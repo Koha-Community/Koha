@@ -35,6 +35,8 @@ BEGIN {
     use_ok('Koha::Patron');
 }
 
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 my $builder = t::lib::TestBuilder->new();
 my $dbh = C4::Context->dbh;
 my $schema  = Koha::Database->schema;

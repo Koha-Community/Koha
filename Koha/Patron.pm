@@ -687,7 +687,12 @@ sub validate {
 
     # patron cardnumber and/or userid unique?
     if ($self->cardnumber || $self->userid) {
-        my $patron = Koha::Patrons->find({cardnumber => $self->cardnumber, userid => $self->userid});
+        my $or;
+        $or->{cardnumber} = $self->cardnumber if $self->cardnumber;
+        $or->{userid}     = $self->userid     if $self->userid;
+        my $patron = Koha::Patrons->search({
+            -or => $or
+        })->next;
         if ($patron && (!$self->in_storage || $self->in_storage
             && $self->borrowernumber ne $patron->borrowernumber)) {
             Koha::Exceptions::Patron::DuplicateObject->throw(

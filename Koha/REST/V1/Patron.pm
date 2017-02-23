@@ -67,7 +67,7 @@ sub get {
 }
 
 sub add {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
         my $body = $c->req->json;
@@ -75,112 +75,119 @@ sub add {
         if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
 
         my $patron = Koha::Patron->new($body)->validate->store;
-        return $c->$cb($patron, 201);
+        return $c->render(status => 201, openapi => $patron);
     }
     catch {
         unless (blessed $_ && $_->can('rethrow')) {
-            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render(status  => 500,
+                              openapi => {error => "Something went wrong, check Koha logs for details."});
         }
         if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
-            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
+            return $c->render(status  => 409,
+                              openapi => { error => $_->error, conflict => $_->conflict });
         }
         elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
-            return $c->$cb({ error => "Library with branchcode \"".$_->branchcode."\" does not exist" }, 400);
+            return $c->render(status  => 400,
+                              openapi => { error => "Library with branchcode \"".$_->branchcode."\" does not exist" });
         }
         elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
-            return $c->$cb({error => "Patron category \"".$_->categorycode."\" does not exist"}, 400);
+            return $c->render(status  => 400,
+                              openapi => {error => "Patron category \"".$_->categorycode."\" does not exist"});
         }
         else {
-            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render(status  => 500,
+                              openapi => {error => "Something went wrong, check Koha logs for details."});
         }
     };
 }
 
 sub edit {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my $patron;
     return try {
-        $patron = Koha::Patrons->find($args->{borrowernumber});
+        my $borrowernumber = $c->validation->param('borrowernumber');
+        $patron = Koha::Patrons->find($borrowernumber);
         my $body = $c->req->json;
-        $body->{borrowernumber} = $args->{borrowernumber};
+        $body->{borrowernumber} = $c->validation->param('borrowernumber');
 
         if ($c->stash('is_owner_access') || $c->stash('is_guarantor_access')){
             if (C4::Context->preference('OPACPatronDetails')) {
                 die unless $patron->set($body)->validate;
                 my $m = Koha::Patron::Modification->new->validate_changes($body, "edit")->store();
-                return $c->$cb({}, 202);
+                return $c->render( status => 202, openapi => {});
             } else {
-                return $c->$cb({ error => "You need a permission to change Your personal details"}, 403);
+                return $c->render( status => 403,
+                                   openapi => { error => "You need a permission to change Your personal details"});
             }
         }
         else {
             if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
             delete $body->{borrowernumber};
             die unless $patron->set($body)->validate;
-            return $c->$cb({}, 204) unless $patron->is_changed; # No Content = No changes made
+            return $c->render( status => 204, openapi => {}) unless $patron->is_changed; # No Content = No changes made
             $patron->store;
-            return $c->$cb($patron, 200);
+            return $c->render( status => 200, openapi => $patron);
         }
     }
     catch {
         unless ($patron) {
-            return $c->$cb({error => "Patron not found"}, 404);
+            return $c->render( status => 404, openapi => {error => "Patron not found"});
         }
         unless (blessed $_ && $_->can('rethrow')) {
-            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render( status => 500, openapi => {error => "Something went wrong, check Koha logs for details."});
         }
         if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
-            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
+            return $c->render( status => 409, openapi => { error => $_->error, conflict => $_->conflict });
         }
         elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
-            return $c->$cb({ error => "Library with branchcode \"".$_->branchcode."\" does not exist" }, 400);
+            return $c->render( status => 400, openapi => { error => "Library with branchcode \"".$_->branchcode."\" does not exist" });
         }
         elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
-            return $c->$cb({error => "Patron category \"".$_->categorycode."\" does not exist"}, 400);
+            return $c->render( status => 400, openapi => {error => "Patron category \"".$_->categorycode."\" does not exist"});
         }
         elsif ($_->isa('Koha::Exceptions::MissingParameter')) {
-            return $c->$cb({error => "Missing mandatory parameter(s)", parameters => $_->parameter }, 400);
+            return $c->render( status => 400, openapi => {error => "Missing mandatory parameter(s)", parameters => $_->parameter });
         }
         elsif ($_->isa('Koha::Exceptions::BadParameter')) {
-            return $c->$cb({error => "Invalid parameter(s)", parameters => $_->parameter }, 400);
+            return $c->render( status => 400, openapi => {error => "Invalid parameter(s)", parameters => $_->parameter });
         }
         elsif ($_->isa('Koha::Exceptions::NoChanges')) {
-            return $c->$cb({error => "No changes have been made"}, 204);
+            return $c->render( status => 204, openapi => {error => "No changes have been made"});
         }
         else {
-            return $c->$cb({error => "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render( status => 500, openapi => {error => "Something went wrong, check Koha logs for details."});
         }
     };
 }
 
 sub delete {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find($args->{borrowernumber});
+    my $patron = Koha::Patrons->find($c->validation->param('borrowernumber'));
     unless ($patron) {
-        return $c->$cb({error => "Patron not found"}, 404);
+        return $c->render( status => 404, openapi => {error => "Patron not found"});
     }
 
     # check if loans, reservations, debarrment, etc. before deletion!
     my $res = $patron->delete;
 
     if ($res eq '1') {
-        return $c->$cb({}, 200);
+        return $c->render( status => 200, openapi => {});
     } elsif ($res eq '-1') {
-        return $c->$cb({}, 404);
+        return $c->render( status => 404, openapi => {});
     } else {
-        return $c->$cb({}, 400);
+        return $c->render( status => 400, openapi => {});
     }
 }
 
 sub pay {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $patron = Koha::Patrons->find($args->{borrowernumber});
+        my $patron = Koha::Patrons->find($c->validation->param('borrowernumber'));
         unless ($patron) {
-            return $c->$cb({error => "Patron not found"}, 404);
+            return $c->render(status => 404, openapi => {error => "Patron not found"});
         }
 
         my $body = $c->req->json;
@@ -189,7 +196,7 @@ sub pay {
 
         Koha::Account->new(
             {
-                patron_id => $args->{borrowernumber},
+                patron_id => $c->validation->param('borrowernumber'),
             }
           )->pay(
             {
@@ -198,95 +205,104 @@ sub pay {
             }
           );
 
-        return $c->$cb('', 204);
+        return $c->render(status => 204, openapi => '');
     } catch {
         if ($_->isa('DBIx::Class::Exception')) {
-            return $c->$cb({ error => $_->msg }, 500);
+            return $c->render(status => 500, openapi => { error => $_->msg });
         }
         else {
-            return $c->$cb({
+            return $c->render(status => 500,
+                              openapi => {
                 error => 'Something went wrong, check the logs.'
-            }, 500);
+            });
         }
     };
 }
 
 sub changepassword {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my $patron;
     my $user;
     try {
-        $patron = Koha::Patrons->find($args->{borrowernumber});
+        $patron = Koha::Patrons->find($c->validation->param('borrowernumber'));
         $user = $c->stash('koha.user');
 
         my $OpacPasswordChange = C4::Context->preference("OpacPasswordChange");
         my $haspermission = haspermission($user->userid, {borrowers => 1});
-        unless ($OpacPasswordChange && $user->borrowernumber == $args->{borrowernumber}) {
+        unless ($OpacPasswordChange && $user->borrowernumber == $c->validation->param('borrowernumber')) {
             Koha::Exceptions::BadSystemPreference->throw(
                 preference => 'OpacPasswordChange'
             ) unless $haspermission;
         }
 
-        my $pw = $args->{'body'};
+        my $pw = $c->req->json;
         my $dbh = C4::Context->dbh;
         unless ($haspermission || checkpw_internal($dbh, $patron->userid, $pw->{'current_password'})) {
             Koha::Exceptions::Password::Invalid->throw;
         }
         $patron->change_password_to($pw->{'new_password'});
-        return $c->$cb({}, 200);
+        return $c->render(status => 200, openapi => {});
     }
     catch {
         if (not defined $patron) {
-            return $c->$cb({ error => "Patron not found." }, 404);
+            return $c->render(status => 404,
+                              openapi => { error => "Patron not found." });
         }
         elsif (not defined $user) {
-            return $c->$cb({ error => "User must be defined." }, 500);
+            return $c->render(status  => 500,
+                              openapi => { error => "User must be defined." });
         }
 
         die $_ unless blessed $_ && $_->can('rethrow');
         if ($_->isa('Koha::Exceptions::Password::Invalid')) {
-            return $c->$cb({ error => "Wrong current password." }, 400);
+            return $c->render(status  => 400,
+                              openapi => { error => "Wrong current password." });
         }
         elsif ($_->isa('Koha::Exceptions::Password::TooShort')) {
-            return $c->$cb({ error => $_->error }, 400);
+            return $c->render(status => 400, openapi => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions::Password::TrailingWhitespaces')) {
-            return $c->$cb({ error => $_->error }, 400);
+            return $c->render(status => 400, openapi => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions::BadSystemPreference')
                && $_->preference eq 'OpacPasswordChange') {
-            return $c->$cb({ error => "OPAC password change is disabled" }, 403);
+            return $c->render(status => 403,
+                              openapi => {
+                                error => "OPAC password change is disabled"
+                    });
         }
         else {
-            return $c->$cb({ error => "Something went wrong. $_" }, 500);
+            return $c->render(status  => 500,
+                              openapi => { error => "Something went wrong. $_" });
         }
     }
 }
 
 sub getstatus {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
         my $user = $c->stash('koha.user');
 
-        my $patron = Koha::Patrons->find($args->{borrowernumber});
+        my $patron = Koha::Patrons->find($c->validation->param('borrowernumber'));
         unless ($patron) {
-            return $c->$cb({error => "Patron not found"}, 404);
+            return $c->render(status  => 404,
+                              openapi => {error => "Patron not found"});
         }
 
         my $ret = $patron->TO_JSON;
         my %problems = map { ref($_) => $_ } $patron->status_not_ok;
         $ret->{blocks} = Koha::Availability->_swaggerize_exception(\%problems);
 
-        return $c->$cb($ret, 200);
+        return $c->render(status => 200, openapi => $ret);
     } catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->$cb( { error => $_->msg }, 500 );
+            return $c->render(status => 500, openapi => { error => $_->msg });
         }
         else {
-            return $c->$cb(
-                { error => "Something went wrong, check the logs." }, 500 );
+            return $c->render( status => 500, openapi =>
+                { error => "Something went wrong, check the logs." });
         }
     };
 }
