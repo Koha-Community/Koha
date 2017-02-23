@@ -94,3 +94,6 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 
 # share_usage_with_koha_community.pl every months
 0 0 1 * *  __KOHA_USER__ $KOHA_CRON_PATH/share_usage_with_koha_community.pl
+
+# run merge authorities
+20 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/merge_authorities.pl -b
