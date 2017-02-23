@@ -178,7 +178,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 
 my $authid = $query->param('authid');
 
-my $authtypecode = Koha::Authorities->find($authid)->authtypecode;
+my $authobj = Koha::Authorities->find($authid);
+my $authtypecode = $authobj ? $authobj->authtypecode : q{};
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 # Build list of authtypes for showing them
@@ -209,15 +210,16 @@ my $biblio_fields;
 while (my ($tagfield) = $sth->fetchrow) {
 	$biblio_fields.= $tagfield."9,";
 }
-chop $biblio_fields;
+chop $biblio_fields if $biblio_fields;
 
 build_tabs ($template, $record, $dbh,"",$query);
 
+my $type = $authority_types->find($authtypecode);
 $template->param(
     authid          => $authid,
     count           => $count,
     biblio_fields   => $biblio_fields,
-    authtypetext    => $authority_types->find($authtypecode)->authtypetext,
+    authtypetext    => $type ? $type->authtypetext: "",
     authtypecode    => $authtypecode,
     authority_types => $authority_types,
     csrf_token      => Koha::Token->new->generate_csrf({ session_id => scalar $query->cookie('CGISESSID') }),

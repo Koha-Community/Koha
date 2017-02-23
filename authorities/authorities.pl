@@ -660,12 +660,13 @@ if ($op eq "duplicate")
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypetext'] } );
 
+my $type = $authority_types->find($authtypecode);
 $template->param(
     authority_types => $authority_types,
     authtypecode    => $authtypecode,
     authid          => $authid,
     linkid          => $linkid,
-    authtypetext    => $authority_types->find($authtypecode)->authtypetext,
+    authtypetext    => $type ? $type->authtypetext : "",
     hide_marc       => C4::Context->preference('hide_marc'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
