@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Scalar::Util qw( looks_like_number );
+use Scalar::Util qw( blessed looks_like_number );
 
 use C4::Auth qw( haspermission );
 use Koha::Account::Lines;
@@ -28,21 +28,22 @@ use Koha::Account;
 use Try::Tiny;
 
 sub list {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my $params  = $c->req->params->to_hash;
     my $accountlines = Koha::Account::Lines->search($params);
 
-    return $c->$cb($accountlines, 200);
+    return $c->render( status => 200, openapi => $accountlines);
 }
 
 
 sub edit {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+    my $accountline = Koha::Account::Lines->find($c->validation->param('accountlines_id'));
     unless ($accountline) {
-        return $c->$cb({error => "Accountline not found"}, 404);
+        return $c->render( status  => 404,
+                           openapi => {error => "Accountline not found"});
     }
 
     my $body = $c->req->json;
@@ -50,17 +51,19 @@ sub edit {
     $accountline->set( $body );
     $accountline->store();
 
-    return $c->$cb($accountline, 200);
+    return $c->render( status => 200, openapi => $accountline);
 }
 
 
 sub pay {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $accountline = Koha::Account::Lines->find($args->{accountlines_id});
+        my $accountline_id = $c->validation->param('accountlines_id');
+        my $accountline = Koha::Account::Lines->find($accountline_id);
         unless ($accountline) {
-            return $c->$cb({error => "Accountline not found"}, 404);
+            return $c->render( status => 404,
+                               openapi => {error => "Accountline not found"});
         }
 
         my $body = $c->req->json;
@@ -79,16 +82,16 @@ sub pay {
             }
           );
 
-        $accountline = Koha::Account::Lines->find($args->{accountlines_id});
-        return $c->$cb($accountline, 200);
+        $accountline = Koha::Account::Lines->find($accountline_id);
+        return $c->render( status => 200, openapi => $accountline);
     } catch {
-        if ($_->isa('DBIx::Class::Exception')) {
-            return $c->$cb({ error => $_->msg }, 500);
+        if (blessed($_) && $_->isa('DBIx::Class::Exception')) {
+            return $c->render( status => 500, openapi => { error => $_->msg });
         }
         else {
-            return $c->$cb({
+            return $c->render( status  => 500, openapi => {
                 error => 'Something went wrong, check the logs.'
-            }, 500);
+            });
         }
     };
 }

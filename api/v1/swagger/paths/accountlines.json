@@ -1,6 +1,7 @@
 {
   "/accountlines": {
     "get": {
+      "x-mojo-to": "Accountline#list",
       "operationId": "listAccountlines",
       "tags": ["accountlines"],
       "parameters": [
@@ -21,8 +22,32 @@
             }
           }
         },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -39,6 +64,7 @@
   },
   "/accountlines/{accountlines_id}": {
     "put": {
+      "x-mojo-to": "Accountline#edit",
       "operationId": "editAccountlines",
       "tags": ["accountlines"],
       "produces": [
@@ -81,6 +107,12 @@
           "description": "Missing or wrong parameters",
           "schema": { "$ref": "../definitions.json#/error" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -90,6 +122,18 @@
         "404": {
           "description": "Accountline not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -101,6 +145,7 @@
   },
   "/accountlines/{accountlines_id}/payment": {
     "post": {
+      "x-mojo-to": "Accountline#pay",
       "operationId": "payAccountlines",
       "tags": ["accountlines"],
       "produces": [
@@ -142,6 +187,12 @@
           "description": "Missing or wrong parameters",
           "schema": { "$ref": "../definitions.json#/error" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": {
@@ -151,6 +202,18 @@
         "404": {
           "description": "Accountline not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
