@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Getopt::Long;
 use MARC::Record;
@@ -284,6 +284,49 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     # Final check
     $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $marc1->field('609'), undef, 'Merge removed the 609 again even after deleting the authority record' );
+};
+
+subtest "Test some specific postponed merge issues" => sub {
+    plan tests => 4;
+
+    my $authmarc = MARC::Record->new;
+    $authmarc->append_fields( MARC::Field->new( '109', '', '', 'a' => 'aa', b => 'bb' ));
+    my $oldauthmarc = MARC::Record->new;
+    $oldauthmarc->append_fields( MARC::Field->new( '112', '', '', c => 'cc' ));
+    my $id = AddAuthority( $authmarc, undef, $authtype1 );
+    my $biblio = MARC::Record->new;
+    $biblio->append_fields(
+        MARC::Field->new( '109', '', '', a => 'a1', 9 => $id ),
+        MARC::Field->new( '612', '', '', a => 'a2', c => 'cc', 9 => $id+1 ),
+        MARC::Field->new( '612', '', '', a => 'a3', 9 => $id+2 ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $biblio, '' );
+
+    # Merge A to B postponed, A is deleted (simulated by id+1)
+    # This proves the !authtypefrom condition in sub merge
+    # Additionally, we test clearing subfield
+    merge({ mergefrom => $id + 1, MARCfrom => $oldauthmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
+    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $biblio->subfield('609', '9'), $id, '612 moved to 609' );
+    is( $biblio->subfield('609', 'c'), undef, '609c cleared correctly' );
+
+    # Merge A to B postponed, delete B immediately (hits B < hits A)
+    # This proves the !@record_to test in sub merge
+    merge({ mergefrom => $id + 2, mergeto => $id + 1, MARCto => undef, biblionumbers => [ $biblionumber ] });
+    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $biblio->field('612'), undef, 'Last 612 must be gone' );
+
+    # Show that we 'need' skip_merge; this example is far-fetched.
+    # We *prove* by contradiction.
+    # Suppose: Merge A to B postponed, and delete A would merge rightaway.
+    # (You would need some special race condition with merge.pl to do so.)
+    # The modify merge would be useless after that.
+    @linkedrecords = ( $biblionumber );
+    my $restored_mocks = set_mocks();
+    DelAuthority({ authid => $id }); # delete A
+    $restored_mocks->{auth_mod}->unmock_all;
+    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $biblio->subfield('109', '9'), $id, 'If the 109 is no longer present, another modify merge would not bring it back' );
 };
 
 sub set_mocks {
