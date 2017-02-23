@@ -78,6 +78,7 @@ subtest 'under() tests' => sub {
       ->json_is('/error', 'Session has been expired.');
 
     # 503 (under maintenance & pending update)
+    my $ver = C4::Context->preference('Version');
     t::lib::Mocks::mock_preference('Version', 1);
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
@@ -92,6 +93,8 @@ subtest 'under() tests' => sub {
     $t->request_ok($tx)
       ->status_is(503)
       ->json_is('/error', 'System is under maintenance.');
+
+    t::lib::Mocks::mock_preference('Version', $ver);
 
     $schema->storage->txn_rollback;
 };

@@ -101,24 +101,26 @@ sub under {
 }
 
 sub login {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;;
 
-    my $userid = $args->{userid} || $args->{cardnumber};
-    my $password = $args->{password};
+    my $userid = $c->validation->param('userid') ||
+                 $c->validation->param('cardnumber');
+    my $password = $c->validation->param('password');
     my $patron;
 
-    return $c->$cb({ error => "Either userid or cardnumber is required "
-                             ."- neither given." }, 403) unless ($userid);
+    return $c->render( status => 400, openapi => {
+        error => "Either userid or cardnumber is required "
+                             ."- neither given." }) unless ($userid);
 
     my $cgi = CGI->new;
     $cgi->param(userid => $userid);
     $cgi->param(password => $password);
     my ($status, $cookie, $sessionid) = C4::Auth::check_api_auth($cgi);
 
-    return $c->$cb({ error => "Login failed." }, 401) if $status eq "failed";
-    return $c->$cb({ error => "Session expired." }, 401) if $status eq "expired";
-    return $c->$cb({ error => "Database is under maintenance." }, 401) if $status eq "maintenance";
-    return $c->$cb({ error => "Login failed." }, 401) unless $status eq "ok";
+    return $c->render( status => 401, openapi => { error => "Login failed." }) if $status eq "failed";
+    return $c->render( status => 401, openapi => { error => "Session expired." }) if $status eq "expired";
+    return $c->render( status => 503, openapi => { error => "Database is under maintenance." }) if $status eq "maintenance";
+    return $c->render( status => 401, openapi => { error => "Login failed." }) unless $status eq "ok";
 
     $patron = Koha::Patrons->find({ userid => $userid }) unless $patron;
     $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
@@ -127,18 +129,20 @@ sub login {
 
     $c->cookie(CGISESSID => $sessionid, { path => "/" });
 
-    return $c->$cb($session, 201);
+    return $c->render( status => 201, openapi => $session);
 }
 
 sub logout {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;;
 
-    my $sessionid = $args->{session}->{sessionid};
+    my $json = $c->req->json;
+    my $sessionid = exists $json->{sessionid} ? $json->{sessionid} : undef;
     $sessionid = $c->cookie('CGISESSID') unless $sessionid;
 
     my ($status, $sid) = C4::Auth::check_cookie_auth($sessionid);
     unless ($status eq "ok") {
-        return $c->$cb({ error => "Invalid session id."}, 401);
+        return $c->render( status  => 401,
+                           openapi => { error => "Invalid session id."});
     }
 
     $c->cookie(CGISESSID => $sessionid, { path => "/", expires => 1 });
@@ -146,7 +150,7 @@ sub logout {
     my $session = C4::Auth::get_session($sessionid);
     $session->delete;
     $session->flush;
-    return $c->$cb({}, 200);
+    return $c->render( status => 200, openapi => {});
 }
 
 sub _swaggerize_session {
