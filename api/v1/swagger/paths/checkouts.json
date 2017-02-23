@@ -1,6 +1,7 @@
 {
   "/checkouts": {
     "get": {
+      "x-mojo-to": "Checkout#list",
       "operationId": "listCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -16,6 +17,12 @@
             "$ref": "../definitions.json#/checkouts"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": { "$ref": "../definitions.json#/error" }
@@ -23,6 +30,18 @@
         "404": {
           "description": "Patron not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -36,6 +55,7 @@
   },
   "/checkouts/{checkout_id}": {
     "get": {
+      "x-mojo-to": "Checkout#get",
       "operationId": "getCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -47,6 +67,12 @@
           "description": "Updated borrower's checkout",
           "schema": { "$ref": "../definitions.json#/checkout" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": { "$ref": "../definitions.json#/error" }
@@ -54,6 +80,18 @@
         "404": {
           "description": "Checkout not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -65,6 +103,7 @@
       }
     },
     "put": {
+      "x-mojo-to": "Checkout#renew",
       "operationId": "renewCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -76,6 +115,12 @@
           "description": "Updated borrower's checkout",
           "schema": { "$ref": "../definitions.json#/checkout" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Cannot renew checkout",
           "schema": { "$ref": "../definitions.json#/error" }
@@ -83,6 +128,18 @@
         "404": {
           "description": "Checkout not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
@@ -96,6 +153,7 @@
   },
   "/checkouts/{checkout_id}/renewability": {
     "get": {
+      "x-mojo-to": "Checkout#renewability",
       "operationId": "renewabilityCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -111,6 +169,12 @@
           "description": "Checkout renewability",
           "schema": { "$ref": "../definitions.json#/renewability" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Forbidden",
           "schema": { "$ref": "../definitions.json#/error" }
@@ -118,12 +182,25 @@
         "404": {
           "description": "Checkout not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
   },
   "/checkouts/history": {
     "get": {
+      "x-mojo-to": "Checkout#listhistory",
       "operationId": "listhistoryCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [
@@ -139,12 +216,30 @@
             "$ref": "../definitions.json#/checkouts"
           }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": { "$ref": "../definitions.json#/error" }
         },
         "404": {
           "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
@@ -161,6 +256,7 @@
   },
   "/checkouts/history/{checkout_id}": {
     "get": {
+      "x-mojo-to": "Checkout#gethistory",
       "operationId": "gethistoryCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [
@@ -172,6 +268,12 @@
           "description": "Got borrower's checkout",
           "schema": { "$ref": "../definitions.json#/checkout" }
         },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
         "403": {
           "description": "Access forbidden",
           "schema": { "$ref": "../definitions.json#/error" }
@@ -179,6 +281,18 @@
         "404": {
           "description": "Checkout not found",
           "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       },
       "x-koha-authorization": {
