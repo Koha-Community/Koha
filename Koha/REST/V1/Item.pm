@@ -26,12 +26,12 @@ use C4::Items qw( GetHiddenItemnumbers );
 use Koha::Items;
 
 sub get {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $itemnumber = $c->param('itemnumber');
+    my $itemnumber = $c->validation->param('itemnumber');
     my $item = Koha::Items->find($itemnumber);
     unless ($item) {
-        return $c->$cb({error => "Item not found"}, 404);
+        return $c->render(status => 404, openapi => {error => "Item not found"});
     }
 
     # Hide non-public itemnotes if user has no staff access
@@ -42,13 +42,13 @@ sub get {
         my %hiddenitems = map { $_ => 1 } @hiddenitems;
 
         # Pretend it was not found as it's hidden from OPAC to regular users
-        return $c->$cb({error => "Item not found"}, 404)
+        return $c->render( status => 404, openapi => {error => "Item not found"} )
           if $hiddenitems{$itemnumber};
 
         $item->set({ itemnotes_nonpublic => undef });
     }
 
-    return $c->$cb($item, 200);
+    return $c->render( status => 200, openapi => $item );
 }
 
 1;

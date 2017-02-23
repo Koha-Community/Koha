@@ -1,6 +1,7 @@
 {
   "/items/{itemnumber}": {
     "get": {
+      "x-mojo-to": "Item#get",
       "operationId": "getItem",
       "tags": ["items"],
       "parameters": [{
@@ -24,6 +25,18 @@
         },
         "404": {
           "description": "Item not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
           "schema": {
             "$ref": "../definitions.json#/error"
           }
