@@ -184,14 +184,16 @@ sub article_requests_finished {
 
 =head3 search_patrons_to_anonymise
 
-    my $patrons = Koha::Patrons->search_patrons_to_anonymise( $date );
+    my $patrons = Koha::Patrons->search_patrons_to_anonymise( { before => $older_than_date, [ library => $library ] } );
 
 This method returns all patrons who has an issue history older than a given date.
 
 =cut
 
 sub search_patrons_to_anonymise {
-    my ( $class, $older_than_date, $library ) = @_;
+    my ( $class, $params ) = @_;
+    my $older_than_date = $params->{before};
+    my $library         = $params->{library};
     $older_than_date = $older_than_date ? dt_from_string($older_than_date) : dt_from_string;
     $library ||=
       ( C4::Context->preference('IndependentBranches') && C4::Context->userenv && !C4::Context->IsSuperLibrarian() && C4::Context->userenv->{branch} )
@@ -214,7 +216,7 @@ sub search_patrons_to_anonymise {
 
 =head3 anonymise_issue_history
 
-    Koha::Patrons->search->anonymise_issue_history( $older_than_date );
+    Koha::Patrons->search->anonymise_issue_history( { before => $older_than_date } );
 
 Anonymise issue history (old_issues) for all patrons older than the given date.
 To make sure all the conditions are met, the caller has the responsability to
@@ -223,7 +225,9 @@ call search_patrons_to_anonymise to filter the Koha::Patrons set
 =cut
 
 sub anonymise_issue_history {
-    my ( $self, $older_than_date ) = @_;
+    my ( $self, $params ) = @_;
+
+    my $older_than_date = $params->{before};
 
     return unless $older_than_date;
     $older_than_date = dt_from_string $older_than_date;

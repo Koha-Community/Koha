@@ -74,7 +74,7 @@ my ($newyear,$newmonth,$newday) = Add_Delta_Days ($year,$month,$day,(-1)*$days);
 my $formatdate = sprintf "%4d-%02d-%02d",$newyear,$newmonth,$newday;
 $verbose and print "Checkouts before $formatdate will be anonymised.\n";
 
-my $rows = Koha::Patrons->search_patrons_to_anonymise( $formatdate )->anonymise_issue_history( $formatdate );
+my $rows = Koha::Patrons->search_patrons_to_anonymise( { before => $formatdate } )->anonymise_issue_history( { before => $formatdate } );
 $verbose and print int($rows) . " checkouts anonymised.\n";
 
 exit(0);

@@ -110,8 +110,8 @@ if ( $step == 2 ) {
     my $patrons_to_anonymize =
         $checkboxes{issue}
       ? $branch eq '*'
-          ? Koha::Patrons->search_patrons_to_anonymise($last_issue_date)
-          : Koha::Patrons->search_patrons_to_anonymise( $last_issue_date, $branch )
+          ? Koha::Patrons->search_patrons_to_anonymise( { before => $last_issue_date } )
+          : Koha::Patrons->search_patrons_to_anonymise( { before => $last_issue_date, library => $branch } )
       : undef;
 
     $template->param(
@@ -159,7 +159,7 @@ elsif ( $step == 3 ) {
     # Anonymising all members
     if ($do_anonym) {
         #FIXME: anonymisation errors are not handled
-        my $rows = Koha::Patrons->search_patrons_to_anonymise( $last_issue_date )->anonymise_issue_history( $last_issue_date );
+        my $rows = Koha::Patrons->search_patrons_to_anonymise( { before => $last_issue_date } )->anonymise_issue_history( { before => $last_issue_date } );
         $template->param(
             do_anonym   => $rows,
         );
