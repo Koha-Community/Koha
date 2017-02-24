@@ -220,7 +220,8 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
         NetworkPrint($letter->{content});
     }
     $query->param( 'borrowernumber', '' );
-    $borrowernumber = '';
+    $borrowernumber = ''; # FIXME This is terrible
+    $borrower = {};
 }
 
 #
