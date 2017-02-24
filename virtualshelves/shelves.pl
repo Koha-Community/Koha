@@ -145,6 +145,7 @@ if ( $op eq 'add_form' ) {
                 my @barcodes = split /\n/, $barcodes; # Entries are effectively passed in as a <cr> separated list
                 foreach my $barcode (@barcodes){
                     $barcode =~ s/\r$//; # strip any naughty return chars
+                    next if $barcode eq '';
                     my $item = GetItem( 0, $barcode);
                     if (defined $item && $item->{itemnumber}) {
                         my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
