@@ -716,8 +716,8 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
         is( $returned, 1, 'The item should have been returned' );
 
-        my $patron_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( '2010-10-11' )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } )->next;
-        is( ref($patron_to_anonymise), 'Koha::Patron', 'search_patrons_to_anonymise should return Koha::Patrons' );
+        my $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( '2010-10-11' )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } );
+        is( ref($patrons_to_anonymise), 'Koha::Patrons', 'search_patrons_to_anonymise should return Koha::Patrons' );
 
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( '2010-10-11')->anonymise_issue_history('2010-10-11');
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );

@@ -71,7 +71,7 @@ sub search_housebound_deliverers {
     return Koha::Patrons->_new_from_dbic($del);
 }
 
-=head3
+=head3 search_upcoming_membership_expires
 
 my $patrons = Koha::Patrons->search_upcoming_membership_expires();
 
