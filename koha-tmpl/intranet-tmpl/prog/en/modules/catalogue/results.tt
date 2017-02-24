@@ -635,11 +635,12 @@ var holdForPatron = function () {
                                                 </span>
                                             [% END %]
                                         </strong>
-
+                                    [% IF ( showbranchlist ) %]
                                     [% IF ( SEARCH_RESULT.availablecount ) %]
                                     <ul>
                                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
-
+                                        <li>[% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]</li>
+                                        <!--
                                         [% IF item_level_itypes && !noItemTypeImages && available_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
                                           <img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />
@@ -654,14 +655,18 @@ var holdForPatron = function () {
                                         <br/>[% available_items_loo.description %]
                                         [% END %]
                                         </li>
+                                        -->
                                     [% END %]
                                     </ul>
                                     [% END %]
-
+                                    [% END %]
                                    [% IF ( SEARCH_RESULT.onloancount ) %]
                                    <span class="status">[% SEARCH_RESULT.onloancount %] on loan:</span>
+                                    [% IF ( showbranchlist ) %]
                                     <ul>
                                     [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
+                                        <li>[% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]</li>
+                                        <!--
                                         [% IF item_level_itypes && !noItemTypeImages && onloan_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
                                           <img src="[% onloan_items_loo.imageurl %]" title="[% onloan_items_loo.description %]" alt="[% onloan_items_loo.description %]" />
@@ -676,14 +681,18 @@ var holdForPatron = function () {
                                         <br/>[% onloan_items_loo.description %]
                                         [% END %]
                                         </li>
+                                        -->
                                     [% END %]
                                     </ul>
                                     [% END %]
-
+                                    [% END %]
                                     [% IF ( SEARCH_RESULT.othercount ) %]
                                     <span class="unavailable">[% SEARCH_RESULT.othercount %] unavailable:</span>
+                                    [% IF ( showbranchlist ) %]
                                     <ul>
                                     [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
+                                        <li>[% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]</li>
+                                        <!--
                                         [% IF item_level_itypes && !noItemTypeImages && other_items_loo.imageurl %]
                                         <li style="list-style: none; list-style-type: none;">
                                           <img src="[% other_items_loo.imageurl %]" title="[% other_items_loo.description %]" alt="[% other_items_loo.description %]" />
@@ -704,8 +713,10 @@ var holdForPatron = function () {
                                         <br/>[% other_items_loo.description %]
                                         [% END %]
                                         </li>
+                                        -->
                                     [% END %]
                                     </ul>
+                                    [% END %]
                                     [% END %]
                                     [% ELSE %]
                                     [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS.count ) %]
