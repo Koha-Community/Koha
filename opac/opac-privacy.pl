@@ -60,10 +60,8 @@ if ( $op eq "update_privacy" ) {
 elsif ( $op eq "delete_record" ) {
 
     # delete all reading records for items returned
-    # uses a hardcoded date ridiculously far in the future
-
     my $rows = eval {
-        Koha::Patrons->search({ 'me.borrowernumber' => $borrowernumber })->anonymise_issue_history( { before => '2999-12-12' } );
+        Koha::Patrons->search({ 'me.borrowernumber' => $borrowernumber })->anonymise_issue_history;
     };
     $rows = $@ ? 0 : int($rows);
     $template->param( 'deleted' => $rows );

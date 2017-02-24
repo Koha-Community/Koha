@@ -688,7 +688,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
 
     subtest 'patron privacy is 1 (default)' => sub {
-        plan tests => 4;
+        plan tests => 6;
 
         t::lib::Mocks::mock_preference('IndependentBranches', 0);
         my $patron = $builder->build(
@@ -696,7 +696,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 value  => { privacy => 1, }
             }
         );
-        my $item = $builder->build(
+        my $item_1 = $builder->build(
             {   source => 'Item',
                 value  => {
                     itemlost  => 0,
@@ -704,29 +704,55 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
                 },
             }
         );
-        my $issue = $builder->build(
+        my $issue_1 = $builder->build(
             {   source => 'Issue',
                 value  => {
                     borrowernumber => $patron->{borrowernumber},
-                    itemnumber     => $item->{itemnumber},
+                    itemnumber     => $item_1->{itemnumber},
+                },
+            }
+        );
+        my $item_2 = $builder->build(
+            {   source => 'Item',
+                value  => {
+                    itemlost  => 0,
+                    withdrawn => 0,
+                },
+            }
+        );
+        my $issue_2 = $builder->build(
+            {   source => 'Issue',
+                value  => {
+                    borrowernumber => $patron->{borrowernumber},
+                    itemnumber     => $item_2->{itemnumber},
                 },
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
-        is( $returned, 1, 'The item should have been returned' );
+        my ( $returned_1, undef, undef ) = C4::Circulation::AddReturn( $item_1->{barcode}, undef, undef, undef, '2010-10-10' );
+        my ( $returned_2, undef, undef ) = C4::Circulation::AddReturn( $item_2->{barcode}, undef, undef, undef, '2011-11-11' );
+        is( $returned_1 && $returned_2, 1, 'The items should have been returned' );
 
         my $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } );
         is( ref($patrons_to_anonymise), 'Koha::Patrons', 'search_patrons_to_anonymise should return Koha::Patrons' );
 
-        my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
+        my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history( { before => '2010-10-11' } );
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
 
         my $dbh = C4::Context->dbh;
-        my ($borrowernumber_used_to_anonymised) = $dbh->selectrow_array(q|
-            SELECT borrowernumber FROM old_issues where itemnumber = ?
-        |, undef, $item->{itemnumber});
+        my $sth = $dbh->prepare(q|SELECT borrowernumber FROM old_issues where itemnumber = ?|);
+        $sth->execute($item_1->{itemnumber});
+        my ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'With privacy=1, the issue should have been anonymised' );
+        $sth->execute($item_2->{itemnumber});
+        ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
+        is( $borrowernumber_used_to_anonymised, $patron->{borrowernumber}, 'The issue should not have been anonymised, the returned date is later' );
+
+        $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history;
+        $sth->execute($item_2->{itemnumber});
+        ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
+        is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue should have been anonymised, the returned date is before' );
+
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
 
