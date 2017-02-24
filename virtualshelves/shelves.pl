@@ -151,18 +151,18 @@ if ( $op eq 'add_form' ) {
                         my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
                         my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
                         if ($@) {
-                            push @messages, { item_barcode => $barcode, type => 'error', code => ref($@), msg => $@ };
+                            push @messages, { item_barcode => $barcode, type => 'alert', code => ref($@), msg => $@ };
                         } elsif ( $added ) {
                             push @messages, { item_barcode => $barcode, type => 'message', code => 'success_on_add_biblio' };
                         } else {
                             push @messages, { item_barcode => $barcode, type => 'message', code => 'error_on_add_biblio' };
                         }
                     } else {
-                        push @messages, { item_barcode => $barcode, type => 'error', code => 'item_does_not_exist' };
+                        push @messages, { item_barcode => $barcode, type => 'alert', code => 'item_does_not_exist' };
                     }
                 }
             } else {
-                push @messages, { type => 'error', code => 'unauthorized_on_add_biblio' };
+                push @messages, { type => 'alert', code => 'unauthorized_on_add_biblio' };
             }
         }
     } else {
