@@ -427,6 +427,11 @@ __PACKAGE__->table("borrowers");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 overdrive_auth_token
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -1351,8 +1356,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-31 10:39:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lc6GQ2E7d+tyzTk3v2sWjQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-02-10 07:30:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:35WEsGd5LmkZ3bB486M1yA
 
 __PACKAGE__->belongs_to(
     "guarantor",

@@ -424,6 +424,11 @@ __PACKAGE__->table("deletedborrowers");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 overdrive_auth_token
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -601,11 +606,13 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "overdrive_auth_token",
+  { data_type => "text", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-13 17:32:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pcdyzQacTbFDJ9R1k0E8mA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-02-10 07:30:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tq4JDUSFKuU5K69TTVSkVg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
