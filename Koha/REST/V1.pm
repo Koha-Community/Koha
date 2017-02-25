@@ -60,6 +60,18 @@ sub startup {
                                 # Paths-, Parameters-, Definitions- & Info-object
                                 # is not allowed by the OpenAPI specification.
     });
+
+    push @{$self->app->static->paths}, C4::Context->config('intranetdir');
+    $self->routes->get('/api/v1/doc' => sub {
+        if ($_[0]->req->url->path->to_string eq 'api/v1/doc') {
+            $_[0]->res->headers->location('/api/v1/doc/');
+            return $_[0]->render(status => 301, text => '');
+        }
+        return $_[0]->reply->static('api/v1/swagger-ui/dist/index.html');
+    });
+    $self->routes->get('/api/v1/doc/*path' => sub {
+        return $_[0]->reply->static('api/v1/swagger-ui/dist/'.$_[0]->stash->{path});
+    });
 }
 
 =head3 default_exception_handling
