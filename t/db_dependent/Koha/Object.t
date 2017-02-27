@@ -17,14 +17,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Warn;
 
 use C4::Context;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Libraries;
 
 use Scalar::Util qw( isvstring );
+use Try::Tiny;
 
 use t::lib::TestBuilder;
 
@@ -168,6 +170,29 @@ subtest 'TO_JSON tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest "Test update method" => sub {
+    plan tests => 6;
 
+    $schema->storage->txn_begin;
 
-1;
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $library = Koha::Libraries->find( $branchcode );
+    $library->update({ branchname => 'New_Name', branchcity => 'AMS' });
+    is( $library->branchname, 'New_Name', 'Changed name with update' );
+    is( $library->branchcity, 'AMS', 'Changed city too' );
+    is( $library->is_changed, 0, 'Change should be stored already' );
+    try {
+        $library->update({
+            branchcity => 'NYC', not_a_column => 53, branchname => 'Name3',
+        });
+        fail( 'It should not be possible to update an unexisting column without an error from Koha::Object/DBIx' );
+    } catch {
+        ok( $_->isa('Koha::Exceptions::Object'), 'Caught error when updating wrong column' );
+        $library->discard_changes; #requery after failing update
+    };
+    # Check if the columns are not updated
+    is( $library->branchcity, 'AMS', 'First column not updated' );
+    is( $library->branchname, 'New_Name', 'Third column not updated' );
+
+    $schema->storage->txn_rollback;
+};

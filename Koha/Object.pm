@@ -301,13 +301,12 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes);
-
+    my @known_methods = qw( is_changed id in_storage get_column discard_changes update );
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw( "The method $method is not covered by tests!" ) unless grep {/^$method$/} @known_methods;
 
     my $r = eval { $self->_result->$method(@_) };
     if ( $@ ) {
-        Koha::Exceptions::Object::MethodNotFound->throw( "No method $method for " . ref($self) );
+        Koha::Exceptions::Object->throw( ref($self) . "::$method generated this error: " . $@ );
     }
     return $r;
 }
