@@ -619,7 +619,8 @@ sub get_matches {
     my $self = shift;
     my ($source_record, $max_matches) = @_;
 
-    my %matches = ();
+    my $matches = {};
+    my $marcframework_used = ''; # use the default framework
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
@@ -665,6 +666,27 @@ sub get_matches {
             my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
             ( $error, $searchresults, $total_hits ) =
               $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
+
+            if ( defined $error ) {
+                warn "search failed ($query) $error";
+            }
+            else {
+                if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
+                    foreach my $matched ( @{$searchresults} ) {
+                        my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", $marcframework_used );
+                        my $id = $matched->field($biblionumber_tag)->subfield($biblionumber_subfield);
+                        $matches->{$id}->{score} += $matchpoint->{score};
+                        $matches->{$id}->{record} = $matched;
+                    }
+                }
+                else {
+                    foreach my $matched ( @{$searchresults} ) {
+                        $matches->{$matched}->{score} += $matchpoint->{'score'};
+                        $matches->{$matched}->{record} = $matched;
+                    }
+                }
+            }
+
         }
         elsif ( $self->{'record_type'} eq 'authority' ) {
             my $authresults;
@@ -687,41 +709,43 @@ sub get_matches {
                 'AuthidAsc', 1
               );
             foreach my $result (@$authresults) {
-                push @$searchresults, $result->{'authid'};
-            }
-        }
-
-        if ( defined $error ) {
-            warn "search failed ($query) $error";
-        }
-        else {
-            foreach my $matched ( @{$searchresults} ) {
-                $matches{$matched} += $matchpoint->{'score'};
+                my $id = $result->{authid};
+                $matches->{$id}->{score} += $matchpoint->{'score'};
+                $matches->{$id}->{record} = $id;
             }
         }
     }
 
     # get rid of any that don't meet the threshold
-    %matches = map { ($matches{$_} >= $self->{'threshold'}) ? ($_ => $matches{$_}) : () } keys %matches;
-
-    # get rid of any that don't meet the required checks
-    %matches = map { _passes_required_checks($source_record, $_, $self->{'required_checks'}) ?  ($_ => $matches{$_}) : () } 
-                keys %matches unless ($self->{'record_type'} eq 'auth');
+    $matches = { map { ($matches->{$_}->{score} >= $self->{'threshold'}) ? ($_ => $matches->{$_}) : () } keys %$matches };
 
     my @results = ();
     if ($self->{'record_type'} eq 'biblio') {
         require C4::Biblio;
-        foreach my $marcblob (keys %matches) {
-            my $target_record = C4::Search::new_record_from_zebra('biblioserver',$marcblob);
-            my $record_number;
-            my $result = C4::Biblio::TransformMarcToKoha($target_record, '');
-            $record_number = $result->{'biblionumber'};
-            push @results, { 'record_id' => $record_number, 'score' => $matches{$marcblob} };
+        # get rid of any that don't meet the required checks
+        $matches = {
+            map {
+                _passes_required_checks( $source_record, $_, $self->{'required_checks'} )
+                  ? ( $_ => $matches->{$_} )
+                  : ()
+            } keys %$matches
+        };
+
+        foreach my $id ( keys %$matches ) {
+            my $target_record = C4::Search::new_record_from_zebra( 'biblioserver', $matches->{$id}->{record} );
+            my $result = C4::Biblio::TransformMarcToKoha( $target_record, $marcframework_used );
+            push @results, {
+                record_id => $result->{biblionumber},
+                score     => $matches->{$id}->{score}
+            };
         }
     } elsif ($self->{'record_type'} eq 'authority') {
         require C4::AuthoritiesMarc;
-        foreach my $authid (keys %matches) {
-            push @results, { 'record_id' => $authid, 'score' => $matches{$authid} };
+        foreach my $id (keys %$matches) {
+            push @results, {
+                record_id => $id,
+                score     => $matches->{$id}->{score}
+            };
         }
     }
     @results = sort {
@@ -732,7 +756,6 @@ sub get_matches {
         @results = @results[0..$max_matches-1];
     }
     return @results;
-
 }
 
 =head2 dump
