@@ -1743,7 +1743,6 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `returndate` datetime default NULL, -- date the item was returned, will be NULL until moved to old_issues
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
-  `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
@@ -1772,7 +1771,6 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `returndate` datetime default NULL, -- date the item was returned
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
-  `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
   `auto_renew` BOOLEAN default FALSE, -- automatic renewal
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
