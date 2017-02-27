@@ -997,7 +997,6 @@ sub parse_overdues_letter {
     my $patron = Koha::Patrons->find( $params->{borrowernumber} );
 
     my $substitute = $params->{'substitute'} || {};
-    $substitute->{today} ||= output_pref( { dt => dt_from_string, dateonly => 1} );
 
     my %tables = ( 'borrowers' => $params->{'borrowernumber'} );
     if ( my $p = $params->{'branchcode'} ) {

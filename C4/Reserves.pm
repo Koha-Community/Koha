@@ -1869,7 +1869,6 @@ sub _koha_notify_reserve {
             'reserves'       => $hold->unblessed,
             'items'          => $hold->itemnumber,
         },
-        substitute => { today => output_pref( { dt => dt_from_string, dateonly => 1 } ) },
     );
 
     my $notification_sent = 0; #Keeping track if a Hold_filled message is sent. If no message can be sent, then default to a print message.
