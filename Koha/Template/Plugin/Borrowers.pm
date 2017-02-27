@@ -57,4 +57,5 @@ sub HasOverdues {
     return Koha::Patrons->find( $borrowernumber )->has_overdues;
 }
 
+
 1;

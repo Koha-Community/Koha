@@ -64,7 +64,6 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 use DateTime;
 use Koha::DateUtils;
 use Koha::Database;
-use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Token;
 
@@ -357,7 +356,6 @@ $template->param(
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
-    borrower => Koha::Patrons->find( $borrowernumber ),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
