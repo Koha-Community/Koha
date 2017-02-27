@@ -688,7 +688,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
 
     subtest 'patron privacy is 1 (default)' => sub {
-        plan tests => 6;
+        plan tests => 8;
 
         t::lib::Mocks::mock_preference('IndependentBranches', 0);
         my $patron = $builder->build(
@@ -752,6 +752,17 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         $sth->execute($item_2->{itemnumber});
         ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
         is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue should have been anonymised, the returned date is before' );
+
+        my $sth_reset = $dbh->prepare(q|UPDATE old_issues SET borrowernumber = ? WHERE itemnumber = ?|);
+        $sth_reset->execute( $patron->{borrowernumber}, $item_1->{itemnumber} );
+        $sth_reset->execute( $patron->{borrowernumber}, $item_2->{itemnumber} );
+        $rows_affected = Koha::Patrons->search_patrons_to_anonymise->anonymise_issue_history;
+        $sth->execute($item_1->{itemnumber});
+        ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
+        is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue 1 should have been anonymised, before parameter was not passed' );
+        $sth->execute($item_2->{itemnumber});
+        ($borrowernumber_used_to_anonymised) = $sth->fetchrow_array;
+        is( $borrowernumber_used_to_anonymised, $anonymous->{borrowernumber}, 'The issue 2 should have been anonymised, before parameter was not passed' );
 
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
