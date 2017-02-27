@@ -160,7 +160,7 @@
         <legend>Warnings</legend>
         <ul>
             <li>[% patrons_to_delete.size || 0 %] patrons will be deleted</li>
-            <li>[% patrons_to_anonymize.size || 0 %] patron's checkout histories will be anonymized</li>
+            <li>[% patrons_to_anonymize.count || 0 %] patron's checkout histories will be anonymized</li>
         </ul>
 
         <br />
@@ -177,9 +177,9 @@
                 <input type="hidden" name="do_delete" value="[% patrons_to_delete.size %]" /></fieldset>
 
             [% END %]
-            [% IF patrons_to_anonymize.size %]
-                Checkout history for [% patrons_to_anonymize.size %] patrons will be anonymized
-                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.size %]" />
+            [% IF patrons_to_anonymize.count %]
+                Checkout history for [% patrons_to_anonymize.count %] patrons will be anonymized
+                <input type="hidden" name="do_anonym" value="[% patrons_to_anonymize.count %]" />
             [% END %]
 
             <input type="hidden" name="step" value="3" />
