@@ -547,8 +547,31 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 
 my @results;
 
+my $suppress = 0;
+if (C4::Context->preference('OpacSuppression')) {
+    # OPAC suppression by IP address
+    if (C4::Context->preference('OpacSuppressionByIPRange')) {
+        my $IPAddress = $ENV{'REMOTE_ADDR'};
+        my $IPRange = C4::Context->preference('OpacSuppressionByIPRange');
+        $suppress = ($IPAddress !~ /^$IPRange/);
+    }
+    else {
+        $suppress = 1;
+    }
+}
+
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = $builder->build_query_compat(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang, { expanded_facet => $expanded_facet });
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
+  = $builder->build_query_compat(
+    \@operators,
+    \@operands,
+    \@indexes,
+    \@limits,
+    \@sort_by,
+    0,
+    $lang,
+    { expanded_facet => $expanded_facet, suppress => $suppress }
+    );
 
 sub _input_cgi_parse {
     my @elements;
@@ -567,36 +590,6 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
-
-# add OPAC 'hidelostitems'
-#if (C4::Context->preference('hidelostitems') == 1) {
-#    # either lost ge 0 or no value in the lost register
-#    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
-#}
-#
-# add OPAC suppression - requires at least one item indexed with Suppress
-if (C4::Context->preference('OpacSuppression')) {
-    # OPAC suppression by IP address
-    if (C4::Context->preference('OpacSuppressionByIPRange')) {
-        my $IPAddress = $ENV{'REMOTE_ADDR'};
-        my $IPRange = C4::Context->preference('OpacSuppressionByIPRange');
-        if ($IPAddress !~ /^$IPRange/)  {
-            if ( $query_type eq 'pqf' ) {
-                $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1';
-            } else {
-                $query = "($query) not Suppress=1";
-            }
-        }
-    }
-    else {
-        if ( $query_type eq 'pqf' ) {
-            #$query = "($query) && -(suppress:1)"; #QP syntax
-            $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1'; #PQF syntax
-        } else {
-            $query = "($query) not Suppress=1";
-        }
-    }
-}
 
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 $template->param ( OPACResultsSidebar => C4::Context->preference('OPACResultsSidebar'));
