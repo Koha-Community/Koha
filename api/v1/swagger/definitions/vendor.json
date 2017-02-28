@@ -1,0 +1,149 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../x-primitives.json#/vendor_id"
+    },
+    "name": {
+      "type": [
+        "string"
+      ],
+      "description": "Vendor name"
+    },
+    "address1": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor physical address (line 1)"
+    },
+    "address2": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor physical address (line 2)"
+    },
+    "address3": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor physical address (line 3)"
+    },
+    "address4": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor physical address (line 4)"
+    },
+    "phone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor phone number"
+    },
+    "fax": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor fax number"
+    },
+    "accountnumber": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor account number"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor notes"
+    },
+    "postal": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor postal address"
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Vendor web address"
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is this vendor active"
+    },
+    "list_currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "List prices currency"
+    },
+    "invoice_currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Invoice prices currency"
+    },
+    "gst": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Is the library taxed when buying to this vendor"
+    },
+    "list_includes_gst": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "List prices include taxes"
+    },
+    "invoice_includes_gst": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "Invoice prices include taxes"
+    },
+    "tax_rate": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Tax rate"
+    },
+    "discount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Discount offered on all items ordered from this vendor"
+    },
+    "deliverytime": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Vendor expected delivery time (in days)"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["name"]
+}

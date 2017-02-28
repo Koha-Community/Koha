@@ -385,6 +385,13 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-09 13:43:30
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b3aUNZsdvNzEuKScGD7ZPQ
 
+__PACKAGE__->add_columns(
+    '+active' => { is_boolean => 1 },
+    '+gstreg' => { is_boolean => 1 },
+    '+listincgst' => { is_boolean => 1 },
+    '+invoiceincgst' => { is_boolean => 1 },
+);
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
