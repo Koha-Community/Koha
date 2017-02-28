@@ -355,7 +355,7 @@ sub ReportToCommunity {
     my $data = shift;
     my $json = encode_json($data);
 
-    my $url = "http://hea.koha-community.org/upload.pl";
+    my $url = "https://hea.koha-community.org/upload.pl";
     my $ua = LWP::UserAgent->new;
     my $res = $ua->post(
         $url,
