@@ -1,7 +1,11 @@
 package t::lib::TestBuilder;
 
 use Modern::Perl;
+
 use Koha::Database;
+
+use Carp;
+use Module::Load;
 use String::Random;
 
 sub new {
@@ -49,6 +53,33 @@ sub delete {
         $rv++;
     }
     return $rv;
+}
+
+sub build_object {
+    my ( $self, $params ) = @_;
+
+    my $class = $params->{class};
+    my $value = $params->{value};
+
+    if ( not defined $class ) {
+        carp "Missing class param";
+        return;
+    }
+
+    load $class;
+    my $source = $class->_type;
+    my @pks = $self->schema->source( $class->_type )->primary_columns;
+
+    my $hashref = $self->build({ source => $source, value => $value });
+    my @ids;
+
+    foreach my $pk ( @pks ) {
+        push @ids, { $pk => $hashref->{ $pk } };
+    }
+
+    my $object = $class->find( @ids );
+
+    return $object;
 }
 
 sub build {
@@ -500,6 +531,13 @@ Note that you should wrap these actions in a transaction yourself.
 
     Realize that passing primary key values to build may result in undef
     if a record with that primary key already exists.
+
+=head2 build_object
+
+Given a plural Koha::Object-derived class, it creates a random element, and
+returns the corresponding Koha::Object.
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' [, value => { ... }] });
 
 =head1 AUTHOR
 

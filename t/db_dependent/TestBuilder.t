@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Warn;
 use Data::Dumper qw(Dumper);
 
 use Koha::Database;
+use Koha::Patrons;
 
 BEGIN {
     use_ok('t::lib::TestBuilder');
@@ -344,5 +345,39 @@ subtest 'Default values' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'build_object() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    $builder = t::lib::TestBuilder->new();
+
+    my $categorycode = $builder->build( { source => 'Category' } )->{categorycode};
+    my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
+
+    my $issuing_rule = $builder->build_object(
+        {   class => 'Koha::IssuingRules',
+            value => {
+                categorycode => $categorycode,
+                itemtype     => $itemtype
+            }
+        }
+    );
+
+    is( ref($issuing_rule), 'Koha::IssuingRule', 'Type is correct' );
+    is( $issuing_rule->categorycode,
+        $categorycode, 'Firstname correctly set' );
+    is( $issuing_rule->itemtype, $itemtype, 'Firstname correctly set' );
+
+    warning_is { $issuing_rule = $builder->build_object( {} ); }
+    { carped => 'Missing class param' },
+        'The class parameter is mandatory, raises a warning if absent';
+    is( $issuing_rule, undef,
+        'If the class parameter is missing, undef is returned' );
+
+    $schema->storage->txn_rollback;
+};
 
 1;
