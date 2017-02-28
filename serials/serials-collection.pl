@@ -146,6 +146,7 @@ my $subscriptionidlist="";
 foreach my $subscription (@$subscriptiondescs){
   $subscriptionidlist.=$subscription->{'subscriptionid'}."," ;
   $biblionumber = $subscription->{'bibnum'} unless ($biblionumber);
+  $subscription->{'hasRouting'} = check_routing($subscription->{'subscriptionid'});
 }
 
 chop $subscriptionidlist;
