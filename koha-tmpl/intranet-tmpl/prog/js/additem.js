@@ -161,8 +161,6 @@ function cloneItemBlock(index, unique_item_fields, callback) {
         }
     }
 
-    var random = Math.floor(Math.random()*100000); // get a random itemid.
-    var clone = $("<div id='itemblock"+random+"'></div>")
     $.ajax({
         url: "/cgi-bin/koha/services/itemrecorddisplay.pl",
         dataType: 'html',
@@ -171,6 +169,9 @@ function cloneItemBlock(index, unique_item_fields, callback) {
         },
         success: function(data, textStatus, jqXHR) {
             /* Create the item block */
+            var random = Math.floor(Math.random()*100000); // get a random itemid.
+            var clone = $("<div/>", { id: 'itemblock'+random });
+            $("#outeritemblock").append(clone);
             $(clone).append(data);
             /* Change all itemid fields value */
             $(clone).find("input[name='itemid']").each(function(){
@@ -209,7 +210,6 @@ function cloneItemBlock(index, unique_item_fields, callback) {
                 }
             });
 
-            $("#outeritemblock").append(clone);
             if (typeof callback === "function"){
                 var cloneIndex = "itemblock"+random;
                 callback(cloneIndex);
