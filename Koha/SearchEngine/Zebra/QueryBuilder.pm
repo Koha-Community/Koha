@@ -30,9 +30,29 @@ sub build_query {
 }
 
 sub build_query_compat {
-    # Because this passes directly on to C4::Search, we have no trouble being
-    # compatible.
-    build_query(@_);
+    my $self = shift;
+    my ($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $params) = @_;
+
+    my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
+      = $self->build_query(@_);
+
+    # add OPAC 'hidelostitems'
+    #if (C4::Context->preference('hidelostitems') == 1) {
+    #    # either lost ge 0 or no value in the lost register
+    #    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
+    #}
+    #
+    # add OPAC suppression - requires at least one item indexed with Suppress
+    if ($params->{suppress}) {
+        if ( $query_type eq 'pqf' ) {
+            #$query = "($query) && -(suppress:1)"; #QP syntax
+            $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1'; #PQF syntax
+        } else {
+            $query = "($query) not Suppress=1";
+        }
+    }
+
+    return ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 }
 
 sub build_authorities_query {
