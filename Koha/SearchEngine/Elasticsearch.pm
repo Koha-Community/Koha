@@ -224,9 +224,7 @@ sub get_elasticsearch_mappings {
                     include_in_all  => JSON::false,
                     fields          => {
                         phrase => {
-                            search_analyzer => "analyser_phrase",
-                            analyzer  => "analyser_phrase",
-                            type            => "text",
+                            type            => "keyword",
                         },
                     },
                 };
