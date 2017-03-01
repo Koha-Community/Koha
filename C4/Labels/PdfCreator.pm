@@ -31,6 +31,9 @@ use Koha::Exception::UnknownObject;
 use Koha::Exception::DB;
 use Koha::Exception::Labels::UnknownItems;
 
+use Koha::Logger;
+my $log = Koha::Logger->new({category => __PACKAGE__});
+
 =head new
 
     my $creator = C4::Labels::PdfCreator->new({
@@ -69,6 +72,7 @@ sub create {
 
     ##Start .pdf creation.
     my $filePath = $self->getFile()->stringify();
+    $log->debug("Writing PDF to '$filePath'") if $log->is_debug;
 #    system("rm", "$filePath");
     prFile($filePath);
     $self->setMediaBoxFromSheet($sheet);
@@ -122,28 +126,34 @@ Page 85, Table 30, MediaBox
 
 sub setMediaBoxFromSheet {
     my ($self, $sheet) = @_;
-    die "setMediaBoxFromSheet():> Param \$sheet '$sheet' is not a proper Sheet-object!" unless ($sheet->isa('C4::Labels::Sheet'));
-    prMbox(0, 0, $sheet->getPdfDimensions()->{width}, $sheet->getPdfDimensions()->{height});
+    unless ($sheet->isa('C4::Labels::Sheet')) {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[0]."():> Param \$sheet '$sheet' is not a proper Sheet-object!");
+    }
+    my @pos = (0, 0, $sheet->getPdfDimensions()->{width}, $sheet->getPdfDimensions()->{height});
+    $log->debug("Setting MediaBox as '@pos'") if $log->is_debug;
+    prMbox(@pos);
 }
 
 sub printBoundingBox {
     my ($self, $object) = @_;
     if ($object->getBoundingBox()) {
         my $pos = $object->getPdfPosition();
-        prAdd(_box($pos->{x},
-                   $pos->{y},
-                   $object->getPdfDimensions()->{width},
-                   $object->getPdfDimensions()->{height}
-        ));
+        my @pos = ($pos->{x}, $pos->{y}, $object->getPdfDimensions()->{width}, $object->getPdfDimensions()->{height});
+        $log->debug("Bounding box at '".join(', ',@pos)."'") if $log->is_debug;
+        prAdd(_box(@pos));
     }
 }
 sub printElement {
     my ($self, $element, $itemId) = @_;
 
     try {
-    my $text = C4::Labels::DataSourceManager::executeDataSource($element, $itemId);
-    C4::Labels::DataSourceManager::executeDataFormat($element, $text);
+        $log->debug("PrintElement item:'$itemId'") if $log->is_debug;
+        my $text = C4::Labels::DataSourceManager::executeDataSource($element, $itemId);
+        $log->debug("PrintElement item:'$itemId', text:'$text'") if $log->is_debug;
+        C4::Labels::DataSourceManager::executeDataFormat($element, $text);
     } catch { #Simply tag the Exception with the current Element and pass it upstream
+        $log->warn("PrintElement item:'$itemId', exception:'$_'") if $log->is_warn;
         my $idTag = "Error printing label for Item '$itemId'";
         die "$idTag\n$_" unless blessed($_) && $_->can('rethrow');
         $_->{message} = $idTag."\n".$_->{message};

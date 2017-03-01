@@ -28,6 +28,9 @@ use C4::Context;
 use Koha::Exception::UnknownObject;
 use Koha::Exception::BadParameter;
 
+use Koha::Logger;
+my $log = Koha::Logger->new({category => __PACKAGE__});
+
 =head SYNOPSIS
 
 Define subroutines that format and print text.
@@ -68,10 +71,14 @@ sub public_barcode39 {
         Koha::Exception::BadParameter->throw(error => $cc[3]."():> Given text '$text' has unallowed characters. Only these characters are allowed: A-Z, 0-9, -, ., $, /, +, % and space");
     }
 
-    PDF::Reuse::Barcode::Code39 (x             => $pos->{x},
-                                 y             => $pos->{y} - ($barcodeHeight*$yScaling),
-                                 ySize         => $yScaling,
-                                 xSize         => $xScaling,
+    my %pos = (
+        x             => $pos->{x},
+        y             => $pos->{y} - ($barcodeHeight*$yScaling),
+        ySize         => $yScaling,
+        xSize         => $xScaling,
+    );
+    $log->debug(  "Barcode39 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    PDF::Reuse::Barcode::Code39 (%pos,
                                  value         => '*'.$text.'*',
                                  text          => $showText,
                                  hide_asterisk => 1,);
@@ -95,10 +102,14 @@ sub public_barcode128 {
         Koha::Exception::BadParameter->throw(error => $cc[3]."():> Given text '$text' has unallowed characters. Only these characters are allowed: A-Z, 0-9, -, ., $, /, +, % and space");
     }
 
-    PDF::Reuse::Barcode::Code128 (x             => $pos->{x},
-                                  y             => $pos->{y} - ($barcodeHeight*$yScaling),
-                                  ySize         => $yScaling,
-                                  xSize         => $xScaling,
+    my %pos = (
+        x             => $pos->{x},
+        y             => $pos->{y} - ($barcodeHeight*$yScaling),
+        ySize         => $yScaling,
+        xSize         => $xScaling,
+    );
+    $log->debug(  "Barcode128 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    PDF::Reuse::Barcode::Code128 (%pos,
                                   value         => $text,
                                   text          => $showText,);
 }
@@ -125,10 +136,14 @@ sub public_barcodeEAN13 {
         Koha::Exception::BadParameter->throw(error => $cc[3]."():> Given text '$text' must be 13 characters long.");
     }
 
-    PDF::Reuse::Barcode::EAN13  (x             => $pos->{x},
-                                 y             => $pos->{y} - ($barcodeHeight*$yScaling),
-                                 ySize         => $yScaling,
-                                 xSize         => $xScaling,
+    my %pos = (
+        x             => $pos->{x},
+        y             => $pos->{y} - ($barcodeHeight*$yScaling),
+        ySize         => $yScaling,
+        xSize         => $xScaling,
+    );
+    $log->debug(  "EAN13 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    PDF::Reuse::Barcode::EAN13  (%pos,
                                  value         => $text,
                                  text          => $showText,);
 }
@@ -155,10 +170,14 @@ sub public_barcodeEAN13checksum {
         Koha::Exception::BadParameter->throw(error => $cc[3]."():> Given text '$text' must be 12 characters long.");
     }
 
-    PDF::Reuse::Barcode::EAN13  (x             => $pos->{x},
-                                 y             => $pos->{y} - ($barcodeHeight*$yScaling),
-                                 ySize         => $yScaling,
-                                 xSize         => $xScaling,
+    my %pos = (
+        x             => $pos->{x},
+        y             => $pos->{y} - ($barcodeHeight*$yScaling),
+        ySize         => $yScaling,
+        xSize         => $xScaling,
+    );
+    $log->debug(  "EAN13checksum ".$log->flatten(\%pos)  ) if $log->is_debug;
+    PDF::Reuse::Barcode::EAN13  (%pos,
                                  value         => $text,
                                  text          => $showText,);
 }
@@ -268,7 +287,9 @@ sub _printLines {
     for (my $i=0 ; $i<scalar(@$lines) ; $i++) {
         my $line = $lines->[$i];
         my $posTop = $pos->{y} - ($fontSize*($i+1)) - (($i != 0) ? $lineSeparation*$i : 0);
-        PDF::Reuse::prText($pos->{x}, $posTop, $line);
+        my @pos = ($pos->{x}, $posTop);
+        $log->debug(  "_printLine ".$log->flatten(\@pos)  ) if $log->is_debug;
+        PDF::Reuse::prText(@pos, $line);
     }
 }
 
