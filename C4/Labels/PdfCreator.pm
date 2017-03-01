@@ -65,16 +65,17 @@ in css3 start from top left, thus the sheet coordinates need to be inverted some
 sub create {
     my ($self, $itemBarcodes) = @_;
     my $items = $self->_normalizeBarcodesToItems($itemBarcodes); #Check if we have bad items.
+    my $sheet = $self->getSheet();
 
     ##Start .pdf creation.
     my $filePath = $self->getFile()->stringify();
 #    system("rm", "$filePath");
     prFile($filePath);
+    $self->setMediaBoxFromSheet($sheet);
     ($self->{fontSize}, $self->{fontSizeOld}) = prFontSize(12);
     $self->{font} = getTTFont();
     $self->setOrigo();
 
-    my $sheet = $self->getSheet();
     $sheet->setPdfPosition($self->getOrigo());
     $self->printBoundingBox($sheet);
 
@@ -108,6 +109,23 @@ sub create {
     prEnd();
     return ($filePath);
 }
+
+=head2 setMediaBoxFromSheet
+
+Sets the MediaBox-property of a PDF-Page.
+MediaBox I suppose is basically the page size.
+
+Based on http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/PDF32000_2008.pdf
+Page 85, Table 30, MediaBox
+
+=cut
+
+sub setMediaBoxFromSheet {
+    my ($self, $sheet) = @_;
+    die "setMediaBoxFromSheet():> Param \$sheet '$sheet' is not a proper Sheet-object!" unless ($sheet->isa('C4::Labels::Sheet'));
+    prMbox(0, 0, $sheet->getPdfDimensions()->{width}, $sheet->getPdfDimensions()->{height});
+}
+
 sub printBoundingBox {
     my ($self, $object) = @_;
     if ($object->getBoundingBox()) {

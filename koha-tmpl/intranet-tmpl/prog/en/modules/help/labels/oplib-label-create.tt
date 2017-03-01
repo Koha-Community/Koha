@@ -16,7 +16,15 @@ The screencast is a .mp4-video, so not all browsers can play it directly. Try do
 <h3>Implementation specifics</h3>
 <p>Due to the limitations in the Koha's PDF-printing library, dpi can currently only be used to scale the label sheet's element dimensions and positions.
    So when printing pdfs, the dpi only affects the positioning and size of the elements, not the size of the printable text or barcodes.
-   This is simply a convenience to have more space on the screen to work with miniscule details, bu decreasing the dpi-value.
+   This is simply a convenience to have more space on the screen to work with miniscule details, by decreasing the dpi-value.
+</p>
+<h3>Default measurement unit</h3>
+<p>Each unit of measurement should match 1⁄72 inches based on the PDF-specification.</p>
+
+<h2> * Sheet size * </h2>
+<p>The dimensions of the initial gray background sheet set the size of the printed document. Thus you can print documents of any dimension.<br/>
+   The default dimensions for a PDF-document are x=595, y=842 if you are looking for a A4-fit.<br/>
+   See title <i>Default measurement</i> to calculate sheet sizes.
 </p>
 
 <h2> * DataSource * </h2>
