@@ -48,16 +48,21 @@ if ( $action eq 'add' ) {
     my $description = $cgi->param('description') || undef;
     my $branchcode  = $cgi->param('branchcode')  || undef;
 
-    my $group = Koha::Library::Group->new(
-        {
-            parent_id   => $parent_id,
-            title       => $title,
-            description => $description,
-            branchcode  => $branchcode,
-        }
-    )->store();
+    if ( !$branchcode && Koha::Library::Groups->search( { title => $title } )->count() ) {
+        $template->param( error_duplicate_title => $title );
+    }
+    else {
+        my $group = Koha::Library::Group->new(
+            {
+                parent_id   => $parent_id,
+                title       => $title,
+                description => $description,
+                branchcode  => $branchcode,
+            }
+        )->store();
 
-    $template->param( added => $group );
+        $template->param( added => $group );
+    }
 }
 elsif ( $action eq 'edit' ) {
     my $id          = $cgi->param('id')          || undef;

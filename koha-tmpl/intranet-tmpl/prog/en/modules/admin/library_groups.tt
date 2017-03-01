@@ -108,6 +108,10 @@
             [% deleted.library | $KohaSpan class = 'name' %] has been removed from group.
         [% END %]
     </div>
+[% ELSIF error_duplicate_title %]
+    <div class="dialog alert error-duplicate-group-title">
+            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' %] already exists.
+    </div>
 [% END %]
 
 <div id="doc3" class="yui-t2">
