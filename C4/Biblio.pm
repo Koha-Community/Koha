@@ -1988,6 +1988,7 @@ sub GetMarcUrls {
         }
         my @urls = $field->subfield('u');
         foreach my $url (@urls) {
+            $url =~ s/^\s+|\s+$//g; # trim
             my $marcurl;
             if ( $marcflavour eq 'MARC21' ) {
                 my $s3   = $field->subfield('3');

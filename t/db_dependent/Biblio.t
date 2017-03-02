@@ -273,6 +273,17 @@ sub run_tests {
     is( ( $marcflavour eq 'UNIMARC' && @$a2 == @$a1 + 1 ) ||
         ( $marcflavour ne 'UNIMARC' && @$a2 == @$a1 + 3 ), 1,
         'Check the number of returned notes of GetMarcNotes' );
+
+    # test for GetMarcUrls
+    $marc_record->append_fields(
+        MARC::Field->new( '856', '', '', u => ' https://koha-community.org ' ),
+        MARC::Field->new( '856', '', '', u => 'koha-community.org' ),
+    );
+    my $marcurl = GetMarcUrls( $marc_record, $marcflavour );
+    is( @$marcurl, 2, 'GetMarcUrls returns two URLs' );
+    like( $marcurl->[0]->{MARCURL}, qr/^https/, 'GetMarcUrls did not stumble over a preceding space' );
+    ok( $marcflavour ne 'MARC21' || $marcurl->[1]->{MARCURL} =~ /^http:\/\//,
+        'GetMarcUrls prefixed a MARC21 URL with http://' );
 }
 
 sub get_title_field {
@@ -327,21 +338,21 @@ sub create_issn_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 31;
+    plan tests => 34;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 31;
+    plan tests => 34;
     run_tests('UNIMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 31;
+    plan tests => 34;
     run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
