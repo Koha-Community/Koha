@@ -76,16 +76,7 @@ BEGIN {
           qw(shib_ok checkpw_shib logout_shib login_shib_url get_login_shib);
 
         # Check for good config
-        if ( shib_ok() ) {
-
-            # Get shibboleth login attribute
-            $shib_login = get_login_shib();
-        }
-
-        # Bad config, disable shibboleth
-        else {
-            $shib = 0;
-        }
+        $shib = 0 unless shib_ok();
     }
     if ($cas) {
         import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
@@ -160,6 +151,9 @@ sub get_template_and_user {
 
     my $in = shift;
     my ( $user, $cookie, $sessionID, $flags );
+
+    # Get shibboleth login attribute
+    $shib_login = get_login_shib() if $shib;
 
     C4::Context->interface( $in->{type} );
 
@@ -790,6 +784,10 @@ sub _timeout_syspref {
 sub checkauth {
     my $query = shift;
     $debug and warn "Checking Auth";
+
+    # Get shibboleth login attribute
+    $shib_login = get_login_shib() if $shib;
+
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;

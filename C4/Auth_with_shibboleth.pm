@@ -27,6 +27,7 @@ use Koha::Patrons;
 use C4::Members::Messaging;
 use Carp;
 use CGI;
+use List::Util qw(any);
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
@@ -82,9 +83,14 @@ sub get_login_shib {
     my $config = _get_shib_config();
 
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
-    $debug and warn $matchAttribute . " value: " . $ENV{$matchAttribute};
 
-    return $ENV{$matchAttribute} || '';
+    if ( any { /(^psgi|^plack)/i } keys %ENV ) {
+      $debug and warn $matchAttribute . " value: " . $ENV{"HTTP_".uc($matchAttribute)};
+      return $ENV{"HTTP_".uc($matchAttribute)} || '';
+    } else {
+      $debug and warn $matchAttribute . " value: " . $ENV{$matchAttribute};
+      return $ENV{$matchAttribute} || '';
+    }
 }
 
 # Checks for password correctness
@@ -247,11 +253,20 @@ Map their attributes to what you want to see in koha
 
 Tell apache that we wish to allow koha to authenticate via shibboleth.
 
-This is as simple as adding the below to your virtualhost config:
+This is as simple as adding the below to your virtualhost config (for CGI running):
 
  <Location />
    AuthType shibboleth
    Require shibboleth
+ </Location>
+
+Or (for Plack running):
+
+ <Location />
+   AuthType shibboleth
+   Require shibboleth
+   ShibUseEnvironment Off
+   ShibUseHeaders On
  </Location>
 
 =item 5.
