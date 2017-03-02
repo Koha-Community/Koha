@@ -3,11 +3,11 @@ use Modern::Perl;
 use t::lib::Mocks;
 use Test::More tests => 5;                      # last test to print
 
-local $@;
-eval { require WebService::ILS::OverDrive::Patron; }
-  or diag($@);
+use Module::Load::Conditional qw( can_load );
+
 SKIP: {
-    skip "cannot filnd WebService::ILS::OverDrive::Patron", 5 if $@;
+    skip "cannot find WebService::ILS::OverDrive::Patron", 5
+      unless can_load( modules => { 'WebService::ILS::OverDrive::Patron' => undef } );
 
     use_ok('Koha::ExternalContent::OverDrive');
 
