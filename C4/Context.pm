@@ -1020,7 +1020,8 @@ sub interface {
 
     if (defined $interface) {
         $interface = lc $interface;
-        if ($interface eq 'opac' || $interface eq 'intranet' || $interface eq 'sip' || $interface eq 'commandline') {
+        if ($interface eq 'opac' || $interface eq 'intranet' || $interface eq 'sip' ||
+            $interface eq 'commandline' || $interface eq 'rest' ) {
             $context->{interface} = $interface;
         } else {
             warn "invalid interface : '$interface'";

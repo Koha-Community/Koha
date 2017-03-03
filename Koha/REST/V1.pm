@@ -37,6 +37,8 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
+    C4::Context->interface('rest');
+
     # Force charset=utf8 in Content-Type header for JSON responses
     $self->types->type(json => 'application/json; charset=utf8');
 
