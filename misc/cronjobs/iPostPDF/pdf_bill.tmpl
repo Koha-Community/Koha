@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Lasku</title>
+		<style>
+			body {
+				font-size: large;
+			}
+			.header, .footer {
+				margin-top:20mm;
+				margin-left:21mm;
+				margin-right:21mm;
+				height:30mm;
+				position: relative;
+			}
+			.footer {
+				clear: both;
+				margin-top: 40mm;
+			}
+			.recipient{
+				height: 30mm;
+			}
+			.content, .recipient {
+				margin-top:20mm;
+				margin-left:21mm;
+				margin-right:21mm;
+				padding-bottom:21mm;
+				position: relative;
+			}
+			.sender {
+				padding-bottom: 30mm;
+			}
+			.billheader, .billfooter {
+				position: absolute;
+				right: 0;
+				top: 0;
+			}
+			.library{
+				position: absolute;
+				top:0;
+				left:0;
+			}
+			hr{
+				background: #000000;
+				border: 0;
+				height: 0.5mm;
+			}
+			.summary {
+				position: relative;
+				float:right;
+			}
+			ul.info {
+				padding:0;
+				margin:0;
+				list-style: none;
+			}
+			ul.items-row {
+			  display: table;
+			  width: 100%;
+			  text-align: left;
+			  padding: 0;
+			  margin: 0;
+			}
+
+			ul.items-row > li {
+			  display: table-cell;
+			  width: 25%;
+			  padding: 5mm 0;
+			}
+			li {
+				list-style: none;
+			}
+			.hidden {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<TMPL_VAR NAME=ITEMINFO>
+	</body>
+</html>
