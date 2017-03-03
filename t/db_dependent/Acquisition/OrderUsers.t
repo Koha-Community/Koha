@@ -50,7 +50,6 @@ my $order = Koha::Acquisition::Order->new(
         entrydate        => '01-01-2014',
         currency         => 'EUR',
         notes            => "This is a note1",
-        gstrate          => 0.0500,
         orderstatus      => 1,
         quantityreceived => 0,
         rrp              => 10,
