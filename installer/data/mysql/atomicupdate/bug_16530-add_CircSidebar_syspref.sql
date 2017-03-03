@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('CircSidebar','0','','Activate or deactivate the navigation sidebar on all Circulation pages','YesNo');
