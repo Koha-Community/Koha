@@ -315,8 +315,12 @@ sub buildKohaItemsNamespace {
 
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
     my $xml = '';
+    my %descs = map { $_->{authorised_value} => $_ } Koha::AuthorisedValues->get_descriptions_by_koha_field( { kohafield => 'items.notforloan' } );
+
     for my $item (@items) {
         my $status;
+        my $substatus = '';
+<<<<<<< HEAD
 
         if ($item->has_pending_hold) {
             $status = 'Pending hold';
@@ -338,6 +342,11 @@ sub buildKohaItemsNamespace {
         }
         elsif ($item->onloan) {
             $status = "Checked out";
+        }
+        elsif ( $item->notforloan > 0 ) {
+                $status = "reallynotforloan";
+                $substatus = $descs{$item->{notforloan}} || '';
+                $substatus = $substatus->{opac_description} if $substatus;
         }
         elsif ( $item->notforloan && $item->notforloan > 0
             || exists $itemtypes->{ $item->effective_itemtype }
@@ -364,6 +373,7 @@ sub buildKohaItemsNamespace {
           . "<location>$location</location>"
           . "<ccode>$ccode</ccode>"
           . "<status>".( $status // q{} )."</status>"
+          . "<substatus>$substatus</substatus>"
           . "<itemcallnumber>$itemcallnumber</itemcallnumber>"
           . "<stocknumber>$stocknumber</stocknumber>"
           . "</item>";

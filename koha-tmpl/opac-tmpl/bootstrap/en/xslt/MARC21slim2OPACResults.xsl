@@ -12,6 +12,7 @@
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
     <xsl:key name="item-by-status-and-branch-home" match="items:item" use="concat(items:status, ' ', items:homebranch)"/>
     <xsl:key name="item-by-status-and-branch-holding" match="items:item" use="concat(items:status, ' ', items:holdingbranch)"/>
+    <xsl:key name="item-by-substatus-and-branch" match="items:item" use="concat(items:substatus, ' ', items:homebranch)"/>
 
     <xsl:template match="/">
             <xsl:apply-templates/>
@@ -1333,6 +1334,27 @@
                             <br/>
                        </xsl:when></xsl:choose>
                    </xsl:when> </xsl:choose>
+
+                   <xsl:if test="count(key('item-by-status', 'available'))=0">
+                       <span class="available"><xsl:value-of select="items:homebranch"/><xsl:text>: </xsl:text></span>
+                   </xsl:if>
+
+                   <xsl:choose>
+                       <xsl:when test="count(key('item-by-status', 'reallynotforloan'))>0">
+                          <span class="unavailable">
+                              <br />
+                             <xsl:variable name="reference_items" select="key('item-by-status', 'reallynotforloan')"/>
+                             <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch))[1])]">
+                                  <xsl:value-of select="items:substatus"/>
+                                  <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<span class="LabelCallNumber">Call number: </span><xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+                                  <xsl:text> (</xsl:text>
+                                  <xsl:value-of select="count(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch)))"/>
+                                  <xsl:text>)</xsl:text>
+                                  <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
+                              </xsl:for-each>
+                           </span>
+                       </xsl:when>
+                   </xsl:choose>
 
                    <xsl:if test="count(key('item-by-status', 'Checked out'))>0">
                    <span class="unavailable">
