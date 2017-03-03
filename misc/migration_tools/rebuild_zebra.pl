@@ -635,19 +635,26 @@ sub generate_deleted_marc_records {
 }
 
 sub get_corrected_marc_record {
-    my ($record_type, $record_number) = @_;
+    my ( $record_type, $record_number ) = @_;
 
-    my $marc = get_raw_marc_record($record_type, $record_number);
+    my $marc = get_raw_marc_record( $record_type, $record_number );
 
-    if (defined $marc) {
+    if ( defined $marc ) {
         fix_leader($marc);
-        if ($record_type eq 'authority') {
-            fix_authority_id($marc, $record_number);
-        } elsif ($record_type eq 'biblio' && C4::Context->preference('IncludeSeeFromInSearches')) {
-            my $normalizer = Koha::RecordProcessor->new( { filters => 'EmbedSeeFromHeadings' } );
+        if ( $record_type eq 'authority' ) {
+            fix_authority_id( $marc, $record_number );
+        }
+        elsif ( $record_type eq 'biblio' ) {
+
+            my @filters;
+            push @filters, 'EmbedItemsAvailability';
+            push @filters, 'IncludeSeeFromInSearches'
+                if C4::Context->preference('IncludeSeeFromInSearches');
+
+            my $normalizer = Koha::RecordProcessor->new( { filters => \@filters } );
             $marc = $normalizer->process($marc);
         }
-        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+        if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
             fix_unimarc_100($marc);
         }
     }

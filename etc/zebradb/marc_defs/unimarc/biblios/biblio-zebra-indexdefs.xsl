@@ -1880,6 +1880,15 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </xslo:if>
     </xslo:for-each>
   </xslo:template>
+  <xslo:template mode="index_subfields" match="marc:datafield[@tag='999']">
+    <xslo:for-each select="marc:subfield">
+      <xslo:if test="contains('x', @code)">
+        <z:index name="not-onloan-count:n">
+          <xslo:value-of select="."/>
+        </z:index>
+      </xslo:if>
+    </xslo:for-each>
+  </xslo:template>
   <xslo:template mode="index_data_field" match="marc:datafield[@tag='700']">
     <z:index name="Author:w Personal-name:w Author:p Personal-name:p Personal-name:p">
       <xslo:variable name="raw_heading">
