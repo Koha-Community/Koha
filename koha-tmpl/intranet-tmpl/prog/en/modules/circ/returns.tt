@@ -224,7 +224,7 @@ $(document).ready(function () {
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-        <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% homebranch %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+        <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% TransferWaitingAt %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
