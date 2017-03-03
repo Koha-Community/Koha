@@ -218,6 +218,28 @@ __PAZPAR2_TOGGLE_XML_POST__
 
  <!-- Opuscapita iPost configuration -->
  <printmailProviders>
+    <opuscapita>
+        <combineacrossbranches>yes</combineacrossbranches>
+        <targetdir>/home/koha/koha-dev/var/spool/printmail/epl</targetdir>
+        <branches>
+            <demobranch>
+                <!-- See iPost EPL Design Guide for information about headers: http://www.opuscapita.com/media/830049/iPost-EPL-Design-Guide-FI-ENG-12-01-2016.pdf -->
+                <header>EPL1nnnnnnnnnnnTT002SD 0</header>
+                <contact></contact>
+                <layout>
+                    <!-- Control the paging -->
+                    <contpagecode>EPL80068</contpagecode>
+                    <firstpage>42</firstpage>
+                    <otherpages>76</otherpages>
+                </layout>
+            </demobranch>
+        </branches>
+        <sftp>
+            <host></host>
+            <user></user>
+            <password></password>
+        </sftp>
+    </opuscapita>
     <opusFTP>
       <ftpHost></ftpHost>
       <ftpUser></ftpUser>

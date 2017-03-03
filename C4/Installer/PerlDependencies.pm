@@ -867,6 +867,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.73',
     },
+    'Text::Undiacritic' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.07',
+    },
     'Text::Unidecode' => {
         'usage'    => 'Edifact',
         'required' => '0',
