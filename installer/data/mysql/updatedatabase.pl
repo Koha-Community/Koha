@@ -13937,6 +13937,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17260 - updatedatabase.pl fails on invalid entries in ENUM and BOOLEAN columns)\n";
 }
 
+$DBversion = "16.12.00.012";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('OpacNewsLibrarySelect', '0', '', 'Show selector for branches on OPAC news page', 'YesNo');
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14764 - Add OPAC News branch selector)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
