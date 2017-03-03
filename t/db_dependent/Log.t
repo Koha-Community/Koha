@@ -93,7 +93,7 @@ subtest "GetLogs should return all logs if dates are not set" => sub {
 
 subtest 'logaction(): interface is correctly logged' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     # No interface passed, using C4::Context->interface
     $dbh->do("DELETE FROM action_logs;");
@@ -123,12 +123,19 @@ subtest 'logaction(): interface is correctly logged' => sub {
     $logs = GetLogs();
     is( @{$logs}[0]->{ interface }, 'sip', 'Passed interface is respected (sip)');
 
+    # Explicit interfaces
+    $dbh->do("DELETE FROM action_logs;");
+    C4::Context->interface( 'rest' );
+    logaction( "MEMBERS", "MODIFY", 1, 'test info', 'rest');
+    $logs = GetLogs();
+    is( @{$logs}[0]->{ interface }, 'rest', 'Passed interface is respected (rest)');
+
     $dbh->rollback;
 };
 
 subtest 'GetLogs() respects interface filters' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $dbh->do("DELETE FROM action_logs;");
 
@@ -136,9 +143,10 @@ subtest 'GetLogs() respects interface filters' => sub {
     logaction( 'MEMBERS', 'MODIFY', 1, 'sip info',         'sip');
     logaction( 'MEMBERS', 'MODIFY', 1, 'intranet info',    'intranet');
     logaction( 'MEMBERS', 'MODIFY', 1, 'commandline info', 'commandline');
+    logaction( 'MEMBERS', 'MODIFY', 1, 'rest info', 'rest');
 
     my $logs = scalar @{ GetLogs() };
-    is( $logs, 4, 'If no filter on interfaces is passed, all logs are returned');
+    is( $logs, 5, 'If no filter on interfaces is passed, all logs are returned');
 
     $logs = GetLogs(undef,undef,undef,undef,undef,undef,undef,['opac']);
     is( @{$logs}[0]->{ interface }, 'opac', 'Interface correctly filtered (opac)');
@@ -151,6 +159,9 @@ subtest 'GetLogs() respects interface filters' => sub {
 
     $logs = GetLogs(undef,undef,undef,undef,undef,undef,undef,['commandline']);
     is( @{$logs}[0]->{ interface }, 'commandline', 'Interface correctly filtered (commandline)');
+
+    $logs = GetLogs(undef,undef,undef,undef,undef,undef,undef,['rest']);
+    is( @{$logs}[0]->{ interface }, 'rest', 'Interface correctly filtered (rest)');
 
     $dbh->rollback;
 };
