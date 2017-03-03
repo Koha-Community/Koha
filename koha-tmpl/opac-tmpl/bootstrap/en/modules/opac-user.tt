@@ -901,11 +901,13 @@ Using this account is not recommended because some parts of Koha will not functi
     <script type="text/JavaScript">
     $(document).ready(function() {
         [% IF ( overdrive_error ) %]
-        KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote %]");
+            KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote %]");
         [% END %]
+
         [% IF ( overdrive_tab ) %]
-        $("#opac-user-views").tabs("select", "#opac-user-overdrive");
+            $("#opac-user-views").tabs("select", "#opac-user-overdrive");
         [% END %]
+
         $("#opac-user-overdrive").each( function() {
             KOHA.OverDriveCirculation.display_account_details(this);
         } );
