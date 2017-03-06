@@ -60,7 +60,7 @@ sub _new_schema {
     my $db_passwd = $context->config("pass");
     my $tls = $context->config("tls");
     my $tls_options;
-    if ($tls eq 'yes'){
+    if( $tls && $tls eq 'yes' ) {
         my $ca = $context->config('ca');
         my $cert = $context->config('cert');
         my $key = $context->config('key');
