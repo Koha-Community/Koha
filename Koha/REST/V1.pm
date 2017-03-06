@@ -20,6 +20,8 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Context;
 
+use Koha::Logger::Mojo;
+
 =head1 NAME
 
 Koha::REST::V1 - Main v.1 REST api class
@@ -38,6 +40,8 @@ sub startup {
     my $self = shift;
 
     C4::Context->interface('rest');
+
+    $self->log(Koha::Logger::Mojo->get);
 
     # Force charset=utf8 in Content-Type header for JSON responses
     $self->types->type(json => 'application/json; charset=utf8');
