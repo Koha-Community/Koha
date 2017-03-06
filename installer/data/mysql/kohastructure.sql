@@ -4208,6 +4208,25 @@ CREATE TABLE `oauth_access_tokens` (
     PRIMARY KEY (`access_token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table `circulation_rules`
+--
+
+DROP TABLE IF EXISTS `circulation_rules`;
+CREATE TABLE `circulation_rules` (
+  `id` int(11) NOT NULL auto_increment,
+  `branchcode` varchar(10) NULL default NULL,
+  `categorycode` varchar(10) NULL default NULL,
+  `itemtype` varchar(10) NULL default NULL,
+  `rule_name` varchar(32) NOT NULL,
+  `rule_value` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `branchcode` (`branchcode`),
+  KEY `categorycode` (`categorycode`),
+  KEY `itemtype` (`itemtype`),
+  UNIQUE (`branchcode`,`categorycode`,`itemtype`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
