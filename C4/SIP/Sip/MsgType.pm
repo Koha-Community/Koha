@@ -420,7 +420,7 @@ sub build_patron_status {
 
         $resp .= patron_status_string($patron);
         $resp .= $lang . timestamp();
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
 
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
@@ -948,7 +948,7 @@ sub handle_patron_info {
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
         $resp .= add_field( FID_PATRON_ID,     $patron->id );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
 
         # TODO: add code for the fields
         #   hold items limit
@@ -1246,7 +1246,7 @@ sub handle_patron_enable {
         $resp .= $patron->language . timestamp();
 
         $resp .= add_field( FID_PATRON_ID,     $patron->id );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
         if ( defined($patron_pwd) ) {
             $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ) );
         }

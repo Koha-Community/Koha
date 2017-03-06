@@ -191,6 +191,26 @@ sub AUTOLOAD {
     }
 }
 
+sub name {
+    my ( $self, $template ) = @_;
+
+    if ($template) {
+        require Template;
+        require Koha::Patrons;
+
+        my $tt = Template->new();
+
+        my $patron = Koha::Patrons->find( $self->{borrowernumber} );
+
+        my $output;
+        $tt->process( \$template, { patron => $patron }, \$output );
+        return $output;
+    }
+    else {
+        return $self->{name};
+    }
+}
+
 sub check_password {
     my ( $self, $pwd ) = @_;
 
