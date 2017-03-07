@@ -88,7 +88,9 @@ $(document).ready(function() {
     [% ELSE %]
         <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier %]&amp;booksellerid=[% booksellerid %]&amp;allbaskets=1">Show all baskets</a>
     [% END %]
-    | <a href="#" id="show_active_vendors">Show active vendors only</a><a href="#" id="show_all_vendors">Show all vendors</a>
+    [% UNLESS booksellerid %]
+        | <a href="#" id="show_active_vendors">Show active vendors only</a><a href="#" id="show_all_vendors">Show all vendors</a>
+    [% END %]
     <div id="acqui_order_supplierlist">
         [% FOREACH supplier IN loop_suppliers %]
             [% IF ( supplier.active ) %]
