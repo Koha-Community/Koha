@@ -34,12 +34,14 @@ $(document).ready(function() {
         $(this).find("legend").html(legend);
     });
     $("#show_all_vendors").hide();
-    $("#show_active_vendors").click(function(){
+    $("#show_active_vendors").on('click', function(e){
+        e.preventDefault();
         $(".inactive").hide();
         $("#show_active_vendors").hide();
         $("#show_all_vendors").show();
     });
-    $("#show_all_vendors").click(function(){
+    $("#show_all_vendors").on('click', function(e){
+        e.preventDefault();
         $(".inactive").show();
         $("#show_all_vendors").hide();
         $("#show_active_vendors").show();
