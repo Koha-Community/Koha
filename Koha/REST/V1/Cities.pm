@@ -42,7 +42,7 @@ sub list {
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
             return $c->render( status  => 500,
-                               openapi => { error => $_->msg } );
+                               openapi => { error => $_->{msg} } );
         }
         else {
             return $c->render( status => 500,
@@ -76,7 +76,7 @@ sub add {
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
             return $c->render( status  => 500,
-                               openapi => { error => $_->message } );
+                               openapi => { error => $_->{msg} } );
         }
         else {
             return $c->render( status => 500,
@@ -131,7 +131,7 @@ sub delete {
         }
         elsif ( $_->isa('DBIx::Class::Exception') ) {
             return $c->render( status  => 500,
-                               openapi => { error => $_->msg } );
+                               openapi => { error => $_->{msg} } );
         }
         else {
             return $c->render( status => 500,
