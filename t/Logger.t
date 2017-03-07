@@ -21,25 +21,20 @@ use C4::Context;
 use Koha::Logger;
 
 use File::Temp qw/tempfile/;
+use File::Slurp;
 use Test::MockModule;
 use Test::More tests => 1;
 use Test::Warn;
 
 subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
-    plan tests => 8;
+    plan tests => 6;
     test01();
 };
 
 sub test01 {
 
-    my $ret;
+    my ($ret, $logger);
     my $mContext = new Test::MockModule('C4::Context');
-    $mContext->mock( 'config', sub { return; } );
-
-    my $logger= Koha::Logger->get;
-    is( exists $logger->{logger}, '', 'No log4perl config');
-    my $d= $logger->debug('Message 1');
-    is( $d, undef, 'No return value for debug call');
 
     my $log = mytempfile();
     my $conf = mytempfile( <<"HERE"
@@ -51,20 +46,30 @@ log4perl.appender.INTRANET.layout=PatternLayout
 log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l %n
 HERE
     );
+
     $mContext->mock( 'config', sub { return $conf; } );
-    $logger= Koha::Logger->get({ interface => 'intranet' });
-    is( exists $logger->{logger}, 1, 'Log4perl config found');
+    $logger = Koha::Logger->get({ interface => 'intranet' });
+
+    is( ref($logger), 'Koha::Logger', 'Log4perl config found');
     is( $logger->warn('Message 2'), 1, 'Message 2 returned a value' );
+    $ret = File::Slurp::read_file($log);
+    like($ret, qr/Message 2/, 'Got a correct log entry');
+
     warning_is { $ret = $logger->catastrophe }
-               "ERROR: Unsupported method catastrophe",
+               "ERROR: Unsupported method Koha::Logger::catastrophe, params ''",
                "Undefined method raises warning";
     is( $ret, undef, "'catastrophe' method undefined");
-    system("chmod 400 $log");
-    warnings_are { $ret = $logger->warn('Message 3') }
-                 [ "Log file not writable for log4perl",
-                   "warn: Message 3" ],
-                 "Warnings raised if log file is not writeable";
-    is( $ret, undef, 'Message 3 returned undef' );
+
+    BAIL_OUT('Running test as root') if (getpwuid $>) eq 'root';
+    eval {
+        system("chmod 400 $log");
+        kill 'HUP', $$; #HUP myself to reload log4perl config
+        $logger->warn('Message 3');
+        ok(0, 'Should have crashed because of missing write permission');
+    };
+    if ($@) {
+        like($@, qr/Can't open $log \(Permission denied\)/, 'Crashed due to missing write permission');
+    }
 }
 
 sub mytempfile {

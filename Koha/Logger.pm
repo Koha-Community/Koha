@@ -1,22 +1,18 @@
 package Koha::Logger;
 
+# Copyright 2017 Koha-Suomi
 # Copyright 2015 ByWater Solutions
 # kyle@bywatersolutions.com
+# Marcel de Rooy, Rijksmuseum
 #
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+use Carp;
+
+use Log::Log4perl;
+use base qw(Log::Log4perl::Logger);
 
 =head1 NAME
 
@@ -30,14 +26,10 @@ Koha::Logger
     $logger->warn( 'WARNING: Serious error encountered' );
     $logger->debug( 'I thought that this code was not used' );
 
-=head1 FUNCTIONS
+    #Hot-reload log4perl configuration changes
+    kill -HUP <koha process id>
 
 =cut
-
-use Modern::Perl;
-
-use Log::Log4perl;
-use Carp;
 
 use C4::Context;
 
@@ -59,136 +51,47 @@ sub get {
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     my $category = $params ? ( $params->{category} || caller ) : caller;
     my $l4pcat = $interface . '.' . $category;
-
-    my $init = _init();
-    my $self = {};
-    if ($init) {
-        $self->{logger} = Log::Log4perl->get_logger($l4pcat);
-        $self->{cat}    = $l4pcat;
-        $self->{logs}   = $init if ref $init;
-    }
-    bless $self, $class;
-    return $self;
+    _init();
+    my $logger = Log::Log4perl->get_logger($l4pcat);
+    bless($logger, $class);
+    return $logger;
 }
 
-=head1 INTERNALS
+sub _init {
+    my $confFile = C4::Context->config("log4perl_conf");
+    eval {
+        Log::Log4perl->init_and_watch( $confFile, 'HUP' ) #Starman uses HUP as well!
+            unless(Log::Log4perl->initialized());
+    };
+    if ($@) {
+        my @err;
+        if (not($confFile)) {
+            push(@err, 'Not defined');
+        } elsif (not(-e $confFile)) {
+            push(@err, 'Not exists');
+        } elsif (not(-r $confFile)) {
+            push(@err, 'Not readable');
+        } elsif (not(-f $confFile)) {
+            push(@err, 'Not plain file');
+        }
+        my $msg = "Couldn't init Koha::Logger from configuration file '$confFile'\n";
+        $msg .= "Configuration file has these problems: @err\n" if (scalar(@err));
+        $msg .= "Log::Log4Perl exception: $@\n";
+        die $msg;
+    }
+}
 
 =head2 AUTOLOAD
 
-    In order to prevent a crash when log4perl cannot write to Koha logfile,
-    we check first before calling log4perl.
-    If log4perl would add such a check, this would no longer be needed.
+    Prevent a crash when log4perl is invoked improperly.
 
 =cut
 
 sub AUTOLOAD {
-    my ( $self, $line ) = @_;
-    my $method = $Koha::Logger::AUTOLOAD;
-    $method =~ s/^Koha::Logger:://;
-
-    if ( !exists $self->{logger} ) {
-
-        #do not use log4perl; no print to stderr
-    }
-    elsif ( !$self->_recheck_logfile ) {
-        warn "Log file not writable for log4perl";
-        warn "$method: $line" if $line;
-    }
-    elsif ( $self->{logger}->can($method) ) {    #use log4perl
-        $self->{logger}->$method($line);
-        return 1;
-    }
-    else {                                       # we should not really get here
-        warn "ERROR: Unsupported method $method";
-    }
-    return;
-}
-
-=head2 DESTROY
-
-    Dummy destroy to prevent call to AUTOLOAD
-
-=cut
-
-sub DESTROY { }
-
-=head2 _init, _check_conf and _recheck_logfile
-
-=cut
-
-sub _init {
-    my $rv;
-    $ENV{"LOG4PERL_CONF"} = C4::Context->config("log4perl_conf"); #Supercharge Koha::Log to skip unnecessary configuration file checking on each log attempt
-    if ( exists $ENV{"LOG4PERL_CONF"} and $ENV{'LOG4PERL_CONF'} and -s $ENV{"LOG4PERL_CONF"} ) {
-
-        # Check for web server level configuration first
-        # In this case we ASSUME that you correctly arranged logfile
-        # permissions. If not, log4perl will crash on you.
-        # We will not parse apache files here.
-        Log::Log4perl->init_once( $ENV{"LOG4PERL_CONF"} );
-    }
-    elsif ( C4::Context->config("log4perl_conf") ) {
-
-        # Now look in the koha conf file. We only check the permissions of
-        # the default logfiles. For the rest, we again ASSUME that
-        # you arranged file permissions.
-        my $conf = C4::Context->config("log4perl_conf");
-        if ( $rv = _check_conf($conf) ) {
-            Log::Log4perl->init_once($conf);
-            return $rv;
-        }
-        else {
-            return 0;
-        }
-    }
-    else {
-        # This means that you do not use log4perl currently.
-        # We will not be forcing it.
-        return 0;
-    }
-    return 1;    # if we make it here, log4perl did not crash :)
-}
-
-sub _check_conf {    # check logfiles in log4perl config (at initialization)
-    my $file = shift;
-    return if !-r $file;
-    open my $fh, '<', $file;
-    my @lines = <$fh>;
-    close $fh;
-    my @logs;
-    foreach my $l (@lines) {
-        if ( $l =~ /(OPAC|INTRANET)\.filename\s*=\s*(.*)\s*$/i ) {
-
-            # we only check the two default logfiles, skipping additional ones
-            return if !-w $2;
-            push @logs, $1 . ':' . $2;
-        }
-    }
-    return if !@logs;    # we should find one
-    return \@logs;
-}
-
-sub _recheck_logfile {    # recheck saved logfile when logging message
     my $self = shift;
-
-    return 1 if !exists $self->{logs};    # remember? your own responsibility
-    my $opac = $self->{cat} =~ /^OPAC/;
-    my $log;
-    foreach ( @{ $self->{logs} } ) {
-        $log = $_ if $opac && /^OPAC:/ || !$opac && /^INTRANET:/;
-        last if $log;
-    }
-    $log =~ s/^(OPAC|INTRANET)://;
-    return -w $log;
+    my $method = $Koha::Logger::AUTOLOAD;
+    warn "ERROR: Unsupported method $method, params '@_'";
+    return undef;
 }
-
-=head1 AUTHOR
-
-Kyle M Hall, E<lt>kyle@bywatersolutions.comE<gt>
-Marcel de Rooy, Rijksmuseum
-
-=cut
 
 1;
-
-__END__
