@@ -64,12 +64,6 @@ __PACKAGE__->table("old_issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 return
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 4
-
 =head2 renewals
 
   data_type: 'tinyint'
@@ -129,8 +123,6 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "return",
-  { data_type => "varchar", is_nullable => 1, size => 4 },
   "renewals",
   { data_type => "tinyint", is_nullable => 1 },
   "auto_renew",
@@ -207,8 +199,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-23 13:04:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9GdzytyInRcFZns/q0qb3Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-07 14:25:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Nqm7crVG/Y5G3kuLAAKdSQ
 
 sub koha_objects_class {
     'Koha::Old::Checkouts';

@@ -65,12 +65,6 @@ __PACKAGE__->table("issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
-=head2 return
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 4
-
 =head2 renewals
 
   data_type: 'tinyint'
@@ -130,8 +124,6 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
-  "return",
-  { data_type => "varchar", is_nullable => 1, size => 4 },
   "renewals",
   { data_type => "tinyint", is_nullable => 1 },
   "auto_renew",
@@ -222,8 +214,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-04 12:00:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kREecsHr6wZPiokS946BHw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-07 14:25:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8jFZATc7tlK4Qb5YW8yrrw
 
 __PACKAGE__->belongs_to(
     "borrower",
