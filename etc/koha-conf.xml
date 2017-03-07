@@ -203,6 +203,18 @@ __PAZPAR2_TOGGLE_XML_POST__
                                             e.g. https://server/cgi-bin/koha/opac-paycollect.pl -->
     </CPU>
  </online_payments>
+   <!-- sendOverdueBills module and sap ftp configurations -->
+ <sendoverduebills_pathtoxml></sendoverduebills_pathtoxml> <!-- All xml files created by this module goes in this directory -->
+ <!-- Path to xml schema including filename -->
+ <sendoverduebills_pathtoxsd></sendoverduebills_pathtoxsd>
+ <sendoverduebills_xmlwritemode></sendoverduebills_xmlwritemode> <!-- Use value 1 only if you need to read xml manually! Default value is 0 -->
+ <sap_ftp_host></sap_ftp_host> <!-- Ftp host ip address -->
+ <sap_ftp_port></sap_ftp_port> <!-- Ftp host port -->
+ <sap_ftp_timeout></sap_ftp_timeout> <!-- Ftp connection timeout -->
+ <sap_ftp_ispassive></sap_ftp_ispassive> <!-- 1 for passive mode, 0 for active mode -->
+ <sap_ftp_user></sap_ftp_user> <!-- Ftp username -->
+ <sap_ftp_pw></sap_ftp_pw> <!-- Ftp password for username -->
+ <sap_use_sftp></sap_use_sftp> <!-- 1 use sftp, 0 use ftp -->
 
 </config>
 </yazgfs>

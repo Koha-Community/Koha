@@ -44,6 +44,11 @@
     <dt><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue notice/status triggers</a></dt>
     <dd>Set notice/status triggers for overdue items</dd>
     [% END %]
+
+    [% IF ( CAN_user_tools_edit_notices ) %]
+    <dt><a href="/cgi-bin/koha/tools/sendOverdueBills.pl">Send overdue bills</a></dt>
+    <dd>Create and send overdue bills</dd>
+    [% END %]
     
     [% IF ( CAN_user_tools_label_creator ) %]
     <dt><a href="/cgi-bin/koha/patroncards/home.pl">Patron card creator</a></dt>

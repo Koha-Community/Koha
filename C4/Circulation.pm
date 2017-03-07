@@ -37,6 +37,7 @@ use C4::Log; # logaction
 use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
 use C4::RotatingCollections qw(GetCollectionItemBranches);
 use Algorithm::CheckDigits;
+use C4::KohaSuomi::Billing::BillingManager qw(RemovePayment);
 
 use Data::Dumper;
 use Koha::Account;
@@ -2012,6 +2013,8 @@ sub AddReturn {
             }
         }
     }
+
+    C4::KohaSuomi::Billing::BillingManager::RemovePayment($borrowernumber, $item->{itemnumber});
 
     # fix up the overdues in accounts...
     if ($borrowernumber) {

@@ -1402,6 +1402,20 @@ CREATE TABLE `overduerules` ( -- overdue notice status and triggers
   UNIQUE KEY `overduerules_branch_cat` (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+--
+-- Table structure for table `overduebills`
+--
+
+CREATE TABLE `overduebills` (
+  `bill_id` int(11) NOT NULL AUTO_INCREMENT,
+  `issue_id` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `billingdate` datetime DEFAULT NULL,
+  PRIMARY KEY (`bill_id`),
+  KEY `issue_id` (`issue_id`)
+) DEFAULT CHARSET=utf8;
+
 -- Table structure for table `pending_offline_operations`
 --
 -- this table is MyISAM, InnoDB tables are growing only and this table is filled/emptied/filled/emptied...
