@@ -52,6 +52,7 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
     my $res = Koha::Template::Plugin::Koha::Version( $version );
     is_deeply( $res, {
         major       => $major,
+        minor       => $minor,
         release     => $major . "." . $minor,
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => $development
@@ -67,6 +68,7 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
     $res = Koha::Template::Plugin::Koha::Version( $version );
     is_deeply( $res, {
         major       => $major,
+        minor       => $minor,
         release     => $major . "." . $minor,
         maintenance => $major . "." . $minor . "." . $maintenance,
         development => undef
