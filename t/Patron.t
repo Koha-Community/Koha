@@ -22,7 +22,7 @@ use Test::Warn;
 use t::lib::Mocks;
 
 BEGIN {
-    t::lib::Mocks::mock_dbh;
+    use Test::DBIx::Class;
     use_ok('Koha::Object');
     use_ok('Koha::Patron');
 }

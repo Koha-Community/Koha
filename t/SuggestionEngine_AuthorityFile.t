@@ -29,7 +29,7 @@ use Test::MockModule;
 use t::lib::Mocks;
 
 # Mock the DB connexion and C4::Context
-my $context = t::lib::Mocks::mock_dbh;
+use Test::DBIx::Class;
 
 use_ok('Koha::SuggestionEngine');
 

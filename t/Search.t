@@ -21,7 +21,7 @@ use Test::More tests => 3;
 use t::lib::Mocks;
 
 # Mock the DB connexion and C4::Context
-my $context =  t::lib::Mocks::mock_dbh;
+use Test::DBIx::Class;
 
 use_ok('C4::Search');
 can_ok('C4::Search',

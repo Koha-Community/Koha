@@ -9,7 +9,7 @@ use Koha::Schema;
 use_ok('C4::Members');
 
 BEGIN {
-    t::lib::Mocks::mock_dbh;
+    use Test::DBIx::Class;
 }
 
 my $dbh = C4::Context->dbh;

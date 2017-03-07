@@ -67,7 +67,7 @@ foreach (sort @keys) {
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
 # Testing syspref caching
-t::lib::Mocks::mock_dbh;
+use Test::DBIx::Class;
 
 my $history;
 

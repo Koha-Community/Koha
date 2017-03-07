@@ -31,7 +31,7 @@ use t::lib::Mocks;
 
 =cut
 
-my $context_module = t::lib::Mocks::mock_dbh;
+use Test::DBIx::Class;
 
 # Loop through the C4:: modules
 my $lib = File::Spec->rel2abs('C4');
