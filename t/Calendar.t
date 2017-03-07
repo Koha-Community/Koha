@@ -39,16 +39,6 @@ use_ok('Koha::Calendar');
 
 use Test::DBIx::Class;
 
-sub fixtures {
-    my ( $data ) = @_;
-    fixtures_ok [
-        Biblio => [
-            [ qw/ biblionumber datecreated timestamp  / ],
-            @$data,
-        ],
-    ], 'add fixtures';
-}
-
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock(
     _new_schema => sub { return Schema(); }
