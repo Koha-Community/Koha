@@ -36,6 +36,12 @@ use Koha::Exceptions::Authorization;
 use Scalar::Util qw( blessed );
 use Try::Tiny;
 
+=head1 NAME
+
+Koha::REST::V1::Auth
+
+=head2 Operations
+
 =head3 under
 
 This subroutine is called before every request to API.
