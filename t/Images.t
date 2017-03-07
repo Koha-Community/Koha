@@ -32,12 +32,7 @@ BEGIN {
 
 use_ok('C4::Images');
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Biblioimage' ;
+use Test::DBIx::Class;
 
 # Make the code in the module use our mocked Koha::Schema/Koha::Database
 my $db = Test::MockModule->new('Koha::Database');

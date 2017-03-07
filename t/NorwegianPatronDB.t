@@ -60,12 +60,7 @@ BEGIN {
     }
 }
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Borrower', 'BorrowerSync';
+use Test::DBIx::Class {}, 'Borrower', 'BorrowerSync'; #Also loads those modules.
 
 # Make the code in the module use our mocked Koha::Schema/Koha::Database
 my $db = Test::MockModule->new('Koha::Database');

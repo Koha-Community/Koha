@@ -33,12 +33,8 @@ BEGIN {
 
 use_ok('C4::Biblio');
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Biblio' ;
+#use Test::DBIx::Class {}, 'Biblio';
+use Test::DBIx::Class; #No difference between these two invocations in time taken to execute tests.
 
 sub fixtures {
     my ( $data ) = @_;

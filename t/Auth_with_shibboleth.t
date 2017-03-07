@@ -34,7 +34,7 @@ BEGIN {
     }
 }
 
-use Test::DBIx::Class { schema_class => 'Koha::Schema', connect_info => ['dbi:SQLite:dbname=:memory:','',''] };
+use Test::DBIx::Class;
 
 # Mock Variables
 my $matchpoint = 'userid';

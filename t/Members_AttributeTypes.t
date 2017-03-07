@@ -32,12 +32,7 @@ BEGIN {
 
 use_ok('C4::Members::AttributeTypes');
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'BorrowerAttributeType', 'Category' ;
+use Test::DBIx::Class;
 
 fixtures_ok [
     Category => [

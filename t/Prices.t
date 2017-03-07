@@ -20,12 +20,7 @@ use_ok('Koha::Number::Price');
 
 t::lib::Mocks::mock_preference( 'gist', '0.02|0.05|0.196' );
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Currency' ;
+use Test::DBIx::Class;
 
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );

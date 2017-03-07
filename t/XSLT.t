@@ -27,7 +27,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 10;
+        plan tests => 9;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -35,18 +35,7 @@ BEGIN {
     use_ok('C4::XSLT');
 };
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Branch' ;
-
-fixtures_ok [
-    Branch => [
-    ],
-];
-
+use Test::DBIx::Class;
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');

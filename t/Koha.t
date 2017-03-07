@@ -33,12 +33,7 @@ BEGIN {
 
 use_ok('C4::Koha');
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'Branch' ;
+use Test::DBIx::Class;
 
 sub fixtures {
     my ( $libraries ) = @_;

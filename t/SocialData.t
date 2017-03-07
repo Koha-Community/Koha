@@ -34,12 +34,7 @@ BEGIN {
     use_ok('C4::SocialData');
 }
 
-use Test::DBIx::Class {
-    schema_class => 'Koha::Schema',
-    connect_info => ['dbi:SQLite:dbname=:memory:','',''],
-    connect_opts => { name_sep => '.', quote_char => '`', },
-    fixture_class => '::Populate',
-}, 'SocialData', 'Biblioitem' ;
+use Test::DBIx::Class;
 
 fixtures_ok [
     Biblioitem => [
