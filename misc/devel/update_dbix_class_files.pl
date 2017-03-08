@@ -25,15 +25,15 @@ use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 use Getopt::Long;
 use Pod::Usage;
 
-my $path = "./";
-my $db_driver = 'mysql';
-my $db_host = 'localhost';
-my $db_port = '3306';
-my $db_name;
-my $db_user;
-my $db_passwd;
-my $tablename;
-my $help;
+my ($path, $db_driver, $db_host, $db_port, $db_name, $db_user, $db_passwd, $tablename, $help);
+
+#Get defaults if exists ~/.my.cnf
+defaultFromMyCnf();
+
+$path = "./" unless $path;
+$db_driver = 'mysql' unless $db_driver;
+$db_host = 'localhost' unless $db_host;
+$db_port = '3306' unless $db_port;
 
 GetOptions(
     "path=s"      => \$path,
@@ -53,17 +53,42 @@ pod2usage(1) if defined $help;
 if (! defined $db_name ) {
     print "Error: \'db_name\' parameter is mandatory.\n";
     pod2usage(1);
-} else {
-    my $options = { debug => 1, dump_directory => $path, preserve_case => 1 };
-    if ($tablename) {
-        $options->{constraint} = qr/\A$tablename\z/
-    }
+}
 
-    make_schema_at(
-        "Koha::Schema",
-        $options,
-        ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
-    );
+
+my $options = { debug => 1, dump_directory => $path, preserve_case => 1 };
+if ($tablename) {
+    $options->{constraint} = qr/\A$tablename\z/
+}
+
+make_schema_at(
+    "Koha::Schema",
+    $options,
+    ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
+);
+
+
+
+
+
+sub defaultFromMyCnf {
+    my $c = _parseMyCnf();
+    return unless $c;
+    $db_user   = $c->{'client.user'}     unless $db_user;
+    $db_host   = $c->{'client.host'}     unless $db_host;
+    $db_port   = $c->{'client.port'}     unless $db_port;
+    $db_name   = $c->{'client.database'} unless $db_name;
+    $db_passwd = $c->{'client.password'} unless $db_passwd;
+    $db_driver = 'mysql'                 unless $db_driver;
+}
+sub _parseMyCnf {
+    use Config::Simple;
+    my %c;
+    my $home = `echo ~`;
+    chomp $home;
+    return undef unless $home;
+    Config::Simple->import_from("$home/.my.cnf", \%c);
+    return \%c;
 }
 
 1;
