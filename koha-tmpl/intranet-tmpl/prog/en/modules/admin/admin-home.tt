@@ -13,7 +13,12 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-
+            [% IF ( Koha.Preference('Mana') == 2) %]
+                <fieldset>
+                    <p><center> You haven't decided if you want to activate Mana Knowlede Base, please let us know by clicking<center></p>
+                    <a href=/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice><center>Here</center></a>
+                </fieldset>
+           [% END %]
         <h1>Koha administration</h1>
         <div class="row">
             <div class="col-md-6 sysprefs">

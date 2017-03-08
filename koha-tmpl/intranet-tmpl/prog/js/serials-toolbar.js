@@ -40,4 +40,7 @@ function popup(subscriptionid) {
         popup( subscriptionid );
         return false;
     });
+    $("#mana-subscription-share").click(function() {
+        window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=share";
+    });
  });

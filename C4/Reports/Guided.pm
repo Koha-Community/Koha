@@ -33,6 +33,7 @@ use C4::Log;
 
 use Koha::AuthorisedValues;
 use Koha::Patron::Categories;
+use Koha::SharedContent;
 
 BEGIN {
     require Exporter;

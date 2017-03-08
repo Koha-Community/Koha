@@ -96,14 +96,16 @@ for my $field ( @$additional_fields ) {
 
 my $expiration_date_dt = $expiration_date ? dt_from_string( $expiration_date ) : undef;
 my @subscriptions;
+my $mana_statuscode;
 if ($searched){
     if ($mana) {
-        my $result = Koha::SharedContent::manaGetRequest("subscription",{
+        my $result = Koha::SharedContent::search_entities("subscription",{
             title        => $title,
             issn         => $ISSN,
             ean          => $EAN,
             publisher    => $publisher
         });
+        $mana_statuscode = $result->{code};
         @subscriptions = @{ $result->{data} };
     }
     else {
@@ -127,6 +129,7 @@ if ($searched){
 if ($mana) {
     $template->param(
         subscriptions => \@subscriptions,
+        statuscode    => $mana_statuscode,
         total         => scalar @subscriptions,
         title_filter  => $title,
         ISSN_filter   => $ISSN,

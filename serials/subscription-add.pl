@@ -292,35 +292,9 @@ sub _guess_enddate {
     return $enddate;
 }
 
-sub manage_subscription_numbering_pattern_id {
-    my $params;
-    if ( $query->param('numbering_pattern') eq 'mana' ) {
-        foreach (qw/numberingmethod label1 add1 every1 whenmorethan1 setto1
-                   numbering1 label2 add2 every2 whenmorethan2 setto2 numbering2
-                   label3 add3 every3 whenmorethan3 setto3 numbering3/) {
-            $params->{$_} = $query->param($_) if $query->param($_);
-        }
-
-        my $existing = Koha::Subscription::Numberpatterns->search($params)->next();
-
-        if ($existing) {
-            return $existing->id;
-        }
-
-        $params->{label} = Koha::Subscription::Numberpattern->uniqueLabel($query->param('patternname'));
-        $params->{description} = $query->param('sndescription');
-
-
-        my $subscription_np = Koha::Subscription::Numberpattern->new()->set($params)->store();
-        return $subscription_np->id;
-    }
-
-    return $query->param('numbering_pattern');
-}
-
-sub manage_subscription_frequencies_id {
-    my $periodicity;
-    if ( $query->param('frequency') eq 'mana' ) {
+sub redirect_add_subscription {
+    my $periodicity = $query->param('frequency');
+    if ($periodicity eq 'mana') {
         my $subscription_freq = Koha::Subscription::Frequency->new()->set(
             {
                 description   => $query->param('sfdescription'),
@@ -331,15 +305,7 @@ sub manage_subscription_frequencies_id {
         )->store();
         $periodicity = $subscription_freq->id;
     }
-    else {
-        $periodicity = $query->param('frequency');
-    }
-    return $periodicity;
-}
-
-sub redirect_add_subscription {
-    my $periodicity = manage_subscription_frequencies_id();
-    my $numberpattern = manage_subscription_numbering_pattern_id();
+    my $numberpattern = Koha::Subscription::Numberpatterns->new_or_existing({ $query->Vars });
 
     my $auser          = $query->param('user');
     my $branchcode     = $query->param('branchcode');
@@ -379,10 +345,7 @@ sub redirect_add_subscription {
     my $mana_id;
     if ( $query->param('mana_id') ne "" ) {
         $mana_id = $query->param('mana_id');
-        Koha::SharedContent::manaNewUserPatchRequest("subscription",$mana_id);
-    }
-    else {
-        $mana_id = undef;
+        Koha::SharedContent::increment_entity_value("subscription",$mana_id, "nbofusers");
     }
 
     my $startdate      = output_pref( { str => scalar $query->param('startdate'),      dateonly => 1, dateformat => 'iso' } );
@@ -406,7 +369,10 @@ sub redirect_add_subscription {
         $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate,
         $skip_serialseq, $itemtype, $previousitemtype, $mana_id
     );
-
+    if ( (C4::Context->preference('Mana')) and ( grep { $_ eq "subscription" } split(/,/, C4::Context->preference('AutoShareWithMana'))) ){
+        my $result = Koha::SharedContent::send_entity( $query->param('mana_language') || '', $loggedinuser, $subscriptionid, 'subscription');
+        $template->param( mana_msg => $result->{msg} );
+    }
     my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
     insert_additional_fields( $additional_fields, $biblionumber, $subscriptionid );
 
@@ -434,8 +400,19 @@ sub redirect_mod_subscription {
         ? output_pref( { str => $nextacquidate, dateonly => 1, dateformat => 'iso' } )
         : $firstacquidate;
 
-    my $periodicity = manage_subscription_frequencies_id();
-    my $numberpattern = manage_subscription_numbering_pattern_id();
+    my $periodicity = $query->param('frequency');
+    if ($periodicity eq 'mana') {
+        my $subscription_freq = Koha::Subscription::Frequency->new()->set(
+            {
+                description   => $query->param('sfdescription'),
+                unit          => $query->param('unit'),
+                unitsperissue => $query->param('unitsperissue'),
+                issuesperunit => $query->param('issuesperunit'),
+            }
+        )->store();
+        $periodicity = $subscription_freq->id;
+    }
+    my $numberpattern = Koha::Subscription::Numberpatterns->new_or_existing({ $query->Vars });
 
     my $subtype = $query->param('subtype');
     my $sublength = $query->param('sublength');
@@ -466,7 +443,7 @@ sub redirect_mod_subscription {
     my $mana_id;
     if ( defined( $query->param('mana_id') ) ) {
         $mana_id = $query->param('mana_id');
-        Koha::SharedContent::manaNewUserPatchRequest("subscription",$mana_id);
+        Koha::SharedContent::increment_entity_value("subscription",$mana_id, "nbofusers");
     }
     else {
         $mana_id = undef;

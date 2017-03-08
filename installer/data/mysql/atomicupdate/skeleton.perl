@@ -1,4 +1,4 @@
-$DBversion = 'XXX';  # will be replaced by the RM
+$DBversion = 'XXX';
 if( CheckVersion( $DBversion ) ) {
     # you can use $dbh here like:
     # $dbh->do( "ALTER TABLE biblio ADD COLUMN badtaste int" );

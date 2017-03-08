@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2016 BibLibre Morgane Alonso
+# Copyright 2017 BibLibre Baptiste Wojtkowski
 #
 # This file is part of Koha.
 #
@@ -22,7 +22,6 @@ use Modern::Perl;
 
 use Koha::SharedContent;
 use C4::Auth qw(check_cookie_auth);
-use Koha::Report;
 
 use CGI;
 use JSON;
@@ -40,17 +39,31 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $result = Koha::SharedContent::get_entity_by_id(
-    scalar $input->param('resource'),
-    scalar $input->param('id')
-);
+
+my $content;
+$content->{resource_id} = $input->param("resource_id");
+$content->{resource_type} = $input->param("resource");
+$content->{message} = $input->param("message");
+Koha::SharedContent::send_entity('', undef, undef, 'resource_comment', $content);
 my $package = "Koha::".ucfirst($input->param('resource'));
 my $resource;
-
-if ( $input->param( 'saveinbase' )) {
-    $resource = { id => $package->new_from_mana($result->{data})->id };
+my $result;
+eval{
+    $result = Koha::SharedContent::get_entity_by_id(
+        scalar $input->param('resource'),
+        scalar $input->param('id')
+    );
+};
+if ( $@ or $result->{code} == 500 ){
+    $resource->{errmsg} =  "Error: mana access got broken, please try again later\n\n ( error: $@ )";
 }
 else{
-    $resource = $result->{data};
+    if ( $input->param( 'saveinbase' )) {
+        $resource = { id => $package->new_from_mana($result->{data})->id };
+    }
+    else{
+        $resource = $result->{data};
+    }
 }
+
 print(to_json($resource));

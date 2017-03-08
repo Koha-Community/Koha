@@ -55,4 +55,10 @@ sub object_class {
     return 'Koha::Report';
 }
 
+=head1 AUTHOR
+
+Kyle M Hall <kyle@bywatersolutions.com>
+
+=cut
+
 1;

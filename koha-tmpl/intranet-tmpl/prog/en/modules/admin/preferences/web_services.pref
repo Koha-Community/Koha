@@ -63,9 +63,20 @@ Web services:
         -
             - pref: Mana
               choices:
-                  yes: Enable
-                  no: Disable
-            - request to Mana Webservice. Mana centralize commun information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana.
+                  0: Disable
+                  1: Enable
+                  2: No, let me think about it
+            - request to Mana Webservice. Mana centralize commun information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana. The informations shared with Mana KB are shared under the CC-0 license. More infos about CC-0 license on https://creativecommons.org/choose/zero/
+        -
+             - "Security token used to authenticate on mana:"
+             - pref: ManaToken
+               class: Text
+             - <br> You need a security token to authenticate on Mana. If this sytem preference is empty, please fill in the following form, you will receive an email to confirm and activate your token. <br> <form> First name <input name="firstname" type="text" id="firstname"> <br> Last name <input name="lastname" type=text id=lastname> <br> Email address <input name="email" type=text id=email><br> <input type=submit id=activatemana value="Send"></form>
+        -
+            - 'Fields automatically shared with mana'
+            - pref: AutoShareWithMana
+              multiple:
+                subscription: Subscriptions
     Reporting:
         -
             - Only return

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2016 BibLibre Morgane Alonso
+# Copyright 2017 BibLibre Baptiste Wojtkowski
 #
 # This file is part of Koha.
 #
@@ -22,7 +22,6 @@ use Modern::Perl;
 
 use Koha::SharedContent;
 use C4::Auth qw(check_cookie_auth);
-use Koha::Report;
 
 use CGI;
 use JSON;
@@ -39,18 +38,11 @@ my ( $auth_status, $sessionID ) =
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
-
-my $result = Koha::SharedContent::get_entity_by_id(
+my $result = Koha::SharedContent::increment_entity_value(
     scalar $input->param('resource'),
-    scalar $input->param('id')
+    scalar $input->param('id'),
+    scalar $input->param('field'),
+    scalar $input->param('step')
 );
-my $package = "Koha::".ucfirst($input->param('resource'));
-my $resource;
 
-if ( $input->param( 'saveinbase' )) {
-    $resource = { id => $package->new_from_mana($result->{data})->id };
-}
-else{
-    $resource = $result->{data};
-}
-print(to_json($resource));
+return $result;

@@ -18,8 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Koha::SharedContent;
 use Koha::Subscription;
@@ -39,9 +38,16 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
+my $templatename;
+if ($input->param( "resource" ) eq 'report') {
+    $templatename = "mana/mana-report-search-result.tt";
+} else {
+    $templatename = "mana/mana-subscription-search-result.tt";
+}
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "serials/mana-subscription-search-result.tt",
+        template_name   => $templatename,
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -52,11 +58,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $input->param('biblionumber');
+my ($identifier, $sub_mana_info);
+$identifier = $input->param('id');
+$template->param( lowWarned => 5, warned => 10, highWarned => 20);
+my $package = "Koha::".ucfirst($input->param( 'resource' ));
+$sub_mana_info = $package->get_search_info($identifier);
 
-my $sub_mana_info = Koha::Subscription::get_search_info($biblionumber);
-my $result =
-  Koha::SharedContent::manaGetRequest( "subscription", $sub_mana_info );
-$template->param( subscriptions => $result->{data} );
+$sub_mana_info->{ usecomments } = $input->param('usecomments');
+my $resourcename = $input->param('resource');
+my $result = Koha::SharedContent::search_entities( $resourcename, $sub_mana_info);
+my $nbofcomment;
+foreach my $resource (@{ $result->{data} }){
+    $nbofcomment = 0;
+    foreach my $comment (@{ $resource->{comments} }){
+        $nbofcomment += $comment->{nb};
+    }
+    $resource->{nbofcomment} = $nbofcomment;
+}
+
+$template->param( $input->param('resource')."s" => $result->{data} );
+$template->param( statuscode => $result->{code} );
+$template->param( msg => $result->{msg} );
 
 output_with_http_headers $input, $cookie, $template->output, 'json';

@@ -33,11 +33,7 @@ use Koha::Acquisition::Bookseller;
 use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
 use Carp;
 
-use LWP::UserAgent;
 use Koha::SharedContent;
-use Koha::Patrons;
-use Koha::Subscriptions;
-use Koha::Libraries;
 
 my $query = new CGI;
 my $op = $query->param('op') || q{};
@@ -65,7 +61,6 @@ my ($template, $loggedinuser, $cookie)
                 flagsrequired => {serials => $permission},
                 debug => 1,
                 });
-
 
 my $subs = GetSubscription($subscriptionid);
 
@@ -104,44 +99,10 @@ if ($op eq 'del') {
     }
 }
 elsif ( $op and $op eq "share" ) {
-    my $mana_language;
-    if ( $query->param('mana_language') ) {
-        $mana_language = $query->param('mana_language');
-    }
-    else {
-        $mana_language = C4::Context->preference('language');
-    }
-
-    my $mana_email;
-    if ( $loggedinuser ne 0 ) {
-        my $borrower = Koha::Patrons->find($loggedinuser);
-        $mana_email = $borrower->email
-          if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
-        $mana_email = $borrower->emailpro
-          if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
-        $mana_email =
-          Koha::Libraries->find( C4::Context->userenv->{'branch'} )->branchemail
-          if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
-    }
-    $mana_email = C4::Context->preference('KohaAdminEmailAddress')
-      if ( ( not defined($mana_email) ) or ( $mana_email eq '' ) );
-    my %versions = C4::Context::get_versions();
-
-    my $mana_info = {
-        language    => $mana_language,
-        kohaversion => $versions{'kohaVersion'},
-        exportemail => $mana_email
-    };
-    my $sub_mana_info = Koha::Subscription::get_sharable_info($subscriptionid);
-    $sub_mana_info = { %$sub_mana_info, %$mana_info };
-    my $result = Koha::SharedContent::manaPostRequest( "subscription",
-        $sub_mana_info );
-    if ( $result->{code} eq "200" and $result->{code} eq "201" ) {
-        my $subscription = Koha::Subscriptions->find($subscriptionid);
-        $subscription->set( { mana_id => $result->{id} } )->store;
-        $subs->{mana_id} = $result->{id};
-    }
-    $template->param( mana_code => $result->{code} );
+    my $mana_language = $query->param('mana_language');
+    my $result = Koha::SharedContent::send_entity($mana_language, $loggedinuser, $subscriptionid, 'subscription');
+    $template->param( mana_code => $result->{msg} );
+    $subs->{mana_id} = $result->{id};
 }
 
 my $hasRouting = check_routing($subscriptionid);
@@ -210,6 +171,7 @@ $template->param(
     default_bib_view => $default_bib_view,
     orders_grouped => $orders_grouped,
     (uc(C4::Context->preference("marcflavour"))) => 1,
+    mana_comments => $subs->{comments},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

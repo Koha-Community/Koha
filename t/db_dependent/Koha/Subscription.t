@@ -31,7 +31,6 @@ use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $builder = t::lib::TestBuilder->new;
 
 use_ok('Koha::Subscription');
 
@@ -150,6 +149,7 @@ my $ref = {
     'unit'            => $sub_freq_1->{unit},
     'unitsperissue'   => $sub_freq_1->{unitsperissue},
     'issuesperunit'   => $sub_freq_1->{issuesperunit},
+    'label'           => $sub_np_1->{label},
     'sndescription'   => $sub_np_1->{description},
     'numberingmethod' => $sub_np_1->{numberingmethod},
     'label'           => $sub_np_1->{label},
@@ -176,7 +176,7 @@ my $ref = {
     'publishercode'   => $bi_1->{publishercode}
 };
 
-is_deeply( Koha::Subscription::get_sharable_info( $sub_1->{subscriptionid} ),
+is_deeply( Koha::Subscription->get_sharable_info( $sub_1->{subscriptionid} ),
     $ref, "get_sharable_info function is ok" );
 
 $schema->storage->txn_rollback;

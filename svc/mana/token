@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2016 BibLibre Morgane Alonso
+# Copyright 2016 BibLibre Baptiste Wojtkowski
 #
 # This file is part of Koha.
 #
@@ -18,15 +18,14 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 #
 
+
 use Modern::Perl;
 
 use Koha::SharedContent;
 use C4::Auth qw(check_cookie_auth);
-use Koha::Report;
 
 use CGI;
 use JSON;
-
 
 my $input = new CGI;
 binmode STDOUT, ":encoding(UTF-8)";
@@ -40,17 +39,17 @@ if ( $auth_status ne "ok" ) {
     exit 0;
 }
 
-my $result = Koha::SharedContent::get_entity_by_id(
-    scalar $input->param('resource'),
-    scalar $input->param('id')
-);
-my $package = "Koha::".ucfirst($input->param('resource'));
-my $resource;
+my $mana_ip = C4::Context->config('mana_config');
 
-if ( $input->param( 'saveinbase' )) {
-    $resource = { id => $package->new_from_mana($result->{data})->id };
-}
-else{
-    $resource = $result->{data};
-}
-print(to_json($resource));
+my $url = "$mana_ip/getsecuritytoken";
+my $request = HTTP::Request->new( POST => $url );
+
+my $content;
+$content->{ firstname }= $input->param("firstname");
+$content->{ lastname }= $input->param("lastname");
+$content->{ email }= $input->param("email");
+my $json = to_json( $content, { utf8 => 1 } );
+$request->content($json);
+my $result = Koha::SharedContent::process_request($request);
+
+print(to_json($result));

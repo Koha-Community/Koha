@@ -393,28 +393,42 @@ function show_page_2() {
 }
 
 function mana_search() {
+    $("#mana_search").html("<p>" + _("Mana kb is being asked for your subscription..") + "</p>");
+    $("#mana_search").show();
+
     $.ajax({
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/search",
-        data: {biblionumber : $("#biblionumber").val()},
+        data: {id: $("#biblionumber").val(), resource: 'subscription', usecomments: 1},
         dataType: "html",
     })
     .done( function( result ) {
-    $("#mana_search_result .modal-body").html(result);
-        $("#mana_search_result_label").text("Results from Mana");
+        $("#mana_search_result .modal-body").html(result);
+        $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
         $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
             "sPaginationType": "four_button",
+            "order":[[4, "desc"], [5, "desc"]],
+            "autoWidth": false,
+            "columnDefs": [
+                { "width": "35%", "targets": 1 }
+            ],
             "aoColumnDefs": [
                 { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] },
                 { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
             ]
         }));
-        if($("td.dataTables_empty").length == 0){
-            $("#mana_search").show();
+        if( $("#mana_results_datatable").length && $("td.dataTables_empty").length == 0){
+            $("#mana_search").html("<p>" + _("Subscription found on Mana Knowledge Base:") + "</p><p> <a style='cursor:pointer' data-toggle='modal' data-target='#mana_search_result'>" + _("Quick fill") + "</a></p>");
         }
-    }).fail(function(result){
-    });
+        else if ( $("#mana_results_datatable").length ){
+            $("#mana_search").html("<p>" + _("No subscription found on Mana Knowledge Base :(") + "</p><p>" + _(" Please feel free to share you pattern with all others librarians once you are done") + "</p>");
+        }
+        else{
+            $("#mana_search").html( result );
+        }
+        $("#mana_search").show();
+    })
 }
 
 function mana_use(mana_id){
@@ -423,7 +437,7 @@ function mana_use(mana_id){
     $.ajax( {
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/use",
-        data: {id : mana_id},
+        data: {id: mana_id, resource: 'subscription'},
         dataType: "json",
     })
     .done(function(result){
@@ -492,11 +506,8 @@ function mana_use(mana_id){
     });
 }
 
-function removeDisabledAttr() {
-    $('select:disabled').removeAttr('disabled');
-}
-
 $(document).ready(function() {
+    mana_search();
     $("#displayexample").hide();
     $("#mana_search_result").modal("hide");
     $("#aqbooksellerid").on('keypress', function(e) {
@@ -606,9 +617,9 @@ $(document).ready(function() {
     });
     $("#subscription_add_next").on("click",function(){
         if ( Check_page1() ){
-            [% IF Koha.Preference('Mana') %]
+            if ( mana_enabled ) {
                 mana_search();
-            [% END %]
+            }
             show_page_2();
         }
     });
@@ -635,5 +646,8 @@ $(document).ready(function() {
     $("#testpatternbutton").on("click",function(e){
         e.preventDefault();
         testPredictionPattern();
+    });
+    $('#save-subscription').on("click", function(e){
+        $('select:disabled').removeAttr('disabled');
     });
 });

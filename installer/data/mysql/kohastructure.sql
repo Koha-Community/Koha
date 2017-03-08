@@ -1462,6 +1462,7 @@ CREATE TABLE saved_sql ( -- saved sql reports
     report_area varchar(6) default NULL,
     report_group varchar(80) default NULL,
     report_subgroup varchar(80) default NULL,
+    `mana_id` int(11) NULL DEFAULT NULL,
    PRIMARY KEY  (`id`),
    KEY sql_area_group_idx (report_group, report_subgroup),
    KEY boridx (`borrowernumber`)
@@ -2127,6 +2128,7 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `reneweddate` date default NULL, -- date of last renewal for the subscription
   `itemtype` VARCHAR( 10 ) NULL,
   `previousitemtype` VARCHAR( 10 ) NULL,
+  `mana_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY  (`subscriptionid`),
   KEY `by_biblionumber` (`biblionumber`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,

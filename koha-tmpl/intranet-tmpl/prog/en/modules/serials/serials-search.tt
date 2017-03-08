@@ -297,7 +297,7 @@
             </ul>
             [% IF mana %]
                 <div id="mana">
-                    [% INCLUDE 'mana-subscription-search-result.inc' %]
+                    [% INCLUDE 'mana/mana-subscription-search-result.inc' %]
                 </div>
             [% ELSE %]
             <div id="opened">
@@ -421,6 +421,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'mana.inc' %]
     <script>
         var subscriptionid = "[% subscriptionid | html %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");

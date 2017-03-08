@@ -6,6 +6,9 @@
             <ul class="dropdown-menu">
                 <li id="newmenuc"><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">New guided report</a> </li>
                 <li id="newsql"><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL">New SQL report</a> </li>
+                [% IF Koha.Preference('Mana')==1 %]
+                <li id="newsql"><a href="" data-toggle="modal" data-target="#mana_search_result">New SQL from Mana</a> </li>
+                [% END %]
             </ul>
         </div>
     [% END %]
@@ -47,6 +50,40 @@
             </div>
         [% END %]
 
+        [% IF ( mana_id && Koha.Preference('Mana') == 1 ) %]
+            <div class="btn-group">
+                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> Report mistake <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    [% FOREACH c IN mana_comments %]
+                        <li class="mana-comment" data-id="[% c.id %]">
+                            <a href="#">[% c.message %] ([% c.nb %])</a>
+                        </li>
+                    [% END %]
+                    <li role="separator" class="divider"></li>
+                    <li class="mana-other-comment"><a href="#">Other</a> </li>
+                </ul>
+            </div>
+
+            <div id="mana-comment-box" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="display: none;">
+                <div class="modal-dialog modal-lg" style="width: 30%">
+                    <div class="modal-content" style="">
+                        <div class="modal-header">
+                            <button type="button" id="mana-comment-close" class="closebtn"  aria-hidden="true">×</button>
+                            <h3 id="mana_submit_comment"> Please enter a new commment (max 35 caracters)</h3>
+                        </div>
+                        <div class="modal-body">
+                            <input hidden id="mana-resource" value="report">
+                            <input hidden id="mana-resource-id" value="[% mana_id %]">
+                            <div>
+                                <input type="text" maxlength="35" size="35" id="mana-comment">
+                            </div>
+                            <button id="mana-send-comment"> Comment </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        [% END %]
+
         [% IF ( execute ) %]
             [% BLOCK params %]
                 [%- FOREACH param IN sql_params %]&amp;sql_params=[% param | uri %][% END %]
@@ -77,3 +114,104 @@
 
     [% END %]
 </div>
+
+[% IF Koha.Preference('Mana')==1 %]
+    <div id="mana_search_result" class="modal fade container-fluid" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="width: 100%; left:0%; margin-left: auto; display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="mana_search_result_label"> Mana Search</h3>
+                </div>
+                <div>
+                    <form id="search_form" style="margin-left: 5%">
+                        Please enter a few key words:
+                        <input type=text id=mana_search_field>
+                        <input type=button class="mana_search_button" value="Search">
+                    </form>
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+[% END %]
+
+<script type="text/javascript">
+    function mana_use( mana_id ){
+        $.ajax( {
+            type:"POST",
+            url: "/cgi-bin/koha/svc/mana/use",
+            data: {id:mana_id, resource: 'report', saveinbase: 1},
+            dataType: "json",
+        })
+        .done( function (result){
+            if ( result.errmsg ){
+                alert( result.errmsg );
+            }
+            else{
+                window.location = ("/cgi-bin/koha/reports/guided_reports.pl?reports=").concat(result.id).concat("&amp;phase=Show%20SQL&mana_success=1&phase=Edit%20SQL");
+            }
+        })
+        .fail( function ( foo, msg, longmsg, bla ){
+        });
+    }
+
+    function mana_search( textquery ){
+        $.ajax({
+            type: "POST",
+            url: "/cgi-bin/koha/svc/mana/search",
+            data: {biblionumber: $("#biblionumber").val(), resource: 'report', id: textquery, usecomments: 1},
+            dataType: "html",
+        })
+        .done( function( result ) {
+            $("#mana_search_result .modal-body").html(result);
+            $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
+            $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults,{
+                "sPaginationType":"four_button",
+                "autoWidth": false,
+                "columnDefs": [
+                    { "width": "35%", "targets": 1 }
+                ],
+                "aoColumnDefs": [
+                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                ]
+            }));
+            if($("td.dataTables_empty").length == 0){
+                 $("#mana_search").show();
+            }
+
+            $( "select[class='actionreport1']" ).show();
+            $( "button[class='actionreport2']" ).hide();
+
+            $(".showbutton").on("click", function(){
+                $(this).parent().hide();
+                $(this).parent().next().show();
+            });
+
+            $("a[class='hidebutton']").on("click", function(){
+                $(this).parent().hide();
+                $(this).parent().prev().show();
+            });
+
+            $("#commentCloseButton").on("click", function(){
+                $("#comment_box").modal("hide");
+            });
+
+            $(".actionreport1").on("click", function(){
+                $("#selectedcomment").val($(this).val());
+                $(this).parent("select").hide();
+                $(this).parent("select").next().show();
+            });
+
+            $(".actionreport2").on("click", function(){
+                $(this).hide();
+                $(this).prev().show();
+                mana_increment($("#selectedcomment").val(), 'resource_comment', 'nb', -1);
+            });
+        }).fail( function( result ){
+        });
+    }
+</script>

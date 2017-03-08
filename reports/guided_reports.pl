@@ -38,6 +38,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::SharedContent;
 
 =head1 NAME
 
@@ -145,6 +146,7 @@ elsif ( $phase eq 'Build new' ) {
         }
     }
     $template->param(
+        'manamsg' => $input->param('manamsg') || '',
         'saved1'                => 1,
         'savedreports'          => $reports,
         'usecache'              => $usecache,
@@ -180,6 +182,10 @@ elsif ( $phase eq 'Show SQL'){
         'notes'      => $report->notes,
         'sql'     => $report->savedsql,
         'showsql' => 1,
+        'mana_success' => $input->param('mana_success'),
+        'mana_success' => scalar $input->param('mana_success'),
+        'mana_id' => $report->{mana_id},
+        'mana_comments' => $report->{comments}
     );
 }
 
@@ -198,6 +204,8 @@ elsif ( $phase eq 'Edit SQL'){
         'public' => $report->public,
         'usecache' => $usecache,
         'editsql'    => 1,
+        'mana_id' => $report->{mana_id},
+        'mana_comments' => $report->{comments}
     );
 }
 
@@ -547,7 +555,7 @@ elsif ( $phase eq 'Build report' ) {
 
 elsif ( $phase eq 'Save' ) {
     # Save the report that has just been built
-    my $area           = $input->param('area');
+    my $area = $input->param('area');
     my $sql  = $input->param('sql');
     my $type = $input->param('type');
     $template->param(
@@ -651,6 +659,7 @@ elsif ( $phase eq 'Save Report' ) {
                     cache_expiry   => $cache_expiry,
                     public         => $public,
                 } );
+
                 logaction( "REPORTS", "ADD", $id, "$name | $sql" ) if C4::Context->preference("ReportsLog");
             $template->param(
                 'save_successful' => 1,
@@ -668,6 +677,14 @@ elsif ( $phase eq 'Save Report' ) {
     }
 }
 
+elsif ($phase eq 'Share'){
+    my $result = Koha::SharedContent::send_entity($input->param('mana_language'), $borrowernumber, scalar $input->param('reportid'), 'report');
+    if ( $result ) {
+        print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&manamsg=".$result->{msg});
+    }else{
+        print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&manamsg=noanswer");
+    }
+}
 elsif ($phase eq 'Run this report'){
     # execute a saved report
     my $limit      = $input->param('limit') || 20;
