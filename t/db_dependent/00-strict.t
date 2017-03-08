@@ -14,7 +14,7 @@ my @dirs = ( 'acqui', 'admin', 'authorities', 'basket',
     'edithelp.pl', 'errors', 'fix-perl-path.PL', 'help.pl', 'installer',
     'koha_perl_deps.pl', 'kohaversion.pl', 'labels',
     'mainpage.pl', 'Makefile.PL', 'members', 'misc', 'offline_circ', 'opac',
-    'patroncards', 'reports', 'reserve', 'resetversion.pl', 'reviews',
+    'patroncards', 'reports', 'reserve', 'reviews',
     'rewrite-config.PL', 'rotating_collections', 'serials', 'services', 'skel',
     'sms', 'suggestion', 'svc', 'tags', 'tools', 'virtualshelves' );
 
