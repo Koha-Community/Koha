@@ -1458,6 +1458,7 @@ CREATE TABLE `search_field` (
   `label` varchar(255) NOT NULL COMMENT 'the human readable name of the field, for display',
   `type` ENUM('', 'string', 'date', 'number', 'boolean', 'sum', 'isbn', 'stdno') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
   `weight` decimal(5,2) DEFAULT NULL,
+  `facet_order` TINYINT(4) DEFAULT NULL COMMENT 'the order place of the field in facet list if faceted',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
