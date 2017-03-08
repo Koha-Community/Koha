@@ -60,16 +60,24 @@ sub store {
         Koha::Exceptions::Virtualshelves::DuplicateObject->throw;
     }
 
-    $self->allow_add( 0 )
-        unless defined $self->allow_add;
-    $self->allow_delete_own( 1 )
-        unless defined $self->allow_delete_own;
-    $self->allow_delete_other( 0 )
-        unless defined $self->allow_delete_other;
+    $self->allow_change_from_owner( 1 )
+        unless defined $self->allow_change_from_owner;
+    $self->allow_change_from_others( 0 )
+        unless defined $self->allow_change_from_others;
 
     $self->created_on( dt_from_string );
 
     return $self->SUPER::store( $self );
+}
+
+sub is_public {
+    my ( $self ) = @_;
+    return $self->category == $PUBLIC;
+}
+
+sub is_private {
+    my ( $self ) = @_;
+    return $self->category == $PRIVATE;
 }
 
 sub is_shelfname_valid {
@@ -80,14 +88,14 @@ sub is_shelfname_valid {
         ( $self->shelfnumber ? ( "me.shelfnumber" => { '!=', $self->shelfnumber } ) : () ),
     };
 
-    if ( $self->category == $PRIVATE and defined $self->owner ) {
+    if ( $self->is_private and defined $self->owner ) {
         $conditions->{-or} = {
             "virtualshelfshares.borrowernumber" => $self->owner,
             "me.owner" => $self->owner,
         };
         $conditions->{category} = $PRIVATE;
     }
-    elsif ( $self->category == $PRIVATE and not defined $self->owner ) {
+    elsif ( $self->is_private and not defined $self->owner ) {
         $conditions->{owner} = undef;
         $conditions->{category} = $PRIVATE;
     }
@@ -174,6 +182,10 @@ sub add_biblio {
         }
     )->count;
     return if $already_exists;
+
+    # Check permissions
+    return unless ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) || $self->allow_change_from_others;
+
     my $content = Koha::Virtualshelfcontent->new(
         {
             shelfnumber => $self->shelfnumber,
@@ -194,38 +206,18 @@ sub remove_biblios {
     return unless @$biblionumbers;
 
     my $number_removed = 0;
-    for my $biblionumber ( @$biblionumbers ) {
-        if ( $self->owner == $borrowernumber or $self->allow_delete_own ) {
-            $number_removed += $self->get_contents->search(
-                {
-                    biblionumber => $biblionumber,
-                    borrowernumber => $borrowernumber,
-                }
-            )->delete;
-        }
-        if ( $self->allow_delete_other ) {
-            $number_removed += $self->get_contents->search(
-                {
-                    biblionumber => $biblionumber,
-                    # FIXME
-                    # This does not make sense, but it's has been backported from DelFromShelf.
-                    # Why shouldn't we allow to remove his own contribution if allow_delete_other is on?
-                    borrowernumber => {
-                        -or => {
-                            '!=' => $borrowernumber,
-                            '=' => undef
-                        }
-                    },
-                }
-            )->delete;
-        }
+    if( ( $self->owner == $borrowernumber && $self->allow_change_from_owner )
+      || $self->allow_change_from_others ) {
+        $number_removed += $self->get_contents->search({
+            biblionumber => $biblionumbers,
+        })->delete;
     }
     return $number_removed;
 }
 
 sub can_be_viewed {
     my ( $self, $borrowernumber ) = @_;
-    return 1 if $self->category == $PUBLIC;
+    return 1 if $self->is_public;
     return 0 unless $borrowernumber;
     return 1 if $self->owner == $borrowernumber;
     return $self->get_shares->search(
@@ -243,7 +235,7 @@ sub can_be_deleted {
 
     my $patron = Koha::Patrons->find( $borrowernumber );
 
-    return 1 if $self->category == $PUBLIC and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
+    return 1 if $self->is_public and C4::Auth::haspermission( $patron->userid, { lists => 'delete_public_lists' } );
 
     return 0;
 }
@@ -260,20 +252,14 @@ sub can_biblios_be_added {
 
     return 1
       if $borrowernumber
-      and ( $self->owner == $borrowernumber
-         or $self->allow_add );
+      and ( ( $self->owner == $borrowernumber && $self->allow_change_from_owner ) or $self->allow_change_from_others );
     return 0;
 }
 
 sub can_biblios_be_removed {
     my ( $self, $borrowernumber ) = @_;
-
-    return 1
-      if $borrowernumber
-      and (  $self->owner == $borrowernumber
-          or $self->allow_delete_own
-          or $self->allow_delete_other );
-    return 0;
+    return $self->can_biblios_be_added( $borrowernumber );
+    # Same answer since bug 18228
 }
 
 sub _type {

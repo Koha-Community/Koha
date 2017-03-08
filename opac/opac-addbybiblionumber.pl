@@ -107,25 +107,26 @@ if ($newvirtualshelf) {
         my $private_shelves = Koha::Virtualshelves->search(
             {   category => 1,
                 owner    => $loggedinuser,
+                allow_change_from_owner => 1,
             },
             { order_by => 'shelfname' }
         );
         my $shelves_shared_with_me = Koha::Virtualshelves->search(
             {   category                            => 1,
                 'virtualshelfshares.borrowernumber' => $loggedinuser,
-                -or                                 => {
-                    allow_add => 1,
-                    owner     => $loggedinuser,
-                }
+                allow_change_from_others            => 1,
             },
             { join => 'virtualshelfshares', }
         );
         my $public_shelves = Koha::Virtualshelves->search(
             {   category => 2,
-                -or      => {
-                    allow_add => 1,
-                    owner     => $loggedinuser,
-                }
+                -or      => [
+                    -and => {
+                        allow_change_from_owner => 1,
+                        owner     => $loggedinuser,
+                    },
+                    allow_change_from_others => 1,
+                ],
             },
             { order_by => 'shelfname' }
         );

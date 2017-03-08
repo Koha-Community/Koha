@@ -33,6 +33,8 @@ use Koha::Biblioitems;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
 
+use constant ANYONE => 2;
+
 my $query = new CGI;
 
 my $template_name = $query->param('rss') ? "opac-shelves-rss.tt" : "opac-shelves.tt";
@@ -56,7 +58,8 @@ my $category = $query->param('category') || 1;
 my ( $shelf, $shelfnumber, @messages );
 
 if ( $op eq 'add_form' ) {
-    # Nothing to do
+    # Only pass default
+    $shelf = { allow_change_from_owner => 1 };
 } elsif ( $op eq 'edit_form' ) {
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
@@ -74,14 +77,14 @@ if ( $op eq 'add_form' ) {
     }
 } elsif ( $op eq 'add' ) {
     if ( $loggedinuser ) {
+        my $allow_changes_from = $query->param('allow_changes_from');
         eval {
             $shelf = Koha::Virtualshelf->new(
                 {   shelfname          => scalar $query->param('shelfname'),
                     sortfield          => scalar $query->param('sortfield'),
                     category           => scalar $query->param('category') || 1,
-                    allow_add          => scalar $query->param('allow_add'),
-                    allow_delete_own   => scalar $query->param('allow_delete_own'),
-                    allow_delete_other => scalar $query->param('allow_delete_other'),
+                    allow_change_from_owner => $allow_changes_from > 0,
+                    allow_change_from_others => $allow_changes_from == ANYONE,
                     owner              => scalar $loggedinuser,
                 }
             );
@@ -110,9 +113,9 @@ if ( $op eq 'add_form' ) {
         if ( $shelf->can_be_managed( $loggedinuser ) ) {
             $shelf->shelfname( scalar $query->param('shelfname') );
             $shelf->sortfield( $sortfield );
-            $shelf->allow_add( scalar $query->param('allow_add') );
-            $shelf->allow_delete_own( scalar $query->param('allow_delete_own') );
-            $shelf->allow_delete_other( scalar $query->param('allow_delete_other') );
+            my $allow_changes_from = $query->param('allow_changes_from');
+            $shelf->allow_change_from_owner( $allow_changes_from > 0 );
+            $shelf->allow_change_from_others( $allow_changes_from == ANYONE );
             $shelf->category( scalar $query->param('category') );
             eval { $shelf->store };
 

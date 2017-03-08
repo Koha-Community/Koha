@@ -90,10 +90,13 @@ sub get_some_shelves {
     if ( $add_allowed ) {
         push @conditions, {
             -or =>
-            {
-                "me.allow_add" => 1,
-                "me.owner" => $borrowernumber,
-            }
+            [
+                {
+                    "me.owner" => $borrowernumber,
+                    "me.allow_change_from_owner" => 1,
+                },
+                "me.allow_change_from_others" => 1,
+            ]
         };
     }
     if ( $category == 1 ) {
@@ -135,7 +138,6 @@ sub get_shelves_containing_record {
                         'me.owner' => $borrowernumber,
                         -or        => {
                             'virtualshelfshares.borrowernumber' => $borrowernumber,
-                            "me.allow_add"                      => 1,
                         },
                     }
                 },

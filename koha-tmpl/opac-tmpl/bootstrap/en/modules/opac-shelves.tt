@@ -12,28 +12,12 @@
 
 [% BLOCK list_permissions %]
     <li>
-        <label for="allow_add">Permissions: </label>
-        <select name="allow_add" id="allow_add">
-            [% IF shelf.allow_add %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
-            [% IF shelf.allow_add %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
+        <label for="allow_changes_from">Allow changes to contents from: </label>
+        <select name="allow_changes_from" id="allow_changes_from">
+            [% IF !shelf.allow_change_from_owner %]<option value="0">Nobody</option>[% ELSE %]<option value="0" selected="selected">Nobody</option>[% END %]
+            [% IF shelf.allow_change_from_owner && !shelf.allow_change_from_others %]<option value="1" selected="selected">Owner only</option>[% ELSE %]<option value="1">Owner only</option>[% END %]
+            [% IF shelf.allow_change_from_owner && shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
         </select>
-        &nbsp;<span>anyone else to add entries.</span>
-    </li>
-    <li>
-        <label>&nbsp;</label>
-        <select name="allow_delete_own" id="allow_delete_own">
-            [% IF shelf and not shelf.allow_delete_own %]<option value="0" selected="selected">Do not allow</option>[% ELSE %]<option value="0">Do not allow</option>[% END %]
-            [% IF not shelf or shelf.allow_delete_own %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
-        </select>
-        &nbsp;<span>anyone to remove their own contributed entries.</span>
-    </li>
-    <li>
-        <label>&nbsp;</label>
-        <select name="allow_delete_other" id="allow_delete_other">
-            [% IF shelf.allow_delete_other %]<option value="0">Do not allow</option>[% ELSE %]<option value="0" selected="selected">Do not allow</option>[% END %]
-            [% IF shelf.allow_delete_other %]<option value="1" selected="selected">Allow</option>[% ELSE %]<option value="1">Allow</option>[% END %]
-        </select>
-        &nbsp;<span>anyone to remove other contributed entries.</span>
     </li>
 [% END %]
 
@@ -51,13 +35,13 @@
             <li>Lists</li>
         [% END %]
 
-        [% IF shelf and shelf.category == PRIVATE %]
+        [% IF shelf and shelf.is_private %]
             [% IF op == 'view' OR op == 'edit_form' %]
                 <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE %]">Your lists</a></li>
             [% ELSE %]
                 <li><span class="divider">&rsaquo;</span> Your lists</li>
             [% END %]
-        [% ELSIF shelf AND shelf.category == PUBLIC %]
+        [% ELSIF shelf AND shelf.is_public %]
             [% IF op == 'view' %]
                 <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC %]">Public lists</a></li>
             [% ELSE %]
@@ -586,25 +570,23 @@
                                         <li>
                                             <label for="category">Category:</label>
                                             <select name="category" id="category">
-                                                [% IF shelf.category == PRIVATE %]
+                                                [% IF shelf.is_private %]
                                                         <option value="1" selected="selected">Private</option>
                                                     [% ELSE %]
                                                         <option value="1">Private</option>
                                                     [% END %]
-                                                [% IF shelf.category == PUBLIC %]
+                                                [% IF shelf.is_public %]
                                                     <option value="2" selected="selected">Public</option>
                                                 [% ELSE %]
                                                     <option value="2">Public</option>
                                                 [% END %]
                                             </select>
-                                            [% IF shelf.category == PUBLIC AND NOT Koha.Preference('OpacAllowPublicListCreation') %]
+                                            [% IF shelf.is_public AND NOT Koha.Preference('OpacAllowPublicListCreation') %]
                                                 <span class="hint alert alert-info">The library has disabled the ability for patrons to create new public lists.  If you make your list private, you will not be able to make it public again.</span>
                                             [% END %]
                                         </li>
                                     [% END %]
-                                    [% IF shelf.category == PUBLIC OR shelf.is_shared %]
-                                        [% INCLUDE list_permissions %]
-                                    [% END %]
+                                    [% INCLUDE list_permissions %]
                                 </ol>
                                 [% UNLESS Koha.Preference('OpacAllowPublicListCreation') OR category == PUBLIC %]
                                     <input type="hidden" name="category" value="[% PRIVATE %]" />
@@ -671,7 +653,7 @@
                                                 <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber %]">[% s.shelfname |html %]</a></td>
                                                 <td>[% IF contents.count %][% contents.count %] [% IF contents.count == 1 %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
                                                 <td>
-                                                    [% IF s.category == PRIVATE %]
+                                                    [% IF s.is_private %]
                                                         [% IF s.is_shared %]Shared[% ELSE %]Private[% END %]
                                                     [% ELSE %]
                                                         Public
@@ -696,7 +678,7 @@
                                                             <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                                                         </form>
                                                     [% END %]
-                                                    [% IF s.category == PRIVATE AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
+                                                    [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
                                                         <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber |html %]" class="">Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
