@@ -41,13 +41,4 @@ sub mock_preference {
     });
 }
 
-sub mock_dbh {
-    our $context = new Test::MockModule('Koha::Database');
-    $context->mock( '_new_schema', sub {
-        my $dbh = Koha::Schema->connect( 'DBI:Mock:', '', '' );
-        return $dbh;
-    } );
-    return $context;
-}
-
 1;
