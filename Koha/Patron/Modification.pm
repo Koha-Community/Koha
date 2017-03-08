@@ -33,6 +33,7 @@ use Koha::Patron::Attribute;
 use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
+use Digest::MD5 qw( md5_hex );
 use JSON;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
@@ -46,6 +47,29 @@ Koha::Patron::Modification - Class represents a request to modify or create a pa
 =head2 Class Methods
 
 =cut
+
+=head2 new
+
+=cut
+
+sub new {
+    my $class = shift;
+    my ($attributes) = @_;
+
+    # Generate a verification_token unless provided
+    if ( ref $attributes && !$attributes->{verification_token} ) {
+        my $verification_token = md5_hex( time().{}.rand().{}.$$ );
+        while ( Koha::Patron::Modifications->search( {
+                    verification_token => $verification_token
+                } )->count()
+        ) {
+            $verification_token = md5_hex( time().{}.rand().{}.$$ );
+        }
+        $attributes->{verification_token} = $verification_token;
+    }
+
+    return $class->SUPER::new(@_);
+}
 
 =head2 store
 

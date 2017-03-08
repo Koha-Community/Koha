@@ -43,7 +43,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'new() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -79,6 +79,18 @@ subtest 'new() tests' => sub {
         'Duplicate verification token 1234567890',
         'Exception carries the right message'
     );
+
+    # Create new pending modification, let verification_token be generated
+    # automatically
+    Koha::Patron::Modification->new(
+        {
+            surname            => 'Koha-Suomi',
+            firstname          => 'Suha-Koomi',
+        }
+    )->store();
+    $borrower = Koha::Patron::Modifications->find(
+        { surname => 'Koha-Suomi' } );
+    ok(length($borrower->verification_token) > 0, 'Verification token generated.');
 
     $schema->storage->txn_rollback;
 };
