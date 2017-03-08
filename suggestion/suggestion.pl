@@ -90,6 +90,8 @@ my $returnsuggested = $input->param('returnsuggested');
 my $managedby       = $input->param('managedby');
 my $displayby       = $input->param('displayby') || '';
 my $tabcode         = $input->param('tabcode');
+my $save_confirmed  = $input->param('save_confirmed') || 0;
+
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
 # filter informations which are not suggestion related.
@@ -121,60 +123,78 @@ my $branchfilter = $input->param('branchcode') || C4::Context->userenv->{'branch
 #########################################
 ##  Operations
 ##
+
 if ( $op =~ /save/i ) {
+    my @messages;
+    my $biblio = MarcRecordFromNewSuggestion({
+            title => $suggestion_only->{title},
+            author => $suggestion_only->{author},
+            itemtype => $suggestion_only->{itemtype},
+    });
 
-    for my $date_key ( qw( suggesteddate manageddate accepteddate rejecteddate ) ) {
-        $suggestion_only->{$date_key} = dt_from_string( $suggestion_only->{$date_key} )
-            if $suggestion_only->{$date_key};
+    if ( ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) && !$save_confirmed ) {
+        push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
+        $template->param(
+            messages => \@messages,
+            need_confirm => 1
+        );
+        delete $suggestion_ref->{suggesteddate};
+        Init($suggestion_ref);
     }
+    else {
 
-    if ( $suggestion_only->{"STATUS"} ) {
-        if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
-            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = dt_from_string;
-            $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
+        for my $date_key ( qw( suggesteddate manageddate accepteddate rejecteddate ) ) {
+            $suggestion_only->{$date_key} = dt_from_string( $suggestion_only->{$date_key} )
+                if $suggestion_only->{$date_key};
         }
-        $suggestion_only->{manageddate} = dt_from_string;
-        $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
-    }
 
-    my $otherreason = $input->param('other_reason');
-    if ($suggestion_only->{reason} eq 'other' && $otherreason) {
-        $suggestion_only->{reason} = $otherreason;
-    }
-
-    if ( $suggestion_only->{'suggestionid'} > 0 ) {
-        &ModSuggestion($suggestion_only);
-    } else {
-        ###FIXME:Search here if suggestion already exists.
-        my $suggestions_loop =
-            SearchSuggestion( $suggestion_only );
-        if (@$suggestions_loop>=1){
-            #some suggestion are answering the request Donot Add
-            my @messages;
-            for my $suggestion ( @$suggestions_loop ) {
-                push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+        if ( $suggestion_only->{"STATUS"} ) {
+            if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
+                $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "date" } = dt_from_string;
+                $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
             }
-            $template->param( messages => \@messages );
-        } 
-        else {    
-            ## Adding some informations related to suggestion
-            &NewSuggestion($suggestion_only);
+            $suggestion_only->{manageddate} = dt_from_string;
+            $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
         }
-        # empty fields, to avoid filter in "SearchSuggestion"
-    }  
-    map{delete $$suggestion_ref{$_}} keys %$suggestion_ref;
-    $op = 'else';
 
-    if( $redirect eq 'purchase_suggestions' ) {
-        print $input->redirect("/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=$borrowernumber");
+        my $otherreason = $input->param('other_reason');
+        if ($suggestion_only->{reason} eq 'other' && $otherreason) {
+            $suggestion_only->{reason} = $otherreason;
+        }
+
+        if ( $suggestion_only->{'suggestionid'} > 0 ) {
+            &ModSuggestion($suggestion_only);
+        } else {
+            ###FIXME:Search here if suggestion already exists.
+            my $suggestions_loop =
+                SearchSuggestion( $suggestion_only );
+            if (@$suggestions_loop>=1){
+                #some suggestion are answering the request Donot Add
+                my @messages;
+                for my $suggestion ( @$suggestions_loop ) {
+                    push @messages, { type => 'error', code => 'already_exists', id => $suggestion->{suggestionid} };
+                }
+                $template->param( messages => \@messages );
+            }
+            else {
+                ## Adding some informations related to suggestion
+                &NewSuggestion($suggestion_only);
+            }
+            # empty fields, to avoid filter in "SearchSuggestion"
+        }
+        map{delete $$suggestion_ref{$_}} keys %$suggestion_ref;
+        $op = 'else';
+
+        if( $redirect eq 'purchase_suggestions' ) {
+            print $input->redirect("/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=$borrowernumber");
+        }
     }
-
 }
 elsif ($op=~/add/) {
-    #Adds suggestion  
+    #Adds suggestion
     Init($suggestion_ref);
     $op ='save';
-} 
+}
 elsif ($op=~/edit/) {
     #Edit suggestion  
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});

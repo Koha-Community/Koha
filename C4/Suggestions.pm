@@ -690,7 +690,7 @@ sub MarcRecordFromNewSuggestion {
     }
     else {
         $record->append_fields(
-            MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $suggestion->{author})
+            MARC::Field->new($it_tag, ' ', ' ', $it_subfield => $suggestion->{itemtype})
         );
     }
 

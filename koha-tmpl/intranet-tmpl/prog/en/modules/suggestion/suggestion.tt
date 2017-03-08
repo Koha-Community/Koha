@@ -239,6 +239,16 @@
 [% END %]
 
 [% IF ( op_save ) %]
+    [% FOR m IN messages %]
+        <div class="dialog [% m.type %]">
+            [% SWITCH m.code %]
+            [% CASE 'biblio_exists' %]
+                A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id %]">[% m.title %]</a>. Click on "Confirm your suggestion" to ignore this message.
+            [% CASE %]
+                [% m.code %]
+            [% END %]
+        </div>
+    [% END %]
     <form id="add_edit" action="suggestion.pl" method="post" class="validated">
     <input type="hidden" name="redirect" id="redirect" value="[% redirect | html %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber | html %]" />
@@ -410,7 +420,25 @@
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total | html %]"/>
                 </li></ol>
     </fieldset><input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
-    <fieldset class="action"><input type="hidden" name="op" value="[% op | html %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | uri %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit your suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
+    <fieldset class="action">
+        <input type="hidden" name="op" value="[% op | html %]" />
+        [% IF ( suggestionid ) %]
+            [% IF ( need_confirm ) %]
+                <input type="hidden" name="save_confirmed" value="1" />
+                <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" value="Confirm your suggestion" />
+            [% ELSE %]
+                <input type="submit" value="Save" />
+            [% END %]
+            <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | uri %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>
+        [% ELSE %]
+            [% IF ( need_confirm ) %]
+                <input type="hidden" name="save_confirmed" value="1" />
+                <input onclick="this.form.op.value = 'save'; this.form.submit();" type="submit" value="Confirm your suggestion" />
+            [% ELSE %]
+                <input type="submit" value="Submit your suggestion" />
+            [% END %]
+            <a class="cancel" href="suggestion.pl">Cancel</a>
+        [% END %]
     </fieldset>
     </form>
 [% END %]
@@ -428,6 +456,8 @@
         [% SWITCH m.code %]
         [% CASE 'already_exists' %]
             The suggestion has not been added. A suggestion with this title already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | html %]&op=show'>suggestion #[% m.id | html %]</a>)
+        [% CASE 'biblio_exists' %]
+            A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id %]">[% m.title %]</a>. Click on "Confirm your suggestion" to ignore this message.
         [% CASE %]
             [% m.code | html %]
         [% END %]
