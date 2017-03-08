@@ -53,6 +53,9 @@
                 } );
             }
         });
+        $("#facet_biblios > table").tableDnD( {
+            onDragClass: "dragClass",
+        } );
     });
 </script>
 <style>
@@ -260,15 +263,20 @@ a.add, a.delete {
                               </select>
                             </td>
                             <td>
-                              <select name="mapping_facet">
-                                [% IF mapping.facet %]
-                                  <option value="0">No</option>
-                                  <option value="1" selected="selected">Yes</option>
-                                [% ELSE %]
-                                  <option value="0" selected="selected">No</option>
-                                  <option value="1">Yes</option>
-                                [% END %]
-                              </select>
+                              [% IF mapping.is_facetable %]
+                                <select name="mapping_facet">
+                                  [% IF mapping.facet %]
+                                    <option value="0">No</option>
+                                    <option value="1" selected="selected">Yes</option>
+                                  [% ELSE %]
+                                    <option value="0" selected="selected">No</option>
+                                    <option value="1">Yes</option>
+                                  [% END %]
+                                </select>
+                              [% ELSE %]
+                                <input type="hidden" name="mapping_facet" value="0" />
+                                No
+                              [% END %]
                             </td>
                             <td>
                               <select name="mapping_suggestible">
@@ -332,6 +340,51 @@ a.add, a.delete {
                         </tr>
                       </tfoot>
                     </table>
+
+                    [% IF index.index_name == 'biblios' %]
+                        <h3>Facet order</h3>
+                        <div id="facet_[% index.index_name %]">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Search field</th>
+                                        <th>Label</th>
+                                        <th>Display</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOREACH f IN facetable_fields %]
+                                        <tr>
+                                            <td>
+                                                [% f.name %]
+                                            </td>
+                                            <td>
+                                                [% SWITCH f.name %]
+                                                [% CASE 'author' %]Authors
+                                                [% CASE 'itype' %]Item Types
+                                                [% CASE 'location' %]Locations
+                                                [% CASE 'su-geo' %]Places
+                                                [% CASE 'se' %]Series
+                                                [% CASE 'subject' %]Topics
+                                                [% CASE 'ccode' %]Collections
+                                                [% CASE 'holdingbranch' %]Holding libraries
+                                                [% CASE 'homebranch' %]Home libraries
+                                                [% CASE %][% f %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF f.facet_order %]
+                                                    <input type="checkbox" name="display_facet" value="[% f.name %]" checked="checked" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" name="display_facet" value="[% f.name %]" />
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div>
+                    [% END %]
                 </div>
             [% END %]
         </div>

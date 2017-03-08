@@ -436,18 +436,25 @@ sub _convert_facets {
 
     # These should correspond to the ES field names, as opposed to the CCL
     # things that zebra uses.
-    # TODO let the library define the order using the interface.
-    my %type_to_label = (
-        author => { order => 1, label => 'Authors', },
-        itype => { order => 2, label => 'ItemTypes', },
-        location => { order => 3, label => 'Location', },
-        'su-geo' => { order => 4, label => 'Places', },
-        'title-series' => { order => 5, label => 'Series', },
-        subject => { order => 6, label => 'Topics', },
-        ccode => { order => 7, label => 'CollectionCodes',},
-        holdingbranch => { order => 8, label => 'HoldingLibrary' },
-        homebranch => { order => 9, label => 'HomeLibrary' }
+    my %type_to_label;
+    my %label = (
+        author         => 'Authors',
+        itype          => 'ItemTypes',
+        location       => 'Location',
+        'su-geo'       => 'Places',
+        'title-series' => 'Series',
+        subject        => 'Topics',
+        ccode          => 'CollectionCodes',
+        holdingbranch  => 'HoldingLibrary',
+        homebranch     => 'HomeLibrary',
     );
+    my @facetable_fields =
+      Koha::SearchEngine::Elasticsearch->get_facetable_fields;
+    for my $f (@facetable_fields) {
+        next unless defined $f->facet_order;
+        $type_to_label{ $f->name } =
+          { order => $f->facet_order, label => $label{ $f->name } };
+    }
 
     # We also have some special cases, e.g. itypes that need to show the
     # value rather than the code.
@@ -504,6 +511,5 @@ sub _convert_facets {
     @facets = sort { $a->{order} cmp $b->{order} } @facets;
     return \@facets;
 }
-
 
 1;

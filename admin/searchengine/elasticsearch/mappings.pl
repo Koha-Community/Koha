@@ -18,6 +18,7 @@
 use Modern::Perl;
 use CGI;
 use Scalar::Util qw(looks_like_number);
+use List::Util qw( first );
 use C4::Koha;
 use C4::Output;
 use C4::Auth;
@@ -71,17 +72,18 @@ if ( $op eq 'edit' ) {
 
     $schema->storage->txn_begin;
 
-    my @field_name = $input->param('search_field_name');
-    my @field_label = $input->param('search_field_label');
-    my @field_type = $input->param('search_field_type');
-    my @field_weight = $input->param('search_field_weight');
+    my @field_name = $input->multi_param('search_field_name');
+    my @field_label = $input->multi_param('search_field_label');
+    my @field_type = $input->multi_param('search_field_type');
+    my @field_weight = $input->multi_param('search_field_weight');
 
-    my @index_name          = $input->param('mapping_index_name');
-    my @search_field_name  = $input->param('mapping_search_field_name');
-    my @mapping_sort        = $input->param('mapping_sort');
-    my @mapping_facet       = $input->param('mapping_facet');
-    my @mapping_suggestible = $input->param('mapping_suggestible');
-    my @mapping_marc_field  = $input->param('mapping_marc_field');
+    my @index_name          = $input->multi_param('mapping_index_name');
+    my @search_field_name  = $input->multi_param('mapping_search_field_name');
+    my @mapping_sort        = $input->multi_param('mapping_sort');
+    my @mapping_facet       = $input->multi_param('mapping_facet');
+    my @mapping_suggestible = $input->multi_param('mapping_suggestible');
+    my @mapping_marc_field  = $input->multi_param('mapping_marc_field');
+    my @faceted_field_names = $input->multi_param('display_facet');
 
     eval {
 
@@ -105,10 +107,14 @@ if ( $op eq 'edit' ) {
                 $search_field->weight($field_weight);
             }
 
+            my $facet_order = first { $faceted_field_names[$_] eq $field_name } 0 .. $#faceted_field_names;
+            $search_field->facet_order(defined $facet_order ? $facet_order + 1 : undef);
             $search_field->store;
         }
 
         Koha::SearchMarcMaps->search( { marc_type => $marc_type, } )->delete;
+        my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+        my @facetable_field_names = map { $_->name } @facetable_fields;
 
         for my $i ( 0 .. scalar(@index_name) - 1 ) {
             my $index_name          = $index_name[$i];
@@ -118,6 +124,7 @@ if ( $op eq 'edit' ) {
             my $mapping_suggestible = $mapping_suggestible[$i];
             my $mapping_sort        = $mapping_sort[$i];
             $mapping_sort = undef if $mapping_sort eq 'undef';
+            $mapping_facet = ( grep {/^$search_field_name$/} @facetable_field_names ) ? $mapping_facet : 0;
 
             my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
             # TODO Check mapping format
@@ -180,15 +187,20 @@ for my $index_name (@index_names) {
     );
 
     my @mappings;
+    my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+    my @facetable_field_names = map { $_->name } @facetable_fields;
+
     while ( my $s = $search_fields->next ) {
+        my $name = $s->name;
         push @mappings,
-          { search_field_name  => $s->name,
+          { search_field_name  => $name,
             search_field_label => $s->label,
             search_field_type  => $s->type,
             marc_field         => $s->get_column('marc_field'),
             sort               => $s->get_column('sort') // 'undef', # To avoid warnings "Use of uninitialized value in lc"
             suggestible        => $s->get_column('suggestible'),
             facet              => $s->get_column('facet'),
+            is_facetable       => ( grep {/^$name$/} @facetable_field_names ) ? 1 : 0,
           };
     }
 
@@ -203,9 +215,11 @@ while ( my $search_field = $search_fields->next ) {
     push @all_search_fields, $search_field_unblessed;
 }
 
+my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
 $template->param(
     indexes           => \@indexes,
     all_search_fields => \@all_search_fields,
+    facetable_fields  => \@facetable_fields,
     messages          => \@messages,
 );
 

@@ -284,7 +284,15 @@ sub reset_elasticsearch_mappings {
             my $field_type = $data->{type};
             my $field_label = $data->{label};
             my $mappings = $data->{mappings};
-            my $search_field = Koha::SearchFields->find_or_create({ name => $field_name, label => $field_label, type => $field_type }, { key => 'name' });
+            my $facet_order = $data->{facet_order};
+            my $search_field = Koha::SearchFields->find_or_create({ name => $field_name });
+            $search_field->update(
+                {
+                    label       => $field_label,
+                    type        => $field_type,
+                    facet_order => $facet_order
+                }
+            );
             for my $mapping ( @$mappings ) {
                 my $marc_field = Koha::SearchMarcMaps->find_or_create({ index_name => $index_name, marc_type => $mapping->{marc_type}, marc_field => $mapping->{marc_field} });
                 $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet} || 0, suggestible => $mapping->{suggestible} || 0, sort => $mapping->{sort} } );
@@ -962,6 +970,22 @@ sub _read_configuration {
     }
 
     return $configuration;
+}
+
+sub get_facetable_fields {
+    my ($self) = @_;
+
+    # These should correspond to the ES field names, as opposed to the CCL
+    # things that zebra uses.
+    my @search_field_names = qw( author itype location su-geo se subject ccode holdingbranch homebranch );
+    my @faceted_fields = Koha::SearchFields->search(
+        { name => { -in => \@search_field_names }, facet_order => { '!=' => undef } }, { order_by => ['facet_order'] }
+    );
+    my @not_faceted_fields = Koha::SearchFields->search(
+        { name => { -in => \@search_field_names }, facet_order => undef }, { order_by => ['facet_order'] }
+    );
+    # This could certainly be improved
+    return ( @faceted_fields, @not_faceted_fields );
 }
 
 1;
