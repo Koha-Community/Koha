@@ -2268,9 +2268,8 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
   `sortfield` varchar(16) default 'title', -- the field this list is sorted on
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
   `created_on` datetime NOT NULL, -- creation time
-  `allow_add` tinyint(1) default 0, -- permission for adding entries to list
-  `allow_delete_own` tinyint(1) default 1, -- permission for deleting entries frm list that you added yourself
-  `allow_delete_other` tinyint(1) default 0, -- permission for deleting entries from list that another person added
+  `allow_change_from_owner` tinyint(1) default 1, -- can owner change contents?
+  `allow_change_from_others` tinyint(1) default 0 -- can others change contents?
   PRIMARY KEY  (`shelfnumber`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in Members.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
