@@ -67,19 +67,13 @@ __PACKAGE__->table("virtualshelves");
   datetime_undef_if_invalid: 1
   is_nullable: 0
 
-=head2 allow_add
-
-  data_type: 'tinyint'
-  default_value: 0
-  is_nullable: 1
-
-=head2 allow_delete_own
+=head2 allow_change_from_owner
 
   data_type: 'tinyint'
   default_value: 1
   is_nullable: 1
 
-=head2 allow_delete_other
+=head2 allow_change_from_others
 
   data_type: 'tinyint'
   default_value: 0
@@ -116,11 +110,9 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 0,
   },
-  "allow_add",
-  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
-  "allow_delete_own",
+  "allow_change_from_owner",
   { data_type => "tinyint", default_value => 1, is_nullable => 1 },
-  "allow_delete_other",
+  "allow_change_from_others",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
@@ -189,8 +181,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-06 09:35:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wfAdz7LrmH49vdJ3f5rsmA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-08 14:19:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xoq0lhLouCbkAp6F4ZyMGQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
