@@ -344,8 +344,10 @@ $sth->execute(
     $sampleissuingrule3->{article_requests},
 );
 
+my $rule = Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed;
+$sampleissuingrule1->{issuingrules_id} = $rule->{issuingrules_id} if $rule;
 is_deeply(
-    Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed,
+    $rule,
     $sampleissuingrule1,
     "GetIssuingCharge returns issuingrule1's informations"
 );

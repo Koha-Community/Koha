@@ -854,6 +854,7 @@ CREATE TABLE `import_items` (
 
 DROP TABLE IF EXISTS `issuingrules`;
 CREATE TABLE `issuingrules` ( -- circulation and fine rules
+  `issuingrules_id` int(11) NOT NULL auto_increment,
   `categorycode` varchar(10) NOT NULL default '', -- patron category this rule is for (categories.categorycode)
   `itemtype` varchar(10) NOT NULL default '', -- item type this rule is for (itemtypes.itemtype)
   `restrictedtype` tinyint(1) default NULL, -- not used? always NULL
@@ -887,7 +888,8 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   onshelfholds tinyint(1) NOT NULL default 0, -- allow holds for items that are on shelf
   opacitemholds char(1) NOT NULL default 'N', -- allow opac users to place specific items on hold
   article_requests enum('no','yes','bib_only','item_only') NOT NULL DEFAULT 'no', -- allow article requests to be placed,
-  PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
+  PRIMARY KEY (`issuingrules_id`),
+  UNIQUE KEY `issuingrules_selects` (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

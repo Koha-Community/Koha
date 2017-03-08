@@ -23,6 +23,12 @@ __PACKAGE__->table("issuingrules");
 
 =head1 ACCESSORS
 
+=head2 issuingrules_id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 categorycode
 
   data_type: 'varchar'
@@ -218,6 +224,8 @@ __PACKAGE__->table("issuingrules");
 =cut
 
 __PACKAGE__->add_columns(
+  "issuingrules_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "categorycode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "itemtype",
@@ -300,6 +308,20 @@ __PACKAGE__->add_columns(
 
 =over 4
 
+=item * L</issuingrules_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("issuingrules_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<issuingrules_selects>
+
+=over 4
+
 =item * L</branchcode>
 
 =item * L</categorycode>
@@ -310,7 +332,10 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
+__PACKAGE__->add_unique_constraint(
+  "issuingrules_selects",
+  ["branchcode", "categorycode", "itemtype"],
+);
 
 
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:15:48
