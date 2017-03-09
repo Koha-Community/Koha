@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 
@@ -260,6 +260,32 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
 
     is( $stat->itemtype, $blevel_itemtype,
         "biblio-level itype recorded on statistics for return");
+};
+
+subtest 'Handle ids duplication' => sub {
+    plan tests => 1;
+
+    my $biblio = $builder->build( { source => 'Biblio' } );
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber => $biblio->{biblionumber},
+                notforloan => 0,
+                itemlost   => 0,
+                withdrawn  => 0,
+
+            }
+        }
+    );
+    my $patron = $builder->build({source => 'Borrower'});
+
+    my $checkout = AddIssue( $patron, $item->{barcode} );
+    $builder->build({ source => 'OldIssue', value => { issue_id => $checkout->issue_id } });
+
+    my @a = AddReturn( $item->{barcode} );
+    my $old_checkout = Koha::Old::Checkouts->find( $checkout->issue_id );
+    isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
 };
 
 1;
