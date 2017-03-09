@@ -2120,7 +2120,15 @@ sub MarkIssueReturned {
         die "Fatal error: the patron ($borrowernumber) has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or not set correctly."
             unless C4::Members::GetMember( borrowernumber => $anonymouspatron );
     }
+    my $database = Koha::Database->new();
+    my $schema   = $database->schema;
     my $dbh   = C4::Context->dbh;
+
+    my $issue_id = $dbh->selectrow_array(
+        q|SELECT issue_id FROM issues WHERE itemnumber = ?|,
+        undef, $itemnumber
+    );
+
     my $query = 'UPDATE issues SET returndate=';
     my @bind;
     if ($dropbox_branch) {
@@ -2134,34 +2142,44 @@ sub MarkIssueReturned {
     } else {
         $query .= ' now() ';
     }
-    $query .= ' WHERE  borrowernumber = ?  AND itemnumber = ?';
-    push @bind, $borrowernumber, $itemnumber;
-    # FIXME transaction
-    my $sth_upd  = $dbh->prepare($query);
-    $sth_upd->execute(@bind);
-    my $sth_copy = $dbh->prepare('INSERT INTO old_issues SELECT * FROM issues
-                                  WHERE borrowernumber = ?
-                                  AND itemnumber = ?');
-    $sth_copy->execute($borrowernumber, $itemnumber);
-    # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
-    if ( $privacy == 2) {
-        my $sth_ano = $dbh->prepare("UPDATE old_issues SET borrowernumber=?
-                                  WHERE borrowernumber = ?
-                                  AND itemnumber = ?");
-       $sth_ano->execute($anonymouspatron, $borrowernumber, $itemnumber);
-    }
-    my $sth_del  = $dbh->prepare("DELETE FROM issues
-                                  WHERE borrowernumber = ?
-                                  AND itemnumber = ?");
-    $sth_del->execute($borrowernumber, $itemnumber);
+    $query .= ' WHERE issue_id = ?';
+    push @bind, $issue_id;
 
-    ModItem( { 'onloan' => undef }, undef, $itemnumber );
+    # FIXME Improve the return value and handle it from callers
+    $schema->txn_do(sub {
+        $dbh->do( $query, undef, @bind );
 
-    if ( C4::Context->preference('StoreLastBorrower') ) {
-        my $item = Koha::Items->find( $itemnumber );
-        my $patron = Koha::Patrons->find( $borrowernumber );
-        $item->last_returned_by( $patron );
-    }
+        my $id_already_exists = $dbh->selectrow_array(
+            q|SELECT COUNT(*) FROM old_issues WHERE issue_id = ?|,
+            undef, $issue_id
+        );
+
+        if ( $id_already_exists ) {
+            my $new_issue_id = $dbh->selectrow_array(q|SELECT MAX(issue_id)+1 FROM old_issues|);
+            $dbh->do(
+                q|UPDATE issues SET issue_id = ? WHERE issue_id = ?|,
+                undef, $new_issue_id, $issue_id
+            );
+            $issue_id = $new_issue_id;
+        }
+
+        $dbh->do(q|INSERT INTO old_issues SELECT * FROM issues WHERE issue_id = ?|, undef, $issue_id);
+
+        # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
+        if ( $privacy == 2) {
+            $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $issue_id);
+        }
+
+        $dbh->do(q|DELETE FROM issues WHERE issue_id = ?|, undef, $issue_id);
+
+        ModItem( { 'onloan' => undef }, undef, $itemnumber );
+
+        if ( C4::Context->preference('StoreLastBorrower') ) {
+            my $item = Koha::Items->find( $itemnumber );
+            my $patron = Koha::Patrons->find( $borrowernumber );
+            $item->last_returned_by( $patron );
+        }
+    });
 }
 
 =head2 _debar_user_on_return
