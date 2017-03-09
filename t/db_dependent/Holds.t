@@ -661,7 +661,6 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
     my $itemtype = shift;
