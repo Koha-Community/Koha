@@ -37,6 +37,13 @@ BEGIN {
     Log::Log4perl->wrapper_register(__PACKAGE__);
 }
 
+my $defaultConfig = q(
+    log4perl.rootLogger=WARN, ROOT
+    log4perl.appender.ROOT=Log::Log4perl::Appender::Screen
+    log4perl.appender.ROOT.layout=PatternLayout
+    log4perl.appender.ROOT.utf8=1
+);
+
 =head2 get
 
     Returns a logger object (based on log4perl).
@@ -59,6 +66,24 @@ sub get {
 
 sub _init {
     my $confFile = C4::Context->config("log4perl_conf");
+    if ($confFile) {
+        _initFromConfFile($confFile);
+    }
+    else {
+        _initDefault();
+    }
+}
+sub _initDefault {
+    eval {
+        Log::Log4perl->init( \$defaultConfig )
+            unless(Log::Log4perl->initialized());
+    };
+    if ($@) {
+        die __PACKAGE__."::initDefault():> $@";
+    }
+}
+sub _initFromConfFile {
+    my ($confFile) = @_;
     eval {
         Log::Log4perl->init_and_watch( $confFile, 'HUP' ) #Starman uses HUP as well!
             unless(Log::Log4perl->initialized());
