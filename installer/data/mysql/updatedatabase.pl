@@ -3575,16 +3575,19 @@ if ( CheckVersion($DBversion) ) {
         `delay1` int(4) DEFAULT NULL,
         `letter1` varchar(20) DEFAULT NULL,
         `debarred1` varchar(1) DEFAULT '0',
+        `fine1` float NOT NULL default '0',
         `delay2` int(4) DEFAULT NULL,
         `debarred2` varchar(1) DEFAULT '0',
         `letter2` varchar(20) DEFAULT NULL,
+        `fine2` float NOT NULL default '0',
         `delay3` int(4) DEFAULT NULL,
         `letter3` varchar(20) DEFAULT NULL,
         `debarred3` int(1) DEFAULT '0',
+        `fine3` float NOT NULL default '0',
         PRIMARY KEY (`overduerules_id`),
         UNIQUE KEY `overduerules_branch_cat` (`branchcode`,`categorycode`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-    $dbh->do("INSERT INTO overduerules(branchcode, categorycode, delay1, letter1, debarred1, delay2, debarred2, letter2, delay3, letter3, debarred3) SELECT * FROM old_overduerules");
+    $dbh->do("INSERT INTO overduerules(branchcode, categorycode, delay1, letter1, debarred1, fine1, delay2, debarred2, letter2, fine2, delay3, letter3, debarred3, fine3) SELECT * FROM old_overduerules");
     $dbh->do("DROP TABLE old_overduerules");
     $dbh->do("ALTER TABLE overduerules_transport_types
               ADD COLUMN overduerules_id int(11) NOT NULL");

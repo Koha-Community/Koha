@@ -87,6 +87,7 @@ $(document).ready(function() {
               <th scope="col">Delay</th>
               <th scope="col">Letter</th>
               <th scope="col">Restrict</th>
+			  <th scope="col">Fine</th>
               [% FOREACH mtt IN message_transport_types %]
                 <th scpre="col">
                   [% SWITCH mtt %]
@@ -132,6 +133,9 @@ $(document).ready(function() {
               [% ELSE %]
                 <input type="checkbox" name="debarred[% tab.number %]-[% value.overduename %]" value="1" />
               [% END %]
+              </td>
+              <td>
+                <input type="text" name="fine[% tab.number %]-[% value.overduename %]" size="4" value="[% value.fine %]" />
               </td>
               [% FOREACH mtt IN value.message_transport_types %]
                 <td>

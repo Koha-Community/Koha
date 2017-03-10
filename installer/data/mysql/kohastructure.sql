@@ -1402,12 +1402,15 @@ CREATE TABLE `overduerules` ( -- overdue notice status and triggers
   `delay1` int(4) default NULL, -- number of days after the item is overdue that the first notice is sent
   `letter1` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the first notice
   `debarred1` varchar(1) default 0, -- is the patron restricted when the first notice is sent (1 for yes, 0 for no)
+  `fine1` float NOT NULL default '0', -- How much a borrower is fined for each succesfully sent letter
   `delay2` int(4) default NULL, -- number of days after the item is overdue that the second notice is sent
   `debarred2` varchar(1) default 0, -- is the patron restricted when the second notice is sent (1 for yes, 0 for no)
   `letter2` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the second notice
+  `fine2` float NOT NULL default '0', -- How much a borrower is fined for each succesfully sent letter
   `delay3` int(4) default NULL, -- number of days after the item is overdue that the third notice is sent
   `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
   `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
+  `fine3` float NOT NULL default '0', -- How much a borrower is fined for each succesfully sent letter
   PRIMARY KEY  (`overduerules_id`),
   UNIQUE KEY `overduerules_branch_cat` (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
