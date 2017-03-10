@@ -76,7 +76,7 @@ sub new {
     $self->{'user'}     = C4::Context->config("user");
     $self->{'password'} = C4::Context->config("pass");
     $self->{'tls'} = C4::Context->config("tls");
-    if ($self->{'tls'} eq 'yes'){
+    if( $self->{'tls'} && $self->{'tls'} eq 'yes' ) {
         $self->{'ca'} = C4::Context->config('ca');
         $self->{'cert'} = C4::Context->config('cert');
         $self->{'key'} = C4::Context->config('key');
