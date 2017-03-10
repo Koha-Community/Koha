@@ -161,6 +161,10 @@ sub edit {
     };
 }
 
+sub patch {
+    return edit(@_);
+}
+
 sub delete {
     my $c = shift->openapi->valid_input or return;
 

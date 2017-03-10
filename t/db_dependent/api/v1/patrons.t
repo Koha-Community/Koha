@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 120;
+use Test::More tests => 121;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -342,6 +342,22 @@ $t->request_ok($tx)
   ->status_is(200, 'Patron updated successfully')
   ->json_has($newpatron);
 
+subtest 'patch() tests' => sub {
+    plan tests => 3;
+
+    my ($borrowernumber, $session_id) =
+    create_user_and_session({ authorized => 16 });
+
+    my $update = { surname => 'Koha-Suomi' };
+    $tx = $t->ua->build_tx(PATCH => "/api/v1/patrons/" . $borrowernumber => json => $update );
+    $tx->req->cookies({name => 'CGISESSID', value => $session_id});
+    $t->request_ok($tx)
+      ->status_is(200, 'Patron updated successfully')
+      ->json_hasnt('/');
+
+    Koha::Patrons->find($borrowernumber)->delete; # clean
+};
+
 ### DELETE /api/v1/patrons
 
 $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/0");
@@ -477,3 +493,29 @@ $t->request_ok($tx)
   ->json_is('/blocks/Patron::Debt' => $debt);
 
 $schema->storage->txn_rollback;
+
+sub create_user_and_session {
+
+    my $args  = shift;
+    my $flags = ( $args->{authorized} ) ? $args->{authorized} : 0;
+    my $dbh   = C4::Context->dbh;
+
+    my $user = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                flags => $flags
+            }
+        }
+    );
+
+    # Create a session for the authorized user
+    my $session = C4::Auth::get_session('');
+    $session->param( 'number',   $user->{borrowernumber} );
+    $session->param( 'id',       $user->{userid} );
+    $session->param( 'ip',       '127.0.0.1' );
+    $session->param( 'lasttime', time() );
+    $session->flush;
+
+    return ( $user->{borrowernumber}, $session->id );
+}
