@@ -200,12 +200,22 @@ elsif ( $op eq "checkout" ) {
         }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
-            my $hold_existed;
+            my ( $hold_existed, $item );
             if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
                 # There is no easy way to know if the patron has been charged for this item.
                 # So we check if a hold existed for this item before the check in
-                my $item = Koha::Items->find({ barcode => $barcode });
-                $hold_existed = Koha::Holds->search({ -or => { 'biblionumber' => $item->biblionumber, 'itemnumber' => $item->itemnumber}})->count;
+                $item = Koha::Items->find({ barcode => $barcode });
+                $hold_existed = Koha::Holds->search(
+                    {
+                        -and => {
+                            borrowernumber => $borrower->{borrowernumber},
+                            -or            => {
+                                biblionumber => $item->biblionumber,
+                                itemnumber   => $item->itemnumber
+                            }
+                        }
+                    }
+                )->count;
             }
             AddIssue( $borrower, $barcode );
 
@@ -214,7 +224,14 @@ elsif ( $op eq "checkout" ) {
                 $template->param(
                     # If the hold existed before the check in, let's confirm that the charge line exists
                     # Note that this should not be needed but since we do not have proper exception handling here we do it this way
-                    patron_has_hold_fee => Koha::Account::Lines->search({ borrowernumber => $borrower->{borrowernumber}, accounttype => 'Res', date => $dtf->format_date( dt_from_string ) })->count,
+                    patron_has_hold_fee => Koha::Account::Lines->search(
+                        {
+                            borrowernumber => $borrower->{borrowernumber},
+                            accounttype    => 'Res',
+                            description    => 'Reserve Charge - ' . $item->biblio->title,
+                            date           => $dtf->format_date(dt_from_string)
+                        }
+                      )->count,
                 );
             }
         } else {

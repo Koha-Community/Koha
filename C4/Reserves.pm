@@ -1184,7 +1184,7 @@ sub ModReserveFill {
     $hold->delete();
 
     if ( C4::Context->preference('HoldFeeMode') eq 'any_time_is_collected' ) {
-        my $reserve_fee = GetReserveFee( $hold->borrowernumber );
+        my $reserve_fee = GetReserveFee( $hold->borrowernumber, $hold->biblionumber );
         ChargeReserveFee( $hold->borrowernumber, $reserve_fee, $hold->biblio->title );
     }
 
