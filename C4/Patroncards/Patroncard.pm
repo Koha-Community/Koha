@@ -89,15 +89,15 @@ sub draw_text {
         my $line = shift @$text;
         my $parse_line = $line;
         my @orig_line = split(/ /,$line);
-        if ($parse_line =~ m/<[A-Za-z0-9]+>/) {     # test to see if the line has db fields embedded...
+        if ($parse_line =~ m/<[A-Za-z0-9_]+>/) {     # test to see if the line has db fields embedded...
             my @fields = ();
-            while ($parse_line =~ m/<([A-Za-z0-9]+)>(.*$)/) {
+            while ($parse_line =~ m/<([A-Za-z0-9_]+)>(.*$)/) {
                 push (@fields, $1);
                 $parse_line = $2;
             }
             my $borrower_attributes = get_borrower_attributes($self->{'borrower_number'},@fields);
             grep{ # substitute data for db fields
-                if ($_ =~ m/<([A-Za-z0-9]+)>/) {
+                if ($_ =~ m/<([A-Za-z0-9_]+)>/) {
                     my $field = $1;
                     $_ =~ s/$_/$borrower_attributes->{$field}/;
                 }
