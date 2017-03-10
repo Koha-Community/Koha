@@ -49,7 +49,7 @@ $info{'port'}     = C4::Context->config("port");
 $info{'user'}     = C4::Context->config("user");
 $info{'password'} = C4::Context->config("pass");
 $info{'tls'} = C4::Context->config("tls");
-    if ($info{'tls'} eq 'yes'){
+    if ($info{'tls'} && $info{'tls'} eq 'yes'){
         $info{'ca'} = C4::Context->config('ca');
         $info{'cert'} = C4::Context->config('cert');
         $info{'key'} = C4::Context->config('key');
