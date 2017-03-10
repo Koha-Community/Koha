@@ -31,6 +31,34 @@ Koha::Patron::Attribute::Types Object set class
 
 =cut
 
+=head3 Koha::Patron::Attribute::Types->search();
+
+my @attribute_types = Koha::Patron::Attribute::Types->search($params);
+
+=cut
+
+sub search {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $branchcode = $params->{branchcode};
+    delete( $params->{branchcode} );
+
+    my $or =
+      $branchcode
+      ? {
+        '-or' => [
+            'borrower_attribute_types_branches.b_branchcode' => undef,
+            'borrower_attribute_types_branches.b_branchcode' => $branchcode,
+        ]
+      }
+      : {};
+    my $join = $branchcode ? { join => 'borrower_attribute_types_branches' } : {};
+    $attributes //= {};
+    $attributes = { %$attributes, %$join };
+    return $self->SUPER::search( { %$params, %$or, }, $attributes );
+}
+
+
 =head3 type
 
 =cut

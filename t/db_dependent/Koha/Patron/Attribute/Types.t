@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -255,19 +255,21 @@ subtest 'replace_library_limits() tests' => sub {
     my $library_limits = $attribute_type->library_limits;
     is( $library_limits, undef, 'Replacing with empty array yields no library limits' );
 
-    my $library_1 = $builder->build({ source => 'Branch'})->{branchcode};
-    my $library_2 = $builder->build({ source => 'Branch'})->{branchcode};
-    my $library_3 = $builder->build({ source => 'Branch'})->{branchcode};
+    my $library_1 = $builder->build({ source => 'Branch' })->{branchcode};
+    my $library_2 = $builder->build({ source => 'Branch' })->{branchcode};
+    my $library_3 = $builder->build({ source => 'Branch' })->{branchcode};
 
     $attribute_type->replace_library_limits( [$library_1] );
     $library_limits = $attribute_type->library_limits;
-    is( $library_limits->count, 1, 'Successfully adds a single library limit' );
+    is( $library_limits->count, 1,
+        'Successfully adds a single library limit' );
     my $library_limit = $library_limits->next;
-    is( $library_limit->branchcode, $library_1, 'Library limit correctly set' );
+    is( $library_limit->branchcode,
+        $library_1, 'Library limit correctly set' );
 
-
-    my @branchcodes_list = ($library_1, $library_2, $library_3);
-    $attribute_type->replace_library_limits( [$library_1, $library_2, $library_3] );
+    my @branchcodes_list = ( $library_1, $library_2, $library_3 );
+    $attribute_type->replace_library_limits(
+        [ $library_1, $library_2, $library_3 ] );
     $library_limits = $attribute_type->library_limits;
     is( $library_limits->count, 3, 'Successfully adds two library limit' );
 
@@ -281,6 +283,55 @@ subtest 'replace_library_limits() tests' => sub {
             'Library limits correctly set (values)'
         );
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'search() with branch limits tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup before running the tests
+    Koha::Patron::Attribute::Types->search()->delete();
+
+    my $object_code_1
+        = Koha::Patron::Attribute::Type->new( { code => 'code_1', } )
+        ->store();
+
+    my $object_code_2
+        = Koha::Patron::Attribute::Type->new( { code => 'code_2', } )
+        ->store();
+
+    my $object_code_3
+        = Koha::Patron::Attribute::Type->new( { code => 'code_3', } )
+        ->store();
+
+    my $object_code_4
+        = Koha::Patron::Attribute::Type->new( { code => 'code_4', } )
+        ->store();
+
+    is( Koha::Patron::Attribute::Types->search()->count,
+        4, 'Three objects created' );
+
+    my $branch_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $branch_2 = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    $object_code_1->library_limits( [$branch_1] );
+    $object_code_2->library_limits( [$branch_2] );
+    $object_code_3->library_limits( [ $branch_1, $branch_2 ] );
+
+    is( Koha::Patron::Attribute::Types->search( { branchcode => $branch_1 } )
+            ->count,
+        3,
+        '3 attribute types are available for the specified branch'
+    );
+    is( Koha::Patron::Attribute::Types->search( { branchcode => $branch_2 } )
+            ->count,
+        3,
+        '3 attribute types are available for the specified branch'
+    );
 
     $schema->storage->txn_rollback;
 };
