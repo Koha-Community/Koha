@@ -146,6 +146,8 @@ if ($op eq 'edit') {
     foreach my $unit (@$units){
         if ($unit->{'type'} eq $layout->get_attr('units')) {
             $unit->{'selected'} = 1;
+        } else {
+            $unit->{'selected'} = 0;
         }
     }
 
