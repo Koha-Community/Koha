@@ -13781,6 +13781,17 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.11.04.001";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        ALTER TABLE search_field CHANGE COLUMN type type ENUM('', 'string', 'date', 'number', 'boolean', 'sum') NOT NULL
+        COMMENT 'what type of data this holds, relevant when storing it in the search engine';
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17260 - updatedatabase.pl fails on invalid entries in ENUM and BOOLEAN columns)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
