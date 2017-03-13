@@ -1483,14 +1483,14 @@ sub NewSubscription {
     logaction( "SERIAL", "ADD", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 
     #set serial flag on biblio if not already set.
-    my $bib = GetBiblio($biblionumber);
-    if ( $bib and !$bib->{'serial'} ) {
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    if ( $biblio and !$biblio->serial ) {
         my $record = GetMarcBiblio($biblionumber);
-        my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial', $bib->{'frameworkcode'} );
+        my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial', $biblio->frameworkcode );
         if ($tag) {
             eval { $record->field($tag)->update( $subf => 1 ); };
         }
-        ModBiblio( $record, $biblionumber, $bib->{'frameworkcode'} );
+        ModBiblio( $record, $biblionumber, $biblio->frameworkcode );
     }
     return $subscriptionid;
 }

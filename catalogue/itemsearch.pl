@@ -28,6 +28,7 @@ use C4::Biblio;
 use C4::Koha;
 
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::Item::Search::Field qw(GetItemSearchFields);
 use Koha::ItemTypes;
 use Koha::Libraries;
@@ -226,7 +227,7 @@ if (scalar keys %params > 0) {
         }
 
         foreach my $item (@$results) {
-            $item->{biblio} = GetBiblio($item->{biblionumber});
+            $item->{biblio} = Koha::Biblios->find( $item->{biblionumber} );
             ($item->{biblioitem}) = GetBiblioItemByBiblioNumber($item->{biblionumber});
             $item->{status} = $notforloan_map->{$item->{notforloan}};
             if (defined $item->{location}) {

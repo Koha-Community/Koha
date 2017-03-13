@@ -76,9 +76,8 @@ sub add {
             }, 400);
         }
         $biblionumber ||= $biblio->biblionumber;
-        $biblio->unblessed; # FIXME remove later
     } else {
-        $biblio = C4::Biblio::GetBiblio($biblionumber);
+        $biblio = Koha::Biblios->find( $biblionumber );
     }
 
     my $can_reserve =
@@ -102,7 +101,7 @@ sub add {
 
     my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
         $biblionumber, undef, $priority, undef, $expirationdate, undef,
-        $biblio->{title}, $itemnumber);
+        $biblio->title, $itemnumber);
 
     unless ($reserve_id) {
         return $c->$cb({

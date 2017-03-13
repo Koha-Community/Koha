@@ -26,6 +26,8 @@ use C4::Biblio;
 use C4::Output;
 use C4::Images;
 
+use Koha::Biblios;
+
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -38,7 +40,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $imagenumber = $query->param('imagenumber');
-my $biblio = GetBiblio($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 if ( C4::Context->preference("OPACLocalCoverImages") ) {
     my @images = ListImagesForBiblio($biblionumber);

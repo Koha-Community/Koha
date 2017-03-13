@@ -34,6 +34,7 @@ use C4::Budgets;
 use C4::Biblio;
 use C4::Reports;
 use C4::Acquisition; #GetBasket()
+use Koha::Biblios;
 use Koha::DateUtils;
 
 my $query = new CGI;
@@ -97,13 +98,14 @@ if ( $get_orders ) {
     # Format the order's informations
     foreach my $order (@orders) {
         # Get the title of the ordered item
-        my $biblio = C4::Biblio::GetBiblio($order->{'biblionumber'});
+        my $biblio = Koha::Biblios->find( $order->{biblionumber} );
         my $basket = C4::Acquisition::GetBasket($order->{'basketno'});
 
         $order->{'basketname'} = $basket->{'basketname'};
         $order->{'authorisedbyname'} = $basket->{'authorisedbyname'};
 
-        $order->{'title'} = $biblio->{'title'} || $order->{'biblionumber'};
+        $order->{title} = $biblio ? $biblio->title : '';
+        $order->{title} ||= $order->{biblionumber};
 
         $order->{'total_rrp'} = $order->{'quantity'} * $order->{'rrp'};
         $order->{'total_ecost'} = $order->{'quantity'} * $order->{'ecost'};

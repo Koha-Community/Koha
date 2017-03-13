@@ -441,7 +441,8 @@ sub GetPatronInfo {
             my $library = Koha::Libraries->find( $hold->branchcode );
             my $branchname = $library ? $library->branchname : '';
             $unblessed_hold->{branchname} = $branchname;
-            $unblessed_hold->{title}      = GetBiblio( $hold->biblionumber )->{'title'}; # Should be $hold->get_biblio
+            $biblio = Koha::Biblios->find( $hold->biblionumber ); # Should be $hold->get_biblio
+            $unblessed_hold->{title} = $biblio ? $biblio->title : ''; # Just in case, but should not be needed
 
             push @{ $borrower->{holds}{hold} }, $unblessed_hold;
 
@@ -641,10 +642,10 @@ sub HoldTitle {
 
     # Get the biblio record, or return an error code
     my $biblionumber = $cgi->param('bib_id');
-    my $biblio = GetBiblio( $biblionumber );
-    return { code => 'RecordNotFound' } unless $$biblio{biblionumber};
-    
-    my $title = $$biblio{title};
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    return { code => 'RecordNotFound' } unless $biblio;
+
+    my $title = $biblio ? $biblio->title : '';
 
     # Check if the biblio can be reserved
     return { code => 'NotHoldable' } unless CanBookBeReserved( $borrowernumber, $biblionumber ) eq 'OK';
@@ -709,10 +710,10 @@ sub HoldItem {
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
-    my $biblio = GetBiblio($biblionumber);
-    return { code => 'RecordNotFound' } unless $$biblio{biblionumber};
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    return { code => 'RecordNotFound' } unless $biblio;
 
-    my $title = $$biblio{title};
+    my $title = $biblio ? $biblio->title : '';
 
     # Get the item or return an error code
     my $itemnumber = $cgi->param('item_id');
@@ -720,7 +721,7 @@ sub HoldItem {
     return { code => 'RecordNotFound' } unless $$item{itemnumber};
 
     # If the biblio does not match the item, return an error code
-    return { code => 'RecordNotFound' } if $$item{biblionumber} ne $$biblio{biblionumber};
+    return { code => 'RecordNotFound' } if $$item{biblionumber} ne $biblio->biblionumber;
 
     # Check for item disponibility
     my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber );

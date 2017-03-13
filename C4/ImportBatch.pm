@@ -662,7 +662,7 @@ sub BatchCommitRecords {
             $recordid = $record_match;
             my $oldxml;
             if ($record_type eq 'biblio') {
-                my $oldbiblio = GetBiblio($recordid);
+                my $oldbiblio = Koha::Biblios->find( $recordid );
                 $oldxml = GetXmlBiblio($recordid);
 
                 # remove item fields so that they don't get
@@ -674,7 +674,7 @@ sub BatchCommitRecords {
                 }
                 $oldxml = $old_marc->as_xml($marc_type);
 
-                ModBiblio($marc_record, $recordid, $oldbiblio->{'frameworkcode'});
+                ModBiblio($marc_record, $recordid, $oldbiblio->frameworkcode);
                 $query = "UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?";
 
                 if ($item_result eq 'create_new' || $item_result eq 'replace') {
@@ -865,13 +865,13 @@ sub BatchRevertRecords {
             my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'}, $marc_type);
             if ($record_type eq 'biblio') {
                 my $biblionumber = $rowref->{'matched_biblionumber'};
-                my $oldbiblio = GetBiblio($biblionumber);
+                my $oldbiblio = Koha::Biblios->find( $biblionumber );
 
                 $logger->info("C4::ImportBatch::BatchRevertRecords: Biblio record $biblionumber does not exist, restoration of this record was skipped") unless $oldbiblio;
                 next unless $oldbiblio; # Record has since been deleted. Deleted records should stay deleted.
 
                 $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
-                ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
+                ModBiblio($old_record, $biblionumber, $oldbiblio->frameworkcode);
             } else {
                 my $authid = $rowref->{'matched_authid'};
                 ModAuthority($authid, $old_record, GuessAuthTypeCode($old_record));

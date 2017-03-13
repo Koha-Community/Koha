@@ -44,9 +44,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $imagenumber = $query->param('imagenumber');
-my $biblio = GetBiblio($biblionumber);
-my $biblio_object = Koha::Biblios->find( $biblionumber ); # This should replace $biblio
-my $itemcount = $biblio_object->items->count;;
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $itemcount = $biblio->items->count;;
 
 my @items = GetItemsInfo($biblionumber);
 

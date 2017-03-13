@@ -64,7 +64,6 @@ BEGIN {
 
     # to get something
     push @EXPORT, qw(
-      GetBiblio
       GetBiblioData
       GetMarcBiblio
       GetBiblioItemData
@@ -906,25 +905,6 @@ sub GetISBDView {
 
     return $res;
 }
-
-=head2 GetBiblio
-
-  my $biblio = &GetBiblio($biblionumber);
-
-=cut
-
-sub GetBiblio {
-    my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber = ?");
-    my $count          = 0;
-    my @results;
-    $sth->execute($biblionumber);
-    if ( my $data = $sth->fetchrow_hashref ) {
-        return $data;
-    }
-    return;
-}    # sub GetBiblio
 
 =head2 GetBiblioItemInfosOf
 

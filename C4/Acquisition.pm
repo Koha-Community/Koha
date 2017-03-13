@@ -3084,7 +3084,7 @@ sub NotifyOrderUsers {
     for my $borrowernumber (@borrowernumbers) {
         my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
         my $library = Koha::Libraries->find( $borrower->{branchcode} )->unblessed;
-        my $biblio = C4::Biblio::GetBiblio( $order->{biblionumber} );
+        my $biblio = Koha::Biblios->find( $order->{biblionumber} )->unblessed;
         my $letter = C4::Letters::GetPreparedLetter(
             module      => 'acquisition',
             letter_code => 'ACQ_NOTIF_ON_RECEIV',

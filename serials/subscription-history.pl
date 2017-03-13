@@ -35,6 +35,7 @@ use C4::Output;
 
 use C4::Biblio;
 use C4::Serials;
+use Koha::Biblios;
 use Koha::DateUtils;
 
 my $input = new CGI;
@@ -72,11 +73,11 @@ if($op && $op eq 'mod') {
     exit;
 } else {
     my $history = GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
-    my $biblio  = GetBiblio($history->{'biblionumber'});
+    my $biblio  = Koha::Biblios->find( $history->{biblionumber} );
 
     $template->param(
         subscriptionid  => $subscriptionid,
-        title           => $biblio->{'title'},
+        title           => $biblio->title,
         histstartdate   => $history->{'histstartdate'},
         histenddate     => $history->{'histenddate'},
         receivedlist    => $history->{'recievedlist'},

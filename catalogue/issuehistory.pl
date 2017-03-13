@@ -27,6 +27,8 @@ use C4::Circulation;    # GetBiblioIssues
 use C4::Biblio;    # GetBiblio
 use C4::Search;		# enabled_staff_search_views
 
+use Koha::Biblios;
+
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -38,20 +40,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-# getting cgi params.
-my $params = $query->Vars;
-
-my $biblionumber = $params->{'biblionumber'};
+my $biblionumber = $query->param('biblionumber');
 
 if (C4::Context->preference("HidePatronName")) {
    $template->param(HidePatronName => 1);
 }
 
 my $issues = GetBiblioIssues($biblionumber);
-my $biblio = GetBiblio($biblionumber);
-$template->param(%$biblio);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 $template->param(
+    biblio       => $biblio,
     total        => scalar @$issues,
     issues       => $issues,
 	issuehistoryview => 1,

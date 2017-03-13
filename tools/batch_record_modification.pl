@@ -29,6 +29,8 @@ use C4::AuthoritiesMarc qw( BuildSummary ModAuthority );
 use C4::BackgroundJob;
 use C4::Biblio qw( GetMarcBiblio ModBiblio );
 use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModificationTemplates ModifyRecordWithTemplate );
+
+use Koha::Biblios;
 use Koha::MetadataRecord::Authority;
 
 my $input = new CGI;
@@ -116,7 +118,7 @@ if ( $op eq 'form' ) {
     for my $record_id ( uniq @record_ids ) {
         if ( $recordtype eq 'biblio' ) {
             # Retrieve biblio information
-            my $biblio = C4::Biblio::GetBiblio( $record_id );
+            my $biblio = Koha::Biblios->find( $record_id );
             unless ( $biblio ) {
                 push @messages, {
                     type => 'warning',
