@@ -36,6 +36,7 @@ use C4::Members qw();
 use C4::Letters;
 use C4::Log;
 
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Database;
@@ -330,7 +331,7 @@ sub CanItemBeReserved {
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
     my $item       = GetItem($itemnumber);
-    my $biblioData = C4::Biblio::GetBiblioData( $item->{biblionumber} );
+    my $biblio     = Koha::Biblios->find( $item->{biblionumber} );
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
 
@@ -341,7 +342,7 @@ sub CanItemBeReserved {
 
     # Check for the age restriction
     my ( $ageRestriction, $daysToAgeRestriction ) =
-      C4::Circulation::GetAgeRestriction( $biblioData->{agerestriction}, $borrower );
+      C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
     return 'ageRestricted' if $daysToAgeRestriction && $daysToAgeRestriction > 0;
 
     # Check that the patron doesn't have an item level hold on this item already

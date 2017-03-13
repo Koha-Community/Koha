@@ -46,7 +46,7 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Languages qw(getLanguages);
 use C4::Search;
 use C4::Search::History;
-use C4::Biblio;  # GetBiblioData
+use C4::Biblio; # Unused here?
 use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;

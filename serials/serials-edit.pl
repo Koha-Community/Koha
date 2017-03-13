@@ -164,7 +164,7 @@ foreach my $serialid (@serialids) {
         $processedserialid{$serialid} = 1;
     }
 }
-my $biblio = GetBiblioData( $serialdatalist[0]->{'biblionumber'} );
+my $biblio = Koha::Biblios->find( $serialdatalist[0]->{biblionumber} );
 
 my @newserialloop;
 my @subscriptionloop;
@@ -425,7 +425,7 @@ $template->param(
     serialsadditems => $serialdatalist[0]->{'serialsadditems'},
     callnumber	     => $serialdatalist[0]->{'callnumber'},
     internalnotes   => $serialdatalist[0]->{'internalnotes'},
-    bibliotitle     => $biblio->{'title'},
+    bibliotitle     => $biblio->title,
     biblionumber    => $serialdatalist[0]->{'biblionumber'},
     serialslist     => \@serialdatalist,
     default_bib_view => $default_bib_view,

@@ -684,8 +684,8 @@ sub CreatePicklistFromItemMap {
         my $firstname = $patron->firstname;
         my $phone = $patron->phone;
 
-        my $bib = GetBiblioData($biblionumber);
-        my $title = $bib->{title};
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $title = $biblio->title;
 
         $sth_load->execute($biblionumber, $itemnumber, $barcode, $surname, $firstname, $phone, $borrowernumber,
                            $cardnumber, $reservedate, $title, $itemcallnumber,

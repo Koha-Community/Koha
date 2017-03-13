@@ -34,6 +34,8 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Reports::Guided;    #_get_column_defs
 use C4::Charset;
+
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
@@ -311,9 +313,9 @@ my $loop = $uploadbarcodes
     ? [ map { $results->{$_} } keys %$results ]
     : $inventorylist // [];
 for my $item ( @$loop ) {
-    my $biblio = C4::Biblio::GetBiblioData($item->{biblionumber});
-    $item->{title} = $biblio->{title};
-    $item->{author} = $biblio->{author};
+    my $biblio = Koha::Biblios->find( $item->{biblionumber} );
+    $item->{title} = $biblio->title;
+    $item->{author} = $biblio->author;
 }
 
 $template->param(

@@ -128,7 +128,6 @@ if ($show_results) {
     my @items =();
     # This code needs to be refactored using these subs...
     #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
-    #my $dat = &GetBiblioData( $biblio->{biblionumber} );
     for ( my $i = 0 ; $i < $hits ; $i++ ) {
         my @row_data= ();
         #DEBUG Notes: Decode the MARC record from each resulting MARC record...

@@ -46,6 +46,8 @@ use C4::XSLT;
 
 use Data::Dumper;
 
+use Koha::Biblios;
+
 my %newtags = ();
 my @deltags = ();
 my %counts  = ();
@@ -229,11 +231,11 @@ if ($loggedinuser) {
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
     my $my_approved_tags = get_approval_rows({ approved => 1 });
     foreach my $tag (@$my_tags) {
-        my $biblio = GetBiblioData($tag->{biblionumber});
+        my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
         my $record = &GetMarcBiblio( $tag->{biblionumber} );
         $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
-        $tag->{title} = $biblio->{title};
-        $tag->{author} = $biblio->{author};
+        $tag->{title} = $biblio->title;
+        $tag->{author} = $biblio->author;
 
         my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');
         my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;

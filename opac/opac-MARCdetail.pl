@@ -57,6 +57,7 @@ use C4::Members;
 use C4::Acquisition;
 use C4::Koha;
 use List::MoreUtils qw( any uniq );
+use Koha::Biblios;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 
@@ -90,7 +91,7 @@ if (scalar @all_items >= 1) {
 my $framework = &GetFrameworkCode( $biblionumber );
 my $tagslib = &GetMarcStructure( 0, $framework );
 my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
-my $biblio = GetBiblioData($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
@@ -114,7 +115,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my ($bt_tag,$bt_subtag) = GetMarcFromKohaField('biblio.title',$framework);
 $template->param(
-    bibliotitle => $biblio->{title},
+    bibliotitle => $biblio->title,
 ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
      $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
 

@@ -26,6 +26,7 @@ use C4::External::Syndetics qw(get_syndetics_editions);
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
+use Koha::Biblios;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
@@ -74,10 +75,10 @@ sub _get_biblio_from_xisbn {
     my $biblionumber = C4::Biblio::get_koha_field_from_marc('biblio', 'biblionumber', $record, '');
     return unless $biblionumber;
 
-    my $xbiblio = GetBiblioData($biblionumber);
-    return unless $xbiblio;
-    $xbiblio->{normalized_isbn} = GetNormalizedISBN($xbiblio->{isbn});
-    return $xbiblio;
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    return unless $biblio;
+    $biblio->{normalized_isbn} = GetNormalizedISBN($biblio->biblioitem->isbn);
+    return $biblio;
 }
 
 =head1 get_xisbns($isbn);

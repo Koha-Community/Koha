@@ -34,6 +34,8 @@ use Text::CSV;
 use C4::Context;
 use C4::Biblio;
 use C4::Koha qw( GetVariationsOfISBN );
+
+use Koha::Biblios;
 use Koha::Database;
 
 binmode STDOUT, ':encoding(UTF-8)';
@@ -156,13 +158,13 @@ while ( my $row = $csv->getline_hr($fh) ) {
             say "Found matching record! Biblionumber: $biblionumber";
 
             if ( $verbose > 2 ) {
-                my $biblio = GetBiblioData($biblionumber);
-                say "Title from record: " . $biblio->{title}
-                  if ( $biblio->{title} );
-                say "Author from record: " . $biblio->{author}
-                  if ( $biblio->{author} );
-                say "ISBN from record: " . $biblio->{isbn}
-                  if ( $biblio->{isbn} );
+                my $biblio = Koha::Biblios->find( $biblionumber );
+                say "Title from record: " . $biblio->title
+                  if $biblio->title;
+                say "Author from record: " . $biblio->author
+                  if $biblio->author;
+                say "ISBN from record: " . $biblio->biblioitem->isbn
+                  if $biblio->biblioitem->isbn;
             }
             say "Title: " . $row->{Title};
             say "Author: " . $row->{Author};

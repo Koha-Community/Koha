@@ -3586,12 +3586,13 @@ sub UpdateTotalIssues {
         carp "UpdateTotalIssues could not get biblio record";
         return;
     }
-    my $data = GetBiblioData($biblionumber);
-    unless ($data) {
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    unless ($biblio) {
         carp "UpdateTotalIssues could not get datas of biblio";
         return;
     }
-    my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $data->{'frameworkcode'});
+    my $biblioitem = $biblio->biblioitem;
+    my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $biblio->frameworkcode);
     unless ($totalissuestag) {
         return 1; # There is nothing to do
     }
@@ -3599,7 +3600,7 @@ sub UpdateTotalIssues {
     if (defined $value) {
         $totalissues = $value;
     } else {
-        $totalissues = $data->{'totalissues'} + $increase;
+        $totalissues = $biblioitem->totalissues + $increase;
     }
 
      my $field = $record->field($totalissuestag);
@@ -3611,7 +3612,7 @@ sub UpdateTotalIssues {
          $record->insert_grouped_field($field);
      }
 
-     return ModBiblio($record, $biblionumber, $data->{'frameworkcode'});
+     return ModBiblio($record, $biblionumber, $biblio->frameworkcode);
 }
 
 =head2 RemoveAllNsb

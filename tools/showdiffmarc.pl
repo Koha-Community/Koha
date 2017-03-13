@@ -31,6 +31,8 @@ use C4::Auth;
 use C4::Biblio;
 use C4::ImportBatch;
 
+use Koha::Biblios;
+
 # Input params
 my $input        = new CGI;
 my $biblionumber = $input->param('id');
@@ -60,8 +62,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $recordBiblionumber = GetMarcBiblio($biblionumber, 'embed_items');
 if( $recordBiblionumber ) {
     $formatted1 = $recordBiblionumber->as_formatted;
-    my $data = GetBiblioData($biblionumber);
-    $biblioTitle = $data->{title};
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    $biblioTitle = $biblio->title;
 } else {
     $errorFormatted1 = 1;
 }

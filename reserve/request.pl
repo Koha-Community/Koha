@@ -42,6 +42,8 @@ use Koha::DateUtils;
 use C4::Utils::DataTables::Members;
 use C4::Members;
 use C4::Search;		# enabled_staff_search_views
+
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Checkouts;
 use Koha::Holds;
@@ -213,7 +215,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     my %biblioloopiter = ();
 
-    my $dat = GetBiblioData($biblionumber);
+    my $biblio = Koha::Biblios->find( $biblionumber );
 
     my $force_hold_level;
     if ( $patron ) {
@@ -380,11 +382,11 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{holdingbranch} = $item->{holdingbranch};
             }
 
-		if($item->{biblionumber} ne $biblionumber){
-			$item->{hostitemsflag}=1;
-		        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
-		}
-		
+            if($item->{biblionumber} ne $biblionumber){
+                $item->{hostitemsflag} = 1;
+                $item->{hosttitle} = Koha::Biblios->find( $item->{biblionumber} )->title;
+            }
+
             # if the item is currently on loan, we display its return date and
             # change the background color
             my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } );
@@ -612,8 +614,8 @@ foreach my $biblionumber (@biblionumbers) {
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,
-                     title             => $dat->{title},
-                     author            => $dat->{author},
+                     title             => $biblio->title,
+                     author            => $biblio->author,
                      holdsview => 1,
                      C4::Search::enabled_staff_search_views,
                     );
@@ -622,7 +624,7 @@ foreach my $biblionumber (@biblionumbers) {
     }
 
     $biblioloopiter{biblionumber} = $biblionumber;
-    $biblioloopiter{title} = $dat->{title};
+    $biblioloopiter{title} = $biblio->title;
     $biblioloopiter{rank} = $fixedRank;
     $biblioloopiter{reserveloop} = \@reserveloop;
 

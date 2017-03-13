@@ -31,6 +31,8 @@ use C4::Koha;
 use C4::ClassSource;
 use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder/;
 
+use Koha::Biblios;
+
 use Date::Calc qw(Today);
 
 use MARC::File::XML;
@@ -58,8 +60,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 
 
 
-my $biblio = GetBiblioData($biblionumber);
-$template->param(bibliotitle => $biblio->{'title'});
+my $biblio = Koha::Biblios->find( $biblionumber );
+$template->param(bibliotitle => $biblio->title);
 $template->param(biblionumber => $biblionumber);
 
 # If we already have the barcode of the item to move and the biblionumber to move the item to

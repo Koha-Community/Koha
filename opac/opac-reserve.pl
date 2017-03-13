@@ -32,7 +32,9 @@ use C4::Context;
 use C4::Members;
 use C4::Overdues;
 use C4::Debug;
+
 use Koha::AuthorisedValues;
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -522,7 +524,7 @@ foreach my $biblioNum (@biblionumbers) {
         if ( $itemInfo->{biblionumber} ne $biblioNum ) {
             $biblioLoopIter{hostitemsflag}    = 1;
             $itemLoopIter->{hostbiblionumber} = $itemInfo->{biblionumber};
-            $itemLoopIter->{hosttitle}        = GetBiblioData( $itemInfo->{biblionumber} )->{title};
+            $itemLoopIter->{hosttitle}        = Koha::Biblios->find( $itemInfo->{biblionumber} )->title;
         }
 
         # If there is no loan, return and transfer, we show a checkbox.

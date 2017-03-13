@@ -22,6 +22,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Biblio;
+use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Reviews;
 
@@ -69,9 +70,9 @@ my $reviews = Koha::Reviews->search(
 foreach ( @$reviews ) {
     my $borrowernumber = $_->{borrowernumber};
     my $patron = Koha::Patrons->find( $borrowernumber);
-    my $biblioData     = GetBiblioData($_->{biblionumber});
+    my $biblio         = Koha::Biblios->find( $_->{biblionumber} );
     # setting some borrower info into this hash
-    $_->{bibliotitle} = $biblioData->{'title'};
+    $_->{bibliotitle} = $biblio->title;
     $_->{surname}     = $patron->surname;
     $_->{firstname}   = $patron->firstname;
 }

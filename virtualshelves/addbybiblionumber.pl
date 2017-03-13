@@ -63,6 +63,7 @@ use C4::Biblio;
 use C4::Output;
 use C4::Auth;
 
+use Koha::Biblios;
 use Koha::Virtualshelves;
 
 my $query           = new CGI;
@@ -185,12 +186,12 @@ if ($newvirtualshelf) {
 
 my @biblios;
 for my $biblionumber (@biblionumbers) {
-    my $data = GetBiblioData($biblionumber);
+    my $biblio = Koha::Biblios->find( $biblionumber );
     push(
         @biblios,
         {   biblionumber => $biblionumber,
-            title        => $data->{'title'},
-            author       => $data->{'author'},
+            title        => $biblio->title,
+            author       => $biblio->author,
         }
     );
 }

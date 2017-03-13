@@ -31,6 +31,7 @@ use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters;
 use Koha::AdditionalField;
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::ItemTypes;
 use Carp;
@@ -182,10 +183,10 @@ if ($op eq 'addsubscription') {
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
-        my $bib = GetBiblioData($new_biblionumber);
-        if (defined $bib) {
+        my $biblio = Koha::Biblios->find( $new_biblionumber );
+        if (defined $biblio) {
             $template->param(bibnum      => $new_biblionumber);
-            $template->param(bibliotitle => $bib->{title});
+            $template->param(bibliotitle => $biblio->title);
         }
     }
 

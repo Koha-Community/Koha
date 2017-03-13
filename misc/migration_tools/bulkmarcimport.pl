@@ -31,6 +31,7 @@ use Getopt::Long;
 use IO::File;
 use Pod::Usage;
 
+use Koha::Biblios;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
@@ -417,7 +418,9 @@ RECORD: while (  ) {
 			}
 					# create biblio, unless we already have it ( either match or isbn )
             if ($biblionumber) {
-                eval{$biblioitemnumber=GetBiblioData($biblionumber)->{biblioitemnumber};};
+                eval{
+                    $biblioitemnumber = Koha::Biblios->find( $biblionumber )->biblioitem->biblioitemnumber;
+                };
                 if ($update) {
                     eval { ( $biblionumber, $biblioitemnumber ) = ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) ) };
                     if ($@) {

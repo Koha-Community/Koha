@@ -314,20 +314,13 @@ sub GetBasketAsCSV {
         }
         for my $order (@orders) {
             my @row;
-            my $bd = GetBiblioData( $order->{'biblionumber'} );
-            my @biblioitems = GetBiblioItemByBiblioNumber( $order->{'biblionumber'});
-            for my $biblioitem (@biblioitems) {
-                if (    $biblioitem->{isbn}
-                    and $order->{isbn}
-                    and $biblioitem->{isbn} eq $order->{isbn} )
-                {
-                    $order = { %$order, %$biblioitem };
-                }
-            }
+            my $biblio = Koha::Biblios->find( $order->{biblionumber} );
+            my $biblioitem = $biblio->biblioitem;
+            $order = { %$order, %{ $biblioitem->unblessed } };
             if ($contract) {
                 $order = {%$order, %$contract};
             }
-            $order = {%$order, %$basket, %$bd};
+            $order = {%$order, %$basket, %{ $biblio->unblessed }};
             for my $field (@fields) {
                 push @row, $order->{$field};
             }
@@ -343,17 +336,18 @@ sub GetBasketAsCSV {
     }
     else {
         foreach my $order (@orders) {
-            my $bd = GetBiblioData( $order->{'biblionumber'} );
+            my $biblio = Koha::Biblios->find( $order->{biblionumber} );
+            my $biblioitem = $biblio->biblioitem;
             my $row = {
                 contractname => $contract->{'contractname'},
                 ordernumber => $order->{'ordernumber'},
                 entrydate => $order->{'entrydate'},
                 isbn => $order->{'isbn'},
-                author => $bd->{'author'},
-                title => $bd->{'title'},
-                publicationyear => $bd->{'publicationyear'},
-                publishercode => $bd->{'publishercode'},
-                collectiontitle => $bd->{'collectiontitle'},
+                author => $biblio->author,
+                title => $biblio->title,
+                publicationyear => $biblioitem->publicationyear,
+                publishercode => $biblioitem->publishercode,
+                collectiontitle => $biblioitem->collectiontitle,
                 notes => $order->{'order_vendornote'},
                 quantity => $order->{'quantity'},
                 rrp => $order->{'rrp'},
@@ -412,16 +406,17 @@ sub GetBasketGroupAsCSV {
         my $basketgroup = GetBasketgroup( $$basket{basketgroupid} );
 
         foreach my $order (@orders) {
-            my $bd = GetBiblioData( $order->{'biblionumber'} );
+            my $biblio = Koha::Biblios->find( $order->{biblionumber} );
+            my $biblioitem = $biblio->biblioitem;
             my $row = {
                 clientnumber => $bookseller->accountnumber,
                 basketname => $basket->{basketname},
                 ordernumber => $order->{ordernumber},
-                author => $bd->{author},
-                title => $bd->{title},
-                publishercode => $bd->{publishercode},
-                publicationyear => $bd->{publicationyear},
-                collectiontitle => $bd->{collectiontitle},
+                author => $biblio->author,
+                title => $biblio->title,
+                publishercode => $biblioitem->publishercode,
+                publicationyear => $biblioitem->publicationyear,
+                collectiontitle => $biblioitem->collectiontitle,
                 isbn => $order->{isbn},
                 quantity => $order->{quantity},
                 rrp_tax_included => $order->{rrp_tax_included},

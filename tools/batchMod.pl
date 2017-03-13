@@ -576,11 +576,11 @@ sub BuildItemsData{
 
             # grab title, author, and ISBN to identify bib that the item
             # belongs to in the display
-			 my $biblio=GetBiblioData($$itemdata{biblionumber});
-            $this_row{title} = $biblio->{title};
-            $this_row{author} = $biblio->{author};
-            $this_row{isbn} = $biblio->{isbn};
-            $this_row{biblionumber} = $biblio->{biblionumber};
+            my $biblio = Koha::Biblios->find( $itemdata->{biblionumber} );
+            $this_row{title}        = $biblio->title;
+            $this_row{author}       = $biblio->author;
+            $this_row{isbn}         = $biblio->biblioitem->isbn;
+            $this_row{biblionumber} = $biblio->biblionumber;
 
 			if (%this_row) {
 				push(@big_array, \%this_row);

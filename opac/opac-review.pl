@@ -25,6 +25,8 @@ use C4::Output;
 use C4::Biblio;
 use C4::Scrubber;
 use C4::Debug;
+
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Review;
 use Koha::Reviews;
@@ -45,7 +47,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # FIXME: need to allow user to delete their own comment(s)
 
 my ( $clean, @errors, $savedreview );
-my $biblio = GetBiblioData($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 if( !$biblio ) {
     push @errors, { nobiblio => 1 };
@@ -101,7 +103,7 @@ $template->param(
     'borrowernumber' => $borrowernumber,
     'review'         => $review,
     'reviewid'       => $reviewid || 0,
-    'title'          => $biblio->{'title'},
+    'title'          => $biblio->title,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
