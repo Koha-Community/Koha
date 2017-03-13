@@ -71,7 +71,6 @@ BEGIN {
         GetItemLocation
         GetLostItems
         GetItemsForInventory
-        GetItemsCount
         GetItemInfosOf
         GetItemsByBiblioitemnumber
         GetItemsInfo
@@ -1167,26 +1166,6 @@ sub GetItemsForInventory {
     }
 
     return (\@results, $iTotalRecords);
-}
-
-=head2 GetItemsCount
-
-  $count = &GetItemsCount( $biblionumber);
-
-This function return count of item with $biblionumber
-
-=cut
-
-sub GetItemsCount {
-    my ( $biblionumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT count(*)
-          FROM  items 
-          WHERE biblionumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my $count = $sth->fetchrow;  
-    return ($count);
 }
 
 =head2 GetItemInfosOf

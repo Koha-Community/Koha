@@ -30,6 +30,7 @@ use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use Koha::Biblios;
 use Koha::Number::Price;
 use Koha::Libraries;
 
@@ -1851,7 +1852,8 @@ sub DelOrder {
 
     if($delete_biblio) {
         # We get the number of remaining items
-        my $itemcount = C4::Items::GetItemsCount($bibnum);
+        my $biblio = Koha::Biblios->find( $bibnum );
+        my $itemcount = $biblio->items->count;
 
         # If there are no items left,
         if ( $itemcount == 0 ) {

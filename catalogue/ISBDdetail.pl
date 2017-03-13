@@ -47,6 +47,8 @@ use C4::Members; # to use GetMember
 use C4::Serials;    # CountSubscriptionFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);
+
+use Koha::Biblios;
 use Koha::RecordProcessor;
 
 
@@ -87,6 +89,7 @@ if ( not defined $record ) {
        exit;
 }
 
+my $biblio = Koha::Biblios->find( $biblionumber );
 my $framework = GetFrameworkCode( $biblionumber );
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
@@ -114,7 +117,7 @@ if($query->cookie("holdfor")){
 }
 
 # count of item linked with biblio
-my $itemcount = GetItemsCount($biblionumber);
+my $itemcount = $biblio->items->count;
 $template->param( count => $itemcount);
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
  

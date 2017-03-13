@@ -29,6 +29,8 @@ use C4::Images;
 use C4::Search;
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 
+use Koha::Biblios;
+
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -43,7 +45,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $imagenumber = $query->param('imagenumber');
 my $biblio = GetBiblio($biblionumber);
-my $itemcount = GetItemsCount($biblionumber);
+my $biblio_object = Koha::Biblios->find( $biblionumber ); # This should replace $biblio
+my $itemcount = $biblio_object->items->count;;
 
 my @items = GetItemsInfo($biblionumber);
 

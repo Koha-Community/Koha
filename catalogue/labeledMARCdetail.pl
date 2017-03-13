@@ -31,6 +31,7 @@ use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 
+use Koha::Biblios;
 use Koha::BiblioFrameworks;
 
 my $query        = new CGI;
@@ -65,6 +66,7 @@ if ( not defined $record ) {
     exit;
 }
 
+my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
 my $tagslib = GetMarcStructure(1,$frameworkcode);
 my $biblio = GetBiblioData($biblionumber);
 
@@ -79,7 +81,7 @@ if($query->cookie("holdfor")){
 }
 
 #count of item linked
-my $itemcount = GetItemsCount($biblionumber);
+my $itemcount = $biblio_object->items->count;
 $template->param( count => $itemcount,
 					bibliotitle => $biblio->{title}, );
 

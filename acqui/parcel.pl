@@ -240,7 +240,7 @@ unless( defined $invoice->{closedate} ) {
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $line{'ordernumber'};
         my @subscriptions = GetSubscriptionsId ($biblionumber);
-        my $itemcount = GetItemsCount($biblionumber);
+        my $itemcount   = $biblio->items->count;
         my $holds_count = $biblio->holds->count;
         my @items = GetItemnumbersFromOrder( $ordernumber );
         my $itemholds;

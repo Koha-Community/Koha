@@ -34,6 +34,8 @@ use C4::Debug;
 use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
+
+use Koha::Biblios;
 use Koha::DateUtils;
 
 my $input = new CGI;
@@ -181,7 +183,7 @@ if ($op eq "action") {
 
 			# If there are no items left, delete the biblio
 			if ( $del_records ) {
-                            my $itemscount = GetItemsCount($itemdata->{'biblionumber'});
+                            my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
                             if ( $itemscount == 0 ) {
 			        my $error = DelBiblio($itemdata->{'biblionumber'});
 			        $deleted_records++ unless ( $error );

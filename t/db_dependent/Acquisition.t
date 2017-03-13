@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 63;
+use Test::More tests => 65;
 use Koha::Database;
 
 BEGIN {
@@ -166,6 +166,7 @@ my ( $biblionumber1, $biblioitemnumber1 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber2, $biblioitemnumber2 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber3, $biblioitemnumber3 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber4, $biblioitemnumber4 ) = AddBiblio( MARC::Record->new, '' );
+my ( $biblionumber5, $biblioitemnumber5 ) = AddBiblio( MARC::Record->new, '' );
 
 # Prepare 5 orders, and make distinction beween fields to be tested with eq and with ==
 # Ex : a price of 50.1 will be stored internally as 5.100000
@@ -257,11 +258,31 @@ my @order_content = (
             uncertainprice => 0,
             tax_rate        => 0
         }
+    },
+    {
+        str => {
+            basketno     => $basketno,
+            biblionumber => $biblionumber5,
+            budget_id    => $budget->{budget_id},
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note"
+        },
+        num => {
+            quantity       => 1,
+            ecost          => 10,
+            rrp            => 10,
+            listprice      => 10,
+            ecost          => 10,
+            rrp            => 10,
+            discount       => 0,
+            uncertainprice => 0,
+            tax_rate        => 0
+        }
     }
 );
 
-# Create 4 orders in database
-for ( 0 .. 4 ) {
+# Create 5 orders in database
+for ( 0 .. 5 ) {
     my %ocontent;
     @ocontent{ keys %{ $order_content[$_]->{num} } } =
       values %{ $order_content[$_]->{num} };
@@ -298,7 +319,7 @@ my $search_orders = SearchOrders({
 isa_ok( $search_orders, 'ARRAY' );
 ok(
     (
-        ( scalar @$search_orders == 4 )
+        ( scalar @$search_orders == 5 )
           and !grep ( $_->{ordernumber} eq $ordernumbers[3], @$search_orders )
     ),
     "SearchOrders only gets non-cancelled orders"
@@ -311,7 +332,7 @@ $search_orders = SearchOrders({
 });
 ok(
     (
-        ( scalar @$search_orders == 3 ) and !grep ( (
+        ( scalar @$search_orders == 4 ) and !grep ( (
                      ( $_->{ordernumber} eq $ordernumbers[3] )
                   or ( $_->{ordernumber} eq $ordernumbers[4] )
             ),
@@ -368,7 +389,7 @@ $search_orders = SearchOrders({
     pending      => 1,
     ordered      => 1,
 });
-is( scalar (@$search_orders), 3, "SearchOrders with pending and ordered params gets only pending ordered orders. After closing the basket, orders are marked as 'ordered' (bug 11170)" );
+is( scalar (@$search_orders), 4, "SearchOrders with pending and ordered params gets only pending ordered orders. After closing the basket, orders are marked as 'ordered' (bug 11170)" );
 
 #
 # Test AddClaim
@@ -498,6 +519,14 @@ $order4 = GetOrder($order4->{ordernumber});
 ok((defined $order4->{datecancellationprinted}), "order is cancelled");
 ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \"foobar\"");
 ok((not defined GetBiblio($order4->{biblionumber})), "biblio does not exist anymore");
+
+my $order5 = GetOrder($ordernumbers[4]);
+C4::Items::AddItem( { barcode => '0102030405' }, $order5->{biblionumber} );
+$error = DelOrder($order5->{biblionumber}, $order5->{ordernumber}, 1);
+$order5 = GetOrder($order5->{ordernumber});
+ok((defined $order5->{datecancellationprinted}), "order is cancelled");
+ok(GetBiblio($order5->{biblionumber}), "biblio still exists");
+
 # End of tests for DelOrder
 
 subtest 'ModOrder' => sub {
