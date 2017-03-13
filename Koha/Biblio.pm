@@ -280,6 +280,23 @@ sub biblioitem {
     return $self->{_biblioitem};
 }
 
+=head3 subscriptions
+
+my $subscriptions = $self->subscriptions
+
+Returns the related Koha::Subscriptions object for this Biblio object
+
+=cut
+
+sub subscriptions {
+    my ($self) = @_;
+
+    $self->{_subscriptions} ||= Koha::Subscriptions->search( { biblionumber => $self->biblionumber } );
+
+    return $self->{_subscriptions};
+}
+
+
 =head3 type
 
 =cut

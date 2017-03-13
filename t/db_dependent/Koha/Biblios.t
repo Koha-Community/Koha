@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use C4::Reserves;
 
 use Koha::Biblios;
 use Koha::Patrons;
+use Koha::Subscriptions;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -50,6 +51,22 @@ subtest 'holds' => sub {
     is( ref($holds), 'Koha::Holds', '->holds should return a Koha::Holds object' );
     is( $holds->count, 1, '->holds should only return 1 hold' );
     is( $holds->next->borrowernumber, $patron->borrowernumber, '->holds should return the correct hold' );
+};
+
+subtest 'subscriptions' => sub {
+    plan tests => 2;
+    $builder->build(
+        { source => 'Subscription', value => { biblionumber => $biblio->id } }
+    );
+    $builder->build(
+        { source => 'Subscription', value => { biblionumber => $biblio->id } }
+    );
+    my $biblio        = Koha::Biblios->find( $biblio->id );
+    my $subscriptions = $biblio->subscriptions;
+    is( ref($subscriptions), 'Koha::Subscriptions',
+        'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
+    );
+    is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
 };
 
 $schema->storage->txn_rollback;
