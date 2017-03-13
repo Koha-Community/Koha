@@ -142,4 +142,10 @@ done
 
 db_stop
 
+# Bug 18250: Correct startup order of koha-common and memcached
+# Since the init script has been updated, we can force the order in rc.d
+# by disabling and enabling again.
+update-rc.d koha-common disable
+update-rc.d koha-common enable
+
 exit 0
