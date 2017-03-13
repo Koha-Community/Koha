@@ -69,7 +69,6 @@ BEGIN {
       GetMarcBiblio
       GetBiblioItemData
       GetBiblioItemInfosOf
-      GetBiblioItemByBiblioNumber
 
       &GetRecordValue
 
@@ -749,29 +748,6 @@ sub GetBiblioItemData {
     $sth->finish;
     return ($data);
 }    # sub &GetBiblioItemData
-
-=head2 GetBiblioItemByBiblioNumber
-
-NOTE : This function has been copy/paste from C4/Biblio.pm from head before zebra integration.
-
-=cut
-
-sub GetBiblioItemByBiblioNumber {
-    my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            = $dbh->prepare("Select * FROM biblioitems WHERE biblionumber = ?");
-    my $count          = 0;
-    my @results;
-
-    $sth->execute($biblionumber);
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-
-    $sth->finish;
-    return @results;
-}
 
 =head2 GetISBDView 
 

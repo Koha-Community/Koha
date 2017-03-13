@@ -233,8 +233,9 @@ if (scalar keys %params > 0) {
         }
 
         foreach my $item (@$results) {
-            $item->{biblio} = Koha::Biblios->find( $item->{biblionumber} );
-            ($item->{biblioitem}) = GetBiblioItemByBiblioNumber($item->{biblionumber});
+            my $biblio = Koha::Biblios->find( $item->{biblionumber} );
+            $item->{biblio} = $biblio;
+            $item->{biblioitem} = $biblio->biblioitem->unblessed;
             $item->{status} = $notforloan_map->{$item->{notforloan}};
             if (defined $item->{location}) {
                 $item->{location} = $location_map->{$item->{location}};

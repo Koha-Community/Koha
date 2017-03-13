@@ -208,9 +208,13 @@ sub GetRecords {
     foreach my $biblionumber ( split( / /, $cgi->param('id') ) ) {
 
         # Get the biblioitem from the biblionumber
-        my $biblioitem = ( GetBiblioItemByBiblioNumber( $biblionumber, undef ) )[0];
-        if ( not $biblioitem->{'biblionumber'} ) {
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $biblioitem = $biblio->biblioitem;
+        if ( $biblioitem ) {
+            $biblioitem = $biblioitem->unblessed;
+        } else {
             $biblioitem->{code} = "RecordNotFound";
+            # FIXME We should not need to process something else; next?
         }
 
         my $embed_items = 1;
@@ -223,7 +227,6 @@ sub GetRecords {
 
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-        my $biblio = Koha::Biblios->find( $biblionumber );
         my $holds  = $biblio->current_holds->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
         my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);

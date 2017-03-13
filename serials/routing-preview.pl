@@ -66,7 +66,6 @@ my $library;
 if($ok){
     # get biblio information....
     my $biblionumber = $subs->{'bibnum'};
-    my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblionumber);
     my @itemresults = GetItemsInfo( $biblionumber );
     my $branch = @itemresults ? $itemresults[0]->{'holdingbranch'} : $subs->{branchcode};
     $library = Koha::Libraries->find($branch);
@@ -95,7 +94,7 @@ if($ok){
                     branchcode     => $branch
                 });
             } else {
-                AddReserve($branch,$routing->{borrowernumber},$biblionumber,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
+                AddReserve($branch,$routing->{borrowernumber},$biblionumber,undef,$routing->{ranking}, undef, undef, $notes,$title);
         }
     }
 	}
