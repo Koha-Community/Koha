@@ -24,9 +24,9 @@ $(document).ready(function() {
 	<div id="yui-main">
 		<div class="yui-b">
             <h2>Keyword to MARC mapping</h2>
-			[% UNLESS ( fields ) %]
-            <div class="dialog message"><p>There are no mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework. </p></div>
-			[% END %]
+            [% UNLESS ( fields.count ) %]
+                <div class="dialog message"><p>There are no mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework. </p></div>
+            [% END %]
 			<form method="get" action="/cgi-bin/koha/admin/fieldmapping.pl" id="selectframework">
 				<label for="framework">Framework:</label>
                 <select name="framework" id="framework" style="width:20em;">
@@ -58,7 +58,8 @@ $(document).ready(function() {
 				</fieldset>
 			</form>
 
-				[% IF ( fields ) %]<table>
+                [% IF ( fields.count ) %]
+                    <table>
                     <caption>Mappings for the [% IF framework.frameworktext %]<em>[% framework.frameworktext %]</em>[% ELSE %]default[% END %] framework</caption>
 									<tr>
 										<th>Field</th>
@@ -71,7 +72,7 @@ $(document).ready(function() {
 										<td>[% field.field %]</td>
 										<td>[% field.fieldcode %]</td>
 										<td>[% field.subfieldcode %]</td>
-                                        <td><a class="btn btn-default btn-xs" href="?op=delete&amp;id=[% field.id %]&amp;framework=[% field.framework %]"><i class="fa fa-trash"></i> Delete</a></td>
+                                        <td><a class="btn btn-default btn-xs" href="?op=delete&amp;id=[% field.id %]&amp;framework=[% field.frameworkcode %]"><i class="fa fa-trash"></i> Delete</a></td>
 									</tr>
 									[% END %]
 								</table>[% END %]

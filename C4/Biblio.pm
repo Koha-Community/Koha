@@ -72,9 +72,6 @@ BEGIN {
       GetBiblionumberFromItemnumber
 
       &GetRecordValue
-      &GetFieldMapping
-      &SetFieldMapping
-      &DeleteFieldMapping
 
       &GetISBDView
 
@@ -684,66 +681,6 @@ sub GetRecordValue {
     }
 
     return \@result;
-}
-
-=head2 SetFieldMapping
-
-  SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
-
-Set a Field to MARC mapping value, if it already exists we don't add a new one.
-
-=cut
-
-sub SetFieldMapping {
-    my ( $framework, $field, $fieldcode, $subfieldcode ) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare('SELECT * FROM fieldmapping WHERE fieldcode = ? AND subfieldcode = ? AND frameworkcode = ? AND field = ?');
-    $sth->execute( $fieldcode, $subfieldcode, $framework, $field );
-    if ( not $sth->fetchrow_hashref ) {
-        my @args;
-        $sth = $dbh->prepare('INSERT INTO fieldmapping (fieldcode, subfieldcode, frameworkcode, field) VALUES(?,?,?,?)');
-
-        $sth->execute( $fieldcode, $subfieldcode, $framework, $field );
-    }
-}
-
-=head2 DeleteFieldMapping
-
-  DeleteFieldMapping($id);
-
-Delete a field mapping from an $id.
-
-=cut
-
-sub DeleteFieldMapping {
-    my ($id) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare('DELETE FROM fieldmapping WHERE id = ?');
-    $sth->execute($id);
-}
-
-=head2 GetFieldMapping
-
-  GetFieldMapping($frameworkcode);
-
-Get all field mappings for a specified frameworkcode
-
-=cut
-
-sub GetFieldMapping {
-    my ($framework) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare('SELECT * FROM fieldmapping where frameworkcode = ?');
-    $sth->execute($framework);
-
-    my @return;
-    while ( my $row = $sth->fetchrow_hashref ) {
-        push @return, $row;
-    }
-    return \@return;
 }
 
 =head2 GetBiblioData

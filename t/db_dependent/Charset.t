@@ -2,7 +2,7 @@ use Modern::Perl;
 use Test::More tests => 4;
 use MARC::Record;
 
-use C4::Biblio qw( AddBiblio SetFieldMapping GetMarcFromKohaField );
+use C4::Biblio qw( AddBiblio GetMarcFromKohaField );
 use C4::Context;
 use C4::Charset qw( SanitizeRecord );
 
