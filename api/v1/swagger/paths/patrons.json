@@ -205,7 +205,10 @@
       "produces": ["application/json"],
       "responses": {
         "200": {
-          "description": "Field(s) updated"
+          "description": "Field(s) updated",
+          "schema": {
+            "$ref": "../definitions.json#/patron"
+          }
         },
         "202": {
           "description": "Accepted and waiting for librarian verification"
