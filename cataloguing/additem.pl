@@ -644,41 +644,28 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delallitems") {
 #-------------------------------------------------------------------------------
-    my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
-    my $errortest=0;
-    my $itemfail;
-    foreach my $biblioitem (@biblioitems) {
-        my $items = &GetItemsByBiblioitemnumber( $biblioitem->{biblioitemnumber} );
-
-        foreach my $item (@$items) {
-            $error =&DelItemCheck( $biblionumber, $item->{itemnumber} );
-            $itemfail =$item;
-        if($error == 1){
-            next
-            }
-        else {
-            push @errors,$error;
-            $errortest++
-            }
+    my $itemnumbers = C4::Items::GetItemnumbersForBiblio( $biblionumber );
+    foreach my $itemnumber ( @$itemnumbers ) {
+        $error = C4::Items::DelItemCheck( $biblionumber, $itemnumber );
+        next if $error == 1; # Means ok
+        push @errors,$error;
+    }
+    if ( @errors ) {
+        $nextop="additem";
+    } else {
+        my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
+        my $views = { C4::Search::enabled_staff_search_views };
+        if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
+            print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
+            print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
+            print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
+        } else {
+            print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
         }
-        if($errortest > 0){
-            $nextop="additem";
-        } 
-        else {
-            my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
-            my $views = { C4::Search::enabled_staff_search_views };
-            if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
-            } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
-            } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
-                print $input->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber&searchid=$searchid");
-            } else {
-                print $input->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber&searchid=$searchid");
-            }
-            exit;
-        }
-	}
+        exit;
+    }
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
