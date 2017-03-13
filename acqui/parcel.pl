@@ -241,7 +241,7 @@ unless( defined $invoice->{closedate} ) {
         my $biblio = Koha::Biblios->find( $biblionumber );
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $line{'ordernumber'};
-        my @subscriptions = GetSubscriptionsId ($biblionumber);
+        my $has_subscriptions = $biblio->subscriptions->count;
         my $itemcount   = $biblio->items->count;
         my $holds_count = $biblio->holds->count;
         my @items = GetItemnumbersFromOrder( $ordernumber );
@@ -253,13 +253,13 @@ unless( defined $invoice->{closedate} ) {
         $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
 
         # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !($has_subscriptions) && !($holds_count);
         $line{items}                = ($itemcount) - (scalar @items);
         $line{left_item}            = 1 if $line{items} >= 1;
         $line{left_biblio}          = 1 if $countbiblio > 1;
         $line{biblios}              = $countbiblio - 1;
-        $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
-        $line{subscriptions}        = scalar @subscriptions;
+        $line{left_subscription}    = 1 if $has_subscriptions;
+        $line{subscriptions}        = $has_subscriptions;
         $line{left_holds}           = ($holds_count >= 1) ? 1 : 0;
         $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
         $line{holds}                = $holds_count;

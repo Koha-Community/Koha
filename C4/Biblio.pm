@@ -101,7 +101,6 @@ BEGIN {
 
       &CountItemsIssued
       &CountBiblioInOrders
-      &GetSubscriptionsId
     );
 
     # To modify something
@@ -3432,26 +3431,6 @@ sub CountBiblioInOrders {
     $sth->execute($biblionumber);
     my $count = $sth->fetchrow;
     return ($count);
-}
-
-=head2 GetSubscriptionsId
-
-    $subscriptions = &GetSubscriptionsId($biblionumber);
-
-This function return an array of subscriptionid with $biblionumber
-
-=cut
-
-sub GetSubscriptionsId {
- my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $query          = "SELECT subscriptionid
-          FROM  subscription
-          WHERE biblionumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my @subscriptions = $sth->fetchrow_array;
-    return (@subscriptions);
 }
 
 =head2 prepare_host_field
