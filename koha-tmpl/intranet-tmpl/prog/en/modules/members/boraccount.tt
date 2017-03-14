@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -103,8 +104,8 @@ $(document).ready(function() {
         [%- IF account.description %], [% account.description %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">View item</a>&nbsp;[% END %][% account.title |html %]</td>
       <td>[% account.note | html_line_break %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount %]</td>
-      [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
+      [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
     [% IF ( reverse_col ) %]
       <td>
 	[% IF ( account.payment ) %]
@@ -128,9 +129,9 @@ $(document).ready(function() {
   <tr>
     <td colspan="4">Total due</td>
     [% IF ( totalcredit ) %]
-        <td class="credit" style="text-align: right;">[% total %]</td>
+        <td class="credit" style="text-align: right;">[% total | $Price %]</td>
     [% ELSE %]
-       <td class="debit"style="text-align: right;">[% total %]</td>
+       <td class="debit"style="text-align: right;">[% total | $Price %]</td>
     [% END %]
     [% IF ( reverse_col ) %]
       <td colspan="2"></td>
