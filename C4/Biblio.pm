@@ -1303,6 +1303,44 @@ sub GetXmlBiblio {
     return $marcxml;
 }
 
+=head2 GetDeletedXmlBiblio
+
+  my $marcxml = GetDeletedXmlBiblio($biblioitemnumber);
+
+Returns deletedbiblio_metadata's marcxml of the biblioitemnumber passed in parameter.
+The XML should only contain biblio information (item information is no longer stored in marcxml field)
+
+=cut
+
+sub GetDeletedXmlBiblio {
+    my ($biblioitemnumber, $biblionumber) = @_;
+    my $dbh = C4::Context->dbh;
+    return unless ($biblionumber || $biblioitemnumber);
+
+    my @args;
+    my @pks;
+    if ($biblioitemnumber) {
+        push(@pks,  'biblioitemnumber = ?');
+        push(@args, $biblioitemnumber);
+    }
+    if ($biblionumber) {
+        push(@pks,  'biblionumber = ?');
+        push(@args, $biblionumber);
+    }
+    my ($marcxml) = $dbh->selectrow_array(
+
+        "SELECT metadata\n".
+        "FROM deletedbiblio_metadata\n".
+        "WHERE\n".
+        "   ".join(" AND ", @pks)."\n".
+        "   AND format='marcxml'\n".
+        "   AND marcflavour=?\n"
+
+        , undef, @args, C4::Context->preference('marcflavour')
+    );
+    return $marcxml;
+}
+
 =head2 GetCOinSBiblio
 
   my $coins = GetCOinSBiblio($record);
@@ -1454,6 +1492,83 @@ sub GetCOinSBiblio {
     return $coins_value;
 }
 
+=head2 GetMarcFromISBN
+
+  my $record = C4::Biblio::GetMarcFromISBN($isbn);
+
+=cut
+
+sub GetMarcFromISBN {
+    my ($isbn) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("
+        SELECT bm.metadata
+        FROM biblioitems bi
+            LEFT JOIN biblio_metadata bm ON bi.biblioitemnumber = bm.biblioitemnumber
+        WHERE
+            bi.isbn = ? AND
+            bm.format = 'marcxml'
+    ");
+    $sth->execute($isbn);
+    if ( my ($marcxml) = $sth->fetchrow_array ) {
+        my $record = eval {
+            MARC::Record::new_from_xml( $marcxml, "utf8",
+                C4::Context->preference('marcflavour') );
+        };
+        warn $@ if $@;
+        return $record;
+    }
+    return;
+}
+
+=head2 GetValFromMarcFromKohaField
+
+    my $val = C4::Biblio::GetValFromMarcFromKohaField($MARC::Record, 'biblio.biblionumber');
+
+Shortcut to get the value matching the KohaToMarcMapped field
+
+@PARAM1 MARC::Record
+@PARAM2 String, what you would normally give for C4::Biblio::GetMarcFromKohaField()
+@RETURNS String, the expected value.
+@THROWS Koha::Exception::BadParameter if the given KohaToMarcMapping is missing
+
+=cut
+
+sub GetValFromMarcFromKohaField {
+    my ($record, $kohaField) = @_;
+    my ($fieldTag, $subfieldCode) = C4::Biblio::GetMarcFromKohaField( $kohaField );
+    Koha::Exception::BadParameter->throw(error => "KohaToMarcMapping '$kohaField' is not defined in the mapping rules!")
+            unless ($fieldTag && $subfieldCode);
+    return $record->subfield( $fieldTag, $subfieldCode );
+}
+
+=head2 SetValToMarcFromKohaField
+
+    my $val = C4::Biblio::SetValToMarcFromKohaField(1188811, $MARC::Record, 'biblio.biblionumber');
+
+Shortcut to set the value matching the KohaToMarcMapped field to the given MARC::Record
+
+@PARAM1 String, value to set
+@PARAM2 MARC::Record
+@PARAM3 String, what you would normally give for C4::Biblio::GetMarcFromKohaField()
+@RETURNS undef
+@THROWS Koha::Exception::BadParameter if the given KohaToMarcMapping is missing
+
+=cut
+
+sub SetValToMarcFromKohaField {
+    my ($val, $record, $kohaField) = @_;
+    my ($fieldTag, $subfieldCode) = C4::Biblio::GetMarcFromKohaField( $kohaField );
+    Koha::Exception::BadParameter->throw(error => "KohaToMarcMapping '$kohaField' is not defined in the mapping rules!")
+            unless ($fieldTag && $subfieldCode);
+
+    my $field = $record->field($fieldTag);
+    unless ($field) {
+        $field = MARC::Field->new($fieldTag);
+        $record->insert_fields_ordered($field);
+    }
+    $field->update($subfieldCode => $val);
+}
 
 =head2 GetMarcPrice
 
@@ -1649,6 +1764,103 @@ sub GetAuthorisedValueDesc {
     }
 }
 
+sub GetMarcBiblionumber {
+    my ($record) = @_;
+    my ( $tagid_biblionumber, $subfieldid_biblionumber ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
+    my $bn = $record->subfield( $tagid_biblionumber, $subfieldid_biblionumber );
+    return $bn;
+}
+
+sub GetMarcTitle {
+    my ($record) = @_;
+    my $title = $record->subfield('245','a') || $record->subfield('240','a') || $record->subfield('130','a');
+    return $title;
+}
+
+sub GetMarcAuthor {
+    my ($record) = @_;
+    my $author = $record->subfield('100','a') || $record->subfield('110','a');
+    return $author;
+}
+
+=head GetMarcStdids
+
+    my $stdids = C4::Biblio::GetMarcStdids( $MARC::Record );
+
+@RETURNS Array of standard identifiers in list context
+         or concatenated String of standard identifiers in scalar context
+
+=cut
+
+sub GetMarcStdids {
+    my ($record) = @_;
+
+    my @stdids;
+    my $stdids = GetMarcISBNs($record);
+    push @stdids, @$stdids;
+    $stdids = GetMarcEANs($record);
+    push @stdids, @$stdids;
+    $stdids = GetMarcISSNs($record);
+    push @stdids, @$stdids;
+
+    if (wantarray) {
+        return @stdids;
+    }
+    return join(", ", @stdids);
+}
+
+=head GetMarcEANs
+
+@RETURNS ArrayRef of Strings
+
+=cut
+
+sub GetMarcEANs {
+    my ($record) = @_;
+    return _getAllFieldsSubfields($record, '024', 'a');
+}
+
+=head GetMarcISBNs
+
+@RETURNS ArrayRef of Strings.
+
+=cut
+
+sub GetMarcISBNs {
+    my ($record) = @_;
+    return _getAllFieldsSubfields($record, '020', 'a');
+}
+
+=head GetMarcISSNs
+
+@RETURNS ArrayRef of Strings.
+
+=cut
+
+sub GetMarcISSNs {
+    my ($record) = @_;
+    return _getAllFieldsSubfields($record, '022', 'a');
+}
+
+=head _getAllFieldsSubfields
+
+@RETURNS ArrayRef of Strings of all the field repetitions and subfield repetitions.
+
+=cut
+
+sub _getAllFieldsSubfields {
+    my ($record, $tag, $code) = @_;
+    my @vals;
+    my @f = $record->field($tag);
+    foreach my $f (@f) {
+        my @sfs = $f->subfield($code);
+        if (@sfs) {
+            push(@vals, @sfs);
+        }
+    }
+    return \@vals;
+}
+
 =head2 GetMarcControlnumber
 
   $marccontrolnumber = GetMarcControlnumber($record,$marcflavour);
@@ -1673,6 +1885,78 @@ sub GetMarcControlnumber {
         }
     }
     return $controlnumber;
+}
+
+=head2 GetMarcKohaDefaultItemType
+
+  $itype = GetMarcKohaDefaultItemType($record);
+
+=cut
+
+sub GetMarcKohaDefaultItemType {
+    my ($record) = @_;
+    my ( $tagid, $subfieldid ) = C4::Biblio::GetMarcFromKohaField( "biblioitems.itemtype" );
+    my $itype = $record->subfield( $tagid, $subfieldid );
+    return $itype;
+}
+
+=head2 SetMarcKohaDefaultItemType
+
+  $record = SetMarcKohaDefaultItemType($record, $itype);
+
+=cut
+
+sub SetMarcKohaDefaultItemType {
+    my ($record, $itype) = @_;
+    my ( $tagid, $subfieldid ) = C4::Biblio::GetMarcFromKohaField( "biblioitems.itemtype" );
+    my $f = $record->field($tagid);
+
+    if ($f) {
+        $f->update( $subfieldid => $itype );
+    }
+    else {
+        my $f = MARC::Field->new( $tagid, '', '', $subfieldid => $itype);
+        $record->append_fields( $f );
+    }
+
+    return $record;
+}
+
+=head2 GetMarcKohaFramework
+
+  $fw = GetMarcKohaFramework($record);
+
+=cut
+
+sub GetMarcKohaFramework {
+    my ($record) = @_;
+    my ( $tagid, $subfieldid ) = C4::Biblio::GetMarcFromKohaField( "biblio.frameworkcode" );
+    die "biblio.frameworkcode is missing from KohaToMarcMapping" unless(defined($tagid) && defined($subfieldid));
+    my $fw = $record->subfield( $tagid, $subfieldid );
+    return $fw;
+}
+
+=head2 SetMarcKohaFramework
+
+  $record = SetMarcKohaFramework($record, $fw);
+
+=cut
+
+sub SetMarcKohaFramework {
+    my ($record, $fw) = @_;
+    my ( $tagid, $subfieldid ) = C4::Biblio::GetMarcFromKohaField( "biblio.frameworkcode" );
+    die "biblio.frameworkcode is missing from KohaToMarcMapping" unless(defined($tagid) && defined($subfieldid));
+    my $f = $record->field($tagid);
+
+    if ($f) {
+        $f->update( $subfieldid => $fw );
+    }
+    else {
+        my $f = MARC::Field->new( $tagid, '', '', $subfieldid => $fw);
+        $record->append_fields( $f );
+    }
+
+    return $record;
 }
 
 =head2 GetMarcISBN
@@ -2185,6 +2469,34 @@ sub UpsertMarcControlField {
         my $f = MARC::Field->new($tag, $content);
         $record->insert_fields_ordered( $f );
     }
+}
+
+=head2 UpsertBiblio
+
+    my $biblio = C4::Biblio::UpsertBiblio($record, $frameworkcode);
+
+Adds a new biblio if no matching biblio is found, otherwise overwrites the existing biblio.
+Currently matches using the ISBN-field from field 020$a. This is only useful for simple testing
+and currently is not meant to be used in production code.
+
+@RETURNS ($record, $biblionumber, $biblioitemnumber)
+
+=cut
+
+sub UpsertBiblio {
+    my ($record, $frameworkcode, @options) = @_;
+
+    my $isbn = GetValFromMarcFromKohaField( $record, "biblioitems.isbn" );
+    my $oldRecord = C4::Biblio::GetMarcFromISBN($isbn) if $isbn;
+    if ($oldRecord) {
+        return ($oldRecord,
+                GetValFromMarcFromKohaField( $record, "biblio.biblionumber" ),
+                GetValFromMarcFromKohaField( $record, "biblioitems.biblioitemnumber" ));
+    }
+
+    my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio($record, $frameworkcode);
+    $record = C4::Biblio::GetMarcBiblio($biblionumber);
+    return ($record, $biblionumber, $biblioitemnumber);
 }
 
 =head2 GetFrameworkCode
