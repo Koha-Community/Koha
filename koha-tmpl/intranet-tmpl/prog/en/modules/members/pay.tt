@@ -1,5 +1,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -18,7 +20,7 @@ function enableCheckboxActions(){
     $(document).ready(function(){
  $('#pay-fines-form').preventDoubleFormSubmit();
         $("#woall").click(function(event){
-            var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | format('%.2f') %]" );
+            var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | $Price %]" );
             var answer = confirm(msg);
                 if (!answer){
                     event.preventDefault();
@@ -86,7 +88,7 @@ function enableCheckboxActions(){
 <tfoot>
 <tr>
     <td class="total" colspan="8">Total due:</td>
-    <td style="text-align: right;">[% total | format('%.2f') %]</td>
+    <td style="text-align: right;">[% total | $Price %]</td>
 </tr>
 </tfoot>
 <tbody>
@@ -144,15 +146,15 @@ function enableCheckboxActions(){
     <td>[% line.accounttype %]</td>
     <td>[% line.notify_id %]</td>
     <td>[% line.notify_level %]</td>
-    <td class="debit" style="text-align: right;">[% line.amount | format('%.2f') %]</td>
-    <td class="debit" style="text-align: right;">[% line.amountoutstanding | format('%.2f') %]</td>
+    <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
+    <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
 </tr>
 [% END %]
 [% IF ( account_grp.total ) %]
 <tr>
 
     <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
-    <td style="text-align: right;">[% account_grp.total | format('%.2f') %]</td>
+    <td style="text-align: right;">[% account_grp.total | $Price %]</td>
 </tr>
 [% END %]
 [% END %]
