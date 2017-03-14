@@ -202,7 +202,7 @@
                             [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                 <td class="actions">
                                     [% IF CAN_user_coursereserves_add_reserves %]
-                                        <a class="btn btn-mini" href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="add_items.pl?course_id=[% course.course_id %]&amp;barcode=[% cr.item.barcode %]&amp;action=lookup&amp;return=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit</a>
                                     [% END %]
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]
