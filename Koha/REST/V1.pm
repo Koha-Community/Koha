@@ -51,6 +51,8 @@ sub startup {
         $self->secrets([$secret_passphrase]);
     }
 
+    $self->app->hook(before_render => \&default_exception_handling);
+
     $self->plugin(OpenAPI => {
         url => $self->home->rel_file("api/v1/swagger/swagger.json"),
         route => $self->routes->under('/api/v1')->to('Auth#under'),
@@ -58,6 +60,32 @@ sub startup {
                                 # Paths-, Parameters-, Definitions- & Info-object
                                 # is not allowed by the OpenAPI specification.
     });
+}
+
+=head3 default_exception_handling
+
+A before_render hook for handling default exceptions.
+
+=cut
+
+sub default_exception_handling {
+    my ($c, $args) = @_;
+
+    if ($args->{exception} && $args->{exception}->{message}) {
+        my $e = $args->{exception}->{message};
+        $c->app->log->error(Koha::Exceptions::to_str($e));
+        %$args = (
+            status => 500,
+            # TODO: Do we want a configuration for displaying either
+            # a detailed description of the error or simply a "Something
+            # went wrong, check the logs."? Now that we can stringify all
+            # exceptions with Koha::Exceptions::to_str($e), we could also
+            # display the detailed error if some DEBUG variable is enabled.
+            # Of course the error is still logged if log4perl is configured
+            # appropriately...
+            json => { error => 'Something went wrong, check the logs.' }
+        );
+    }
 }
 
 1;
