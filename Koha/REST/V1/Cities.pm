@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::City;
 use Koha::Cities;
+use Koha::Exceptions;
 
 use Try::Tiny;
 
@@ -40,14 +41,7 @@ sub list {
         return $c->render( status => 200, openapi => $cities );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 
 }
@@ -74,14 +68,7 @@ sub add {
         return $c->render( status => 200, openapi => $city );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 }
 
@@ -102,14 +89,7 @@ sub update {
             return $c->render( status  => 404,
                                openapi => { error => "Object not found" } );
         }
-        elsif ( $_->isa('Koha::Exceptions::Object') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->message } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 
 }
@@ -129,14 +109,7 @@ sub delete {
             return $c->render( status  => 404,
                                openapi => { error => "Object not found" } );
         }
-        elsif ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 
 }
