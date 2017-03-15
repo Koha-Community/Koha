@@ -428,6 +428,7 @@ RECORD: foreach my $record ( @{$marc_records} ) {
             }
         } elsif ( @{$results} > 1 ) {
             $logger->debug("More than one match for: $query");
+            next;
         } else {
             $logger->debug("No match for: $query");
         }
