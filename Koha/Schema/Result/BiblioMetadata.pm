@@ -32,7 +32,6 @@ __PACKAGE__->table("biblio_metadata");
 =head2 biblionumber
 
   data_type: 'integer'
-  is_foreign_key: 1
   is_nullable: 0
 
 =head2 format
@@ -52,19 +51,27 @@ __PACKAGE__->table("biblio_metadata");
   data_type: 'longtext'
   is_nullable: 0
 
+=head2 biblioitemnumber
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "biblionumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  { data_type => "integer", is_nullable => 0 },
   "format",
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "marcflavour",
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "metadata",
   { data_type => "longtext", is_nullable => 0 },
+  "biblioitemnumber",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -85,6 +92,8 @@ __PACKAGE__->set_primary_key("id");
 
 =over 4
 
+=item * L</biblioitemnumber>
+
 =item * L</biblionumber>
 
 =item * L</format>
@@ -97,29 +106,29 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->add_unique_constraint(
   "biblio_metadata_uniq_key",
-  ["biblionumber", "format", "marcflavour"],
+  ["biblioitemnumber", "biblionumber", "format", "marcflavour"],
 );
 
 =head1 RELATIONS
 
-=head2 biblionumber
+=head2 biblioitemnumber
 
 Type: belongs_to
 
-Related object: L<Koha::Schema::Result::Biblio>
+Related object: L<Koha::Schema::Result::Biblioitem>
 
 =cut
 
 __PACKAGE__->belongs_to(
-  "biblionumber",
-  "Koha::Schema::Result::Biblio",
-  { biblionumber => "biblionumber" },
+  "biblioitemnumber",
+  "Koha::Schema::Result::Biblioitem",
+  { biblioitemnumber => "biblioitemnumber" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LoYje8i9pvKcBn8DQwH/Sg
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-14 18:44:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Hge4/lIJmyxCqxZ+D50Cjw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

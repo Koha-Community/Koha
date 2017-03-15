@@ -296,6 +296,21 @@ __PACKAGE__->set_primary_key("biblioitemnumber");
 
 =head1 RELATIONS
 
+=head2 biblio_metadatas
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BiblioMetadata>
+
+=cut
+
+__PACKAGE__->has_many(
+  "biblio_metadatas",
+  "Koha::Schema::Result::BiblioMetadata",
+  { "foreign.biblioitemnumber" => "self.biblioitemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 biblionumber
 
 Type: belongs_to
@@ -327,8 +342,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cAlg2aIZ7hxeq+Hgl1AJcA
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-14 18:44:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Warcx3/VQxOzL94kNEA7aA
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 
