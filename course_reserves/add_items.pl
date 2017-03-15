@@ -30,6 +30,7 @@ use Koha::Items;
 
 use C4::CourseReserves qw(GetCourse GetCourseItem GetCourseReserve ModCourseItem ModCourseReserve);
 
+use Koha::Items;
 use Koha::ItemTypes;
 
 my $cgi = new CGI;
@@ -60,8 +61,8 @@ $template->param( ERROR_BARCODE_NOT_FOUND => $barcode . $inumber )
 
 $template->param( course => GetCourse($course_id) );
 
-if ( $action eq 'lookup' ) {
-    my $course_item = GetCourseItem( itemnumber => $item->{'itemnumber'} );
+if ( $action eq 'lookup' and $item ) {
+    my $course_item = GetCourseItem( itemnumber => $item->itemnumber );
     my $course_reserve =
       ($course_item)
       ? GetCourseReserve(
@@ -73,7 +74,7 @@ if ( $action eq 'lookup' ) {
     my $itemtypes = Koha::ItemTypes->search;
     $template->param(
         item           => $item,
-        title          => $title,
+        biblio         => $item->biblio,
         course_item    => $course_item,
         course_reserve => $course_reserve,
 

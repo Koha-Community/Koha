@@ -21,7 +21,6 @@ use List::MoreUtils qw(any);
 
 use C4::Context;
 use C4::Items qw(GetItem ModItem);
-use C4::Biblio qw(GetBiblioFromItemNumber);
 use C4::Circulation qw(GetOpenIssue);
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
@@ -877,8 +876,13 @@ sub GetCourseReserves {
 
     if ($include_items) {
         foreach my $cr (@$course_reserves) {
+            my $item = Koha::Items->find( $cr->{itemnumber} );
+            my $biblio = $item->biblio;
+            my $biblioitem = $biblio->biblioitem;
             $cr->{'course_item'} = GetCourseItem( ci_id => $cr->{'ci_id'} );
-            $cr->{'item'}        = GetBiblioFromItemNumber( $cr->{'itemnumber'} );
+            $cr->{'item'}        = $item;
+            $cr->{'biblio'}      = $biblio;
+            $cr->{'biblioitem'}  = $biblioitem;
             $cr->{'issue'}       = GetOpenIssue( $cr->{'itemnumber'} );
         }
     }
