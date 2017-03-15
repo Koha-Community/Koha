@@ -68,7 +68,6 @@ BEGIN {
     
         CheckItemPreSave
     
-        GetItemLocation
         GetLostItems
         GetItemsForInventory
         GetItemInfosOf
@@ -775,91 +774,6 @@ in C<GetItemsByBiblioitemnumber> and C<GetItemsInfo>
 has copy-and-paste work.
 
 =cut
-
-=head2 GetItemLocation
-
-  $itemlochash = GetItemLocation($fwk);
-
-Returns a list of valid values for the
-C<items.location> field.
-
-NOTE: does B<not> return an individual item's
-location.
-
-where fwk stands for an optional framework code.
-Create a location selector with the following code
-
-=head3 in PERL SCRIPT
-
-  my $itemlochash = getitemlocation;
-  my @itemlocloop;
-  foreach my $thisloc (keys %$itemlochash) {
-      my $selected = 1 if $thisbranch eq $branch;
-      my %row =(locval => $thisloc,
-                  selected => $selected,
-                  locname => $itemlochash->{$thisloc},
-               );
-      push @itemlocloop, \%row;
-  }
-  $template->param(itemlocationloop => \@itemlocloop);
-
-=head3 in TEMPLATE
-
-  <select name="location">
-      <option value="">Default</option>
-  <!-- TMPL_LOOP name="itemlocationloop" -->
-      <option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
-  <!-- /TMPL_LOOP -->
-  </select>
-
-=cut
-
-sub GetItemLocation {
-
-    # returns a reference to a hash of references to location...
-    my ($fwk) = @_;
-    my %itemlocation;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    $fwk = '' unless ($fwk);
-    my ( $tag, $subfield ) =
-      GetMarcFromKohaField( "items.location", $fwk );
-    if ( $tag and $subfield ) {
-        my $sth =
-          $dbh->prepare(
-            "SELECT authorised_value
-            FROM marc_subfield_structure 
-            WHERE tagfield=? 
-                AND tagsubfield=? 
-                AND frameworkcode=?"
-          );
-        $sth->execute( $tag, $subfield, $fwk );
-        if ( my ($authorisedvaluecat) = $sth->fetchrow ) {
-            my $authvalsth =
-              $dbh->prepare(
-                "SELECT authorised_value,lib
-                FROM authorised_values
-                WHERE category=?
-                ORDER BY lib"
-              );
-            $authvalsth->execute($authorisedvaluecat);
-            while ( my ( $authorisedvalue, $lib ) = $authvalsth->fetchrow ) {
-                $itemlocation{$authorisedvalue} = $lib;
-            }
-            return \%itemlocation;
-        }
-        else {
-
-            #No authvalue list
-            # build default
-        }
-    }
-
-    #No authvalue list
-    #build default
-    $itemlocation{"1"} = "Not For Loan";
-    return \%itemlocation;
-}
 
 =head2 GetLostItems
 
