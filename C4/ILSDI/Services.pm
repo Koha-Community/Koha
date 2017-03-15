@@ -423,15 +423,20 @@ sub GetPatronInfo {
 
             my $unblessed_hold = $hold->unblessed;
             # Get additional informations
-            my $item = GetBiblioFromItemNumber( $hold->itemnumber, undef );
+            my $item = Koha::Items->find( $hold->itemnumber );
+            my $biblio = $item->biblio;
+            my $biblioitem = $biblio->biblioitem;
             my $library = Koha::Libraries->find( $hold->branchcode ); # Should $hold->get_library
             my $branchname = $library ? $library->branchname : '';
 
             # Remove unwanted fields
+            $item = $item->unblessed;
             delete $item->{'more_subfields_xml'};
+            $biblio = $biblio->unblessed;
+            $biblioitem = $biblioitem->unblessed;
 
             # Add additional fields
-            $unblessed_hold->{item}       = $item;
+            $unblessed_hold->{item}       = { %$item, %$biblio, %$biblioitem };
             $unblessed_hold->{branchname} = $branchname;
             $unblessed_hold->{title}      = GetBiblio( $hold->biblionumber )->{'title'}; # Should be $hold->get_biblio
 
