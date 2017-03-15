@@ -144,7 +144,7 @@ subtest 'get_column' => sub {
     plan tests => 1;
     my @cities = Koha::Cities->search;
     my @city_names = map { $_->city_name } @cities;
-    is_deeply( [ Koha::Cities->search->get_column('city_name')->all ], \@city_names, 'Koha::Objects->get_column should be allowed' );
+    is_deeply( [ Koha::Cities->search->get_column('city_name') ], \@city_names, 'Koha::Objects->get_column should be allowed' );
 };
 
 subtest 'Exceptions' => sub {
