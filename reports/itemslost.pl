@@ -50,32 +50,40 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $params = $query->Vars;
 my $get_items = $params->{'get_items'};
 
-if ( $get_items ) {
-    my $branchfilter     = $params->{'branchfilter'}    || undef;
-    my $barcodefilter    = $params->{'barcodefilter'}   || undef;
-    my $itemtypesfilter  = $params->{'itemtypesfilter'} || undef;
+if ($get_items) {
+    my $branchfilter     = $params->{'branchfilter'}     || undef;
+    my $barcodefilter    = $params->{'barcodefilter'}    || undef;
+    my $itemtypesfilter  = $params->{'itemtypesfilter'}  || undef;
     my $loststatusfilter = $params->{'loststatusfilter'} || undef;
 
-    my %where;
-    $where{'homebranch'}       = $branchfilter    if defined $branchfilter;
-    $where{'barcode'}          = $barcodefilter   if defined $barcodefilter;
-    $where{'authorised_value'} = $loststatusfilter if defined $loststatusfilter;
+    my $params = {
+        ( $branchfilter ? ( homebranch => $branchfilter ) : () ),
+        (
+            $loststatusfilter
+            ? ( itemlost => $loststatusfilter )
+            : ( itemlost => { '!=' => 0 } )
+        ),
+        ( $barcodefilter ? ( barcode => { like => "%$barcodefilter%" } ) : () ),
+    };
 
-    my $itype = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
-    $where{$itype}            = $itemtypesfilter if defined $itemtypesfilter;
-
-    my $items = GetLostItems( \%where );
-    foreach my $it (@$items) {
-        $it->{'datelastseen'} = eval { output_pref( { dt => dt_from_string( $it->{'datelastseen'} ), dateonly => 1 }); }
-                   if ( $it->{'datelastseen'} );
+    my $attributes;
+    if ($itemtypesfilter) {
+        if ( C4::Context->preference('item-level_itypes') ) {
+            $params->{itype} = $itemtypesfilter;
+        }
+        else {
+            # We want a join on biblioitems
+            $attributes = { join => 'biblioitem' };
+            $params->{'biblioitem.itemtype'} = $itemtypesfilter;
+        }
     }
 
+    my $items = Koha::Items->search( $params, $attributes );
+
     $template->param(
-                     total       => scalar @$items,
-                     itemsloop   => $items,
-                     get_items   => $get_items,
-                     itype_level => C4::Context->preference('item-level_itypes'),
-                 );
+        items     => $items,
+        get_items => $get_items,
+    );
 }
 
 # getting all itemtypes

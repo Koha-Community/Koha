@@ -774,69 +774,6 @@ has copy-and-paste work.
 
 =cut
 
-=head2 GetLostItems
-
-  $items = GetLostItems( $where );
-
-This function gets a list of lost items.
-
-=over 2
-
-=item input:
-
-C<$where> is a hashref. it containts a field of the items table as key
-and the value to match as value. For example:
-
-{ barcode    => 'abc123',
-  homebranch => 'CPL',    }
-
-=item return:
-
-C<$items> is a reference to an array full of hashrefs with columns
-from the "items" table as keys.
-
-=item usage in the perl script:
-
-  my $where = { barcode => '0001548' };
-  my $items = GetLostItems( $where );
-  $template->param( itemsloop => $items );
-
-=back
-
-=cut
-
-sub GetLostItems {
-    # Getting input args.
-    my $where   = shift;
-    my $dbh     = C4::Context->dbh;
-
-    my $query   = "
-        SELECT title, author, lib, itemlost, authorised_value, barcode, datelastseen, price, replacementprice, homebranch,
-               itype, itemtype, holdingbranch, location, itemnotes, items.biblionumber as biblionumber, itemcallnumber
-        FROM   items
-            LEFT JOIN biblio ON (items.biblionumber = biblio.biblionumber)
-            LEFT JOIN biblioitems ON (items.biblionumber = biblioitems.biblionumber)
-            LEFT JOIN authorised_values ON (items.itemlost = authorised_values.authorised_value)
-        WHERE
-        	authorised_values.category = 'LOST'
-          	AND itemlost IS NOT NULL
-         	AND itemlost <> 0
-    ";
-    my @query_parameters;
-    foreach my $key (keys %$where) {
-        $query .= " AND $key LIKE ?";
-        push @query_parameters, "%$where->{$key}%";
-    }
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute( @query_parameters );
-    my $items = [];
-    while ( my $row = $sth->fetchrow_hashref ){
-        push @$items, $row;
-    }
-    return $items;
-}
-
 =head2 GetItemsForInventory
 
 ($itemlist, $iTotalRecords) = GetItemsForInventory( {
