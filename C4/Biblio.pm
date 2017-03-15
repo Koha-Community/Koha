@@ -70,7 +70,6 @@ BEGIN {
       GetBiblioItemData
       GetBiblioItemInfosOf
       GetBiblioItemByBiblioNumber
-      GetBiblioFromItemNumber
       GetBiblionumberFromItemnumber
 
       &GetRecordValue
@@ -786,45 +785,6 @@ sub GetBiblionumberFromItemnumber {
     $sth->execute($itemnumber);
     my ($result) = $sth->fetchrow;
     return ($result);
-}
-
-=head2 GetBiblioFromItemNumber
-
-  $item = &GetBiblioFromItemNumber($itemnumber,$barcode);
-
-Looks up the item with the given itemnumber. if undef, try the barcode.
-
-C<&itemnodata> returns a reference-to-hash whose keys are the fields
-from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
-database.
-
-=cut
-
-#'
-sub GetBiblioFromItemNumber {
-    my ( $itemnumber, $barcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if ($itemnumber) {
-        $sth = $dbh->prepare(
-            "SELECT * FROM items 
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-             WHERE items.itemnumber = ?"
-        );
-        $sth->execute($itemnumber);
-    } else {
-        $sth = $dbh->prepare(
-            "SELECT * FROM items 
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-             WHERE items.barcode = ?"
-        );
-        $sth->execute($barcode);
-    }
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
 }
 
 =head2 GetISBDView 
