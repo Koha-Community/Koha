@@ -679,8 +679,6 @@ sub DelItem {
     # FIXME check the item has no current issues
     my $deleted = _koha_delete_item( $itemnumber );
 
-    # get the MARC record
-    my $record = GetMarcBiblio($biblionumber);
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
     #search item field code
