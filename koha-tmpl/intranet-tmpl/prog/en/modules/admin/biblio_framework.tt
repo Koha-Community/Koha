@@ -172,26 +172,26 @@
     <tr>
         <td>&nbsp;</td>
         <td>Default framework</td>
-        <td><a href="marctagstructure.pl?frameworkcode=[% frameworkcode %]">MARC structure</a></td>
+        <td><a href="marctagstructure.pl?frameworkcode=">MARC structure</a></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>
 
             <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#exportModal_[% frameworkcode %]">Export</a>
+            <a href="#" data-toggle="modal" data-target="#exportModal_default">Export</a>
             <!-- Modal -->
-            <div class="modal hide" id="exportModal_[% frameworkcode %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% frameworkcode %]" aria-hidden="true">
+            <div class="modal hide" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="exportLabelexportModal_[% frameworkcode %]">Export default framework</h3>
+                    <h3 id="exportLabelexportModal_default">Export default framework</h3>
                 </div>
-                <form action="import_export_framework.pl" name="form_[% frameworkcode %]" method="get" target="_blank"  class="form_export">
+                <form action="import_export_framework.pl" name="form_default" method="get" target="_blank"  class="form_export">
                     <div class="modal-body">
                         <fieldset>
                             <input type="hidden" name="frameworkcode" value="default" />
-                            <p><label for="csv_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="csv" id="csv_type_export_[% frameworkcode %]" checked="checked" /> Export to CSV spreadsheet</label></p>
-                            <p><label for="xml_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="excel" id="xml_type_export_[% frameworkcode %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
-                            <p><label for="ods_type_export_[% frameworkcode %]"><input type="radio" name="type_export_[% frameworkcode %]" value="ods" id="ods_type_export_[% frameworkcode %]" /> Export to OpenDocument spreadsheet format</label></p>
+                            <p><label for="csv_type_export_default"><input type="radio" name="type_export_default" value="csv" id="csv_type_export_default" checked="checked" /> Export to CSV spreadsheet</label></p>
+                            <p><label for="xml_type_export_default"><input type="radio" name="type_export_default" value="excel" id="xml_type_export_default" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
+                            <p><label for="ods_type_export_default"><input type="radio" name="type_export_default" value="ods" id="ods_type_export_default" /> Export to OpenDocument spreadsheet format</label></p>
 
                         </fieldset>
                     </div>
@@ -206,19 +206,19 @@
         <td>
 
             <!-- Button to trigger modal -->
-            <a href="#" data-toggle="modal" data-target="#importModal_[% frameworkcode %][% loop.count %]">Import</a>
+            <a href="#" data-toggle="modal" data-target="#importModal_default">Import</a>
             <!-- Modal -->
-            <div class="modal hide" id="importModal_[% frameworkcode %][% loop.count %]" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_[% frameworkcode %][% loop.count %]" aria-hidden="true">
+            <div class="modal hide" id="importModal_default" tabindex="-1" role="dialog" aria-labelledby="importLabelexportModal_default" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="importLabelexportModal_[% frameworkcode %][% loop.count %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+                    <h3 id="importLabelexportModal_default">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
                 </div>
-                <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% frameworkcode %]" id="form_i_[% frameworkcode %]" method="post" enctype="multipart/form-data" class="form_import">
+                <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
                     <div class="modal-body">
                             <input type="hidden" name="frameworkcode" value="default" />
                             <input type="hidden" name="action" value="import" />
-                            <p><label for="file_import_[% frameworkcode %]">Upload file:</label> <input type="file" name="file_import_[% frameworkcode %]" id="file_import_[% frameworkcode %]" class="input_import" /></p>
-                            <div id="importing_[% frameworkcode %]" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
+                            <p><label for="file_import_default">Upload file:</label> <input type="file" name="file_import_default" id="file_import_default" class="input_import" /></p>
+                            <div id="importing_default" style="display:none" class="importing"><img src="[% interface %]/[% theme %]/img/loading-small.gif" alt="" /><span class="importing_msg"></span></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn">Import</button>
