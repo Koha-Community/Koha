@@ -49,6 +49,7 @@ use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::BiblioFrameworks;
+use Koha::Items;
 use Koha::Patron::Messages;
 use Koha::Patron::Images;
 use Koha::SearchEngine;
@@ -329,10 +330,10 @@ if (@$barcodes) {
     $template_params->{alert} = $alerts;
     $template_params->{messages} = $messages;
 
-    #  Get the item title for more information
-    my $getmessageiteminfo = GetBiblioFromItemNumber(undef,$barcode);
+    my $item = Koha::Items->find({ barcode => $barcode });
+    my $biblio = $item->biblio;
 
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.notforloan', authorised_value => { not => undef } });
+    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.notforloan', authorised_value => { not => undef } });
     $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorised_value : undef;
 
     # Fix for bug 7494: optional checkout-time fallback search for a book
@@ -376,22 +377,21 @@ if (@$barcodes) {
             $blocker = 1;
         }
     }
-    my $iteminfo = GetBiblioFromItemNumber(undef, $barcode);
     if( !$blocker || $force_allow_issue ){
         my $confirm_required = 0;
         unless($issueconfirmed){
             #  Get the item title for more information
-            my $materials = $iteminfo->{'materials'};
-            my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.materials', authorised_value => $materials });
+            my $materials = $item->materials;
+            my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.materials', authorised_value => $materials });
             $materials = $descriptions->{lib} // $materials;
             $template_params->{additional_materials} = $materials;
-            $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
+            $template_params->{itemhomebranch} = $item->homebranch;
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
             foreach my $needsconfirmation ( keys %$question ) {
                 $template_params->{$needsconfirmation} = $$question{$needsconfirmation};
-                $template_params->{getTitleMessageIteminfo} = $iteminfo->{'title'};
-                $template_params->{getBarcodeMessageIteminfo} = $iteminfo->{'barcode'};
+                $template_params->{getTitleMessageIteminfo} = $biblio->title;
+                $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $template_params->{onsite_checkout} = $onsite_checkout;
                 $confirm_required = 1;
@@ -413,7 +413,7 @@ if (@$barcodes) {
     }
 
     $template->param(
-        itembiblionumber => $getmessageiteminfo->{'biblionumber'}
+        itembiblionumber => $biblio->biblionumber
     );
 
 
@@ -421,9 +421,9 @@ if (@$barcodes) {
     $patron = Koha::Patrons->find( $borrowernumber );
     $template_params->{issuecount} = $patron->checkouts->count;
 
-    if ( $iteminfo ) {
-        $iteminfo->{subtitle} = GetRecordValue('subtitle', GetMarcBiblio($iteminfo->{biblionumber}), GetFrameworkCode($iteminfo->{biblionumber}));
-        $template_params->{item} = $iteminfo;
+    if ( $item ) {
+        $template_params->{item} = $item;
+        $template_params->{biblio} = $biblio;
     }
     push @$checkout_infos, $template_params;
   }

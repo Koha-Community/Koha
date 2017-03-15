@@ -287,7 +287,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF PREVISSUE %]
-    <li>Patron has previously checked out this title: <b>[% item.title %] [% IF item.author %] by [% item.author %][% END %]</b>. Check out anyway?</li>
+    <li>Patron has previously checked out this title: <b>[% biblio.title %] [% IF biblio.author %] by [% biblio.author %][% END %]</b>. Check out anyway?</li>
 [% END %]
 
 [% IF BIBLIO_ALREADY_ISSUED %]
