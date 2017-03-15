@@ -38,8 +38,7 @@ sub getObjectType {
 =head t::lib::TestObjects::createTestGroup
 
     my $atomicupdates = t::lib::TestObjects::AtomicUpdateFactory->createTestGroup([
-                            {'issue_id' => 'Bug3432',
-                             'filename' => 'Bug3432-RavingRabbitsMayhem',
+                            {'filename' => 'Bug3432-RavingRabbitsMayhem',
                              'modification_time' => '2015-01-02 15:59:32',
                             },
                         ], undef, $testContext1, $testContext2, $testContext3);
@@ -59,8 +58,8 @@ See t::lib::TestObjects::ObjectFactory for more documentation
 sub handleTestObject {
     my ($class, $object, $stashes) = @_;
 
-    ##First see if the given Record already exists in the DB. For testing purposes we use the isbn as the UNIQUE identifier.
-    my $atomicupdate = Koha::AtomicUpdater->find($object->{issue_id});
+    my $issueId = Koha::AtomicUpdate::getIssueIdentifier($object->{filename});
+    my $atomicupdate = Koha::AtomicUpdater->find($issueId);
     unless ($atomicupdate) {
         my $atomicupdater = Koha::AtomicUpdater->new();
         $atomicupdate = $atomicupdater->addAtomicUpdate($object);
@@ -82,10 +81,10 @@ and populates defaults for missing values.
 sub validateAndPopulateDefaultValues {
     my ($self, $object, $hashKey) = @_;
 
-    $object->{issue_id} = 'BugRancidacid' unless $object->{issue_id};
-    $object->{filename} = 'BugRancidacid-LaboratoryExperimentsGoneSour' unless $object->{filename};
+#    $object->{issue_id} = 'BugRancidacid' unless $object->{issue_id};
+#    $object->{filename} = 'BugRancidacid-LaboratoryExperimentsGoneSour' unless $object->{filename};
 
-    $self->SUPER::validateAndPopulateDefaultValues($object, $hashKey);
+#    $self->SUPER::validateAndPopulateDefaultValues($object, $hashKey);
 }
 
 sub deleteTestGroup {

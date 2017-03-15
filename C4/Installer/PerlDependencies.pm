@@ -227,6 +227,16 @@ our $PERL_DEPS = {
         'min_ver'  => '0.45',
         # Also needed for our use of PDF::Reuse
     },
+    'Data::Format::Pretty::Console' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.34',
+    },
+    'Git' => {
+        'usage'    => 'AtomicUpdater',
+        'required' => '1',
+        'min_ver'  => '0.41',
+    },
     'DateTime' => {
         'usage'    => 'Core',
         'required' => '1',
