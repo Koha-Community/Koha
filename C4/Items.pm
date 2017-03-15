@@ -67,7 +67,6 @@ BEGIN {
     
         CheckItemPreSave
     
-        GetItemStatus
         GetItemLocation
         GetLostItems
         GetItemsForInventory
@@ -775,97 +774,6 @@ in C<GetItemsByBiblioitemnumber> and C<GetItemsInfo>
 has copy-and-paste work.
 
 =cut
-
-=head2 GetItemStatus
-
-  $itemstatushash = GetItemStatus($fwkcode);
-
-Returns a list of valid values for the
-C<items.notforloan> field.
-
-NOTE: does B<not> return an individual item's
-status.
-
-Can be MARC dependent.
-fwkcode is optional.
-But basically could be can be loan or not
-Create a status selector with the following code
-
-=head3 in PERL SCRIPT
-
- my $itemstatushash = getitemstatus;
- my @itemstatusloop;
- foreach my $thisstatus (keys %$itemstatushash) {
-     my %row =(value => $thisstatus,
-                 statusname => $itemstatushash->{$thisstatus}->{'statusname'},
-             );
-     push @itemstatusloop, \%row;
- }
- $template->param(statusloop=>\@itemstatusloop);
-
-=head3 in TEMPLATE
-
-<select name="statusloop" id="statusloop">
-    <option value="">Default</option>
-    [% FOREACH statusloo IN statusloop %]
-        [% IF ( statusloo.selected ) %]
-            <option value="[% statusloo.value %]" selected="selected">[% statusloo.statusname %]</option>
-        [% ELSE %]
-            <option value="[% statusloo.value %]">[% statusloo.statusname %]</option>
-        [% END %]
-    [% END %]
-</select>
-
-=cut
-
-sub GetItemStatus {
-
-    # returns a reference to a hash of references to status...
-    my ($fwk) = @_;
-    my %itemstatus;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    $fwk = '' unless ($fwk);
-    my ( $tag, $subfield ) =
-      GetMarcFromKohaField( "items.notforloan", $fwk );
-    if ( $tag and $subfield ) {
-        my $sth =
-          $dbh->prepare(
-            "SELECT authorised_value
-            FROM marc_subfield_structure
-            WHERE tagfield=?
-                AND tagsubfield=?
-                AND frameworkcode=?
-            "
-          );
-        $sth->execute( $tag, $subfield, $fwk );
-        if ( my ($authorisedvaluecat) = $sth->fetchrow ) {
-            my $authvalsth =
-              $dbh->prepare(
-                "SELECT authorised_value,lib
-                FROM authorised_values 
-                WHERE category=? 
-                ORDER BY lib
-                "
-              );
-            $authvalsth->execute($authorisedvaluecat);
-            while ( my ( $authorisedvalue, $lib ) = $authvalsth->fetchrow ) {
-                $itemstatus{$authorisedvalue} = $lib;
-            }
-            return \%itemstatus;
-        }
-        else {
-
-            #No authvalue list
-            # build default
-        }
-    }
-
-    #No authvalue list
-    #build default
-    $itemstatus{"1"} = "Not For Loan";
-    return \%itemstatus;
-}
 
 =head2 GetItemLocation
 
