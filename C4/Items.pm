@@ -69,7 +69,6 @@ BEGIN {
         CheckItemPreSave
     
         GetItemsForInventory
-        GetItemInfosOf
         GetItemsByBiblioitemnumber
         GetItemsInfo
 	GetItemsLocationInfo
@@ -921,26 +920,6 @@ sub GetItemsForInventory {
     }
 
     return (\@results, $iTotalRecords);
-}
-
-=head2 GetItemInfosOf
-
-  GetItemInfosOf(@itemnumbers);
-
-=cut
-
-sub GetItemInfosOf {
-    my @itemnumbers = @_;
-
-    my $itemnumber_values = @itemnumbers ? join( ',', @itemnumbers ) : "''";
-
-    my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT *
-        FROM items
-        WHERE itemnumber IN ($itemnumber_values)
-    ";
-    return $dbh->selectall_hashref($query, 'itemnumber');
 }
 
 =head2 GetItemsByBiblioitemnumber

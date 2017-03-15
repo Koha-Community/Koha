@@ -294,28 +294,30 @@ foreach my $biblionumber (@biblionumbers) {
 
     my %itemnumbers_of_biblioitem;
 
-    ## $items is array of 'item' table numbers
-    my $items = Koha::Items->search({ biblionumber => $biblionumber });
-    my @itemnumbers = $items->get_column('itemnumber');
     my @hostitems = get_hostitemnumbers_of($biblionumber);
+    my @itemnumbers;
     if (@hostitems){
         $template->param('hostitemsflag' => 1);
         push(@itemnumbers, @hostitems);
     }
 
-    if (!@itemnumbers) {
+    my $items = Koha::Items->search({ -or => { biblionumber => $biblionumber, itemnumber => { in => \@itemnumbers } } });
+
+    unless ( $items->count ) {
+        # FIXME Then why do we continue?
         $template->param('noitems' => 1);
         $biblioloopiter{noitems} = 1;
     }
 
-    ## Hash of item number to 'item' table fields
-    my $iteminfos_of = GetItemInfosOf(@itemnumbers);
-
     ## Here we go backwards again to create hash of biblioitemnumber to itemnumbers,
     ## when by definition all of the itemnumber have the same biblioitemnumber
-    foreach my $itemnumber (@itemnumbers) {
-        my $biblioitemnumber = $iteminfos_of->{$itemnumber}->{biblioitemnumber};
+    my ( $itemnumbers_of_biblioitem, $iteminfos_of);
+    while ( my $item = $items->next ) {
+        $item = $item->unblessed;
+        my $biblioitemnumber = $item->{biblioitemnumber};
+        my $itemnumber = $item->{itemnumber};
         push( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} }, $itemnumber );
+        $iteminfos_of->{$itemnumber} = $item;
     }
 
     ## Should be same as biblionumber

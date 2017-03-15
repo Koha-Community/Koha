@@ -30,7 +30,6 @@ use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(TransformMarcToKoha);
-use C4::Items qw(GetItemInfosOf);
 use C4::Creators::Lib qw(html_table);
 use C4::Debug;
 
