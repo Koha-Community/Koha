@@ -30,11 +30,12 @@ use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
 use C4::Search qw(SimpleSearch);
 use C4::Biblio qw(TransformMarcToKoha);
-use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
+use C4::Items qw(GetItemInfosOf);
 use C4::Creators::Lib qw(html_table);
 use C4::Debug;
-use Koha::DateUtils;
 
+use Koha::DateUtils;
+use Koha::Items;
 use Koha::ItemTypes;
 use Koha::SearchEngine::Search;
 
@@ -139,27 +140,20 @@ if ($show_results) {
         push (@results_set, $biblio);
         my $biblionumber = $biblio->{'biblionumber'};
         #DEBUG Notes: Grab the item numbers associated with this MARC record...
-        my $itemnums = get_itemnumbers_of($biblionumber);
+        my $items = Koha::Items->search({ biblionumber => $biblionumber }, { order_by => { -desc => 'itemnumber' }});
         #DEBUG Notes: Retrieve the item data for each number...
-        if (my $iii = $itemnums->{$biblionumber}) {
-            my $item_results = GetItemInfosOf(@$iii);
-            foreach my $item ( keys %$item_results ) {
-                #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
-                if ($item_results->{$item}->{'biblionumber'} eq $results_set[$i]->{'biblionumber'}) {
-                    my $item_data;
-                    $item_data->{'_item_number'} = $item_results->{$item}->{'itemnumber'};
-                    $item_data->{'_item_call_number'} = ($item_results->{$item}->{'itemcallnumber'} ? $item_results->{$item}->{'itemcallnumber'} : 'NA');
-                    $item_data->{'_date_accessioned'} = $item_results->{$item}->{'dateaccessioned'};
-                    $item_data->{'_barcode'} = ( $item_results->{$item}->{'barcode'} ? $item_results->{$item}->{'barcode'} : 'NA');
-                    $item_data->{'_add'} = $item_results->{$item}->{'itemnumber'};
-                    unshift (@row_data, $item_data);    # item numbers are given to us in descending order by get_itemnumbers_of()...
-                }
+        while ( my $item = $items->next ) {
+            #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
+            if ( $item->biblionumber eq $results_set[$i]->{'biblionumber'} ) {
+                my $item_data;
+                $item_data->{'_item_number'}      = $item->itemnumber;
+                $item_data->{'_item_call_number'} = ( $item->itemcallnumber || 'NA' );
+                $item_data->{'_date_accessioned'} = $item->dateaccessioned;
+                $item_data->{'_barcode'}          = ( $item->barcode || 'NA' );
+                $item_data->{'_add'}              = $item->itemnumber;
+                push @row_data, $item_data;
             }
             $results_set[$i]->{'item_table'} = html_table($display_columns, \@row_data);
-        }
-        else {
-            # FIXME: Some error trapping code needed
-            warn sprintf('No item numbers retrieved for biblio number: %s', $biblionumber);
         }
     }
 

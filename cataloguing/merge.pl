@@ -31,6 +31,7 @@ use C4::Reserves qw/MergeHolds/;
 use C4::Acquisition qw/ModOrder GetOrdersByBiblionumber/;
 
 use Koha::BiblioFrameworks;
+use Koha::Items;
 use Koha::MetadataRecord;
 
 my $input = new CGI;
@@ -87,13 +88,13 @@ if ($merge) {
 
     # Moving items from the other record to the reference record
     foreach my $biblionumber (@biblionumbers) {
-        my $itemnumbers = get_itemnumbers_of($biblionumber);
-        foreach my $itemnumber (@{ $itemnumbers->{$biblionumber} }) {
-        my $res = MoveItemFromBiblio($itemnumber, $biblionumber, $ref_biblionumber);
-        if (not defined $res) {
-            push @notmoveditems, $itemnumber;
+        my $items = Koha::Items->search({ biblionumber => $biblionumber });
+        while ( my $item = $items->next) {
+            my $res = MoveItemFromBiblio( $item->itemnumber, $biblionumber, $ref_biblionumber );
+            if ( not defined $res ) {
+                push @notmoveditems, $item->itemnumber;
+            }
         }
-    }
     }
     # If some items could not be moved :
     if (scalar(@notmoveditems) > 0) {
