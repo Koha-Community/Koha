@@ -37,6 +37,7 @@ use C4::Reserves;
 use C4::Koha;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
+use Koha::Items;
 use Koha::ItemTypes;
 
 my $input = new CGI;
@@ -92,34 +93,33 @@ foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
 
     my $itemnumber = $num->{'itemnumber'};
-    my $gettitle     = GetBiblioFromItemNumber( $itemnumber );
+    my $item = Koha::Items->find( $itemnumber );
+    my $biblio = $item->biblio;
     my $borrowernum = $num->{'borrowernumber'};
-    my $holdingbranch = $gettitle->{'holdingbranch'};
-    my $homebranch = $gettitle->{'homebranch'};
+    my $holdingbranch = $item->holdingbranch;
+    my $homebranch = $item->homebranch;
 
     my %getreserv = (
         itemnumber => $itemnumber,
         borrowernum => $borrowernum,
     );
 
-    # fix up item type for display
-    $gettitle->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $gettitle->{'itype'} : $gettitle->{'itemtype'};
     my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
-    my $itemtype = Koha::ItemTypes->find( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
+    my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
 
     $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
-    $getreserv{'title'}          = $gettitle->{'title'};
-    $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($gettitle->{'biblionumber'}), GetFrameworkCode($gettitle->{'biblionumber'}));
-    $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};
-    $getreserv{'barcode'}        = $gettitle->{'barcode'};
-    $getreserv{'homebranch'}     = $gettitle->{'homebranch'};
-    $getreserv{'holdingbranch'}  = $gettitle->{'holdingbranch'};
-    $getreserv{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
-    $getreserv{'enumchron'}      = $gettitle->{'enumchron'};
-    $getreserv{'copynumber'}     = $gettitle->{'copynumber'};
+    $getreserv{'title'}          = $biblio->title;
+    $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($biblio->biblionumber), $biblio->frameworkcode);
+    $getreserv{'biblionumber'}   = $biblio->biblionumber;
+    $getreserv{'barcode'}        = $item->barcode;
+    $getreserv{'homebranch'}     = $homebranch;
+    $getreserv{'holdingbranch'}  = $item->holdingbranch;
+    $getreserv{'itemcallnumber'} = $item->itemcallnumber;
+    $getreserv{'enumchron'}      = $item->enumchron;
+    $getreserv{'copynumber'}     = $item->copynumber;
     if ( $homebranch ne $holdingbranch ) {
         $getreserv{'dotransfer'} = 1;
     }
@@ -190,7 +190,7 @@ sub cancel {
     if ($nextreservinfo) {
         my %res;
         my $borrowerinfo = C4::Members::GetMember( borrowernumber => $nextreservinfo );
-        my $iteminfo = GetBiblioFromItemNumber($item);
+        my $title = Koha::Items->find( $item )->biblio->title;
         if ( $messages->{'transfert'} ) {
             $res{messagetransfert} = $messages->{'transfert'};
             $res{branchcode}       = $messages->{'transfert'};
@@ -201,7 +201,7 @@ sub cancel {
         $res{nextreservsurname}   = $borrowerinfo->{'surname'};
         $res{nextreservfirstname} = $borrowerinfo->{'firstname'};
         $res{nextreservitem}      = $item;
-        $res{nextreservtitle}     = $iteminfo->{'title'};
+        $res{nextreservtitle}     = $title;
         $res{waiting}             = $messages->{'waiting'} ? 1 : 0;
 
         return \%res;

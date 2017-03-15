@@ -26,6 +26,7 @@ use Koha::Database;
 use Koha::Biblios;
 use Koha::Checkouts;
 use Koha::Patrons;
+use Koha::Items;
 
 =encoding UTF-8
 
@@ -71,37 +72,34 @@ use Koha::Patrons;
 sub new {
 	my ($class, $item_id) = @_;
 	my $type = ref($class) || $class;
-	my $self;
-    my $itemnumber = GetItemnumberFromBarcode($item_id);
-	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
-	if (! $item) {
+    my $item = Koha::Items->find( { barcode => $item_id } );
+    unless ( $item ) {
 		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
 	}
-    $item->{  'itemnumber'   } = $itemnumber;
-    $item->{      'id'       } = $item->{barcode};     # to SIP, the barcode IS the id.
-    $item->{permanent_location}= $item->{homebranch};
-    $item->{'collection_code'} = $item->{ccode};
-    $item->{  'call_number'  } = $item->{itemcallnumber};
+    my $self = $item->unblessed;
+    $self->{      'id'       } = $item->barcode;     # to SIP, the barcode IS the id.
+    $self->{permanent_location}= $item->homebranch;
+    $self->{'collection_code'} = $item->ccode;
+    $self->{  'call_number'  } = $item->itemcallnumber;
 
-    my $it = C4::Context->preference('item-level_itypes') ? $item->{itype} : $item->{itemtype};
+    my $it = $item->effective_itemtype;
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
-    $item->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
+    $self->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
 	# check if its on issue and if so get the borrower
-    my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
+    my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     if ($issue) {
-        $item->{due_date} = dt_from_string( $issue->date_due, 'sql' )->truncate( to => 'minute' );
+        $self->{due_date} = dt_from_string( $issue->date_due, 'sql' )->truncate( to => 'minute' );
     }
     my $borrower = $issue ? GetMember( borrowernumber => $issue->borrowernumber ) : {};
-	$item->{patron} = $borrower->{'cardnumber'};
-    my $biblio = Koha::Biblios->find( $item->{biblionumber } );
+    $self->{patron} = $borrower->{'cardnumber'};
+    my $biblio = Koha::Biblios->find( $self->{biblionumber} );
     my $holds = $biblio->current_holds->unblessed;
-    $item->{hold_queue} = $holds;
-	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
-	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
-	$self = $item;
+    $self->{hold_queue} = $holds;
+    $self->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$self->{hold_queue}} )];
+    $self->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$self->{hold_queue}} )];
 	bless $self, $type;
 
     syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",

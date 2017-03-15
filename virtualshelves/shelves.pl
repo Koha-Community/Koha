@@ -152,8 +152,7 @@ if ( $op eq 'add_form' ) {
                     next if $barcode eq '';
                     my $item = GetItem( 0, $barcode);
                     if (defined $item && $item->{itemnumber}) {
-                        my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
-                        my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
+                        my $added = eval { $shelf->add_biblio( $item->{biblionumber}, $loggedinuser ); };
                         if ($@) {
                             push @messages, { item_barcode => $barcode, type => 'alert', code => ref($@), msg => $@ };
                         } elsif ( $added ) {

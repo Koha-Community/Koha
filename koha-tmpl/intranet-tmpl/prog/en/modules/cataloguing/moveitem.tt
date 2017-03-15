@@ -36,18 +36,14 @@
 		[% IF ( errornonewitem ) %]ERROR: Unable to create the new item.<p>
 			[% INCLUDE actions %]
 			[% INCLUDE fail %]
+        </p>
 		[% END %]
 
 		[% IF ( errornoitem ) %]ERROR: Unable to get the item.<p>
 			[% INCLUDE actions %]
 			[% INCLUDE fail %]
-		[% END %]
-
-		[% IF ( errornoitemnumber ) %]ERROR: Unable to get the item number from this barcode.<p>
-			[% INCLUDE actions %]
-			[% INCLUDE fail %]
-		[% END %]
 		</p>
+        [% END %]
     </div>
 
 	[% ELSE %]

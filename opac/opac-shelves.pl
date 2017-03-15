@@ -30,6 +30,7 @@ use C4::Tags qw( get_tags );
 use C4::XSLT;
 
 use Koha::Biblioitems;
+use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Virtualshelves;
 use Koha::RecordProcessor;
@@ -174,9 +175,8 @@ if ( $op eq 'add_form' ) {
         if( my $barcode = $query->param('barcode') ) {
             my $item = GetItem( 0, $barcode);
             if (defined $item && $item->{itemnumber}) {
-                my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
                 if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
-                    my $added = eval { $shelf->add_biblio( $biblio->{biblionumber}, $loggedinuser ); };
+                    my $added = eval { $shelf->add_biblio( $item->{biblionumber}, $loggedinuser ); };
                     if ($@) {
                         push @messages, { type => 'error', code => ref($@), msg => $@ };
                     } elsif ( $added ) {

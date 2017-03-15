@@ -30,6 +30,8 @@ use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 
+use Koha::Items;
+
 my $query = CGI->new;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -43,9 +45,10 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $operations = GetOfflineOperations;
 
 for (@$operations) {
-    my $biblio             = GetBiblioFromItemNumber(undef, $_->{'barcode'});
-    $_->{'bibliotitle'}    = $biblio->{'title'};
-    $_->{'biblionumber'}   = $biblio->{'biblionumber'};
+    my $item = Koha::Items->find({ barcode => $_->{barcode} });
+    my $biblio = $item->biblio;
+    $_->{'bibliotitle'}    = $biblio->title;
+    $_->{'biblionumber'}   = $biblio->biblionumber;
     my $borrower           = C4::Members::GetMember( cardnumber => $_->{'cardnumber'} );
     if ($borrower) {
         $_->{'borrowernumber'} = $borrower->{'borrowernumber'};

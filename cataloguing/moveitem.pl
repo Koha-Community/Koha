@@ -34,6 +34,9 @@ use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder/;
 use Date::Calc qw(Today);
 
 use MARC::File::XML;
+
+use Koha::Items;
+
 my $query = CGI->new;
 
 # The biblio to move the item to
@@ -61,19 +64,15 @@ $template->param(biblionumber => $biblionumber);
 
 # If we already have the barcode of the item to move and the biblionumber to move the item to
 if ($barcode && $biblionumber) { 
-    
-    # We get his itemnumber
-    my $itemnumber = GetItemnumberFromBarcode($barcode);
 
-    if ($itemnumber) {
-    	# And then, we get the item
-	my $item = GetItem($itemnumber);
+    my $itemnumber;
+    my $item = Koha::Items->find({ barcode => $barcode });
 
-	if ($item) {
+    if ($item) {
 
-	    my $results = GetBiblioFromItemNumber($itemnumber, $barcode);
-	    my $frombiblionumber = $results->{'biblionumber'};
-	   
+        $itemnumber = $item->itemnumber;
+        my $frombiblionumber = $item->biblionumber;
+
 	    my $moveresult = MoveItemFromBiblio($itemnumber, $frombiblionumber, $biblionumber); 
 	    if ($moveresult) { 
 		$template->param(success => 1);
@@ -87,11 +86,6 @@ if ($barcode && $biblionumber) {
 	    $template->param(error => 1,
 	                     errornoitem => 1);
 	}
-    } else {
-	    $template->param(error => 1,
-			     errornoitemnumber => 1);
-
-    }
     $template->param(
 			barcode => $barcode,  
 			itemnumber => $itemnumber,

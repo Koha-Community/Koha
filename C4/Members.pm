@@ -827,9 +827,10 @@ sub GetMemberAccountRecords {
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         if ( $data->{itemnumber} ) {
-            my $biblio = GetBiblioFromItemNumber( $data->{itemnumber} );
-            $data->{biblionumber} = $biblio->{biblionumber};
-            $data->{title}        = $biblio->{title};
+            my $item = Koha::Items->find( $data->{itemnumber} );
+            my $biblio = $item->biblio;
+            $data->{biblionumber} = $biblio->biblionumber;
+            $data->{title}        = $biblio->title;
         }
         $acctlines[$numlines] = $data;
         $numlines++;
@@ -908,9 +909,10 @@ sub GetBorNotifyAcctRecord {
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         if ( $data->{itemnumber} ) {
-            my $biblio = GetBiblioFromItemNumber( $data->{itemnumber} );
-            $data->{biblionumber} = $biblio->{biblionumber};
-            $data->{title}        = $biblio->{title};
+            my $item = Koha::Items->find( $data->{itemnumber} );
+            my $biblio = $item->biblio;
+            $data->{biblionumber} = $biblio->biblionumber;
+            $data->{title}        = $biblio->title;
         }
         $acctlines[$numlines] = $data;
         $numlines++;

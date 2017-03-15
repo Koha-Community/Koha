@@ -57,6 +57,7 @@ use C4::Members::Messaging;
 use C4::Overdues;
 use Koha::DateUtils;
 use C4::Log;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -251,7 +252,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             $due_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
             $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
         } else {
-            my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
+            my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'DUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},'0');
             my $titles = "";
@@ -265,7 +266,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
-                                      biblionumber   => $biblio->{'biblionumber'},
+                                      biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,
@@ -285,7 +286,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             $upcoming_digest->{ $upcoming->{borrowernumber} }->{email} = $from_address;
             $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
         } else {
-            my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
+            my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'PREDUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$borrower_preferences->{'days_in_advance'});
             my $titles = "";
@@ -299,7 +300,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
                                       branchcode     => $upcoming->{'branchcode'},
-                                      biblionumber   => $biblio->{'biblionumber'},
+                                      biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => { 'items.content' => $titles },
                                       message_transport_type => $transport,

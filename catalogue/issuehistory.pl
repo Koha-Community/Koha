@@ -24,7 +24,7 @@ use C4::Auth;
 use C4::Output;
 
 use C4::Circulation;    # GetBiblioIssues
-use C4::Biblio;    # GetBiblio GetBiblioFromItemNumber
+use C4::Biblio;    # GetBiblio
 use C4::Search;		# enabled_staff_search_views
 
 my $query = new CGI;

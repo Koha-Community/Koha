@@ -89,20 +89,29 @@ while ( my $library = $libraries->next ) {
                 $getransf{'messcompa'} = 1;
 				$getransf{'diff'} = $diff;
             }
-            my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
-            my $itemtype = Koha::ItemTypes->find( (C4::Context->preference('item-level_itypes')) ? $gettitle->{'itype'} : $gettitle->{'itemtype'} );
+
+            my $item = Koha::Items->find( $num->{itemnumber} );
+            my $biblio = $item->biblio;
+            my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
 
             $getransf{'datetransfer'} = $num->{'datesent'};
             $getransf{'itemtype'} = $itemtype->description; # FIXME Should not it be translated_description?
-			foreach (qw(title author biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
-            	$getransf{$_} = $gettitle->{$_};
-			}
+            %getransf = (
+                %getransf,
+                title          => $biblio->title,
+                author         => $biblio->author,
+                biblionumber   => $biblio->biblionumber,
+                itemnumber     => $item->itemnumber,
+                barcode        => $item->barcode,
+                homebranch     => $item->homebranch,
+                holdingbranch  => $item->holdingbranch,
+                itemcallnumber => $item->itemcallnumber,
+            );
 
-            my $record = GetMarcBiblio($gettitle->{'biblionumber'});
-            $getransf{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($gettitle->{'biblionumber'}));
+            my $record = GetMarcBiblio($biblio->biblionumber);
+            $getransf{'subtitle'} = GetRecordValue('subtitle', $record, $biblio->frameworkcode);
 
             # we check if we have a reserv for this transfer
-            my $item = Koha::Items->find( $num->{itemnumber} );
             my $holds = $item->current_holds;
             if ( my $first_hold = $holds->next ) {
                 my $getborrower = C4::Members::GetMember( borrowernumber => $first_hold->borrowernumber );

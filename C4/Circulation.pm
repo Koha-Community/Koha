@@ -305,31 +305,32 @@ sub transferbook {
     my ( $tbr, $barcode, $ignoreRs ) = @_;
     my $messages;
     my $dotransfer      = 1;
-    my $itemnumber = GetItemnumberFromBarcode( $barcode );
-    my $issue      = Koha::Checkouts->find({ itemnumber => $itemnumber });
-    my $biblio = GetBiblioFromItemNumber($itemnumber);
+    my $item = Koha::Items->find( { barcode => $barcode } );
 
     # bad barcode..
-    if ( not $itemnumber ) {
+    unless ( $item ) {
         $messages->{'BadBarcode'} = $barcode;
         $dotransfer = 0;
     }
 
+    my $itemnumber = $item->itemnumber;
+    my $issue = GetOpenIssue($itemnumber);
     # get branches of book...
-    my $hbr = $biblio->{'homebranch'};
-    my $fbr = $biblio->{'holdingbranch'};
+    my $hbr = $item->homebranch;
+    my $fbr = $item->holdingbranch;
 
     # if using Branch Transfer Limits
     if ( C4::Context->preference("UseBranchTransferLimits") == 1 ) {
+        my $code = C4::Context->preference("BranchTransferLimitsType") eq 'ccode' ? $item->ccode : $item->biblio->biblioitem->itemtype; # BranchTransferLimitsType is 'ccode' or 'itemtype'
         if ( C4::Context->preference("item-level_itypes") && C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' ) {
-            if ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{'itype'} ) ) {
-                $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{'itype'};
+            if ( ! IsBranchTransferAllowed( $tbr, $fbr, $item->itype ) ) {
+                $messages->{'NotAllowed'} = $tbr . "::" . $item->itype;
                 $dotransfer = 0;
             }
-        } elsif ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{ C4::Context->preference("BranchTransferLimitsType") } ) ) {
-            $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{ C4::Context->preference("BranchTransferLimitsType") };
+        } elsif ( ! IsBranchTransferAllowed( $tbr, $fbr, $code ) ) {
+            $messages->{'NotAllowed'} = $tbr . "::" . $code;
             $dotransfer = 0;
-    	}
+        }
     }
 
     # if is permanent...
@@ -373,7 +374,7 @@ sub transferbook {
 
     }
     ModDateLastSeen( $itemnumber );
-    return ( $dotransfer, $messages, $biblio );
+    return ( $dotransfer, $messages );
 }
 
 
@@ -672,7 +673,7 @@ sub CanBookBeIssued {
     my $onsite_checkout     = $params->{onsite_checkout}     || 0;
     my $override_high_holds = $params->{override_high_holds} || 0;
 
-    my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
+    my $item = GetItem(undef, $barcode );
     my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
 	$item->{'itemtype'}=$item->{'itype'}; 
@@ -1146,8 +1147,8 @@ sub CanBookBeReturned {
 
 sub checkHighHolds {
     my ( $item, $borrower ) = @_;
-    my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
     my $branch = _GetCircControlBranch( $item, $borrower );
+    my $item_object = Koha::Items->find( $item->{itemnumber} );
 
     my $return_data = {
         exceeded    => 0,
@@ -1206,11 +1207,7 @@ sub checkHighHolds {
 
         my $calendar = Koha::Calendar->new( branchcode => $branch );
 
-        my $itype =
-          ( C4::Context->preference('item-level_itypes') )
-          ? $biblio->{'itype'}
-          : $biblio->{'itemtype'};
-
+        my $itype = $item_object->effective_itemtype;
         my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branch, $borrower );
 
         my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
@@ -1299,14 +1296,12 @@ sub AddIssue {
         # find which item we issue
         my $item = GetItem( '', $barcode )
           or return;    # if we don't get an Item, abort.
+        my $item_object = Koha::Items->find( { barcode => $barcode } );
 
         my $branch = _GetCircControlBranch( $item, $borrower );
 
         # get actual issuing if there is one
         my $actualissue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
-
-        # get biblioinformation for this item
-        my $biblio = GetBiblioFromItemNumber( $item->{itemnumber} );
 
         # check if we just renew the issue.
         if ( $actualissue and $actualissue->borrowernumber eq $borrower->{'borrowernumber'}
@@ -1360,10 +1355,7 @@ sub AddIssue {
 
             # Record in the database the fact that the book was issued.
             unless ($datedue) {
-                my $itype =
-                  ( C4::Context->preference('item-level_itypes') )
-                  ? $biblio->{'itype'}
-                  : $biblio->{'itemtype'};
+                my $itype = $item_object->effective_itemtype;
                 $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
 
             }
@@ -1464,7 +1456,7 @@ sub AddIssue {
         logaction(
             "CIRCULATION", "ISSUE",
             $borrower->{'borrowernumber'},
-            $biblio->{'itemnumber'}
+            $item->{'itemnumber'}
         ) if C4::Context->preference("IssueLog");
     }
     return $issue;
@@ -1862,7 +1854,6 @@ sub AddReturn {
     }
 
         # full item data, but no borrowernumber or checkout info (no issue)
-        # we know GetItem should work because GetItemnumberFromBarcode worked
     my $hbr = GetBranchItemRule($item->{'homebranch'}, $item->{'itype'})->{'returnbranch'} || "homebranch";
         # get the proper branch to which to return the item
     my $returnbranch = $item->{$hbr} || $branch ;
@@ -2823,7 +2814,8 @@ sub AddRenewal {
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
 
     my $item   = GetItem($itemnumber) or return;
-    my $biblio = GetBiblioFromItemNumber($itemnumber) or return;
+    my $item_object = Koha::Items->find( $itemnumber ); # Should replace $item
+    my $biblio = $item_object->biblio;
 
     my $dbh = C4::Context->dbh;
 
@@ -2851,8 +2843,7 @@ sub AddRenewal {
     # based on the value of the RenewalPeriodBase syspref.
     unless ($datedue) {
 
-        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
-
+        my $itemtype = $item_object->effective_itemtype;
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         dt_from_string( $issue->date_due, 'sql' ) :
                                         DateTime->now( time_zone => C4::Context->tz());
@@ -2870,14 +2861,13 @@ sub AddRenewal {
     $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
 
     # Update the renewal count on the item, and tell zebra to reindex
-    $renews = $biblio->{'renewals'} + 1;
-    ModItem({ renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $biblio->{'biblionumber'}, $itemnumber);
+    $renews = $item->{renewals} + 1;
+    ModItem({ renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item->{biblionumber}, $itemnumber);
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
         my $accountno = getnextacctno( $borrowernumber );
-        my $item = GetBiblioFromItemNumber($itemnumber);
         my $manager_id = 0;
         $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
         $sth = $dbh->prepare(
@@ -2887,7 +2877,7 @@ sub AddRenewal {
                     VALUES (now(),?,?,?,?,?,?,?,?)"
         );
         $sth->execute( $borrowernumber, $accountno, $charge, $manager_id,
-            "Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
+            "Renewal of Rental Item " . $item_object->title . " $item->{'barcode'}",
             'Rent', $charge, $itemnumber );
     }
 
@@ -3708,9 +3698,10 @@ sub ProcessOfflineOperation {
 sub ProcessOfflineReturn {
     my $operation = shift;
 
-    my $itemnumber = C4::Items::GetItemnumberFromBarcode( $operation->{barcode} );
+    my $item = Koha::Items->find({barcode => $operation->{barcode}});
 
-    if ( $itemnumber ) {
+    if ( $item ) {
+        my $itemnumber = $item->itemnumber;
         my $issue = GetOpenIssue( $itemnumber );
         if ( $issue ) {
             MarkIssueReturned(
@@ -3739,10 +3730,11 @@ sub ProcessOfflineIssue {
     my $borrower = C4::Members::GetMember( cardnumber => $operation->{cardnumber} );
 
     if ( $borrower->{borrowernumber} ) {
-        my $itemnumber = C4::Items::GetItemnumberFromBarcode( $operation->{barcode} );
-        unless ($itemnumber) {
+        my $item = Koha::Items->find({ barcode => $operation->{barcode} });
+        unless ($item) {
             return "Barcode not found.";
         }
+        my $itemnumber = $item->itemnumber;
         my $issue = GetOpenIssue( $itemnumber );
 
         if ( $issue and ( $issue->{borrowernumber} ne $borrower->{borrowernumber} ) ) { # Item already issued to another borrower, mark it returned

@@ -52,6 +52,7 @@ use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::BiblioFrameworks;
 use Koha::Checkouts;
+use Koha::Items;
 use Koha::Patrons;
 
 my $query = new CGI;
@@ -146,14 +147,14 @@ if ($query->param('WT-itemNumber')){
 }
 
 if ( $query->param('reserve_id') ) {
-    my $item           = $query->param('itemnumber');
+    my $itemnumber     = $query->param('itemnumber');
     my $borrowernumber = $query->param('borrowernumber');
     my $reserve_id     = $query->param('reserve_id');
     my $diffBranchReturned = $query->param('diffBranch');
-    my $iteminfo   = GetBiblioFromItemNumber($item);
     my $cancel_reserve = $query->param('cancel_reserve');
     # fix up item type for display
-    $iteminfo->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $iteminfo->{'itype'} : $iteminfo->{'itemtype'};
+    my $item = Koha::Items->find( $itemnumber );
+    my $biblio = $item->biblio;
 
     if ( $cancel_reserve ) {
         CancelReserve({ reserve_id => $reserve_id, charge_cancel_fee => !$forgivemanualholdsexpire });
@@ -161,19 +162,19 @@ if ( $query->param('reserve_id') ) {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
-        ModReserveAffect( $item, $borrowernumber, $diffBranchSend, $reserve_id );
+        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id );
     }
 #   check if we have other reserves for this document, if we have a return send the message of transfer
-    my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
+    my ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
 
     my $borr = GetMember( borrowernumber => $nextreservinfo );
     my $name   = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     if ( $messages->{'transfert'} ) {
         $template->param(
-            itemtitle      => $iteminfo->{'title'},
-            itemnumber     => $iteminfo->{'itemnumber'},
-            itembiblionumber => $iteminfo->{'biblionumber'},
-            iteminfo       => $iteminfo->{'author'},
+            itemtitle      => $biblio->title,
+            itemnumber     => $item->itemnumber,
+            itembiblionumber => $biblio->biblionumber,
+            iteminfo       => $biblio->author,
             name           => $name,
             borrowernumber => $borrowernumber,
             borcnum        => $borr->{'cardnumber'},
@@ -256,20 +257,11 @@ my $returnbranch;
 if ($barcode) {
     $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
     $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
-    $itemnumber = GetItemnumberFromBarcode($barcode);
-
-#
-# save the return
-#
-
-    # get biblio description
-    my $biblio = GetBiblioFromItemNumber($itemnumber);
-    # fix up item type for display
-    $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
+    my $item = Koha::Items->find({ barcode => $barcode });
 
     # Check if we should display a checkin message, based on the the item
     # type of the checked in item
-    my $itemtype = Koha::ItemTypes->find( $biblio->{'itemtype'} );
+    my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
     if ( $itemtype && $itemtype->checkinmsg ) {
         $template->param(
             checkinmsg     => $itemtype->checkinmsg,
@@ -278,26 +270,27 @@ if ($barcode) {
     }
 
     # make sure return branch respects home branch circulation rules, default to homebranch
-    my $hbr = GetBranchItemRule($biblio->{'homebranch'}, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
-    $returnbranch = $biblio->{$hbr};
+    my $hbr = GetBranchItemRule($item->homebranch, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
+    $returnbranch = $item->$hbr;
 
-    my $materials = $biblio->{'materials'};
+    my $materials = $item->materials;
     my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
     $materials = $descriptions->{lib} // $materials;
 
     my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } );
 
+    my $biblio = $item->biblio;
     $template->param(
-        title            => $biblio->{'title'},
-        homebranch       => $biblio->{'homebranch'},
-        holdingbranch    => $biblio->{'holdingbranch'},
+        title            => $biblio->title,
+        homebranch       => $item->homebranch,
+        holdingbranch    => $item->holdingbranch,
         returnbranch     => $returnbranch,
-        author           => $biblio->{'author'},
-        itembarcode      => $biblio->{'barcode'},
-        itemtype         => $biblio->{'itemtype'},
-        ccode            => $biblio->{'ccode'},
-        itembiblionumber => $biblio->{'biblionumber'},
-        biblionumber     => $biblio->{'biblionumber'},
+        author           => $biblio->author,
+        itembarcode      => $item->barcode,
+        itemtype         => $item->effective_itemtype,
+        ccode            => $item->ccode,
+        itembiblionumber => $biblio->biblionumber,
+        biblionumber     => $biblio->biblionumber,
         borrower         => $borrower,
         additional_materials => $materials,
         issue            => $issue,
@@ -595,25 +588,23 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{borrowernumber} = $riborrowernumber{$_};
         }
 
-        #        my %ri;
-        my $biblio = GetBiblioFromItemNumber(GetItemnumberFromBarcode($bar_code));
-        my $item   = GetItem( GetItemnumberFromBarcode($bar_code) );
-        # fix up item type for display
-        $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
-        $ri{itembiblionumber}    = $biblio->{'biblionumber'};
-        $ri{itemtitle}           = $biblio->{'title'};
-        $ri{itemauthor}          = $biblio->{'author'};
-        $ri{itemcallnumber}      = $biblio->{'itemcallnumber'};
-        $ri{dateaccessioned}     = $item->{dateaccessioned};
-        $ri{itemtype}            = $biblio->{'itemtype'};
-        $ri{itemnote}            = $biblio->{'itemnotes'};
-        $ri{itemnotes_nonpublic} = $item->{'itemnotes_nonpublic'};
-        $ri{ccode}               = $biblio->{'ccode'};
-        $ri{enumchron}           = $biblio->{'enumchron'};
-        $ri{itemnumber}          = $biblio->{'itemnumber'};
+        my $item = Koha::Items->find({ barcode => $bar_code });
+        my $biblio = $item->biblio;
+        # FIXME pass $item to the template and we are done here...
+        $ri{itembiblionumber}    = $biblio->biblionumber;
+        $ri{itemtitle}           = $biblio->title;
+        $ri{itemauthor}          = $biblio->author;
+        $ri{itemcallnumber}      = $item->itemcallnumber;
+        $ri{dateaccessioned}     = $item->dateaccessioned;
+        $ri{itemtype}            = $item->effective_itemtype;
+        $ri{itemnote}            = $item->itemnotes;
+        $ri{itemnotes_nonpublic} = $item->itemnotes_nonpublic;
+        $ri{ccode}               = $item->ccode;
+        $ri{enumchron}           = $item->enumchron;
+        $ri{itemnumber}          = $item->itemnumber;
         $ri{barcode}             = $bar_code;
-        $ri{homebranch}          = $item->{'homebranch'};
-        $ri{holdingbranch}       = $item->{'holdingbranch'};
+        $ri{homebranch}          = $item->homebranch;
+        $ri{holdingbranch}       = $item->holdingbranch;
 
         $ri{location}         = $biblio->{'location'};
         my $shelfcode = $ri{'location'};

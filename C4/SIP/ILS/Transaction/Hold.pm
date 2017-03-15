@@ -3,17 +3,15 @@
 
 package C4::SIP::ILS::Transaction::Hold;
 
-use warnings;
-use strict;
+use Modern::Perl;
 
 use C4::SIP::ILS::Transaction;
 
 use C4::Reserves;	# AddReserve
 use C4::Members;	# GetMember
-use C4::Biblio;		# GetBiblioFromItemNumber GetBiblioItemByBiblioNumber
 use parent qw(C4::SIP::ILS::Transaction);
 
-
+use Koha::Items;
 
 my %fields = (
 	expiration_date => 0,
@@ -49,8 +47,8 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    my $bib = GetBiblioFromItemNumber( undef, $self->{item}->id );
-    unless ($bib) {
+    my $item = Koha::Items->find({ barcode => $self->{item}->id });
+    unless ($item) {
         $self->screen_msg( 'No biblio record matches barcode "' . $self->{item}->id . '".' );
         $self->ok(0);
         return $self;
@@ -61,8 +59,7 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    my $bibno = $bib->{biblionumber};
-    AddReserve( $branch, $borrower->{borrowernumber}, $bibno, GetBiblioItemByBiblioNumber($bibno) );
+    AddReserve( $branch, $borrower->{borrowernumber}, $item->biblionumber );
 
     # unfortunately no meaningful return value
     $self->ok(1);
@@ -82,10 +79,10 @@ sub drop_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $bib = GetBiblioFromItemNumber(undef, $self->{item}->id);
+    my $item = Koha::Items->find({ barcode => $self->{item}->id });
 
       CancelReserve({
-            biblionumber   => $bib->{biblionumber},
+            biblionumber   => $item->biblionumber,
         itemnumber     => $self->{item}->id,
            borrowernumber => $borrower->{borrowernumber}
       });
@@ -107,8 +104,8 @@ sub change_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $bib = GetBiblioFromItemNumber(undef, $self->{item}->id);
-	unless ($bib) {
+    my $item = Koha::Items->find({ barcode => $self->{item}->id });
+    unless ($item) {
 		$self->screen_msg('No biblio record matches barcode "' . $self->{item}->id . '".');
 		$self->ok(0);
 		return $self;
@@ -119,8 +116,7 @@ sub change_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $bibno = $bib->{biblionumber};
-	ModReserve({ biblionumber => $bibno, borrowernumber => $borrower->{borrowernumber}, branchcode => $branch });
+    ModReserve({ biblionumber => $item->biblionumber, borrowernumber => $borrower->{borrowernumber}, branchcode => $branch });
 
 	$self->ok(1);
 	return $self;
