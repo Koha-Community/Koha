@@ -12,6 +12,7 @@ BEGIN {
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
+use Koha::Items;
 use Getopt::Long;
 
 $| = 1;
@@ -34,7 +35,6 @@ if (not $result or $want_help or not $do_update) {
 
 my $num_bibs_processed     = 0;
 my $num_bibs_modified      = 0;
-my $num_nobib_foritemnumber = 0;
 my $num_noitem_forbarcode = 0;
 my $num_nobarcode_inhostfield =0;
 my $num_hostfields_unabletomodify =0;
@@ -91,36 +91,31 @@ sub process_bib {
     my $analyticfield = '773';
 	foreach my $hostfield ( $bib->field($analyticfield) ) {
 		if(my $barcode = $hostfield->subfield('o')){
-			my $itemnumber = GetItemnumberFromBarcode($barcode);
-			if ($itemnumber ne undef){
-				my $bibnumber = GetBiblionumberFromItemnumber($itemnumber);
-				if ($bibnumber ne undef){
-					my $modif;
-					if ($hostfield->subfield('0') ne $bibnumber){
-						$hostfield->update('0', $bibnumber);
-						$modif = 1;
-					}
-					if ($hostfield->subfield('9') ne $itemnumber){
-						$hostfield->update('9', $itemnumber);
-						$modif=1;
-					}
-					if ($modif){
-						$num_bibs_modified++;
-						my $modresult = ModBiblio($bib, $biblionumber, '');
-						warn "Modifying biblio $biblionumber";
-						if (!$modresult){
-							warn "Unable to modify biblio $biblionumber with update host field";
-							$num_hostfields_unabletomodify++;
-						}
-					}
-				} else {
-					warn "No biblio record found corressponding to itemnumber $itemnumber";
-					$num_nobib_foritemnumber++;
-				}
-			} else {
-				warn "No item record found for barcode $barcode";
-				$num_noitem_forbarcode++;
-			}
+            my $item = Koha::Items->find({ barcode => $barcode });
+            if ($item) {
+                my $modif;
+                if ( $hostfield->subfield('0') ne $biblionumber ) {
+                    $hostfield->update( '0', $biblionumber );
+                    $modif = 1;
+                }
+                if ( $hostfield->subfield('9') ne $item->itemnumber ) {
+                    $hostfield->update( '9', $item->itemnumber );
+                    $modif = 1;
+                }
+                if ($modif) {
+                    $num_bibs_modified++;
+                    my $modresult = ModBiblio( $bib, $biblionumber, '' );
+                    warn "Modifying biblio $biblionumber";
+                    if ( !$modresult ) {
+                        warn "Unable to modify biblio $biblionumber with update host field";
+                        $num_hostfields_unabletomodify++;
+                    }
+                }
+            }
+            else {
+                warn "No item record found for barcode $barcode";
+                $num_noitem_forbarcode++;
+            }
 		} else{
 			warn "No barcode in host field for biblionumber $biblionumber";
 			$num_nobarcode_inhostfield++;
