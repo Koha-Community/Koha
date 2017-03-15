@@ -22,6 +22,7 @@ use Mojo::Base 'Mojolicious::Controller';
 use C4::Biblio;
 use C4::Reserves;
 
+use Koha::Items;
 use Koha::Patrons;
 use Koha::Holds;
 use Koha::DateUtils;
@@ -65,17 +66,20 @@ sub add {
         }, 400);
     }
 
+    my $biblio;
     if ($itemnumber) {
-        my $item_biblionumber = C4::Biblio::GetBiblionumberFromItemnumber($itemnumber);
-        if ($biblionumber and $biblionumber != $item_biblionumber) {
+        my $item = Koha::Items->find( $itemnumber );
+        $biblio = $item->biblio;
+        if ($biblionumber and $biblionumber != $biblio->biblionumber) {
             return $c->$cb({
                 error => "Item $itemnumber doesn't belong to biblio $biblionumber"
             }, 400);
         }
-        $biblionumber ||= $item_biblionumber;
+        $biblionumber ||= $biblio->biblionumber;
+        $biblio->unblessed; # FIXME remove later
+    } else {
+        $biblio = C4::Biblio::GetBiblio($biblionumber);
     }
-
-    my $biblio = C4::Biblio::GetBiblio($biblionumber);
 
     my $can_reserve =
       $itemnumber

@@ -34,6 +34,7 @@ use C4::XSLT ();
 use YAML; #marcrecords2csv
 use Template;
 use Text::CSV::Encoded; #marc2csv
+use Koha::Items;
 use Koha::SimpleMARC qw(read_field);
 use Koha::XSLT_Handler;
 use Koha::CsvProfiles;
@@ -427,7 +428,8 @@ sub marc2csv {
     my $firstpass = 1;
     if ( @$itemnumbers ) {
         for my $itemnumber ( @$itemnumbers) {
-            my $biblionumber = GetBiblionumberFromItemnumber $itemnumber;
+            my $item = Koha::Items->find( $itemnumber );
+            my $biblionumber = $item->biblio->biblionumber;
             $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] );
             $firstpass = 0;
         }

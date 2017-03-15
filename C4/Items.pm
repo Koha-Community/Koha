@@ -665,7 +665,8 @@ sub DelItem {
     my $biblionumber = $params->{biblionumber};
 
     unless ($biblionumber) {
-        $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber($itemnumber);
+        my $item = Koha::Items->find( $itemnumber );
+        $biblionumber = $item->biblio->biblionumber;
     }
 
     # If there is no biblionumber for the given itemnumber, there is nothing to delete

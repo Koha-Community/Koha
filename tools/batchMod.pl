@@ -37,6 +37,7 @@ use List::MoreUtils qw/uniq/;
 
 use Koha::Biblios;
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::ItemTypes;
 
 my $input = new CGI;
@@ -121,7 +122,10 @@ if ($op eq "action") {
 	    $items_display_hashref=BuildItemsData(@itemnumbers);
 	} else {
 	    # Else, we only display the barcode
-	    my @simple_items_display = map {{ itemnumber => $_, barcode => (GetBarcodeFromItemnumber($_) or ""), biblionumber => (GetBiblionumberFromItemnumber($_) or "") }} @itemnumbers;
+        my @simple_items_display = map {
+            my $itemnumber = $_;
+            my $item = Koha::Items->find($itemnumber);
+            { itemnumber => $itemnumber, barcode => ($item->barcode || q||), biblionumber => $item->biblio->biblionumber }} @itemnumbers;
 	    $template->param("simple_items_display" => \@simple_items_display);
 	}
 

@@ -31,6 +31,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
 use Koha::Biblios;
+use Koha::Items;
 use Koha::Number::Price;
 use Koha::Libraries;
 use Koha::CsvProfiles;
@@ -1660,17 +1661,17 @@ sub CancelReceipt {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
         if ( @affects ) {
             for my $in ( @itemnumbers ) {
-                my $biblionumber = C4::Biblio::GetBiblionumberFromItemnumber( $in );
-                my $frameworkcode = GetFrameworkCode($biblionumber);
-                my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $frameworkcode );
-                my $item = C4::Items::GetMarcItem( $biblionumber, $in );
+                my $item = Koha::Items->find( $in );
+                my $biblio = $item->biblio;
+                my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $biblio->frameworkcode );
+                my $item_marc = C4::Items::GetMarcItem( $biblio->biblionumber, $in );
                 for my $affect ( @affects ) {
                     my ( $sf, $v ) = split q{=}, $affect, 2;
-                    foreach ( $item->field($itemfield) ) {
+                    foreach ( $item_marc->field($itemfield) ) {
                         $_->update( $sf => $v );
                     }
                 }
-                C4::Items::ModItemFromMarc( $item, $biblionumber, $in );
+                C4::Items::ModItemFromMarc( $item_marc, $biblio->biblionumber, $in );
             }
         }
     }

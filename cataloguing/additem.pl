@@ -31,6 +31,7 @@ use C4::Circulation;
 use C4::Koha;
 use C4::ClassSource;
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use List::MoreUtils qw/any/;
@@ -794,9 +795,10 @@ foreach my $field (@fields) {
 
 	if ( C4::Context->preference('EasyAnalyticalRecords') ) {
 	    foreach my $hostitemnumber (@hostitemnumbers){
+            my $item = Koha::Items->find( $hostitemnumber );
 		if ($this_row{itemnumber} eq $hostitemnumber){
 			$this_row{hostitemflag} = 1;
-			$this_row{hostbiblionumber}= GetBiblionumberFromItemnumber($hostitemnumber);
+            $this_row{hostbiblionumber}= $item->biblio->biblionumber;
 			last;
 		}
 	    }

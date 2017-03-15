@@ -245,7 +245,8 @@ if ( $query->param('place_reserve') ) {
 
 #item may belong to a host biblio, if yes change biblioNum to hosts bilbionumber
         if ( $itemNum ne '' ) {
-            my $hostbiblioNum = GetBiblionumberFromItemnumber($itemNum);
+            my $item = Koha::Items->find( $itemNum );
+            my $hostbiblioNum = $item->biblio->biblionumber;
             if ( $hostbiblioNum ne $biblioNum ) {
                 $biblioNum = $hostbiblioNum;
             }
