@@ -352,6 +352,7 @@ RECORD: while (  ) {
             }
         } elsif ( $results && scalar(@$results) > 1 ) {
             $logger->debug("more than one match for $query");
+            next;
         } else {
             $logger->debug("nomatch for $query");
         }
