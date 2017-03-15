@@ -17,6 +17,8 @@ use C4::Biblio qw(
     GetMarcFromKohaField
     ModBiblio
     ModBiblioMarc
+    GetFrameworkCode
+    GetMarcBiblio
 );
 use C4::Koha;
 use C4::Charset qw( MarcToUTF8Record SetUTF8Flag );
@@ -40,22 +42,43 @@ use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
 use open qw( :std :encoding(UTF-8) );
-binmode( STDOUT, ":encoding(UTF-8)" );
-my ( $input_marc_file, $number, $offset) = ('',0,0);
-my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
-my ( $insert, $filters, $update, $all, $yamlfile, $authtypes, $append );
-my $cleanisbn = 1;
-my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
+binmode(STDOUT, ":encoding(UTF-8)");
+my ($input_marc_file, $number, $offset, $cleanisbn) = ('', 0, 0, 1);
+my $version;
+my $delete;
+my $test_parameter;
+my $skip_marc8_conversion;
+my $char_encoding;
+my $verbose;
+my $commit;
+my $fk_off;
+my $format;
+my $biblios;
+my $authorities;
+my $keepids;
+my $match;
+my $isbn_check;
+my $logfile;
+my $insert;
+my $filters;
+my $update;
+my $all;
+my $yamlfile;
+my $authtypes;
+my $append;
+my $sourcetag;
+my $sourcesubfield;
+my $idmapfl;
+my $dedup_barcode;
 my $framework = '';
 my $localcust;
 my $marc_mod_template = '';
 my $marc_mod_template_id = -1;
-
-$|=1;
+$| = 1;
 
 GetOptions(
-    'commit:f'    => \$commit,
-    'file:s'    => \$input_marc_file,
+    'commit:f' => \$commit,
+    'file:s' => \$input_marc_file,
     'n:f' => \$number,
     'o|offset:f' => \$offset,
     'h' => \$version,
@@ -72,22 +95,23 @@ GetOptions(
     'b|biblios' => \$biblios,
     'a|authorities' => \$authorities,
     'authtypes:s' => \$authtypes,
-    'filter=s@'     => \$filters,
-    'insert'        => \$insert,
-    'update'        => \$update,
-    'all'           => \$all,
-    'match=s@'    => \$match,
+    'filter=s@' => \$filters,
+    'insert' => \$insert,
+    'update' => \$update,
+    'all' => \$all,
+    'match=s@' => \$match,
     'i|isbn' => \$isbn_check,
     'x:s' => \$sourcetag,
     'y:s' => \$sourcesubfield,
     'idmap:s' => \$idmapfl,
-    'cleanisbn!'     => \$cleanisbn,
-    'yaml:s'        => \$yamlfile,
+    'cleanisbn!' => \$cleanisbn,
+    'yaml:s' => \$yamlfile,
     'dedupbarcode' => \$dedup_barcode,
     'framework=s' => \$framework,
-    'custom:s'    => \$localcust,
+    'custom:s' => \$localcust,
     'marcmodtemplate:s' => \$marc_mod_template,
 );
+
 $biblios ||= !$authorities;
 $insert  ||= !$update;
 my $writemode = ($append) ? "a" : "w";
@@ -99,6 +123,25 @@ if ($all) {
     $update = 1;
 }
 
+my $using_elastic_search = (C4::Context->preference('SearchEngine') eq 'Elasticsearch');
+my $modify_biblio_marc_options = {
+    defer_search_engine_indexing => $using_elastic_search,
+    overlay_context => { source => 'bulkmarcimport' }
+};
+
+my @search_engine_record_ids;
+my @search_engine_records;
+my $indexer;
+if ($using_elastic_search) {
+    use Koha::SearchEngine::Elasticsearch::Indexer;
+    $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new(
+        { index => $authorities ?
+            $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX :
+            $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX
+        }
+    );
+}
+
 if ($version || ($input_marc_file eq '')) {
     pod2usage( -verbose => 2 );
     exit;
@@ -107,13 +150,13 @@ if( $update && !( $match || $isbn_check ) ) {
     warn "Using -update without -match or -isbn seems to be useless.\n";
 }
 
-if(defined $localcust) { #local customize module
-    if(!-e $localcust) {
-        $localcust= $localcust||'LocalChanges'; #default name
-        $localcust=~ s/^.*\/([^\/]+)$/$1/; #extract file name only
-        $localcust=~ s/\.pm$//;           #remove extension
-        my $fqcust= $FindBin::Bin."/$localcust.pm"; #try migration_tools dir
-        if(-e $fqcust) {
+if (defined $localcust) { #local customize module
+    if (!-e $localcust) {
+        $localcust = $localcust || 'LocalChanges'; #default name
+        $localcust =~ s/^.*\/([^\/]+)$/$1/; #extract file name only
+        $localcust =~ s/\.pm$//;           #remove extension
+        my $fqcust = $FindBin::Bin . "/$localcust.pm"; #try migration_tools dir
+        if (-e $fqcust) {
             $localcust= $fqcust;
         }
         else {
@@ -122,7 +165,7 @@ if(defined $localcust) { #local customize module
         }
     }
     require $localcust if $localcust;
-    $localcust=\&customize if $localcust;
+    $localcust = \&customize if $localcust;
 }
 
 if($marc_mod_template ne '') {
@@ -147,18 +190,17 @@ if($marc_mod_template ne '') {
 }
 
 my $dbh = C4::Context->dbh;
-my $heading_fields=get_heading_fields();
-
+my $heading_fields = get_heading_fields();
 my $idmapfh;
+
 if (defined $idmapfl) {
   open($idmapfh, '>', $idmapfl) or die "cannot open $idmapfl \n";
 }
 
-if ((not defined $sourcesubfield) && (not defined $sourcetag)){
-  $sourcetag="910";
-  $sourcesubfield="a";
+if ((not defined $sourcesubfield) && (not defined $sourcetag)) {
+    $sourcetag = "910";
+    $sourcesubfield = "a";
 }
-
 
 # Disable logging for the biblios and authorities import operation. It would unnecessarily
 # slow the import
@@ -166,49 +208,47 @@ $ENV{OVERRIDE_SYSPREF_CataloguingLog} = 0;
 $ENV{OVERRIDE_SYSPREF_AuthoritiesLog} = 0;
 
 if ($fk_off) {
-	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
+    $dbh->do("SET FOREIGN_KEY_CHECKS = 0");
 }
 
-
 if ($delete) {
-	if ($biblios){
-    	print "deleting biblios\n";
+    if ($biblios) {
+        print "Deleting biblios\n";
         $dbh->do("DELETE FROM biblio");
         $dbh->do("ALTER TABLE biblio AUTO_INCREMENT = 1");
         $dbh->do("DELETE FROM biblioitems");
         $dbh->do("ALTER TABLE biblioitems AUTO_INCREMENT = 1");
         $dbh->do("DELETE FROM items");
         $dbh->do("ALTER TABLE items AUTO_INCREMENT = 1");
-	}
-	else {
-    	print "deleting authorities\n";
-    	$dbh->do("truncate auth_header");
-	}
+    }
+    else {
+        print "Deleting authorities\n";
+        $dbh->do("truncate auth_header");
+    }
     $dbh->do("truncate zebraqueue");
 }
-
-
 
 if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 
-my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
+my $batch;
+my $marc_flavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 # The definition of $searcher must be before MARC::Batch->new
 my $searcher = Koha::SearchEngine::Search->new(
     {
         index => (
-              $authorities
+            $authorities
             ? $Koha::SearchEngine::AUTHORITIES_INDEX
             : $Koha::SearchEngine::BIBLIOS_INDEX
         )
     }
 );
 
-print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
+print "Characteristic MARC flavour: $marc_flavour\n" if $verbose;
 my $starttime = gettimeofday;
-my $batch;
+
 my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
 if (defined $format && $format =~ /XML/i) {
     # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
@@ -221,54 +261,59 @@ if (defined $format && $format =~ /XML/i) {
     #       extract the records, not using regexes to look
     #       for <record>.*</record>.
     $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
-    my $recordformat= ($marcFlavour eq "MARC21"?"USMARC":uc($marcFlavour));
-#UNIMARC Authorities have a different way to manage encoding than UNIMARC biblios.
-    $recordformat=$recordformat."AUTH" if ($authorities and $marcFlavour ne "MARC21");
+    my $recordformat = ($marc_flavour eq "MARC21" ? "USMARC" : uc($marc_flavour));
+    #UNIMARC Authorities have a different way to manage encoding than UNIMARC biblios.
+    $recordformat = $recordformat . "AUTH" if ($authorities and $marc_flavour ne "MARC21");
     $MARC::File::XML::_load_args{RecordFormat} = $recordformat;
-    $batch = MARC::Batch->new( 'XML', $fh );
-} else {
-    $batch = MARC::Batch->new( 'USMARC', $fh );
+    $batch = MARC::Batch->new('XML', $fh);
 }
+else {
+    $batch = MARC::Batch->new('USMARC', $fh);
+}
+
 $batch->warnings_off();
 $batch->strict_off();
-my $i=0;
 my $commitnum = $commit ? $commit : 50;
 my $yamlhash;
 
 # Skip file offset
-if ( $offset ) {
+if ($offset) {
     print "Skipping file offset: $offset records\n";
     $batch->next() while ($offset--);
 }
 
-my ($tagid,$subfieldid);
-if ($authorities){
-	  $tagid='001';
+my ($tagid, $subfieldid);
+if ($authorities) {
+    $tagid = '001';
 }
 else {
-   ( $tagid, $subfieldid ) =
-            GetMarcFromKohaField( "biblio.biblionumber" );
-	$tagid||="001";
+    ($tagid, $subfieldid) = GetMarcFromKohaField("biblio.biblionumber");
+    $tagid ||= "001";
 }
 
+my $sth_isbn;
 # the SQL query to search on isbn
-my $sth_isbn = $dbh->prepare("SELECT biblionumber,biblioitemnumber FROM biblioitems WHERE isbn=?");
+if ($isbn_check) {
+    $sth_isbn = $dbh->prepare("SELECT biblionumber, biblioitemnumber FROM biblioitems WHERE isbn=?");
+}
 
 my $loghandle;
-if ($logfile){
-   $loghandle= IO::File->new($logfile, $writemode) ;
-   print $loghandle "id;operation;status\n";
+if ($logfile) {
+    $loghandle= IO::File->new($logfile, $writemode);
+    print $loghandle "id;operation;status\n";
 }
 
+my $record_number = 0;
 my $logger = Koha::Logger->get;
 my $schema = Koha::Database->schema;
-$schema->txn_begin;
+my $marc_records = [];
 RECORD: while (  ) {
     my $record;
-    # get records
+    $record_number++;
+    # get record
     eval { $record = $batch->next() };
-    if ( $@ ) {
-        print "Bad MARC record $i: $@ skipped\n";
+    if ($@) {
+        print "Bad MARC record $record_number: $@ skipped\n";
         # FIXME - because MARC::Batch->next() combines grabbing the next
         # blob and parsing it into one operation, a correctable condition
         # such as a MARC-8 record claiming that it's UTF-8 can't be recovered
@@ -277,279 +322,325 @@ RECORD: while (  ) {
         # C4::Charset::MarcToUTF8Record) because it doesn't use MARC::Batch.
         next;
     }
-    # skip if we get an empty record (that is MARC valid, but will result in AddBiblio failure
-    last unless ( $record );
-    $i++;
-    if( ($verbose//1)==1 ) { #no dot for verbose==2
-        print "." . ( $i % 100==0 ? "\n$i" : '' );
+    if ($record) {
+        # transcode the record to UTF8 if needed & applicable.
+        if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
+            my ($guessed_charset, $charset_errors);
+            ($record, $guessed_charset, $charset_errors) = MarcToUTF8Record($record, $marc_flavour . (($authorities and $marc_flavour ne "MARC21") ? 'AUTH' : ''));
+            if ($guessed_charset eq 'failed') {
+                warn "ERROR: failed to perform character conversion for record $record_number\n";
+                next RECORD;
+            }
+        }
+        SetUTF8Flag($record);
+        &$localcust($record) if $localcust;
+        push @{$marc_records}, $record;
+    }
+    else {
+        last;
+    }
+}
+
+$record_number = 0;
+my $records_total = @{$marc_records};
+$schema->txn_begin;
+RECORD: foreach my $record (@{$marc_records}) {
+    $record_number++;
+    if (($verbose//1) == 1) { #no dot for verbose==2
+        print "." . ($record_number % 100 == 0 ? "\n$record_number" : '');
     }
 
-    # transcode the record to UTF8 if needed & applicable.
-    if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
-        # FIXME update condition
-        my ($guessed_charset, $charset_errors);
-         ($record, $guessed_charset, $charset_errors) = MarcToUTF8Record($record, $marcFlavour.(($authorities and $marcFlavour ne "MARC21")?'AUTH':''));
-        if ($guessed_charset eq 'failed') {
-            warn "ERROR: failed to perform character conversion for record $i\n";
-            next RECORD;            
-        }
+    if ($marc_mod_template_id > 0) {
+        print "Modifying MARC\n" if $verbose;
+        ModifyRecordWithTemplate( $marc_mod_template_id, $record );
     }
-    SetUTF8Flag($record);
-    if($marc_mod_template_id > 0) {
-    print "Modifying MARC\n" if $verbose;
-    ModifyRecordWithTemplate( $marc_mod_template_id, $record );
-    }
-    &$localcust($record) if $localcust;
+
     my $isbn;
     # remove trailing - in isbn (only for biblios, of course)
-    if( $biblios ) {
-        my $tag = $marcFlavour eq 'UNIMARC' ? '010' : '020';
+    if ($biblios && ($cleanisbn || $isbn_check)) {
+        my $tag = $marc_flavour eq 'UNIMARC' ? '010' : '020';
         my $field = $record->field($tag);
         $isbn = $field && $field->subfield('a');
-        if ( $isbn && $cleanisbn ) {
+        if ($isbn && $cleanisbn) {
             $isbn =~ s/-//g;
             $field->update('a' => $isbn);
         }
     }
-    my $id;
     # search for duplicates (based on Local-number)
-    my $originalid;
-    $originalid = GetRecordId( $record, $tagid, $subfieldid );
+    my $originalid = GetRecordId($record, $tagid, $subfieldid);
+    my $matched_record_id = undef;
     if ($match) {
         require C4::Search;
-        my $query = build_query( $match, $record );
-        my $server = ( $authorities ? 'authorityserver' : 'biblioserver' );
-        my ( $error, $results, $totalhits ) = $searcher->simple_search_compat( $query, 0, 3, [$server] );
+        my $server = ($authorities ? 'authorityserver' : 'biblioserver');
+        my $query = build_query($match, $record);
+        $logger->debug("Bulkmarcimport: $query");
+        my ($error, $results, $totalhits) = $searcher->simple_search_compat($query, 0, 3, [$server]);
         # changed to warn so able to continue with one broken record
-        if ( defined $error ) {
+        if (defined $error) {
             warn "unable to search the database for duplicates : $error";
-            printlog( { id => $id || $originalid || $match, op => "match", status => "ERROR" } ) if ($logfile);
+            printlog({ id => $originalid , op => "match", status => "ERROR" }) if ($logfile);
             next RECORD;
         }
-        if ( $results && scalar(@$results) == 1 ) {
-            my $marcrecord = C4::Search::new_record_from_zebra( $server, $results->[0] );
-            SetUTF8Flag($marcrecord);
-            $id = GetRecordId( $marcrecord, $tagid, $subfieldid );
-            if ( $authorities && $marcFlavour ) {
-                #Skip if authority in database is the same as the on in database
-                if ( $marcrecord->field('005') && $record->field('005') &&
-                     $marcrecord->field('005')->data && $record->field('005')->data &&
-                     $marcrecord->field('005')->data >= $record->field('005')->data ) {
-                    if ($yamlfile) {
-                        $yamlhash->{$originalid}->{'authid'} = $id;
+        $logger->debug("Bulkmarcimport: $query $server : $totalhits");
+        # sub SimpleSearch could return undefined, but only on error, so
+        # should not really need to safeguard here, but do so anyway
+        $results //= [];
+        if (@{$results} == 1) {
+            my $matched_record = C4::Search::new_record_from_zebra($server, $results->[0]);
+            SetUTF8Flag($matched_record);
+            $matched_record_id = GetRecordId($matched_record, $tagid, $subfieldid);
 
-                        # we recover all subfields of the heading authorities
-                        my @subfields;
-                        foreach my $field ( $marcrecord->field("2..") ) {
-                            push @subfields, map { ( $_->[0] =~ /[a-z]/ ? $_->[1] : () ) } $field->subfields();
-                        }
-                        $yamlhash->{$originalid}->{'subfields'} = \@subfields;
-                        $yamlhash->{$originalid}->{'updated'} = 0;
+            if ($authorities && $marc_flavour) {
+                #Skip if authority in database is the same or newer than the incoming record
+                if (RecordRevisionIsGtOrEq($matched_record, $record)) {
+                    if ($yamlfile) {
+                        $yamlhash->{$originalid} = YAMLFileEntry(
+                            $matched_record,
+                            $matched_record_id,
+                            0
+                        );
                     }
                     next;
                 }
             }
-        } elsif ( $results && scalar(@$results) > 1 ) {
-            $logger->debug("more than one match for $query");
-        } else {
-            $logger->debug("nomatch for $query");
         }
-    }
-    if ($keepids && $originalid) {
+        elsif(@{$results} > 1) {
+            $logger->debug("More than one match for: $query");
+        }
+        else {
+            $logger->debug("No match for: $query");
+        }
+
+        if ($keepids && $originalid) {
             my $storeidfield;
-            if ( length($keepids) == 3 ) {
-                $storeidfield = MARC::Field->new( $keepids, $originalid );
+            if (length($keepids) == 3) {
+                $storeidfield = MARC::Field->new($keepids, $originalid);
             } else {
-                $storeidfield = MARC::Field->new( substr( $keepids, 0, 3 ), "", "", substr( $keepids, 3, 1 ), $originalid );
+                $storeidfield = MARC::Field->new(substr($keepids, 0, 3), "", "", substr($keepids, 3, 1), $originalid);
             }
             $record->insert_fields_ordered($storeidfield);
-            $record->delete_field( $record->field($tagid) );
+            $record->delete_field($record->field($tagid));
+        }
     }
+
     foreach my $stringfilter (@$filters) {
-        if ( length($stringfilter) == 3 ) {
-            foreach my $field ( $record->field($stringfilter) ) {
+        if (length($stringfilter) == 3) {
+            foreach my $field ($record->field($stringfilter)) {
                 $record->delete_field($field);
-                $logger->debug("removed : ", $field->as_string);
+                $logger->debug("Removed: ", $field->as_string);
             }
         } elsif ($stringfilter =~ /([0-9]{3})([a-z0-9])(.*)/) {
             my $removetag = $1;
             my $removesubfield = $2;
             my $removematch = $3;
-            if ( ( $removetag > "010" ) && $removesubfield ) {
-                foreach my $field ( $record->field($removetag) ) {
-                    $field->delete_subfield( code => "$removesubfield", match => $removematch );
-                    $logger->debug("Potentially removed : ", $field->subfield($removesubfield));
+            if (($removetag > "010") && $removesubfield) {
+                foreach my $field ($record->field($removetag)) {
+                    $field->delete_subfield(code => "$removesubfield", match => $removematch);
+                    $logger->debug("Potentially removed: ", $field->subfield($removesubfield));
                 }
             }
         }
     }
     unless ($test_parameter) {
-        if ($authorities){
-            my $authtypecode=GuessAuthTypeCode($record, $heading_fields);
-            my $authid= ($id?$id:GuessAuthId($record));
-            if ($authid && GetAuthority($authid) && $update ){
+        if ($authorities) {
+            my $authtypecode = GuessAuthTypeCode($record, $heading_fields);
+            my $authid = ($matched_record_id? $matched_record_id : GuessAuthId($record));
+            if ($authid && GetAuthority($authid) && $update) {
             ## Authority has an id and is in database : Replace
-                eval { ( $authid ) = ModAuthority($authid,$record, $authtypecode) };
-                if ($@){
+                eval { ( $authid ) = ModAuthority($authid, $record, $authtypecode) };
+                if ($@) {
                     warn "Problem with authority $authid Cannot Modify";
-					printlog({id=>$originalid||$id||$authid, op=>"edit",status=>"ERROR"}) if ($logfile);
+                    printlog({ id => $authid, op => "edit", status => "ERROR" }) if ($logfile);
                 }
-				else{
-					printlog({id=>$originalid||$id||$authid, op=>"edit",status=>"ok"}) if ($logfile);
-				}
-            }  
-	        else {
-            ## True insert in database
-                eval { ( $authid ) = AddAuthority($record,"", $authtypecode) };
-                if ($@){
-                    warn "Problem with authority $authid Cannot Add".$@;
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
+                else{
+                    printlog({ id=> $authid, op=> "edit", status => "ok"}) if ($logfile);
                 }
-   				else{
-					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ok"}) if ($logfile);
-				}
- 	        }
-            if ($yamlfile) {
-            $yamlhash->{$originalid}->{'authid'} = $authid;
-            my @subfields;
-            foreach my $field ( $record->field("2..") ) {
-                push @subfields, map { ( $_->[0] =~ /[a-z]/ ? $_->[1] : () ) } $field->subfields();
             }
-            $yamlhash->{$originalid}->{'subfields'} = \@subfields;
-            $yamlhash->{$originalid}->{'updated'} = 1;
+            else {
+            ## True insert in database
+                eval { ( $authid ) = AddAuthority($record, "", $authtypecode) };
+                if ($@) {
+                    warn "Problem with authority $originalid Cannot Add ".$@;
+                    printlog({ id => $originalid, op => "insert", status => "ERROR" }) if ($logfile);
+                }
+                else {
+                    printlog({ id => $authid, op => "insert", status => "ok" }) if ($logfile);
+                }
+
+            }
+            if ($yamlfile) {
+                $yamlhash->{$originalid} = YAMLFileEntry(
+                    $record,
+                    $authid,
+                    1 #@FIXME: Really always updated?
+                );
             }
         }
         else {
-            my ( $biblionumber, $biblioitemnumber, $itemnumbers_ref, $errors_ref );
-            $biblionumber = $id;
+            my ($biblioitemnumber, $itemnumbers_ref, $errors_ref, $record_id);
             # check for duplicate, based on ISBN (skip it if we already have found a duplicate with match parameter
-            if (!$biblionumber && $isbn_check && $isbn) {
-    #         warn "search ISBN : $isbn";
+            if (!$matched_record_id && $isbn_check && $isbn) {
                 $sth_isbn->execute($isbn);
-                ($biblionumber,$biblioitemnumber) = $sth_isbn->fetchrow;
+                ($matched_record_id, $biblioitemnumber) = $sth_isbn->fetchrow;
             }
-        	if (defined $idmapfl) {
-			 	if ($sourcetag < "010"){
-					if ($record->field($sourcetag)){
-					  my $source = $record->field($sourcetag)->data();
-                      printf($idmapfh "%s|%s\n",$source,$biblionumber);
-					}
-			    } else {
-					my $source=$record->subfield($sourcetag,$sourcesubfield);
-                    printf($idmapfh "%s|%s\n",$source,$biblionumber);
-			  }
-			}
-					# create biblio, unless we already have it ( either match or isbn )
-            if ($biblionumber) {
+
+            if (defined $idmapfl && $matched_record_id) {
+                if ($sourcetag < "010") {
+                    if ($record->field($sourcetag)) {
+                        my $source = $record->field($sourcetag)->data();
+                        printf($idmapfh "%s|%s\n", $source, $matched_record_id);
+                    }
+                }
+                else {
+                    my $source = $record->subfield($sourcetag, $sourcesubfield);
+                    printf($idmapfh "%s|%s\n", $source, $matched_record_id);
+                }
+            }
+
+            # create biblio, unless we already have it ( either match or isbn )
+            if ($matched_record_id) {
+                # TODO: Implement also for authority records!
                 eval{
-                    $biblioitemnumber = Koha::Biblios->find( $biblionumber )->biblioitem->biblioitemnumber;
+                    $biblioitemnumber = Koha::Biblios->find( $matched_record_id )->biblioitem->biblioitemnumber;
                 };
                 if ($update) {
-                    eval { ModBiblio( $record, $biblionumber, $framework, { overlay_context => { source => 'bulkmarcimport' } } ) };
+                    my $success;
+                    eval { $success = ModBiblio($record, $matched_record_id, GetFrameworkCode($matched_record_id), $modify_biblio_marc_options) };
                     if ($@) {
-                        warn "ERROR: Edit biblio $biblionumber failed: $@\n";
-                        printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);
+                        warn "ERROR: Edit biblio $matched_record_id failed: $@\n";
+                        printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
                         next RECORD;
-                    } else {
-                        printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ok" } ) if ($logfile);
                     }
-                } else {
-                    printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "warning : already in database" } ) if ($logfile);
+                    elsif (!$success) {
+                        warn "ERROR: Edit biblio $matched_record_id failed for unkown reason";
+                        printlog( { id => $matched_record_id, op => "update", status => "ERROR" } ) if ($logfile);
+                        next RECORD;
+                    }
+                    else {
+                        $record_id = $matched_record_id;
+                        printlog( { id => $record_id, op => "update", status => "ok" } ) if ($logfile);
+                    }
                 }
-            } else {
-                if ($insert) {
-                    eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $framework, { defer_marc_save => 1 } ) };
-                    if ($@) {
-                        warn "ERROR: Adding biblio $biblionumber failed: $@\n";
-                        printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ERROR" } ) if ($logfile);
-                        next RECORD;
-                    } else {
-                        printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ok" } ) if ($logfile);
-                    }
-                } else {
-                    warn "WARNING: Updating record ".($id||$originalid)." failed";
-                    printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "warning : not in database" } ) if ($logfile);
-                    next RECORD;
+                else {
+                    printlog( { id => $matched_record_id, op => "update", status => "warning : already in database and option -update not enabled, skipping..." } ) if ($logfile);
                 }
             }
-            eval { ( $itemnumbers_ref, $errors_ref ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
-            my $error_adding = $@;
-            # Work on a clone so that if there are real errors, we can maybe
-            # fix them up later.
-			my $clone_record = $record->clone();
-            C4::Biblio::_strip_item_fields($clone_record, '');
-            # This sets the marc fields if there was an error, and also calls
-            # defer_marc_save.
-            ModBiblioMarc( $clone_record, $biblionumber );
-            if ( $error_adding ) {
-                warn "ERROR: Adding items to bib $biblionumber failed: $error_adding";
-				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
-                # if we failed because of an exception, assume that 
-                # the MARC columns in biblioitems were not set.
+            elsif ($insert) {
+                eval { ($record_id, $biblioitemnumber) = AddBiblio($record, $framework, { defer_marc_save => 1 }) };
+                if ($@) {
+                    warn "ERROR: Adding biblio $record_id failed: $@\n";
+                    printlog( { id => $record_id, op => "insert", status => "ERROR" } ) if ($logfile);
+                    next RECORD;
+                }
+                else {
+                    printlog( { id => $record_id, op => "insert", status => "ok" } ) if ($logfile);
+                }
+            }
+            else {
+                warn "WARNING: Updating record ".($originalid)." failed";
+                printlog( { id => $originalid, op => "insert", status => "warning : not in database and option -insert not enabled, skipping..." } ) if ($logfile);
                 next RECORD;
             }
- 			else{
-				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ok"}) if ($logfile);
-			}
-            if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
-                # Find the record called 'barcode'
-                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField( 'items.barcode' );
-                # Now remove any items that didn't have a duplicate_barcode error,
-                # erase the barcodes on items that did, and re-add those items.
-                my %dupes;
-                foreach my $i (0 .. $#{$errors_ref}) {
-                    my $ref = $errors_ref->[$i];
-                    if ($ref && ($ref->{error_code} eq 'duplicate_barcode')) {
-                        $dupes{$ref->{item_sequence}} = 1;
-                        # Delete the error message because we're going to
-                        # retry this one.
-                        delete $errors_ref->[$i];
-                    }
-                }
-                my $seq = 0;
-                foreach my $field ($record->field($tag)) {
-                    $seq++;
-                    if ($dupes{$seq}) {
-                        # Here we remove the barcode
-                        $field->delete_subfield(code => $sub);
-                    } else {
-                        # otherwise we delete the field because we don't want
-                        # two of them
-                        $record->delete_fields($field);
-                    }
-                }
-                # Now re-add the record as before, adding errors to the prev list
-                my $more_errors;
-                eval { ( $itemnumbers_ref, $more_errors ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
-                if ( $@ ) {
-                    warn "ERROR: Adding items to bib $biblionumber failed: $@\n";
-                    printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
+            my $record_has_added_items = 0;
+            if ($record_id) {
+                $yamlhash->{$originalid} = $record_id if $yamlfile;
+                eval { ($itemnumbers_ref, $errors_ref) = AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, $framework); };
+                $record_has_added_items = @{$itemnumbers_ref};
+                my $error_adding = $@;
+                # Work on a clone so that if there are real errors, we can maybe
+                # fix them up later.
+                my $clone_record = $record->clone();
+                C4::Biblio::_strip_item_fields($clone_record, $framework);
+                # This sets the marc fields if there was an error, and also calls
+                # defer_marc_save.
+                ModBiblioMarc($clone_record, $record_id, $modify_biblio_marc_options);
+                if ($error_adding) {
+                    warn "ERROR: Adding items to bib $record_id failed: $error_adding";
+                    printlog({ id => $record_id, op => "insert items", status => "ERROR"}) if ($logfile);
                     # if we failed because of an exception, assume that
                     # the MARC columns in biblioitems were not set.
-                    ModBiblioMarc( $record, $biblionumber );
                     next RECORD;
-                } else {
-                    printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ok"}) if ($logfile);
                 }
-                push @$errors_ref, @{ $more_errors };
+                else {
+                    printlog({ id => $record_id, op => "insert items", status => "ok" }) if ($logfile);
+                }
+                if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
+                    # Find the record called 'barcode'
+                    my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode');
+                    # Now remove any items that didn't have a duplicate_barcode error,
+                    # erase the barcodes on items that did, and re-add those items.
+                    my %dupes;
+                    foreach my $i (0 .. $#{$errors_ref}) {
+                        my $ref = $errors_ref->[$i];
+                        if ($ref && ($ref->{error_code} eq 'duplicate_barcode')) {
+                            $dupes{$ref->{item_sequence}} = 1;
+                            # Delete the error message because we're going to
+                            # retry this one.
+                            delete $errors_ref->[$i];
+                        }
+                    }
+                    my $seq = 0;
+                    foreach my $field ($record->field($tag)) {
+                        $seq++;
+                        if ($dupes{$seq}) {
+                            # Here we remove the barcode
+                            $field->delete_subfield(code => $sub);
+                        }
+                        else {
+                            # otherwise we delete the field because we don't want
+                            # two of them
+                            $record->delete_fields($field);
+                        }
+                    }
+                    # Now re-add the record as before, adding errors to the prev list
+                    my $more_errors;
+                    eval { ($itemnumbers_ref, $more_errors) = AddItemBatchFromMarc($record, $record_id, $biblioitemnumber, ''); };
+                    $record_has_added_items ||= @{$itemnumbers_ref};
+                    if ($@) {
+                        warn "ERROR: Adding items to bib $record_id failed: $@\n";
+                        printlog({ id => $record_id, op => "insert items", status => "ERROR" }) if ($logfile);
+                        # if we failed because of an exception, assume that
+                        # the MARC columns in biblioitems were not set.
+
+                        # @FIXME: Why do we save here without stripping items? Besides,
+                        # save with stripped items has already been performed
+                        ModBiblioMarc($record, $record_id, $modify_biblio_marc_options);
+                        next RECORD;
+                    }
+                    else {
+                        printlog({ id => $record_id, op => "insert", status => "ok" }) if ($logfile);
+                    }
+                    push @$errors_ref, @{$more_errors};
+                }
+                if (@{$errors_ref}) {
+                    report_item_errors($record_id, $errors_ref);
+                }
+                C4::Biblio::_strip_item_fields($record, $framework);
+                if ($record_has_added_items || $matched_record_id) {
+                    # Replace with record from GetMarcBiblio with "$embeditems = 1"
+                    $record = GetMarcBiblio({biblionumber => $record_id, embed_items => 1});
+                }
+                push @search_engine_record_ids, $record_id;
+                push @search_engine_records, $record;
             }
-            if ($#{ $errors_ref } > -1) {
-                report_item_errors($biblionumber, $errors_ref);
-            }
-            $yamlhash->{$originalid} = $biblionumber if ($yamlfile);
         }
-        if ( 0 == $i % $commitnum ) {
+        if ($record_number % $commitnum == 0 || $record_number == $number || $record_number == $records_total) {
             $schema->txn_commit;
             $schema->txn_begin;
+            if ($indexer) {
+                $indexer->update_index(\@search_engine_record_ids, \@search_engine_records);
+                @search_engine_record_ids = ();
+                @search_engine_records = ();
+            }
         }
     }
-    print $record->as_formatted()."\n" if ($verbose//0)==2;
-    last if $i == $number;
+    print $record->as_formatted() . "\n" if ($verbose//0) == 2;
+    last if $record_number == $number;
 }
 $schema->txn_commit;
 
 if ($fk_off) {
-	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
+    $dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
 
 # Restore CataloguingLog and AuthoritiesLog
@@ -557,11 +648,11 @@ delete $ENV{OVERRIDE_SYSPREF_CataloguingLog};
 delete $ENV{OVERRIDE_SYSPREF_AuthoritiesLog};
 
 my $timeneeded = gettimeofday - $starttime;
-print "\n$i MARC records done in $timeneeded seconds\n";
-if ($logfile){
-  print $loghandle "file : $input_marc_file\n";
-  print $loghandle "$i MARC records done in $timeneeded seconds\n";
-  $loghandle->close;
+print "\n$record_number MARC records done in $timeneeded seconds\n";
+if ($logfile) {
+    print $loghandle "file : $input_marc_file\n";
+    print $loghandle "$record_number MARC records done in $timeneeded seconds\n";
+    $loghandle->close;
 }
 if ($yamlfile) {
     open my $yamlfileout, q{>}, "$yamlfile" or die "cannot open $yamlfile \n";
@@ -569,47 +660,74 @@ if ($yamlfile) {
 }
 exit 0;
 
-sub GetRecordId{
-	my $marcrecord=shift;
-	my $tag=shift;
-	my $subfield=shift;
-	my $id;
-	if ($tag lt "010"){
-		return $marcrecord->field($tag)->data() if $marcrecord->field($tag);
-	} 
-	elsif ($subfield){
-		if ($marcrecord->field($tag)){
-			return $marcrecord->subfield($tag,$subfield);
-		}
-	}
-	return $id;
+sub YAMLFileEntry {
+    my ($record, $record_id, $updated) = @_;
+
+    my $entry = {
+        authid => $record_id
+    };
+
+    # we recover all subfields of the heading authorities
+    my @subfields;
+    foreach my $field ($record->field("2..")) {
+        push @subfields, map { ( $_->[0] =~ /[a-z]/ ? $_->[1] : () ) } $field->subfields();
+    }
+    $entry->{'subfields'} = \@subfields;
+    $entry->{'updated'} = $updated;
+
+    return $entry;
 }
-sub build_query {
-	my $match = shift;
-	my $record=shift;
-        my @searchstrings;
-	foreach my $matchingpoint (@$match){
-	  my $string = build_simplequery($matchingpoint,$record);
-	  push @searchstrings,$string if (length($string)>0);
-        }
-    my $op = 'AND';
-    return join(" $op ",@searchstrings);
+
+sub RecordRevisionIsGtOrEq {
+    my ($record_a, $record_b) = @_;
+    return $record_a->field('005') && $record_b->field('005') &&
+    $record_a->field('005')->data && $record_b->field('005')->data &&
+    $record_a->field('005')->data >= $record_b->field('005')->data;
 }
-sub build_simplequery {
-	my $element=shift;
-	my $record=shift;
-    my @searchstrings;
-    my ($index,$recorddata)=split /,/,$element;
-    if ($recorddata=~/(\d{3})(.*)/) {
-        my ($tag,$subfields) =($1,$2);
-        foreach my $field ($record->field($tag)){
-		  if (length($field->as_string("$subfields"))>0){
-              push @searchstrings,"$index:\"".$field->as_string("$subfields")."\"";
-		  }
+
+sub GetRecordId {
+    my $marcrecord = shift;
+    my $tag = shift;
+    my $subfield = shift;
+    if ($tag lt "010") {
+        return $marcrecord->field($tag)->data() if $marcrecord->field($tag);
+    }
+    elsif ($subfield) {
+        if ($marcrecord->field($tag)) {
+            return $marcrecord->subfield($tag, $subfield);
         }
     }
+    return undef;
+}
+sub build_query {
+    my ($match, $record) = @_;
+    my @searchstrings;
+
+    foreach my $matchpoint (@$match) {
+        my $query = build_simplequery($matchpoint, $record);
+        push (@searchstrings, $query) if $query;
+    }
     my $op = 'AND';
-    return join(" $op ",@searchstrings);
+    return join(" $op ", @searchstrings);
+}
+sub build_simplequery {
+    my ($matchpoint, $record) = @_;
+
+    my @searchstrings;
+    my ($index, $record_data) = split (/,/, $matchpoint);
+    if ($record_data =~ /(\d{3})(.*)/) {
+        my ($tag, $subfields) = ($1, $2);
+        foreach my $field ($record->field($tag)) {
+            if (length($field->as_string("$subfields")) > 0) {
+                push (@searchstrings, "$index:\"" . $field->as_string("$subfields") . "\"");
+            }
+        }
+    }
+    else {
+        print "Invalid matchpoint format, invalid marc-field: $matchpoint\n";
+    }
+    my $op = 'AND';
+    return join(" $op ", @searchstrings);
 }
 sub report_item_errors {
     my $biblionumber = shift;
@@ -624,20 +742,20 @@ sub report_item_errors {
         print $msg, "\n";
     }
 }
-sub printlog{
-	my $logelements=shift;
-    print $loghandle join( ";", map { defined $_ ? $_ : "" } @$logelements{qw<id op status>} ), "\n";
+sub printlog {
+    my $logelements = shift;
+    print $loghandle join(";", map { defined $_ ? $_ : "" } @$logelements{qw<id op status>}), "\n";
 }
-sub get_heading_fields{
+sub get_heading_fields {
     my $headingfields;
-    if ($authtypes){
+    if ($authtypes) {
         $headingfields = YAML::XS::LoadFile($authtypes);
-        $headingfields={C4::Context->preference('marcflavour')=>$headingfields};
+        $headingfields = { C4::Context->preference('marcflavour') => $headingfields };
         $logger->debug(Encode::decode_utf8(YAML::XS::Dump($headingfields)));
     }
-    unless ($headingfields){
-        $headingfields=$dbh->selectall_hashref("SELECT auth_tag_to_report, authtypecode from auth_types",'auth_tag_to_report',{Slice=>{}});
-        $headingfields={C4::Context->preference('marcflavour')=>$headingfields};
+    unless ($headingfields) {
+        $headingfields = $dbh->selectall_hashref("SELECT auth_tag_to_report, authtypecode from auth_types",'auth_tag_to_report',{Slice=>{}});
+        $headingfields = { C4::Context->preference('marcflavour') => $headingfields };
     }
     return $headingfields;
 }

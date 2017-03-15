@@ -192,7 +192,7 @@ The C<$options> argument is a hashref with additional parameters:
 
 =item B<defer_marc_save>: used when ModBiblioMarc is handled by the caller
 
-=item B<skip_record_index>: used when the indexing schedulling will be handled by the caller
+=item B<skip_record_index>: used when the indexing scheduling will be handled by the caller
 
 =back
 
@@ -202,8 +202,8 @@ sub AddBiblio {
     my ( $record, $frameworkcode, $options ) = @_;
 
     $options //= {};
-    my $skip_record_index = $options->{skip_record_index} || 0;
-    my $defer_marc_save   = $options->{defer_marc_save}   || 0;
+    my $skip_record_index = $options->{'skip_record_index'} // 0;
+    my $defer_marc_save = $options->{defer_marc_save} // 0;
 
     if (!$record) {
         carp('AddBiblio called with undefined record');
@@ -351,6 +351,10 @@ us to not relink records when the authority linker is saving modifications.
 Unless C<skip_holds_queue> is passed, ModBiblio will trigger the BatchUpdateBiblioHoldsQueue
 task to rebuild the holds queue for the biblio if I<RealTimeHoldsQueue> is enabled.
 
+=item C<skip_record_index>
+
+Used when the indexing schedulling will be handled by the caller
+
 =back
 
 Returns 1 on success 0 on failure
@@ -361,7 +365,9 @@ sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode, $options ) = @_;
 
     $options //= {};
-    my $skip_record_index = $options->{skip_record_index} || 0;
+    my $mod_biblio_marc_options = {
+        skip_record_index => $options->{'skip_record_index'} // 0
+    };
 
     if (!$record) {
         carp 'No record passed to ModBiblio';
@@ -406,7 +412,6 @@ sub ModBiblio {
     # apply overlay rules
     if (   C4::Context->preference('MARCOverlayRules')
         && $biblionumber
-        && defined $options
         && exists $options->{overlay_context} )
     {
         $record = ApplyMarcOverlayRules(
@@ -434,7 +439,7 @@ sub ModBiblio {
     _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
 
     # update the MARC record (that now contains biblio and items) with the new record data
-    ModBiblioMarc( $record, $biblionumber, { skip_record_index => $skip_record_index } );
+    ModBiblioMarc( $record, $biblionumber, $mod_biblio_marc_options );
 
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
@@ -2786,24 +2791,34 @@ sub _koha_delete_biblio_metadata {
 
 =head2 ModBiblioMarc
 
-  ModBiblioMarc($newrec,$biblionumber);
+  ModBiblioMarc($newrec, $biblionumber, $options);
 
 Add MARC XML data for a biblio to koha
 
 Function exported, but should NOT be used, unless you really know what you're doing
+
+The C<$options> argument is a hashref with additional parameters:
+
+=over 4
+
+=item C<skip_record_index>: used when the indexing scheduling will be handled by the caller
+
+=back
 
 =cut
 
 sub ModBiblioMarc {
     # pass the MARC::Record to this function, and it will create the records in
     # the marcxml field
-    my ( $record, $biblionumber, $params ) = @_;
+    my ( $record, $biblionumber, $options ) = @_;
+    $options //= {};
+
     if ( !$record ) {
         carp 'ModBiblioMarc passed an undefined record';
         return;
     }
 
-    my $skip_record_index = $params->{skip_record_index} || 0;
+    my $skip_record_index = $options->{skip_record_index} // 0;
 
     # Clone record as it gets modified
     $record = $record->clone();
