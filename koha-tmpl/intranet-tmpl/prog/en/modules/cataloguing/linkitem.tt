@@ -11,7 +11,6 @@
 [% IF ( error ) %]
     <div class="dialog alert">
 	[% IF ( errornomodbiblio ) %]ERROR: Unable to modify the bibliographic record.[% END %]
-	[% IF ( errornohostbiblionumber ) %]ERROR: Unable to get the biblio number of host item.[% END %]
 	[% IF ( errornohostitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
     </div>
     <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">

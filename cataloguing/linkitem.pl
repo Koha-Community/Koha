@@ -56,43 +56,42 @@ if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC') {
 
 $template->param(biblionumber => $biblionumber);
 
-if ($barcode && $biblionumber) { 
-    
-    # We get the host itemnumber
-    my $hostitemnumber = GetItemnumberFromBarcode($barcode);
+if ( $barcode && $biblionumber ) {
 
-    if ($hostitemnumber) {
-	my $hostbiblionumber = GetBiblionumberFromItemnumber($hostitemnumber);
+    my $item = Koha::Items->find( { barcode => $barcode } );
 
-	if ($hostbiblionumber) {
-	        my $field = PrepHostMarcField($hostbiblionumber, $hostitemnumber,$marcflavour);
-		$biblio->append_fields($field);
+    if ($item) {
+        my $field = PrepHostMarcField( $item->biblio->biblionumber, $item->itemnumber, $marcflavour );
+        $biblio->append_fields($field);
 
-		my $modresult = ModBiblio($biblio, $biblionumber, ''); 
-		if ($modresult) { 
-			$template->param(success => 1);
-		} else {
-			$template->param(error => 1,
-					 errornomodbiblio => 1); 
-		}
-	} else {
-		$template->param(error => 1,
-	        	             errornohostbiblionumber => 1);
-	}
-    } else {
-	    $template->param(error => 1,
-			     errornohostitemnumber => 1);
-
+        my $modresult = ModBiblio( $biblio, $biblionumber, '' );
+        if ($modresult) {
+            $template->param( success => 1 );
+        }
+        else {
+            $template->param(
+                error            => 1,
+                errornomodbiblio => 1
+            );
+        }
     }
-    $template->param(
-			barcode => $barcode,  
-			hostitemnumber => $hostitemnumber,
-		    );
+    else {
+        $template->param(
+            error                 => 1,
+            errornohostitemnumber => 1,
+        );
+    }
 
-} else {
-    $template->param(missingparameter => 1);
-    if (!$barcode)      { $template->param(missingbarcode      => 1); }
-    if (!$biblionumber) { $template->param(missingbiblionumber => 1); }
+    $template->param(
+        barcode        => $barcode,
+        hostitemnumber => $item->itemnumber,
+    );
+
+}
+else {
+    $template->param( missingparameter => 1 );
+    if ( !$barcode )      { $template->param( missingbarcode      => 1 ); }
+    if ( !$biblionumber ) { $template->param( missingbiblionumber => 1 ); }
 }
 
 
