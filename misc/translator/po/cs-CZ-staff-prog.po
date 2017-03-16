@@ -5,18 +5,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-15 17:15-0300\n"
-"PO-Revision-Date: 2017-02-21 08:36+0000\n"
+"POT-Creation-Date: 2017-03-14 14:11-0300\n"
+"PO-Revision-Date: 2017-02-22 10:59+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
-"\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
+">\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487666214.000000\n"
+"X-POOTLE-MTIME: 1487761171.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1393,12 +1393,11 @@ msgid ""
 "the logs. %s Currency updated successfully. %s Currency added successfully. "
 "%s Currency deleted successfully. %s %s %s "
 msgstr ""
-"%s %s Při úpravě typu autority došlo k chybě. Je možné, že již existuje "
-"stejný typ autority. %s Při vkládání tohoto typu autority došlo k chybě. "
-"Tento typ autority již pravděpodobně existuje. %s Při odstraňování tohoto "
-"typu autority došlo k chybě. Zkontrolujte logovací záznamy. %s Typ autority "
-"byl úspěšně aktualizován. %s Typ autority byl úspěšně vložen. %s Typ "
-"autrority byl úspěšně odstraněn.%s %s %s "
+"%s %s Při úpravě tměny došlo k chybě. Je možné, že měna již existuje. %s Při "
+"vytváření měny došlo k chybě. Měna pravděpodobně již existuje. %s Při "
+"odstraňování měny došlo k chybě. Zkontrolujte logovací záznamy. %s Měna byla "
+"úspěšně aktualizována. %s Měna byla úspěšně vytvořena. %s Měna byla úspěšně "
+"odstraněna.%s %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -1962,7 +1961,7 @@ msgstr ""
 #. %23$s:  IF message.error 
 #. %24$s:  message.error
 #. %25$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:96
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:104
 #, c-format
 msgid ""
 "%s %s The biblionumber %s does not exist in the database. %s The authority "
@@ -2803,6 +2802,18 @@ msgstr ""
 #, c-format
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
 msgstr "%s %sPole %s Omezení podpolí%s %s %s %s "
+
+#. %1$s:  SWITCH m.code 
+#. %2$s:  CASE 'invalid_mimetype' 
+#. %3$s:  CASE 
+#. %4$s:  m.code 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#, c-format
+msgid ""
+"%s %sThe file used does not have a valid format. Only csv and txt are "
+"allowed. %s%s %s "
+msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -3946,7 +3957,7 @@ msgstr "%s Ne %s Ano %s Pouze záznamy %s Pouze jednotky %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "%s No action defined for the template. %s "
 msgstr "%s Nebyla definována žádná akce. %s "
@@ -4591,7 +4602,7 @@ msgstr "%s Neexistují nezpracované (přijaté) návrhy. %s "
 #. %7$s:  report.total_success 
 #. %8$s:  report.total_records 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:230
 #, c-format
 msgid ""
 "%s There are no record ids defined. %s %s %s All records have been deleted "
@@ -5504,7 +5515,7 @@ msgstr "%s záznam %s: %s"
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:94
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:209
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:217
 #, c-format
 msgid "%s record(s)"
 msgstr "%s záznam/y/ů"
@@ -7935,7 +7946,7 @@ msgstr "&rsaquo; Upozornit předplatitele na "
 msgid "&rsaquo; Attach an item to "
 msgstr "&rsaquo; Připojit jednotku k "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #, c-format
 msgid "&rsaquo; Audio alerts"
 msgstr "&rsaquo; Zvuková upozornění"
@@ -9781,8 +9792,8 @@ msgstr "- Prosím, vyberte jednotku k rezervaci"
 msgid "- Start date missing or invalid."
 msgstr "- Chybí datum zahájení nebo je neplatné"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:82
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:91
+#: intranet-tmpl/prog/en/modules/tools/export.tt:209
 #, c-format
 msgid "-- All --"
 msgstr "-- Vše --"
@@ -9808,7 +9819,7 @@ msgstr "-- Vyberte stav --"
 msgid "-- Choose format --"
 msgstr "-- Vyberte formát --"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
 #, c-format
 msgid "-- Choose one -- "
 msgstr "-- Vyberte -- "
@@ -10208,7 +10219,7 @@ msgstr "Přístup ke všem funkcím knihovníka"
 msgid "Accession date"
 msgstr "Datum vložení"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:124
 #, c-format
 msgid "Accession date (inclusive)"
 msgstr "Datum vložení (včetně)"
@@ -10906,7 +10917,7 @@ msgstr "Přidat více kopií podle této jednotky"
 msgid "Add multiple items"
 msgstr "Přidat více jednotek "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Add new alert"
 msgstr "Přidat upozornění"
@@ -11362,7 +11373,7 @@ msgstr "Adresa: "
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:28
@@ -12555,7 +12566,7 @@ msgstr ""
 "Opravdu chcete odstranit čtenáře %s %s? Tuto operaci nelze vrátit zpět."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Are you sure you want to delete the selected audio alerts?"
 msgstr "Opravdu chcete odstranit vybraná zvuková upozornění?"
 
@@ -13057,7 +13068,7 @@ msgid "Attribute: "
 msgstr "Atribut: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:80
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
 msgid "Audio alerts"
@@ -13098,7 +13109,7 @@ msgid "Auth value:"
 msgstr "Ověřená hodnota:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:237
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:206
 #, c-format
 msgid "Authid"
 msgstr "Identifikátor autority"
@@ -13268,7 +13279,7 @@ msgid "Authorities tables"
 msgstr "Autoritní tabulky"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:136
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:136
 #, c-format
 msgid "Authorities: "
 msgstr "Autority: "
@@ -13356,7 +13367,7 @@ msgstr "Typ autority"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:207
 #, c-format
 msgid "Authority type: "
 msgstr "Typ autority: "
@@ -14087,8 +14098,8 @@ msgstr "Výsledky zpracování dávky"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:90
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:97
 #, c-format
 msgid "Batch record deletion"
 msgstr "Dávkové mazání záznamů"
@@ -14262,7 +14273,7 @@ msgstr "Bibliografický záznam"
 msgid "Bibliographic record %s"
 msgstr "Bibliografický záznam %s"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:135
 #, c-format
 msgid "Bibliographic: "
 msgstr "Bibliografický: "
@@ -14284,7 +14295,7 @@ msgstr "Číslo bibliografické jednotky (interní)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:209
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:174
 #, c-format
 msgid "Biblionumber"
 msgstr "Číslo bibliografického záznamu (interní)"
@@ -14863,7 +14874,7 @@ msgstr "CSV - %s"
 msgid "CSV profile ID"
 msgstr "ID CSV profilu"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:167
+#: intranet-tmpl/prog/en/modules/tools/export.tt:176
 #, c-format
 msgid "CSV profile: "
 msgstr "CSV profil: "
@@ -15002,7 +15013,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Signatura (Z-A po 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:101
+#: intranet-tmpl/prog/en/modules/tools/export.tt:110
 #, c-format
 msgid "Call number range"
 msgstr "Rozsah signatur"
@@ -15215,7 +15226,7 @@ msgstr "Záznam není možné uložit, protože nebyla vyplněna následující 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:73
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:304
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:95
@@ -15298,8 +15309,8 @@ msgstr "Záznam není možné uložit, protože nebyla vyplněna následující 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:52
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:261
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:228
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:154
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:444
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:185
@@ -16087,7 +16098,7 @@ msgid "Change messaging preferences to default for this category?"
 msgstr ""
 "Vrátit nastavení posílání zpráv na výchozí hodnoty podle kategorie čtenáře?"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:83
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:90
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
 #, c-format
 msgid "Change order"
@@ -16353,7 +16364,7 @@ msgid "Check that your database is running."
 msgstr "Zkontrolujte, zda je databáze spuštěna."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Check the box next to the alert you want to delete."
 msgstr "Zaškrtněte políčko vedle upozornění, které chcete odstranit."
 
@@ -16654,7 +16665,7 @@ msgstr "Stav výpůjčky:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:710
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:68
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:170
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:178
 #, c-format
 msgid "Checkouts"
 msgstr "Půjčování"
@@ -16757,8 +16768,8 @@ msgstr "Vybrat pořadí tisku textových polí"
 msgid "Choose a field name"
 msgstr "Vyberte pole"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:251
-#: intranet-tmpl/prog/en/modules/tools/export.tt:277
+#: intranet-tmpl/prog/en/modules/tools/export.tt:260
+#: intranet-tmpl/prog/en/modules/tools/export.tt:286
 #, c-format
 msgid "Choose a file "
 msgstr "Vybrat soubor "
@@ -17335,8 +17346,8 @@ msgstr "Vymazat"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:203
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:231
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:190
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:165
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Clear all"
@@ -17405,7 +17416,7 @@ msgstr "Vymazat formulář"
 msgid "Clear selection on visible rows"
 msgstr "Odstranit označení zobrazených položek."
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
 #, c-format
 msgid "Clear used authorities"
 msgstr "Vyčistit použité autority"
@@ -18390,7 +18401,7 @@ msgstr "Obsah seznamu "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:148
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:63
 #, c-format
@@ -19892,6 +19903,16 @@ msgstr "Výchozí hodnota:"
 msgid "Default values"
 msgstr "Výchozí hodnoty"
 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#, fuzzy, c-format
+msgid "Default: ReplyToDefault system preference"
+msgstr "Společná nastavení systému"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#, fuzzy, c-format
+msgid "Default: ReturnpathDefault system preference"
+msgstr "Hledat v systémových nastaveních"
+
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
@@ -20459,7 +20480,7 @@ msgstr "Odstranit v centrální databázi"
 msgid "Delete selected"
 msgstr "Odstranit označené"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:129
 #, c-format
 msgid "Delete selected alerts"
 msgstr "Smazat vybraná upozornění"
@@ -20471,7 +20492,7 @@ msgid "Delete selected items"
 msgstr "Smazat vybrané položky"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:219
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:227
 msgid "Delete selected records"
 msgstr "Smazat vybrané záznamy"
 
@@ -21267,13 +21288,13 @@ msgid "Don't decrease loan length based on holds"
 msgstr "Nezkracovat délku výpůjčky v případě vytvořené rezervace"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:63
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, c-format
 msgid "Don't export fields:"
 msgstr "Neexportovat pole:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:150
 #, c-format
 msgid "Don't export items:"
 msgstr "Neexportovat jednotky:"
@@ -21356,12 +21377,12 @@ msgid "Download cart"
 msgstr "Stáhnout košík"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:292
+#: intranet-tmpl/prog/en/modules/tools/export.tt:301
 msgid "Download configuration"
 msgstr "Stáhnout nastavení"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:266
+#: intranet-tmpl/prog/en/modules/tools/export.tt:275
 msgid "Download database"
 msgstr "Stáhnout databázi"
 
@@ -21713,7 +21734,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:392
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:130
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:217
@@ -21815,7 +21836,7 @@ msgstr "Upravit akci %s"
 msgid "Edit actions"
 msgstr "Upravit akce"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Edit alert"
 msgstr "Upravit upozornění"
@@ -22238,7 +22259,7 @@ msgstr "Chybí konečné datum"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:337
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:122
+#: intranet-tmpl/prog/en/modules/tools/export.tt:131
 #, c-format
 msgid "End date:"
 msgstr "Konečné datum:"
@@ -22995,8 +23016,8 @@ msgstr "Exportovat jako CSV"
 msgid "Export as PDF"
 msgstr "Exportovat jako PDF"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:53
-#: intranet-tmpl/prog/en/modules/tools/export.tt:242
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
+#: intranet-tmpl/prog/en/modules/tools/export.tt:251
 #, c-format
 msgid "Export authority records"
 msgstr "Exportovat záznamy autorit"
@@ -23006,8 +23027,8 @@ msgstr "Exportovat záznamy autorit"
 msgid "Export bibliographic and holdings data"
 msgstr "Exportovat bibliografické a jednotkové záznamy"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:52
-#: intranet-tmpl/prog/en/modules/tools/export.tt:181
+#: intranet-tmpl/prog/en/modules/tools/export.tt:61
+#: intranet-tmpl/prog/en/modules/tools/export.tt:190
 #, c-format
 msgid "Export bibliographic records"
 msgstr "Exportovat bibliografické záznamy"
@@ -23027,7 +23048,7 @@ msgstr "Exportovat dávku průkazů"
 msgid "Export checkouts using format:"
 msgstr "Exportovat výpůjčky ve formátu:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:58
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
 #, c-format
 msgid "Export configuration"
 msgstr "Exportovat nastavení"
@@ -23038,7 +23059,7 @@ msgstr "Exportovat nastavení"
 msgid "Export data"
 msgstr "Exportovat data"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:55
+#: intranet-tmpl/prog/en/modules/tools/export.tt:64
 #, c-format
 msgid "Export database"
 msgstr "Exportovat databázi"
@@ -23475,21 +23496,23 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Pole zobrazená ve výstupu:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:213
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#, fuzzy, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
-"as a filter: it is compatible with other parameters."
+"as a filter: it is compatible with other parameters. (File types accepted: ."
+"csv and .txt)"
 msgstr ""
 "Soubor obsahující identifikátory autoritních záznamů, jeden identifikátor na "
 "řádek. Tento seznam funguje jako filtr, je možné jej tedy kombinovat i s "
 "dalšími parametry."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:134
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:143
+#, fuzzy, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
-"This list works as a filter: it is compatible with other parameters."
+"This list works as a filter: it is compatible with other parameters. (File "
+"types accepted: .csv and .txt)"
 msgstr ""
 "Soubor obsahující identifikátory bibliografických záznamů, jeden "
 "identifikátor na řádek. Tento seznam funguje jako filtr, je možné jej tedy "
@@ -23510,8 +23533,8 @@ msgstr "Soubor se nepodařilo odstranit."
 msgid "File could not be read."
 msgstr "Soubor nelze přečíst."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:159
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:238
 #, c-format
 msgid "File format: "
 msgstr "Formát souboru: "
@@ -23528,8 +23551,8 @@ msgstr "Soubor byl odstraněn."
 msgid "File name"
 msgstr "Název souboru"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -23542,15 +23565,15 @@ msgstr "Typ souboru"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:223
 #, c-format
 msgid "File:"
 msgstr "Soubor:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:88
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:152
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:33
 #, c-format
@@ -24221,12 +24244,12 @@ msgstr "Z libovolné knihovny"
 msgid "From any library:"
 msgstr "Z libovolné knihovny:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:190
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, c-format
 msgid "From authid: "
 msgstr "Od authid: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:71
+#: intranet-tmpl/prog/en/modules/tools/export.tt:80
 #, c-format
 msgid "From biblio number: "
 msgstr "Od čísla katalogizačního záznamu: "
@@ -24252,7 +24275,7 @@ msgstr "Z domovské knihovny"
 msgid "From home library:"
 msgstr "Z domovské knihovny:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
+#: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #, c-format
 msgid "From item call number: "
 msgstr "Od signatury: "
@@ -25251,7 +25274,7 @@ msgstr "Jednotky:"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:349
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:39
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:338
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:340
 #, c-format
@@ -25460,7 +25483,7 @@ msgstr "Každoročně opakovaná uzavírka"
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:10
@@ -25634,7 +25657,7 @@ msgstr "Každoročně opakovaná uzavírka"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:84
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:80
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:88
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -25863,7 +25886,7 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "ID"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
 #, c-format
 msgid "IM_notification.ogg"
 msgstr "IM_notification.ogg"
@@ -27701,7 +27724,7 @@ msgstr "Typ jednotky:"
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:122
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:107
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:80
+#: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, c-format
 msgid "Item type: "
 msgstr "Typ jednotky: "
@@ -27759,7 +27782,7 @@ msgstr "Přírůstkové číslo"
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:215
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:246
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #, c-format
 msgid "Items"
 msgstr "Jednotky"
@@ -28691,7 +28714,7 @@ msgstr ""
 "Koha &rsaquo; Administrace &rsaquo; %sKonfigurace sad OAI &rsaquo; Přidat "
 "novou sadu OAI%sKonfigurace sad OAI%s"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:2
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:3
 #, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Audio alerts"
 msgstr "Koha &rsaquo; Administrace &rsaquo; Zvuková upozornění"
@@ -31439,7 +31462,7 @@ msgstr "Knihovna:"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:139
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:143
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "Library: "
 msgstr "Knihovna: "
@@ -33652,22 +33675,22 @@ msgid "Move action up"
 msgstr "Posunout akci nahoru"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
 msgid "Move alert down"
 msgstr "Posunout upozornění níže"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:111
 msgid "Move alert to bottom"
 msgstr "Přesunout upozornění na konec"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:100
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:107
 msgid "Move alert to top"
 msgstr "Přesunout upozornění na začátek"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:96
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:103
 msgid "Move alert up"
 msgstr "Posunout upozornění výše"
 
@@ -34078,7 +34101,7 @@ msgstr "Nový účet "
 msgid "New action"
 msgstr "Nová akce"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:25
 #, c-format
 msgid "New alert"
 msgstr "Nové varování"
@@ -34120,7 +34143,7 @@ msgid "New batch patrons modification"
 msgstr "Nová dávka pro úpravu čtenářů"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "New batch record deletion"
 msgstr "Nová dávka záznamů pro smazání"
@@ -34702,6 +34725,12 @@ msgstr "Adresa není k dispozici."
 #, c-format
 msgid "No and try to override system preferences"
 msgstr "Ne, bez ohledu na nastavení systému"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
+#, fuzzy
+msgid "No authorities have been selected."
+msgstr "Nebyl zvolen žádný záznam."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
@@ -35566,14 +35595,14 @@ msgstr "Nelze prodloužit"
 msgid "Note"
 msgstr "Poznámka"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:63
+#: intranet-tmpl/prog/en/modules/tools/export.tt:72
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr ""
 "Poznámka: Ve výchozím nastavení jsou exportovány i informace o jednotkách."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:249
-#: intranet-tmpl/prog/en/modules/tools/export.tt:275
+#: intranet-tmpl/prog/en/modules/tools/export.tt:258
+#: intranet-tmpl/prog/en/modules/tools/export.tt:284
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
@@ -35647,6 +35676,7 @@ msgid "Note:"
 msgstr "Poznámka:"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:44
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:217
@@ -36706,15 +36736,15 @@ msgid "Optional module missing"
 msgstr "Chybějící volitelný modul"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:701
-#: intranet-tmpl/prog/en/modules/tools/export.tt:139
-#: intranet-tmpl/prog/en/modules/tools/export.tt:218
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:227
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
 msgstr "Možnosti"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:138
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #, c-format
 msgid "Or enter a list of record numbers"
 msgstr "Nebo vložte seznam čísel záznamů"
@@ -37056,12 +37086,12 @@ msgstr "Další..."
 msgid "Output"
 msgstr "Výstup"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
+#: intranet-tmpl/prog/en/modules/tools/export.tt:236
 #, c-format
 msgid "Output format"
 msgstr "Výstupní formát"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:164
 #, c-format
 msgid "Output format "
 msgstr "Výstupní formát "
@@ -38667,7 +38697,7 @@ msgstr "Plánování pro %s podle %s"
 msgid "Play media"
 msgstr "Přehrát média"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
 #, c-format
 msgid "Play sound"
 msgstr "Přehrát zvuk"
@@ -38837,6 +38867,11 @@ msgstr "Upravte jednu měnu a označte ji jako aktivní, prosím."
 #, c-format
 msgid "Please enable Javascript:"
 msgstr "Povolte použití Javascriptu:"
+
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#, c-format
+msgid "Please enable system preference 'AudioAlerts' to activate sounds."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -39205,7 +39240,7 @@ msgid "Please select only one %s to %s."
 msgstr "Vyberte prosím jen jeden %s do %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Please select or enter a sound."
 msgstr "Vyberte nebo vložte zvuk."
 
@@ -39391,7 +39426,7 @@ msgstr "Publikováno dne %s%s, Autor: "
 msgid "Pre-adolescent"
 msgstr "Děti 9-13 let"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
 #, c-format
 msgid "Precedence"
 msgstr "Pořadí"
@@ -40629,7 +40664,7 @@ msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "Záznam není v kódování UTF-8, pravděpodobně je poškozený"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
 #, c-format
 msgid "Record number list (one per line): "
 msgstr "Seznam čísel záznamů (jedno číslo na řádek): "
@@ -40656,7 +40691,7 @@ msgstr "Název"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #, c-format
 msgid "Record type"
 msgstr "Typ záznamu"
@@ -40869,12 +40904,12 @@ msgstr "Datum upomínky"
 msgid "Reminder: "
 msgstr "Upomínka: "
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:214
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
 #, c-format
 msgid "Reminder: this action will delete all selected authorities!"
 msgstr "Upozornění: tato akce odstraní všechny vybrané autoritní záznamy!"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:186
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:194
 #, c-format
 msgid ""
 "Reminder: this action will delete all selected bibliographic records, "
@@ -40964,7 +40999,7 @@ msgstr "Smazat aspekt [% facet.facet_title_value |html %]"
 msgid "Remove item from collection"
 msgstr "Odstranit jednotku ze souboru"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:145
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, c-format
 msgid "Remove non-local items:"
 msgstr "Odstranit nelokální jednotky:"
@@ -41257,8 +41292,8 @@ msgstr "Cena náhrady:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
-msgid "Reply-To (if different to Email): "
-msgstr "Odpovědět na (pokud je rozdílné od primárního e-mailu): "
+msgid "Reply-To: "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #, c-format
@@ -41518,8 +41553,8 @@ msgstr "Knihovna pro modulární načítání javaskriptu Require.js"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:37
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:43
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
@@ -41898,10 +41933,9 @@ msgid "Return to: "
 msgstr "Vrátit se na: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "Return-Path (if different to Email): "
-msgstr ""
-"E-mailová adresa pro odpověď (pokud se liší od hlavní e-mailové adresy): "
+#, fuzzy, c-format
+msgid "Return-Path: "
+msgstr "Vrátit se na: "
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -41985,7 +42019,7 @@ msgstr "Rocio Dressler"
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
-msgid "Rodrigo Santallan"
+msgid "Rodrigo Santellan"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
@@ -43370,7 +43404,7 @@ msgstr "Vyberte kategorii vypůjčovatele"
 msgid "Select a budget"
 msgstr "Vyberte rozpočet"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:45
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:46
 #, c-format
 msgid "Select a built-in sound: "
 msgstr "Vyberte připravený zvuk: "
@@ -43486,8 +43520,8 @@ msgstr "Vyberte čas"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:202
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:230
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:197
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Select all"
@@ -43600,8 +43634,8 @@ msgstr "Vyberte vlastníka"
 msgid "Select planning type:"
 msgstr "Vyberte typ plánování:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:68
-#: intranet-tmpl/prog/en/modules/tools/export.tt:188
+#: intranet-tmpl/prog/en/modules/tools/export.tt:77
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, c-format
 msgid "Select records to export "
 msgstr "Vyberte záznamy k exportu "
@@ -43677,12 +43711,12 @@ msgstr "Vyberte zobrazit nebo opak:"
 msgid "Select to import"
 msgstr "Vyberte záznamy k importu a objednání"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:159
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
 #, c-format
 msgid "Select without holds"
 msgstr "Záznamy bez rezervací"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
 #, c-format
 msgid "Select without items"
 msgstr "Záznamy bez jednotek"
@@ -43723,13 +43757,13 @@ msgstr ""
 "Vybráním této možnosti přepíšete stávajícího majitele fondu, pokud je "
 "stanoven"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:84
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:91
 #, c-format
 msgid "Selector"
 msgstr "Selektor"
 
 # nedáme spíš špouštěč? nebo něco takového?
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:34
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
 #, c-format
 msgid "Selector: "
 msgstr "Selektor: "
@@ -44780,12 +44814,12 @@ msgstr "Řazení"
 msgid "Sorting routine"
 msgstr "Řazení"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:92
 #, c-format
 msgid "Sound"
 msgstr "Zvuk"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:39
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
 #, c-format
 msgid "Sound: "
 msgstr "Zvuk: "
@@ -45112,7 +45146,7 @@ msgstr "Počáteční datum musí být dříve než koncové"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:336
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:145
-#: intranet-tmpl/prog/en/modules/tools/export.tt:118
+#: intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
 msgid "Start date:"
 msgstr "Počáteční datum:"
@@ -45733,7 +45767,7 @@ msgstr "Předmětová hesla:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:377
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:33
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
@@ -46114,7 +46148,7 @@ msgstr "Součet"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:490
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:207
 #, c-format
 msgid "Summary"
 msgstr "Souhrn"
@@ -48695,7 +48729,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:246
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:210
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:442
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
@@ -48866,12 +48900,12 @@ msgstr "Do souboru:"
 msgid "To a file: "
 msgstr "To a file: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:194
+#: intranet-tmpl/prog/en/modules/tools/export.tt:203
 #, c-format
 msgid "To authid: "
 msgstr "Do authid: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:75
+#: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, c-format
 msgid "To biblio number: "
 msgstr "K číslu bibliografického záznamu: "
@@ -48897,7 +48931,7 @@ msgstr ""
 "povolena, a parametr enable_plugins musí být nastaven v konfiguračním "
 "souboru Koha"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, c-format
 msgid "To item call number: "
 msgstr "K výtisku signatury: "
@@ -49147,7 +49181,7 @@ msgstr "Zásuvné moduly"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:85
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -49745,7 +49779,7 @@ msgid "URL: "
 msgstr "URL: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:134
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:128
 #, c-format
@@ -49868,8 +49902,8 @@ msgstr "Nedefinovaný"
 msgid "Undo import into catalog"
 msgstr "Odstranit importované záznamy z katalogu"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:268
+#: intranet-tmpl/prog/en/modules/tools/export.tt:294
 #, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "Bohužel, žádné zálohy nejsou k dispozici."
@@ -50362,15 +50396,15 @@ msgstr "Použít soubor s čárovým kódem"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:26
 #, c-format
 msgid "Use a file"
 msgstr "Použít soubor"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:130
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:139
+#: intranet-tmpl/prog/en/modules/tools/export.tt:218
 #, c-format
 msgid "Use a file "
 msgstr "Použít soubor "
@@ -50497,7 +50531,7 @@ msgstr "Viz"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:651
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:71
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:208
 #, c-format
 msgid "Used in"
 msgstr "Počet propojených záznamů"
@@ -52834,7 +52868,7 @@ msgstr ""
 "xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
@@ -53280,7 +53314,7 @@ msgstr "být přiřazený k podpoli MARC, "
 msgid "be mapped to the same tag,"
 msgstr "být přiřazeno ke stejnému poli,"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
 #, c-format
 msgid "beep.ogg"
 msgstr "beep.ogg"
@@ -53438,7 +53472,7 @@ msgstr "podle měsíce"
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "konsorciem Bridge Consortium of Carleton College a St. Olaf College."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
 #, c-format
 msgid "call.ogg"
 msgstr "call.ogg"
@@ -53560,12 +53594,12 @@ msgstr "při obdržení tohoto periodika vytvářet jednotku"
 msgid "create one or more authorized values"
 msgstr ", vytvořte jednu nebo více ověřených hodnot v této kategorii"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
 #, c-format
 msgid "critical.ogg"
 msgstr "critical.ogg"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:163
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
 #, c-format
 msgid "csv"
 msgstr "csv"
@@ -53681,12 +53715,12 @@ msgstr "detaily odběru (předplatného)"
 msgid "detected."
 msgstr "nenalezena."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
 #, c-format
 msgid "device_connect.ogg"
 msgstr "device_connect.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
 #, c-format
 msgid "device_disconnect.ogg"
 msgstr "device_disconnect.ogg"
@@ -53769,7 +53803,7 @@ msgstr "upravit jednotky"
 msgid "email"
 msgstr "e-mail"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
 #, c-format
 msgid "ending.ogg"
 msgstr "ending.ogg"
@@ -53803,7 +53837,7 @@ msgstr "je dostupná."
 msgid "expired"
 msgstr "prošlý"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
 #, c-format
 msgid "fail.ogg"
 msgstr "fail.ogg"
@@ -54022,7 +54056,7 @@ msgstr "na poplatcích/upomínkách. Pokud chcete, můžete zaznamenat platbu. "
 msgid "in library "
 msgstr "v knihovně "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
 #, c-format
 msgid "incoming_call.ogg"
 msgstr "incoming_call.ogg"
@@ -54285,8 +54319,8 @@ msgid "koha-conf.xml"
 msgstr "koha-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 msgid "koha.mrc"
 msgstr "koha.mrc"
 
@@ -54342,12 +54376,12 @@ msgstr "- sada bezplatných ikon jsou dostupné pod licencí "
 msgid "like"
 msgstr "jako"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
 #, c-format
 msgid "loading.ogg"
 msgstr "loading.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
 #, c-format
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
@@ -54372,8 +54406,8 @@ msgstr "m/"
 msgid "manage circulation rules"
 msgstr "Spravovat pravidla výpůjček"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:161
-#: intranet-tmpl/prog/en/modules/tools/export.tt:231
+#: intranet-tmpl/prog/en/modules/tools/export.tt:170
+#: intranet-tmpl/prog/en/modules/tools/export.tt:240
 #, c-format
 msgid "marc"
 msgstr "MARC"
@@ -54383,7 +54417,7 @@ msgstr "MARC"
 msgid "matches"
 msgstr "shoduje se s"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
 #, c-format
 msgid "maximize.ogg"
 msgstr "maximize.ogg"
@@ -54412,7 +54446,7 @@ msgstr ""
 "mfirstname%scard number%sfirstname%sbranchname%sdate%saccounttype%samount"
 "%stitle%sbarcode%s\"itype\" "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "minimize.ogg"
 msgstr "minimize.ogg"
@@ -54449,7 +54483,7 @@ msgstr "není známo"
 msgid "never"
 msgstr "nikdy"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
 #, c-format
 msgid "new_mail_notification.ogg"
 msgstr "new_mail_notification.ogg"
@@ -54554,7 +54588,7 @@ msgstr "jednou za"
 msgid "one or more records without items attached. %s "
 msgstr "připojen jeden nebo více záznamů bez jednotek. %s "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
 #, c-format
 msgid "opening.ogg"
 msgstr "opening.ogg"
@@ -54591,7 +54625,7 @@ msgstr "nebo vytvořit novou"
 msgid "or create:"
 msgstr "nebo vytvořit:"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
 #, c-format
 msgid "panic.ogg"
 msgstr "panic.ogg"
@@ -54647,7 +54681,7 @@ msgstr "plugin od Johna Resiga je dostupný pod licencí "
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "plugin od Jovana Popovice je dostupný pod licencí BSD a GPL v2 ."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
 #, c-format
 msgid "popup.ogg"
 msgstr "popup.ogg"
@@ -54807,12 +54841,12 @@ msgid "selection"
 msgstr "výběr"
 
 #. INPUT type=text name=selector
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
 msgid "selector"
 msgstr "selektor"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:159
+#: intranet-tmpl/prog/en/modules/tools/export.tt:231
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "oddělujte mezerou (např. 100a 200 606) "
@@ -54875,7 +54909,7 @@ msgid "software.coop, United Kingdom"
 msgstr "software.coop, Spojené Království"
 
 #. INPUT type=text name=sound
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
 msgid "sound"
 msgstr "zvuk"
 
@@ -55222,7 +55256,7 @@ msgstr "prosím nejprve vytvořte potřebný počet polí "
 msgid "view"
 msgstr "zobrazit"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:66
 #, c-format
 msgid "warning.ogg"
 msgstr "warning.ogg"
@@ -55293,8 +55327,8 @@ msgstr "hodnotou "
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "napsaný a udržovaný Jörnem Zaeffererem je dostupný pod licencí "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
-#: intranet-tmpl/prog/en/modules/tools/export.tt:232
+#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "xml"
 msgstr "xml"

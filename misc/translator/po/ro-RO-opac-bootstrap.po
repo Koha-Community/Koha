@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-15 20:10-0300\n"
-"PO-Revision-Date: 2011-06-21 08:54+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"POT-Creation-Date: 2017-03-14 17:18-0300\n"
+"PO-Revision-Date: 2017-03-14 20:40+0000\n"
+"Last-Translator: Sorin-Alexandru <sorin@curierul.ro>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);;\n"
-"X-Generator: Pootle 2.1.6\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1489524004.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -26,7 +27,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr ""
+msgstr "\" %s Restricție adăugată prin întârzierea procesului %s %s %s %s "
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:301
@@ -46,9 +47,9 @@ msgstr ""
 #. %9$s:  END 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1299
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s %s %s %s (prioritate %s) %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -60,9 +61,9 @@ msgstr "%s %s %s %s (%s) "
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s %s %s %s Fără titlu %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -74,9 +75,9 @@ msgstr "%s %s %s %s (%s) "
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:321
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
-msgstr "%s %s %s %s (%s)"
+msgstr "%s %s %s %s %s Fără titlu %s %s , %s %s"
 
 #. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
 #. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
@@ -94,12 +95,12 @@ msgstr "%s %s %s %s (%s)"
 #. %14$s:  ELSE 
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:402
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr ""
-"%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%sAceastă înregistrare nu are nici un "
-"element.%s "
+"%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%s Această înregistrare nu are nici un "
+"element. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -110,9 +111,10 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:669
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr ""
+"%s %s %s %s 1 articol este în comandă. %s %s articole sunt în comandă. %s %s "
 
 #. %1$s:  ELSIF ( itemloop.size ) 
 #. %2$s:  INCLUDE items_table items=itemloop tab="holdings" 
@@ -125,26 +127,29 @@ msgstr "%s %s %s %s (%s) "
 #. %9$s:  IF holds_count.defined || priority 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
+#, fuzzy, c-format
 msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
 msgstr ""
+"%s %s %s %s 1 articol este în comandă. %s %s articole sunt în comandă. %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:622
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s Item in transit from "
-msgstr "Articol în tranzit către <b> %s</b> "
+msgstr "%s %s %s %s Articol în tranzit de la"
 
 #. %1$s:  END 
 #. %2$s:  IF ( subscription_LOO.letter ) 
 #. %3$s:  IF ( loggedinusername ) 
 #. %4$s:  IF ( subscription_LOO.hasalert ) 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:135
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s You have subscribed to email notification on new issues "
-msgstr "Aboneaza-te la notificare prin e-mail cu privire la probleme noi "
+msgstr ""
+"%s %s %s %s V-ați abonat la notificările prin email pentru noi articole "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" -
@@ -165,6 +170,9 @@ msgid ""
 "%s %s %s %s is overdue %sYour copy of %s (barcode %s) is overdue %s %s is "
 "due %sYour copy of %s (barcode %s) is due back at the library today %s "
 msgstr ""
+"%s %s %s %s este în întârziere %s Exemplarul dumneavoastră cu codul de bare "
+"%s (barcode %s) a depășit termenul %s %s scadent %sExemplarul deținut de "
+"dumneavoastră %s (barcode %s) trebuie remis bibliotecii astăzi %s "
 
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
@@ -172,16 +180,16 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:606
 #, c-format
 msgid "%s %s %s Item waiting at "
-msgstr ""
+msgstr "%s %s %s Articol așteptat la"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s "
-msgstr "Koha Catalog online "
+msgstr "%s %s %s Catalog online %s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -191,9 +199,9 @@ msgstr "Koha Catalog online "
 #. %6$s:  RestrictedPageTitle 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-restrictedpage.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
-msgstr "Catalogul %s &rsaquo; Comentarii la %s "
+msgstr "%s %s %s Catalogul online %s catalog %s &rsaquo; %s %s "
 
 #. %1$s:  IF (otheritemloop.size) 
 #. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
@@ -203,16 +211,17 @@ msgstr "Catalogul %s &rsaquo; Comentarii la %s "
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
 #, fuzzy, c-format
 msgid "%s %s %s No other items. %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s %s Nu există alte elemente. %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
 #. %3$s:  IF ( WINDOW_CLOSE ) 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s Note: this window will close automatically in 5 seconds. %s "
-msgstr "Notă: această fereastră se va închide automat în 5 secunde "
+msgstr ""
+"%s %s %s Notă: această fereastră se va închide automat în 5 secunde. %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -224,9 +233,9 @@ msgstr "Notă: această fereastră se va închide automat în 5 secunde "
 #. %8$s:  subtitl.subfield |html 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s%s%sNo title%s %s %s%s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s %s%s%sFără titlu%s %s %s%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term |html 
@@ -234,7 +243,7 @@ msgstr "%s %s %s %s (%s) "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #, c-format
 msgid "%s %s (not approved) %s "
-msgstr ""
+msgstr "%s %s (nu sunt aprobate) %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -243,7 +252,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:102
 #, c-format
 msgid "%s %s End date: "
-msgstr ""
+msgstr "%s %s Dată de final: "
 
 #. %1$s:  END 
 #. %2$s:  UNLESS mandatory.defined('password') 
@@ -254,6 +263,8 @@ msgid ""
 "%s %s If you do not enter a password a system generated password will be "
 "created. %s "
 msgstr ""
+"%s %s Dacă nu introduceți dumneavoastră o parolă, sistemul va genera el una. "
+"%s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -266,9 +277,9 @@ msgstr "Articol în tranzit către <b> %s</b> "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s No results found. %s "
-msgstr "Fără rezultate găsite. "
+msgstr "%s %s Nu au fost găsite rezultate. %s "
 
 #. %1$s: - SWITCH index -
 #. %2$s: - CASE 'su-na' -
@@ -276,11 +287,13 @@ msgstr "Fără rezultate găsite. "
 #. %4$s: - CASE 'su-rl' -
 #. %5$s: - END -
 #: opac-tmpl/bootstrap/en/modules/text/explodedterms.tt:1
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s Search also for narrower subjects %s Search also for broader subjects "
 "%s Search also for related subjects %s "
 msgstr ""
+"%s %s Restrânge tipul de căutare %s Extinde tipul de căutare %s Căutare "
+"subiecte conexe %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'too_many' 
@@ -299,17 +312,24 @@ msgid ""
 "been added. A suggestion with this title already exists. %s Your suggestion "
 "has been submitted. %s %s %s "
 msgstr ""
+"%s %s Propunerea nu a fost adăugată. Ați atins limita de propuneri pe care "
+"le puteți plasa în acest moment (%s). Imediat ce biblioteca va procesa "
+"aceste propuneri o să puteți plasa altele. %s Propunerea nu a fost adăugată. "
+"O propunere cu acest titlu deja există. %s Propunerea dumneavoastră a fost "
+"transmisă. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
-msgstr "Aboneaza-te la notificare prin e-mail cu privire la probleme noi "
+msgstr ""
+"%s %s Trebuie să fiți autentificat dacă doriți să vă abonați la notificări "
+"pe e-mail cu privire la noile probleme %s %s "
 
 #. %1$s:  USE AuthorisedValues 
 #. %2$s:  SET itemavailable = 1 
@@ -329,9 +349,9 @@ msgstr ""
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by "
-msgstr "%s, %s "
+msgstr "%s %s de "
 
 #. %1$s:  i.title | html 
 #. %2$s:  IF i.author 
@@ -340,7 +360,7 @@ msgstr "%s, %s "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:12
 #, fuzzy, c-format
 msgid "%s %s by %s %s "
-msgstr "%s %s %s %s(%s)"
+msgstr "%s %s de %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  IF ( review.borrowernumber && ShowReviewer != "none" ) 
@@ -362,24 +382,24 @@ msgstr "%s %s %s %s(%s)"
 #. %18$s:  END 
 #. %19$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
-msgstr "%s %s %s %s %s %s %s %s %s%s%s %s["
+msgstr "%s %s de %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:13
-#, c-format
+#, fuzzy, c-format
 msgid "%s %s sent you a cart from our online catalog."
-msgstr ""
+msgstr "%s %s trimite în coș din catalogul online."
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:11
-#, c-format
+#, fuzzy, c-format
 msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
-msgstr ""
+msgstr "%s %s trimite din catalogul online în raftul virtual numit : %s."
 
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
@@ -388,7 +408,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:108
 #, fuzzy, c-format
 msgid "%s %s tag%stags%s successfully added."
-msgstr "adăugat cu succes."
+msgstr "%s %s etichetă%etichete%s adăugat(e) cu succes."
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -404,12 +424,15 @@ msgstr "adăugat cu succes."
 #. %12$s:  END 
 #. %13$s:  END 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:35
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
 "%s(Broader heading) %s(Narrower heading) %s(Immediate parent body) %s "
 "%s(%s)%s %s "
 msgstr ""
+"%s %s(Poziția de început) %s(Poziția ulterioară) %s(Acronim) %s(Compoziție "
+"musicală) %s(Poziție mai amplă) %s(Poziție restrânsă) %s(Origine directă) %s "
+"%s(%s)%s %s "
 
 #. %1$s:  collectiontitle 
 #. %2$s:  IF ( collectionissn ) 
@@ -419,9 +442,9 @@ msgstr ""
 #. %6$s:  collectionvolume 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:239
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s, ISSN %s %s %s; %s %s "
-msgstr "%s %s %s %s (%s) "
+msgstr "%s %s, ISSN %s %s %s; %s %s "
 
 #. %1$s:  SWITCH option 
 #. %2$s:  CASE 'bibtex' 
@@ -440,6 +463,9 @@ msgid ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD %s "
 msgstr ""
+"%s %sBIBTEX %sFinalNotă %sMARCXML %sMARC (non-Unicode/MARC-8) %sMARC "
+"(Unicode/UTF-8) %sMARC (Unicode/UTF-8, Standard) %sMODS (XML) %sRIS %sISBD "
+"%s "
 
 #. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -471,7 +497,7 @@ msgstr ""
 #. %28$s:  ACCOUNT_LINE.title 
 #. %29$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:105
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
@@ -479,6 +505,12 @@ msgid ""
 "%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
 "%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
+"%s %sPlată, mulțumesc %sPlată, mulțumesc (cash via SIP2) %sPlată, mulțumesc "
+"(VISA via SIP2) %sPlată, mulțumesc (credit card via SIP2) %sCard nou "
+"%sPenalizare %sComision de administrare a contului %sVariat %sArticol "
+"pierdut %sAchită %sAcumulați penalizări %sTimp de așteptare prea mare %sTaxă "
+"de închiriere %sScutit %sTaxă restituire articol pierdut %sPlată %sAchită"
+"%sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF s.category == PRIVATE 
 #. %2$s:  IF s.is_shared 
@@ -580,11 +612,13 @@ msgstr ""
 #. %17$s:  GROUP_RESULT.intransitcount 
 #. %18$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:218
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s Lost (%s),%s %s Damaged "
 "(%s),%s %s On order (%s),%s %s In transit (%s),%s "
 msgstr ""
+"%s Verificat (%s), %s %s Retras (%s), %s %s Pierdut (%s),%s %s Deteriorat "
+"(%s),%s %s La comandă (%s),%s %s În tranzit (%s),%s "
 
 #. %1$s:  IF ( SEARCH_RESULT.onloancount ) 
 #. %2$s:  SEARCH_RESULT.onloancount 
@@ -610,11 +644,14 @@ msgstr ""
 #. %22$s:  SEARCH_RESULT.intransitcount 
 #. %23$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:406
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
 "(%s),%s %s On order (%s),%s %s On hold (%s),%s %s In transit (%s),%s "
 msgstr ""
+"%s Verificat (%s), %s %s Retras (%s), %s %s%s Pierdut (%s),%s%s %s "
+"Deteriorat (%s),%s %s La comandă (%s),%s %s În așteptare (%s),%s %s În "
+"tranzit (%s),%s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -623,23 +660,25 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
 #, fuzzy, c-format
 msgid "%s City:"
-msgstr "Oraş"
+msgstr "%s Oraș:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:699
 #, fuzzy, c-format
 msgid "%s Contact note:"
-msgstr "Conținuturi:"
+msgstr "%s Conținut:"
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:100
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Could not create new list. Please check if the name is unique. %s Sorry, "
 "you cannot add items to this list. %s "
 msgstr ""
+"%s Nu a fost ccreeată o nouă listă. Vă rugăm veificați ca numele să fie "
+"unic. %s Ne pare rău dar nu au fost adăugate elemente noi în listă. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -648,13 +687,13 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
 #, fuzzy, c-format
 msgid "%s Country:"
-msgstr "Ţară:"
+msgstr "%s Țară:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:284
 #, fuzzy, c-format
 msgid "%s Date of birth:"
-msgstr "Data nașterii:"
+msgstr "%s Data nașterii:"
 
 #. %1$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:98
@@ -692,44 +731,46 @@ msgstr "Pagină de început"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
 #, c-format
 msgid "%s Initials:"
-msgstr ""
+msgstr "%s Inițiale:"
 
 #. %1$s:  SEARCH_RESULT.num_critics 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:430
 #, c-format
 msgid "%s Internet user critics"
-msgstr ""
+msgstr "%s Critici ale utilizatorilor de pe internet"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:617
 #, fuzzy, c-format
 msgid "%s Item waiting to be pulled from "
-msgstr "Articol așteptat sa fie retras de la <b> %s</b> "
+msgstr "Articol care urmează să fie retras de la <b> %s</b> "
 
 #. %1$s:  issues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
-#, fuzzy, c-format
+#, c-format
 msgid "%s Item(s) checked out"
-msgstr "%s articole verificate"
+msgstr "%s Articol(e) verificat(e)"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "%s Library card number: "
-msgstr "Vă rugăm să introduceţi numărul dvs. de card:"
+msgstr "%s Numărul cardului de bibliotecă: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:115
-#, fuzzy, c-format
+#, c-format
 msgid "%s Log out"
-msgstr "Deconectați-vă"
+msgstr "%s Deconectare"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:178
-#, c-format
+#, fuzzy, c-format
 msgid "%s No article requests can be made for this record. %s "
 msgstr ""
+"%s Nicio cerere pentru acest articol nu poate fi făcută cu această "
+"înregistrare. %s "
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
@@ -761,42 +802,42 @@ msgstr "Fără rezultate găsite. "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not allowed"
-msgstr "Nu Poate Suprima"
+msgstr "%s Nu este permis"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable "
-msgstr "Fără actualizări rămase "
+msgstr "%s Nu se poate reînnoi "
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
-#, fuzzy, c-format
+#, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "Fără actualizări rămase"
+msgstr "%s Nu se poate reînnoi %s Nu este permis "
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:502
-#, fuzzy, c-format
+#, c-format
 msgid "%s On hold %s No renewals left %s "
-msgstr "Fără actualizări rămase "
+msgstr "%s În așteptare%s Nu mai aveți dreptul la reînnoiri %s "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:319
-#, fuzzy, c-format
+#, c-format
 msgid "%s Other names:"
-msgstr "Alt nume:"
+msgstr "%s Alt nume:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#, fuzzy, c-format
+#, c-format
 msgid "%s Other phone:"
-msgstr "Alt nume:"
+msgstr "%s Alt telefon:"
 
 #. %1$s:  IF ( PassMismatch ) 
 #. %2$s:  END 
@@ -813,12 +854,14 @@ msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s %s Your password contains leading and/or "
+"reset your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
-"Parola dvs. curentă a fost introdus incorect. Dacă această problemă "
-"persistă, vă rugăm să cereţi uni bibliotecar să vă re-seteze parola pentru "
-"dvs. "
+"%s Parola nu se potrivește. Reintroduceți confirmarea parolei dumneavoastră. "
+"%s %s Noua parolă trebuie să aibă cel puțin %s caractere. %s %s Parola a "
+"fost introdusă incorect. Dacă această problemă persistă solicitați unui "
+"bibliotecar resetarea parolei. %s %s Parola dumneavoastră conține spații sau/"
+"și caractere neacceptate. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -834,39 +877,39 @@ msgstr ""
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:838
-#, fuzzy, c-format
+#, c-format
 msgid "%s Phone:"
-msgstr "%s :"
+msgstr "%s Telefon:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:82
 #, c-format
 msgid "%s Please correct this and resubmit. "
-msgstr ""
+msgstr "%s Vă rugăm corectați și retrimiteți. "
 
 #. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "%s Please see a member of the library staff. "
-msgstr "Vă rugăm să consultaţi un membru al personalului bibliotecii. "
+msgstr "%s Vă rugăm să consultați un membru al personalului bibliotecii. "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary email:"
-msgstr "Email de serviciu:"
+msgstr "%s Email principal:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s Primary phone:"
-msgstr "Primar;"
+msgstr "%s Telefon principal:"
 
 #. %1$s:  SEARCH_RESULT.num_critics_pro 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:433
 #, c-format
 msgid "%s Professional critics"
-msgstr ""
+msgstr "%s Critici profesionale"
 
 #. %1$s:  IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 
 #. %2$s:  ELSE 
@@ -875,29 +918,32 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Purchase suggestions %s %s Your purchase suggestions %s Purchase "
 "suggestions %s %s "
-msgstr "Catalog &rsaquo; Pagina principală a bibliotecii "
+msgstr ""
+"%s Sugestii pentru achiziționare %s %s Sugestiile dumneavoastră de "
+"achiziționare %s Sugestii pentru achiziționare %s %s "
 
 #. %1$s:  SEARCH_RESULT.num_quotations 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:439
+#, c-format
 #, fuzzy, c-format
 msgid "%s Quotations"
-msgstr "fără ilustrații"
+msgstr "Cotațiile"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:234
-#, fuzzy, c-format
+#, c-format
 msgid "%s Salutation:"
-msgstr "fără ilustrații"
+msgstr "%s Formă de salut:"
 
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
 #, c-format
 msgid "%s Search"
-msgstr "Căutare în %s"
+msgstr "%s Căutare"
 
 #. %1$s:  LibraryName |html 
 #. %2$s:  IF ( query_desc ) 
@@ -907,80 +953,80 @@ msgstr "Căutare în %s"
 #. %6$s:  limit_desc |html 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
-msgstr "&nbsp;cu limita(e):&nbsp;'%s'"
+msgstr "%s Caută %spentru '%s'%s%s&nbsp;cu limită(e):&nbsp;'%s'%s"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#, fuzzy, c-format
+#, c-format
 msgid "%s Secondary email:"
-msgstr "Email de serviciu:"
+msgstr "%s Email secundar:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#, fuzzy, c-format
+#, c-format
 msgid "%s Secondary phone:"
-msgstr "Email de serviciu:"
+msgstr "%s Telefon secundar:"
 
 #. %1$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid "%s Self checkout system"
-msgstr "Sistem de împrumuturi %s"
+msgstr "%s Sistem de autoîmprumut"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:629
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
-#, fuzzy, c-format
+#, c-format
 msgid "%s State:"
-msgstr "Data:"
+msgstr "%s Județ:"
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#, fuzzy, c-format
+#, c-format
 msgid "%s Street number:"
-msgstr "Număr de utilizatori:"
+msgstr "%s Număr stradă:"
 
 #. For the first occurrence,
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:256
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:726
-#, fuzzy, c-format
+#, c-format
 msgid "%s Surname:"
-msgstr "Prenume:"
+msgstr "%s Prenume:"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid "%s Tags to show from other users %s Tags to show %s: "
-msgstr "etichete de la alți utilizatori. "
+msgstr "%s Arată etichete de la alți clienți %s Arată eticete %s: "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF (errPassTooShort) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
-msgstr ""
+msgstr "%s Parola nu se potrivește. %s Parola este prea scurtă. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
 #. %3$s:  FOREACH role IN content 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr "Definiţi categoriile şi valorile autorizate pentru acestea. "
+msgstr "%s Acest ppn nu este găsit în serviciul idref.. %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:234
-#, fuzzy, c-format
+#, c-format
 msgid "%s This record has no items. %s "
-msgstr "Această înregistrare nu are articole. "
+msgstr "%s Această înregistrare nu are articole. %s "
 
 #. %1$s:  IF holds_count.defined 
 #. %2$s:  holds_count 
@@ -1404,7 +1450,7 @@ msgstr "Koha Catalog online "
 #. %17$s:  ELSE 
 #. %18$s:  END 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:3
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s ILS-DI &rsaquo; GetAvailability %s "
 "ILS-DI &rsaquo; GetRecords %s ILS-DI &rsaquo; GetAuthorityRecords %s ILS-DI "
@@ -1413,6 +1459,13 @@ msgid ""
 "GetServices %s ILS-DI &rsaquo; RenewLoan %s ILS-DI &rsaquo; HoldTitle %s ILS-"
 "DI &rsaquo; HoldItem %s ILS-DI &rsaquo; CancelHold %s ILS-DI %s"
 msgstr ""
+"%s%s%sCatalog online%s catalog &rsaquo; %s ILS-DI &rsaquo; Disponibilitate "
+"%s ILS-DI &rsaquo; GetRecords %s ILS-DI &rsaquo; GetAuthorityRecords %s ILS-"
+"DI &rsaquo; LookupPatron %s ILS-DI &rsaquo; ClientAutentificat %s ILS-DI "
+"&rsaquo; ObțineInfoClient %s ILS-DI &rsaquo; ObțineStatusClient %s ILS-DI "
+"&rsaquo; GetServices %s ILS-DI &rsaquo; PrelungireÎmprumut %s ILS-DI "
+"&rsaquo; HoldTitle %s ILS-DI &rsaquo; RețineArticol %s ILS-DI &rsaquo; "
+"AnulareReținere %s ILS-DI %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1422,11 +1475,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Log in to your account %s Catalog "
 "login disabled %s"
-msgstr "Catalog &rsaquo; Cont pentru %s %s "
+msgstr ""
+"%s%s%sCatalog online%s catalog &rsaquo; %s Conectare în contul tău %s "
+"Conectare catalog anulată %s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -1450,6 +1505,9 @@ msgid ""
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
+"%s%s%sCatalog online%s catalog &rsaquo; %s Rezultatul căutărilor %spentru "
+"'%s'%s%s&nbsp;cu limită(e):&nbsp;'%s'%s %s Nu ați specificat nici un "
+"criteriu de căutare. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1459,11 +1517,13 @@ msgstr ""
 #. %6$s:  ELSE 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sAuthority search result%sNo results "
 "found%s"
-msgstr "Catalog &rsaquo; Căutare avansată "
+msgstr ""
+"%s%s%sCatalog online%s catalog &rsaquo; %sAuthority search result%sNu a fost "
+"găsit un rezultat%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1474,9 +1534,11 @@ msgstr "Catalog &rsaquo; Căutare avansată "
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
-msgstr "Catalog &rsaquo; Cont pentru %s %s "
+msgstr ""
+"%s%s%sCatalog online%s catalog &rsaquo; %sConținutul %s%sListele "
+"dumneavoastră%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -7640,9 +7702,9 @@ msgstr "Brevet"
 
 #. %1$s:  review.datereviewed | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
-#, fuzzy, c-format
+#, c-format
 msgid "Patron comment on %s"
-msgstr "Comentarii"
+msgstr "Comentariu client pe %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:141
 #, fuzzy, c-format
@@ -8598,7 +8660,8 @@ msgstr "Întoarceţi-vă la rezumatul."
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:633
 #, c-format
 msgid "Returns a patron's status information from Koha."
-msgstr "Returnează informații referitoare la sadiul utilizatorului din Koha."
+msgstr ""
+"Returnează informații referitoare la stadiul utilizatorului din catalog."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:654
 #, c-format
@@ -8767,7 +8830,7 @@ msgstr "Caută "
 
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
-#. %3$s:  mylibraryfirst 
+#. %3$s:  Branches.GetName( mylibraryfirst ) 
 #. %4$s:  END 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:159
@@ -9067,7 +9130,7 @@ msgstr "Selectează o listă"
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:30
 #, c-format
 msgid "Share a list with another patron"
-msgstr ""
+msgstr "Partajează lista cu un alt utilizator"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
@@ -9241,6 +9304,9 @@ msgid ""
 "Sorry, but we could not accept this key. The invitation may have expired. "
 "Contact the patron who sent you the invitation."
 msgstr ""
+"Ne pare rău dar  această cheie nu este acceptată. Este posibil ca invitația "
+"de participare să fi expirat. Contactați utilizatorul care a trimis "
+"invitația."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:41
 #, c-format
@@ -9963,6 +10029,9 @@ msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
 "If you make your list private, you will not be able to make it public again."
 msgstr ""
+"Biblioteca a dezactivat posibilitatea ca utilizatorii să creeze noi liste "
+"publice. Dacă realizați o listă privată nu este posibil să convertiți în "
+"publică."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:33
 #, fuzzy, c-format
@@ -10200,10 +10269,9 @@ msgstr "<em>MESAJ 5:</ em> Acest articol nu este pentru împrumut. "
 
 #. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, fuzzy, c-format
+#, c-format
 msgid "This item is on hold for another patron. %s "
-msgstr ""
-"<em>MESAJ 8:</ em> Acest articol este rezervat pentru un alt utilizator. "
+msgstr "Acest articol este rezervat pentru un alt utilizator. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -10466,7 +10534,7 @@ msgid "URL(s)"
 msgstr "URL(s)"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:128
 #, fuzzy, c-format
@@ -11324,6 +11392,11 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
+"Împrumutul dumneavoastră a expirat din următorul/următoarele motiv(e): %s %s "
+"Contul dumneavoastră este expirat. Contactați biblioteca pentru informații "
+"suplimentare. %s Ați atins numărul maxim permis de reînnoirea a acestui "
+"articol . %s Este prea devreme ca acest articol să fie reînnoit. %s Acest "
+"articol este în așteptare pentru un alt utilizator. %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -12151,7 +12224,7 @@ msgstr ""
 #, c-format
 msgid "the ILS identifier for the patron for whom the request is placed"
 msgstr ""
-"identificatorul ILS pentru utilizatorul pentru care cererea este amplasată"
+"identificatorul ILS al utilizatorului pentru care cererea este amplasată"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
 #, c-format
@@ -12181,7 +12254,7 @@ msgid ""
 "LookupPatron or AuthenticatePatron"
 msgstr ""
 "utilizator unic identificat in ILS; acelaşi identificator returnat de "
-"LookupPatron sau AuthenticatePatron"
+"CăutareUtilizator sau AutentificăUtilizator"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
@@ -12269,12 +12342,11 @@ msgid "was not found in the database. Please try again."
 msgstr "nu a fost găsit în baza de date. Vă rugăm să încercaţi din nou."
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "whether or not to return extended patron attributes information in the "
 "response"
-msgstr ""
-"dacă sau să nu returneze informații de contact ale utilizatorilor în raspuns"
+msgstr "dacă se returnaează sau nu informații de contact ale utilizatorilor"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:512
 #, c-format

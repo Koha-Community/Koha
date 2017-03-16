@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2017-02-15 21:02-0300\n"
+"POT-Creation-Date: 2017-03-14 18:10-0300\n"
 "PO-Revision-Date: 2017-02-21 10:17+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-POOTLE-MTIME: 1487672232.000000\n"
@@ -1824,7 +1824,7 @@ msgstr ""
 #. %23$s:  IF message.error 
 #. %24$s:  message.error
 #. %25$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:96
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:104
 #, c-format
 msgid ""
 "%s %s The biblionumber %s does not exist in the database. %s The authority "
@@ -2626,6 +2626,18 @@ msgstr "%s %s Вказівки на підполя ознаки „%s“ %s %s %
 #, c-format
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
 msgstr "%s %s Вказівки на підполя ознаки „%s“ %s %s %s %s "
+
+#. %1$s:  SWITCH m.code 
+#. %2$s:  CASE 'invalid_mimetype' 
+#. %3$s:  CASE 
+#. %4$s:  m.code 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#, c-format
+msgid ""
+"%s %sThe file used does not have a valid format. Only csv and txt are "
+"allowed. %s%s %s "
+msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -3758,7 +3770,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, fuzzy, c-format
 msgid "%s No action defined for the template. %s "
 msgstr "Не визначається ще"
@@ -4386,7 +4398,7 @@ msgstr "%s Немає незавершених (схвалених) пропоз
 #. %7$s:  report.total_success 
 #. %8$s:  report.total_records 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:230
 #, c-format
 msgid ""
 "%s There are no record ids defined. %s %s %s All records have been deleted "
@@ -5305,7 +5317,7 @@ msgstr "%s записі(ах) "
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:94
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:209
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:217
 #, c-format
 msgid "%s record(s)"
 msgstr "%s записі(ах) "
@@ -5915,7 +5927,8 @@ msgstr "%s&nbsp;%s загалом (%s показано / %s приховано) 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:97
 #, c-format
 msgid "%s&rsaquo; Modify %s server %s%s %s&rsaquo; New %s server%s "
-msgstr "%s&rsaquo; Редагування %s-сервера „%s“%s %s&rsaquo; Новий %s-сервер %s "
+msgstr ""
+"%s&rsaquo; Редагування %s-сервера „%s“%s %s&rsaquo; Новий %s-сервер %s "
 
 #. %1$s:  IF ( saved1 ) 
 #. %2$s:  ELSIF ( create ) 
@@ -7737,7 +7750,7 @@ msgstr "Коха &rsaquo; Серіальні видання &rsaquo; Пильн�
 msgid "&rsaquo; Attach an item to "
 msgstr "Приєднати примірник до „%s“"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #, c-format
 msgid "&rsaquo; Audio alerts"
 msgstr "&rsaquo; Звукові попередження"
@@ -9613,8 +9626,8 @@ msgstr "= випустіть елемент відвідувач"
 msgid "- Start date missing or invalid."
 msgstr "— дата початку відсутня чи невірна."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:82
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:91
+#: intranet-tmpl/prog/en/modules/tools/export.tt:209
 #, c-format
 msgid "-- All --"
 msgstr "-- Усі --"
@@ -9640,7 +9653,7 @@ msgstr "-- виберіть стан -- "
 msgid "-- Choose format --"
 msgstr "-- виберіть формат --"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
 #, fuzzy, c-format
 msgid "-- Choose one -- "
 msgstr "-- Виберіть причину --"
@@ -10045,7 +10058,7 @@ msgstr "Доступ до усіх бібліотечних функцій"
 msgid "Accession date"
 msgstr "Дата надходження: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:124
 #, fuzzy, c-format
 msgid "Accession date (inclusive)"
 msgstr "Дата надходження (включно): "
@@ -10740,7 +10753,7 @@ msgstr "Додати декілька примірників"
 msgid "Add multiple items"
 msgstr "Додати декілька примірників"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Add new alert"
 msgstr "Додати нове попередження"
@@ -11198,7 +11211,7 @@ msgstr "Адреса: "
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:28
@@ -12408,7 +12421,7 @@ msgstr ""
 "це."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Are you sure you want to delete the selected audio alerts?"
 msgstr "Ви впевнені, що хочете вилучити вибрані звукові попередження?"
 
@@ -12964,7 +12977,7 @@ msgid "Attribute: "
 msgstr "Атрибути відвідувача"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:80
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
 msgid "Audio alerts"
@@ -13005,7 +13018,7 @@ msgid "Auth value:"
 msgstr "Авторитетне джерело: "
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:237
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:206
 #, fuzzy, c-format
 msgid "Authid"
 msgstr "Авторитетне значення"
@@ -13175,7 +13188,7 @@ msgid "Authorities tables"
 msgstr "Таблиці модуля „Авторитетні джерела“"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:136
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:136
 #, fuzzy, c-format
 msgid "Authorities: "
 msgstr "Авторитетні джерела"
@@ -13266,7 +13279,7 @@ msgstr "Тип авторитетного джерела "
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:207
 #, c-format
 msgid "Authority type: "
 msgstr "Тип авторитетного джерела: "
@@ -14004,8 +14017,8 @@ msgstr "Результати пакетного вилучення примір�
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:90
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:97
 #, c-format
 msgid "Batch record deletion"
 msgstr "Пакетне вилучення записів"
@@ -14186,7 +14199,7 @@ msgstr "бібліографічного запису № %s"
 msgid "Bibliographic record %s"
 msgstr "бібліографічного запису № %s"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:135
 #, fuzzy, c-format
 msgid "Bibliographic: "
 msgstr "бібліографічні покажчики"
@@ -14208,7 +14221,7 @@ msgstr "Ранґ/НомериБіблОд"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:209
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:174
 #, fuzzy, c-format
 msgid "Biblionumber"
 msgstr "№ бібліогр. запису: "
@@ -14775,7 +14788,7 @@ msgstr "CSV — „%s“"
 msgid "CSV profile ID"
 msgstr "Профілі форматування CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:167
+#: intranet-tmpl/prog/en/modules/tools/export.tt:176
 #, fuzzy, c-format
 msgid "CSV profile: "
 msgstr "Профілі форматування CSV"
@@ -14914,7 +14927,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Шифр зберігання (від Я-А,Z-A до 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:101
+#: intranet-tmpl/prog/en/modules/tools/export.tt:110
 #, fuzzy, c-format
 msgid "Call number range"
 msgstr "Діапазон шифрів зберігання"
@@ -15110,7 +15123,7 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:73
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:304
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:95
@@ -15193,8 +15206,8 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:52
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:261
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:228
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:154
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:444
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:185
@@ -15672,8 +15685,8 @@ msgid ""
 "%s)%s "
 msgstr ""
 "Номер читацького квитка (cardnumber) „%s“ не є придатним номером читацького "
-"квитка %s (для відвідувача з номером користувача АБІС (borrowernumber) „%s“)%"
-"s "
+"квитка %s (для відвідувача з номером користувача АБІС (borrowernumber) "
+"„%s“)%s "
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:167
 #, c-format
@@ -15998,7 +16011,7 @@ msgstr ""
 "Типові налаштування щодо надсилання повідомлень для цієї категорії "
 "відвідувачів"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:83
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:90
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
 #, fuzzy, c-format
 msgid "Change order"
@@ -16265,7 +16278,7 @@ msgid "Check that your database is running."
 msgstr "Перевірте, що Ваша база даних працююча."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 #, fuzzy
 msgid "Check the box next to the alert you want to delete."
 msgstr ""
@@ -16571,7 +16584,7 @@ msgstr "Стан видачі: "
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:710
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:68
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:170
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:178
 #, c-format
 msgid "Checkouts"
 msgstr "Видачі"
@@ -16672,8 +16685,8 @@ msgstr "Визначення порядку текстових полів для
 msgid "Choose a field name"
 msgstr "Вибираємо файл *.koc: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:251
-#: intranet-tmpl/prog/en/modules/tools/export.tt:277
+#: intranet-tmpl/prog/en/modules/tools/export.tt:260
+#: intranet-tmpl/prog/en/modules/tools/export.tt:286
 #, fuzzy, c-format
 msgid "Choose a file "
 msgstr "Вибираємо файл *.koc: "
@@ -17256,8 +17269,8 @@ msgstr "Очистити"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:203
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:231
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:190
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:165
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Clear all"
@@ -17328,7 +17341,7 @@ msgstr "Введіть пошукові терміни"
 msgid "Clear selection on visible rows"
 msgstr "= випустіть елемент відвідувач"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
 #, fuzzy, c-format
 msgid "Clear used authorities"
 msgstr "Створити нове авторитетне джерело"
@@ -18315,7 +18328,7 @@ msgstr "Вміст списку: "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:148
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:63
 #, fuzzy, c-format
@@ -19823,6 +19836,16 @@ msgstr "Значення за умовчанням: "
 msgid "Default values"
 msgstr "Значення за умовчанням"
 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#, fuzzy, c-format
+msgid "Default: ReplyToDefault system preference"
+msgstr "Загальні параметри системи"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#, fuzzy, c-format
+msgid "Default: ReturnpathDefault system preference"
+msgstr "Пошук за системними параметрами"
+
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
@@ -20399,7 +20422,7 @@ msgstr "Вилучити список"
 msgid "Delete selected"
 msgstr "Вилучити позначене"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:129
 #, c-format
 msgid "Delete selected alerts"
 msgstr "Вилучити вибрані попередження"
@@ -20411,7 +20434,7 @@ msgid "Delete selected items"
 msgstr "Вилучити позначене"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:219
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:227
 #, fuzzy
 msgid "Delete selected records"
 msgstr "Вилучити позначене"
@@ -21212,13 +21235,13 @@ msgid "Don't decrease loan length based on holds"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:63
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, fuzzy, c-format
 msgid "Don't export fields:"
 msgstr "Не експортувати поля"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:150
 #, fuzzy, c-format
 msgid "Don't export items:"
 msgstr "Не експортувати примірники"
@@ -21302,13 +21325,13 @@ msgid "Download cart"
 msgstr "Звантаження возика"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:292
+#: intranet-tmpl/prog/en/modules/tools/export.tt:301
 #, fuzzy
 msgid "Download configuration"
 msgstr "Налаштування друкарки"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:266
+#: intranet-tmpl/prog/en/modules/tools/export.tt:275
 #, fuzzy
 msgid "Download database"
 msgstr "Звантаження возика"
@@ -21665,7 +21688,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:392
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:130
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:217
@@ -21768,7 +21791,7 @@ msgstr "Редагувати запис"
 msgid "Edit actions"
 msgstr "Редагувати запис"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Edit alert"
 msgstr "Редагувати попередження"
@@ -22197,7 +22220,7 @@ msgstr "відсутнє значення"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:337
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:122
+#: intranet-tmpl/prog/en/modules/tools/export.tt:131
 #, fuzzy, c-format
 msgid "End date:"
 msgstr "Кінцева дата: "
@@ -22964,8 +22987,8 @@ msgstr "Експортувати"
 msgid "Export as PDF"
 msgstr "Експортувати"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:53
-#: intranet-tmpl/prog/en/modules/tools/export.tt:242
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
+#: intranet-tmpl/prog/en/modules/tools/export.tt:251
 #, fuzzy, c-format
 msgid "Export authority records"
 msgstr "n — повний авторитетний запис"
@@ -22976,8 +22999,8 @@ msgid "Export bibliographic and holdings data"
 msgstr ""
 "Експортування бібліографічної інформації та даних про одиниці зберігання"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:52
-#: intranet-tmpl/prog/en/modules/tools/export.tt:181
+#: intranet-tmpl/prog/en/modules/tools/export.tt:61
+#: intranet-tmpl/prog/en/modules/tools/export.tt:190
 #, fuzzy, c-format
 msgid "Export bibliographic records"
 msgstr "Редагування бібліографічного запису"
@@ -22999,7 +23022,7 @@ msgstr "Експорт партії"
 msgid "Export checkouts using format:"
 msgstr "Видач загалом: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:58
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
 #, fuzzy, c-format
 msgid "Export configuration"
 msgstr "Налаштування друкарки"
@@ -23010,7 +23033,7 @@ msgstr "Налаштування друкарки"
 msgid "Export data"
 msgstr "Експорт даних"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:55
+#: intranet-tmpl/prog/en/modules/tools/export.tt:64
 #, fuzzy, c-format
 msgid "Export database"
 msgstr "Експорт даних"
@@ -23449,18 +23472,20 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Виберіть — відображати чи ні: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:213
+#: intranet-tmpl/prog/en/modules/tools/export.tt:222
 #, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
-"as a filter: it is compatible with other parameters."
+"as a filter: it is compatible with other parameters. (File types accepted: ."
+"csv and .txt)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:143
 #, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
-"This list works as a filter: it is compatible with other parameters."
+"This list works as a filter: it is compatible with other parameters. (File "
+"types accepted: .csv and .txt)"
 msgstr ""
 
 #. SCRIPT
@@ -23480,8 +23505,8 @@ msgstr "%s зображень переміщено до бази даних."
 msgid "File could not be read."
 msgstr "Рядок заголовку не вдалося проаналізувати"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:159
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:238
 #, c-format
 msgid "File format: "
 msgstr "Формат файлу: "
@@ -23499,8 +23524,8 @@ msgstr "Було надіслане повідомлення на електро
 msgid "File name"
 msgstr "Назва файлу"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -23513,15 +23538,15 @@ msgstr "Тип файлу"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:223
 #, c-format
 msgid "File:"
 msgstr "Файл: "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:88
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:152
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:33
 #, c-format
@@ -24195,12 +24220,12 @@ msgstr "з будь-якої бібліотеки"
 msgid "From any library:"
 msgstr "З будь-якої бібліотеки: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:190
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, fuzzy, c-format
 msgid "From authid: "
 msgstr "Формат"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:71
+#: intranet-tmpl/prog/en/modules/tools/export.tt:80
 #, c-format
 msgid "From biblio number: "
 msgstr "Від бібліотечного запису №: "
@@ -24226,7 +24251,7 @@ msgstr "з джерельної бібліотеки"
 msgid "From home library:"
 msgstr "З джерельної бібліотеки: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
+#: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #, fuzzy, c-format
 msgid "From item call number: "
 msgstr "Від шифру зберігання примірника: "
@@ -25228,7 +25253,7 @@ msgstr "Наявність у фондах: "
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:349
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:39
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:338
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:340
 #, c-format
@@ -25442,7 +25467,7 @@ msgstr "Ряд святкових днів повторюється щорічн
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:10
@@ -25616,7 +25641,7 @@ msgstr "Ряд святкових днів повторюється щорічн
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:84
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:80
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:88
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -25846,7 +25871,7 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "Ідентифікатор"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
 #, c-format
 msgid "IM_notification.ogg"
 msgstr "IM_notification.ogg"
@@ -27684,7 +27709,7 @@ msgstr "Тип одиниці: "
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:122
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:107
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:80
+#: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, c-format
 msgid "Item type: "
 msgstr "Тип одиниці: "
@@ -27742,7 +27767,7 @@ msgstr "Номер од.зб. "
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:215
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:246
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #, c-format
 msgid "Items"
 msgstr "Примірники"
@@ -28676,7 +28701,7 @@ msgstr ""
 "Коха &rsaquo; Адміністрування &rsaquo; Правила видачі &rsaquo; Дублювання "
 "правил видачі"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:2
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:3
 #, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Audio alerts"
 msgstr "Коха &rsaquo; Керування &rsaquo; Звукові попередження"
@@ -31460,7 +31485,7 @@ msgstr "Бібліотека: "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:139
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:143
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "Library: "
 msgstr "Бібліотека: "
@@ -33686,22 +33711,22 @@ msgid "Move action up"
 msgstr "кадри з природнім рухом; зображення реальності"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
 msgid "Move alert down"
 msgstr "Перемістити попередження нижче"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:111
 msgid "Move alert to bottom"
 msgstr "Перемістити попередження на самий низ"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:100
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:107
 msgid "Move alert to top"
 msgstr "Перемістити попередження на самий верх"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:96
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:103
 msgid "Move alert up"
 msgstr "Перемістити попередження вище"
 
@@ -34118,7 +34143,7 @@ msgstr "Облік"
 msgid "New action"
 msgstr "Новий відвідувач "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:25
 #, c-format
 msgid "New alert"
 msgstr "Нове попередження"
@@ -34161,7 +34186,7 @@ msgid "New batch patrons modification"
 msgstr "Пакетна зміна примірників"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, fuzzy, c-format
 msgid "New batch record deletion"
 msgstr "Пакетне вилучення примірників"
@@ -34744,6 +34769,12 @@ msgstr "Не вказана адреса."
 #, fuzzy, c-format
 msgid "No and try to override system preferences"
 msgstr "Загальні параметри системи"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
+#, fuzzy
+msgid "No authorities have been selected."
+msgstr "Не заготовлено жодного запису."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
@@ -35618,15 +35649,15 @@ msgstr "Загалом підлягає платежу"
 msgid "Note"
 msgstr "Нотатка"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:63
+#: intranet-tmpl/prog/en/modules/tools/export.tt:72
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr ""
 "Примітка: примірники будуть експортовані цим інструментом якщо не зазначено "
 "інше."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:249
-#: intranet-tmpl/prog/en/modules/tools/export.tt:275
+#: intranet-tmpl/prog/en/modules/tools/export.tt:258
+#: intranet-tmpl/prog/en/modules/tools/export.tt:284
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
@@ -35695,6 +35726,7 @@ msgid "Note:"
 msgstr "Примітка: "
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:44
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:217
@@ -36749,15 +36781,15 @@ msgid "Optional module missing"
 msgstr "Відсутній необов’язковий модуль"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:701
-#: intranet-tmpl/prog/en/modules/tools/export.tt:139
-#: intranet-tmpl/prog/en/modules/tools/export.tt:218
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:227
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
 msgstr "Параметри"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:138
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #, fuzzy, c-format
 msgid "Or enter a list of record numbers"
 msgstr "Введіть номер квитка відвідувача: "
@@ -37101,12 +37133,12 @@ msgstr "Інше…"
 msgid "Output"
 msgstr "Виведення"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
+#: intranet-tmpl/prog/en/modules/tools/export.tt:236
 #, fuzzy, c-format
 msgid "Output format"
 msgstr "Формат виводу "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:164
 #, c-format
 msgid "Output format "
 msgstr "Формат виводу "
@@ -38725,7 +38757,7 @@ msgstr "Складання рахунків від %s до %s"
 msgid "Play media"
 msgstr "Відтворити мультимедіа"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
 #, c-format
 msgid "Play sound"
 msgstr "Відтворити звук"
@@ -38896,6 +38928,11 @@ msgstr ""
 #, c-format
 msgid "Please enable Javascript:"
 msgstr "Будь ласка, включіть JavaScript: "
+
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#, c-format
+msgid "Please enable system preference 'AudioAlerts' to activate sounds."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -39292,7 +39329,7 @@ msgid "Please select only one %s to %s."
 msgstr "= випустіть елемент відвідувач"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 #, fuzzy
 msgid "Please select or enter a sound."
 msgstr "= випустіть елемент відвідувач"
@@ -39483,7 +39520,7 @@ msgstr "Оприлюднено %s %s – "
 msgid "Pre-adolescent"
 msgstr "для дітей середнього шкільного віку (9-13 років)"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
 #, c-format
 msgid "Precedence"
 msgstr "Пріоритет"
@@ -40744,7 +40781,7 @@ msgid "Record not marked as UTF-8, may be corrupted"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
 #, fuzzy, c-format
 msgid "Record number list (one per line): "
 msgstr "Використовуєм файл зі штрих-кодами"
@@ -40772,7 +40809,7 @@ msgstr "Тип дороги: "
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #, c-format
 msgid "Record type"
 msgstr "Тип запису"
@@ -40985,12 +41022,12 @@ msgstr "Дата нагадування"
 msgid "Reminder: "
 msgstr "Дата нагадування"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:214
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
 #, c-format
 msgid "Reminder: this action will delete all selected authorities!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:186
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:194
 #, c-format
 msgid ""
 "Reminder: this action will delete all selected bibliographic records, "
@@ -41078,7 +41115,7 @@ msgstr "Вилучити грань „[% facet.facet_link_value | html %]“"
 msgid "Remove item from collection"
 msgstr "Вилучити примірник із зібрання"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:145
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, fuzzy, c-format
 msgid "Remove non-local items:"
 msgstr "Вилучати нелокальні примірники"
@@ -41377,7 +41414,7 @@ msgstr "Ціна для заміни: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
-msgid "Reply-To (if different to Email): "
+msgid "Reply-To: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
@@ -41636,8 +41673,8 @@ msgstr "Відсутній обов’язковий модуль"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:37
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:43
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
@@ -42016,9 +42053,9 @@ msgid "Return to: "
 msgstr "Повернутися до: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "Return-Path (if different to Email): "
-msgstr ""
+#, fuzzy, c-format
+msgid "Return-Path: "
+msgstr "Повернутися до: "
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -42104,7 +42141,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
-msgid "Rodrigo Santallan"
+msgid "Rodrigo Santellan"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
@@ -43522,7 +43559,7 @@ msgstr "Вибір позичальника"
 msgid "Select a budget"
 msgstr "виберіть кошти"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:45
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:46
 #, fuzzy, c-format
 msgid "Select a built-in sound: "
 msgstr "Виберіть вбудований звук"
@@ -43637,8 +43674,8 @@ msgstr "Вилучити список"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:202
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:230
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:197
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Select all"
@@ -43752,8 +43789,8 @@ msgstr "Селектор"
 msgid "Select planning type:"
 msgstr "виберіть тип категорії"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:68
-#: intranet-tmpl/prog/en/modules/tools/export.tt:188
+#: intranet-tmpl/prog/en/modules/tools/export.tt:77
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, fuzzy, c-format
 msgid "Select records to export "
 msgstr "Вибираємо записи для експорту "
@@ -43830,12 +43867,12 @@ msgstr "Виберіть — відображати чи ні: "
 msgid "Select to import"
 msgstr "Вибираємо файл для імпорту: "
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:159
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
 #, fuzzy, c-format
 msgid "Select without holds"
 msgstr "Знайти й зарезервувати"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
 #, fuzzy, c-format
 msgid "Select without items"
 msgstr "Вибір сповіщення: "
@@ -43875,12 +43912,12 @@ msgstr ""
 msgid "Selecting this option will overwrite existing fund owners, if any"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:84
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:91
 #, c-format
 msgid "Selector"
 msgstr "Селектор"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:34
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
 #, fuzzy, c-format
 msgid "Selector: "
 msgstr "Селектор"
@@ -44934,12 +44971,12 @@ msgstr "Сортування"
 msgid "Sorting routine"
 msgstr "Поле 1 (для сортування) "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:92
 #, c-format
 msgid "Sound"
 msgstr "Звук"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:39
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
 #, fuzzy, c-format
 msgid "Sound: "
 msgstr "Звук"
@@ -45270,7 +45307,7 @@ msgstr "Дата початку повинна передувати кінцев
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:336
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:145
-#: intranet-tmpl/prog/en/modules/tools/export.tt:118
+#: intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
 msgid "Start date:"
 msgstr "Дата початку: "
@@ -45899,7 +45936,7 @@ msgstr "Теми: "
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:377
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:33
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
@@ -46283,7 +46320,7 @@ msgstr "Нд"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:490
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:207
 #, c-format
 msgid "Summary"
 msgstr "Зведення"
@@ -48807,7 +48844,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:246
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:210
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:442
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
@@ -48981,12 +49018,12 @@ msgstr "до файлу: "
 msgid "To a file: "
 msgstr "до файлу: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:194
+#: intranet-tmpl/prog/en/modules/tools/export.tt:203
 #, fuzzy, c-format
 msgid "To authid: "
 msgstr "Дата: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:75
+#: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, c-format
 msgid "To biblio number: "
 msgstr "До бібліотечного запису №: "
@@ -49012,7 +49049,7 @@ msgstr ""
 "„UseKohaPlugins“ а також прапорець „enable_plugins“ повинен бути "
 "встановлений у файлі налаштувань Коха."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, fuzzy, c-format
 msgid "To item call number: "
 msgstr "До шифру замовлення примірника: "
@@ -49260,7 +49297,7 @@ msgstr "Додатки для інструментів"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:85
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -49866,7 +49903,7 @@ msgid "URL: "
 msgstr "Веб-адреса: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:134
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:128
 #, c-format
@@ -49991,8 +50028,8 @@ msgstr "Не визначено"
 msgid "Undo import into catalog"
 msgstr "Скасувати імпорт до каталогу"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:268
+#: intranet-tmpl/prog/en/modules/tools/export.tt:294
 #, fuzzy, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "Немає доступних примірників"
@@ -50500,15 +50537,15 @@ msgstr "Використовуєм файл зі штрих-кодами"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:26
 #, fuzzy, c-format
 msgid "Use a file"
 msgstr "Використовуєм файл зі штрих-кодами"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:130
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:139
+#: intranet-tmpl/prog/en/modules/tools/export.tt:218
 #, fuzzy, c-format
 msgid "Use a file "
 msgstr "Використовуєм файл зі штрих-кодами"
@@ -50634,7 +50671,7 @@ msgstr "Використано"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:651
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:71
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:208
 #, c-format
 msgid "Used in"
 msgstr "Використано"
@@ -52947,7 +52984,7 @@ msgstr ""
 "xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
@@ -53395,7 +53432,7 @@ msgstr "проектуватися на МАРК-підполе"
 msgid "be mapped to the same tag,"
 msgstr "будуть проектуватися на таку ж ознаку,"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
 #, c-format
 msgid "beep.ogg"
 msgstr "beep.ogg"
@@ -53563,7 +53600,7 @@ msgstr ""
 " від Консорціуму Брідж, що складається з коледжу Карлтон та коледжу Св. "
 "Олафа."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
 #, c-format
 msgid "call.ogg"
 msgstr "call.ogg"
@@ -53686,13 +53723,13 @@ msgstr "створювати запис примірника при отрима
 msgid "create one or more authorized values"
 msgstr "Не означено жодного авторитетного значення для „%s“"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
 #, c-format
 msgid "critical.ogg"
 msgstr "critical.ogg"
 
 # Canadian Subject Headings
-#: intranet-tmpl/prog/en/modules/tools/export.tt:163
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
 #, fuzzy, c-format
 msgid "csv"
 msgstr "csh"
@@ -53808,12 +53845,12 @@ msgstr "детальніше про підписку"
 msgid "detected."
 msgstr "не виявлено."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
 #, c-format
 msgid "device_connect.ogg"
 msgstr "device_connect.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
 #, c-format
 msgid "device_disconnect.ogg"
 msgstr "device_disconnect.ogg"
@@ -53897,7 +53934,7 @@ msgstr "редагування примірників"
 msgid "email"
 msgstr "email"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
 #, c-format
 msgid "ending.ogg"
 msgstr "ending.ogg"
@@ -53929,7 +53966,7 @@ msgstr " існує."
 msgid "expired"
 msgstr " вже в минулому"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
 #, c-format
 msgid "fail.ogg"
 msgstr "fail.ogg"
@@ -54150,7 +54187,7 @@ msgstr ""
 msgid "in library "
 msgstr "Моя бібліотека"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
 #, c-format
 msgid "incoming_call.ogg"
 msgstr "incoming_call.ogg"
@@ -54415,8 +54452,8 @@ msgid "koha-conf.xml"
 msgstr "koha-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 msgid "koha.mrc"
 msgstr ""
 
@@ -54472,12 +54509,12 @@ msgstr " поширюється на умовах "
 msgid "like"
 msgstr "подібно до"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
 #, c-format
 msgid "loading.ogg"
 msgstr "loading.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
 #, c-format
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
@@ -54502,8 +54539,8 @@ msgstr "/"
 msgid "manage circulation rules"
 msgstr "Керування правилами обігу"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:161
-#: intranet-tmpl/prog/en/modules/tools/export.tt:231
+#: intranet-tmpl/prog/en/modules/tools/export.tt:170
+#: intranet-tmpl/prog/en/modules/tools/export.tt:240
 #, fuzzy, c-format
 msgid "marc"
 msgstr "Марк"
@@ -54513,7 +54550,7 @@ msgstr "Марк"
 msgid "matches"
 msgstr "Партії"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
 #, c-format
 msgid "maximize.ogg"
 msgstr "maximize.ogg"
@@ -54540,7 +54577,7 @@ msgid ""
 "%stitle%sbarcode%s\"itype\" "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "minimize.ogg"
 msgstr "minimize.ogg"
@@ -54578,7 +54615,7 @@ msgstr "nal"
 msgid "never"
 msgstr "Скасування оплати"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
 #, c-format
 msgid "new_mail_notification.ogg"
 msgstr "new_mail_notification.ogg"
@@ -54686,7 +54723,7 @@ msgstr " один раз в "
 msgid "one or more records without items attached. %s "
 msgstr "цей запис немає приєднаних примірників."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
 #, c-format
 msgid "opening.ogg"
 msgstr "opening.ogg"
@@ -54723,7 +54760,7 @@ msgstr "або ж створити"
 msgid "or create:"
 msgstr "або ж створити"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
 #, c-format
 msgid "panic.ogg"
 msgstr "panic.ogg"
@@ -54783,7 +54820,7 @@ msgstr ""
 " — додаток від Йована Поповича {Jovan Popovic} на умовах ліцензій BSD та GPL "
 "вер. 2."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
 #, c-format
 msgid "popup.ogg"
 msgstr "popup.ogg"
@@ -54962,12 +54999,12 @@ msgstr "розділ, секція"
 
 # 124^b - Секція
 #. INPUT type=text name=selector
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
 msgid "selector"
 msgstr "селектор"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:159
+#: intranet-tmpl/prog/en/modules/tools/export.tt:231
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr " відокремлювати пробілом (наприклад, 100a 200 606)"
@@ -55031,7 +55068,7 @@ msgid "software.coop, United Kingdom"
 msgstr "software.coop, Великобританія"
 
 #. INPUT type=text name=sound
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
 msgid "sound"
 msgstr "звук"
 
@@ -55389,7 +55426,7 @@ msgstr ""
 msgid "view"
 msgstr "Перегляд"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:66
 #, c-format
 msgid "warning.ogg"
 msgstr "warning.ogg"
@@ -55461,8 +55498,8 @@ msgstr ""
 " — додаток від Йована Поповича {Jovan Popovic} на умовах ліцензій BSD та GPL "
 "вер. 2."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
-#: intranet-tmpl/prog/en/modules/tools/export.tt:232
+#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "xml"
 msgstr "xml"
