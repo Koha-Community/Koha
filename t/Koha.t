@@ -47,6 +47,7 @@ sub fixtures {
 
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
+Koha::Database::flush_schema_cache();
 
 my $libraries = [
     ['XXX_test', 'my branchname XXX'],
