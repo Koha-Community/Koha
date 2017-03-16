@@ -805,6 +805,49 @@
                 </span>
             </xsl:if>
 
+<!-- MARC21 776 Additional Physical Form Entry -->
+    <xsl:if test="marc:datafield[@tag=776]">
+        <span class="results_summary add_physical_form">
+            <span class="label">Additional physical formats: </span>
+            <xsl:for-each select="marc:datafield[@tag=776]">
+                <xsl:variable name="linktext">
+                    <xsl:choose>
+                    <xsl:when test="marc:subfield[@code='t']">
+                        <xsl:value-of select="marc:subfield[@code='t']"/>
+                    </xsl:when>
+                    <xsl:when test="marc:subfield[@code='a']">
+                        <xsl:value-of select="marc:subfield[@code='a']"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>No title</xsl:text>
+                    </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:choose>
+                <xsl:when test="marc:subfield[@code='w']">
+                    <a>
+                    <xsl:attribute name="href">
+                        <xsl:text>/cgi-bin/koha/opac-search.pl?q=Control-number:</xsl:text>
+                        <xsl:call-template name="extractControlNumber">
+                            <xsl:with-param name="subfieldW">
+                                <xsl:value-of select="marc:subfield[@code='w']"/>
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:value-of select="$linktext"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$linktext"/>
+                </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="position() != last()">
+                    <xsl:text>; </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </span>
+    </xsl:if>
+
 <!-- DDC classification -->
     <xsl:if test="marc:datafield[@tag=082]">
         <span class="results_summary ddc">
