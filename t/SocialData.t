@@ -56,6 +56,7 @@ fixtures_ok [
 
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
+Koha::Database::flush_schema_cache();
 
 my $data = C4::SocialData::get_data();
 is( $data, undef, 'get_data should return undef if no param given');
