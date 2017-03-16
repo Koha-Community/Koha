@@ -6,9 +6,11 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+
+use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -23,10 +25,29 @@ BEGIN {
     use_ok('C4::Auth');
 }
 
-my $schema = Koha::Database->schema;
-$schema->storage->txn_begin;
+my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 my $dbh     = C4::Context->dbh;
+
+$schema->storage->txn_begin;
+
+subtest 'checkauth() tests' => sub {
+
+    plan tests => 1;
+
+    my $patron = $builder->build({ source => 'Borrower', value => { flags => undef } })->{userid};
+
+    # Mock a CGI object with real userid param
+    my $cgi = Test::MockObject->new();
+    $cgi->mock( 'param', sub { return $patron; } );
+    $cgi->mock( 'cookie', sub { return; } );
+
+    my $authnotrequired = 1;
+    my ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, $authnotrequired );
+
+    is( $userid, undef, 'checkauth() returns undef for userid if no logged in user (Bug 18275)' );
+
+};
 
 my $hash1 = hash_password('password');
 my $hash2 = hash_password('password');
