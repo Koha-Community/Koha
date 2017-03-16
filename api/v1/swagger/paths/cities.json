@@ -2,7 +2,7 @@
   "/cities": {
     "get": {
       "x-mojo-to": "Cities#list",
-      "operationId": "list",
+      "operationId": "listCities",
       "tags": ["cities"],
       "produces": [
         "application/json"
@@ -64,7 +64,7 @@
     },
     "post": {
       "x-mojo-to": "Cities#add",
-      "operationId": "add",
+      "operationId": "addCity",
       "tags": ["cities"],
       "parameters": [{
         "name": "body",
@@ -120,7 +120,7 @@
   "/cities/{cityid}": {
     "get": {
       "x-mojo-to": "Cities#get",
-      "operationId": "get",
+      "operationId": "getCity",
       "tags": ["cities"],
       "parameters": [{
         "$ref": "../parameters.json#/cityidPathParam"
@@ -157,7 +157,7 @@
     },
     "put": {
       "x-mojo-to": "Cities#update",
-      "operationId": "update",
+      "operationId": "updateCity",
       "tags": ["cities"],
       "parameters": [{
         "$ref": "../parameters.json#/cityidPathParam"
@@ -219,7 +219,7 @@
     },
     "delete": {
       "x-mojo-to": "Cities#delete",
-      "operationId": "delete",
+      "operationId": "deleteCity",
       "tags": ["cities"],
       "parameters": [{
         "$ref": "../parameters.json#/cityidPathParam"
