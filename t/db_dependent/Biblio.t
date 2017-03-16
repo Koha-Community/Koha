@@ -17,21 +17,22 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 
 use List::MoreUtils qw( uniq );
 use MARC::Record;
 use t::lib::Mocks qw( mock_preference );
 
+use Koha::Database;
+
 BEGIN {
     use_ok('C4::Biblio');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     plan tests => 23;
@@ -328,19 +329,22 @@ sub create_issn_field {
 subtest 'MARC21' => sub {
     plan tests => 31;
     run_tests('MARC21');
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
+    $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
     plan tests => 31;
     run_tests('UNIMARC');
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
+    $schema->storage->txn_begin;
 };
 
 subtest 'NORMARC' => sub {
     plan tests => 31;
     run_tests('NORMARC');
-    $dbh->rollback;
+    $schema->storage->txn_rollback;
+    $schema->storage->txn_begin;
 };
 
 subtest 'IsMarcStructureInternal' => sub {
@@ -360,6 +364,18 @@ subtest 'IsMarcStructureInternal' => sub {
     is( grep( /^mandatory$/, @internals ), 1, 'check mandatory' );
     is( grep( /^repeatable$/, @internals ), 1, 'check repeatable' );
     is( grep( /^a$/, @internals ), 0, 'no subfield a' );
+};
+
+subtest 'deletedbiblio_metadata' => sub {
+    plan tests => 2;
+
+    my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
+    my $biblio_metadata = C4::Biblio::GetXmlBiblio( $biblionumber );
+    C4::Biblio::DelBiblio( $biblionumber );
+    my ( $moved ) = $dbh->selectrow_array(q|SELECT biblionumber FROM deletedbiblio WHERE biblionumber=?|, undef, $biblionumber);
+    is( $moved, $biblionumber );
+    ( $moved ) = $dbh->selectrow_array(q|SELECT biblionumber FROM deletedbiblio_metadata WHERE biblionumber=?|, undef, $biblionumber);
+    is( $moved, $biblionumber );
 };
 
 1;
