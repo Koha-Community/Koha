@@ -55,6 +55,10 @@
                     <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Open Document Spreadsheet</a></li>
                 </ul>
             </div>
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm toggle_sql" id="toggle_sql_hid" href="#"><i class="fa fa-eye"></i> Show sql code</a>
+                <a class="btn btn-default btn-sm toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide sql code</a>
+            </div>
         [% END %]
 
     [% END %]

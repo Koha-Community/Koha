@@ -172,6 +172,12 @@ $("#delColumn").on("click",function(){
     });
 [% END %]
 
+    $(".toggle_sql").click(function(){
+        $("#sql_output").toggle();
+        $("#toggle_sql_hid").toggle();
+        $("#toggle_sql_vis").toggle();
+    });
+
     $("#table_reports").delegate(".confirmdelete", 'click', function(){
         $(this).parents('tr').attr("class","warn");
         if(confirm(_("Are you sure you want to delete this saved report?"))){
@@ -826,9 +832,10 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( execute ) %]
 <h1>[% name %]</h1>
-[% IF ( notes ) %]<p>[% notes %]</p>[% END %]
-[% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
-<pre id="sql_output">[% sql |html %]</pre>
+[% IF ( notes ) %]<p><span class="label">Notes:</span> [% notes %]</p>[% END %]
+[% IF ( unlimited_total ) %]<p><span class="label">Total number of results:</span> [% unlimited_total %][% IF unlimited_total > limit %] ([% limit %] shown)[% END %].</p>[% END %]
+<div id="sql_output" style="display:none;"><span class="label">Report SQL:</span><pre>[% sql |html %]</pre></div>
+</br>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
     <input type="hidden" name="phase" value="Run this report"/>
