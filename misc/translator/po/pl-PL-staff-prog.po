@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-02-15 19:55-0300\n"
-"PO-Revision-Date: 2017-01-18 13:46+0000\n"
+"POT-Creation-Date: 2017-03-14 17:02-0300\n"
+"PO-Revision-Date: 2017-02-22 20:28+0000\n"
 "Last-Translator: Ilona <szczudlo@biblos.pk.edu.pl>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1484747169.000000\n"
+"X-POOTLE-MTIME: 1487795323.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1956,7 +1956,7 @@ msgstr ""
 #. %23$s:  IF message.error 
 #. %24$s:  message.error
 #. %25$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:96
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:104
 #, c-format
 msgid ""
 "%s %s The biblionumber %s does not exist in the database. %s The authority "
@@ -2253,10 +2253,12 @@ msgstr "%s %s w "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
-msgstr "Egzemplarze zmodyfikowane: %s (ze zmodyfikowanymi polami: %s). "
+msgstr ""
+"Egzemplarze zmodyfikowane: %s %s (ze zmodyfikowanymi polami: %s). %s Nie "
+"zmodyfikowano egzemplarzy. %s "
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total 
@@ -2803,6 +2805,18 @@ msgstr ""
 #, c-format
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
 msgstr "%s %sEtykieta %s - ograniczenia podpól%s %s %s %s "
+
+#. %1$s:  SWITCH m.code 
+#. %2$s:  CASE 'invalid_mimetype' 
+#. %3$s:  CASE 
+#. %4$s:  m.code 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#, c-format
+msgid ""
+"%s %sThe file used does not have a valid format. Only csv and txt are "
+"allowed. %s%s %s "
+msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -3954,7 +3968,7 @@ msgstr "%s Nie %s Tak %s Tylko rekord %s Tylko egzemplarz %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "%s No action defined for the template. %s "
 msgstr "%s Jeszcze nie zdefiniowano %s "
@@ -4603,7 +4617,7 @@ msgstr "%s Kolekcja nie zawiera żadnych pozycji %s "
 #. %7$s:  report.total_success 
 #. %8$s:  report.total_records 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:230
 #, c-format
 msgid ""
 "%s There are no record ids defined. %s %s %s All records have been deleted "
@@ -4858,7 +4872,7 @@ msgstr ""
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -4871,7 +4885,8 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
@@ -5517,7 +5532,7 @@ msgstr "%s rekord %s: %s"
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:94
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:209
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:217
 #, c-format
 msgid "%s record(s)"
 msgstr "%s rekord(ów)"
@@ -7955,7 +7970,7 @@ msgstr "&rsaquo; Powiadom subskrybentów "
 msgid "&rsaquo; Attach an item to "
 msgstr "&rsaquo; Przenieś egzemplarz do "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #, c-format
 msgid "&rsaquo; Audio alerts"
 msgstr "&rsaquo; Alerty dźwiękowe"
@@ -9808,8 +9823,8 @@ msgstr "- Proszę wybrać egzemplarz, aby zamówić"
 msgid "- Start date missing or invalid."
 msgstr "- Brakująca lub błędna data początkowa."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:82
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:91
+#: intranet-tmpl/prog/en/modules/tools/export.tt:209
 #, c-format
 msgid "-- All --"
 msgstr "-- Wszystko --"
@@ -9835,7 +9850,7 @@ msgstr "-- Wybierz status --"
 msgid "-- Choose format --"
 msgstr "-- Wybierz format --"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
 #, c-format
 msgid "-- Choose one -- "
 msgstr "-- Wybierz jeden -- "
@@ -10239,7 +10254,7 @@ msgstr "Dostęp do wszystkich funkcji"
 msgid "Accession date"
 msgstr "Data akcesji"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:124
 #, c-format
 msgid "Accession date (inclusive)"
 msgstr "Data akcesji (włącznie)"
@@ -10939,7 +10954,7 @@ msgstr "Dodaj wiele egzemplarzy"
 msgid "Add multiple items"
 msgstr "Dodaj wiele egzemplarzy"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Add new alert"
 msgstr "Dodaj nowy alert"
@@ -11396,7 +11411,7 @@ msgstr "Adres: "
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:28
@@ -12198,7 +12213,7 @@ msgstr "Nowy rekord analityczny"
 #: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "Andreas Roussos"
-msgstr ""
+msgstr "Andreas Roussos"
 
 #: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
@@ -12591,7 +12606,7 @@ msgstr ""
 "Czy na pewno chcesz usunąć użytkownika? %s %s Operacji nie można cofnąć."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Are you sure you want to delete the selected audio alerts?"
 msgstr "Czy na pewno chcesz usunąć zaznaczone alerty dźwiękowe?"
 
@@ -13095,7 +13110,7 @@ msgid "Attribute: "
 msgstr "Atrybut: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:80
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
 msgid "Audio alerts"
@@ -13136,7 +13151,7 @@ msgid "Auth value:"
 msgstr "Dopuszczona wartość:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:237
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:206
 #, c-format
 msgid "Authid"
 msgstr "ID hasła wzorcowego"
@@ -13306,7 +13321,7 @@ msgid "Authorities tables"
 msgstr "Tabele haseł wzorcowych"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:136
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:136
 #, c-format
 msgid "Authorities: "
 msgstr "Hasła wzorcowe: "
@@ -13395,7 +13410,7 @@ msgstr "Typ hasła wzorcowego"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:207
 #, c-format
 msgid "Authority type: "
 msgstr "Typ hasła wzorcowego: "
@@ -13490,13 +13505,13 @@ msgid "Auto-fill row"
 msgstr "Autouzupełnianie"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Autolocation is switched on and you are logging in with an IP address that "
 "doesn't match your library. "
 msgstr ""
-"IndependentBranches i Autolocation są włączone. Zalogowałeś się z adresu IP, "
-"który nie pasuje do biblioteki. "
+"Autolocation jest włączony. Zalogowałeś się z adresu IP, który nie pasuje do "
+"biblioteki. "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:69
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:138
@@ -14127,8 +14142,8 @@ msgstr "Wyniki grup użytkowników"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:90
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:97
 #, c-format
 msgid "Batch record deletion"
 msgstr "Usuń grupę rekordów"
@@ -14304,7 +14319,7 @@ msgstr "Rekord bibliograficzny"
 msgid "Bibliographic record %s"
 msgstr "Rekord bibliograficzny %s"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:135
 #, c-format
 msgid "Bibliographic: "
 msgstr "Rekordy bibliograficzne: "
@@ -14326,7 +14341,7 @@ msgstr "Numer rekordu egzemplarza (lokalny)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:209
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:174
 #, c-format
 msgid "Biblionumber"
 msgstr "Numer rekordu:"
@@ -14905,7 +14920,7 @@ msgstr "CSV - %s"
 msgid "CSV profile ID"
 msgstr "ID profilu CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:167
+#: intranet-tmpl/prog/en/modules/tools/export.tt:176
 #, c-format
 msgid "CSV profile: "
 msgstr "Profil CSV: "
@@ -15044,7 +15059,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Sygnatura (Z-A do 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:101
+#: intranet-tmpl/prog/en/modules/tools/export.tt:110
 #, c-format
 msgid "Call number range"
 msgstr "Zakres sygnatur"
@@ -15259,7 +15274,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:73
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:304
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:95
@@ -15342,8 +15357,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:52
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:261
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:228
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:154
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:444
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:185
@@ -16130,7 +16145,7 @@ msgstr "Zmień status egzemplarza"
 msgid "Change messaging preferences to default for this category?"
 msgstr "Zmienić ustawienia powiadomień na domyślne dla tej kategorii?"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:83
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:90
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
 #, c-format
 msgid "Change order"
@@ -16400,7 +16415,7 @@ msgid "Check that your database is running."
 msgstr "Sprawdź czy Twoja baza danych działa."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Check the box next to the alert you want to delete."
 msgstr "Zaznacz alert, który chcesz usunąć."
 
@@ -16702,7 +16717,7 @@ msgstr "Status wypożyczenia"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:710
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:68
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:170
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:178
 #, c-format
 msgid "Checkouts"
 msgstr "Wypożyczenia"
@@ -16803,8 +16818,8 @@ msgstr "Wybierz kolejność pól na wydruku"
 msgid "Choose a field name"
 msgstr "Wybierz nazwę pliku"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:251
-#: intranet-tmpl/prog/en/modules/tools/export.tt:277
+#: intranet-tmpl/prog/en/modules/tools/export.tt:260
+#: intranet-tmpl/prog/en/modules/tools/export.tt:286
 #, c-format
 msgid "Choose a file "
 msgstr "Wybierz plik "
@@ -16963,7 +16978,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Chris Kirby"
-msgstr ""
+msgstr "Chris Kirby"
 
 #: intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
@@ -17380,8 +17395,8 @@ msgstr "Wyczyść"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:203
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:231
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:190
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:165
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Clear all"
@@ -17450,7 +17465,7 @@ msgstr "Wyczyść"
 msgid "Clear selection on visible rows"
 msgstr "Wyczyść zaznaczenie na widocznych wierszach"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
 #, c-format
 msgid "Clear used authorities"
 msgstr "Wyczyść używane hasła wzorcowe"
@@ -18428,7 +18443,7 @@ msgstr "Zawartość "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:148
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:63
 #, c-format
@@ -19401,9 +19416,9 @@ msgid "Dan Scott"
 msgstr "Dan Scott"
 
 #: intranet-tmpl/prog/en/modules/about.tt:470
-#, fuzzy, c-format
+#, c-format
 msgid "Dani Elder"
-msgstr "Daniel Barker"
+msgstr "Dani Elder"
 
 #: intranet-tmpl/prog/en/modules/about.tt:406
 #, c-format
@@ -19934,6 +19949,16 @@ msgstr "Domyślna wartość:"
 #, c-format
 msgid "Default values"
 msgstr "Wartości domyślne"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#, fuzzy, c-format
+msgid "Default: ReplyToDefault system preference"
+msgstr "Globalne ustawienia systemu"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#, fuzzy, c-format
+msgid "Default: ReturnpathDefault system preference"
+msgstr "Szukaj w opcjach systemu"
 
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
@@ -20510,7 +20535,7 @@ msgstr "Usuń zdalnie"
 msgid "Delete selected"
 msgstr "Usuń zaznaczone"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:129
 #, c-format
 msgid "Delete selected alerts"
 msgstr "Usuń zaznaczone alerty"
@@ -20522,7 +20547,7 @@ msgid "Delete selected items"
 msgstr "Usuń zaznaczone pozycje"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:219
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:227
 msgid "Delete selected records"
 msgstr "Usuń zaznaczone rekordy"
 
@@ -21322,13 +21347,13 @@ msgid "Don't decrease loan length based on holds"
 msgstr "Nie skracaj długości wypożyczeń na podstawie zamówień"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:63
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, c-format
 msgid "Don't export fields:"
 msgstr "Nie eksportuj pól:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:150
 #, c-format
 msgid "Don't export items:"
 msgstr "Nie eksportuj egzemplarzy:"
@@ -21411,12 +21436,12 @@ msgid "Download cart"
 msgstr "Pobierz zawartość schowka"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:292
+#: intranet-tmpl/prog/en/modules/tools/export.tt:301
 msgid "Download configuration"
 msgstr "Pobierz konfigurację"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:266
+#: intranet-tmpl/prog/en/modules/tools/export.tt:275
 msgid "Download database"
 msgstr "Pobierz bazę danych"
 
@@ -21767,7 +21792,7 @@ msgstr "Ed Summers (kodowanie i pakiety Perla takie jak MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:392
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:130
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:217
@@ -21869,7 +21894,7 @@ msgstr "Modyfikuj działanie %s"
 msgid "Edit actions"
 msgstr "Modyfikuj działanie"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Edit alert"
 msgstr "Modyfikuj alert"
@@ -22295,7 +22320,7 @@ msgstr "Brak daty zakończenia"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:337
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:122
+#: intranet-tmpl/prog/en/modules/tools/export.tt:131
 #, c-format
 msgid "End date:"
 msgstr "Data zakończenia:"
@@ -23054,8 +23079,8 @@ msgstr "Eksportuj do pliku CSV"
 msgid "Export as PDF"
 msgstr "Eksportuj jako PDF"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:53
-#: intranet-tmpl/prog/en/modules/tools/export.tt:242
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
+#: intranet-tmpl/prog/en/modules/tools/export.tt:251
 #, c-format
 msgid "Export authority records"
 msgstr "Eksportuj rekordy haseł wzorcowych"
@@ -23065,8 +23090,8 @@ msgstr "Eksportuj rekordy haseł wzorcowych"
 msgid "Export bibliographic and holdings data"
 msgstr "Eksportowanie rekordów bibliograficznych i szczegółów egzemplarzy"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:52
-#: intranet-tmpl/prog/en/modules/tools/export.tt:181
+#: intranet-tmpl/prog/en/modules/tools/export.tt:61
+#: intranet-tmpl/prog/en/modules/tools/export.tt:190
 #, c-format
 msgid "Export bibliographic records"
 msgstr "Eksportuj rekordy bibliograficzne"
@@ -23086,7 +23111,7 @@ msgstr "Eksportuj grupę kart"
 msgid "Export checkouts using format:"
 msgstr "Eksportuj wypożyczenia używając formatu:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:58
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
 #, c-format
 msgid "Export configuration"
 msgstr "Eksportuj konfigurację"
@@ -23097,7 +23122,7 @@ msgstr "Eksportuj konfigurację"
 msgid "Export data"
 msgstr "Eksportuj dane"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:55
+#: intranet-tmpl/prog/en/modules/tools/export.tt:64
 #, c-format
 msgid "Export database"
 msgstr "Eksport bazy danych"
@@ -23532,20 +23557,22 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Wyświetlane pola w raporcie:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:213
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#, fuzzy, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
-"as a filter: it is compatible with other parameters."
+"as a filter: it is compatible with other parameters. (File types accepted: ."
+"csv and .txt)"
 msgstr ""
 "Plik zawierający listę ID haseł wzorcowych, każde ID w osobnej linijce. "
 "Lista działa jak filtr: jest kompatybilna z innymi parametrami."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:134
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:143
+#, fuzzy, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
-"This list works as a filter: it is compatible with other parameters."
+"This list works as a filter: it is compatible with other parameters. (File "
+"types accepted: .csv and .txt)"
 msgstr ""
 "Plik zawierający listę numerów systemowych egzemplarzy, każdy numer w "
 "osobnej linijce. Lista działa jak filtr: jest kompatybilna z innymi "
@@ -23566,8 +23593,8 @@ msgstr "Plik nie może zostać usunięty."
 msgid "File could not be read."
 msgstr "Plik nie może zostać odczytany."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:159
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:238
 #, c-format
 msgid "File format: "
 msgstr "Format pliku: "
@@ -23584,8 +23611,8 @@ msgstr "Plik został usunięty."
 msgid "File name"
 msgstr "Nazwa pliku"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -23598,15 +23625,15 @@ msgstr "Typ pliku"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:223
 #, c-format
 msgid "File:"
 msgstr "Plik:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:88
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:152
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:33
 #, c-format
@@ -24277,12 +24304,12 @@ msgstr "Z każdej biblioteki"
 msgid "From any library:"
 msgstr "Z każdej biblioteki:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:190
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, c-format
 msgid "From authid: "
 msgstr "Od ID hasła wzorcowego: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:71
+#: intranet-tmpl/prog/en/modules/tools/export.tt:80
 #, c-format
 msgid "From biblio number: "
 msgstr "Od numeru systemowego: "
@@ -24308,7 +24335,7 @@ msgstr "Z biblioteki macierzystej/głównej"
 msgid "From home library:"
 msgstr "Z biblioteki macierzystej/głównej:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
+#: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #, c-format
 msgid "From item call number: "
 msgstr "Od sygnatury: "
@@ -25311,7 +25338,7 @@ msgstr "Egzemplarze:"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:349
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:39
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:338
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:340
 #, c-format
@@ -25520,7 +25547,7 @@ msgstr "Powtarzany co roku zakres dni, gdy biblioteka jest zamknięta"
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:10
@@ -25694,7 +25721,7 @@ msgstr "Powtarzany co roku zakres dni, gdy biblioteka jest zamknięta"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:84
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:80
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:88
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -25924,7 +25951,7 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "ID"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
 #, c-format
 msgid "IM_notification.ogg"
 msgstr "IM_notification.ogg"
@@ -27765,7 +27792,7 @@ msgstr "Typ dokumentu:"
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:122
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:107
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:80
+#: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, c-format
 msgid "Item type: "
 msgstr "Typ dokumentu: "
@@ -27823,7 +27850,7 @@ msgstr "Itemnumber"
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:215
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:246
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #, c-format
 msgid "Items"
 msgstr "Egzemplarze"
@@ -28759,7 +28786,7 @@ msgstr ""
 "Koha &rsaquo; Administracja &rsaquo; %sKonfiguracja zestawów OAI &rsaquo; "
 "Dodaj nowy zestaw OAI %sKonfiguracja zestawów OAI%s"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:2
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:3
 #, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Audio alerts"
 msgstr "Koha &rsaquo; Administracja &rsaquo; Alerty dżwiękowe"
@@ -31274,7 +31301,7 @@ msgstr "Pozostaw puste, by dodać przez wyszukiwanie egzemplarzy (itemnumber)."
 #: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Lee Jamison"
-msgstr ""
+msgstr "Lee Jamison"
 
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:44
 #, c-format
@@ -31534,7 +31561,7 @@ msgstr "Biblioteka:"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:139
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:143
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "Library: "
 msgstr "Biblioteka: "
@@ -33747,22 +33774,22 @@ msgid "Move action up"
 msgstr "Przenieś działanie w górę"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
 msgid "Move alert down"
 msgstr "Przesuń alert w dół"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:111
 msgid "Move alert to bottom"
 msgstr "Przesuń alert na dół"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:100
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:107
 msgid "Move alert to top"
 msgstr "Przesuń alert na górę"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:96
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:103
 msgid "Move alert up"
 msgstr "Przenieś alert w górę"
 
@@ -34174,7 +34201,7 @@ msgstr "Nowe konto "
 msgid "New action"
 msgstr "Nowe działanie"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:25
 #, c-format
 msgid "New alert"
 msgstr "Nowy alert"
@@ -34216,7 +34243,7 @@ msgid "New batch patrons modification"
 msgstr "Nowa modyfikacja grupy użytkowników"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "New batch record deletion"
 msgstr "Nowa grupa rekordów do usunięcia"
@@ -34796,6 +34823,12 @@ msgstr "Brak informacji o adresie."
 msgid "No and try to override system preferences"
 msgstr "Nie i spróbuj ominąć opcje systemowe"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
+#, fuzzy
+msgid "No authorities have been selected."
+msgstr "Brak wybrano żadnych rekordów."
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
 #, c-format
@@ -34812,6 +34845,8 @@ msgstr "Nie zdefiniowano kategorii. "
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
+"Brak zdefiniowanych zasada udostępniania i należności dla tej kombinacji "
+"kategorii użytkownika i typu dokumentu."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -35655,13 +35690,13 @@ msgstr "Brak możliwości prolongaty"
 msgid "Note"
 msgstr "Uwaga"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:63
+#: intranet-tmpl/prog/en/modules/tools/export.tt:72
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr "Uwaga: Egzemplarze mogą być eksportowane przez to narzędzie."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:249
-#: intranet-tmpl/prog/en/modules/tools/export.tt:275
+#: intranet-tmpl/prog/en/modules/tools/export.tt:258
+#: intranet-tmpl/prog/en/modules/tools/export.tt:284
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr "Uwaga: Eksportowany plik będzie bardzo duży."
@@ -35736,6 +35771,7 @@ msgid "Note:"
 msgstr "Uwaga:"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:44
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:217
@@ -36790,15 +36826,15 @@ msgid "Optional module missing"
 msgstr "Brak opcjonalnego modułu"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:701
-#: intranet-tmpl/prog/en/modules/tools/export.tt:139
-#: intranet-tmpl/prog/en/modules/tools/export.tt:218
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:227
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
 msgstr "Opcje"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:138
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #, c-format
 msgid "Or enter a list of record numbers"
 msgstr "Albo wprowadź listę numerów rekordów"
@@ -37140,12 +37176,12 @@ msgstr "Inne..."
 msgid "Output"
 msgstr "Wynik"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
+#: intranet-tmpl/prog/en/modules/tools/export.tt:236
 #, c-format
 msgid "Output format"
 msgstr "Format wyjściowy"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:164
 #, c-format
 msgid "Output format "
 msgstr "Format wyjściowy "
@@ -38752,7 +38788,7 @@ msgstr "Planowanie dla: %s przez: %s"
 msgid "Play media"
 msgstr "multimedia"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
 #, c-format
 msgid "Play sound"
 msgstr "Odtwórz dźwięk"
@@ -38920,6 +38956,11 @@ msgstr "Modyfikuj jedną walutę i oznacz ją jako aktywną."
 #, c-format
 msgid "Please enable Javascript:"
 msgstr "Proszę włączyć Javascript:"
+
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#, c-format
+msgid "Please enable system preference 'AudioAlerts' to activate sounds."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -39287,7 +39328,7 @@ msgid "Please select only one %s to %s."
 msgstr "Wybierz tylko jeden %s do %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Please select or enter a sound."
 msgstr "Wybierz lub wprowadź dźwięk."
 
@@ -39472,7 +39513,7 @@ msgstr "Opublikowano %s%s przez "
 msgid "Pre-adolescent"
 msgstr "Wiek gimnazjalny"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
 #, c-format
 msgid "Precedence"
 msgstr "Kolejność"
@@ -40486,7 +40527,7 @@ msgstr "Rachel Hamilton-Williams (Kaitiaki/Opiekun od 2004 do dziś)"
 #: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Radek Siman"
-msgstr ""
+msgstr "Radek Siman"
 
 #: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
@@ -40712,7 +40753,7 @@ msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "Rekord nieoznaczony jako UTF-8, może być uszkodzony"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
 #, c-format
 msgid "Record number list (one per line): "
 msgstr "Lista numerów rekordów (jeden numer rekordu w wierszu): "
@@ -40739,7 +40780,7 @@ msgstr "Tytuł rekordu"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #, c-format
 msgid "Record type"
 msgstr "Typ rekordu"
@@ -40952,12 +40993,12 @@ msgstr "Data przypomnienia"
 msgid "Reminder: "
 msgstr "Data przypomnienia: "
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:214
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
 #, c-format
 msgid "Reminder: this action will delete all selected authorities!"
 msgstr "Pamiętaj: to działanie usunie wszystkie zaznaczone hasła wzorcowe!"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:186
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:194
 #, c-format
 msgid ""
 "Reminder: this action will delete all selected bibliographic records, "
@@ -41050,7 +41091,7 @@ msgstr "Usuń fasety [% facet.facet_link_value | html %]"
 msgid "Remove item from collection"
 msgstr "Usuń egzemplarz z kolekcji"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:145
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, c-format
 msgid "Remove non-local items:"
 msgstr "Usuń egzemplarze nieutworzone lokalnie:"
@@ -41343,8 +41384,8 @@ msgstr "Koszt zastąpienia:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
-msgid "Reply-To (if different to Email): "
-msgstr "Odpowiedz do (jeśli inny e-mail): "
+msgid "Reply-To: "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #, c-format
@@ -41604,8 +41645,8 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:37
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:43
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
@@ -41983,9 +42024,9 @@ msgid "Return to: "
 msgstr "Powrót do: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "Return-Path (if different to Email): "
-msgstr "Ścieżka powrotu (jeśli inny e-mail): "
+#, fuzzy, c-format
+msgid "Return-Path: "
+msgstr "Powrót do: "
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -42068,9 +42109,9 @@ msgid "Rocio Dressler"
 msgstr "Rocio Dressler"
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
-#, c-format
-msgid "Rodrigo Santallan"
-msgstr ""
+#, fuzzy, c-format
+msgid "Rodrigo Santellan"
+msgstr "Rodrigo Santallan"
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
 #, c-format
@@ -43177,9 +43218,9 @@ msgstr "Szukaj w opcjach systemu"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets"
-msgstr "Wybierz źródła "
+msgstr "Wybierz źródła"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #, c-format
@@ -43457,7 +43498,7 @@ msgstr "Wybierz kategorię użytkownika"
 msgid "Select a budget"
 msgstr "Wybierz budżet"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:45
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:46
 #, c-format
 msgid "Select a built-in sound: "
 msgstr "Wybierz wbudowane dźwięki: "
@@ -43572,8 +43613,8 @@ msgstr "Wybierz czas"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:202
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:230
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:197
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Select all"
@@ -43686,8 +43727,8 @@ msgstr "Wybierz właściciela"
 msgid "Select planning type:"
 msgstr "Wybierz typ planowania:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:68
-#: intranet-tmpl/prog/en/modules/tools/export.tt:188
+#: intranet-tmpl/prog/en/modules/tools/export.tt:77
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, c-format
 msgid "Select records to export "
 msgstr "Wybierz rekordy do eksportu "
@@ -43764,12 +43805,12 @@ msgstr "Wybierz, by wyświetlać albo nie wyświetlać:"
 msgid "Select to import"
 msgstr "Wybierz plik do importowania"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:159
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
 #, c-format
 msgid "Select without holds"
 msgstr "Wybierz egzemplarze bez zamówień"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
 #, c-format
 msgid "Select without items"
 msgstr "Wybierz pozycje bez egzemplarzy"
@@ -43810,12 +43851,12 @@ msgid "Selecting this option will overwrite existing fund owners, if any"
 msgstr ""
 "Wybierając tę opcję, nadpiszą się istniejący właściciele funduszy, jeśli"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:84
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:91
 #, c-format
 msgid "Selector"
 msgstr "Selektor"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:34
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
 #, c-format
 msgid "Selector: "
 msgstr "Selektor: "
@@ -44871,12 +44912,12 @@ msgstr "Sortowanie"
 msgid "Sorting routine"
 msgstr "Klasyfikacja"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:92
 #, c-format
 msgid "Sound"
 msgstr "Dźwięk"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:39
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
 #, c-format
 msgid "Sound: "
 msgstr "Dźwięk: "
@@ -45203,7 +45244,7 @@ msgstr "Data początkowa musi być przed datą końcową"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:336
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:145
-#: intranet-tmpl/prog/en/modules/tools/export.tt:118
+#: intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
 msgid "Start date:"
 msgstr "Data początkowa:"
@@ -45825,7 +45866,7 @@ msgstr "Hasła przedmiotowe:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:377
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:33
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
@@ -46208,7 +46249,7 @@ msgstr "Razem"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:490
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:207
 #, c-format
 msgid "Summary"
 msgstr "Opis skrócony"
@@ -48659,7 +48700,7 @@ msgstr "Tim Hannah"
 #: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "Tim McMahon"
-msgstr ""
+msgstr "Tim McMahon"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -48785,7 +48826,7 @@ msgstr "TinyMCE WYSIWYG redaktor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:246
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:210
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:442
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
@@ -48956,12 +48997,12 @@ msgstr "Do pliku:"
 msgid "To a file: "
 msgstr "Do pliku: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:194
+#: intranet-tmpl/prog/en/modules/tools/export.tt:203
 #, c-format
 msgid "To authid: "
 msgstr "Do ID hasła wzorcowego: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:75
+#: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, c-format
 msgid "To biblio number: "
 msgstr "Do numeru systemowego: "
@@ -48986,7 +49027,7 @@ msgstr ""
 "Jeśli chcesz włączyć wtyczki, włącz w ustawieniach systemowych "
 "UseKohaPlugins i enable_plugins ustaw w pliku konfiguracyjnym Koha"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, c-format
 msgid "To item call number: "
 msgstr "Do sygnatury: "
@@ -49235,7 +49276,7 @@ msgstr "Narzędzia wtyczek"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:85
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -49833,7 +49874,7 @@ msgid "URL: "
 msgstr "URL: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:134
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:128
 #, c-format
@@ -49958,8 +49999,8 @@ msgstr "Zawartość nieokreślona"
 msgid "Undo import into catalog"
 msgstr "Wycofaj zaimportowane opisy z katalogu"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:268
+#: intranet-tmpl/prog/en/modules/tools/export.tt:294
 #, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "Niestety, kopie bezpieczeństwa nie są dostępne."
@@ -50451,15 +50492,15 @@ msgstr "Użyj pliku kodu kreskowego"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:26
 #, c-format
 msgid "Use a file"
 msgstr "Użyj pliku"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:130
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:139
+#: intranet-tmpl/prog/en/modules/tools/export.tt:218
 #, c-format
 msgid "Use a file "
 msgstr "Użyj pliku "
@@ -50586,7 +50627,7 @@ msgstr "Użyty do"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:651
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:71
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:208
 #, c-format
 msgid "Used in"
 msgstr "Używany w"
@@ -51936,13 +51977,13 @@ msgstr ""
 
 # tłumaczenie niepewne
 #: intranet-tmpl/prog/en/modules/about.tt:194
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
 "file. That will bring a performance boost to enable it. "
 msgstr ""
-"Brakuje &lt;log4perl_conf&gt; wpisu w pliku koha-conf.xml. Dodaj go "
-"wskazując plik log4perl.conf w twojej instalacji Koha. "
+"You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
+"file. That will bring a performance boost to enable it. "
 
 # tłumaczenie niepewne
 #: intranet-tmpl/prog/en/modules/about.tt:301
@@ -52909,7 +52950,7 @@ msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
 #: intranet-tmpl/prog/en/modules/about.tt:139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -52922,9 +52963,10 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
 "xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] %s "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
@@ -52932,7 +52974,7 @@ msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:387
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
 "empty_option = \"All libraries\" %%] [%% INCLUDE form_field_select name="
@@ -52942,14 +52984,14 @@ msgid ""
 msgstr ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
 "empty_option = \"All libraries\" %%] [%% INCLUDE form_field_select name="
-"\"holdingbranch\" options = branches empty_option = \"All libraries\" %%] "
+"\"holdingbranch\" options = branches empty_option = \"All libraries\" %%] %s "
 "[%% INCLUDE form_field_select name=\"location\" options = locations "
-"empty_option = \"All locations\" %%] "
+"empty_option = \"All locations\" %%] %s "
 
 #. %1$s:  IF notforloans.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
 "empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
@@ -52959,9 +53001,9 @@ msgid ""
 msgstr ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
 "empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
-"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] [%% "
-"INCLUDE form_field_select name=\"notforloan\" options = notforloans "
-"empty_option = \"All statuses\" %%] "
+"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s "
+"[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
+"empty_option = \"All statuses\" %%] %s "
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:528
 #, c-format
@@ -53371,7 +53413,7 @@ msgstr "mapowane do podpola MARC, "
 msgid "be mapped to the same tag,"
 msgstr "zostanie mapowane do tej samej etykiety/taga/znacznika,"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
 #, c-format
 msgid "beep.ogg"
 msgstr "beep.ogg"
@@ -53529,7 +53571,7 @@ msgstr "ze względu na miesiące"
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "przez Bridge Consortium of Carleton College i St. Olaf College."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
 #, c-format
 msgid "call.ogg"
 msgstr "call.ogg"
@@ -53651,12 +53693,12 @@ msgstr "utwórz rekord egzemplarza, kiedy otrzymasz czasopismo"
 msgid "create one or more authorized values"
 msgstr "Utwórz jedną lub więcej Dopuszczonych wartości"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
 #, c-format
 msgid "critical.ogg"
 msgstr "critical.ogg"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:163
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
 #, c-format
 msgid "csv"
 msgstr "csv"
@@ -53779,12 +53821,12 @@ msgstr "szczegóły prenumeraty"
 msgid "detected."
 msgstr "wykryto."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
 #, c-format
 msgid "device_connect.ogg"
 msgstr "device_connect.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
 #, c-format
 msgid "device_disconnect.ogg"
 msgstr "device_disconnect.ogg"
@@ -53867,7 +53909,7 @@ msgstr "Modyfikuj egzemplarze"
 msgid "email"
 msgstr "e-mail"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
 #, c-format
 msgid "ending.ogg"
 msgstr "ending.ogg"
@@ -53901,7 +53943,7 @@ msgstr "istnieje."
 msgid "expired"
 msgstr "stracił ważność"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
 #, c-format
 msgid "fail.ogg"
 msgstr "fail.ogg"
@@ -54124,7 +54166,7 @@ msgstr "w należnościach. Jeśli chcesz możesz zapisać opłaty. "
 msgid "in library "
 msgstr "w bibliotece "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
 #, c-format
 msgid "incoming_call.ogg"
 msgstr "incoming_call.ogg"
@@ -54391,8 +54433,8 @@ msgid "koha-conf.xml"
 msgstr "koha-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 msgid "koha.mrc"
 msgstr "koha.mrc"
 
@@ -54448,12 +54490,12 @@ msgstr "na licencji "
 msgid "like"
 msgstr "podobne do"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
 #, c-format
 msgid "loading.ogg"
 msgstr "loading.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
 #, c-format
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
@@ -54478,8 +54520,8 @@ msgstr "m/"
 msgid "manage circulation rules"
 msgstr "Zarządzanie zasadami udostępniania"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:161
-#: intranet-tmpl/prog/en/modules/tools/export.tt:231
+#: intranet-tmpl/prog/en/modules/tools/export.tt:170
+#: intranet-tmpl/prog/en/modules/tools/export.tt:240
 #, c-format
 msgid "marc"
 msgstr "marc"
@@ -54489,7 +54531,7 @@ msgstr "marc"
 msgid "matches"
 msgstr "pasuje"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
 #, c-format
 msgid "maximize.ogg"
 msgstr "maximize.ogg"
@@ -54518,7 +54560,7 @@ msgstr ""
 "mfirstname%scard number%sfirstname%sbranchname%sdate%saccounttype%samount"
 "%stitle%sbarcode%s\"itype\" "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "minimize.ogg"
 msgstr "minimize.ogg"
@@ -54554,7 +54596,7 @@ msgstr "brak"
 msgid "never"
 msgstr "nigdy"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
 #, c-format
 msgid "new_mail_notification.ogg"
 msgstr "new_mail_notification.ogg"
@@ -54659,7 +54701,7 @@ msgstr "co"
 msgid "one or more records without items attached. %s "
 msgstr "jeden lub więcej rekordów bez podłączonych egzemplarzy. %s "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
 #, c-format
 msgid "opening.ogg"
 msgstr "opening.ogg"
@@ -54696,7 +54738,7 @@ msgstr "utwórz"
 msgid "or create:"
 msgstr "utwórz:"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
 #, c-format
 msgid "panic.ogg"
 msgstr "panic.ogg"
@@ -54752,7 +54794,7 @@ msgstr "plugin dodany przez John Resig jest na licencji "
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "plugin dodany przez Jovan Popovic jest na licencji BSD i GPL v2."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
 #, c-format
 msgid "popup.ogg"
 msgstr "popup.ogg"
@@ -54915,12 +54957,12 @@ msgid "selection"
 msgstr "selekcja"
 
 #. INPUT type=text name=selector
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
 msgid "selector"
 msgstr "Selektor"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:159
+#: intranet-tmpl/prog/en/modules/tools/export.tt:231
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "oddzielone spacją (np: 100a 200 606) "
@@ -54983,7 +55025,7 @@ msgid "software.coop, United Kingdom"
 msgstr "software.coop, Wielka Brytania"
 
 #. INPUT type=text name=sound
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
 msgid "sound"
 msgstr "dźwięk"
 
@@ -55333,7 +55375,7 @@ msgstr "veuillez d'abord creer le nombre de champs necessaires "
 msgid "view"
 msgstr "Podgląd"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:66
 #, c-format
 msgid "warning.ogg"
 msgstr "warning.ogg"
@@ -55404,8 +55446,8 @@ msgstr "Dopuszczona wartość "
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "napisany i utrzymywany przez Jörn Zaefferer jest na licencji "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
-#: intranet-tmpl/prog/en/modules/tools/export.tt:232
+#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "xml"
 msgstr "xml"

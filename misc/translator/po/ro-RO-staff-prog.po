@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-02-15 20:10-0300\n"
-"PO-Revision-Date: 2011-06-21 08:54+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"POT-Creation-Date: 2017-03-14 17:18-0300\n"
+"PO-Revision-Date: 2017-03-14 20:35+0000\n"
+"Last-Translator: Sorin-Alexandru <sorin@curierul.ro>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);;\n"
-"X-Generator: Pootle 2.1.6\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1489523757.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1782,7 +1783,7 @@ msgstr ""
 #. %23$s:  IF message.error 
 #. %24$s:  message.error
 #. %25$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:96
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:104
 #, c-format
 msgid ""
 "%s %s The biblionumber %s does not exist in the database. %s The authority "
@@ -2557,6 +2558,18 @@ msgstr "%s %s %s %s (%s) "
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
 msgstr "Editaţi impunerile subdomeniilor MARC "
 
+#. %1$s:  SWITCH m.code 
+#. %2$s:  CASE 'invalid_mimetype' 
+#. %3$s:  CASE 
+#. %4$s:  m.code 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#, c-format
+msgid ""
+"%s %sThe file used does not have a valid format. Only csv and txt are "
+"allowed. %s%s %s "
+msgstr ""
+
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1015
@@ -2829,12 +2842,11 @@ msgstr ""
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:139
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s (if checked, it means that the subfield is a URL and can be clicked) "
 msgstr ""
-"%s (dacă verificat, aceasta înseamnă că subdomeniul este un URL şi poate fi "
-"accesat)"
+"%s (dacă este bifat înseamnă că subdomeniul este un URL şi poate fi accesat)"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:244
@@ -2843,6 +2855,8 @@ msgid ""
 "%s (if checked, items of this type will be hidden as filters in OPAC's "
 "advanced search) "
 msgstr ""
+"%s (dacă este bifat înseamnă că elementele de acest tip vor fi ascunse în "
+"căutare avansată OPAC)"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:253
@@ -2852,9 +2866,9 @@ msgid ""
 "item of this type can be issued unless notforloan is set for a specific "
 "item) "
 msgstr ""
-"(dacă este verificat, nici un articol de acest tip nu poate fi emis. Dacă nu "
-"este verificat, fiecare articol de acest tip pot fi emis cu excepţia cazului "
-"în care nu se împrumută este setat pentru un anumit articol) "
+"(dacă este bifat, nici un articol de acest tip nu poate fi emis. Dacă nu "
+"este bifat, fiecare articol de acest tip pot fi emis cu excepţia cazului în "
+"care nu se împrumută este setat pentru un anumit articol) "
 
 #. For the first occurrence,
 #. %1$s:  budget.b_txt 
@@ -3661,7 +3675,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, fuzzy, c-format
 msgid "%s No action defined for the template. %s "
 msgstr "Suprimaţi acest raport salvat"
@@ -4275,7 +4289,7 @@ msgstr "(Sunt %s abonamente asociate cu acest titlu). "
 #. %7$s:  report.total_success 
 #. %8$s:  report.total_records 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:230
 #, c-format
 msgid ""
 "%s There are no record ids defined. %s %s %s All records have been deleted "
@@ -5159,7 +5173,7 @@ msgstr "%s Deţin(e)"
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:94
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:209
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:217
 #, fuzzy, c-format
 msgid "%s record(s)"
 msgstr "%s Deţin(e)"
@@ -7545,7 +7559,7 @@ msgstr "Alarmaţi abonaţii pentru <i>%s</i> "
 msgid "&rsaquo; Attach an item to "
 msgstr "Ataşaţi articolul "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #, fuzzy, c-format
 msgid "&rsaquo; Audio alerts"
 msgstr "&rsaquo; Tipuri de Articole"
@@ -9411,8 +9425,8 @@ msgstr "- Rugăm să selectaţi un articol pentru a efectua o blocare\n"
 msgid "- Start date missing or invalid."
 msgstr "- Data începerii lipseşte sau este invalidă.\n"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:82
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:91
+#: intranet-tmpl/prog/en/modules/tools/export.tt:209
 #, c-format
 msgid "-- All --"
 msgstr "-- Tot --"
@@ -9438,7 +9452,7 @@ msgstr "-- Alegeţi un statut --"
 msgid "-- Choose format --"
 msgstr "-- Alegeţi Formatul --"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
 #, fuzzy, c-format
 msgid "-- Choose one -- "
 msgstr "-- Alegeţi Unul --"
@@ -9847,7 +9861,7 @@ msgstr ""
 msgid "Accession date"
 msgstr "Data Accesului:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:124
 #, fuzzy, c-format
 msgid "Accession date (inclusive)"
 msgstr "Data accesului (inclusiv): "
@@ -10545,7 +10559,7 @@ msgstr "Domeniu autorizat duplicat"
 msgid "Add multiple items"
 msgstr "Domeniu autorizat duplicat"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, fuzzy, c-format
 msgid "Add new alert"
 msgstr "Colecţie: "
@@ -11005,7 +11019,7 @@ msgstr "Adresă: "
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:28
@@ -12222,7 +12236,7 @@ msgstr ""
 "anulată."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 #, fuzzy
 msgid "Are you sure you want to delete the selected audio alerts?"
 msgstr "Sunteţi sigur că doriţi să înlăturaţi articolele selectate?"
@@ -12786,7 +12800,7 @@ msgid "Attribute: "
 msgstr "Adăugaţi tipul de atribut a clientului "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:80
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
 msgid "Audio alerts"
@@ -12828,7 +12842,7 @@ msgid "Auth value:"
 msgstr "Valoare autorizată:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:237
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:206
 #, fuzzy, c-format
 msgid "Authid"
 msgstr "Autorizat"
@@ -12998,7 +13012,7 @@ msgid "Authorities tables"
 msgstr "Autorităţi"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:136
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:136
 #, fuzzy, c-format
 msgid "Authorities: "
 msgstr "Autorităţi"
@@ -13087,7 +13101,7 @@ msgstr "Tipul autorităţii"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:207
 #, fuzzy, c-format
 msgid "Authority type: "
 msgstr "Tipul autorităţii: "
@@ -13820,8 +13834,8 @@ msgstr "Suprimarea articolelor lotului"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:90
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:97
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "Suprimarea articolelor lotului"
@@ -13998,7 +14012,7 @@ msgstr "Adăugaţi o Înregistrare Bibliografică"
 msgid "Bibliographic record %s"
 msgstr "Adăugaţi o Înregistrare Bibliografică"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:135
 #, fuzzy, c-format
 msgid "Bibliographic: "
 msgstr "Bibliografii:"
@@ -14020,7 +14034,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:209
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:174
 #, fuzzy, c-format
 msgid "Biblionumber"
 msgstr "Număr_bibliografic:"
@@ -14582,7 +14596,7 @@ msgstr "CSV - %s"
 msgid "CSV profile ID"
 msgstr "profiluri CSV"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:167
+#: intranet-tmpl/prog/en/modules/tools/export.tt:176
 #, fuzzy, c-format
 msgid "CSV profile: "
 msgstr "profiluri CSV"
@@ -14721,7 +14735,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "Număr de Apel (De la Ficţiune Z-A până la Non-ficţiune 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:101
+#: intranet-tmpl/prog/en/modules/tools/export.tt:110
 #, fuzzy, c-format
 msgid "Call number range"
 msgstr "Gama Numerelor de Apel"
@@ -14927,7 +14941,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:73
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:304
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:95
@@ -15010,8 +15024,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:52
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:261
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:228
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:154
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:444
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:185
@@ -15799,7 +15813,7 @@ msgstr "Statutul Împrumuturilor:"
 msgid "Change messaging preferences to default for this category?"
 msgstr "Preferinţe implicite ale mesajelor pentru această categorie client"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:83
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:90
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
 #, fuzzy, c-format
 msgid "Change order"
@@ -16064,7 +16078,7 @@ msgid "Check that your database is running."
 msgstr "Verificaţi dacă baza dvs. de date funcţionează."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 #, fuzzy
 msgid "Check the box next to the alert you want to delete."
 msgstr ""
@@ -16372,7 +16386,7 @@ msgstr "Statutul Împrumuturilor:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:710
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:68
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:170
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:178
 #, c-format
 msgid "Checkouts"
 msgstr "Împrumuturi"
@@ -16473,8 +16487,8 @@ msgstr "Alegeţi Ordinea Rubricilor Textului pentru Imprimare"
 msgid "Choose a field name"
 msgstr "Alegeţi Fişierul *.koc: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:251
-#: intranet-tmpl/prog/en/modules/tools/export.tt:277
+#: intranet-tmpl/prog/en/modules/tools/export.tt:260
+#: intranet-tmpl/prog/en/modules/tools/export.tt:286
 #, fuzzy, c-format
 msgid "Choose a file "
 msgstr "Alegeţi Fişierul *.koc: "
@@ -17030,8 +17044,8 @@ msgstr "Eliberaţi"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:203
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:231
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:190
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:165
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, fuzzy, c-format
 msgid "Clear all"
@@ -17102,7 +17116,7 @@ msgstr "Introduceţi termenii căutării"
 msgid "Clear selection on visible rows"
 msgstr "Suprimaţi profilul selectat ? "
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
 #, fuzzy, c-format
 msgid "Clear used authorities"
 msgstr "Creaţi un lot nou"
@@ -18081,7 +18095,7 @@ msgstr "Conţinut "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:148
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:63
 #, c-format
@@ -19577,6 +19591,16 @@ msgstr "Valoare implicită:"
 msgid "Default values"
 msgstr "Valori implicite:"
 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#, fuzzy, c-format
+msgid "Default: ReplyToDefault system preference"
+msgstr "Sistemul global de preferinţe"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#, fuzzy, c-format
+msgid "Default: ReturnpathDefault system preference"
+msgstr "Sistemul global de preferinţe"
+
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
@@ -20150,7 +20174,7 @@ msgstr "Suprimaţi lista"
 msgid "Delete selected"
 msgstr "Suprimaţi selectarea"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:129
 #, fuzzy, c-format
 msgid "Delete selected alerts"
 msgstr "Suprimaţi selectarea"
@@ -20162,7 +20186,7 @@ msgid "Delete selected items"
 msgstr "Suprimaţi selectarea"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:219
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:227
 #, fuzzy
 msgid "Delete selected records"
 msgstr "Suprimaţi selectarea"
@@ -20965,13 +20989,13 @@ msgid "Don't decrease loan length based on holds"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:63
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, fuzzy, c-format
 msgid "Don't export fields:"
 msgstr "Nu exportaţi domenii"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:150
 #, fuzzy, c-format
 msgid "Don't export items:"
 msgstr "Nu exportaţi articole"
@@ -21055,13 +21079,13 @@ msgid "Download cart"
 msgstr "Descărcaţi coş"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:292
+#: intranet-tmpl/prog/en/modules/tools/export.tt:301
 #, fuzzy
 msgid "Download configuration"
 msgstr "Descărcaţi coş"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:266
+#: intranet-tmpl/prog/en/modules/tools/export.tt:275
 #, fuzzy
 msgid "Download database"
 msgstr "Descărcaţi coş"
@@ -21415,7 +21439,7 @@ msgstr "Ed Summers (Unele coduri şi ambalaje Perl ca Înregistrarea::MARC)"
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:392
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:130
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:217
@@ -21518,7 +21542,7 @@ msgstr "Editarea unei înregistrări"
 msgid "Edit actions"
 msgstr "Editarea unei înregistrări"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, fuzzy, c-format
 msgid "Edit alert"
 msgstr "Editaţi coşul %s"
@@ -21950,7 +21974,7 @@ msgstr "Data de sfârşit lipseşte"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:337
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:122
+#: intranet-tmpl/prog/en/modules/tools/export.tt:131
 #, fuzzy, c-format
 msgid "End date:"
 msgstr "Data de sfârşit:"
@@ -22711,8 +22735,8 @@ msgstr "Exportaţi în fişier csv"
 msgid "Export as PDF"
 msgstr "Exportaţi în fişier csv"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:53
-#: intranet-tmpl/prog/en/modules/tools/export.tt:242
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
+#: intranet-tmpl/prog/en/modules/tools/export.tt:251
 #, fuzzy, c-format
 msgid "Export authority records"
 msgstr "Adăugarea unei Înregistrări Autorizate"
@@ -22722,8 +22746,8 @@ msgstr "Adăugarea unei Înregistrări Autorizate"
 msgid "Export bibliographic and holdings data"
 msgstr "Editaţi Înregistrarea Bibliografică"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:52
-#: intranet-tmpl/prog/en/modules/tools/export.tt:181
+#: intranet-tmpl/prog/en/modules/tools/export.tt:61
+#: intranet-tmpl/prog/en/modules/tools/export.tt:190
 #, fuzzy, c-format
 msgid "Export bibliographic records"
 msgstr "Editaţi Înregistrarea Bibliografică"
@@ -22743,7 +22767,7 @@ msgstr "Exportaţi Lot"
 msgid "Export checkouts using format:"
 msgstr "Împrumutat pe"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:58
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
 #, fuzzy, c-format
 msgid "Export configuration"
 msgstr ": Configuraţie OK!"
@@ -22754,7 +22778,7 @@ msgstr ": Configuraţie OK!"
 msgid "Export data"
 msgstr "Exportaţi informaţii despre articol"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:55
+#: intranet-tmpl/prog/en/modules/tools/export.tt:64
 #, fuzzy, c-format
 msgid "Export database"
 msgstr "Exportaţi informaţii despre articol"
@@ -23190,18 +23214,20 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Întocmiţi şi Aplicaţi Rapoartele"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:213
+#: intranet-tmpl/prog/en/modules/tools/export.tt:222
 #, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
-"as a filter: it is compatible with other parameters."
+"as a filter: it is compatible with other parameters. (File types accepted: ."
+"csv and .txt)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:143
 #, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
-"This list works as a filter: it is compatible with other parameters."
+"This list works as a filter: it is compatible with other parameters. (File "
+"types accepted: .csv and .txt)"
 msgstr ""
 
 #. SCRIPT
@@ -23221,8 +23247,8 @@ msgstr "%s articolul(ele) n-a(u) putut fi şters(e) :"
 msgid "File could not be read."
 msgstr "Rândul de antet nu a putut fi analizat"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:159
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:238
 #, fuzzy, c-format
 msgid "File format: "
 msgstr "Formatul fişierului: "
@@ -23240,8 +23266,8 @@ msgstr "Suprimaţi Subdomeniul"
 msgid "File name"
 msgstr "Numele fişierului"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -23254,15 +23280,15 @@ msgstr "Numele fişierului"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:223
 #, fuzzy, c-format
 msgid "File:"
 msgstr "Fişier:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:88
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:152
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:33
 #, fuzzy, c-format
@@ -23939,12 +23965,12 @@ msgstr "De La Orice Bibliotecă"
 msgid "From any library:"
 msgstr "De La Orice Bibliotecă:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:190
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, fuzzy, c-format
 msgid "From authid: "
 msgstr "Format: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:71
+#: intranet-tmpl/prog/en/modules/tools/export.tt:80
 #, fuzzy, c-format
 msgid "From biblio number: "
 msgstr "De la un număr bibliografic: "
@@ -23970,7 +23996,7 @@ msgstr "De La Biblioteca De Bază"
 msgid "From home library:"
 msgstr "De La Biblioteca De Bază:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
+#: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #, fuzzy, c-format
 msgid "From item call number: "
 msgstr "De la numărul_de_apel_al_articolului: "
@@ -24961,7 +24987,7 @@ msgstr "0 Reţineri"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:349
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:39
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:338
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:340
 #, c-format
@@ -25170,7 +25196,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:10
@@ -25344,7 +25370,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:84
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:80
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:88
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -25572,7 +25598,7 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
 #, fuzzy, c-format
 msgid "IM_notification.ogg"
 msgstr "Anulaţi notificaţia"
@@ -27370,7 +27396,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:122
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:107
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:80
+#: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, fuzzy, c-format
 msgid "Item type: "
 msgstr "Toate Tipurile de Articole "
@@ -27428,7 +27454,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:215
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:246
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #, c-format
 msgid "Items"
 msgstr ""
@@ -28346,7 +28372,7 @@ msgstr ""
 "<a1>Acasă</a> &rsaquo; <a2>Administraţie</a> &rsaquo; Setaţi Limitele de "
 "Transfer a Bibliotecii"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:2
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:3
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Audio alerts"
 msgstr ""
@@ -31060,7 +31086,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:139
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:143
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, fuzzy, c-format
 msgid "Library: "
 msgstr "Orice Bibliotecă "
@@ -33267,25 +33293,25 @@ msgid "Move action up"
 msgstr "Ficţiune"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
 #, fuzzy
 msgid "Move alert down"
 msgstr "Ficţiune"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:111
 #, fuzzy
 msgid "Move alert to bottom"
 msgstr "Ficţiune"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:100
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:107
 #, fuzzy
 msgid "Move alert to top"
 msgstr "Ficţiune"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:96
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:103
 #, fuzzy
 msgid "Move alert up"
 msgstr "Ficţiune"
@@ -33700,7 +33726,7 @@ msgstr "Cont"
 msgid "New action"
 msgstr "Adăugaţi un client nou "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:25
 #, fuzzy, c-format
 msgid "New alert"
 msgstr "valoarea"
@@ -33743,7 +33769,7 @@ msgid "New batch patrons modification"
 msgstr "Modificarea articolelor lotului"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, fuzzy, c-format
 msgid "New batch record deletion"
 msgstr "Suprimarea articolelor lotului"
@@ -34316,6 +34342,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "No and try to override system preferences"
 msgstr "Sistemul global de preferinţe"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
+#, fuzzy
+msgid "No authorities have been selected."
+msgstr "Definiţi categoriile de client. "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
@@ -35173,13 +35205,13 @@ msgstr "Termeni Curenţi"
 msgid "Note"
 msgstr "Notă"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:63
+#: intranet-tmpl/prog/en/modules/tools/export.tt:72
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:249
-#: intranet-tmpl/prog/en/modules/tools/export.tt:275
+#: intranet-tmpl/prog/en/modules/tools/export.tt:258
+#: intranet-tmpl/prog/en/modules/tools/export.tt:284
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
@@ -35247,6 +35279,7 @@ msgid "Note:"
 msgstr "%s : %s"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:44
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:217
@@ -36286,15 +36319,15 @@ msgid "Optional module missing"
 msgstr "lipseşte valoarea"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:701
-#: intranet-tmpl/prog/en/modules/tools/export.tt:139
-#: intranet-tmpl/prog/en/modules/tools/export.tt:218
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:227
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:138
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #, fuzzy, c-format
 msgid "Or enter a list of record numbers"
 msgstr "Introduceţi numărul_ de_card a clientului:"
@@ -36637,12 +36670,12 @@ msgstr ""
 msgid "Output"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
+#: intranet-tmpl/prog/en/modules/tools/export.tt:236
 #, fuzzy, c-format
 msgid "Output format"
 msgstr "Orice format"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:164
 #, c-format
 msgid "Output format "
 msgstr ""
@@ -38247,7 +38280,7 @@ msgstr ""
 msgid "Play media"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
 #, fuzzy, c-format
 msgid "Play sound"
 msgstr "Modele industriale"
@@ -38409,6 +38442,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:82
 #, c-format
 msgid "Please enable Javascript:"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#, c-format
+msgid "Please enable system preference 'AudioAlerts' to activate sounds."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
@@ -38792,7 +38830,7 @@ msgid "Please select only one %s to %s."
 msgstr "Suprimaţi profilul selectat ? "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 #, fuzzy
 msgid "Please select or enter a sound."
 msgstr "Suprimaţi profilul selectat ? "
@@ -38980,7 +39018,7 @@ msgstr "Închis pe: %s "
 msgid "Pre-adolescent"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
 #, c-format
 msgid "Precedence"
 msgstr ""
@@ -40227,7 +40265,7 @@ msgid "Record not marked as UTF-8, may be corrupted"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
 #, fuzzy, c-format
 msgid "Record number list (one per line): "
 msgstr "Lista codurilor_de_bare (un cod_de_bare pe linie): "
@@ -40255,7 +40293,7 @@ msgstr "Adăugaţi un nou tip de cale"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #, fuzzy, c-format
 msgid "Record type"
 msgstr "Adăugaţi un nou tip de cale"
@@ -40468,12 +40506,12 @@ msgstr "Data de Sfârşit"
 msgid "Reminder: "
 msgstr "Data de Sfârşit"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:214
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
 #, c-format
 msgid "Reminder: this action will delete all selected authorities!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:186
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:194
 #, c-format
 msgid ""
 "Reminder: this action will delete all selected bibliographic records, "
@@ -40561,7 +40599,7 @@ msgstr ""
 msgid "Remove item from collection"
 msgstr "Colecţie:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:145
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, fuzzy, c-format
 msgid "Remove non-local items:"
 msgstr "%s înregistrări importate"
@@ -40858,7 +40896,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
-msgid "Reply-To (if different to Email): "
+msgid "Reply-To: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
@@ -41117,8 +41155,8 @@ msgstr "Codul regulei de depunere lipseşte"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:37
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:43
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
@@ -41499,9 +41537,9 @@ msgid "Return to: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "Return-Path (if different to Email): "
-msgstr ""
+#, fuzzy, c-format
+msgid "Return-Path: "
+msgstr "Data expirării:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -41585,7 +41623,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
-msgid "Rodrigo Santallan"
+msgid "Rodrigo Santellan"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
@@ -42991,7 +43029,7 @@ msgstr ""
 msgid "Select a budget"
 msgstr "Definiţi propriile bugete"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:45
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:46
 #, fuzzy, c-format
 msgid "Select a built-in sound: "
 msgstr "Definiţi propriile bugete"
@@ -43106,8 +43144,8 @@ msgstr "Suprimaţi lista"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:202
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:230
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:197
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, fuzzy, c-format
 msgid "Select all"
@@ -43220,8 +43258,8 @@ msgstr "Suprimaţi"
 msgid "Select planning type:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:68
-#: intranet-tmpl/prog/en/modules/tools/export.tt:188
+#: intranet-tmpl/prog/en/modules/tools/export.tt:77
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, c-format
 msgid "Select records to export "
 msgstr ""
@@ -43297,12 +43335,12 @@ msgstr ""
 msgid "Select to import"
 msgstr "Suprimaţi"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:159
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
 #, fuzzy, c-format
 msgid "Select without holds"
 msgstr "Detaliile Catalogului"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
 #, fuzzy, c-format
 msgid "Select without items"
 msgstr "Suprimaţi selectarea"
@@ -43340,12 +43378,12 @@ msgstr ""
 msgid "Selecting this option will overwrite existing fund owners, if any"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:84
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:91
 #, fuzzy, c-format
 msgid "Selector"
 msgstr "Suprimaţi"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:34
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
 #, fuzzy, c-format
 msgid "Selector: "
 msgstr "Suprimaţi"
@@ -44394,12 +44432,12 @@ msgstr "Coş"
 msgid "Sorting routine"
 msgstr "Rutină de Depunere:"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:92
 #, c-format
 msgid "Sound"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:39
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
 #, fuzzy, c-format
 msgid "Sound: "
 msgstr "Fond "
@@ -44722,7 +44760,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:336
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:145
-#: intranet-tmpl/prog/en/modules/tools/export.tt:118
+#: intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
 msgid "Start date:"
 msgstr ""
@@ -45343,7 +45381,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:377
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:33
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
@@ -45726,7 +45764,7 @@ msgstr "Rezumatul"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:490
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:207
 #, c-format
 msgid "Summary"
 msgstr "Rezumatul"
@@ -48178,7 +48216,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:246
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:210
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:442
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
@@ -48346,12 +48384,12 @@ msgstr ""
 msgid "To a file: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:194
+#: intranet-tmpl/prog/en/modules/tools/export.tt:203
 #, fuzzy, c-format
 msgid "To authid: "
 msgstr "Data: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:75
+#: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, fuzzy, c-format
 msgid "To biblio number: "
 msgstr "De la un număr bibliografic: "
@@ -48374,7 +48412,7 @@ msgid ""
 "file"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, fuzzy, c-format
 msgid "To item call number: "
 msgstr "De la numărul_de_apel_al_articolului: "
@@ -48614,7 +48652,7 @@ msgstr "| Ataşamente:%s,"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:85
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -49217,7 +49255,7 @@ msgid "URL: "
 msgstr ""
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:134
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:128
 #, fuzzy, c-format
@@ -49341,8 +49379,8 @@ msgstr ""
 msgid "Undo import into catalog"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:268
+#: intranet-tmpl/prog/en/modules/tools/export.tt:294
 #, c-format
 msgid "Unfortunately, no backups are available."
 msgstr ""
@@ -49845,15 +49883,15 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:26
 #, c-format
 msgid "Use a file"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:130
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:139
+#: intranet-tmpl/prog/en/modules/tools/export.tt:218
 #, fuzzy, c-format
 msgid "Use a file "
 msgstr "Alegeţi Fişierul *.koc: "
@@ -49971,7 +50009,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:651
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:71
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:208
 #, c-format
 msgid "Used in"
 msgstr ""
@@ -52224,7 +52262,7 @@ msgid ""
 "warnNoTemplateCaching %%] %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 msgstr ""
@@ -52630,7 +52668,7 @@ msgstr "Conectaţi %s.%s la un subdomeniu MARC "
 msgid "be mapped to the same tag,"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
 #, c-format
 msgid "beep.ogg"
 msgstr ""
@@ -52787,7 +52825,7 @@ msgstr "2 luni"
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
 #, c-format
 msgid "call.ogg"
 msgstr ""
@@ -52910,12 +52948,12 @@ msgstr ""
 msgid "create one or more authorized values"
 msgstr "Definiţi categoriile şi valorile autorizate pentru acestea."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
 #, c-format
 msgid "critical.ogg"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:163
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
 #, c-format
 msgid "csv"
 msgstr ""
@@ -53023,12 +53061,12 @@ msgstr ""
 msgid "detected."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
 #, c-format
 msgid "device_connect.ogg"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
 #, c-format
 msgid "device_disconnect.ogg"
 msgstr ""
@@ -53113,7 +53151,7 @@ msgstr "Editaţi Articolele"
 msgid "email"
 msgstr "Email"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
 #, fuzzy, c-format
 msgid "ending.ogg"
 msgstr "Făceţi clic pe 'Sugestii de administrare'"
@@ -53145,7 +53183,7 @@ msgstr ""
 msgid "expired"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
 #, c-format
 msgid "fail.ogg"
 msgstr ""
@@ -53362,7 +53400,7 @@ msgstr ""
 msgid "in library "
 msgstr "Adăugaţi o nouă Bibliotecă/Sucursală"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
 #, c-format
 msgid "incoming_call.ogg"
 msgstr ""
@@ -53624,8 +53662,8 @@ msgid "koha-conf.xml"
 msgstr ""
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 msgid "koha.mrc"
 msgstr ""
 
@@ -53681,12 +53719,12 @@ msgstr ""
 msgid "like"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
 #, fuzzy, c-format
 msgid "loading.ogg"
 msgstr "Rubrica de la A-Z"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
 #, fuzzy, c-format
 msgid "loading_2.ogg"
 msgstr "Rubrica de la A-Z"
@@ -53711,8 +53749,8 @@ msgstr "/"
 msgid "manage circulation rules"
 msgstr "Notă de circulaţie: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:161
-#: intranet-tmpl/prog/en/modules/tools/export.tt:231
+#: intranet-tmpl/prog/en/modules/tools/export.tt:170
+#: intranet-tmpl/prog/en/modules/tools/export.tt:240
 #, c-format
 msgid "marc"
 msgstr ""
@@ -53722,7 +53760,7 @@ msgstr ""
 msgid "matches"
 msgstr "Loturi"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
 #, c-format
 msgid "maximize.ogg"
 msgstr ""
@@ -53749,7 +53787,7 @@ msgid ""
 "%stitle%sbarcode%s\"itype\" "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "minimize.ogg"
 msgstr ""
@@ -53785,7 +53823,7 @@ msgstr ""
 msgid "never"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
 #, fuzzy, c-format
 msgid "new_mail_notification.ogg"
 msgstr "Anulaţi notificaţia"
@@ -53893,7 +53931,7 @@ msgstr ""
 msgid "one or more records without items attached. %s "
 msgstr "acestă înregistrare nu are articole ataşate. "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
 #, c-format
 msgid "opening.ogg"
 msgstr ""
@@ -53930,7 +53968,7 @@ msgstr "Creaţi"
 msgid "or create:"
 msgstr "Creaţi"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
 #, c-format
 msgid "panic.ogg"
 msgstr ""
@@ -53986,7 +54024,7 @@ msgstr ""
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
 #, c-format
 msgid "popup.ogg"
 msgstr ""
@@ -54151,13 +54189,13 @@ msgid "selection"
 msgstr "Colecţie"
 
 #. INPUT type=text name=selector
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
 #, fuzzy
 msgid "selector"
 msgstr "Colecţie"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:159
+#: intranet-tmpl/prog/en/modules/tools/export.tt:231
 #, fuzzy, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "%S separate de un spaţiu. (ex., 100a 200 606) "
@@ -54220,7 +54258,7 @@ msgid "software.coop, United Kingdom"
 msgstr ", Regatul Unit al Marii Britanii"
 
 #. INPUT type=text name=sound
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
 msgid "sound"
 msgstr ""
 
@@ -54554,7 +54592,7 @@ msgstr ""
 msgid "view"
 msgstr "Recenzie"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:66
 #, fuzzy, c-format
 msgid "warning.ogg"
 msgstr "Data Creaţiei"
@@ -54626,8 +54664,8 @@ msgstr "Valoare autorizată"
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
-#: intranet-tmpl/prog/en/modules/tools/export.tt:232
+#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "xml"
 msgstr "xml"

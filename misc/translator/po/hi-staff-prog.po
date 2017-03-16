@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-02-15 18:18-0300\n"
+"POT-Creation-Date: 2017-03-14 15:20-0300\n"
 "PO-Revision-Date: 2017-02-16 14:13+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,9 +218,8 @@ msgid ""
 "%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
 "late, %s "
 msgstr ""
-"%s %s %s \"%s (%s दिनों)\",\"%s\",\"%s\",\"%s %sलेखक: %s.%s%sद्वारा "
-"प्रकाशित:%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,विलंभ "
-"में कुल आदेश, %s "
+"%s %s %s \"%s (%s दिनों)\",\"%s\",\"%s\",\"%s %sलेखक: %s.%s%sद्वारा प्रकाशित:%s."
+"%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,विलंभ में कुल आदेश, %s "
 
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
@@ -247,8 +246,8 @@ msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
 "\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 msgstr ""
-"%s %s %s %s \"%s %sद्वारा %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%"
-"s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
+"%s %s %s %s \"%s %sद्वारा %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
+"\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
 
 #. %1$s:  END 
 #. %2$s:  BLOCK form_field_select_text_block 
@@ -1920,7 +1919,7 @@ msgstr ""
 #. %23$s:  IF message.error 
 #. %24$s:  message.error
 #. %25$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:96
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:104
 #, c-format
 msgid ""
 "%s %s The biblionumber %s does not exist in the database. %s The authority "
@@ -2214,8 +2213,7 @@ msgstr "%s %s अंदर"
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
 msgstr ""
-"%s %s आइटम(ओं) संशोधित (साथ %s क्षेत्र(ओं) संशोधित). %s कोई आइटम संशोधित नही"
-". %s "
+"%s %s आइटम(ओं) संशोधित (साथ %s क्षेत्र(ओं) संशोधित). %s कोई आइटम संशोधित नही. %s "
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total 
@@ -2744,6 +2742,18 @@ msgstr ""
 #, c-format
 msgid "%s %sTag %s Subfield constraints%s %s %s %s "
 msgstr "%s %sटैग %s Subfield बाधाओं %s %s %s %s "
+
+#. %1$s:  SWITCH m.code 
+#. %2$s:  CASE 'invalid_mimetype' 
+#. %3$s:  CASE 
+#. %4$s:  m.code 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:51
+#, c-format
+msgid ""
+"%s %sThe file used does not have a valid format. Only csv and txt are "
+"allowed. %s%s %s "
+msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -3870,7 +3880,7 @@ msgstr "%s नही %s हाँ %s रिकार्ड केवल %s आ�
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "%s No action defined for the template. %s "
 msgstr "%s टेमप्लेट के लिए अभी तक परिभाषित नहीं. %s "
@@ -4506,7 +4516,7 @@ msgstr "%s कोई बकाया (स्वीकार) सुझाव ह
 #. %7$s:  report.total_success 
 #. %8$s:  report.total_records 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:230
 #, c-format
 msgid ""
 "%s There are no record ids defined. %s %s %s All records have been deleted "
@@ -5411,7 +5421,7 @@ msgstr "%s रिकॉर्ड  %s: %s"
 #. %1$s:  count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:94
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:209
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:217
 #, c-format
 msgid "%s record(s)"
 msgstr "%s रिकॉर्ड (ओं)"
@@ -7826,7 +7836,7 @@ msgstr "&rsaquo; चेतावनी ग्राहकों के लिए
 msgid "&rsaquo; Attach an item to "
 msgstr "&rsaquo; एक आइटम संलग्न को"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #, c-format
 msgid "&rsaquo; Audio alerts"
 msgstr "&rsaquo; आडियो चेतावनी"
@@ -9657,8 +9667,8 @@ msgstr "- कृपया एक आइटम एक होल्ड के ल�
 msgid "- Start date missing or invalid."
 msgstr "- आरंभ तिथि लापता या अवैध."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:82
-#: intranet-tmpl/prog/en/modules/tools/export.tt:200
+#: intranet-tmpl/prog/en/modules/tools/export.tt:91
+#: intranet-tmpl/prog/en/modules/tools/export.tt:209
 #, c-format
 msgid "-- All --"
 msgstr "- सब --"
@@ -9684,7 +9694,7 @@ msgstr "-- एक स्थिति चुनें --"
 msgid "-- Choose format --"
 msgstr "-- एक फ्रामेट चुनें --"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:47
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
 #, c-format
 msgid "-- Choose one -- "
 msgstr "-- एक चुनें --"
@@ -10086,7 +10096,7 @@ msgstr "सभी लाइब्रेरियन कार्यों के
 msgid "Accession date"
 msgstr "परिग्रहण दिनांक"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:115
+#: intranet-tmpl/prog/en/modules/tools/export.tt:124
 #, c-format
 msgid "Accession date (inclusive)"
 msgstr "परिग्रहण तारीख ( समावेशी)"
@@ -10783,7 +10793,7 @@ msgstr "इस आइटम की एकाधिक तिथियाँ क�
 msgid "Add multiple items"
 msgstr "एकाधिक आइटम जोड़ें"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Add new alert"
 msgstr "नई चेतावनी जोड़े"
@@ -11239,7 +11249,7 @@ msgstr "पता: "
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:27
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:28
@@ -12423,7 +12433,7 @@ msgid ""
 msgstr "क्या आप इस संरक्षक को हटाना चाहते हैं %s %s? यह पूर्ववत नहीं कर सकते हैं."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Are you sure you want to delete the selected audio alerts?"
 msgstr "क्या आप वाकई चयनित ऑडियो अलर्ट को मिटाना चाहते हैं?"
 
@@ -12917,7 +12927,7 @@ msgid "Attribute: "
 msgstr "गुण प्रकारः "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:80
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:77
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:78
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:121
 #, c-format
 msgid "Audio alerts"
@@ -12958,7 +12968,7 @@ msgid "Auth value:"
 msgstr "Auth मूल्य:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:237
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:206
 #, c-format
 msgid "Authid"
 msgstr "ऑथआईडी"
@@ -13128,7 +13138,7 @@ msgid "Authorities tables"
 msgstr "प्राधिकरण सारणी"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:136
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:136
 #, c-format
 msgid "Authorities: "
 msgstr "प्राधिकरणः"
@@ -13215,7 +13225,7 @@ msgstr "प्राधिकरण के प्रकार"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:207
 #, c-format
 msgid "Authority type: "
 msgstr "प्राधिकरण प्रकार: "
@@ -13315,8 +13325,8 @@ msgid ""
 "Autolocation is switched on and you are logging in with an IP address that "
 "doesn't match your library. "
 msgstr ""
-"Autolocation चालू है और आप एक आईपी पते के साथ प्रवेश कर रहे हैं जोकि आपके "
-"पुस्तकालय से मेल नहीं खाती।"
+"Autolocation चालू है और आप एक आईपी पते के साथ प्रवेश कर रहे हैं जोकि आपके पुस्तकालय से मेल "
+"नहीं खाती।"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:69
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:138
@@ -13946,8 +13956,8 @@ msgstr "बैच संरक्षक परिणाम"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:128
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:82
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:90
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:97
 #, c-format
 msgid "Batch record deletion"
 msgstr "बैच रिकार्ड हटाना"
@@ -14120,7 +14130,7 @@ msgstr "ग्रन्थसूची का रिकार्ड"
 msgid "Bibliographic record %s"
 msgstr "ग्रन्थसूची का रिकार्ड  %s"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:135
 #, c-format
 msgid "Bibliographic: "
 msgstr "ग्रन्थसूची का "
@@ -14142,7 +14152,7 @@ msgstr "Biblio आइटम नंबर (आंतरिक)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:209
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:174
 #, c-format
 msgid "Biblionumber"
 msgstr "बिब्लियोसंख्या"
@@ -14717,7 +14727,7 @@ msgstr "सीएसवी  - %s"
 msgid "CSV profile ID"
 msgstr "सीएसवी प्रोफ़ाइल आईडी"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:167
+#: intranet-tmpl/prog/en/modules/tools/export.tt:176
 #, c-format
 msgid "CSV profile: "
 msgstr "सीएसवी प्रोफ़ाइल:"
@@ -14856,7 +14866,7 @@ msgid "Call number (Z-A to 9-0)"
 msgstr "कॉल नंबर (Z-A to 9-0)"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:39
-#: intranet-tmpl/prog/en/modules/tools/export.tt:101
+#: intranet-tmpl/prog/en/modules/tools/export.tt:110
 #, c-format
 msgid "Call number range"
 msgstr "कॉल नंबर रेंज"
@@ -15056,7 +15066,7 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:73
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:304
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:95
@@ -15139,8 +15149,8 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:52
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:171
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:261
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:228
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:154
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:444
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:185
@@ -15923,7 +15933,7 @@ msgstr "आइटम स्तर बदले"
 msgid "Change messaging preferences to default for this category?"
 msgstr "इस श्रेणी के लिए डिफ़ॉल्ट करने के लिए प्राथमिकताएँ संदेश बदलें?"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:83
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:90
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:103
 #, c-format
 msgid "Change order"
@@ -16189,7 +16199,7 @@ msgid "Check that your database is running."
 msgstr "जो आपके डेटाबेस चल रहा है की जाँच करें."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Check the box next to the alert you want to delete."
 msgstr "बॉक्स चेतावनी आप हटाना चाहते हैं के बगल की जाँच करें।"
 
@@ -16485,7 +16495,7 @@ msgstr "चेकआउट स्तर:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:710
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:68
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:170
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:178
 #, c-format
 msgid "Checkouts"
 msgstr "चेकआउट"
@@ -16585,8 +16595,8 @@ msgstr "प्रिंट करने के लिए पाठ क्षे�
 msgid "Choose a field name"
 msgstr "एक क्षेत्र नाम चुनें "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:251
-#: intranet-tmpl/prog/en/modules/tools/export.tt:277
+#: intranet-tmpl/prog/en/modules/tools/export.tt:260
+#: intranet-tmpl/prog/en/modules/tools/export.tt:286
 #, c-format
 msgid "Choose a file "
 msgstr "एक फ़ाइल चुनें"
@@ -17159,8 +17169,8 @@ msgstr "स्पष्ट"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:203
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:231
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:157
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:190
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:165
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:198
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Clear all"
@@ -17227,7 +17237,7 @@ msgstr "खोज शब्द साफ"
 msgid "Clear selection on visible rows"
 msgstr "दिखाई पंक्तियों पर चयन साफ करें"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:191
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
 #, c-format
 msgid "Clear used authorities"
 msgstr "साफ इस्तेमाल किया अधिकारियों"
@@ -18204,7 +18214,7 @@ msgstr "सामग्री "
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:148
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:184
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:63
 #, c-format
@@ -19697,6 +19707,16 @@ msgstr "डिफ़ॉल्ट मान:"
 msgid "Default values"
 msgstr "डिफ़ॉल्ट मूल्य"
 
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:189
+#, fuzzy, c-format
+msgid "Default: ReplyToDefault system preference"
+msgstr "ग्लोबल सिस्टम वरीयताएँ"
+
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:190
+#, fuzzy, c-format
+msgid "Default: ReturnpathDefault system preference"
+msgstr "खोज सिस्टम वरीयताएँ"
+
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:440
@@ -20261,7 +20281,7 @@ msgstr "एक रिमोट मिटाएँ"
 msgid "Delete selected"
 msgstr "चयनित हटाएँ"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:129
 #, c-format
 msgid "Delete selected alerts"
 msgstr "चुने गए चेतावनी को मिटाएँ"
@@ -20273,7 +20293,7 @@ msgid "Delete selected items"
 msgstr "मिटाएँ चयनित आइटम"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:219
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:227
 msgid "Delete selected records"
 msgstr "चयनित रिकार्ड हटाएँ"
 
@@ -21064,13 +21084,13 @@ msgid "Don't decrease loan length based on holds"
 msgstr "रखती है के आधार पर ऋण लंबाई कम नहीं है"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:63
-#: intranet-tmpl/prog/en/modules/tools/export.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:158
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #, c-format
 msgid "Don't export fields:"
 msgstr "क्षेत्रों में निर्यात नहीं करते हैं:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:141
+#: intranet-tmpl/prog/en/modules/tools/export.tt:150
 #, c-format
 msgid "Don't export items:"
 msgstr "आइटम का निर्यात नहीं करते हैं:"
@@ -21153,12 +21173,12 @@ msgid "Download cart"
 msgstr "डाउनलोड कार्ट"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:292
+#: intranet-tmpl/prog/en/modules/tools/export.tt:301
 msgid "Download configuration"
 msgstr "डाउनलोड विन्यास"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:266
+#: intranet-tmpl/prog/en/modules/tools/export.tt:275
 msgid "Download database"
 msgstr "डाउनलोड डाटाबेस"
 
@@ -21508,7 +21528,7 @@ msgstr "एड ग्रीष्मकाल (कुछ कोड और MARC �
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:392
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:130
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:217
@@ -21610,7 +21630,7 @@ msgstr "कार्रवाई संपादित करें %s"
 msgid "Edit actions"
 msgstr "कार्रवाई संपादित करें"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:29
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:30
 #, c-format
 msgid "Edit alert"
 msgstr "संपादित अलर्ट"
@@ -22033,7 +22053,7 @@ msgstr "अंतिम तिथि लापता"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:337
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:122
+#: intranet-tmpl/prog/en/modules/tools/export.tt:131
 #, c-format
 msgid "End date:"
 msgstr "अंतिम तिथि:"
@@ -22792,8 +22812,8 @@ msgstr "सीएसवी में निर्यात"
 msgid "Export as PDF"
 msgstr "पीडीएफ में निर्यात"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:53
-#: intranet-tmpl/prog/en/modules/tools/export.tt:242
+#: intranet-tmpl/prog/en/modules/tools/export.tt:62
+#: intranet-tmpl/prog/en/modules/tools/export.tt:251
 #, c-format
 msgid "Export authority records"
 msgstr "प्राधिकरण रिकार्ड निर्यात"
@@ -22803,8 +22823,8 @@ msgstr "प्राधिकरण रिकार्ड निर्यात"
 msgid "Export bibliographic and holdings data"
 msgstr "निर्यात ग्रंथ सूची और होल्डिग डेटा"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:52
-#: intranet-tmpl/prog/en/modules/tools/export.tt:181
+#: intranet-tmpl/prog/en/modules/tools/export.tt:61
+#: intranet-tmpl/prog/en/modules/tools/export.tt:190
 #, c-format
 msgid "Export bibliographic records"
 msgstr "निर्यात ग्रंथ सूची रिकार्ड"
@@ -22824,7 +22844,7 @@ msgstr "निर्यात कार्ड बैच"
 msgid "Export checkouts using format:"
 msgstr "निर्यातचैक आउट प्रारूप का उपयोग:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:58
+#: intranet-tmpl/prog/en/modules/tools/export.tt:67
 #, c-format
 msgid "Export configuration"
 msgstr "विन्यास निर्यात"
@@ -22835,7 +22855,7 @@ msgstr "विन्यास निर्यात"
 msgid "Export data"
 msgstr "निर्यात डेटा"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:55
+#: intranet-tmpl/prog/en/modules/tools/export.tt:64
 #, c-format
 msgid "Export database"
 msgstr "निर्यात डाटाबेस"
@@ -23268,20 +23288,22 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "फील्ड्स रिपोर्ट में प्रदर्शित करने के लिए:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:213
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#, fuzzy, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
-"as a filter: it is compatible with other parameters."
+"as a filter: it is compatible with other parameters. (File types accepted: ."
+"csv and .txt)"
 msgstr ""
 "फ़ाइल प्रति पंक्ति एक authid साथ authids की एक सूची से युक्त। इस सूची में एक फिल्टर के रूप "
 "में काम करता है: यह अन्य मानकों के साथ संगत है।"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:134
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/export.tt:143
+#, fuzzy, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
-"This list works as a filter: it is compatible with other parameters."
+"This list works as a filter: it is compatible with other parameters. (File "
+"types accepted: .csv and .txt)"
 msgstr ""
 "फ़ाइल प्रति पंक्ति एक Biblio संख्या के साथ Biblio नंबरों की सूची से युक्त। इस सूची में एक "
 "फिल्टर के रूप में काम करता है: यह अन्य मानकों के साथ संगत है।"
@@ -23301,8 +23323,8 @@ msgstr "फ़ाइल को हटाया नहीं जा सकता 
 msgid "File could not be read."
 msgstr "फ़ाइल को पढ़ने नहीं जा सका।"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:159
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:168
+#: intranet-tmpl/prog/en/modules/tools/export.tt:238
 #, c-format
 msgid "File format: "
 msgstr "फ़ाइल प्रारूप: "
@@ -23319,8 +23341,8 @@ msgstr "फ़ाइल हटा दिया गया है।"
 msgid "File name"
 msgstr "फ़ाइल का नाम"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -23333,15 +23355,15 @@ msgstr "फ़ाइल प्रकार"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:214
+#: intranet-tmpl/prog/en/modules/tools/export.tt:223
 #, c-format
 msgid "File:"
 msgstr "फ़ाइल:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:88
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/export.tt:135
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:134
+#: intranet-tmpl/prog/en/modules/tools/export.tt:144
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:142
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:152
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:33
 #, c-format
@@ -24010,12 +24032,12 @@ msgstr "किसी भी पुस्तकालय से:"
 msgid "From any library:"
 msgstr "किसी भी पुस्तकालय से:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:190
+#: intranet-tmpl/prog/en/modules/tools/export.tt:199
 #, c-format
 msgid "From authid: "
 msgstr "authid से:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:71
+#: intranet-tmpl/prog/en/modules/tools/export.tt:80
 #, c-format
 msgid "From biblio number: "
 msgstr "Biblio संख्या से: "
@@ -24041,7 +24063,7 @@ msgstr "होम लाइब्रेरी से"
 msgid "From home library:"
 msgstr "होम लाइब्रेरी से:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:104
+#: intranet-tmpl/prog/en/modules/tools/export.tt:113
 #, c-format
 msgid "From item call number: "
 msgstr "आइटम कॉल नंबर से: "
@@ -25036,7 +25058,7 @@ msgstr "होल्डिंग्सः"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:462
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:349
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:39
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:169
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:338
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:340
 #, c-format
@@ -25245,7 +25267,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:25
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:26
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:28
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:16
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:63
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:48
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:10
@@ -25419,7 +25441,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:26
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:84
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:80
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:88
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -25647,7 +25669,7 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "आईडी"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
 #, c-format
 msgid "IM_notification.ogg"
 msgstr "IM_notification.ogg"
@@ -27470,7 +27492,7 @@ msgstr "आइटम के प्रकार:"
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:122
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:107
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:149
-#: intranet-tmpl/prog/en/modules/tools/export.tt:80
+#: intranet-tmpl/prog/en/modules/tools/export.tt:89
 #, c-format
 msgid "Item type: "
 msgstr "आइटम प्रकार: "
@@ -27528,7 +27550,7 @@ msgstr "आइटमनंबर"
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:215
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:246
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:176
 #, c-format
 msgid "Items"
 msgstr "आइटम"
@@ -28454,7 +28476,7 @@ msgstr ""
 "कोहा &rsaquo; प्रशासन &rsaquo; %sOAI सेट विन्यास &rsaquo; नया OAI सेट जोड़े%sOAI "
 "सेट विन्यास%s"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:2
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:3
 #, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Audio alerts"
 msgstr "कोहा &rsaquo; प्रशासन &rsaquo; आडियो अलर्ट"
@@ -31161,7 +31183,7 @@ msgstr "लाइब्रेरी:"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:139
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:143
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "Library: "
 msgstr "लाइब्रेरी: "
@@ -33361,22 +33383,22 @@ msgid "Move action up"
 msgstr "ऊपर कार्रवाई ले जाएँ "
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:115
 msgid "Move alert down"
 msgstr "चेतावनी नीचे ले जाएँ"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:111
 msgid "Move alert to bottom"
 msgstr "नीचे करने के लिए ले जाएँ चेतावनी"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:100
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:107
 msgid "Move alert to top"
 msgstr "शीर्ष करने के लिए ले जाएँ चेतावनी"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:96
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:103
 msgid "Move alert up"
 msgstr "चेतावनी ऊपर ले जाएँ "
 
@@ -33786,7 +33808,7 @@ msgstr "नया खाता"
 msgid "New action"
 msgstr "नई कार्रवाई"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:24
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:25
 #, c-format
 msgid "New alert"
 msgstr "नया अलर्ट"
@@ -33828,7 +33850,7 @@ msgid "New batch patrons modification"
 msgstr "नए बैच संरक्षक संशोधन"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:242
 #, c-format
 msgid "New batch record deletion"
 msgstr "नए बैच रिकॉर्ड विलोपन"
@@ -34408,6 +34430,12 @@ msgstr "नहीं पता संग्रहीत."
 msgid "No and try to override system preferences"
 msgstr "कोई और सिस्टम वरीयताओं को ओवरराइड करने की कोशिश"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
+#, fuzzy
+msgid "No authorities have been selected."
+msgstr "कोई रिकॉर्ड नहीं चुना गया।"
+
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
 #, c-format
@@ -34424,8 +34452,7 @@ msgstr "श्रेणियों में परिभाषित नही
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
-" इस संरक्षक और आइटम प्रकार संयोजन के लिए कोई परिसंचरण नियम नही परिभाषित किया "
-"गया है."
+" इस संरक्षक और आइटम प्रकार संयोजन के लिए कोई परिसंचरण नियम नही परिभाषित किया गया है."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -35259,13 +35286,13 @@ msgstr "नवीनीकरणयोग्य नही"
 msgid "Note"
 msgstr "नोट"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:63
+#: intranet-tmpl/prog/en/modules/tools/export.tt:72
 #, c-format
 msgid "Note : The items are exported by this tool unless specified."
 msgstr "नोट: जब तक निर्दिष्ट इस आइटम इस उपकरण द्वारा निर्यात किया जाता है."
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:249
-#: intranet-tmpl/prog/en/modules/tools/export.tt:275
+#: intranet-tmpl/prog/en/modules/tools/export.tt:258
+#: intranet-tmpl/prog/en/modules/tools/export.tt:284
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr "नोट: यह निर्यात फ़ाइल बहुत बड़ी हो जाएगा, और रात को उत्पन्न होता है।"
@@ -35340,6 +35367,7 @@ msgid "Note:"
 msgstr "टिप्पणीः"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:44
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:694
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:217
@@ -36389,15 +36417,15 @@ msgid "Optional module missing"
 msgstr "वैकल्पिक मॉड्यूल लापता"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:701
-#: intranet-tmpl/prog/en/modules/tools/export.tt:139
-#: intranet-tmpl/prog/en/modules/tools/export.tt:218
+#: intranet-tmpl/prog/en/modules/tools/export.tt:148
+#: intranet-tmpl/prog/en/modules/tools/export.tt:227
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
 msgstr "विकल्प"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:138
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:146
 #, c-format
 msgid "Or enter a list of record numbers"
 msgstr "या रिकार्ड संख्या की एक सूची दर्ज"
@@ -36739,12 +36767,12 @@ msgstr "अन्य ..."
 msgid "Output"
 msgstr "आउटपुट"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:227
+#: intranet-tmpl/prog/en/modules/tools/export.tt:236
 #, c-format
 msgid "Output format"
 msgstr "आउटपुट प्रारूप"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:155
+#: intranet-tmpl/prog/en/modules/tools/export.tt:164
 #, c-format
 msgid "Output format "
 msgstr "आउटपुट फार्मेट"
@@ -38340,7 +38368,7 @@ msgstr "योजना के लिए %s द्वारा %s"
 msgid "Play media"
 msgstr "मीडिया चलाए"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
 #, c-format
 msgid "Play sound"
 msgstr "ध्वनि बजाएँ"
@@ -38504,6 +38532,11 @@ msgstr "एक मुद्रा को संपादित करने औ�
 #, c-format
 msgid "Please enable Javascript:"
 msgstr "जावास्क्रिप्ट सक्षम करें:"
+
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#, c-format
+msgid "Please enable system preference 'AudioAlerts' to activate sounds."
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -38869,7 +38902,7 @@ msgid "Please select only one %s to %s."
 msgstr "कृपया चयन करे केवल एक %s को %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:4
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
 msgid "Please select or enter a sound."
 msgstr "कृपया चयन करें या एक ध्वनि दर्ज करें।"
 
@@ -39055,7 +39088,7 @@ msgstr "पर प्रविष्ट किया %s%s द्वारा"
 msgid "Pre-adolescent"
 msgstr "पूर्व किशोर"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:82
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:89
 #, c-format
 msgid "Precedence"
 msgstr "पूर्वता"
@@ -40293,7 +40326,7 @@ msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "रिकार्ड के रूप में UTF-8, दूषित हो सकती है चिह्नित नहीं"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:149
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:141
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:149
 #, c-format
 msgid "Record number list (one per line): "
 msgstr "रिकार्ड संख्या सूची (एक प्रति पंक्ति):"
@@ -40320,7 +40353,7 @@ msgstr "रिकार्ड शीर्षक"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:133
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
 #, c-format
 msgid "Record type"
 msgstr "रिकार्ड प्रकार"
@@ -40533,12 +40566,12 @@ msgstr "अनुस्मारक तिथि"
 msgid "Reminder: "
 msgstr "अनुस्मारक:"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:214
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:222
 #, c-format
 msgid "Reminder: this action will delete all selected authorities!"
 msgstr "अनुस्मारक: इस कार्रवाई के सभी चयनित प्रधिकारियों को हटाना होगा!"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:186
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:194
 #, c-format
 msgid ""
 "Reminder: this action will delete all selected bibliographic records, "
@@ -40628,7 +40661,7 @@ msgstr "पहलू [% facet.facet_link_value हटाये | एचटीए
 msgid "Remove item from collection"
 msgstr "संग्रह से निकालें आइटम"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:145
+#: intranet-tmpl/prog/en/modules/tools/export.tt:154
 #, c-format
 msgid "Remove non-local items:"
 msgstr "निकालें गैर स्थानीय आइटम"
@@ -40921,8 +40954,8 @@ msgstr "प्रतिस्थापन मूल्य:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
-msgid "Reply-To (if different to Email): "
-msgstr "उत्तर-करने के लिए (अगर ईमेल करने के लिए अलग-अलग): "
+msgid "Reply-To: "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #, c-format
@@ -41181,8 +41214,8 @@ msgstr "Require.js जेएस मॉड्यूल प्रणाली"
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:42
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:37
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:43
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:145
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:70
@@ -41560,9 +41593,9 @@ msgid "Return to: "
 msgstr "के लिए लौटेः"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, c-format
-msgid "Return-Path (if different to Email): "
-msgstr "लौटें-पथ (अगर ईमेल करने के लिए अलग-अलग): "
+#, fuzzy, c-format
+msgid "Return-Path: "
+msgstr "के लिए लौटेः"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -41645,8 +41678,8 @@ msgid "Rocio Dressler"
 msgstr "Rocio ड्रेस्लर"
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
-#, c-format
-msgid "Rodrigo Santallan"
+#, fuzzy, c-format
+msgid "Rodrigo Santellan"
 msgstr "रॉड्रिगो सेन्टाल्लेन"
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
@@ -43031,7 +43064,7 @@ msgstr "चुनें एक उधारकर्ता वर्ग"
 msgid "Select a budget"
 msgstr "एक बजट चुनें ।"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:45
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:46
 #, c-format
 msgid "Select a built-in sound: "
 msgstr "एक निर्मित में ध्वनि का चयन करें:"
@@ -43146,8 +43179,8 @@ msgstr "चुनें एक समय"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:126
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:202
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:230
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:197
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:245
 #, c-format
 msgid "Select all"
@@ -43260,8 +43293,8 @@ msgstr "स्वामी का चयन"
 msgid "Select planning type:"
 msgstr "नियोजन प्रकार का चयन करें:"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:68
-#: intranet-tmpl/prog/en/modules/tools/export.tt:188
+#: intranet-tmpl/prog/en/modules/tools/export.tt:77
+#: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, c-format
 msgid "Select records to export "
 msgstr "चुनें रिकार्ड निर्यात करने के लिए "
@@ -43337,12 +43370,12 @@ msgstr "प्रदर्शित करने या नहीं करन�
 msgid "Select to import"
 msgstr "आयात करने के लिए चयन"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:159
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
 #, c-format
 msgid "Select without holds"
 msgstr "होल्ड के बिना चयन करें"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:166
 #, c-format
 msgid "Select without items"
 msgstr "आइटम के बिना चयन करें"
@@ -43382,12 +43415,12 @@ msgstr ""
 msgid "Selecting this option will overwrite existing fund owners, if any"
 msgstr "इस विकल्प को मौजूदा फंड मालिकों के ऊपर लिख देगा का चयन, यदि कोई हो"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:84
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:91
 #, c-format
 msgid "Selector"
 msgstr "चयनकर्ता"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:34
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
 #, c-format
 msgid "Selector: "
 msgstr "चयनकर्ताः"
@@ -44435,12 +44468,12 @@ msgstr "छंटाई"
 msgid "Sorting routine"
 msgstr "छंटनी की दिनचर्या"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:92
 #, c-format
 msgid "Sound"
 msgstr "ध्वनि"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:39
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
 #, c-format
 msgid "Sound: "
 msgstr "ध्वनि:"
@@ -44765,7 +44798,7 @@ msgstr "प्रारंभ तिथि को समाप्ति ति�
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:336
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:145
-#: intranet-tmpl/prog/en/modules/tools/export.tt:118
+#: intranet-tmpl/prog/en/modules/tools/export.tt:127
 #, c-format
 msgid "Start date:"
 msgstr "प्रारंभ तिथि:"
@@ -45384,7 +45417,7 @@ msgstr "विषय:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:377
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:33
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
@@ -45765,7 +45798,7 @@ msgstr "कुल"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:37
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:490
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:199
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:207
 #, c-format
 msgid "Summary"
 msgstr "सारांश"
@@ -48316,7 +48349,7 @@ msgstr "TinyMCE संपादक v3.5.8 "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:246
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:140
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:210
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:442
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:464
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:491
@@ -48486,12 +48519,12 @@ msgstr "एक फाइल करने के लिए:"
 msgid "To a file: "
 msgstr "एक फाइल को: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:194
+#: intranet-tmpl/prog/en/modules/tools/export.tt:203
 #, c-format
 msgid "To authid: "
 msgstr "To authid: "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:75
+#: intranet-tmpl/prog/en/modules/tools/export.tt:84
 #, c-format
 msgid "To biblio number: "
 msgstr "संख्या biblio को: "
@@ -48516,7 +48549,7 @@ msgstr ""
 "कोहा plugins सक्षम करने के लिए प्रणाली वरीयता UseकोहाPlugins सक्षम होना चाहिए, और "
 "झंडा enable_plugins कोहा विन्यास फाइल में सेट किया जाना चाहिए"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:108
+#: intranet-tmpl/prog/en/modules/tools/export.tt:117
 #, c-format
 msgid "To item call number: "
 msgstr "आइटम कॉल नंबर करने के लिए:"
@@ -48762,7 +48795,7 @@ msgstr "उपकरण प्लगइन:"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:27
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:85
 #: intranet-tmpl/prog/en/modules/tools/export.tt:42
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:81
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:89
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:160
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:58
@@ -49360,7 +49393,7 @@ msgid "URL: "
 msgstr "यूआरएल: "
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:134
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:128
 #, c-format
@@ -49483,8 +49516,8 @@ msgstr "अपरिभाषित"
 msgid "Undo import into catalog"
 msgstr "सूची में पूर्ववत करें आयात"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:268
+#: intranet-tmpl/prog/en/modules/tools/export.tt:294
 #, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "दुर्भाग्य से, कोई बैकअप उपलब्ध हैं."
@@ -49976,15 +50009,15 @@ msgstr "एक बारकोड फाइल का प्रयोग कर�
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:86
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:140
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:132
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:140
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:26
 #, c-format
 msgid "Use a file"
 msgstr "फाइल का प्रयोग करें"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:130
-#: intranet-tmpl/prog/en/modules/tools/export.tt:209
+#: intranet-tmpl/prog/en/modules/tools/export.tt:139
+#: intranet-tmpl/prog/en/modules/tools/export.tt:218
 #, c-format
 msgid "Use a file "
 msgstr "फाइल का प्रयोग करें"
@@ -50108,7 +50141,7 @@ msgstr "के लिए प्रयोग करें"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:651
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:71
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:208
 #, c-format
 msgid "Used in"
 msgstr "में प्रयुक्त"
@@ -51448,8 +51481,8 @@ msgid ""
 "You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
 "file. That will bring a performance boost to enable it. "
 msgstr ""
-"आप याद कर रहे हैं &lt;template_cache_dir&gt; अपने Koha-conf.xml फ़ाइल में "
-"प्रवेश। यही कारण है कि इसे सक्षम करने के लिए एक प्रदर्शन को बढ़ावा लाएगा।"
+"आप याद कर रहे हैं &lt;template_cache_dir&gt; अपने Koha-conf.xml फ़ाइल में प्रवेश। यही "
+"कारण है कि इसे सक्षम करने के लिए एक प्रदर्शन को बढ़ावा लाएगा।"
 
 #: intranet-tmpl/prog/en/modules/about.tt:301
 #, c-format
@@ -52432,7 +52465,7 @@ msgstr ""
 "AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
 "warnNoTemplateCaching %%] %s "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:94
+#: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
 msgid "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
@@ -52449,8 +52482,8 @@ msgid ""
 "empty_option = \"All locations\" %%] %s "
 msgstr ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
-"empty_option = \"All libraries\" %%] [%% INCLUDE form_field_select name=\""
-"holdingbranch\" options = branches empty_option = \"All libraries\" %%] %s "
+"empty_option = \"All libraries\" %%] [%% INCLUDE form_field_select name="
+"\"holdingbranch\" options = branches empty_option = \"All libraries\" %%] %s "
 "[%% INCLUDE form_field_select name=\"location\" options = locations "
 "empty_option = \"All locations\" %%] %s "
 
@@ -52466,9 +52499,9 @@ msgid ""
 "empty_option = \"All statuses\" %%] %s "
 msgstr ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
-"empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name=\""
-"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s [%% "
-"INCLUDE form_field_select name=\"notforloan\" options = notforloans "
+"empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
+"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s "
+"[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
 "empty_option = \"All statuses\" %%] %s "
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:528
@@ -52877,7 +52910,7 @@ msgstr "एक मार्क उपक्षेत्र को मैप क�
 msgid "be mapped to the same tag,"
 msgstr "एक ही टैग करने के लिए, प्रतिचित्रित हो"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:48
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
 #, c-format
 msgid "beep.ogg"
 msgstr "beep.ogg"
@@ -53035,7 +53068,7 @@ msgstr "महीने द्वारा"
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "सेंट ओलाफ कॉलेज कार्लटन कॉलेज के पुल कंसोर्टियम और से।"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:49
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
 #, c-format
 msgid "call.ogg"
 msgstr "call.ogg"
@@ -53155,12 +53188,12 @@ msgstr "एक आइटम रिकार्ड जब इस धाराव�
 msgid "create one or more authorized values"
 msgstr "एक या एक से अधिक अधिकृत मूल्यों को बनाने के"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:50
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
 #, c-format
 msgid "critical.ogg"
 msgstr "critical.ogg"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:163
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
 #, c-format
 msgid "csv"
 msgstr "सी एस वी"
@@ -53275,12 +53308,12 @@ msgstr "की सदस्यता का विस्तार"
 msgid "detected."
 msgstr "पता चला."
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:51
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
 #, c-format
 msgid "device_connect.ogg"
 msgstr "device_connect.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:52
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
 #, c-format
 msgid "device_disconnect.ogg"
 msgstr "device_disconnect.ogg"
@@ -53363,7 +53396,7 @@ msgstr "संपादित आइटम"
 msgid "email"
 msgstr "ईमेल"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:53
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
 #, c-format
 msgid "ending.ogg"
 msgstr "ending.ogg"
@@ -53397,7 +53430,7 @@ msgstr "मौजूद है."
 msgid "expired"
 msgstr "समय सीमा समाप्त हो"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:54
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:55
 #, c-format
 msgid "fail.ogg"
 msgstr "fail.ogg"
@@ -53617,7 +53650,7 @@ msgstr "जुर्माने के रूप में। आप चाह�
 msgid "in library "
 msgstr "में पुस्तकालय"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:56
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
 #, c-format
 msgid "incoming_call.ogg"
 msgstr "incoming_call.ogg"
@@ -53880,8 +53913,8 @@ msgid "koha-conf.xml"
 msgstr "कोहा-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
-#: intranet-tmpl/prog/en/modules/tools/export.tt:236
+#: intranet-tmpl/prog/en/modules/tools/export.tt:184
+#: intranet-tmpl/prog/en/modules/tools/export.tt:245
 msgid "koha.mrc"
 msgstr "कोहा.mrc"
 
@@ -53937,12 +53970,12 @@ msgstr "के अंतर्गत लाइसेंस "
 msgid "like"
 msgstr "पसंद करना"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:57
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
 #, c-format
 msgid "loading.ogg"
 msgstr "loading.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:58
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
 #, c-format
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
@@ -53967,8 +54000,8 @@ msgstr "m/"
 msgid "manage circulation rules"
 msgstr "संचलन के नियमों का प्रबंधन"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:161
-#: intranet-tmpl/prog/en/modules/tools/export.tt:231
+#: intranet-tmpl/prog/en/modules/tools/export.tt:170
+#: intranet-tmpl/prog/en/modules/tools/export.tt:240
 #, c-format
 msgid "marc"
 msgstr "मार्क"
@@ -53978,7 +54011,7 @@ msgstr "मार्क"
 msgid "matches"
 msgstr "मिलान"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:59
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
 #, c-format
 msgid "maximize.ogg"
 msgstr "maximize.ogg"
@@ -54007,7 +54040,7 @@ msgstr ""
 "mfirstname%sकार्डनंबर%sप्रथमनाम%sशाखानाम%sतिथि%saलेखाप्रकार%sराशी%stitle%sबारकोड%s"
 "\"itype\" "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:60
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
 msgid "minimize.ogg"
 msgstr "minimize.ogg"
@@ -54043,7 +54076,7 @@ msgstr "लागू नहीं"
 msgid "never"
 msgstr "कभी नहीं"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
 #, c-format
 msgid "new_mail_notification.ogg"
 msgstr "new_mail_notification.ogg"
@@ -54148,7 +54181,7 @@ msgstr "एक बार हर"
 msgid "one or more records without items attached. %s "
 msgstr "संलग्न के आइटम के बगैर एक या एक से अधिक रिकॉर्ड. %s "
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:62
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
 #, c-format
 msgid "opening.ogg"
 msgstr "opening.ogg"
@@ -54185,7 +54218,7 @@ msgstr "या बनाएँ"
 msgid "or create:"
 msgstr "या बनाएँः"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:63
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
 #, c-format
 msgid "panic.ogg"
 msgstr "panic.ogg"
@@ -54241,7 +54274,7 @@ msgstr "प्लगइन जॉन Resig द्वारा अंतर्ग
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "प्लगइन Jovan Popovic से बीएसडी और जीपीएल v2 लाइसेंस के तहत लाइसेंस प्राप्त है।"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:64
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
 #, c-format
 msgid "popup.ogg"
 msgstr "popup.ogg"
@@ -54401,12 +54434,12 @@ msgid "selection"
 msgstr "चयन"
 
 #. INPUT type=text name=selector
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:35
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:36
 msgid "selector"
 msgstr "चयनकर्ता"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:150
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:159
+#: intranet-tmpl/prog/en/modules/tools/export.tt:231
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "एक खाली से अलग. (e.g., 100a 200 606) "
@@ -54469,7 +54502,7 @@ msgid "software.coop, United Kingdom"
 msgstr "software.coop, यूनाइटेड किंगडम"
 
 #. INPUT type=text name=sound
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:40
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:41
 msgid "sound"
 msgstr "ध्वनि"
 
@@ -54810,7 +54843,7 @@ msgstr "veuillez डी abord CreER le nombre de चैंपियनों nec
 msgid "view"
 msgstr "देखें"
 
-#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:65
+#: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:66
 #, c-format
 msgid "warning.ogg"
 msgstr "warning.ogg"
@@ -54881,8 +54914,8 @@ msgstr "मूल्य के साथ"
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "लिखा है और Jörn Zaefferer द्वारा बनाए रखा अंतर्गत लाइसेंस प्राप्त है "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:162
-#: intranet-tmpl/prog/en/modules/tools/export.tt:232
+#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "xml"
 msgstr "एक्सएमएल"
