@@ -89,7 +89,7 @@ if ( $op eq "do_search" ) {
                     "acqdate(" . $datefrom . '-)';
             } else {
                 $ccl_query .= ' and ' if $ccl_textbox;
-                $ccl_query .= "acqdate,st-date-normalized,ge=" . $datefrom;
+                $ccl_query .= "acqdate,st-date-normalized,ge>=" . $datefrom;
             }
         }
     }
@@ -103,7 +103,7 @@ if ( $op eq "do_search" ) {
                 $ccl_query .= "acqdate(-" . $dateto . ')';
             } else {
                 $ccl_query .= ' and ' if ( $ccl_textbox || $datefrom );
-                $ccl_query .= "acqdate,st-date-normalized,le=" . $dateto;
+                $ccl_query .= "acqdate,st-date-normalized,le<=" . $dateto;
             }
         }
     }
