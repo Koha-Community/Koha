@@ -931,6 +931,8 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.validate.min.js"></script>
+    [% PROCESS 'password_check.inc' %]
+    [% PROCESS 'add_password_check' new_password => 'borrower_password' %]
     <script type="text/javascript">
         //<![CDATA[
         $(document).ready(function() {
@@ -953,6 +955,22 @@
                     },
                     borrower_B_email: {
                         email: true
+                    },
+                    borrower_password: {
+                        [% IF mandatory.defined('password') %]
+                        required: true,
+                        [% END %]
+                        password_strong: true,
+                        password_no_spaces: true
+                    },
+                    borrower_password2: {
+                        [% IF mandatory.defined('password') %]
+                        required: true,
+                        [% END %]
+                        password_match: true
+                    },
+                    captcha: {
+                        required: true,
                     }
                 },
                 submitHandler: function(form) {

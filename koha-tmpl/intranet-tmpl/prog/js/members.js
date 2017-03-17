@@ -103,20 +103,6 @@ function check_form_borrowers(nav){
             }
         }
     }
-    if ( document.form.password ) {
-        if ( document.form.password.value != document.form.password2.value ){
-            if ( message_champ !== '' ){
-                message_champ += "\n";
-            }
-            message_champ+= MSG_PASSWORD_MISMATCH;
-            statut=1;
-        }
-
-        if ( ! check_password( document.form.password.value ) ) {
-            message_champ += MSG_PASSWORD_CONTAINS_TRAILING_SPACES;
-            statut = 1;
-        }
-    }
 
     //patrons form to test if you checked no to the question of double
     if (statut!=1 && document.form.check_member.value > 0 ) {

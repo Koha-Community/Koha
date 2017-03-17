@@ -70,6 +70,21 @@ $(document).ready(function() {
         }
         else {return false;}
     });
+
+    $("#entryform").validate({
+        rules: {
+            password: {
+                required: true,
+                password_strong: true,
+                password_no_spaces: true
+            },
+            password2: {
+                required: true,
+                password_match: true
+            }
+        }
+    });
+
     $("#saverecord").click(function(){
         if( check_form_borrowers() ){
             $("#entryform").submit();
@@ -86,8 +101,6 @@ $(document).ready(function() {
         var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
         var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
         var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
-        var MSG_PASSWORD_MISMATCH = _("The passwords entered do not match");
-        var MSG_PASSWORD_CONTAINS_TRAILING_SPACES = _("Password contains leading and/or trailing spaces.");
         var MSG_MONTH = _("%s month")
         var MSG_MONTHS = _("%s months")
         var MSG_YEAR = _("%s year")
@@ -1259,4 +1272,5 @@ $(document).ready(function() {
 [% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
-
+[% PROCESS 'password_check.inc' %]
+[% PROCESS 'add_password_check' new_password => 'password' %]
