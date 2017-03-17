@@ -67,6 +67,7 @@ if ( ( $member ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
 push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
 my $minpw = C4::Context->preference('minPasswordLength');
+$minpw = 3 if not $minpw or $minpw < 3;
 push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpassword) < $minpw ) );
 
 if ( $newpassword && !scalar(@errors) ) {

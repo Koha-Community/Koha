@@ -28,7 +28,6 @@ my ( $template, $dummy, $cookie ) = get_template_and_user(
 my $email          = $query->param('email') // q{};
 my $password       = $query->param('password');
 my $repeatPassword = $query->param('repeatPassword');
-my $minPassLength  = C4::Context->preference('minPasswordLength');
 my $id             = $query->param('id');
 my $uniqueKey      = $query->param('uniqueKey');
 my $username       = $query->param('username');
@@ -145,6 +144,8 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 elsif ( $query->param('passwordReset') ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
 
+    my $minPassLength = C4::Context->preference('minPasswordLength');
+    $minPassLength = 3 if not $minPassLength or $minPassLength < 3;
     #validate password length & match
     if (   ($borrower_number)
         && ( $password eq $repeatPassword )
@@ -169,7 +170,6 @@ elsif ( $query->param('passwordReset') ) {
         }
         $template->param(
             new_password    => 1,
-            minPassLength   => $minPassLength,
             email           => $email,
             uniqueKey       => $uniqueKey,
             errLinkNotValid => $errLinkNotValid,
@@ -189,7 +189,6 @@ elsif ($uniqueKey) {    #reset password form
 
     $template->param(
         new_password    => 1,
-        minPassLength   => $minPassLength,
         email           => $email,
         uniqueKey       => $uniqueKey,
         username        => $username,

@@ -33,7 +33,7 @@
                                 Passwords do not match.  Please re-type your new password.
                                 [% END %]
                                 [% IF ( ShortPass ) %]
-                                Your new password must be at least [% minpasslen %] characters long.
+                                Your new password must be at least [% minPasswordLength%] characters long.
                                 [% END %]
                                 [% IF ( WrongPass ) %]
                                 Your current password was entered incorrectly.  If this problem persists, please ask a librarian to reset your password for you.
@@ -50,7 +50,7 @@
 
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post">
                                 <fieldset>
-                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minpasslen %] characters long.</div>[% END %]
+                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minPasswordLength%] characters long.</div>[% END %]
                                     <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
                                     <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
                                     <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />

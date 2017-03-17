@@ -799,16 +799,12 @@
                 [% UNLESS action == 'edit' || hidden.defined('password') %]
                     <fieldset class="rows" id="memberentry_password">
                         <legend id="contact_legend">Password</legend>
-                        [% IF Koha.Preference('minPasswordLength') || !mandatory.defined('password') %]
-                            <div class="alert alert-info">
-                                [% IF Koha.Preference('minPasswordLength') %]
-                                    <p>Your password must be at least [% Koha.Preference('minPasswordLength') %] characters long.</p>
-                                [% END %]
-                                [% UNLESS mandatory.defined('password') %]
-                                    <div>If you do not enter a password a system generated password will be created.</div>
-                                [% END %]
-                            </div>
-                        [% END %]
+                        <div class="alert alert-info">
+                            <p>Your password must be at least [% Koha.Preference('minPasswordLength') %] characters long.</p>
+                            [% UNLESS mandatory.defined('password') %]
+                                <div>If you do not enter a password a system generated password will be created.</div>
+                            [% END %]
+                        </div>
 
                         [% IF mandatory.defined('password') %]
                             <ol>

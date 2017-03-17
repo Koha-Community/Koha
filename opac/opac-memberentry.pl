@@ -387,6 +387,7 @@ sub CheckMandatoryFields {
 
 sub CheckForInvalidFields {
     my $minpw = C4::Context->preference('minPasswordLength');
+    $minpw = 3 if not $minpw or $minpw < 3;
     my $borrower = shift;
     my @invalidFields;
     if ($borrower->{'email'}) {

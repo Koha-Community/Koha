@@ -47,6 +47,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $minpasslen = C4::Context->preference("minPasswordLength");
+$minpasslen = 3 if not $minpasslen or $minpasslen < 3;
 if ( C4::Context->preference("OpacPasswordChange") ) {
     my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     if (   $query->param('Oldkey')
@@ -107,8 +108,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
 $template->param(
     firstname  => $patron->firstname,
     surname    => $patron->surname,
-    minpasslen => $minpasslen,
-    passwdview => 1
+    passwdview => 1,
 );
 
 

@@ -417,6 +417,8 @@ sub get_template_and_user {
     my $https = $in->{query}->https();
     my $using_https = ( defined $https and $https ne 'OFF' ) ? 1 : 0;
 
+    my $minPasswordLength = C4::Context->preference('minPasswordLength');
+    $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
     $template->param(
         "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         EnhancedMessagingPreferences                                       => C4::Context->preference('EnhancedMessagingPreferences'),
@@ -438,6 +440,7 @@ sub get_template_and_user {
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
+        minPasswordLength  => $minPasswordLength,
     );
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(

@@ -133,9 +133,6 @@ if ( $input->param('add_debarment') ) {
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
-my $minpw = C4::Context->preference('minPasswordLength');
-$template->param("minPasswordLength" => $minpw);
-
 # function to designate mandatory fields (visually with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
@@ -360,6 +357,8 @@ if ($op eq 'save' || $op eq 'insert'){
   my $password = $input->param('password');
   my $password2 = $input->param('password2');
   push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
+  my $minpw = C4::Context->preference('minPasswordLength');
+  $minpw = 3 if not $minpw or $minpw < 3;
   push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
 
   # Validate emails
