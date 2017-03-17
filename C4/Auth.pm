@@ -330,7 +330,7 @@ sub get_template_and_user {
                 # We show the link in opac
                 $template->param( EnableOpacSearchHistory => 1 );
             }
-            if (C4::Context->preference('addSearchHistoryToTheFirstLoggedUser'))
+            if (C4::Context->preference('LoadSearchHistoryToTheFirstLoggedUser'))
             {
                 # And if there are searches performed when the user was not logged in,
                 # we add them to the logged-in search history
