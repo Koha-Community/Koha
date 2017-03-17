@@ -105,10 +105,10 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/0/borrowernumber' => $borrowernumber)
   ->json_is('/0/itemnumber' => $itemnumber1)
-  ->json_is('/0/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
+  ->json_like('/0/date_due' => qr/$date_due1\+\d\d:\d\d/)
   ->json_is('/1/borrowernumber' => $borrowernumber)
   ->json_is('/1/itemnumber' => $itemnumber2)
-  ->json_is('/1/date_due' => $date_due2->ymd . ' ' . $date_due2->hms)
+  ->json_like('/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
   ->json_hasnt('/2');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/".$issue3->issue_id);
@@ -133,10 +133,10 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/0/borrowernumber' => $borrowernumber)
   ->json_is('/0/itemnumber' => $itemnumber1)
-  ->json_is('/0/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
+  ->json_like('/0/date_due' => qr/$date_due1\+\d\d:\d\d/)
   ->json_is('/1/borrowernumber' => $borrowernumber)
   ->json_is('/1/itemnumber' => $itemnumber2)
-  ->json_is('/1/date_due' => $date_due2->ymd . ' ' . $date_due2->hms)
+  ->json_like('/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
   ->json_hasnt('/2');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
@@ -145,20 +145,20 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $borrowernumber)
   ->json_is('/itemnumber' => $itemnumber1)
-  ->json_is('/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
+  ->json_like('/date_due' => qr/$date_due1\+\d\d:\d\d/)
   ->json_hasnt('/1');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $date_due1->ymd . ' ' . $date_due1->hms);
+  ->json_like('/date_due' => qr/$date_due1\+\d\d:\d\d/);
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $date_due2->ymd . ' ' . $date_due2->hms);
+  ->json_like('/date_due' => qr/$date_due2\+\d\d:\d\d/);
 
 
 $dbh->do('DELETE FROM issuingrules');
@@ -172,7 +172,7 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $expected_datedue->ymd . ' ' . $expected_datedue->hms);
+  ->json_like('/date_due' => qr/$expected_datedue\+\d\d:\d\d/);
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue3->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
@@ -206,7 +206,7 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $expected_datedue->ymd . ' ' . $expected_datedue->hms);
+  ->json_like('/date_due' => qr/$expected_datedue\+\d\d:\d\d/);
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
