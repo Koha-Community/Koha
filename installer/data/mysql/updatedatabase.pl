@@ -49,6 +49,8 @@ use File::Path qw[remove_tree]; # perl core module
 use File::Spec;
 use File::Slurp;
 
+use Koha::AtomicUpdater;
+
 # FIXME - The user might be installing a new database, so can't rely
 # on /etc/koha.conf anyway.
 
@@ -6522,22 +6524,32 @@ if( CheckVersion( $DBversion ) ) {
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
+#
+#my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+#
+#opendir( my $dirh, $update_dir );
+#foreach my $file ( sort readdir $dirh ) {
+#    next if $file !~ /\.(sql|perl)$/;  #skip other files
+#    next if $file eq 'skeleton.perl'; # skip the skeleton file
+#    print "DEV atomic update: $file\n";
+#    if ( $file =~ /\.sql$/ ) {
+#        my $installer = C4::Installer->new();
+#        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
+#    } elsif ( $file =~ /\.perl$/ ) {
+#        my $code = read_file( $update_dir . $file );
+#        eval $code;
+#        say "Atomic update generated errors: $@" if $@;
+#    }
+#}
 
-my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
-opendir( my $dirh, $update_dir );
-foreach my $file ( sort readdir $dirh ) {
-    next if $file !~ /\.(sql|perl)$/;  #skip other files
-    next if $file eq 'skeleton.perl'; # skip the skeleton file
-    print "DEV atomic update: $file\n";
-    if ( $file =~ /\.sql$/ ) {
-        my $installer = C4::Installer->new();
-        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
-    } elsif ( $file =~ /\.perl$/ ) {
-        my $code = read_file( $update_dir . $file );
-        eval $code;
-        say "Atomic update generated errors: $@" if $@;
-    }
-}
+#Use Koha::AtomicUpdater instead to prevent reinstalling DB upgrades
+my $atomicUpdater = Koha::AtomicUpdater->new({
+    verbose => 2,
+    scriptDir => C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/',
+});
+$atomicUpdater->buildUpdateOrderFromGit(1000);
+$atomicUpdater->applyAtomicUpdates();
+
 
 =head1 FUNCTIONS
 
@@ -6634,6 +6646,12 @@ as implemented in bug 7167.
 =cut
 
 sub CheckVersion {
+    #Check if we have already applied this update as an atomicupdate
+    my $bug = eval { _getBugNumber() } || 0;
+    warn $@ if $@;
+    my $atomicUpdate = Koha::AtomicUpdater->find( $bug );
+    return 0 if $atomicUpdate;
+
     my ($proposed_version) = @_;
     my $version_number = TransformToNum($proposed_version);
 
@@ -6648,6 +6666,65 @@ sub CheckVersion {
     else {
         return 0;
     }
+}
+
+my $skipped = 0;
+sub _getBugNumber {
+    my $skip = 100;
+    return 0 if $skip >= ++$skipped;
+    require File::Slurp;
+    my ($package, $filename, $line) = caller(2); #Get the second caller from the stack trace
+    my $updatedatabase = File::Slurp::read_file(__FILE__,  binmode => ':utf8', array_ref => 1);
+
+    my ($err, @err);
+
+    my $linePointer = $line;
+    ##Look for the block-ending '}'
+    do {
+        $linePointer+=1;
+    } while ($updatedatabase->[$linePointer] !~ /^\}/);
+    my $blockEndLine = $linePointer;
+
+
+    ##Look for 'SetVersion', fail if it is missing, just for safety's sake.
+    ($err, @err) = (undef, undef);
+    my $getSetVersion = sub {
+        my $i = shift;
+        unless ($updatedatabase->[$i] =~ /^\s{2,5}SetVersion ?\( ?\$DBversion ?\);\s+$/) {
+            return "_getBugNumber():> Line: $i: Malformed SetVersion. Unsafe to proceed.\n".$updatedatabase->[$i];
+        }
+        return undef;
+    };
+    foreach my $step (1..5) {
+        $err = &$getSetVersion($blockEndLine-$step);
+        last unless $err;
+        push(@err, $err);
+    }
+    die join("",@err) if $err;
+
+
+    ##Look for 'Upgrade done'-message
+    ($err, @err) = (undef, undef);
+    my $getUpgradeMsg = sub {
+        my $i = shift;
+        unless ($updatedatabase->[$i] =~ /print "Upgraded? to \$DBversion done/ ||
+                $updatedatabase->[$i] =~ /print "Upgrade done \(/ ) {
+            return "_getBugNumber():> Line: $i: Malformed Bug message. Unsafe to proceed.\n".$updatedatabase->[$i];
+        }
+        return undef;
+    };
+    $linePointer = $blockEndLine;
+    foreach my $step ((1..5)) {
+        $err = &$getUpgradeMsg( --$linePointer );
+        last unless $err;
+        push(@err, $err);
+    }
+    die join("",@err) if $err;
+
+    if ($updatedatabase->[$linePointer] =~ /Bug (\d{4,5})/) {
+        return $1;
+    }
+    die "_getBugNumber():> Failed for line '$line' looking at row:\n".$updatedatabase->[$linePointer];
 }
 
 exit;
