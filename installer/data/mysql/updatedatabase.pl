@@ -12942,8 +12942,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17260 - updatedatabase.pl fails on invalid entries in ENUM and BOOLEAN columns)\n";
 }
 
+$DBversion = "16.05.11.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 16.05.11)\n";
+    SetVersion($DBversion);
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
-# SEE bug 13068
+# SEE bug sss
 # if there is anything in the atomicupdate, read and execute it.
 
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
