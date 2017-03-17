@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-15 09:41+0000\n"
+"PO-Revision-Date: 2017-03-09 12:38+0000\n"
 "Last-Translator: Eugenios <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487151663.000000\n"
+"X-POOTLE-MTIME: 1489063080.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -87,7 +87,7 @@ msgstr "Να γίνεται προειδοποίηση"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqWarnOnDuplicateInvoice# when the librarian tries to create an invoice with a duplicate number."
-msgstr "όταν ο βιβλιοθηκονόμος προσπαθεί να δημιουργήσει ένα τιμολόγιο με έναν διπλό/duplicate αριθμό."
+msgstr "όταν ο βιβλιοθηκονόμος προσπαθεί να δημιουργήσει ένα τιμολόγιο με διπλό (duplicate) αριθμό."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -167,7 +167,7 @@ msgstr "acquisitions.pref#UniqueItemFields# (διαχωρίζονται από �
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/16_05/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
-msgstr ""
+msgstr "Οι ακόλουθες <a href='http://schema.koha-community.org/16_05/tables/items.html' target='blank'>στήλες στη βάση δεδομένων</a> πρέπει να είναι μοναδικές σε ένα τεκμήριο:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
@@ -1458,6 +1458,22 @@ msgid "authorities.pref#AuthDisplayHierarchy# broader term/narrower term hierarc
 msgstr "ιεραρχίες ευρύτερων όρων/στενότερων όρων κατά την προβολή καθιερωμένων."
 
 # Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# When updating biblio records from an attached authority record (\"merging\"), handle subfields of relevant biblio record fields in"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# loose"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# mode. In strict mode subfields that are not found in the authority record, are deleted. Loose mode will keep them. Loose mode is the historical behavior and still the default."
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeMode# strict"
+msgstr ""
+
+# Authorities > General
 msgid "authorities.pref#AutoCreateAuthorities# When editing records,"
 msgstr "Κατά την επεξεργασία εγγραφών,"
 
@@ -1659,7 +1675,7 @@ msgstr " ."
 
 # Cataloging > Display
 msgid "cataloguing.pref#AuthoritySeparator# Separate multiple displayed authors, series or subjects with "
-msgstr ""
+msgstr "Διαχωρίστε πολλαπλές εμφανίσεις συγγραφέων, σειρών ή θεμάτων με  "
 
 # Cataloging > Exporting
 # Cataloging > Exporting
@@ -1673,7 +1689,7 @@ msgstr ""
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#BibtexExportAdditionalFields# Include following fields when exporting BibTeX,"
-msgstr ""
+msgstr "Περιλαμβάνει τα ακόλουθα πεδία όταν εξάγεται σε BibTeX,"
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#BibtexExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating BibTex tag, use the following format: BT_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. notes: [501$a, 505$g] )"
@@ -1765,11 +1781,11 @@ msgstr "<br />παράδειγμα: '001,245ab,600'"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# <li>all subfields of fields 600</li>"
-msgstr ""
+msgstr " <li>όλα τα υποπεδία του πεδίου 600</li>"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# <li>subfields a and b of fields 245</li>"
-msgstr ""
+msgstr " <li>τα υποπεδία a και b του πεδίου 245</li>"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# <li>value of 001</li>"
@@ -1959,7 +1975,7 @@ msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# UNIMARC: \"995$f 995$h 995$j\""
-msgstr ""
+msgstr "UNIMARC: \"995$f 995$h 995$j\""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# Define a list of subfields for which editing is authorized when edit_items_restricted permission is enabled, separated by spaces."
@@ -4444,7 +4460,7 @@ msgstr "i18n_l10n.pref#CalendarFirstDayOfWeek# comme premier jour de la semaine 
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr ". <b>Σημείωση:</b> Μην αλλάζεται αυτή την προτίμηση σε ενεργό κατάλογο που περιέχει ληξιπρόθεσμες χρεώσεις με πρόστιμα. Η ενέργεια θα έχει ως αποτέλεσμα την διπλοεγγραφή των προστίμων"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TimeFormat# 12 hour format ( e.g. \"02:18 PM\" )"
@@ -4472,7 +4488,7 @@ msgstr ""
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# . <b>Note:</b> Do not change this preference on a production server with overdue items that are accruing fines. Doing so will result in duplicate fines!"
-msgstr ""
+msgstr ". <b>Σημείωση:</b> Μην αλλάζεται αυτή την προτίμηση σε ενεργό κατάλογο που περιέχει ληξιπρόθεσμες χρεώσεις με πρόστιμα. Η ενέργεια θα έχει ως αποτέλεσμα την διπλοεγγραφή των προστίμων!"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#dateformat# Format dates like"
@@ -4712,7 +4728,7 @@ msgstr "OPAC"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref Advanced Search Options"
-msgstr ""
+msgstr "Επιλογές Σύνθετης Αναζήτησης"
 
 # OPAC > Appearance
 msgid "opac.pref Appearance"
@@ -4724,7 +4740,7 @@ msgstr "Χαρακτηριστικά"
 
 # OPAC > Payments
 msgid "opac.pref Payments"
-msgstr ""
+msgstr "Πληρωμές"
 
 # OPAC > Policy
 msgid "opac.pref Policy"
@@ -4748,11 +4764,11 @@ msgstr "Περιήγηση στο Ράφι"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Allow"
-msgstr ""
+msgstr "Να επιτρέπεται"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# Don't allow"
-msgstr ""
+msgstr "Να μην επιτρέπεται"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor\"."
@@ -4768,7 +4784,7 @@ msgstr "Να μην επιτρέπεται"
 
 # OPAC > Policy
 msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# patrons to select library when making a purchase suggestion"
-msgstr ""
+msgstr "στα μέλη να επιλέγουν βιβλιοθήκη όταν υποβάλλουν προτάσεις"
 
 # OPAC > Privacy
 msgid "opac.pref#AnonSuggestions# Allow"
@@ -4808,15 +4824,15 @@ msgstr "σε μορφή MARC."
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# Block"
-msgstr ""
+msgstr "Να αποκλείονται"
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# Don't block"
-msgstr ""
+msgstr "Να μην αποκλείονται"
 
 # OPAC > Policy
 msgid "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC actions such as placing a hold or renewing.  Note that the setting for a patron category takes priority over this system preference."
-msgstr ""
+msgstr "τα μέλη με συνδομή που έχει λήξη από ενέργειες μέσω OPAC όπως οι κρατήσεις και ανανεώσεις. Σημειώστε ότι οι ρυθμίσεις στις κατηγορίες μελών υπερισχύουν έναντι αυτής της προτίμησης συστήματος."
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
@@ -4840,7 +4856,7 @@ msgstr "Εμφάνιση"
 
 # OPAC > Appearance
 msgid "opac.pref#DisplayOPACiconsXSLT# the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC."
-msgstr ""
+msgstr "των εικονιδίων μορφότυπου, κοινού και τύπου υλικού στα αποτελέσματα αναζήτησης στον OPAC σε μορφή XSLT MARC21 και στις σελίδες \"Λεπτομέρειες για\""
 
 # OPAC > Privacy
 msgid "opac.pref#EnableOpacSearchHistory# Don't keep"
@@ -4856,11 +4872,11 @@ msgstr "το ιστορικό αναζήτησης των μελών στον OP
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Allow"
-msgstr ""
+msgstr "Να επιτρέπεται"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Don't allow"
-msgstr ""
+msgstr "Να μην επιτρέπεται"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Production"
@@ -4872,23 +4888,23 @@ msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# mode."
-msgstr ""
+msgstr "κατάσταση."
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# patrons to make payments from the OPAC via PayPal in"
-msgstr ""
+msgstr "στα μέλη να πραγματοποιούν πληρωμές από τον OPAC μέσω PayPal σε"
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# Don't show"
-msgstr ""
+msgstr "Απόκρυψη"
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# GoogleIndicTransliteration on the OPAC."
-msgstr ""
+msgstr "GoogleIndicTransliteration στον OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# Show"
-msgstr ""
+msgstr "Εμφάνιση"
 
 # OPAC > Appearance
 msgid "opac.pref#HighlightOwnItemsOnOPAC#  by moving the results to the front and increasing the size or highlighting the rows for those results. (Non-XSLT Only)"
@@ -4916,15 +4932,15 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# Show"
-msgstr "opac.pref#LibraryName# Προβολή"
+msgstr "Εμφάνιση του"
 
 # OPAC > Appearance
 msgid "opac.pref#LibraryName# as the name of the library on the OPAC."
-msgstr "opac.pref#LibraryName# το όνομα της Βιβλιοθήκης στον OPAC."
+msgstr "ως όνομα της Βιβλιοθήκης στον OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#NoLoginInstructions# Show the following HTML on the OPAC login form when a patron is not logged in:"
-msgstr ""
+msgstr "Προβολή του ακόλουθου, σε HTML, στη φόρμα σύνδεσης του OPAC όταν το μέλος δεν έχει συνδεθεί:"
 
 # OPAC > Features
 msgid "opac.pref#OPACAcquisitionDetails# Display"
@@ -6912,7 +6928,7 @@ msgstr "τελευταία τεύχη μίας περιοδικής έκδοση
 
 # Serials
 msgid "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)"
-msgstr "κατάλογος πεδίων που δεν θα επανεγγράφονται ότι γίνεται αντιγραφή μιας συνδρομής (Διαχωρίστε τα με κάθετο |)"
+msgstr "Κατάλογος πεδίων που δεν θα επανεγγράφονται όταν γίνεται αντιγραφή μιας συνδρομής (Διαχωρίστε τα με κάθετο |)"
 
 # Serials
 msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
