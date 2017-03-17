@@ -228,7 +228,7 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
     $t->request_ok($tx) # create hold to myself
       ->status_is(200)
       ->json_is('/reserve_id', $reserve_id3)
-      ->json_is('/suspend_until', $suspend_until . ' 00:00:00')
+      ->json_like('/suspend_until', qr/${suspend_until}T00:00:00\+\d\d:\d\d/)
       ->json_is('/priority', 2);
 };
 
@@ -256,7 +256,7 @@ subtest "Test endpoints with permission" => sub {
     $t->request_ok($tx)
       ->status_is(200)
       ->json_is('/reserve_id', $reserve_id)
-      ->json_is('/suspend_until', $suspend_until . ' 00:00:00')
+      ->json_like('/suspend_until', qr/${suspend_until}T00:00:00\+\d\d:\d\d/)
       ->json_is('/priority', 2);
 
     $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
