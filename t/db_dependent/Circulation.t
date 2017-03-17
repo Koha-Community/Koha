@@ -1639,5 +1639,3 @@ sub set_userenv {
     my ( $library ) = @_;
     C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, $library->{branchname}, '', '', '');
 }
-
-1;
