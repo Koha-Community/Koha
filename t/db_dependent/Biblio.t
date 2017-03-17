@@ -373,9 +373,9 @@ subtest 'deletedbiblio_metadata' => sub {
     my $biblio_metadata = C4::Biblio::GetXmlBiblio( $biblionumber );
     C4::Biblio::DelBiblio( $biblionumber );
     my ( $moved ) = $dbh->selectrow_array(q|SELECT biblionumber FROM deletedbiblio WHERE biblionumber=?|, undef, $biblionumber);
-    is( $moved, $biblionumber );
+    is( $moved, $biblionumber, 'Found in deletedbiblio' );
     ( $moved ) = $dbh->selectrow_array(q|SELECT biblionumber FROM deletedbiblio_metadata WHERE biblionumber=?|, undef, $biblionumber);
-    is( $moved, $biblionumber );
+    is( $moved, $biblionumber, 'Found in deletedbiblio_metadata' );
 };
 
 1;
