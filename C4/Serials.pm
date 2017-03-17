@@ -2501,9 +2501,8 @@ num_type can take :
     -monthabrv
     -season
     -seasonabrv
-=cut
 
-#'
+=cut
 
 sub _numeration {
     my ($value, $num_type, $locale) = @_;
@@ -2569,8 +2568,11 @@ sub is_barcode_in_use {
 }
 
 =head2 CloseSubscription
+
 Close a subscription given a subscriptionid
+
 =cut
+
 sub CloseSubscription {
     my ( $subscriptionid ) = @_;
     return unless $subscriptionid;
@@ -2593,8 +2595,11 @@ sub CloseSubscription {
 }
 
 =head2 ReopenSubscription
+
 Reopen a subscription given a subscriptionid
+
 =cut
+
 sub ReopenSubscription {
     my ( $subscriptionid ) = @_;
     return unless $subscriptionid;
