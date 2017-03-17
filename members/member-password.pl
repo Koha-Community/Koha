@@ -93,18 +93,6 @@ if ( $newpassword && !scalar(@errors) ) {
         push( @errors, 'BADUSERID' );
     }
 }
-else {
-    my $userid = $bor->{'userid'};
-
-    my $chars              = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    my $length             = int( rand(2) ) + C4::Context->preference("minPasswordLength");
-    my $defaultnewpassword = '';
-    for ( my $i = 0 ; $i < $length ; $i++ ) {
-        $defaultnewpassword .= substr( $chars, int( rand( length($chars) ) ), 1 );
-    }
-
-    $template->param( defaultnewpassword => $defaultnewpassword );
-}
 
 if ( $category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
