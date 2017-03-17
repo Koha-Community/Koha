@@ -129,13 +129,14 @@ $t->request_ok($tx)
   ->json_hasnt('/1')
   ->json_hasnt('/error');
 
+my $date_due_regexp = $date_due1->ymd . 'T' . $date_due1->hms . '\+' .'\d\d:\d\d';
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $borrowernumber)
   ->json_is('/itemnumber' => $itemnumber1)
-  ->json_is('/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
+  ->json_like('/date_due' => qr/$date_due_regexp/)
   ->json_hasnt('/error');
 
 $issue1->delete();
