@@ -159,10 +159,10 @@ subtest 'TO_JSON tests' => sub {
     my $lost = $patron->TO_JSON()->{lost};
     my $gonenoaddress = $patron->TO_JSON->{gonenoaddress};
 
-    ok( $lost->isa('Mojo::JSON::_Bool'), 'Boolean attribute type is correct' );
+    ok( $lost->isa('JSON::PP::Boolean'), 'Boolean attribute type is correct' );
     is( $lost, 1, 'Boolean attribute value is correct (true)' );
 
-    ok( $gonenoaddress->isa('Mojo::JSON::_Bool'), 'Boolean attribute type is correct' );
+    ok( $gonenoaddress->isa('JSON::PP::Boolean'), 'Boolean attribute type is correct' );
     is( $gonenoaddress, 0, 'Boolean attribute value is correct (false)' );
 
     ok( !isvstring($patron->borrowernumber), 'Integer values are not coded as strings' );
