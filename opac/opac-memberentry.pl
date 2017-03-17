@@ -28,6 +28,10 @@ use C4::Output;
 use C4::Members;
 use C4::Members::Attributes qw( GetBorrowerAttributes );
 use C4::Form::MessagingPreferences;
+use Koha::AuthUtils;
+use Koha::Patrons;
+use Koha::Patron::Modification;
+use Koha::Patron::Modifications;
 use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
@@ -165,7 +169,7 @@ if ( $action eq 'create' ) {
                 $verification_token = md5_hex( time().{}.rand().{}.$$ );
             }
 
-            $borrower{password}           = random_string("..........");
+            $borrower{password}           = Koha::AuthUtils::generate_password;
             $borrower{verification_token} = $verification_token;
 
             Koha::Patron::Modification->new( \%borrower )->store();
@@ -386,8 +390,6 @@ sub CheckMandatoryFields {
 }
 
 sub CheckForInvalidFields {
-    my $minpw = C4::Context->preference('minPasswordLength');
-    $minpw = 3 if not $minpw or $minpw < 3;
     my $borrower = shift;
     my @invalidFields;
     if ($borrower->{'email'}) {
@@ -421,11 +423,13 @@ sub CheckForInvalidFields {
     {
         push( @invalidFields, "password_match" );
     }
-    if ( $borrower->{'password'}  && $minpw && (length($borrower->{'password'}) < $minpw) ) {
-       push(@invalidFields, "password_invalid");
-    }
     if ( $borrower->{'password'} ) {
-       push(@invalidFields, "password_spaces") if ($borrower->{'password'} =~ /^\s/ or $borrower->{'password'} =~ /\s$/);
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $borrower->{password} );
+          unless ( $is_valid ) {
+              push @invalidFields, 'password_too_short' if $error eq 'too_short';
+              push @invalidFields, 'password_too_weak' if $error eq 'too_weak';
+              push @invalidFields, 'password_has_whitespaces' if $error eq 'has_whitespaces';
+          }
     }
 
     return \@invalidFields;

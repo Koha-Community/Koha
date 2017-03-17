@@ -22,6 +22,9 @@ use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
 use Encode qw( encode is_utf8 );
 use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 use List::MoreUtils qw/ any /;
+use String::Random qw( random_string );
+
+use C4::Context;
 
 use base 'Exporter';
 
@@ -133,6 +136,51 @@ sub generate_salt {
     close SOURCE;
     return $string;
 }
+
+=head2 is_password_valid
+
+my ( $is_valid, $error ) = is_password_valid( $password );
+
+return $is_valid == 1 if the password match minPasswordLength and RequireStrongPassword conditions
+otherwise return $is_valid == 0 and $error will contain the error ('too_short' or 'too_weak')
+
+=cut
+
+sub is_password_valid {
+    my ($password) = @_;
+    my $minPasswordLength = C4::Context->preference('minPasswordLength');
+    $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
+    if ( length($password) < $minPasswordLength ) {
+        return ( 0, 'too_short' );
+    }
+    elsif ( C4::Context->preference('RequireStrongPassword') ) {
+        return ( 0, 'too_weak' )
+          if $password !~ m|(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{$minPasswordLength,}|;
+    }
+    return ( 0, 'has_whitespaces' ) if $password =~ m[^\s|\s$];
+    return ( 1, undef );
+}
+
+=head2 generate_password
+
+my password = generate_password();
+
+Generate a password according to the minPasswordLength and RequireStrongPassword.
+
+=cut
+
+sub generate_password {
+    my $minPasswordLength = C4::Context->preference('minPasswordLength');
+    $minPasswordLength = 8 if not $minPasswordLength or $minPasswordLength < 8;
+
+    my ( $password, $is_valid );
+    do {
+        $password = random_string('.' x $minPasswordLength );
+        ( $is_valid, undef ) = is_password_valid( $password );
+    } while not $is_valid;
+    return $password;
+}
+
 
 =head2 get_script_name
 

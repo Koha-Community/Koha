@@ -37,6 +37,7 @@ use C4::Koha;
 use C4::Log;
 use C4::Letters;
 use C4::Form::MessagingPreferences;
+use Koha::AuthUtils;
 use Koha::AuthorisedValues;
 use Koha::Patron::Debarments;
 use Koha::Cities;
@@ -353,13 +354,19 @@ if ($op eq 'save' || $op eq 'insert'){
   unless (Check_Userid($userid,$borrowernumber)) {
     push @errors, "ERROR_login_exist";
   }
-  
+
   my $password = $input->param('password');
   my $password2 = $input->param('password2');
   push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
-  my $minpw = C4::Context->preference('minPasswordLength');
-  $minpw = 3 if not $minpw or $minpw < 3;
-  push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
+
+  if ( $password and $password ne '****' ) {
+      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
+      unless ( $is_valid ) {
+          push @errors, 'ERROR_password_too_short' if $error eq 'too_short';
+          push @errors, 'ERROR_password_too_weak' if $error eq 'too_weak';
+          push @errors, 'ERROR_password_has_whitespaces' if $error eq 'has_whitespaces';
+      }
+  }
 
   # Validate emails
   my $emailprimary = $input->param('email');

@@ -15,6 +15,7 @@ use C4::Members;
 use C4::Circulation;
 use CGI qw ( -utf8 );
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::AuthUtils;
 use Koha::Token;
 
 use Koha::Patrons;
@@ -66,11 +67,16 @@ if ( ( $member ne $loggedinuser ) && ( $category_type eq 'S' ) ) {
 
 push( @errors, 'NOMATCH' ) if ( ( $newpassword && $newpassword2 ) && ( $newpassword ne $newpassword2 ) );
 
-my $minpw = C4::Context->preference('minPasswordLength');
-$minpw = 3 if not $minpw or $minpw < 3;
-push( @errors, 'SHORTPASSWORD' ) if ( $newpassword && $minpw && ( length($newpassword) < $minpw ) );
+if ( $newpassword and not @errors ) {
+    my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $newpassword );
+    unless ( $is_valid ) {
+        push @errors, 'ERROR_password_too_short' if $error eq 'too_short';
+        push @errors, 'ERROR_password_too_weak' if $error eq 'too_weak';
+        push @errors, 'ERROR_password_has_whitespaces' if $error eq 'has_whitespaces';
+    }
+}
 
-if ( $newpassword && !scalar(@errors) ) {
+if ( $newpassword and not @errors) {
 
     die "Wrong CSRF token"
         unless Koha::Token->new->check_csrf({

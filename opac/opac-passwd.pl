@@ -46,47 +46,46 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $minpasslen = C4::Context->preference("minPasswordLength");
-$minpasslen = 3 if not $minpasslen or $minpasslen < 3;
 if ( C4::Context->preference("OpacPasswordChange") ) {
     my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     if (   $query->param('Oldkey')
         && $query->param('Newkey')
         && $query->param('Confirm') )
     {
+        my $error;
+        my $new_password = $query->param('Newkey');
+        my $confirm_password = $query->param('Confirm');
         if ( goodkey( $dbh, $borrowernumber, $query->param('Oldkey') ) ) {
-            if ( $query->param('Newkey') =~ m|^\s+| or $query->param('Newkey') =~ m|\s+$| ) {
-                $template->param(
-                    Error_messages => 1,
-                    PasswordContainsTrailingSpaces => 1,
-                );
-            }
-            elsif ( $query->param('Newkey') eq $query->param('Confirm')
-                && length( $query->param('Confirm') ) >= $minpasslen )
-            {    # Record password
-                my $clave = hash_password( $query->param('Newkey') );
-                $sth->execute( $clave, $borrowernumber );
-                $template->param( 'password_updated' => '1' );
-                $template->param( 'borrowernumber'   => $borrowernumber );
-            }
-            elsif ( $query->param('Newkey') ne $query->param('Confirm') ) {
+
+            if ( $new_password ne $confirm_password ) {
                 $template->param( 'Ask_data'       => '1' );
                 $template->param( 'Error_messages' => '1' );
-                $template->param( 'PassMismatch'   => '1' );
-            }
-            elsif ( length( $query->param('Confirm') ) < $minpasslen ) {
-                $template->param( 'Ask_data'       => '1' );
-                $template->param( 'Error_messages' => '1' );
-                $template->param( 'ShortPass'      => '1' );
-            }
-            else {
-                $template->param( 'Error_messages' => '1' );
+                $template->param( 'passwords_mismatch'   => '1' );
+            } else {
+                my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $new_password );
+                unless ( $is_valid ) {
+                    $error = 'password_too_short' if $error eq 'too_short';
+                    $error = 'password_too_weak' if $error eq 'too_weak';
+                    $error = 'password_has_whitespaces' if $error eq 'has_whitespaces';
+                } else {
+                    # Password is valid and match
+                    my $clave = hash_password( $new_password );
+                    $sth->execute( $clave, $borrowernumber );
+                    $template->param( 'password_updated' => '1' );
+                    $template->param( 'borrowernumber'   => $borrowernumber );
+                }
             }
         }
         else {
-            $template->param( 'Ask_data'       => '1' );
-            $template->param( 'Error_messages' => '1' );
-            $template->param( 'WrongPass'      => '1' );
+            $error = 'WrongPass';
+        }
+        if ($error) {
+            $template->param(
+                Ask_data       => 1,
+                Error_messages => 1,
+                $error         => 1,
+            );
+
         }
     }
     else {

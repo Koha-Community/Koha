@@ -46,8 +46,6 @@ my $errBadEmail;
 
 #new password form error
 my $errLinkNotValid;
-my $errPassNotMatch;
-my $errPassTooShort;
 
 if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 
@@ -144,38 +142,33 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 elsif ( $query->param('passwordReset') ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
 
-    my $minPassLength = C4::Context->preference('minPasswordLength');
-    $minPassLength = 3 if not $minPassLength or $minPassLength < 3;
-    #validate password length & match
-    if (   ($borrower_number)
-        && ( $password eq $repeatPassword )
-        && ( length($password) >= $minPassLength ) )
-    {    #apply changes
-        Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
-        CompletePasswordRecovery($uniqueKey);
-        $template->param(
-            password_reset_done => 1,
-            username            => $username
-        );
+    my $error;
+    if ( not $borrower_number ) {
+        $error = 'errLinkNotValid';
+    } elsif ( $password ne $repeatPassword ) {
+        $error = 'errPassNotMatch';
+    } else {
+        my ( $is_valid, $err) = Koha::AuthUtils::is_password_valid( $password );
+        unless ( $is_valid ) {
+            $error = 'password_too_short' if $err eq 'too_short';
+            $error = 'password_too_weak' if $err eq 'too_weak';
+            $error = 'password_has_whitespaces' if $err eq 'has_whitespaces';
+        } else {
+            Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
+            CompletePasswordRecovery($uniqueKey);
+            $template->param(
+                password_reset_done => 1,
+                username            => $username
+            );
+        }
     }
-    else {    #errors
-        if ( !$borrower_number ) {    #parameters not valid
-            $errLinkNotValid = 1;
-        }
-        elsif ( $password ne $repeatPassword ) {    #passwords does not match
-            $errPassNotMatch = 1;
-        }
-        elsif ( length($password) < $minPassLength ) {    #password too short
-            $errPassTooShort = 1;
-        }
+    if ( $error ) {
         $template->param(
-            new_password    => 1,
-            email           => $email,
-            uniqueKey       => $uniqueKey,
-            errLinkNotValid => $errLinkNotValid,
-            errPassNotMatch => $errPassNotMatch,
-            errPassTooShort => $errPassTooShort,
-            hasError        => 1
+            new_password => 1,
+            email        => $email,
+            uniqueKey    => $uniqueKey,
+            hasError     => 1,
+            $error       => 1,
         );
     }
 }
