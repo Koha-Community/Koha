@@ -50,7 +50,8 @@ my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM issuingrules');
-my $loggedinuser = $builder->build({ source => 'Borrower' });
+my $loggedinuser = $builder->build({ source => 'Borrower',
+                                    value => { flags => 1 } });
 
 $dbh->do(q{
     INSERT INTO user_permissions (borrowernumber, module_bit, code)
