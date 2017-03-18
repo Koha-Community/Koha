@@ -71,148 +71,98 @@ function Hide(link)
 
 
 [% IF ( choosemarc ) %]
-    <h2 align="center">Choose your setup</h2>
-    <p>Basic setup selects recommended settings by default.</p>
-    <form name="frameworkselection" method="post" action="install.pl">
-    <input type="hidden" name="step" value="3" />
-    <input type="hidden" name="op" value="selectframeworks"/>
-
-    <div>
-        <input type="radio" name="setup" value="Basic" checked="checked">Basic<br/>
-        <input type="radio" name="setup" value="Advanced"/>Advanced<br/>
-    </div>
-
-    <h2 align="center">Select your MARC flavor</h2>
-    <p>MARC stands for Machine Readable Cataloging, containing information about a bibliographic record. MARC21 is more commonly used globally, whereas UNIMARC tends to be used in Europe. </p>
-
-    [% FOREACH flavourloo IN flavourloop %]
-    <div>
-            [% IF ( flavourloo.label == "Unimarc") %]
-                 <input type="radio" name="marcflavour" value="[% flavourloo.code %]" /> [% flavourloo.label %]<br/>
-            [% ELSE %]
-                 <input type="radio" name="marcflavour" value="[% flavourloo.code %]" checked="checked" /> [% flavourloo.label %] <br/>
-            [% END %]
-    </div>
-    [% END %]
-
-        <p>Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
-
-    </form>
-
+   <h2 align="center">Select your MARC flavor</h2>
+       <form name="frameworkselection" method="post" action="install.pl">
+           <input type="hidden" name="step" value="3" />
+           <input type="hidden" name="op" value="selectframeworks" />
+           <p>
+           [% FOREACH flavourloo IN flavourloop %]
+           <div>
+              [% IF ( flavourloo.checked ) %]
+                  <input type="radio" name="marcflavour" value="[% flavourloo.code %]" checked /> [% flavourloo.label %] <br/>
+              [% ELSE %]
+                  <input type="radio" name="marcflavour" value="[% flavourloo.code %]" /> [% flavourloo.label %] <br/>
+              [% END %]
+           </div>
+           [% END %]
+           </p>
+           <p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
+           </form>
 [% END %]
 
 [% IF ( selectframeworks ) %]
-        <h2 align= "center"> [% setup %] setup</h2>
-        <h2 align="center">Selecting Default Settings</h2>
+<h2 align="center">Selecting Default Settings</h2>
+    <script type="text/javascript">
+       var linklabel = _("Select all sample data");
+       document.write('<p><a href="#" onclick="return selectAllFrameworks();">'+linklabel+'</a></p>');
+    </script>
+    <form name="frameworkselection" method="post" action="install.pl">
+    <input type="hidden" name="step" value="3" />
+    <input type="hidden" name="op" value="addframeworks" />
 
-        [% IF setup == "Advanced" %]
-            <script type="text/javascript">
-                var linklabel = _("Select all options");
-                document.write('<p><a href="#" onclick="return selectAllFrameworks();"><button>'+linklabel+'</button></a></p>');
-            </script>
-        [% END %]
-        <form name="frameworkselection" method="post" action="install.pl">
-            <input type="hidden" name="step" value="3" />
-            <input type="hidden" name="op" value="addframeworks" />
     [% IF ( frameworksloop ) %]
-        <h2>MARC frameworks: [% marcflavour %]</h2>
-        [% IF ( en_marc_frameworks ) %]
-            <h4><span class="error">No MARC frameworks are available for your language.
-                    Defaulting to the frameworks supplied for English (en)<span></h4>
-        [% END %]
-        [% FOREACH frameworksloo IN frameworksloop %]
-           <div>
-           <h3>[% frameworksloo.label %]</h3>
-           [% FOREACH framework IN frameworksloo.frameworks %]
-                <table style="border:1px;vertical-align:top;">
-                <tr>
-                    <td style = "border:1px; vertical-align:top;">
-                        [% IF (frameworksloo.label == "Default") && (setup=="Basic") %]
-                            <input type="hidden" name="framework" value="[% framework.fwkfile %]" id ="[%framework.fwkname%]" />
-                        [% ELSE %]
-                            <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id ="[%framework.fwkname%]" />
-                        [% END %]
-                    </td>
-                    <td>
-                    [% IF (frameworksloo.label == "Default") && (setup=="Basic") %]
-                        <ul>
-                            <li>
-                                <label for="[% framework.fwkname %]">
-                                    [% framework.fwkdescription %]
-                                    <em>([% framework.fwkname %])</em>
-                                </label>
-                            </li>
-                        </ul>
-                    </td>
-                    [% ELSE %]
-                    <td>
-                        <label for= "[% framework.fwkname %]">
-                            [% framework.fwkdescription %]
-                            <em>([% framework.fwkname %])</em>
-                        </label>
-                    </td>
-                    [% END %]
-                </tr>
-                </table>
-           [% END %]
-           </div>
-        [% END %]
-    <h2>Other data</h2>
+    <h2>MARC frameworks: [% marcflavour %]</h2>
+    [% IF ( en_marc_frameworks ) %]
+         <h4><span class="error">No MARC frameworks are available for your language.
+                Defaulting to the frameworks supplied for English (en)<span></h4>
     [% END %]
-    [% IF ( en_sample_data ) %]
-        <h4><span class="error">No sample data and settings are available for your language.
-                Defaulting to the samples supplied for English (en)<span></h4>
-    [% END %]
-    [% FOREACH levelloo IN levelloop %]
-        <div>
-        <h3>[% levelloo.label %]</h3>
-
-        [% IF (setup == "Basic" && levelloo.label == "Optional") %]
-            <script type="text/javascript">
-                var linklabel = _("Select all options");
-                document.write('<p><a href="#" onclick="return selectAllFrameworks();"><button>'+linklabel+'</button></a></p>');
-            </script>
-        [% END %]
-
-        [% FOREACH framework IN levelloo.frameworks %]
-            <table style="border:1px;vertical-align:top;">
-            <tr>
-                <td style="vertical-align:top;">
-                [% IF (levelloo.label == "Default" ) && (setup=="Basic")%]
-                     <input type="hidden" name="framework" value="[% framework.fwkfile %]" id="[%framework.fwkname %]" />
-                [% ELSE %]
-                     <input type="checkbox" name="framework" value="[%framework.fwkfile %]" id="[%framework.fwkname%]"/>
-                [% END %]
-                </td>
-                <td>
-                [% IF (levelloo.label == "Default") && (setup=="Basic")%]
-                <ul>
-                    <li>
-                        <label for="[% framework.fwkname %]">
-                            [% framework.fwkdescription %]
-                            <em>([% framework.fwkname %])</em>
-                        </label>
-                    </li>
-                </ul>
-                </td>
-                [% ELSE %]
-                <td>
-                    <label for= "[% framework.fwkname %]">
-                        [% framework.fwkdescription %]
-                        <em>([% framework.fwkname %])</em>
-                    </label>
-                </td>
-                [% END %]
-            </tr>
-            </table>
-        [% END %]
-        </div>
-    [% END %]
-    <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete,
-    please be patient.</p>
-    <p><input type="submit" value="Import &gt;&gt;" />
-    </p>
-    </form>
+    [% FOREACH frameworksloo IN frameworksloop %]
+    <div>
+    <h3>[% frameworksloo.label %]</h3>
+    [% FOREACH framework IN frameworksloo.frameworks %]
+       <table style="border:1px;vertical-align:top;">
+       <tr>
+       <td style="vertical-align:top;">
+          [% IF ( framework.checked ) %]
+               <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
+          [% ELSE %]
+               <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
+          [% END %]
+       </td>
+       <td>
+          <label for="[% framework.fwkname %]">
+               [% framework.fwkdescription %]
+               <em>([% framework.fwkname %])</em>
+           </label>
+       </td>
+       </table>
+     [% END %]
+     </div>
+     [% END %]
+     <h2>Other data</h2>
+     [% END %]
+     [% IF ( en_sample_data ) %]
+         <h4><span class="error">No sample data and settings are available for your language.
+                 Defaulting to the samples supplied for English (en)<span></h4>
+     [% END %]
+     [% FOREACH levelloo IN levelloop %]
+     <div>
+     <h3>[% levelloo.label %]</h3>
+     [% FOREACH framework IN levelloo.frameworks %]
+        <table style="border:1px;vertical-align:top;">
+        <tr>
+        <td style="vertical-align:top;">
+            [% IF ( framework.checked ) %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" id="[% framework.fwkname %]" />
+            [% ELSE %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" id="[% framework.fwkname %]" />
+            [% END %]
+        </td>
+        <td>
+                <label for="[% framework.fwkname %]">
+                    [% framework.fwkdescription %]
+                    <em>([% framework.fwkname %])</em>
+                </label>
+        </td>
+        </table>
+     [% END %]
+     </div>
+     [% END %]
+     <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete,
+     please be patient.</p>
+     <p><input type="submit" value="Import &gt;&gt;" />
+     </p>
+     </form>
 [% END %]
 
 

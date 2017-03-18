@@ -296,9 +296,6 @@ elsif ( $step && $step == 3 ) {
         $template->param( "levelloop"      => $levellist );
         $template->param( "$op"            => 1 );
 
-        my $setup = $query->param('setup');
-        $template->param( "setup" => $setup );
-
     }
     elsif ( $op && $op eq 'choosemarc' ) {
         #
@@ -343,16 +340,12 @@ elsif ( $step && $step == 3 ) {
         my $marcflavour = C4::Context->preference("marcflavour");
         my @flavourlist;
         foreach my $marc (@listdir) {
-            my %cell = (
-                "label"   => ucfirst($marc),
-                "code"    => uc($marc),
-                "checked" => defined($marcflavour)
-                ? uc($marc) eq $marcflavour
-                : 0
-            );
-
+             my %cell=(
+                 "label"=> ucfirst($marc),
+                  "code"=>uc($marc),
+               "checked"=> defined($marcflavour) ? uc($marc) eq $marcflavour : 0);
 #             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
-            push @flavourlist, \%cell;
+             push @flavourlist, \%cell;
         }
         $template->param( "flavourloop" => \@flavourlist );
         $template->param( "$op"         => 1 );
