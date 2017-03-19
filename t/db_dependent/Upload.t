@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Warn;
 
 use Test::MockModule;
@@ -18,7 +18,7 @@ use Koha::Uploader;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $builder = t::lib::TestBuilder->new;
+our $builder = t::lib::TestBuilder->new;
 
 our $current_upload = 0;
 our $uploads = [
@@ -190,6 +190,23 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
     $delete = $kohaobj->delete({ keep_file => 1 });
     ok( $delete =~ /^(0E0|-1)$/, 'Repeated delete unsuccessful' );
     # NOTE: Koha::Object->delete does not return 0E0 (yet?)
+};
+
+subtest 'Test delete_missing' => sub {
+    plan tests => 4;
+
+    # If we add files via TestBuilder, they do not exist
+    my $upload01 = $builder->build({ source => 'UploadedFile' });
+    my $upload02 = $builder->build({ source => 'UploadedFile' });
+    # dry run first
+    my $deleted = Koha::UploadedFiles->delete_missing({ keep_record => 1 });
+    is( $deleted, 2, 'Expect two missing files' );
+    isnt( Koha::UploadedFiles->find( $upload01->{id} ), undef, 'Not deleted' );
+    $deleted = Koha::UploadedFiles->delete_missing;
+    is( $deleted, 2, 'Deleted two missing files' );
+    is( Koha::UploadedFiles->search({
+        id => [ $upload01->{id}, $upload02->{id} ],
+    })->count, 0, 'Records are gone' );
 };
 
 subtest 'Call search_term with[out] private flag' => sub {

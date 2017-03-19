@@ -105,6 +105,36 @@ sub delete_temporary {
     })->delete;
 }
 
+=head3 delete_missing
+
+    $cnt = Koha::UploadedFiles->delete_missing();
+
+    $cnt = Koha::UploadedFiles->delete_missing({ keep_record => 1 });
+
+Deletes all records where the actual file is not found.
+
+Supports a keep_record hash parameter to do a check only.
+
+Returns the number of missing files (and/or deleted records).
+
+=cut
+
+sub delete_missing {
+    my ( $self, $params ) = @_;
+    $self = Koha::UploadedFiles->new if !ref($self); # handle class call
+    my $cnt = 0;
+    while( my $row = $self->next ) {
+        if( my $file = $row->full_path ) {
+            next if -e $file;
+            # We are passing keep_file since we already know that the file
+            # is missing and we do not want to see the warning
+            $row->delete({ keep_file => 1 }) if !$params->{keep_record};
+            $cnt++;
+        }
+    }
+    return $cnt;
+}
+
 =head3 search_term
 
 Search_term allows you to pass a term to search in filename and hashvalue.
