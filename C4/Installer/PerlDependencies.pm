@@ -774,12 +774,12 @@ our $PERL_DEPS = {
     },
     'Mojolicious' => {
         'usage'    => 'REST API',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '6.0',
     },
     'Swagger2' => {
         'usage'    => 'REST API',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '0.59',
     },
     'UNIVERSAL::can' => {
