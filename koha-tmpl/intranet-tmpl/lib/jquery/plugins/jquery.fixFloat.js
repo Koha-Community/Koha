@@ -3,7 +3,8 @@
 */
 (function ($, window) {
     "use strict";
-    $.fn.fixFloat = function (options={}) {
+    $.fn.fixFloat = function (options) {
+        var options = options || {};
         var tbh = $(this);
         var defaults = {
             enabled: true,
