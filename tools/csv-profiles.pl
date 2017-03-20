@@ -72,6 +72,10 @@ if ( $op eq 'add_form' ) {
     my $profile     = $input->param("profile");
     my $description = $input->param("description");
     my $type        = $input->param("type");
+    my $used_for    =
+        $type eq "marc"
+      ? $input->param("used_for_marc")
+      : $input->param("used_for_sql");
     my $content =
         $type eq "marc"
       ? $input->param("marc_content")
@@ -92,6 +96,7 @@ if ( $op eq 'add_form' ) {
         $csv_profile->subfield_separator($subfield_separator);
         $csv_profile->encoding($encoding);
         $csv_profile->type($type);
+        $csv_profile->used_for($used_for);
         eval { $csv_profile->store; };
 
         if ($@) {
@@ -109,6 +114,7 @@ if ( $op eq 'add_form' ) {
                 subfield_separator => $subfield_separator,
                 encoding           => $encoding,
                 type               => $type,
+                used_for           => $used_for,
             }
         );
         eval { $csv_profile->store; };

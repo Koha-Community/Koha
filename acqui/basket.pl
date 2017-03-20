@@ -431,7 +431,7 @@ if ( $op eq 'list' ) {
         unclosable           => @orders ? $basket->{is_standing} : 1,
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
-        csv_profiles         => [ Koha::CsvProfiles->search({ type => 'export_basket' }) ],
+        csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' }) ],
     );
 }
 

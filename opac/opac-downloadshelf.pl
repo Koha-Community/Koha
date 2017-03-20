@@ -129,7 +129,7 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         } else {
             $template->param(fullpage => 1);
         }
-        $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
+        $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ]);
         $template->param( shelf => $shelf );
         output_html_with_http_headers $query, $cookie, $template->output;
     }

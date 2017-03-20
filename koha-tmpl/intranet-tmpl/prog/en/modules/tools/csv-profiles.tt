@@ -102,10 +102,17 @@ function reloadPage(p) {
 [% END %]
 
 [% BLOCK type_description %]
-    [% IF type_code == 'marc' %] MARC for export records
-    [% ELSIF type_code == 'late_issues' %] SQL for late serial issues claims
-    [% ELSIF type_code == 'export_basket' %] SQL for basket export in acquisition
-    [% ELSE %] Uknown type
+    [% IF type_code == 'marc' %] MARC
+    [% ELSIF type_code == 'sql' %] SQL
+    [% ELSE %] Unknown type
+    [% END %]
+[% END %]
+
+[% BLOCK used_for_description %]
+    [% IF used_for_code == 'export_records' %] Export records
+    [% ELSIF used_for_code == 'late_issues' %] Late serial issues claims
+    [% ELSIF used_for_code == 'export_basket' %] Basket export in acquisition
+    [% ELSE %] Unknown usage
     [% END %]
 [% END %]
 
@@ -132,7 +139,7 @@ function reloadPage(p) {
                 <li>
                     <label for="type" class="required">Profile type: </label>
                     <select id="type" name="type">
-                        [% FOREACH type IN [ 'marc' 'late_issues' 'export_basket'] %]
+                        [% FOREACH type IN [ 'marc' 'sql'] %]
                         [% IF csv_profile.type == type %]
                             <option value="[% type %]" selected="selected">[% PROCESS type_description type_code = type %]</option>
                         [% ELSE %]
@@ -141,6 +148,30 @@ function reloadPage(p) {
                         [% END %]
                     </select>
                     <span class="required">Required</span>
+                </li>
+                <li class="sql_specific">
+                    <label for="used_for_sql">Usage: </label>
+                    <select id="used_for_sql" name="used_for_sql">
+                        [% FOREACH used_for IN [ 'late_issues' 'export_basket' ] %]
+                        [% IF csv_profile.used_for == used_for %]
+                            <option value="[% used_for %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                        [% ELSE %]
+                            <option value="[% used_for %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                        [% END %]
+                        [% END %]
+                    </select>
+                </li>
+                <li class="marc_specific">
+                    <label for="used_for_marc">Usage: </label>
+                    <select id="used_for_marc" name="used_for_marc">
+                        [% FOREACH used_for IN [ 'export_records' ] %]
+                        [% IF csv_profile.used_for == used_for %]
+                            <option value="[% used_for %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                        [% ELSE %]
+                            <option value="[% used_for %]">[% PROCESS used_for_description used_for_code = used_for %]</option>
+                        [% END %]
+                        [% END %]
+                    </select>
                 </li>
                 <li>
                     <label for="description">Profile description: </label>
@@ -233,7 +264,7 @@ function reloadPage(p) {
 
     <h2>CSV profiles</h2>
 
-    [% IF csv_profiles%]
+    [% IF csv_profiles %]
         <table id="table_csv_profiles">
             <thead>
                 <th>CSV profile ID</th>
@@ -242,6 +273,7 @@ function reloadPage(p) {
                 <th>Content</th>
                 <th>CSV separator</th>
                 <th>CSV type</th>
+                <th>Usage</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
             </thead>
@@ -254,6 +286,7 @@ function reloadPage(p) {
                     <td>[% csv_profile.content %]</td>
                     <td>[% csv_profile.csv_separator %]</td>
                     <td>[% PROCESS type_description type_code = csv_profile.type %]</td>
+                    <td>[% PROCESS used_for_description used_for_code = csv_profile.used_for %]</td>
                     <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=[% csv_profile.export_format_id %]">Edit</a></td>
                     <td><a href="/cgi-bin/koha/tools/csv-profiles.pl?op=delete_confirm&amp;export_format_id=[% csv_profile.export_format_id %]">Delete</a></td>
                 </tr>

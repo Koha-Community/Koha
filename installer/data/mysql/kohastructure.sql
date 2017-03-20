@@ -718,6 +718,7 @@ CREATE TABLE `export_format` (
   `subfield_separator` varchar(2) NOT NULL,
   `encoding` varchar(255) NOT NULL,
   `type` varchar(255) DEFAULT 'marc',
+  `used_for` varchar(255) DEFAULT 'export_records',
   PRIMARY KEY  (`export_format_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Used for CSV export';
 
