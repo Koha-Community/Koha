@@ -63,11 +63,11 @@ Parameter keep_file may be used to delete records, but keep files.
 
 sub delete {
     my ( $self, $params ) = @_;
+    $self = Koha::UploadedFiles->new if !ref($self); # handle class call
     # We use the individual delete on each resultset record
     my $err = 0;
-    while( my $row = $self->_resultset->next ) {
-        my $kohaobj = Koha::UploadedFile->_new_from_dbic( $row );
-        $err++ if !$kohaobj->delete( $params );
+    while( my $row = $self->next ) {
+        $err++ if !$row->delete( $params );
     }
     return $err==0;
 }
