@@ -39,6 +39,7 @@
 
                     [% IF ( impossible ) %]<!-- We tried to issue, but failed. -->
                         <div class="alert">
+                            <span class="sco-alert-warning noissue"></span>
                             <h3>Item cannot be checked out.</h3>
                             <p>Sorry, this item cannot be checked out at this station.</p>
                             [% IF ( title ) %]
@@ -102,6 +103,7 @@
 
                     [% IF ( confirm ) %]<!-- We need to confirm the issue.. -->
                         <div class="alert"><h3>Please confirm the checkout:</h3>
+                            <span class="sco-alert-warning confirm"></span>
                             [% IF ( confirm_renew_issue ) %]
                                 <p>This item is already checked out to you.</p>
                             [% END %]
@@ -149,6 +151,7 @@
                     [% IF ( nopermission ) %]
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert">
+                        <span class="sco-alert-warning nopermission"></span>
                             <h3>Access denied</h3>
                             <p>Sorry, this self-checkout station has lost authentication.  Please contact the administrator to resolve this problem.</p>
                         </div>
@@ -157,6 +160,7 @@
                     [% IF ( different_ip ) %]
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert">
+                            <span class="sco-alert-warning sessionlost"></span>
                             <h3>Session lost</h3>
                             <p>You are accessing self-checkout from a different IP address! please log in again.</p>
                         </div>
@@ -165,15 +169,31 @@
                     [% IF ( invalid_username_or_password ) %]
                         <!-- This is what is displayed if user doesn't have permission -->
                         <div class="alert">
+                            <span class="sco-alert-warning notfound"></span>
                             <h3>Record not found</h3>
                             <p>Your userid was not found in the database.  Please try again.</p>
                         </div>
                     [% END %]
 
                     [% IF ( issued ) %]
-                    <span class="sco-alert-success"></span>
+                    <span class="sco-alert-success issue"></span>
                     <div class="alert alert-info">
                         <p>Item checked out</p>
+                    </div>
+                    [% ELSIF ( renewed ) %]
+                    <span class="sco-alert-success renew"></span>
+                    <div class="alert alert-info">
+                        <p>Item renewed</p>
+                    </div>
+                    [% ELSIF ( returned == 0 ) %]
+                    <span class="sco-alert-warning return"></span>
+                    <div class="alert alert-info">
+                        <p>Item not checked in: please see circulation staff for assistance</p>
+                    </div>
+                    [% ELSIF ( returned == 1 ) %]
+                    <span class="sco-alert-success return"></span>
+                    <div class="alert alert-info">
+                        <p>Item checked in</p>
                     </div>
                     [% END %]
 

@@ -124,10 +124,12 @@ my $return_only = 0;
 #warn "issuer cardnumber: " .   $issuer->{cardnumber};
 #warn "patron cardnumber: " . $borrower->{cardnumber};
 if ($op eq "logout") {
+    $template->param( loggedout => 1 );
     $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
 }
 elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
+    $template->param( returned => $doreturn );
 }
 elsif ( $patron and $op eq "checkout" ) {
     my $impossible  = {};
@@ -177,6 +179,7 @@ elsif ( $patron and $op eq "checkout" ) {
             #warn "renewing";
             AddRenewal( $borrower->{borrowernumber}, $item->{itemnumber} );
             push @newissueslist, $barcode;
+            $template->param( renewed => 1 );
         } else {
             #warn "renew confirmation";
             $template->param(
