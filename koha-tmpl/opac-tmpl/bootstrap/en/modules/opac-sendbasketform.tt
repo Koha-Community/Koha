@@ -37,7 +37,7 @@
                                     <input type="hidden" name="bib_list" value="[% bib_list %]" />
                                     <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                 </fieldset>
-                                [% IF Koha.Preference('RequestOnOpac') || Koha.Preference('OpacRenewalAllowed') %]<p>Please do not use this mail to request or renew books.</p>[% END %]
+                                [% IF Koha.Preference('RequestOnOpac') || Koha.Preference('OpacRenewalAllowed') %]<p id="donotrequestbymail">Please do not use this mail to request or renew books.</p>[% END %]
                                 <fieldset class="action">
                                     <input type="submit" class="btn" value="Send" />
                                     <a class="cancel close" href="#">Cancel</a>
