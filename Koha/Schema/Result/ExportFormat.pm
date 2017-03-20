@@ -76,6 +76,13 @@ __PACKAGE__->table("export_format");
   is_nullable: 1
   size: 255
 
+=head2 used_for
+
+  data_type: 'varchar'
+  default_value: 'export_records'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -102,6 +109,13 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 255,
   },
+  "used_for",
+  {
+    data_type => "varchar",
+    default_value => "export_records",
+    is_nullable => 1,
+    size => 255,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -117,8 +131,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("export_format_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AJbxXXJBftCbSKm2E/ZTjA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-20 10:12:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cHdb+bBmBVTAK71TNjdqgg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
