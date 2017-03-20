@@ -9,7 +9,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Reserve <i><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% item.title %]</a></i> for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Reserve <i><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]">[% title %]</a></i> for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
 
 <div id="doc" class="yui-t7">
     <div id="bd">
@@ -23,7 +23,7 @@
             <input type="hidden" name="action" value="add" />
 
             <fieldset class="rows">
-                <legend>Add <i>[% item.title %]</i> to <i>[% course.course_name %]</i></legend>
+                <legend>Add <i>[% title %]</i> to <i>[% course.course_name %]</i></legend>
                 <ol>
                     <li>
                         <span class="label">Barcode:</span>
