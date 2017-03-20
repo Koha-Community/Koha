@@ -122,9 +122,9 @@
                         [% IF (RESERVE_CHARGE) %]
                             <div class="alert" id="reserve_fee">
                                 [% IF Koha.Preference('HoldFeeMode') == 'any_time_is_collected' %]
-                                    There is a charge of [% RESERVE_CHARGE %] for collecting this hold
+                                    You will be charged a hold fee of [% RESERVE_CHARGE %] when you collect this item
                                 [% ELSE %]
-                                    There is a charge of [% RESERVE_CHARGE %] for placing this hold
+                                    You will be charged a hold fee of [% RESERVE_CHARGE %] for placing this hold
                                 [% END %]
                             </div>
                         [% END %]
