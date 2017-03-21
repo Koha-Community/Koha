@@ -72,11 +72,13 @@ my @branch = $query->multi_param("branch");
 my @messages;
 if ( $op eq 'export' ) {
     my $filename = $query->param('id_list_file');
-    my $mimetype = $query->uploadInfo($filename)->{'Content-Type'};
-    my @valid_mimetypes = qw( application/octet-stream text/csv text/plain );
-    unless ( grep { /^$mimetype$/ } @valid_mimetypes ) {
-        push @messages, { type => 'alert', code => 'invalid_mimetype' };
-        $op = '';
+    if ( $filename ) {
+        my $mimetype = $query->uploadInfo($filename)->{'Content-Type'};
+        my @valid_mimetypes = qw( application/octet-stream text/csv text/plain );
+        unless ( grep { /^$mimetype$/ } @valid_mimetypes ) {
+            push @messages, { type => 'alert', code => 'invalid_mimetype' };
+            $op = '';
+        }
     }
 }
 
