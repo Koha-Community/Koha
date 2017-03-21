@@ -17,11 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 94;
-
-BEGIN {
-    use_ok('C4::Log')
-}
+use Test::More tests => 93;
 
 use DateTime;
 
@@ -31,6 +27,7 @@ use t::lib::TestBuilder;
 use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
+use C4::Log;
 use C4::Members;
 use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
