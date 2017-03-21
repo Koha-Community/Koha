@@ -161,6 +161,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ExtendedPatronAttributes','0',NULL,'Use extended patron IDs and attributes','YesNo'),
 ('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
 ('FacetMaxCount','20',NULL,'Specify the max facet count for each category','Integer'),
+('FailedLoginAttempts','','','Number of login attempts before lockout the patron account','Integer'),
 ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo'),
 ('FilterBeforeOverdueReport','0','','Do not run overdue report until filter selected','YesNo'),
 ('FineNotifyAtCheckin','0',NULL,'If ON notify librarians of overdue fines on the items they are checking in.','YesNo'),

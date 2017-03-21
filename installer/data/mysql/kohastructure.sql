@@ -635,6 +635,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
   `lastseen` datetime default NULL, -- last time a patron has been seed (connected at the OPAC or staff interface)
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
+  `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`),
@@ -1670,6 +1671,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- time of last change could be useful for synchronization with external systems (among others)
   `lastseen` datetime default NULL, -- last time a patron has been seed (connected at the OPAC or staff interface)
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
+  `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
