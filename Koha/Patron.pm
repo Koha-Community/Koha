@@ -630,6 +630,24 @@ sub get_enrollable_clubs {
     return wantarray ? $e->as_list : $e;
 }
 
+=head3 account_locked
+
+my $is_locked = $patron->account_locked
+
+Return true if the patron has reach the maximum number of login attempts (see pref FailedLoginAttempts).
+Otherwise return false.
+If the pref is not set (empty string, null or 0), the feature is considered as disabled.
+
+=cut
+
+sub account_locked {
+    my ($self) = @_;
+    my $FailedLoginAttempts = C4::Context->preference('FailedLoginAttempts');
+    return ( $FailedLoginAttempts
+          and $self->login_attempts
+          and $self->login_attempts >= $FailedLoginAttempts )? 1 : 0;
+}
+
 =head3 type
 
 =cut
