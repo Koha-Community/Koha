@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 59;
+use Test::More tests => 57;
 use t::lib::Mocks qw(mock_preference);
 use POSIX qw(strftime);
 use Data::Dumper;
@@ -74,6 +74,8 @@ t::lib::Mocks::mock_preference( "UsageStatsLastUpdateTime", $now );
 $update = C4::UsageStats->NeedUpdate;
 is( $update, 0, "Last update just be done, no update needed " );
 
+my $nb_of_libraries = Koha::Libraries->count;
+
 # ---------- Testing BuildReport ----------------
 
 #Test report->library -----------------
@@ -87,15 +89,15 @@ t::lib::Mocks::mock_preference( "UsageStatsLibraryUrl",  0 );
 
 my $report = C4::UsageStats->BuildReport();
 
-isa_ok( $report,            'HASH', '$report is a HASH' );
-isa_ok( $report->{library}, 'HASH', '$report->{library} is a HASH' );
-is( scalar( keys %{$report->{library}} ), 6,  "There are 6 fields in $report->{library}" );
-is( $report->{library}->{id},             0,  "UsageStatsID           is good" );
-is( $report->{library}->{name},           '', "UsageStatsLibraryName  is good" );
-is( $report->{library}->{url},            '', "UsageStatsLibraryUrl   is good" );
-is( $report->{library}->{type},           '', "UsageStatsLibraryType  is good" );
-is( $report->{library}->{country},        '', "UsageStatsCountry      is good" );
-is( $report->{library}->{number_of_libraries}, undef, "UsageStatsLibrariesInfo is good" );
+isa_ok( $report,              'HASH',  '$report is a HASH' );
+isa_ok( $report->{libraries}, 'ARRAY', '$report->{libraries} is an ARRAY' );
+is( scalar( @{ $report->{libraries} } ), 0, "There are 0 fields in libraries, libraries info are not shared" );
+is( $report->{installation}->{koha_id}, 0,  "UsageStatsID          is good" );
+is( $report->{installation}->{name},    '', "UsageStatsLibraryName is good" );
+is( $report->{installation}->{url},     '', "UsageStatsLibraryUrl  is good" );
+is( $report->{installation}->{type},    '', "UsageStatsLibraryType is good" );
+is( $report->{installation}->{country}, '', "UsageStatsCountry     is good" );
+
 
 #mock with values
 t::lib::Mocks::mock_preference( "UsageStatsID",          1 );
@@ -104,19 +106,19 @@ t::lib::Mocks::mock_preference( "UsageStatsLibraryUrl",  'URL' );
 t::lib::Mocks::mock_preference( "UsageStatsLibraryType", 'TYPE' );
 t::lib::Mocks::mock_preference( "UsageStatsCountry",     'COUNTRY' );
 t::lib::Mocks::mock_preference( "UsageStatsLibrariesInfo", 1 );
+t::lib::Mocks::mock_preference( "UsageStatsGeolocation", 1 );
+
 
 $report = C4::UsageStats->BuildReport();
 
-isa_ok( $report,            'HASH', '$report is a HASH' );
-isa_ok( $report->{library}, 'HASH', '$report->{library} is a HASH' );
-is( scalar( keys %{$report->{library}} ), 6,         "There are 6 fields in $report->{library}" );
-is( $report->{library}->{id},             1,         "UsageStatsID            is good" );
-is( $report->{library}->{name},           'NAME',    "UsageStatsLibraryName   is good" );
-is( $report->{library}->{url},            'URL',     "UsageStatsLibraryUrl    is good" );
-is( $report->{library}->{type},           'TYPE',    "UsageStatsLibraryType   is good" );
-is( $report->{library}->{country},        'COUNTRY', "UsageStatsCountry       is good" );
-my $nb_of_libraries = Koha::Libraries->count;
-is( $report->{library}->{number_of_libraries}, $nb_of_libraries, "UsageStatsLibrariesInfo is good" );
+isa_ok( $report,              'HASH',  '$report is a HASH' );
+isa_ok( $report->{libraries}, 'ARRAY', '$report->{libraries} is an ARRAY' );
+is( scalar( @{ $report->{libraries} } ), $nb_of_libraries, "There are 6 fields in $report->{libraries}" );
+is( $report->{installation}->{koha_id}, 1,     "UsageStatsID          is good" );
+is( $report->{installation}->{name},   'NAME', "UsageStatsLibraryName is good" );
+is( $report->{installation}->{url},     'URL', "UsageStatsLibraryUrl  is good" );
+is( $report->{installation}->{type},   'TYPE', "UsageStatsLibraryType is good" );
+is( $report->{installation}->{country}, 'COUNTRY', "UsageStatsCountry is good" );
 
 #Test report->volumetry ---------------
 #with original values
