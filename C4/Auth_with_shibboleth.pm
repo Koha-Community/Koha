@@ -256,7 +256,7 @@ This is as simple as enabling B<useshibboleth> in koha-conf.xml:
 Map shibboleth attributes to koha fields, and configure authentication match point in koha-conf.xml.
 
  <shibboleth>
-   <matchpoint>userid<matchpoint> <!-- koha borrower field to match upon -->
+   <matchpoint>userid</matchpoint> <!-- koha borrower field to match upon -->
    <mapping>
      <userid is="eduPersonID"></userid> <!-- koha borrower field to shibboleth attribute mapping -->
    </mapping>

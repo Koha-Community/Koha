@@ -1291,8 +1291,6 @@ sub AddMember_Opac {
         $borrower{'password'} = $password;
     }
 
-    $borrower{'cardnumber'} = fixup_cardnumber( $borrower{'cardnumber'} );
-
     %borrower = AddMember_Auto(%borrower);
 
     return ( $borrower{'borrowernumber'}, $borrower{'password'} );

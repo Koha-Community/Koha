@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 use Test::MockModule;
-use Data::Dumper;
+use Data::Dumper qw/Dumper/;
 use C4::Context;
 use Koha::Database;
 use Koha::Holds;
@@ -37,7 +37,6 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 # Remove invalid guarantorid's as long as we have no FK
 $dbh->do("UPDATE borrowers b1 LEFT JOIN borrowers b2 ON b2.borrowernumber=b1.guarantorid SET b1.guarantorid=NULL where b1.guarantorid IS NOT NULL AND b2.borrowernumber IS NULL");
@@ -491,4 +490,17 @@ eval {
 is($@, '', 'Bug 16009: GetMember(cardnumber => undef) works');
 is($patron, undef, 'Bug 16009: GetMember(cardnumber => undef) returns undef');
 
-1;
+subtest 'Trivial test for AddMember_Auto' => sub {
+    plan tests => 3;
+    my $members_mock = Test::MockModule->new( 'C4::Members' );
+    $members_mock->mock( 'fixup_cardnumber', sub { 12345; } );
+    my $library = $builder->build({ source => 'Branch' });
+    my $category = $builder->build({ source => 'Category' });
+    my %borr = AddMember_Auto( surname=> 'Dick3', firstname => 'Philip', branchcode => $library->{branchcode}, categorycode => $category->{categorycode}, password => '34567890' );
+    ok( $borr{borrowernumber}, 'Borrower hash contains borrowernumber' );
+    is( $borr{cardnumber}, 12345, 'Borrower hash contains cardnumber' );
+    $patron = Koha::Patrons->find( $borr{borrowernumber} );
+    isnt( $patron, undef, 'Patron found' );
+};
+
+$schema->storage->txn_rollback;
