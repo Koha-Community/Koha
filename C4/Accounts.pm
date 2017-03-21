@@ -285,7 +285,7 @@ sub makepayment {
     });
 
     #check to see what accounttype
-    if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
+    if ( $data->{itemnumber} && ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) ) {
         C4::Circulation::ReturnLostItem( $borrowernumber, $data->{'itemnumber'} );
     }
     my $sthr = $dbh->prepare("SELECT max(accountlines_id) AS lastinsertid FROM accountlines");
