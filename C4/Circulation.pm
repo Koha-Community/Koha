@@ -2954,7 +2954,7 @@ sub AddRenewal {
     );
 
     #Log the renewal
-    logaction("CIRCULATION", "RENEW", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
+    logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
     return $datedue;
 }
 

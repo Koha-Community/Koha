@@ -473,16 +473,16 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     );
     t::lib::Mocks::mock_preference('RenewalLog', 0);
     my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    my $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    my $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
     AddRenewal( $renewing_borrower->{borrowernumber}, $itemnumber7, $branch );
-    my $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    my $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
     is ($new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog');
 
     t::lib::Mocks::mock_preference('RenewalLog', 1);
     $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
     AddRenewal( $renewing_borrower->{borrowernumber}, $itemnumber7, $branch );
-    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEW"]) } );
+    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
 
