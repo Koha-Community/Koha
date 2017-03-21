@@ -109,9 +109,7 @@ $(document).ready(function() {
         e.preventDefault();
         clearFilters(true);
     });
-    $("#searchform").on("submit",function(){
-        return filter();
-    });
+    $("#searchform").on("submit", filter);
 });
 
 var dtMemberResults;
