@@ -10,28 +10,32 @@
 
 <script type="text/javascript">
 //<![CDATA[
-    var originalOffset;
-    $(window).scroll(function () {
+    function positionMap() {
         var tbh = $("#mapid");
-        var offsetTop = tbh.offset().top;
+        var mapContainer = tbh.parent();
+        mapContainer.css('position', 'relative');
+        mapContainer.css('min-height', tbh.outerHeight(true));
+        tbh.css('position', 'absolute');
+        tbh.css('right', 0);
+
+        var offsetTop = mapContainer.offset().top;
         var s = parseInt($(window).scrollTop(), 10);
-        var fixMe = (s > offsetTop);
-        if ( !originalOffset ) originalOffset = tbh.position().top;
-        var repositionMe = (s < originalOffset);
-        if (fixMe) {
-            tbh.css({
-                'position': 'fixed',
-                    'top': '0',
-                'margin-left': '40%'
-            });
+        tbh.css('top', '').css('bottom', '');
+        if (s > offsetTop) {
+            var mapContainerOffsetBottom = offsetTop + mapContainer.innerHeight();
+            if (s + tbh.outerHeight(true) > mapContainerOffsetBottom) {
+                tbh.css('bottom', 0);
+            } else {
+                tbh.css('top', s - offsetTop);
+            }
+        } else {
+            tbh.css('top', 0);
         }
-        if (repositionMe) {
-            tbh.css({
-                'position': 'absolute',
-                    'top': originalOffset,
-                'margin-left': '40%'
-            });
-        }
+    }
+
+    $(document).ready(function() {
+        $(window).scroll(positionMap);
+        positionMap();
     });
 //]]>
 </script>
@@ -321,6 +325,7 @@
         $("#UsageStatsLibrariesInfo").on('change', function(){
             if ( $(this).val() == 1 ) $("#libraries_info").show()
             else $("#libraries_info").hide();
+            positionMap();
         });
 
     </script>
