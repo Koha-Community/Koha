@@ -334,7 +334,12 @@ sub update_password {
     my ( $self, $userid, $password ) = @_;
     eval { $self->userid($userid)->store; };
     return if $@; # Make sure the userid is not already in used by another patron
-    $self->password($password)->store;
+    $self->update(
+        {
+            password       => $password,
+            login_attempts => 0,
+        }
+    );
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
     return 1;
 }
