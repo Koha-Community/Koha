@@ -78,7 +78,7 @@ my $reserve3 = $builder->build({
     },
 });
 
-Koha::Cache->get_instance()->flush_all();
+Koha::Caches->get_instance()->flush_all();
 my $holiday = $builder->build({
     source => 'SpecialHoliday',
     value => {

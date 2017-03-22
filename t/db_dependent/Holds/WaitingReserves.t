@@ -19,6 +19,8 @@ my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 $dbh->do(q{DELETE FROM special_holidays});
+$dbh->do(q{DELETE FROM repeatable_holidays});
+$dbh->do("DELETE FROM reserves");
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -135,7 +137,7 @@ my $reserve1 = $builder->build({
 t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
 t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 6);
 
-ModReserveAffect( $item1->{itemnumber}, $patron1->{borrowernumber}, 0);
+ModReserveAffect( $item1->{itemnumber}, $patron1->{borrowernumber});
 my $r = Koha::Holds->find($reserve1->{reserve_id});
 
 is($r->waitingdate, $today->ymd, 'Waiting date should be set to today' );
@@ -207,8 +209,10 @@ my $holiday2 = $builder->build({
     },
 });
 
+Koha::Caches->get_instance->flush_all;
+
 t::lib::Mocks::mock_preference('ExcludeHolidaysFromMaxPickUpDelay', 1);
-ModReserveAffect( $item3->{itemnumber}, $patron2->{borrowernumber}, 0);
+ModReserveAffect( $item3->{itemnumber}, $patron2->{borrowernumber});
 
 # Add 6 days of pickup delay + 1 day of holiday.
 my $expected_expiration = $today->clone;
