@@ -97,7 +97,8 @@ sub reset_config {
 ##############################################################
 
 # Can module load
-use_ok('C4::Auth_with_shibboleth');
+use C4::Auth_with_shibboleth;
+require_ok('C4::Auth_with_shibboleth');
 $C4::Auth_with_shibboleth::debug = '0';
 
 # Subroutine tests

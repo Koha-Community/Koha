@@ -116,7 +116,7 @@ sub checkpw_shib {
 sub _autocreate {
     my ( $config, $match ) = @_;
 
-    my %borrower = ( shibbolethMatchField => $match );
+    my %borrower = ( $config->{matchpoint} => $match );
 
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
         $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
