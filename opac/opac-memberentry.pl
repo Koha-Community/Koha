@@ -254,7 +254,7 @@ elsif ( $action eq 'update' ) {
     }
     else {
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
-        my $extended_attributes_changes = FilterUnchagedAttributes( $borrowernumber, $attributes );
+        my $extended_attributes_changes = FilterUnchangedAttributes( $borrowernumber, $attributes );
 
         if ( %borrower_changes || scalar @{$extended_attributes_changes} > 0 ) {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -317,6 +317,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 
     $template->param( patron_attribute_classes => GeneratePatronAttributesForm( $borrowernumber ) );
 } else {
+    # Render self-registration page
     $template->param( patron_attribute_classes => GeneratePatronAttributesForm() );
 }
 
@@ -474,7 +475,7 @@ sub DelEmptyFields {
     return %borrower;
 }
 
-sub FilterUnchagedAttributes {
+sub FilterUnchangedAttributes {
     my ( $borrowernumber, $entered_attributes ) = @_;
 
     my @patron_attributes = grep {$_->opac_editable} Koha::Patron::Attributes->search({ borrowernumber => $borrowernumber })->as_list;
@@ -574,7 +575,9 @@ sub GeneratePatronAttributesForm {
             # If editable, make sure there's at least one empty entry,
             # to make the template's job easier
             values => $attr_values{ $attr_type->code() } || ['']
-        };
+        }
+            unless !defined $attr_values{ $attr_type->code() }
+                    and !$attr_type->opac_editable;
     }
 
     # Finally, build a list of containing classes
