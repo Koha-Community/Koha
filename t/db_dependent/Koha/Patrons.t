@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Test::Warn;
 use DateTime;
 
@@ -879,6 +879,26 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
 
     Koha::Patrons->find( $anonymous->{borrowernumber})->delete;
     Koha::Patrons->find( $userenv_patron->{borrowernumber})->delete;
+};
+
+subtest 'account_locked' => sub {
+    plan tests => 8;
+    my $patron = $builder->build({ source => 'Borrower', value => { login_attempts => 0 } });
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+    for my $value ( undef, '', 0 ) {
+        t::lib::Mocks::mock_preference('FailedloginAttempts', $value);
+        is( $patron->account_locked, 0, 'Feature is disabled, patron account should not be considered locked' );
+        $patron->login_attempts(1)->store;
+        is( $patron->account_locked, 0, 'Feature is disabled, patron account should not be considered locked' );
+    }
+
+    t::lib::Mocks::mock_preference('FailedloginAttempts', 3);
+    $patron->login_attempts(2)->store;
+    is( $patron->account_locked, 0, 'Patron has 2 failed attempts, account should not be considered locked yet' );
+    $patron->login_attempts(3)->store;
+    is( $patron->account_locked, 1, 'Patron has 3 failed attempts, account should be considered locked yet' );
+
+    $patron->delete;
 };
 
 $retrieved_patron_1->delete;
