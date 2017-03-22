@@ -607,30 +607,35 @@ sub ParsePatronAttributes {
     my @codes  = $cgi->multi_param('patron_attribute_code');
     my @values = $cgi->multi_param('patron_attribute_value');
 
+    my @editable_attribute_types
+        = map { $_->code } Koha::Patron::Attribute::Types->search({ opac_editable => 1 });
+
     my $ea = each_array( @codes, @values );
     my @attributes;
 
     my $delete_candidates = {};
 
     while ( my ( $code, $value ) = $ea->() ) {
-        if ( !defined($value) or $value eq '' ) {
-            $delete_candidates->{$code} = 1
-                unless $delete_candidates->{$code};
-        }
-        else {
-            # we've got a value
-            push @attributes, { code => $code, value => $value };
+        if ( any { $_ eq $code } @editable_attribute_types ) {
+            # It is an editable attribute
+            if ( !defined($value) or $value eq '' ) {
+                $delete_candidates->{$code} = 1
+                    unless $delete_candidates->{$code};
+            }
+            else {
+                # we've got a value
+                push @attributes, { code => $code, value => $value };
 
-            # 'code' is no longer a delete candidate
-            delete $delete_candidates->{$code};
+                # 'code' is no longer a delete candidate
+                delete $delete_candidates->{$code}
+                    if defined $delete_candidates->{$code};
+            }
         }
     }
 
     foreach my $code ( keys %{$delete_candidates} ) {
-        if (Koha::Patron::Attributes->search(
-                { borrowernumber => $borrowernumber, code => $code }
-            )->count > 0
-            )
+        if ( Koha::Patron::Attributes->search({
+                borrowernumber => $borrowernumber, code => $code })->count > 0 )
         {
             push @attributes, { code => $code, value => '' }
                 unless any { $_->{code} eq $code } @attributes;
