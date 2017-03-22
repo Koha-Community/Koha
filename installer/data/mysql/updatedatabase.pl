@@ -13959,6 +13959,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 16530 - Add a circ sidebar navigation menu)\n";
 }
 
+$DBversion = "16.12.00.014";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+            INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+            ('LoadSearchHistoryToTheFirstLoggedUser', '1', NULL, 'If ON, the next user will automatically get the last searches in his history', 'YesNo');
+            });
+            SetVersion( $DBversion );
+            print "Upgrade to $DBversion done (Bug 8010 - Search history can be added to the wrong patron)\n";
+            }
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
