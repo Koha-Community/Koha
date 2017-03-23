@@ -128,12 +128,6 @@ __PACKAGE__->table("branches");
   data_type: 'text'
   is_nullable: 1
 
-=head2 geolocation
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 255
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -177,8 +171,6 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "opac_info",
   { data_type => "text", is_nullable => 1 },
-  "geolocation",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -551,8 +543,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-02-06 10:07:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aq4mf5Dwbd8ps9ANLy8DuQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-23 00:39:05
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U1U/OTAkM3scLXJhzY/Jgw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
