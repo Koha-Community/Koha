@@ -175,14 +175,14 @@ elsif  ($op eq 'save') {
     my $image_select = 0;
     my $field_enabled = 0;
     CGI_PARAMS:
-    foreach my $parameter ($cgi->param()) {     # parse the field values and build a hash of the layout for conversion to xml and storage in the db
+    foreach my $parameter ($cgi->multi_param()) {     # parse the field values and build a hash of the layout for conversion to xml and storage in the db
         if ($parameter =~ m/^field_([0-9])_(.*)$/) {
             my $field_number = $1;
             my $field_data = $2;
             $field_enabled = $field_number if $field_data eq 'enable';
             next CGI_PARAMS unless $field_number == $field_enabled;
             if ($field_data eq 'text') {
-                push @$text_lines, $cgi->param($parameter);
+                push @$text_lines, $cgi->multi_param($parameter);
                 if ($array_index <= 0) {
                     $array_index++;
                 }
@@ -196,7 +196,7 @@ elsif  ($op eq 'save') {
         }
         elsif ($parameter =~ m/^barcode_(.*)$/) {
             $field_enabled = $1 if $1 eq 'print';
-            next CGI_PARAMS unless $field_enabled eq 'print';
+            next CGI_PARAMS unless defined $field_enabled && $field_enabled eq 'print';
             $layout->{'barcode'}->{$1} = $cgi->param($parameter);
         }
         elsif ($parameter =~m/^image_([0-9])_(.*)$/) {
