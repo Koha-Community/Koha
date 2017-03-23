@@ -23,6 +23,7 @@ use MARC::Record;
 
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case/;
 
 =head1 NAME
@@ -689,7 +690,6 @@ sub get_matches {
 
         }
         elsif ( $self->{'record_type'} eq 'authority' ) {
-            my $authresults;
             my @marclist;
             my @and_or;
             my @excluding = [];
@@ -701,13 +701,14 @@ sub get_matches {
                 push @operator, 'exact';
                 push @value,    $key;
             }
-            require C4::AuthoritiesMarc;
-            ( $authresults, $total_hits ) =
-              C4::AuthoritiesMarc::SearchAuthorities(
-                \@marclist,  \@and_or, \@excluding, \@operator,
-                \@value,     0,        20,          undef,
-                'AuthidAsc', 1
-              );
+            my $builder  = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+            my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+            my $search_query = $builder->build_authorities_query_compat(
+                \@marclist, \@and_or, \@excluding, \@operator,
+                \@value, undef, 'AuthidAsc'
+            );
+            my ( $authresults, $total ) = $searcher->search_auth_compat( $search_query, 0, 20 );
+
             foreach my $result (@$authresults) {
                 my $id = $result->{authid};
                 $matches->{$id}->{score} += $matchpoint->{'score'};
