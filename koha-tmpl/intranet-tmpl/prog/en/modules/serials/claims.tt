@@ -142,8 +142,8 @@
     [% IF error_claim %]
         [% IF error_claim == 'no_vendor_email' %]
             <div class="dialog alert">This vendor has no email defined for late issues.</div>
-        [% ELSIF error_claim == 'no_loggedin_user_email' %]
-            <div class="dialog alert">No email is configured for your user.</div>
+        [% ELSIF error_claim == 'bad_or_missing_sender' %]
+            <div class="dialog alert">Bad or missing sender address; check your branch email address or preference KohaAdminEmailAddress.</div>
         [% ELSE %]
             <div class="dialog alert">[% error_claim %]</div>
         [% END %]

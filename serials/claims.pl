@@ -80,7 +80,7 @@ if (@serialnums) { # i.e. they have been flagged to generate claims
         if ( $err->{error} eq "no_email" ) {
             $template->param( error_claim => 'no_vendor_email' );
         } elsif ( $err->{error} =~ m|Bad or missing From address| ) {
-            $template->param( error_claim => 'no_loggedin_user_email' );
+            $template->param( error_claim => 'bad_or_missing_sender' );
         }
     } else {
         $template->param( info_claim => 1 );
