@@ -21,7 +21,7 @@
 [% IF ( facets_loo.type_label_HomeLibrary ) %]<span id="facet-home-libraries">Home libraries</span>[% END %]
 [% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
 [% IF facets_loo.type_label_Location %]<span id="facet-locations">Locations</span>[% END %]
-[% IF facets_loo.type_label_CollectionCodes %]<span id="facet-locations">Collections</span>[% END %]
+[% IF facets_loo.type_label_CollectionCodes %]<span id="facet-collections">Collections</span>[% END %]
 <ul>
   [% SET url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi _ limit_cgi %]
   [% IF ( sort_by ) %]
