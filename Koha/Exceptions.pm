@@ -24,6 +24,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'A required parameter is missing'
     },
+    'Koha::Exceptions::WrongParameter' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'One or more parameters are wrong',
+    },
     'Koha::Exceptions::CannotAddLibraryLimit' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'General problem adding a library limit'

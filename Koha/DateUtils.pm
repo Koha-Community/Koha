@@ -19,7 +19,7 @@ package Koha::DateUtils;
 use Modern::Perl;
 use DateTime;
 use C4::Context;
-use Carp;
+use Koha::Exceptions;
 
 use base 'Exporter';
 
@@ -209,17 +209,16 @@ sub output_pref {
         $dt = $params;
     }
 
-    carp "output_pref should not be called with both dt and str parameters"
-        and return
-            if $dt and $str;
+    Koha::Exceptions::WrongParameter->throw( 'output_pref should not be called with both dt and str parameter' ) if $dt and $str;
 
     if ( $str ) {
         local $@;
         $dt = eval { dt_from_string( $str ) };
-        carp "Invalid date '$str' passed to output_pref\n" if $@;
+        Koha::Exceptions::WrongParameter->throw("Invalid date '$str' passed to output_pref" ) if $@;
     }
 
-    return unless defined $dt && ref($dt) eq 'DateTime';
+    return if !defined $dt; # NULL date
+    Koha::Exceptions::WrongParameter->throw( 'dt is not a datetime' )  if ref($dt) ne 'DateTime';
 
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     if ( $dt->ymd !~ /^9999/ ) {
