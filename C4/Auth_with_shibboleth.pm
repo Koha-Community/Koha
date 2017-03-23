@@ -300,7 +300,7 @@ Given a shib_login attribute, this routine checks for a matching local user and 
 
   my ( $retval, $retcard, $retuserid ) = _autocreate( $config, $match );
 
-Given a database handle, a shibboleth attribute reference and a userid this internal routine will add the given user to koha and return their user credentials
+Given a shibboleth attribute reference and a userid this internal routine will add the given user to Koha and return their user credentials.
 
 This routine is NOT exported
 
