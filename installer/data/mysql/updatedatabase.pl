@@ -13969,6 +13969,28 @@ if( CheckVersion( $DBversion ) ) {
             print "Upgrade to $DBversion done (Bug 8010 - Search history can be added to the wrong patron)\n";
             }
 
+$DBversion = "16.12.00.015";
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'branches', 'geolocation' ) ) {
+        $dbh->do(q|
+                ALTER TABLE branches ADD COLUMN geolocation VARCHAR(255) DEFAULT NULL after opac_info
+                |);
+    }
+
+    $dbh->do(q|
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type ) VALUES ('UsageStatsGeolocation', '', NULL, 'Geolocation of the main library', 'Free');
+            |);
+    $dbh->do(q|
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type ) VALUES ('UsageStatsLibrariesInfo', '', NULL, 'Share libraries information', 'YesNo');
+            |);
+    $dbh->do(q|
+            INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type ) VALUES ('UsageStatsPublicID', '', NULL, 'Public ID for Hea website', 'Free');
+            |)
+        
+        SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18066 - Hea version 2)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
