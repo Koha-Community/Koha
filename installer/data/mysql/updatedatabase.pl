@@ -13985,7 +13985,7 @@ if( CheckVersion( $DBversion ) ) {
             |);
     $dbh->do(q|
             INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type ) VALUES ('UsageStatsPublicID', '', NULL, 'Public ID for Hea website', 'Free');
-            |)
+            |);
         
         SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 18066 - Hea version 2)\n";
