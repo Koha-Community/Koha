@@ -164,11 +164,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.01'
     },
-    'Test::Harness' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '2.56'
-    },
     'PDF::API2::Util' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -382,11 +377,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.05'
     },
-    'Test::More' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '0.8'
-    },
     'GD::Barcode::UPCE' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -567,30 +557,55 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.39'
     },
-    'Test::MockObject' => {
+    'Text::Bidi'   => {
+        'usage'    => 'Label batch PDF',
+        'required' => '1',
+        'min_ver'  => '0.03',
+    },
+    'Test::DBIx::Class' => {
+        'usage'    => 'Testing modules utilising DBIx::Class',
+        'required' => '0',
+        'min_ver'  => '0.42',
+    },
+    'Test::Deep' => {
         'usage'    => 'Core',
         'required' => '0',
-        'min_ver'  => '1.09',
+        'min_ver'  => '0.106',
+    },
+    'Test::Exception' => {
+        'usage'    => 'Core',
+        'required' => '0',
+        'min_ver'  => '0.35',
+    },
+    'Test::Harness' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '2.56'
     },
     'Test::MockModule' => {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '0.05',
     },
-    'Test::Warn' => {
+    'Test::MockObject' => {
         'usage'    => 'Core',
         'required' => '0',
-        'min_ver'  => '0.21',
+        'min_ver'  => '1.09',
+    },
+    'Test::More' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.8'
     },
     'Test::Strict' => {
         'usage'    => 'Core',
         'required' => '0',
         'min_ver'  => '0.14',
     },
-    'Test::Deep' => {
+    'Test::Warn' => {
         'usage'    => 'Core',
         'required' => '0',
-        'min_ver'  => '0.106',
+        'min_ver'  => '0.21',
     },
     'Test::YAML::Valid' => {
         'usage'    => 'Core',
@@ -601,6 +616,11 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '1.08',
+    },
+    'Test::WWW::Mechanize' => {
+        'usage'    => 'Testing suite',
+        'required' => '0',
+        'min_ver'  => '1.42',
     },
     'HTML::FormatText' => {
         'usage'    => 'Core',
@@ -672,11 +692,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '9999.13',
     },
-    'Test::WWW::Mechanize' => {
-        'usage'    => 'Testing suite',
-        'required' => '0',
-        'min_ver'  => '1.42',
-    },
     'Library::CallNumber::LC' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -716,16 +731,6 @@ our $PERL_DEPS = {
         'usage'    => 'OverDrive integration',
         'required' => '0',
         'min_ver'  => '5.836',
-    },
-    'Test::DBIx::Class' => {
-        'usage'    => 'Testing modules utilising DBIx::Class',
-        'required' => '0',
-        'min_ver'  => '0.42',
-    },
-    'Text::Bidi'   => {
-        'usage'    => 'Label batch PDF',
-        'required' => '1',
-        'min_ver'  => '0.03',
     },
     'SOAP::Lite' => {
         'usage'    => 'Norwegian national library card',
