@@ -1,18 +1,17 @@
 <fieldset class="rows" id="memberentry_mainaddress">
     <legend id="main_address_lgd">Main address</legend><ol>
-[% UNLESS nostreetnumber %]
-    <li>
-    [% IF ( mandatorystreetnumber ) %]
-        <label for="streetnumber" class="required">
-    [% ELSE %]
-        <label for="streetnumber">
-    [% END %]
-        Street number: </label>
-        <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]" />
-    [% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
-    </li>
-[% END %]
 [% UNLESS nostreettype %]
+    [% UNLESS nostreetnumber %]
+        [% IF ( mandatorystreetnumber ) %]
+            <label for="streetnumber" class="required">
+        [% ELSE %]
+            <label for="streetnumber">
+        [% END %]
+            Street number: </label>
+            <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]" />
+        [% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
+    [% END %]
+
     [% IF roadtypes %]
         <li>
         [% IF ( mandatorystreettype ) %]
