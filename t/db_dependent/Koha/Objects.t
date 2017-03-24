@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -125,6 +125,19 @@ subtest 'single' => sub {
     is(ref($patron), 'Koha::Patron', 'Koha::Objects->single returns a single Koha::Patron object.');
     warning_like { Koha::Patrons->search->single } qr/SQL that returns multiple rows/,
     "Warning is presented if single is used for a result with multiple rows.";
+};
+
+subtest 'last' => sub {
+    plan tests => 3;
+    my $builder = t::lib::TestBuilder->new;
+    my $patron_1  = $builder->build( { source => 'Borrower' } );
+    my $patron_2  = $builder->build( { source => 'Borrower' } );
+    my $last_patron = Koha::Patrons->search->last;
+    is( $last_patron->borrowernumber, $patron_2->{borrowernumber}, '->last should return the last inserted patron' );
+    $last_patron = Koha::Patrons->search({ borrowernumber => $patron_1->{borrowernumber} })->last;
+    is( $last_patron->borrowernumber, $patron_1->{borrowernumber}, '->last should work even if there is only 1 result' );
+    $last_patron = Koha::Patrons->search({ surname => 'should_not_exist' })->last;
+    is( $last_patron, undef, '->last should return undef if search does not return any results' );
 };
 
 subtest 'Exceptions' => sub {

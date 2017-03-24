@@ -205,6 +205,30 @@ sub next {
     return $object;
 }
 
+=head3 Koha::Objects->last;
+
+my $object = Koha::Objects->last;
+
+Returns the last object that is part of this set.
+Returns undef if there are no object to return.
+
+=cut
+
+sub last {
+    my ( $self ) = @_;
+
+    my $count = $self->_resultset->count;
+    return unless $count;
+
+    my $result = $self->_resultset->slice($count - 1, $count)->first;
+
+    my $object = $self->object_class()->_new_from_dbic( $result );
+
+    return $object;
+}
+
+
+
 =head3 Koha::Objects->reset();
 
 Koha::Objects->reset();
@@ -335,7 +359,7 @@ Currently count, pager, update and delete are covered.
 sub AUTOLOAD {
     my ( $self, @params ) = @_;
 
-    my @known_methods = qw( count pager update delete result_class single );
+    my @known_methods = qw( count pager update delete result_class single slice );
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
