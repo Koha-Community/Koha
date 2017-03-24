@@ -104,6 +104,22 @@ sub dt_from_string {
             (?<year>\d{4})
         |xms;
     }
+    elsif ( $date_format eq 'rfc3339' ) {
+        $regex = qr/
+            (?<year>\d{4})
+            -
+            (?<month>\d{2})
+            -
+            (?<day>\d{2})
+            ([Tt\s])
+            (?<hour>\d{2})
+            :
+            (?<minute>\d{2})
+            :
+            (?<second>\d{2})
+            (([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
+        /xms;
+    }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
         # iso or sql format are yyyy-dd-mm[ hh:mm:ss]"
         $regex = $fallback_re;
@@ -236,6 +252,10 @@ sub output_pref {
         $date = $dateonly
           ? $dt->strftime("%Y-%m-%d")
           : $dt->strftime("%Y-%m-%d $time");
+    }
+    elsif ( $pref =~ m/^rfc3339/ ) {
+        $date = $dt->strftime('%FT%T%z');
+        substr($date, -2, 0, ':'); # timezone "HHmm" => "HH:mm"
     }
     elsif ( $pref =~ m/^metric/ ) {
         $date = $dateonly

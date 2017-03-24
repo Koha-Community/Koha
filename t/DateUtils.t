@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 63;
+use Test::More tests => 67;
 
 use Test::MockModule;
 use Test::Warn;
@@ -45,6 +45,9 @@ cmp_ok $date_string, 'eq', '2011-06-16 12:00', 'iso output';
 
 $date_string = output_pref({ dt => $dt, dateformat => 'iso', timeformat => '12hr' });
 cmp_ok $date_string, 'eq', '2011-06-16 12:00 PM', 'iso output 12hr';
+
+$date_string = output_pref({ dt => $dt, dateformat => 'rfc3339' });
+like($date_string, qr/2011-06-16T12:00:00\+|-\d\d:\d\d/, 'RFC3339 output');
 
 # "notime" doesn't actually mean anything in this context, but we
 # can't pass undef or output_pref will try to access the database
@@ -113,6 +116,11 @@ $dt0 = dt_from_string( '2012-01-00', 'iso' );
 isa_ok( $dt0, 'DateTime',
     'dt_from_string returns a DateTime object passed a zero iso day' );
 cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects iso day 0' );
+
+$dt0 = dt_from_string( '2012-01-00T12:00:00Z', 'rfc3339' );
+isa_ok( $dt0, 'DateTime',
+    'dt_from_string returns a DateTime object passed a zero rfc3339 day' );
+cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects rfc3339 day 0' );
 
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
@@ -198,6 +206,8 @@ $dt = eval { dt_from_string( '31/01/2015', 'iso' ); };
 is( ref($dt), '', '31/01/2015 is not a correct date in iso format' );
 $dt = eval { dt_from_string( '01/01/2015', 'iso' ); };
 is( ref($dt), '', '01/01/2015 is not a correct date in iso format' );
+$dt = eval { dt_from_string( '01/01/2015', 'rfc3339' ); };
+is( ref($dt), '', '01/01/2015 is not a correct date in rfc3339 format' );
 $dt = eval { dt_from_string( '31/01/2015', 'us' ); };
 is( ref($dt), '', '31/01/2015 is not a correct date in us format' );
 $dt = dt_from_string( '01/01/2015', 'us' );
