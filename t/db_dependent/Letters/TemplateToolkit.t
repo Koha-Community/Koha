@@ -338,7 +338,7 @@ Your library.
         |;
         my $tt_letter = process_letter( { template => $tt_template, %$params });
 
-        is( $tt_letter->{content}, $letter->{content}, );
+        is( $tt_letter->{content}, $letter->{content}, 'Verified letter content' );
     };
 
     subtest 'AR_*' => sub {
@@ -418,7 +418,7 @@ Thank you for visiting <<branches.branchname>>.
 |;
         reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
         my $checkin_template = q[
-The following items have been checkin out:
+The following items have been checked out:
 ----
 <<biblio.title>> was due on <<old_issues.date_due | dateonly>>
 ----
@@ -448,7 +448,7 @@ Thank you for visiting [% branch.branchname %].
 |;
         reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
         $checkin_template = q[
-The following items have been checkin out:
+The following items have been checked out:
 ----
 [% biblio.title %] was due on [% old_checkout.date_due | $KohaDates %]
 ----
@@ -466,10 +466,10 @@ Thank you for visiting [% branch.branchname %].
         AddReturn( $item2->{barcode} );
         my $second_checkin_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
 
-        is( $first_checkout_tt_letter->content, $first_checkout_letter->content, );
-        is( $second_checkout_tt_letter->content, $second_checkout_letter->content, );
-        is( $first_checkin_tt_letter->content, $first_checkin_letter->content, );
-        is( $second_checkin_tt_letter->content, $second_checkin_letter->content, );
+        is( $first_checkout_tt_letter->content, $first_checkout_letter->content, 'Verify first checkout letter' );
+        is( $second_checkout_tt_letter->content, $second_checkout_letter->content, 'Verify second checkout letter' );
+        is( $first_checkin_tt_letter->content, $first_checkin_letter->content, 'Verify first checkin letter'  );
+        is( $second_checkin_tt_letter->content, $second_checkin_letter->content, 'Verify second checkin letter' );
 
     };
 };
