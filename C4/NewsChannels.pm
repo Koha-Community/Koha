@@ -205,7 +205,7 @@ sub GetNewsToDisplay {
         OR    expirationdate = '00-00-0000'
      )
      AND   DATE(timestamp) < DATE_ADD(CURDATE(), INTERVAL 1 DAY)
-     AND   (lang = '' OR lang = ?)
+     AND   (opac_news.lang = '' OR opac_news.lang = ?)
      AND   (opac_news.branchcode IS NULL OR opac_news.branchcode = ?)
      ORDER BY number
     }; # expirationdate field is NOT in ISO format?
