@@ -22,6 +22,7 @@ use Crypt::Eksblowfish::Bcrypt qw(bcrypt en_base64);
 use Encode qw( encode is_utf8 );
 use Fcntl qw/O_RDONLY/; # O_RDONLY is used in generate_salt
 use List::MoreUtils qw/ any /;
+use Koha::Patron;
 
 use base 'Exporter';
 
@@ -150,6 +151,102 @@ sub get_script_name {
     } else {
         return $ENV{SCRIPT_NAME};
     }
+}
+
+=head checkHash
+
+    my $passwordOk = Koha::AuthUtils::checkHash($password1, $password2)
+
+Checks if a clear-text String/password matches the given hash when
+MD5 or Bcrypt hashing algorith is applied to it.
+
+Bcrypt is applied if @PARAM2 starts with '$2'
+MD5 otherwise
+
+@PARAM1 String, clear text passsword or any other String
+@PARAM2 String, hashed text password or any other String.
+@RETURN Boolean, 1 if given parameters match
+               , 0 if not
+=cut
+
+sub checkHash {
+    my ( $password, $stored_hash ) = @_;
+
+    $password = Encode::encode( 'UTF-8', $password )
+            if Encode::is_utf8($password);
+
+    return if $stored_hash eq '!';
+
+    my $hash;
+    if ( substr( $stored_hash, 0, 2 ) eq '$2' ) {
+        $hash = hash_password( $password, $stored_hash );
+    } else {
+        #@DEPRECATED Digest::MD5, don't use it or you will get hurt.
+        require Digest::MD5;
+        $hash = Digest::MD5::md5_base64($password);
+    }
+    return $hash eq $stored_hash;
+}
+
+=head checkKohaSuperuser
+
+    my $borrower = Koha::AuthUtils::checkKohaSuperuser($userid, $password);
+
+Check if the userid and password match the ones in the $KOHA_CONF
+@PARAM1 String, user identifier, either the koha.borrowers.userid, or koha.borrowers.cardnumber
+@PARAM2 String, clear text password from the authenticating user
+@RETURNS Koha::Borrower branded as superuser with ->isSuperuser()
+         or undef if user logging in is not a superuser.
+@THROWS Koha::Exception::LoginFailed if user identifier matches, but password doesn't
+=cut
+
+sub checkKohaSuperuser {
+    my ($userid, $password) = @_;
+
+    if ( $userid && $userid eq C4::Context->config('user') ) {
+        if ( $password && $password eq C4::Context->config('pass') ) {
+            return _createTemporarySuperuser();
+        }
+        else {
+            Koha::Exception::LoginFailed->throw(error => "Password authentication failed");
+        }
+    }
+}
+
+=head checkKohaSuperuserFromUserid
+See checkKohaSuperuser(), with only the "user identifier"-@PARAM.
+@THROWS nothing.
+=cut
+
+sub checkKohaSuperuserFromUserid {
+    my ($userid) = @_;
+
+    if ( $userid && $userid eq C4::Context->config('user') ) {
+        return _createTemporarySuperuser();
+    }
+}
+
+=head _createTemporarySuperuser
+
+Create a temporary superuser which should be instantiated only to the environment
+and then discarded. So do not ->store() it!
+@RETURN Koha::Borrower, stamped as superuser.
+=cut
+
+sub _createTemporarySuperuser {
+    my $borrower = Koha::Patron->new();
+
+    my $superuserName = C4::Context->config('user');
+    $borrower->isSuperuser(1);
+    $borrower->set({borrowernumber => 0,
+                       userid     => $superuserName,
+                       cardnumber => $superuserName,
+                       firstname  => $superuserName,
+                       surname    => $superuserName,
+                       branchcode => 'NO_LIBRARY_SET',
+                       email      => C4::Context->preference('KohaAdminEmailAddress')
+                    });
+    return $borrower;
 }
 
 1;

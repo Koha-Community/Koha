@@ -653,7 +653,6 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's encrypted password
-  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
   `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
   `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
@@ -1692,7 +1691,6 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's Bcrypt encrypted password
-  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
   `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
   `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
@@ -2289,15 +2287,6 @@ CREATE TABLE `tags_index` ( -- a weighted list of all tags and where they are us
 -- Table structure for table `userflags`
 --
 
-DROP TABLE IF EXISTS `userflags`;
-CREATE TABLE `userflags` (
-  `bit` int(11) NOT NULL default 0,
-  `flag` varchar(30) default NULL,
-  `flagdesc` varchar(255) default NULL,
-  `defaulton` int(11) default NULL,
-  PRIMARY KEY  (`bit`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 --
 -- Table structure for table `virtualshelves`
 --
@@ -2478,20 +2467,6 @@ CREATE TABLE language_script_mapping (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `permissions`
---
-
-DROP TABLE IF EXISTS `permissions`;
-CREATE TABLE `permissions` (
-  `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(64) NOT NULL DEFAULT '',
-  `description` varchar(255) DEFAULT NULL,
-  PRIMARY KEY  (`module_bit`, `code`),
-  CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `serialitems`
 --
 
@@ -2506,18 +2481,52 @@ CREATE TABLE `serialitems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Table structure for table `user_permissions`
+-- Table structure for table permission_modules
 --
 
-DROP TABLE IF EXISTS `user_permissions`;
-CREATE TABLE `user_permissions` (
-  `borrowernumber` int(11) NOT NULL DEFAULT 0,
-  `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(64) DEFAULT NULL,
-  CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) REFERENCES `permissions` (`module_bit`, `code`)
+DROP TABLE IF EXISTS permission_modules;
+CREATE TABLE permission_modules (
+  permission_module_id int(11) NOT NULL auto_increment,
+  module varchar(32) NOT NULL,
+  description varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (permission_module_id),
+  UNIQUE KEY (module)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table `permissions`
+--
+
+DROP TABLE IF EXISTS permissions;
+CREATE TABLE permissions (
+  permission_id int(11) NOT NULL auto_increment,
+  module varchar(32) NOT NULL,
+  code varchar(64) NOT NULL,
+  description varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (permission_id),
+  UNIQUE KEY (code),
+  CONSTRAINT permissions_to_modules_ibfk1 FOREIGN KEY (module) REFERENCES permission_modules (module)
     ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table structure for table borrower_permissions
+--
+
+DROP TABLE IF EXISTS borrower_permissions;
+CREATE TABLE borrower_permissions (
+  borrower_permission_id int(11) NOT NULL auto_increment,
+  borrowernumber int(11) NOT NULL,
+  permission_module_id int(11) NOT NULL,
+  permission_id int(11) NOT NULL,
+  PRIMARY KEY  (borrower_permission_id),
+  UNIQUE KEY (borrowernumber, permission_module_id, permission_id),
+  CONSTRAINT borrower_permissions_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber)
+     ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT borrower_permissions_ibfk_2 FOREIGN KEY (permission_id) REFERENCES permissions (permission_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT borrower_permissions_ibfk_3 FOREIGN KEY (permission_module_id) REFERENCES permission_modules (permission_module_id)
+     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -3473,7 +3482,6 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `relationship` varchar(100) DEFAULT NULL,
   `sex` varchar(1) DEFAULT NULL,
   `password` varchar(30) DEFAULT NULL,
-  `flags` int(11) DEFAULT NULL,
   `userid` varchar(75) DEFAULT NULL,
   `opacnote` mediumtext,
   `contactnote` varchar(255) DEFAULT NULL,

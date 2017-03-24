@@ -19,6 +19,8 @@ package Koha::Patrons;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use Scalar::Util qw(blessed);
+use Try::Tiny;
 
 use Carp;
 
@@ -27,7 +29,10 @@ use Koha::DateUtils;
 
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
+use Koha::AuthUtils;
 use Koha::Patron;
+
+use Koha::Exception::UnknownObject;
 
 use base qw(Koha::Objects);
 
@@ -197,6 +202,52 @@ sub _type {
 
 sub object_class {
     return 'Koha::Patron';
+}
+
+=head cast
+
+    my $borrower = Koha::Borrowers->cast('cardnumber');
+    my $borrower = Koha::Borrowers->cast($Koha::Borrower);
+    my $borrower = Koha::Borrowers->cast('userid');
+    my $borrower = Koha::Borrowers->cast('borrowernumber');
+    my $borrower = Koha::Borrowers->cast({borrowernumber => 123,
+                                                });
+    my $borrower = Koha::Borrowers->cast({firstname => 'Olli-Antti',
+                                                    surname => 'Kivi',
+                                                    address => 'Koskikatu 25',
+                                                });
+
+Because there are gazillion million ways in Koha to invoke a Borrower, this is a
+omnibus for easily creating a Borrower-object from all the arcane invocations present
+in many parts of Koha.
+Just throw the crazy and unpredictable return values from myriad subroutines returning
+some kind of an borrowerish value to this casting function to get a brand new Koha::Borrower.
+@PARAM1 Scalar, or HASHRef.
+@RETURNS Koha::Borrower, possibly already in DB or a completely new one if nothing was
+                         inferred from the DB.
+@THROWS Koha::Exception::BadParameter, if no idea what to do with the input.
+@THROWS Koha::Exception::UnknownObject, if we cannot find a Borrower with the given input.
+=cut
+
+sub cast {
+    my ($class, $input) = @_;
+
+    my $borrower;
+    try {
+        $borrower = $class->SUPER::cast($input);
+    } catch {
+        if (blessed($_) && $_->isa('Koha::Exception::UnknownObject')) {
+            $borrower = Koha::AuthUtils::checkKohaSuperuserFromUserid($input);
+            unless ($borrower) {
+                $_->rethrow();
+            }
+        }
+        else {
+            die $_;
+        }
+    };
+
+    return $borrower;
 }
 
 =head1 AUTHOR

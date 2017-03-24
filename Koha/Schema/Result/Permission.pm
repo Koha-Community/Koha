@@ -23,17 +23,22 @@ __PACKAGE__->table("permissions");
 
 =head1 ACCESSORS
 
-=head2 module_bit
+=head2 permission_id
 
   data_type: 'integer'
-  default_value: 0
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 module
+
+  data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
+  size: 32
 
 =head2 code
 
   data_type: 'varchar'
-  default_value: (empty string)
   is_nullable: 0
   size: 64
 
@@ -46,15 +51,12 @@ __PACKAGE__->table("permissions");
 =cut
 
 __PACKAGE__->add_columns(
-  "module_bit",
-  {
-    data_type      => "integer",
-    default_value  => 0,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  "permission_id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "module",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 32 },
   "code",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 64 },
+  { data_type => "varchar", is_nullable => 0, size => 64 },
   "description",
   { data_type => "varchar", is_nullable => 1, size => 255 },
 );
@@ -63,7 +65,19 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</module_bit>
+=item * L</permission_id>
+
+=back
+
+=cut
+
+__PACKAGE__->set_primary_key("permission_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<code>
+
+=over 4
 
 =item * L</code>
 
@@ -71,41 +85,38 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->set_primary_key("module_bit", "code");
+__PACKAGE__->add_unique_constraint("code", ["code"]);
 
 =head1 RELATIONS
 
-=head2 module_bit
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Userflag>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "module_bit",
-  "Koha::Schema::Result::Userflag",
-  { bit => "module_bit" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
-
-=head2 user_permissions
+=head2 borrower_permissions
 
 Type: has_many
 
-Related object: L<Koha::Schema::Result::UserPermission>
+Related object: L<Koha::Schema::Result::BorrowerPermission>
 
 =cut
 
 __PACKAGE__->has_many(
-  "user_permissions",
-  "Koha::Schema::Result::UserPermission",
-  {
-    "foreign.code"       => "self.code",
-    "foreign.module_bit" => "self.module_bit",
-  },
+  "borrower_permissions",
+  "Koha::Schema::Result::BorrowerPermission",
+  { "foreign.permission_id" => "self.permission_id" },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 module
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::PermissionModule>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "module",
+  "Koha::Schema::Result::PermissionModule",
+  { module => "module" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 

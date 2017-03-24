@@ -24,6 +24,10 @@ use Carp;
 use List::MoreUtils qw( none );
 
 use Koha::Database;
+use Koha::Exception::UnknownObject;
+use Koha::Exception::BadParameter;
+
+our $type;
 
 
 use Koha::Exception::UnknownObject;
@@ -92,8 +96,8 @@ validate the given input and make sure we get a Koha::Object or an Exception.
 
 =head2 An example:
 
-    ### IN Koha/Borrowers.pm ###
-    package Koha::Borrowers;
+    ### IN Koha/Patrons.pm ###
+    package Koha::Patrons;
     ...
     sub _get_castable_unique_columns {
         return ['borrowernumber', 'cardnumber', 'userid'];

@@ -26,6 +26,8 @@ use Koha::Database;
 use DateTime;
 use Koha::DateUtils;
 use Koha::Items;
+use Koha::Patrons;
+use Koha::Items;
 
 use base qw(Koha::Object);
 
@@ -94,6 +96,24 @@ sub patron {
 
 sub _type {
     return 'Issue';
+}
+
+sub cardnumber {
+    my ($self) = @_;
+
+    unless ($self->{borrower}) {
+        $self->{borrower} = Koha::Patrons->cast($self->_result->borrower);
+    }
+    return $self->{borrower}->cardnumber;
+}
+
+sub barcode {
+    my ($self) = @_;
+
+    unless ($self->{item}) {
+        $self->{item} = Koha::Items->cast($self->_result->item);
+    }
+    return $self->{item}->barcode;
 }
 
 =head1 AUTHOR

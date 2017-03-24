@@ -52,8 +52,9 @@ __PACKAGE__->table("borrowers");
 
 =head2 othernames
 
-  data_type: 'mediumtext'
+  data_type: 'varchar'
   is_nullable: 1
+  size: 50
 
 =head2 initials
 
@@ -297,11 +298,6 @@ __PACKAGE__->table("borrowers");
   is_nullable: 1
   size: 60
 
-=head2 flags
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 userid
 
   data_type: 'varchar'
@@ -459,7 +455,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "mediumtext", is_nullable => 1 },
   "othernames",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "varchar", is_nullable => 1, size => 50 },
   "initials",
   { data_type => "text", is_nullable => 1 },
   "streetnumber",
@@ -576,8 +572,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
   { data_type => "varchar", is_nullable => 1, size => 60 },
-  "flags",
-  { data_type => "integer", is_nullable => 1 },
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
@@ -672,6 +666,18 @@ __PACKAGE__->set_primary_key("borrowernumber");
 =cut
 
 __PACKAGE__->add_unique_constraint("cardnumber", ["cardnumber"]);
+
+=head2 C<othernames_4>
+
+=over 4
+
+=item * L</othernames>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("othernames_4", ["othernames"]);
 
 =head2 C<userid>
 
@@ -848,6 +854,21 @@ Related object: L<Koha::Schema::Result::BorrowerSync>
 __PACKAGE__->has_many(
   "borrower_syncs",
   "Koha::Schema::Result::BorrowerSync",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 borrower_permissions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BorrowerPermission>
+
+=cut
+
+__PACKAGE__->has_many(
+  "borrower_permissions",
+  "Koha::Schema::Result::BorrowerPermission",
   { "foreign.borrowernumber" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -1274,21 +1295,6 @@ __PACKAGE__->has_many(
   "tags_approvals",
   "Koha::Schema::Result::TagsApproval",
   { "foreign.approved_by" => "self.borrowernumber" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 user_permissions
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::UserPermission>
-
-=cut
-
-__PACKAGE__->has_many(
-  "user_permissions",
-  "Koha::Schema::Result::UserPermission",
-  { "foreign.borrowernumber" => "self.borrowernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 

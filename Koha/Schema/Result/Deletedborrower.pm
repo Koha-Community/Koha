@@ -295,11 +295,6 @@ __PACKAGE__->table("deletedborrowers");
   is_nullable: 1
   size: 60
 
-=head2 flags
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 userid
 
   data_type: 'varchar'
@@ -561,8 +556,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
   { data_type => "varchar", is_nullable => 1, size => 60 },
-  "flags",
-  { data_type => "integer", is_nullable => 1 },
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",

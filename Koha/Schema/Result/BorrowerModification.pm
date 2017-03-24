@@ -307,11 +307,6 @@ __PACKAGE__->table("borrower_modifications");
   is_nullable: 1
   size: 30
 
-=head2 flags
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 userid
 
   data_type: 'varchar'
@@ -537,8 +532,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "password",
   { data_type => "varchar", is_nullable => 1, size => 30 },
-  "flags",
-  { data_type => "integer", is_nullable => 1 },
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",

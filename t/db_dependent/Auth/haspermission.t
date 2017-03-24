@@ -20,7 +20,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 16;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -103,6 +103,16 @@ $r = haspermission( $borr2->{userid}, {
     tools => 'batch_upload_patron_images',
 });
 is( ref($r), 'HASH', 'Borrower2/tools granular two upload subperms' );
+
+# Check haspermission for undef userid
+$r = haspermission( undef, undef );
+is( ref($r), 'HASH', 'ok');
+
+$r = haspermission( undef, { borrowers => '*' });
+is( $r, 0, 'ok');
+
+$r = haspermission( undef, { reserveforothers => 'place_holds' });
+is( $r, 0, 'ok');
 
 # End
 $schema->storage->txn_rollback;

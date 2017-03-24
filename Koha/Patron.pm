@@ -786,6 +786,32 @@ sub _type {
     return 'Borrower';
 }
 
+=head isSuperuser
+
+    $borrower->isSuperuser(1); #Set this borrower to be a superuser
+    if ($borrower->isSuperuser()) {
+        #All your base are belong to us
+    }
+
+Should be used from the authentication modules to mark this $borrower-object to
+have unlimited access to all Koha-features.
+This $borrower-object is the Koha DB user.
+@PARAM1 Integer, 1 means this borrower is the super/DB user.
+                "0" disables the previously set superuserness.
+=cut
+
+sub isSuperuser {
+    my ($self, $Iam) = @_;
+
+    if (defined $Iam && $Iam == 1) {
+        $self->{superuser} = 1;
+    }
+    elsif (defined $Iam && $Iam eq "0") { #Dealing with zero is special in Perl
+        $self->{superuser} = undef;
+    }
+    return (exists($self->{superuser}) && $self->{superuser}) ? 1 : undef;
+}
+
 =head1 AUTHOR
 
 Kyle M Hall <kyle@bywatersolutions.com>
