@@ -1589,9 +1589,9 @@ sub _get_tt_params {
                         foreach my $key ( @$fk ) {
                             $search->{$key} = $id->{$key};
                         }
-                        $object = $module->search( $search )->next();
+                        $object = $module->search( $search )->last();
                     } else { # Foreign key is single column
-                        $object = $module->search( { $fk => $id } )->next();
+                        $object = $module->search( { $fk => $id } )->last();
                     }
                 } else { # using the table's primary key for lookup
                     $object = $module->find($id);
@@ -1601,7 +1601,7 @@ sub _get_tt_params {
             else {    # $ref eq 'ARRAY'
                 my $object;
                 if ( @{ $tables->{$table} } == 1 ) {    # Param is a single key
-                    $object = $module->search( { $pk => $tables->{$table} } )->next();
+                    $object = $module->search( { $pk => $tables->{$table} } )->last();
                 }
                 else {                                  # Params are mutliple foreign keys
                     croak "Multiple foreign keys (table $table) should be passed using an hashref";
