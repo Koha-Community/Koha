@@ -146,18 +146,23 @@ subtest 'discard_changes' => sub {
 
 subtest 'TO_JSON tests' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
+    my $dt = dt_from_string();
     my $borrowernumber = $builder->build(
         { source => 'Borrower',
           value => { lost => 1,
-                     gonenoaddress => 0 } })->{borrowernumber};
+                     gonenoaddress => 0,
+                     updated_on => $dt,
+                     lastseen   => $dt, } })->{borrowernumber};
 
     my $patron = Koha::Patrons->find($borrowernumber);
     my $lost = $patron->TO_JSON()->{lost};
     my $gonenoaddress = $patron->TO_JSON->{gonenoaddress};
+    my $updated_on = $patron->TO_JSON->{updated_on};
+    my $lastseen = $patron->TO_JSON->{lastseen};
 
     ok( $lost->isa('JSON::PP::Boolean'), 'Boolean attribute type is correct' );
     is( $lost, 1, 'Boolean attribute value is correct (true)' );
@@ -166,6 +171,23 @@ subtest 'TO_JSON tests' => sub {
     is( $gonenoaddress, 0, 'Boolean attribute value is correct (false)' );
 
     ok( !isvstring($patron->borrowernumber), 'Integer values are not coded as strings' );
+
+    my $rfc3999_regex = qr/
+            (?<year>\d{4})
+            -
+            (?<month>\d{2})
+            -
+            (?<day>\d{2})
+            ([Tt\s])
+            (?<hour>\d{2})
+            :
+            (?<minute>\d{2})
+            :
+            (?<second>\d{2})
+            (([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
+        /xms;
+    like( $updated_on, $rfc3999_regex, "Date-time $updated_on formatted correctly");
+    like( $lastseen, $rfc3999_regex, "Date-time $updated_on formatted correctly");
 
     $schema->storage->txn_rollback;
 };
