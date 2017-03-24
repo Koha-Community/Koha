@@ -29,7 +29,6 @@ use C4::AuthoritiesMarc;
 use C4::Biblio;
 
 my $input = new CGI;
-my $dbh = C4::Context->dbh;
 my $op = $input->param('op') // q|form|;
 my $recordtype = $input->param('recordtype') // 'biblio';
 
@@ -110,9 +109,7 @@ if ( $op eq 'form' ) {
 } elsif ( $op eq 'delete' ) {
     # We want to delete selected records!
     my @record_ids = $input->multi_param('record_id');
-    my $dbh = C4::Context->dbh;
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
+    my $schema = Koha::Database->new->schema;
 
     my $error;
     my $report = {
@@ -122,6 +119,8 @@ if ( $op eq 'form' ) {
     RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
         $report->{total_records}++;
         next unless $record_id;
+        $schema->storage->txn_begin;
+
         if ( $recordtype eq 'biblio' ) {
             # Biblios
             my $biblionumber = $record_id;
@@ -133,7 +132,7 @@ if ( $op eq 'form' ) {
                     code => 'item_issued',
                     biblionumber => $biblionumber,
                 };
-                $dbh->rollback;
+                $schema->storage->txn_rollback;
                 next;
             }
 
@@ -151,7 +150,7 @@ if ( $op eq 'form' ) {
                         reserve_id => $reserve->{reserve_id},
                         error => $@,
                     };
-                    $dbh->rollback;
+                    $schema->storage->txn_rollback;
                     next RECORD_IDS;
                 }
             }
@@ -159,7 +158,7 @@ if ( $op eq 'form' ) {
             # Delete items
             my @itemnumbers = @{ C4::Items::GetItemnumbersForBiblio( $biblionumber ) };
             ITEMNUMBER: for my $itemnumber ( @itemnumbers ) {
-                my $error = eval { C4::Items::DelItemCheck( $dbh, $biblionumber, $itemnumber ) };
+                my $error = eval { C4::Items::DelItemCheck( $biblionumber, $itemnumber ) };
                 if ( $error != 1 or $@ ) {
                     push @messages, {
                         type => 'error',
@@ -168,7 +167,7 @@ if ( $op eq 'form' ) {
                         itemnumber => $itemnumber,
                         error => ($@ ? $@ : $error),
                     };
-                    $dbh->rollback;
+                    $schema->storage->txn_rollback;
                     next RECORD_IDS;
                 }
             }
@@ -184,7 +183,7 @@ if ( $op eq 'form' ) {
                     biblionumber => $biblionumber,
                     error => ($@ ? $@ : $error),
                 };
-                $dbh->rollback;
+                $schema->storage->txn_rollback;
                 next;
             }
 
@@ -194,7 +193,7 @@ if ( $op eq 'form' ) {
                 biblionumber => $biblionumber,
             };
             $report->{total_success}++;
-            $dbh->commit;
+            $schema->storage->txn_commit;
         } else {
             # Authorities
             my $authid = $record_id;
@@ -206,7 +205,7 @@ if ( $op eq 'form' ) {
                     authid => $authid,
                     error => ($@ ? $@ : 0),
                 };
-                $dbh->rollback;
+                $schema->storage->txn_rollback;
                 next;
             } else {
                 push @messages, {
@@ -215,7 +214,7 @@ if ( $op eq 'form' ) {
                     authid => $authid,
                 };
                 $report->{total_success}++;
-                $dbh->commit;
+                $schema->storage->txn_commit;
             }
         }
     }
