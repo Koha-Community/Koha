@@ -1,0 +1,33 @@
+{
+  "/payments/transactions/{invoicenumber}": {
+    "get": {
+      "x-mojo-to": "Payments::Transactions#get",
+      "operationId": "getTransaction",
+      "tags": ["POS Integration"],
+      "parameters": [
+        {
+          "$ref": "../../parameters.json#/invoicenumberPathParam"
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "A transaction",
+          "schema": {
+            "$ref" : "../../definitions.json#/transaction"
+          }
+        },
+        "404": {
+          "description": "Transaction not found",
+          "schema": {
+            "$ref": "../../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-permission": {
+        "updatecharges": "remaining_permissions"
+      }
+    }
+  }
+}

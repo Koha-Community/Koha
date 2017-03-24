@@ -1,0 +1,43 @@
+{
+  "/payments/online/cpu/{invoicenumber}/report": {
+    "post": {
+      "x-mojo-to": "Payments::Online::CPU::Reports#cpu_online_report",
+      "operationId": "cpuOnlineReport",
+      "tags": ["Online payments"],
+      "parameters": [
+        {
+          "$ref": "../../../parameters.json#/invoicenumberPathParam"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "New report",
+          "required": true,
+          "schema": { "$ref": "../../../definitions/CPUinvoiceReport.json" }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Response for receiving report",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "400": {
+          "description": "Bad parameters",
+          "schema": {
+            "$ref": "../../../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Transaction not found",
+          "schema": {
+            "$ref": "../../../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

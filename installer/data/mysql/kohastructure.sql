@@ -4150,6 +4150,49 @@ CREATE TABLE IF NOT EXISTS club_fields (
   CONSTRAINT club_fields_ibfk_4 FOREIGN KEY (club_id) REFERENCES clubs (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table `payments_transactions`
+--
+
+DROP TABLE IF EXISTS `payments_transactions`;
+CREATE TABLE `payments_transactions` ( -- information related to payments via POS integration
+  transaction_id int(11) NOT NULL auto_increment, -- transaction number
+  borrowernumber int(11) NOT NULL, -- the borrowernumber that the payment is for
+  accountlines_id int(11), -- the accountlines_id of the payment (the accounttype is Pay)
+  user_branch varchar(10), -- branch of the user, can be used for raports that list all payments by branch
+  status ENUM('paid','pending','cancelled','unsent') DEFAULT 'pending', -- status of transaction
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp for payment initialization
+  description TEXT NOT NULL, -- additional description that can hold notes. Prints into the accountlines Pay event once the payment is completed
+  price_in_cents int(11) NOT NULL, -- total price of the payment in cents
+  is_self_payment int(11) NOT NULL DEFAULT 0, -- describes the type of the payment: 0 for pos integration (paid via librarian), 1 for online payments (self payment)
+  PRIMARY KEY (transaction_id),
+  FOREIGN KEY (accountlines_id)
+    REFERENCES accountlines(accountlines_id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (borrowernumber)
+    REFERENCES borrowers(borrowernumber)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `payments_transactions_accountlines`
+--
+
+DROP TABLE IF EXISTS `payments_transactions_accountlines`;
+CREATE TABLE `payments_transactions_accountlines` ( -- related accountlines for payments (transactions)
+  transactions_accountlines_id int(11) NOT NULL auto_increment,
+  transaction_id int(11) NOT NULL, -- referenced transaction_id from payments_transactions
+  accountlines_id int(11) NOT NULL, -- referenced accountlines_id from accountlines
+  paid_price_cents int(11) NOT NULL, -- price (in cents) of the item in accountlines
+  PRIMARY KEY (transactions_accountlines_id),
+  FOREIGN KEY (transaction_id)
+    REFERENCES payments_transactions(transaction_id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (accountlines_id)
+    REFERENCES accountlines(accountlines_id)
+    ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

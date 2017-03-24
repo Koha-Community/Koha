@@ -26,6 +26,9 @@ use C4::Auth;
 use C4::Output;
 use warnings;
 
+use Koha::Acquisition::Currencies;
+use Koha::Payment::Online;
+
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -67,6 +70,9 @@ $template->param(
     ACCOUNT_LINES => $accts,
     total         => sprintf( "%.2f", $total ),
     accountview   => 1,
+    currency => Koha::Acquisition::Currencies->get_active->symbol,
+    online_payments_enabled => Koha::Payment::Online::is_online_payment_enabled(C4::Context::mybranch()),
+    minimumSum => C4::Context->preference("OnlinePaymentMinTotal"),
     message       => scalar $query->param('message') || q{},
     message_value => scalar $query->param('message_value') || q{},
     payment       => scalar $query->param('payment') || q{},

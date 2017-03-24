@@ -38,3 +38,59 @@ Tools:
             - pref: NumSavedReports
               class: integer
             - reports on the Saved Reports page.
+    Payments:
+        -
+            - POS integration. Convert Koha's account types (from accountlines database table) into product codes recognized by your POS provider. Also define the interface being used in each branch.
+            - pref: POSIntegration
+              type: textarea
+              class: code
+            - You can separate branches, or use branch "Default" to make definitions for all branches. If both branch and "Default" is defined, the branch mapping overrides the mapping given in Default.
+            - Use parameter "Default" to define an item number for other types than defined.
+            - "<p>Example:</p>"
+            - "<pre>BRANCH1:</pre>
+               <pre>  POSInterface: CPU</pre>
+               <pre>  FU: demo_001</pre>
+               <pre>  N: demo_002</pre>
+               <pre>  Default: demo_005</pre>
+               <pre>BRANCH2:</pre>
+               <pre>  POSInterface: Vend</pre>
+               <pre>  FU: demo_003</pre>
+               <pre>  N: demo_004</pre>
+               <pre>  Default: demo_005</pre>"
+            - "<p>Example with system-wide mappings:</p>"
+            - "<pre>Default:</pre>
+               <pre>  POSInterface: PayPal</pre>
+               <pre>  FU: demo_001</pre>
+               <pre>  Default: demo_005</pre>"
+            - <b>POSInterface: disabled</b> will make POS integration disabled for that library.
+            - Also, if neither Default branch nor library's branch are defined, POS integration will be disabled that branch.
+        -
+            - Online payments. Define a minimum sum that can be paid via Online Payments
+            - pref: OnlinePaymentMinTotal
+              class: integer
+            - ". (Example: 2.50)"
+        -
+            - Online payments. Convert Koha's account types (from accountlines database table) into product codes recognized by your online payment provider. Also define the interface being used in each branch.
+            - pref: OnlinePayments
+              type: textarea
+              class: code
+            - You can separate branches, or use branch "Default" to make definitions for all branches. If both branch and "Default" is defined, the branch mapping overrides the mapping given in Default.
+            - Use parameter "Default" to define an item number for other types than defined.
+            - "<p>Example:</p>"
+            - "<pre>BRANCH1:</pre>
+               <pre>  OnlinePaymentsInterface: PayPal</pre>
+               <pre>  FU: demo_001</pre>
+               <pre>  N: demo_002</pre>
+               <pre>  Default: demo_005</pre>
+               <pre>BRANCH2:</pre>
+               <pre>  OnlinePaymentsInterface: WU</pre>
+               <pre>  FU: demo_003</pre>
+               <pre>  N: demo_004</pre>
+               <pre>  Default: demo_005</pre>"
+            - "<p>Example with system-wide mappings:</p>"
+            - "<pre>Default:</pre>
+               <pre>  OnlinePaymentsInterface: disabled</pre>
+               <pre>  FU: demo_001</pre>
+               <pre>  Default: demo_005</pre>"
+            - <b>OnlinePaymentsInterface: disabled</b> will make online payment disabled for Patrons in that branch.
+            - Also, if neither Default branch nor Patron's home branch are defined, online payments will be disabled for Patron's in that branch.

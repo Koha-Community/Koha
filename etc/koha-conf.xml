@@ -170,6 +170,39 @@ __PAZPAR2_TOGGLE_XML_POST__
         <base_url>__WEBSERVER_IP__:__WEBSERVER_PORT_LIBRARIAN__</base_url>
     </rest>
  </testservers>
+ <pos>
+    <CPU>
+        <!-- Delivered by CPU: -->
+        <source></source>                           <!-- Source id -->
+        <secretKey></secretKey>                     <!-- Secret key for generating SHA-256 hash -->
+        <url></url>                                 <!-- Address to the cash register server -->
+
+        <!-- Koha settings -->
+        <mode></mode>                               <!-- Use 2 for synchronized mode -->
+        <notificationAddress></notificationAddress> <!-- https://server/api/v1/pos/cpu/{invoicenumber}/report -->
+        <!-- Replace "server" with your server address, but keep {invoicenumber} as it is (it will be converted later into real id) -->
+
+        <!-- SSL certificates -->
+        <ssl_cert></ssl_cert>                       <!-- SSL certificate path -->
+        <ssl_key></ssl_key>                         <!-- SSL key path -->
+        <ssl_ca_file></ssl_ca_file>                 <!-- CA certificate path -->
+  </CPU>
+ </pos>
+ <online_payments>
+    <CPU>
+        <!-- Delivered by CPU: -->
+        <source></source>                           <!-- Source id -->
+        <secretKey></secretKey>                     <!-- Secret key for generating SHA-256 hash -->
+        <url></url>                                 <!-- Address to the online payments server -->
+
+        <mode></mode>                               <!-- Use 3 for online payments -->
+
+        <!-- Replace "server" with your server address, but keep {invoicenumber} as it is (it will be converted later into real id) -->
+        <notificationAddress></notificationAddress> <!-- https://server/api/v1/pos/cpu/{invoicenumber}/report -->
+        <returnAddress></returnAddress> <!-- Where to redirect user from CPU online shop after the payment is complete?
+                                            e.g. https://server/cgi-bin/koha/opac-paycollect.pl -->
+    </CPU>
+ </online_payments>
 
 </config>
 </yazgfs>

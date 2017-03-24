@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "Source": {
+      "type": "string"
+    },
+    "Id": {
+      "description": "Invoice identification number",
+      "type": "string"
+    },
+    "Status": {
+      "description": "Status of payment",
+      "type": "integer"
+    },
+    "Reference": {
+      "description": "Receipt number for successful payments",
+      "type": "string"
+    },
+    "Hash": {
+      "description": "Hash for response parameters",
+      "type": "string"
+    }
+  },
+  "required": [
+    "Id",
+    "Status",
+    "Hash"
+  ]
+}

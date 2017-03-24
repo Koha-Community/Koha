@@ -63,7 +63,39 @@
                             <p><strong>Payment applied:</strong> your payment of [% payment %] has been applied to your account</p>
                         </div>
                     [% END %]
-
+                    [% IF ( ACCOUNT_LINES ) && online_payments_enabled %]
+                        <h3>Pay fines and charges</h3>
+                        [% IF (total > 0) %]
+                            <table class="table table-bordered table-striped" style="width:auto;">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Outstanding</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total due</th>
+                                        <td class="sum"><strong class="sum">[% total %] [% currency.currency %]</strong></td>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr><td>Fines and charges</td><td>[% total %]</td></tr>
+                                </tbody>
+                            </table>
+                            [% IF total >= minimumSum %]
+                                <form action="opac-paycollect.pl" method="POST">
+                                    <button class="btn btn-large pay-fines" type="submit"><i class="icon-shopping-cart"></i> Checkout</button>
+                                </form>
+                                <p>After confirming your payment, please make sure you are forwarded back into the online library in order to ensure successful registration of the payment.</p>
+                                <p>Forwarding happens automatically in most cases, but some banks may require you to press a return-button.</p>
+                            [% ELSE %]
+                                <p>Online payment can be used after your fines and charges exceed a total due of [% minimumSum %] [% currency.currency %].</p>
+                            [% END %]
+                        [% ELSE %]
+                            <p>You have no outstanding fines.</p>
+                        [% END %]
+                    [% END %]
                     <h3>Fines and charges</h3>
 
                     [% IF ( ACCOUNT_LINES ) %]

@@ -88,5 +88,14 @@
   },
   "/patrons/{borrowernumber}/status": {
     "$ref": "paths/patrons.json#/~1patrons~1{borrowernumber}~1status"
+  },
+  "/payments/transaction/{invoicenumber}": {
+    "$ref": "paths/payments/transactions.json#/~1payments~1transactions~1{invoicenumber}"
+  },
+  "/payments/online/cpu/{invoicenumber}/report": {
+    "$ref": "paths/payments/online/cpu.json#/~1payments~1online~1cpu~1{invoicenumber}~1report"
+  },
+  "/payments/pos/cpu/{invoicenumber}/report": {
+    "$ref": "paths/payments/pos/cpu.json#/~1payments~1pos~1cpu~1{invoicenumber}~1report"
   }
 }

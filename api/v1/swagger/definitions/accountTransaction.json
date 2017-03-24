@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "borrowernumber": {
+      "$ref": "../x-primitives.json#/borrowernumber"
+    },
+    "accountlines_id": {
+      "description": "Reference to related accountlines row where accounttype is Pay. If null, transaction is incomplete. Else it is completed.",
+      "type": "integer"
+    },
+    "status": {
+      "description": "Status of transaction",
+      "type": "string"
+    },
+    "timestamp": {
+      "description": "Creation time",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of the transaction row.",
+      "type": "string"
+    },
+    "price_in_cents": {
+      "description": "Total price of transaction",
+      "type": "integer"
+    }
+  }
+}

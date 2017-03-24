@@ -30,8 +30,11 @@ use C4::Accounts;
 use C4::Koha;
 use Koha::Patron::Images;
 use Koha::Account;
+use JSON;
 
 use Koha::Patron::Categories;
+
+use Koha::Payment::POS;
 
 my $input = CGI->new();
 
@@ -63,6 +66,12 @@ my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape $input->param('payment_note');
 my $accountno;
 my $accountlines_id;
+
+my $pos;
+if (Koha::Payment::POS::is_pos_integration_enabled(C4::Context::mybranch())) {
+    $pos = Koha::Payment::POS->new({ branch => C4::Context::mybranch() });
+}
+$template->param( POSInterface => $pos->get_interface() ) if $pos;
 
 if ( $individual || $writeoff ) {
     if ($individual) {
@@ -110,7 +119,42 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             total_due => $total_due
         );
     } else {
-        if ($individual) {
+        if ($pos) {
+            my $payment;
+
+            $payment->{borrowernumber}      = $borrowernumber;
+            $payment->{total_paid}          = $total_paid;
+            $payment->{total_due}           = $total_due;
+            $payment->{payment_note}        = $payment_note || $input->param('notes') || $input->param('selected_accts_notes');
+            my @selected = (defined $select) ? split /,/, $select : $accountno;
+            $payment->{selected}             = \@selected;
+
+            # Initialize the transaction
+            $payment->{transaction} = Koha::PaymentsTransaction->new()->set({
+                borrowernumber      => $payment->{borrowernumber},
+                status              => "unsent",
+                description         => $payment->{payment_note} || '',
+                user_branch         => C4::Context::mybranch(),
+            })->store();
+
+            # Link accountlines to the transaction
+            $payment->{transaction}->AddRelatedAccountlines({
+                paid        => $payment->{total_paid},
+                selected    => $payment->{selected},
+            });
+
+            # Get payment in a format that is ready to be sent to your provider
+            # Include $input in case you have custom query parameters that you want to use
+            my $prepared_payment = $pos->prepare_payment($payment, $input);
+
+            $template->param(
+                startSending => 1,
+                payment => $prepared_payment,
+                POSInterface => $pos->get_interface(),
+                json_payment => JSON::encode_json($prepared_payment),
+            );
+        } else {
+            if ($individual) {
             my $line = Koha::Account::Lines->find($accountlines_id);
             Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                 {
@@ -157,9 +201,10 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                   ->pay( { amount => $total_paid, note => $note } );
             }
 
-            print $input->redirect(
+                print $input->redirect(
 "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
-            );
+                );
+            }
         }
     }
 } else {

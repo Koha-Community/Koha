@@ -62,6 +62,102 @@ function moneyFormat(textObj) {
 }
 //]]>
 </script>
+<style type="text/css">
+    .ball {
+        background-color: rgba(0,0,0,0);
+        border: 25px solid rgba(240,192,71,0.9);
+        opacity: .9;
+        border-top: 25px solid rgba(0,0,0,0);
+        border-left: 25px solid rgba(0,0,0,0);
+        border-radius: 150px;
+        box-shadow: 0 0 35px #f0c047;
+        width: 140px;
+        height: 140px;
+        margin: 50px auto;
+        -moz-animation: spin 1s infinite linear;
+        -webkit-animation: spin 1s infinite linear;
+    }
+
+    .ball1 {
+        background-color: rgba(0,0,0,0);
+        border: 25px solid rgba(240,192,71,0.9);
+        opacity: .9;
+        border-top: 25px solid rgba(0,0,0,0);
+        border-left: 25px solid rgba(0,0,0,0);
+        border-radius: 150px;
+        box-shadow: 0 0 15px #f0c047;
+        width: 70px;
+        height: 70px;
+        margin: 0 auto;
+        position: relative;
+        top: -155px;
+        -moz-animation: spinoff .5s infinite linear;
+        -webkit-animation: spinoff .5s infinite linear;
+    }
+
+    @-moz-keyframes spin {
+        0% {
+            -moz-transform: rotate(0deg);
+        }
+
+        100% {
+            -moz-transform: rotate(360deg);
+        };
+    }
+
+    @-moz-keyframes spinoff {
+        0% {
+            -moz-transform: rotate(0deg);
+        }
+
+        100% {
+            -moz-transform: rotate(-360deg);
+        };
+    }
+
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        };
+    }
+
+    @-webkit-keyframes spinoff {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(-360deg);
+        };
+    }
+
+    .office-button {
+        background:#eee;
+        border:solid 2px rgba(240,192,71,1);
+        border-radius: 5px;
+        font:3em Verdana;
+        margin:10px;
+        min-width:100px;
+        height:100px;
+        outline:none;
+        box-shadow:0 0 2px rgba(240,192,71,1);
+    }
+    .selected {
+        background:#afa;
+        border:solid 4px rgba(50,2020,50,1);
+        box-shadow:0 0 2px rgba(50,2020,50,1);
+    }
+    .office-button::-moz-focus-inner {
+        border:0;
+    }
+    #add_new_office {
+        cursor:pointer;
+    }
+</style>
 </head>
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -99,8 +195,84 @@ function moneyFormat(textObj) {
     </div>
 [% END %]
 
+[% IF ( startSending ) %]
+    <div><h2>Processing payment [% payment.Id %] - Please complete the payment [% IF ( payment.Office ) %]at cash register [% payment.Office %][% ELSE %] at any cash register[% END %].</h2>
+        <div class="ball"></div>
+        <div class="ball1"></div>
+    </div>
+    <div><p>
+        Current status:
+            <span id="status">
+                <span class="connecting">Connecting to the cash register.</span>
+                <span class="pending" style="display:none">Payment is pending. Please complete the payment and navigate back to <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=10902939">Account</a>.</span>
+                <span class="paid" style="display:none">Payment is completed.</span>
+                <span class="cancelled" style="display:none">Payment was cancelled.</span>
+                <span class="processing" style="display:none">Payment is completed, but Koha is still processing it.</span>
+            </span>
+        </p>
+        <button type="button" id="recheck">Update payment status</button>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.ajax({
+                url: "/cgi-bin/koha/members/paycollect-ajax.pl",
+                type: "post",
+                dataType: "json",
+                data: JSON.stringify([% json_payment %]),
+                contentType: "application/json"
+            }).done(function(data){
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                handlePOSResponse(data);
+            });
+            $("#recheck").click(function() {
+                $.get("/api/v1/payments/transaction/" + [% payment.Id %], function(data) {
+                    var response = jQuery.parseJSON(JSON.stringify(data));
+
+                    handlePOSResponse(response);
+                });
+            });
+        });
+
+        function handlePOSResponse(response){
+            $("span[id='status']").children().css("display","none");
+            if (response.status === 0 || response.status == 'cancelled') {
+                $("span.cancelled").css("display", "inline-block");
+                    colorBall("red");
+
+                if (response.error) {
+                    alert(_("Error: ") + JSON.stringify(response));
+                }
+
+                window.location.replace("/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]");
+            }
+            else if (response.status == 1 || response.status == 'paid') {
+                $("span.paid").css("display", "inline-block");
+                colorBall("green");
+                window.location.replace("/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]");
+            }
+            else if (response.Status == 2 || response.status == 'unsent' || response.status == 'pending') {
+                $("span.pending").css("display", "inline-block");
+            }
+        }
+
+        function colorBall(color) {
+            if (color == "red"){
+                $(".ball").css("border", "25px solid rgba(204,0,0,0.9)");
+                $(".ball1").css("border", "25px solid rgba(204,0,0,0.9)");
+                $(".ball").css("box-shadow", "0 0 35px rgb(204,0,0)");
+                $(".ball1").css("box-shadow", "0 0 15px rgb(204,0,0)");
+            } else if (color == "green") {
+                $(".ball").css("border", "25px solid rgba(0,204,0,0.9)");
+                $(".ball1").css("border", "25px solid rgba(0,204,0,0.9)");
+                $(".ball").css("box-shadow", "0 0 35px rgb(0,204,0)");
+                $(".ball1").css("box-shadow", "0 0 15px rgb(0,204,0)");
+            }
+        }
+    </script>
+[% ELSE %]
 [% IF ( pay_individual ) %]
-    <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payindivfine" id="payindivfine" onsubmit="return validatePayment(this)" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
@@ -147,6 +319,13 @@ function moneyFormat(textObj) {
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
         <input name="paid" id="paid" value="[% amountoutstanding | format('%.2f') %]" />
+    </li>
+    <li>
+        [% IF POSInterface %]
+            <!-- Custom template & inputs for POS integration -->
+            [% INCLUDE "payment/${POSInterface}.inc" %]
+            [% IF CustomPOSInputs %][% PROCESS CustomPOSInputs %][% END %]
+        [% END %]
     </li>
 </ol>
 </fieldset>
@@ -217,11 +396,18 @@ function moneyFormat(textObj) {
         <label for="selected_accts_notes">Note: </label>
         <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes %]</textarea>
     </li>
+    <li>
+        [% IF POSInterface %]
+            <!-- Custom template & inputs for POS integration -->
+            [% INCLUDE "payment/${POSInterface}.inc" %]
+        [% END %]
+    </li>
     </ol>
     </fieldset>
     <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
         <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
     </form>
+[% END %]
 [% END %]
 </div></div>
 </div>
