@@ -46,7 +46,6 @@ __PACKAGE__->table("message_transports");
 
   data_type: 'varchar'
   default_value: (empty string)
-  is_foreign_key: 1
   is_nullable: 0
   size: 20
 
@@ -54,7 +53,6 @@ __PACKAGE__->table("message_transports");
 
   data_type: 'varchar'
   default_value: (empty string)
-  is_foreign_key: 1
   is_nullable: 0
   size: 20
 
@@ -62,7 +60,6 @@ __PACKAGE__->table("message_transports");
 
   data_type: 'varchar'
   default_value: (empty string)
-  is_foreign_key: 1
   is_nullable: 0
   size: 10
 
@@ -76,29 +73,11 @@ __PACKAGE__->add_columns(
   "is_digest",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "letter_module",
-  {
-    data_type => "varchar",
-    default_value => "",
-    is_foreign_key => 1,
-    is_nullable => 0,
-    size => 20,
-  },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 20 },
   "letter_code",
-  {
-    data_type => "varchar",
-    default_value => "",
-    is_foreign_key => 1,
-    is_nullable => 0,
-    size => 20,
-  },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 20 },
   "branchcode",
-  {
-    data_type => "varchar",
-    default_value => "",
-    is_foreign_key => 1,
-    is_nullable => 0,
-    size => 10,
-  },
+  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -118,25 +97,6 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("message_attribute_id", "message_transport_type", "is_digest");
 
 =head1 RELATIONS
-
-=head2 letter
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::Letter>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "letter",
-  "Koha::Schema::Result::Letter",
-  {
-    branchcode => "branchcode",
-    code => "letter_code",
-    module => "letter_module",
-  },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
-);
 
 =head2 message_attribute
 
@@ -169,8 +129,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:P4Bsq0A7/imUhRBRnD5HrQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-23 21:42:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RYvCEp0euH7L07OBlttqPw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

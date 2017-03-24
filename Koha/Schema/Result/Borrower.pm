@@ -427,6 +427,13 @@ __PACKAGE__->table("borrowers");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 lang
+
+  data_type: 'varchar'
+  default_value: 'default'
+  is_nullable: 0
+  size: 25
+
 =head2 overdrive_auth_token
 
   data_type: 'text'
@@ -620,6 +627,13 @@ __PACKAGE__->add_columns(
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
+  },
+  "lang",
+  {
+    data_type => "varchar",
+    default_value => "default",
+    is_nullable => 0,
+    size => 25,
   },
   "overdrive_auth_token",
   { data_type => "text", is_nullable => 1 },
@@ -1356,8 +1370,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qq3fmJ73x8Qv+Pqbs7zkow
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-23 21:42:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dchVNO0KEo638glUkcMLkg
 
 __PACKAGE__->belongs_to(
     "guarantor",

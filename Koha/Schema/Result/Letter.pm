@@ -77,6 +77,13 @@ __PACKAGE__->table("letter");
   is_nullable: 0
   size: 20
 
+=head2 lang
+
+  data_type: 'varchar'
+  default_value: 'default'
+  is_nullable: 0
+  size: 25
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -102,6 +109,13 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 20,
   },
+  "lang",
+  {
+    data_type => "varchar",
+    default_value => "default",
+    is_nullable => 0,
+    size => 25,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -116,11 +130,13 @@ __PACKAGE__->add_columns(
 
 =item * L</message_transport_type>
 
+=item * L</lang>
+
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("module", "code", "branchcode", "message_transport_type");
+__PACKAGE__->set_primary_key("module", "code", "branchcode", "message_transport_type", "lang");
 
 =head1 RELATIONS
 
@@ -139,28 +155,9 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
-=head2 message_transports
 
-Type: has_many
-
-Related object: L<Koha::Schema::Result::MessageTransport>
-
-=cut
-
-__PACKAGE__->has_many(
-  "message_transports",
-  "Koha::Schema::Result::MessageTransport",
-  {
-    "foreign.branchcode"    => "self.branchcode",
-    "foreign.letter_code"   => "self.code",
-    "foreign.letter_module" => "self.module",
-  },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-05-02 18:04:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HFUQ+/BKlweHglzOlm0lUQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-23 21:29:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A9wpcu1LVyagxvkrqJMpLw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
