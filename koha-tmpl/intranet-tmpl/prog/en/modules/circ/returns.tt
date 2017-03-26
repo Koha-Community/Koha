@@ -21,6 +21,14 @@
     [% END %]
 [% END %]
 
+[% BLOCK display_holdpatron_address %]
+    [% IF Koha.Preference( 'AddressFormat' ) %]
+        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+    [% ELSE %]
+        [% INCLUDE 'member-display-address-style-us.inc' %]
+    [% END %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
@@ -226,13 +234,12 @@ $(document).ready(function () {
         <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% TransferWaitingAt %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
-        <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
+        <ul>
+            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
-                <li>[% wborstnum %] [% wboraddress %][% IF ( wboraddress2 ) %]<br />
-		[% wboraddress2 %]<br />[% END %]
-        [% wborcity %]  [% wborzip %]</li>
-        [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
-		[% IF ( wboremail ) %]<li><a id="boremail" href="mailto:[% wboremail %]">[% wboremail %]</a></li>[% END %]
+            [% INCLUDE display_holdpatron_address %]
+            [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
+            [% IF ( wboremail ) %]<li><a id="boremail" href="mailto:[% wboremail %]">[% wboremail %]</a></li>[% END %]
         </ul>
 
     <form method="post" action="returns.pl" class="confirm">
@@ -270,20 +277,12 @@ $(document).ready(function () {
                     [% END %]
 
                     <h4>Hold for:</h4>
-
+                    <ul>
                     <li>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])
                         <span class="patron-category"> - [% borcategory %]</span>
                     </li>
-
-                    <li>
-                        [% borstnum %] [% boraddress %]<br />
-                        [% IF ( boraddress2 ) %]
-                            [% boraddress2 %]<br />
-                        [% END %]
-                        [% borcity %] [% borzip %]
-                    </li>
-
+                    [% INCLUDE display_holdpatron_address %]
                     [% IF ( borphone ) %]
                         <li> [% borphone %]</li>
                     [% END %]
@@ -299,6 +298,7 @@ $(document).ready(function () {
                     [% IF ( gonenoaddress ) %]
                         <li class="error">Patron's address is in doubt</li>
                     [% END %]
+                    </ul>
 
                     [% IF ( transfertodo ) %]
                         <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
@@ -353,9 +353,7 @@ $(document).ready(function () {
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
-                        <li>[% borstnum %] [% boraddress %]<br />
-						[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
-						[% borcity %]  [% borzip %]</li>
+                        [% INCLUDE display_holdpatron_address %]
                         [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
                         [% IF ( boremail ) %]<li>[% IF ( transfertodo ) %][% boremail %][% ELSE %]<a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>[% END %]</li>[% END %]
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
@@ -471,7 +469,6 @@ $(document).ready(function () {
                         <h4>Notes: [% reservenotes %]</h4>
                     [% END %]
                     <h5>Hold for:</h5>
-
                         <li>
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
                                 [% borsurname %], [% borfirstname %]
@@ -480,13 +477,7 @@ $(document).ready(function () {
                             <span class="patron-category"> - [% borcategory %]</span>
                         </li>
 
-                        <li>
-                            [% borstnum %] [% boraddress %]<br />
-                            [% IF ( boraddress2 ) %]
-                                [% boraddress2 %]<br />
-                            [% END %]
-                            [% borcity %] [% borzip %]
-                        </li>
+                        [% INCLUDE display_holdpatron_address %]
 
                         [% IF ( borphone ) %]
                             <li>[% borphone %]</li>
