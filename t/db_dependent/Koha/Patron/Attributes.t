@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 use Test::Exception;
@@ -231,6 +231,46 @@ subtest 'opac_editable() tests' => sub {
         }
     );
     is( $attribute_2->opac_editable, 0, '->opac_editable returns 0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'type() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron
+        = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    my $attr_type = $builder->build( { source => 'BorrowerAttributeType' } );
+    my $attribute = Koha::Patron::Attribute->new(
+        {   borrowernumber => $patron,
+            code           => $attr_type->{code},
+            attribute      => $patron
+        }
+    );
+
+    my $attribute_type = $attribute->type;
+
+    is( ref($attribute_type),
+        'Koha::Patron::Attribute::Type',
+        '->type returns a Koha::Patron::Attribute::Type object'
+    );
+
+    is( $attribute_type->code,
+        $attr_type->{code},
+        '->type returns the right Koha::Patron::Attribute::Type object' );
+
+    is( $attribute_type->opac_editable,
+        $attr_type->{opac_editable},
+        '->type returns the right Koha::Patron::Attribute::Type object'
+    );
+
+    is( $attribute_type->opac_display,
+        $attr_type->{opac_display},
+        '->type returns the right Koha::Patron::Attribute::Type object'
+    );
 
     $schema->storage->txn_rollback;
 };

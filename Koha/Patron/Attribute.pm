@@ -79,6 +79,21 @@ sub opac_editable {
     return Koha::Patron::Attribute::Types->find( $self->code )->opac_editable;
 }
 
+=head3 type
+
+    my $attribute_type = $attribute->type;
+
+Returns a C<Koha::Patron::Attribute::Type> object corresponding to the current patron attribute
+
+=cut
+
+sub type {
+
+    my $self = shift;
+
+    return Koha::Patron::Attribute::Types->find( $self->code );
+}
+
 =head2 Internal methods
 
 =head3 _check_repeatable
@@ -93,7 +108,7 @@ sub _check_repeatable {
 
     my $self = shift;
 
-    if ( !Koha::Patron::Attribute::Types->find( $self->code )->repeatable ) {
+    if ( !$self->type->repeatable ) {
         my $attr_count
             = Koha::Database->new->schema->resultset( $self->_type )->search(
             {   borrowernumber => $self->borrowernumber,
@@ -119,7 +134,7 @@ sub _check_unique_id {
 
     my $self = shift;
 
-    if ( Koha::Patron::Attribute::Types->find( $self->code )->unique_id ) {
+    if ( $self->type->unique_id ) {
         my $unique_count
             = Koha::Database->new->schema->resultset( $self->_type )
             ->search( { code => $self->code, attribute => $self->attribute } )
