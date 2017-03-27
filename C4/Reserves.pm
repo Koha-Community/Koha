@@ -2185,7 +2185,7 @@ available within the slip:
 =cut
 
 sub ReserveSlip {
-    my ($branch, $borrowernumber, $biblionumber) = @_;
+    my ($branch, $borrowernumber, $biblionumber, $transfer) = @_;
 
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
     my $patron = Koha::Patrons->find( $borrowernumber );
@@ -2198,7 +2198,7 @@ sub ReserveSlip {
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',
-        letter_code => 'HOLD_SLIP',
+        letter_code => $transfer ? 'TRANSFERSLIP' : 'HOLD_SLIP',
         branchcode => $branch,
         lang => $patron->lang,
         tables => {
