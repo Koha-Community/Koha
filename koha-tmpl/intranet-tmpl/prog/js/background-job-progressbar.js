@@ -11,7 +11,7 @@ function updateJobProgress() {
         var percentage = json.job_status == 'completed' ? 100 :
                             json.job_size > 0              ? Math.floor(100 * json.progress / json.job_size) :
                             100;
-        var bgproperty = (parseInt(percentage/2)*3-300)+"px 0px";
+        var bgproperty = (parseInt(percentage*2)-300)+"px 0px";
         $("#jobprogress").css("background-position",bgproperty);
         $("#jobprogresspercent").text(percentage);
 
