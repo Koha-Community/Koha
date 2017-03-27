@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pt-PT-i-staff-t-prog-v-3000000\n"
-"POT-Creation-Date: 2017-03-14 17:13-0300\n"
-"PO-Revision-Date: 2017-02-15 13:00+0000\n"
+"POT-Creation-Date: 2017-03-17 08:49-0300\n"
+"PO-Revision-Date: 2017-03-27 10:20+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487163643.000000\n"
+"X-POOTLE-MTIME: 1490610042.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -2252,10 +2252,12 @@ msgstr "%s %s em "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
-msgstr "%s itens modificados (com %s campos modificados). "
+msgstr ""
+"%s %s itens modificados (com %s campos modificados). %s Nenhum modificado. %"
+"s "
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total 
@@ -2804,6 +2806,8 @@ msgid ""
 "%s %sThe file used does not have a valid format. Only csv and txt are "
 "allowed. %s%s %s "
 msgstr ""
+"%s %sO ficheiro usado não tem um formato válido. Apenas ficheiros CSV e "
+"ficheiros de texto são permitidos. %s%s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -4856,7 +4860,7 @@ msgstr ""
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -4869,7 +4873,8 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
@@ -12240,7 +12245,7 @@ msgstr "Analizar exemplares"
 #: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "Andreas Roussos"
-msgstr ""
+msgstr "Andreas Roussos"
 
 #: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
@@ -13554,13 +13559,13 @@ msgid "Auto-fill row"
 msgstr "Linha auto-preenchimento"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Autolocation is switched on and you are logging in with an IP address that "
 "doesn't match your library. "
 msgstr ""
-"IndependentBranches e Autolocation estão ligados e está a autenticar-se com "
-"um endereço IP que não corresponde à sua biblioteca. "
+"A localização automática (Autolocation) está ligada e está a autenticar-se "
+"com um endereço IP que não corresponde à sua biblioteca. "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:69
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:138
@@ -17027,7 +17032,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Chris Kirby"
-msgstr ""
+msgstr "Chris Kirby"
 
 #: intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
@@ -19471,9 +19476,9 @@ msgid "Dan Scott"
 msgstr "Dan Scott"
 
 #: intranet-tmpl/prog/en/modules/about.tt:470
-#, fuzzy, c-format
+#, c-format
 msgid "Dani Elder"
-msgstr "Daniel Barker"
+msgstr "Dani Elder"
 
 #: intranet-tmpl/prog/en/modules/about.tt:406
 #, c-format
@@ -20007,14 +20012,14 @@ msgid "Default values"
 msgstr "Valor por omissão"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
-#, fuzzy, c-format
+#, c-format
 msgid "Default: ReplyToDefault system preference"
-msgstr "Preferências do sistema"
+msgstr "Valor por omissão: Preferência de sistema ReplyToDefault"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "Default: ReturnpathDefault system preference"
-msgstr "Pesquisar preferências do sistema"
+msgstr "Valor por omissão: Preferência de sistema ReturnpathDefault"
 
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
@@ -23620,24 +23625,26 @@ msgid "Fields to display in report:"
 msgstr "Campos a mostrar no relatório:"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
 "as a filter: it is compatible with other parameters. (File types accepted: ."
 "csv and .txt)"
 msgstr ""
 "Ficheiro contendo uma lista de identificadores de autoridades por linha. "
-"Esta lista funciona como filtro: é compatível com outros parâmetros."
+"Esta lista funciona como filtro: é compatível com outros parâmetros. (Tipos "
+"de ficheiros aceites: .csv e .txt)"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
 "This list works as a filter: it is compatible with other parameters. (File "
 "types accepted: .csv and .txt)"
 msgstr ""
 "Ficheiro contendo uma lista de identificadores de registos, um por linha. "
-"Esta lista funciona como filtro: é compatível com outros parâmetros."
+"Esta lista funciona como filtro: é compatível com outros parâmetros. (Tipos "
+"de ficheiros aceites: .csv e .txt)"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:194
@@ -31357,7 +31364,7 @@ msgstr "Deixe vazio para adicionar pela pesquisa de exemplar."
 #: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Lee Jamison"
-msgstr ""
+msgstr "Lee Jamison"
 
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:44
 #, c-format
@@ -34889,9 +34896,8 @@ msgstr "Não, tentar sobrepor as preferências de sistema"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
-#, fuzzy
 msgid "No authorities have been selected."
-msgstr "Nenhum registo foi selecionado."
+msgstr "Nenhuma autoridade foi selecionada."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
@@ -34909,6 +34915,8 @@ msgstr "Nenhuma categoria foi definida. "
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
+"Nenhuma regra de circulação definida para a combinação deste leitor e do "
+"tipo de documento."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -39034,6 +39042,7 @@ msgstr "Por favor active o Javascript:"
 #, c-format
 msgid "Please enable system preference 'AudioAlerts' to activate sounds."
 msgstr ""
+"Por favor ative a preferência de sistema 'AudioAlerts' para utilizar os sons."
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -40607,7 +40616,7 @@ msgstr "Rachel Hamilton-Williams (Kaitiaki de 2004 até ao presente)"
 #: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Radek Siman"
-msgstr ""
+msgstr "Radek Siman"
 
 #: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
@@ -41466,7 +41475,7 @@ msgstr "Preço de substituição:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
 msgid "Reply-To: "
-msgstr ""
+msgstr "Reply-To: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #, c-format
@@ -42045,7 +42054,7 @@ msgstr "Voltar à página anterior"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/browser-strings.inc:1
 msgid "Return to results"
-msgstr "Voltar aos resultados"
+msgstr "Resultados"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:22
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:27
@@ -42105,9 +42114,9 @@ msgid "Return to: "
 msgstr "Voltar a: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "Return-Path: "
-msgstr "Voltar a: "
+msgstr "Return-Path: "
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -42192,7 +42201,7 @@ msgstr "Rocio Dressler"
 #: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
 msgid "Rodrigo Santellan"
-msgstr ""
+msgstr "Rodrigo Santellan"
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
 #, c-format
@@ -43299,9 +43308,9 @@ msgstr "Pesquisar preferências do sistema"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets"
-msgstr "Alvos de pesquisa "
+msgstr "Alvos da pesquisa "
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #, c-format
@@ -48788,7 +48797,7 @@ msgstr "Tim Hannah"
 #: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "Tim McMahon"
-msgstr ""
+msgstr "Tim McMahon"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -52060,14 +52069,14 @@ msgstr ""
 "sua instância. "
 
 #: intranet-tmpl/prog/en/modules/about.tt:194
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
 "file. That will bring a performance boost to enable it. "
 msgstr ""
-"Tem a falta a entrada &lt;log4perl_conf&gt; no ficheiro de configuração koha-"
-"conf.xml. Por favor adicione-a, apontando para o ficheiro log4perl.conf da "
-"sua instância. "
+"A entrada &lt;template_cache_dir&gt; está em falta no ficheiro de "
+"configuração koha-conf.xml. Ao definir a diretoria de cache irá aumentar a "
+"performance do sistema. "
 
 #: intranet-tmpl/prog/en/modules/about.tt:301
 #, c-format
@@ -53045,7 +53054,7 @@ msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
 #: intranet-tmpl/prog/en/modules/about.tt:139
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -53058,7 +53067,8 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
 "xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] %s "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:103
 #, c-format
@@ -53068,6 +53078,7 @@ msgstr "[%% INCLUDE 'branch-selector.inc' branches = libraries %%] "
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:387
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
@@ -53080,11 +53091,12 @@ msgstr ""
 "empty_option = \"Todas as bibliotecas\" %%] [%% INCLUDE form_field_select "
 "name=\"holdingbranch\" options = branches empty_option = \"Todas as "
 "bibliotecas\" %%] [%% INCLUDE form_field_select name=\"location\" options = "
-"locations empty_option = \"Todas as localizações\" %%] "
+"locations empty_option = \"Todas as localizações\" %%] %s"
 
 #. %1$s:  IF notforloans.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:406
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
@@ -53093,11 +53105,11 @@ msgid ""
 "[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
 "empty_option = \"All statuses\" %%] %s "
 msgstr ""
-"[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
-"empty_option = \"Todos os tipos de documento\" %%] [%% INCLUDE "
-"form_field_select name=\"ccode\" options = ccodes empty_option = \"Todas as "
-"coleções\" %%] [%% INCLUDE form_field_select name=\"notforloan\" options = "
-"notforloans empty_option = \"Todos estados\" %%] "
+"[%% INCLUDE form_field_select name=\"itype\" options = itemtypes empty_option "
+"= \"Todos os tipos de documento\" %%] [%% INCLUDE form_field_select "
+"name=\"ccode\" options = ccodes empty_option = \"Todas as coleções\" %%] [%% "
+"INCLUDE form_field_select name=\"notforloan\" options = notforloans "
+"empty_option = \"Todos estados\" %%] %s "
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:528
 #, c-format

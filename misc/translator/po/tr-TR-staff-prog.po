@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-03-14 18:07-0300\n"
-"PO-Revision-Date: 2017-02-16 11:27+0000\n"
+"POT-Creation-Date: 2017-03-17 09:02-0300\n"
+"PO-Revision-Date: 2017-03-21 10:27+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487244420.000000\n"
+"X-POOTLE-MTIME: 1490092032.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -823,8 +823,8 @@ msgid ""
 "level hold (placed %s) for delivery at %s. %s %s Hold for: "
 msgstr ""
 "%s %s %s Ödünç verilmez %s (%s) %s %s %s %s Şu konumda beklemede %s "
-"tarihinden beri %s. %s materyal-düzeyi ayırtma (ayırtıldı %s) bu konumda "
-"teslim alınmak üzere %s. %s %s Ayırtılan:"
+"tarihinden beri %s. %s Ayırtıldı (ayırtma tarihi %s) teslim alma yeri %s. %s "
+"%s Ayırtılan:"
 
 #. %1$s:  END 
 #. %2$s:  SWITCH unit.type 
@@ -2792,6 +2792,8 @@ msgid ""
 "%s %sThe file used does not have a valid format. Only csv and txt are "
 "allowed. %s%s %s "
 msgstr ""
+"%s %sKullanılan dosya geçerli bir biçimde değil. Sadece csv ve txt'e izin "
+"verilir. %s%s %s"
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -4622,7 +4624,7 @@ msgstr "%s Tanımlanmış alan bulunmamaktadır. %s %s %s"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1038
 #, c-format
 msgid "%s There is no order for this biblio. %s "
-msgstr "%s Bu bibliyo için herhangi bir düzen yok. %s"
+msgstr "%s Bu bibliyografik kayıt için herhangi bir sipariş bilgisi yok. %s"
 
 #. %1$s:  ELSIF search_done 
 #. %2$s:  END 
@@ -19918,14 +19920,14 @@ msgid "Default values"
 msgstr "Varsayılan değerler"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
-#, fuzzy, c-format
+#, c-format
 msgid "Default: ReplyToDefault system preference"
-msgstr "Genel sistem tercihleri"
+msgstr "Varsayılan: ReplyToDefault sistem tercihi"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "Default: ReturnpathDefault system preference"
-msgstr "Sistem Tercihlerini ara"
+msgstr "Varsayılan: ReplyToDefault sistem tercihi"
 
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
@@ -23524,25 +23526,26 @@ msgid "Fields to display in report:"
 msgstr "Raporda görüntülenecek alanlar:"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:222
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
 "as a filter: it is compatible with other parameters. (File types accepted: ."
 "csv and .txt)"
 msgstr ""
-"Her satırda bir authid ile authids listesini içeren bir dosya. Bu liste bir "
-"filtre olarak çalışır: Diğer parametrelerle uyumludur."
+"Her satırda bir authid bulunan bir authids listesi içeren dosya. Bu liste "
+"bir filtre işlevi görür: diğer parametrelerle uyumludur. (Kabul edilen dosya "
+"türleri: .csv ve .txt)"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
 "This list works as a filter: it is compatible with other parameters. (File "
 "types accepted: .csv and .txt)"
 msgstr ""
-"Her satır başına bir bibliyo numarası ile bibliyo numaralarının bir "
-"listesini içeren dosya. Bu liste bir filtre gibi çalışır: Diğer parametreler "
-"ile uyumludur."
+"Her satıra bir adet bibliyo numarası olan bibliyo numaraları listesini "
+"içeren dosya. Bu liste bir filtre işlevi görür: diğer parametrelerle "
+"uyumludur. (Kabul edilen dosya türleri: .csv ve .txt)"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:194
@@ -34781,9 +34784,8 @@ msgstr "Hayır ve sistem tercihlerini geçersiz kılmaya çalışın"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:8
-#, fuzzy
 msgid "No authorities have been selected."
-msgstr "Hiçbir kayıt seçilmedi."
+msgstr "Hiçbir otorite seçilmedi."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:188
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:409
@@ -38923,6 +38925,8 @@ msgstr "Lütfen Javascript'i etkinleştirin:"
 #, c-format
 msgid "Please enable system preference 'AudioAlerts' to activate sounds."
 msgstr ""
+"Sesleri etkinleştirmek için 'AudioAlerts' sistem tercihi özelliğini "
+"etkinleştirin."
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:73
 #, c-format
@@ -41351,7 +41355,7 @@ msgstr "Yenileme ücreti:"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:189
 #, c-format
 msgid "Reply-To: "
-msgstr ""
+msgstr "Yanıtla:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:154
 #, c-format
@@ -41990,9 +41994,9 @@ msgid "Return to: "
 msgstr "Dön: "
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "Return-Path: "
-msgstr "Dön: "
+msgstr "Dönüş yolu:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:132
 #, c-format
@@ -42075,9 +42079,9 @@ msgid "Rocio Dressler"
 msgstr "Rocio Dressler"
 
 #: intranet-tmpl/prog/en/modules/about.tt:625
-#, fuzzy, c-format
+#, c-format
 msgid "Rodrigo Santellan"
-msgstr "Rodrigo Santallan"
+msgstr "Rodrigo Santellan"
 
 #: intranet-tmpl/prog/en/modules/about.tt:424
 #, c-format
