@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 15:04-0300\n"
-"PO-Revision-Date: 2017-03-14 14:38+0000\n"
-"Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
+"POT-Creation-Date: 2017-03-17 08:22-0300\n"
+"PO-Revision-Date: 2017-03-22 14:44+0000\n"
+"Last-Translator: Alexandre <alexandre.breton@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1489502295.000000\n"
+"X-POOTLE-MTIME: 1490193858.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -869,7 +869,7 @@ msgstr "%s Autre numéro de téléphone :"
 #. %8$s:  IF PasswordContainsTrailingSpaces 
 #. %9$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
@@ -877,10 +877,10 @@ msgid ""
 "reset your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
-"%s Les mots de passe ne correspondent pas. Veuillez resaisir votre nouveau "
+"%s Les mots de passe ne correspondent pas. Veuillez ressaisir votre nouveau "
 "mot de passe. %s %s Votre nouveau mot de passe doit contenir au moins %s "
 "caractères. %s %s Votre mot de passe actuel a été mal saisi. Si ce problème "
-"persiste, contactez un bibliothécaire afin de reinitialiser votre mot de "
+"persiste, contactez un bibliothécaire afin de réinitialiser votre mot de "
 "passe. %s %s Votre mot de passe commence ou se termine par des espaces. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
@@ -8064,7 +8064,7 @@ msgid "Please enter your card number:"
 msgstr "Merci de saisir votre numéro de carte&nbsp;:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please fill out this form to make a purchase suggestion. You will receive an "
 "email when the library processes your suggestion."
@@ -10394,9 +10394,9 @@ msgid "This email address already exists in our database."
 msgstr "Cette adresse courriel existe déjà dans notre base de données."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
-#, fuzzy, c-format
+#, c-format
 msgid "This is a on-site checkout, it cannot be renewed."
-msgstr "Ce titre ne peut pas être réservé."
+msgstr "Ce titre est en prêt sur place uniquement, il ne peut être renouvelé."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
 #, c-format
@@ -10413,6 +10413,8 @@ msgstr "Ce document n'existe pas."
 msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
+"Cet exemplaire a été programmée pour être renouvelée automatiquement et ne "
+"peut être renouvelé autrement. "
 
 #. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
@@ -11578,6 +11580,7 @@ msgstr "Vos listes"
 msgid "Your lists:"
 msgstr "Vos listes :"
 
+# Une phrase était manquante.
 #. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
 #. %2$s:  IF error == 'card_expired' 
 #. %3$s:  ELSIF error == 'too_many' 
@@ -11586,7 +11589,7 @@ msgstr "Vos listes :"
 #. %6$s:  END 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your loan renewal failed because of the following reason(s): %s %s Your "
 "account has expired. Please contact the library for more information. %s You "
@@ -11594,10 +11597,11 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
-"Votre renouvellement n'a pas fonctionné pour la(les) raison(s) suivante(s): "
-"%s %s Votre compte est expiré. Merci de contacter la bibliothèque pour plus "
+"Votre renouvellement n'a pas fonctionné pour la(les) raison(s) suivante(s): %"
+"s %s Votre compte est expiré. Merci de contacter la bibliothèque pour plus "
 "d'informations. %s Vous avez atteint le maximum de renouvellements "
-"possibles. %s Cet exemplaire est réservé par un autre utilisateur. %s %s "
+"possibles. %s La date de prêt de cet exemplaire est trop récente pour le "
+"renouveler. %s Cet exemplaire est réservé par un autre utilisateur. %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
