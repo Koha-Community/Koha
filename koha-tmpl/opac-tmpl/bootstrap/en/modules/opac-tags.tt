@@ -87,7 +87,14 @@
                                 </div>
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     [% UNLESS ( loggedinusername ) %]
-                                        <p><a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a></p>
+                                        <p>
+                                            [% IF Koha.Preference('casAuthentication') %]
+                                                [%# CAS authentication is too complicated for modal window %]
+                                                <a href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                            [% ELSE %]
+                                                <a class="loginModal-trigger" href="/cgi-bin/koha/opac-user.pl">Log in to see your own saved tags.</a>
+                                            [% END %]
+                                        </p>
                                     [% END %]
                                 [% END %]
                             </fieldset>
