@@ -74,7 +74,7 @@ sub isPreparing {
     my $h3 = $d->find_element("//h3[contains(.,\"Preparing to pay fines\")]",'xpath');
     is($h3->get_text(), "Preparing to pay fines", "Opac preparing to redirect user to online shop (but skipping online shop in these tests)");
     my $continueLink = $d->find_element("//p[contains(.,\"automatically redirected to\")]/a[text()=\"online payment\"]", "xpath");
-
+    $d->pause(3000);
     $continueLink->click();
     ok(1, "Opac Clicked to continue with the payment");
 
@@ -84,6 +84,7 @@ sub isPreparing {
 sub isPaymentPaid {
     my ($self, $status) = @_;
     my $d = $self->getDriver();
+
     $self->debugTakeSessionSnapshot();
 
     my $h3 = $d->find_element("//h3[contains(.,\"You have no outstanding\")]",'xpath');

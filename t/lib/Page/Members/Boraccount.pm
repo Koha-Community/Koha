@@ -154,7 +154,19 @@ sub isTransactionComplete {
     my $d = $self->getDriver();
     $self->debugTakeSessionSnapshot();
 
-    my $transaction_columns = $d->find_element("//td[contains(\@class, 'transactionnumber') and text() = '".$transactionnumber."']", "xpath");
+    my $func = undef; # we only need to poll for success
+    my $success = sub {
+        eval {
+            my $transaction_columns = $d->find_element("//td[contains(\@class, 'transactionnumber') and text() = '".$transactionnumber."']", "xpath");
+        };
+        if ($@) {
+            $d->refresh();
+            return 0;
+        }
+        return 1;
+    };
+
+    $self->poll($func, $success, 5, 5000); # poll for max 25 seconds
 
     ok(1, "Intra Found transaction, number ".$transactionnumber);
 

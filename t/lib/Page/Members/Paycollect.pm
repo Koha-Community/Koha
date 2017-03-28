@@ -261,12 +261,13 @@ sub waitUntilPaymentIsCompletedAtPOS {
             my $el = $d->find_element("button[id='recheck']",'css');
         };
         if ($@) {
-            return 1;
+            return 1; # return 1 here on purpose because we want the find_element
+                      # to fail!
         }
         return 0;
     };
 
-    $self->poll($func, $success, 50, 100); # poll for max 5 seconds
+    $self->poll($func, $success, 5, 5000); # poll for max 25 seconds
 
     $self->debugTakeSessionSnapshot();
 
