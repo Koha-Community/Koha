@@ -1283,7 +1283,7 @@ sub checkauth {
     if ($cas) {
 
         # Is authentication against multiple CAS servers enabled?
-        if ( C4::Auth_with_cas::multipleAuth && !$casparam ) {
+        if ( C4::Auth_with_cas::multipleAuth() && !$casparam ) {
             my $casservers = C4::Auth_with_cas::getMultipleAuth();
             my @tmplservers;
             foreach my $key ( keys %$casservers ) {
