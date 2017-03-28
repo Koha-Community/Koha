@@ -23,6 +23,7 @@ use Exception::Class (
     'Koha::Exception::SystemCall' => {
         isa => 'Koha::Exception',
         description => 'Making a system call failed',
+        fields => ['killSignal', 'exitCode'],
     },
 );
 
