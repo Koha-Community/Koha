@@ -92,7 +92,7 @@ sub handleTestObject {
 
     C4::Accounts::manualinvoice(
         $borrower->borrowernumber,      # borrowernumber
-        undef,                          # itemnumber
+        $fine->{itemnumber},            # itemnumber
         $fine->{description},           # description
         $fine->{accounttype},           # accounttype
         $fine->{amount},                # amountoutstanding
@@ -124,6 +124,7 @@ sub validateAndPopulateDefaultValues {
         Koha::Exception::BadParameter->throw(error => __PACKAGE__."->createTestGroup():> 'note' is a mandatory parameter!");
     }
 
+    $object->{itemnumber} = undef unless defined $object->{itemnumber};
     $object->{description} = "Test payment" unless defined $object->{description};
     $object->{accounttype} = "FU" unless defined $object->{accounttype};
 }
