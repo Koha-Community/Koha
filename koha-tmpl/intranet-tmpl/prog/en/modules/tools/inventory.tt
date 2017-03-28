@@ -180,12 +180,18 @@ $(document).ready(function(){
                               <legend>[% status.fieldname %]</legend>
                               <ul id="statuses-[% fieldname %]" style="display: inline;">
                               [% FOREACH value IN status.values %]
-                                  [% IF (value.lib) %]<li>
+                                  [% IF (value.lib) %]
+                                    <li>
                                     <label for="[% value.id %]">
-                                      [% value.lib %]
+                                        [% IF value.authorised_value==0 %]
+                                            For loan
+                                        [% ELSE %]
+                                            [% value.lib %]
+                                        [% END %]
                                     </label>
                                     <input type="checkbox" name="status-[% status.fieldname %]-[% value.authorised_value %]" id="[% value.authorised_value %]" />
-                                  </li>[% END %]
+                                    </li>
+                                  [% END %]
                               [% END %]
                               </ul>
                           </fieldset>
@@ -294,7 +300,7 @@ $(document).ready(function(){
             [% ELSIF result.problem == 'missingitem' %]
                 <p>Item missing</p>
             [% ELSIF result.problem == 'changestatus' %]
-                <p>Change item status</p>
+                <p>Unknown not-for-loan status</p>
             [% ELSIF result.problem == 'not_scanned' %]
                 <p>Item should have been scanned</p>
             [% END %]
