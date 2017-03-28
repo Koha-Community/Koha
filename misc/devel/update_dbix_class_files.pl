@@ -56,7 +56,7 @@ if (! defined $db_name ) {
 }
 
 
-my $options = { debug => 1, dump_directory => $path, preserve_case => 1 };
+my $options = { debug => 1, dump_directory => $path, preserve_case => 1, overwrite_modifications => 1 };
 if ($tablename) {
     $options->{constraint} = qr/\A$tablename\z/
 }
