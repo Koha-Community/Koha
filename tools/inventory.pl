@@ -94,11 +94,14 @@ for my $statfield (qw/items.notforloan items.itemlost items.withdrawn items.dama
     $hash->{authcode} = $mss->count ? $mss->next->authorised_value : undef;
     if ($hash->{authcode}){
         my $arr = GetAuthorisedValues($hash->{authcode});
-        $hash->{values} = $arr;
-        push @$statuses, $hash;
         if ( $statfield eq 'items.notforloan') {
+            # Add notforloan == 0 to the list of possible notforloan statuses
+            # The lib value is replaced in the template
+            push @$arr, { authorised_value => 0, id => 'stat0' , lib => 'ignore' };
             @notforloans = map { $_->{'authorised_value'} } @$arr;
         }
+        $hash->{values} = $arr;
+        push @$statuses, $hash;
     }
 }
 
