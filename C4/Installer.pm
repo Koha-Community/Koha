@@ -20,11 +20,15 @@ package C4::Installer;
 use Modern::Perl;
 
 use Encode qw( encode is_utf8 );
+use Try::Tiny;
+use Scalar::Util qw(blessed);
 use DBIx::RunSQL;
 use C4::Context;
 use C4::Installer::PerlModules;
+use C4::KohaSuomi::TestRunner;
 use DBI;
 use Koha;
+use Koha::SearchEngine::Elasticsearch;
 
 use vars qw(@ISA @EXPORT);
 BEGIN {
@@ -197,6 +201,48 @@ sub updatedatabase {
              join("",@report);
     }
     #eval{ `rm $logfilepath_errors` };
+}
+
+=head2 reinstall
+
+Basically:
+
+DROP DATABASE and CREATE DATABASE and install/install_automatic.pl
+Only for databases whose name starts with koha_ci
+
+=cut
+
+sub reinstall {
+    my ($verbose) = @_;
+    my $db_name = C4::Context->config('database');
+    die "Database name doesn't start with 'koha_ci'. Aborting from potentially destroying a production DB." unless $db_name =~ /^koha_ci/;
+
+    my $db_user = C4::Context->config('user');
+    my $db_pass = C4::Context->config('pass');
+    my $db_host = C4::Context->config('hostname');
+    my $tr = C4::KohaSuomi::TestRunner->new($verbose);
+
+    #Cannot recreate DB with DBI since it cannot connect to an nonexisting DB
+    print __PACKAGE__."::reinstall():> Recreating database '$db_name'\n" if $verbose;
+    try {
+        $tr->shell("echo 'DROP DATABASE $db_name; CREATE DATABASE $db_name;' | mysql -u'$db_user' -p'$db_pass'");
+    } catch {
+        if (blessed($_) && $_->isa('Koha::Exception::SystemCall')) {
+            warn $_->error if (not($tr->verbose));
+            warn "There was a problem DROPping and CREATEing the database '$db_name'\n".
+                 "You must manually 'CREATE DATABASE $db_name' and then retry.";
+            $_->rethrow();
+        }
+        $_->rethrow() if blessed($_);
+        die $_ unless blessed($_);
+    };
+
+    print __PACKAGE__."::reinstall():> Populating default database '$db_name'\n" if $verbose;
+    install_default_database($verbose);
+    print __PACKAGE__."::reinstall():> Flushing caches for '$db_name'\n" if $verbose;
+    Koha::Caches::flush();
+    print __PACKAGE__."::reinstall():> Resetting Elasticsearch mappings for '$db_name'\n" if $verbose;
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
 }
 
 =head2 marc_framework_sql_list
