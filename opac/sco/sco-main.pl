@@ -131,7 +131,7 @@ elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
     $template->param( returned => $doreturn );
 }
-elsif ( $patron and $op eq "checkout" ) {
+elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
     my $impossible  = {};
     my $needconfirm = {};
     ( $impossible, $needconfirm ) = CanBookBeIssued(
@@ -174,7 +174,7 @@ elsif ( $patron and $op eq "checkout" ) {
                 barcode    => $barcode,
             );
         }
-    } elsif ( $needconfirm->{RENEW_ISSUE} ) {
+    } elsif ( $needconfirm->{RENEW_ISSUE} || $op eq 'renew' ) {
         if ($confirmed) {
             #warn "renewing";
             AddRenewal( $borrower->{borrowernumber}, $item->{itemnumber} );
