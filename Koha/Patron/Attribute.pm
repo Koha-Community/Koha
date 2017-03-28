@@ -109,8 +109,7 @@ sub _check_repeatable {
     my $self = shift;
 
     if ( !$self->type->repeatable ) {
-        my $attr_count
-            = Koha::Database->new->schema->resultset( $self->_type )->search(
+        my $attr_count = Koha::Patron::Attributes->search(
             {   borrowernumber => $self->borrowernumber,
                 code           => $self->code
             }
@@ -135,8 +134,7 @@ sub _check_unique_id {
     my $self = shift;
 
     if ( $self->type->unique_id ) {
-        my $unique_count
-            = Koha::Database->new->schema->resultset( $self->_type )
+        my $unique_count = Koha::Patron::Attributes
             ->search( { code => $self->code, attribute => $self->attribute } )
             ->count;
         Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw()
