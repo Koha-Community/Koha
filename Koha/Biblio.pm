@@ -32,6 +32,7 @@ use Koha::Biblioitems;
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
 use Koha::IssuingRules;
+use Koha::Subscriptions;
 
 =head1 NAME
 
