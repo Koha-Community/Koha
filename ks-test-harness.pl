@@ -100,6 +100,7 @@ my $testResultsDir = 'testResults';
 my $testResultsArchive = 'testResults.tar.gz';
 my $junitDir =  $testResultsDir.'/junit';
 my $cloverDir = $testResultsDir.'/clover';
+my $cover_dbDir = $testResultsDir.'/cover_db';
 my @archivableDirs = ($junitDir, $cloverDir);
 mkdir $testResultsDir unless -d $testResultsDir;
 _shell("rm -r $junitDir");
@@ -130,7 +131,7 @@ Empty previous coverage test results
 =cut
 
 sub clearCoverDb {
-    my $cmd = "/usr/bin/cover -delete $testResultsDir/cover_db";
+    my $cmd = "/usr/bin/cover -delete $cover_dbDir";
     print "$cmd\n" if $dryRun;
     _shell($cmd) unless $dryRun;
 }
@@ -142,7 +143,7 @@ Create Clover coverage reports
 =cut
 
 sub createCoverReport {
-    my $cmd = "/usr/bin/cover -report clover -outputdir $testResultsDir/clover $testResultsDir/cover_db";
+    my $cmd = "/usr/bin/cover -report clover -outputdir $testResultsDir/clover $cover_dbDir";
     print "$cmd\n" if $dryRun;
     _shell($cmd) unless $dryRun;
 }
@@ -186,7 +187,7 @@ sub runharness {
             $EXECUTABLE_NAME,
             '-w',
         );
-        push(@exec, '-MDevel::Cover=-silent,1,-coverage,all') if $clover;
+        push(@exec, "-MDevel::Cover=-db,$cover_dbDir,-silent,1,-coverage,all") if $clover;
 
         if ($dryRun) {
             print "TAP::Harness::JUnit would run tests with this config:\nxmlfile => $xmlfile\npackage => $dirToPackage\nexec => @exec\ntests => @tests\n";
