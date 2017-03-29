@@ -691,7 +691,7 @@ sub GetPreparedLetter {
 
     my $tables = $params{tables} || {};
     my $substitute = $params{substitute} || {};
-    my $loops  = $params{loops} || {}; # loops is not supported for history syntax
+    my $loops  = $params{loops} || {}; # loops is not supported for historical notices syntax
     my $repeat = $params{repeat};
     %$tables || %$substitute || $repeat || %$loops
       or carp( "ERROR: nothing to substitute - both 'tables', 'loops' and 'substitute' are empty" ),
