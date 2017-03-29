@@ -140,6 +140,8 @@ sub _check_unique_id {
         Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw()
             if $unique_count > 0;
     }
+
+    return $self;
 }
 
 =head3 _type
