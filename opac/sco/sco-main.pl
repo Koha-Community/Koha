@@ -137,15 +137,13 @@ elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
 elsif ( $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
-    if ( !$confirmed ) {
-        ( $impossible, $needconfirm ) = CanBookBeIssued(
-            $borrower,
-            $barcode,
-            undef,
-            0,
-            C4::Context->preference("AllowItemsOnHoldCheckoutSCO")
-        );
-    }
+    ( $impossible, $needconfirm ) = CanBookBeIssued(
+        $borrower,
+        $barcode,
+        undef,
+        0,
+        C4::Context->preference("AllowItemsOnHoldCheckoutSCO")
+    );
     $confirm_required = scalar keys %$needconfirm;
 
     #warn "confirm_required: " . $confirm_required ;
