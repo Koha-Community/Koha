@@ -817,7 +817,9 @@
                                 [% IF ( subscription.closed ) %]
                                     <p>This subscription is closed.</p>
                                 [% END %]
-                                <span style="display:none;"> [% IF ( subscription.callnumber ) %]<p>Call number: [% subscription.callnumber %]</p>[% END %]</span>
+                                [% IF ( subscription.callnumber ) %]
+                                  <p>Call number: [% subscription.callnumber %]</p>
+                                [% END %]
                                 [% IF ( subscription.subscriptionnotes ) %]
                                     <p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>
                                 [% END %]
@@ -838,9 +840,6 @@
                                 [% END %]
                                 [% IF ( subscription.opacnote ) %]
                                     <p>[% subscription.opacnote FILTER html_line_break %]</p>
-                                [% END %]
-                                [% IF ( subscription.callnumber ) %]
-                                  <p>Call number: [% subscription.callnumber %]</p>
                                 [% END %]
                                 [% IF ( subscription.latestserials ) %]
                                     <p> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
