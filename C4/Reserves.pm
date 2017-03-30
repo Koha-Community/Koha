@@ -680,7 +680,7 @@ sub GetReservesForBranch {
     my $dbh = C4::Context->dbh;
 
     my $query = "
-        SELECT reserve_id,borrowernumber,reservedate,itemnumber,waitingdate
+        SELECT reserve_id,borrowernumber,reservedate,itemnumber,waitingdate, expirationdate
         FROM   reserves
         WHERE   priority='0'
         AND found='W'
@@ -899,6 +899,8 @@ Cancels all reserves with an expiration date from before today.
 =cut
 
 sub CancelExpiredReserves {
+    return unless C4::Context->preference("ExpireReservesMaxPickUpDelay");
+
     my $today = dt_from_string();
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 

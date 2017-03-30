@@ -301,6 +301,8 @@ sub days_forward {
     my $start_dt = shift;
     my $num_days = shift;
 
+    return $start_dt unless $num_days > 0;
+
     my $base_dt = $start_dt->clone();
 
     while ($num_days--) {

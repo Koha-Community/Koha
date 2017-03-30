@@ -86,7 +86,6 @@ my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch(
 
 my $today = Date_to_Days(&Today);
 my $max_pickup_delay = C4::Context->preference('ReservesMaxPickUpDelay');
-$max_pickup_delay-- if C4::Context->preference('ExpireReservesMaxPickUpDelay');
 
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
@@ -107,12 +106,8 @@ foreach my $num (@getreserves) {
     my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
-    my ( $waiting_year, $waiting_month, $waiting_day ) = split (/-/, $num->{'waitingdate'});
-
-    ( $waiting_year, $waiting_month, $waiting_day ) =
-      Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day,
-        $max_pickup_delay);
-    my $calcDate = Date_to_Days( $waiting_year, $waiting_month, $waiting_day );
+    my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
+    my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
 
     $getreserv{'itemtype'}       = $itemtypeinfo->{'description'};
     $getreserv{'title'}          = $gettitle->{'title'};

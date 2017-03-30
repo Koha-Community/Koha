@@ -871,17 +871,7 @@ sub _parseletter {
     }
 
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
-        my @waitingdate = split /-/, $values->{'waitingdate'};
-
-        $values->{'expirationdate'} = '';
-        if ( C4::Context->preference('ReservesMaxPickUpDelay') ) {
-            my $dt = dt_from_string();
-            $dt->add( days => C4::Context->preference('ReservesMaxPickUpDelay') );
-            $values->{'expirationdate'} = output_pref( { dt => $dt, dateonly => 1 } );
-        }
-
         $values->{'waitingdate'} = output_pref({ dt => dt_from_string( $values->{'waitingdate'} ), dateonly => 1 });
-
     }
 
     if ($letter->{content} && $letter->{content} =~ /<<today>>/) {

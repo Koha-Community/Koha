@@ -132,23 +132,21 @@ sub set_waiting {
         $requested_expiration = dt_from_string($self->expirationdate);
     }
 
-    if ( C4::Context->preference("ExpireReservesMaxPickUpDelay") ) {
-        my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
-        my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
-        my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
+    my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
+    my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
+    my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
 
-        my $expirationdate = $today->clone;
-        $expirationdate->add(days => $max_pickup_delay);
+    my $expirationdate = $today->clone;
+    $expirationdate->add(days => $max_pickup_delay);
 
-        if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-            $expirationdate = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
-        }
-
-        # If patron's requested expiration date is prior to the
-        # calculated one, we keep the patron's one.
-        my $cmp = $requested_expiration ? DateTime->compare($requested_expiration, $expirationdate) : 0;
-        $values->{expirationdate} = $cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd;
+    if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
+        $expirationdate = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
     }
+
+    # If patron's requested expiration date is prior to the
+    # calculated one, we keep the patron's one.
+    my $cmp = $requested_expiration ? DateTime->compare($requested_expiration, $expirationdate) : 0;
+    $values->{expirationdate} = $cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd;
 
     $self->set($values)->store();
 

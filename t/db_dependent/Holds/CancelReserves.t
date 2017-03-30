@@ -8,7 +8,7 @@ use Koha::DateUtils;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use_ok('C4::Reserves');
 
@@ -63,7 +63,12 @@ my $reserve2 = $builder->build({
 
 CancelExpiredReserves();
 my $r2 = Koha::Holds->find($reserve2->{reserve_id});
-is($r2, undef,'Reserve 2 should be canceled.');
+ok($r2, 'Without ExpireReservesMaxPickUpDelay, reserve 2 should not be canceled.');
+
+t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
+CancelExpiredReserves();
+$r2 = Koha::Holds->find($reserve2->{reserve_id});
+is($r2, undef,'With ExpireReservesMaxPickUpDelay, reserve 2 should be canceled.');
 
 # Reserve expired on holiday
 my $reserve3 = $builder->build({
