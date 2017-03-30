@@ -3,24 +3,30 @@
 
 [%- BLOCK action_menu %]
     <div class="dropdown">
-        <a class="btn btn-mini dropdown-toggle" id="budgetmenu_[% block_budget_id %]" role="button" data-toggle="dropdown" href="#">
+        <a class="btn btn-mini dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id %]" role="button" data-toggle="dropdown" href="#">
            Actions <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget_id %]">
+        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id %]">
               <li>
-                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% block_budget_id |html %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a href="[% script_name %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id |html %]"><i class="fa fa-pencil"></i> Edit</a>
+              </li>
+              [% IF block_budget.count %]
+                  <li class="disabled">
+                      <a data-toggle="tooltip" data-placement="left" title="[% block_budget.count %] fund(s) are attached to this budget. You must delete all attached funds before deleting this budget." href="#"><i class="fa fa-trash"></i> Delete</a>
+                  </li>
+              [% ELSE %]
+                  <li>
+                      <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id %]"><i class="fa fa-trash"></i> Delete</a>
+                  </li>
+              [% END %]
+              <li>
+                  <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id %]"><i class="fa fa-copy"></i> Duplicate</a>
               </li>
               <li>
-                  <a href="[% script_name %]?op=delete_confirm&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-trash"></i> Delete</a>
+                  <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
               <li>
-                  <a href="[% script_name %]?op=duplicate_form&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-copy"></i> Duplicate</a>
-              </li>
-              <li>
-                  <a href="[% script_name %]?op=close_form&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-times-circle"></i> Close</a>
-              </li>
-              <li>
-                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget_id %]"><i class="fa fa-plus"></i> Add fund</a>
+                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id %]"><i class="fa fa-plus"></i> Add fund</a>
               </li>
         </ul>
     </div>
@@ -225,7 +231,7 @@
     [% END %]
     [% IF ( delete_confirm ) %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        [% IF ( total ) %]
+        [% IF ( total || funds_exist ) %]
             <span>Cannot delete budget '[% budget_period_description %]'</span>
         [% ELSE %]
             <span>Delete budget '[% budget_period_description %]'?</span>
@@ -401,10 +407,13 @@
         <h3>Cannot delete budget</h3>
         <p><strong>This record is used [% total %] times</strong>
         . Deletion is not possible.</p>
+    [% ELSIF ( funds_exist ) %]
+        <div class="dialog message">
+        <h3>Cannot delete budget</h3>
+        <p>This budget has funds attached. You must delete all attached funds before you can delete this budget.</p>
     [% ELSE %]
         <div class="dialog alert">
         <h3>Delete budget '[% budget_period_description %]'?</h3>
-    [% END %]
 
     <!-- ############################################################# -->
     <!-- "delete" and "cancel" buttons    -->
@@ -418,6 +427,7 @@
     <form action="[% script_name %]" method="post">
         <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
     </form>
+    [% END %]
 
     </div>
 [% END %]
@@ -532,6 +542,10 @@
 [% IF ( else ) %]
   <h2>Budgets administration</h2>
 
+    [% IF ( failed_delete_funds_exist ) %]
+        <div class="dialog message">Failed to delete budget because funds exist.</div>
+    [% END %]
+
   [% INCLUDE 'budgets-active-currency.inc' %]
 
   <div id="budgetsTabs" class="toptabs">
@@ -566,7 +580,7 @@
                 </td>
                 <td class="data">[% period_active.budget_period_total | $Price %]</td>
                 <td>
-                    [% PROCESS action_menu block_budget_id=period_active.budget_period_id %]
+                    [% PROCESS action_menu block_budget=period_active %]
                 </td>
                 </tr>
               [% END %]
@@ -598,7 +612,7 @@
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
                   <td class="data">[% period_loo.budget_period_total | $Price %]</td>
                   <td>
-                        [% PROCESS action_menu block_budget_id=period_loo.budget_period_id %]
+                        [% PROCESS action_menu block_budget=period_loo %]
                   </td>
                   </tr>
               [% END %]
