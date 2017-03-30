@@ -61,6 +61,7 @@ while ( my $auto_renew = $auto_renews->next ) {
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
     if ( $error eq 'auto_renew' ) {
         my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
+        $auto_renew->auto_renew_error(undef)->store;
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
