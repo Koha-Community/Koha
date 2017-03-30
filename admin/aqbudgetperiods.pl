@@ -127,21 +127,31 @@ elsif ( $op eq 'add_validate' ) {
 #--------------------------------------------------
 elsif ( $op eq 'delete_confirm' ) {
 ## delete a budget period (preparation)
-    my $dbh = C4::Context->dbh;
-    ## $total = number of records linked to the record that must be deleted
+    my $funds = GetBudgets({ budget_period_id => $budget_period_id });
+    my $fund_count = scalar @$funds;
+    if ( $fund_count > 0 ) {
+        $template->param( funds_exist => 1 );
+    }
+
+    #$total = number of records linked to the record that must be deleted
     my $total = 0;
     my $data = GetBudgetPeriod( $budget_period_id);
-
     $template->param(
-		%$data
+        %$data
     );
 }
 
 elsif ( $op eq 'delete_confirmed' ) {
-## delete the budget period record
-
-    my $data = GetBudgetPeriod( $budget_period_id);
-    DelBudgetPeriod($budget_period_id);
+    ## confirm no funds have been added to budget
+    my $funds = GetBudgets({ budget_period_id => $budget_period_id });
+    my $fund_count = scalar @$funds;
+    if ( $fund_count > 0 ) {
+        $template->param( failed_delete_funds_exist => 1 );
+    } else {
+        ## delete the budget period record
+        my $data = GetBudgetPeriod( $budget_period_id);
+        DelBudgetPeriod($budget_period_id);
+    }
 	$op='else';
 }
 
@@ -263,6 +273,8 @@ my @period_active_loop;
 foreach my $result ( @{$results} ) {
     my $budgetperiod = $result;
     $budgetperiod->{budget_active} = 1;
+    my $funds = GetBudgets({ budget_period_id => $budgetperiod->{budget_period_id} });
+    $budgetperiod->{count} = scalar @$funds;
     push( @period_active_loop, $budgetperiod );
 }
 
@@ -276,6 +288,8 @@ my @period_inactive_loop;
 foreach my $result ( @{$results} ) {
     my $budgetperiod = $result;
     $budgetperiod->{budget_active} = 1;
+    my $funds = GetBudgets({ budget_period_id => $budgetperiod->{budget_period_id} });
+    $budgetperiod->{count} = scalar @$funds;
     push( @period_inactive_loop, $budgetperiod );
 }
 
