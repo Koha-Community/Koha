@@ -50,6 +50,7 @@ use C4::Koha;
 use Koha::Authorities;
 
 use Koha::Authority::Types;
+use Koha::Token;
 
 our ($tagslib);
 
@@ -219,6 +220,7 @@ $template->param(
     authtypetext    => $authority_types->find($authtypecode)->authtypetext,
     authtypecode    => $authtypecode,
     authority_types => $authority_types,
+    csrf_token      => Koha::Token->new->generate_csrf({ session_id => scalar $query->cookie('CGISESSID') }),
 );
 
 $template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");
