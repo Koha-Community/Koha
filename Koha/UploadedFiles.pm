@@ -77,7 +77,7 @@ sub delete {
 =head3 delete_temporary
 
 Delete_temporary is called by cleanup_database and only removes temporary
-uploads older than [pref Upload_PurgeTemporaryFiles_Days] days.
+uploads older than [pref UploadPurgeTemporaryFilesDays] days.
 It is possible to override the pref with the override_pref parameter.
 
 Returns true if no errors occur. (Even when no files had to be deleted.)
@@ -87,7 +87,7 @@ Returns true if no errors occur. (Even when no files had to be deleted.)
 sub delete_temporary {
     my ( $self, $params ) = @_;
     my $days = $params->{override_pref} ||
-        C4::Context->preference('Upload_PurgeTemporaryFiles_Days');
+        C4::Context->preference('UploadPurgeTemporaryFilesDays');
     return 1 if !$days;
     my $dt = dt_from_string();
     $dt->subtract( days => $days );

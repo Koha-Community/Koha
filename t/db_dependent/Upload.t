@@ -269,15 +269,15 @@ subtest 'Testing delete_temporary' => sub {
     $recs[2]->dtcreated($dt)->store;
 
     # Now call delete_temporary with 0, 6, 5 and 1 (via override)
-    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 0 );
+    t::lib::Mocks::mock_preference('UploadPurgeTemporaryFilesDays', 0 );
     Koha::UploadedFiles->delete_temporary;
     is( Koha::UploadedFiles->search->count, 6, 'Delete with pref==0' );
 
-    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 6 );
+    t::lib::Mocks::mock_preference('UploadPurgeTemporaryFilesDays', 6 );
     Koha::UploadedFiles->delete_temporary;
     is( Koha::UploadedFiles->search->count, 6, 'Delete with pref==6' );
 
-    t::lib::Mocks::mock_preference('Upload_PurgeTemporaryFiles_Days', 5 );
+    t::lib::Mocks::mock_preference('UploadPurgeTemporaryFilesDays', 5 );
     Koha::UploadedFiles->delete_temporary;
     is( Koha::UploadedFiles->search->count, 4, 'Delete with pref==5 makes 4' );
 
