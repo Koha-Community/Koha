@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pt-PT-i-staff-t-prog-v-3000000\n"
 "POT-Creation-Date: 2017-03-14 20:15-0300\n"
-"PO-Revision-Date: 2017-01-17 17:34+0000\n"
+"PO-Revision-Date: 2017-03-27 10:06+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1484674443.000000\n"
+"X-POOTLE-MTIME: 1490609162.000000\n"
 
 #. %1$s:  UNLESS loop.last 
 #. %2$s:  END 
@@ -12474,13 +12474,13 @@ msgid "Auto-fill row"
 msgstr "Linha auto-preenchimento"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Autolocation is switched on and you are logging in with an IP address that "
 "doesn't match your library. "
 msgstr ""
-"IndependentBranches e Autolocation estão ligados e está a autenticar-se com "
-"um endereço IP que não corresponde à sua biblioteca. "
+"A localização automática (Autolocation) está ligada e está a autenticar-se "
+"com um endereço IP que não corresponde à sua biblioteca. "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:159
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
@@ -32831,6 +32831,8 @@ msgstr "Nenhuma categoria foi definida. "
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
+"Não está definida uma regra de circulação para esta combinação de leitor e "
+"tipo de documento."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -37038,9 +37040,8 @@ msgstr "Por favor, seleccione pelo menos uma sugestão a eliminar."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:4
-#, fuzzy
 msgid "Please select image(s) to delete."
-msgstr "Por favor, selecione imagens para %s."
+msgstr "Por favor, selecione a imagem ou imagens a apagar."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:28
@@ -40607,9 +40608,9 @@ msgstr "Pesquisar preferências do sistema"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:136
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets"
-msgstr "Alvos de pesquisa "
+msgstr "Alvos da pesquisa "
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:103
 #, c-format
@@ -49856,6 +49857,7 @@ msgstr "[%% INCLUDE 'branch-selector.inc' branches = branchloop %%] "
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:376
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
@@ -49864,12 +49866,13 @@ msgid ""
 msgstr ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
 "empty_option = \"Todas as bibliotecas\" %%] [%% INCLUDE form_field_select "
-"name=\"location\" options = locations empty_option = \"Todas as localizações"
-"\" %%] "
+"name=\"location\" options = locations empty_option = \"Todas as "
+"localizações\" %%] %s "
 
 #. %1$s:  IF notforloans.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:390
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
@@ -49882,7 +49885,7 @@ msgstr ""
 "empty_option = \"Todos os tipos de documento\" %%] [%% INCLUDE "
 "form_field_select name=\"ccode\" options = ccodes empty_option = \"Todas as "
 "coleções\" %%] [%% INCLUDE form_field_select name=\"notforloan\" options = "
-"notforloans empty_option = \"Todos estados\" %%] "
+"notforloans empty_option = \"Todos estados\" %%] %s "
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:119
 #, c-format
