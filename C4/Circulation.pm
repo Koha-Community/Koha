@@ -829,11 +829,11 @@ sub CanBookBeIssued {
 
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
-    my $switch_onsite_checkout =
+    my $switch_onsite_checkout = (
           C4::Context->preference('SwitchOnSiteCheckouts')
       and $issue->{onsite_checkout}
       and $issue
-      and $issue->{borrowernumber} == $borrower->{'borrowernumber'} ? 1 : 0;
+      and $issue->{borrowernumber} == $borrower->{'borrowernumber'} ? 1 : 0 );
     my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany ) {
