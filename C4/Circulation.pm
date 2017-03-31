@@ -3369,6 +3369,13 @@ sub SendCirculationAlert {
 
     my $schema = Koha::Database->new->schema;
     my @transports = keys %{ $borrower_preferences->{transports} };
+
+    # From the MySQL doc:
+    # LOCK TABLES is not transaction-safe and implicitly commits any active transaction before attempting to lock the tables.
+    # If the LOCK/UNLOCK statements are executed from tests, the current transaction will be committed.
+    # To avoid that we need to guess if this code is execute from tests or not (yes it is a bit hacky)
+    my $called_from_tests = exists $ENV{_} and $ENV{_} =~ m|prove|;
+
     for my $mtt (@transports) {
         my $letter =  C4::Letters::GetPreparedLetter (
             module => 'circulation',
@@ -3386,17 +3393,17 @@ sub SendCirculationAlert {
         ) or next;
 
         $schema->storage->txn_begin;
-        C4::Context->dbh->do(q|LOCK TABLE message_queue READ|);
-        C4::Context->dbh->do(q|LOCK TABLE message_queue WRITE|);
+        C4::Context->dbh->do(q|LOCK TABLE message_queue READ|) unless $called_from_tests;
+        C4::Context->dbh->do(q|LOCK TABLE message_queue WRITE|) unless $called_from_tests;
         my $message = C4::Message->find_last_message($borrower, $type, $mtt);
         unless ( $message ) {
-            C4::Context->dbh->do(q|UNLOCK TABLES|);
+            C4::Context->dbh->do(q|UNLOCK TABLES|) unless $called_from_tests;
             C4::Message->enqueue($letter, $borrower, $mtt);
         } else {
             $message->append($letter);
             $message->update;
         }
-        C4::Context->dbh->do(q|UNLOCK TABLES|);
+        C4::Context->dbh->do(q|UNLOCK TABLES|) unless $called_from_tests;
         $schema->storage->txn_commit;
     }
 
