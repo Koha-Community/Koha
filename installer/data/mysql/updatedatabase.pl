@@ -14001,7 +14001,18 @@ if ( CheckVersion($DBversion) ) {
         });
     }
 
-    print "Upgrade to $DBversion done (Bug 13757: Make patron attributes editable in the opac if set to 'editable in OPAC'\n";
+    print "Upgrade to $DBversion done (Bug 13757: Make patron attributes editable in the opac if set to 'editable in OPAC)'\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "16.12.00.017";
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('CumulativeRestrictionPeriods',  0,  NULL,  'Cumulate the restriction periods instead of keeping the highest',  'YesNo')
+    });
+
+    print "Upgrade to $DBversion done (Bug 14146 - Additional days are not added to restriction period when checking-in several overdues for same patron)'\n";
     SetVersion($DBversion);
 }
 
