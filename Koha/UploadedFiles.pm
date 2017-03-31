@@ -86,9 +86,12 @@ Returns true if no errors occur. (Even when no files had to be deleted.)
 
 sub delete_temporary {
     my ( $self, $params ) = @_;
-    my $days = $params->{override_pref} ||
-        C4::Context->preference('UploadPurgeTemporaryFilesDays');
-    return 1 if !$days;
+    my $days = C4::Context->preference('UploadPurgeTemporaryFilesDays');
+    if( exists $params->{override_pref} ) {
+        $days = $params->{override_pref};
+    } elsif( !defined($days) || $days eq '' ) { # allow 0, not NULL or ""
+        return 1;
+    }
     my $dt = dt_from_string();
     $dt->subtract( days => $days );
     my $parser = Koha::Database->new->schema->storage->datetime_parser;

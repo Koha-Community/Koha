@@ -311,11 +311,12 @@ if ($special_holidays_days) {
 }
 
 if( $temp_uploads ) {
-    # Delete temporary uploads, governed by a pref.
-    # If the pref is empty, nothing happens (unless you override).
+    # Delete temporary uploads, governed by a pref (unless you override)
     print "Purging temporary uploads.\n" if $verbose;
     Koha::UploadedFiles->delete_temporary({
-        override_pref => $temp_uploads_days,
+        defined($temp_uploads_days)
+            ? ( override_pref => $temp_uploads_days )
+            : ()
     });
     print "Done purging temporary uploads.\n" if $verbose;
 }
