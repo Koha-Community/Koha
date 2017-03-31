@@ -14073,6 +14073,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17708 - Renewal log seems empty)\n";
 }
 
+$DBversion = "16.12.00.022";
+if( CheckVersion( $DBversion ) ) {
+    print "NOTE: The sender for serial claim notifications has been corrected. The email address of the staff member is no longer used. We will use the branch email address or KohaAdminEmailAddress, as is done for other notices.\n";
+    print "Upgrade to $DBversion done (Bug 17866 - Change sender for serial claim notifications)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
