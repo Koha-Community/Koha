@@ -119,13 +119,13 @@ $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($patron->{ borrowernumber }-
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "1"});
+  ->json_is('/required_permissions', {"borrowers" => "*"});
 
 $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $patron->{ borrowernumber });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "1"});
+  ->json_is('/required_permissions', {"borrowers" => "*"});
 
 # User without permissions, but is the owner of the object
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->{borrowernumber});

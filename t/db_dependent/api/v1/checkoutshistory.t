@@ -53,10 +53,10 @@ $dbh->do('DELETE FROM issuingrules');
 my $loggedinuser = $builder->build({ source => 'Borrower',
                                     value => { flags => 1 } });
 
-$dbh->do(q{
-    INSERT INTO user_permissions (borrowernumber, module_bit, code)
-    VALUES (?, 1, 'circulate_remaining_permissions')
-}, undef, $loggedinuser->{borrowernumber});
+Koha::Auth::PermissionManager->grantPermission(
+    Koha::Patrons->find($loggedinuser->{borrowernumber}),
+    'circulate', 'circulate_remaining_permissions'
+);
 
 my $session = C4::Auth::get_session('');
 $session->param('number', $loggedinuser->{ borrowernumber });

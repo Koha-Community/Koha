@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 4;
 use Test::Mojo;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use DateTime;
@@ -32,6 +33,10 @@ use Koha::Database;
 use Koha::Biblios;
 use Koha::Items;
 use Koha::Patrons;
+
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -62,31 +67,40 @@ $session_nopermission->param('ip', '127.0.0.1');
 $session_nopermission->param('lasttime', time());
 $session_nopermission->flush;
 
-my $borrower = Koha::Patron->new;
-$borrower->categorycode( $categorycode );
-$borrower->branchcode( $branchcode );
-$borrower->surname("Test Surname");
-$borrower->flags(80); #borrowers and reserveforothers flags
-$borrower->userid($nopermission->{ userid }."z");
-$borrower->store;
+my $borrower = Koha::Patrons->find($builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+        surname      => 'Test Surname',
+        userid       => $nopermission->{ userid }."z",
+        flags        => 80
+    }
+})->{'borrowernumber'});
 my $borrowernumber = $borrower->borrowernumber;
 
-my $borrower2 = Koha::Patron->new;
-$borrower2->categorycode( $categorycode );
-$borrower2->branchcode( $branchcode );
-$borrower2->surname("Test Surname 2");
-$borrower2->userid($nopermission->{ userid }."x");
-$borrower2->flags(16); # borrowers flag
-$borrower2->store;
+my $borrower2 = Koha::Patrons->find($builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+        surname      => 'Test Surname 2',
+        userid       => $nopermission->{ userid }."x",
+        flags        => 16
+    }
+})->{'borrowernumber'});
 my $borrowernumber2 = $borrower2->borrowernumber;
 
-my $borrower3 = Koha::Patron->new;
-$borrower3->categorycode( $categorycode );
-$borrower3->branchcode( $branchcode );
-$borrower3->surname("Test Surname 2");
-$borrower3->userid($nopermission->{ userid }."y");
-$borrower3->flags(64); # reserveforothers flag
-$borrower3->store;
+my $borrower3 = Koha::Patrons->find($builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode   => $branchcode,
+        categorycode => $categorycode,
+        surname      => 'Test Surname 3',
+        userid       => $nopermission->{ userid }."y",
+        flags        => 64
+    }
+})->{'borrowernumber'});
 my $borrowernumber3 = $borrower3->borrowernumber;
 
 # Get sessions

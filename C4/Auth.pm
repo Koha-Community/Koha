@@ -1501,35 +1501,35 @@ sub check_api_auth {
             if ( $return == 1 ) {
                 my (
                     $borrowernumber, $firstname,  $surname,
-                    $userflags,      $branchcode, $branchname,
+                                     $branchcode, $branchname,
                     $branchprinter,  $emailaddress
                 );
                 my $sth =
                   $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
+"select borrowernumber, firstname, surname, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
                   );
                 $sth->execute($userid);
                 (
                     $borrowernumber, $firstname,  $surname,
-                    $userflags,      $branchcode, $branchname,
+                                     $branchcode, $branchname,
                     $branchprinter,  $emailaddress
                 ) = $sth->fetchrow if ( $sth->rows );
 
                 unless ( $sth->rows ) {
                     my $sth = $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
+"select borrowernumber, firstname, surname, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
                     );
                     $sth->execute($cardnumber);
                     (
                         $borrowernumber, $firstname,  $surname,
-                        $userflags,      $branchcode, $branchname,
+                                         $branchcode, $branchname,
                         $branchprinter,  $emailaddress
                     ) = $sth->fetchrow if ( $sth->rows );
 
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
                         (
-                            $borrowernumber, $firstname,  $surname,       $userflags,
+                            $borrowernumber, $firstname,  $surname,
                             $branchcode,     $branchname, $branchprinter, $emailaddress
                         ) = $sth->fetchrow if ( $sth->rows );
                     }
@@ -1563,7 +1563,7 @@ sub check_api_auth {
                 $session->param( 'surname',      $surname );
                 $session->param( 'branch',       $branchcode );
                 $session->param( 'branchname',   $branchname );
-                $session->param( 'flags',        $userflags );
+                $session->param( 'flags',        undef );
                 $session->param( 'emailaddress', $emailaddress );
                 $session->param( 'ip',           $session->remote_addr() );
                 $session->param( 'lasttime',     time() );

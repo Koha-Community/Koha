@@ -158,6 +158,7 @@ sub edit {
         else {
             return $c->render( status => 500, openapi => {error => "Something went wrong, check Koha logs for details."});
         }
+        Koha::Exceptions::rethrow_exception($_);
     };
 }
 

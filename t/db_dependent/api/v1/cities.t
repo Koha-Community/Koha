@@ -367,10 +367,9 @@ sub create_user_and_session {
     $session->flush;
 
     if ( $args->{authorized} ) {
-        $dbh->do( "
-            INSERT INTO user_permissions (borrowernumber,module_bit,code)
-            VALUES (?,3,'parameters_remaining_permissions')", undef,
-            $user->{borrowernumber} );
+        my $patron = Koha::Patrons->find($user->{borrowernumber});
+        Koha::Auth::PermissionManager->grantPermission($patron, 'parameters',
+                                        'parameters_remaining_permissions');
     }
 
     return ( $user->{borrowernumber}, $session->id );

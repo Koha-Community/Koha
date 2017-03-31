@@ -89,12 +89,7 @@ sub under {
         elsif ($_->isa('Koha::Exceptions')) {
             return $c->render(status => 500, json => { error => $_->error });
         }
-        else {
-            return $c->render(
-                status => 500,
-                json => { error => 'Something went wrong, check the logs.' }
-            );
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 
     return $status;
