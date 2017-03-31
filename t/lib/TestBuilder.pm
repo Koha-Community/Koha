@@ -74,7 +74,7 @@ sub build_object {
     my @ids;
 
     foreach my $pk ( @pks ) {
-        push @ids, { $pk => $hashref->{ $pk } };
+        push @ids, $hashref->{ $pk };
     }
 
     my $object = $class->find( @ids );
