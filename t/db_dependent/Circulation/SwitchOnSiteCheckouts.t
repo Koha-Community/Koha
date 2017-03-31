@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use C4::Context;
 
 use C4::Biblio;
@@ -53,6 +53,7 @@ my $patron = $builder->build({
     source => 'Borrower',
     value => {
         branchcode => $branch->{branchcode},
+        debarred => undef,
     },
 });
 
@@ -68,6 +69,9 @@ my $item = $builder->build({
         biblionumber => $biblio->{biblionumber},
         homebranch => $branch->{branchcode},
         holdingbranch => $branch->{branchcode},
+        notforloan => 0,
+        withdrawn => 0,
+        lost => 0,
     },
 });
 
@@ -86,6 +90,8 @@ my $issuingrule = $builder->build({
 
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
 C4::Context->set_userenv($patron->{borrowernumber}, $patron->{userid}, 'usercnum', 'First name', 'Surname', $branch->{branchcode}, 'My Library', 0);
+
+t::lib::Mocks::mock_preference('AllowTooManyOverride', 0);
 
 # Add onsite checkout
 C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string, undef, dt_from_string, undef, { onsite_checkout => 1 } );
@@ -113,6 +119,9 @@ my $another_item = $builder->build({
         biblionumber => $biblio->{biblionumber},
         homebranch => $branch->{branchcode},
         holdingbranch => $branch->{branchcode},
+        notforloan => 0,
+        withdrawn => 0,
+        lost => 0,
     },
 });
 
@@ -120,6 +129,20 @@ C4::Circulation::AddIssue( $patron, $another_item->{barcode}, dt_from_string, un
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'Specific case 1 - Switch is allowed' );
 is( exists $impossible->{TOO_MANY}, '', 'Specific case 1 - Switch is allowed' );
+
+my $yet_another_item = $builder->build({
+    source => 'Item',
+    value => {
+        biblionumber => $biblio->{biblionumber},
+        homebranch => $branch->{branchcode},
+        holdingbranch => $branch->{branchcode},
+        notforloan => 0,
+        withdrawn => 0,
+        lost => 0,
+    },
+});
+( $impossible, undef, undef, undef ) = C4::Circulation::CanBookBeIssued( $patron, $yet_another_item->{barcode} );
+is( $impossible->{TOO_MANY}, 'TOO_MANY_CHECKOUTS', 'Not a specific case, $delta should not be incremented' );
 
 $dbh->do(q|DELETE FROM issuingrules|);
 my $borrower_circ_rule = $builder->build({
