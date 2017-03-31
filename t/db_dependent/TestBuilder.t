@@ -30,9 +30,9 @@ BEGIN {
     use_ok('t::lib::TestBuilder');
 }
 
-my $schema = Koha::Database->new->schema;
+our $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $builder;
+our $builder;
 
 
 subtest 'Start with some trivial tests' => sub {
@@ -344,13 +344,9 @@ subtest 'Default values' => sub {
     is( $item->{more_subfields_xml}, 'some xml', 'Default should not overwrite assigned value' );
 };
 
-$schema->storage->txn_rollback;
-
 subtest 'build_object() tests' => sub {
 
     plan tests => 5;
-
-    $schema->storage->txn_begin;
 
     $builder = t::lib::TestBuilder->new();
 
@@ -368,8 +364,8 @@ subtest 'build_object() tests' => sub {
 
     is( ref($issuing_rule), 'Koha::IssuingRule', 'Type is correct' );
     is( $issuing_rule->categorycode,
-        $categorycode, 'Firstname correctly set' );
-    is( $issuing_rule->itemtype, $itemtype, 'Firstname correctly set' );
+        $categorycode, 'Category code correctly set' );
+    is( $issuing_rule->itemtype, $itemtype, 'Item type correctly set' );
 
     warning_is { $issuing_rule = $builder->build_object( {} ); }
     { carped => 'Missing class param' },
@@ -377,7 +373,6 @@ subtest 'build_object() tests' => sub {
     is( $issuing_rule, undef,
         'If the class parameter is missing, undef is returned' );
 
-    $schema->storage->txn_rollback;
 };
 
-1;
+$schema->storage->txn_rollback;
