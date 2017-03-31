@@ -20,6 +20,7 @@ package Koha::Objects;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw( none );
 
 use Koha::Database;
 
@@ -70,19 +71,25 @@ sub _new_from_dbic {
 
 =head3 Koha::Objects->find();
 
-my $object = Koha::Objects->find($id);
-my $object = Koha::Objects->find( { keypart1 => $keypart1, keypart2 => $keypart2 } );
+Similar to DBIx::Class::ResultSet->find this method accepts:
+    \%columns_values | @pk_values, { key => $unique_constraint, %attrs }?
+Strictly speaking, columns_values should only refer to columns under an
+unique constraint.
+
+my $object = Koha::Objects->find( { col1 => $val1, col2 => $val2 } );
+my $object = Koha::Objects->find( $id );
+my $object = Koha::Objects->find( $idpart1, $idpart2, $attrs ); # composite PK
 
 =cut
 
 sub find {
-    my ( $self, $id ) = @_;
+    my ( $self, @pars ) = @_;
 
     croak 'Cannot use "->find" in list context' if wantarray;
 
-    return unless defined($id);
+    return if !@pars || none { defined($_) } @pars;
 
-    my $result = $self->_resultset()->find($id);
+    my $result = $self->_resultset()->find( @pars );
 
     return unless $result;
 
