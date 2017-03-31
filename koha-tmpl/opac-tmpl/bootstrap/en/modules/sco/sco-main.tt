@@ -42,36 +42,32 @@
 
                             <p>
                                 [% IF ( circ_error_UNKNOWN_BARCODE ) %]
-                                    <em>MESSAGE 1:</em> The system does not recognize this barcode.
+                                    The system does not recognize this barcode.
                                 [% ELSIF ( circ_error_max_loans_allowed ) %]
-                                    <em>MESSAGE 2:</em> You have checked out too many items and can't check out any more.
+                                    You have checked out too many items and can't check out any more.
                                 [% ELSIF ( circ_error_ISSUED_TO_ANOTHER ) %]
-                                <em>MESSAGE 3:</em> This item is checked out to someone else.
+                                    This item is checked out to someone else.
                                 [% ELSIF ( circ_error_NO_MORE_RENEWALS ) %]
-                                    <em>MESSAGE 4:</em> You cannot renew this item again.
+                                    You cannot renew this item again.
                                 [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
-                                    <em>MESSAGE 5:</em> This item is not for loan.
+                                    This item is not for loan.
                                 [% ELSIF ( circ_error_DEBT ) %]
-                                    <em>MESSAGE 6:</em> You owe the library [% amount %] and cannot check out.
+                                    You owe the library [% amount %] and cannot check out.
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
-                                    <em>MESSAGE 7:</em> This item has been withdrawn from the collection.
+                                    This item has been withdrawn from the collection.
                                 [% ELSIF ( circ_error_RESTRICTED ) %]
-                                    <em>MESSAGE 8:</em>
                                 [% ELSIF ( circ_error_RESERVED ) %]
-                                    <em>MESSAGE 9:</em> This item is on hold for another patron.
+                                    This item is on hold for another patron.
                                 [% ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) %]
-                                    <em>MESSAGE 10:</em>
                                 [% ELSIF ( circ_error_EXPIRED ) %]
-                                    <em>MESSAGE 11:</em> Your account has expired.
+                                    Your account has expired.
                                 [% ELSIF ( circ_error_DEBARRED ) %]
-                                    <em>MESSAGE 12:</em> Your account has been suspended.
+                                    Your account has been suspended.
                                 [% ELSIF ( circ_error_CARD_LOST ) %]
-                                    <em>MESSAGE 13:</em> This card has been declared lost.
+                                    This card has been declared lost.
                                 [% ELSIF ( circ_error_GNA ) %]
-                                    <em>MESSAGE 14:</em>
                                 [% ELSIF ( circ_error_INVALID_DATE ) %]
-                                    <em>MESSAGE 15:</em>
-                                [% END # / IF circ_error_UNKNOWN_BARCODE %]
+                                [% END %]
                                 Please see a member of the library staff.
                             </p>
 
