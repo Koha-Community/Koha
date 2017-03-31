@@ -220,7 +220,7 @@ sub last {
     my $count = $self->_resultset->count;
     return unless $count;
 
-    my $result = $self->_resultset->slice($count - 1, $count)->first;
+    my ( $result ) = $self->_resultset->slice($count - 1, $count - 1);
 
     my $object = $self->object_class()->_new_from_dbic( $result );
 
