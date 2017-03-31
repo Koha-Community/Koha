@@ -14048,6 +14048,20 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18173 - Remove issues.return DB field)\n";
 }
 
+$DBversion = "16.12.00.020";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET options="any_time_is_placed|not_always|any_time_is_collected" WHERE variable="HoldFeeMode";
+    });
+
+    $dbh->do(q{
+        UPDATE systempreferences SET value="any_time_is_placed" WHERE variable="HoldFeeMode" AND value="always";
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17560 - Hold fee placement at point of checkout)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
