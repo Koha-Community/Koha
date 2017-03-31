@@ -14034,6 +14034,20 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.12.00.019";
+if( CheckVersion( $DBversion ) ) {
+    if ( column_exists( 'issues', 'return' ) ) {
+        $dbh->do(q|ALTER TABLE issues DROP column `return`|);
+    }
+
+    if ( column_exists( 'old_issues', 'return' ) ) {
+        $dbh->do(q|ALTER TABLE old_issues DROP column `return`|);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18173 - Remove issues.return DB field)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
