@@ -14076,6 +14076,7 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = "16.12.00.022";
 if( CheckVersion( $DBversion ) ) {
     print "NOTE: The sender for serial claim notifications has been corrected. The email address of the staff member is no longer used. We will use the branch email address or KohaAdminEmailAddress, as is done for other notices.\n";
+    SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 17866 - Change sender for serial claim notifications)\n";
 }
 
