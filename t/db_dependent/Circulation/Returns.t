@@ -81,7 +81,7 @@ subtest 'Handle ids duplication' => sub {
     $builder->build({ source => 'OldIssue', value => { issue_id => $checkout->issue_id } });
 
     my @a = AddReturn( $item->{barcode} );
-    my $old_checkout = Koha::Old::Checkouts->find( $checkout->issue_id );
+    my $old_checkout = Koha::OldIssues->find( $checkout->issue_id );
     isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
 };
 
