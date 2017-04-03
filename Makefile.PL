@@ -1536,7 +1536,7 @@ sub upgrade {
     }
 
     $upgrade .= qq/
-MOD_BACKUP = \$(ABSPERLRUN) -Minstall_misc::UpgradeBackup -e 'backup_changed_files({\@ARGV}, '$backup_suffix', '\''\$(VERBINST)'\'', '\''\$(UNINST)'\'');' --
+MOD_BACKUP = \$(ABSPERLRUN) -MC4::Installer::UpgradeBackup -e 'backup_changed_files({\@ARGV}, '$backup_suffix', '\''\$(VERBINST)'\'', '\''\$(UNINST)'\'');' --
 
 upgrade :: make_upgrade_backup install
 \t\$(NOECHO) \$(NOOP)
