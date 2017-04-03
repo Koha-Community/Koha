@@ -115,24 +115,30 @@ Deletes all records where the actual file is not found.
 
 Supports a keep_record hash parameter to do a check only.
 
-Returns the number of missing files (and/or deleted records).
+Return value: If you pass keep_record, it returns the number of records where
+the file is not found, or 0E0. Otherwise it returns a number, 0E0 or -1 just
+as delete does.
 
 =cut
 
 sub delete_missing {
     my ( $self, $params ) = @_;
     $self = Koha::UploadedFiles->new if !ref($self); # handle class call
-    my $cnt = 0;
+    my $rv = 0;
     while( my $row = $self->next ) {
-        if( my $file = $row->full_path ) {
-            next if -e $file;
-            # We are passing keep_file since we already know that the file
-            # is missing and we do not want to see the warning
-            $row->delete({ keep_file => 1 }) if !$params->{keep_record};
-            $cnt++;
+        my $file = $row->full_path;
+        next if -e $file;
+        if( $params->{keep_record} ) {
+            $rv++;
+            next;
         }
+        # We are passing keep_file since we already know that the file
+        # is missing and we do not want to see the warning
+        # Apply the same logic as in delete for the return value
+        my $delete = $row->delete({ keep_file => 1 }); # 1, 0E0 or -1
+        $rv = ( $delete < 0 || $rv < 0 ) ? -1 : ( $rv + $delete );
     }
-    return $cnt;
+    return $rv==0 ? "0E0" : $rv;
 }
 
 =head3 search_term

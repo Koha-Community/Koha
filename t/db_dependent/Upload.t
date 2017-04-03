@@ -193,20 +193,23 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
 };
 
 subtest 'Test delete_missing' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     # If we add files via TestBuilder, they do not exist
     my $upload01 = $builder->build({ source => 'UploadedFile' });
     my $upload02 = $builder->build({ source => 'UploadedFile' });
     # dry run first
     my $deleted = Koha::UploadedFiles->delete_missing({ keep_record => 1 });
-    is( $deleted, 2, 'Expect two missing files' );
+    is( $deleted, 2, 'Expect two records with missing files' );
     isnt( Koha::UploadedFiles->find( $upload01->{id} ), undef, 'Not deleted' );
     $deleted = Koha::UploadedFiles->delete_missing;
-    is( $deleted, 2, 'Deleted two missing files' );
+    ok( $deleted =~ /^(2|-1)$/, 'Deleted two records with missing files' );
     is( Koha::UploadedFiles->search({
         id => [ $upload01->{id}, $upload02->{id} ],
     })->count, 0, 'Records are gone' );
+    # Repeat it
+    $deleted = Koha::UploadedFiles->delete_missing;
+    is( $deleted, "0E0", "Return value of 0E0 expected" );
 };
 
 subtest 'Call search_term with[out] private flag' => sub {
