@@ -61,7 +61,10 @@ Delete uploaded file.
 It deletes not only the record, but also the actual file (unless you pass
 the keep_file parameter).
 
-Returns filename on successful delete or undef.
+Returns number of deleted records (1 or 0E0), or -1 for unknown.
+Please keep in mind that a deleted record does not automatically imply a
+deleted file; a warning may have been raised.
+(TODO: Use exceptions.)
 
 =cut
 
@@ -72,13 +75,19 @@ sub delete {
     my $file = $self->full_path;
 
     my $retval = $self->SUPER::delete;
+    if( !defined($retval) ) { # undef is Unknown (-1)
+        $retval = -1;
+    } elsif( $retval eq '0' ) { # 0 => 0E0
+        $retval = "0E0";
+    } elsif( $retval !~ /^(0E0|1)$/ ) { # Unknown too
+        $retval = -1;
+    }
     return $retval if $params->{keep_file};
 
     if( ! -e $file ) {
         warn "Removing record for $name within category ".
             $self->uploadcategorycode. ", but file was missing.";
     } elsif( ! unlink($file) ) {
-        $retval = 0;
         warn "Problem while deleting: $file";
     }
     return $retval;

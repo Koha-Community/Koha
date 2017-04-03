@@ -57,9 +57,12 @@ provides a wrapper around search to look for a term in multiple columns.
 =head3 delete
 
 Delete uploaded files.
-Returns true if no errors occur. (So, false may mean partial success.)
 
 Parameter keep_file may be used to delete records, but keep files.
+
+Returns the number of deleted records, 0E0 or -1 (Unknown).
+Please note that the number of deleted records is not automatically the same
+as the number of files.
 
 =cut
 
@@ -67,11 +70,12 @@ sub delete {
     my ( $self, $params ) = @_;
     $self = Koha::UploadedFiles->new if !ref($self); # handle class call
     # We use the individual delete on each resultset record
-    my $err = 0;
+    my $rv = 0;
     while( my $row = $self->next ) {
-        $err++ if !$row->delete( $params );
+        my $delete= $row->delete( $params ); # 1, 0E0 or -1
+        $rv = ( $delete < 0 || $rv < 0 ) ? -1 : ( $rv + $delete );
     }
-    return $err==0;
+    return $rv==0 ? "0E0" : $rv;
 }
 
 =head3 delete_temporary
@@ -80,7 +84,7 @@ Delete_temporary is called by cleanup_database and only removes temporary
 uploads older than [pref UploadPurgeTemporaryFilesDays] days.
 It is possible to override the pref with the override_pref parameter.
 
-Returns true if no errors occur. (Even when no files had to be deleted.)
+Return value: see delete.
 
 =cut
 
@@ -90,7 +94,7 @@ sub delete_temporary {
     if( exists $params->{override_pref} ) {
         $days = $params->{override_pref};
     } elsif( !defined($days) || $days eq '' ) { # allow 0, not NULL or ""
-        return 1;
+        return "0E0";
     }
     my $dt = dt_from_string();
     $dt->subtract( days => $days );
