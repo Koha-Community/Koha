@@ -715,11 +715,14 @@ to ensure those parts are correct.
 sub _clean_search_term {
     my ( $self, $term ) = @_;
 
+    my $auto_truncation  = C4::Context->preference("QueryAutoTruncate")    || 0;
+
     # Some hardcoded searches (like with authorities) produce things like
     # 'an=123', when it ought to be 'an:123' for our purposes.
     $term =~ s/=/:/g;
     $term = $self->_convert_index_strings_freeform($term);
     $term =~ s/[{}]/"/g;
+    $term = $self->_truncate_terms($term) if ( $auto_truncation );
     return $term;
 }
 
@@ -778,6 +781,29 @@ sub _sort_field {
         $f .= '__sort';
     }
     return $f;
+}
+
+=head2 _truncate_terms
+
+    my $query = $self->_truncate_terms($query);
+
+Given a string query this function appends '*' wildcard  to all terms except
+operands.
+
+=cut
+
+sub _truncate_terms {
+    my ($self, $query) = @_;
+    my @stops = qw/and or not/;
+    my @new_terms;
+    my @split_query = split /[\(\s\)]/, $query ;
+    foreach  my $term ( @split_query ) {
+        next if ($term eq '' || $term eq ' ' ) ;
+        $term .= "*" unless ( ( grep { lc($term) =~ /^$_$/ } @stops ) || ($term =~ /\*$/ ) );
+        push @new_terms, $term;
+    }
+    $query=join ' ' ,@new_terms;
+    return $query;
 }
 
 1;
