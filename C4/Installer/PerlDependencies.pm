@@ -502,6 +502,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.71'
     },
+    'YAML::XS' => {
+        'usage'    => 'Core',
+        'required' => '0.59',
+        'min_ver'  => '0.59'
+    },
     'Time::HiRes' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -696,6 +701,11 @@ our $PERL_DEPS = {
         'usage'    => 'Plugins',
         'required' => '0',
         'min_ver'  => '2.07',
+    },
+    'File::Fu::File' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.0.8',
     },
     'Archive::Extract' => {
         'usage'    => 'Plugins',

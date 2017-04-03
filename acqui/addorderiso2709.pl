@@ -47,6 +47,7 @@ use Koha::Libraries;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use C4::KohaSuomi::AcquisitionIntegration;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
@@ -333,29 +334,60 @@ if ($op eq ""){
                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
                 $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                 $price = Koha::Number::Price->new($price)->unformat;
-                $orderinfo{tax_rate} = $bookseller->tax_rate;
-                my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
-                $orderinfo{discount} = $c;
+
+                # Getting the correct gstrate and discount percentages from marcxml file
+                $orderinfo{tax_rate} = GetMarcGSTrate($marcrecord, C4::Context->preference('marcflavour')) / 100;
+
+                # The discount depends on bookseller
+                my $c;
+
+                if($bookseller->name =~ /BTJ/i || $bookseller->name =~ /BTJ/ || $bookseller->url  =~ /www.btj.fi/) {
+                    $c = $c_discount ? $c_discount : C4::KohaSuomi::AcquisitionIntegration::getDiscounts($patron->{branchcode}, $marcrecord, $bookseller->discount) / 100;
+                }else{
+                    $c = $c_discount ? $c_discount : GetMarcDiscount($marcrecord, C4::Context->preference('marcflavour')) / 100;
+                }
+
+
                 if ( $bookseller->listincgst ) {
                     if ( $c_discount ) {
-                        $orderinfo{ecost} = $price;
-                        $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                        if($bookseller->name =~ /BTJ/i || $bookseller->name =~ /BTJ/ || $bookseller->url  =~ /www.btj.fi/) {
+                            $orderinfo{ecost} = $price;
+                        } else {
+                            $orderinfo{ecost} = $price * ( 1 - $c );
+                        }
+                        $orderinfo{ecost} = $price * ( 1 - $c ); #Get the VAT included discounted price
+                        $orderinfo{rrp}   = $price; #Replacement price is the non-discounted price. Otherwise our patrons can start making profit by stealing books.
                     } else {
-                        $orderinfo{ecost} = $price * ( 1 - $c );
+                        if($bookseller->name =~ /BTJ/i || $bookseller->name =~ /BTJ/ || $bookseller->url  =~ /www.btj.fi/) {
+                            $orderinfo{ecost} = $price * ( 1 - $c );
+                        } else {
+                            $orderinfo{ecost} = $price;
+                        }
                         $orderinfo{rrp}   = $price;
                     }
                 } else {
                     if ( $c_discount ) {
-                        $orderinfo{ecost} = $price / ( 1 + $orderinfo{tax_rate} );
-                        $orderinfo{rrp}   = $orderinfo{ecost} / ( 1 - $c );
+                        if($bookseller->name =~ /BTJ/i || $bookseller->name =~ /BTJ/ || $bookseller->url  =~ /www.btj.fi/) {
+                            $orderinfo{ecost} = $price / ( 1 + $orderinfo{tax_rate} ); #Add VAT/GST and the discount
+                            $orderinfo{rrp}   = $price;
+                        } else {
+                            $orderinfo{ecost} = $price / ( 1 + $orderinfo{tax_rate} ) * ( 1 - $c ); #Add VAT/GST and the discount
+                            $orderinfo{rrp}   = $price / ( 1 + $orderinfo{tax_rate} ); #Add the VAT
+                        }
                     } else {
-                        $orderinfo{rrp}   = $price / ( 1 + $orderinfo{tax_rate} );
-                        $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+                        if($bookseller->name =~ /BTJ/i || $bookseller->name =~ /BTJ/ || $bookseller->url  =~ /www.btj.fi/) {
+                            $orderinfo{rrp}   = $price;
+                            $orderinfo{ecost} = $orderinfo{rrp} * ( 1 - $c );
+                        } else {
+                            $orderinfo{rrp}   = $price / ( 1 + $orderinfo{tax_rate} );
+                            $orderinfo{ecost} = $price / ( 1 + $orderinfo{tax_rate} );
+                        }
                     }
                 }
                 $orderinfo{listprice} = $orderinfo{rrp} / $active_currency->rate;
                 $orderinfo{unitprice} = $orderinfo{ecost};
                 $orderinfo{total} = $orderinfo{ecost} * $c_quantity;
+                $orderinfo{discount} = $c*100;
             } else {
                 $orderinfo{listprice} = 0;
             }
@@ -529,13 +561,14 @@ sub import_biblios_list {
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
 
-        my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2']);
+        my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2', 'selectionListName']);
         my $price = $infos->{price};
         my $quantity = $infos->{quantity};
         my $budget_code = $infos->{budget_code};
         my $discount = $infos->{discount};
         my $sort1 = $infos->{sort1};
         my $sort2 = $infos->{sort2};
+        my $selectionListName = $infos->{selectionListName};
         my $budget_id;
         if($budget_code) {
             my $biblio_budget = GetBudgetByCode($budget_code);
@@ -606,11 +639,13 @@ sub import_biblios_list {
             $cellrecord{discount} = $discount || '';
             $cellrecord{sort1} = $sort1 || '';
             $cellrecord{sort2} = $sort2 || '';
+            $cellrecord{selectionListName} = $selectionListName || '';
         } else {
             $cellrecord{quantity} = $all_items_quantity;
         }
 
     }
+    @list = sort {$a->{selectionListName} cmp $b->{selectionListName}} @list;
     my $num_records = $batch->{'num_records'};
     my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);

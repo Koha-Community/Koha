@@ -241,7 +241,13 @@
                         <input type="hidden" name="import_batch_id" value="[%import_batch_id %]" />
                         <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
 
+                        [% lastSelectionListName = '' %]
                         [% FOREACH biblio IN biblio_list %]
+                        [% IF lastSelectionListName != biblio.selectionListName %]
+                            <h3>[% biblio.selectionListName %]</h3>
+                            <hr/>
+                            [% lastSelectionListName = biblio.selectionListName %]
+                        [% END %]
                         <fieldset class="biblio unselected rows" style="float:none;">
                           <legend>
                             <label for="record_[% biblio.import_record_id %]" style="width:auto;">

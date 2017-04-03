@@ -475,8 +475,13 @@ sub get_order_infos {
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $order->{'ordernumber'};
         my @subscriptions = GetSubscriptionsId ($biblionumber);
-        my $itemcount   = $biblio->items->count;
-        my $holds_count = $biblio->holds->count;
+        my $itemcount;
+        my $holds_count;
+        if ($biblio) {
+            $itemcount = $biblio->items->count;
+            $holds_count = $biblio->holds->count;
+        }
+
         my @items = GetItemnumbersFromOrder( $ordernumber );
         my $itemholds  = $biblio->holds->search({ itemnumber => { -in => \@items } })->count;
 

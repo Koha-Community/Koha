@@ -86,3 +86,21 @@ Acquisitions:
                   "pdfformat::layout3pagesfr": French 3-page
                   "pdfformat::layout2pagesde": German 2-page
             - layout when printing basket groups.
+    Interfacing:
+        -
+            - "Define vendor integration rules:"
+            - "This is a YAML-config."
+            - "."
+            - pref: VaaraAcqVendorConfigurations
+              type: textarea
+              class: code
+            - "Example config for the new 'RemoteBiblioPackageImporter'. This makes pullSelectionListsFromBookvendors.pl-cronjob connect to ftp.btj.fi:21 using passive ftp, then chdir to / and fetch all files matching the given fileRegexp not yet in koha.import_batches. Then stageFiles and commitFiles to Koha catalogue. Deduplication is done using the 'matcher'-param, which is the name of the Matcher. If you just want to pull fully catalogued records from BTJ, simply copy-paste the example but change the credentials and matcher."
+            - "<pre>---<br/>BTJBiblios:<br/>    host: ftp.btj.fi<br/>    port: 21<br/>    username: btjee<br/>    password: bebop<br/>    protocol: passive ftp<br/>    basedir: /<br/>    encoding: UTF-8<br/>    format: MARCXML<br/>    fileRegexp: 'B(\\d{4})(\\d{2})(\\d{2})xm[ak]'<br/>    stageFiles: 1<br/>    commitFiles: 1<br/>    matcher: ALLFONS<br/>    localStorageDir: /tmp/testImportedMARC<br/><br/></pre>"
+            - "<pre>---<br/>Kirjavalitys:<br/>    host: localhost<br/>    port: 21<br/>    orderDirectory: /Order<br/>    username: user<br/>    selectionListConfirmationDirectory: /marcarkisto<br/>    selectionListDirectory: /<br/>    selectionListEncoding: utf8<br/>    selectionListFormat: marcxml<br/>    password: bebop<br/>    protocol: passive ftp<br/>    basedir: /<br/>    encoding: UTF-8<br/>    format: MARCXML<br/>    fileRegexp: 'B(\\d{4})(\\d{2})(\\d{2})xm[ak]'<br/>    stageFiles: 1<br/>    commitFiles: 0<br/>    matcher: ACQ(create empty matcher)<br/>    localStorageDir: /tmp/<br/>    KVDirectories: [/tmp/varkaus/, /tmp/heinavesi/, /tmp/pieksamaki/](optional) <br/><br/></pre>"
+        -
+            - "Define Arvo 1.0 discounts:"
+            - "This is a YAML-config."
+            - "."
+            - pref: ArvoDiscounts
+              type: textarea
+              class: code

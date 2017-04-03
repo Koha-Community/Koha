@@ -57,6 +57,8 @@ use Koha::EDI qw/create_edi_order get_edifact_ean/;
 
 use Koha::Acquisition::Booksellers;
 use Koha::ItemTypes;
+use C4::KohaSuomi::AcquisitionIntegration;
+use C4::KohaSuomi::SendAcquisitionByXML;
 
 our $input=new CGI;
 
@@ -107,6 +109,11 @@ sub displaybasketgroups {
                 ++$i;
             }
             $basketgroup -> {'basketsqty'} = $basketsqty;
+
+            #Check if the basketgroup has been delivered already
+            if (C4::KohaSuomi::AcquisitionIntegration::isBasketgroupOrdered($basketgroup)) {
+                $basketgroup->{'ordered'} = 1;
+            }
         }
         $template->param(basketgroups => $basketgroups);
     }
@@ -285,6 +292,7 @@ if ( $op eq "add" ) {
     $template->param(grouping => 1);
     my $basketgroups = &GetBasketgroups($booksellerid);
     my $baskets = &GetBasketsByBookseller($booksellerid);
+    $template->param(  orderInterface => C4::KohaSuomi::AcquisitionIntegration::GetOrderInterface( $bookseller )  );
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 } elsif ($op eq 'mod_basket') {
 #
@@ -301,7 +309,8 @@ if ( $op eq "add" ) {
 #
     my $basketgroupid = $input->param('basketgroupid');
     CloseBasketgroup($basketgroupid);
-    printbasketgrouppdf($basketgroupid);
+    #printbasketgrouppdf($basketgroupid);
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid.'&amp;listclosed=1');
     exit;
 }elsif ($op eq 'print'){
 #
@@ -310,6 +319,24 @@ if ( $op eq "add" ) {
     my $basketgroupid = $input->param('basketgroupid');
     printbasketgrouppdf($basketgroupid);
     exit;
+}elsif ( $op eq "send_order") {
+#
+# Send this closed basketgroup to the bookseller using the booksellers desired method
+#
+    my $basketgroupid = $input->param('basketgroupid');
+    my $patron = C4::Members::GetMember( borrowernumber => $loggedinuser );
+    my $errorsList = C4::KohaSuomi::AcquisitionIntegration::SendBasketgroupToVendors($basketgroupid, $patron->{branchcode});
+
+    $template->param(listclosed => 1);
+    $template->param(orderErrorList => $errorsList) if $errorsList;
+    my $basketgroups = &GetBasketgroups($booksellerid);
+    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+
+    my $baskets = &GetBasketsByBookseller($booksellerid);
+    $template->param(  orderInterface => C4::KohaSuomi::AcquisitionIntegration::GetOrderInterface( $bookseller )  );
+    displaybasketgroups($basketgroups, $bookseller, $baskets);
+    #WHY DO THEY REDIRECT?? THIS SUCKS! print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid.'&amp;listclosed=1');
+    #exit;
 }elsif ( $op eq "export" ) {
 #
 # export a closed basketgroup in csv
@@ -320,6 +347,17 @@ if ( $op eq "add" ) {
         -attachment => 'basketgroup' . $basketgroupid . '.csv',
     );
     print GetBasketGroupAsCSV( $basketgroupid, $input );
+    exit;
+}elsif ( $op eq "export_xml" ) {
+#
+# export a closed basketgroup in xml
+#
+    my $basketgroupid = $input->param('basketgroupid');
+    my $booksellerid    = $input->param('booksellerid');
+
+    C4::KohaSuomi::SendAcquisitionByXML::sendBasketGroupAsXml($basketgroupid);
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
+
     exit;
 }elsif( $op eq "delete"){
 #
@@ -395,7 +433,7 @@ if ( $op eq "add" ) {
     my $basketgroups = &GetBasketgroups($booksellerid);
     my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
     my $baskets = &GetBasketsByBookseller($booksellerid);
-
+    $template->param(  orderInterface => C4::KohaSuomi::AcquisitionIntegration::GetOrderInterface( $bookseller )  );
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 }
 $template->param(listclosed => ((defined $input->param('listclosed')) && ($input->param('listclosed') eq '1'))? 1:0 );

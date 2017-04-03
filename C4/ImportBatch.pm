@@ -17,8 +17,8 @@ package C4::ImportBatch;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
+use Scalar::Util qw(blessed);
 
 use C4::Context;
 use C4::Koha;
@@ -29,6 +29,9 @@ use C4::AuthoritiesMarc;
 use C4::MarcModificationTemplates;
 use Koha::Plugins::Handler;
 use Koha::Logger;
+
+use Koha::Exception::DB;
+use Koha::Exception::BadParameter;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -971,6 +974,35 @@ sub DeleteBatch {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare('DELETE FROM import_batches WHERE import_batch_id = ?');
     $sth->execute( $batch_id );
+}
+
+=head2 DeleteImportBatches
+
+    C4::ImportBatch::DeleteImportBatches( $olderThanDt );
+
+Nukes the import_batches-table and all attached import_*-tables
+@param {DateTime} $olderThanDt, delete entries older than this.
+@throws Koha::Exception::DB if something strange happened with the DB
+
+=cut
+
+sub DeleteImportBatches {
+    my ($olderThanDt) = @_;
+    unless (blessed($olderThanDt) && $olderThanDt->isa('DateTime')) {
+        my @cc = caller(0);
+        Koha::Exception::BadParameter->throw(error => $cc[3]."():> Param \$olderThanDt '$olderThanDt' is not a DateTime");
+    }
+    my $dbh=C4::Context->dbh;
+    my ($sth, $sql);
+
+    eval {
+        $sth=$dbh->prepare("DELETE FROM import_batches WHERE upload_timestamp <= ?");
+        $sth->execute($olderThanDt->iso8601());
+    };
+    if ($@ || $sth->err) {
+        my @cc = caller(0);
+        Koha::Exception::DB->throw(error => $cc[3].'():>'.($@ || $sth->errstr));
+    }
 }
 
 =head2 GetAllImportBatches
