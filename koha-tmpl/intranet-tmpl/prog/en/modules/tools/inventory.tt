@@ -128,7 +128,7 @@ $(document).ready(function(){
             <legend>Use a barcode file</legend>
      <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepickerfrom" />
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" />
             </li>
           </ol>
         </fieldset>
@@ -200,8 +200,9 @@ $(document).ready(function(){
           <ol>
         [% END %]
 
-        <li><label for="datelastseen">Inventory date:</label>
-            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | $KohaDates %]" class="datepickerfrom" />
+        <li><label for="datelastseen">Last inventory date:</label>
+            <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | $KohaDates %]" class="datepicker" />
+            (Skip records marked as seen on or after this date.)
         </li>
         <li><label for="ignoreissued">Skip items on loan: </label>
             [% IF (ignoreissued) %]
@@ -232,7 +233,6 @@ $(document).ready(function(){
     [% END %]
     [% IF (op) %]
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl" class="checkboxed">
-    <input type="hidden" name="markseen" value="1" />
     <input type="hidden" name="minlocation" value="[% minlocation %]" />
     <input type="hidden" name="maxlocation" value="[% maxlocation %]" />
     <input type="hidden" name="location" value="[% location %]" />
@@ -276,7 +276,8 @@ $(document).ready(function(){
                 [% result.location | html %]
             </td>
             <td>
-            <p><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a></p><p>[% result.author | html %]</p>
+                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% result.biblionumber %]" class="openWin">[% result.title | html %]</a>
+                <p>[% result.author | html %]</p>
             </td>
             <td>
             [% result.notforloan | html %]
@@ -294,14 +295,18 @@ $(document).ready(function(){
             [% result.datelastseen | $KohaDates | html %]
             </td>
             <td>
-            [% IF result.problem == 'wrongplace' %]
-                <p>Item should not have been scanned</p>
-            [% ELSIF result.problem == 'missingitem' %]
-                <p>Item missing</p>
-            [% ELSIF result.problem == 'changestatus' %]
-                <p>Unknown not-for-loan status</p>
-            [% ELSIF result.problem == 'not_scanned' %]
-                <p>Item should have been scanned</p>
+            [% FOREACH problem IN result.problems %]
+                [% IF problem.key == 'wrongplace' %]
+                    Found in wrong place<br/>
+                [% ELSIF problem.key == 'changestatus' %]
+                    Unknown not-for-loan status<br/>
+                [% ELSIF problem.key == 'not_scanned' %]
+                    Missing (not scanned)<br/>
+                [% ELSIF problem.key == 'checkedout' %]
+                    Still checked out<br/>
+                [% ELSIF problem.key == 'no_barcode' %]
+                    No barcode<br/>
+                [% END %]
             [% END %]
             </td>
         </tr>
