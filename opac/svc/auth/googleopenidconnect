@@ -192,7 +192,7 @@ elsif ( defined $query->param('code') ) {
                     my $categorycode = C4::Context->preference('GoogleOpenIDConnectDefaultCategory') // q{};
                     my $branchcode = C4::Context->preference('GoogleOpenIDConnectDefaultBranch') // q{};
                     my $password = undef;
-                    $borrower = Koha::Patron->new( {
+                    my $borrowernumber = C4::Members::AddMember(
                         cardnumber   => $cardnumber,
                         firstname    => $firstname,
                         surname      => $surname,
@@ -200,9 +200,10 @@ elsif ( defined $query->param('code') ) {
                         categorycode => $categorycode,
                         branchcode   => $branchcode,
                         userid       => $userid,
-                        password     => $password,
-                    } );
-                    $borrower->store();
+                        password     => $password
+                    );
+                    $borrower = Koha::Patrons->find( {
+                        borrowernumber => $borrowernumber } );
                 }
                 my ( $userid, $cookie, $session_id ) =
                   checkauth( $query, 1, {}, 'opac', $email );
