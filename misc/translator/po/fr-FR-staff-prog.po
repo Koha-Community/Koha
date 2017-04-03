@@ -18,17 +18,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
 "POT-Creation-Date: 2017-03-17 09:25-0300\n"
-"PO-Revision-Date: 2017-01-19 16:12+0000\n"
+"PO-Revision-Date: 2017-03-22 10:58+0000\n"
 "Last-Translator: simone <pascale.nalon@mines-paristech.fr>\n"
-"Language-Team: French (France) (http://www.transifex.com/projects/p/koha/"
-"language/fr_FR/)\n"
+"Language-Team: French (France) "
+"(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1484842348.000000\n"
+"X-POOTLE-MTIME: 1490180316.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -227,6 +227,7 @@ msgstr "%% Correspond à chaque nombre de caractères"
 #. %23$s:  END +
 #. %24$s:  orders.size 
 #: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
@@ -234,7 +235,7 @@ msgid ""
 "late, %s "
 msgstr ""
 "%s%s %s%s\"%s (%s jours)\",\"%s\",\"%s\",\"%s %sAuteur: %s.%s%sPublié par: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total des "
 "commandes en retard, %s "
 
 #. %1$s: - USE Branches -
@@ -839,16 +840,15 @@ msgstr "%s %s %s SRU %s Z39.50 %s %s "
 #. %16$s:  CASE 'opacnote' 
 #. %17$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:305
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %s %s Surname: %s First name: %s Library: %s Category %s City %s State %s "
 "ZIP/Postal code %s Country %s Sort 1: %s Sort 2: %s Registration date: %s "
 "Expiry date: %s Circulation note: %s OPAC note: %s "
 msgstr ""
-"%s %s %s Nom de famille&nbsp;: %s Prénom&nbsp;: %s Bibliothèque&nbsp;: %s "
-"Catégorie %s Ville %s Département %s Code postal %s Pays %s Tri 1&nbsp: %s "
-"Tri 2&nbsp: %s Date d'inscription&nbsp;: %s Date d'expiration&nbsp: %s Note "
-"de circulation&nbsp: %s %s Note OPAC&nbsp: %s "
+"%s %s %s %s \"%s %spar %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\""
+", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\"%s "
 
 #. For the first occurrence,
 #. %1$s:  IF serial.publisheddate 
@@ -1972,10 +1972,13 @@ msgstr "%s %s dans "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:64
+#, c-format
 #, fuzzy, c-format
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
-msgstr "%s exemplaire(s) modifié(s) (avec %s champs modifiés)."
+msgstr ""
+"%s exemplaire(s) modifié(s) (avec %s champs modifiés).Aucun exemplaire "
+"modifié. %s"
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total 
@@ -4480,7 +4483,7 @@ msgstr "%s Code postal: "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -4516,7 +4519,7 @@ msgstr ""
 #. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
 #. %3$s:  IF avs 
 #: intranet-tmpl/prog/en/includes/av-build-dropbox.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s [%%# Parameters: name: the name of the select element category: the "
 "authorised value category default: the default authorised value to select "
@@ -6034,7 +6037,7 @@ msgstr "%sModifier le groupe %s%sAjouter un groupe%s"
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "%sEdit%sCreate%s label layout"
 msgstr "%sModifier%sCréer%s modèle d'étiquette"
 
@@ -6044,7 +6047,7 @@ msgstr "%sModifier%sCréer%s modèle d'étiquette"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:356
 #, fuzzy, c-format
 msgid "%sEdit%sCreate%s patron card graphic layout"
-msgstr "%sModifier%sCréer%s présentation graphique de la carte d'adhérent"
+msgstr "%sModifier%sCréer%s mise en page de la carte d'adhérent"
 
 #. %1$s:  IF (template_id) 
 #. %2$s:  ELSE 
@@ -33699,6 +33702,8 @@ msgstr "Aucune catégorie n'est définie. "
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
+"Aucune règle de circulation n'est définie pour cette combinaison d'adhérent "
+"et de type de document."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17

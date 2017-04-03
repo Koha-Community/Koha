@@ -6,17 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-03-17 09:13-0300\n"
-"PO-Revision-Date: 2017-02-22 10:58+0000\n"
-"Last-Translator: m23 <black23@gmail.com>\n"
-"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
-">\n"
+"PO-Revision-Date: 2017-03-20 07:39+0000\n"
+"Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
+"Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487761120.000000\n"
+"X-POOTLE-MTIME: 1489995591.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1948,10 +1948,12 @@ msgstr "%s%s v "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
-msgstr "%s upravené jednotka(ky) (%s upravených polí). "
+msgstr ""
+"%s %s upravených jednotek (%s upravených polí). %s Žádné jednotky nebyly "
+"upraveny. %s "
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total 
@@ -4454,7 +4456,7 @@ msgstr "%s PSČ: "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -4467,7 +4469,8 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || "
 "AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError%%] "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
@@ -33506,6 +33509,8 @@ msgstr "Nebyly definovány žádné kategorie. "
 msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
+"Pro tuto kombinaci čtenářské kategorie a typ jednotky není definováno žádné "
+"pravidlo pro výpůjčky."
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:45
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
@@ -41541,9 +41546,9 @@ msgstr "Hledat v systémových nastaveních"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets"
-msgstr "Prohledávat následující servery "
+msgstr "Prohledávat následující servery"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #, c-format
@@ -50033,13 +50038,13 @@ msgstr ""
 "nastavení by mělo ukazovat na soubor log4perl.conf pro vaši instanci. "
 
 #: intranet-tmpl/prog/en/modules/about.tt:160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
 "file. That will bring a performance boost to enable it. "
 msgstr ""
-"V souboru koha-conf.xml chybí nastavení &lt;log4perl_conf&gt;. Toto "
-"nastavení by mělo ukazovat na soubor log4perl.conf pro vaši instanci. "
+"V souboru koha-conf.xml chybí nastavení &lt;template_cache_dir&gt;. Toto "
+"nastavení zrychlí práci se systémem."
 
 #: intranet-tmpl/prog/en/modules/about.tt:267
 #, c-format
@@ -51009,7 +51014,7 @@ msgstr ""
 
 #. %1$s:  IF (warnIsRootUser) 
 #: intranet-tmpl/prog/en/modules/about.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
@@ -51022,7 +51027,8 @@ msgstr ""
 "warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
 "warnNoActiveCurrency || QueryParserError || warnIsRootUser || "
 "xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError %%] %s "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] %s "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:93
 #, c-format
@@ -51032,20 +51038,21 @@ msgstr "[%% INCLUDE 'branch-selector.inc' branches = branchloop %%] "
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
 "empty_option = \"All libraries\" %%] %s [%% INCLUDE form_field_select name="
 "\"location\" options = locations empty_option = \"All locations\" %%] %s "
 msgstr ""
 "[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
-"empty_option = \"Všechny knihovny\" %%] [%% INCLUDE form_field_select name="
-"\"location\" options = locations empty_option = \"Všechna umístění\" %%] "
+"empty_option = \"Všechny knihovny\" %%] %s [%% INCLUDE form_field_select "
+"name=\"location\" options = locations empty_option = \"Všechna umístění\" %%]"
+" %s "
 
 #. %1$s:  IF notforloans.size 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:400
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
 "empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
@@ -51055,9 +51062,9 @@ msgid ""
 msgstr ""
 "[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
 "empty_option = \"Všechny typy jednotek\" %%] [%% INCLUDE form_field_select "
-"name=\"ccode\" options = ccodes empty_option = \"Všechny části fondu\" %%] "
-"[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
-"empty_option = \"Všechny statusy\" %%] "
+"name=\"ccode\" options = ccodes empty_option = \"Všechny části fondu\" %%]  %"
+"s [%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
+"empty_option = \"Všechny statusy\" %%] %s "
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:119
 #, c-format
