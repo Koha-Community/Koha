@@ -134,7 +134,13 @@ if (@subscriptionid){
   $subscriptions=PrepareSerialsData(\@subscriptioninformation);
   $subscriptioncount = CountSubscriptionFromBiblionumber($subscriptiondescs->[0]{'biblionumber'});
 } else {
-  $subscriptiondescs = GetSubscriptionsFromBiblionumber($biblionumber) ;
+  $subscriptiondescs = GetSubscriptionsFromBiblionumber($biblionumber);
+  foreach my $s (@$subscriptiondescs) {
+    my $frequency = C4::Serials::Frequency::GetSubscriptionFrequency($s->{periodicity});
+    my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($s->{numberpattern});
+    $s->{frequency} = $frequency;
+    $s->{numberpattern} = $numberpattern;
+  }
   my $subscriptioninformation = GetFullSubscriptionsFromBiblionumber($biblionumber);
   $subscriptions=PrepareSerialsData($subscriptioninformation);
 }
