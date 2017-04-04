@@ -29,7 +29,6 @@ use C4::Members;
 use C4::Members::Attributes qw( GetBorrowerAttributes );
 use C4::Form::MessagingPreferences;
 use C4::Scrubber;
-use Email::Valid;
 use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patron::Attribute::Types;
@@ -39,6 +38,7 @@ use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use Koha::Patrons;
 use Koha::Token;
+use Koha::Validation;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -88,6 +88,7 @@ $template->param(
     mandatory         => $mandatory,
     libraries         => \@libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
+    ValidatePhoneNumber   => C4::Context->preference('ValidatePhoneNumber') || '.*',
 );
 
 my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
@@ -389,7 +390,7 @@ sub CheckForInvalidFields {
     my $borrower = shift;
     my @invalidFields;
     if ($borrower->{'email'}) {
-        unless ( Email::Valid->address($borrower->{'email'}) ) {
+        unless ( Koha::Validation::email($borrower->{'email'}) ) {
             push(@invalidFields, "email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
             my $patrons_with_same_email = Koha::Patrons->search( { email => $borrower->{email} })->count;
@@ -399,10 +400,22 @@ sub CheckForInvalidFields {
         }
     }
     if ($borrower->{'emailpro'}) {
-        push(@invalidFields, "emailpro") if (!Email::Valid->address($borrower->{'emailpro'}));
+        push(@invalidFields, "emailpro") if (!Koha::Validation::email($borrower->{'emailpro'}));
     }
     if ($borrower->{'B_email'}) {
-        push(@invalidFields, "B_email") if (!Email::Valid->address($borrower->{'B_email'}));
+        push(@invalidFields, "B_email") if (!Koha::Validation::email($borrower->{'B_email'}));
+    }
+    if ($borrower->{'mobile'}) {
+        push(@invalidFields, "mobile") if (!Koha::Validation::phone($borrower->{'mobile'}));
+    }
+    if ($borrower->{'phone'}) {
+        push(@invalidFields, "phone") if (!Koha::Validation::phone($borrower->{'phone'}));
+    }
+    if ($borrower->{'phonepro'}) {
+        push(@invalidFields, "phonepro") if (!Koha::Validation::phone($borrower->{'phonepro'}));
+    }
+    if ($borrower->{'B_phone'}) {
+        push(@invalidFields, "B_phone") if (!Koha::Validation::phone($borrower->{'B_phone'}));
     }
     if ( defined $borrower->{'password'}
         and $borrower->{'password'} ne $borrower->{'password2'} )

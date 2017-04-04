@@ -217,3 +217,12 @@ Patrons:
          - pref: FailedLoginAttempts
            class: integer
          - failed login attempts.
+     -
+         - Use the following regex /
+         - pref: ValidatePhoneNumber
+           type: textarea
+           class: code
+         - / to validate patrons' phone numbers.
+         - Example ^((\+)?[1-9]{1,2})?([-\s\.])?((\(\d{1,4}\))|\d{1,4})(([-\s\.])?[0-9]{1,12}){1,2}$
+         - (Source of example http://regexlib.com/REDetails.aspx?regexp_id=3009)
+         - Leave blank to accept any phone number.

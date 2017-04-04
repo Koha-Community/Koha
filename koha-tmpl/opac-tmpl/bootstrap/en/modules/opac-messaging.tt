@@ -28,6 +28,9 @@
                     [% IF ( settings_updated ) %]
                         <div class="alert alert-success"><h4>Settings updated</h4></div>
                     [% END %]
+                    [% IF ( invalid_smsnumber ) %]
+                        <div class="alert alert-error"><h4>Invalid SMS number</h4></div>
+                    [% END %]
                     <form action="/cgi-bin/koha/opac-messaging.pl" method="get" name="opacmessaging">
                         <input type="hidden" name="modify" value="yes" />
 
@@ -174,7 +177,48 @@
       }
     });
     $("#info_digests").tooltip();
+
+    var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
+    $.validator.addMethod('phone', function(value) {
+        if (!value.trim()) {
+            return 1;
+        }
+        else {
+            return (value.match(/[% ValidatePhoneNumber %]/));
+        }
+    },
+    MSG_INCORRECT_PHONE);
+
+    $("form[name='opacmessaging']").validate({
+        rules: {
+            SMSnumber: {
+                phone: true
+            }
+        },
+        submitHandler: function(form) {
+            $("body, form input[type='submit'], form button[type='submit'], form a").addClass('waiting');
+            if (form.beenSubmitted) {
+                return false;
+            }
+            else {
+                form.beenSubmitted = true;
+                $("#SMSnumber").each(function(){
+                    $(this).val($.trim($(this).val()));
+                });
+                form.submit();
+            }
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element.closest("li")).wrap('<li></li>');
+            error.addClass('alert-error');
+            error.width("auto");
+        }
+    });
+    $("#SMSnumber").on("change", function(){
+        $(this).val($.trim($(this).val()));
+    });
   });
 //]]>
 </script>
+<script type="text/javascript" src="/opac-tmpl/bootstrap/lib/jquery/plugins/jquery.validate.min.js"></script>
 [% END %]

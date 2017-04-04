@@ -65,6 +65,10 @@
                                 [% IF field == "email" %]<li>Contact information: <a href="#borrower_email">primary email address</a></li>[% END %]
                                 [% IF field == "emailpro" %]<li>Contact information: <a href="#borrower_emailpro">secondary email address</a></li>[% END %]
                                 [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
+                                [% IF field == "phone" %]<li>Contact information: <a href="#borrower_phone">primary phone</a></li>[% END %]
+                                [% IF field == "phonepro" %]<li>Contact information: <a href="#borrower_phonepro">secondary phone</a></li>[% END %]
+                                [% IF field == "mobile" %]<li>Contact information: <a href="#borrower_mobile">other phone</a></li>[% END %]
+                                [% IF field == "B_phone" %]<li>Alternate address information: <a href="#borrower_B_phone">phone</a></li>[% END %]
                                 [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_invalid" %]<li>Password does not meet minimum requirements! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_spaces" %]<li>Password contains leading and/or trailing spaces! <a href="#password">password</a></li>[% END %]
@@ -1002,6 +1006,17 @@
                 $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
             [% END %]
 
+            var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
+            $.validator.addMethod('phone', function(value) {
+                if (!value.trim()) {
+                    return 1;
+                }
+                else {
+                    return (value.match(/[% ValidatePhoneNumber %]/));
+                }
+            },
+            MSG_INCORRECT_PHONE);
+
             $("#memberentry-form").validate({
                 rules: {
                     borrower_email: {
@@ -1012,6 +1027,18 @@
                     },
                     borrower_B_email: {
                         email: true
+                    },
+                    borrower_phone: {
+                        phone: true
+                    },
+                    borrower_phonepro: {
+                        phone: true
+                    },
+                    borrower_mobile: {
+                        phone: true
+                    },
+                    borrower_B_phone: {
+                        phone: true
                     }
                 },
                 submitHandler: function(form) {
@@ -1020,6 +1047,12 @@
                     }
                     else {
                         form.beenSubmitted = true;
+                        $("#borrower_email, #borrower_emailpro, #borrower_B_email").each(function(){
+                            $(this).val($.trim($(this).val()));
+                        });
+                        $("#borrower_phone, #borrower_phonepro, #borrower_B_phone").each(function(){
+                            $(this).val($.trim($(this).val()));
+                        });
                         form.submit();
                     }
                 },
@@ -1032,6 +1065,10 @@
                     error.css('top', offset.top);
                     error.css('width', 'auto');
                 }
+            });
+
+            $("#borrower_email, #borrower_emailpro, #borrower_B_email, #borrower_phone, #borrower_phonepro, #borrower_B_phone").on("change", function(){
+                $(this).val($.trim($(this).val()));
             });
 
             [% IF borrower.guarantorid && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]

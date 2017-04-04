@@ -63,6 +63,19 @@ $(document).ready(function() {
         $(".toggler").toggle();
     });
 
+
+    var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
+    $.validator.addMethod('phone', function(value) {
+        value = value.trim();
+        if (!value.trim()) {
+            return 1;
+        }
+        else {
+            return (value.match(/[% ValidatePhoneNumber %]/));
+        }
+    },
+    MSG_INCORRECT_PHONE);
+
     $("#save_quick_add").click(function(){
         $("#quick_add_form").validate();
         if( $("#quick_add_form").valid()){
@@ -207,6 +220,18 @@ $(document).ready(function() {
             [% END %]
             [% IF ERROR_bad_email_alternative %]
                 <li id="ERROR_bad_email_alternative">The alternative email is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_phone %]
+                <li id="ERROR_bad_phone">The primary phone is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_phone_secondary %]
+                <li id="ERROR_bad_phone_secondary">The secondary phone is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_phone_alternative %]
+                <li id="ERROR_bad_phone_alternative">The alternative phone is invalid.</li>
+            [% END %]
+            [% IF ERROR_bad_smsnumber %]
+                <li id="ERROR_bad_smsnumber">The SMS number is invalid.</li>
             [% END %]
 			</ul>
 		</div>

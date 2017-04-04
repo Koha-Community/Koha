@@ -46,7 +46,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
 use Koha::Token;
-use Email::Valid;
+use Koha::Validation;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
@@ -355,19 +355,13 @@ if ($op eq 'save' || $op eq 'insert'){
   push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
 
   # Validate emails
-  my $emailprimary = $input->param('email');
-  my $emailsecondary = $input->param('emailpro');
-  my $emailalt = $input->param('B_email');
-
-  if ($emailprimary) {
-      push (@errors, "ERROR_bad_email") if (!Email::Valid->address($emailprimary));
-  }
-  if ($emailsecondary) {
-      push (@errors, "ERROR_bad_email_secondary") if (!Email::Valid->address($emailsecondary));
-  }
-  if ($emailalt) {
-      push (@errors, "ERROR_bad_email_alternative") if (!Email::Valid->address($emailalt));
-  }
+  push (@errors, "ERROR_bad_email") if ($input->param('email') && !Koha::Validation::email($input->param('email')));
+  push (@errors, "ERROR_bad_email_secondary") if ($input->param('emailpro') && !Koha::Validation::email($input->param('emailpro')));
+  push (@errors, "ERROR_bad_email_alternative") if ($input->param('B_email') && !Koha::Validation::email($input->param('B_email')));
+  # Validate phone numbers
+  push (@errors, "ERROR_bad_phone") if ($input->param('phone') && !Koha::Validation::phone($input->param('phone')));
+  push (@errors, "ERROR_bad_phone_secondary") if ($input->param('phonepro') && !Koha::Validation::phone($input->param('phonepro')));
+  push (@errors, "ERROR_bad_phone_alternative") if ($input->param('B_phone') && !Koha::Validation::phone($input->param('B_phone')));
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {
     $extended_patron_attributes = parse_extended_patron_attributes($input);
@@ -395,7 +389,11 @@ if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') 
 # BZ 14683: Do not mixup mobile [read: other phone] with smsalertnumber
 my $sms = $input->param('SMSnumber');
 if ( defined $sms ) {
-    $newdata{smsalertnumber} = $sms;
+    if (Koha::Validation::phone($sms)){
+        $newdata{smsalertnumber} = $sms;
+    } else {
+        push (@errors, "ERROR_bad_smsnumber");
+    }
 }
 
 ###  Error checks should happen before this line.
@@ -711,6 +709,10 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     $template->param(ExtendedPatronAttributes => 1);
     patron_attributes_form($template, $borrowernumber);
 }
+
+$template->param(
+    ValidatePhoneNumber  => C4::Context->preference('ValidatePhoneNumber') || '.*',
+);
 
 if (C4::Context->preference('EnhancedMessagingPreferences')) {
     if ($op eq 'add') {

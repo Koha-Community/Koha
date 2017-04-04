@@ -334,6 +334,21 @@ $(document).ready(function(){
             },
             B_email: {
                 email: true
+            },
+            phone: {
+                phone: true
+            },
+            phonepro: {
+                phone: true
+            },
+            mobile: {
+                phone: true
+            },
+            SMSnumber: {
+                phone: true
+            },
+            B_phone: {
+                phone: true
             }
         },
         submitHandler: function(form) {
@@ -342,8 +357,21 @@ $(document).ready(function(){
                 return false;
             else
                 form.beenSubmitted = true;
+                $("#email, #emailpro, #B_email").each(function(){
+                    $(this).val($.trim($(this).val()));
+                });
+                $("#phone, #phonepro, #B_phone, #SMSnumber").each(function(){
+                    $(this).val($.trim($(this).val()));
+                });
                 form.submit();
             }
+    });
+
+    $("#email, #emailpro, #B_email").each(function(){
+        $(this).val($.trim($(this).val()));
+    });
+    $("#phone, #phonepro, #B_phone, #SMSnumber").each(function(){
+        $(this).val($.trim($(this).val()));
     });
 
     var mrform = $("#manual_restriction_form");

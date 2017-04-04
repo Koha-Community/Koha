@@ -31,6 +31,7 @@ use C4::Members;
 use C4::Members::Messaging;
 use C4::Form::MessagingPreferences;
 use Koha::SMS::Providers;
+use Koha::Validation;
 
 my $query = CGI->new();
 
@@ -53,10 +54,20 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
 my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
+my $validate_phone = C4::Context->preference('ValidatePhoneNumber');
+
+$template->param(
+    ValidatePhoneNumber    => $validate_phone || '.*',
+);
+
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
     my $sms = $query->param('SMSnumber');
     my $sms_provider_id = $query->param('sms_provider_id');
-    if ( defined $sms && ( $borrower->{'smsalertnumber'} // '' ) ne $sms
+
+    my $valid_sms = Koha::Validation::phone($sms);
+    $template->param( invalid_smsnumber => 1 ) unless $valid_sms;
+
+    if ( defined $sms && $valid_sms && ( $borrower->{'smsalertnumber'} // '' ) ne $sms
             or ( $borrower->{sms_provider_id} // '' ) ne $sms_provider_id ) {
         ModMember(
             borrowernumber  => $borrowernumber,
