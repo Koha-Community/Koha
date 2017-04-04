@@ -17,7 +17,7 @@
     [% IF EnableBorrowerFiles %]
         [% IF ( borrower_files ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% borrowernumber %]">Files</a></li>
     [% END %]
-    [% IF CAN_user_borrowers && useDischarge %]
+    [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
         [% IF dischargeview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
     [% END %]
     [% IF Koha.Preference('HouseboundModule') %]

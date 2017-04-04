@@ -27,7 +27,7 @@ use Koha::Patron::Debarments;
 
 my $cgi = new CGI;
 
-my ( $loggedinuser, $cookie, $sessionID ) = checkauth( $cgi, 0, { borrowers => 1 }, 'intranet' );
+my ( $loggedinuser, $cookie, $sessionID ) = checkauth( $cgi, 0, { borrowers => 'edit_borrowers' }, 'intranet' );
 
 my $borrowernumber = $cgi->param('borrowernumber');
 my $action         = $cgi->param('action');

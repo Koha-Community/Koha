@@ -71,7 +71,7 @@ my ($template, $loggedinuser, $cookie)
            query => $input,
            type => "intranet",
            authnotrequired => 0,
-           flagsrequired => {borrowers => 1},
+           flagsrequired => {borrowers => 'edit_borrowers'},
            debug => ($debug) ? 1 : 0,
        });
 

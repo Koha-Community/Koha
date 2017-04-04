@@ -42,7 +42,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { borrowers     => 1,
+        flagsrequired   => { borrowers     => 'edit_borrowers',
                              updatecharges => 'remaining_permissions'},
         debug           => 1,
     }

@@ -41,7 +41,7 @@ my $session   = get_session($sessionID);
 my $userid   = $session->param('id');
 
 unless (haspermission($userid, { circulate => 'circulate_remaining_permissions' })
-    || haspermission($userid, { borrowers => '*' })) {
+    || haspermission($userid, { borrowers => 'edit_borrowers' })) {
     exit 0;
 }
 

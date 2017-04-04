@@ -1041,7 +1041,7 @@ $(document).ready(function() {
                                  <th>Comment</th>
                                  <th>Expiration</th>
                                  <th>Created</th>
-                                 [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+                                 [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                                    <th>Remove?</th>
                                  [% END %]
                             </tr>
@@ -1060,7 +1060,7 @@ $(document).ready(function() {
                                     </td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
                                     <td>[% d.created | $KohaDates %]</td>
-                                    [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+                                    [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                                       <td>
                                         <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
                                       </td>
@@ -1073,7 +1073,7 @@ $(document).ready(function() {
                     <p>Patron is currently unrestricted.</p>
                 [% END %]
 
-                [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
+                [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                     <p><a href="#" id="add_manual_restriction">Add manual restriction</a></p>
                     <fieldset id="manual_restriction_form">
                         <input type="hidden" id="add_debarment" name="add_debarment" value="0" />

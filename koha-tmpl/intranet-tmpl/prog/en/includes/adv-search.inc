@@ -21,7 +21,7 @@
             </div>
         [% END %]
 
-        [% IF ( CAN_user_borrowers ) %]
+        [% IF CAN_user_borrowers_edit_borrowers %]
             <div id="patron_search" class="residentsearch">
                 <p class="tip">Enter patron card number or partial name:</p>
                 <form action="/cgi-bin/koha/members/member.pl" method="post">
@@ -42,7 +42,7 @@
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                 <li><a class="keep_text" href="#renew_search">Renew</a></li>
             [% END %]
-            [% IF ( CAN_user_borrowers ) %]
+            [% IF CAN_user_borrowers_edit_borrowers %]
                 <li><a class="keep_text" href="#patron_search">Search patrons</a></li>
             [% END %]
         </ul>

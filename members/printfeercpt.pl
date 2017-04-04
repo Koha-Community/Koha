@@ -41,7 +41,7 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {borrowers => 1, updatecharges => 'remaining_permissions'},
+                            flagsrequired => {borrowers => 'edit_borrowers', updatecharges => 'remaining_permissions'},
                             debug => 1,
                             });
 

@@ -33,7 +33,7 @@ my ($template, $loggedinuser, $cookie)
                                 query => $cgi,
                                 type => "opac",
                                 authnotrequired => 1,
-                                flagsrequired => {borrowers => 1},
+                                flagsrequired => {borrowers => 'edit_borrowers'},
                                 debug => 1,
                                 });
 

@@ -43,7 +43,7 @@ my ($template, $borrowernumber, $cookie)
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => {borrowers => 1},
+                                        flagsrequired => {borrowers => 'edit_borrowers'},
                                         debug => 1,
                                         });
 
@@ -89,7 +89,7 @@ if ($patron->category->category_type eq "S") {
         exit 0; # Exit without error
     }
 } else {
-    unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>1})) {
+    unless(C4::Auth::haspermission($userenv->{'id'},{'borrowers'=>'edit_borrowers'})) {
 	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
         exit 0; # Exit without error
     }

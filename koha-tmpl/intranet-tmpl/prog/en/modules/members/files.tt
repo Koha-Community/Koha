@@ -46,7 +46,7 @@
                             <th>Type</th>
                             <th>Description</th>
                             <th>Uploaded</th>
-                            [% IF CAN_user_borrowers %]<th>&nbsp;</th>[% END %]
+                            [% IF CAN_user_borrowers_edit_borrowers %]<th>&nbsp;</th>[% END %]
                         </tr>
                     </thead>
 
@@ -57,7 +57,7 @@
                                  <td>[% f.file_type %]</td>
                                  <td>[% f.file_description %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
+                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
                             </tr>
                         [% END %]
                     </tbody>

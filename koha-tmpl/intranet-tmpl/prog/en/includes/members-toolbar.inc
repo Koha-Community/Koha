@@ -6,7 +6,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( NorwegianPatronDBEnable == 1 ) %]
             $("#deletepatronlocal").click(function(){
                 confirm_local_deletion();
@@ -132,7 +132,7 @@ function searchToHold(){
 </script>
 
 <div id="toolbar" class="btn-toolbar">
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( guarantor ) %]
             <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantor.borrowernumber %]&amp;categorycode=[% categorycode %]">
         [% ELSE %]
@@ -141,11 +141,11 @@ function searchToHold(){
         <i class="fa fa-pencil"></i> Edit</a>
     [% END %]
 
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF adultborrower AND Koha.Preference("borrowerRelationship") %]
             <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
-        [% IF ( CAN_user_borrowers ) %]
+        [% IF CAN_user_borrowers_edit_borrowers %]
             <a id="changepassword" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
         [% END %]
         <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
@@ -154,7 +154,7 @@ function searchToHold(){
     <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
+                [% IF CAN_user_borrowers_edit_borrowers %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
                 [% IF Borrowers.HasOverdues( borrowernumber ) %]
@@ -172,7 +172,7 @@ function searchToHold(){
          <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                [% IF ( CAN_user_borrowers ) %]
+                [% IF CAN_user_borrowers_edit_borrowers %]
                     <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=[% destination %]&amp;reregistration=y">Renew patron</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
@@ -182,10 +182,10 @@ function searchToHold(){
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
-                [% IF CAN_user_borrowers && useDischarge %]
+                [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
                     <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
                 [% END %]
-                [% IF ( CAN_user_borrowers ) %]
+                [% IF CAN_user_borrowers_edit_borrowers %]
                     [% IF ( NorwegianPatronDBEnable == 1 ) %]
                         <li><a id="deletepatronlocal" href="#">Delete local</a></li>
                         <li><a id="deletepatronremote" href="#">Delete remote</a></li>

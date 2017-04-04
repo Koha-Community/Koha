@@ -100,10 +100,10 @@ if (defined $print and $print eq "page") {
     $flagsrequired =  { circulate => "circulate_remaining_permissions" };
 } elsif (defined $print and $print eq "brief") {
     $template_name = "members/moremember-brief.tt";
-    $flagsrequired = { borrowers => 1 };
+    $flagsrequired = { borrowers => 'edit_borrowers' };
 } else {
     $template_name = "members/moremember.tt";
-    $flagsrequired = { borrowers => 1 };
+    $flagsrequired = { borrowers => 'edit_borrowers' };
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

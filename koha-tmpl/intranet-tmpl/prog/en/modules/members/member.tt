@@ -348,7 +348,7 @@ function filterByFirstLetterSurname(letter) {
             [% END %]
           </div>
 
-          [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
+          [% IF CAN_user_borrowers_edit_borrowers && pending_borrower_modifications %]
             <div class="pending-info" id="patron_updates_pending">
               <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
               <span class="number_box"><a href="/cgi-bin/koha/members/members-update.pl">[% pending_borrower_modifications %]</a></span>

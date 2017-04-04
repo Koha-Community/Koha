@@ -74,7 +74,7 @@
           [% IF ( batch_checkout_view ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrowernumber %]&amp;batch=1">Batch check out</a></li>
         [% END %]
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Details</a></li>
     [% END %]
     [% IF ( CAN_user_updatecharges ) %]
@@ -83,12 +83,12 @@
     [% IF ( CAN_user_circulate_circulate_remaining_permissions  )  %]
         [% IF Koha.Preference("RoutingSerials") %][% IF ( routinglistview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% borrowernumber %]">Routing lists</a></li>[% END %]
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( intranetreadinghistory ) %]
             [% IF ( readingrecordview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrowernumber %]">Circulation history</a></li>
         [% END %]
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( intranetreadinghistory ) %]
             [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% borrowernumber %]">Holds history</a></li>
         [% END %]
@@ -96,22 +96,22 @@
     [% IF ( CAN_user_parameters ) %]
         [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% borrowernumber %]&amp;src=circ">Modification log</a></li>
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
 	[% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]">Notices</a></li>
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF (  statisticsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/statistics.pl?borrowernumber=[% borrowernumber %]">Statistics</a></li>
     [% END %]
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( EnableBorrowerFiles ) %]
             [% IF ( borrower_files ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/files.pl?borrowernumber=[% borrowernumber %]">Files</a></li>
         [% END %]
     [% END %]
 
-    [% IF ( CAN_user_borrowers ) %]
+    [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( suggestionsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/purchase-suggestions.pl?borrowernumber=[% borrowernumber %]">Purchase suggestions</a></li>
     [% END %]
-    [% IF CAN_user_borrowers && useDischarge %]
+    [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
         [% IF dischargeview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharges</a></li>
     [% END %]
     [% IF Koha.Preference('HouseboundModule') %]
