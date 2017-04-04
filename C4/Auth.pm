@@ -213,26 +213,26 @@ sub get_template_and_user {
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
         # as SSL certs against an email address)
-        my $borrower;
+        my $patron;
         $borrowernumber = getborrowernumber($user) if defined($user);
         if ( !defined($borrowernumber) && defined($user) ) {
-            $borrower = Koha::Patrons->find( $user );
-            if ($borrower) {
-                $borrower = $borrower->unblessed;
+            $patron = Koha::Patrons->find( $user );
+            if ($patron) {
                 $borrowernumber = $user;
 
                 # A bit of a hack, but I don't know there's a nicer way
                 # to do it.
-                $user = $borrower->{firstname} . ' ' . $borrower->{surname};
+                $user = $patron->firstname . ' ' . $patron->surname;
             }
         } else {
-            $borrower = Koha::Patrons->find( $borrowernumber );
-            $borrower->unblessed if $borrower; # FIXME Otherwise, what to do?
+            $patron = Koha::Patrons->find( $borrowernumber );
+            # FIXME What to do if $patron does not exist?
         }
 
         # user info
-        $template->param( loggedinusername   => $user );
-        $template->param( loggedinusernumber => $borrowernumber );
+        $template->param( loggedinusername   => $user ); # FIXME Should be replaced with something like patron-title.inc
+        $template->param( loggedinusernumber => $borrowernumber ); # FIXME Should be replaced with logged_in_user.borrowernumber
+        $template->param( logged_in_user     => $patron );
         $template->param( sessionID          => $sessionID );
 
         if ( $in->{'type'} eq 'opac' ) {
@@ -254,7 +254,7 @@ sub get_template_and_user {
             );
         }
 
-        $template->param( "USER_INFO" => $borrower );
+        $template->param( "USER_INFO" => $patron->unblessed );
 
         my $all_perms = get_all_subpermissions();
 
