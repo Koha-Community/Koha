@@ -7,6 +7,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 3, 'manage_circ_rules', 'Manage circulation rules'),
+   ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
+   ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
    ( 6, 'modify_holds_priority', 'Modify holds priority'),
    ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
