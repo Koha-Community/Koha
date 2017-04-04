@@ -160,10 +160,10 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
     unless (C4::Context->config('demo') eq 1) {
-        my $sth = $dbh->prepare("delete from auth_tag_structure where tagfield=? and authtypecode=?");
-        $sth->execute($searchfield,$authtypecode);
-        my $sth = $dbh->prepare("delete from auth_subfield_structure where tagfield=? and authtypecode=?");
-        $sth->execute($searchfield,$authtypecode);
+        my $sth_tag = $dbh->prepare("delete from auth_tag_structure where tagfield=? and authtypecode=?");
+        $sth_tag->execute($searchfield,$authtypecode);
+        my $sth_sub = $dbh->prepare("delete from auth_subfield_structure where tagfield=? and authtypecode=?");
+        $sth_sub->execute($searchfield,$authtypecode);
     }
     my $tagfield = $input->param('tagfield');
     print $input->redirect("/cgi-bin/koha/admin/auth_tag_structure.pl?searchfield=$tagfield&amp;authtypecode=$authtypecode");
@@ -248,6 +248,7 @@ sub StringSearch  {
 sub duplicate_auth_framework {
     my ($newauthtype,$oldauthtype) = @_;
 #   warn "TO $newauthtype FROM $oldauthtype";
+    my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where authtypecode=?");
     $sth->execute($oldauthtype);
     my $sth_insert = $dbh->prepare("insert into auth_tag_structure  (tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, authtypecode) values (?,?,?,?,?,?,?)");
