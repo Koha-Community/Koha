@@ -386,12 +386,28 @@
                                 until [% category.enrolmentperioddate | $KohaDates %]
                             [% END %]
                         </td>
-                        <td>[% category.dateofbirthrequired %] years</td>
-                        <td>[% category.upperagelimit %] years</td>
-                        <td>[% category.enrolmentfee | $Price %]</td>
+                        [% IF (category.dateofbirthrequired) %]
+                            <td>[% category.dateofbirthrequired %] years</td>
+                        [% ELSE %]
+                            <td>-</td>
+                        [% END %]
+                        [% IF (category.upperagelimit) %]
+                            <td>[% category.upperagelimit %] years</td>
+                        [% ELSE %]
+                            <td>-</td>
+                        [% END %]
+                        [% IF (category.enrolmentfee > 0) %]
+                            <td>[% category.enrolmentfee | $Price %]</td>
+                        [% ELSE %]
+                            <td>-</td>
+                        [% END %]
                         <td>[% IF ( category.overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td>
                         <td>[% IF ( category.hidelostitems ) %]Hidden[% ELSE %]Shown[% END %]</td>
-                        <td>[% category.reservefee | $Price %]</td>
+                        [% IF (category.reservefee > 0) %]
+                            <td>[% category.reservefee | $Price %]</td>
+                        [% ELSE %]
+                            <td>-</td>
+                        [% END %]
                         [% IF Koha.Preference('EnhancedMessagingPreferences') %]
                             <td style="white-space: nowrap; font-size:80%;">
                                 [% SET default_messaging = category.default_messaging %]
