@@ -1,3 +1,4 @@
+[% INCLUDE 'blocking_errors.inc' %]
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {

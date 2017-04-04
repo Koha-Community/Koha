@@ -1,3 +1,4 @@
+[% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group">
         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=new"><i class="fa fa-plus"></i> New collection</a>

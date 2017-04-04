@@ -1,3 +1,4 @@
+[% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>

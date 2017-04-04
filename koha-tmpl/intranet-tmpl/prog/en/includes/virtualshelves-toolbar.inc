@@ -1,3 +1,5 @@
+[% INCLUDE 'blocking_errors.inc' %]
+
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group"><a id="newshelf" class="btn btn-default btn-sm" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=add_form&amp;referer=[% op %]"><i class="fa fa-plus"></i> New list</a></div>
 

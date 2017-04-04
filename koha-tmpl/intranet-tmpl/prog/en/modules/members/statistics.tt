@@ -3,7 +3,9 @@
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
-Statistics for [% INCLUDE 'patron-title.inc' no_html = 1 %]
+[% UNLESS blocking_error %]
+    Statistics for [% INCLUDE 'patron-title.inc' no_html = 1 %]
+[% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
@@ -26,7 +28,7 @@ Statistics for [% INCLUDE 'patron-title.inc' no_html = 1 %]
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Statistics for [% INCLUDE 'patron-title.inc' invert_name = 1 %][% END %]
+&rsaquo; [% UNLESS blocking_error %]Statistics for [% INCLUDE 'patron-title.inc' invert_name = 1 %][% END %]
 </div>
 
 <div id="doc3" class="yui-t1">

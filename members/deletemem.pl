@@ -38,7 +38,7 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 
 my $input = new CGI;
 
-my ($template, $borrowernumber, $cookie)
+my ($template, $loggedinuser, $cookie)
                 = get_template_and_user({template_name => "members/deletemem.tt",
                                         query => $input,
                                         type => "intranet",
@@ -51,10 +51,14 @@ my ($template, $borrowernumber, $cookie)
 my $member       = $input->param('member');
 
 #Do not delete yourself...
-if ($borrowernumber == $member ) {
+if ( $loggedinuser == $member ) {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_YOURSELF");
     exit 0; # Exit without error
 }
+
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $member );
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Handle deletion from the Norwegian national patron database, if it is enabled
 # If the "deletelocal" parameter is set to "false", the regular deletion will be
@@ -73,11 +77,6 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
 my $countissues = scalar(@$issues);
 
-my $patron = Koha::Patrons->find( $member );
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$member");
-    exit;
-}
 my $flags = C4::Members::patronflags( $patron->unblessed );
 my $userenv = C4::Context->userenv;
 

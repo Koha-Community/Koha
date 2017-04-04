@@ -50,7 +50,8 @@ unless ( $patron ) {
 my $add=$input->param('add');
 if ($add){
     if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
-        #  print $input->header;
+        # Note: If the logged in user is not allowed to see this patron an invoice can be forced
+        # Here we are trusting librarians not to hack the system
         my $barcode=$input->param('barcode');
         my $itemnum;
         if ($barcode) {
@@ -92,7 +93,11 @@ if ($add){
                              updatecharges => 'remaining_permissions' },
         debug           => 1,
     });
-					
+
+    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+    my $patron         = Koha::Patrons->find($borrowernumber);
+    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
   # get authorised values with type of MANUAL_INV
   my @invoice_types;
   my $dbh = C4::Context->dbh;

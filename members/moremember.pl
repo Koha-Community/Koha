@@ -121,12 +121,9 @@ $borrowernumber = HTML::Entities::encode($borrowernumber);
 my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
-my $patron        = Koha::Patrons->find($borrowernumber);
-unless ( $patron ) {
-    $template->param (unknowuser => 1);
-    output_html_with_http_headers $input, $cookie, $template->output;
-    exit;
-}
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $borrowernumber );
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;

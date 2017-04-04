@@ -45,11 +45,9 @@ my $newpassword2 = $input->param('newpassword2');
 
 my @errors;
 
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 my $patron = Koha::Patrons->find( $member );
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$member");
-    exit;
-}
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $category_type = $patron->category->category_type;
 my $bor = $patron->unblessed;

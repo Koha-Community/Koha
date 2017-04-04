@@ -48,11 +48,10 @@ my $borrowernumber  = $input->param('borrowernumber');
 my $action          = $input->param('action') || '';
 my $accountlines_id = $input->param('accountlines_id');
 
-my $patron = Koha::Patrons->find( $borrowernumber );
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-    exit;
-}
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $borrowernumber );
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
 my $category = $patron->category;
 my $data = $patron->unblessed;
 $data->{description} = $category->description;

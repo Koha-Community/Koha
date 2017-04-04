@@ -48,6 +48,9 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
 $template->param( $borrower );
 $template->param( picture => 1 ) if $patron->image;
 

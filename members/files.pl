@@ -46,7 +46,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param( 'borrower_files' => 1 );
 
 my $borrowernumber = $cgi->param('borrowernumber');
-my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber );
+
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error( $cgi, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
+my $bf = Koha::Patron::Files->new( borrowernumber => $borrowernumber ); # FIXME Should be $patron->get_files. Koha::Patron::Files needs to be Koha::Objects based first
 
 my $op = $cgi->param('op') || '';
 
@@ -62,11 +67,6 @@ if ( $op eq 'download' ) {
     print $file->{'file_content'};
 }
 else {
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    unless ( $patron ) {
-        print $cgi->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-        exit;
-    }
 
     my $patron_category = $patron->category;
     $template->param(%{ $patron->unblessed});

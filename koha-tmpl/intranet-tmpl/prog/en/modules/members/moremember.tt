@@ -5,9 +5,7 @@
 [% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
-[% IF ( unknowuser ) %]
-    Patron does not exist
-[% ELSE %]
+[% UNLESS blocking_error %]
     Patron details for [% INCLUDE 'patron-title.inc' no_html = 1 %]
 [% END %]
 </title>
@@ -144,7 +142,7 @@ function validate1(date) {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron details for [% INCLUDE 'patron-title.inc' %][% END %]
+&rsaquo; [% UNLESS blocking_error %]Patron details for [% INCLUDE 'patron-title.inc' %][% END %]
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -153,9 +151,7 @@ function validate1(date) {
 	<div id="yui-main">
 	<div class="yui-b">
 
-[% UNLESS ( unknowuser ) %]
 [% INCLUDE 'members-toolbar.inc' %]
-[% END %]
 
 [% IF ( error ) %]
 <div class="dialog alert">
@@ -179,9 +175,6 @@ function validate1(date) {
 [% END %]
 <div class="yui-g">
 
-[% IF ( unknowuser ) %]
-   <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
-[% ELSE %]
     [% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry | $KohaDates %]</div>[% END %]
 
     [% IF fines %]
@@ -657,8 +650,6 @@ function validate1(date) {
 [% END %]
 
 </div>
-[% END %] <!-- unknowuser -->
-
 
 </div>
 </div>

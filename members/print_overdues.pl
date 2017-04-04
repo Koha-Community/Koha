@@ -27,6 +27,8 @@ use C4::Output;
 use C4::Members qw(GetOverduesForPatron);
 use C4::Overdues qw(parse_overdues_letter);
 
+use Koha::Patrons;
+
 my $input = new CGI;
 
 my $flagsrequired = { circulate => "circulate_remaining_permissions" };
@@ -44,6 +46,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $borrowernumber = $input->param('borrowernumber');
 my $branchcode     = C4::Context->userenv->{'branch'};
+
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $borrowernumber );
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $overdues = GetOverduesForPatron($borrowernumber);
 

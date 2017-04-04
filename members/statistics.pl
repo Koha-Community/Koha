@@ -47,12 +47,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $borrowernumber = $input->param('borrowernumber');
 
-# Set informations for the patron
-my $patron = Koha::Patrons->find( $borrowernumber );
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-    exit;
-}
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $borrowernumber );
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $category = $patron->category;
 my $borrower= $patron->unblessed;

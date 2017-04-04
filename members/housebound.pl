@@ -56,12 +56,10 @@ my $method = $input->param('method') // q{};
 my $visit_id = $input->param('visit_id') // q{};
 
 # Get patron
-my $patron = eval {
-    my $borrowernumber = $input->param('borrowernumber') // q{};
-    return Koha::Patrons->find($borrowernumber);
-};
-push @messages, { type => 'error', code => 'error_on_patron_load' }
-    if ( $@ or !$patron );
+my $borrowernumber = $input->param('borrowernumber');
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron = Koha::Patrons->find($borrowernumber);
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Get supporting cast
 my ( $branch, $category, $houseboundprofile, $visit, $patron_image );

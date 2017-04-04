@@ -1,3 +1,4 @@
+[% INCLUDE 'blocking_errors.inc' %]
 [% USE Categories %]
 [% USE Koha %]
 [% SET categories = Categories.all %]

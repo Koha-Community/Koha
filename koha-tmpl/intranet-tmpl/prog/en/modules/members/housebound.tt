@@ -30,9 +30,7 @@
     <div id="yui-main">
       <div class="yui-b">
 
-        [% UNLESS ( unknowuser ) %]
         [% INCLUDE 'members-toolbar.inc' %]
-        [% END %]
 
         <div class="yui-g">
 
@@ -43,8 +41,6 @@
             [% FOR m IN messages %]
                 <div class="dialog [% m.type %]">
                     [% SWITCH m.code %]
-                    [% CASE 'error_on_patron_load' %]
-                        An error occurred whilst loading the patron details.
                     [% CASE 'error_on_profile_store' %]
                         An error occurred whilst updating this housebound profile.
                     [% CASE 'error_on_profile_create' %]

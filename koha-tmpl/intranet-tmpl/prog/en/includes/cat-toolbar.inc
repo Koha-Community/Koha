@@ -1,3 +1,4 @@
+[% INCLUDE 'blocking_errors.inc' %]
 <div id="toolbar" class="btn-toolbar">
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ||

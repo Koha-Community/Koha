@@ -27,6 +27,7 @@ use Koha::Patron::Modifications;
 
 my $query = new CGI;
 
+# FIXME Should be a checkauth call
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "about.tt",
@@ -38,11 +39,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+
 my @params = $query->param;
 
 foreach my $param (@params) {
     if ( $param =~ "^modify_" ) {
         my (undef, $borrowernumber) = split( /_/, $param );
+
+        my $patron = Koha::Patrons->find($borrowernumber);
+        next unless $logged_in_user->can_see_patron_infos( $patron );
 
         my $action = $query->param($param);
 
