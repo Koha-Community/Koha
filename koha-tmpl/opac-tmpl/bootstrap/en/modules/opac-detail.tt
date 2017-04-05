@@ -1268,7 +1268,22 @@
                         [% END %]
                     </td>
                     [% IF ( itemdata_enumchron ) %]
-                        <td class="vol_info">[% ITEM_RESULT.enumchron %]</td>
+                        <td class="vol_info">
+                            [% IF ITEM_RESULT.enumchron && ITEM_RESULT.serialseq %]
+                                <span class="enum">[% ITEM_RESULT.enumchron %]</span>
+                                [% IF ( ITEM_RESULT.serialseq && ITEM_RESULT.enumchron!=ITEM_RESULT.serialseq ) %]
+                                    <span class="sep"> -- </span>
+                                    <span class="serialseq">[% ITEM_RESULT.serialseq %]</span>
+                                [% END %]
+                            [% ELSIF ITEM_RESULT.enumchron %]
+                                <span class="enum">[% ITEM_RESULT.enumchron %]</span>
+                            [% ELSIF ITEM_RESULT.serialseq %]
+                                    <span class="serialseq">[% ITEM_RESULT.serialseq %]</span>
+                            [% END %]
+                            [% IF ( ITEM_RESULT.publisheddate ) %]
+                                <span class="pubdate">([% ITEM_RESULT.publisheddate | $KohaDates %])</span>
+                            [% END %]
+                        </td>
                     [% END %]
                     [% IF ( itemdata_uri ) %]
                         <td class="url">
