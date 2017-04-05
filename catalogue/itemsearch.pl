@@ -75,6 +75,9 @@ if (defined $format and $format eq 'json') {
 
     # Retrieve all results
     $cgi->param('rows', 0);
+} elsif (defined $format and $format eq 'barcodes') {
+    # Retrieve all results
+    $cgi->param('rows', 0);
 } elsif (defined $format) {
     die "Unsupported format $format";
 }
@@ -196,6 +199,19 @@ if (scalar keys %params > 0) {
     };
 
     my ($results, $total_rows) = SearchItems($filter, $search_params);
+
+    if ($format eq 'barcodes') {
+        print $cgi->header({
+            type => 'text/plain',
+            attachment => 'barcodes.txt',
+        });
+
+        foreach my $item (@$results) {
+            print $item->{barcode} . "\n";
+        }
+        exit;
+    }
+
     if ($results) {
         # Get notforloan labels
         my $notforloan_map = {};

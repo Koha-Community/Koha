@@ -226,11 +226,54 @@
         + '  <thead>' + tr + tr + '</thead>'
         + '  <tbody></tbody>'
         + '</table>';
-      var results_heading = "<h1>" + _("Item search results") + "</h1>";
-      results_heading += "<p><a href=\"/cgi-bin/koha/catalogue/search.pl\">" + _("Go to advanced search") + "</a></p>";
-      results_heading += "<p><a class=\"editsearchlink\" href=\"#\">" + _("Edit search") + "</a>";
-      results_heading += " | <a class=\"resultstocsv\" href=\"#\">" + _("Output results to csv") + "</a></p>";
-      $('#results-wrapper').empty().html(results_heading + table);
+
+      var advSearchLink = $('<a>')
+        .attr('href', '/cgi-bin/koha/catalogue/search.pl')
+        .html(_("Go to advanced search"));
+      var editSearchLink = $('<a>')
+        .attr('href', '#')
+        .html(_("Edit search"))
+        .addClass('btn btn-default btn-xs')
+        .on('click', function(e) {
+          e.preventDefault();
+          $('#item-search-block').show();
+        });
+
+      var csvExportLink = $('<a>')
+        .attr('href', '#')
+        .html(_("Export results to CSV"))
+        .addClass('btn btn-default btn-xs')
+        .on('click', function(e) {
+          e.preventDefault();
+          $('#format-csv').prop('checked', true);
+          $('#itemsearchform').submit();
+          $('#format-html').prop('checked', true);
+        });
+      var barcodesExportLink = $('<a>')
+        .attr('href', '#')
+        .html(_("Export results to barcodes file"))
+        .addClass('btn btn-default btn-xs')
+        .on('click', function(e) {
+          e.preventDefault();
+          $('#format-barcodes').prop('checked', true);
+          $('#itemsearchform').submit();
+          $('#format-html').prop('checked', true);
+        });
+
+      var editSearchAndExportLinks = $('<p>')
+        .append(editSearchLink)
+        .append(' | ')
+        .append(csvExportLink)
+        .append(' ')
+        .append(barcodesExportLink);
+
+      var results_heading = $('<div>').addClass('results-heading')
+        .append("<h1>" + _("Item search results") + "</h1>")
+        .append($('<p>').append(advSearchLink))
+        .append(editSearchAndExportLinks);
+      $('#results-wrapper').empty()
+        .append(results_heading)
+        .append(table);
 
       var params = [];
       $form.find('select').not(':disabled').find('option:selected').each(function () {
@@ -310,11 +353,6 @@
       });
     }
 
-    function hideForm() {
-      $("#item-search-block").hide();
-      $('.editsearchlink').show();
-    }
-
     $(document).ready(function () {
       $('#toolbar').fixFloat();
       // Add the "New field" link.
@@ -351,25 +389,9 @@
         var format = searchform.find('input[name="format"]:checked').val();
         if (format == 'html') {
           submitForm(searchform);
-          hideForm();
+          $("#item-search-block").hide();
           return false;
         }
-      });
-
-      $("body").on("click",".editsearchlink",function(e) {
-        e.preventDefault();
-        $('#item-search-block').show();
-        $(this).hide();
-        return false;
-      });
-
-      $("body").on("click",".resultstocsv",function(e) {
-        e.preventDefault();
-        $('#format-csv').prop("checked",true);
-        $('#itemsearchform').submit();
-        hideForm();
-        $('#format-html').prop("checked",true);
-        return false;
       });
     });
     //]]>
@@ -479,11 +501,10 @@
               <label>Output:</label>
               <input type="radio" id="format-html" name="format" value="html" checked="checked" /> <label for="format-html">Screen</label>
               <input type="radio" id="format-csv" name="format" value="csv" /> <label for="format-csv">CSV</label>
+              <input type="radio" id="format-barcodes" name="format" value="barcodes"/> <label for="format-barcodes">Barcodes file</label>
             </div>
           </fieldset>
       </form>
-
-      <p><a id="editsearchlink" href="#" style="display:none">Edit search</a></p>
     </div>
   </div>
   <div id="doc3" class="yui-t7">
