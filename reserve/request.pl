@@ -215,29 +215,31 @@ foreach my $biblionumber (@biblionumbers) {
 
     my $dat = GetBiblioData($biblionumber);
 
-    my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
-    $canReserve //= '';
-    if ( $canReserve eq 'OK' ) {
-
-        #All is OK and we can continue
-    }
-    elsif ( $canReserve eq 'tooManyReserves' ) {
-        $exceeded_maxreserves = 1;
-    }
-    elsif ( $canReserve eq 'tooManyHoldsForThisRecord' ) {
-        $exceeded_holds_per_record = 1;
-        $biblioloopiter{$canReserve} = 1;
-    }
-    elsif ( $canReserve eq 'ageRestricted' ) {
-        $template->param( $canReserve => 1 );
-        $biblioloopiter{$canReserve} = 1;
-    }
-    else {
-        $biblioloopiter{$canReserve} = 1;
-    }
-
     my $force_hold_level;
-    if ( $patron->borrowernumber ) {
+    if ( $patron ) {
+        { # CanBookBeReserved
+            my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
+            $canReserve //= '';
+            if ( $canReserve eq 'OK' ) {
+
+                #All is OK and we can continue
+            }
+            elsif ( $canReserve eq 'tooManyReserves' ) {
+                $exceeded_maxreserves = 1;
+            }
+            elsif ( $canReserve eq 'tooManyHoldsForThisRecord' ) {
+                $exceeded_holds_per_record = 1;
+                $biblioloopiter{$canReserve} = 1;
+            }
+            elsif ( $canReserve eq 'ageRestricted' ) {
+                $template->param( $canReserve => 1 );
+                $biblioloopiter{$canReserve} = 1;
+            }
+            else {
+                $biblioloopiter{$canReserve} = 1;
+            }
+        }
+
         # For multiple holds per record, if a patron has previously placed a hold,
         # the patron can only place more holds of the same type. That is, if the
         # patron placed a record level hold, all the holds the patron places must
@@ -261,15 +263,17 @@ foreach my $biblionumber (@biblionumbers) {
         $biblioloopiter{remaining_holds_for_record} = $max_holds_for_record;
         $template->param( max_holds_for_record => $max_holds_for_record );
         $template->param( remaining_holds_for_record => $remaining_holds_for_record );
-    }
 
-    # Check to see if patron is allowed to place holds on records where the
-    # patron already has an item from that record checked out
-    my $alreadypossession;
-    if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
-        && CheckIfIssuedToPatron( $patron->borrowernumber, $biblionumber ) )
-    {
-        $template->param( alreadypossession => $alreadypossession, );
+        { # alreadypossession
+            # Check to see if patron is allowed to place holds on records where the
+            # patron already has an item from that record checked out
+            my $alreadypossession;
+            if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
+                && CheckIfIssuedToPatron( $patron->borrowernumber, $biblionumber ) )
+            {
+                $template->param( alreadypossession => $alreadypossession, );
+            }
+        }
     }
 
 
@@ -392,13 +396,13 @@ foreach my $biblionumber (@biblionumbers) {
             # checking reserve
             my $holds = Koha::Items->find( $itemnumber )->current_holds;
             if ( my $first_hold = $holds->next ) {
-                my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
+                my $p = Koha::Patrons->find( $first_hold->borrowernumber );
 
                 $item->{backgroundcolor} = 'reserved';
                 $item->{reservedate}     = output_pref({ dt => dt_from_string( $first_hold->reservedate ), dateonly => 1 }); # FIXME Should be formatted in the template
-                $item->{ReservedForBorrowernumber}     = $first_hold->borrowernumber;
-                $item->{ReservedForSurname}     = $patron->surname;
-                $item->{ReservedForFirstname}     = $patron->firstname;
+                $item->{ReservedForBorrowernumber}     = $p->borrowernumber;
+                $item->{ReservedForSurname}     = $p->surname;
+                $item->{ReservedForFirstname}     = $p->firstname;
                 $item->{ExpectedAtLibrary}     = $first_hold->branchcode;
                 $item->{waitingdate} = $first_hold->waitingdate;
             }
@@ -451,41 +455,43 @@ foreach my $biblionumber (@biblionumbers) {
                 }
             }
 
-            my $patron_unblessed = $patron->unblessed;
-            my $branch = C4::Circulation::_GetCircControlBranch($item, $patron_unblessed);
+            if ( $patron ) {
+                my $patron_unblessed = $patron->unblessed;
+                my $branch = C4::Circulation::_GetCircControlBranch($item, $patron_unblessed);
 
-            my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
+                my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
 
-            $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
+                $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-            my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber );
-            $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber );
+                $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
-            $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $patron_unblessed);
+                $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $patron_unblessed);
 
-            if (
-                   !$item->{cantreserve}
-                && !$exceeded_maxreserves
-                && IsAvailableForItemLevelRequest($item, $patron_unblessed)
-                && $can_item_be_reserved eq 'OK'
-              )
-            {
-                $item->{available} = 1;
-                $num_available++;
+                if (
+                       !$item->{cantreserve}
+                    && !$exceeded_maxreserves
+                    && IsAvailableForItemLevelRequest($item, $patron_unblessed)
+                    && $can_item_be_reserved eq 'OK'
+                  )
+                {
+                    $item->{available} = 1;
+                    $num_available++;
 
-                push( @available_itemtypes, $item->{itype} );
-            }
-            elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
-                # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-                $item->{override} = 1;
-                $num_override++;
-            }
+                    push( @available_itemtypes, $item->{itype} );
+                }
+                elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+                    # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
+                    $item->{override} = 1;
+                    $num_override++;
+                }
 
-            # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
+                # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
 
-            # Show serial enumeration when needed
-            if ($item->{enumchron}) {
-                $itemdata_enumchron = 1;
+                # Show serial enumeration when needed
+                if ($item->{enumchron}) {
+                    $itemdata_enumchron = 1;
+                }
             }
 
             push @{ $biblioitem->{itemloop} }, $item;
@@ -611,7 +617,7 @@ foreach my $biblionumber (@biblionumbers) {
                      holdsview => 1,
                      C4::Search::enabled_staff_search_views,
                     );
-    if ( $patron ) { # FIXME This test seems very useless
+    if ( $patron ) {
         $template->param( borrower_branchcode => $patron->branchcode );
     }
 
