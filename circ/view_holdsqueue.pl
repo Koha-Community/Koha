@@ -53,6 +53,9 @@ my $itemtypeslimit = $params->{'itemtypeslimit'};
 if ( $run_report ) {
     # XXX GetHoldsQueueItems() does not support $itemtypeslimit!
     my $items = GetHoldsQueueItems($branchlimit, $itemtypeslimit);
+    for my $item ( @$items ) {
+        $item->{patron} = Koha::Patrons->find( $item->{borrowernumber} );
+    }
     $template->param(
         branchlimit     => $branchlimit,
         total      => scalar @$items,

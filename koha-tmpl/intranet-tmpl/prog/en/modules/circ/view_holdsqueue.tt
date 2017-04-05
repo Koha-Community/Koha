@@ -151,11 +151,11 @@
                 [% END %]
             </td>
             <td class="hq-patron">
-              [% IF Koha.Preference('HidePatronName') %]
-                <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% itemsloo.borrowernumber %]#reserves">[% itemsloo.cardnumber %]</a></p>
-              [% ELSE %]
-                <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% itemsloo.borrowernumber %]#reserves">[% itemsloo.surname %], [% itemsloo.firstname %] ([% itemsloo.cardnumber %])</a></p>
-                <p>[% itemsloo.phone %]</p>
+              <p>
+                  [% INCLUDE 'patron-title.inc' patron=itemsloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+              </p>
+              [% UNLESS Koha.Preference('HidePatronName') %]
+                 <p>[% itemsloo.patron.phone %]</p>
               [% END %]
             </td>
             <td class="hq-sendto">[% Branches.GetName( itemsloo.pickbranch ) %]</td>
