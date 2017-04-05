@@ -89,6 +89,35 @@ $(document).ready(function(){
     $("#inventory_form").on("submit",function(){
         return checkForm();
     });
+
+    // #uploadbarcodes and #compareinv2barcd determine the behavior of
+    // the controls within the barcode fieldset and the optional filters
+    $("#uploadbarcodes").change(function() {
+        if( $("#uploadbarcodes").val() ) {
+            $("#setdate").prop('disabled',false);
+            $("#compareinv2barcd").prop('disabled',false);
+            $("#dont_checkin").prop('disabled',false);
+            if( $("#compareinv2barcd").attr('checked') ) {
+                $("fieldset#optionalfilters").show();
+            } else {
+                $("fieldset#optionalfilters").hide();
+            }
+        } else {
+            $("#setdate").prop('disabled',true);
+            $("#compareinv2barcd").prop('disabled',true);
+            $("#compareinv2barcd").attr('checked',false);
+            $("#dont_checkin").prop('disabled',true);
+            $("#dont_checkin").attr('checked',false);
+            $("fieldset#optionalfilters").show();
+        }
+    });
+    $("#compareinv2barcd").click(function() {
+        if( $("#compareinv2barcd").attr('checked') ) {
+            $("fieldset#optionalfilters").show();
+        } else {
+            $("fieldset#optionalfilters").hide();
+        }
+    });
 });
 //]]>
 </script>
@@ -125,16 +154,17 @@ $(document).ready(function(){
     <div class="yui-g">
     <form method="post" id="inventory_form" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
         <fieldset class="rows">
-            <legend>Use a barcode file</legend>
-     <ol>
+          <legend>Use a barcode file</legend>
+          <ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" />
-            </li>
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" disabled /></li>
+            <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
+            <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
           </ol>
         </fieldset>
 
         <fieldset class="rows">
-        <legend>Select items you want to check</legend>
+        <legend>Item location filters</legend>
         <ol><li>
         <label for="branch">Library: </label>
             <input type="radio" name="branch" value="homebranch"> Home library</input>
@@ -165,11 +195,12 @@ $(document).ready(function(){
            <li><label for="maxlocation">...and: </label>
                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation %]" />
         </li>
-        [% IF (statuses) %]
     </ol>
     </fieldset>
-            <fieldset class="rows">
-            <legend>Item statuses</legend>
+
+    <fieldset class="rows" id="optionalfilters">
+            <legend>Optional filters for inventory list or comparing barcodes</legend>
+            <br/>
             <div id="statuses" style="display: block;">
                   [% FOREACH status IN statuses %]
                       [% IF (status.values) %]
@@ -195,32 +226,31 @@ $(document).ready(function(){
                       [% END %]
                   [% END %]
                 </div>
-            </fieldset>
-        <fieldset class="rows">
-          <ol>
-        [% END %]
-
-        <li><label for="datelastseen">Last inventory date:</label>
+        <ol>
+        <li>
+            <br/>
+            <label for="datelastseen">Last inventory date:</label>
             <input type="text" id="datelastseen" name="datelastseen" value="[% datelastseen | $KohaDates %]" class="datepicker" />
             (Skip records marked as seen on or after this date.)
         </li>
-        <li><label for="ignoreissued">Skip items on loan: </label>
+        <li>
+            <label for="ignoreissued">Skip items on loan: </label>
             [% IF (ignoreissued) %]
-            <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" /></li>
+                <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" />
             [% ELSE %]
-            <input type="checkbox" id="ignoreissued" name="ignoreissued" /></li>
+                <input type="checkbox" id="ignoreissued" name="ignoreissued" />
             [% END %]
+        </li>
+        </ol>
+    </fieldset>
+
+        <fieldset class="rows">
+          <legend>Additional options</legend>
+          <ol>
+
         <li>
            <label for="CSVexport">Export to CSV file: </label>
            <input type="checkbox" name="CSVexport" id="CSVexport" />
-        </li>
-        <li>
-            <label for="compareinv2barcd">Compare barcodes list to results: </label>
-            <input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" />
-        </li>
-        <li>
-            <label for="dont_checkin">Do not check in items scanned during inventory: </label>
-            <input type="checkbox" name="dont_checkin" id="dont_checkin" />
         </li>
         </ol>
   </fieldset>
