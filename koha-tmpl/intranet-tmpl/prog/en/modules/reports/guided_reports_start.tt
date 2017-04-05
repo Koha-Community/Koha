@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% USE Koha %]
 
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
@@ -86,6 +87,7 @@ $("#delColumn").on("click",function(){
 
 [% IF (saved1) %]
     var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
+        'iDisplayLength': [% Koha.Preference('NumSavedReports') %],
         'bAutoWidth': false,
         'sPaginationType': 'four_button',
         'aaSorting': [[ 1, "asc" ]],

@@ -287,6 +287,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NovelistSelectStaffView','tab','tab|above|below','Where to display Novelist Select content in the staff client','Choice'),
 ('NovelistSelectView','tab','tab|above|below|right','Where to display Novelist Select content','Choice'),
 ('numReturnedItemsToShow','20',NULL,'Number of returned items to show on the check-in page','Integer'),
+('NumSavedReports', '20', NULL, 'By default, show this number of saved reports.', 'Integer'),
 ('numSearchResults','20',NULL,'Specify the maximum number of results to display on a page of results','Integer'),
 ('numSearchRSSResults','50',NULL,'Specify the maximum number of results to display on a RSS page of results','Integer'),
 ('OAI-PMH','0',NULL,'if ON, OAI-PMH server is enabled','YesNo'),
