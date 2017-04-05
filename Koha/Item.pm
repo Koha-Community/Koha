@@ -25,6 +25,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
+use Koha::Checkouts;
 use Koha::IssuingRules;
 use Koha::Item::Transfer;
 use Koha::Patrons;
@@ -104,6 +105,21 @@ sub biblioitem {
     my ( $self ) = @_;
     my $biblioitem_rs = $self->_result->biblioitem;
     return Koha::Biblioitem->_new_from_dbic( $biblioitem_rs );
+}
+
+=head3 checkout
+
+my $checkout = $item->checkout;
+
+Return the checkout for this item
+
+=cut
+
+sub checkout {
+    my ( $self ) = @_;
+    my $checkout_rs = $self->_result->issue;
+    return unless $checkout_rs;
+    return Koha::Checkout->_new_from_dbic( $checkout_rs );
 }
 
 =head3 get_transfer
