@@ -20,32 +20,62 @@ sub search {
         $searchmember = $dt_params->{sSearch} // '';
     }
 
-    my ($sth, $query, $iTotalRecords, $iTotalDisplayRecords);
+    # If branches are independent and user is not superlibrarian
+    # The search has to be only on the user branch
+    my $userenv = C4::Context->userenv;
+    my @restricted_branchcodes;
+    if (C4::Context::only_my_library) {
+        push @restricted_branchcodes, $userenv->{branch};
+    }
+    else {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        unless (
+            $logged_in_user->can(
+                { borrowers => 'view_borrower_infos_from_any_libraries' }
+            )
+          )
+        {
+            if ( my $library_groups = $logged_in_user->library->library_groups )
+            {
+                while ( my $library_group = $library_groups->next ) {
+                    push @restricted_branchcodes,
+                      $library_group->parent->children->get_column('branchcode');
+                }
+            }
+            else {
+                push @restricted_branchcodes, $userenv->{branch};
+            }
+        }
+    }
+
+    my ($sth, $query, $iTotalQuery, $iTotalRecords, $iTotalDisplayRecords);
     my $dbh = C4::Context->dbh;
     # Get the iTotalRecords DataTable variable
-    $query = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
-    $sth = $dbh->prepare($query);
-    $sth->execute;
-    ($iTotalRecords) = $sth->fetchrow_array;
+    $query = $iTotalQuery = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
+    if ( @restricted_branchcodes ) {
+        $iTotalQuery .= " WHERE borrowers.branchcode IN (" . join( ',', ('?') x @restricted_branchcodes ) . ")";
+    }
+    ($iTotalRecords) = $dbh->selectrow_array( $iTotalQuery, undef, @restricted_branchcodes );
+
+    # Do that after iTotalQuery!
+    if ( defined $branchcode and $branchcode ) {
+        @restricted_branchcodes = @restricted_branchcodes
+            ? grep { /^$branchcode$/ } @restricted_branchcodes
+                ? ($branchcode)
+                : (undef) # Do not return any results
+            : ($branchcode);
+    }
 
     if ( $searchfieldstype eq 'dateofbirth' ) {
         # Return an empty list if the date of birth is not correctly formatted
         $searchmember = eval { output_pref( { str => $searchmember, dateformat => 'iso', dateonly => 1 } ); };
         if ( $@ or not $searchmember ) {
             return {
-                iTotalRecords        => 0,
+                iTotalRecords        => $iTotalRecords,
                 iTotalDisplayRecords => 0,
                 patrons              => [],
             };
         }
-    }
-
-    # If branches are independent and user is not superlibrarian
-    # The search has to be only on the user branch
-    if ( C4::Context::only_my_library ) {
-        my $userenv = C4::Context->userenv;
-        $branchcode = $userenv->{'branch'};
-
     }
 
     my $select = "SELECT
@@ -70,9 +100,9 @@ sub search {
         push @where_strs, "borrowers.categorycode = ?";
         push @where_args, $categorycode;
     }
-    if(defined $branchcode and $branchcode ne '') {
-        push @where_strs, "borrowers.branchcode = ?";
-        push @where_args, $branchcode;
+    if(@restricted_branchcodes ) {
+        push @where_strs, "borrowers.branchcode IN (" . join( ',', ('?') x @restricted_branchcodes ) . ")";
+        push @where_args, @restricted_branchcodes;
     }
 
     my $searchfields = {
