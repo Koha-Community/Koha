@@ -1338,7 +1338,7 @@ sub _send_message_by_email {
     );
 
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
-    if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
+    if ( my $bcc = C4::Context->preference('NoticeBcc') ) {
        $sendmail_params{ Bcc } = $bcc;
     }
 
