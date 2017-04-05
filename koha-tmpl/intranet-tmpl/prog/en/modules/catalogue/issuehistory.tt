@@ -25,8 +25,8 @@
 [% IF biblio.author %]<h3>by [% biblio.author %]</h3>[% END %]
 
 <div class="searchresults">
-    [% IF ( issues ) %]
-        <h4>Checked out [% total %] times</h4>
+    [% IF checkouts.count %]
+        <h4>Checked out [% checkouts.count %] times</h4>
         <table id="table_issues">
             <thead><tr>
             [% IF Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
@@ -40,39 +40,40 @@
             <th class='title-string'>Checkin on</th>
             </tr></thead>
             <tbody>
-        [% FOREACH issue IN issues %]
+        [% FOREACH checkout IN checkouts %]
             <tr>
                 [% IF Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issue.borrowernumber %]">[% IF HidePatronName %][% issue.cardnumber %][% ELSE %][% issue.surname %][% IF ( issue.firstname ) %], [% issue.firstname %][% END %][% END %]</a></td>
                 [% END %]
-                <td>[% IF ( issue.barcode ) %]
-                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issue.biblionumber %]&amp;itemnumber=[% issue.itemnumber %]">[% issue.barcode %]</a>
+                <td>
+                    [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]
+                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber %]&amp;itemnumber=[% checkout.item.itemnumber %]">[% checkout.item.barcode %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
-                <td>[% IF ( issue.branchcode ) %]
-                        [% Branches.GetName( issue.branchcode ) %]
+                <td>[% IF checkout.branchcode %]
+                        [% Branches.GetName( checkout.branchcode ) %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
-                <td>[% IF ( issue.renewals ) %]
-                        Yes[% IF ( issue.lastreneweddate ) %], <small>last on: [% issue.lastreneweddate |$KohaDates with_hours => 1  %]</small>
+                <td>[% IF checkout.renewals %]
+                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates with_hours => 1  %]</small>
                             [% END %]
                     [% ELSE %]
                         No
                     [% END %]</td>
-                <td>[% IF ( issue.issuedate ) %]
-                        <span title="[% issue.issuedate %]">[% issue.issuedate |$KohaDates with_hours => 1  %]</span>
+                <td>[% IF checkout.issuedate %]
+                        <span title="[% checkout.issuedate %]">[% checkout.issuedate |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
-                <td>[% IF ( issue.date_due ) %]
-                        <span title="[% issue.date_due %]">[% issue.date_due |$KohaDates with_hours => 1  %]</span>
+                <td>[% IF checkout.date_due %]
+                        <span title="[% checkout.date_due %]">[% checkout.date_due |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
-                <td>[% IF ( issue.returndate ) %]
-                        <span title="[% issue.returndate %]">[% issue.returndate |$KohaDates with_hours => 1  %]</span>
+                <td>[% IF checkout.returndate %]
+                        <span title="[% checkout.returndate %]">[% checkout.returndate |$KohaDates with_hours => 1  %]</span>
                     [% ELSE %]
                         <span title="Checked out"><small>Checked out</small></span>
                     [% END %]</td>

@@ -22,9 +22,9 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 
-use C4::Circulation;    # GetBiblioIssues
 use C4::Biblio;    # GetBiblio
 use C4::Search;		# enabled_staff_search_views
+use Koha::Checkouts;
 
 use Koha::Biblios;
 
@@ -41,18 +41,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber');
 
-if (C4::Context->preference("HidePatronName")) {
-   $template->param(HidePatronName => 1);
-}
-
-my $issues = GetBiblioIssues($biblionumber);
+my $checkouts = Koha::Checkouts->search(
+    { biblionumber => $biblionumber },
+    {
+        join       => 'item',
+        order_by   => 'timestamp',
+    }
+);
 my $biblio = Koha::Biblios->find( $biblionumber );
 
 $template->param(
-    biblionumber => $biblionumber, # required for left-side navigation
-    biblio       => $biblio,
-    total        => scalar @$issues,
-    issues       => $issues,
+    checkouts => $checkouts,
+    biblio    => $biblio,
 	issuehistoryview => 1,
 	C4::Search::enabled_staff_search_views,
 );
