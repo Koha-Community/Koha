@@ -128,6 +128,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
         flagsrequired   => { circulate => 'circulate_remaining_permissions' },
     }
 );
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 
 my $force_allow_issue = $query->param('forceallow') || 0;
 if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {
@@ -262,6 +263,10 @@ if ($findborrower) {
 # get the borrower information.....
 $patron ||= Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
 if ($patron) {
+
+    $template->param( borrowernumber => $patron->borrowernumber );
+    output_and_exit_if_error( $query, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
     my $overdues = $patron->get_overdues;
     my $issues = $patron->checkouts;
     my $balance = $patron->account->balance;
