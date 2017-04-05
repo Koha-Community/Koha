@@ -74,6 +74,20 @@ sub item {
     return Koha::Item->_new_from_dbic( $item_rs );
 }
 
+=head3 patron
+
+my $patron = $checkout->patron
+
+Return the patron for who the checkout has been done
+
+=cut
+
+sub patron {
+    my ( $self ) = @_;
+    my $patron_rs = $self->_result->borrower;
+    return Koha::Patron->_new_from_dbic( $patron_rs );
+}
+
 =head3 type
 
 =cut

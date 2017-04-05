@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::Checkouts;
 use Koha::Database;
@@ -91,6 +91,13 @@ subtest 'item' => sub {
     my $item = $retrieved_checkout_1->item;
     is( ref( $item ), 'Koha::Item', 'Koha::Checkout->item should return a Koha::Item' );
     is( $item->itemnumber, $item_1->{itemnumber}, 'Koha::Checkout->item should return the correct item' );
+};
+
+subtest 'patron' => sub {
+    plan tests => 2;
+    my $p = $new_checkout_1->patron;
+    is( ref($p), 'Koha::Patron', 'Koha::Checkout->patron should return a Koha::Patron' );
+    is( $p->borrowernumber, $patron->{borrowernumber}, 'Koha::Checkout->patron should return the correct patron' );
 };
 
 $retrieved_checkout_1->delete;
