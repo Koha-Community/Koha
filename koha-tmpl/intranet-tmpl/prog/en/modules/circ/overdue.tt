@@ -58,9 +58,12 @@
       [% FOREACH overdueloo IN overdueloop %]
         <tr>
           <td><span title="[% overdueloo.duedate %]">[% overdueloo.duedate | $KohaDates %]</span></td>
-          <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.surname %][% IF (overdueloo.firstname) %], [% overdueloo.firstname %][% END %] ([% overdueloo.cardnumber %])</a>
-          [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
-          [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
+          <td>
+            [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+            [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
+                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=[% INCLUDE subject %] [% overdueloo.title |html %]">email</a>][% END %]
+                [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
+            [% END %]
           <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) %][% END %]</td>
           <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron %][% END %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber %]&amp;itemnumber=[% overdueloo.itemnum %]#item[% overdueloo.itemnum %]">[% overdueloo.barcode %]</a></td>
@@ -174,7 +177,7 @@
         <label>Library of the patron:</label>
         <select name="branch" id="branch">
             <option value="">Any</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter, only_from_group => 1 ) %]
         </select>
     </li>
 

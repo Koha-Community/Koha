@@ -31,7 +31,7 @@
                 <form id="ar-branchcode-form" method="post">
                     <select name="branchcode" id="branchcode">
                         <option value="">All libraries</option>
-                        [% FOREACH b IN Branches.all %]
+                        [% FOREACH b IN Branches.all( only_from_group => 1 ) %]
                             [% IF b.branchcode == branchcode %]
                                 <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
                             [% ELSE %]

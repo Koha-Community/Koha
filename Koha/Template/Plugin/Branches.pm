@@ -59,10 +59,11 @@ sub all {
     my ( $self, $params ) = @_;
     my $selected = $params->{selected};
     my $unfiltered = $params->{unfiltered} || 0;
+    my $only_from_group = $params->{only_from_group} || 0;
 
     my $libraries = $unfiltered
       ? Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed
-      : Koha::Libraries->search_filtered( {}, { order_by => ['branchname'] } )->unblessed;
+      : Koha::Libraries->search_filtered( { only_from_group => $only_from_group }, { order_by => ['branchname'] } )->unblessed;
 
     for my $l ( @$libraries ) {
         if (       defined $selected and $l->{branchcode} eq $selected

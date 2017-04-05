@@ -85,7 +85,7 @@
 
         <p>
             <label for="branchcode">Library: </label>
-            [% SET branches = Branches.all( selected => branchcode_filter ) %]
+            [% SET branches = Branches.all( selected => branchcode_filter, only_my_group => 1 ) %]
             <select name="branchcode_filter" id="branchcode">
                 [% IF branches.size != 1 %]
                   <option value="">Any</option>
