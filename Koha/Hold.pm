@@ -305,6 +305,7 @@ Returns the related Koha::Patron object for this Hold
 
 =cut
 
+# FIXME Should be renamed with ->patron
 sub borrower {
     my ($self) = @_;
 

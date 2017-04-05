@@ -795,13 +795,7 @@ function checkMultiHold() {
     [% END %]
 
         <td>
-          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]" >
-	  [% IF ( reserveloo.hidename ) %]
-	      [% reserveloo.cardnumber (reserveloo.borrowernumber) %]
-	  [% ELSE %]
-	      [% reserveloo.firstname %] [% reserveloo.surname %]
-	  [% END %]
-	  </a>
+          [% INCLUDE 'patron-title.inc' patron=reserveloo.patron hide_patron_infos_if_needed=1 %]
         </td>
         <td>[% reserveloo.notes %]</td>
         <td>[% reserveloo.date %]</td>

@@ -373,7 +373,7 @@
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber %][% END %]</td>
                     <td class="status">
 
-                        [% IF ( item.datedue ) %]
+                        [% IF item.CheckedOutFor %]
                           [% IF item.onsite_checkout %]
                             <span>Currently in local use
                           [% ELSE %]
@@ -381,16 +381,11 @@
                           [% END %]
                                 [% UNLESS ( item.NOTSAMEBRANCH ) %]
                                   [% IF item.onsite_checkout %]
-                                    by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">
+                                    by
                                   [% ELSE %]
-                                    to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber %]">
+                                    to
                                   [% END %]
-                                        [% IF ( item.hidepatronname ) %]
-                                            [% item.cardnumber %]
-                                        [% ELSE %]
-                                            [% item.firstname %] [% item.surname %]
-                                        [% END %]
-                                    </a>
+                                  [% INCLUDE 'patron-title.inc' patron=item.CheckedOutFor hide_patron_infos_if_needed=1 %]
                                 [% END %]
                                 : due [% item.datedue %]
                             </span>
@@ -440,13 +435,8 @@
                                 Item-level hold (placed [% item.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( item.ExpectedAtLibrary ) %].
                             [% END %]
                             [% IF ( canreservefromotherbranches ) %]
-                                Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.ReservedForBorrowernumber %]">
-                                    [% IF ( item.hidepatronname ) %]
-                                        [% item.Reservedcardnumber %]
-                                    [% ELSE %]
-                                        [% item.ReservedForFirstname _ " " _ item.ReservedForSurname _ " (" _ item.Reservedcardnumber _ ")" %]
-                                    [% END %]
-                                </a>
+                                Hold for:
+                                [% INCLUDE 'patron-title.inc' patron=item.ReservedFor hide_patron_infos_if_needed=1 %]
                             [% END %]
                         [% END %]
                         [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) %]

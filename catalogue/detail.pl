@@ -253,11 +253,6 @@ foreach my $item (@items) {
         $itemfields{$_} = 1 if ( $item->{$_} );
     }
 
-    if (C4::Context->preference('HidePatronName')){
-        $item->{'hidepatronname'} = 1;
-    }
-
-
     # checking for holds
     my $item_object = Koha::Items->find( $item->{itemnumber} );
     my $holds = $item_object->current_holds;
@@ -265,15 +260,15 @@ foreach my $item (@items) {
         my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
         $item->{backgroundcolor} = 'reserved';
         $item->{reservedate}     = $first_hold->reservedate;
-        $item->{ReservedForBorrowernumber}     = $first_hold->borrowernumber;
-        $item->{ReservedForSurname}     = $patron->surname;
-        $item->{ReservedForFirstname}   = $patron->firstname;
+        $item->{ReservedFor}     = $patron,
         $item->{ExpectedAtLibrary}      = $first_hold->branchcode;
-        $item->{Reservedcardnumber}     = $patron->cardnumber;
         # Check waiting status
         $item->{waitingdate} = $first_hold->waitingdate;
     }
 
+    if ( my $checkout = $item_object->checkout ) {
+        $item->{CheckedOutFor} = $checkout->patron;
+    }
 
 	# Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});

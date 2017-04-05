@@ -572,19 +572,12 @@ foreach my $biblionumber (@biblionumbers) {
             }
         }
 
-        #     get borrowers reserve info
-        if ( C4::Context->preference('HidePatronName') ) {
-            $reserve{'hidename'}   = 1;
-            $reserve{'cardnumber'} = $res->borrower()->cardnumber();
-        }
         $reserve{'expirationdate'} = output_pref( { dt => dt_from_string( $res->expirationdate ), dateonly => 1 } )
           unless ( !defined( $res->expirationdate ) || $res->expirationdate eq '0000-00-00' );
         $reserve{'date'}           = output_pref( { dt => dt_from_string( $res->reservedate ), dateonly => 1 } );
         $reserve{'borrowernumber'} = $res->borrowernumber();
         $reserve{'biblionumber'}   = $res->biblionumber();
-        $reserve{'borrowernumber'} = $res->borrowernumber();
-        $reserve{'firstname'}      = $res->borrower()->firstname();
-        $reserve{'surname'}        = $res->borrower()->surname();
+        $reserve{'patron'}         = $res->borrower;
         $reserve{'notes'}          = $res->reservenotes();
         $reserve{'waiting_date'}   = $res->waitingdate();
         $reserve{'ccode'}          = $res->item() ? $res->item()->ccode() : undef;
