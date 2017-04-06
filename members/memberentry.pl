@@ -238,7 +238,7 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
         $conditions->{dateofbirth} = $newdata{dateofbirth} if $newdata{dateofbirth};
     }
     $nodouble = 1;
-    my $patrons = Koha::Patrons->search($conditions);
+    my $patrons = Koha::Patrons->search($conditions); # FIXME Should be search_limited?
     if ( $patrons->count > 0) {
         $nodouble = 0;
         $check_member = $patrons->next->borrowernumber;

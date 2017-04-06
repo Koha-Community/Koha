@@ -41,6 +41,41 @@ Koha::Patron - Koha Patron Object class
 
 =cut
 
+=head3 search_limited
+
+my $patrons = Koha::Patrons->search_limit( $params, $attributes );
+
+Returns all the patrons the logged in user is allowed to see
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $userenv = C4::Context->userenv;
+    my @restricted_branchcodes;
+    my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+    if ( $logged_in_user and not
+        $logged_in_user->can(
+            { borrowers => 'view_borrower_infos_from_any_libraries' }
+        )
+      )
+    {
+        if ( my $library_groups = $logged_in_user->library->library_groups )
+        {
+            while ( my $library_group = $library_groups->next ) {
+                push @restricted_branchcodes,
+                  $library_group->parent->children->get_column('branchcode');
+            }
+        }
+        else {
+            push @restricted_branchcodes, $userenv->{branch};
+        }
+    }
+    $params->{'me.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
+    return $self->search( $params, $attributes );
+}
+
 =head3 search_housebound_choosers
 
 Returns all Patrons which are Housebound choosers.

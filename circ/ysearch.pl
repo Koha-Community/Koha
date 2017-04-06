@@ -67,7 +67,7 @@ foreach my $p (@parts) {
 
 push( @params, { branchcode => C4::Context->userenv->{branch} } ) if $limit_on_branch;
 
-my $borrowers_rs = Koha::Patrons->search(
+my $borrowers_rs = Koha::Patrons->search_limited(
     { -and => \@params },
     {
         # Get the first 10 results
