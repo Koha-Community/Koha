@@ -21,6 +21,7 @@ package Koha::Patron;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw( uniq );
 
 use C4::Context;
 use C4::Log;
@@ -733,6 +734,50 @@ sub can_see_patron_infos {
         }
     }
     return $can;
+}
+
+=head3 libraries_where_can_see_patrons
+
+my $libraries = $patron-libraries_where_can_see_patrons;
+
+Return the list of branchcodes(!) of libraries the patron is allowed to see other patron's infos.
+The branchcodes are arbitrarily returned sorted.
+We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
+
+An empty array means no restriction, the patron can see patron's infos from any libraries.
+
+=cut
+
+sub libraries_where_can_see_patrons {
+    my ( $self ) = @_;
+    my $userenv = C4::Context->userenv;
+
+    return () unless $userenv; # For tests, but userenv should be defined in tests...
+
+    my @restricted_branchcodes;
+    if (C4::Context::only_my_library) {
+        push @restricted_branchcodes, $self->branchcode;
+    }
+    else {
+        unless (
+            $self->can(
+                { borrowers => 'view_borrower_infos_from_any_libraries' }
+            )
+          )
+        {
+            my $library_groups = $self->library->library_groups;
+            if ( $library_groups->count )
+            {
+                while ( my $library_group = $library_groups->next ) {
+                    push @restricted_branchcodes, $library_group->parent->children->get_column('branchcode');
+                }
+            }
+            else {
+                push @restricted_branchcodes, $self->branchcode;
+            }
+        }
+    }
+    return sort(uniq(@restricted_branchcodes));
 }
 
 sub can {

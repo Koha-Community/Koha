@@ -47,32 +47,17 @@ sub search_filtered {
 
     my @branchcodes;
     if ( my $userenv = C4::Context->userenv ) {
-        if ( C4::Context::only_my_library ) {
-            push @branchcodes, $userenv->{branch};
-        }
-        else {
+        my $only_from_group = $params->{only_from_group};
+        if ( $only_from_group ) {
             my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
-            unless (
-                $logged_in_user->can(
-                    { borrowers => 'view_borrower_infos_from_any_libraries' }
-                )
-              )
-            {
-                if ( my $library_groups = $logged_in_user->library->library_groups )
-                {
-                    while ( my $library_group = $library_groups->next ) {
-                        push @branchcodes,
-                          $library_group->parent->children->get_column('branchcode');
-                    }
-                }
-                else {
-                    push @branchcodes, $userenv->{branch};
-                }
+            my @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+            $params->{branchcode} = { -in => \@branchcodes } if @branchcodes;
+        } else {
+            if ( C4::Context::only_my_library ) {
+                $params->{branchcode} = C4::Context->userenv->{branch};
             }
         }
     }
-
-    $params->{branchcode} = { -in => \@branchcodes } if @branchcodes;
     delete $params->{only_from_group};
     return $self->SUPER::search( $params, $attributes );
 }

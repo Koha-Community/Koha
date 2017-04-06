@@ -54,23 +54,9 @@ sub search_limited {
 
     my $userenv = C4::Context->userenv;
     my @restricted_branchcodes;
-    my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
-    if ( $logged_in_user and not
-        $logged_in_user->can(
-            { borrowers => 'view_borrower_infos_from_any_libraries' }
-        )
-      )
-    {
-        if ( my $library_groups = $logged_in_user->library->library_groups )
-        {
-            while ( my $library_group = $library_groups->next ) {
-                push @restricted_branchcodes,
-                  $library_group->parent->children->get_column('branchcode');
-            }
-        }
-        else {
-            push @restricted_branchcodes, $userenv->{branch};
-        }
+    if ( $userenv ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
     }
     $params->{'me.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
     return $self->search( $params, $attributes );

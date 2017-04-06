@@ -23,30 +23,8 @@ sub search {
     # If branches are independent and user is not superlibrarian
     # The search has to be only on the user branch
     my $userenv = C4::Context->userenv;
-    my @restricted_branchcodes;
-    if (C4::Context::only_my_library) {
-        push @restricted_branchcodes, $userenv->{branch};
-    }
-    else {
-        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
-        unless (
-            $logged_in_user->can(
-                { borrowers => 'view_borrower_infos_from_any_libraries' }
-            )
-          )
-        {
-            if ( my $library_groups = $logged_in_user->library->library_groups )
-            {
-                while ( my $library_group = $library_groups->next ) {
-                    push @restricted_branchcodes,
-                      $library_group->parent->children->get_column('branchcode');
-                }
-            }
-            else {
-                push @restricted_branchcodes, $userenv->{branch};
-            }
-        }
-    }
+    my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+    my @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
 
     my ($sth, $query, $iTotalQuery, $iTotalRecords, $iTotalDisplayRecords);
     my $dbh = C4::Context->dbh;
