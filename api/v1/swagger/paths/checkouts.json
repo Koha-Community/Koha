@@ -198,6 +198,63 @@
       }
     }
   },
+  "/checkouts/expanded": {
+    "get": {
+      "x-mojo-to": "Checkout#expanded",
+      "operationId": "expandedCheckouts",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [{
+        "$ref": "../parameters.json#/borrowernumberQueryParam"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of expanded checkouts",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/checkoutexpanded"
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
   "/checkouts/history": {
     "get": {
       "x-mojo-to": "Checkout#listhistory",

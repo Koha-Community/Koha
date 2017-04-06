@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;
-
 use C4::Auth qw( haspermission );
 use C4::Context;
 use C4::Circulation;
@@ -105,14 +104,9 @@ sub renewability {
     my $borrowernumber = $checkout->borrowernumber;
     my $itemnumber = $checkout->itemnumber;
 
-    my $OpacRenewalAllowed;
-    if ($user->borrowernumber == $borrowernumber) {
-        $OpacRenewalAllowed = C4::Context->preference('OpacRenewalAllowed');
-    }
-
-    unless ($user && ($OpacRenewalAllowed
-            || haspermission($user->userid, { circulate => "circulate_remaining_permissions" }))) {
-        return $c->render(status => 403, openapi => {error => "You don't have the required permission"});
+    unless (_opac_renewal_allowed($user, $borrowernumber))  {
+        return $c->render(status => 403, openapi => {
+            error => "You don't have the required permission"});
     }
 
     my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
@@ -158,6 +152,59 @@ sub gethistory {
     }
 
     return $c->render( status => 200, openapi => $checkout );
+}
+
+sub expanded {
+    my $c = shift->openapi->valid_input or return;
+
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
+      or return;
+    my $user = $c->stash('koha.user');
+    my $opac_renewability = _opac_renewal_allowed($user, $borrowernumber);
+    my $checkouts = Koha::Checkouts->search({
+        borrowernumber => $borrowernumber
+    });
+    my $checkouts_json = $checkouts->TO_JSON;
+
+    foreach my $checkout (@{$checkouts_json}) {
+        my $item         = Koha::Items->find($checkout->{itemnumber});
+        my $branchcode   = C4::Circulation::_GetCircControlBranch( $item->unblessed,
+                                                                   $borrower);
+        my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+            {   categorycode => $borrower->{categorycode},
+                itemtype     => $item->effective_itemtype,
+                branchcode   => $branchcode
+            }
+        );
+        $checkout->{'max_renewals'} = $issuing_rule
+                        ? 0+$issuing_rule->renewalsallowed : 0;
+        my ($can_renew, $error);
+        if ($opac_renewability) {
+            ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
+            $borrowernumber, $checkout->{'itemnumber'});
+        }
+
+        $checkout->{'renewable'} = $can_renew
+        ? Mojo::JSON->true : Mojo::JSON->false;
+    }
+
+    return $c->render( status => 200, openapi => $checkouts_json );
+}
+
+sub _opac_renewal_allowed {
+    my ($user, $borrowernumber) = @_;
+
+    my $OpacRenewalAllowed;
+    if ($user->borrowernumber == $borrowernumber) {
+        $OpacRenewalAllowed = C4::Context->preference('OpacRenewalAllowed');
+    }
+
+    unless ($user && ($OpacRenewalAllowed || haspermission($user->userid,
+                           { circulate => "circulate_remaining_permissions" }))) {
+        return 0;
+    }
+    return 1;
 }
 
 1;
