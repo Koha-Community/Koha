@@ -709,6 +709,39 @@ sub account_locked {
           and $self->login_attempts >= $FailedLoginAttempts )? 1 : 0;
 }
 
+=head3 can_see_patron_infos
+
+my $can_see = $patron->can_see_patron_infos( $patron );
+
+Return true if the patron (usually the logged in user) can see the patron's infos for a given patron
+
+=cut
+
+sub can_see_patron_infos {
+    my ( $self, $patron ) = @_;
+    my $can = 0;
+    if ( $self->branchcode eq $patron->branchcode ) {
+        $can = 1;
+    } elsif ( $self->can( { borrowers => 'view_borrower_infos_from_any_libraries' } ) ) {
+        $can = 1;
+    } elsif ( my $library_groups = $self->library->library_groups ) {
+        while ( my $library_group = $library_groups->next ) {
+            if ( $library_group->parent->has_child( $patron->library->branchcode ) ) {
+                $can = 1;
+                last;
+            }
+        }
+    }
+    return $can;
+}
+
+sub can {
+    my ( $self, $flagsrequired ) = @_;
+    return unless $self->userid;
+    # TODO code from haspermission needs to be moved here!
+    return C4::Auth::haspermission( $self->userid, $flagsrequired );
+}
+
 =head3 type
 
 =cut
