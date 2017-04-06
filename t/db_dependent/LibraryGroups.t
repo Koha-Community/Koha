@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use t::lib::TestBuilder;
 
@@ -82,6 +82,29 @@ subtest 'Koha::Library->library_groups' => sub {
     $groups = $library1->library_groups;
     is( ref( $groups ), 'Koha::Library::Groups', 'Koha::Library->library_groups should return Koha::Library::Groups' );
     is( $groups->count, 2, 'Library 1 should be part of 2 groups' );
+};
+
+# root_group
+#     + groupA
+#         + groupA1
+#             + groupA1_library2
+#         + groupA_library1
+#         + groupA2
+#     + groupB
+#         + groupB_library1
+
+subtest 'Koha::Library::Group->has_child' => sub {
+    plan tests => 2;
+    is( $groupA->has_child( $library1->{branchcode} ), 1, 'library1 should be condidered as a child of groupA' );
+    is( $groupB->has_child( $library2->{branchcode} ), 0, 'library2 should not be considered as a child of groupB' );
+
+    # TODO This is not implemented because not used yet
+    # ->has_child only works with libraries
+    #is( $groupA->has_child( $groupA1 ), 1, 'groupA1 should be condidered as a child of groupA' );
+
+    # FIXME At the time of writing this test fails because the ->children methods does not return more than 1 level of depth
+    # See Bug 15707 comments 166-170+
+    #is( $groupA->has_child( $groupA1_library2->branchcode ), 1, 'groupA1_library2 should be considered as a child of groupA (it is a grandchild)' );
 };
 
 my $groupX = Koha::Library::Group->new( { title => "Group X" } )->store();

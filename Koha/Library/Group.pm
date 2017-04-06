@@ -62,6 +62,21 @@ sub children {
     return wantarray ? $children->as_list : $children;
 }
 
+=head3 has_child
+
+my $has_child = $group->has_child( $branchcode );
+
+Return true if the given branchcode library is a child of this group.
+
+=cut
+
+sub has_child {
+    my ( $self, $branchcode ) = @_;
+    return unless $branchcode; # Does not support group of libraries.
+    return ( grep { $_ and $_ eq $branchcode }
+          $self->children->get_column('branchcode') ) ? 1 : 0;
+}
+
 =head3 library
 
 my $library = $group->library();
