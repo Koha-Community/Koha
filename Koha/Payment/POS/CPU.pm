@@ -342,15 +342,15 @@ sub _calculate_payment_hash {
     my ($class, $payment) = @_;
     my $data;
 
-    foreach my $param (sort keys $payment){
+    foreach my $param (sort keys %$payment){
         next if $param eq "Hash";
         my $value = $payment->{$param};
 
         if (ref($payment->{$param}) eq 'ARRAY') {
             my $product_hash = $value;
             $value = "";
-            foreach my $product (values $product_hash){
-                foreach my $product_data (sort keys $product){
+            foreach my $product (values %$product_hash){
+                foreach my $product_data (sort keys %$product){
                     $value .= $product->{$product_data} . "&";
                 }
             }
@@ -532,7 +532,7 @@ sub _validate_cpu_hash {
     # none of the fields contain ';' character (from CPU documentation)
     # Also it seems that fields should be trim()med or they could cause problems
     # in SHA2 hash calculation at payment server
-    foreach my $field (keys $invoice){
+    foreach my $field (keys %$invoice){
         $invoice->{$field} =~ s/;//g if defined $invoice->{$field}; # Remove semicolon
         $invoice->{$field} =~ s/^\s+|\s+$//g if defined $invoice->{$field}; # Trim both ends
         my $tmp_field = $invoice->{$field};
@@ -543,7 +543,7 @@ sub _validate_cpu_hash {
 
     $invoice->{Mode} = int($invoice->{Mode});
     foreach my $product (@{ $invoice->{Products} }){
-        foreach my $product_field (keys $product){
+        foreach my $product_field (keys %$product){
             $product->{$product_field} =~ s/;//g if defined $invoice->{$product_field}; # Remove semicolon
             $product->{$product_field} =~ s/'//g if defined $invoice->{$product_field}; # Remove '
             $product->{$product_field} =~ s/^\s+|\s+$//g if defined $invoice->{$product_field}; # Trim both ends
