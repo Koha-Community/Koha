@@ -56,6 +56,18 @@ sub get_effective_marcorgcode {
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
 
+=head3 library_groups
+
+Return the Library groups of this library
+
+=cut
+
+sub library_groups {
+    my ( $self ) = @_;
+    my $rs = $self->_result->library_groups;
+    return Koha::Library::Groups->_new_from_dbic( $rs );
+}
+
 =head2 Internal methods
 
 =head3 _type

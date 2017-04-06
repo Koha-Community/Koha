@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use t::lib::TestBuilder;
 
@@ -42,8 +42,10 @@ ok( $in_list, 'New root group is in the list returned by the get_root_groups met
 my $groupA  = Koha::Library::Group->new({ parent_id => $root_group->id, title => 'Group A' })->store();
 my $groupA1 = Koha::Library::Group->new({ parent_id => $groupA->id,     title => 'Group A1' })->store();
 my $groupA2 = Koha::Library::Group->new({ parent_id => $groupA->id,     title => 'Group A2' })->store();
+my $groupB  = Koha::Library::Group->new({ parent_id => $root_group->id, title => 'Group B' })->store();
 
 my $groupA_library1  = Koha::Library::Group->new({ parent_id => $groupA->id,  branchcode => $library1->{branchcode} })->store();
+my $groupB_library1  = Koha::Library::Group->new({ parent_id => $groupB->id,  branchcode => $library1->{branchcode} })->store();
 my $groupA1_library2 = Koha::Library::Group->new({ parent_id => $groupA1->id, branchcode => $library2->{branchcode} })->store();
 
 my @children = $root_group->children()->as_list();
@@ -68,6 +70,19 @@ $in_list = any { $_->id eq $groupA_library1->branchcode } @libraries_not_direct_
 ok( !$in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 1 is not in the list');
 $in_list = any { $_->id eq $groupA1_library2->branchcode } @libraries_not_direct_children;
 ok( $in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 2 is in the list');
+
+subtest 'Koha::Library->library_groups' => sub {
+    plan tests => 4;
+    my $library3 = Koha::Libraries->find( $library3->{branchcode} );
+    my $groups = $library3->library_groups;
+    is( ref( $groups ), 'Koha::Library::Groups', 'Koha::Library->library_groups should return Koha::Library::Groups' );
+    is( $groups->count, 0, 'Library 3 should not be part of any groups');
+
+    my $library1 = Koha::Libraries->find( $library1->{branchcode} );
+    $groups = $library1->library_groups;
+    is( ref( $groups ), 'Koha::Library::Groups', 'Koha::Library->library_groups should return Koha::Library::Groups' );
+    is( $groups->count, 2, 'Library 1 should be part of 2 groups' );
+};
 
 my $groupX = Koha::Library::Group->new( { title => "Group X" } )->store();
 my $groupX_library1 = Koha::Library::Group->new({ parent_id => $groupX->id,  branchcode => $library1->{branchcode} })->store();
