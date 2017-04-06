@@ -33,7 +33,6 @@ use C4::Context;
 use Koha::Database;
 use Koha::Biblio;
 use Koha::Biblioitem;
-use Koha::Biblioitems;
 use Koha::Exporter::Record;
 use Koha::Biblio::Metadata;
 
@@ -60,9 +59,8 @@ $biblio_2->append_fields(
 my ($biblionumber_2, $biblioitemnumber_2) = AddBiblio($biblio_2, '');
 
 my $bad_biblio = Koha::Biblio->new()->store();
+Koha::Biblio::Metadata->new( { biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', marcflavour => C4::Context->preference('marcflavour') } )->store();
 my $bad_biblionumber = $bad_biblio->id;
-my $bad_biblioitem = Koha::Biblioitem->new({biblionumber => $bad_biblionumber})->store();
-Koha::Biblio::Metadata->new( { biblioitemnumber => $bad_biblioitem->biblioitemnumber, biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', marcflavour => C4::Context->preference('marcflavour') } )->store();
 
 my $builder = t::lib::TestBuilder->new;
 my $item_1_1 = $builder->build({
