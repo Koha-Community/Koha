@@ -81,7 +81,7 @@ subtest 'json2marc' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 6;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
     my $query = $builder->build_query();
@@ -101,6 +101,20 @@ subtest 'build_query tests' => sub {
         'homebranch added to facets if DisplayLibraryFacets=home' );
     ok( !defined $query->{aggregations}{holdingbranch},
         'holdingbranch not added to facets if DisplayLibraryFacets=home' );
+
+    t::lib::Mocks::mock_preference('QueryAutoTruncate','');
+    ( undef, $query ) = $builder->build_query_compat( undef, ['donald duck'] );
+    is( $query->{query}{query_string}{query}, "(donald duck)", "query not altered if QueryAutoTruncate disabled" );
+
+    t::lib::Mocks::mock_preference('QueryAutoTruncate','1');
+    ( undef, $query ) = $builder->build_query_compat( undef, ['donald duck'] );
+    is( $query->{query}{query_string}{query}, "(donald* duck*)", "simple query is auto truncated when QueryAutoTruncate enabled" );
+    ( undef, $query ) = $builder->build_query_compat( undef, ['donald or duck and mickey not mouse'] );
+    is( $query->{query}{query_string}{query}, "(donald* or duck* and mickey* not mouse*)", "reserved words are not affected by QueryAutoTruncate" ); #Ensure reserved words are not truncated
+    ( undef, $query ) = $builder->build_query_compat( undef, ['donald* duck*'] );
+    is( $query->{query}{query_string}{query}, "(donald* duck*)", "query with '*' is unaltered when QueryAutoTruncate is enabled" );
+
+
 };
 
 1;
