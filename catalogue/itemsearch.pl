@@ -36,10 +36,10 @@ my $cgi = new CGI;
 my %params = $cgi->Vars;
 
 my $format = $cgi->param('format');
-my ($template_name, $content_type);
+my $template_name = 'catalogue/itemsearch.tt';
+
 if (defined $format and $format eq 'json') {
     $template_name = 'catalogue/itemsearch_json.tt';
-    $content_type = 'json';
 
     # Map DataTables parameters with 'regular' parameters
     $cgi->param('rows', scalar $cgi->param('iDisplayLength'));
@@ -75,10 +75,8 @@ if (defined $format and $format eq 'json') {
 
     # Retrieve all results
     $cgi->param('rows', 0);
-} else {
-    $format = 'html';
-    $template_name = 'catalogue/itemsearch.tt';
-    $content_type = 'html';
+} elsif (defined $format) {
+    die "Unsupported format $format";
 }
 
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
@@ -226,93 +224,78 @@ if (scalar keys %params > 0) {
         search_params => $search_params,
         results => $results,
         total_rows => $total_rows,
-        search_done => 1,
     );
 
-    if ($format eq 'html') {
-        # Build pagination bar
-        my $url = '/cgi-bin/koha/catalogue/itemsearch.pl';
-        my @params;
-        foreach my $p (keys %params) {
-            my @v = $cgi->multi_param($p);
-            push @params, map { "$p=" . $_ } @v;
+    if ($format eq 'csv') {
+        print $cgi->header({
+            type => 'text/csv',
+            attachment => 'items.csv',
+        });
+
+        for my $line ( split '\n', $template->output ) {
+            print "$line\n" unless $line =~ m|^\s*$|;
         }
-        $url .= '?' . join ('&', @params);
-        my $nb_pages = 1 + int($total_rows / $search_params->{rows});
-        my $current_page = $search_params->{page};
-        my $pagination_bar = pagination_bar($url, $nb_pages, $current_page, 'page');
+    } elsif ($format eq 'json') {
+        output_with_http_headers $cgi, $cookie, $template->output, 'json';
+    }
 
-        $template->param(pagination_bar => $pagination_bar);
+    exit;
+}
+
+# Display the search form
+
+my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
+my @locations;
+foreach my $location (@$location_values) {
+    push @locations, {
+        value => $location->{authorised_value},
+        label => $location->{lib} // $location->{authorised_value},
+    };
+}
+my @itemtypes;
+foreach my $itemtype ( Koha::ItemTypes->search ) {
+    push @itemtypes, {
+        value => $itemtype->itemtype,
+        label => $itemtype->translated_description,
+    };
+}
+
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.ccode', authorised_value => { not => undef } });
+my $ccode_avcode = $mss->count ? $mss->next->authorised_value : 'CCODE';
+my $ccodes = GetAuthorisedValues($ccode_avcode);
+my @ccodes;
+foreach my $ccode (@$ccodes) {
+    push @ccodes, {
+        value => $ccode->{authorised_value},
+        label => $ccode->{lib},
+    };
+}
+
+my @notforloans;
+foreach my $value (@$notforloan_values) {
+    push @notforloans, {
+        value => $value->{authorised_value},
+        label => $value->{lib},
+    };
+}
+
+my @items_search_fields = GetItemSearchFields();
+
+my $authorised_values = {};
+foreach my $field (@items_search_fields) {
+    if (my $category = ($field->{authorised_values_category})) {
+        $authorised_values->{$category} = GetAuthorisedValues($category);
     }
 }
 
-if ($format eq 'html') {
-    # Retrieve data required for the form.
+$template->param(
+    branches => \@branches,
+    locations => \@locations,
+    itemtypes => \@itemtypes,
+    ccodes => \@ccodes,
+    notforloans => \@notforloans,
+    items_search_fields => \@items_search_fields,
+    authorised_values_json => to_json($authorised_values),
+);
 
-    my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
-    my @locations;
-    foreach my $location (@$location_values) {
-        push @locations, {
-            value => $location->{authorised_value},
-            label => $location->{lib} // $location->{authorised_value},
-        };
-    }
-    my @itemtypes;
-    foreach my $itemtype ( Koha::ItemTypes->search ) {
-        push @itemtypes, {
-            value => $itemtype->itemtype,
-            label => $itemtype->translated_description,
-        };
-    }
-
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.ccode', authorised_value => { not => undef } });
-    my $ccode_avcode = $mss->count ? $mss->next->authorised_value : 'CCODE';
-    my $ccodes = GetAuthorisedValues($ccode_avcode);
-    my @ccodes;
-    foreach my $ccode (@$ccodes) {
-        push @ccodes, {
-            value => $ccode->{authorised_value},
-            label => $ccode->{lib},
-        };
-    }
-
-    my @notforloans;
-    foreach my $value (@$notforloan_values) {
-        push @notforloans, {
-            value => $value->{authorised_value},
-            label => $value->{lib},
-        };
-    }
-
-    my @items_search_fields = GetItemSearchFields();
-
-    my $authorised_values = {};
-    foreach my $field (@items_search_fields) {
-        if (my $category = ($field->{authorised_values_category})) {
-            $authorised_values->{$category} = GetAuthorisedValues($category);
-        }
-    }
-
-    $template->param(
-        branches => \@branches,
-        locations => \@locations,
-        itemtypes => \@itemtypes,
-        ccodes => \@ccodes,
-        notforloans => \@notforloans,
-        items_search_fields => \@items_search_fields,
-        authorised_values_json => to_json($authorised_values),
-    );
-}
-
-if ($format eq 'csv') {
-    print $cgi->header({
-        type => 'text/csv',
-        attachment => 'items.csv',
-    });
-
-    for my $line ( split '\n', $template->output ) {
-        print "$line\n" unless $line =~ m|^\s*$|;
-    }
-} else {
-    output_with_http_headers $cgi, $cookie, $template->output, $content_type;
-}
+output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -487,23 +487,6 @@
     </div>
   </div>
   <div id="doc3" class="yui-t7">
-      <div id="results-wrapper">
-        [% IF search_done %]
-          [% IF total_rows > 0 %]
-            <p>Found [% total_rows %] results.</p>
-          [% ELSE %]
-            <p>No results found.</p>
-          [% END %]
-
-          [% IF results %]
-            [% INCLUDE 'catalogue/itemsearch_items.inc' items = results %]
-          [% END %]
-
-          <div class="pages">
-            [% pagination_bar %]
-          </div>
-
-        [% END %]
-      </div>
+      <div id="results-wrapper"></div>
 
     [% INCLUDE 'intranet-bottom.inc' %]
