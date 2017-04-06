@@ -32,6 +32,7 @@ __PACKAGE__->table("deletedbiblio_metadata");
 =head2 biblionumber
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 format
@@ -51,26 +52,19 @@ __PACKAGE__->table("deletedbiblio_metadata");
   data_type: 'longtext'
   is_nullable: 0
 
-=head2 biblioitemnumber
-
-  data_type: 'integer'
-  is_nullable: 0
-
 =cut
 
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "biblionumber",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "format",
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "marcflavour",
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "metadata",
   { data_type => "longtext", is_nullable => 0 },
-  "biblioitemnumber",
-  { data_type => "integer", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -91,8 +85,6 @@ __PACKAGE__->set_primary_key("id");
 
 =over 4
 
-=item * L</biblioitemnumber>
-
 =item * L</biblionumber>
 
 =item * L</format>
@@ -105,12 +97,29 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->add_unique_constraint(
   "deletedbiblio_metadata_uniq_key",
-  ["biblioitemnumber", "biblionumber", "format", "marcflavour"],
+  ["biblionumber", "format", "marcflavour"],
+);
+
+=head1 RELATIONS
+
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Deletedbiblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Deletedbiblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-03-15 12:08:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:s2+vDtfa+QqaWtXgPT6fZg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hKgy8bBepvfP/ZYPApJnwQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
