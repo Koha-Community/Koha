@@ -199,6 +199,14 @@ eval { #run in a eval-block so we don't die without tearing down the test contex
     ok(not(defined($permissionModule)), "PermissionManager from objects, delPermissionModule:> Module deleted.");
 
 
+    ##Grant all subpermissions from a permission module
+    $permissionManager->revokeAllPermissions($borrowers->{'1A01'});
+    $permissionManager->grantAllSubpermissions($borrowers->{'1A01'}, ['circulate']);
+    ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'circulate', 'circulate_remaining_permissions'), "PermissionManager, grant all subpermissions of module:> Borrower has all permissions 1.");
+    ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'circulate', 'override_renewals'), "PermissionManager, grant all subpermissions of module:> Borrower has all permissions 2.");
+    ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'circulate', 'overdues_report'), "PermissionManager, grant all subpermissions of module:> Borrower has all permissions 3.");
+    ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'circulate', 'force_checkout'), "PermissionManager, grant all subpermissions of module:> Borrower has all permissions 4.");
+    ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'circulate', 'manage_restrictions'), "PermissionManager, grant all subpermissions of module:> Borrower has all permissions 5.");
 
     ##Testing superlibrarian permission
     $permissionManager->revokeAllPermissions($borrowers->{'1A01'});

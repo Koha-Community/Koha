@@ -313,6 +313,51 @@ sub getBorrowerPermissions {
     return \@borrowerPermissions;
 }
 
+=head grantAllSubpermissions
+
+    $permissionManager->grantAllSubpermissions($borrower, [
+        borrowers,
+        reserveforothers,
+        tools
+    ]);
+
+    $permissionManager->grantAllSubpermissions($borrower,
+        \Koha::Auth::PermissionModules->as_list
+    );
+
+    $permissionManager->grantAllSubpermissions($borrower, [
+        Koha::Auth::PermissionModule,
+        Koha::Auth::PermissionModule,
+        Koha::Auth::PermissionModule
+    ]);
+
+Grants all permissions from the given module(s).
+
+@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Borrower
+@THROWS Koha::Exception::BadParameter
+=cut
+
+sub grantAllSubpermissions {
+    my ($self, $borrower, $modules) = @_;
+
+    unless (ref($modules) eq 'ARRAY') {
+        $modules = [$modules];
+    }
+
+    my $to_be_granted = {};
+    foreach my $module (@$modules) {
+        if (ref($module) eq 'Koha::Auth::PermissionModule') {
+            $to_be_granted->{$module->module} = $module->getPermissions();
+        } else {
+            $to_be_granted->{$module} = Koha::Auth::PermissionModules->find({
+                                        module => $module,
+                                    })->getPermissions();
+        }
+    }
+
+    $self->grantPermissions($borrower, $to_be_granted);
+}
+
 =head grantPermissions
 
     $permissionManager->grantPermissions($borrower, {borrowers => 'view_borrowers',

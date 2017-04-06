@@ -8,6 +8,9 @@ use Carp;
 use Module::Load;
 use String::Random;
 
+use Koha::Auth::PermissionManager;
+use Koha::Auth::PermissionModules;
+
 sub new {
     my ($class) = @_;
     my $self = {};
@@ -111,10 +114,18 @@ sub build {
     }
 
     # store this record and return hashref
-    return $self->_storeColumnValues({
+    my $stored_values = $self->_storeColumnValues({
         source => $source,
         values => $col_values,
     });
+
+    # KOHA-SUOMI PERMISSION HACK:
+    # Translate borrowers.flags into Koha-Suomi compatible permissions
+    if ($source eq 'Borrower') {
+        $self->_koha_suomi_permission_flags($stored_values->{borrowernumber}, $params);
+    }
+
+    return $stored_values;
 }
 
 # ------------------------------------------------------------------------------
@@ -455,6 +466,50 @@ sub _gen_default_values {
             more_subfields_xml => undef,
         },
     };
+}
+
+sub _koha_suomi_permission_flags {
+    my ($self, $borrowernumber, $params) = @_;
+
+    my $values = $params->{value};
+    return unless $values and $values->{flags};
+
+    my $patron  = Koha::Patrons->find($borrowernumber);
+    my $manager = Koha::Auth::PermissionManager->new();
+
+    my $userflags = _koha_community_userflags();
+    my @patron_permissions;
+    foreach my $flag (keys %$userflags) {
+        if ($values->{flags} & ( 2**$flag)) {
+            push @patron_permissions, $userflags->{$flag}->{'flag'};
+        }
+    }
+
+    $manager->grantAllSubpermissions($patron, \@patron_permissions);
+}
+
+sub _koha_community_userflags {
+    return {
+        0 =>  { flag => 'superlibrarian' },
+        1 =>  { flag => 'circulate' },
+        2 =>  { flag => 'catalogue' },
+        3 =>  { flag => 'parameters' },
+        4 =>  { flag => 'borrowers' },
+        5 =>  { flag => 'permissions' },
+        6 =>  { flag => 'reserveforothers' },
+        9 =>  { flag => 'editcatalogue' },
+        10 => { flag => 'updatecharges' },
+        11 => { flag => 'acquisition' },
+        12 => { flag => 'management' },
+        13 => { flag => 'tools' },
+        14 => { flag => 'editauthorities' },
+        15 => { flag => 'serials' },
+        16 => { flag => 'reports' },
+        17 => { flag => 'staffaccess' },
+        18 => { flag => 'coursereserves' },
+        19 => { flag => 'plugins' },
+        20 => { flag => 'lists' },
+    }
 }
 
 =head1 NAME
