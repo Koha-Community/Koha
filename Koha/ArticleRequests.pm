@@ -38,6 +38,29 @@ Koha::ArticleRequests - Koha ArticleRequests Object class
 
 =cut
 
+=head3 search_limited
+
+my $article_requests = Koha::ArticleRequests->search_limited( $params, $attributes );
+
+Search for article requests according to logged in patron restrictions
+
+=cut
+
+sub search_limited {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $userenv = C4::Context->userenv;
+    my @restricted_branchcodes;
+    if ( $userenv ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+    }
+    # TODO This 'borrowernumber' relation name is confusing and needs to be renamed
+    $params->{'borrowernumber.branchcode'} = { -in => \@restricted_branchcodes } if @restricted_branchcodes;
+    $attributes->{join} = 'borrowernumber';
+    return $self->search( $params, $attributes );
+}
+
 =head3 pending
 
 =cut
@@ -45,8 +68,8 @@ Koha::ArticleRequests - Koha ArticleRequests Object class
 sub pending {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Pending };
-    $params->{branchcode} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search( $params );
+    $params->{'me.branchcode'} = $branchcode if $branchcode;
+    return Koha::ArticleRequests->search_limited( $params );
 }
 
 =head3 processing
@@ -56,8 +79,8 @@ sub pending {
 sub processing {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Processing };
-    $params->{branchcode} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search( $params );
+    $params->{'me.branchcode'} = $branchcode if $branchcode;
+    return Koha::ArticleRequests->search_limited( $params );
 }
 
 =head3 completed
@@ -67,8 +90,8 @@ sub processing {
 sub completed {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Completed };
-    $params->{branchcode} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search( $params );
+    $params->{'me.branchcode'} = $branchcode if $branchcode;
+    return Koha::ArticleRequests->search_limited( $params );
 }
 
 =head3 canceled
@@ -78,8 +101,8 @@ sub completed {
 sub canceled {
     my ( $self, $branchcode ) = @_;
     my $params = { status => Koha::ArticleRequest::Status::Canceled };
-    $params->{branchcode} = $branchcode if $branchcode;
-    return Koha::ArticleRequests->search( $params );
+    $params->{'me.branchcode'} = $branchcode if $branchcode;
+    return Koha::ArticleRequests->search_limited( $params );
 }
 
 =head3 _type

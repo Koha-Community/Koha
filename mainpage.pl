@@ -68,12 +68,12 @@ my $pendingtags        = get_count_by_tag_status(0);
 my $pendingsuggestions = CountSuggestion("ASKED");
 my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count( $branch );
 my $pending_discharge_requests = Koha::Patron::Discharge::count({ pending => 1 });
-my $pending_article_requests = Koha::ArticleRequests->count(
+my $pending_article_requests = Koha::ArticleRequests->search_limited(
     {
         status => Koha::ArticleRequest::Status::Pending,
         $branch ? ( branchcode => $branch ) : (),
     }
-);
+)->count;
 
 $template->param(
     pendingcomments                => $pendingcomments,
