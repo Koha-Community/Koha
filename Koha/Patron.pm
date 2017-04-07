@@ -720,14 +720,27 @@ Return true if the patron (usually the logged in user) can see the patron's info
 
 sub can_see_patron_infos {
     my ( $self, $patron ) = @_;
+    return $self->can_see_patrons_from( $patron->library->branchcode );
+}
+
+=head3 can_see_patrons_from
+
+my $can_see = $patron->can_see_patrons_from( $branchcode );
+
+Return true if the patron (usually the logged in user) can see the patron's infos from a given library
+
+=cut
+
+sub can_see_patrons_from {
+    my ( $self, $branchcode ) = @_;
     my $can = 0;
-    if ( $self->branchcode eq $patron->branchcode ) {
+    if ( $self->branchcode eq $branchcode ) {
         $can = 1;
     } elsif ( $self->can( { borrowers => 'view_borrower_infos_from_any_libraries' } ) ) {
         $can = 1;
     } elsif ( my $library_groups = $self->library->library_groups ) {
         while ( my $library_group = $library_groups->next ) {
-            if ( $library_group->parent->has_child( $patron->library->branchcode ) ) {
+            if ( $library_group->parent->has_child( $branchcode ) ) {
                 $can = 1;
                 last;
             }
@@ -777,6 +790,7 @@ sub libraries_where_can_see_patrons {
             }
         }
     }
+
     return sort(uniq(@restricted_branchcodes));
 }
 
