@@ -274,7 +274,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('NorwegianPatronDBSearchNLAfterLocalHit','0',NULL,'Search NL if a search has already given one or more local hits?.','YesNo'),
 ('NotesBlacklist','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
 ('NotHighlightedWords','and|or|not',NULL,'List of words to NOT highlight when OpacHitHighlight is enabled','free'),
-('NoticeBcc','','','Email address to bcc outgoing overdue notices sent by email','free'),
+('NoticeBcc','','','Email address to bcc outgoing notices sent by email','free'),
 ('NoticeCSS','',NULL,'Notices CSS url.','free'),
 ('NotifyBorrowerDeparture','30',NULL,'Define number of days before expiry where circulation is warned about patron account expiry','Integer'),
 ('NovelistSelectEnabled','0',NULL,'Enable Novelist Select content.  Requires Novelist Profile and Password','YesNo'),
