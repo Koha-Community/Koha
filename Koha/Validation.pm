@@ -39,6 +39,7 @@ This module lets you validate given inputs.
 =head3 email
 
 Koha::Validation::email("email@address.com");
+Koha::Validation->email("email@address.com");
 
 Validates given email.
 
@@ -48,6 +49,7 @@ returns: 1 if the given email is valid (or empty), 0 otherwise.
 
 sub email {
     my $address = shift;
+    $address = shift if $address eq __PACKAGE__;
 
     return 1 unless $address;
     return 0 if $address =~ /(^(\s))|((\s)$)/;
@@ -58,6 +60,7 @@ sub email {
 =head3 phone
 
 Koha::Validation::validate_phonenumber(123456789);
+Koha::Validation->validate_phonenumber(123456789);
 
 Validates given phone number.
 
@@ -67,6 +70,7 @@ returns: 1 if the given phone number is valid (or empty), 0 otherwise.
 
 sub phone {
     my $phonenumber = shift;
+    $phonenumber = shift if $phonenumber eq __PACKAGE__;
 
     return 1 unless $phonenumber;
     return 0 if $phonenumber =~ /(^(\s))|((\s)$)/;

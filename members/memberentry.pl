@@ -443,7 +443,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
-            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
+            C4::Form::MessagingPreferences::handle_form_action($input, \%newdata, $template, 1, $newdata{'categorycode'});
         }
         # Try to do the live sync with the Norwegian national patron database, if it is enabled
         if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -504,7 +504,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
-            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
+            C4::Form::MessagingPreferences::handle_form_action($input, \%data, $template);
         }
 	}
 	print scalar ($destination eq "circ") ? 

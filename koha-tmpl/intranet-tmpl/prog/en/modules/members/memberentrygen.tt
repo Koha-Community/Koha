@@ -63,6 +63,15 @@ $(document).ready(function() {
         $(".toggler").toggle();
     });
 
+    [% IF email %]
+    patron_email = "[% email %]";
+    [% END %]
+    [% IF phone %]
+    patron_phone = "[% phone %]";
+    [% END %]
+    [% IF smsalertnumber %]
+    patron_sms = "[% smsalertnumber %]";
+    [% END %]
 
     var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
     $.validator.addMethod('phone', function(value) {
@@ -113,6 +122,7 @@ $(document).ready(function() {
 //]]>
 </script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/members_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/messaging-preference_[% KOHA_VERSION %].js"></script>
 </head>
 <body id="pat_memberentrygen" class="pat">
 [% INCLUDE 'header.inc' %]

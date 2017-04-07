@@ -373,6 +373,18 @@ $(document).ready(function(){
     $("#phone, #phonepro, #B_phone, #SMSnumber").each(function(){
         $(this).val($.trim($(this).val()));
     });
+    disableCheckboxesWithInvalidPreferences($("#email"), "email");
+    disableCheckboxesWithInvalidPreferences($("#phone"), "phone");
+    disableCheckboxesWithInvalidPreferences($("#SMSnumber"), "sms");
+    $("#email").on("input change", function() {
+        disableCheckboxesWithInvalidPreferences($("#email"), "email");
+    });
+    $("#phone").on("input change", function() {
+        disableCheckboxesWithInvalidPreferences($("#phone"), "phone");
+    });
+    $("#SMSnumber").on("input change", function() {
+        disableCheckboxesWithInvalidPreferences($("#SMSnumber"), "sms");
+    });
 
     var mrform = $("#manual_restriction_form");
     var mrlink = $("#add_manual_restriction");

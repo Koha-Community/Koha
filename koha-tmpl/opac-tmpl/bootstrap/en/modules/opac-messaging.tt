@@ -25,6 +25,9 @@
                 [% IF Koha.Preference( 'EnhancedMessagingPreferencesOPAC' )  %]
                 <div id="usermessaging">
                     <h3>Your messaging settings</h3>
+                    <div id="required-email" class="alert" style="[% IF BORROWER_INFO.email %]display:none;[% END %]"><h4>Primary email</h4> is required in order to set Email preferences.</div>
+                    [% IF ( TalkingTechItivaPhone AND ValidatePhoneNumber ) %]<div id="required-phone" class="alert" style="[% IF BORROWER_INFO.phone %]display:none;[% END %]"><h4>Primary phone</h4> is required in order to set Phone preferences.</div>[% END %]
+                    [% IF ( SMSSendDriver AND ValidatePhoneNumber ) %]<div id="required-sms" class="alert" style="[% IF SMSnumber %]display:none;[% END %]"><h4>SMS number</h4> is required in order to set SMS preferences.</div>[% END %]
                     [% IF ( settings_updated ) %]
                         <div class="alert alert-success"><h4>Settings updated</h4></div>
                     [% END %]
@@ -214,11 +217,28 @@
             error.width("auto");
         }
     });
-    $("#SMSnumber").on("change", function(){
+    [% IF BORROWER_INFO.email %]
+    patron_email = "[% BORROWER_INFO.email %]";
+    [% END %]
+    [% IF BORROWER_INFO.phone %]
+    patron_phone = "[% BORROWER_INFO.phone %]";
+    [% END %]
+    [% IF smsalertnumber %]
+    patron_sms = "[% BORROWER_INFO.smsalertnumber %]";
+    [% END %]
+    disableCheckboxesWithInvalidPreferences(undefined, "email");
+    disableCheckboxesWithInvalidPreferences(undefined, "phone");
+    [% IF SMSSendDriver %]
+    $("#SMSnumber").on("input change", function(){
         $(this).val($.trim($(this).val()));
+        [% IF ( ValidatePhoneNumber ) %]
+        disableCheckboxesWithInvalidPreferences($("#SMSnumber"), "sms");
+        [% END %]
     });
+    [% END %]
   });
 //]]>
 </script>
 <script type="text/javascript" src="/opac-tmpl/bootstrap/lib/jquery/plugins/jquery.validate.min.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/messaging-preference.js"></script>
 [% END %]

@@ -170,6 +170,23 @@ sub approve {
                             && $attr->{value} == 0
                           );
                 }
+
+                # Validate messaging preferences if any of the following field
+                # have been removed
+                if (!$data->{email} || !$data->{phone} ||
+                    !$data->{smsalertnumber}) {
+                    C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
+                        $self->borrowernumber
+                    );
+                }
+                # ...or if any of the given contact information is invalid
+                elsif (!Koha::Validation::email($data->{email}) ||
+                       !Koha::Validation::phone($data->{phone}) ||
+                       !Koha::Validation::phone($data->{phone})) {
+                    C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
+                        $self->borrowernumber
+                    );
+                }
             }
             catch {
                 if ( $_->isa('DBIx::Class::Exception') ) {

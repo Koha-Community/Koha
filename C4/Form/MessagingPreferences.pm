@@ -77,11 +77,47 @@ sub handle_form_action {
     # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
     my $prefs_set = 0;
     OPTION: foreach my $option ( @$messaging_options ) {
-        my $updater = { %{ $target_params }, 
-                        message_attribute_id    => $option->{'message_attribute_id'} };
-        
+        my $updater = {
+            message_attribute_id  => $option->{'message_attribute_id'}
+        };
+
+        $updater->{borrowernumber} = $target_params->{borrowernumber};
+        if ($target_params->{categorycode} && !$target_params->{borrowernumber}) {
+            $updater->{categorycode} = $target_params->{categorycode};
+            delete $updater->{borrowernumber};
+        }
+
         # find the desired transports
-        @{$updater->{'message_transport_types'}} = $query->multi_param( $option->{'message_attribute_id'} );
+        @{$updater->{'message_transport_types'}} =
+            $query->multi_param( $option->{'message_attribute_id'} );
+
+        my $email     = $query->param('email');
+        my $phone     = $query->param('phone');
+        my $smsnumber = $query->param('SMSnumber');
+
+        # Messaging preference validation. Make sure there is a valid contact
+        # information provided for every transport method. Otherwise remove
+        # the transport method, because the message cannot be delivered!
+        if (_no_contact_set($email, $target_params, 'email')) {
+            my $id = _transport_set(
+                'email', @{$updater->{'message_transport_types'}}
+            );
+            splice(@{$updater->{'message_transport_types'}}, $id, 1) if $id > -1;
+        }
+        if (_no_contact_set($phone, $target_params, 'phone')) {
+            my $id = _transport_set(
+                'phone',@{$updater->{'message_transport_types'}}
+            );
+            splice(@{$updater->{'message_transport_types'}}, $id, 1) if $id > -1;
+        }
+        if (_no_contact_set($smsnumber, $target_params, 'smsalertnumber')) {
+            my $id = _transport_set(
+                'sms',
+                @{$updater->{'message_transport_types'}}
+            );
+            splice(@{$updater->{'message_transport_types'}}, $id, 1) if $id > -1;
+        }
+
         next OPTION unless $updater->{'message_transport_types'};
 
         if ( $option->{'has_digest'} ) {
@@ -147,6 +183,26 @@ sub set_form_values {
         $option->{'digest'} = 1 if $pref->{'wants_digest'};
     }
     $template->param(messaging_preferences => $messaging_options);
+}
+
+sub _no_contact_set {
+    my ($param, $target_params, $target_param_name) = @_;
+
+    if (defined $param && !$param) {
+        return 1;
+    }
+    elsif (!defined $param && exists $target_params->{$target_param_name}
+                           && !$target_params->{$target_param_name}) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+sub _transport_set {
+    my ($name, @transport_methods) = @_;
+
+    return List::MoreUtils::firstidx { $_ eq $name } @transport_methods;
 }
 
 =head1 TODO

@@ -77,7 +77,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
         $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber );
     }
 
-    C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $borrowernumber }, $template);
+    C4::Form::MessagingPreferences::handle_form_action($query, $borrower, $template);
 }
 
 C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrower->{'borrowernumber'} }, $template);
