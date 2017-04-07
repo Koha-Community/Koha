@@ -56,9 +56,11 @@
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
                                     This item has been withdrawn from the collection.
                                 [% ELSIF ( circ_error_RESTRICTED ) %]
+                                    This item is restricted.
                                 [% ELSIF ( circ_error_RESERVED ) %]
                                     This item is on hold for another patron.
                                 [% ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) %]
+                                    This item belongs to another branch.
                                 [% ELSIF ( circ_error_EXPIRED ) %]
                                     Your account has expired.
                                 [% ELSIF ( circ_error_DEBARRED ) %]
@@ -66,7 +68,9 @@
                                 [% ELSIF ( circ_error_CARD_LOST ) %]
                                     This card has been declared lost.
                                 [% ELSIF ( circ_error_GNA ) %]
+                                    Your contact information seems to be incomplete.
                                 [% ELSIF ( circ_error_INVALID_DATE ) %]
+                                    Due date is not valid.
                                 [% END %]
                                 Please see a member of the library staff.
                             </p>
