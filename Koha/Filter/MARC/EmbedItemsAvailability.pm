@@ -74,13 +74,10 @@ sub _processrecord {
     my ($biblionumber_field, $biblionumber_subfield) = GetMarcFromKohaField("biblio.biblionumber", '');
     my $biblionumber = $record->field($biblionumber_field)->subfield($biblionumber_subfield);
 
-    my $not_onloan_items = 0;
-    my $items = Koha::Items->search({ biblionumber => $biblionumber });
-
-    while ( my $item = $items->next ) {
-        $not_onloan_items++
-            if not $item->onloan;
-    }
+    my $not_onloan_items = Koha::Items->search({
+        biblionumber => $biblionumber,
+        onloan => undef,
+    })->count;
 
     # check for field 999
     my $destination_field = $record->field('999');
