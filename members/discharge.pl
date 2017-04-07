@@ -102,7 +102,7 @@ if ( $input->param('discharge') and $can_be_discharged ) {
 }
 
 # Already generated discharges
-my $validated_discharges = Koha::Patron::Discharge::get_validated({
+my @validated_discharges = Koha::Patron::Discharge::get_validated({
     borrowernumber => $borrowernumber,
 });
 
@@ -132,7 +132,7 @@ $template->param(
     branchcode        => $patron->branchcode,
     has_reserves      => $has_reserves,
     can_be_discharged => $can_be_discharged,
-    validated_discharges => $validated_discharges,
+    validated_discharges => \@validated_discharges,
 );
 
 $template->param( dischargeview => 1, );

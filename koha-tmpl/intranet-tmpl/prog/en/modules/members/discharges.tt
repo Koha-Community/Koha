@@ -23,7 +23,7 @@
             </tr>
           </thead>
           <tbody>
-            [% FOR d IN pending_discharges %]
+            [% FOREACH d IN pending_discharges %]
               <tr>
                 <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber %]">[% d.borrower.surname %], [% d.borrower.firstname %]</a></td>
                 <td><a href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber %]">Allow</a></td>

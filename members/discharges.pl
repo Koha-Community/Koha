@@ -52,10 +52,9 @@ if( $op eq 'allow' ) {
     }) if $borrowernumber;
 }
 
-my $pending_discharges = Koha::Patron::Discharge::get_pendings({
+my @pending_discharges = Koha::Patron::Discharge::get_pendings({
     branchcode => $branchcode
 });
-
-$template->param( pending_discharges => $pending_discharges );
+$template->param( pending_discharges => \@pending_discharges );
 
 output_html_with_http_headers $input, $cookie, $template->output;
