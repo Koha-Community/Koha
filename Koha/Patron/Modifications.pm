@@ -52,17 +52,26 @@ sub pending_count {
         AND borrower_modifications.borrowernumber = borrowers.borrowernumber
     ";
 
-    my @params;
-    if ($branchcode) {
-        $query .= " AND borrowers.branchcode = ? ";
-        push( @params, $branchcode );
+    my $userenv = C4::Context->userenv;
+    my @branchcodes;
+    if ( $userenv ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        if ($branchcode) {
+            return 0 unless $logged_in_user->can_see_patrons_from($branchcode);
+            @branchcodes = ( $branchcode );
+        }
+        else {
+            @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+        }
+    }
+    my @sql_params;
+    if ( @branchcodes ) {
+        $query .= ' AND borrowers.branchcode IN ( ' . join( ',', ('?') x @branchcodes ) . ' )';
+        push( @sql_params, @branchcodes );
     }
 
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@params);
-    my $result = $sth->fetchrow_hashref();
-
-    return $result->{count};
+    my ( $count ) = $dbh->selectrow_array( $query, undef, @sql_params );
+    return $count;
 }
 
 =head2 pending
@@ -84,14 +93,26 @@ sub pending {
         AND borrower_modifications.borrowernumber = borrowers.borrowernumber
     ";
 
-    my @params;
-    if ($branchcode) {
-        $query .= " AND borrowers.branchcode = ? ";
-        push( @params, $branchcode );
+    my $userenv = C4::Context->userenv;
+    my @branchcodes;
+    if ( $userenv ) {
+        my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
+        if ($branchcode) {
+            return 0 unless $logged_in_user->can_see_patrons_from($branchcode);
+            @branchcodes = ( $branchcode );
+        }
+        else {
+            @branchcodes = $logged_in_user->libraries_where_can_see_patrons;
+        }
+    }
+    my @sql_params;
+    if ( @branchcodes ) {
+        $query .= ' AND borrowers.branchcode IN ( ' . join( ',', ('?') x @branchcodes ) . ' )';
+        push( @sql_params, @branchcodes );
     }
     $query .= " ORDER BY borrowers.surname, borrowers.firstname";
     my $sth = $dbh->prepare($query);
-    $sth->execute(@params);
+    $sth->execute(@sql_params);
 
     my @m;
     while ( my $row = $sth->fetchrow_hashref() ) {
