@@ -43,7 +43,7 @@ my $status   = $query->param('status') || 0;
 my $reviewid = $query->param('reviewid');
 my $page     = $query->param('page') || 1;
 my $count    = C4::Context->preference('numSearchResults') || 20;
-my $total    = Koha::Reviews->search({ approved => $status })->count;
+my $total    = Koha::Reviews->search_limited({ approved => $status })->count;
 
 if ( $op eq 'approve' ) {
     my $review = Koha::Reviews->find( $reviewid );
@@ -58,7 +58,7 @@ elsif ( $op eq 'delete' ) {
     $review->delete if $review;
 }
 
-my $reviews = Koha::Reviews->search(
+my $reviews = Koha::Reviews->search_limited(
     { approved => $status },
     {
         rows => $count,

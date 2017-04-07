@@ -63,7 +63,7 @@ my $branch =
   ? C4::Context->userenv()->{'branch'}
   : undef;
 
-my $pendingcomments    = Koha::Reviews->search({ approved => 0 })->count;
+my $pendingcomments    = Koha::Reviews->search_limited({ approved => 0 })->count;
 my $pendingtags        = get_count_by_tag_status(0);
 my $pendingsuggestions = CountSuggestion("ASKED");
 my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count( $branch );
