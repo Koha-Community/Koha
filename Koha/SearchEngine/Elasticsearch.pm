@@ -141,12 +141,12 @@ sub get_elasticsearch_settings {
             analysis => {
                 analyzer => {
                     analyser_phrase => {
-                        tokenizer => 'keyword',
-                        filter    => ['lowercase'],
+                        tokenizer => 'icu_tokenizer',
+                        filter    => ['icu_folding'],
                     },
                     analyser_standard => {
-                        tokenizer => 'standard',
-                        filter    => ['lowercase'],
+                        tokenizer => 'icu_tokenizer',
+                        filter    => ['icu_folding'],
                     },
                 },
             }
@@ -170,6 +170,7 @@ sub get_elasticsearch_mappings {
     # TODO cache in the object?
     my $mappings = {
         data => {
+            _all => {type => "string", analyzer => "analyser_standard"},
             properties => {
                 record => {
                     store          => "true",
