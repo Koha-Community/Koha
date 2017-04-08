@@ -379,6 +379,10 @@ sub checkauth {
     $template->param( login => 1 );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
+    if ($info{'invalid_username_or_password'} == 1) {
+                $template->param( 'invalid_username_or_password' => $info{'invalid_username_or_password'});
+    }
+
     $template->param( \%info );
     $cookie = $query->cookie(
         -name    => 'CGISESSID',
