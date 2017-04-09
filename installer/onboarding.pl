@@ -189,7 +189,7 @@ elsif ( $step && $step == 2 ) {
             $enrolmentperioddate = output_pref(
                 {
                     dt         => dt_from_string($enrolmentperioddate),
-                    dateformat => 'iso',
+                    dateformat => 'DateTime',
                     dateonly   => 1,
                 }
             );
@@ -204,7 +204,7 @@ elsif ( $step && $step == 2 ) {
                 category_type         => $category_type,
                 default_privacy       => $default_privacy,
                 enrolmentperiod       => $enrolmentperiod,
-                enrolmentperioddate   => $enrolmentperioddate,
+                enrolmentperioddate   => $enrolmentperioddate
             }
         );
 

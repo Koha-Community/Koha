@@ -147,7 +147,7 @@ jQuery.validator.addMethod( "enrollment_period", function(){
                             <ol>
                                 <li>
                                     <label for="enrolmentperiod" style="width:6em;">In months: </label>
-                                    <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" /> months
+                                    <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" maxlength="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" /> months
                                 </li>
                                 <li>
                                     <label for="enrolmentperioddate" style="width:6em;">Until date: </label>

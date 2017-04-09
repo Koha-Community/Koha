@@ -224,13 +224,13 @@ function Hide(link)
         <p>
             We are upgrading from Koha [% dbversion %] to [% kohaversion %], you must update your database.
         <br>
-        <a href="install.pl?step=3&amp;op=updatestructure" class="button"><button>Update Database</button></a>
+        <a href="install.pl?step=3&amp;op=updatestructure" class="button">Update your database</a>
         </p>
     [% ELSE %]
         <p>We are ready to do some basic configuration. Please install some basic configuration settings to continue the installation:
         <br>
         <br>
-            <a href="install.pl?step=3&amp;op=choosemarc" class="button"><button>Install Basic Configuration Settings</button></a>
+            <a href="install.pl?step=3&amp;op=choosemarc" class="button">Install basic configuration settings</a>
 
     [% END %]
 [% END %]
@@ -256,7 +256,7 @@ function Hide(link)
  [% UNLESS ( has_update_errors ) %]
     <p>Everything went OK, update done.</p>
   [% END %]
-<a href="install.pl?step=3&amp;op=choosemarc" class="button"><button>Back to Installation</button></a>
+<a href="install.pl?step=3&amp;op=finished" class="button">Continue to log in to Koha</a>
   </div>
 [% END %]
 
