@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Biblio;
 use C4::Items;
@@ -151,6 +151,19 @@ subtest 'title_remainder' => sub {
 
     my $biblio = Koha::Biblios->find($bibnum);
     is($biblio->title_remainder, 'Remainder', 'Got remainder of title');
+};
+
+subtest 'store' => sub {
+    plan tests => 2;
+
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('BK');
+
+    my $biblio = Koha::Biblios->find($bibnum);
+    $biblio->title_remainder;
+    is(ref($biblio->{_record}), 'MARC::Record',
+       'MARC::Record is cached in the object');
+    $biblio->store;
+    is($biblio->{_record}, undef, 'store invalidates ->{_record}');
 };
 
 $schema->storage->txn_rollback;

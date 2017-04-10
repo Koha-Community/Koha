@@ -416,8 +416,21 @@ Returns the Remainder of title, 245$b.
 sub title_remainder {
     my ($self) = @_;
 
-    return unless my $record = C4::Biblio::GetMarcBiblio($self->biblionumber);
+    $self->{_record} ||= C4::Biblio::GetMarcBiblio($self->biblionumber);
+    return unless my $record = $self->{_record};
     return $record->subfield('245','b');
+}
+
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    $self->{_record} = undef;
+
+    $self->SUPER::store;
 }
 
 =head3 type
