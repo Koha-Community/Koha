@@ -460,7 +460,14 @@ $(document).ready(function() {
  [% ELSE %]
  <li id="contact-details" style="display: none">
  [% END %]
-     <span class="label">Patron #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid |html %]</a>[% END %]
+     <span class="label">Patron #:</span>
+     [% IF guarantorid %]
+        [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid | html %]</a>
+        [% ELSE %]
+            [% guarantorid | html %]
+        [% END %]
+    [% END %]
  </li>
         [% UNLESS nocontactname %]
  <li>

@@ -271,14 +271,18 @@ function validate1(date) {
                 <span class="label">Guarantees:</span>
                 <ul>
                     [% FOREACH guarantee IN guarantees %]
-                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                        [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
+                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                        [% ELSE %]
+                            <li>[% guarantee.firstname | html %] [% guarantee.surname | html %]</li>
+                        [% END %]
                     [% END %]
                 </ul>
             </li>
         [% ELSIF guarantor %]
             <li>
                 <span class="label">Guarantor:</span>
-                [% IF guarantor.borrowernumber %]
+                [% IF guarantor.borrowernumber AND logged_in_user.can_see_patron_infos( guarantor ) %]
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
                 [% ELSE %]
                     [% guarantor.firstname | html %] [% guarantor.surname | html %]

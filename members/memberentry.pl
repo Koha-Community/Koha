@@ -755,10 +755,13 @@ $template->param(
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
+$guarantorid = $borrower_data->{'guarantorid'} || $guarantorid;
+my $guarantor = $guarantorid ? Koha::Patrons->find( $guarantorid ) : undef;
 $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
-  guarantorid => ($borrower_data->{'guarantorid'} || $guarantorid),
+  guarantor   => $guarantor,
+  guarantorid => $guarantorid,
   relshiploop => \@relshipdata,
   btitle=> $default_borrowertitle,
   guarantorinfo   => $guarantorinfo,
