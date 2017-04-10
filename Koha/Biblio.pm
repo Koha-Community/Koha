@@ -405,6 +405,21 @@ sub subscriptions {
 }
 
 
+=head3 title_remainder
+
+my $field = $self->title_remainder
+
+Returns the Remainder of title, 245$b.
+
+=cut
+
+sub title_remainder {
+    my ($self) = @_;
+
+    return unless my $record = C4::Biblio::GetMarcBiblio($self->biblionumber);
+    return $record->subfield('245','b');
+}
+
 =head3 type
 
 =cut

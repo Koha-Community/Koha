@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use C4::Biblio;
 use C4::Items;
@@ -144,6 +144,15 @@ subtest 'can_be_transferred' => sub {
        .' invalid library is given.');
 };
 
+subtest 'title_remainder' => sub {
+    plan tests => 1;
+
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('BK');
+
+    my $biblio = Koha::Biblios->find($bibnum);
+    is($biblio->title_remainder, 'Remainder', 'Got remainder of title');
+};
+
 $schema->storage->txn_rollback;
 
 
@@ -155,7 +164,7 @@ sub create_helper_biblio {
     $title = 'Silence in the library';
     $bib->append_fields(
         MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
+        MARC::Field->new('245', ' ', ' ', a => $title, b => 'Remainder'),
         MARC::Field->new('942', ' ', ' ', c => $itemtype),
     );
     return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
