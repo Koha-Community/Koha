@@ -56,8 +56,8 @@ sub getexpanded {
     unless ($biblio) {
         return $c->render(status => 404, openapi => {error => "Biblio not found"});
     }
-    my $expanded = $biblio->items;
-    for my $item (@{$expanded}) {
+    my @expanded = $biblio->items;
+    foreach my $item (@expanded) {
 
         # we assume item is available by default
         $item->{status} = "available";
@@ -83,7 +83,11 @@ sub getexpanded {
         }
     }
 
-    return $c->render(status => 200, openapi => { biblio => $biblio, items => $expanded });
+    my $biblio_json = $biblio->TO_JSON;
+    my $title_remainder = $biblio->title_remainder;
+    $biblio_json->{'title_remainder'} = $title_remainder if $title_remainder;
+
+    return $c->render(status => 200, openapi => { biblio => $biblio_json, items => \@expanded });
 }
 
 sub add {

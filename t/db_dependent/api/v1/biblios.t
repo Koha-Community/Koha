@@ -20,13 +20,14 @@ use Modern::Perl;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 use Data::Dumper;
 use C4::Auth;
 use C4::Context;
 use Koha::Database;
 use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
+use MARC::Field;
 
 BEGIN {
     use_ok('Koha::Biblios');
@@ -76,7 +77,36 @@ subtest 'Create biblio' => sub {
 
 	$t->json_is('/biblionumber' => $biblionumber)
 	  ->json_is('/items'      => $itemnumber)
-	  ->header_like(Location => qr/$biblionumber/, 'Location header contains biblionumber');
+	  ->header_like(Location => qr/$biblionumber/, 'Location header contains biblionumber')
+};
+
+subtest 'getexpanded() tests' => sub {
+    plan tests => 8;
+
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio({
+        itemtype => 'BK',
+        remainder_of_title => 'Remainder'
+    });
+
+    my $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/expanded");
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    $t->json_is('/biblio/biblionumber' => $bibnum)
+      ->json_is('/biblio/title_remainder' => 'Remainder');
+
+    ($bibnum, $title, $bibitemnum) = create_helper_biblio({ itemtype => 'BK' });
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/expanded");
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    $t->json_is('/biblio/biblionumber' => $bibnum)
+      ->json_hasnt('/biblio/title_remainder');
 };
 
 subtest 'Delete biblio' => sub {
@@ -91,3 +121,22 @@ subtest 'Delete biblio' => sub {
 
 
 $schema->storage->txn_rollback;
+
+# Helper method to set up a Biblio.
+sub create_helper_biblio {
+    my $params = shift;
+    my $itemtype = $params->{itemtype};
+    my $remainder = $params->{remainder_of_title};
+    my ($bibnum, $title, $bibitemnum);
+    my $bib = MARC::Record->new();
+    $title = 'Silence in the library';
+    my @title_subfields;
+    push @title_subfields, (a => $title);
+    push @title_subfields, (b => $remainder) if $remainder;
+    $bib->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', @title_subfields),
+        MARC::Field->new('942', ' ', ' ', c => $itemtype),
+    );
+    return ($bibnum, $title, $bibitemnum) = C4::Biblio::AddBiblio($bib, '');
+}
