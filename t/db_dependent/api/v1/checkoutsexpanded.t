@@ -47,7 +47,7 @@ my $module = new Test::MockModule('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
 
 subtest 'get() tests' => sub {
-    plan tests => 17;
+    plan tests => 34;
 
     $schema->storage->txn_begin;
 
@@ -117,6 +117,28 @@ subtest 'get() tests' => sub {
         ->json_is('/1/max_renewals' => 1)
         ->json_hasnt('/2');
 
+    t::lib::Mocks::mock_preference('OpacRenewalAllowed', 0);
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/expanded?borrowernumber="
+                              .$borrowernumber);
+    $tx->req->cookies({name =>'CGISESSID', value => $librariansessionid});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+        ->status_is(200)
+        ->json_is('/0/borrowernumber' => $borrowernumber)
+        ->json_is('/0/itemnumber' => $itemnumber1)
+        ->json_like('/0/date_due' => qr/$due\+\d\d:\d\d/)
+        ->json_is('/0/renewals'   => 0)
+        ->json_is('/0/renewable'  => Mojo::JSON->true)
+        ->json_is('/0/renewability_error' => undef)
+        ->json_is('/0/max_renewals' => 5)
+        ->json_is('/1/borrowernumber' => $borrowernumber)
+        ->json_is('/1/itemnumber' => $itemnumber2)
+        ->json_like('/1/date_due' => qr/$due2\+\d\d:\d\d/)
+        ->json_is('/1/renewals'   => 1)
+        ->json_is('/1/renewable'  => Mojo::JSON->false)
+        ->json_is('/1/renewability_error' => 'too_many')
+        ->json_is('/1/max_renewals' => 1)
+        ->json_hasnt('/2');
     $schema->storage->txn_rollback;
 };
 
