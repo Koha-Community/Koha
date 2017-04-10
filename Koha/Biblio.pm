@@ -433,6 +433,19 @@ sub store {
     $self->SUPER::store;
 }
 
+=head3 TO_JSON
+
+=cut
+
+sub TO_JSON {
+    my ($self) = @_;
+
+    my $json = $self->SUPER::TO_JSON;
+    my $title_remainder = $self->title_remainder;
+    $json->{'title_remainder'} = $title_remainder if $title_remainder;
+    return $json;
+}
+
 =head3 type
 
 =cut

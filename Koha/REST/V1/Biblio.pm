@@ -33,6 +33,7 @@ sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $biblio = Koha::Biblios->find($c->validation->param('biblionumber'));
+
     unless ($biblio) {
         return $c->render(status => 404, openapi => {error => "Biblio not found"});
     }
@@ -83,11 +84,7 @@ sub getexpanded {
         }
     }
 
-    my $biblio_json = $biblio->TO_JSON;
-    my $title_remainder = $biblio->title_remainder;
-    $biblio_json->{'title_remainder'} = $title_remainder if $title_remainder;
-
-    return $c->render(status => 200, openapi => { biblio => $biblio_json, items => \@expanded });
+    return $c->render(status => 200, openapi => { biblio => $biblio, items => \@expanded });
 }
 
 sub add {
