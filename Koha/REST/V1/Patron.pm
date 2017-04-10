@@ -24,7 +24,8 @@ use Koha::Patrons;
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $patrons = Koha::Patrons->search;
+    # FIXME The limited does not work here, the userenv is not set
+    my $patrons = Koha::Patrons->search_limited;
 
     return $c->render(status => 200, openapi => $patrons);
 }
