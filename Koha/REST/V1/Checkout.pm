@@ -187,6 +187,7 @@ sub expanded {
 
         $checkout->{'renewable'} = $can_renew
         ? Mojo::JSON->true : Mojo::JSON->false;
+        $checkout->{'renewability_error'} = $error;
     }
 
     return $c->render( status => 200, openapi => $checkouts_json );
