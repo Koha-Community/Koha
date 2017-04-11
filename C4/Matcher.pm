@@ -880,8 +880,130 @@ sub valid_normalization_routines {
         'remove_spaces',
         'upper_case',
         'lower_case',
-        'legacy_default'
+        'legacy_default',
+        'copy',
+        'move',
+        'paste',
+        'preserve'
     );
+}
+
+=head2 overlayRecord
+
+  $mergedRecord = $matcher->overlayRecord($old_record, $new_record);
+
+@Param1 MARC:Record of the old record whose fields should be preserved
+@Param2 MARC:Record of the record whose fields should be overwritten with the old ones
+@Returns MARC::Record-object with overlayed fields.
+
+Overlays the new_record with the designated fields from the old_record.
+Fields are defined using this C4::Matcher's "Match points".
+-Tag and subfields can be used. If only tag is given, all subfields for all the tags present in the old_record are selected.
+-If subfields are defined, only the defined subfields are selected and other subfields are lost.
+-Selected subfields/fields are copied over same elements in the new_record, or if the new_record misses those elements,
+  new ones are created.
+
+=cut
+
+sub overlayRecord {
+    my $matcher = shift; #Get my $self!
+    my ($old_record, $record) = @_;
+    foreach my $matchpoint ( @{$matcher->{matchpoints}} ) {
+        foreach my $component ( @{$matchpoint->{components}} ) {
+            my $tag = $component->{tag};
+            my @t = keys(%{$component->{subfields}});
+            my $subfield = shift(@t);
+            my $normalizer = $component->{norms}->[0];
+
+            _copyFieldsTo( $old_record, $record, $tag, $subfield );
+        }
+    }
+
+    foreach my $required_check (@{$matcher->{required_checks}}) {
+        my $source_field = $required_check->{source_matchpoint}->{components}->[0]->{tag};
+        my @t = keys(%{$required_check->{source_matchpoint}->{components}->[0]->{subfields}});
+        my $source_subfield = shift @t;
+        my $source_norms = $required_check->{source_matchpoint}->{components}->[0]->{norms}->[0];
+        my $target_field = $required_check->{target_matchpoint}->{components}->[0]->{tag};
+        @t = keys(%{$required_check->{target_matchpoint}->{components}->[0]->{subfields}});
+        my $target_subfield = shift @t;
+        my $target_norms = $required_check->{target_matchpoint}->{components}->[0]->{norms}->[0];
+
+        if ($source_norms =~ /copy/ && $target_norms =~ /paste/) {
+            _copyFieldsTo( $record, $record, $source_field, $source_subfield, $target_field, $target_subfield );
+        }
+        elsif ($source_norms =~ /move/ && $target_norms =~ /paste/) {
+            _copyFieldsTo( $record, $record, $source_field, $source_subfield, $target_field, $target_subfield );
+            if ($source_field && $source_subfield) {
+                my @source_fields = $record->field($source_field);
+                foreach my $f (@source_fields) {
+                    $f->delete_subfield(code => $source_subfield);
+                }
+            }
+            elsif ($source_field) {
+                my @source_fields = $record->field($source_field);
+                $record->delete_fields(@source_fields);
+            }
+        }
+        elsif ($source_norms =~ /preserve/ && $target_norms =~ /preserve/) {
+            _copyFieldsTo( $old_record, $record, $source_field, $source_subfield, $target_field, $target_subfield );
+        }
+
+    }
+    return $record;
+}
+#Copies the given field and subfield from $oldRecord to the $newRecord as a new field and subfield
+#
+#   _copyFieldsTo($oldRecord, $newRecord, '049', 'a', '051, 'c');
+#   _copyFieldsTo($oldRecord, $newRecord, '049', 'a'); #Target field and subfield defaults to '049' and 'a'
+#
+#@PARAM1  MARC::Record from which to copy fields from
+#@PARAM2  MARC::Record to receive the copied fields
+#@PARAM3  source tag as String
+#@PARAM4  source subfield as String, optional, if omited copies the whole field regardless of target definitions
+#@PARAM5  target field, if the source field needs to change the field code
+#@PARAM6  target subfield, if the source subfield needs to change code
+sub _copyFieldsTo {
+    my ($oldRecord, $newRecord, $sourceField, $sourceSubfield, $targetField, $targetSubfield) = @_;
+    $targetField = $sourceField unless $targetField;
+    $targetSubfield = $sourceSubfield unless $targetSubfield;
+
+    my @oldFields = $oldRecord->field($sourceField);
+    my @newFields = $newRecord->field($targetField);
+
+    if (@oldFields) { #There is no point in continuing if there is nothing to preserve.
+        for (my $oi=0 ; $oi < scalar @oldFields ; $oi++) {
+
+            my $old_field = $oldFields[$oi];
+            my $new_field = $newFields[$oi];
+            if (not($new_field) && not($sourceSubfield)) { #If no new field present, clone the old field
+                $new_field = $old_field->clone();
+                $new_field->set_tag( $targetField ) if $targetField;
+                $newRecord->append_fields( $new_field );
+            }
+            else { #Copy the designated fields
+                my @subfields = ($sourceSubfield);
+                @subfields = map {$_->[0]} $old_field->subfields() unless $sourceSubfield; #Move all subfields if none are define
+
+                if (@subfields) {
+                    foreach my $sftag ( @subfields ) {
+                        my $oldSfContent = $old_field->subfield($sftag);
+                        if ( $oldSfContent ) {
+                            $sftag = $targetSubfield if $targetSubfield;
+
+                            if (not($new_field)) { #Why is MARC::Field so crap that it doesn't allow creating an empty object?
+                                $new_field = MARC::Field->new(  $targetField, ' ', ' ', $sftag => $oldSfContent  );
+                                $newRecord->append_fields( $new_field );
+                            }
+                            else {
+                                $new_field->update( $sftag => $oldSfContent );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 1;

@@ -1,8 +1,11 @@
 //z3950_search.js for Authorities, Bib records and Acquisitions module
 function Import(Breeding, recordid, AuthType, FrameworkCode) {
 
+    var matcherid = $("select[breeding="+Breeding+"]").val();
+    $.cookie('matcher', matcherid); //Firstly set the matcher persistence cookie
+
     if ( AuthType == false ) {
-        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+recordid+"&z3950=1&frameworkcode="+FrameworkCode+"&breedingid="+Breeding;
+        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+recordid+"&z3950=1&frameworkcode="+FrameworkCode+"&breedingid="+Breeding+"&matcherid="+matcherid;
     } else {
         opener.document.location="../authorities/authorities.pl?breedingid="+Breeding+"&authtypecode="+AuthType+"&authid="+recordid;
     }

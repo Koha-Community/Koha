@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Context;
 use C4::Breeding;
 use C4::Koha;
+use C4::Matcher;
 
 my $input        = new CGI;
 my $error         = $input->param('error');
@@ -70,6 +71,14 @@ $template->param(
     dewey        => $dewey,
     subject      => $subject,
 );
+
+#Get the matchers to choose from
+my $matcherCookie = $input->cookie('matcher');
+my $matchers = [ C4::Matcher::GetMatcherList() ];
+if ($matcherCookie) {
+    foreach (@$matchers) { if($_->{matcher_id} == $matcherCookie) {$_->{selected} = 1;} } #Mark the previously selected matcher as selected
+}
+$template->param(    matchers => $matchers    ); #Send the matcher to the template
 
 if ( $op ne "do_search" ) {
     my $schema = Koha::Database->new()->schema();
