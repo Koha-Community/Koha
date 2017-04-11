@@ -11,8 +11,13 @@
 
 <div id="doc" class="yui-t7">
     <div id="bd">
-        [% IF ERROR_BARCODE_NOT_FOUND %]
-            <div class="dialog alert">No item found with barcode [% ERROR_BARCODE_NOT_FOUND %]</div>
+
+        [% IF ERROR_ITEM_NOT_FOUND %]
+            [% IF UNKNOWN_BARCODE %]
+                <div class="dialog alert">No item found with barcode [% UNKNOWN_BARCODE %]</div>
+            [% ELSE %]
+                 <div class="dialog alert">No item found</div>
+            [% END %]
         [% END %]
 
         <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
