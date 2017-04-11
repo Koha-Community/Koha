@@ -423,6 +423,11 @@ $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 # Ensure that the preference 'LetterLog' is set to logging
 t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
 
+# SendAlerts needs branchemail or KohaAdminEmailAddress as sender
+C4::Context->_new_userenv('DUMMY');
+C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'My Library', 0, '', '');
+t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
+
 {
 warning_is {
     $err = SendAlerts( 'orderacquisition', $basketno , 'TESTACQORDER' ) }
