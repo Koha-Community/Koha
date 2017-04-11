@@ -27,6 +27,8 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::Library;
 use Koha::Libraries;
 
+use t::lib::TestBuilder;
+
 use DateTime::Duration;
 use Test::More tests => 102;
 use Test::Warn;
@@ -42,6 +44,7 @@ my $sql;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
+my $builder = t::lib::TestBuilder->new;
 # Reset item types to only the default ones
 $dbh->do(q|DELETE FROM itemtypes;|);
 $sql = "
@@ -67,24 +70,12 @@ if (not defined Koha::Libraries->find('CPL')) {
     Koha::Library->new({ branchcode => 'CPL', branchname => 'Centerville' })->store;
 }
 
-my $sth = $dbh->prepare("SELECT * FROM categories WHERE categorycode='S';");
-$sth->execute();
-if (!$sth->fetchrow_hashref) {
-    $sql = "INSERT INTO categories
-                (categorycode,description,enrolmentperiod,upperagelimit,
-                 dateofbirthrequired,finetype,bulk,enrolmentfee,
-                 overduenoticerequired,issuelimit,reservefee,category_type)
-            VALUES
-                ('S','Staff',99,999,
-                 18,NULL,NULL,'0.000000',
-                 0,NULL,'0.000000','S');";
-    $dbh->do($sql);
-}
+my $patron_category = $builder->build({ source => 'Category' });
 
 my $member = {
     firstname => 'my firstname',
     surname => 'my surname',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => 'CPL',
 };
 my $borrowernumber = AddMember(%$member);
