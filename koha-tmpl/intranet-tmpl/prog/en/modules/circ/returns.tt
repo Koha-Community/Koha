@@ -140,7 +140,6 @@ $(document).ready(function () {
     });
     [% END %]
     $('.openWin').on("click",function(e){
-        e.preventDefault();
         Dopop( $(this).data("url") );
     });
 });
@@ -406,10 +405,10 @@ $(document).ready(function () {
     Transfer now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
     [% IF itemnumber %]
-        <button type="submit" name="dotransfer" class="print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
+        <button type="submit" name="dotransfer" value="Yes" class="print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% returnbranch %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
     [% END %]
-	<button type="submit" name="dotransfer" class="submit"><i class="fa fa-check"></i> Yes</button>
-	<button type="submit" name="notransfer" class="submit"><i class="fa fa-times"></i> No</button>
+    <button type="submit" name="dotransfer" value="Yes" class="submit"><i class="fa fa-check"></i> Yes</button>
+    <button type="submit" name="notransfer" value="No" class="submit"><i class="fa fa-times"></i> No</button>
     <input type="hidden" name="tobranch" value="[% returnbranch %]" />
 	<input type="hidden" name="transferitem" value="[% itemnumber %]" />
         <input type="hidden" name="exemptfine" value="[% exemptfine %]" />
