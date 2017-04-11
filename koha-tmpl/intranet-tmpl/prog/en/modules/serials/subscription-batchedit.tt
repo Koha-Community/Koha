@@ -1,0 +1,153 @@
+[% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE ItemTypes %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Serials &rsaquo; Batch edit</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+</head>
+<body id="ser_subscription-batchedit" class="ser">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'serials-search.inc' %]
+
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        &rsaquo;
+        <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+        &rsaquo;
+        Batch edit
+    </div>
+
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <h1>Subscription batch edit</h1>
+
+                    <div>
+                        <p>You are about to edit the following subscriptions:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ISSN</th>
+                                    <th>Title</th>
+                                    <th>Notes</th>
+                                    <th>Library</th>
+                                    <th>Location</th>
+                                    <th>Call number</th>
+                                    <th>Expiration date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                [% FOREACH subscription IN subscriptions %]
+                                    <tr>
+                                        <td>[% subscription.biblio.biblioitem.issn %]</td>
+                                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">[% subscription.biblio.title %] (#[% subscription.subscriptionid %])</a></td>
+                                        <td>[% subscription.notes %] [% IF subscription.internalnotes %]([% subscription.internalnotes %])[% END %]</td>
+                                        <td>[% Branches.GetName(subscription.branchcode) %]</td>
+                                        <td>[% AuthorisedValues.GetByCode('LOC', subscription.location) %]</td>
+                                        <td>[% subscription.callnumber %]</td>
+                                        <td>[% subscription.enddate | $KohaDates %]</td>
+                                    </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <form method="post">
+                        [% FOREACH subscription IN subscriptions %]
+                            <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid %]"/>
+                        [% END %]
+                        [% IF referrer %]
+                            <input type="hidden" name="referrer" value="[% referrer %]"/>
+                        [% END %]
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label for="booksellerid">Bookseller</label>
+                                    <select id="booksellerid" name="booksellerid">
+                                        <option value="">No change</option>
+                                        [% FOREACH bookseller IN booksellers %]
+                                            <option value="[% bookseller.id %]">[% bookseller.name %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="location">Location</label>
+                                    <select id="location" name="location">
+                                        <option value="">No change</option>
+                                        [% FOREACH av IN AuthorisedValues.Get('LOC') %]
+                                            <option value="[% av.authorised_value | html %]">[% av.lib %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="branchcode">Library</label>
+                                    <select id="branchcode" name="branchcode">
+                                        <option value="">No change</option>
+                                        [% FOREACH branch IN Branches.all %]
+                                            <option value="[% branch.branchcode | html %]">[% branch.branchname %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="itemtype">Item type</label>
+                                    <select id="itemtype" name="itemtype">
+                                        <option value="">No change</option>
+                                        [% FOREACH itemtype IN ItemTypes.Get() %]
+                                            <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="notes">Public note</label>
+                                    <textarea id="notes" name="notes" placeholder="No change"></textarea>
+                                </li>
+                                <li>
+                                    <label for="internalnotes">Nonpublic note</label>
+                                    <textarea id="internalnotes" name="internalnotes" placeholder="No change"></textarea>
+                                </li>
+                                <li>
+                                    <label for="serialsadditems">Create item when receiving</label>
+                                    <select id="serialsadditems" name="serialsadditems">
+                                        <option value="">No change</option>
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+
+                                </li>
+                                <li>
+                                    <label for="enddate">Expiration date</label>
+                                    <input type="date" class="datepicker" id="enddate" name="enddate" placeholder="No change"/>
+                                </li>
+                                [% FOREACH field IN additional_fields %]
+                                    <li>
+                                        <label for="field_[% field.id %]">[% field.name %]</label>
+                                        [% IF field.authorised_value_category %]
+                                            <select id="field_[% field.id %]" name="field_[% field.id %]">
+                                                <option value="">No change</option>
+                                                [% FOREACH av IN AuthorisedValues.Get(field.authorised_value_category) %]
+                                                    <option value="[% av.authorised_value %]">[% av.lib %]</option>
+                                                [% END %]
+                                            </select>
+                                        [% ELSE %]
+                                            <input id="field_[% field.id %]" name="field_[% field.id %]" placeholder="No change"/>
+                                        [% END %]
+                                    </li>
+                                [% END %]
+                            </ol>
+                        </fieldset>
+
+                        <fieldset class="action">
+                            <button type="submit" name="batchedit" value="1">Start batch edit</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="yui-b">
+                [% INCLUDE 'serials-menu.inc' %]
+            </div>
+        </div>
+
+    [% INCLUDE 'intranet-bottom.inc' %]

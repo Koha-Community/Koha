@@ -1,6 +1,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE CGI %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -18,9 +19,26 @@
 
 
 [% BLOCK subscriptions_table %]
-    <table id="osrlt">
+  <form method="post">
+
+    [% url_params = [] %]
+    [% FOREACH param IN CGI.params.pairs %]
+        [% escaped_value = BLOCK %][% param.value | uri %][% END %]
+        [% url_params.push(param.key _ '=' _ escaped_value) %]
+    [% END %]
+    <input type="hidden" name="referrer" value="/cgi-bin/koha/serials/serials-search.pl?[% url_params.join('&') %]"/>
+
+    <div class="actions">
+        <a class="select-all" href="#"><i class="fa fa-check"></i> Select all</a>
+        |
+        <a class="clear-all" href="#"><i class="fa fa-remove"></i> Clear all</a>
+        |
+        <button class="btn btn-default btn-xs" type="submit" formaction="/cgi-bin/koha/serials/subscription-batchedit.pl"><i class="fa fa-pencil"></i> Edit</button>
+    </div>
+    <table>
       <thead>
         <tr>
+            <th></th>
             <th>ISSN</th>
             <th class="anti-the">Title</th>
             <th>Notes</th>
@@ -38,6 +56,7 @@
       </thead>
       <tfoot>
         <tr>
+          <td></td>
           <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
           <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
           <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
@@ -57,6 +76,7 @@
         [% FOREACH subscription IN subscriptions %]
         [% UNLESS subscription.cannotdisplay %]
           <tr>
+            <td><input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]"/></td>
             <td>
             [% IF ( subscription.issn ) %][% subscription.issn %]
             [% END %]
@@ -157,6 +177,7 @@
         [% END %]
       </tbody>
     </table>
+  </form>
 [% END %]
 
 <div id="doc3" class="yui-t2">
@@ -396,6 +417,12 @@
             $('#serialstabs').tabs();
             $("#reopensub").click(function(){
                 return confirm(_("Are you sure you want to reopen this subscription?"));
+            });
+
+            $('.select-all, .clear-all').on('click', function(e) {
+                e.preventDefault();
+                var checkboxes = $(this).parents('form').find('input[type="checkbox"]');
+                checkboxes.prop('checked', $(this).hasClass('select-all'));
             });
         });
     </script>
