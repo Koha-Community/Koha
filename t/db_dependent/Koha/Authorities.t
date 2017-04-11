@@ -32,7 +32,6 @@ use C4::Context;
 use Koha::Authority;
 use Koha::Authorities;
 use Koha::Authority::MergeRequest;
-use Koha::Authority::MergeRequests;
 use Koha::Authority::Type;
 use Koha::Authority::Types;
 use Koha::Database;
@@ -91,35 +90,39 @@ subtest 'New merge request, method oldmarc' => sub {
     });
     like( $req->reportxml, qr/b_findme/, 'Reportxml initialized' );
 
-    # Check if oldmarc is a MARC::Record and has one field
+    # Check if oldmarc is a MARC::Record and has one or two fields
     is( ref( $req->oldmarc ), 'MARC::Record', 'Check oldmarc method' );
-    is( scalar $req->oldmarc->fields, 1, 'Contains one field' );
+    if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        is( scalar $req->oldmarc->fields, 2, 'UNIMARC contains two fields' );
+    } else {
+        is( scalar $req->oldmarc->fields, 1, 'MARC21 contains one field' );
+    }
 };
 
-subtest 'Testing reporting_tag_xml in MergeRequests' => sub {
+subtest 'Testing reporting_tag_xml in MergeRequest' => sub {
     plan tests => 2;
 
     my $record = MARC::Record->new;
     $record->append_fields(
         MARC::Field->new( '024', '', '', a => 'aaa' ),
-        MARC::Field->new( '100', '', '', a => 'Best author' ),
+        MARC::Field->new( '110', '', '', a => 'Best author' ),
         MARC::Field->new( '234', '', '', a => 'Just a field' ),
     );
-    my $xml = Koha::Authority::MergeRequests->reporting_tag_xml({
-        record => $record, tag => '110',
+    my $xml = Koha::Authority::MergeRequest->reporting_tag_xml({
+        record => $record, tag => '100',
     });
     is( $xml, undef, 'Expected no result for wrong tag' );
-    $xml = Koha::Authority::MergeRequests->reporting_tag_xml({
-        record => $record, tag => '100',
+    $xml = Koha::Authority::MergeRequest->reporting_tag_xml({
+        record => $record, tag => '110',
     });
     my $newrecord = MARC::Record->new_from_xml(
         $xml, 'UTF-8',
         C4::Context->preference('marcflavour') eq 'UNIMARC' ?
         'UNIMARCAUTH' :
         'MARC21',
-    ); # MARC format does not actually matter here
-    cmp_deeply( $record->field('100')->subfields,
-        $newrecord->field('100')->subfields,
+    );
+    cmp_deeply( $record->field('110')->subfields,
+        $newrecord->field('110')->subfields,
         'Compare reporting tag in both records',
     );
 };

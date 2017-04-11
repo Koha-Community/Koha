@@ -22,7 +22,6 @@ use Modern::Perl;
 use parent qw(Koha::Object);
 
 use Koha::Authorities;
-use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 
 =head1 NAME
@@ -67,7 +66,7 @@ sub new {
     if( $self->authid && $oldrecord ) {
         my $auth = Koha::Authorities->find( $self->authid );
         my $type = $auth ? Koha::Authority::Types->find($auth->authtypecode) : undef;
-        $self->reportxml( Koha::Authority::MergeRequests->reporting_tag_xml({ record => $oldrecord, tag => $type->auth_tag_to_report })) if $type;
+        $self->reportxml( $self->reporting_tag_xml({ record => $oldrecord, tag => $type->auth_tag_to_report })) if $type;
     }
     return $self;
 }
@@ -87,6 +86,39 @@ sub oldmarc {
 }
 
 =head2 CLASS METHODS
+
+=head3 reporting_tag_xml
+
+    my $xml = Koha::Authority::MergeRequest->reporting_tag_xml({
+        record => $record, tag => $tag,
+    });
+
+=cut
+
+sub reporting_tag_xml {
+    my ( $class, $params ) = @_;
+    return if !$params->{record} || !$params->{tag};
+
+    my $newrecord = MARC::Record->new;
+    $newrecord->encoding( 'UTF-8' );
+    my $reportfield = $params->{record}->field( $params->{tag} );
+    return if !$reportfield;
+
+    # For UNIMARC we need a field 100 that includes the encoding
+    # at position 13 and 14
+    if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+        $newrecord->append_fields(
+            MARC::Field->new( '100', '', '', a => ' 'x13 . '50' ),
+        );
+    }
+
+    $newrecord->append_fields( $reportfield );
+    return $newrecord->as_xml(
+        C4::Context->preference('marcflavour') eq 'UNIMARC' ?
+        'UNIMARCAUTH' :
+        'MARC21'
+    );
+}
 
 =head3 _type
 

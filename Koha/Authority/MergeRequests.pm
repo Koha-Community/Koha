@@ -42,34 +42,7 @@ Description
 
 =head1 METHODS
 
-=head2 INSTANCE METHODS
-
 =head2 CLASS METHODS
-
-=head3 reporting_tag_xml
-
-    my $xml = Koha::Authority::MergeRequests->reporting_tag_xml({
-        record => $record, tag => $tag,
-    });
-
-=cut
-
-sub reporting_tag_xml {
-    my ( $class, $params ) = @_;
-    return if !$params->{record} || !$params->{tag};
-
-    my $newrecord = MARC::Record->new;
-    $newrecord->encoding( 'UTF-8' );
-    my $reportfield = $params->{record}->field( $params->{tag} );
-    return if !$reportfield;
-
-    $newrecord->append_fields( $reportfield );
-    return $newrecord->as_xml(
-        C4::Context->preference('marcflavour') eq 'UNIMARC' ?
-        'UNIMARCAUTH' :
-        'MARC21'
-    );
-}
 
 =head3 cron_cleanup
 
