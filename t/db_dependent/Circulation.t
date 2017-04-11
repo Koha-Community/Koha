@@ -58,6 +58,7 @@ my $itemtype = $builder->build(
         value  => { notforloan => undef, rentalcharge => 0 }
     }
 )->{itemtype};
+my $patron_category = $builder->build({ source => 'Category', value => { enrolmentfee => 0 } });
 
 my $CircControl = C4::Context->preference('CircControl');
 my $HomeOrHoldingBranch = C4::Context->preference('HomeOrHoldingBranch');
@@ -190,7 +191,7 @@ my $sth = C4::Context->dbh->prepare("SELECT COUNT(*) FROM accountlines WHERE amo
 $sth->execute();
 my ( $original_count ) = $sth->fetchrow_array();
 
-C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', 'S', ? )", undef, $library2->{branchcode} );
+C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', ?, ? )", undef, $patron_category->{categorycode}, $library2->{branchcode} );
 
 C4::Circulation::ProcessOfflinePayment({ cardnumber => '99999999999', amount => '123.45' });
 
@@ -260,28 +261,28 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my %renewing_borrower_data = (
         firstname =>  'John',
         surname => 'Renewal',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
     my %reserving_borrower_data = (
         firstname =>  'Katrin',
         surname => 'Reservation',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
     my %hold_waiting_borrower_data = (
         firstname =>  'Kyle',
         surname => 'Reservation',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
     my %restricted_borrower_data = (
         firstname =>  'Alice',
         surname => 'Reservation',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         debarred => '3228-01-01',
         branchcode => $branch,
     );
@@ -761,7 +762,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my %a_borrower_data = (
         firstname =>  'Fridolyn',
         surname => 'SOMERS',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
@@ -841,7 +842,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my %a_borrower_data = (
         firstname =>  'Kyle',
         surname => 'Hall',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
@@ -907,13 +908,13 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $borrowernumber1 = AddMember(
         firstname    => 'Kyle',
         surname      => 'Hall',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode   => $library2->{branchcode},
     );
     my $borrowernumber2 = AddMember(
         firstname    => 'Chelsea',
         surname      => 'Hall',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode   => $library2->{branchcode},
     );
 
@@ -984,7 +985,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $borrowernumber = AddMember(
         firstname =>  'fn',
         surname => 'dn',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
 
@@ -1310,7 +1311,7 @@ subtest 'MultipleReserves' => sub {
     my %renewing_borrower_data = (
         firstname =>  'John',
         surname => 'Renewal',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
     my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
@@ -1323,7 +1324,7 @@ subtest 'MultipleReserves' => sub {
     my %reserving_borrower_data1 = (
         firstname =>  'Katrin',
         surname => 'Reservation',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
     my $reserving_borrowernumber1 = AddMember(%reserving_borrower_data1);
@@ -1336,7 +1337,7 @@ subtest 'MultipleReserves' => sub {
     my %reserving_borrower_data2 = (
         firstname =>  'Kirk',
         surname => 'Reservation',
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
     my $reserving_borrowernumber2 = AddMember(%reserving_borrower_data2);

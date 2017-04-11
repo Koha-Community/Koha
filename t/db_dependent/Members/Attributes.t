@@ -48,7 +48,6 @@ my $patron = $builder->build(
         value  => {
             firstname    => 'my firstname',
             surname      => 'my surname',
-            categorycode => 'S',
             branchcode => $library->{branchcode},
         }
     }
@@ -228,7 +227,6 @@ my $another_patron = $builder->build(
         value  => {
             firstname    => 'my another firstname',
             surname      => 'my another surname',
-            categorycode => 'S',
             branchcode => $new_library->{branchcode},
         }
     }

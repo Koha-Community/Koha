@@ -17,6 +17,7 @@ my $builder = t::lib::TestBuilder->new;
 my $library = $builder->build({
     source => "Branch",
 });
+my $patron_category = $builder->build({ source => 'Category' });
 
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
@@ -68,7 +69,7 @@ my $borrowernumber = C4::Members::AddMember(
     cardnumber => 'TESTCARD',
     firstname =>  'TESTFN',
     surname => 'TESTSN',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
     dateofbirth => '',
     dateexpiry => '9999-12-31',

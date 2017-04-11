@@ -23,6 +23,7 @@ $dbh->{RaiseError} = 1;
 
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 my $itemtype   = $builder->build({ source => 'Itemtype' })->{itemtype};
+my $patron_category = $builder->build({ source => 'Category' });
 
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 my $userenv->{branch} = $branchcode;
@@ -47,7 +48,7 @@ $builder->build(
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => $branchcode,
 );
 my $borrower = GetMember( borrowernumber => $borrowernumber );

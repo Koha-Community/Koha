@@ -33,7 +33,6 @@ my $bib_title = "Test Title";
 my $borrower = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $library1->{branchcode},
     }
 });

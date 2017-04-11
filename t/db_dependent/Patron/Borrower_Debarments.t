@@ -22,10 +22,11 @@ my $library = $builder->build({
     source => 'Branch',
 });
 
+my $patron_category = $builder->build({ source => 'Category' });
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
 );
 

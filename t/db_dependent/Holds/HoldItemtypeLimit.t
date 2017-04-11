@@ -26,10 +26,10 @@ my $library = $builder->build({
 
 my $bib_title = "Test Title";
 
+
 my $borrower = $builder->build({
     source => 'Borrower',
     value => {
-        categorycode => 'S',
         branchcode => $library->{branchcode},
     }
 });

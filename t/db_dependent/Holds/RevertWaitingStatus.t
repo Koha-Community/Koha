@@ -69,12 +69,13 @@ my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
 );
 
 # Create some borrowers
+my $patron_category = $builder->build({ source => 'Category' });
 my @borrowernumbers;
 foreach my $i ( 1 .. $borrowers_count ) {
     my $borrowernumber = AddMember(
         firstname    => 'my firstname',
         surname      => 'my surname ' . $i,
-        categorycode => 'S',
+        categorycode => $patron_category->{categorycode},
         branchcode   => $branchcode,
     );
     push @borrowernumbers, $borrowernumber;

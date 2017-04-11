@@ -27,6 +27,7 @@ my $library1 = $builder->build({
 my $library2 = $builder->build({
     source => 'Branch',
 });
+my $patron_category = $builder->build({ source => 'Category' });
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
@@ -81,7 +82,7 @@ my $userid = 'my_userid';
 my $borrowernumber = C4::Members::AddMember(
     firstname =>  'my fistname',
     surname => 'my surname',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => $my_branch,
     userid => $userid,
 );

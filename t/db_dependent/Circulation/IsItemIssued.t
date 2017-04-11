@@ -37,6 +37,7 @@ my $builder = t::lib::TestBuilder->new;
 
 my $library = $builder->build({ source => 'Branch' });
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
+my $patron_category = $builder->build({ source => 'Category' });
 
 C4::Context->_new_userenv('DUMMY SESSION');
 C4::Context->set_userenv(
@@ -50,7 +51,7 @@ C4::Context->set_userenv(
 my $borrowernumber = AddMember(
     firstname =>  'my firstname',
     surname => 'my surname',
-    categorycode => 'S',
+    categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
 );
 
