@@ -54,9 +54,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { coursereserves => 'add_reserves' },
     }
 );
-my $inumber = $itemnumber ? "(blank) (itemnumber:$itemnumber)" : "";
-$template->param( ERROR_BARCODE_NOT_FOUND => $barcode . $inumber )
-  unless ( $barcode && !$itemnumber && $item && $action eq 'lookup' );
+
+unless ( $item && $action eq 'lookup' ){
+    $template->param( ERROR_ITEM_NOT_FOUND => 1 );
+    $template->param( UNKNOWN_BARCODE => $barcode ) if $barcode;
+}
 
 $template->param( course => GetCourse($course_id) );
 
