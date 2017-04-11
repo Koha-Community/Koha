@@ -938,6 +938,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
             if ( !result.errors.length ) {
                 $('#macro-ui').modal('hide');
+                editor.focus(); //Return cursor to editor after macro run
                 return false;
             }
 
