@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 12;
 use Test::Warn;
-use Data::Dumper qw(Dumper);
+use File::Basename qw(dirname);
 
 use Koha::Database;
 use Koha::Patrons;
@@ -346,7 +346,7 @@ subtest 'Default values' => sub {
 
 subtest 'build_object() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $builder = t::lib::TestBuilder->new();
 
@@ -373,6 +373,22 @@ subtest 'build_object() tests' => sub {
     is( $issuing_rule, undef,
         'If the class parameter is missing, undef is returned' );
 
+    subtest 'Test all classes' => sub {
+        my $Koha_modules_dir = dirname(__FILE__) . '/../../Koha';
+        my @koha_object_based_modules = `/bin/grep -rl 'sub object_class' $Koha_modules_dir`;
+        my @source_in_failure;
+        for my $module_filepath ( @koha_object_based_modules ) {
+            chomp $module_filepath;
+            next unless $module_filepath =~ m|\.pm$|;
+            my $module = $module_filepath;
+            $module =~ s|^.*/(Koha.*)\.pm$|$1|;
+            $module =~ s|/|::|g;
+            next if $module eq 'Koha::Objects';
+            eval "require $module";;
+            my $object = $builder->build_object( { class => $module } );
+            is( ref($object), $module->object_class, "Testing $module" );
+        }
+    };
 };
 
 $schema->storage->txn_rollback;
