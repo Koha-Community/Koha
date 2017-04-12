@@ -3625,6 +3625,7 @@ CREATE TABLE `message_queue` (
   `from_address` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `reply_address` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content_type` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `delivery_note` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),

@@ -51,6 +51,7 @@
                 <th>Status</th>
                 <th>Updated on</th>
                 <th>Time created</th>
+                <th>Delivery note</th>
             </tr>
         </thead>
 	<tbody>
@@ -90,7 +91,8 @@
         </td>
         <td data-order="[% QUEUED_MESSAGE.updated_on | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</td>
         <td data-order="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</td>
-	    </tr>
+	    <td>[% QUEUED_MESSAGE.delivery_note | html %]</td>
+        </tr>
 	    [% END %]
 	</tbody>
     </table>

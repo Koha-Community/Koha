@@ -963,9 +963,9 @@ sub EnqueueLetter {
     my $dbh       = C4::Context->dbh();
     my $statement = << 'ENDSQL';
 INSERT INTO message_queue
-( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type )
+( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type, delivery_note )
 VALUES
-( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      NOW(),       ?,          ?,            ?,           ? )
+( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      NOW(),       ?,          ?,            ?,           ?,              ? )
 ENDSQL
 
     my $sth    = $dbh->prepare($statement);
@@ -981,6 +981,7 @@ ENDSQL
         $params->{'from_address'},                # from_address
         $params->{'reply_address'},               # reply_address
         $params->{'letter'}->{'content-type'},    # content_type
+        $params->{'delivery_note'}        || '',  # delivery_note
     );
     return $dbh->last_insert_id(undef,undef,'message_queue', undef);
 }
@@ -1123,7 +1124,7 @@ sub GetQueuedMessages {
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, updated_on
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, updated_on, delivery_note
 FROM message_queue
 ENDSQL
 
@@ -1177,7 +1178,7 @@ sub GetMessage {
     return unless $message_id;
     my $dbh = C4::Context->dbh;
     return $dbh->selectrow_hashref(q|
-        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, updated_on, to_address, from_address, reply_address, content_type
+        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, updated_on, to_address, from_address, reply_address, content_type, delivery_note
         FROM message_queue
         WHERE message_id = ?
     |, {}, $message_id );
@@ -1282,7 +1283,7 @@ sub _get_unsent_messages {
 
     my $dbh = C4::Context->dbh();
     my $statement = qq{
-        SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.reply_address, mq.to_address, mq.content_type, b.branchcode, mq.letter_code
+        SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.reply_address, mq.to_address, mq.content_type, b.branchcode, mq.letter_code, mq.delivery_note
         FROM message_queue mq
         LEFT JOIN borrowers b ON b.borrowernumber = mq.borrowernumber
         WHERE status = ?
@@ -1333,7 +1334,8 @@ sub _send_message_by_email {
         unless ($patron) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status( { message_id => $message->{'message_id'},
-                                   status     => 'failed' } );
+                                   status     => 'failed',
+                                   delivery_note => 'Invalid borrowernumber '.$message->{borrowernumber} } );
             return;
         }
         $to_address = $patron->notice_email_address;
@@ -1341,7 +1343,8 @@ sub _send_message_by_email {
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?
             _set_message_status( { message_id => $message->{'message_id'},
-                                   status     => 'failed' } );
+                                   status     => 'failed',
+                                   delivery_note => 'Unable to find an email address for this borrower' } );
             return;
         }
     }
@@ -1417,7 +1420,8 @@ sub _send_message_by_email {
         _set_message_status(
             {
                 message_id => $message->{'message_id'},
-                status     => 'sent'
+                status     => 'sent',
+                delivery_note => ''
             }
         );
         return 1;
@@ -1426,7 +1430,8 @@ sub _send_message_by_email {
         _set_message_status(
             {
                 message_id => $message->{'message_id'},
-                status     => 'failed'
+                status     => 'failed',
+                delivery_note => $Mail::Sendmail::error
             }
         );
         carp "$_";
@@ -1477,13 +1482,15 @@ sub _send_message_by_sms {
 
     unless ( $patron and $patron->smsalertnumber ) {
         _set_message_status( { message_id => $message->{'message_id'},
-                               status     => 'failed' } );
+                               status     => 'failed',
+                               delivery_note => 'Missing SMS number' } );
         return;
     }
 
     if ( _is_duplicate( $message ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
-                               status     => 'failed' } );
+                               status     => 'failed',
+                               delivery_note => 'Message is duplicate' } );
         return;
     }
 
@@ -1491,7 +1498,9 @@ sub _send_message_by_sms {
                                        message     => $message->{'content'},
                                      } );
     _set_message_status( { message_id => $message->{'message_id'},
-                           status     => ($success ? 'sent' : 'failed') } );
+                           status     => ($success ? 'sent' : 'failed'),
+                           delivery_note => ($success ? '' : 'No notes from SMS driver') } );
+
     return $success;
 }
 
@@ -1515,9 +1524,10 @@ sub _set_message_status {
     }
 
     my $dbh = C4::Context->dbh();
-    my $statement = 'UPDATE message_queue SET status= ? WHERE message_id = ?';
+    my $statement = 'UPDATE message_queue SET status= ?, delivery_note= ? WHERE message_id = ?';
     my $sth = $dbh->prepare( $statement );
     my $result = $sth->execute( $params->{'status'},
+                                $params->{'delivery_note'} || '',
                                 $params->{'message_id'} );
     return $result;
 }

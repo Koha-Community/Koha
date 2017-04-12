@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 84;
+use Test::More tests => 86;
 use Test::MockModule;
 use Test::Warn;
 use Test::Exception;
@@ -146,6 +146,7 @@ is( $messages->[0]->{message_transport_type}, $my_message->{message_transport_ty
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
 isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
 is( $messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed equals time queued when created in message_queue table' );
+is( $messages->[0]->{delivery_note}, '', 'Delivery note for successful message correctly empty');
 
 # Setting time_queued to something else than now
 my $yesterday = dt_from_string->subtract( days => 1 );
@@ -174,6 +175,11 @@ $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
 is( $resent, 0, 'The message should not have been resent again' );
 $resent = C4::Letters::ResendMessage();
 is( $resent, undef, 'ResendMessage should return undef if not message_id given' );
+
+# Delivery notes
+is($messages->[0]->{delivery_note}, 'Missing SMS number',
+   'Delivery note for no smsalertnumber correctly set');
+
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();
