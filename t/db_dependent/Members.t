@@ -47,10 +47,10 @@ my $library1 = $builder->build({
 my $library2 = $builder->build({
     source => 'Branch',
 });
+my $patron_category = $builder->build({ source => 'Category' });
 my $CARDNUMBER   = 'TESTCARD01';
 my $FIRSTNAME    = 'Marie';
 my $SURNAME      = 'Mcknight';
-my $CATEGORYCODE = 'S';
 my $BRANCHCODE   = $library1->{branchcode};
 
 my $CHANGED_FIRSTNAME = "Marry Ann";
@@ -85,7 +85,7 @@ my %data = (
     cardnumber => $CARDNUMBER,
     firstname =>  $FIRSTNAME,
     surname => $SURNAME,
-    categorycode => $CATEGORYCODE,
+    categorycode => $patron_category->{categorycode},
     branchcode => $BRANCHCODE,
     dateofbirth => '',
     dateexpiry => '9999-12-31',
@@ -100,7 +100,7 @@ my $member = GetMember( cardnumber => $CARDNUMBER )
 
 ok ( $member->{firstname}    eq $FIRSTNAME    &&
      $member->{surname}      eq $SURNAME      &&
-     $member->{categorycode} eq $CATEGORYCODE &&
+     $member->{categorycode} eq $patron_category->{categorycode} &&
      $member->{branchcode}   eq $BRANCHCODE
      , "Got member")
   or diag("Mismatching member details: ".Dumper(\%data, $member));
@@ -154,7 +154,7 @@ is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when 
     cardnumber   => "123456789",
     firstname    => "Tomasito",
     surname      => "None",
-    categorycode => "S",
+    categorycode => $patron_category->{categorycode},
     branchcode   => $library2->{branchcode},
     dateofbirth  => '',
     debarred     => '',
@@ -367,10 +367,10 @@ isnt( Koha::Patrons->find( $patron2->{borrowernumber} )->lastseen, undef, 'Lasts
 ## Remove all entries with userid='' (should be only 1 max)
 $dbh->do(q|DELETE FROM borrowers WHERE userid = ''|);
 ## And create a patron with a userid=''
-$borrowernumber = AddMember( categorycode => 'S', branchcode => $library2->{branchcode} );
+$borrowernumber = AddMember( categorycode => $patron_category->{categorycode}, branchcode => $library2->{branchcode} );
 $dbh->do(q|UPDATE borrowers SET userid = '' WHERE borrowernumber = ?|, undef, $borrowernumber);
 # Create another patron and verify the userid has been generated
-$borrowernumber = AddMember( categorycode => 'S', branchcode => $library2->{branchcode} );
+$borrowernumber = AddMember( categorycode => $patron_category->{categorycode}, branchcode => $library2->{branchcode} );
 ok( $borrowernumber > 0, 'AddMember should have inserted the patron even if no userid is given' );
 $borrower = GetMember( borrowernumber => $borrowernumber );
 ok( $borrower->{userid},  'A userid should have been generated correctly' );
