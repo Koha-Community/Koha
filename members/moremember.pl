@@ -121,9 +121,12 @@ $borrowernumber = HTML::Entities::encode($borrowernumber);
 my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 my $patron         = Koha::Patrons->find( $borrowernumber );
-output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $userenv = C4::Context->userenv;
+if ( $userenv and $userenv->{number} ) { # Allow DB user to create a superlibrarian patron
+    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+}
 
 my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;
@@ -202,7 +205,6 @@ $bor{'borrowernumber'} = $borrowernumber;
 # Converts the branchcode to the branch name
 my $samebranch;
 if ( C4::Context->preference("IndependentBranches") ) {
-    my $userenv = C4::Context->userenv;
     if ( C4::Context->IsSuperLibrarian() ) {
         $samebranch = 1;
     }

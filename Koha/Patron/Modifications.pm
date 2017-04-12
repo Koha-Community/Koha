@@ -54,7 +54,7 @@ sub pending_count {
 
     my $userenv = C4::Context->userenv;
     my @branchcodes;
-    if ( $userenv ) {
+    if ( $userenv and $userenv->{number} ) {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         if ($branchcode) {
             return 0 unless $logged_in_user->can_see_patrons_from($branchcode);

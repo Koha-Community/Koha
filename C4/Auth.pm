@@ -254,7 +254,7 @@ sub get_template_and_user {
             );
         }
 
-        $template->param( "USER_INFO" => $patron->unblessed );
+        $template->param( "USER_INFO" => $patron->unblessed ) if $borrowernumber != 0;
 
         my $all_perms = get_all_subpermissions();
 

@@ -184,7 +184,7 @@ sub search_limited {
     my ( $params, $attributes ) = @_;
     my $userenv = C4::Context->userenv;
     my @restricted_branchcodes;
-    if ( $userenv ) {
+    if ( $userenv and $userenv->{number} ) {
         my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
         @restricted_branchcodes = $logged_in_user->libraries_where_can_see_patrons;
     }

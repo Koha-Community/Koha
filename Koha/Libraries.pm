@@ -46,7 +46,8 @@ sub search_filtered {
     my ( $self, $params, $attributes ) = @_;
 
     my @branchcodes;
-    if ( my $userenv = C4::Context->userenv ) {
+    my $userenv = C4::Context->userenv;
+    if ( $userenv and $userenv->{number} ) {
         my $only_from_group = $params->{only_from_group};
         if ( $only_from_group ) {
             my $logged_in_user = Koha::Patrons->find( $userenv->{number} );
