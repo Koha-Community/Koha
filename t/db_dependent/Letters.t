@@ -129,7 +129,7 @@ is( $messages->[0]->{subject}, $my_message->{letter}->{title}, 'EnqueueLetter st
 is( $messages->[0]->{content}, $my_message->{letter}->{content}, 'EnqueueLetter stores the content correctly' );
 is( $messages->[0]->{message_transport_type}, $my_message->{message_transport_type}, 'EnqueueLetter stores the message type correctly' );
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
-
+is( $messages->[0]->{delivery_note}, '', 'Delivery note for successful message correctly empty');
 
 # SendQueuedMessages
 my $messages_processed = C4::Letters::SendQueuedMessages();
@@ -150,6 +150,11 @@ $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
 is( $resent, 0, 'The message should not have been resent again' );
 $resent = C4::Letters::ResendMessage();
 is( $resent, undef, 'ResendMessage should return undef if not message_id given' );
+
+# Delivery notes
+is($messages->[0]->{delivery_note}, 'Missing SMS number',
+   'Delivery note for no smsalertnumber correctly set');
+
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();

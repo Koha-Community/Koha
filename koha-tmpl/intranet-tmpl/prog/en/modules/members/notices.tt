@@ -13,7 +13,7 @@
     $(document).ready(function() {
     $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aaSorting": [[ 3, "desc" ]],
-        "aoColumns": [ null,null,null,{ "sType": "title-string" } ],
+        "aoColumns": [ null,null,null,{ "sType": "title-string" }, null ],
         "sPaginationType": "four_button"
     }));
 
@@ -53,6 +53,7 @@
 		<th>Type</th>
 		<th>Status</th>
 		<th>Time</th>
+		<th>Delivery note</th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -91,6 +92,9 @@
             [% END %]
         </td>
         <td><span title="[% QUEUED_MESSAGE.time_queued %]">[% QUEUED_MESSAGE.time_queued | $KohaDates with_hours => 1 %]</span></td>
+        <td>
+            [% QUEUED_MESSAGE.delivery_note %]
+        </td>
 	    </tr>
 	    [% END %]
 	</tbody>

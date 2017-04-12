@@ -2600,6 +2600,7 @@ CREATE TABLE `message_queue` (
   `to_address` mediumtext,
   `from_address` mediumtext,
   `content_type` text,
+  `delivery_note` text,
   PRIMARY KEY `message_id` (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),
