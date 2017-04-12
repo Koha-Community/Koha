@@ -580,13 +580,13 @@ for my $new_budget ( @new_budgets ) {
 
 # Test SetOwnerToFundHierarchy
 
-my $categorycode = 'S';
+my $patron_category = $builder->build({ source => 'Category' });
 my $branchcode = $library->{branchcode};
 my $john_doe = C4::Members::AddMember(
     cardnumber   => '123456',
     firstname    => 'John',
     surname      => 'Doe',
-    categorycode => $categorycode,
+    categorycode => $patron_category->{categorycode},
     branchcode   => $branchcode,
     dateofbirth  => '',
     dateexpiry   => '9999-12-31',
@@ -611,7 +611,7 @@ my $jane_doe = C4::Members::AddMember(
     cardnumber   => '789012',
     firstname    => 'Jane',
     surname      => 'Doe',
-    categorycode => $categorycode,
+    categorycode => $patron_category->{categorycode},
     branchcode   => $branchcode,
     dateofbirth  => '',
     dateexpiry   => '9999-12-31',
