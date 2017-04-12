@@ -114,7 +114,6 @@ for (@names) {
 
 $template->param(
     finesview => 1,
-    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
