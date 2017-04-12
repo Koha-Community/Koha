@@ -123,6 +123,7 @@ $template->param(
     branch                   => $branch,
     datelastseen             => $datelastseen,
     compareinv2barcd         => $compareinv2barcd,
+    uploadedbarcodesflag     => $uploadbarcodes ? 1 : 0,
 );
 
 # Walk through uploaded barcodes, report errors, mark as seen, check in
