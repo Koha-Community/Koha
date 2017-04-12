@@ -116,7 +116,6 @@ $template->param(
     is_child            => ($data->{'category_type'} eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
-    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 

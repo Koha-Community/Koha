@@ -340,7 +340,6 @@ $template->param(
     samebranch      => $samebranch,
     quickslip       => $quickslip,
     privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
-    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
