@@ -61,7 +61,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 $template->param(%$borrower);
-
+$template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' );
 $template->param(
     QUEUED_MESSAGES    => $queued_messages,
     borrowernumber     => $borrowernumber,
