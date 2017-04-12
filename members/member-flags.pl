@@ -202,7 +202,6 @@ $template->param(
 		branchcode => $bor->{'branchcode'},
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
-		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
         csrf_token => Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
 		);

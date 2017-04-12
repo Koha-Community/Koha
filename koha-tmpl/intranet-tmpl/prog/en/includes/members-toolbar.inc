@@ -142,8 +142,8 @@ function searchToHold(){
     [% END %]
 
     [% IF ( CAN_user_borrowers ) %]
-        [% IF ( adultborrower AND activeBorrowerRelationship ) %]
-            <a id="addchild" class="btn btn-small" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
+        [% IF adultborrower AND Koha.Preference("borrowerRelationship") %]
+            <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
         [% IF ( CAN_user_borrowers ) %]
             <a id="changepassword" class="btn btn-small" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
