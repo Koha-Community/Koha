@@ -126,8 +126,6 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $de
         phone => $bor->{'phone'},
         email => $bor->{'email'},
         branchcode => $bor->{'branchcode'},
-        branchname => GetBranchName($bor->{'branchcode'}),
-		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
     if ($countissues >0) {

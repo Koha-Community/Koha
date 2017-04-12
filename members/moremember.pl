@@ -350,7 +350,6 @@ $template->param(
     is_child        => ($category_type eq 'C'),
     samebranch      => $samebranch,
     quickslip       => $quickslip,
-    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),

@@ -193,7 +193,6 @@ $template->param(
 		branchname => GetBranchName($bor->{'branchcode'}),
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
-		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
         RoutingSerials => C4::Context->preference('RoutingSerials'),
 		);
 

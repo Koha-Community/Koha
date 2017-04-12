@@ -150,7 +150,6 @@ $template->param(
     borrower      => $borrower,
     categoryname  => $borrower->{description},
     total         => $total_due,
-    activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
 );

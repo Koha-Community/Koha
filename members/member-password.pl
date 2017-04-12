@@ -137,7 +137,6 @@ $template->param(
     userid                     => $bor->{'userid'},
     destination                => $destination,
     is_child                   => ( $bor->{'category_type'} eq 'C' ),
-    activeBorrowerRelationship => ( C4::Context->preference('borrowerRelationship') ne '' ),
     minPasswordLength          => $minpw,
     RoutingSerials             => C4::Context->preference('RoutingSerials'),
 );
