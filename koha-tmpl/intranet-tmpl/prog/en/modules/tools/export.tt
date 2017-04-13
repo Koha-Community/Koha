@@ -96,7 +96,7 @@ $(document).ready(function() {
         </li>
         
         <li>
-            <label>Library: </label>
+            <label>With items owned by the following libraries: </label>
             [% INCLUDE 'branch-selector.inc' branches = libraries %]
         </li>
     </ol>
@@ -146,8 +146,8 @@ $(document).ready(function() {
         <input id="dont_export_item" type="checkbox" name="dont_export_item" />
         </li>
         <li>
-        <label for="strip_nonlocal_items">Remove non-local items:</label>
-        <input id="strip_nonlocal_items" type="checkbox" name="strip_nonlocal_items" />
+        <label for="strip_items_not_from_libraries">Remove items not owned by selected libraries:</label>
+        <input id="strip_items_not_from_libraries" type="checkbox" name="strip_items_not_from_libraries" />
         </li>
         <li>
         <label for="export_remove_fields">Don't export fields:</label>

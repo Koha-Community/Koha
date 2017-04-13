@@ -63,7 +63,7 @@ sub _get_biblio_for_export {
     my $biblionumber = $params->{biblionumber};
     my $itemnumbers  = $params->{itemnumbers};
     my $export_items = $params->{export_items} // 1;
-    my $only_export_items_for_branch = $params->{only_export_items_for_branch};
+    my $only_export_items_for_branches = $params->{only_export_items_for_branches};
 
     my $record = eval { C4::Biblio::GetMarcBiblio($biblionumber); };
 
@@ -71,12 +71,13 @@ sub _get_biblio_for_export {
 
     if ($export_items) {
         C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, $itemnumbers );
-        if ($only_export_items_for_branch) {
+        if ($only_export_items_for_branches && @$only_export_items_for_branches) {
+            my %export_items_for_branches = map { $_ => 1 } @$only_export_items_for_branches;
             my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField( 'items.homebranch', '' );    # Should be GetFrameworkCode( $biblionumber )?
 
             for my $itemfield ( $record->field($homebranchfield) ) {
                 my $homebranch = $itemfield->subfield($homebranchsubfield);
-                if ( $only_export_items_for_branch ne $homebranch ) {
+                unless ( $export_items_for_branches{$homebranch} ) {
                     $record->delete_field($itemfield);
                 }
             }

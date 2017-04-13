@@ -87,13 +87,12 @@ if ( $op eq "export" ) {
     my $export_remove_fields = $query->param("export_remove_fields") || q||;
     my @biblionumbers      = $query->multi_param("biblionumbers");
     my @itemnumbers        = $query->multi_param("itemnumbers");
-    my $strip_nonlocal_items =  $query->param('strip_nonlocal_items');
+    my $strip_items_not_from_libraries =  $query->param('strip_items_not_from_libraries');
     my @sql_params;
     my $sql_query;
 
-    my $libraries = $strip_nonlocal_items
-        ? [ Koha::Libraries->find(C4::Context->userenv->{branch})->unblessed ]
-        : Koha::Libraries->search_filtered->unblessed;
+    my $libraries = Koha::Libraries->search_filtered->unblessed;
+    my $only_export_items_for_branches = $strip_items_not_from_libraries ? \@branch : undef;
     my @branchcodes;
     for my $branchcode ( @branch ) {
         if ( grep { $_->{branchcode} eq $branchcode } @$libraries ) {
@@ -209,6 +208,7 @@ if ( $op eq "export" ) {
                 dont_export_fields => $export_remove_fields,
                 csv_profile_id     => $csv_profile_id,
                 export_items       => (not $dont_export_items),
+                only_export_items_for_branches => $only_export_items_for_branches,
             }
         );
     }
