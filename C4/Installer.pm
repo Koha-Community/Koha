@@ -28,6 +28,7 @@ use C4::Installer::PerlModules;
 use C4::KohaSuomi::TestRunner;
 use DBI;
 use Koha;
+use Koha::AtomicUpdater;
 use Koha::SearchEngine::Elasticsearch;
 
 use vars qw(@ISA @EXPORT);
@@ -125,6 +126,8 @@ sub install_default_database {
     }
     $error = $installer->load_db_schema();
     die "$cc[3]():> FATAL: $error" if $error;
+
+    Koha::AtomicUpdater->new->addAllAtomicUpdates();
 
     my $all_languages = C4::Languages::getAllLanguages();
     my $lang = 'en';
