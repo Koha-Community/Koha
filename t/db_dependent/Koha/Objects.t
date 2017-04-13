@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
+use Koha::IssuingRules;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -106,6 +107,32 @@ subtest 'new' => sub {
     $patron_category = Koha::Patron::Category->new( { categorycode => $a_cat_code, category_type => undef } )->store;
     is( Koha::Patron::Categories->find($a_cat_code)->category_type, 'A', 'Koha::Object->new should set the default value even if the argument exists but is not defined' );
     Koha::Patron::Categories->find($a_cat_code)->delete;
+};
+
+subtest 'find' => sub {
+    plan tests => 4;
+
+    # check find on a single PK
+    my $patron = $builder->build({ source => 'Borrower' });
+    is( Koha::Patrons->find($patron->{borrowernumber})->surname,
+        $patron->{surname}, "Checking an arbitrary patron column after find"
+    );
+    # check find with unique column
+    my $obj = Koha::Patrons->find($patron->{cardnumber}, { key => 'cardnumber' });
+    is( $obj->borrowernumber, $patron->{borrowernumber},
+        'Find with unique column and key specified' );
+    # check find with an additional where clause in the attrs hash
+    # we do not expect to find something now
+    is( Koha::Patrons->find(
+        $patron->{borrowernumber},
+        { where => { surname => { '!=', $patron->{surname} }}},
+    ), undef, 'Additional where clause in find call' );
+
+    # check find with a composite FK
+    my $rule = $builder->build({ source => 'Issuingrule' });
+    my @pk = ( $rule->{branchcode}, $rule->{categorycode}, $rule->{itemtype} );
+    is( ref(Koha::IssuingRules->find(@pk)), "Koha::IssuingRule",
+        'Find returned a Koha object for composite primary key' );
 };
 
 subtest 'search_related' => sub {
