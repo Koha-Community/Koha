@@ -2441,7 +2441,7 @@ DROP TABLE IF EXISTS `serialitems`;
 CREATE TABLE `serialitems` (
 	`itemnumber` int(11) NOT NULL,
 	`serialid` int(11) NOT NULL,
-	UNIQUE KEY `serialitemsidx` (`itemnumber`),
+    PRIMARY KEY (`itemnumber`),
 	KEY `serialitems_sfk_1` (`serialid`),
 	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
