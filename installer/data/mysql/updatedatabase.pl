@@ -14108,6 +14108,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 9988 - Add AuthorityMergeLimit)\n";
 }
 
+$DBversion = '16.12.00.024';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET variable="NoticeBcc" WHERE variable="OverdueNoticeBcc";
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14537 - The system preference 'OverdueNoticeBcc' is mis-named.)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
