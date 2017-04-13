@@ -96,7 +96,7 @@ unless ( $separator ) {
 
 my $csv = Text::CSV->new( { sep_char => $separator, binary => 1 } );
 
-# If the user did not specify any field to export, we assume he wants them all
+# If the user did not specify any field to export, we assume he or she wants them all
 # We retrieve the first borrower informations to get field names
 my ($borrowernumber) = $sth->fetchrow_array or die "No borrower to export";
 my $member = GetMember($borrowernumber); # FIXME Now is_expired is no longer available

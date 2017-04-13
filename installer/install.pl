@@ -226,7 +226,7 @@ elsif ( $step && $step == 3 ) {
     elsif ( $op && $op eq 'selectframeworks' ) {
         #
         #
-        # 1ST install, 2nd sub-step : show the user the sql datas he can insert in the database.
+        # 1ST install, 2nd sub-step : show the user the sql datas he or she can insert in the database.
         #
         #
         # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)

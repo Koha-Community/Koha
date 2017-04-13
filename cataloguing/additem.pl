@@ -528,7 +528,7 @@ if ($op eq "additem") {
         my $oldbarcode = $addedolditem->{'barcode'};
         my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
 
-	# If there is a barcode and we can't find him new values, we can't add multiple copies
+	# If there is a barcode and we can't find him or her new values, we can't add multiple copies
 	my $testbarcode;
         $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
 	if ($oldbarcode && !$testbarcode) {

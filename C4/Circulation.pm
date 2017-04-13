@@ -2220,7 +2220,7 @@ C<$datedue> date due DateTime object
 C<$return_date> DateTime object representing the return time
 
 Internal function, called only by AddReturn that calculates and updates
- the user fine days, and debars him if necessary.
+ the user fine days, and debars him or her if necessary.
 
 Should only be called for overdue returns
 
@@ -3860,7 +3860,7 @@ sub IsItemIssued {
   my ($ageRestriction, $daysToAgeRestriction) = GetAgeRestriction($record_restrictions, $borrower);
   my ($ageRestriction, $daysToAgeRestriction) = GetAgeRestriction($record_restrictions);
 
-  if($daysToAgeRestriction <= 0) { #Borrower is allowed to access this material, as he is older or as old as the agerestriction }
+  if($daysToAgeRestriction <= 0) { #Borrower is allowed to access this material, as he or she is older or as old as the agerestriction }
   if($daysToAgeRestriction > 0) { #Borrower is this many days from meeting the agerestriction }
 
 @PARAM1 the koha.biblioitems.agerestriction value, like K18, PEGI 13, ...

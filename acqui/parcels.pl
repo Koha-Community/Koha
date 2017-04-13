@@ -29,7 +29,7 @@ parcels.pl
 =head1 DESCRIPTION
 
 This script shows all orders/parcels receipt or pending for a given supplier.
-It allows to write an order/parcels as 'received' when he arrives.
+It allows to write an order/parcels as 'received' when it arrives.
 
 =head1 CGI PARAMETERS
 

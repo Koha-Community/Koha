@@ -412,7 +412,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
     is( $total,
         $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA,
-        "Juvenile growing and become an young adult, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
+        "Juvenile growing and become an young adult, he or she should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
     );
 
     $patron->delete;

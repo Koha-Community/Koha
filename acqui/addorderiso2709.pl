@@ -2,7 +2,7 @@
 
 #A script that lets the user populate a basket from an iso2709 file
 #the script first displays a list of import batches, then when a batch is selected displays all the biblios in it.
-#The user can then pick which biblios he wants to order
+#The user can then pick which biblios he or she wants to order
 
 # Copyright 2008 - 2011 BibLibre SARL
 #

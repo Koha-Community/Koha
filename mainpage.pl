@@ -85,7 +85,7 @@ $template->param(
 );
 
 #
-# warn user if he is using mysql/admin login
+# warn user if he or she is using mysql/admin login
 #
 unless ($loggedinuser) {
     $template->param(adminWarning => 1);

@@ -694,7 +694,7 @@ If specified, data will be appended to the logfile. If not, the logfile will be 
 
 =item B<-t, -test>
 
-Test mode: parses the file, saying what he would do, but doing nothing.
+Test mode: parses the file, saying what it would do, but doing nothing.
 
 =item B<-s>
 

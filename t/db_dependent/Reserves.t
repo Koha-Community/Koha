@@ -535,13 +535,13 @@ C4::Biblio::ModBiblio( $record, $bibnum, $frameworkcode );
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Reserving an ageRestricted Biblio without a borrower dateofbirth succeeds" );
 
-#Set the dateofbirth for the Borrower making him "too young".
+#Set the dateofbirth for the Borrower making him or her "too young".
 $borrower->{dateofbirth} = DateTime->now->add( years => -15 );
 C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'ageRestricted', "Reserving a 'PEGI 16' Biblio by a 15 year old borrower fails");
 
-#Set the dateofbirth for the Borrower making him "too old".
+#Set the dateofbirth for the Borrower making him or her "too old".
 $borrower->{dateofbirth} = DateTime->now->add( years => -30 );
 C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
 

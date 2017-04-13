@@ -136,7 +136,7 @@ if ($borrowernumber_hold && !$action) {
     my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
     my $diffbranch;
 
-    # we check the reserves of the borrower, and if he can reserv a document
+    # we check the reserves of the borrower, and if he or she can reserve a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
     my $reserves_count =

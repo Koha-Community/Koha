@@ -153,10 +153,10 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 #look for duplicates
     ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
     if($biblionumber && !$input->param('use_external_source')) {
-	#if duplicate record found and user did not decide yet, first warn user
-	#and let him choose between using new record or existing record
-	Load_Duplicate($duplicatetitle);
-	exit;
+        #if duplicate record found and user did not decide yet, first warn user
+        #and let him or her choose between using new record or existing record
+        Load_Duplicate($duplicatetitle);
+        exit;
     }
     #from this point: add a new record
         if (C4::Context->preference("BiblioAddsAuthorities")){
