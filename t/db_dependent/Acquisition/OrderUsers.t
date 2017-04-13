@@ -18,6 +18,7 @@ my $library = $builder->build({
     source => "Branch",
 });
 my $patron_category = $builder->build({ source => 'Category' });
+my $currency = $builder->build({ source => 'Currency' });
 
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
@@ -49,7 +50,7 @@ my $order = Koha::Acquisition::Order->new(
         biblionumber     => $biblionumber,
         budget_id        => $budgetid,
         entrydate        => '01-01-2014',
-        currency         => 'EUR',
+        currency         => $currency->{currency},
         notes            => "This is a note1",
         orderstatus      => 1,
         quantityreceived => 0,
