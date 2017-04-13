@@ -44,9 +44,7 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<serialitemsidx>
+=head1 PRIMARY KEY
 
 =over 4
 
@@ -56,7 +54,7 @@ __PACKAGE__->add_columns(
 
 =cut
 
-__PACKAGE__->add_unique_constraint("serialitemsidx", ["itemnumber"]);
+__PACKAGE__->set_primary_key("itemnumber");
 
 =head1 RELATIONS
 
@@ -91,8 +89,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JZcKy2QIB2c39vgpntWahQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-13 13:53:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z43jqmURevaJeui7l8ThlQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
