@@ -361,6 +361,7 @@ elsif ( $step && $step == 3 ) {
             "error" => $error,
             "$op"   => 1,
         );
+        Koha::AtomicUpdater->new->addAllAtomicUpdates();
     }
     elsif ( $op && $op eq 'updatestructure' ) {
         #

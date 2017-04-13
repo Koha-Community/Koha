@@ -130,6 +130,25 @@ sub addAtomicUpdate {
     return $atomicupdate;
 }
 
+=head addAllAtomicUpdates
+
+Gets all pending atomicupdates and marks them added. This is useful for installer
+where we want to set all atomicupdates marked as applied to avoid applying them
+after installation.
+
+=cut
+
+sub addAllAtomicUpdates {
+    my ($self) = @_;
+
+    my $atomicUpdates = $self->getPendingAtomicUpdates();
+    foreach my $key (keys %$atomicUpdates) {
+        $self->addAtomicUpdate($atomicUpdates->{$key}->unblessed);
+    }
+
+    return $atomicUpdates;
+}
+
 sub removeAtomicUpdate {
     my ($self, $issueId) = @_;
     print "Deleting atomicupdate '$issueId'\n" if $self->{verbose} > 2;

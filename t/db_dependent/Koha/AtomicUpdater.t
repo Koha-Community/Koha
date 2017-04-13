@@ -326,5 +326,50 @@ sub applySingleAtomicUpdateFromFile {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
 }
 
+subtest 'Mark all atomicupdates as installed (for fresh installs), but do not'
+       .' execute them' => \&addAllAtomicUpdates;
+sub addAllAtomicUpdates {
+    my $subtestContext = {};
+    eval {
+    my $files = t::lib::TestObjects::FileFactory->createTestGroup([
+                        {
+                            filepath => 'atomicupdate/',
+                            filename => 'Bug_00001-First-update.pl',
+                            content  => '$ENV{ATOMICUPDATE_TESTS_3}++;',
+                        },
+                        {
+                            filepath => 'atomicupdate/',
+                            filename => 'Bug_00002-Second-update.pl',
+                            content  => '$ENV{ATOMICUPDATE_TESTS_3}++;',
+                        },
+                        ],
+                        undef, $subtestContext, $testContext);
+
+    my $atomicUpdater = Koha::AtomicUpdater->new({
+            scriptDir => $files->{'Bug_00001-First-update.pl'}->dirname(),
+    });
+
+    $atomicUpdater->addAllAtomicUpdates;
+    my $atomicUpdate = $atomicUpdater->find('Bug-00001');
+    my $atomicUpdate2 = $atomicUpdater->find('Bug-00002');
+    t::lib::TestObjects::AtomicUpdateFactory->addToContext($atomicUpdate, undef,
+                                                $subtestContext, $testContext);
+    t::lib::TestObjects::AtomicUpdateFactory->addToContext($atomicUpdate2, undef,
+                                                $subtestContext, $testContext);
+
+    is($atomicUpdate->filename,
+       "Bug_00001-First-update.pl",
+       "Bug_00001-First-update.pl added to DB");
+    is($atomicUpdate2->filename,
+       "Bug_00002-Second-update.pl",
+       "Bug_00002-Second-update.pl added to DB");
+    is($ENV{ATOMICUPDATE_TESTS_3}, undef, "However, updates were not executed.");
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
 t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
 done_testing;
