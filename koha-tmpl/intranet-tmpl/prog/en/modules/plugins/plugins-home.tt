@@ -33,9 +33,16 @@
                     [% IF ( CAN_user_plugins_manage ) %]
                         <div class="btn-toolbar" id="toolbar">
                             <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload plugin</a>
+                            <div class="btn-group">
+                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-eye"></i> View plugins by class <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">View all plugins</a></li>
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=report">View report plugins</a></li>
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">View tool plugins</a></li>
+                                </ul>
+                            </div>
                         </div>
                     [% END %]
-
                     <h1>Plugins</h1>
 
                     [% UNLESS ( plugins ) %]
