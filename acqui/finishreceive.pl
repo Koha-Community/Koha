@@ -153,6 +153,7 @@ ModItem(
     {
         booksellerid         => $booksellerid,
         dateaccessioned      => $datereceived,
+        datelastseen         => $datereceived,
         price                => $unitprice,
         replacementprice     => $order->{rrp},
         replacementpricedate => $datereceived,
