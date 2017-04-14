@@ -2,11 +2,14 @@
 [%- USE Koha -%]
 [%- USE To -%]
 [%- USE ItemTypes -%]
-[% USE AuthorisedValues %]
+[%- USE AuthorisedValues -%]
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
 [
   "[% FILTER escape_quotes = replace('"', '\"') ~%]
+    <input type="checkbox" name="itemnumber" value="[% item.itemnumber %]"/>
+  [%~ END %]",
+  "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]" title="Go to record detail page">[% biblio.title | html %]</a>[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author | html %]
   [%~ END %]",
   "[% (biblioitem.publicationyear || biblio.copyrightdate) | html %]",
@@ -18,10 +21,10 @@
   "[% item.itemcallnumber | html %]",
   "[% Branches.GetName(item.homebranch) | html %]",
   "[% Branches.GetName(item.holdingbranch) | html %]",
-  "[% item.location | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.location', authorised_value => item.location) | html %]",
   "[% ItemTypes.GetDescription(item.itype) | html %]",
   "[% item.stocknumber | html %]",
-  "[% item.status | html %]",
+  "[% AuthorisedValues.GetDescriptionByKohaField( frameworkcode => biblio.frameworkcode, kohafield => 'items.notforloan', authorised_value => item.notforloan) | html %]",
   "[% AuthorisedValues.GetByCode( 'LOST', item.itemlost ) || "" | html %]",
   "[% AuthorisedValues.GetByCode( 'WITHDRAWN', item.withdrawn ) || "" | html %]",
   "[% (item.issues || 0) | html %]",

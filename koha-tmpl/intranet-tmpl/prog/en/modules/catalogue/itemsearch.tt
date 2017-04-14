@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE To %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 
 [% BLOCK form_label %]
   [% SWITCH label %]
@@ -109,6 +110,18 @@
     [%- END -%]
     [%- To.json(escaped) | $raw -%]
 [%- END -%]
+
+[% notforloans = AuthorisedValues.GetDescriptionsByKohaField({ kohafield = 'items.notforloan' }) %]
+[% FOREACH nfl IN notforloans %]
+    [% nfl.value = nfl.authorised_value %]
+    [% nfl.label = nfl.lib %]
+[% END %]
+
+[% locations = AuthorisedValues.GetDescriptionsByKohaField({ kohafield = 'items.location' }) %]
+[% FOREACH loc IN locations %]
+    [% loc.value = loc.authorised_value %]
+    [% loc.label = loc.lib %]
+[% END %]
 
 [%# Page starts here %]
 
@@ -266,6 +279,7 @@
         function submitForm($form) {
             var tr = ''
                 + '    <tr>'
+                + '      <th id="items_checkbox"></th>'
                 + '      <th id="items_title">' + _("Title") + '</th>'
                 + '      <th id="items_pubdate">' + _("Publication date") + '</th>'
                 + '      <th id="items_publisher">' + _("Publisher") + '</th>'
@@ -301,38 +315,79 @@
                     $('#item-search-block').show();
                 });
 
+            function exportItems(format) {
+              var itemnumbers = [];
+              $('#results').find('input[name="itemnumber"]:checked').each(function() {
+                itemnumbers.push($(this).val());
+              });
+              if (itemnumbers.length) {
+                var href = '/cgi-bin/koha/catalogue/item-export.pl?format=' + format;
+                href += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                location = href;
+              } else {
+                $('#format-' + format).prop('checked', true);
+                $('#itemsearchform').submit();
+                $('#format-html').prop('checked', true);
+              }
+            }
+
             var csvExportLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Export results to CSV"))
-                .addClass('btn btn-default btn-xs')
+                .html("CSV")
                 .on('click', function(e) {
                     e.preventDefault();
-                    $('#format-csv').prop('checked', true);
-                    $('#itemsearchform').submit();
-                    $('#format-html').prop('checked', true);
+                    exportItems('csv');
                 });
             var barcodesExportLink = $('<a>')
                 .attr('href', '#')
-                .html(_("Export results to barcodes file"))
-                .addClass('btn btn-default btn-xs')
+                .html(_("Barcodes file"))
                 .on('click', function(e) {
                     e.preventDefault();
-                    $('#format-barcodes').prop('checked', true);
-                    $('#itemsearchform').submit();
-                    $('#format-html').prop('checked', true);
+                    exportItems('barcodes');
               });
 
-            var editSearchAndExportLinks = $('<p>')
-                .append(editSearchLink)
-                .append(' | ')
-                .append(csvExportLink)
-                .append(' ')
-                .append(barcodesExportLink);
+            var exportButton = $('<div>')
+              .addClass('btn-group')
+              .append($('<button>')
+                  .addClass('btn btn-default btn-xs dropdown-toggle')
+                  .attr('id', 'export-button')
+                  .attr('data-toggle', 'dropdown')
+                  .attr('aria-haspopup', 'true')
+                  .attr('aria-expanded', 'false')
+                  .html(_("Export all results to") + ' <span class="caret"></span>'))
+              .append($('<ul>')
+                  .addClass('dropdown-menu')
+                  .append($('<li>').append(csvExportLink))
+                  .append($('<li>').append(barcodesExportLink)));
+
+            var selectVisibleRows = $('<a>')
+              .attr('href', '#')
+              .append('<i class="fa fa-check"></i> ')
+              .append(_("Select visible rows"))
+              .on('click', function(e) {
+                  e.preventDefault();
+                  $('#results input[type="checkbox"]').prop('checked', true).change();
+              });
+            var clearSelection = $('<a>')
+              .attr('href', '#')
+              .append('<i class="fa fa-remove"></i> ')
+              .append(_("Clear selection"))
+              .on('click', function(e) {
+                  e.preventDefault();
+                  $('#results input[type="checkbox"]').prop('checked', false).change();
+              });
+            var exportLinks = $('<p>')
+              .append(selectVisibleRows)
+              .append(' ')
+              .append(clearSelection)
+              .append(' | ')
+              .append(exportButton);
 
             var results_heading = $('<div>').addClass('results-heading')
                 .append("<h1>" + _("Item search results") + "</h1>")
                 .append($('<p>').append(advSearchLink))
-                .append(editSearchAndExportLinks);
+                .append($('<p>').append(editSearchLink))
+                .append(exportLinks);
             $('#results-wrapper').empty()
                 .append(results_heading)
                 .append(table);
@@ -369,7 +424,9 @@
                     });
                 },
                 'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
+                'aaSorting': [[1, 'asc']],
                 'aoColumns': [
+                    { 'sName': 'checkbox', 'bSortable': false },
                     { 'sName': 'title' },
                     { 'sName': 'publicationyear' },
                     { 'sName': 'publishercode' },
@@ -385,12 +442,13 @@
                     { 'sName': 'itemlost' },
                     { 'sName': 'withdrawn' },
                     { 'sName': 'issues' },
-                    { 'sName': 'checkbox', 'bSortable': false }
+                    { 'sName': 'actions', 'bSortable': false }
                 ],
                 "sPaginationType": "full_numbers"
             })).columnFilter({
                 'sPlaceHolder': 'head:after',
                 'aoColumns': [
+                    null,
                     { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'text' },
@@ -432,6 +490,16 @@
                     { 'type': 'text' },
                     null
                 ]
+            });
+
+            $('#results').on('change', 'input[type="checkbox"]', function() {
+              var countSelected = $(this).parents('table').find('input:checked').length;
+              var caret = ' <span class="caret">';
+              if (countSelected > 0) {
+                $('#export-button').html(_("Export selected results to") + caret);
+              } else {
+                $('#export-button').html(_("Export all results to") + caret);
+              }
             });
         }
         var Sticky;

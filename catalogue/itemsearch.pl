@@ -97,13 +97,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
     flagsrequired   => { catalogue => 1 },
 });
 
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.notforloan', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my $notforloan_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
-
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.location', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my $location_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
-
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
 $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
@@ -227,38 +221,10 @@ if (scalar keys %params > 0) {
     }
 
     if ($results) {
-        # Get notforloan labels
-        my $notforloan_map = {};
-        foreach my $nfl_value (@$notforloan_values) {
-            $notforloan_map->{$nfl_value->{authorised_value}} = $nfl_value->{lib};
-        }
-
-        # Get location labels
-        my $location_map = {};
-        foreach my $loc_value (@$location_values) {
-            $location_map->{$loc_value->{authorised_value}} = $loc_value->{lib};
-        }
-
-        # Get itemlost labels
-        my $itemlost_map = {};
-        foreach my $il_value (@$itemlost_values) {
-            $itemlost_map->{$il_value->{authorised_value}} = $il_value->{lib};
-        }
-
-        # Get withdrawn labels
-        my $withdrawn_map = {};
-        foreach my $wd_value (@$withdrawn_values) {
-            $withdrawn_map->{$wd_value->{authorised_value}} = $wd_value->{lib};
-        }
-
         foreach my $item (@$results) {
             my $biblio = Koha::Biblios->find( $item->{biblionumber} );
             $item->{biblio} = $biblio;
             $item->{biblioitem} = $biblio->biblioitem->unblessed;
-            $item->{status} = $notforloan_map->{$item->{notforloan}};
-            if (defined $item->{location}) {
-                $item->{location} = $location_map->{$item->{location}};
-            }
         }
     }
 
@@ -289,13 +255,6 @@ if (scalar keys %params > 0) {
 # Display the search form
 
 my @branches = map { value => $_->branchcode, label => $_->branchname }, Koha::Libraries->search( {}, { order_by => 'branchname' } );
-my @locations;
-foreach my $location (@$location_values) {
-    push @locations, {
-        value => $location->{authorised_value},
-        label => $location->{lib} // $location->{authorised_value},
-    };
-}
 my @itemtypes;
 foreach my $itemtype ( Koha::ItemTypes->search ) {
     push @itemtypes, {
@@ -304,23 +263,10 @@ foreach my $itemtype ( Koha::ItemTypes->search ) {
     };
 }
 
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.ccode', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
-my $ccode_avcode = $mss->count ? $mss->next->authorised_value : 'CCODE';
-my $ccodes = GetAuthorisedValues($ccode_avcode);
-my @ccodes;
-foreach my $ccode (@$ccodes) {
-    push @ccodes, {
-        value => $ccode->{authorised_value},
-        label => $ccode->{lib},
-    };
-}
-
-my @notforloans;
-foreach my $value (@$notforloan_values) {
-    push @notforloans, {
-        value => $value->{authorised_value},
-        label => $value->{lib},
-    };
+my @ccodes = Koha::AuthorisedValues->get_descriptions_by_koha_field({ kohafield => 'items.ccode' });
+foreach my $ccode (@ccodes) {
+    $ccode->{value} = $ccode->{authorised_value},
+    $ccode->{label} = $ccode->{lib},
 }
 
 my @itemlosts;
@@ -350,10 +296,8 @@ foreach my $field (@items_search_fields) {
 
 $template->param(
     branches => \@branches,
-    locations => \@locations,
     itemtypes => \@itemtypes,
     ccodes => \@ccodes,
-    notforloans => \@notforloans,
     itemlosts => \@itemlosts,
     withdrawns => \@withdrawns,
     items_search_fields => \@items_search_fields,
