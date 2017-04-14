@@ -280,7 +280,7 @@ if ($barcode) {
 
     my $materials = $biblio->{'materials'};
     my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
-    $materials = $descriptions->{lib} // '';
+    $materials = $descriptions->{lib} // $materials;
 
     $template->param(
         title            => $biblio->{'title'},
