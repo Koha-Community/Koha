@@ -383,7 +383,7 @@ if (@$barcodes) {
             #  Get the item title for more information
             my $materials = $iteminfo->{'materials'};
             my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $getmessageiteminfo->{frameworkcode}, kohafield => 'items.materials', authorised_value => $materials });
-            $materials = $descriptions->{lib} // '';
+            $materials = $descriptions->{lib} // $materials;
             $template_params->{additional_materials} = $materials;
             $template_params->{itemhomebranch} = $iteminfo->{'homebranch'};
 
