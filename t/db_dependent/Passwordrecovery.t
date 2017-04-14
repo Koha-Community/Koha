@@ -51,7 +51,7 @@ my $uuid2   = "WXYZ0987";
 my $uuid3   = "LMNO4561";
 
 my $patron_category = $builder->build({ source => 'Category' });
-my $branch       = $schema->resultset('Branch')->first(); #  legit branch from your db
+my $branch = $builder->build({ source => 'Branch' });
 
 $schema->resultset('BorrowerPasswordRecovery')->delete_all();
 
@@ -64,7 +64,7 @@ $schema->resultset('Borrower')->create(
         userid          => $userid1,
         email           => $email1,
         categorycode    => $patron_category->{categorycode},
-        branchcode      => $branch,
+        branchcode      => $branch->{branchcode},
     }
 );
 $schema->resultset('Borrower')->create(
@@ -76,7 +76,7 @@ $schema->resultset('Borrower')->create(
         userid          => $userid2,
         email           => $email2,
         categorycode    => $patron_category->{categorycode},
-        branchcode      => $branch,
+        branchcode      => $branch->{branchcode},
     }
 );
 $schema->resultset('Borrower')->create(
@@ -88,7 +88,7 @@ $schema->resultset('Borrower')->create(
         userid         => $userid3,
         email          => $email3,
         categorycode   => $patron_category->{categorycode},
-        branchcode     => $branch,
+        branchcode     => $branch->{branchcode},
     }
 );
 
