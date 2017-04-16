@@ -20,8 +20,10 @@ use Modern::Perl;
 use POSIX qw(strftime);
 
 use Test::More tests => 49;
-use Koha::Database;
 
+use t::lib::TestBuilder;
+
+use Koha::Database;
 use Koha::Biblio;
 use Koha::Patron;
 use Koha::Library;
@@ -34,6 +36,7 @@ BEGIN {
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
+my $builder = t::lib::TestBuilder->new;
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
@@ -50,21 +53,22 @@ my $biblioitem = $schema->resultset('Biblioitem')->new(
 )->insert();
 ok( $biblioitem->id, 'biblioitem created' );
 
+my $itype = $builder->build({ source => 'Itemtype' });
 my $item = Koha::Item->new(
     {
         biblionumber     => $biblio->id,
         biblioitemnumber => $biblioitem->id,
-        itype => $schema->resultset('Itemtype')->search()->next()->itemtype(),
+        itype => $itype->{itype},
     }
 )->store();
 ok( $item->id, 'Koha::Item created' );
 
-my $branch   = Koha::Libraries->search()->next();
-my $category = $schema->resultset('Category')->next();
+my $branch   = $builder->build({ source => 'Branch' });
+my $category = $builder->build({ source => 'Category' });
 my $patron   = Koha::Patron->new(
     {
-        categorycode => $category->id,
-        branchcode   => $branch->id,
+        categorycode => $category->{categorycode},
+        branchcode   => $branch->{branchcode},
     }
 )->store();
 ok( $patron->id, 'Koha::Patron created' );

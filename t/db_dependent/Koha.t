@@ -4,22 +4,28 @@
 # It requires a working Koha database with the sample data
 
 use Modern::Perl;
+use DateTime::Format::MySQL;
+use Test::More tests => 7;
+
+use t::lib::TestBuilder;
+
 use C4::Context;
+use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValueCategories;
-
-use Test::More tests => 7;
-use DateTime::Format::MySQL;
 
 BEGIN {
     use_ok('C4::Koha', qw( :DEFAULT GetDailyQuote GetItemTypesCategorized));
     use_ok('C4::Members');
 }
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
+our $itype_1 = $builder->build({ source => 'Itemtype' });
 
 subtest 'Authorized Values Tests' => sub {
     plan tests => 3;
@@ -152,9 +158,9 @@ subtest 'Authorized Values Tests' => sub {
 };
 
 subtest 'Itemtype info Tests' => sub {
-    like ( getitemtypeinfo('BK')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on unspecified interface returns intranet imageurl (legacy behavior)' );
-    like ( getitemtypeinfo('BK', 'intranet')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on "intranet" interface returns intranet imageurl' );
-    like ( getitemtypeinfo('BK', 'opac')->{'imageurl'}, qr/opac-tmpl/, 'getitemtypeinfo on "opac" interface returns opac imageurl' );
+    like ( getitemtypeinfo( $itype_1->{itemtype} )->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on unspecified interface returns intranet imageurl (legacy behavior)' );
+    like ( getitemtypeinfo( $itype_1->{itemtype}, 'intranet')->{'imageurl'}, qr/intranet-tmpl/, 'getitemtypeinfo on "intranet" interface returns intranet imageurl' );
+    like ( getitemtypeinfo( $itype_1->{itemtype}, 'opac')->{'imageurl'}, qr/opac-tmpl/, 'getitemtypeinfo on "opac" interface returns opac imageurl' );
 };
 
 ### test for C4::Koha->GetDailyQuote()
@@ -294,4 +300,4 @@ subtest 'GetItemTypesCategorized test' => sub{
     is_deeply(\@results,\@expected, 'GetItemTypesCategorized: grouped and ungrouped items returned as expected.');
 };
 
-$dbh->rollback();
+$schema->storage->txn_rollback;

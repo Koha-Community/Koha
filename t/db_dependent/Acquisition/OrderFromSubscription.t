@@ -2,6 +2,8 @@ use Modern::Perl;
 
 use Test::More tests => 12;
 
+use t::lib::TestBuilder;
+
 use_ok('C4::Acquisition');
 use_ok('C4::Biblio');
 use_ok('C4::Budgets');
@@ -13,8 +15,11 @@ use Koha::Database;
 # Start transaction
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
+
+my $curcode = $builder->build({ source => 'Currency' })->{currencycode};
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
@@ -61,7 +66,7 @@ my $order = Koha::Acquisition::Order->new({
     biblionumber => $subscription->{biblionumber},
     entrydate => '01-01-2013',
     quantity => 1,
-    currency => 'USD',
+    currency => $curcode,
     listprice => $cost,
     notes => "This is a note",
     basketno => $basketno,

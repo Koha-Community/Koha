@@ -17,6 +17,7 @@
 use Modern::Perl;
 use Test::More tests => 57;
 use t::lib::Mocks qw(mock_preference);
+use t::lib::TestBuilder;
 use POSIX qw(strftime);
 use Data::Dumper;
 use Koha::Biblios;
@@ -41,9 +42,10 @@ can_ok(
       _count )
 );
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM biblio');
@@ -213,8 +215,8 @@ sub construct_objects_needed {
     my $cardnumber1  = 'test_card1';
     my $cardnumber2  = 'test_card2';
     my $cardnumber3  = 'test_card3';
-    my $categorycode = Koha::Database->new()->schema()->resultset('Category')->first()->categorycode();
-    my $branchcode   = Koha::Database->new()->schema()->resultset('Branch')->first()->branchcode();
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 
     my $query = '
     INSERT INTO borrowers
@@ -613,4 +615,4 @@ sub verif_systempreferences_values {
     }
 }
 
-$dbh->rollback;
+$schema->storage->txn_rollback;

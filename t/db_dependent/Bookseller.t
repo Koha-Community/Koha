@@ -6,6 +6,8 @@ use Test::More tests => 86;
 use Test::MockModule;
 use Test::Warn;
 
+use t::lib::TestBuilder;
+
 use C4::Context;
 use Koha::DateUtils;
 use DateTime::Duration;
@@ -35,14 +37,17 @@ my $dbh = C4::Context->dbh;
 my $database = Koha::Database->new();
 my $schema = $database->schema();
 $schema->storage->txn_begin();
-
 $dbh->{RaiseError} = 1;
+my $builder = t::lib::TestBuilder->new;
 
 #Start tests
 $dbh->do(q|DELETE FROM aqorders|);
 $dbh->do(q|DELETE FROM aqbasket|);
 $dbh->do(q|DELETE FROM aqbooksellers|);
 $dbh->do(q|DELETE FROM subscription|);
+
+# Add currency
+my $curcode = $builder->build({ source => 'Currency' })->{currencycode};
 
 #Test AddBookseller
 my $count            = Koha::Acquisition::Booksellers->search()->count();
@@ -350,7 +355,7 @@ my $order1 = Koha::Acquisition::Order->new(
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
         entrydate        => '01-01-2013',
-        currency         => 'EUR',
+        currency         => $curcode,
         notes            => "This is a note1",
         tax_rate          => 0.0500,
         orderstatus      => 1,
@@ -370,7 +375,7 @@ my $order2 = Koha::Acquisition::Order->new(
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
         entrydate      => '01-01-2013',
-        currency       => 'EUR',
+        currency       => $curcode,
         notes          => "This is a note2",
         tax_rate        => 0.0500,
         orderstatus    => 1,
@@ -388,7 +393,7 @@ my $order3 = Koha::Acquisition::Order->new(
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
         entrydate      => '02-02-2013',
-        currency       => 'EUR',
+        currency       => $curcode,
         notes          => "This is a note3",
         tax_rate        => 0.0500,
         orderstatus    => 2,
@@ -406,7 +411,7 @@ my $order4 = Koha::Acquisition::Order->new(
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
         entrydate        => '02-02-2013',
-        currency         => 'EUR',
+        currency         => $curcode,
         notes            => "This is a note3",
         tax_rate          => 0.0500,
         orderstatus      => 2,

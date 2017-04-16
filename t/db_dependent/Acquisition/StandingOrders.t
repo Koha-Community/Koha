@@ -22,6 +22,7 @@ my $branch = $builder->build( { source => 'Branch' } );
 my $bookseller = $builder->build( { source => 'Aqbookseller' } );
 my $budget = $builder->build( { source => 'Aqbudget' } );
 my $staffmember = $builder->build( { source => 'Borrower' } );
+my $curcode = $builder->build( { source => 'Currency' })->{currencycode};
 
 # Create baskets and orders
 
@@ -61,7 +62,7 @@ my $ordernumber = Koha::Acquisition::Order->new(
         basketno                 => $basketno,
         biblionumber             => $biblionumber,
         budget_id                => $budget->{budget_id},
-        currency                 => 'USD',
+        currency                 => $curcode,
         quantity                 => 0,
         rrp                      => 42,
         rrp_tax_included         => 42,

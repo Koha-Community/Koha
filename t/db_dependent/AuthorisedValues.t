@@ -3,18 +3,21 @@
 use Modern::Perl;
 use Test::More tests => 15;
 
+use t::lib::TestBuilder;
+
+use Koha::Database;
 use C4::Context;
 use Koha::AuthorisedValue;
 use Koha::AuthorisedValues;
 use Koha::AuthorisedValueCategories;
 use Koha::MarcSubfieldStructures;
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 
-$dbh->do("DELETE FROM authorised_values");
-$dbh->do("DELETE FROM authorised_value_categories");
+Koha::AuthorisedValues->delete;
+Koha::AuthorisedValueCategories->delete;
 
 # insert
 Koha::AuthorisedValueCategory->new({ category_name => 'av_for_testing' })->store;
@@ -89,11 +92,8 @@ my @authorised_values =
   Koha::AuthorisedValues->new()->search( { category => 'av_for_testing' } );
 is( @authorised_values, 3, "Get correct number of values" );
 
-my $branches_rs = Koha::Database->new()->schema()->resultset('Branch')->search();
-my $branch1 = $branches_rs->next();
-my $branchcode1 = $branch1->branchcode();
-my $branch2 = $branches_rs->next();
-my $branchcode2 = $branch2->branchcode();
+my $branchcode1 = $builder->build({ source => 'Branch' })->{branchcode};
+my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 
 $av1->add_branch_limitation( $branchcode1 );
 
@@ -225,3 +225,5 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
         );
     };
 };
+
+$schema->storage->txn_rollback;
