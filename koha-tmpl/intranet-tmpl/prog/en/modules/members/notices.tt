@@ -19,6 +19,7 @@
             e.preventDefault();
             var rowid = $(this).data("noticeid");
             $("#notice"+rowid).toggle();
+            $("#resend_notice"+rowid).toggle();
         });
 
     });
@@ -75,7 +76,7 @@
             [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
             [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
             [% IF ( QUEUED_MESSAGE.status != 'pending' ) %]
-            <div class="notice">
+            <div id="resend_notice[% QUEUED_MESSAGE.message_id %]"  class="notice">
                 <form action="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrowernumber %]" method="POST">
                     <input type="hidden" name="op" value="resend_notice" />
                     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
