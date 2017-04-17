@@ -17,9 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-#Recommended pragmas
 use Modern::Perl;
-use diagnostics;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use C4::Output;
@@ -50,25 +48,6 @@ my ( $template, $loggedinuser, $cookie ) =
         debug           => 1,
     }
   );
-
-#Check database connection
-my %info;
-$info{'dbname'} = C4::Context->config("database");
-$info{'dbms'}   = (
-      C4::Context->config("db_scheme")
-    ? C4::Context->config("db_scheme")
-    : "mysql"
-);
-
-$info{'hostname'} = C4::Context->config("hostname");
-$info{'port'}     = C4::Context->config("port");
-$info{'user'}     = C4::Context->config("user");
-$info{'password'} = C4::Context->config("pass");
-my $dbh = DBI->connect(
-    "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
-      . ( $info{port} ? ";port=$info{port}" : "" ),
-    $info{'user'}, $info{'password'}
-);
 
 #Store the value of the template input name='op' in the variable $op so we can check if the user has pressed the button with the name="op" and value="finish" meaning the user has finished the onboarding tool.
 my $op = $input->param('op') || '';
@@ -382,7 +361,6 @@ elsif ( $step && $step == 3 ) {
 #Perform data validation on the flag that has been handed to onboarding.pl by the template
             my $flag = $input->param('flag');
             if ( $input->param('newflags') ) {
-                my $dbh              = C4::Context->dbh();
                 my @perms            = $input->multi_param('flag');
                 my %all_module_perms = ();
                 my %sub_perms        = ();
@@ -498,7 +476,6 @@ elsif ( $step && $step == 5 ) {
     );
 
     my $input = CGI->new;
-    my $dbh   = C4::Context->dbh;
 
     my ( $template, $loggedinuser, $cookie ) =
       C4::InstallAuth::get_template_and_user(
