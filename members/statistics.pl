@@ -97,6 +97,8 @@ $template->param( picture => 1 ) if $patron_image;
 
 $template->param(%$borrower);
 
+$template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' );
+
 $template->param(
     statisticsview     => 1,
     datas              => $datas,
