@@ -18,6 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use C4::Context;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use C4::Output;
@@ -35,6 +36,11 @@ use Koha::IssuingRules;
 #Setting variables
 my $input = new CGI;
 my $step  = $input->param('step');
+
+unless ( C4::Context->preference('Version') ) {
+    print $input->redirect("/cgi-bin/koha/installer/install.pl");
+    exit;
+}
 
 #Getting the appropriate template to display to the user
 my ( $template, $loggedinuser, $cookie ) =
