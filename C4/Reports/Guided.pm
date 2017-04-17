@@ -27,9 +27,13 @@ use C4::Context;
 use C4::Templates qw/themelanguage/;
 use C4::Koha;
 use Koha::DateUtils;
+use Koha::Patrons;
+use Koha::Reports;
 use C4::Output;
 use C4::Debug;
 use C4::Log;
+use Koha::Notice::Templates;
+use C4::Letters;
 
 use Koha::AuthorisedValues;
 use Koha::Patron::Categories;
@@ -927,6 +931,99 @@ sub ValidateSQLParameters {
     }
 
     return \@problematic_parameters;
+}
+
+=head2 EmailReport
+
+    my ( $emails, $arrayrefs ) = EmailReport($report_id, $letter_code, $module, $branch, $email)
+
+Take a report and use it to process a Template Toolkit formatted notice
+Returns arrayrefs containing prepared letters and errors respectively
+
+=cut
+
+sub EmailReport {
+
+    my $params     = shift;
+    my $report_id  = $params->{report_id};
+    my $from       = $params->{from};
+    my $email      = $params->{email};
+    my $module     = $params->{module};
+    my $code       = $params->{code};
+    my $branch     = $params->{branch} || "";
+
+    my @errors = ();
+    my @emails = ();
+
+    return ( undef, [{ FATAL => "MISSING_PARAMS" }] ) unless ($report_id && $module && $code);
+
+    return ( undef, [{ FATAL => "NO_LETTER" }] ) unless
+    my $letter = Koha::Notice::Templates->find({
+        module     => $module,
+        code       => $code,
+        branchcode => $branch,
+        message_transport_type => 'email',
+    });
+    $letter = $letter->unblessed;
+
+    my $report = Koha::Reports->find( $report_id );
+    my $sql = $report->savedsql;
+    return ( { FATAL => "NO_REPORT" } ) unless $sql;
+
+    my ( $sth, $errors ) = execute_query( $sql ); #don't pass offset or limit, hardcoded limit of 999,999 will be used
+    return ( undef, [{ FATAL => "REPORT_FAIL" }] ) if $errors;
+
+    my $counter = 1;
+    my $template = $letter->{content};
+
+    while ( my $row = $sth->fetchrow_hashref() ) {
+        my $email;
+        my $err_count = scalar @errors;
+        push ( @errors, { NO_BOR_COL => $counter } ) unless defined $row->{borrowernumber};
+        push ( @errors, { NO_EMAIL_COL => $counter } ) unless ( (defined $email && defined $row->{$email}) || defined $row->{email} );
+        push ( @errors, { NO_FROM_COL => $counter } ) unless defined ( $from || $row->{from} );
+        push ( @errors, { NO_BOR => $row->{borrowernumber} } ) unless Koha::Patrons->find({borrowernumber=>$row->{borrowernumber}});
+
+        my $from_address = $from || $row->{from};
+        my $to_address = $email ? $row->{$email} : $row->{email};
+        push ( @errors, { NOT_PARSE => $counter } ) unless my $content = _process_row_TT( $row, $template );
+        $counter++;
+        next if scalar @errors > $err_count; #If any problems, try next
+
+        $letter->{content}       = $content;
+        $email->{borrowernumber} = $row->{borrowernumber};
+        $email->{letter}         = $letter;
+        $email->{from_address}   = $from_address;
+        $email->{to_address}     = $to_address;
+
+        push ( @emails, $email );
+    }
+
+    return ( \@emails, \@errors );
+
+}
+
+
+
+=head2 ProcessRowTT
+
+   my $content = ProcessRowTT($row_hashref, $template);
+
+Accepts a hashref containing values and processes them against Template Toolkit
+to produce content
+
+=cut
+
+sub _process_row_TT {
+
+    my ($row, $template) = @_;
+
+    return 0 unless ($row && $template);
+    my $content;
+    my $processor = Template->new();
+    $processor->process( \$template, $row, \$content);
+    return $content;
+
 }
 
 sub _get_display_value {
