@@ -351,7 +351,6 @@ if ( $borr->{lost} && ($borr->{lost} == 1) ) {
     );
 }
 
-my $patron = Koha::Patrons->find( $borrowernumber );
 if ( $patron->is_debarred ) {
     $noreserves = 1;
     $template->param(
