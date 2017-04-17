@@ -84,37 +84,37 @@ if ( $op && $op eq 'finish' )
 
 my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
 $template->param(
-     libraries   => $libraries,
-     group_types => [
-     {
+    libraries   => $libraries,
+    group_types => [
+        {
             categorytype => 'searchdomain',
             categories   => [
-               Koha::LibraryCategories->search(
-                   { categorytype => 'searchdomain' }
-               )
+                Koha::LibraryCategories->search(
+                    { categorytype => 'searchdomain' }
+                )
             ],
-     },
-     {
+        },
+        {
             categorytype => 'properties',
             categories   => [
-               Koha::LibraryCategories->search(
-                   { categorytype => 'properties' }
-               )
+                Koha::LibraryCategories->search(
+                    { categorytype => 'properties' }
+                )
             ],
-     },
-     ]
+        },
+    ]
 );
 
-
 #Select all the patron category records in the categories database table and give them to the template
-    my $categories = Koha::Patron::Categories->search();
-    $template->param( 'categories' => $categories, );
+my $categories = Koha::Patron::Categories->search();
+$template->param( 'categories' => $categories, );
 
 #Check if the $step variable equals 1 i.e. the user has clicked to create a library in the create library screen 1
-    my $itemtypes = Koha::ItemTypes->search();
-    $template->param( 'itemtypes' => $itemtypes, );
+my $itemtypes = Koha::ItemTypes->search();
+$template->param( 'itemtypes' => $itemtypes, );
 
 if ( $step && $step == 1 ) {
+
     #store inputted parameters in variables
     my $branchcode = $input->param('branchcode');
     $branchcode = uc($branchcode);
@@ -152,7 +152,8 @@ if ( $step && $step == 1 ) {
 #Check if the $step variable equals 2 i.e. the user has clicked to create a patron category in the create patron category screen 1
 }
 elsif ( $step && $step == 2 ) {
-    if ($op eq "add_validate_category"){
+    if ( $op eq "add_validate_category" ) {
+
         #Initialising values
         my $searchfield  = $input->param('description') // q||;
         my $categorycode = $input->param('categorycode');
@@ -162,27 +163,27 @@ elsif ( $step && $step == 2 ) {
         $template->param( 'categorycode' => $categorycode );
 
         my ( $template, $loggedinuser, $cookie ) =
-            C4::InstallAuth::get_template_and_user(
+          C4::InstallAuth::get_template_and_user(
             {
                 template_name   => "/onboarding/onboardingstep2.tt",
                 query           => $input,
                 type            => "intranet",
                 authnotrequired => 0,
                 flagsrequired =>
-                { parameters => 'parameters_remaining_permissions' },
+                  { parameters => 'parameters_remaining_permissions' },
                 debug => 1,
             }
-            );
+          );
 
-        #Once the user submits the page, this code validates the input and adds it
-        #to the database as a new patron category
+      #Once the user submits the page, this code validates the input and adds it
+      #to the database as a new patron category
         $categorycode = $input->param('categorycode');
         my $description           = $input->param('description');
         my $overduenoticerequired = $input->param('overduenoticerequired');
         my $category_type         = $input->param('category_type');
         my $default_privacy       = $input->param('default_privacy');
         my $enrolmentperiod       = $input->param('enrolmentperiod');
-        my $enrolmentperioddate   = $input->param('enrolmentperioddate') || undef;
+        my $enrolmentperioddate = $input->param('enrolmentperioddate') || undef;
 
         #Converts the string into a date format
         if ($enrolmentperioddate) {
@@ -220,18 +221,17 @@ elsif ( $step && $step == 2 ) {
 
         $template->param( 'message' => $message );
     }
+
     #Create a patron
 }
 elsif ( $step && $step == 3 ) {
-    my $firstpassword  = $input->param('password') || '';
+    my $firstpassword  = $input->param('password')  || '';
     my $secondpassword = $input->param('password2') || '';
-
 
     #Find all patron records in the database and hand them to the template
     my %currentpatrons = Koha::Patrons->search();
     my $currentpatrons = values %currentpatrons;
-    $template->param( 'patrons' =>$currentpatrons);
-
+    $template->param( 'patrons' => $currentpatrons );
 
 #Find all library records in the database and hand them to the template to display in the library dropdown box
     my $libraries =
@@ -264,7 +264,8 @@ elsif ( $step && $step == 3 ) {
 
 #Incrementing the highest existing patron cardnumber to prevent duplicate cardnumber entry
 
-    my $existing_cardnumber = $schema->resultset('Borrower')->get_column('cardnumber')->max() // 0;
+    my $existing_cardnumber =
+      $schema->resultset('Borrower')->get_column('cardnumber')->max() // 0;
 
     my $new_cardnumber = $existing_cardnumber + 1;
     $template->param( "newcardnumber" => $new_cardnumber );
@@ -366,8 +367,10 @@ elsif ( $step && $step == 3 ) {
             $newdata{city}           = "";
 
 #Hand tne the dateexpiry of the patron based on the patron category it is created from
-            my $patron_category = Koha::Patron::Categories->find( $newdata{categorycode} );
-            $newdata{dateexpiry} = $patron_category->get_expiry_date( $newdata{dateenrolled} );
+            my $patron_category =
+              Koha::Patron::Categories->find( $newdata{categorycode} );
+            $newdata{dateexpiry} =
+              $patron_category->get_expiry_date( $newdata{dateenrolled} );
 
 #Hand the newdata hash to the AddMember subroutine in the C4::Members module and it creates a patron and hands back a borrowernumber which is being stored
             my $borrowernumber = &AddMember(%newdata);
@@ -394,13 +397,17 @@ elsif ( $step && $step == 3 ) {
                 }
 
                 # construct flags
-                my @userflags = $schema->resultset('Userflag')->search({},{
-                        order_by => { -asc =>'bit'},
-                        }
+                my @userflags = $schema->resultset('Userflag')->search(
+                    {},
+                    {
+                        order_by => { -asc => 'bit' },
+                    }
                 );
 
-#Setting superlibrarian permissions for new patron
-                my $flags = Koha::Patrons->find($borrowernumber)->set({flags=>1})->store;
+                #Setting superlibrarian permissions for new patron
+                my $flags =
+                  Koha::Patrons->find($borrowernumber)->set( { flags => 1 } )
+                  ->store;
 
                 #Error handling checking if the patron was created successfully
                 if ( !$borrowernumber ) {
@@ -427,8 +434,8 @@ elsif ( $step && $step == 4 ) {
               { parameters => 'parameters_remaining_permissions' },
             debug => 1,
         }
-    );
-  if ($op eq "add_validate"){
+      );
+    if ( $op eq "add_validate" ) {
         my $description   = $input->param('description');
         my $itemtype_code = $input->param('itemtype');
         $itemtype_code = uc($itemtype_code);
@@ -555,31 +562,37 @@ elsif ( $step && $step == 5 ) {
 
 #Allows for the 'All' option to work when selecting all libraries for a circulation rule to apply to.
         if ( $branch eq "*" ) {
-            my $search_default_rules = $schema->resultset('DefaultCircRule')->count();
-            my $insert_default_rules = $schema->resultset('Issuingrule')->new(
-                    { maxissueqty => $maxissueqty, onshelfholds => $onshelfholds }
-                );
+            my $search_default_rules =
+              $schema->resultset('DefaultCircRule')->count();
+            my $insert_default_rules =
+              $schema->resultset('Issuingrule')
+              ->new(
+                { maxissueqty => $maxissueqty, onshelfholds => $onshelfholds }
+              );
         }
+
 #Allows for the 'All' option to work when selecting all patron categories for a circulation rule to apply to.
         elsif ( $bor eq "*" ) {
 
-            my $search_default_rules = $schema->resultset('DefaultCircRule')->count();
-            my $insert_default_rules = $schema->resultset('Issuingrule')->new(
-                        { maxissueqty => $maxissueqty}
-            );
+            my $search_default_rules =
+              $schema->resultset('DefaultCircRule')->count();
+            my $insert_default_rules = $schema->resultset('Issuingrule')
+              ->new( { maxissueqty => $maxissueqty } );
         }
 
 #Allows for the 'All' option to work when selecting all itemtypes for a circulation rule to apply to
         elsif ( $itemtype eq "*" ) {
-            my $search_default_rules = $schema->resultset('DefaultCircRule')->search({},{
+            my $search_default_rules =
+              $schema->resultset('DefaultCircRule')->search(
+                {},
+                {
                     branchcode => $branch
-                    }
+                }
 
-            );
+              );
 
-            my $insert_default_rules = $schema->resultset('Issuingrule')->new(
-                           { branchcode => $branch, onshelfholds => $onshelfholds }
-            );
+            my $insert_default_rules = $schema->resultset('Issuingrule')
+              ->new( { branchcode => $branch, onshelfholds => $onshelfholds } );
         }
 
         my $issuingrule = Koha::IssuingRules->find(
