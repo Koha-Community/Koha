@@ -218,31 +218,6 @@ elsif ( $step && $step == 3 ) {
     my $currentpatrons = values %currentpatrons;
     $template->param( 'patrons' => $currentpatrons );
 
-#Find all library records in the database and hand them to the template to display in the library dropdown box
-    my $libraries =
-      Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
-    $template->param(
-        libraries   => $libraries,
-        group_types => [
-            {
-                categorytype => 'searchdomain',
-                categories   => [
-                    Koha::LibraryCategories->search(
-                        { categorytype => 'searchdomain' }
-                    )
-                ],
-            },
-            {
-                categorytype => 'properties',
-                categories   => [
-                    Koha::LibraryCategories->search(
-                        { categorytype => 'properties' }
-                    )
-                ],
-            },
-        ]
-    );
-
 #Find all patron categories in the database and hand them to the template to display in the patron category dropdown box
     my $categories = Koha::Patron::Categories->search();
     $template->param( 'categories' => $categories, );
@@ -455,31 +430,6 @@ elsif ( $step && $step == 5 ) {
     my $itemtypes;
     $itemtypes = Koha::ItemTypes->search();
     $template->param( itemtypes => $itemtypes, );
-
-  #Find all the exisiting libraries to display in a dropdown box in the template
-    my $libraries =
-      Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
-    $template->param(
-        libraries   => $libraries,
-        group_types => [
-            {
-                categorytype => 'searchdomain',
-                categories   => [
-                    Koha::LibraryCategories->search(
-                        { categorytype => 'searchdomain' }
-                    )
-                ],
-            },
-            {
-                categorytype => 'properties',
-                categories   => [
-                    Koha::LibraryCategories->search(
-                        { categorytype => 'properties' }
-                    )
-                ],
-            },
-        ]
-    );
 
     my $input = CGI->new;
 
