@@ -184,7 +184,7 @@ sub get_template_and_user {
 
     # If the user logged in is the SCO user and he tries to go out the SCO module, log the user out removing the CGISESSID cookie
     if ( $in->{type} eq 'opac' and $in->{template_name} !~ m|sco/| ) {
-        if (  C4::Context->preference('AutoSelfCheckID') && $user eq C4::Context->preference('AutoSelfCheckID') ) {
+        if ( $user && C4::Context->preference('AutoSelfCheckID') && $user eq C4::Context->preference('AutoSelfCheckID') ) {
             $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac', $in->{query} );
             my $cookie = $in->{query}->cookie(
                 -name     => 'CGISESSID',
