@@ -344,7 +344,7 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 }
 
 $template->param(
-    borrower                 => Koha::Patrons->find($borrowernumber),
+    borrower                 => scalar Koha::Patrons->find($borrowernumber),
     patron_messages          => $patron_messages,
     opacnote                 => $borr->{opacnote},
     patronupdate             => $patronupdate,
