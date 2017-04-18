@@ -103,7 +103,7 @@ if ( $data->{'category_type'} eq 'C') {
     $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
+$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' || $data->{'category_type'} eq 'I' );
 if (! $limit){
 	$limit = 'full';
 }

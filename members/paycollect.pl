@@ -173,7 +173,7 @@ sub borrower_add_additional_fields {
                 $b_ref->{catcode} = $catcodes->[0];
             }
         }
-    } elsif ( $b_ref->{category_type} eq 'A' ) {
+    } elsif ( $b_ref->{category_type} eq 'A' || $b_ref->{category_type} eq 'I' ) {
         $b_ref->{adultborrower} = 1;
     }
 
