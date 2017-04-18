@@ -55,7 +55,8 @@ sub _getToolbarActionElements {
     my $duplicateA = $d->find_element("#duplicate", 'css');
     my $printButton = $d->find_element("#duplicate + div > button", 'css');
     my $searchToHoldA = $d->find_element("#searchtohold", 'css');
-    my $moreButton = $d->find_element("#searchtohold + div > button", 'css');
+    my $addNewMessage = $d->find_element("#addnewmessageLabel", 'css');
+    my $moreButton = $d->find_element("//button[contains(.,'More')]", 'xpath');
 
     my $e = {};
     $e->{edit} = $editA if $editA;
@@ -63,6 +64,7 @@ sub _getToolbarActionElements {
     $e->{duplicate} = $duplicateA if $duplicateA;
     $e->{print} = $printButton if $printButton;
     $e->{searchToHold} = $searchToHoldA if $searchToHoldA;
+    $e->{addNewMessage} = $addNewMessage if $addNewMessage;
     $e->{more} = $moreButton if $moreButton;
     return $e;
 }

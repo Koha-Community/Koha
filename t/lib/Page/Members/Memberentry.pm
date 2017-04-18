@@ -239,8 +239,8 @@ sub submitForm {
         my $holdsIdentifier = $d->find_element('#othernames');
         $holdsIdentifier->click();
     };
-    my $submitButton = $d->find_element('form#entryform input[type="submit"]');
-    $submitButton->submit();
+    my $submitButton = $d->find_element('#saverecord');
+    $submitButton->click();
     $self->debugTakeSessionSnapshot();
 
     if ($valid) {
