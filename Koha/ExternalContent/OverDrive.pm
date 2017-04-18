@@ -135,7 +135,9 @@ sub auth_by_code {
     $access_token or die "Invalid OverDrive code returned";
     $self->set_token_in_koha_session($access_token, $access_token_type);
 
-    $self->koha_patron->set({overdrive_auth_token => $auth_token})->store;
+    if (my $koha_patron = $self->koha_patron) {
+        $koha_patron->set({overdrive_auth_token => $auth_token})->store;
+    }
     return $self->get_return_page_from_koha_session;
 }
 
@@ -202,7 +204,8 @@ sub is_logged_in {
 sub auth_by_saved_token {
     my $self = shift;
 
-    my $koha_patron = $self->koha_patron;
+    my $koha_patron = $self->koha_patron or return;
+
     if (my $auth_token = $koha_patron->overdrive_auth_token) {
         my ($access_token, $access_token_type, $new_auth_token)
           = $self->client->auth_by_token($auth_token);
@@ -224,7 +227,9 @@ sub forget {
     my $self = shift;
 
     $self->set_token_in_koha_session("", "");
-    $self->koha_patron->set({overdrive_auth_token => undef})->store;
+    if (my $koha_patron = $self->koha_patron) {
+        $koha_patron->set({overdrive_auth_token => undef})->store;
+    }
 }
 
 use vars qw{$AUTOLOAD};

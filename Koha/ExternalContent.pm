@@ -86,7 +86,7 @@ sub koha_patron {
     }
 
     my $id = $self->get_from_koha_session('number')
-      or die "No patron number in session";
+      or return;
     my $patron = Koha::Patrons->find($id)
       or die "Invalid patron number in session";
     return $self->_koha_patron_accessor($patron);
