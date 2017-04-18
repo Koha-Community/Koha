@@ -105,7 +105,7 @@ if ( $bor->{'category_type'} eq 'C') {
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
-$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
+$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' || $bor->{'category_type'} eq 'I' );
 
 my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
