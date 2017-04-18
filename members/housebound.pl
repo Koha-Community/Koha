@@ -171,7 +171,7 @@ if ( C4::Context->preference('ExtendedPatronAttributes') and $patron ) {
     );
 }
 
-$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' );
+$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 $template->param(
     picture            => $patron_image,
     housebound_profile => $houseboundprofile,
