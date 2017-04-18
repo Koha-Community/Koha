@@ -94,7 +94,7 @@ if ($writeoff_all) {
     Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         {
             amount     => $amount,
-            lines      => [Koha::Account::Lines->find($accountlines_id)],
+            lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
             type       => 'writeoff',
             note       => $payment_note,
             library_id => $branch,
@@ -208,7 +208,7 @@ sub writeoff_all {
             Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                 {
                     amount => $amount,
-                    lines  => [ Koha::Account::Lines->find($accountlines_id) ],
+                    lines  => [ scalar Koha::Account::Lines->find($accountlines_id) ],
                     type   => 'writeoff',
                     note   => $payment_note,
                     library_id => $branch,
