@@ -111,6 +111,8 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $de
     my $patron_image = Koha::Patron::Images->find($bor->{borrowernumber});
     $template->param( picture => 1 ) if $patron_image;
 
+    $template->param( adultborrower => 1 ) if ( $bor->{category_type} eq 'A' );
+
     $template->param(borrowernumber => $member,
         surname => $bor->{'surname'},
         title => $bor->{'title'},
