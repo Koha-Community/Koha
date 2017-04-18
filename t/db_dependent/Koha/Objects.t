@@ -19,7 +19,11 @@
 
 use Modern::Perl;
 
+<<<<<<< HEAD
 use Test::More tests => 10;
+=======
+use Test::More tests => 14;
+>>>>>>> 5a26041... Bug 18539: Forbid list context calls for Koha::Objects->find
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -42,6 +46,16 @@ is( ref(Koha::Authority::Types->find('')), 'Koha::Authority::Type', 'Koha::Objec
 my @columns = Koha::Patrons->columns;
 my $borrowernumber_exists = grep { /^borrowernumber$/ } @columns;
 is( $borrowernumber_exists, 1, 'Koha::Objects->columns should return the table columns' );
+
+subtest 'find' => sub {
+    plan tests => 2;
+    my $patron = $builder->build({source => 'Borrower'});
+    my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
+    is( $patron_object->borrowernumber, $patron->{borrowernumber}, '->find should return the correct object' );
+
+    eval { my @patrons = Koha::Patrons->find( $patron->{borrowernumber} ); };
+    like( $@, qr|^Cannot use "->find" in list context|, "->find should not be called in list context to avoid side-effects" );
+};
 
 subtest 'update' => sub {
     plan tests => 2;
