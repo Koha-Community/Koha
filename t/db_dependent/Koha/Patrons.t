@@ -403,7 +403,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     $borrower_data{categorycode} = 'J';
     C4::Members::ModMember(%borrower_data);
     ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
-    is( $total, $enrolmentfee_K + $enrolmentfee_J, "Kid growing and become a juvenile, he should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
+    is( $total, $enrolmentfee_K + $enrolmentfee_J, "Kid growing and become a juvenile, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
 
     # Check with calling directly Koha::Patron->get_enrolment_fee_if_needed
     my $patron = Koha::Patrons->find($borrowernumber);
@@ -412,7 +412,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
     is( $total,
         $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA,
-        "Juvenile growing and become an young adult, he or she should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
+        "Juvenile growing and become an young adult, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
     );
 
     $patron->delete;

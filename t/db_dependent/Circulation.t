@@ -1235,7 +1235,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     my ( $error, $question, $alerts );
 
-    # Patron cannot issue item_1, he or she has overdues
+    # Patron cannot issue item_1, they have overdues
     my $yesterday = DateTime->today( time_zone => C4::Context->tz() )->add( days => -1 );
     my $issue = AddIssue( $patron, $item_1->{barcode}, $yesterday );    # Add an overdue
 
@@ -1249,7 +1249,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     is( keys(%$question) + keys(%$alerts), 0 );
     is( $error->{USERBLOCKEDOVERDUE},      1 );
 
-    # Patron cannot issue item_1, he or she is debarred
+    # Patron cannot issue item_1, they are debarred
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
     Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber}, expiration => $tomorrow } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
@@ -1479,7 +1479,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     );
     $rule->store();
 
-    # Patron cannot issue item_1, he or she has overdues
+    # Patron cannot issue item_1, they have overdues
     my $five_days_ago = dt_from_string->subtract( days => 5 );
     my $ten_days_ago  = dt_from_string->subtract( days => 10 );
     AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue

@@ -154,7 +154,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
     if($biblionumber && !$input->param('use_external_source')) {
         #if duplicate record found and user did not decide yet, first warn user
-        #and let him or her choose between using new record or existing record
+        #and let them choose between using a new record or an existing record
         Load_Duplicate($duplicatetitle);
         exit;
     }

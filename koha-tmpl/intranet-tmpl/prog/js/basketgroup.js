@@ -242,7 +242,7 @@ function closeandprint(bg){
 }
 
 //function that lets the user unclose a basketgroup
-//as long as he or she hasn't submitted the changes to the page.
+//as long as they haven't submitted the changes to the page.
 function unclosegroup(bgid){
     var div = document.getElementById('basketgroup-'+bgid+'-closed').parentNode;
     var divtodel = document.getElementById('unclose-' + bgid);

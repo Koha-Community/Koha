@@ -32,7 +32,7 @@ my $patron_enable_test_template = {
 	       ], };
 
 # We need to disable the valid patron before we can
-# ensure that he or she was properly enabled.
+# ensure that they were properly enabled.
 my $patron_disable_test_template = {
     id => 'Patron Enable: block patron (prep to test enabling)',
     msg => "01N20060102    084238AO$instid|ALBlocked patron for SIP test.|AA$user_barcode|",

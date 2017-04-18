@@ -63,7 +63,7 @@ The functions in this module deal with the aqorders in OPAC and in librarian int
 
 A suggestion is done in the OPAC. It has the status "ASKED"
 
-When a librarian manages the suggestion, he or she can set the status to "REJECTED" or "ACCEPTED".
+When a librarian manages the suggestion, they can set the status to "REJECTED" or "ACCEPTED".
 
 When the book is ordered, the suggestion status becomes "ORDERED"
 
@@ -554,7 +554,7 @@ sub ConnectSuggestionAndBiblio {
 
 &DelSuggestion($borrowernumber,$ordernumber)
 
-Delete a suggestion. A borrower can delete a suggestion only if he or she is its owner.
+Delete a suggestion. A borrower can delete a suggestion only if they are its owner.
 
 =cut
 
