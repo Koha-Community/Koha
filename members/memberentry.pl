@@ -753,7 +753,7 @@ $template->param( csrf_token =>
 
 # HouseboundModule data
 $template->param(
-    housebound_role  => Koha::Patron::HouseboundRoles->find($borrowernumber),
+    housebound_role  => scalar Koha::Patron::HouseboundRoles->find($borrowernumber),
 );
 
 if(defined($data{'flags'})){
