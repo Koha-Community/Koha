@@ -18,18 +18,15 @@
             };
             function Remove() {
                 items = new Array;
-                item_num = new Array;
 
                 if(document.items.action.length > 0) {
                     for (var i=0; i < document.items.action.length; i++) {
                         if (document.items.action[i].checked) {
                             items.push("label_id=" +  document.items.action[i].value);
-                            item_num.push(i+1);
                         }
                     }
                     getstr = items.join("&");
-                    item_msg = item_num.join(", ");
-                    var msg = _("Are you sure you want to remove card number(s): %s from this batch?").format(item_msg);
+                    var msg = _("Are you sure you want to remove the selected patron(s) from this batch?");
                 } else if (document.items.action.checked) {
                     alert(_("Deletion of patron from a batch with only one patron will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
                     return; // no deletion for single item batch
