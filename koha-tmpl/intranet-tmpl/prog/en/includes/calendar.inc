@@ -135,7 +135,12 @@ $.datepicker.setDefaults({
         buttonImageOnly: true,
         showButtonPanel: true,
         showOtherMonths: true,
-        selectOtherMonths: true
+        selectOtherMonths: true,
+        yearRange: "c-100:c+10"
+    });
+
+$("#dateofbirth").datepicker({
+        yearRange: "c-100:c"
     });
 
     $( ".datepicker" ).datepicker({
