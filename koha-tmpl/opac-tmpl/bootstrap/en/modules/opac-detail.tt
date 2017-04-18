@@ -813,9 +813,9 @@
                                 [% IF ( subscription.letter ) %]<span class="email_notifications">
                                     [% IF ( loggedinusername ) %]
                                         [% IF ( subscription.hasalert ) %]
-                                            You have subscribed to email notification on new issues. <a style="color:#000;" class="btn" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;externalid=[% subscription.subscriptionid %]&amp;alerttype=issue_det&amp;biblionumber=[% subscription.biblionumber %]">Cancel email notification</a>
+                                            You have subscribed to email notification on new issues. <a style="color:#000;" class="btn" title="Cancel email notification" href="/cgi-bin/koha/opac-alert-subscribe.pl?op=cancel&amp;externalid=[% subscription.subscriptionid %]&amp;alerttype=issue&amp;biblionumber=[% subscription.biblionumber %]">Cancel email notification</a>
                                         [% ELSE %]
-                                            <a style="color:#000;" class="btn" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?externalid=[% subscription.subscriptionid %]&amp;alerttype=issue_det&amp;biblionumber=[% subscription.biblionumber %]">Subscribe to email notification on new issues</a>
+                                            <a style="color:#000;" class="btn" title="Subscribe to email notification on new issues" href="/cgi-bin/koha/opac-alert-subscribe.pl?externalid=[% subscription.subscriptionid %]&amp;alerttype=issue&amp;biblionumber=[% subscription.biblionumber %]">Subscribe to email notification on new issues</a>
                                         [% END %]
                                     [% ELSE %]
                                         You must log in if you want to subscribe to email notification on new issues
