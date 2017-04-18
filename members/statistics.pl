@@ -98,7 +98,7 @@ $template->param( picture => 1 ) if $picture;
 
 $template->param(%$borrower);
 
-$template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' );
+$template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' || $borrower->{category_type} eq 'I' );
 
 $template->param(
     statisticsview     => 1,

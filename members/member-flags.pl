@@ -156,7 +156,7 @@ if ($input->param('newflags')) {
         $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
     }
 	
-$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
+$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' || $bor->{'category_type'} eq 'I' );
     my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 

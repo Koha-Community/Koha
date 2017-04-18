@@ -112,7 +112,7 @@ for (my $i=0;$i<$numaccts;$i++){
     push(@accountrows, \%row);
 }
 
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
+$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' || $data->{'category_type'} eq 'I' );
 
 my ($picture, $dberror) = GetPatronImage($data->{'borrowernumber'});
 $template->param( picture => 1 ) if $picture;

@@ -110,7 +110,7 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'} or $de
     my ($picture, $dberror) = GetPatronImage($bor->{'borrowernumber'});
     $template->param( picture => 1 ) if $picture;
 
-    $template->param( adultborrower => 1 ) if ( $bor->{category_type} eq 'A' );
+    $template->param( adultborrower => 1 ) if ( $bor->{category_type} eq 'A' || $bor->{category_type} eq 'I' );
 
     $template->param(borrowernumber => $member,
         surname => $bor->{'surname'},
