@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -16,6 +16,7 @@ use C4::Context;
 use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Items;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -689,6 +690,39 @@ is( @$holds_queue, 1, "Item targeted when hold itemtype is not set" );
 CancelReserve( { reserve_id => $reserve_id } );
 
 # End testing hold itemtype limit
+
+
+# Test Local Holds Priority - Bug 18001
+t::lib::Mocks::mock_preference('LocalHoldsPriority', 1);
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'homebranch');
+
+$dbh->do("DELETE FROM tmp_holdsqueue");
+$dbh->do("DELETE FROM hold_fill_targets");
+$dbh->do("DELETE FROM reserves");
+$dbh->do("DELETE FROM default_branch_circ_rules");
+$dbh->do("DELETE FROM default_branch_item_rules");
+$dbh->do("DELETE FROM default_circ_rules");
+$dbh->do("DELETE FROM branch_item_rules");
+
+my $item = Koha::Items->find( { biblionumber => $biblionumber } );
+$item->holdingbranch( $item->homebranch );
+$item->store();
+
+my $item2 = Koha::Item->new( $item->unblessed );
+$item2->itemnumber( undef );
+$item2->store();
+
+my $item3 = Koha::Item->new( $item->unblessed );
+$item3->itemnumber( undef );
+$item3->store();
+
+$reserve_id = AddReserve( $item->homebranch, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+
+C4::HoldsQueue::CreateQueue();
+
+my $queue_rs = $schema->resultset('TmpHoldsqueue');
+is( $queue_rs->count(), 1, "Hold queue contains one hold from chosen from three possible items" );
 
 # Cleanup
 $schema->storage->txn_rollback;
