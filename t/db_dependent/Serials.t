@@ -17,6 +17,7 @@ use C4::Budgets;
 use C4::Items;
 use Koha::DateUtils;
 use t::lib::Mocks;
+use t::lib::TestBuilder;
 use Test::More tests => 49;
 
 BEGIN {
@@ -28,6 +29,8 @@ my $dbh = C4::Context->dbh;
 # Start transaction
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+my $builder = t::lib::TestBuilder->new();
 
 # This could/should be used for all untested methods
 my @methods = ('updateClaim');
@@ -140,17 +143,33 @@ ok(C4::Serials::GetSerialStatusFromSerialId($serial->{serialid}), 'test getting 
 isa_ok(C4::Serials::GetSerialInformation($serial->{serialid}), 'HASH', 'test getting Serial Information');
 
 subtest 'Values should not be erased on editing' => sub {
+
     plan tests => 1;
+
     ( $biblionumber, $biblioitemnumber ) = get_biblio();
     my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber', '' );
-    my $item_record    = new MARC::Record;
+    my ( $it_tag, $it_sf )   = GetMarcFromKohaField( 'items.itype', '' );
+
+    my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
     my $itemcallnumber = 'XXXmy itemcallnumberXXX';
-    $item_record->append_fields( MARC::Field->new( '080', '', '', "a" => "default" ), MARC::Field->new( $icn_tag, '', '', $icn_sf => $itemcallnumber ), );
+
+    my $item_record    = new MARC::Record;
+
+    $item_record->append_fields(
+        MARC::Field->new( '080', '', '', "a" => "default" ),
+        MARC::Field->new(
+            $icn_tag, '', '',
+            $icn_sf => $itemcallnumber,
+            $it_sf  => $itemtype
+        )
+    );
     my ( undef, undef, $itemnumber ) = C4::Items::AddItemFromMarc( $item_record, $biblionumber );
-    my $serialid = C4::Serials::NewIssue( "serialseq", $subscriptionid, $biblionumber, 1, undef, undef, "publisheddatetext", "notes" );
+    my $serialid = C4::Serials::NewIssue( "serialseq", $subscriptionid, $biblionumber,
+                                          1, undef, undef, "publisheddatetext", "notes" );
     C4::Serials::AddItem2Serial( $serialid, $itemnumber );
     my $serial_info = C4::Serials::GetSerialInformation($serialid);
-    my ($itemcallnumber_info) = grep { $_->{kohafield} eq 'items.itemcallnumber' } @{ $serial_info->{items}[0]->{iteminformation} };
+    my ($itemcallnumber_info) = grep { $_->{kohafield} eq 'items.itemcallnumber' }
+                                     @{ $serial_info->{items}[0]->{iteminformation} };
     like( $itemcallnumber_info->{marc_value}, qr|value="$itemcallnumber"| );
 };
 
