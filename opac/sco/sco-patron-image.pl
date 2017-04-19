@@ -22,6 +22,8 @@ use warnings;
 use C4::Service;
 use C4::Members;
 use Koha::Patron::Images;
+use Koha::Patrons;
+use Koha::Token;
 
 my ($query, $response) = C4::Service->init(circulate => 'self_checkout');
 
@@ -35,10 +37,28 @@ unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
 }
 
 my ($borrowernumber) = C4::Service->require_params('borrowernumber');
+my ($csrf_token) = C4::Service->require_params('csrf_token');
 
-my $patron_image = Koha::Patron::Images->find($borrowernumber);
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $patron_image = $patron->image;
 
 if ($patron_image) {
+
+    unless (
+        Koha::Token->new->check_csrf(
+            {
+                session_id => scalar $query->cookie('CGISESSID')
+                  . $patron->cardnumber,
+                id => $patron->userid,
+                token => $csrf_token,
+            }
+        )
+      )
+    {
+
+        print $query->header(-type => 'text/plain', -status => '403 Forbidden');
+        exit;
+    }
     print $query->header(
         -type           => $patron_image->mimetype,
         -Content_Length => length( $patron_image->imagefile )
