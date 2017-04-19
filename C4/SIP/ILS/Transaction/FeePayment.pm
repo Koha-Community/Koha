@@ -57,7 +57,7 @@ sub pay {
 
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
-        if ( $fee && $fee->amountoutstanding == $amt ) {
+        if ( $fee ) {
             $account->pay(
                 {
                     amount => $amt,
