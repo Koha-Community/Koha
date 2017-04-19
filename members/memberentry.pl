@@ -308,6 +308,14 @@ if ($op eq 'save' || $op eq 'insert'){
                 : ()
     }
 
+    if ($newdata{othernames} && Koha::Patrons->search({
+            othernames     => $newdata{othernames},
+            borrowernumber => { '!=' => $borrowernumber },
+        })->count)
+    {
+        push @errors, 'ERROR_othernames_not_unique';
+    }
+
     my $dateofbirth;
     if ($op eq 'save' && $step == 3) {
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);

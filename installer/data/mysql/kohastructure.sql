@@ -616,7 +616,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` mediumtext, -- any other names associated with the patron/borrower
+  `othernames` varchar(50), -- any other names associated with the patron/borrower
   `initials` text, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
@@ -1668,7 +1668,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` mediumtext, -- any other names associated with the patron/borrower
+  `othernames` varchar(50), -- any other names associated with the patron/borrower
   `initials` text, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
@@ -1736,6 +1736,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
   UNIQUE KEY `cardnumber` (`cardnumber`),
+  UNIQUE KEY `othernames` (`othernames`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
@@ -1743,7 +1744,6 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   KEY `guarantorid` (`guarantorid`),
   KEY `surname_idx` (`surname`(255)),
   KEY `firstname_idx` (`firstname`(255)),
-  KEY `othernames_idx` (`othernames`(255)),
   KEY `sms_provider_id` (`sms_provider_id`),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),

@@ -72,7 +72,9 @@ $(document).ready(function() {
     [% IF smsalertnumber %]
     patron_sms = "[% smsalertnumber %]";
     [% END %]
-
+    [% IF borrowernumber %]
+    borrowernumber = [% borrowernumber %]
+    [% END %]
     var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
     $.validator.addMethod('phone', function(value) {
         value = value.trim();
@@ -109,6 +111,7 @@ $(document).ready(function() {
         var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
         var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
         var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
+        var MSG_OTHERNAMES_NOT_UNIQUE = _("Not unique! Used by patron");
         var MSG_PASSWORD_MISMATCH = _("The passwords entered do not match");
         var MSG_PASSWORD_CONTAINS_TRAILING_SPACES = _("Password contains leading and/or trailing spaces.");
         var MSG_MONTH = _("%s month")
@@ -212,6 +215,9 @@ $(document).ready(function() {
 			[% END %]
 			[% IF ( ERROR_dateexpiry ) %]
 				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
+			[% END %]
+			[% IF ( ERROR_othernames_not_unique ) %]
+				<li id="ERROR_othernames_not_unique">Holds identifier is not unique.</li>
 			[% END %]
 			[% IF ( ERROR_short_password ) %]
 				<li id="ERROR_short_password">Password must be at least [% minPasswordLength %] characters long.</li>
@@ -384,7 +390,7 @@ $(document).ready(function() {
 			[% ELSE %]
 			<label for="othernames">
 			[% END %]
-            Other name: </label>
+            Holds identifier / Other name: </label>
             <input type="text" id="othernames" name="othernames" size="20"  value="[% othernames | html UNLESS opduplicate %]" />
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]

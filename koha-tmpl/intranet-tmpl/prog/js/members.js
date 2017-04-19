@@ -278,6 +278,43 @@ function write_age() {
     hint.html(age_string);
 }
 
+function updateOthername() {
+    var othernames = $("#othernames");
+    var firstname = $("#firstname");
+    var surname = $("#surname");
+
+    if (othernames.val().length > 0) {
+        return;
+    }
+
+    $("#othernames").val(  surname.val() + ", " + firstname.val()  );
+}
+
+function checkUniqueOthernames(borrno) {
+    var params = {};
+    params.othernames = $("#othernames").val();
+    if (borrno) {
+        params.borrowernumber = borrno;
+    }
+    else if (borrowernumber) {
+        params.borrowernumber = borrowernumber;
+    }
+    var serialized = $.param(params);
+    $.get("/cgi-bin/koha/svc/members/check_unique_othernames", $.param(params), function (sjson) {
+        var uniqueelement = $("#othernames_uniquecheck");
+        if (sjson.borrowernumber) {
+            if (uniqueelement.length !== 0) { //Prevents spamming this uniqueness warning
+                uniqueelement.remove();
+            }
+            //We havent yet checked for uniqueness
+            $("#othernames").after('<span id="othernames_uniquecheck" class="required">'+MSG_OTHERNAMES_NOT_UNIQUE+' <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='+sjson.borrowernumber+'">'+sjson.borrowernumber+'</a> - </span>');
+        }
+        else {
+            uniqueelement.remove();
+        }
+    });
+}
+
 $(document).ready(function(){
     if($("#yesdebarred").is(":checked")){
         $("#debarreduntil").show();
@@ -315,6 +352,11 @@ $(document).ready(function(){
         $('input[name="city"]').val( RegExp.$2 );
         $('input[name="state"]').val( RegExp.$3 );
         $('input[name="country"]').val( RegExp.$4 );
+    });
+
+    $("#othernames").focus(updateOthername);
+    $("#othernames").on('change', function() {
+        checkUniqueOthernames();
     });
 
     $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });

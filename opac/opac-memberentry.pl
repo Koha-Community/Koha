@@ -233,16 +233,26 @@ elsif ( $action eq 'update' ) {
     my %borrower_changes = DelEmptyFields(%borrower);
     my @empty_mandatory_fields =
       CheckMandatoryFields( \%borrower_changes, $action );
+
+    my $prev_othernames_owner = Koha::Patrons->search({
+        othernames     => $borrower_changes{othernames},
+        borrowernumber => { '!=' => $borrowernumber },
+    })->next if $borrower_changes{othernames};
+    if ($prev_othernames_owner) {
+        $prev_othernames_owner = $prev_othernames_owner->borrowernumber;
+    }
+
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
     # Send back the data to the template
     %borrower = ( %$borrower, %borrower );
 
-    if (@empty_mandatory_fields || @$invalidformfields) {
+    if (@empty_mandatory_fields || @$invalidformfields || $prev_othernames_owner) {
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
             borrower               => \%borrower,
+            ERROR_othernames_not_unique => $prev_othernames_owner,
             csrf_token             => Koha::Token->new->generate_csrf({
                 session_id => scalar $cgi->cookie('CGISESSID'),
             }),
