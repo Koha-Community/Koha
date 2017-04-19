@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Circulation;
 use Koha::Item;
@@ -78,8 +78,16 @@ subtest 'biblio' => sub {
     plan tests => 2;
 
     my $biblio = $retrieved_item_1->biblio;
-    is( ref( $biblio ), 'Koha::Biblio', 'Koha::Item->bilio should return a Koha::Biblio' );
+    is( ref( $biblio ), 'Koha::Biblio', 'Koha::Item->biblio should return a Koha::Biblio' );
     is( $biblio->biblionumber, $retrieved_item_1->biblionumber, 'Koha::Item->biblio should return the correct biblio' );
+};
+
+subtest 'biblioitem' => sub {
+    plan tests => 2;
+
+    my $biblioitem = $retrieved_item_1->biblioitem;
+    is( ref( $biblioitem ), 'Koha::Biblioitem', 'Koha::Item->biblioitem should return a Koha::Biblioitem' );
+    is( $biblioitem->biblionumber, $retrieved_item_1->biblionumber, 'Koha::Item->biblioitem should return the correct biblioitem' );
 };
 
 $retrieved_item_1->delete;
