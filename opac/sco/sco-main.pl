@@ -35,7 +35,6 @@ use strict;
 use warnings;
 
 use CGI qw ( -utf8 );
-use Digest::MD5 qw(md5_base64);
 
 use C4::Auth qw(get_template_and_user checkpw);
 use C4::Koha;
@@ -47,6 +46,8 @@ use C4::Biblio;
 use C4::Items;
 use Koha::Acquisition::Currencies;
 use Koha::Patron::Images;
+use Koha::Patron::Messages;
+use Koha::Token;
 
 my $query = new CGI;
 
@@ -263,6 +264,7 @@ if ($borrower->{cardnumber}) {
         $template->param(
             display_patron_image => 1,
             cardnumber           => $borrower->{cardnumber},
+            csrf_token           => Koha::Token->new->generate_csrf( { session_id => scalar $query->cookie('CGISESSID') . $borrower->{cardnumber}, id => $borrower->{userid}} ),
         ) if $patron_image;
     }
 } else {
