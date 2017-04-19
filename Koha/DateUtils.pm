@@ -218,7 +218,7 @@ sub output_pref {
     }
 
     return if !defined $dt; # NULL date
-    Koha::Exceptions::WrongParameter->throw( 'dt is not a datetime' )  if ref($dt) ne 'DateTime';
+    Koha::Exceptions::WrongParameter->throw( "output_pref is called with '$dt' (ref ". ( ref($dt) ? ref($dt):'SCALAR')."), not a DateTime object")  if ref($dt) ne 'DateTime';
 
     # FIXME: see bug 13242 => no TZ for dates 'infinite'
     if ( $dt->ymd !~ /^9999/ ) {
