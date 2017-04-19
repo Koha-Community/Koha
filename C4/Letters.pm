@@ -1047,6 +1047,10 @@ sub SendQueuedMessages {
             if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
                 my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
                 my $sms_provider = Koha::SMS::Providers->find( $member->{'sms_provider_id'} );
+                unless ( $sms_provider ) {
+                    warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                    next MESSAGE;
+                }
                 $message->{to_address} .= '@' . $sms_provider->domain();
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
             } else {
