@@ -110,7 +110,7 @@ subtest 'new' => sub {
 };
 
 subtest 'find' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     # check find on a single PK
     my $patron = $builder->build({ source => 'Borrower' });
@@ -133,6 +133,8 @@ subtest 'find' => sub {
     my @pk = ( $rule->{branchcode}, $rule->{categorycode}, $rule->{itemtype} );
     is( ref(Koha::IssuingRules->find(@pk)), "Koha::IssuingRule",
         'Find returned a Koha object for composite primary key' );
+
+    is( Koha::Patrons->find(), undef, 'Find returns undef if no params passed' );
 };
 
 subtest 'search_related' => sub {
