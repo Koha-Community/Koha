@@ -1197,6 +1197,7 @@ sub IssueSlip {
     my @issues = @{ GetPendingIssues($borrowernumber) };
 
     for my $issue (@issues) {
+        $issue->{date_due_orig} = $issue->{date_due};
         $issue->{date_due} = $issue->{date_due_sql};
         if ($quickslip) {
             my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
@@ -1209,7 +1210,9 @@ sub IssueSlip {
 
     # Sort on timestamp then on issuedate (useful for tests and could be if modified in a batch
     @issues = sort {
-        my $s = $b->{timestamp} <=> $a->{timestamp};
+        my $s = $a->{date_due_orig} <=> $b->{date_due_orig};
+        $s == 0 ?
+             $b->{timestamp} <=> $a->{timestamp} : $s;
         $s == 0 ?
              $b->{issuedate} <=> $a->{issuedate} : $s;
     } @issues;
