@@ -416,7 +416,7 @@ $(document).ready(function() {
                     }
                 },
                 {
-                    "bVisible": exports_enabled ? true : false,
+                    "bVisible": exports_enabled == 1 ? true : false,
                     "bSortable": false,
                     "mDataProp": function ( oObj ) {
                         var s = "<input type='checkbox' name='itemnumbers' value='" + oObj.itemnumber + "' style='visibility:hidden;' />";
