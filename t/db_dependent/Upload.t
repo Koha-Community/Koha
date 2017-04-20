@@ -185,7 +185,7 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
 
     # add another one with TestBuilder and delete twice (file does not exist)
     $upload01 = $builder->build({ source => 'UploadedFile' });
-    my $kohaobj = Koha::UploadedFiles->find( $upload01->{id} );
+    $kohaobj = Koha::UploadedFiles->find( $upload01->{id} );
     $delete = $kohaobj->delete({ keep_file => 1 });
     $delete = $kohaobj->delete({ keep_file => 1 });
     ok( $delete =~ /^(0E0|-1)$/, 'Repeated delete unsuccessful' );
