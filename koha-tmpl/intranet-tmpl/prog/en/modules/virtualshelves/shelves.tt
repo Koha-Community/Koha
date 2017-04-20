@@ -379,7 +379,11 @@ function AdjustRemark() {
         [% CASE 'error_on_delete' %]
             <span>An error occurred when deleting this list.</span>
         [% CASE 'error_on_add_biblio' %]
-           <span>The item ([% m.item_barcode %]) has not been added to the list. Please verify it is not already in the list.</span>
+            [% IF m.item_barcode %]
+               <span>The item ([% m.item_barcode %]) has not been added to the list. Please verify it is not already in the list.</span>
+            [% ELSE %]
+                <span>The record ([% m.bibnum %]) has not been added to the list. Please verify it is not already in the list.</span>
+            [% END %]
         [% CASE 'success_on_update' %]
             <span>List updated.</span>
         [% CASE 'success_on_insert' %]
@@ -387,13 +391,21 @@ function AdjustRemark() {
         [% CASE 'success_on_delete' %]
             <span>List deleted.</span>
         [% CASE 'success_on_add_biblio' %]
-            <span>The item ([% m.item_barcode %]) has been added to the list.</span>
+            [% IF m.item_barcode %]
+                <span>The item ([% m.item_barcode %]) has been added to the list.</span>
+            [% ELSE %]
+                <span>The record ([% m.bibnum %]) has been added to the list.</span>
+            [% END %]
         [% CASE 'success_on_remove_biblios' %]
             <span>The item has been removed from the list.</span>
         [% CASE 'does_not_exist' %]
             <span>This list does not exist.</span>
         [% CASE 'item_does_not_exist' %]
-            <span>The item ([% m.item_barcode %]) does not exist.</span>
+            [% IF m.item_barcode %]
+                <span>The item ([% m.item_barcode %]) does not exist.</span>
+            [% ELSE %]
+                <span>The record ([% m.bibnum %]) does not exist.</span>
+            [% END %]
         [% CASE 'unauthorized_on_view' %]
             <span>You do not have permission to view this list.</span>
         [% CASE 'unauthorized_on_update' %]
@@ -683,6 +695,13 @@ function AdjustRemark() {
         <li>
           <label for="barcodes">Barcodes:</label>
           <textarea name="barcodes" id="barcodes" class="focus" autocomplete="off" rows="5"></textarea>
+          <input type="hidden" name="op" value="add_biblio" />
+          <input type="hidden" name="referer" value="view" />
+          <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />
+        </li>
+        <li>
+          <label for="biblionumbers">Biblio numbers:</label>
+          <textarea name="biblionumbers" id="biblionumbers" class="focus" autocomplete="off" rows="5"></textarea>
           <input type="hidden" name="op" value="add_biblio" />
           <input type="hidden" name="referer" value="view" />
           <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber %]" />

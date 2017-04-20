@@ -169,6 +169,30 @@ if ( $op eq 'add_form' ) {
                 push @messages, { type => 'alert', code => 'unauthorized_on_add_biblio' };
             }
         }
+        if ( my $biblionumbers = $query->param('biblionumbers') ) {
+            if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
+                my @biblionumbers = split /\n/, $biblionumbers;
+                foreach my $biblionumber (@biblionumbers) {
+                    $biblionumber =~ s/\r$//; # strip any naughty return chars
+                    next if $biblionumber eq '';
+                    my $biblio = Koha::Biblios->find($biblionumber);
+                    if (defined $biblio) {
+                        my $added = eval { $shelf->add_biblio( $biblionumber, $loggedinuser ); };
+                        if ($@) {
+                            push @messages, { bibnum => $biblionumber, type => 'alert', code => ref($@), msg => $@ };
+                        } elsif ( $added ) {
+                            push @messages, { bibnum => $biblionumber, type => 'message', code => 'success_on_add_biblio' };
+                        } else {
+                            push @messages, { bibnum => $biblionumber, type => 'message', code => 'error_on_add_biblio' };
+                        }
+                    } else {
+                        push @messages, { bibnum => $biblionumber, type => 'alert', code => 'item_does_not_exist' };
+                    }
+                }
+            } else {
+                push @messages, { type => 'alert', code => 'unauthorized_on_add_biblio' };
+            }
+        }
     } else {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
