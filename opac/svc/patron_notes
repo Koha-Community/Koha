@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use JSON qw( to_json );
+use JSON qw( encode_json );
 use C4::Service;
 use C4::Auth qw /check_cookie_auth/;
 use C4::Letters;
@@ -97,7 +97,7 @@ if ($is_ajax) {
             $status = "fail";
         }
 
-        my $json = to_json ( { status => $status, note => $clean_note, issue_id => $issue_id } );
+        my $json = encode_json ( { status => $status, note => $clean_note, issue_id => $issue_id } );
         output_with_http_headers($query, undef, $json, 'json');
         exit;
     } # END Issue Note
