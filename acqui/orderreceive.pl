@@ -71,6 +71,7 @@ use C4::Members;
 use C4::Items;
 use C4::Biblio;
 use C4::Suggestions;
+use C4::Koha;
 
 use Koha::Acquisition::Booksellers;
 use Koha::DateUtils qw( dt_from_string );
