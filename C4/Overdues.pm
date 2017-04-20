@@ -638,7 +638,7 @@ Looks up a patron by borrower number.
 C<$borrower> is a reference-to-hash whose keys are all of the fields
 from the borrowers and categories tables of the Koha database. Thus,
 C<$borrower> contains all information about both the borrower and
-category he or she belongs to.
+category they belong to.
 
 =cut
 

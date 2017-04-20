@@ -763,7 +763,7 @@ where the eight bit is set) octet with the Unicode
 replacement character.  This is meant as a last-ditch
 method, and would be best used as part of a UI that
 lets a cataloguer pick various character conversions
-until he or she finds the right one.
+until they find the right one.
 
 =cut
 
