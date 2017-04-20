@@ -36,7 +36,15 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-
+    $("#cn_max").hide();
+    var max_len = [% maxlength_cardnumber %];
+    $("#cardnumber").change(function(){
+        if ( $("#cardnumber").val().length >= max_len ) {
+            $("#cn_max").show();
+        } else {
+            $("#cn_max").hide();
+        }
+    });
     var toggle_quick_add = $(".toggle_quick_add");
     $(toggle_quick_add).click(function(e){
         toggle_quick_add.toggle();
@@ -635,15 +643,15 @@ $(document).ready(function() {
           [% END %]
           [% IF minlength_cardnumber == maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]
+                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
                 <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]
+                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
                 <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
           [% ELSIF maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]
+                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
                 <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
           [% ELSE %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" />
