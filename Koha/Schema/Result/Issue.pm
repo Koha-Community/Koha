@@ -95,6 +95,17 @@ __PACKAGE__->table("issues");
   default_value: 0
   is_nullable: 0
 
+=head2 note
+
+  data_type: 'mediumtext'
+  is_nullable: 1
+
+=head2 notedate
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -143,6 +154,14 @@ __PACKAGE__->add_columns(
   },
   "onsite_checkout",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "note",
+  { data_type => "mediumtext", is_nullable => 1 },
+  "notedate",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -214,8 +233,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-07 14:25:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8jFZATc7tlK4Qb5YW8yrrw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:03:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3GAOBprPziYcGJF2A5xReg
 
 __PACKAGE__->belongs_to(
     "borrower",
