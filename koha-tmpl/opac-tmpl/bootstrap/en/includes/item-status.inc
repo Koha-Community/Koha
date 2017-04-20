@@ -18,7 +18,10 @@ not use an API to fetch items that populates item.datedue.
     [% END %]
 [% END %]
 
-[% IF ( item.datedue || issue.date_due ) %]
+[% IF item.isa('Koha::Item') %][% SET datedue = issue.date_due %]
+[% ELSE %][% SET datedue = item.datedue || issue.date_due %]
+[% END %]
+[% IF datedue %]
     [% SET itemavailable = 0 %]
     [% IF item.onsite_checkout %]
         [% IF ( OPACShowCheckoutName ) %]
@@ -35,13 +38,13 @@ not use an API to fetch items that populates item.datedue.
     [% END %]
 [% END %]
 
-[% IF ( item.transfertwhen ) %]
+[% IF NOT ( item.isa('Koha::Item') ) AND item.transfertwhen %] [%# transfertwhen is set in C4::Search, do not have it for course reserves %]
     [% SET itemavailable = 0 %]
     <span class="item-status intransit">In transit from [% Branches.GetName( item.transfertfrom ) %]
     to [% Branches.GetName( item.transfertto ) %] since [% item.transfertwhen | $KohaDates %]</span>
 [% END %]
 
-[% IF ( item.waiting ) %]
+[% IF NOT( item.isa('Koha::Item') ) AND item.waiting %] [%# Not sure where does come from this waiting flag %]
     [% SET itemavailable = 0 %]
     <span class="item-status onhold">On hold</span>
 [% END %]
@@ -51,14 +54,15 @@ not use an API to fetch items that populates item.datedue.
     <span class="item-status withdrawn">Item withdrawn</span>
 [% END %]
 
-[% IF ( item.itemnotforloan ) %]
+
+[% IF NOT ( item.isa('Koha::Item') ) AND item.itemnotforloan %]
     [% SET itemavailable = 0 %]
     [% IF ( item.notforloanvalueopac ) %]
         <span class="item-status notforloan">[% item.notforloanvalueopac %] [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]</span>
     [% ELSE %]
         <span class="item-status notforloan">Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]</span>
     [% END %]
-[% ELSIF ( item.notforloan_per_itemtype ) %]
+[% ELSIF NOT ( item.isa('Koha::Item') ) AND item.notforloan_per_itemtype %]
     [% SET itemavailable = 0 %]
     <span class="item-status notforloan">Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]</span>
 [% END %]
@@ -73,11 +77,12 @@ not use an API to fetch items that populates item.datedue.
     [% END %]
 [% END %]
 
-[% IF item.on_order %]
+[% IF NOT ( item.isa('Koha::Item') ) AND item.on_order %][%# on_order is only set from opac-detail.pl %]
     [% SET itemavailable = 0 %]
     <span class="item-status onorder">On order</span>
 [% END %]
 
 [% IF ( itemavailable ) %]
-    <span class="item-status available">Available [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]</span>
+    [% IF NOT item.isa('Koha::Item') %][% SET restrictedopac = item.restrictedopac %][% END %]
+    <span class="item-status available">Available [% IF restrictedopac %]<span class="restricted">([% restrictedopac %])</span>[% END %]</span>
 [% END %]
