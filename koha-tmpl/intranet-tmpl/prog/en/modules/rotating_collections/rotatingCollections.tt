@@ -48,7 +48,9 @@
                                 <tr>
                                     <th>Title</th>
                                     <th>Description</th>
-                                    <th>Current location</th>
+                                    <th>Owner</th>
+                                    <th>Items</th>
+                                    <th>Transferred</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -57,7 +59,18 @@
                                 <tr>
                                     <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]">[% collectionsLoo.colTitle %]</a></td>
                                     <td>[% collectionsLoo.colDesc %]</td>
-                                    <td>[% Branches.GetName( collectionsLoo.colBranchcode ) %]</td>
+                                    <td>[% Branches.GetName( collectionsLoo.owningBranchcode ) %]</td>
+                                    <td>[% collectionsLoo.colItemsCount %]</td>
+                                    <td>[% IF collectionsLoo.itemsTransferred > 0 %]
+                                            [% IF collectionsLoo.itemsTransferred == collectionsLoo.colItemsCount %]
+                                                All items transferred
+                                            [% ELSE %]
+                                                [% collectionsLoo.itemsTransferred %] items transferred
+                                            [% END %]
+                                        [% ELSE  %]
+                                          None transferred yet
+                                        [% END %]
+                                    </td>
                                     <td>
                                     <div class="dropdown">
                                         <a class="btn btn-default btn-xs" dropdown-toggle" id="collectionsactions[% collectionsLoo.colId %]" role="button" data-toggle="dropdown" href="#">
@@ -65,6 +78,7 @@
                                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="collectionsactions[% collectionsLoo.colId %]">
                                             <li><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-plus"></i> Add or remove items</a></li>
                                             <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]"><i class="fa fa-exchange"></i> Transfer</a></li>
+                                            <li><a href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% collectionsLoo.colId %]&transferAction=collectionReturn"><i class="fa fa-exchange"></i> Return</a></li>
                                             <li><a href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-pencil"></i> Edit</a></li>
                                             <li><a class="confirmdelete" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=delete&amp;colId=[% collectionsLoo.colId %]"><i class="fa fa-trash"></i> Delete</a></li>
                                         </ul>

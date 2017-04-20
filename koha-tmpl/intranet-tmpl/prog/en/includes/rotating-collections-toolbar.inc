@@ -22,6 +22,9 @@
                         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% colId %]"><i class="fa fa-exchange"></i> Transfer</a>
                     </div>
                     <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/rotating_collections/transferCollection.pl?colId=[% colId %]&transferAction=collectionReturn"><i class="fa fa-exchange"></i> Return</a>
+                    </div>
+                    <div class="btn-group">
                         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/rotating_collections/editCollections.pl?action=edit&amp;colId=[% colId %]"><i class="fa fa-pencil"></i> Edit</a>
                     </div>
                     <div class="btn-group">

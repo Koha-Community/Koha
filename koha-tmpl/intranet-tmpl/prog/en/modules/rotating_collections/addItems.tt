@@ -1,11 +1,196 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection [% colTitle %] &rsquo; Add or remove items</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
     //<![CDATA[
         $( document ).ready(function() {
-            $("#barcode").focus();
+          $("#barcode").focus();
+          $(".loading").hide();
+
+          // KD-139: Handle button clicking events in the item table of this view.
+          $("body").on("click", "a[id^=remove-colitem]", function() {
+            var selectedItemBarcode = this.getAttribute("data-barcode");
+            var selectedItemTitle = this.getAttribute("data-title");
+            if (selectedItemBarcode) {
+              $("#barcode").val(selectedItemBarcode);
+              $("#modal-remove-body-message").text(_("Please confirm the removal of item with the barcode: ")
+                                            + selectedItemBarcode
+                                            + _(" and title: ") + selectedItemTitle
+                                            + _(" from the collection: ") + "[% colTitle %]");
+              $("input[name^=removeItem]").prop('checked', true);
+            }
+          });
+
+          $("body").on("click", "a[id^=return-colitem]", function() {
+            var selectedItemNumber = this.getAttribute("data-itemnumber");
+            var selectedItemTitle = this.getAttribute("data-title");
+            var selectedItemOrigin = this.getAttribute("data-originbranch");
+            if (selectedItemNumber && selectedItemTitle && selectedItemOrigin) {
+              $("#btn-return-item-confirm").attr("data-itemnumber", selectedItemNumber)
+              $("#modal-return-body-message").text(_("Please confirm the return of the item '")
+                                            + selectedItemTitle + _("' to  ") + selectedItemOrigin);
+            }
+          });
+
+          $("body").on("click", "a[id^=transfer-colitem]", function() {
+            var selectedItemNumber = this.getAttribute("data-itemnumber");
+            var selectedItemTitle = this.getAttribute("data-title");
+            if (selectedItemNumber) {
+              $("#modal-transfer-item-body-message").text(_("Please select a transfer location for the item: ") + selectedItemTitle);
+              $("#btn-transfer-item-confirm").attr("data-itemnumber", selectedItemNumber);
+            }
+          });
+
+          $("#transfer-col").click(function() {
+            var collectionId = "[% colId %]";
+            var collectionTitle = "[% colTitle %]";
+            var collectionTransferText = $("select[id='transfer-branch'] option:selected").text();
+            var collectionTransferTo = $("select[id=transfer-branch]").val();
+            if (collectionId && collectionTransferTo) {
+              $("#btn-transfer-confirm").attr("data-transferto", collectionTransferTo);
+              $("#modal-transfer-body-message").text(_("Please confirm the transfer of collection ")
+                                                      + collectionTitle + _(" to ")
+                                                      + collectionTransferText);
+            }
+          });
+
+          $("#btn-transfer-confirm").click(function() {
+            var colToTransfer = this.getAttribute('data-colid');
+            var colToTransferTo = this.getAttribute('data-transferto');
+            if (colToTransfer && colToTransferTo) {
+              transferCollection(colToTransfer, colToTransferTo);
+            }
+          });
+
+          $("#btn-remove-confirm").click(function() {
+            $("form:last").submit();
+            $("input[name^=removeItem]").prop('checked', false);
+          });
+
+          $("#btn-transfer-item-confirm").click(function() {
+            var itemToTransfer = this.getAttribute("data-itemnumber");
+            var colToTransferTo = $("select[id=transfer-item-select]").val();
+            var colId = "[% colId %]";
+            if (itemToTransfer && colToTransferTo) {
+              transferItem(colId, itemToTransfer, colToTransferTo);
+            }
+          });
+
+          $("#btn-return-item-confirm").click(function() {
+            var itemToReturn = this.getAttribute("data-itemnumber");
+            var colId = "[% colId %]";
+            if (itemToReturn && colId) {
+              returnItem(colId, itemToReturn);
+            }
+          });
+
+          $("#btn-remove-cancel").click(function() {
+            $("#barcode").val("");
+            $("input[name^=removeItem]").prop('checked', false);
+          });
+
+          $(document).ajaxStart(function (event) {
+            $("#alert-block").hide();
+            $("#alert-block").after($(".loading").show());
+          });
+          $(document).ajaxStop(function () {
+            $(".loading").hide();
+            $("#alert-block").show();
+          });
+
+          var colTable = $("#table-col-items").dataTable($.extend(true, {}, dataTablesDefaults, {
+            'bAutoWidth': false,
+            "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 'nosort' ] }
+            ],
+            "sPaginationType": "four_button"
+          }));
         });
+
+      // KD-139: Performs a transfer on a collection using a standard ajax-call
+      function transferCollection(selectedCollectionId, selectedCollectionTransferTo) {
+        $.post("transferCollection.pl",
+          {
+            colId: selectedCollectionId,
+            toBranch: selectedCollectionTransferTo,
+            transferAction: "collectionTransfer"
+          })
+          .done(function(response) {
+            var resultMsg = $(response).find("#alert-block").html();
+            $("#alert-block").html(resultMsg);
+            if ($("#alert-block").find('.alert-success')) {
+              reloadDataTable();
+            }
+        });
+      }
+
+      function transferItem(selectedCollectionId, selectedItemNumber, selectedCollectionTransferTo) {
+        $.post("transferCollection.pl",
+          {
+            colId: selectedCollectionId,
+            toBranch: selectedCollectionTransferTo,
+            itemNumber: selectedItemNumber,
+            transferAction: "itemTransfer"
+          })
+          .done(function(response) {
+            var resultMsg = $(response).find("#alert-block").html();
+            $("#alert-block").html(resultMsg);
+            if ($("#alert-block").find('.alert-success')) {
+              reloadDataTable();
+            }
+        });
+      }
+
+      function returnItem(selectedCollectionId, selectedItemNumber) {
+        $.post("transferCollection.pl",
+          {
+            colId: selectedCollectionId,
+            itemNumber: selectedItemNumber,
+            transferAction: "itemReturn"
+          })
+          .done(function(response) {
+            var resultMsg = $(response).find("#alert-block").html();
+            $("#alert-block").html(resultMsg);
+            if ($("#alert-block").find('.alert-success')) {
+              reloadDataTable();
+            }
+        });
+      }
+
+      function returnCollection(selectedCollectionId) {
+        $.post("transferCollection.pl",
+          {
+            colId: selectedCollectionId,
+            transferAction: "collectionReturn"
+          })
+          .done(function(response) {
+            var resultMsg = $(response).find("#alert-block").html();
+            $("#alert-block").html(resultMsg);
+            if ($("#alert-block").find('.alert-success')) {
+              reloadDataTable();
+            }
+        });
+      }
+
+      function reloadDataTable() {
+        $.get("addItems.pl?colId=[% colId %]", function(response) {
+          var newCollectionsTable = $(response).find("#table-col-items").parent().html();
+          var oldCollectionsTable = $("#table-col-items").parent();
+          oldCollectionsTable.replaceWith(newCollectionsTable);
+          $("#table-col-items").dataTable($.extend(true, {}, dataTablesDefaults, {
+            'bAutoWidth': false,
+            "aoColumnDefs": [
+              { 'bSortable': false, 'aTargets': [ 'nosort' ] }
+            ],
+            "sPaginationType": "four_button"
+          }));
+        });
+        $("#barcode").focus();
+      }
     //]]>
 </script>
 </head>
@@ -28,88 +213,104 @@
               [% ELSE %]
               [% INCLUDE 'rotating-collections-toolbar.inc' %]
               <h1>Collection <i>[% colTitle %]</i></h1>
-
-              [% IF ( previousActionAdd ) %]
-                [% IF ( addSuccess ) %]
-                  <div class="dialog message">Item with barcode '[% barcode %]' added successfully</div>
-                [% ELSE %]
-                  <div class="dialog alert">
-                    <p>Failed to add item with barcode <i>[% barcode %]</i>:
-                    <p>
-                        [% IF failureMessage == "NO_ITEM" %]
-                            No item with matching barcode found
-                        [% ELSIF failureMessage == "IN_COLLECTION_OTHER" %]
-                            Item is already in a different rotating collection
-                        [% ELSIF failureMessage == "IN_COLLECTION" %]
-                            Item is already in this collection
-                        [% ELSE %]
-                            [% failureMessage %]
-                        [% END %]
-                    </p>
-                </div>
+              <div id="alert-block">
+                [% IF ( previousActionAdd ) %]
+                  [% IF ( addSuccess ) %]
+                    <div class="dialog message">Item with barcode '[% barcode %]' added successfully</div>
+                  [% ELSE %]
+                    <div class="dialog alert">
+                      <p>Failed to add item with barcode <i>[% barcode %]</i>:
+                      <p>
+                          [% IF failureMessage == "NO_ITEM" %]
+                              No item with matching barcode found
+                          [% ELSIF failureMessage == "IN_COLLECTION_OTHER" %]
+                              Item is already in a different rotating collection
+                          [% ELSIF failureMessage == "IN_COLLECTION" %]
+                              Item is already in this collection
+                          [% ELSE %]
+                              [% failureMessage %]
+                          [% END %]
+                      </p>
+                  </div>
+                  [% END %]
                 [% END %]
-              [% END %]
 
-              [% IF ( previousActionRemove ) %]
-                [% IF ( removeSuccess ) %]
-                  <div class="dialog message">Item with barcode <i>[% barcode %]</i> removed successfully</div>
-                [% ELSE %]
-                  <div class="dialog alert">
-                    Failed to remove item with barcode <i>[% barcode %]</i>:
-                    <p>
-                        [% IF failureMessage == "NO_ITEM" %]
-                            No item with matching barcode found
-                        [% ELSIF failureMessage == "NOT_IN_COLLECTION" %]
-                            Item is not in this collection
-                        [% ELSE %]
-                            [% failureMessage %]
-                        [% END %]
-                    </p>
-                </div>
+                [% IF ( previousActionRemove ) %]
+                  [% IF ( removeSuccess ) %]
+                    <div class="dialog message">Item with barcode <i>[% barcode %]</i> removed successfully</div>
+                  [% ELSE %]
+                    <div class="dialog alert">
+                      Failed to remove item with barcode <i>[% barcode %]</i>:
+                      <p>
+                          [% IF failureMessage == "NO_ITEM" %]
+                              No item with matching barcode found
+                          [% ELSIF failureMessage == "NOT_IN_COLLECTION" %]
+                              Item is not in this collection
+                          [% ELSE %]
+                              [% failureMessage %]
+                          [% END %]
+                      </p>
+                  </div>
+                  [% END %]
                 [% END %]
-              [% END %]
 
-              <div>
-                <form action="addItems.pl" method="post">
-                    <fieldset class="brief">
-                        <legend>Add or remove items</legend>
-                        <ol>
-                            <li>
-                                <label for="barcode">Barcode: </label>
-                                <input type="text" id="barcode" name="barcode" />
-                                [% IF ( removeChecked ) %]
-                                    <label class="inline"><input type="checkbox" name="removeItem" checked="checked" /> Remove item from collection</label>
-                                [% ELSE %]
-                                    <label class="inline"><input type="checkbox" name="removeItem" /> Remove item from collection</label>
-                                [% END %]
-                            </li>
-                        </ol>
-                        <p>
-                            <input type="hidden" id="colId" name="colId" value="[% colId %]" />
-                            <input type="hidden" name="action" value="addItem" />
-                            <input type="submit" value="Submit" />
-                        </p>
-                    </fieldset>
+                <div>
+                  <form action="addItems.pl" method="post">
+                      <fieldset class="brief">
+                          <legend>Add or remove items</legend>
+                          <ol>
+                              <li>
+                                  <label for="barcode">Barcode: </label>
+                                  <input type="text" id="barcode" name="barcode" />
+                                  [% IF ( removeChecked ) %]
+                                      <label class="inline"><input type="checkbox" name="removeItem" checked="checked" /> Remove item from collection</label>
+                                  [% ELSE %]
+                                      <label class="inline"><input type="checkbox" name="removeItem" /> Remove item from collection</label>
+                                  [% END %]
+                              </li>
+                          </ol>
+                          <p>
+                              <input type="hidden" id="colId" name="colId" value="[% colId %]" />
+                              <input type="hidden" name="action" value="addItem" />
+                              <input type="submit" value="Submit" />
+                          </p>
+                      </fieldset>
 
-                </form>
+                  </form>
+                </div>
               </div>
-
+              <h2>Items in <i>[% colTitle %]</i></h2>
               <div>
-                <h2>Items in <i>[% colTitle %]</i></h2>
                 [% IF ( collectionItemsLoop ) %]
-                  <table>
-                    <tr>
-                      <th>Title</th>
-                      <th>Call number</th>
-                      <th>Barcode</th>
-                      <th>&nbsp;</th>
-                    </tr>
+                  <table id="table-col-items">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Call number</th>
+                        <th>Barcode</th>
+                        <th>Date added</th>
+                        <th>Origin library</th>
+                        <th>Home library</th>
+                        <th>Current location</th>
+                        <th>Transferred</th>
+                        <th class="nosort">Transfer</th>
+                        <th class="nosort">Return</th>
+                        <th class="nosort">Remove</th>
+                      </tr>
+                    </thead>
                     [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
                       <tr>
                         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = collectionItemsLoo.biblionumber %][% collectionItemsLoo.title |html %]</a></td>
                         <td>[% collectionItemsLoo.itemcallnumber %]</td>
                         <td>[% collectionItemsLoo.barcode %]</td>
-                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId %]&amp;barcode=[% collectionItemsLoo.barcode %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
+                        <td>[% collectionItemsLoo.date_added_format %]</td>
+                        <td>[% collectionItemsLoo.origin_branchname %]</td>
+                        <td>[% collectionItemsLoo.branchname %]</td>
+                        <td>[% collectionItemsLoo.holdingbranchname %]</td>
+                        <td>[% IF collectionItemsLoo.transferred %]Yes[% ELSE %]No[% END %]</td>
+                        <td><a id="transfer-colitem-[% collectionItemsLoo.barcode %]" data-toggle="modal" href="#transferItemModal" class="btn btn-small" data-itemnumber="[% collectionItemsLoo.itemnumber %]" data-barcode="[% collectionItemsLoo.barcode %]" data-title="[% collectionItemsLoo.title %]"><i class="icon-gift"></i> Transfer</a></td>
+                        <td><a id="return-colitem-[% collectionItemsLoo.barcode %]" data-toggle="modal" href="#returnColItemModal" class="btn btn-small" data-itemnumber="[% collectionItemsLoo.itemnumber %]" data-title="[% collectionItemsLoo.title %]" data-originbranch="[% collectionItemsLoo.origin_branchname %]"><i class="icon-repeat"></i> Return</a></td>
+                        <td><a id="remove-colitem-[% collectionItemsLoo.barcode %]" data-toggle="modal" href="#removeColItemModal" class="btn btn-small" data-barcode="[% collectionItemsLoo.barcode %]" data-title="[% collectionItemsLoo.title %]"><i class="icon-remove"></i> Remove</a></td>
                       </tr>
                     [% END %]
                   </table>
@@ -118,10 +319,117 @@
                 [% END %]
               </div>
             [% END %]
+              <div>
+                <br/>
+                <a href="rotatingCollections.pl" class="btn btn-small"><i class="icon-home"></i> Return to rotating collections home</a>
+              </div>
             </div> <!-- /.yui-b -->
         </div> <!-- /#yui-main -->
         <div class="yui-b">
             [% INCLUDE 'tools-menu.inc' %]
         </div>
     </div> <!-- /#bd -->
+    <!-- Modal for confirm deletion box-->
+    <div class="modal" id="removeColItemModal" tabindex="-1" role="dialog" aria-labelledby="removeColItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="removeColItemModalHeader">Confirm item removal</h3>
+            </div>
+            <div class="modal-body">
+               <strong><p id="modal-remove-body-message"></p></strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-remove-cancel" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-default" id="btn-remove-confirm">Remove item</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal for item transfer-->
+    <div class="modal" id="transferItemModal" tabindex="-1" role="dialog" aria-labelledby="transferItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="transferItemModalHeader">Select item transfer location</h3>
+            </div>
+            <div class="modal-body">
+             <strong><p id="modal-transfer-item-body-message"></p></strong>
+             <label for="transfer-item-select">Select transfer location: </label>
+              <select name="transfer-item-select" id="transfer-item-select">
+                [% FOREACH branch IN branchesLoop %]
+                  [% IF ( branch.selected ) %]
+                    <option value="[% branch.branchcode %]" selected="selected">[% branch.branchname %]</option>
+                  [% ELSE %]
+                    <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                  [% END %]
+                [% END %]
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="btn-transfer-cancel" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-default" id="btn-transfer-item-confirm" data-colid="[% colId %]" data-transferto="" data-itemnumber="" data-dismiss="modal">Transfer</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal for confirm item return box-->
+    <div class="modal " id="returnColItemModal" tabindex="-1" role="dialog" aria-labelledby="returnColItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="returnColItemModalHeader">Confirm item return</h3>
+            </div>
+            <div class="modal-body">
+               <strong><p id="modal-return-body-message"></p></strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-return-item-cancel" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-default" id="btn-return-item-confirm" data-itemnumber="" data-dismiss="modal">Return item</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal for confirm transfer box-->
+    <div class="modal " id="transferColModal" tabindex="-1" role="dialog" aria-labelledby="transferColModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="transferColModalHeader">Confirm collection transfer</h3>
+            </div>
+            <div class="modal-body">
+               <strong><p id="modal-transfer-body-message"></p></strong>
+               <p id="modal-transfer-body-desc"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-transfer-cancel" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-default" id="btn-transfer-confirm" data-colid="[% colId %]" data-transferto="" data-dismiss="modal">Transfer collection</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal for confirm return collection box-->
+    <div class="modal " id="returnColModal" tabindex="-1" role="dialog" aria-labelledby="returnColModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="returnColModalHeader">Confirm collection return</h3>
+            </div>
+            <div class="modal-body">
+               <strong><p id="modal-return-body-message"></p></strong>
+               <p id="modal-return-body-desc"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-return-cancel" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-default" id="btn-return-confirm" data-colid="[% colId %]" data-dismiss="modal">Return collection</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="loading"><strong>Processing...</strong><img src="[% interface %]/[% theme %]/img/loading.gif" /></div>
 [% INCLUDE 'intranet-bottom.inc' %]

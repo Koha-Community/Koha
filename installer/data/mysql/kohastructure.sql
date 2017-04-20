@@ -387,6 +387,7 @@ CREATE TABLE collections (
   colTitle varchar(100) NOT NULL DEFAULT '',
   colDesc text NOT NULL,
   colBranchcode varchar(10) DEFAULT NULL, -- 'branchcode for branch where item should be held.'
+  owningBranchcode varchar(10) DEFAULT NULL, -- 'owning branch'
   PRIMARY KEY (colId)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -405,6 +406,11 @@ CREATE TABLE collections_tracking (
   collections_tracking_id integer(11) NOT NULL auto_increment,
   colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
   itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
+  origin_branchcode varchar(10) DEFAULT NULL,
+  transfer_branch varchar(10) DEFAULT NULL,
+  transferred tinyint(1) DEFAULT '0',
+  date_added datetime DEFAULT NULL,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (collections_tracking_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

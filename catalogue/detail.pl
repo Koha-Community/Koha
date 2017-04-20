@@ -47,6 +47,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::Virtualshelves;
+use C4::RotatingCollections;
 
 my $query = CGI->new();
 
@@ -283,6 +284,9 @@ foreach my $item (@items) {
         $item->{transfertto}   = $transfertto;
         $item->{nocancel} = 1;
     }
+
+    # KD-139: Check the item's rotating collection status
+    $item->{itemsCollection} = GetItemsCollection($item->{itemnumber});
 
     foreach my $f (qw( itemnotes )) {
         if ($item->{$f}) {

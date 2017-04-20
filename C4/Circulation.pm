@@ -35,7 +35,7 @@ use C4::Message;
 use C4::Debug;
 use C4::Log; # logaction
 use C4::Overdues qw(CalcFine UpdateFine get_chargeable_units);
-use C4::RotatingCollections qw(GetCollectionItemBranches);
+use C4::RotatingCollections;
 use Algorithm::CheckDigits;
 use C4::KohaSuomi::Billing::BillingManager qw(RemovePayment);
 
@@ -345,8 +345,16 @@ sub transferbook {
 
     # can't transfer book if is already there....
     if ( $fbr eq $tbr ) {
-        $messages->{'DestinationEqualsHolding'} = 1;
-        $dotransfer = 0;
+        # KD-139: Allow transferred items that are still in their origin to be returned
+        my $transfers = GetTransfers($itemnumber);
+        my $originBranch = C4::RotatingCollections::GetItemOriginBranch($itemnumber);
+        if ($transfers && $originBranch && ($originBranch eq $fbr)) {
+            DeleteTransfer($itemnumber);
+        }
+        else {
+            $messages->{'DestinationEqualsHolding'} = 1;
+            $dotransfer = 0;
+        }
     }
 
     # check if it is still issued to someone, return it...

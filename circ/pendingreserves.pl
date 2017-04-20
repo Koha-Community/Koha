@@ -100,7 +100,7 @@ my $strsth =
                     ORDER BY items.itemnumber SEPARATOR '|') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '|') l_location,
-            GROUP_CONCAT(DISTINCT items.itemcallnumber 
+            GROUP_CONCAT(DISTINCT(CONCAT_WS(' Col ', items.cn_sort, collections_tracking.colId))
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
             GROUP_CONCAT(DISTINCT items.enumchron
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_enumchron,
@@ -117,6 +117,7 @@ my $strsth =
         LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
+        LEFT JOIN collections_tracking ON collections_tracking.itemnumber = items.itemnumber
         LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
     WHERE
     reserves.found IS NULL

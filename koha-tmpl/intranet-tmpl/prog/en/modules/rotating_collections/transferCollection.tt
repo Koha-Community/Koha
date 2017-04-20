@@ -16,6 +16,61 @@
 
                 <h1>Transfer collection <i>[% colTitle %]</i></h1>
 
+                <div id="alert-block">
+                  <!-- Success conditions -->
+                  [% IF transferSuccess && previousAction == "collectionTransfer" %]
+                    <div class="alert-success">Collection transferred successfully</div>
+                  [% ELSIF transferSuccess && previousAction == "itemTransfer" %]
+                    <div class="alert-success">Item transferred successfully</div>
+                  [% ELSIF transferSuccess && previousAction == "itemReturn" %]
+                    <div class="alert-success">Item returned successfully</div>
+                  [% ELSIF transferSuccess && previousAction == "collectionReturn" && problemItems %]
+                    <div class="alert-success">Some items returned succesfully, problematic items: <br />
+                      [% FOREACH item IN problemItems %]
+                        [% item %]<br />
+                      [% END %]
+                    </div>
+                  [% ELSIF transferSuccess && previousAction == "collectionReturn" && !problemItems %]
+                    <div class="alert-success">Collection returned succesfully</div>
+                  <!-- Cases where not all items were transferred succesfully -->
+                  [% ELSIF transferSuccess && previousAction == "collectionTransfer" && problemItems %]
+                    <div class="alert-success">Some items transferred succesfully, problematic items: <br />
+                      [% FOREACH item IN problemItems %]
+                        [% item %]<br />
+                      [% END %]
+                    </div>
+                  <!-- Failing conditions-->
+                  [% ELSIF transferFailure && previousAction == "collectionTransfer" %]
+                    <div class="alert-error">Failed to transfer any items in collection!</div>
+                    <div class="alert-error">Problems: <br />
+                      [% FOREACH item IN problemItems %]
+                        <strong>[% item %]</strong><br />
+                      [% END %]
+                    </div>
+                  [% ELSIF transferFailure && previousAction == "itemTransfer" %]
+                    <div class="alert-error">Failed to transfer item!</div>
+                    <div class="alert-error">Problems: <br />
+                      [% FOREACH error IN errorMessage %]
+                        <strong>[% error %]</strong><br />
+                      [% END %]
+                    </div>
+                  [% ELSIF transferFailure && previousAction == "itemReturn" %]
+                    <div class="alert-error">Failed to return item!</div>
+                    <div class="alert-error">Problems: <br />
+                      [% FOREACH error IN errorMessage %]
+                        <strong>[% error %]</strong><br />
+                      [% END %]
+                    </div>
+                  [% ELSIF transferFailure && previousAction == "collectionReturn" %]
+                    <div class="alert-error">Failed to return any item in collection!</div>
+                    <div class="alert-error">Problematic items: <br />
+                      [% FOREACH item IN errorMessages %]
+                        <strong>[% item %]</strong><br />
+                      [% END %]
+                    </div>
+                  [% END %]
+                </div>
+
                 [% IF ( transferSuccess ) %]
                     <div class="dialog message">
                         <p>Collection transferred successfully</p>
@@ -33,6 +88,7 @@
                     <div>
                         <form action="transferCollection.pl" method="post">
                             <input type="hidden" name="colId" value="[% colId %]" />
+                            <input type="hidden" name="transferAction" value="collectionTransfer">
                             <fieldset class="rows">
                                 <ol>
                                     <li>

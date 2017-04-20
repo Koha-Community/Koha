@@ -94,11 +94,14 @@ if ($collectionItems) {
     $template->param( collectionItemsLoop => $collectionItems );
 }
 
+my $branchesLoop = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+
 $template->param(
     colId          => $colId,
     colTitle       => $colTitle,
     colDescription => $colDescription,
     colBranchcode  => $colBranchcode,
+    branchesLoop   => $branchesLoop,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
