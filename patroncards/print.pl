@@ -45,6 +45,7 @@ my @label_ids = $cgi->multi_param('label_id') if $cgi->param('label_id');   # th
 my @batch_ids = $cgi->multi_param('batch_id') if $cgi->param('batch_id');
 my $patronlist_id = $cgi->param('patronlist_id') || undef;
 my $layout_id = $cgi->param('layout_id') || undef;
+my $layout_back_id = $cgi->param('layout_back_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
 my @borrower_numbers = $cgi->multi_param('borrower_number') if $cgi->param('borrower_number');
@@ -67,6 +68,7 @@ if ($op eq 'export') {
                          batch_id        => $batch_ids[0],
                          template_id     => $template_id,
                          layout_id       => $layout_id,
+                         layout_back_id  => $layout_back_id,
                          start_card      => $start_card,
                          label_ids       => $label_id_param,
                          card_count      => scalar(@label_ids),
@@ -82,6 +84,7 @@ if ($op eq 'export') {
         push (@batches, {create_script   => ($output_format eq 'pdf' ? 'create-pdf.pl' : 'create-csv.pl'),
                          template_id     => $template_id,
                          layout_id       => $layout_id,
+                         layout_back_id  => $layout_back_id,
                          start_card      => $start_card,
                          borrower_numbers    => $borrower_number_param,
                          card_count      => scalar(@borrower_numbers),
@@ -97,6 +100,7 @@ if ($op eq 'export') {
                             batch_id        => $batch_id,
                             template_id     => $template_id,
                             layout_id       => $layout_id,
+                            layout_back_id  => $layout_back_id,
                             start_card      => $start_card,
                             });
         }
@@ -110,6 +114,7 @@ if ($op eq 'export') {
                          patronlist_id   => $patronlist_id,
                          template_id     => $template_id,
                          layout_id       => $layout_id,
+                         layout_back_id  => $layout_back_id,
                          start_card      => $start_card,
                          referer         => $referer,
                         );

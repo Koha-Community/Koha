@@ -26,6 +26,7 @@ use Graphics::Magick;
 use XML::Simple;
 use POSIX qw(ceil);
 use autouse 'Data::Dumper' => qw(Dumper);
+use Clone qw(clone);
 
 use C4::Debug;
 use C4::Context;
@@ -48,6 +49,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
+my $layout_back_id   = $cgi->param('layout_back_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
 my @label_ids   = $cgi->multi_param('label_id') if $cgi->param('label_id');
 my @borrower_numbers  = $cgi->multi_param('borrower_number') if $cgi->param('borrower_number');
@@ -70,6 +72,7 @@ $pdf = C4::Creators::PDF->new(InitVars => 0);
 my $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
 my $pc_template = C4::Patroncards::Template->retrieve(template_id => $template_id, profile_id => 1);
 my $layout = C4::Patroncards::Layout->retrieve(layout_id => $layout_id);
+my $layout_back = C4::Patroncards::Layout->retrieve(layout_id => $layout_back_id) if ( $layout_back_id );
 
 $| = 1;
 
@@ -110,6 +113,7 @@ else {
 }
 
 my $layout_xml = XMLin($layout->get_attr('layout_xml'), ForceArray => 1);
+my $layout_back_xml = XMLin($layout_back->get_attr('layout_xml'), ForceArray => 1) if ( defined $layout_back );
 
 if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page to swap columns
     my $even = 1;
@@ -127,12 +131,17 @@ if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page t
 CARD_ITEMS:
 foreach my $item (@{$items}) {
     if ($item) {
+
+#my $print_layout_xml = $layout_back_xml;
+        my $print_layout_xml = (( ($cardscount % 2  == 1) && ( $layout_back_id ) ) ?
+            clone($layout_back_xml) : clone($layout_xml) );
+
         $cardscount ++;
         my $borrower_number = $item->{'borrower_number'};
         my $card_number = GetMember(borrowernumber => $borrower_number)->{'cardnumber'};
 
 #       Set barcode data
-        $layout_xml->{'barcode'}->[0]->{'data'} = $card_number if $layout_xml->{'barcode'};
+        $print_layout_xml->{'barcode'}->[0]->{'data'} = $card_number if $print_layout_xml->{'barcode'};
 
 #       Create a new patroncard object
         my $patron_card = C4::Patroncards::Patroncard->new(
@@ -142,17 +151,17 @@ foreach my $item (@{$items}) {
                 lly                     => $lly,
                 height                  => $pc_template->get_attr('label_height'), # of the card
                 width                   => $pc_template->get_attr('label_width'),
-                layout                  => $layout_xml,
+                layout                  => $print_layout_xml,
                 text_wrap_cols          => 30, #FIXME: hardcoded,
         );
 
-        $patron_card->draw_guide_box($pdf) if $layout_xml->{'guide_box'};
-        $patron_card->draw_barcode($pdf) if $layout_xml->{'barcode'};
+        $patron_card->draw_guide_box($pdf) if $print_layout_xml->{'guide_box'};
+        $patron_card->draw_barcode($pdf) if $print_layout_xml->{'barcode'};
 
 #       Do image foo and place binary image data into layout hash
         my $image_data = {};
         my $error = undef;
-        my $images = $layout_xml->{'images'};
+        my $images = $print_layout_xml->{'images'};
         PROCESS_IMAGES:
         foreach (keys %{$images}) {
             if (grep{m/source/} keys(%{$images->{$_}->{'data_source'}->[0]})) {
@@ -232,6 +241,12 @@ foreach my $item (@{$items}) {
         $patron_card->draw_text($pdf);
     }
     ($llx, $lly, $new_page) = $pc_template->get_next_label_pos();
+
+    if ( ($cardscount % 2  == 1) && ( $layout_back_id ) ) {
+        $pdf->Page();
+        redo; # Use same patron data again for backside in card printer
+    }
+
     $pdf->Page() if $new_page;
 }
 # No errors occurred within eval, we can issue the pdf

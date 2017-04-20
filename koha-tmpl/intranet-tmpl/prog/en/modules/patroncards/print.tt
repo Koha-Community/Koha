@@ -26,17 +26,17 @@
                         [% IF ( batche.label_ids ) %]
                         <legend>[% batche.card_count %] Single patron cards</legend>
                         <p>
-                                <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script %]?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %][% batche.label_ids %]">label_single_[% batche.card_count %].pdf</a>
+                                <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script %]?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]]&amp;layout_back_id=[% batche.layout_back_id %]&amp;start_card=[% batche.start_card %][% batche.label_ids %]">label_single_[% batche.card_count %].pdf</a>
                         </p>
                         [% ELSIF ( batche.borrower_numbers ) %]
                         <legend>[% batche.card_count %] Single Patron Cards</legend>
                         <p>
-                                <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script %]?template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %][% batche.borrower_numbers %]">label_single_[% batche.card_count %].pdf</a>
+                                <a class="document pdf" href="/cgi-bin/koha/patroncards/[% batche.create_script %]?template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;layout_back_id=[% batche.layout_back_id %]&amp;start_card=[% batche.start_card %][% batche.borrower_numbers %]">label_single_[% batche.card_count %].pdf</a>
                         </p>
                         [% ELSE %]
                         <legend>Card batch number [% batche.batch_id %]</legend>
                         <p>
-                                <a class="document pdf" href="/cgi-bin/koha/patroncards/create-pdf.pl?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %]">label_batch_[% batche.batch_id %].pdf</a>
+                                <a class="document pdf" href="/cgi-bin/koha/patroncards/create-pdf.pl?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;layout_back_id=[% batche.layout_back_id %]&amp;start_card=[% batche.start_card %]">label_batch_[% batche.batch_id %].pdf</a>
                         </p>
                         [% END %]
                     [% END %]
@@ -93,6 +93,17 @@
                                 [% END %]
                             </select>
                         </li>
+                        <li>
+                            <label style="width:9em" for="layout_back_id">Select a layout for back side: </label>
+                            <select name="layout_back_id" id="layout_back_id">
+                                <option value="0">Back side layout not used</option>
+                                [% FOREACH layout IN layouts %]
+                                <option value="[% layout.layout_id %]">[% layout.layout_name %]</option>
+                                [% END %]
+                            </select>
+                            <span class="hint">Used for duplex printers (needs a '1 up template')</span>
+                        </li>
+
                         <li>
                             <label style="width:9em" for="start_card">Enter starting card position: </label>
                             <input type="text" size="5" id="start_card" name="start_card" class="focus" title="Starting card number" value="1" />
