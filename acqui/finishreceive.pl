@@ -31,6 +31,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Search;
 
+use Koha::Number::Price;
 use Koha::Acquisition::Booksellers;
 
 use List::MoreUtils qw/any/;
@@ -56,6 +57,8 @@ my $cnt              = 0;
 my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
+
+$unitprice = Koha::Number::Price->new( $unitprice )->unformat();
 
 #need old receivedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
