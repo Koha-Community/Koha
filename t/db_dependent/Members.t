@@ -81,7 +81,7 @@ my $userenv = C4::Context->userenv
 # Make a borrower for testing
 my %data = (
     cardnumber => $CARDNUMBER,
-    firstname =>  $FIRSTNAME,
+    firstname =>  $FIRSTNAME . q{ },
     surname => $SURNAME,
     categorycode => $CATEGORYCODE,
     branchcode => $BRANCHCODE,
@@ -121,7 +121,7 @@ ok ( $member->{firstname}    eq $FIRSTNAME    &&
 
 is($member->{dateofbirth}, undef, "Empty dates handled correctly");
 
-$member->{firstname} = $CHANGED_FIRSTNAME;
+$member->{firstname} = $CHANGED_FIRSTNAME . q{ };
 $member->{email}     = $EMAIL;
 $member->{phone}     = $PHONE;
 $member->{emailpro}  = $EMAILPRO;
