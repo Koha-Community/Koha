@@ -326,6 +326,83 @@ sub applySingleAtomicUpdateFromFile {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
 }
 
+subtest 'Support community dev atomicupdates (.perl files, see skeleton.perl)'
+        => \&applyCommunityDevUpdate;
+sub applyCommunityDevUpdate {
+    my $subtestContext = {};
+    my $dev_update = q{
+$DBversion = 'XXX';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "SHOW TABLES" );
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    $ENV{ATOMICUPDATE_TESTS_VAL}++;
+    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+}
+};
+    my $dev_update_invalid = q{
+$DBversion = '16.00.00';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "SHOW TABLES" );
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    $ENV{ATOMICUPDATE_TESTS_INV}++;
+    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+}
+};
+    eval {
+    my $files = t::lib::TestObjects::FileFactory->createTestGroup([
+                        {
+                            filepath => 'atomicupdate/',
+                            filename => 'Bug_00001-First-update.perl',
+                            content  => $dev_update,
+                        },
+                        {
+                            filepath => 'atomicupdate/',
+                            filename => 'Bug_00002-Invalid-update.perl',
+                            content  => $dev_update_invalid,
+                        }
+                        ],
+                        undef, $subtestContext, $testContext);
+
+    my $atomicUpdater = Koha::AtomicUpdater->new({
+            scriptDir => $files->{'Bug_00001-First-update.perl'}->dirname(),
+    });
+    my $atomicUpdater_invalid = Koha::AtomicUpdater->new({
+            scriptDir => $files->{'Bug_00002-Invalid-update.perl'}->dirname(),
+    });
+
+    $atomicUpdater->applyAtomicUpdate(
+        $files->{'Bug_00001-First-update.perl'}->stringify
+    );
+    $atomicUpdater_invalid->applyAtomicUpdate(
+        $files->{'Bug_00002-Invalid-update.perl'}->stringify
+    );
+
+    my $atomicUpdate = $atomicUpdater->find('Bug-00001');
+    my $atomicUpdate_invalid = $atomicUpdater->find('Bug-00002');
+    t::lib::TestObjects::AtomicUpdateFactory->addToContext($atomicUpdate, undef,
+                                                $subtestContext, $testContext);
+    t::lib::TestObjects::AtomicUpdateFactory->addToContext($atomicUpdate_invalid,
+                                         undef, $subtestContext, $testContext);
+
+    is($atomicUpdate->filename,
+       "Bug_00001-First-update.perl",
+       "Bug_00001-First-update.perl added to DB");
+    is($atomicUpdate_invalid->filename,
+       "Bug_00002-Invalid-update.perl",
+       "Bug_00002-Invalid-update.perl added to DB");
+    is($ENV{ATOMICUPDATE_TESTS_VAL}, 1, "First update execution success.");
+    is($ENV{ATOMICUPDATE_TESTS_INV}, undef, "Invalid update execution failed.");
+    };
+    if ($@) {
+        ok(0, $@);
+    }
+    t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
+}
+
 subtest 'Mark all atomicupdates as installed (for fresh installs), but do not'
        .' execute them' => \&addAllAtomicUpdates;
 sub addAllAtomicUpdates {

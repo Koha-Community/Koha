@@ -258,6 +258,29 @@ sub applyAtomicUpdate {
             my $installer = C4::Installer->new();
             $rv = $installer->load_sql( $self->{scriptDir}.'/'.$filename ) ? 0 : 1;
         } elsif ( $filename =~ /\.(perl|pl)$/ ) {
+            # Koha-community uses .perl files for developer atomic updates. These
+            # simplified versions of atomicupdates do not instantiate $dbh, and
+            # subroutines CheckVersion and SetVersion from updatedatabase.pl are
+            # out of scope when executed by the AtomicUpdater. In order to support
+            # community dev atomicupdates, we have to re-define these subroutines
+            # and pass $dbh into the .perl file.
+            #
+            # See atomicupdates/skeleton.perl for default community template.
+            if ($filename =~ /\.perl$/) {
+                our $dbh = C4::Context->dbh;
+                sub SetVersion   { return 1; }
+                sub CheckVersion {
+                    unless ($_[0] =~ /^XXX$/) {
+                        Koha::Exception::File->throw(
+                            error => 'Atomicupdate is not a dev atomicupdate. Dev'
+                            .' updates are identified by CheckVersion("XXX").'
+                            ." Given version is $_[0]."
+                        );
+                    }
+                    return 1;
+                }
+            }
+
             my $fileAndPath = $self->{scriptDir}.'/'.$filename;
             $rv = do $fileAndPath;
             unless ($rv) {
