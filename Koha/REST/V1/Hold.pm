@@ -34,7 +34,7 @@ sub list {
     foreach my $key (keys %$params) {
         delete $params->{$key} unless grep { $key eq $_ } @valid_params;
     }
-    my $holds = Koha::Holds->search($params)->unblessed;
+    my $holds = Koha::Holds->search($params);
 
     return $c->$cb($holds, 200);
 }
@@ -106,7 +106,7 @@ sub add {
         }, 500);
     }
 
-    my $reserve = C4::Reserves::GetReserve($reserve_id);
+    my $reserve = Koha::Holds->find($reserve_id);
 
     return $c->$cb($reserve, 201);
 }
@@ -137,8 +137,9 @@ sub edit {
         rank => $priority,
         suspend_until => $suspend_until,
     };
+
     C4::Reserves::ModReserve($params);
-    $reserve = C4::Reserves::GetReserve($reserve_id);
+    $reserve = Koha::Holds->find($reserve_id);
 
     return $c->$cb($reserve, 200);
 }
