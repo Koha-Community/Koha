@@ -1019,6 +1019,7 @@ sub checkauth {
 
             # $return: 1 = valid user, 2 = superlibrarian
             if ($return) {
+                # If DB user is logged in
                 $userid ||= $q_userid if $return == 2;
 
                 #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
