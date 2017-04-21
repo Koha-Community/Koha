@@ -463,6 +463,7 @@
                                         <input type="hidden" name="itemid" value="1" />
                                         <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
                                         <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
+                                        <input type="hidden" name="indicator" value="  " /> [%#Pass imaginary indicators to stop warnings in C4::Biblio::TransformHtmlToXml() %]
                                         <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
                                         <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
                                         [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
