@@ -144,6 +144,7 @@
                 <table id="osrlt">
                   <thead>
                     <tr>
+                        <th class="NoSort">Actions</th>
                         <th>ISSN</th>
                         <th class="anti-the">Title</th>
                         <th>Notes</th>
@@ -154,11 +155,11 @@
                         [% FOR field IN additional_fields_for_subscription %]
                           <th>[% field.name %]</th>
                         [% END %]
-                        <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
+                      <td></td>
                       <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
@@ -169,47 +170,12 @@
                       [% FOR field IN additional_fields_for_subscription %]
                         <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 %]" placeholder="Search [% field.name %]" /></td>
                       [% END %]
-                      <td></td>
                     </tr>
                   </tfoot>
                   <tbody>
                     [% FOREACH subscription IN openedsubscriptions %]
                     [% UNLESS subscription.cannotdisplay %]
                       <tr>
-                        <td>
-                        [% IF ( subscription.issn ) %][% subscription.issn %]
-                        [% END %]
-                        </td>
-                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
-                        </td>
-                        <td>[% IF ( subscription.publicnotes ) %][% subscription.publicnotes %][% END %]
-                        [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
-                        </td>
-                        <td>
-                          [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
-                        </td>
-                        <td>
-                          [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
-                        </td>
-                        <td>
-                          [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
-                        </td>
-                        <td>
-                            [% IF ( subscription.enddate ) %]
-                                <span title="[% subscription.enddate %]">[% subscription.enddate | $KohaDates %]</span>
-                            [% ELSE %]
-                                <span title="0000-00-00"></span>
-                            [% END %]
-                        </td>
-
-                        [% FOR field IN additional_fields_for_subscription %]
-                          [% IF field.authorised_value_category %]
-                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
-                          [% ELSE %]
-                            <td>[% subscription.additional_fields.${field.name} %]</td>
-                          [% END %]
-                        [% END %]
-
                         <td>
                             <div class="dropdown">
                                 <div class="btn-group">
@@ -247,6 +213,39 @@
                                 </div>
                             </div>
                         </td>
+                        <td>
+                        [% IF ( subscription.issn ) %][% subscription.issn %]
+                        [% END %]
+                        </td>
+                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" class="button" title="subscription detail">[% subscription.title |html %]</a>
+                        </td>
+                        <td>[% IF ( subscription.publicnotes ) %][% subscription.publicnotes %][% END %]
+                        [% IF ( subscription.internalnotes ) %]([% subscription.internalnotes %])[% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.branchcode ) %][% Branches.GetName( subscription.branchcode ) %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.location ) %][% AuthorisedValues.GetByCode( 'LOC', subscription.location ) %][% END %]
+                        </td>
+                        <td>
+                          [% IF ( subscription.callnumber ) %][% subscription.callnumber %][% END %]
+                        </td>
+                        <td>
+                            [% IF ( subscription.enddate ) %]
+                                <span title="[% subscription.enddate %]">[% subscription.enddate | $KohaDates %]</span>
+                            [% ELSE %]
+                                <span title="0000-00-00"></span>
+                            [% END %]
+                        </td>
+
+                        [% FOR field IN additional_fields_for_subscription %]
+                          [% IF field.authorised_value_category %]
+                            <td>[% AuthorisedValues.GetByCode( field.authorised_value_category, subscription.additional_fields.${field.name} ) %]</td>
+                          [% ELSE %]
+                            <td>[% subscription.additional_fields.${field.name} %]</td>
+                          [% END %]
+                        [% END %]
 
                       </tr>
                       [% END %]
@@ -265,6 +264,7 @@
                 <!-- FIXME add additional_fields for closed subs -->
                   <thead>
                     <tr>
+                        <th class="NoSort">Actions</th>
                         <th>ISSN</th>
                         <th class="anti-the">Title</th>
                         <th>Notes</th>
@@ -274,11 +274,11 @@
                         [% FOR field IN additional_fields_for_subscription %]
                           <th>[% field.name %]</th>
                         [% END %]
-                        <th class="NoSort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
+                      <td></td>
                       <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
                       <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
@@ -288,13 +288,34 @@
                       [% FOR field IN additional_fields_for_subscription %]
                         <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 5 %]" placeholder="Search [% field.name %]" /></td>
                       [% END %]
-                      <td></td>
                     </tr>
                   </tfoot>
                   <tbody>
                     [% FOREACH subscription IN closedsubscriptions %]
                     [% UNLESS subscription.cannotdisplay %]
                       <tr>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
+                                   Actions <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid %]">
+
+                                    [% IF ( routing && CAN_user_serials_routing ) %]
+                                        [% UNLESS ( subscription.cannotedit ) %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
+                                            </li>
+                                        [% END %]
+                                    [% END # IF ( routing && CAN_user_serials_routing ) %]
+
+                                    <li>
+                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
                         <td>
                           [% IF ( subscription.issn ) %]
                             [% subscription.issn %]
@@ -323,28 +344,6 @@
                             <td>[% subscription.additional_fields.${field.name} %]</td>
                           [% END %]
                         [% END %]
-                        <td>
-                            <div class="dropdown">
-                                <a class="btn btn-default btn-xs dropdown-toggle" id="closedsubactions[% subscription.subscriptionid %]" role="button" data-toggle="dropdown" href="#">
-                                   Actions <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="closedsubactions[% subscription.subscriptionid %]">
-
-                                    [% IF ( routing && CAN_user_serials_routing ) %]
-                                        [% UNLESS ( subscription.cannotedit ) %]
-                                            <li>
-                                                <a href="/cgi-bin/koha/serials/serials-search.pl?subscriptionid=[% subscription.subscriptionid %]&amp;op=reopen&amp;routing=[% subscription.routing %]&amp;searched=1&amp;title_filter=[% title_filter | uri %]&amp;ISSN_filter=[% ISSN_filter | uri %]&amp;EAN_filter=[% EAN_filter | uri %]&amp;published_filter=[% publisher_filter | uri %]&amp;bookseller_filter=[% bookseller_filter | uri %]&amp;branch_filter=[% branch_filter | uri %]" id="reopensub"> <i class="fa fa-repeat"></i> Reopen</a>
-                                            </li>
-                                        [% END %]
-                                    [% END # IF ( routing && CAN_user_serials_routing ) %]
-
-                                    <li>
-                                        <a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]"><i class="fa fa-list-alt"></i> Issue history</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </td>
                       </tr>
                     [% END %]
                     [% END %]
