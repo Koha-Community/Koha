@@ -14134,6 +14134,24 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17669 - Introduce preference for deleting temporary uploads)\n";
 }
 
+$DBversion = '16.12.00.026';
+if( CheckVersion( $DBversion ) ) {
+
+    # In order to be overcomplete, we check if the situation is what we expect
+    if( !index_exists( 'serialitems', 'PRIMARY' ) ) {
+        if( index_exists( 'serialitems', 'serialitemsidx' ) ) {
+            $dbh->do(q|
+                ALTER TABLE serialitems ADD PRIMARY KEY (itemnumber), DROP INDEX serialitemsidx;
+            |);
+        } else {
+            $dbh->do(q|ALTER TABLE serialitems ADD PRIMARY KEY (itemnumber)|);
+        }
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18427 - Add a primary key to serialitems)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
