@@ -281,8 +281,11 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     [% IF ( ISSUE.status ) %]
                                                         [% IF ( canrenew ) %]
                                                             <input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>
+                                                           <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
                                                         [% END %]
-                                                        <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                                                        [% IF ISSUE.renewalfee > 0 %]
+                                                            <span class="renewalfee">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) %]': [% ISSUE.renewalfee | $Price %]</span>
+                                                        [% END %]
                                                     [% ELSIF ( ISSUE.on_reserve ) %]
                                                         Not renewable <span class="renewals">(on hold)</span>
                                                     [% ELSIF ( ISSUE.too_many ) %]
