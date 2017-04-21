@@ -14118,6 +14118,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 14537 - The system preference 'OverdueNoticeBcc' is mis-named.)\n";
 }
 
+$DBversion = '16.12.00.025';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES ('UploadPurgeTemporaryFilesDays','',NULL,'If not empty, number of days used when automatically deleting temporary uploads','integer');
+    |);
+
+    my ( $cnt ) = $dbh->selectrow_array( "SELECT COUNT(*) FROM uploaded_files WHERE permanent IS NULL or permanent=0" );
+    if( $cnt ) {
+        print "NOTE: You have $cnt temporary uploads. You could benefit from setting pref UploadPurgeTemporaryFilesDays now to automatically delete them.\n";
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17669 - Introduce preference for deleting temporary uploads)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
