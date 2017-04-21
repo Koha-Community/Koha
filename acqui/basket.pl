@@ -463,27 +463,29 @@ sub get_order_infos {
     }
 
     my $biblionumber = $order->{'biblionumber'};
-    my $biblio = Koha::Biblios->find( $biblionumber );
-    my $countbiblio = CountBiblioInOrders($biblionumber);
-    my $ordernumber = $order->{'ordernumber'};
-    my @subscriptions = GetSubscriptionsId ($biblionumber);
-    my $itemcount   = $biblio->items->count;
-    my $holds_count = $biblio->holds->count;
-    my @items = GetItemnumbersFromOrder( $ordernumber );
-    my $itemholds  = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
+    if ( $biblionumber ) { # The biblio still exists
+        my $biblio = Koha::Biblios->find( $biblionumber );
+        my $countbiblio = CountBiblioInOrders($biblionumber);
+        my $ordernumber = $order->{'ordernumber'};
+        my @subscriptions = GetSubscriptionsId ($biblionumber);
+        my $itemcount   = $biblio->items->count;
+        my $holds_count = $biblio->holds->count;
+        my @items = GetItemnumbersFromOrder( $ordernumber );
+        my $itemholds  = $biblio->holds->search({ itemnumber => { -in => \@items } })->count;
 
-    # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-    $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
-    $line{items}                = ($itemcount) - (scalar @items);
-    $line{left_item}            = 1 if $line{items} >= 1;
-    $line{left_biblio}          = 1 if $countbiblio > 1;
-    $line{biblios}              = $countbiblio - 1;
-    $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
-    $line{subscriptions}        = scalar @subscriptions;
-    ($holds_count >= 1) ? $line{left_holds} = 1 : $line{left_holds} = 0;
-    $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
-    $line{holds}                = $holds_count;
-    $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
+        # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
+        $line{items}                = ($itemcount) - (scalar @items);
+        $line{left_item}            = 1 if $line{items} >= 1;
+        $line{left_biblio}          = 1 if $countbiblio > 1;
+        $line{biblios}              = $countbiblio - 1;
+        $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+        $line{subscriptions}        = scalar @subscriptions;
+        ($holds_count >= 1) ? $line{left_holds} = 1 : $line{left_holds} = 0;
+        $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+        $line{holds}                = $holds_count;
+        $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
+    }
 
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
