@@ -1060,7 +1060,7 @@ sub handle_fee_paid {
     my $status;
     my $resp = FEE_PAID_RESP;
 
-    my $payment_type_writeoff = $server->{account}->{payment_type_writeoff} || '';
+    my $payment_type_writeoff = $server->{account}->{payment_type_writeoff} || q{};
     my $is_writeoff = $pay_type eq $payment_type_writeoff;
 
     $fee_amt    = $fields->{ (FID_FEE_AMT) };
