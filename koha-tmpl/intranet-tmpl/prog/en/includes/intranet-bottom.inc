@@ -1,6 +1,6 @@
         </div>
 
-[% IF ( languages_loop ) %]
+[% IF ( languages_loop && ! popup_window ) %]
     [% UNLESS ( one_language_enabled ) %]
         <div id="changelanguage" class="navbar navbar-default navbar-fixed-bottom">
             <div class="container-fluid">
