@@ -147,6 +147,7 @@ if ($op eq ""){
     my $biblio_count = 0;
     for my $biblio (@$biblios){
         $biblio_count++;
+        my $duplifound = 0;
         # Check if this import_record_id was selected
         next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
@@ -164,15 +165,15 @@ if ($op eq ""){
         unless ( $biblionumber ) {
             if ($matcher_id) {
                 if ( $matcher_id eq '_TITLE_AUTHOR_' ) {
-                    $duplinbatch = $import_batch_id if FindDuplicate($marcrecord);
+                    $duplifound = 1 if FindDuplicate($marcrecord);
                 }
                 else {
                     my $matcher = C4::Matcher->fetch($matcher_id);
                     my @matches = $matcher->get_matches( $marcrecord, my $max_matches = 1 );
-                    $duplinbatch = $import_batch_id if @matches;
+                    $duplifound = 1 if @matches;
                 }
 
-                next if $duplinbatch;
+                $duplinbatch = $import_batch_id and next if $duplifound;
             }
 
             # add the biblio
