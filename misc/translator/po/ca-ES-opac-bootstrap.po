@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.10\n"
-"POT-Creation-Date: 2017-03-17 08:10-0300\n"
+"POT-Creation-Date: 2017-04-16 10:45-0300\n"
 "PO-Revision-Date: 2017-02-22 14:46+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
@@ -881,12 +881,6 @@ msgstr "%s Telèfon:"
 msgid "%s Please correct this and resubmit. "
 msgstr "Si us plau, corregeixi els errors i torni a enviar. "
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s Si us plau, contacta amb personal de la biblioteca. "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
 #, c-format
@@ -1007,6 +1001,37 @@ msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
 "%s Les contrasenyes no coincideixen. %s la contrasenya que has escollit és "
 "massa curta. "
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3738,7 +3763,7 @@ msgid "Ask for a discharge"
 msgstr "Demani la carta de lliberat"
 
 #. For the first occurrence,
-#. %1$s:  Branches.GetName( subscription.branchname ) 
+#. %1$s:  Branches.GetName( subscription.branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #, c-format
@@ -6815,81 +6840,6 @@ msgstr "Vista MARC: %s"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "MISSATGE 10:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "MISSATGE 11:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "MISSATGE  12:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "MISSATGE  13:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "MISSATGE  14:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "MISSATGE  15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "MISSATGE  1:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "MISSATGE  2:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "MISSATGE  3:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "MISSATGE 4:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "MISSATGE 5:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "MISSATGE 6:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "MISSATGE 7:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "MISSATGE 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "MISSATGE 9:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
 #, c-format
@@ -10155,12 +10105,6 @@ msgstr "No s’ha cancelat compartir llista"
 msgid "The subscription expired on %s"
 msgstr "Aquesta subscripció va expirar %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "El sistema no reconeix aquest codi de barres. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10266,12 +10210,6 @@ msgstr ""
 "Aquesta &quot;nube&quot; mostra les matèries més consultades al catàleg. "
 "Clica qualsevol matèria per veure els ítems de la col·lecció."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "Aquest carnet s'ha declarat perdut. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10311,34 +10249,10 @@ msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "S'ha eliminat l'ítem de la col·lecció. %s "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Ja tens aquest ítem en préstec."
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Aquest exemplar ja està prestat. %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "Aquest exemplar no pot sortir en préstec. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Aquest exemplar està reservat per un altre usuari. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -11026,12 +10940,6 @@ msgstr ""
 msgid "You cannot place any more suggestions"
 msgstr "Ho sentim, no pots fer sugerències de compra"
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "No pots renovar aquest exemplar un altre cop. %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -11125,12 +11033,6 @@ msgstr "Tens un crèdit de:"
 #, c-format
 msgid "You have already requested this title."
 msgstr "Ja has demanat aquest títol."
-
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr "Has agafat massa exemplars en préstec i no pots treure'n cap més.  %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
@@ -11226,13 +11128,6 @@ msgstr "Has de seleccionar una biblioteca de recollida. "
 msgid "You must select at least one item. "
 msgstr "Has de seleccionar com a mínim un ítem. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "Deus a la biblioteca %s i no pots fer nous préstecs. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11279,12 +11174,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "El teu compte ha estat congelat. Comentari de %s: "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Se t'ha cancel·lat el compte. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
 #, c-format
@@ -11294,12 +11183,6 @@ msgid ""
 msgstr ""
 "El teu compte ha caducat el %s.. Contacta amb la biblioteca per a més "
 "informació."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "El compte ha caducat. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format

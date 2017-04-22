@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-17 08:53-0300\n"
+"POT-Creation-Date: 2017-04-16 12:09-0300\n"
 "PO-Revision-Date: 2016-12-20 11:40+0200\n"
 "Last-Translator: Paul <vilhan@biblia.sk>\n"
 "Language-Team: SVK\n"
@@ -884,12 +884,6 @@ msgstr "%s Telefón:"
 msgid "%s Please correct this and resubmit. "
 msgstr "%s Opravte to, prosím, a odošlite znova. "
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s Obráťte sa prosím na pracovníka knižnice. "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
 #, c-format
@@ -1007,6 +1001,37 @@ msgstr "%s Zobrazenie menoviek iných užívateľov %s Zobrazenie menoviek %s: "
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr "%s Heslá sa nezhodujú. %s Vami zvolené heslo je prikrátke. "
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
+msgstr ""
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3730,7 +3755,7 @@ msgid "Ask for a discharge"
 msgstr "Požiadajte o uvoľnenie"
 
 #. For the first occurrence,
-#. %1$s:  Branches.GetName( subscription.branchname ) 
+#. %1$s:  Branches.GetName( subscription.branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #, c-format
@@ -6796,81 +6821,6 @@ msgstr "Náhľad MARC: %s"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "Hlásenie 10:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "Hlásenie 11:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "Hlásenie 12:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "Hlásenie 13:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "Hlásenie 14:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "Hlásenie 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "Hlásenie 1:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "Hlásenie 2:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "Hlásenie 3:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "Hlásenie 4:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "Hlásenie 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "Hlásenie 6:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "Hlásenie 7:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "Hlásenie 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "Hlásenie 9:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
 #, c-format
@@ -10130,12 +10080,6 @@ msgstr "Toto zdieľanie nebolo odobraté."
 msgid "The subscription expired on %s"
 msgstr "Predplatné vypršalo dňa %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "Systém nepozná tento čiarový kód. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10241,12 +10185,6 @@ msgstr ""
 "Kliknite nižšie na ktorýkoľvek predmet a zobrazia sa exempláre v našej "
 "zbierke."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "Tento preukaz bol nahlásený ako stratený. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10287,34 +10225,10 @@ msgid ""
 msgstr ""
 "Tento exemplár bol nastavený na automatické predĺženie a nedá sa predĺžiť"
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "Tento exemplár bol stiahnutý zo zbierky. %s "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Tento exemplár vám už bol vypožičaný."
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Tento exemplár si už vypožičal niekto iný. %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "Tento exemplár nie je určený na výpožičku. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Tento exemplár je rezervovaný inému čitateľovi. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -11001,12 +10915,6 @@ msgstr ""
 msgid "You cannot place any more suggestions"
 msgstr "Nemôžete už podať viac návrhov"
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "Tento exemplár už nemôžete obnoviť. %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -11101,12 +11009,6 @@ msgstr "Máte kredit vo výške:"
 msgid "You have already requested this title."
 msgstr "Tento titul ste už vyžiadali."
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr "Vypožičali ste si už priveľa exemplárov a viac vypožičať nemôžete. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
@@ -11200,13 +11102,6 @@ msgstr "Musíte vybrať knižnicu pre vyzdvihnutie. "
 msgid "You must select at least one item. "
 msgstr "Musíte vybrať aspoň jeden exemplár. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "Dlžíte knižnici %s a preto nemôžete viac požičiavať. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11251,12 +11146,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Váš účet bol zablokovaný. %s Poznámka: "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Váš účet bol zrušený. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
 #, c-format
@@ -11266,12 +11155,6 @@ msgid ""
 msgstr ""
 "Váš účet nie je platný od %s. Kontaktujte prosím Vašu knižnicu, ak si ho "
 "želáte obnoviť."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "Skončila platnosť vášho účtu. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format

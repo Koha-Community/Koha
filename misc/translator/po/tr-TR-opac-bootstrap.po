@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-17 09:02-0300\n"
-"PO-Revision-Date: 2017-03-17 12:00+0000\n"
+"POT-Creation-Date: 2017-04-16 12:25-0300\n"
+"PO-Revision-Date: 2017-04-20 11:41+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1489752002.000000\n"
+"X-POOTLE-MTIME: 1492688488.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -24,7 +24,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Kısıtlama gecikmişler işlemi tarafından eklendi %s %s %s %s"
+msgstr "\" %s Kısıtlama gecikenler işlemi tarafından eklendi %s %s %s %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:301
@@ -581,7 +581,7 @@ msgid ""
 "resolve this problem. %s "
 msgstr ""
 "%s pdf dosyası oluşturulurken bir hata oluştu. Bu sorunu gidermek için "
-"lütfen personelle irtibata geçiniz%s "
+"lütfen personelle iletişime geçiniz. %s"
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -786,13 +786,13 @@ msgstr "%s kataloğunda %s sonuç bulunamadı. "
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:87
 #, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s  Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
+msgstr "%s Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
 #, c-format
 msgid "%s Not allowed"
-msgstr "%s İzin verilmedi"
+msgstr "%s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
@@ -805,7 +805,7 @@ msgstr "%s Süresi uzatılamaz"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:257
 #, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "%s Süresi uzatılamaz %s İzin verilmedi"
+msgstr "%s Süresi uzatılamaz %s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -848,7 +848,7 @@ msgstr ""
 "%s Şifreniz eşleşmiyor. Lütfen yeni şifrenizi yeniden giriniz. %s %s Yeni "
 "şifreniz en az %s karakter uzunluğunda olmalıdır. %s %s Mevcut şifreniz "
 "yanlış girildi. Eğer sorun devam ederse, lütfen bir kütüphaneciden "
-"şifrenizin yenilemesini isteyin. %s %s Şifreniz başta ve/veya sonda boşluk "
+"şifrenizin yenilenmesini isteyin. %s %s Parolanız başta ve/veya sonda boşluk "
 "içermektedir. %s"
 
 #. %1$s:  IF ar.status == 'PENDING' 
@@ -874,12 +874,6 @@ msgstr "%s Telefon:"
 #, c-format
 msgid "%s Please correct this and resubmit. "
 msgstr "%s Lütfen bunu düzeltip yeniden gönderin."
-
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s Lütfen kütüphane personelinin bir üyesini görünüz "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
@@ -1001,6 +995,46 @@ msgstr ""
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr "%s Parolalar eşleşmiyor %s Seçmiş olduğunuz parola çok kısa."
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
+msgstr ""
+"%s Sistem bu barkodu tanımıyor. %s Çok fazla materyal ödünç aldınız ve daha "
+"fazla ödünç alamıyorsunuz. %s Bu materyal bir başkasına ödünç verilmiş. %s "
+"Bu materyalin süresini yeniden uzatamazsınız. %s Bu materyal ödünç verilmez. "
+"%s Kütüphaneye borcunuz var %s ve ödünç alamazsınız. %s Bu materyal "
+"koleksiyondan düşülmüş. %s Bu materyal kısıtlanmış. %s Bu materyal başka bir "
+"kullanıcı tarafından ayırtılmış. %s Bu materyal başka bir birime ait. %s "
+"Hesabınızın süresi dolmuş. %s Hesabınız askıya alınmış. %s Bu kart kayıp "
+"olarak bildirilmiş. %s İletişim bilgileriniz eksik görünüyor. %s İade tarihi "
+"geçerli değil. %s Lütfen bir kütüphaneci ile görüşün."
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3115,7 +3149,7 @@ msgstr "(overdue)"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
 #, c-format
 msgid "(published on %s%s by "
-msgstr "tarafından %s%s tarihinde yayımlanmıştır"
+msgstr "(yayın tarihi %s%s"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3734,7 +3768,7 @@ msgid "Ask for a discharge"
 msgstr "İlişik kesme talebinde bulunun"
 
 #. For the first occurrence,
-#. %1$s:  Branches.GetName( subscription.branchname ) 
+#. %1$s:  Branches.GetName( subscription.branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #, c-format
@@ -6529,7 +6563,7 @@ msgstr "Kütüphane: "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:134
 #, c-format
 msgid "Limit to any of the following:"
-msgstr "Aşağıdakilerden herhangi biriyle sınırlandırın:"
+msgstr "Aşağıdakilerden herhangi birine sınırlayın:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:11
 #, c-format
@@ -6811,81 +6845,6 @@ msgstr "MARC Görünümü: %s"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "MESAJ 10:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "MESAJ 11:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "MESAJ 12:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "MESAJ 13:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "MESAJ 14:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "MESAJ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "MESAJ 1:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "MESAJ 2:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "MESAJ 3:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "MESAJ 4:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "MESAJ 5:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "MESAJ 6:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "MESAJ 7:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "MESAJ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "MESAJ 9:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
 #, c-format
@@ -7637,7 +7596,7 @@ msgstr "Eser adına göre sırala"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:70
 #, c-format
 msgid "Order by: "
-msgstr "Buna göre sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:951
 #, c-format
@@ -7848,7 +7807,7 @@ msgstr "%s için makale isteğinde bulunun"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:83
 #, c-format
 msgid "Place hold"
-msgstr "Ayırma koy"
+msgstr "Ayırt"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:177
@@ -9026,7 +8985,7 @@ msgstr "Belirli bir materyal seçin:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #, c-format
 msgid "Select all"
-msgstr "Tümünü seçin"
+msgstr "Tümünü seç"
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:91
@@ -9463,22 +9422,22 @@ msgstr "Üzgünüz,oturumunuz zaman aşımına uğradı,lütfen tekrar giriş ya
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
 #, c-format
 msgid "Sort by:"
-msgstr "Sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
 #, c-format
 msgid "Sort by: "
-msgstr "Sırala: "
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
 msgid "Sort this list by: "
-msgstr "Bu listeyi sırala: "
+msgstr "Bu listenin sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Sorting: "
-msgstr "Sıralanıyor: "
+msgstr "Sıralama:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
 #, c-format
@@ -9615,7 +9574,7 @@ msgstr "Önerinizi gönderin"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #, c-format
 msgid "Subscribe to a subscription alert"
-msgstr "Abonelik uyarısına abone ol"
+msgstr "Abonelik uyarısına abone olun"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
@@ -10147,12 +10106,6 @@ msgstr "Paylaşım kaldırılmadı."
 msgid "The subscription expired on %s"
 msgstr "Abonelik %s tarihinde sona ermiştir"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "Sistem bu barkodu tanımıyor. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10258,12 +10211,6 @@ msgstr ""
 "Koleksiyonumuzda yer alan materyalleri görmek için aşağıdaki  konu "
 "başlıklarından herhangi birine tıklayın."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "Bu kart kayıp olarak bildirilmiştir. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10304,34 +10251,10 @@ msgid ""
 msgstr ""
 "Bu materyal otomatik süre uzatılması için programlandı ve süresi uzatılamaz"
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "Bu materyal koleksiyondan düşülmüştür. %s "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Bu materyal zaten size ödünç verilmiştir."
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Bu materyal başka bir kullanıcı üzerine ödünç verilmiş. %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "Bu materyal ödünç verilmez. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Bu materyal başka bir kullanıcı tarafından ayırtılmış. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -11021,12 +10944,6 @@ msgstr ""
 msgid "You cannot place any more suggestions"
 msgstr "Daha fazla öneri gönderemezsiniz"
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "Bu materyalin süresini tekrar uzatamazsınız %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -11122,13 +11039,6 @@ msgstr "Alacaklı olduğunuz miktar:"
 msgid "You have already requested this title."
 msgstr "Zaten bu eser adını istediniz."
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr ""
-"Çok fazla sayıda materyal ödünç aldınız ve daha fazlasını alamazsınız. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
@@ -11222,13 +11132,6 @@ msgstr "Materyali almak için bir kütüphane seçmelisiniz. "
 msgid "You must select at least one item. "
 msgstr "En az bir materyal seçmelisiniz. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "Kütüphaneye borcunuz var %s ve ödünç materyal alamazsınız. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11274,12 +11177,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Hesabınız dondurulmuştur. %s Açıklama:"
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Hesabınız askıya alınmıştır. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
 #, c-format
@@ -11289,12 +11186,6 @@ msgid ""
 msgstr ""
 "Hesabınızın süresi %s itibari ile dolmuştur. Lütfen hesabınızı yenilemek "
 "için kütüphaneye başvurun."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "Hesabınızın süresi dolmuştur. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format

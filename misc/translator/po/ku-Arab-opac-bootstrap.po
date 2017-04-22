@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: koha\n"
-"POT-Creation-Date: 2017-03-17 08:36-0300\n"
+"POT-Creation-Date: 2017-04-16 11:36-0300\n"
 "PO-Revision-Date: 2013-06-19 01:21+0300\n"
 "Last-Translator: Harem Abdullah <harem.suli@gmail.com>\n"
 "Language-Team: kurdish translation team\n"
@@ -853,12 +853,6 @@ msgstr "%s تەلەفۆن::"
 msgid "%s Please correct this and resubmit. "
 msgstr ""
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s تكایه‌ یه‌كێك له‌ كارمه‌ندانی كتێبخانه‌ ببینه‌ "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
 #, fuzzy, c-format
@@ -974,6 +968,37 @@ msgstr "تاگه‌كان %s له‌ به‌كارهێنه‌رانی تره‌�
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
 
 #. %1$s:  IF error 
@@ -3668,7 +3693,7 @@ msgid "Ask for a discharge"
 msgstr ""
 
 #. For the first occurrence,
-#. %1$s:  Branches.GetName( subscription.branchname ) 
+#. %1$s:  Branches.GetName( subscription.branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #, c-format
@@ -6748,81 +6773,6 @@ msgstr "بینینی مارك"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "په‌یامی ژماره‌ 10 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "په‌یامی ژماره‌ 11 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "په‌یامی ژماره‌ 12 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "په‌یامی ژماره‌ 13 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "په‌یامی ژماره‌ 14 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "په‌یامی ژماره‌ 15 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "په‌یامی ژماره‌ 1 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "په‌یامی ژماره‌ 2 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "په‌یامی ژماره‌ 3 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "په‌یامی ژماره‌ 4 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "په‌یامی ژماره‌ 5 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "په‌یامی ژماره‌ 6 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "په‌یامی ژماره‌ 7 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "په‌یامی ژماره‌ 8 :‏"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "په‌یامی ژماره‌ 9 :‏"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
 #, c-format
@@ -10082,12 +10032,6 @@ msgstr "ئه‌م ئایتمه‌ له‌ سه‌به‌ته‌كه‌ت لاد�
 msgid "The subscription expired on %s"
 msgstr "به‌شداربوونه‌كه‌ به‌سه‌رده‌چێت له‌ %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "سیسته‌مه‌كه‌ ئه‌م باڕكۆده‌ی نه‌ناسیه‌وه‌. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10191,12 +10135,6 @@ msgstr ""
 "كرته‌ له‌سه‌ر هه‌ربابه‌تێكی لای خواره‌وه‌ بكه‌ بۆ ئه‌وه‌ی ئایتمه‌كانی ناو كۆمه‌ڵه‌كه‌مان "
 "ببینیت"
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "ئه‌م ناسنامه‌یه‌ به‌ وونبوو له‌قه‌ڵه‌مدراوه‌. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10232,34 +10170,10 @@ msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "ئه‌م ئایتمه‌ له‌ كۆمه‌ڵه‌كه‌ هێنراوه‌ته‌ ده‌ره‌وه‌ %s "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, fuzzy, c-format
 msgid "This item is already checked out to you."
 msgstr "%sئه‌م ئایتمه‌ خۆی به‌خواستن به‌تۆ دراوه‌%s"
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "ئه‌م ئایتمه‌ دراوه‌ به‌ كه‌سێكی تر %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "ئه‌م ئایتمه‌ بۆ ‌خواستن نیه‌. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, fuzzy, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "ئه‌م ئایتمه‌ له‌لایه‌ن خوێنه‌رێكی تره‌وه‌ نۆره‌ی بۆگیراوه‌ و ده‌درێت به‌و%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -10944,12 +10858,6 @@ msgstr ""
 msgid "You cannot place any more suggestions"
 msgstr "پێشنیاره‌كانم بۆ كڕین"
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "ناتوانیت دووباره‌ ئه‌م ئایتمه‌ نوێ بكه‌یته‌وه‌ %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, fuzzy, c-format
@@ -11043,12 +10951,6 @@ msgstr "له‌ ئێستادا بالانسه‌كه‌ت"
 msgid "You have already requested this title."
 msgstr "له‌ ئێستادا داوای ئه‌م ناونیشانه‌ت كردووه‌."
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, fuzzy, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr "ئایتمی زۆرت خواستووه‌ و ناتوانی هیچ ئایتمێكی تر بخوازیت. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
@@ -11139,13 +11041,6 @@ msgstr "پێویسته‌ كتێبخانه‌یه‌ك ده‌ستنیشان ب�
 msgid "You must select at least one item. "
 msgstr "پێویسته‌ لایه‌نی كه‌م ئایتمێك ده‌ستنیشان بكه‌یت "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, fuzzy, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "قه‌رزاری كتێبخانه‌یت %s و ناتوانیت بخوازیت. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11185,12 +11080,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "پێگه‌كه‌ت ڕاگیراوه‌  %s هه‌تاوه‌كو "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "پێگه‌كه‌ت ڕاگیراوه‌. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
 #, fuzzy, c-format
@@ -11199,12 +11088,6 @@ msgid ""
 "renew your account."
 msgstr ""
 "ناسنامه‌كه‌ت به‌سه‌رچووه‌ . تكایه‌ په‌یوه‌ندی به‌ كتێبخانه‌وه‌ بكه‌ بۆ زانیاری زیاتر."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "پێگه‌كه‌ت به‌سه‌رچووه‌ %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format

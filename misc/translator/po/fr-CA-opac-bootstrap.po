@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-17 08:22-0300\n"
-"PO-Revision-Date: 2017-03-22 14:44+0000\n"
-"Last-Translator: Alexandre <alexandre.breton@ccsr.qc.ca>\n"
+"POT-Creation-Date: 2017-04-16 11:08-0300\n"
+"PO-Revision-Date: 2017-04-21 12:41+0000\n"
+"Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1490193858.000000\n"
+"X-POOTLE-MTIME: 1492778482.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -907,12 +907,6 @@ msgstr "%s Téléphone&nbsp;:"
 msgid "%s Please correct this and resubmit. "
 msgstr "%s Veuillez corriger les erreurs et soumettre à nouveau. "
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s Veuillez contacter un bibliothécaire. "
-
 #
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
@@ -1035,6 +1029,48 @@ msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
 "%s Le mot de passe ne correspond pas au texte saisi. %s Le mot de passe "
 "choisi est trop court. "
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#, c-format
+#, fuzzy, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
+msgstr ""
+"%s Le système ne reconnait pas ce code à barres. %s Vous avez empruntés trop "
+"d'exemplaires et vous ne pouvez pas en emprunter d'autres.%s Cet exemplaire "
+"est emprunté par quelqu'un d'autre. %s Vous ne pouvez pas renouveler cet "
+"exemplaire encore une fois. %s Cet exemplaire est exclu du prêt. %s Vous "
+"devez %s à la bibliothèque, vous ne pouvez pas emprunter. %s Cet exemplaire "
+"est retiré de la collection. %s Cet exemplaire est en accès restreint. %s "
+"Cet exemplaire est réservé par un autre utilisateur. %s Cette carte a été "
+"déclarée perdu. %s Vos informations sont incomplète. %s La date de retour "
+"n'est pas valide. %s Merci d'aller voir un membre du personnel de la "
+"bibliothèque. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3779,7 +3815,7 @@ msgid "Ask for a discharge"
 msgstr "Demander une quittance"
 
 #. For the first occurrence,
-#. %1$s:  Branches.GetName( subscription.branchname ) 
+#. %1$s:  Branches.GetName( subscription.branchcode ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:799
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:802
 #, c-format
@@ -6582,7 +6618,7 @@ msgstr "Site"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:171
 #, c-format
 msgid "Library catalog"
-msgstr "Tous"
+msgstr "Tous les mots"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:215
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:59
@@ -6878,81 +6914,6 @@ msgstr "Vue MARC: %s"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:64
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "MESSAGE 10:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "MESSAGE 11:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "MESSAGE 12:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "MESSAGE 13:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:72
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "MESSAGE 14:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:74
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "MESSAGE 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "MESSAGE 1:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "MESSAGE 2:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "MESSAGE 3:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "MESSAGE 4:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "MESSAGE 5:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "MESSAGE 6:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "MESSAGE 7:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:60
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "MESSAGE 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "MESSAGE 9:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
 #, c-format
@@ -9569,7 +9530,7 @@ msgstr "Tri par&nbsp;: "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
 msgid "Sort this list by: "
-msgstr "Tri cette liste par&nbsp;: "
+msgstr "Trier cette liste par&nbsp;: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
@@ -10255,12 +10216,6 @@ msgstr "Le partage a été supprimé."
 msgid "The subscription expired on %s"
 msgstr "L'abonnement a expiré le %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:46
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "Ce code à barres n'est pas reconnu. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10369,12 +10324,6 @@ msgstr ""
 "catalogue. Cliquez sur l'un d'entre eux pour voir les documents qui y sont "
 "attachés."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:70
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "Cette carte a été déclarée perdue. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10413,37 +10362,13 @@ msgstr "Ce document n'existe pas."
 msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
-"Cet exemplaire a été programmée pour être renouvelée automatiquement et ne "
-"peut être renouvelé autrement. "
-
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:58
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "Cette exemplaire a été retiré de la collection. %s "
+"Cet exemplaire est programmé pour être renouvelé automatiquement et ne peut "
+"être renouvelé autrement. "
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Ce document est déjà en prêt sur votre compte. "
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:50
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Cet exemplaire est prêté à quelqu'un d'autre. %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:54
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "Cet exemplaire est exclu du prêt. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:62
-#, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Cet exemplaire est réservé par un autre utilisateur. %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -11146,12 +11071,6 @@ msgstr ""
 msgid "You cannot place any more suggestions"
 msgstr "Vous ne pouvez plus faire de suggestions."
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:52
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "Vous ne pouvez pas renouveler une nouvelle fois cet exemplaire. %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -11247,12 +11166,6 @@ msgstr "Vous avez un crédit de:"
 #, c-format
 msgid "You have already requested this title."
 msgstr "Vous avez déjà ce titre en réservation."
-
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr "Vous avez atteint le nombre de prêts maximum. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
@@ -11353,13 +11266,6 @@ msgstr "Vous devez sélectionner un site de retrait. "
 msgid "You must select at least one item. "
 msgstr "Vous devez sélectionner au moins un document. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:56
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "Vous avez une dette de %s et ne pouvez pas emprunter. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11408,12 +11314,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Votre compte a été suspendu. %s Commentaire: "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:68
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Votre compte a été suspendu. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:68
 #, c-format
@@ -11423,12 +11323,6 @@ msgid ""
 msgstr ""
 "Votre compte est expiré depuis le %s. Veuillez contacter votre bibliothèque "
 "pour plus d'information."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:66
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "Votre compte a expiré. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
 #, c-format
@@ -11597,8 +11491,8 @@ msgid ""
 "soon after the checkout date for this item to be renewed. %s This item is on "
 "hold for another patron. %s %s "
 msgstr ""
-"Votre renouvellement n'a pas fonctionné pour la(les) raison(s) suivante(s): %"
-"s %s Votre compte est expiré. Merci de contacter la bibliothèque pour plus "
+"Votre renouvellement n'a pas fonctionné pour la(les) raison(s) suivante(s): "
+"%s %s Votre compte est expiré. Merci de contacter la bibliothèque pour plus "
 "d'informations. %s Vous avez atteint le maximum de renouvellements "
 "possibles. %s La date de prêt de cet exemplaire est trop récente pour le "
 "renouveler. %s Cet exemplaire est réservé par un autre utilisateur. %s %s "
@@ -11734,7 +11628,7 @@ msgstr ""
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:19
 msgid "[% LibraryName |html %] Search RSS feed"
-msgstr "[% LibraryName |html %] Chercher flux RSS "
+msgstr "[% LibraryName |html %] Chercher le fil RSS "
 
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:85
