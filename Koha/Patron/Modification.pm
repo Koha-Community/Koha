@@ -104,7 +104,7 @@ sub approve {
 
     # Take care of extended attributes
     if ( $self->extended_attributes ) {
-        $extended_attributes = try { decode_json( $self->extended_attributes ) }
+        $extended_attributes = try { from_json( $self->extended_attributes ) }
         catch {
             Koha::Exceptions::Patron::Modification::InvalidData->throw(
                 'The passed extended_attributes is not valid JSON');

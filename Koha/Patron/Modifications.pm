@@ -97,7 +97,7 @@ sub pending {
     while ( my $row = $sth->fetchrow_hashref() ) {
         foreach my $key ( keys %$row ) {
             if ( defined $row->{$key} && $key eq 'extended_attributes' ) {
-                my $attributes = decode_json( $row->{$key} );
+                my $attributes = from_json( $row->{$key} );
                 my @pending_attributes;
                 foreach my $attr ( @{$attributes} ) {
                     push @pending_attributes,
