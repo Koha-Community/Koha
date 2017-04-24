@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-14 20:27-0300\n"
-"PO-Revision-Date: 2016-11-25 13:41+0000\n"
+"POT-Creation-Date: 2017-04-16 14:28-0300\n"
+"PO-Revision-Date: 2017-04-19 07:33+0000\n"
 "Last-Translator: Ugur <ugurbulgan@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1480081261.000000\n"
+"X-POOTLE-MTIME: 1492587236.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -24,7 +24,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Kısıtlama gecikmişler işlemi tarafından eklendi %s %s %s %s"
+msgstr "\" %s Kısıtlama gecikenler işlemi tarafından eklendi %s %s %s %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:304
@@ -154,7 +154,7 @@ msgstr "%s %s %s Materyal beklemede "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:9
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:10
 #, c-format
 msgid "%s %s %s Koha online %s "
 msgstr "%s %s %s Koha çevrimiçi%s  "
@@ -536,7 +536,7 @@ msgid ""
 "resolve this problem. %s "
 msgstr ""
 "%s pdf dosyası oluşturulurken bir hata oluştu. Bu sorunu gidermek için "
-"lütfen personelle irtibata geçiniz%s "
+"lütfen personelle iletişime geçiniz. %s"
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
@@ -703,7 +703,7 @@ msgid "%s Item(s) checked out"
 msgstr "%s Ödünç verilmiş materyal(ler)"
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:112
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:113
 #, c-format
 msgid "%s Log out"
 msgstr "%s Oturumu sonlandır"
@@ -727,13 +727,13 @@ msgstr "%s kataloğunda %s sonuç bulunamadı. "
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:86
 #, c-format
 msgid "%s No results, try to change filters. %s "
-msgstr "%s  Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
+msgstr "%s Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
 #, c-format
 msgid "%s Not allowed"
-msgstr "%s İzin verilmedi"
+msgstr "%s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:264
@@ -746,7 +746,7 @@ msgstr "%s Süresi uzatılamaz"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:266
 #, c-format
 msgid "%s Not renewable %s Not allowed "
-msgstr "%s Süresi uzatılamaz %s İzin verilmedi"
+msgstr "%s Süresi uzatılamaz %s İzin verilmiyor"
 
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
@@ -783,11 +783,11 @@ msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Your new "
 "password must be at least %s characters long. %s %s Your current password "
 "was entered incorrectly. If this problem persists, please ask a librarian to "
-"re-set your password for you. %s %s Your password contains leading and/or "
+"reset your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
 "%s Şifreniz eşleşmiyor. Lütfen yeni şifrenizi yeniden giriniz. %s %s Yeni "
-"şifreniz en az %s karakter uzunluğunda olmalıdır %s %s mevcut şifreniz "
+"şifreniz en az %s karakter uzunluğunda olmalıdır. %s %s Mevcut şifreniz "
 "yanlış girildi. Eğer sorun devam ederse, lütfen bir kütüphaneciden "
 "şifrenizin yenilenmesini isteyin. %s %s Parolanız başta ve/veya sonda boşluk "
 "içermektedir. %s"
@@ -2957,7 +2957,7 @@ msgstr "(overdue)"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
 #, c-format
 msgid "(published on %s%s by "
-msgstr "tarafından %s%s tarihinde yayımlanmıştır"
+msgstr "(yayın tarihi %s%s"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search 
@@ -3287,7 +3287,7 @@ msgstr "Genç"
 msgid "Adult"
 msgstr "Yetişkin"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:270
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:271
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:13
 #, c-format
 msgid "Advanced search"
@@ -3316,7 +3316,7 @@ msgid "All item types"
 msgstr "Tüm materyal türleri"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:20
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:227
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:228
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:216
 #, c-format
 msgid "All libraries"
@@ -3580,8 +3580,8 @@ msgstr ""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:176
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:178
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:177
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:179
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:218
@@ -3647,7 +3647,7 @@ msgstr "Yazar:"
 msgid "Authority"
 msgstr "Otorite"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:273
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:274
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:33
@@ -3804,7 +3804,7 @@ msgstr "Kısa tarih"
 msgid "Broader Term"
 msgstr "Daha Geniş Terim"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:272
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #, c-format
 msgid "Browse by hierarchy"
 msgstr "Hiyerarşik sıralamaya göre göz at"
@@ -3872,10 +3872,10 @@ msgstr "Yer Numarası"
 msgid "Call no."
 msgstr "Yer no"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:197
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:199
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:203
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:205
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:198
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:200
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:204
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:206
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:228
@@ -3916,7 +3916,7 @@ msgstr "Yer numarası:"
 msgid "Call number: %s"
 msgstr "Yer numarası: %s"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:329
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:330
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:128
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
@@ -3980,7 +3980,7 @@ msgstr "Ayırtılamaz"
 msgid "Card number:"
 msgstr "Kart numarası:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:24
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:25
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #, c-format
 msgid "Cart"
@@ -4220,7 +4220,7 @@ msgid "Close window"
 msgstr "Pencereyi kapat"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:23
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:24
 msgid "Collect items you are interested in"
 msgstr "İlgilendiğiniz materyalleri derleyin"
 
@@ -4387,7 +4387,7 @@ msgstr "Ders #"
 msgid "Course number:"
 msgstr "Ders numarası:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:271
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:272
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
@@ -4622,7 +4622,7 @@ msgid "Delete this list"
 msgstr "Bu listeyi sil"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:104
 msgid "Delete your search history"
 msgstr "Arama geçmişini sil"
 
@@ -4751,7 +4751,7 @@ msgstr "Kütüphane kartınız yok mu?"
 msgid "Don't have a password yet?"
 msgstr "Henüz parolanız yok mu?"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:324
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:325
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
@@ -5360,8 +5360,8 @@ msgstr ""
 "Bir kaynakça veya materyal tanımlayıcıları ile ilişkili öğeleri "
 "kullanılabilirliği ile listesini döndürür."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:220
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:246
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:221
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:247
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:138
@@ -5390,7 +5390,7 @@ msgid "GoToBibliographicRequestPage "
 msgstr "BibliyografikİstekSayfasınaGit "
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:235
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:236
 msgid "Groups"
 msgstr "Gruplar"
 
@@ -5643,8 +5643,8 @@ msgstr "ISBD"
 msgid "ISBD view"
 msgstr "ISBD Görünümü"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:186
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:188
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:187
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:189
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:85
@@ -5802,7 +5802,7 @@ msgstr "Bir CAS hesabınız varsa, oturum açmak için lütfen buraya tıklayın
 msgid "If you have a CAS account, you may use that below."
 msgstr "Bir CAS hesabınız varsa, bunu aşağıda kullanabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:312
 #, c-format
 msgid "If you have a Shibboleth account, please "
 msgstr "Bir Shibboleth hesabınız varsa, lütfen"
@@ -6156,7 +6156,7 @@ msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr "Düzey 4: Sağlam/etki alanı belirli bulma platformları"
 
 #. OPTGROUP
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:228
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:229
 msgid "Libraries"
 msgstr "Kütüphaneler"
 
@@ -6167,8 +6167,8 @@ msgstr "Kütüphaneler"
 msgid "Library"
 msgstr "Kütüphane"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:166
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:168
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:167
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:169
 #, c-format
 msgid "Library catalog"
 msgstr "Kütüphane Kataloğu"
@@ -6187,7 +6187,7 @@ msgstr "Kütüphane: "
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:133
 #, c-format
 msgid "Limit to any of the following:"
-msgstr "Aşağıdakilerden herhangi biriyle sınırlandırın:"
+msgstr "Aşağıdakilerden herhangi birine sınırlayın:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:11
 #, c-format
@@ -6257,7 +6257,7 @@ msgstr "Liste güncellendi."
 msgid "List(s) this item appears in: "
 msgstr "Materyalin görüntülendiği Liste(ler): "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:38
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:51
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:624
@@ -6282,7 +6282,7 @@ msgstr "Yükleniyor"
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:312
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:313
 #, c-format
 msgid "Local Login"
 msgstr "Yerel Oturum Açma"
@@ -6319,7 +6319,7 @@ msgid "Locations"
 msgstr "Konumlar"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:328
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:329
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -6338,7 +6338,7 @@ msgstr "Oturum Aç"
 msgid "Log in to add tags."
 msgstr "Etiket eklemek için oturumu açın."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:73
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:74
 #, c-format
 msgid "Log in to create your own lists"
 msgstr "Kendi Listelerinizi Oluşturmak için Oturum Açınız"
@@ -6348,9 +6348,9 @@ msgstr "Kendi Listelerinizi Oluşturmak için Oturum Açınız"
 msgid "Log in to see your own saved tags."
 msgstr "kaydettiğiniz etiketlerinizi görebilmek için sisteme oturum açın."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:92
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:94
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:299
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:93
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:95
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:300
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:948
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:288
@@ -6385,7 +6385,7 @@ msgstr ""
 msgid "Login"
 msgstr "Oturum aç"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:317
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:318
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
@@ -6641,7 +6641,7 @@ msgstr "Daha fazla seçenek"
 msgid "More searches "
 msgstr "Başka yerde arama"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:277
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:278
 #, c-format
 msgid "Most popular"
 msgstr "En Çok Beğenilenler"
@@ -6701,7 +6701,7 @@ msgstr ""
 msgid "New comment on %s %s, %s%s"
 msgstr "%s %s, %s%s hakkındaki yeni yorum"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:70
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:71
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:497
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:648
@@ -6882,7 +6882,7 @@ msgstr "Geçirilen operasyon parametresi yok."
 msgid "No physical items for this record"
 msgstr "Bu kayda ilişkin materyal yok"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:69
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:70
 #, c-format
 msgid "No private lists"
 msgstr "Özel listeler yok"
@@ -6892,7 +6892,7 @@ msgstr "Özel listeler yok"
 msgid "No private lists."
 msgstr "Özel liste yok."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:52
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:53
 #, c-format
 msgid "No public lists"
 msgstr "Genel liste yok"
@@ -7246,7 +7246,7 @@ msgstr "Eser adına göre sırala"
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:70
 #, c-format
 msgid "Order by: "
-msgstr "Buna göre sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
 #, c-format
@@ -7319,7 +7319,7 @@ msgstr "Şifre"
 msgid "Password updated"
 msgstr "Parola Güncellendi"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:318
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:319
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:71
@@ -7397,7 +7397,7 @@ msgstr "Materyali ayırtın:"
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:82
 #, c-format
 msgid "Place hold"
-msgstr "Ayırma koy"
+msgstr "Ayırt"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
 #, c-format
@@ -7666,7 +7666,7 @@ msgstr "Programlanmış metinler"
 msgid "Public"
 msgstr "Açık"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:41
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:42
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:635
@@ -7750,8 +7750,8 @@ msgstr "Yayıncının yeri"
 msgid "Publisher:"
 msgstr "Yayıncı:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:280
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:282
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:281
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:283
 #, c-format
 msgid "Purchase suggestions"
 msgstr "Satın alma önerileri"
@@ -7812,7 +7812,7 @@ msgstr "Öneri nedeni: "
 msgid "RecallItem "
 msgstr "Materyali geri çağır "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:274
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:275
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:16
 #, c-format
 msgid "Recent comments"
@@ -7843,7 +7843,7 @@ msgstr "Taramanızı gözden geçirin"
 msgid "Register a new account"
 msgstr "Yeni bir hesaba kaydolun"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:324
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:325
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:75
 #, c-format
@@ -8272,10 +8272,10 @@ msgstr "Ara "
 
 #. %1$s:  UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) 
 #. %2$s:  IF ( mylibraryfirst ) 
-#. %3$s:  mylibraryfirst 
+#. %3$s:  Branches.GetName( mylibraryfirst ) 
 #. %4$s:  END 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:156
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:157
 #, c-format
 msgid "Search %s %s (in %s only) %s %s "
 msgstr "Ara %s %s (içinde %s sadece) %s %s"
@@ -8299,7 +8299,7 @@ msgstr "Bu yazarın eserlerinde ara"
 msgid "Search for:"
 msgstr "Katalogda arayın:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:104
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:34
 #, c-format
@@ -8415,7 +8415,7 @@ msgstr "Belirli bir materyal seçin:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:589
 #, c-format
 msgid "Select all"
-msgstr "Tümünü seçin"
+msgstr "Tümünü seç"
 
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:91
@@ -8510,8 +8510,8 @@ msgid "Serial: %s "
 msgstr "Süreli Yayınlar: %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:25
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:191
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:193
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:192
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:194
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
 #, c-format
 msgid "Series"
@@ -8593,7 +8593,7 @@ msgstr "Linkedln üzerinde paylaş"
 msgid "Shelving location"
 msgstr "Raf konumu"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:310
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:80
 #, c-format
 msgid "Shibboleth Login"
@@ -8621,7 +8621,7 @@ msgid "Show last 50 items"
 msgstr "Son 50 materyali göster"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:38
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:39
 msgid "Show lists"
 msgstr "Listeleri göster"
 
@@ -8806,7 +8806,7 @@ msgid ""
 msgstr ""
 "Üzgünüz, Shibboleth kimliğiniz geçerli bir kütüphane kimliği ile eşleşmiyor."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:307
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:308
 #, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity. If "
@@ -8823,22 +8823,22 @@ msgstr "Üzgünüz,oturumunuz zaman aşımına uğradı,lütfen tekrar giriş ya
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:252
 #, c-format
 msgid "Sort by:"
-msgstr "Sırala:"
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:211
 #, c-format
 msgid "Sort by: "
-msgstr "Sırala: "
+msgstr "Sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
 #, c-format
 msgid "Sort this list by: "
-msgstr "Bu listeyi sırala: "
+msgstr "Bu listenin sıralama düzeni:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "Sorting: "
-msgstr "Sıralanıyor: "
+msgstr "Sıralama:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:279
 #, c-format
@@ -8899,15 +8899,15 @@ msgstr "İkinci basamak: Barkodu her bir materyal için teker teker okutturunuz.
 msgid "Su"
 msgstr "Pzr"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:181
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:183
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:182
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:184
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:45
 #, c-format
 msgid "Subject"
 msgstr "Konu"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:276
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:277
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:13
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:32
 #, c-format
@@ -8973,7 +8973,7 @@ msgstr "Önerinizi gönderin"
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:22
 #, c-format
 msgid "Subscribe to a subscription alert"
-msgstr "Abonelik uyarısına abone ol"
+msgstr "Abonelik uyarısına abone olun"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
@@ -9136,7 +9136,7 @@ msgstr "Alan kodu"
 msgid "Tag browser"
 msgstr "Etiket tarayıcısı"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:275
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:276
 #, c-format
 msgid "Tag cloud"
 msgstr "Etiket bulutu"
@@ -9716,8 +9716,8 @@ msgstr "Yazdırma onay bekleme süresi aşıldı"
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:171
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:173
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:172
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:174
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
@@ -9863,8 +9863,8 @@ msgid "Type of heading"
 msgstr "Başlık Türü"
 
 #. INPUT type=text name=q
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:214
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:216
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:215
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:217
 msgid "Type search term"
 msgstr "Arama terimlerini girin"
 
@@ -9884,7 +9884,7 @@ msgid "URL(s)"
 msgstr "URL(ler)"
 
 #. For the first occurrence,
-#. %1$s:  BIBLIO_RESULT.url |url 
+#. %1$s:  BIBLIO_RESULT.url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:127
 #, c-format
@@ -10000,8 +10000,8 @@ msgstr "VHS Teyp / Video Kaset"
 msgid "Verification:"
 msgstr "Doğrulama:"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:49
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:66
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:67
 #, c-format
 msgid "View All"
 msgstr "Hepsini gör"
@@ -10040,7 +10040,7 @@ msgid "View on Amazon.com"
 msgstr "Amazon.com üzerinde görüntüle"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:103
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:104
 msgid "View your search history"
 msgstr "Arama geçmişinizi görüntüleyin"
 
@@ -10106,7 +10106,7 @@ msgstr "Çrş."
 msgid "Wednesday"
 msgstr "Çarşamba"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:98
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:99
 #, c-format
 msgid "Welcome, "
 msgstr "Hoşgeldiniz, "
@@ -10559,8 +10559,8 @@ msgstr "Sepetiniz "
 msgid "Your cart is currently empty"
 msgstr "Sepetiniz şu anda boş"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:18
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:28
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:19
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:29
 #, c-format
 msgid "Your cart is empty."
 msgstr "Sepetiniz boş."
@@ -10650,7 +10650,7 @@ msgstr ""
 msgid "Your list : %s "
 msgstr "Listeniz: %s "
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:56
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:57
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:629
@@ -11004,7 +11004,7 @@ msgstr "katalog ana sayfa"
 msgid "change your password"
 msgstr "parolanızı değiştirin"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:311
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:312
 #, c-format
 msgid "click here to login"
 msgstr "oturum açmak için buraya tıklayın"
@@ -11718,7 +11718,7 @@ msgstr "özetiniz"
 msgid "your tags"
 msgstr "etiketleriniz"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:298
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:299
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:139
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:266
