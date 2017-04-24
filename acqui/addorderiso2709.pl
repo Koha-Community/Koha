@@ -137,6 +137,7 @@ if ($op eq ""){
     my $duplinbatch;
     my $imported = 0;
     my @import_record_id_selected = $input->multi_param("import_record_id");
+    my @overlay = $input->param("overlay");
     my @quantities = $input->multi_param('quantity');
     my @prices = $input->multi_param('price');
     my @budgets_id = $input->multi_param('budget_id');
@@ -155,15 +156,16 @@ if ($op eq ""){
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
         my $match = GetImportRecordMatches( $biblio->{'import_record_id'}, 1 );
         my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
+        my $c_overlay = shift @overlay;
         my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
         my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
         my $c_discount = shift ( @discount);
-        $c_discount = $c_discount / 100 if $c_discount > 1;
+        $c_discount = $c_discount / 100 if $c_discount && $c_discount > 1;
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
         my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
 
-        # 1st insert the biblio, or find it through matcher
-        unless ( $biblionumber ) {
+        # INSERT the biblio if no match found, or if we want to overlay the existing match
+        if ( not($biblionumber) || $c_overlay ) {
             if ($matcher_id) {
                 if ( $matcher_id eq '_TITLE_AUTHOR_' ) {
                     $duplifound = 1 if FindDuplicate($marcrecord);
@@ -191,8 +193,14 @@ if ($op eq ""){
                     }
                 }
             }
-            ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
+            ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' ) unless $c_overlay;
+            ModBiblio( $marcrecord, $biblionumber, $cgiparams->{'frameworkcode'} || '' ) if $c_overlay;
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
+
+            #We need to provide information to koha.import_record_matches to tell Koha that this import_record matches the
+            #just AddBiblio'd biblio. This is necessary to prevent adding the same import_record to koha.biblio many times.
+            SetImportRecordBiblioMatch($biblio->{'import_record_id'}, $biblionumber);
+
             # 2nd add authorities if applicable
             if (C4::Context->preference("BiblioAddsAuthorities")){
                 my $headings_linked =BiblioAutoLink($marcrecord, $cgiparams->{'frameworkcode'});
@@ -419,12 +427,6 @@ if ($op eq ""){
             my @serials      = $input->multi_param('serial');
             my @ind_tag   = $input->multi_param('ind_tag');
             my @indicator = $input->multi_param('indicator');
-            my $item;
-            push @{ $item->{tags} },         $tags[0];
-            push @{ $item->{subfields} },    $subfields[0];
-            push @{ $item->{field_values} }, $field_values[0];
-            push @{ $item->{ind_tag} },      $ind_tag[0];
-            push @{ $item->{indicator} },    $indicator[0];
             my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values, \@indicator, \@ind_tag );
             my $record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
             for (my $qtyloop=1;$qtyloop <= $c_quantity;$qtyloop++) {
@@ -512,9 +514,11 @@ sub import_batches_list {
 
 sub import_biblios_list {
     my ($template, $import_batch_id) = @_;
+    #Recheck duplicates from this batch, because they tend to change a lot! Using the default 1st matcher
+    C4::ImportBatch::BatchFindDuplicates( $import_batch_id, C4::Matcher->fetch(1) );
     my $batch = GetImportBatch($import_batch_id,'staged');
     return () unless $batch and $batch->{import_status} =~ /^staged$|^reverted$/;
-    my $biblios = GetImportRecordsRange($import_batch_id,'','',$batch->{import_status});
+    my $biblios = GetImportRecordsRange($import_batch_id,'','',undef);
     my @list = ();
     my $item_error = 0;
 
@@ -630,6 +634,9 @@ sub import_biblios_list {
         } else {
             $cellrecord{'item_error'} = 1;
         }
+
+        get_matched_cellrecord_items( \%cellrecord );
+
         push @list, \%cellrecord;
 
         if ($alliteminfos == -1 || scalar(@$alliteminfos) == 0) {
@@ -709,6 +716,27 @@ sub add_matcher_list {
         }
     }
     $template->param(available_matchers => \@matchers);
+}
+
+#Get the Items already in Koha for this import_record.
+#A summary of them is displayed for the user.
+sub get_matched_cellrecord_items {
+    my $cellrecord = shift;
+
+    if ($cellrecord->{match_biblionumber}) {
+        my $itemsCountByBranch = C4::Items::GetItemsCountByBranch( $cellrecord->{match_biblionumber} );
+        my $loginBranchcode = $template->{VARS}->{LoginBranchcode};
+        my $totalItemsCount = 0;
+        my @availabilityMap;
+        foreach my $homebranch (sort keys %$itemsCountByBranch) {
+            push (@availabilityMap, $homebranch.' = '.$itemsCountByBranch->{ $homebranch }->{ count });
+            $totalItemsCount += $itemsCountByBranch->{ $homebranch }->{ count };
+        }
+        my $loginBranchcount = $itemsCountByBranch->{ $loginBranchcode }->{ count };
+        $cellrecord->{loginBranchItemsCount} = $loginBranchcount || '0';
+        $cellrecord->{totalItemsCount} = $totalItemsCount;
+        $cellrecord->{availabilityMap} = join("\n", @availabilityMap);
+    }
 }
 
 sub get_infos_syspref {

@@ -82,6 +82,7 @@ BEGIN {
     SetImportRecordStatus
     GetImportRecordMatches
     SetImportRecordMatches
+    SetImportRecordBiblioMatch
 	);
 }
 
@@ -1519,6 +1520,30 @@ sub SetImportRecordMatches {
     foreach my $match (@matches) {
         $sth->execute($import_record_id, $match->{'record_id'}, $match->{'score'});
     }
+}
+
+=head SetImportRecordBiblioMatch
+
+    SetImportRecordBiblioMatch( $import_record_id, $biblionumber, [$score] );
+
+This sets the given Koha Biblio as a strong match for the given $import_record_id.
+This is useful for ex. when you add an item from a staged file. The old import_record persist
+and a new Biblio is created as a clone of the import_record. This function stores the strong
+relationship between import_record and Biblio.
+
+@PARAM1 $import_record_id, the koha.import_record.import_record_id
+@PARAM2 $biblionumber, the new koha.biblio.biblionumber
+@PARAM3 $score, OPTIONAL, the matching score, higher is better. Defaults to 2000000000
+        Don't set it unless you have to.
+=cut
+
+sub SetImportRecordBiblioMatch {
+    my ($import_record_id, $biblionumber, $score) = @_;
+
+    my $matchedBiblioStub;
+    $matchedBiblioStub->{record_id} = $biblionumber;
+    $matchedBiblioStub->{score}     = ($score) ? $score : 2000000000; #koha.import_record_matches.score int(11) --so (almost) max it!
+    SetImportRecordMatches( $import_record_id, $matchedBiblioStub );
 }
 
 =head2 RecordsFromISO2709File
