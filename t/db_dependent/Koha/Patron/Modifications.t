@@ -17,6 +17,8 @@
 
 use Modern::Perl;
 
+use utf8;
+
 use Test::More tests => 6;
 use Test::Exception;
 
@@ -304,7 +306,7 @@ subtest 'pending_count() and pending() tests' => sub {
             surname            => 'Smith',
             firstname          => 'Sandy',
             verification_token => $verification_token_2,
-            extended_attributes => '[{"code":"CODE_2","value":"chau"},{"code":"CODE_2","value":"ciao"}]'
+            extended_attributes => '[{"code":"CODE_2","value":"año"},{"code":"CODE_2","value":"ciao"}]'
         }
     )->store();
 
@@ -341,7 +343,7 @@ subtest 'pending_count() and pending() tests' => sub {
     is( ref($p2_pm_attribute_1), 'Koha::Patron::Attribute', 'patron modification has single attribute object' );
     is( ref($p2_pm_attribute_2), 'Koha::Patron::Attribute', 'patron modification has single attribute object' );
 
-    is( $p2_pm_attribute_1->attribute, 'chau', 'patron modification has the right attribute change' );
+    is( $p2_pm_attribute_1->attribute, 'año', 'patron modification has the right attribute change' );
     is( $p2_pm_attribute_2->attribute, 'ciao', 'patron modification has the right attribute change' );
 
     is( Koha::Patron::Modifications->pending_count($library_1),
