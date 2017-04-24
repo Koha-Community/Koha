@@ -14,6 +14,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.14'
     },
+    'Plack::Middleware::Debug' => {
+        'usage'    => 'Plack',
+        'required' => '1',
+        'min_ver'  => '0.16'
+    },
     'XML::LibXSLT' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -816,6 +821,11 @@ our $PERL_DEPS = {
         'usage'    => 'Test code coverage',
         'required' => '1',
         'min_ver'  => '1.01',
+    },
+    'Devel::Size' => {
+        'usage'    => 'Test code coverage',
+        'required' => '1',
+        'min_ver'  => '0.77',
     },
     'Log::Log4perl' => {
         'usage'    => 'Core',
