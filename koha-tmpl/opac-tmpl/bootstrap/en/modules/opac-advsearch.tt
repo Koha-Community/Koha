@@ -143,7 +143,7 @@
                                                     <label for="[% itemtypeloo.ccl FILTER remove(',') %]-[% itemtypeloo.number %]">
                                                         [% UNLESS ( noItemTypeImages ) %]
                                                             [% IF ( itemtypeloo.imageurl ) %]
-                                                                <img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />
+                                                                <img src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />
                                                             [% END %]
                                                             &nbsp;
                                                         [% END %]
@@ -361,18 +361,19 @@
                 [% END # / IF expanded_options %]
             </div> <!-- / .row-fluid -->
 
-        [% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > 0 and expanded_options ) or
-              ( OpacAdvSearchOptions     and OpacAdvSearchOptions.size > 0     and not expanded_options ) %]
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="text-center">
-                        <!-- SEARCH BUTTONS -->
-                        [% PROCESS searchbuttons %]
-                        <!-- /SEARCH BUTTONS -->
-                    </div>
-                </div> <!-- / .span12 -->
-            </div> <!-- / .row-fluid -->
-        [% END %]
+            [% IF ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.size > 0 and expanded_options ) or
+                  ( OpacAdvSearchOptions     and OpacAdvSearchOptions.size > 0     and not expanded_options ) %]
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="text-center">
+                            <!-- SEARCH BUTTONS -->
+                            [% PROCESS searchbuttons %]
+                            <!-- /SEARCH BUTTONS -->
+                        </div>
+                    </div> <!-- / .span12 -->
+                </div> <!-- / .row-fluid -->
+            [% END %]
+        </div> <!-- / .container-fluid -->
    </div> <!-- / .main -->
 </form>
 
