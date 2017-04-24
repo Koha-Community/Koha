@@ -217,8 +217,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron %][% END %]
                                                 </td>
+
                                                 <td class="author">[% ISSUE.author %]</td>
-                                                </td>
                                                 [% IF ( ISSUE.overdue ) %]
                                                     <td class="date_due overdue">
                                                         <span title="[% ISSUE.date_due %]">
@@ -542,8 +542,8 @@ Using this account is not recommended because some parts of Koha will not functi
                                     <thead>
                                         <tr>
                                             <th class="anti-the">Title</th>
-                                            <th class="psort">Placed on</th>
-                                            <th>Expires on</th>
+                                            <th class="psort title-string">Placed on</th>
+                                            <th class="title-string">Expires on</th>
                                             <th>Pick up location</th>
                                             [% IF ( showpriority ) %]
                                                 <th>Priority</th>
@@ -589,16 +589,18 @@ Using this account is not recommended because some parts of Koha will not functi
                                             <td class="expirationdate">
                                                 [% IF ! RESERVE.found %]
                                                     [% IF ( RESERVE.expirationdate ) %]
-                                                        <span>
+                                                        <span title="[% RESERVE.expirationdate %]">
                                                             <span class="tdlabel">Expiration:</span>
                                                                 [% RESERVE.expirationdate | $KohaDates %]
                                                         </span>
                                                     [% ELSE %]
-                                                        <span class="tdlabel">Expiration:</span>
-                                                        Never expires
+                                                        <span title="0000-00-00">
+                                                            <span class="tdlabel">Expiration:</span>
+                                                            Never expires
+                                                        </span>
                                                     [% END %]
                                                 [% ELSE %]
-                                                    -
+                                                    <span title="0000-00-00">-</span>
                                                 [% END %]
                                             </td>
                                             <td class="branch">
