@@ -138,6 +138,7 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
+            [% IF Koha.Preference('enableOpacCatalogBrowsing') == 1 %]
             <div id="opac-main-search">
     <!--             <div class="span2">
         [% IF ( opacsmallimage ) %]
@@ -296,6 +297,7 @@
                 [% END # / OpacPublic %]
             </div> <!-- /.span10 -->
             </div> <!-- /.opac-main-search -->
+            [% END %]
         </div> <!-- / .row-fluid -->
     </div> <!-- /.container-fluid -->
 
