@@ -129,7 +129,9 @@ for my $overdue ( @{$overdues} ) {
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
-    if ( $mode eq 'production' && !$is_holiday{$branchcode} ) {
+    #HACK TO ENABLE fines-calculations for holidays
+    #ORIGINAL if ( $mode eq 'production' && !$is_holiday{$branchcode} ) {
+    if ( $mode eq 'production' ) { #MODIFIED
         if ( $amount > 0 ) {
             UpdateFine(
                 {
