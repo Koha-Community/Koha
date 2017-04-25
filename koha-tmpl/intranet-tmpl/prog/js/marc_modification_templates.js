@@ -75,8 +75,7 @@ $(document).ready(function() {
         }
     });
 
-    $(".delete_template").on("click",function(e){
-        e.preventDefault();
+    $(".delete_template").on("click",function(){
         return confirmDelete();
     });
 
