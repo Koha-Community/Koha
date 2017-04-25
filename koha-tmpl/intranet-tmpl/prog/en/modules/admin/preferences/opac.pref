@@ -1,6 +1,20 @@
 OPAC:
     Appearance:
         -
+            - pref: enableOpacCatalogBrowsing
+              choices:
+                  yes: "Enable"
+                  no: "Disable"
+            -  catalog browsing and searching.
+        -
+            - pref: linkToExternalSite
+              choices:
+                  yes: "Link to external site"
+                  no: "Link to OPAC"
+            - for links to bibliographic records. The external URL is
+            - pref: externalSiteURL
+              class: url
+        -
             - For search results in the OPAC, show the item's
             - pref: OPACResultsLibrary
               choices:
