@@ -101,6 +101,7 @@ Makefile.PL - Koha packager and installer
     --font_dir                   Location of fonts (e.g. /usr/share/fonts/truetype/ttf-dejavu)
     --run_database_tests         Run database dependent tests (yes, no)
     --install_base               Base directory of installation (e.g. /usr/share/koha)
+    --template-cache-dir         Specify a template cache directory (e.g. /var/cache/koha)
     --help                       Display this help message
 
 =head1 DESCRIPTION
@@ -485,6 +486,7 @@ my %config_defaults = (
   'USE_MEMCACHED'     => 'no',
   'MEMCACHED_SERVERS' => '127.0.0.1:11211',
   'MEMCACHED_NAMESPACE' => 'KOHA',
+  'TEMPLATE_CACHE_DIR' => '/tmp/koha',
   'FONT_DIR'          => '/usr/share/fonts/truetype/ttf-dejavu'
 );
 
@@ -546,6 +548,7 @@ my $cli_koha_use_memcached = "";
 my $cli_koha_font_dir = "";
 my $cli_koha_run_database_tests = "";
 my $cli_koha_install_base = "";
+my $cli_koha_template_cache_dir = "";
 Getopt::Long::Configure('pass_through');
 my $results = GetOptions(
     "prev-install-log=s"           => \$koha_install_log,
@@ -574,6 +577,7 @@ my $results = GetOptions(
     "font_dir=s"                   => \$cli_koha_font_dir,
     "run_database_tests=s"         => \$cli_koha_run_database_tests,
     "install_base=s"               => \$cli_koha_install_base,
+    "template-cache-dir=s"         => \$cli_koha_template_cache_dir,
     "help"                         => sub { HelpMessage(0) },
 ) or HelpMessage(1);
 
@@ -861,7 +865,8 @@ sub get_cli_values {
         USE_MEMCACHED              => $cli_koha_use_memcached,
         FONT_DIR                   => $cli_koha_font_dir,
         RUN_DATABASE_TESTS         => $cli_koha_run_database_tests,
-        INSTALL_BASE               => $cli_koha_install_base
+        INSTALL_BASE               => $cli_koha_install_base,
+        TEMPLATE_CACHE_DIR         => $cli_koha_template_cache_dir
     };
     foreach my $key (keys %{$map}) {
         $values->{$key} = $map->{$key} if ($map->{$key});
@@ -1240,6 +1245,10 @@ Memcached server address?);
 Memcached namespace?);
       $config{'MEMCACHED_NAMESPACE'} = _get_value('MEMCACHED_NAMESPACE', $msg, $defaults->{'MEMCACHED_NAMESPACE'}, $valid_values, $install_log_values);
   }
+
+  $msg = q(
+Template cache directory?);
+  $config{'TEMPLATE_CACHE_DIR'} = _get_value('TEMPLATE_CACHE_DIR', $msg, $defaults->{'TEMPLATE_CACHE_DIR'}, $valid_values, $install_log_values);
 
   $msg = q(
 Path to DejaVu fonts?);

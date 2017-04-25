@@ -153,6 +153,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__MEMCACHED_SERVERS__" => "",
   "__MEMCACHED_NAMESPACE__" => "",
   "__FONT_DIR__" => "/usr/share/fonts/truetype/ttf-dejavu",
+  "__TEMPLATE_CACHE_DIR__" => "/tmp/koha"
 );
 
 # Override configuration from the environment
