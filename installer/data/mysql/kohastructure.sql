@@ -601,6 +601,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
   `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
+  `date_renewed` date default NULL, -- date the patron/borrower's card was last renewed
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
   `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
@@ -1638,6 +1639,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
   `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
+  `date_renewed` date default NULL, -- date the patron/borrower's card was last renewed
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
   `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
@@ -3419,6 +3421,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `categorycode` varchar(10) DEFAULT NULL,
   `dateenrolled` date DEFAULT NULL,
   `dateexpiry` date DEFAULT NULL,
+  `date_renewed` date default NULL,
   `gonenoaddress` tinyint(1) DEFAULT NULL,
   `lost` tinyint(1) DEFAULT NULL,
   `debarred` date DEFAULT NULL,

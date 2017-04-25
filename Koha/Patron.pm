@@ -366,7 +366,9 @@ sub renew_account {
     }
     my $expiry_date = $self->category->get_expiry_date($date);
 
-    $self->dateexpiry($expiry_date)->store;
+    $self->dateexpiry($expiry_date);
+    $self->date_renewed( dt_from_string() );
+    $self->store();
 
     $self->add_enrolment_fee_if_needed;
 

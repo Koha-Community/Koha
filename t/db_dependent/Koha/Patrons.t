@@ -244,7 +244,7 @@ subtest 'is_going_to_expire' => sub {
 
 
 subtest 'renew_account' => sub {
-    plan tests => 30;
+    plan tests => 36;
 
     for my $date ( '2016-03-31', '2016-11-30', dt_from_string() ) {
         my $dt = dt_from_string( $date, 'iso' );
@@ -267,6 +267,7 @@ subtest 'renew_account' => sub {
                 value  => {
                     dateexpiry   => $a_month_ago,
                     categorycode => $patron_category->{categorycode},
+                    date_renewed => undef, # Force builder to not popular the column for new patron
                 }
             }
         );
@@ -290,6 +291,8 @@ subtest 'renew_account' => sub {
         my $retrieved_patron_2 = Koha::Patrons->find( $patron_2->{borrowernumber} );
         my $retrieved_patron_3 = Koha::Patrons->find( $patron_3->{borrowernumber} );
 
+        is( $retrieved_patron->date_renewed, undef, "Date renewed is not set for patrons that have never been renewed" );
+
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
         t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
         my $expiry_date = $retrieved_patron->renew_account;
@@ -303,7 +306,9 @@ subtest 'renew_account' => sub {
         t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
         $expiry_date = $retrieved_patron->renew_account;
         is( $expiry_date, $a_year_later, "today + 12 months must be $a_year_later" );
-        $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
+        $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+        ok( $retrieved_patron->date_renewed, "Date renewed is set when calling renew_account" );
+        $retrieved_expiry_date = $retrieved_patron->dateexpiry;
         is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
         $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
         is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
