@@ -545,6 +545,7 @@ sub getRecords {
                         my $expandable;
                         my $number_of_facets;
                         my @this_facets_array;
+			my %used_facets;
                         for my $one_facet (
                             sort {
                                 $facets_counter->{$link_value}
@@ -553,6 +554,11 @@ sub getRecords {
                             } keys %{ $facets_counter->{$link_value} }
                           )
                         {
+			    my $lc_used_facet;
+                            $one_facet =~ s/([^;:.,]) ?[;:.,]$/$1/; # ISBD/AACR2 punctuation
+                            $lc_used_facet = lc($one_facet);
+                            next if (defined($used_facets{$lc_used_facet}));
+                            $used_facets{$lc_used_facet} = 1;
                             $number_of_facets++;
                             if (   ( $number_of_facets <= 5 )
                                 || ( $expanded_facet eq $link_value )
