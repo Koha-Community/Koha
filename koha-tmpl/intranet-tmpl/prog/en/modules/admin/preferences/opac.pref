@@ -932,3 +932,10 @@ OPAC:
                   BaseURL: "OPACBaseURL"
                   OPACAlias: "configured return URL"
             - "."
+    Authentication:
+        -
+            - pref: opacShibOnly
+              choices:
+                  yes: "Don't allow"
+                  no: Allow
+            - patrons to login by means other than Shibboleth.

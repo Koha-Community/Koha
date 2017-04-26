@@ -1101,6 +1101,23 @@ sub checkauth {
                 }
             }
 
+            # If shib configured and shibOnly enabled, we should ignore anything other than a shibboleth type login.
+            if (
+                   $shib
+                && !$shibSuccess
+                && (
+                    (
+                        ( $type eq 'opac' )
+                        && C4::Context->preference('opacShibOnly')
+                    )
+                    || ( ( $type ne 'opac' )
+                        && C4::Context->preference('staffShibOnly') )
+                )
+              )
+            {
+                $return = 0;
+            }
+
             # $return: 1 = valid user
             if ($return) {
 
@@ -1395,6 +1412,13 @@ sub checkauth {
     }
 
     if ($shib) {
+        #If shibOnly is enabled just go ahead and redirect directly
+        if ( (($type eq 'opac') && C4::Context->preference('opacShibOnly')) || (($type ne 'opac') && C4::Context->preference('staffShibOnly')) ) {
+            my $redirect_url = login_shib_url( $query );
+            print $query->redirect( -uri => "$redirect_url", -status => 303 );
+            safe_exit;
+        }
+
         $template->param(
             shibbolethAuthentication => $shib,
             shibbolethLoginUrl       => login_shib_url($query),
