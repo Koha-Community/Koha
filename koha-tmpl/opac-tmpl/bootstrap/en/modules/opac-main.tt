@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE Branches %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -133,7 +134,30 @@
                                 </form>
                             </div> <!-- /#login -->
                         [% END # /casAuthentication %]
-                    [% END # / loggedinusername %]
+                    [% ELSE %]
+                        [% IF Koha.Preference('OPACUserSummary') %]
+                            <div id="user_summary">
+                                <h1>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></h1>
+                                <ul id="user_summary_shortcuts">
+                                    [% IF checkouts && checkouts > 0 %]
+                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% checkouts %] checkout(s)</a></li>
+                                    [% END %]
+                                    [% IF overdues && overdues > 0 %]
+                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% overdues %] overdue(s)</a></li>
+                                    [% END %]
+                                    [% IF holds_pending && holds_pending > 0 %]
+                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% holds_pending %] hold(s) pending</a></li>
+                                    [% END %]
+                                    [% IF holds_waiting && holds_waiting > 0 %]
+                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% holds_waiting %] hold(s) waiting</a></li>
+                                    [% END %]
+                                    [% IF total_owing && total_owing > 0 %]
+                                        <li><a href="/cgi-bin/koha/opac-account.pl">[% total_owing | $Price %] due</a></li>
+                                    [% END %]
+                                </ul>
+                            </div>
+                        [% END %]
+                    [% END # /loggedinusername %]
                 [% END # /opacuserlogin %]
                 [% IF ( OpacNavRight ) %]
                     <div id="opacnavright">

@@ -25,6 +25,10 @@ use C4::Output;
 use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
 use C4::Koha qw( GetDailyQuote );
+use C4::Members;
+use C4::Overdues;
+use C4::Reserves;
+use Koha::Checkouts;
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -62,7 +66,24 @@ my $koha_news_count = scalar @$all_koha_news;
 
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
 
+my $checkouts = Koha::Checkouts->search({ borrowernumber => $borrowernumber })->count;
+my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
+my @holds = GetReservesFromBorrowernumber($borrowernumber);
+my $holds_pending = 0;
+foreach my $hold (@holds) {
+    if (not defined($hold->{found})){
+        $holds_pending++;
+    }
+}
+my @holds_waiting = GetReservesFromBorrowernumber($borrowernumber, 'W');
+my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+
 $template->param(
+    checkouts           => $checkouts,
+    overdues            => $overdues_count,
+    holds_pending       => $holds_pending,
+    holds_waiting       => scalar @holds_waiting,
+    total_owing         => $total,
     koha_news           => $all_koha_news,
     koha_news_count     => $koha_news_count,
     branchcode          => $homebranch,

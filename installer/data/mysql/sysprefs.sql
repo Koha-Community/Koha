@@ -395,6 +395,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACUserCSS','',NULL,'Add CSS to be included in the OPAC in an embedded <style> tag.','free'),
 ('OPACUserJS','','70|10','Define custom javascript for inclusion in OPAC','Textarea'),
 ('opacuserlogin','1',NULL,'Enable or disable display of user login features','YesNo'),
+('OPACUserSummary', 1, NULL, "Show the summary of a logged in user's checkouts, overdues, holds and fines on the mainpage", 'YesNo'),
 ('OPACViewOthersSuggestions','0',NULL,'If ON, allows all suggestions to be displayed in the OPAC','YesNo'),
 ('OPACXSLTDetailsDisplay','default','','Enable XSL stylesheet control over details page display on OPAC','Free'),
 ('OPACXSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on OPAC','Free'),
