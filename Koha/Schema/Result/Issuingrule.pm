@@ -158,6 +158,12 @@ __PACKAGE__->table("issuingrules");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 no_auto_renewal_after_hard_limit
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 reservesallowed
 
   data_type: 'smallint'
@@ -265,6 +271,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "no_auto_renewal_after",
   { data_type => "integer", is_nullable => 1 },
+  "no_auto_renewal_after_hard_limit",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "reservesallowed",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "holds_per_record",
@@ -305,8 +313,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-11-02 10:33:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:t9AhZLbm4SE7mx25LAyhGA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:15:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D1443VWPcoIXN3+lIkckIQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
