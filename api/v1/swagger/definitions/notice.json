@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "properties": {
+    "message_id": {
+      "description": "Message internal identifier",
+      "type": "integer",
+      "readOnly": true
+    },
+    "borrowernumber": {
+      "$ref": "../x-primitives.json#/borrowernumber"
+    },
+    "subject": {
+      "description": "Subject of the message",
+      "type": ["string", "null"]
+    },
+    "content": {
+      "description": "Content of the message",
+      "type": ["string", "null"]
+    },
+    "metadata": {
+      "description": "",
+      "type": ["string", "null"]
+    },
+    "letter_code": {
+      "description": "",
+      "type": ["string", "null"]
+    },
+    "message_transport_type": {
+      "description": "Transport method. Values accepted by default are 'email', 'sms', 'phone' and 'print'",
+      "type": "string"
+    },
+    "status": {
+      "description": "Delivery status",
+      "type": "string"
+    },
+    "time_queued": {
+      "description": "Date and time of when message was placed in queue",
+      "type": "string",
+      "format": "date-time"
+    },
+    "to_address": {
+      "description": "Destination email address",
+      "type": ["string", "null"]
+    },
+    "from_address": {
+      "description": "Source address of email",
+      "type": ["string", "null"]
+    },
+    "content_type": {
+      "description": "Content type",
+      "type": ["string", "null"]
+    },
+    "delivery_note": {
+      "description": "Additional delivery notes",
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

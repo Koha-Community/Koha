@@ -28,6 +28,7 @@ use C4::Auth qw( check_cookie_auth get_session haspermission );
 use Koha::Account::Lines;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::Notice::Messages;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
 
@@ -335,6 +336,7 @@ sub check_object_ownership {
         borrowernumber  => \&_object_ownership_by_borrowernumber,
         checkout_id     => \&_object_ownership_by_checkout_id,
         reserve_id      => \&_object_ownership_by_reserve_id,
+        message_id      => \&_object_ownership_by_message_id,
     };
 
     foreach my $param ( keys %{ $parameters } ) {
@@ -396,6 +398,20 @@ sub _object_ownership_by_checkout_id {
     $issue = Koha::Old::Checkouts->find($issue_id) unless $issue;
     return $issue && $issue->borrowernumber
             && $user->borrowernumber == $issue->borrowernumber;
+}
+
+=head3 _object_ownership_by_message_id
+
+Finds a Koha::Notice::Message-object by C<$message_id> and checks if it
+belongs to C<$user>.
+
+=cut
+
+sub _object_ownership_by_message_id {
+    my ($c, $user, $message_id) = @_;
+
+    my $message = Koha::Notice::Messages->find($message_id);
+    return $message && $user->borrowernumber == $message->borrowernumber;
 }
 
 =head3 _object_ownership_by_reserve_id

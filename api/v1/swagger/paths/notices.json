@@ -1,0 +1,493 @@
+{
+  "/notices": {
+    "get": {
+      "x-mojo-to": "Notice#list",
+      "operationId": "listNotices",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "get_message"
+        },
+        "allow-owner": true,
+        "allow-guarantor": true
+      },
+      "tags": ["notices"],
+      "parameters": [{
+        "name": "borrowernumber",
+        "in": "query",
+        "description": "Patron's borrowernumber",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "subject",
+        "in": "query",
+        "description": "Case insensative 'starts-with' search on subject",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "content",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on content",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "metadata",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on metadata",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "message_transport_type",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on message transport type",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "time_queued_start",
+        "in": "query",
+        "description": "Search notices after given time",
+        "required": false,
+        "type": "string",
+        "format": "date-time"
+      }, {
+        "name": "time_queued_end",
+        "in": "query",
+        "description": "Search notices before given time",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "to_address",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on to address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "from_address",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on from address",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "content_type",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on content type",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "delivery_note",
+        "in": "query",
+        "description": "Case insensative 'starts_with' search on delivery note",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of notices",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref" : "../definitions.json#/notice"
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Notice#add",
+      "operationId": "addNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "create_message"
+        }
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new notice",
+          "required": true,
+          "schema": { "$ref" : "../definitions.json#/notice" }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "A notice",
+          "schema": {
+              "$ref" : "../definitions.json#/notice"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/notices/{message_id}": {
+    "put": {
+      "x-mojo-to": "Notice#edit",
+      "operationId": "editNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "update_message"
+        }
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new notice",
+          "required": false,
+          "schema": { "$ref": "../definitions.json#/notice" }
+        },
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A notice",
+          "schema": {
+            "$ref" : "../definitions.json#/notice"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "patch": {
+      "x-mojo-to": "Notice#patch",
+      "operationId": "patchNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "update_message"
+        }
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new notice",
+          "schema": { "$ref": "../definitions.json#/notice" }
+        },
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A notice",
+          "schema": {
+            "$ref" : "../definitions.json#/notice"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Notice#delete",
+      "operationId": "deleteNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "delete_message"
+        }
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "Deleting the notice succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found.",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "get": {
+      "x-mojo-to": "Notice#get",
+      "operationId": "getNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "get_message"
+        },
+        "allow-owner": true,
+        "allow-guarantor": true
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A notice",
+          "schema": {
+            "$ref" : "../definitions.json#/notice"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/notices/{message_id}/resend": {
+    "post": {
+      "x-mojo-to": "Notice#resend",
+      "operationId": "resendNotice",
+      "x-koha-authorization": {
+        "permissions": {
+          "messages": "resend_message"
+        }
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "204": {
+          "description": "Resending the notice succeeded.",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}
