@@ -2627,7 +2627,7 @@ sub UpdateKohaToMarc {
         my @biblioitems = C4::Biblio::GetBiblioItemByBiblioNumber($biblionumberOrBibliodata);
         my $biblioitem = $biblioitems[0];
         return 'NOBIBLIODATA' unless $biblioitem;
-        map {$bibdata->{"biblioitems.$_"} = $biblioitem->{$_}} keys($biblioitem);
+        map {$bibdata->{"biblioitems.$_"} = $biblioitem->{$_}} keys(%$biblioitem);
         my $biblio = C4::Biblio::GetBiblio($biblionumberOrBibliodata);
         return 'NOBIBLIODATA' unless $biblio;
         map {$bibdata->{"biblio.$_"} = $biblio->{$_}} keys(%$biblio);
@@ -2663,10 +2663,10 @@ sub UpdateKohaToMarc {
 
         my @existingFields = $record->field($fieldCode);
         if ($existingFields[0]) {
-            $existingFields[0]->update(each $subfields);
+            $existingFields[0]->update(each %$subfields);
         }
         else {
-            my $newField = MARC::Field->new($fieldCode, '', '', each $subfields);
+            my $newField = MARC::Field->new($fieldCode, '', '', each %$subfields);
             $record->insert_fields_ordered($newField);
         }
     }
