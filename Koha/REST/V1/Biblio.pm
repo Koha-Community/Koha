@@ -152,6 +152,7 @@ sub delete {
     unless ($biblio) {
         return $c->render(status => 404, openapi => {error => "Biblio not found"});
     }
+
     my @items = $biblio->items;
     # Delete items first
     my @item_errors = ();
@@ -161,13 +162,16 @@ sub delete {
             push @item_errors, $item->unblessed->{itemnumber};
         }
     }
-    my $res = $biblio->delete;
-    if ($res eq '1') {
+
+    my $res = C4::Biblio::DelBiblio($biblio->biblionumber);
+
+    unless ($res) {
         return $c->render(status => 200, openapi => {});
-    } elsif ($res eq '-1') {
-        return $c->render(status => 404, openapi => {error => "Not found. Error code: " . $res, items => @item_errors});
     } else {
-        return $c->render(status => 400, openapi => {error => "Error code: " . $res, items => @item_errors});
+        return $c->render(status => 400, openapi => {
+            error => $res,
+            items => @item_errors,
+        });
     }
 }
 
