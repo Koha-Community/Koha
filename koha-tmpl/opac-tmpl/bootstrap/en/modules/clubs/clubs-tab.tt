@@ -56,7 +56,7 @@
                     <td>[% c.name %]</td>
                     <td>[% c.description %]</td>
                     <td>
-                        [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.FirstValidEmailAddress ) %]
+                        [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.first_valid_email_address ) %]
                             <a class="btn btn-xs" onclick="loadEnrollmentForm([% c.id %])">
                                 <i class="icon-plus"></i> Enroll
                             </a>

@@ -523,12 +523,13 @@ function validate1(date) {
             </li>
         [% END %]
         <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.size %] Restrictions</a></li>
-        [% SET enrollments = borrower.get_club_enrollments.size || 0 %]
-        [% SET enrollable  = borrower.get_enrollable_clubs.size || 0 %]
-        [% IF CAN_user_clubs && ( enrollments || enrollable ) %]
+
+        [% SET enrollments = patron.get_club_enrollments(1) %]
+        [% SET enrollable  = patron.get_enrollable_clubs(0,1) %]
+        [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
             <li>
                 <a id="clubs-tab-link" href="#clubs-tab">
-                    Clubs ([% enrollments %]/[% enrollable %])
+                    Clubs ([% enrollments.count %]/[% enrollable.count %])
                 </a>
             </li>
         [% END %]

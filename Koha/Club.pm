@@ -63,6 +63,18 @@ sub club_fields {
     return Koha::Club::Fields->search( { club_id => $self->id() } );
 }
 
+=head3 club_enrollments
+
+=cut
+
+sub club_enrollments {
+    my ($self) = @_;
+
+    return unless $self->id();
+
+    return scalar Koha::Club::Enrollments->search( { club_id => $self->id() } );
+}
+
 =head3 club_fields
 
 =cut

@@ -4,6 +4,9 @@
 [% USE ItemTypes %]
 [% USE Price %]
 
+[% SET borrower_club_enrollments =  borrower.get_club_enrollments(1) %]
+[% SET borrower_enrollable_clubs = borrower.get_enrollable_clubs(1,1) %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -134,10 +137,10 @@ Using this account is not recommended because some parts of Koha will not functi
                                 [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
 
-                            [% IF borrower.get_club_enrollments.size || borrower.get_enrollable_clubs(1).size %]
+                            [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
                                 <li>
                                     <a id="opac-user-clubs-tab-link" href="#opac-user-clubs">
-                                        Clubs ([% borrower.get_club_enrollments.size %]/[% borrower.get_enrollable_clubs(1).size || 0 %])
+                                        Clubs ([% borrower_club_enrollments.count || 0 %]/[% borrower_enrollable_clubs.count || 0 %])
                                     </a>
                                 </li>
                             [% END %]
@@ -328,7 +331,7 @@ Using this account is not recommended because some parts of Koha will not functi
                             [% END # IF issues_count %]
                         </div> <!-- / .opac-user-checkouts -->
 
-                        [% IF borrower.get_club_enrollments_count.size || borrower.get_enrollable_clubs(1).size %]
+                        [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
                             <div id="opac-user-clubs">
                                 Loading...
                             </div>

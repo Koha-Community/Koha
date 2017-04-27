@@ -56,6 +56,9 @@ sub get_enrollable {
         }
     }
 
+    # Only clubs with no end date or an end date in the future can be enrolled in
+    $params->{'-or'} = [ date_end => { '>=' => \'CURRENT_DATE()' }, date_end => undef ];
+
     my $rs = $self->_resultset()->search( $params, { prefetch => 'club_template' } );
 
     if (wantarray) {

@@ -44,7 +44,13 @@ my $schema = Koha::Database->new()->schema();
 
 my $id = $cgi->param('id');
 my $club = $id ? Koha::Clubs->find($id) : Koha::Club->new();
-my $stored = $cgi->param('name') ? $id ? 'updated' : 'stored' : undef;
+
+my $stored =
+    $cgi->param('name')
+  ? $id
+      ? 'updated'
+      : 'stored'
+  : undef;
 
 my $club_template_id = $cgi->param('club_template_id');
 my $club_template = $club->club_template() || Koha::Club::Templates->find($club_template_id);

@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -171,7 +172,11 @@
                 [% IF CAN_user_clubs_edit_clubs %]
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                            [% IF club_templates %]
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                            [% ELSE %]
+                                <button disabled="disabled" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                            [% END %]
                             <ul class="dropdown-menu">
                                 [% FOREACH t IN club_templates %]
                                     <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id %]">[% t.name %]</a></li>
@@ -190,6 +195,9 @@
                             <th>Public enrollment</th>
                             <th>Email required</th>
                             <th>Library</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Enrolled patrons</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -218,6 +226,22 @@
                                     </td>
                                     <td>[% Branches.GetName( c.branchcode ) %]</td>
                                     <td>
+                                        [% IF c.date_start %]
+                                            [% c.date_start | $KohaDates %]
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF c.date_end %]
+                                            [% c.date_end | $KohaDates %]
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% c.club_enrollments.count %]
+                                        <a class="btn btn-xs" href="club-enrollments.pl?id=[% c.id %]">
+                                            View enrollments
+                                        </a>
+                                    </td>
+                                    <td>
                                         [% IF CAN_user_clubs_edit_clubs %]
                                             <a class="btn btn-default" style="white-space:nowrap" href="clubs-add-modify.pl?id=[% c.id %]">
                                                 <i class="fa fa-edit"></i> Edit
@@ -236,7 +260,7 @@
                         [% ELSE %]
                             <tr>
                                 <td colspan="8">
-                                    No club templates defined.
+                                    No clubs defined.
                                 </td>
                             </td>
                         [% END %]

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Test::Warn;
 
 use C4::Context;
@@ -129,6 +129,8 @@ my $club = Koha::Club->new(
         club_template_id => $club_template->id,
         name             => "Test Club",
         branchcode       => $branchcode,
+        date_start       => '1900-01-01',
+        date_end         => '9999-01-01',
     }
 )->store();
 
@@ -216,6 +218,7 @@ is( $patron->get_club_enrollments->count,
     1, 'Got 1 club enrollment for patron' );
 is( $patron->get_enrollable_clubs->count,
     0, 'No more enrollable clubs for patron' );
+is( $club->club_enrollments->count, 1, 'There is 1 enrollment for club' );
 
 $schema->storage->txn_rollback();
 1;

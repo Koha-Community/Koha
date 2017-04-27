@@ -1,0 +1,74 @@
+[% USE KohaDates %]
+[% USE Branches %]
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; Club enrollments</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "sPaginationType": "four_button",
+            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+            "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+            ]
+        } ));
+    });
+//]]>
+</script>
+
+</head>
+
+<body id="club_enrollments" class="clubs">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Patron clubs &rsaquo; Club enrollments</div>
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <h1>Club enrollments for <i>[% club.name %]</i></h1>
+
+                <table id="enrollments-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Card number</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        [% FOREACH e IN club.club_enrollments %]
+                            [% SET p = e.patron %]
+                            <tr>
+                                <td>
+                                    [% p.firstname %] [% p.surname %]
+                                </td>
+                                <td>
+                                    [% p.cardnumber %]
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id %]">
+                                        <i class="fa fa-eye"></i>
+                                        View patron
+                                    </a>
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="yui-b noprint">
+            [% INCLUDE 'tools-menu.inc' %]
+        </div>
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

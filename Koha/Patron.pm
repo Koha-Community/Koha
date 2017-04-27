@@ -600,9 +600,13 @@ sub first_valid_email_address {
 =cut
 
 sub get_club_enrollments {
-    my ($self) = @_;
+    my ( $self, $return_scalar ) = @_;
 
-    return Koha::Club::Enrollments->search( { borrowernumber => $self->borrowernumber(), date_canceled => undef } );
+    my $e = Koha::Club::Enrollments->search( { borrowernumber => $self->borrowernumber(), date_canceled => undef } );
+
+    return $e if $return_scalar;
+
+    return wantarray ? $e->as_list : $e;
 }
 
 =head3 get_enrollable_clubs
@@ -610,7 +614,7 @@ sub get_club_enrollments {
 =cut
 
 sub get_enrollable_clubs {
-    my ( $self, $is_enrollable_from_opac ) = @_;
+    my ( $self, $is_enrollable_from_opac, $return_scalar ) = @_;
 
     my $params;
     $params->{is_enrollable_from_opac} = $is_enrollable_from_opac
@@ -619,7 +623,11 @@ sub get_enrollable_clubs {
 
     $params->{borrower} = $self;
 
-    return Koha::Clubs->get_enrollable($params);
+    my $e = Koha::Clubs->get_enrollable($params);
+
+    return $e if $return_scalar;
+
+    return wantarray ? $e->as_list : $e;
 }
 
 =head3 type

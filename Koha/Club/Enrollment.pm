@@ -23,6 +23,7 @@ use Carp;
 
 use Koha::Database;
 use Koha::Clubs;
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -59,6 +60,15 @@ sub cancel {
 sub club {
     my ( $self ) = @_;
     return Koha::Clubs->find( $self->club_id() );
+}
+
+=head3 patron
+
+=cut
+
+sub patron {
+    my ( $self ) = @_;
+    return Koha::Patrons->find( $self->borrowernumber() );
 }
 
 =head3 type
