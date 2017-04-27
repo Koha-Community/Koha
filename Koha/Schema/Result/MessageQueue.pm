@@ -92,6 +92,11 @@ __PACKAGE__->table("message_queue");
   data_type: 'text'
   is_nullable: 1
 
+=head2 delivery_note
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -128,6 +133,8 @@ __PACKAGE__->add_columns(
   "from_address",
   { data_type => "mediumtext", is_nullable => 1 },
   "content_type",
+  { data_type => "text", is_nullable => 1 },
+  "delivery_note",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -181,8 +188,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-06-22 16:37:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nQcmtLCbGEeLFLFP4jwy2g
+# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-04-27 13:05:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Irdj30QHaI9gf5h/JEQHFQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
