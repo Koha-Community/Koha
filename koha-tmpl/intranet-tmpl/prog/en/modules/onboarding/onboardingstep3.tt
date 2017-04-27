@@ -1,152 +1,114 @@
-<!--Includes for creating patron-->
-[% USE Koha %]
-[% USE KohaDates %]
-[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Web installer &rsaquo; Create Koha administrator patron</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'js_includes.inc' %]
-
-<head>
-<title>Create Koha administrator patron</title>
-<!--jQuery scripts for creating patron-->
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
-<script type="text/javascript">
-     var MSG_PASSWORD_MISMATCH=(_("The entered passwords do not match, please rewrite them"));
-     jQuery.validator.addMethod( "password_match", function(value,element){
-        var password = document.getElementById('password').value
-        var confirmpassword = document.getElementById('password2').value
-        if ( password != confirmpassword ){
-                return false;
-        }
-        else{
-                return true
-        }
-     },  MSG_PASSWORD_MISMATCH
-);
-
-$(document).ready(function(){
-   $("#Submit").click(function(){
-      $("#createpatron").validate({
-        rules: {
-            surname: {
-                required: true,
-            },
-            firstname: {
-                required: true,
-            },
-            cardnumber: {
-                required: true,
-            },
-            password: {
-                 password_match:true
-            }
-        },
-        messages: {
-           password: {
-                 required: MSG_PASSWORD_MISMATCH
-           },
-        }
-      });
-   });
-});
-</script>
+[% INCLUDE 'validator-strings.inc' %]
+[% INCLUDE 'installer-strings.inc' %]
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/onboarding.js"></script>
 </head>
 
-<div>
-    <h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif"/> Welcome to Koha</h1>
-</div>
+<body id="installer" class="installer">
+    <div class="container-fluid">
+        <div class="row">
+            <div id="onboarding-step3" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+                <h1 id="logo"><a href="#">Koha</a></h1>
+                <h2>Web installer &rsaquo; Create Koha administrator patron</h2>
 
-[% INCLUDE 'onboarding_messages.inc' %]
+                [% INCLUDE 'onboarding_messages.inc' %]
 
-<h1 align="left"> Create koha administrator patron</h1>
-<p>
-Now we will create a patron with superlibrarian permissions. Login with this to access Koha as a staff member will all permissions.
-</p>
-<form name="createpatron" id="createpatron" method="post" action="onboarding.pl">
-    <fieldset class="rows">
-         <input type="hidden" name="step" value="3"/>
-         <input type="hidden" name="op" value="add_validate_patron" />
-            <legend id="library_management_lgd">Library management</legend>
-            <ol>
-            <h3>Patron identity</h3>
-                <li>
-                    <label for="surname" class="required">Surname: </label>
-                    <input type="text" id="surname" name="surname" title="Please only enter letters in the surname field" value="[% surname |html %]" class="required" required="required" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="firstname" class="required">First name: </label>
-                    <input  type="text" name="firstname" title="Please only enter letters in the first name field" id="firstname" size="20" value="[% firstname |html %]" class="required" required="required">
-                    <span class="required">Required</span>
-                </li>
-            </ol>
+                <p>
+                Now we will create a patron with superlibrarian permissions. Log in with this to access Koha as a staff member with all permissions.
+                </p>
+                <form name="createpatron" id="createpatron" method="post" action="onboarding.pl">
+                    <fieldset class="rows">
+                        <input type="hidden" name="step" value="3" />
+                        <input type="hidden" name="op" value="add_validate_patron" />
+                        <h3>Administrator identity</h3>
+                        <ol>
+                            <li>
+                                <label for="surname" class="required">Surname: </label>
+                                <input type="text" id="surname" name="surname" value="[% surname |html %]" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="firstname" class="required">First name: </label>
+                                <input  type="text" name="firstname" id="firstname" size="20" value="[% firstname |html %]" class="required" required="required">
+                                <span class="required">Required</span>
+                            </li>
+                        </ol>
 
-            <ol>
-                <li>
-                    <label for="cardnumber" class="required">Card number: </label>
-                    [% IF patrons && patrons > 1 %]
-                        <input type="text" id="cardnumber" title="Please enter a cardnumber" class="noEnterSubmit valid" name="cardnumber" value="[% newcardnumber | html %]" class="required" required="required">
-                    [% ELSE %]
-                        <input type="text" id="cardnumber" title="Please enter a cardnumber" name="cardnumber" value="[% cardnumber | html %]" class="required" required="required">
-                    [% END %]
-                    <span class="required">Required</span>
-                </li>
-                <li>
+                        <ol>
+                            <li>
+                                <label for="cardnumber" class="required">Card number: </label>
+                                [% IF patrons && patrons > 1 %]
+                                    <input type="text" id="cardnumber" class="noEnterSubmit valid" name="cardnumber" value="[% newcardnumber | html %]" class="required" required="required">
+                                [% ELSE %]
+                                    <input type="text" id="cardnumber" name="cardnumber" value="[% cardnumber | html %]" class="required" required="required">
+                                [% END %]
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
 
-                <!--require a foreach loop to get all the values for the library that the user has either imported (in web installer) or created in the first step of this onboarding tool-->
-                    <label for="libraries" class="required"> Library: </label>
-                    <select name="libraries" size="1" id="libraries">
+                                <!--require a foreach loop to get all the values for the library that the user has either imported (in web installer) or created in the first step of this onboarding tool-->
+                                <label for="libraries" class="required"> Library: </label>
+                                <select name="libraries" size="1" id="libraries">
+                                    [% FOREACH library IN libraries %]
+                                        <option value="[% library.branchcode %]"> [% library.branchname %] </option>
+                                    [% END %]
+                                </select>
+                                <span class="required"> Required</span>
+                            </li>
+                            <li>
+                                <label for="categorycode_entry" class="required"> Patron category</label>
+                                <select id="categorycode_entry" name="categorycode_entry">
+                                    [% FOREACH category IN categories %]
+                                        <option value = "[% category.categorycode %]">[%category.description %]</option>
+                                    [% END %]
+                                </select>
+                                <span class="required">Required</span><br><br>
+                                <b>Note:</b> If you installed sample patron categories please select the "Staff" option in the patron categories dropdown box.
+                            </li>
+                        </ol>
 
-                     [% FOREACH library IN libraries %]
-                          <option name="libraries" value="[% library.branchcode %]"> [% library.branchname %]
-                     [% END %]
+                            <h3>Administrator account permissions</h3>
+                        <ol>
+                            <li>
+                                <input type="hidden" name="newflags" value="1" />
+                                <input type="hidden" class="flag parent" id="flag-0" name="flag" value="superlibrarian" />
+                                <code> superlibrarian</code>
+                            </li>
+                        </ol>
 
-                        </select>
-                    <span class="required"> Required</span>
-                </li>
-                <li>
-                    <label for="categorycode_entry" class="required"> Patron category</label>
-                    <select id="categorycode_entry" name="categorycode_entry" onchange="update_category_code(this);">
-                    [% FOREACH category IN categories %]
-                        <option name="categorycode_entry" value = "[% category.categorycode %]">[%category.description %]</option>
-                    [% END %]
-                    </select>
-                    <span class="required">Required</span><br><br>
-                    <b>Note:</b> If you installed sample patron categories please select the "Staff" option in the patron categories dropdown box.
-                </li>
-            </ol>
+                            <h3>Administrator login</h3>
+                        <ol>
+                            <li>
+                                <label for="userid" class="required">Username: </label>
+                                <input type="text" name="userid" id ="userid" size="20" value="[% userid |html %]" class="required" required="required" />
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="password" class="required">Password: </label>
+                                <input type="password" name="password" id="password" size="20" value="[% member.password |html %]" class="required" required="required">
+                                <span class="required">Required</span>
+                            </li>
+                            <li>
+                                <label for="password2" class="required">Confirm password: </label>
+                                <input type="password" id="password2" name="password2" size="20" value="" class="required" required="required">
+                                <span class="required">Required</span>
+                            </li>
+                        </ol>
+                        <p>
+                            To create another patron, go to:
+                            <span class="breadcrumbs">Patrons &rsaquo; New patron</span>
+                        </p>
+                        <p>
+                            To give the new patron superlibrarian permissions go to:
+                            <span class="breadcrumbs">More &rsaquo; Set permissions</span>
+                        </p>
+                    </fieldset>
 
-            <ol>
-                    <h3> Koha administrator patron permissions</h3>
-                    <li>
-                        <label> superlibrarian</label>
-                    </li>
-            </ol>
-            <ol>
-            <h3>OPAC/Staff Login</h3>
-                <li>
-                    <label for="userid" class="required">Username: </label>
-                    <input type="text" name="userid" id ="userid" size="20" title="Please only enter a username of letters and numbers" value="[% userid |html %]" class="required" required="required" />
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="passwordlabel" class="required">Password: </label>
-                    <input type="password" name="password" id="password" size="20" value="[% member.password |html %]" class="required" required="required">
-                    <span class="required">Required</span>
-                </li>
-                <li>
-                    <label for="password2" class="required">Confirm password: </label>
-                    <input type="password" id="password2" name="password2" size="20" value="" class="required" required="required">
-                    <span class="required">Required</span>
-                </li>
-            </ol>
-        <p>
-            To create another patron, go to Patrons -> New Patron. <br>
-            More -> Set Permissions in a user page to gain superlibrarian permissions.
-        </p>
-    </fieldset>
-    <br>
-    <input type="submit" id="Submit" class="action" value="Submit"/>
-</form>
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                </form>
+            </div> <!-- / #onboarding-step3 -->
+        </div> <!-- / .row -->
+
+[% INCLUDE 'intranet-bottom.inc' %]

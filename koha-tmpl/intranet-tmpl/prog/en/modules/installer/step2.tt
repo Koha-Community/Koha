@@ -1,63 +1,73 @@
-[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Step 2</title>
+[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Database settings</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
-<div>
-<h1 id="logo"><img alt="Koha" src="[% interface %]/[% theme %]/img/koha.org-logo.gif" /> Web installer &rsaquo; Step 2</h1>
-<h2 align="center">Database settings:</h2>
-<ul>
-<li><em>database type : </em>[% dbms %]</li>
-<li><em>database name : </em>[% dbname %]</li>
-<li><em>database host : </em>[% hostname %]</li>
-<li><em>database port : </em>[% port %] (probably OK if blank)</li>
-<li><em>database user : </em>[% user %]</li>
-</ul>
-<div>
-[% IF ( dbconnection ) %]
-<form name="checkdbparameters" type="post" action="install.pl">
-  [% IF ( checkdatabaseaccess ) %]
-  <p>Connection established.</p>
-     [% IF ( checkdatabasecreated ) %]
-  <p>Database <code>[% dbname %]</code> exists.</p>
-        [% IF ( checkgrantaccess ) %]
-  <p>User <code>[% user %]</code> has all required privileges on database <code>[% dbname %]</code>.</p>
-        [% ELSE %]
-  <p class="error">user <code>[% user %]</code> doesn't have enough privilege on database <code>[% dbname %]</code></p>
-  <p class="tip">Ask for or make a change in the user's privileges. Need help? See
-    [% IF dbms == 'mysql' %]<a href="https://dev.mysql.com/doc/refman/5.5/en/grant.html">
-    [% ELSE %]<a href="http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html">
-    [% END %]this page</a>.
-  </p>
-  <p class="tip">
-    User <code>[% user %]</code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code>[% dbname %]</code>
-  </p>
-        [% END %]
-      [% ELSE %]
-  <p class="error">No database named <code>[% dbname %]</code> detected.</p>
-  <p class="tip">Please create the database before continuing.</p>
-      [% END %]
-   [% ELSE %]
-    <div class="error">[% error %] : [% message %]
-    </div>
-    <div class="tip">
-      <ul>
-      <li>Check that your database is running.</li>
-      <li>Check your database settings in <code>koha-conf.xml</code>. </li>
-      <li>Check the hostname setting in <code>koha-conf.xml</code>. 
-      Some database servers require <code>127.0.0.1</code> rather than <code>localhost</code>.</li>
-    </div>
-    <p>Please correct these errors and <a href="/cgi-bin/koha/installer/install.pl">start the installer</a> again.
-  [% END %]
-  [% IF ( error ) %][% ELSE %]
-<input type="hidden" name="step" value="3" />
-<p> Click 'Next' to continue <input value="Next &gt;&gt;" type="submit" /></p>
-[% END %]
-</form>
-[% ELSE %]
-<form name="checkinformation" type="post" action="install.pl">
-<input type="hidden" name="step" value="2" />
-<input type="hidden" name="checkdb" value="1" />
-<p> Please click 'Next' to continue if this information is correct <input value="Next &gt;&gt;" type="submit" /></p>
-</form>
-[% END %]
-</div>
-</body>
-</html>
+</head>
+
+<body id="installer" class="installer">
+    <div class="container-fluid">
+        <div class="row">
+            <div id="installer-step2" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
+
+                <h1 id="logo"><a href="#">Koha</a></h1>
+                <h2>Web installer &rsaquo; Database settings</h2>
+                <h3>Database settings:</h3>
+                <ul>
+                    <li><em>Database type : </em> <code>[% dbms %]</code></li>
+                    <li><em>Database name : </em> <code>[% dbname %]</code></li>
+                    <li><em>Database host : </em> <code>[% hostname %]</code></li>
+                    <li><em>Database port : </em> <code>[% port %]</code> (probably okay if blank)</li>
+                    <li><em>Database user : </em> <code>[% user %]</code></li>
+                </ul>
+
+                [% IF ( dbconnection ) %]
+                    <form name="checkdbparameters" method="post" action="install.pl">
+                        [% IF ( checkdatabaseaccess ) %]
+                            <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
+                            [% IF ( checkdatabasecreated ) %]
+                                <ul>
+                                    <li>Database <code>[% dbname %]</code> exists.</li>
+                                [% IF ( checkgrantaccess ) %]
+                                    <li>User <code>[% user %]</code> has all required privileges on database <code>[% dbname %]</code>.</li>
+                                    </ul>
+                                [% ELSE %]
+                                    </ul>
+                                    <p class="error">user <code>[% user %]</code> doesn't have enough privilege on database <code>[% dbname %]</code> </p>
+                                    <p class="tip"> Ask for or make a change in the user's privileges. Need help? See [% IF ( mysql ) %]
+                                            <a href="http://dev.mysql.com/doc/refman/4.1/en/grant.html">
+                                        [% ELSE %]
+                                            <a href="http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html">
+                                        [% END %]
+                                        this page</a>. User <code>[% user %]</code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code>[% dbname %]</code>
+                                    </p>
+                                [% END %]
+                            [% ELSE %]
+                                <div class="alert alert-danger" role="alert"><p>No database named <code>[% dbname %]</code> detected.</p></div>
+                                <p>Please create the database before continuing.</p>
+                            [% END %]
+                        [% ELSE %]
+                            <div class="alert alert-warning" role="alert">[% error %] : [% message %]</div>
+                            <div class="tip">
+                                <ul>
+                                    <li>Check that your database is running.</li>
+                                    <li>Check your database settings in <code>koha-conf.xml</code>. </li>
+                                    <li>Check the hostname setting in <code>koha-conf.xml</code>.
+                                    Some database servers require <code>127.0.0.1</code> rather than <code>localhost</code>.</li>
+                                </ul>
+                            </div>
+                            <p>Please correct these errors and <a href="/cgi-bin/koha/installer/install.pl">start the installer</a> again.
+                        [% END %]
+                        [% UNLESS ( error ) %]
+                            <input type="hidden" name="step" value="3" />
+                            <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                        [% END %]
+                    </form>
+                [% ELSE %]
+                    <form name="checkinformation" method="post" action="install.pl">
+                        <input type="hidden" name="step" value="2" />
+                        <input type="hidden" name="checkdb" value="1" />
+                        <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                    </form>
+                [% END # / IF dbconnection %]
+            </div> <!-- / #installer-step2 -->
+        </div> <!-- / .row -->
+
+[% INCLUDE 'intranet-bottom.inc' %]

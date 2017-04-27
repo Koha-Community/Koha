@@ -1,20 +1,31 @@
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
-        [% SWITCH m.code %]
-        [% CASE 'success_on_insert_library' %]<span>Library created!</span>
-        [% CASE 'error_on_insert_library' %]<span>Library already exists and cannot be modified!</span>
-        [% CASE 'success_on_insert_category' %]<span>Patron category created!</span>
-        [% CASE 'error_on_insert_category' %]<span>Patron category already exists and cannot be modified!</span>
-        [% CASE 'success_on_insert_patron' %]<span>Administrator Patron created!</span>
-        [% CASE 'error_on_insert_patron' %]<span>The patron has not been created! Cardnumber or Userid may already exist.</span>
-        [% CASE 'ERROR_cardnumber_already_exists' %]<span>Cardnumber already in use.</span>
-        [% CASE 'ERROR_cardnumber_length' %]<span>Cardnumber length is incorrect.</span>
-        [% CASE 'ERROR_password_mismatch' %]<span>Passwords do not match.</span>
-        [% CASE 'success_on_insert_itemtype' %]<span>New item type created!</span>
-        [% CASE 'error_on_insert_itemtype' %]<span>Item type already exists!</span>
-        [% CASE 'success_on_insert_circ_rule' %]<span>Circulation rule created!</span>
-        [% CASE 'error_on_insert_circ_rule' %]<span>Circulation rule not created!</span>
+    [% SWITCH m.code %]
+        [% CASE 'success_on_insert_library' %]
+            <div class="alert alert-success">Library created!</div>
+        [% CASE 'error_on_insert_library' %]
+            <div class="alert alert-danger">Library already exists and cannot be modified!</div>
+        [% CASE 'success_on_insert_category' %]
+            <div class="alert alert-success">Patron category created!</div>
+        [% CASE 'error_on_insert_category' %]
+            <div class="alert alert-danger">Patron category already exists and cannot be modified!</div>
+        [% CASE 'success_on_insert_patron' %]
+            <div class="alert alert-success">Administrator account created!</div>
+        [% CASE 'error_on_insert_patron' %]
+            <div class="alert alert-danger">The patron has not been created! Cardnumber or Userid may already exist.</div>
+        [% CASE 'ERROR_cardnumber_already_exists' %]
+            <div class="alert alert-danger">Card number already in use.</div>
+        [% CASE 'ERROR_cardnumber_length' %]
+            <div class="alert alert-danger">Card number length is incorrect.</div>
+        [% CASE 'ERROR_password_mismatch' %]
+            <div class="alert alert-danger">Passwords do not match.</div>
+        [% CASE 'success_on_insert_itemtype' %]
+            <div class="alert alert-success">New item type created!</div>
+        [% CASE 'error_on_insert_itemtype' %]
+            <div class="alert alert-danger">Item type already exists!</div>
+        [% CASE 'success_on_insert_circ_rule' %]
+            <div class="alert alert-success">Circulation rule created!</div>
+        [% CASE 'error_on_insert_circ_rule' %]
+            <div class="alert alert-danger">Circulation rule not created!</div>
         [% CASE %][% message %]
-        [% END %]
-    </div>
+    [% END %]
 [% END %]
