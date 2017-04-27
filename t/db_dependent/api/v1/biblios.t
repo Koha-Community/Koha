@@ -110,13 +110,26 @@ subtest 'getexpanded() tests' => sub {
 };
 
 subtest 'Delete biblio' => sub {
-	plan tests => 2;
+	plan tests => 4;
 
+    my ($patron, $session) = create_user_and_session({
+        'editcatalogue' => 'delete_catalogue'
+    });
 	my $tx = $t->ua->build_tx(DELETE => "/api/v1/biblios/$biblionumber");
 	$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
 	$tx->req->cookies({name => 'CGISESSID', value => $session->id});
 	$t->request_ok($tx)
 	  ->status_is(200);
+
+    # Attempt unauthorized delete
+    my ($patron2, $session2) = create_user_and_session({
+        'editcatalogue' => 'edit_catalogue'
+    });
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/biblios/$biblionumber");
+	$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+	$tx->req->cookies({name => 'CGISESSID', value => $session2->id});
+	$t->request_ok($tx)
+	  ->status_is(403);
 };
 
 
@@ -139,4 +152,32 @@ sub create_helper_biblio {
         MARC::Field->new('942', ' ', ' ', c => $itemtype),
     );
     return ($bibnum, $title, $bibitemnum) = C4::Biblio::AddBiblio($bib, '');
+}
+
+sub create_user_and_session {
+    my $flags  = shift;
+
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $user = $builder->build({
+        source => "Borrower",
+        value => {
+            categorycode => $categorycode,
+            branchcode => $branchcode,
+        },
+    });
+
+    my $session = C4::Auth::get_session('');
+    $session->param('number', $user->{ borrowernumber });
+    $session->param('id', $user->{ userid });
+    $session->param('ip', '127.0.0.1');
+    $session->param('lasttime', time());
+    $session->flush;
+
+    my $patron = Koha::Patrons->find($user->{borrowernumber});
+    if ( $flags ) {
+        Koha::Auth::PermissionManager->grantPermissions($patron, $flags);
+    }
+
+    return ($patron, $session);
 }

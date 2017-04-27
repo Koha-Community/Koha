@@ -13,6 +13,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'reserveforothers','place_holds', 'Place holds for patrons'),
    ( 'reserveforothers','modify_holds_priority', 'Modify holds priority'),
    ( 'editcatalogue',   'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
+   ( 'editcatalogue',   'delete_catalogue', 'Allow deleting bibliographic records'),
    ( 'editcatalogue',   'fast_cataloging', 'Fast cataloging'),
    ( 'editcatalogue',   'edit_items', 'Edit items'),
    ( 'editcatalogue',   'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)'),
