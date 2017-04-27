@@ -14291,6 +14291,35 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18110 - Adds FR to the syspref AddressFormat)\n";
 }
 
+$DBversion = '16.12.00.029';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'issues', 'note' ) ) {
+        $dbh->do(q|ALTER TABLE issues ADD note mediumtext default NULL AFTER onsite_checkout|);
+    }
+    unless( column_exists( 'issues', 'notedate' ) ) {
+        $dbh->do(q|ALTER TABLE issues ADD notedate datetime default NULL AFTER note|);
+    }
+    unless( column_exists( 'old_issues', 'note' ) ) {
+        $dbh->do(q|ALTER TABLE old_issues ADD note mediumtext default NULL AFTER onsite_checkout|);
+    }
+    unless( column_exists( 'old_issues', 'notedate' ) ) {
+        $dbh->do(q|ALTER TABLE old_issues ADD notedate datetime default NULL AFTER note|);
+    }
+
+    $dbh->do(q|
+        INSERT IGNORE INTO letter (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`)
+        VALUES ('circulation', 'PATRON_NOTE', '', 'Patron note on item', '0', 'Patron issue note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.item>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
+    |);
+
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`,`type`)
+        VALUES ('AllowCheckoutNotes', '0', NULL, 'Allow patrons to submit notes about checked out items.','YesNo');
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14224: Add column issues.note and issues.notedate)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
