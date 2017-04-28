@@ -83,7 +83,7 @@ my $allbaskets= $query->param('allbaskets')||0;
 my @suppliers;
 
 if ($booksellerid) {
-    push @suppliers, Koha::Acquisition::Booksellers->find( $booksellerid );
+    push @suppliers, scalar Koha::Acquisition::Booksellers->find( $booksellerid );
 } else {
     @suppliers = Koha::Acquisition::Booksellers->search({ name => $supplier });
 }
