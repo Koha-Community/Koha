@@ -822,7 +822,7 @@
         </span>
     </xsl:if>
 
-<!-- DDC classification -->
+<!-- Other classification -->
     <xsl:if test="marc:datafield[@tag=084]">
        <span class="results_summary oc">
            <span class="label">Other classification: </span>
