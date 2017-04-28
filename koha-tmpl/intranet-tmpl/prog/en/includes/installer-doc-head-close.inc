@@ -11,4 +11,14 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
 <script type="text/javascript">
     function _(s) { return s } // dummy function for gettext
+    [%# Prevent XFS attacks -%]
+    $(document).ready(function() {
+       if (self === top) {
+           var antiClickjack = document.getElementById("antiClickjack");
+           antiClickjack.parentNode.removeChild(antiClickjack);
+       } else {
+           top.location = self.location;
+       }
+    });
 </script>
+<style id="antiClickjack">body{display:none !important;}</style>
