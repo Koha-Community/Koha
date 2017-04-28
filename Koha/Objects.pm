@@ -78,8 +78,6 @@ my $object = Koha::Objects->find( { keypart1 => $keypart1, keypart2 => $keypart2
 sub find {
     my ( $self, $id ) = @_;
 
-    croak 'Cannot use "->find" in list context' if wantarray;
-
     return unless defined($id);
 
     my $result = $self->_resultset()->find($id);
