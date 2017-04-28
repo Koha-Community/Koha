@@ -1815,8 +1815,12 @@ sub checkpw {
 
     if ( $return[0] == 0 ) {
         $patron->update({ login_attempts => $patron->login_attempts + 1 }) if $patron;
-    } elsif ( $return[1] == 1 ) {
-        $patron->update({ login_attempts => 0 })->store if $patron;
+    } elsif ( $return[0] == 1 ) {
+        if ( $patron ) {
+            # FIXME Koha::Object->update should return a Koha::Object to allow chaining
+            $patron->update({ login_attempts => 0 });
+            $patron->store;
+        }
     }
     return @return;
 }
