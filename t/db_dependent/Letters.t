@@ -165,6 +165,20 @@ is( $messages->[0]->{status}, 'pending',
 is( $messages->[0]->{delivery_note}, 'Connection failed. Attempting to resend.',
     'Message has correct delivery note about resending' );
 
+my $sms_module = new Test::MockModule('SMS::Send::Example::ExceptionExample');
+$sms_module->mock(
+    'send_sms',
+    sub {
+        require Koha::Exception::SMSDeliveryFailure;
+        Koha::Exception::SMSDeliveryFailure->throw(error => "Bad phone number");
+    }
+);
+
+$messages_processed = C4::Letters::SendQueuedMessages();
+is( $messages->[0]->{status}, 'failed',
+    'Message is in failed status' );
+is( $messages->[0]->{delivery_note}, 'Bad phone number',
+    'Message delivery note is correct.' );
 
 # GetLetters
 my $letters = C4::Letters::GetLetters();
