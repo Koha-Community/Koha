@@ -134,7 +134,6 @@ sub _get_uri {
     my $interface = C4::Context->interface;
     $debug and warn "shibboleth interface: " . $interface;
 
-    my $return;
     my $uri;
     if ( $interface eq 'intranet' ) {
 
