@@ -31,7 +31,7 @@ sub GetByCode {
             ? $opac
                 ? $av->next->opac_description
                 : $av->next->lib
-            : '';
+            : $code;
 }
 
 sub Get {
