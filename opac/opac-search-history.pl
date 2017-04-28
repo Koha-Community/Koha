@@ -40,7 +40,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         template_name => "opac-search-history.tt",
         query => $cgi,
         type => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         flagsrequired => {borrowers => 1},
         debug => 1,
     }
