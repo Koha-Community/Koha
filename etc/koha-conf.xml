@@ -249,6 +249,56 @@ __PAZPAR2_TOGGLE_XML_POST__
       <customerPass></customerPass> <!-- Opus Capita customer password -->
     </opusFTP>
  </printmailProviders>
-
+ <smsProviders>
+    <labyrintti>
+        <!-- Login details for SMS Gateway service
+        There are 3 options to configure this,
+        first one is single branch login. This uses branchcode for defining client
+        <branchcode>
+            <user></user>
+            <passwd></passwd>
+        </branchcode>-->
+        <!-- Second one is library group login. This uses 3 first chars of branchcode for defining client
+        <branchprefix>
+            <user></user>
+            <passwd></passwd>
+        </branchprefix>-->
+        <!-- And the third one is shared login for all messages.-->
+        <user></user>
+        <passwd></passwd>
+        <!-- Report URL is the page where your SMS Gateway provider will send a report
+             about the delivery of the message. Leave {message_id} as it is; it will
+             be replaced by message_id in your driver.
+             With REST API, it should be
+             http://mydomain.com/api/v1/notices/{message_id}/report/_your_gateway_
+                                                                                    -->
+        <reportUrl></reportUrl>
+        <!-- Use UTF-16. Note: with this encoding, maxlength of sms = 70 chars
+            To use UTF-16 when needed: yes
+            To disable and use GSM 03.38: leave blank -->
+        <Unicode></Unicode>
+        <sourceName></sourceName> <!-- Displays as sender name in phones. Maxlength 11 chars -->
+    </labyrintti>
+    <arena>
+        <!-- Login details for SMS Gateway service -->
+        <user></user>
+        <passwd></passwd>
+        <!-- Send messages with separated billing. Uses 3 first chars of branchcode for defining clientid -->
+        <branchcode>
+            <clientid></clientid>
+        </branchcode>
+        <!-- Report URL is the page where your SMS Gateway provider will send a report
+             about the delivery of the message. Leave {message_id} as it is; it will
+             be replaced by message_id in your driver.
+             With REST API, it should be
+             http://mydomain.com/api/v1/notices/{message_id}/report/_your_gateway_
+                                                                                    -->
+        <reportUrl></reportUrl>
+        <!-- Use UTF-16. Note: with this encoding, maxlength of sms = 70 chars
+            To use UTF-16 when needed: yes
+            To disable and use GSM 03.38: leave blank -->
+        <Unicode></Unicode>
+    </arena>
+ </smsProviders>
 </config>
 </yazgfs>

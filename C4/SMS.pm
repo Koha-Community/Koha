@@ -118,6 +118,7 @@ sub send_sms {
             $driver,
             _login    => C4::Context->preference('SMSSendUsername'),
             _password => C4::Context->preference('SMSSendPassword'),
+            _from     => $params->{'from_address'},
             %args,
         );
 
@@ -125,6 +126,7 @@ sub send_sms {
         $sent = $sender->send_sms(
             to   => $params->{destination},
             text => $params->{message},
+            _message_id => $params->{'message_id'},
         );
         return $sent;
     } catch {
