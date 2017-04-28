@@ -14320,6 +14320,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 14224: Add column issues.note and issues.notedate)\n";
 }
 
+$DBversion = '16.12.00.030';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'issuingrules', 'no_auto_renewal_after_hard_limit' ) ) {
+        $dbh->do(q{
+            ALTER TABLE issuingrules ADD COLUMN no_auto_renewal_after_hard_limit DATE DEFAULT NULL AFTER no_auto_renewal_after;
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 16344 - Add a circ rule to limit the auto renewals given a specific date)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
