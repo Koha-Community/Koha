@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -378,6 +378,44 @@ subtest 'delete() tests' => sub {
 
     my $msg = Koha::Notice::Messages->find($message_id);
     is($msg, undef, 'The notice was really deleted!');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Notices::Report::labyrintti() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my ($patron, $session) = create_user_and_session();
+
+    my $notice = $builder->build({
+        source => 'MessageQueue',
+        value => {
+            borrowernumber => $patron->borrowernumber,
+        }
+    });
+
+    my $message_id = $notice->{'message_id'};
+
+    my $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
+        => form => { status => 'ERROR', message => 'Landline number' });
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(404);
+
+    $tx = $t->ua->build_tx(POST => "/api/v1/notices/$message_id/report/labyrintti"
+        => form => { status => 'ERROR', message => 'Landline number' });
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    my $msg = Koha::Notice::Messages->find($message_id);
+    is($msg->status, 'failed', 'Labyrintti reported delivery as failed');
+    is($msg->delivery_note, 'Landline number',
+       'The correct delivery note was stored');
 
     $schema->storage->txn_rollback;
 };

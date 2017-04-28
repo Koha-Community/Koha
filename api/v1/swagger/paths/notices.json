@@ -489,5 +489,49 @@
         }
       }
     }
+  },
+  "/notices/{message_id}/report/labyrintti": {
+    "post": {
+      "x-mojo-to": "Notices::Report#labyrintti",
+      "operationId": "createLabyrinttiReport",
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/message_idPathParam"
+        },
+        {
+          "name": "status",
+          "in": "formData",
+          "type": "string",
+          "description": "Status of the delivery",
+          "required": true
+        },
+        {
+          "name": "message",
+          "in": "formData",
+          "type": "string",
+          "description": "Delivery notes",
+          "required": true
+        }
+      ],
+      "consumes": ["application/x-www-form-urlencoded"],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Response for receiving the report.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "404": {
+          "description": "Notice not found",
+          "schema": {
+            "$ref": "../definitions/error.json"
+          }
+        }
+      }
+    }
   }
 }
