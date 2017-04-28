@@ -23,14 +23,19 @@ use Test::More tests => 1;
 use Test::Mojo;
 
 use Module::Load::Conditional;
-use Swagger2;
+use JSON::Validator::OpenAPI;
 
 use C4::Context;
 use Koha::Database;
 
 my $swaggerPath = C4::Context->config('intranetdir') . "/api/v1/swagger";
-my $swagger     = Swagger2->new( $swaggerPath . "/swagger.json" )->expand;
-my $api_spec    = $swagger->api_spec->data;
+my $swagger     = JSON::Validator::OpenAPI->new->load_and_validate_schema(
+    $swaggerPath . "/swagger.json",
+    {
+        allow_invalid_ref => 1
+    }
+);
+my $api_spec    = $swagger->schema->data;
 my $schema = Koha::Database->new->schema;
 
 # The basic idea of this test:
