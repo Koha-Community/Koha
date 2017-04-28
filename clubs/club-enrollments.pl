@@ -38,7 +38,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $id = $cgi->param('id');
-my $club = Koha::Clubs->find($id);
+my $club = Koha::Clubs->find( $id );
 
 $template->param(
     club          => $club,

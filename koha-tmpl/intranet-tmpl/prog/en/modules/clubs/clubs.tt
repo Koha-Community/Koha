@@ -29,7 +29,7 @@
     });
 
     function ConfirmDeleteTemplate( id, name, a ) {
-        if ( confirm( _("Are you sure you want to delete the club template %s?" ).format(name) ) ) {
+        if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/club/template/delete',
@@ -47,7 +47,7 @@
     }
 
     function ConfirmDeleteClub( id, name, a ) {
-        if ( confirm( _("Are you sure you want to delete the club %s?" ).format(name) ) ) {
+        if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/club/delete',
