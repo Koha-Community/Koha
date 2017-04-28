@@ -80,6 +80,21 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 RELATIONS
 
+=head2 club_fields
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubField>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_fields",
+  "Koha::Schema::Result::ClubField",
+  { "foreign.club_template_field_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_template
 
 Type: belongs_to
@@ -96,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xhCyOHUrXuU+UoHeGk1ZKw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 18:47:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pZ/iYdUn2LUeDNI2I+h+hQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
