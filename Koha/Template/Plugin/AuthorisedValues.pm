@@ -22,10 +22,16 @@ use Template::Plugin;
 use base qw( Template::Plugin );
 
 use C4::Koha;
+use Koha::AuthorisedValues;
 
 sub GetByCode {
     my ( $self, $category, $code, $opac ) = @_;
-    return GetAuthorisedValueByCode( $category, $code, $opac );
+    my $av = Koha::AuthorisedValues->search({ category => $category, authorised_value => $code });
+    return $av->count
+            ? $opac
+                ? $av->next->opac_description
+                : $av->next->lib
+            : $code;
 }
 
 sub Get {
