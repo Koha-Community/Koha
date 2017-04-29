@@ -134,7 +134,7 @@
       }
     }
 
-    function addNewField() {
+    function addNewField( link ) {
       var form_field = $('div.form-field-select-text').last();
       var copy = form_field.clone(true);
       copy.find('input,select').not('[type="hidden"]').each(function() {
@@ -142,6 +142,7 @@
       });
       copy.find('.form-field-conjunction').prop('disabled', false);
       form_field.after(copy);
+      link.remove();
       copy.find('select.form-field-column').change();
     }
 
@@ -299,12 +300,12 @@
       // Add the "New field" link.
       var form_field = $('div.form-field-select-text').last()
       var NEW_FIELD = _("New field");
-      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field">' + NEW_FIELD + '</a>');
-      button_field_new.click(function() {
-        addNewField();
-        return false;
+      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
+      button_field_new.click(function(e) {
+          e.preventDefault();
+          addNewField( $(this) );
       });
-      form_field.after(button_field_new);
+      form_field.append(button_field_new);
 
       // If a field is linked to an authorised values list, display the list.
       $('div.form-field-select-text select').change(function() {
