@@ -956,10 +956,7 @@ $(document).ready(function(){
 [% IF ( DidYouMean ) %]
     $("#didyoumean").load("/cgi-bin/koha/svc/suggestion?render=stub&q=[% querystring |uri %]",
         function() {
-            $(".searchsuggestion").parent().parent().css({
-                "border-color": "#F4ECBE",
-                "background-color": "#FFFBEA"
-            });
+            $(this).addClass("dym-loaded");
         });
 [% END %]
 

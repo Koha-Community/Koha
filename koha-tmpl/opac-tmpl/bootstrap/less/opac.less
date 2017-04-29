@@ -1721,10 +1721,16 @@ input.editshelf {
 #didyoumean {
     background-color: #EEE;
     border: 1px solid #E8E8E8;
-    margin: 0 0 0.5em;
+    box-sizing: border-box;
+    margin: .5em 1.5em;
     text-align: left;
     padding: 0.5em;
     .border-radius-all(3px);
+
+    &.dym-loaded {
+        border-color: #F4ECBE;
+        background-color: #FFFBEA;
+    }
 }
 
 .suggestionlabel {
@@ -1733,7 +1739,6 @@ input.editshelf {
 
 .searchsuggestion {
     padding: 0.2em 0.5em;
-    white-space: nowrap;
     display: inline-block;
 }
 
