@@ -78,20 +78,20 @@ Using this account is not recommended because some parts of Koha will not functi
                     [% IF ( RENEW_ERROR ) %]
                         <div class="dialog alert">
                             <strong>Please note:</strong>
-                            <span>
                                 Your loan renewal failed because of the following reason(s):
-                                [% FOREACH error IN RENEW_ERROR.split('\|') %]
-                                    [% IF error == 'card_expired' %]
-                                        Your account has expired. Please contact the library for more information.
-                                    [% ELSIF error == 'too_many' %]
-                                        You have renewed this item the maximum number of times allowed.
-                                    [% ELSIF error == 'too_soon' %]
-                                        It is too soon after the checkout date for this item to be renewed.
-                                    [% ELSIF error == 'on_reserve' %]
-                                        This item is on hold for another patron.
+                                <ul>
+                                    [% FOREACH error IN RENEW_ERROR.split('\|') %]
+                                        [% IF error == 'card_expired' %]
+                                            <li>Your account has expired. Please contact the library for more information.</li>
+                                        [% ELSIF error == 'too_many' %]
+                                            <li>You have renewed this item the maximum number of times allowed.</li>
+                                        [% ELSIF error == 'too_soon' %]
+                                            <li>It is too soon after the checkout date for this item to be renewed.</li>
+                                        [% ELSIF error == 'on_reserve' %]
+                                            <li>This item is on hold for another patron.</li>
+                                        [% END %]
                                     [% END %]
-                                [% END %]
-                            </span>
+                                </ul>
                         </div>
                     [% END %]
 
