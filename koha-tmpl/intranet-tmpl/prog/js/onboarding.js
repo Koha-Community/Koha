@@ -1,23 +1,13 @@
 function _(s) { return s; } // dummy function for gettext
 
 jQuery.validator.addMethod( "category_code_check", function(value,element){
-    var patt = /^[A-Za-z]{0,10}$/g;
+    var patt = /^[A-Za-z0-9]{0,10}$/g;
     if (patt.test(element.value)) {
         return true;
     } else {
         return false;
     }
-    }, MSG_LETTERS_ONLY
-);
-
-jQuery.validator.addMethod( "letters_only", function(value,element){
-        var patt =/^[A-Za-z ]{0,30}$/g;
-        if (patt.test(element.value)){
-            return true;
-        } else {
-            return false;
-        }
-    }, MSG_LETTERS_ONLY
+    }, MSG_LETTERS_NUMBERS_ONLY
 );
 
 jQuery.validator.addMethod( "enrollment_period", function(){
@@ -45,16 +35,6 @@ jQuery.validator.addMethod( "password_match", function(value,element){
     },  MSG_PASSWORD_MISMATCH
 );
 
-jQuery.validator.addMethod( "cardnumber_check", function(value,element){
-          var patt =/[A-Za-z1-9 ]+$/g;
-          if (patt.test(element.value)){
-              return true;
-          } else {
-              return false;
-          }
-     }, MSG_LETTERS_NUMBERS_ONLY
-);
-
 function toUC(f) {
     var x=f.value.toUpperCase();
     f.value=x;
@@ -76,48 +56,48 @@ $(document).ready(function() {
     $("#category_form").validate({
         rules: {
             categorycode: {
-                    required: true,
-                    category_code_check: true
+                required: true,
+                category_code_check: true
             },
             description: {
                     required:true
             },
             enrolmentperiod: {
-                   required: function(element){
-                         return $("#enrolmentperioddate").val() === "";
-                   },
-                   digits: true,
-                   enrollment_period: true,
+               required: function(element){
+                     return $("#enrolmentperioddate").val() === "";
+               },
+               digits: true,
+               enrollment_period: true,
             },
             enrolmentperioddate: {
-                    required: function(element){
-                        return $("#enrolmentperiod").val() === "";
-                    },
-                    enrollment_period: true,
-                    // is_valid_date ($(#"enrolementperioddate").val());
+                required: function(element){
+                    return $("#enrolmentperiod").val() === "";
+                },
+                enrollment_period: true,
+                // is_valid_date ($(#"enrolementperioddate").val());
             },
             dateofbirthrequired: {
-                    digits: true
+                digits: true
             },
             upperagelimit: {
-                    digits: true
+                digits: true
             },
             enrolmentfee: {
-                    number: true
+                number: true
             },
             reservefee: {
-                    number: true
+                number: true
             },
             category_type: {
-                    required: true
+                required: true
             }
         },
         messages: {
             enrolmentperiod: {
-                    required: MSG_ONE_ENROLLMENTPERIOD
+                required: MSG_ONE_ENROLLMENTPERIOD
             },
             enrolmentperioddate: {
-                    required: MSG_ONE_ENROLLMENTPERIOD
+                required: MSG_ONE_ENROLLMENTPERIOD
             }
         }
     });

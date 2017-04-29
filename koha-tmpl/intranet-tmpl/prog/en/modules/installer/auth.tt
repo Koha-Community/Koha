@@ -18,19 +18,19 @@
                 <h1 id="logo"><a href="#">Koha</a></h1>
 
                 [% IF ( nopermission ) %]
-                    <div id="login_error"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
+                    <div id="login_error" class="alert alert-danger"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
                 [% END %]
 
                 [% IF ( timed_out ) %]
-                <div id="login_error"><strong>Error: </strong>Session timed out, please log in again</div>
+                <div id="login_error" class="alert alert-danger"><strong>Error: </strong>Session timed out, please log in again</div>
                 [% END %]
 
                 [% IF ( different_ip ) %]
-                <div id="login_error"><strong>Error: </strong>IP address has changed, please log in again </div>
+                <div id="login_error" class="alert alert-danger"><strong>Error: </strong>IP address has changed, please log in again </div>
                 [% END %]
 
                 [% IF ( invalid_username_or_password ) %]
-                <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
+                <div id="login_error" class="alert alert-danger"><strong>Error: </strong>Invalid username or password</div>
                 [% END %]
 
                 [% IF ( loginprompt ) %]

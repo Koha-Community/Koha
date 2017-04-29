@@ -89,7 +89,7 @@
                                     [% END %]
                                 </select>
                                 <div class="hint">
-                                        Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <code>batch_anonymise.pl</code> which should be set up by your system administrator.
+                                    Controls how long a patrons checkout history is kept for new patrons of this category. "Never" anonymizes checkouts on return, and "Forever" keeps a patron's checkout history indefinitely. When set to "Default", the amount of history kept is controlled by the cronjob <code>batch_anonymise.pl</code> which should be set up by your system administrator.
                                 </div>
                             </li>
                             <li>
@@ -97,23 +97,24 @@
                                 <fieldset class="rows">
                                     <ol>
                                         <li>
-                                                <span class="label"> </span><strong>Choose one</strong>
-                                            </li>
-                                            <li>
+                                            <span class="label"></span><strong>Choose one</strong>
+                                        </li>
+                                        <li>
                                             <label for="enrolmentperiod">In months: </label>
                                             <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" />
                                         </li>
                                         <li>
-                                             <label for="enrolmentperioddate">Until date: </label>
-                                              <input type="text" class="enrolmentperioddate datepicker" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
-                                             <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                                            <label for="enrolmentperioddate">Until date: </label>
+                                            <input type="text" class="enrolmentperioddate datepicker" name="enrolmentperioddate" id="enrolmentperioddate" value="[% category.enrolmentperioddate | $KohaDates %]" />
+                                             <div class="hint">[% INCLUDE 'date-format.inc' dateformat = Koha.Preference('dateformat') %]</div>
                                         </li>
                                     </ol>
                                 </fieldset>
                             </li>
                         </ol>
 
-                        <p> To add another patron category and for more settings go to:
+                        <p>
+                            To add another patron category and for more settings go to:
                             <span class="breadcrumbs"> Administration <b>&rsaquo;</b> Patron categories</span>
                         </p>
 
