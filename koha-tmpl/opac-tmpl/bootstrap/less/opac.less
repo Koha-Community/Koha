@@ -2526,4 +2526,74 @@ a.reviewlink:visited {
     color: white !important;
 }
 
+.count_label {
+    @base: #369;
+    background-color: @base;
+    border-radius: 5px;
+    color: #FFF;
+    display: inline-block;
+    font-weight: bold;
+    min-width: 1.5em;
+    padding: .2em;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+    &:hover {
+        background-color: lighten( @base, 20% );
+    }
+}
+
+.user_checkouts_count {
+
+}
+
+.user_overdues_count,
+.user_fines_count {
+    background-color: #990000;
+    &:hover {
+        background-color: lighten( #990000, 10% );
+    }
+}
+
+.user_holds_pending_count {
+
+}
+
+.user_holds_waiting_count {
+    background-color: #538200;
+    &:hover {
+        background-color: lighten( #538200, 10% );
+    }
+}
+
+#user_summary {
+    border: 1px solid #EAEAE6;
+    border-radius: 7px;
+    margin-bottom: 1em;
+    padding-bottom: .5em;
+
+    h3 {
+        background-color: #EAEAE6;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2);
+        margin-top: 0;
+        padding: .2em 0;
+        text-align: center;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0 0 .2em 0;
+
+        a {
+            display: block;
+            font-weight: bold;
+            padding: .2em 1em;
+        }
+    }
+}
+
+
+
 @import "responsive.less";

@@ -137,22 +137,22 @@
                     [% ELSE %]
                         [% IF Koha.Preference('OPACUserSummary') %]
                             <div id="user_summary">
-                                <h1>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></h1>
+                                <h3>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></h3>
                                 <ul id="user_summary_shortcuts">
                                     [% IF checkouts && checkouts > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% checkouts %] checkout(s)</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts"><span class="user_checkouts_count count_label">[% checkouts %]</span> Checkout(s)</a></li>
                                     [% END %]
                                     [% IF overdues && overdues > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% overdues %] overdue(s)</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues"><span class="user_overdues_count count_label">[% overdues %]</span> Overdue(s)</a></li>
                                     [% END %]
                                     [% IF holds_pending && holds_pending > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% holds_pending %] hold(s) pending</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_pending_count count_label">[% holds_pending %]</span> Hold(s) pending</a></li>
                                     [% END %]
                                     [% IF holds_waiting && holds_waiting > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-user.pl">[% holds_waiting %] hold(s) waiting</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_waiting_count count_label">[% holds_waiting %]</span> Hold(s) waiting</a></li>
                                     [% END %]
                                     [% IF total_owing && total_owing > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-account.pl">[% total_owing | $Price %] due</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span> Due</a></li>
                                     [% END %]
                                 </ul>
                             </div>
