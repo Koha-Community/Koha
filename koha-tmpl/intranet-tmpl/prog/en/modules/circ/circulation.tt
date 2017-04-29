@@ -895,16 +895,6 @@ No patron matched <span class="ex">[% message | html %]</span>
         [% END %]
     </li>
 
-    [% SET enrollments = patron.get_club_enrollments(1) %]
-    [% SET enrollable  = patron.get_enrollable_clubs(0,1) %]
-    [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
-        <li>
-            <a id="clubs-tab-link" href="#clubs-tab">
-                Clubs ([% enrollments.count %]/[% enrollable.count %])
-            </a>
-        </li>
-    [% END %]
-
     [% IF relatives_issues_count %]
         <li><a id="relatives-issues-tab" href="#relatives-issues">Relatives' checkouts</a></li>
     [% END %]
@@ -924,6 +914,17 @@ No patron matched <span class="ex">[% message | html %]</span>
     [% END %]
 
     <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.count %] Restrictions</a></li>
+
+    [% SET enrollments = patron.get_club_enrollments(1) %]
+    [% SET enrollable  = patron.get_enrollable_clubs(0,1) %]
+    [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
+        <li>
+            <a id="clubs-tab-link" href="#clubs-tab">
+                Clubs ([% enrollments.count %]/[% enrollable.count %])
+            </a>
+        </li>
+    [% END %]
+
 </ul>
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->

@@ -1,13 +1,10 @@
 [% USE KohaDates %]
 
 [% IF enrollments %]
+    <h4>Clubs currently enrolled in</h4>
+
     <table>
         <thead>
-            <tr>
-                <th colspan="4">
-                    Clubs currently enrolled in
-                </th>
-            </tr>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -24,9 +21,9 @@
                     <td>[% e.date_enrolled | $KohaDates %]</td>
                     [% IF CAN_user_clubs_enroll %]
                         <td>
-                            <a class="btn btn-xs" onclick="cancelEnrollment( [% e.id %] )">
+                            <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id %] )">
                                 <i class="fa fa-remove"></i> Cancel
-                            </a>
+                            </button>
                         </td>
                     [% END %]
                 </tr>
@@ -36,13 +33,11 @@
 [% END %]
 
 [% IF clubs %]
+
+    <h4>Clubs not enrolled in</h4>
+
     <table>
         <thead>
-            <tr>
-                <th colspan="3">
-                    Clubs not enrolled in
-                </th>
-            </tr>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -56,10 +51,10 @@
                     <td>[% c.name %]</td>
                     <td>[% c.description %]</td>
                     [% IF CAN_user_clubs_enroll %]
-                        <td>
-                            <a class="btn btn-xs" onclick="loadEnrollmentForm([% c.id %])">
+                        <td class="action">
+                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id %])">
                                 <i class="fa fa-plus"></i> Enroll
-                            </a>
+                            </button>
                         </td>
                     [% END %]
                 </tr>

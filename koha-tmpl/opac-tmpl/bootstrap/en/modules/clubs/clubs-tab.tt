@@ -1,13 +1,11 @@
 [% USE KohaDates %]
 
 [% IF enrollments %]
+
+    <h4>Clubs currently enrolled in</h4>
+
     <table id="clubs-table-enrolled" class="table table-bordered table-striped">
         <thead>
-            <tr>
-                <th colspan="4">
-                    Clubs you are currently enrolled in
-                </th>
-            </tr>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -24,9 +22,9 @@
                     <td>[% e.date_enrolled | $KohaDates %]</td>
                     [% IF e.club.club_template.is_enrollable_from_opac %]
                         <td>
-                            <a class="btn btn-xs" onclick="cancelEnrollment( [% e.id %] )">
+                            <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id %] )">
                                 <i class="icon-remove"></i> Cancel
-                            </a>
+                            </button>
                         </td>
                     [% END %]
                 </tr>
@@ -36,13 +34,11 @@
 [% END %]
 
 [% IF clubs %]
+
+    <h4>Clubs you can enroll in</h4>
+
     <table id="clubs-table-unenrolled" class="table table-bordered table-striped">
         <thead>
-            <tr>
-                <th colspan="3">
-                    Clubs you can enroll in
-                </th>
-            </tr>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
@@ -57,9 +53,9 @@
                     <td>[% c.description %]</td>
                     <td>
                         [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.first_valid_email_address ) %]
-                            <a class="btn btn-xs" onclick="loadEnrollmentForm([% c.id %])">
+                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id %])">
                                 <i class="icon-plus"></i> Enroll
-                            </a>
+                            </button>
                         [% ELSE %]
                             <span class="hint">You must have an email address to enroll</span>
                         [% END %]

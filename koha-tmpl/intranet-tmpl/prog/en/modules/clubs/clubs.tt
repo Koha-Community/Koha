@@ -15,7 +15,7 @@
             "sPaginationType": "four_button",
             "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
             "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
             ]
         } ));
 
@@ -23,7 +23,7 @@
             "sPaginationType": "four_button",
             "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
             "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
             ]
         } ));
     });
@@ -102,7 +102,7 @@
                 [% IF CAN_user_clubs_edit_templates %]
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <a class="btn btn-default" href="templates-add-modify.pl"><i class="fa fa-plus"></i> New club template</a>
+                            <a class="btn btn-sm btn-default" href="templates-add-modify.pl"><i class="fa fa-plus"></i> New club template</a>
                         </div>
                     </div>
                 [% END %]
@@ -143,14 +143,14 @@
                                     <td>[% Branches.GetName( t.branchcode ) %]</td>
                                     <td>
                                         [% IF CAN_user_clubs_edit_templates %]
-                                            <a class="btn btn-default" style="white-space:nowrap"  href="templates-add-modify.pl?id=[% t.id %]">
-                                                <i class="fa fa-edit"></i> Edit
+                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="templates-add-modify.pl?id=[% t.id %]">
+                                                <i class="fa fa-pencil"></i> Edit
                                             </a>
                                         [% END %]
                                     </td>
                                     <td>
                                         [% IF CAN_user_clubs_edit_templates %]
-                                            <a class="btn btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id %], "[% t.name | html %]", $(this) ); return false;'>
+                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id %], "[% t.name | html %]", $(this) ); return false;'>
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         [% END %]
@@ -173,9 +173,9 @@
                     <div class="btn-toolbar">
                         <div class="btn-group">
                             [% IF club_templates %]
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                                <button class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
                             [% ELSE %]
-                                <button disabled="disabled" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
+                                <button disabled="disabled" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New club <span class="caret"></span></button>
                             [% END %]
                             <ul class="dropdown-menu">
                                 [% FOREACH t IN club_templates %]
@@ -198,6 +198,7 @@
                             <th>Start date</th>
                             <th>End date</th>
                             <th>Enrolled patrons</th>
+                            <th>&nbsp;</th>
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
                         </tr>
@@ -237,20 +238,26 @@
                                     </td>
                                     <td>
                                         [% c.club_enrollments.count %]
-                                        <a class="btn btn-xs" href="club-enrollments.pl?id=[% c.id %]">
-                                            View enrollments
+                                    </td>
+                                    <td class="actions">
+                                        [% IF ( c.club_enrollments.count ) %]
+                                            <a class="btn btn-xs btn-default" href="club-enrollments.pl?id=[% c.id %]">
+                                        [% ELSE %]
+                                            <a class="btn btn-xs btn-default disabled" href="club-enrollments.pl?id=[% c.id %]">
+                                        [% END %]
+                                            <i class="fa fa-list-ul"></i> Enrollments
                                         </a>
                                     </td>
-                                    <td>
+                                    <td class="actions">
                                         [% IF CAN_user_clubs_edit_clubs %]
-                                            <a class="btn btn-default" style="white-space:nowrap" href="clubs-add-modify.pl?id=[% c.id %]">
-                                                <i class="fa fa-edit"></i> Edit
+                                            <a class="btn btn-xs btn-default" href="clubs-add-modify.pl?id=[% c.id %]">
+                                                <i class="fa fa-pencil"></i> Edit
                                             </a>
                                         [% END %]
                                     </td>
-                                    <td>
+                                    <td class="actions">
                                         [% IF CAN_user_clubs_edit_clubs %]
-                                            <a class="btn btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
+                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         [% END %]
@@ -259,18 +266,18 @@
                             [% END %]
                         [% ELSE %]
                             <tr>
-                                <td colspan="8">
+                                <td colspan="11">
                                     No clubs defined.
                                 </td>
-                            </td>
+                            </tr>
                         [% END %]
                     </tbody>
-                </table>
-            </div>
-        </div>
+                </table> <!-- /.clubs-table -->
+            </div> <!-- /.yui-b -->
+        </div> <!-- /.yui-main -->
         <div class="yui-b noprint">
             [% INCLUDE 'tools-menu.inc' %]
         </div>
-    </div>
-</div>
+    </div> <!-- /#bd -->
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -40,7 +40,6 @@
                         <tr>
                             <th>Name</th>
                             <th>Card number</th>
-                            <th>&nbsp;</th>
                         </tr>
                     </thead>
 
@@ -49,16 +48,10 @@
                             [% SET p = e.patron %]
                             <tr>
                                 <td>
-                                    [% p.firstname %] [% p.surname %]
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id %]">[% p.surname %], [% p.firstname %]</a>
                                 </td>
                                 <td>
                                     [% p.cardnumber %]
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id %]">
-                                        <i class="fa fa-eye"></i>
-                                        View patron
-                                    </a>
                                 </td>
                             </tr>
                         [% END %]
