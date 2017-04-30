@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 42;
 use Data::Dumper;
 
 use C4::Branch;
@@ -20,6 +20,7 @@ use Koha::DateUtils;
 use Koha::Items;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use FindBin;
