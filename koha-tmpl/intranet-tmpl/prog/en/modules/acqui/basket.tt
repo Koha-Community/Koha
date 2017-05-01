@@ -556,7 +556,8 @@
                                 [% IF ( books_loo.isbn ) %] - [% books_loo.isbn %][% END %]
                                 [% IF ( books_loo.issn ) %] - [% books_loo.issn %][% END %]
                                 [% IF ( books_loo.publishercode ) %], [% books_loo.publishercode %][% END %]
-                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %][% END %]
+                                [% IF ( books_loo.publicationyear ) %], [% books_loo.publicationyear %]
+                                [% ELSIF ( books_loo.copyrightdate ) %] [% books_loo.copyrightdate %][% END %]
                                 [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                                 [% IF ( books_loo.suggestionid ) %]
                                     <br/>
@@ -682,7 +683,8 @@
                         [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
                         [% IF ( order.issn ) %] - [% order.issn %][% END %]
                         [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]
-                        [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
+                        [% IF ( order.publicationyear ) %], [% order.publicationyear %]
+                        [% ELSIF ( order.copyrightdate ) %] [% order.copyrightdate %][% END %]
                         [% IF ( books_loo.editionstatement ) %], [% books_loo.editionstatement %][% END %]
                         [% IF ( order.cancellationreason ) %]
                           <br />
