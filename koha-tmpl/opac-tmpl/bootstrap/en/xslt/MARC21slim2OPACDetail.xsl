@@ -823,6 +823,12 @@
                     </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
+                <xsl:if test="@ind2=8 and marc:subfield[@code='i']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">i</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>: </xsl:text>
+                </xsl:if>
                 <xsl:choose>
                 <xsl:when test="marc:subfield[@code='w']">
                     <a>
