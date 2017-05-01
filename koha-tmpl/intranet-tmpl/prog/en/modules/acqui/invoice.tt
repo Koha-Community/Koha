@@ -167,11 +167,8 @@
                     [% IF ( order.isbn ) %] &ndash; [% order.isbn %][% END %]
                     [% IF ( order.publishercode ) %]
                       <br/>[% order.publishercode %]
-                        [% IF order.publicationyear > 0 %]
-                          - [% order.publicationyear %]
-                        [% ELSIF ( order.copyrightdate > 0) %]
-                          - [% order.copyrightdate %]
-                        [% END %]
+                        [% IF order.publicationyear %], [% order.publicationyear %]
+                        [% ELSIF ( order.copyrightdate ) %][% order.copyrightdate %][% END %]
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode %]</p></td>
