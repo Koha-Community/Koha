@@ -62,12 +62,12 @@ $dbh->do(q|DELETE FROM message_transport_types|);
 my $library = $builder->build({
     source => 'Branch',
 });
-my $patron_category = $builder->build({ source => 'Category' });
+my $patron_category = $builder->build({ source => 'Category' })->{categorycode};
 my $date = dt_from_string;
 my $borrowernumber = AddMember(
     firstname    => 'Jane',
     surname      => 'Smith',
-    categorycode => $patron_category,,
+    categorycode => $patron_category,
     branchcode   => $library->{branchcode},
     dateofbirth  => $date,
 );
