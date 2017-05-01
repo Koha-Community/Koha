@@ -209,7 +209,7 @@ sub require_params {
 
     for my $param ( @params ) {
         $class->return_error( 'params', "Missing '$param'" ) if ( !defined( $query->param( $param ) ) );
-        push @values, $query->param( $param );
+        push @values, scalar $query->param( $param ); # will we ever need multi_param here?
     }
 
     return @values;
