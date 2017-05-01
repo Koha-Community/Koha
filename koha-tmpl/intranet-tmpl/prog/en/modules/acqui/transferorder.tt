@@ -106,7 +106,7 @@
                             [% IF ( ordersloo.publishercode ) %]
                                 <br />Publisher: [% ordersloo.publishercode %]
                                 [%- IF    ( ordersloo.publicationyear > 0) -%], [% ordersloo.publicationyear %]
-                                [%- ELSIF ( ordersloo.copyrightdate   > 0) -%], [% ordersloo.copyrightdate %]
+                                [%- ELSIF ( ordersloo.copyrightdate   > 0) -%] [% ordersloo.copyrightdate %]
                                 [% END %]
                             [% END %]
                         </td>
