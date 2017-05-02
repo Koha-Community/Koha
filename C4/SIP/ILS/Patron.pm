@@ -23,6 +23,7 @@ use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
 use Koha::Libraries;
+use Koha::Logger;
 use Koha::Patrons;
 
 our $kp;    # koha patron
@@ -31,10 +32,16 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
+    my $logger;
     $kp = GetMember(cardnumber=>$patron_id) || GetMember(userid=>$patron_id);
     $debug and warn "new Patron (GetMember): " . Dumper($kp);
+
+    eval { $logger = C4::SIP::SIPServer::get_logger() };
+    if ($@) {
+        $logger = Koha::Logger->get({ interface => 'sip' });
+    }
     unless (defined $kp) {
-        C4::SIP::SIPServer::get_logger()->debug("new ILS::Patron($patron_id): no such patron");
+        $logger->debug("new ILS::Patron($patron_id): no such patron");
         return;
     }
     $kp = GetMember( borrowernumber => $kp->{borrowernumber});
@@ -122,7 +129,7 @@ sub new {
     $ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
     $self = \%ilspatron;
     $debug and warn Dumper($self);
-    C4::SIP::SIPServer::get_logger()->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
+    $logger->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
     bless $self, $type;
     return $self;
 }
