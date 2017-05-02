@@ -805,7 +805,7 @@
                     [% IF ( subscriptionsnumber ) %]
                         <div id="subscriptions">
                             <h2>This is a serial</h2>
-                            <p>There are [% subscriptionsnumber %] subscription(s) associated with this title.</p>
+                            <p class="subscription_count">There are [% subscriptionsnumber %] subscription(s) associated with this title.</p>
                             [% FOREACH subscription IN subscriptions %]
                                 [% IF ( subscription.branchcode ) %]
                                     <h3>At library: [% Branches.GetName( subscription.branchcode ) %]</h3>
@@ -815,15 +815,15 @@
                                     [% END %]
                                 [% END %]
                                 [% IF ( subscription.closed ) %]
-                                    <p>This subscription is closed.</p>
+                                    <p class="subscription_closed">This subscription is closed.</p>
                                 [% END %]
                                 [% IF ( subscription.callnumber ) %]
-                                  <p>Call number: [% subscription.callnumber %]</p>
+                                  <p class="subscription_callnumber">Call number: [% subscription.callnumber %]</p>
                                 [% END %]
                                 [% IF ( subscription.subscriptionnotes ) %]
-                                    <p>[% subscription.subscriptionnotes FILTER html_line_break %] </p>
+                                    <p class="subscription_notes">[% subscription.subscriptionnotes FILTER html_line_break %] </p>
                                 [% END %]
-                                <p>Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
+                                <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
                                 [% IF ( subscription.letter ) %]<span class="email_notifications">
                                     [% IF ( loggedinusername ) %]
                                         [% IF ( subscription.hasalert ) %]
@@ -836,13 +836,13 @@
                                     [% END %]
                                 </span>[% END %]
                                 [% IF ( subscription.missinglist ) %]
-                                    <p>Missing issues: [% subscription.missinglist %] </p>
+                                    <p class="subscription_missing">Missing issues: [% subscription.missinglist %] </p>
                                 [% END %]
                                 [% IF ( subscription.opacnote ) %]
-                                    <p>[% subscription.opacnote FILTER html_line_break %]</p>
+                                    <p class="subscription_opacnote">[% subscription.opacnote FILTER html_line_break %]</p>
                                 [% END %]
                                 [% IF ( subscription.latestserials ) %]
-                                    <p> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
+                                    <p class="subscription_latestissues"> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
                                     <table class="table table-bordered table-striped">
                                         <tr>
                                             <th>Issue #</th>
@@ -874,7 +874,7 @@
                                     </table>
                                 [% END # / IF subscription.latestserials %]
                             [% END # / FOREACH subscriptions %]
-                            <p><a href="opac-serial-issues.pl?biblionumber=[% biblionumber %]">More details</a></p>
+                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblionumber %]">More details</a></p>
                         </div> <!-- / #subscriptions -->
                     [% END # IF subscriptionsnumber %]
 
