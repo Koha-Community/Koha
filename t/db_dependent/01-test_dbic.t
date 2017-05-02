@@ -7,13 +7,10 @@ use Modern::Perl;
 use Test::More;
 use Test::MockModule;
 
+use Koha::Database;
 use Koha::Libraries;
-use C4::Context;
-
-Koha::Libraries->search->count;
 
 my $verbose = 0;
-
 
 subtest "Scenario: Show how caching prevents Test::DBIx::Class from working properly and how to circumvent it", sub {
   my ($firstSchema, $cachedSchema, $cachedSchema2, $firstLibCount, $libCount);
@@ -23,11 +20,8 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
   ok($firstSchema = Koha::Database->schema,
   'Step: Given a normal DB connection.');
 
-  ok($firstLibCount = Koha::Libraries->search->count,
-  '  When the libraries are counted');
+  $firstLibCount = Koha::Libraries->search->count; # first count normal conn
 
-  ok($firstLibCount,
-  '  Then we got a count'); #There should be something like 12 branches in the default DB but making an accurate check here to prevent surface for brittleness.
   print "\$firstLibCount '$firstLibCount'\n" if $verbose;
 
   ok($cachedSchema = Koha::Database::get_schema_cached(),
