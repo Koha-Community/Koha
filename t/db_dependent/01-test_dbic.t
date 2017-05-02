@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
-my $verbose = 0;
 
 use Modern::Perl;
 
@@ -10,12 +9,14 @@ use Test::MockModule;
 
 use Koha::Libraries;
 use C4::Context;
+
 Koha::Libraries->search->count;
 
+my $verbose = 0;
 
 
 subtest "Scenario: Show how caching prevents Test::DBIx::Class from working properly and how to circumvent it", sub {
-  my ($firstSchema, $schema, $cachedSchema, $cachedSchema2, $firstLibCount, $libCount);
+  my ($firstSchema, $cachedSchema, $cachedSchema2, $firstLibCount, $libCount);
 
   eval {
 
@@ -74,13 +75,13 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
   '  And the cached DB connection type is sqlite');
 
 
-  eval "fixtures_ok [ #Dynamically load fixtures, because we dynamically load T:D:C. Otherwise there be compile errors!
+  fixtures_ok( [ #Dynamically load fixtures, because we dynamically load T:D:C. Otherwise there be compile errors!
       Branch => [
           ['branchcode', 'branchname'],
           ['XXX_test', 'my branchname XXX'],
       ]
   ],
-  'Step: Given we deploy T:D:C Fixtures';";
+  'Step: Given we deploy T:D:C Fixtures');
 
   ok($libCount = Koha::Libraries->search->count,
   '  When the libraries are counted');
