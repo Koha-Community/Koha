@@ -1,0 +1,46 @@
+{
+  "/borrowers/status": {
+    "get": {
+      "x-mojo-to": "Borrower#status",
+      "operationId": "status",
+      "tags": ["borrowers"],
+      "summary": "Returns the Borrower's details and statuses",
+      "description": "This endpoint doesn't need other authentication than the proper username and password, and can be used anonymously.<br/>Note: Does not authenticate the Borrower to Koha!",
+      "produces": [
+        "application/json",
+        "application/xml"
+      ],
+      "parameters": [
+        {
+          "name": "uname",
+          "description": "The Username the Borrower uses to authenticate",
+          "in": "formData",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "passwd",
+          "description": "The Password the Borrower uses to authenticate",
+          "in": "formData",
+          "required": true,
+          "type": "string"
+        }
+     ],
+      "consumes": ["application/x-www-form-urlencoded"],
+      "responses": {
+        "200": {
+          "description": "Borrower information",
+          "schema": {
+           "$ref": "../definitions.json#/borrowerStatus"
+          }
+        },
+        "400": {
+          "description": "Password authentication failed using username or password",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}
