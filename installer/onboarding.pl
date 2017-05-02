@@ -76,12 +76,10 @@ if ( $step == 1 ) {
 
         eval { $library->store; };
         unless ($@) {
-            push @messages,
-              { type => 'message', code => 'success_on_insert_library' };
+            push @messages, { code => 'success_on_insert_library' };
         }
         else {
-            push @messages,
-              { type => 'message', code => 'error_on_insert_library' };
+            push @messages, { code => 'error_on_insert_library' };
         }
     }
 
@@ -130,12 +128,10 @@ if ( $step == 2 ) {
         eval { $category->store; };
 
         unless ($@) {
-            push @messages,
-              { type => 'message', code => 'success_on_insert_category' };
+            push @messages, { code => 'success_on_insert_category' };
         }
         else {
-            push @messages,
-              { type => 'message', code => 'error_on_insert_category' };
+            push @messages, { code => 'error_on_insert_category' };
         }
     }
 
@@ -152,21 +148,15 @@ if ( $step == 3 ) {
 
         if ( my $error_code = checkcardnumber($cardnumber) ) {
             if ( $error_code == 1 ) {
-                push @messages,
-                  {
-                    type => 'alert',
-                    code => 'ERROR_cardnumber_already_exists'
-                  };
+                push @messages, { code => 'ERROR_cardnumber_already_exists' };
             }
             elsif ( $error_code == 2 ) {
-                push @messages,
-                  { type => 'alert', code => 'ERROR_cardnumber_length' };
+                push @messages, { code => 'ERROR_cardnumber_length' };
             }
         }
         elsif ( $firstpassword ne $secondpassword ) {
 
-            push @messages,
-              { type => 'alert', code => 'ERROR_password_mismatch' };
+            push @messages, { code => 'ERROR_password_mismatch' };
         }
         else {
 
@@ -194,12 +184,10 @@ if ( $step == 3 ) {
 
             #Error handling checking if the patron was created successfully
             if ($borrowernumber) {
-                push @messages,
-                  { type => 'message', code => 'success_on_insert_patron' };
+                push @messages, { code => 'success_on_insert_patron' };
             }
             else {
-                push @messages,
-                  { type => 'error', code => 'error_on_insert_patron' };
+                push @messages, { code => 'error_on_insert_patron' };
             }
         }
     }
@@ -221,12 +209,10 @@ if ( $step == 4 ) {
         eval { $itemtype->store; };
 
         unless ($@) {
-            push @messages,
-              { type => 'message', code => 'success_on_insert_itemtype' };
+            push @messages, { code => 'success_on_insert_itemtype' };
         }
         else {
-            push @messages,
-              { type => 'message', code => 'error_on_insert_itemtype' };
+            push @messages, { code => 'error_on_insert_itemtype' };
         }
     }
 
@@ -269,12 +255,10 @@ if ( $step == 5 ) {
         eval { $issuingrule->store; };
 
         unless ($@) {
-            push @messages,
-              { type => 'message', code => 'success_on_insert_circ_rule' };
+            push @messages, { code => 'success_on_insert_circ_rule' };
         }
         else {
-            push @messages,
-              { type => 'message', code => 'error_on_insert_circ_rule' };
+            push @messages, { code => 'error_on_insert_circ_rule' };
         }
     }
 
