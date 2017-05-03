@@ -23,7 +23,7 @@ automatic_renewals.pl - cron script to renew loans
 
 =head1 SYNOPSIS
 
-./automatic_renewals.pl
+./automatic_renewals.pl [--send-notices]
 
 or, in crontab:
 0 3 * * * automatic_renewals.pl
@@ -36,11 +36,21 @@ and the renewal isn't premature (No Renewal before) the issue is renewed.
 
 =head1 OPTIONS
 
-No options.
+=over
+
+=item B<--send-notices>
+
+Send AUTO_RENEWALS notices to patrons if the auto renewal has been done.
+
+Note that this option does not support digest yet.
+
+=back
 
 =cut
 
 use Modern::Perl;
+use Pod::Usage;
+use Getopt::Long;
 
 use C4::Circulation;
 use C4::Context;
@@ -49,6 +59,14 @@ use C4::Letters;
 use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
+
+my ( $help, $send_notices );
+GetOptions(
+    'h|help' => \$help,
+    'send-notices' => \$send_notices,
+) || pod2usage(1);
+
+pod2usage(0) if $help;
 
 cronlogaction();
 
@@ -78,31 +96,33 @@ while ( my $auto_renew = $auto_renews->next ) {
     }
 }
 
-for my $borrowernumber ( keys %report ) {
-    my $patron = Koha::Patrons->find($borrowernumber);
-    my @issues;
-    for my $issue ( @{ $report{$borrowernumber} } ) {
-        my $item   = Koha::Items->find( $issue->itemnumber );
-        my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'circulation',
-            letter_code => 'AUTO_RENEWALS',
-            tables      => {
-                borrowers => $patron->borrowernumber,
-                issues    => $issue->itemnumber,
-                items     => $issue->itemnumber,
-                biblio    => $item->biblionumber,
-            },
-        );
+if ( $send_notices ) {
+    for my $borrowernumber ( keys %report ) {
+        my $patron = Koha::Patrons->find($borrowernumber);
+        my @issues;
+        for my $issue ( @{ $report{$borrowernumber} } ) {
+            my $item   = Koha::Items->find( $issue->itemnumber );
+            my $letter = C4::Letters::GetPreparedLetter(
+                module      => 'circulation',
+                letter_code => 'AUTO_RENEWALS',
+                tables      => {
+                    borrowers => $patron->borrowernumber,
+                    issues    => $issue->itemnumber,
+                    items     => $issue->itemnumber,
+                    biblio    => $item->biblionumber,
+                },
+            );
 
-        my $library = Koha::Libraries->find( $patron->branchcode );
-        my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+            my $library = Koha::Libraries->find( $patron->branchcode );
+            my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
 
-        C4::Letters::EnqueueLetter(
-            {   letter                 => $letter,
-                borrowernumber         => $borrowernumber,
-                message_transport_type => 'email',
-                from_address           => $admin_email_address,
-            }
-        );
+            C4::Letters::EnqueueLetter(
+                {   letter                 => $letter,
+                    borrowernumber         => $borrowernumber,
+                    message_transport_type => 'email',
+                    from_address           => $admin_email_address,
+                }
+            );
+        }
     }
 }
