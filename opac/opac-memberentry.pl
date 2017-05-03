@@ -20,6 +20,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Digest::MD5 qw( md5_base64 md5_hex );
 use String::Random qw( random_string );
+
 use C4::Auth;
 use C4::Output;
 use C4::Members;
@@ -31,6 +32,7 @@ use C4::Scrubber;
 use Email::Valid;
 use Koha::DateUtils;
 use Koha::Patron::Images;
+use Koha::Token;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -179,6 +181,12 @@ if ( $action eq 'create' ) {
 elsif ( $action eq 'update' ) {
 
     my $borrower = GetMember( borrowernumber => $borrowernumber );
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            session_id => scalar $cgi->cookie('CGISESSID'),
+            token  => scalar $cgi->param('csrf_token'),
+        });
+
     my %borrower = ParseCgiForBorrower($cgi);
 
     my %borrower_changes = DelEmptyFields(%borrower);
@@ -193,7 +201,10 @@ elsif ( $action eq 'update' ) {
         $template->param(
             empty_mandatory_fields => \@empty_mandatory_fields,
             invalid_form_fields    => $invalidformfields,
-            borrower               => \%borrower
+            borrower               => \%borrower,
+            csrf_token             => Koha::Token->new->generate_csrf({
+                session_id => scalar $cgi->cookie('CGISESSID'),
+            }),
         );
 
         $template->param( action => 'edit' );
@@ -225,6 +236,9 @@ elsif ( $action eq 'update' ) {
                 action => 'edit',
                 nochanges => 1,
                 borrower => GetMember( borrowernumber => $borrowernumber ),
+                csrf_token => Koha::Token->new->generate_csrf({
+                    session_id => scalar $cgi->cookie('CGISESSID'),
+                }),
             );
         }
     }
@@ -244,6 +258,9 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
         borrower  => $borrower,
         guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
         hidden => GetHiddenFields( $mandatory, 'modification' ),
+        csrf_token => Koha::Token->new->generate_csrf({
+            session_id => scalar $cgi->cookie('CGISESSID'),
+        }),
     );
 
     if (C4::Context->preference('OPACpatronimages')) {

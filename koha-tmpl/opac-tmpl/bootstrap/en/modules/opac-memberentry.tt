@@ -904,6 +904,7 @@
                     [% IF OPACPatronDetails %]
                         <fieldset class="action">
                             <input type="hidden" name="action" value="update" />
+                            <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                             <input type="submit" class="btn" value="Submit update request" />
                         </fieldset>
                     [% END %]
