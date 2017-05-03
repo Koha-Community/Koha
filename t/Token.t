@@ -51,16 +51,11 @@ isnt( $result, 1, "This token is no CSRF token" );
 # Test MaxAge parameter
 my $age = 1; # 1 second
 $result = $tokenizer->check_csrf({
-<<<<<<< HEAD
     session_id => $id, token => $csrftoken, MaxAge => $age,
-=======
-    id => $id, secret => $secr, token => $csrftoken, MaxAge => $age,
->>>>>>> Bug 17110: Add unit test for MaxAge parameter in Token.t
 });
 is( $result, 1, "CSRF token still valid within one second" );
 usleep $age * 1000000 * 2; # micro (millionth) seconds + 100%
 $result = $tokenizer->check_csrf({
-<<<<<<< HEAD
     session_id => $id, token => $csrftoken, MaxAge => $age,
 });
 isnt( $result, 1, "CSRF token expired after one second" );
@@ -94,8 +89,3 @@ subtest 'Same logged in user with another session (cookie CGISESSID)' => sub {
     });
     is( $result, '', "CSRF token is not verified if another session is used" );
 };
-=======
-    id => $id, secret => $secr, token => $csrftoken, MaxAge => $age,
-});
-isnt( $result, 1, "CSRF token expired after one second" );
->>>>>>> Bug 17110: Add unit test for MaxAge parameter in Token.t
