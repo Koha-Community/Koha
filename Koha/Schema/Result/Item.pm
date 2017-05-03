@@ -47,7 +47,7 @@ __PACKAGE__->table("items");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 21
 
 =head2 dateaccessioned
 
@@ -280,6 +280,12 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 32
 
+=head2 datereceived
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -300,7 +306,7 @@ __PACKAGE__->add_columns(
     is_nullable    => 0,
   },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 21 },
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
@@ -394,6 +400,12 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "datereceived",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY

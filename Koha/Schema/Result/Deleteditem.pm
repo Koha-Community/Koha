@@ -276,6 +276,12 @@ __PACKAGE__->table("deleteditems");
   is_nullable: 1
   size: 32
 
+=head2 datereceived
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -380,6 +386,12 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "new_status",
   { data_type => "varchar", is_nullable => 1, size => 32 },
+  "datereceived",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
