@@ -1160,6 +1160,10 @@ sub IsAvailableForItemLevelRequest {
         my $any_available = 0;
 
         foreach my $i (@items) {
+
+            my $circ_control_branch = C4::Circulation::_GetCircControlBranch( $i->unblessed(), $borrower );
+            my $branchitemrule = C4::Circulation::GetBranchItemRule( $circ_control_branch, $i->itype );
+
             $any_available = 1
               unless $i->itemlost
               || $i->notforloan > 0
@@ -1168,7 +1172,8 @@ sub IsAvailableForItemLevelRequest {
               || IsItemOnHoldAndFound( $i->id )
               || ( $i->damaged
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
-              || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan;
+              || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
+              || $branchitemrule->{holdallowed} == 1 && $borrower->{branchcode} ne $i->homebranch;
         }
 
         return $any_available ? 0 : 1;
