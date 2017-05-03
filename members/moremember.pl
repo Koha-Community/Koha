@@ -63,6 +63,9 @@ use DateTime;
 use Koha::DateUtils;
 use Koha::Database;
 
+use Koha::Patron::Categories;
+use Koha::Token;
+
 use vars qw($debug);
 
 BEGIN {

@@ -696,11 +696,6 @@ $template->param( csrf_token =>
       Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
 );
 
-# HouseboundModule data
-$template->param(
-    housebound_role  => Koha::Patron::HouseboundRoles->find($borrowernumber),
-);
-
 if(defined($data{'flags'})){
   $template->param(flags=>$data{'flags'});
 }
