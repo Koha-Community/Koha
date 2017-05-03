@@ -802,9 +802,13 @@ function checkMultiHold() {
             Item being transferred to <b> [% reserveloo.wbrname %]</b> <input type="hidden" name="pickup" value="[% reserveloo.wbrcode %]" />
          [% END %]
     [% ELSE %]
-        <select name="pickup">
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
-        </select>
+        [% IF Koha.Preference('IndependentBranches') && Branches.all().size == 1 %]
+            [% Branches.GetName(reserveloo.branchcode) %] <input type="hidden" name="pickup" value="[% reserveloo.branchcode %]" />
+        [% ELSE %]
+            <select name="pickup">
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => reserveloo.branchcode ) %]
+            </select>
+        [% END %]
     [% END %]
         </td>
         <td>
