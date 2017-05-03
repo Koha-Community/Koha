@@ -75,6 +75,12 @@ __PACKAGE__->table("old_issues");
   default_value: 0
   is_nullable: 1
 
+=head2 auto_renew_error
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 32
+
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -138,6 +144,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "auto_renew",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "auto_renew_error",
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -218,8 +226,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:03:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5K7XiVMbAtr3q4GPqKrWOA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-03 04:12:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rvUGkBhLE7AwPNp1viI23Q
 
 sub koha_objects_class {
     'Koha::Old::Checkouts';
