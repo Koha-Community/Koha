@@ -92,6 +92,11 @@ sub build {
     my $source  = $params->{source} || return;
     my $value   = $params->{value};
 
+    $source = 'PermissionModule' if $source eq 'Userflag';
+    if ($source eq 'UserPermission') {
+        return _koha_suomi_user_permission($value);
+    }
+
     my $col_values = $self->_buildColumnValues({
         source  => $source,
         value   => $value,
@@ -468,6 +473,14 @@ sub _gen_default_values {
     };
 }
 
+#
+# Koha-Suomi hacks: TestBuilder compatibility for Koha-Suomi permission changes
+#
+
+# Adds patron permissions for a patron built via TestBuilder Borrower schema by
+# translating the given flags into array of permission modules, then granting all
+# sub-permissions via Koha::Auth::PermissionManager->grantAllSubpermissions()
+# for those permission modules
 sub _koha_suomi_permission_flags {
     my ($self, $borrowernumber, $params) = @_;
 
@@ -488,6 +501,22 @@ sub _koha_suomi_permission_flags {
     $manager->grantAllSubpermissions($patron, \@patron_permissions);
 }
 
+# Converts TestBuilder-generated patron permission (UserPermission schema) for
+# Koha::Auth::PermissionManager
+sub _koha_suomi_user_permission {
+    my ($value) = @_;
+
+    return {} unless $value;
+    my $flag = _koha_community_userflags()->{$value->{module_bit}}->{flag};
+    my $code = $value->{code};
+    my $patron = Koha::Patrons->find($value->{borrowernumber});
+    my $manager = Koha::Auth::PermissionManager->new();
+    $manager->grantPermissions( $patron, { $flag => $code } );
+    return $value;
+}
+
+# Hash map of Koha community userflags. Used for translating module bits into
+# permission module names that can be passed for Koha::Auth::PermissionManager
 sub _koha_community_userflags {
     return {
         0 =>  { flag => 'superlibrarian' },

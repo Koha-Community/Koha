@@ -145,7 +145,7 @@ subtest 'Tests with composite FK in userpermission' => sub {
 
     my $my_user_permission = default_userpermission();
     my $user_permission = $builder->build({
-        source => 'UserPermission',
+        source => 'BorrowerPermission',
         value  => $my_user_permission,
     });
 
@@ -188,16 +188,16 @@ subtest 'Tests with composite FK in userpermission' => sub {
     );
 
     # Checks with composite FK: userpermission -> permission
-    my $perm = $schema->resultset('Permission')->find({ module_bit => $user_permission->{module_bit}, code => $my_user_permission->{code}->{code} });
+    my $perm = $schema->resultset('Permission')->find({ module => $my_user_permission->{permission_module_id}->{module}, code => $my_user_permission->{permission_id}->{code} });
     isnt( $perm, undef, 'build generated record for composite FK' );
     is(
         $perm->code,
-        $my_user_permission->{code}->{code},
+        $my_user_permission->{permission_id}->{code},
         'build stored code correctly'
     );
     is(
         $perm->description,
-        $my_user_permission->{code}->{description},
+        $my_user_permission->{permission_id}->{description},
         'build stored description correctly'
     );
 };
@@ -218,10 +218,10 @@ sub default_userpermission {
             },
             privacy => 1,
         },
-        module_bit => {
-            flag        => 'my flag',
+        permission_module_id => {
+            module      => 'my flag',
         },
-        code => {
+        permission_id => {
             code        => 'my code',
             description => 'my desc',
         },
