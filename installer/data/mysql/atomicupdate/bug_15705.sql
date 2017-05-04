@@ -19,5 +19,5 @@ It\'s too late to renew this checkout.
 You have too much unpaid fines.
 [% END %]
 [% ELSE %]
-The following item [% biblio.title %] as correctly been renewed.
+The following item [% biblio.title %] has correctly been renewed and is now due [% checkout.date_due %]
 [% END %]", 'email');

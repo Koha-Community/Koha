@@ -99,7 +99,6 @@ while ( my $auto_renew = $auto_renews->next ) {
 if ( $send_notices ) {
     for my $borrowernumber ( keys %report ) {
         my $patron = Koha::Patrons->find($borrowernumber);
-        my @issues;
         for my $issue ( @{ $report{$borrowernumber} } ) {
             my $item   = Koha::Items->find( $issue->itemnumber );
             my $letter = C4::Letters::GetPreparedLetter(
