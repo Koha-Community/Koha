@@ -140,7 +140,7 @@ sub set_waiting {
     $expirationdate->add(days => $max_pickup_delay);
 
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-        $expirationdate = $calendar->days_forward( dt_from_string($self->waitingdate), $max_pickup_delay );
+        $expirationdate = $calendar->days_forward( dt_from_string(), $max_pickup_delay );
     }
 
     # If patron's requested expiration date is prior to the
