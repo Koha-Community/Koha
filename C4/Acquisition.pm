@@ -295,14 +295,19 @@ sub GetBasketAsCSV {
         my $csv_profile_content = $csv_profile->content;
         my ( @headers, @fields );
         while ( $csv_profile_content =~ /
-            ([^=]+) # header
-            =
-            ([^\|]+) # fieldname (table.row or row)
+            ([^=\|]+) # header
+            =?
+            ([^\|]*) # fieldname (table.row or row)
             \|? /gxms
         ) {
-            push @headers, $1;
-            my $field = $2;
-            $field =~ s/[^\.]*\.?//; # Remove the table name if exists.
+            my $header = $1;
+            my $field = ($2 eq '') ? $1 : $2;
+
+            $header =~ s/^\s+|\s+$//g; # Trim whitespaces
+            push @headers, $header;
+
+            $field =~ s/[^\.]*\.{1}//; # Remove the table name if exists.
+            $field =~ s/^\s+|\s+$//g; # Trim whitespaces
             push @fields, $field;
         }
         for my $order (@orders) {
