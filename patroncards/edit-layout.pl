@@ -156,6 +156,7 @@ if ($op eq 'edit') {
             layout_name     => $layout->get_attr('layout_name'),
             page_side       => ($layout_xml->{'page_side'} eq 'F' ? 0 : 1),
             guide_box       => $layout_xml->{'guide_box'},
+            guide_grid      => $layout_xml->{'guide_grid'},
             units           => $units,
             @barcode,
             barcode_type    => _set_selected($layout_xml->{'barcode'}->[0]->{'type'}, $barcode_types),
@@ -218,6 +219,7 @@ elsif  ($op eq 'save') {
             $layout->{'units'} = $cgi->param($parameter) if $parameter eq 'units';
             $layout->{'page_side'} = $cgi->param($parameter) if $parameter eq 'page_side';
             $layout->{'guide_box'} = $cgi->param($parameter) if $parameter eq 'guide_box';
+            $layout->{'guide_grid'} = $cgi->param($parameter) if $parameter eq 'guide_grid';
         }
     }
     $layout->{'text'} = $text_lines;

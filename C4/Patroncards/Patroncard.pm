@@ -24,7 +24,7 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use Text::Wrap qw(wrap);
 #use Font::TTFMetrics;
 
-use C4::Creators::Lib qw(get_font_types);
+use C4::Creators::Lib qw(get_font_types get_unit_values);
 use C4::Creators::PDF qw(StrWidth);
 use C4::Patroncards::Lib qw(unpack_UTF8 text_alignment leading box get_borrower_attributes);
 
@@ -32,6 +32,17 @@ use C4::Patroncards::Lib qw(unpack_UTF8 text_alignment leading box get_borrower_
 sub new {
     my ($invocant, %params) = @_;
     my $type = ref($invocant) || $invocant;
+
+    my $units = get_unit_values();
+    my $unitvalue = 1;
+    my $unitdesc = '';
+    foreach my $un (@$units){
+        if ($un->{'type'} eq $params{'layout'}->{'units'}) {
+            $unitvalue = $un->{'value'};
+            $unitdesc = $un->{'desc'};
+        }
+    }
+
     my $self = {
         batch_id                => $params{'batch_id'},
         #card_number             => $params{'card_number'},
@@ -41,6 +52,8 @@ sub new {
         height                  => $params{'height'},
         width                   => $params{'width'},
         layout                  => $params{'layout'},
+        unitvalue               => $unitvalue,
+        unitdesc                => $unitdesc,
         text_wrap_cols          => $params{'text_wrap_cols'},
         barcode_height_scale    => $params{'layout'}->{'barcode'}[0]->{'height_scale'} || 0.01,
         barcode_width_scale     => $params{'layout'}->{'barcode'}[0]->{'width_scale'} || 0.8,
@@ -69,6 +82,7 @@ sub draw_barcode {
 sub draw_guide_box {
     my ($self, $pdf) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
+
     my $obj_stream = "q\n";                            # save the graphic state
     $obj_stream .= "0.5 w\n";                          # border line width
     $obj_stream .= "1.0 0.0 0.0  RG\n";                # border color red
@@ -78,6 +92,79 @@ sub draw_guide_box {
     $obj_stream .= "Q\n";                              # restore the graphic state
     $pdf->Add($obj_stream);
 }
+
+sub draw_guide_grid {
+    my ($self, $pdf) = @_;
+    warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
+
+    # Set up the grid in user defined units.
+    # Each 5th and 10th line get separate values
+
+    my $obj_stream = "q\n";   # save the graphic state
+    my $x = $self->{'llx'};
+    my $y = $self->{'lly'};
+
+    my $cnt = 0;
+    for ( $x = $self->{'llx'}/$self->{'unitvalue'}; $x <= ($self->{'llx'} + $self->{'width'})/$self->{'unitvalue'}; $x++) {
+        my $xx = $x*$self->{'unitvalue'};
+        my $yy = $y + $self->{'height'};
+        if ( ($cnt % 10) && ! ($cnt % 5) ) {
+            $obj_stream .= "0.0 1.0 0.0  RG\n";
+            $obj_stream .= "0 w\n";
+        } elsif ( $cnt % 5 ) {
+            $obj_stream .= "0.0 1.0 1.0  RG\n";
+            $obj_stream .= "0 w\n";
+        } else {
+            $obj_stream .= "0.0 0.0 1.0  RG\n";
+            $obj_stream .= "0 w\n";
+        }
+        $cnt ++;
+
+        $obj_stream .= "$xx $y m\n";
+        $obj_stream .= "$xx $yy l\n";
+
+        $obj_stream .= "s\n";
+    }
+
+    $x = $self->{'llx'};
+    $y = $self->{'lly'};
+    $cnt = 0;
+    for ( $y = $self->{'lly'}/$self->{'unitvalue'}; $y <= ($self->{'lly'} + $self->{'height'})/$self->{'unitvalue'}; $y++) {
+
+        my $xx = $x + $self->{'width'};
+        my $yy = $y*$self->{'unitvalue'};
+
+        if ( ($cnt % 10) && ! ($cnt % 5) ) {
+            $obj_stream .= "0.0 1.0 0.0  RG\n";
+            $obj_stream .= "0 w\n";
+        } elsif ( $cnt % 5 ) {
+            $obj_stream .= "0.0 1.0 1.0  RG\n";
+            $obj_stream .= "0 w\n";
+        } else {
+            $obj_stream .= "0.0 0.0 1.0  RG\n";
+            $obj_stream .= "0 w\n";
+        }
+        $cnt ++;
+
+        $obj_stream .= "$x $yy m\n";
+        $obj_stream .= "$xx $yy l\n";
+        $obj_stream .= "s\n";
+    }
+
+    $obj_stream .= "Q\n"; # restore the graphic state
+    $pdf->Add($obj_stream);
+
+    # Add info about units
+    my $strbottom = "0/0 $self->{'unitdesc'}";
+    my $strtop = sprintf('%.2f', $self->{'width'}/$self->{'unitvalue'}) .'/'. sprintf('%.2f', $self->{'height'}/$self->{'unitvalue'});
+    my $font_size = 6;
+    $pdf->Font( 'Courier' );
+    $pdf->FontSize( $font_size );
+    my $strtop_len = $pdf->StrWidth($strtop) * 1.5;
+    $pdf->Text( $self->{'llx'} + 2, $self->{'lly'} + 2, $strbottom );
+    $pdf->Text( $self->{'llx'} + $self->{'width'} - $strtop_len , $self->{'lly'} + $self->{'height'} - $font_size , $strtop );
+}
+
 
 sub draw_text {
     my ($self, $pdf, %params) = @_;

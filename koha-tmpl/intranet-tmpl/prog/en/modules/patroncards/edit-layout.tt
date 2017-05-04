@@ -176,6 +176,16 @@
                                     <input type="radio" name="guide_box" id="guide_box" value="0" checked="checked" />Off
                                     [% END %]
                                 </li>
+                                <li>
+                                    <label for="guide_grid">Guide grid:</label>
+                                    [% IF ( guide_grid ) %]
+                                    <input type="radio" name="guide_grid" id="guide_grid" value="1" checked="checked" />On
+                                    <input type="radio" name="guide_grid" id="guide_grid" value="0" />Off
+                                    [% ELSE %]
+                                    <input type="radio" name="guide_grid" id="guide_grid" value="1" />On
+                                    <input type="radio" name="guide_grid" id="guide_grid" value="0" checked="checked" />Off
+                                    [% END %]
+                                </li>
                                 </ol>
                                 </fieldset>
                                 </li>
