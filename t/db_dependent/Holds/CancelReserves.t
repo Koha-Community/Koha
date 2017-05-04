@@ -14,11 +14,6 @@ use_ok('C4::Reserves');
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
-
 my $builder = t::lib::TestBuilder->new();
 
 t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 0);
@@ -99,3 +94,5 @@ t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 1);
 CancelExpiredReserves();
 $r3 = Koha::Holds->find($reserve3->{reserve_id});
 is($r3, undef,'Reserve 3 should be canceled.');
+
+$schema->storage->txn_rollback;

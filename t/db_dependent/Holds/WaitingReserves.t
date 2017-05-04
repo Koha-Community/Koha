@@ -16,8 +16,6 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 $dbh->do(q{DELETE FROM special_holidays});
 $dbh->do(q{DELETE FROM repeatable_holidays});
 $dbh->do("DELETE FROM reserves");
@@ -243,4 +241,4 @@ ModReserveAffect( $item4->{itemnumber}, $patron2->{borrowernumber}, 0, $reserve4
 my $r4 = Koha::Holds->find($reserve4->{reserve_id});
 is($r4->expirationdate, $requested_expiredate->ymd, 'Requested expiration date should be kept' );
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
