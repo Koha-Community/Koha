@@ -210,6 +210,7 @@ sub draw_text {
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
     my @card_text = ();
     return unless (ref($self->{'layout'}->{'text'}) eq 'ARRAY'); # just in case there is not text
+
     my $text = [@{$self->{'layout'}->{'text'}}]; # make a copy of the arrayref *not* simply a pointer
     while (scalar @$text) {
         my $line = shift @$text;
@@ -231,8 +232,8 @@ sub draw_text {
             $line = join(' ',@orig_line);
         }
         my $text_attribs = shift @$text;
-        my $origin_llx = $self->{'llx'} + $text_attribs->{'llx'};
-        my $origin_lly = $self->{'lly'} + $text_attribs->{'lly'};
+        my $origin_llx = $self->{'llx'} + $text_attribs->{'llx'} * $self->{'unitvalue'};
+        my $origin_lly = $self->{'lly'} + $text_attribs->{'lly'} * $self->{'unitvalue'};
         my $Tx = 0;     # final text llx
         my $Ty = $origin_lly;   # final text lly
         my $Tw = 0;     # final text word spacing. See http://www.adobe.com/devnet/pdf/pdf_reference.html ISO 32000-1
@@ -270,8 +271,8 @@ sub draw_text {
                     $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});
                     #$font_units_width = $m->string_width($line);
                     #$string_width = ($font_units_width * $text_attribs->{'font_size'}) / $units_per_em;
-                    if (($string_width + $text_attribs->{'llx'}) < $self->{'width'}) {
-                        ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'}, $string_width, $line, $text_attribs->{'text_alignment'});
+                    if ( $string_width + ( $text_attribs->{'llx'} * $self->{'unitvalue'} ) < $self->{'width'}) {
+                        ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'} * $self->{'unitvalue'}, $string_width, $line, $text_attribs->{'text_alignment'});
                         $line =~ s/^\s+//g;     # strip naughty leading spaces
                         push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
                         last WRAP_LINES;
@@ -280,7 +281,7 @@ sub draw_text {
             }
         }
         else {
-            ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'}, $string_width, $line, $text_attribs->{'text_alignment'});
+            ($Tx, $Tw) = text_alignment($origin_llx, $self->{'width'}, $text_attribs->{'llx'} * $self->{'unitvalue'}, $string_width, $line, $text_attribs->{'text_alignment'});
             $line =~ s/^\s+//g;     # strip naughty leading spaces
             push @lines, {line=> $line, Tx => $Tx, Ty => $Ty, Tw => $Tw};
         }
@@ -297,7 +298,7 @@ sub draw_text {
             else {
                 $box_height += $text_attribs->{'font_size'};
             }
-            box ($origin_llx, $box_lly, $self->{'width'} - $text_attribs->{'llx'}, $box_height, $pdf);
+            box ($origin_llx, $box_lly, $self->{'width'} - ( $text_attribs->{'llx'} * $self->{'unitvalue'} ), $box_height, $pdf);
         }
         $pdf->Font($text_attribs->{'font'});
         $pdf->FontSize($text_attribs->{'font_size'});
@@ -315,11 +316,12 @@ sub draw_image {
     my ($self, $pdf) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
     my $images = $self->{'layout'}->{'images'};
+
     PROCESS_IMAGES:
     foreach my $image (keys %$images) {
         next PROCESS_IMAGES if $images->{$image}->{'data_source'}->[0]->{'image_source'} eq 'none';
-        my $Tx = $self->{'llx'} + $images->{$image}->{'Tx'};
-        my $Ty = $self->{'lly'} + $images->{$image}->{'Ty'};
+        my $Tx = $self->{'llx'} + $images->{$image}->{'Tx'} * $self->{'unitvalue'};
+        my $Ty = $self->{'lly'} + $images->{$image}->{'Ty'} * $self->{'unitvalue'};
         warn sprintf('No image passed in.') and next if !$images->{$image}->{'data'};
         my $intName = $pdf->AltJpeg($images->{$image}->{'data'},$images->{$image}->{'Sx'}, $images->{$image}->{'Sy'}, 1, $images->{$image}->{'alt'}->{'data'},$images->{$image}->{'alt'}->{'Sx'}, $images->{$image}->{'alt'}->{'Sy'}, 1);
         my $obj_stream = "q\n";
@@ -338,6 +340,7 @@ sub draw_image {
 sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no common place for it atm...
     my $self = shift;
     my %params = @_;
+
     my $x_scale_factor = 1;
     my $num_of_chars = length($params{'barcode_data'});
     my $tot_bar_length = 0;
@@ -357,8 +360,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         }
         eval {
             PDF::Reuse::Barcode::Code39(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
+                x                   => $params{'llx'} * $self->{'unitvalue'},
+                y                   => $params{'lly'} * $self->{'unitvalue'},
                 value               => "*$params{barcode_data}*",
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
@@ -377,8 +380,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
         eval {
             PDF::Reuse::Barcode::COOP2of5(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
+                x                   => $params{'llx'}* $self->{'unitvalue'},
+                y                   => $params{'lly'}* $self->{'unitvalue'},
                 value               => "*$params{barcode_data}*",
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
@@ -395,8 +398,8 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
         $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
         eval {
             PDF::Reuse::Barcode::Industrial2of5(
-                x                   => $params{'llx'},
-                y                   => $params{'lly'},
+                x                   => $params{'llx'}* $self->{'unitvalue'} ,
+                y                   => $params{'lly'}* $self->{'unitvalue'},
                 value               => "*$params{barcode_data}*",
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
