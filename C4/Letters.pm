@@ -200,7 +200,8 @@ sub GetLettersAvailableForALibrary {
 sub getletter {
     my ( $module, $code, $branchcode, $message_transport_type, $lang) = @_;
     $message_transport_type //= '%';
-    $lang //= 'default';
+    $lang = 'default' unless( $lang && C4::Context->preference('TranslateNotices') );
+
 
     if ( C4::Context->preference('IndependentBranches')
             and $branchcode
