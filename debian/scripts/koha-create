@@ -550,6 +550,8 @@ fi
 
 set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
 
+[ $# -ge 1 ] || ( usage ; die "Missing instance name..." )
+
 name="$1"
 
 set_upload_path $name
