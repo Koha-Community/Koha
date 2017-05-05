@@ -327,7 +327,7 @@ function filterByFirstLetterSurname(letter) {
       <div class="yui-b">
         <div class="yui-g">
           [% IF CAN_user_tools_manage_patron_lists %]
-            <div id="patron_list_dialog" class="dialog alert">
+            <div id="patron_list_dialog" class="dialog alert" style="display:none">
               Added <span class="patrons-length"></span> patrons to <a></a>.
             </div>
           [% END %]
@@ -354,7 +354,7 @@ function filterByFirstLetterSurname(letter) {
             </div>
           [% END %]
 
-          <div id="searchresults">
+          <div id="searchresults" style="display:none">
             <div id="searchheader">
               <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember %]'[% END %]</span></h3>
             </div>
