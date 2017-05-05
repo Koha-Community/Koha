@@ -40,9 +40,9 @@ use t::lib::Mocks;
 
 fixtures_ok [
     Letter => [
-        [ 'module', 'code', 'branchcode', 'name', 'is_html', 'title', 'content' ],
-        [ 'blah',   'ISBN', 'NBSI',       'book', 1,         'green', 'blahblah' ],
-        [ 'bleh',   'ISSN', 'NSSI',       'page', 0,         'blue',  'blehbleh' ]
+        [ 'module', 'code', 'branchcode', 'name', 'is_html', 'title', 'content', 'lang' ],
+        [ 'blah',   'ISBN', 'NBSI',       'book', 1,         'green', 'blahblah', 'french' ],
+        [ 'bleh',   'ISSN', 'NSSI',       'page', 0,         'blue',  'blehbleh', 'american' ]
     ],
 ], 'add fixtures';
 
