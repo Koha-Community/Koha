@@ -568,7 +568,7 @@ function validate1(date) {
     [% END %]
 </div>
 
-[% IF CAN_user_clubs && ( enrollments || enrollable ) %]
+[% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
     <div id="clubs-tab">
         Loading...
     </div>
