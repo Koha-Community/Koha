@@ -26,7 +26,7 @@ use DateTime::Duration;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 use Test::Deep;
 
 BEGIN {
@@ -102,6 +102,13 @@ ModItemTransfer(
 );
 
 #Begin Tests
+
+my $allTransfers = Koha::Item::Transfers->search->count;
+ok(($allTransfers && $allTransfers == 2), "returns all transfers :)");
+
+my $pendingTransfers = Koha::Item::Transfers->search({datearrived => undef })->count;
+ok(($pendingTransfers && $pendingTransfers == 2), "returns all pending transfers :)");
+
 #Test CreateBranchTransferLimit
 is(
     CreateBranchTransferLimit(
