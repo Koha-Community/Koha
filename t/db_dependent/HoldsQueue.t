@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 use Data::Dumper;
 
 use C4::Branch;
