@@ -421,26 +421,30 @@ sub GetPatronInfo {
         my $holds = $patron->holds;
         while ( my $hold = $holds->next ) {
 
-            my $unblessed_hold = $hold->unblessed;
+            my ( $item, $biblio, $biblioitem ) = ( {}, {}, {} );
             # Get additional informations
-            my $item = Koha::Items->find( $hold->itemnumber );
-            my $biblio = $item->biblio;
-            my $biblioitem = $biblio->biblioitem;
-            my $library = Koha::Libraries->find( $hold->branchcode ); # Should $hold->get_library
-            my $branchname = $library ? $library->branchname : '';
+            if ( $hold->itemnumber ) {    # item level holds
+                $item       = Koha::Items->find( $hold->itemnumber );
+                $biblio     = $item->biblio;
+                $biblioitem = $biblio->biblioitem;
 
-            # Remove unwanted fields
-            $item = $item->unblessed;
-            delete $item->{'more_subfields_xml'};
-            $biblio = $biblio->unblessed;
-            $biblioitem = $biblioitem->unblessed;
+                # Remove unwanted fields
+                $item = $item->unblessed;
+                delete $item->{more_subfields_xml};
+                $biblio     = $biblio->unblessed;
+                $biblioitem = $biblioitem->unblessed;
+            }
 
             # Add additional fields
+            my $unblessed_hold = $hold->unblessed;
             $unblessed_hold->{item}       = { %$item, %$biblio, %$biblioitem };
+            my $library = Koha::Libraries->find( $hold->branchcode );
+            my $branchname = $library ? $library->branchname : '';
             $unblessed_hold->{branchname} = $branchname;
             $unblessed_hold->{title}      = GetBiblio( $hold->biblionumber )->{'title'}; # Should be $hold->get_biblio
 
             push @{ $borrower->{holds}{hold} }, $unblessed_hold;
+
         }
     }
 
