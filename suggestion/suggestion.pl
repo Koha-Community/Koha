@@ -288,6 +288,7 @@ foreach my $element ( qw(managedby suggestedby acceptedby) ) {
             $element."_borrowernumber"=>$patron->borrowernumber,
             $element."_firstname"=>$patron->firstname,
             $element."_surname"=>$patron->surname,
+            $element."_cardnumber"=>$patron->cardnumber,
             $element."_branchcode"=>$patron->branchcode,
             $element."_description"=>$category->description,
             $element."_category_type"=>$category->category_type,

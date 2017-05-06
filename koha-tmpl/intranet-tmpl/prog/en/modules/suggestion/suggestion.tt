@@ -305,20 +305,34 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <thead><tr><th>&nbsp;</th><th>Date</th><th>By</th></tr></thead>
             <tbody>
             <tr>
-                <th><span class="label">Suggestion creation</span> </th>
+                <th>Created by:</th>
                 <td>[% suggesteddate | $KohaDates %]</td>
-                <td>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])[% END %]
+                <td>
+                    [% IF ( suggestedby_borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %] ([% suggestedby_cardnumber %])</a>
+                        [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])
+                    [% END %]
                 </td>
             </tr>
             <tr>
-                <th><span class="label">Suggestion management</span> </th>
+                <th>Managed by:</th>
                 <td>[% manageddate | $KohaDates %]</td>
-                <td>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])[% END %]</td>
+                <td>
+                        [% IF ( managedby_borrowernumber ) %]
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %] ([% suggestedby_cardnumber %])</a>
+                            [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])
+                        [% END %]
+                </td>
             </tr>
             <tr>
-                <th><span class="label">Suggestion accepted</span> </th>
+                <th>Accepted on:</th>
                 <td>[% accepteddate | $KohaDates %]</td>
-                <td>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])[% END %]</td>
+                <td>
+                    [% IF ( acceptedby_borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %] ([% suggestedby_cardnumber %])</a>
+                        [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])
+                    [% END %]
+                </td>
             </tr>
             </tbody>
         </table></li></ol>
@@ -448,20 +462,20 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             <thead><tr><th>&nbsp;</th><th>Date</th><th>By</th></tr></thead>
             <tbody>
             <tr>
-                <th><label for="suggesteddate">Suggestion creation</label> </th>
-                <td><input type="text" id="suggesteddate" name="suggesteddate" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/></td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %]</a>  [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])[% END %]
+                <th><label for="suggesteddate">Created by:</label> </th>
+                <td><input type="text" id="suggesteddate" name="suggesteddate" class="datepicker" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/>[% INCLUDE 'date-format.inc' %]</td>
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber %]">[% suggestedby_surname %], [% suggestedby_firstname %] ([% suggestedby_cardnumber %])</a>  [% Branches.GetName( suggestedby_branchcode ) %] ([% suggestedby_description %])[% END %]
                 </td>
             </tr>
             <tr>
-                <th><label for="managedon">Suggestion management</label> </th>
-                <td><input type="text" id="managedon" name="manageddate" size="10" maxlength="10" value="[% manageddate | $KohaDates %]" /></td>
-                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %]</a> [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])[% END %]</td>
+                <th><label for="managedon">Managed by:</label> </th>
+                <td><input type="text" id="managedon" name="manageddate" class="datepicker" size="10" maxlength="10" value="[% manageddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
+                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber %]">[% managedby_surname %], [% managedby_firstname %] ([% suggestedby_cardnumber %])</a> [% Branches.GetName( managedby_branchcode ) %] ([% managedby_description %])[% END %]</td>
             </tr>
             <tr>
-                <th><label for="accepteddate">Suggestion accepted</label> </th>
-                <td><input type="text" id="accepteddate" name="accepteddate" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" /></td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %]</a> [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])[% END %]</td>
+                <th><label for="accepteddate">Accepted on:</label> </th>
+                <td><input type="text" id="accepteddate" name="accepteddate" class="datepicker" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber %]">[% acceptedby_surname %], [% acceptedby_firstname %] ([% suggestedby_cardnumber %])</a> [% Branches.GetName( acceptedby_branchcode ) %] ([% acceptedby_description %])[% END %]</td>
             </tr>
             </tbody>
         </table></li></ol>
@@ -596,11 +610,11 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                         [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn |html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode |html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear |html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place |html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle |html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<span class="note">[% suggestions_loo.note |html%]</span>[% END %]
                 </td>
                 <td>
-                    [% IF ( suggestions_loo.emailsuggestedby ) %]<a href="mailto:[% suggestions_loo.emailsuggestedby %]">[% END %][% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby %])[% END %] [% IF ( suggestions_loo.emailsuggestedby ) %]</a>[% END %]
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby %]">[% suggestions_loo.surnamesuggestedby %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby %])[% END %]</a>
                     [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                 </td>
                 <td>
-                    [% IF ( suggestions_loo.emailmanagedby ) %]<a href="mailto:[% suggestions_loo.emailmanagedby %]">[% END %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby %][% END %] [% IF ( suggestions_loo.emailmanagedby ) %]</a>[% END %]
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby %]">[% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby %][% END %]</a>
                     [% IF ( suggestions_loo.manageddate ) %] - [% suggestions_loo.manageddate | $KohaDates %][% END %]
                 </td>
                 <td>
