@@ -14332,6 +14332,25 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 16344 - Add a circ rule to limit the auto renewals given a specific date)\n";
 }
 
+$DBversion = '16.12.00.031';
+if( CheckVersion( $DBversion ) ) {
+    if ( !index_exists( 'biblioitems', 'timestamp' ) ) {
+        $dbh->do("ALTER TABLE biblioitems ADD KEY `timestamp` (`timestamp`);");
+    }
+    if ( !index_exists( 'deletedbiblioitems', 'timestamp' ) ) {
+        $dbh->do("ALTER TABLE deletedbiblioitems ADD KEY `timestamp` (`timestamp`);");
+    }
+    if ( !index_exists( 'items', 'timestamp' ) ) {
+        $dbh->do("ALTER TABLE items ADD KEY `timestamp` (`timestamp`);");
+    }
+    if ( !index_exists( 'deleteditems', 'timestamp' ) ) {
+        $dbh->do("ALTER TABLE deleteditems ADD KEY `timestamp` (`timestamp`);");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15108: OAI-PMH provider improvements)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
