@@ -123,6 +123,11 @@ sub _loadBatchOverlayRules {
             delete $config->{$key};
         }
         else {
+            unless (ref($config->{$key}) eq 'HASH') {
+                my @cc = caller(0);
+                Koha::Exception::FeatureUnavailable->throw(error => $cc[3]."():> ".
+                    "System preference 'BatchOverlayRules', given Ruleset name '$key' is not a HASH reference. For an example, see the 'default' Ruleset.");
+            }
             $config->{$key}->{ruleName} = $key;
             $config->{$key} = C4::BatchOverlay::Rule->new( $config->{$key} );
 
