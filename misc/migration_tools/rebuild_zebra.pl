@@ -64,7 +64,7 @@ my $run_user = (getpwuid($<))[0];
 my $wait_for_lock = 0;
 my $use_flock;
 my $table = 'biblioitems';
-my $is_memcached = Koha::Caches->get_instance('syspref')->memcached_cache;
+my $is_memcached = Koha::Caches->get_instance->memcached_cache;
 
 my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
