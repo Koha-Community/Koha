@@ -125,7 +125,7 @@ restart_indexer()
             --verbose=1 --respawn --delay=30 \
             --user=$name-koha.$name-koha"
 
-        log_daemon_msg "Stopping Koha indexing daemon for $name"
+        log_daemon_msg "Restarting Koha indexing daemon for $name"
 
         if daemon $DAEMONOPTS --restart -- $INDEXER_DAEMON $INDEXER_PARAMS; then
             log_end_msg 0

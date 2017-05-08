@@ -186,7 +186,7 @@ GetOptions(
             'itemscontent=s' => \$itemscontent,
        )or pod2usage(2);
 pod2usage(1) if $help;
-pod2usage( -verbose => 2 ) if $man;;
+pod2usage( -verbose => 2 ) if $man;
 
 # Since advance notice options are not visible in the web-interface
 # unless EnhancedMessagingPreferences is on, let the user know that
