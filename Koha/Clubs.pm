@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use Koha::Club;
 
@@ -56,10 +57,18 @@ sub get_enrollable {
         }
     }
 
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+
     # Only clubs with no end date or an end date in the future can be enrolled in
     $params->{'-and'} = [
-        -or => [ date_end => { '>=' => \'CAST(now() AS date)' }, date_end => undef],
-        -or => [ 'me.branchcode' => $borrower->branchcode, 'me.branchcode' => undef ]
+        -or => [
+            date_end => { '>=' => $dtf->format_datetime( dt_from_string() ) },
+            date_end => undef,
+        ],
+        -or => [
+            'me.branchcode' => $borrower->branchcode,
+            'me.branchcode' => undef,
+        ]
     ];
 
     my $rs = $self->_resultset()->search( $params, { prefetch => 'club_template' } );
