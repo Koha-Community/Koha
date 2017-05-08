@@ -953,7 +953,7 @@ No patron matched <span class="ex">[% message | html %]</span>
     </div>
 [% END %]
 
-[% IF CAN_user_clubs && ( enrollable || enrollments ) %]
+[% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
     <div id="clubs-tab">
         Loading...
     </div>
