@@ -475,7 +475,7 @@ function verify_images() {
     <li><strong>Published by:</strong>
         <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:[% publishercode |url %]">
             [% publishercode |html %]
-        </a> [% IF ( place ) %]([% place %])[% END %] [% IF ( publicationyear ) %], [% publicationyear %][% END %] [% IF ( editionstatement ) %][% editionstatement %][% END %] [% IF ( editionresponsability ) %][% editionresponsability %][% END %]
+        </a> [% IF ( place ) %]([% place %])[% END %] [% IF ( publicationyear ) %], [% publicationyear %][% END %] [% IF ( editionstatement ) %][% editionstatement %][% END %] [% IF ( editionresponsibility ) %][% editionresponsibility %][% END %]
     </li>
     [% END %]
         <li><strong>Description:</strong>
@@ -1055,7 +1055,7 @@ function verify_images() {
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
-[% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsability ) %][% XISBN.editionresponsability %][% END %]
+[% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility %][% END %]
     [% END %]
                 [% IF ( XISBN.pages ) %] [% END %][% XISBN.pages %] [% IF ( XISBN.illus ) %][% XISBN.illus %][% END %]
                 [% IF ( XISBN.size ) %], [% END %][% XISBN.size %]

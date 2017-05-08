@@ -322,7 +322,8 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
-# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
+
+# in template <TMPL_IF name="I"> => instititional (A for Adult, C for children) 
 $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     patron          => $patron,

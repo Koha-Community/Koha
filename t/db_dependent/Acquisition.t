@@ -360,9 +360,9 @@ C4::Acquisition::CloseBasket($basketno);
 isnt( scalar grep ( $_->{basketno} eq $basketno, @lateorders ),
     0, "GetLateOrders gets orders from closed baskets" );
 ok( !grep ( $_->{ordernumber} eq $ordernumbers[3], @lateorders ),
-    "GetLateOrders does not gets cancelled orders" );
+    "GetLateOrders does not get cancelled orders" );
 ok( !grep ( $_->{ordernumber} eq $ordernumbers[4], @lateorders ),
-    "GetLateOrders does not gets reveived orders" );
+    "GetLateOrders does not get received orders" );
 
 $search_orders = SearchOrders({
     booksellerid => $booksellerid,
