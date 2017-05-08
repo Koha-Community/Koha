@@ -49,6 +49,7 @@ sub open {
     my ($self) = @_;
 
     $self->status(Koha::ArticleRequest::Status::Pending);
+    $self->SUPER::store();
     $self->notify();
     return $self;
 }
