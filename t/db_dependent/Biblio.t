@@ -246,7 +246,7 @@ sub run_tests {
     is( scalar @$isbns, 4, '(GetMarcISBN) The record contains 4 ISBNs');
     for my $i (0 .. $#more_isbns) {
         is( $isbns->[$i], $more_isbns[$i],
-            "(GetMarcISBN) Corretly retrieves ISBN #". ($i + 1));
+            "(GetMarcISBN) Correctly retrieves ISBN #". ($i + 1));
     }
 
     is( GetMarcPrice( $record_for_isbn, $marcflavour ), 100,

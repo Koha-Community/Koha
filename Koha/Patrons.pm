@@ -152,7 +152,7 @@ sub search_patrons_to_anonymise {
     Koha::Patrons->search->anonymise_issue_history( { [ before => $older_than_date ] } );
 
 Anonymise issue history (old_issues) for all patrons older than the given date (optional).
-To make sure all the conditions are met, the caller has the responsability to
+To make sure all the conditions are met, the caller has the responsibility to
 call search_patrons_to_anonymise to filter the Koha::Patrons set
 
 =cut

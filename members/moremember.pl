@@ -329,7 +329,7 @@ if ( C4::Context->preference("ExportCircHistory") ) {
     $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
 }
 
-# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children)
+# in template <TMPL_IF name="I"> => institutional (A for Adult, C for children)
 $template->param( $data->{'categorycode'} => 1 );
 
 # Display the language description instead of the code
