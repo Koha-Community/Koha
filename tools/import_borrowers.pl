@@ -52,6 +52,7 @@ use Koha::DateUtils;
 use Koha::Token;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::List::Patron;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -105,6 +106,12 @@ if ($matchpoint) {
 }
 my $overwrite_cardnumber = $input->param('overwrite_cardnumber');
 
+#create a patronlist
+my $createpatronlist = $input->param('createpatronlist') || 0;
+my $dt = dt_from_string();
+my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
+my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
+
 $template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
@@ -114,13 +121,21 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             token  => scalar $input->param('csrf_token'),
         });
 
+    #create a patronlist
+    my $createpatronlist = $input->param('createpatronlist');
+    my $dt = dt_from_string();
+    my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
+    my $patronlistname = $uploadborrowers. ' (' . $timestamp .')';
+
     push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};
     my $handle = $input->upload('uploadborrowers');
     my $uploadinfo = $input->uploadInfo($uploadborrowers);
     foreach (keys %$uploadinfo) {
         push @feedback, {feedback=>1, name=>$_, value=>$uploadinfo->{$_}, $_=>$uploadinfo->{$_}};
     }
+
     my $imported    = 0;
+    my @imported_borrowers;
     my $alreadyindb = 0;
     my $overwritten = 0;
     my $invalid     = 0;
@@ -356,6 +371,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 
                 $imported++;
                 $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);
+                push @imported_borrowers, $borrowernumber; #for patronlist
             } else {
                 $invalid++;
                 push @errors, {unknown_error => 1};
@@ -363,6 +379,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
         }
     }
+
+    if ( $imported && $createpatronlist ) {
+        my $patronlist = AddPatronList({ name => $patronlistname });
+        AddPatronsToList({ list => $patronlist, borrowernumbers => \@imported_borrowers });
+        $template->param('patronlistname' => $patronlistname);
+    }
+
     (@errors  ) and $template->param(  ERRORS=>\@errors  );
     (@feedback) and $template->param(FEEDBACK=>\@feedback);
     $template->param(

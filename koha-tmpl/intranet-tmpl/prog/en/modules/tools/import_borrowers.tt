@@ -37,6 +37,9 @@
 <h5>Import results :</h5>
 <ul>
 	<li>[% imported %] imported records [% IF ( lastimported ) %](last was [% lastimported %])[% END %]</li>
+        [% IF imported and patronlistname %]
+            <li>Patronlist with imported patrons: [% patronlistname %]</li>
+        [% END %]
 	<li>[% overwritten %] overwritten [% IF ( lastoverwritten ) %](last was [% lastoverwritten %])[% END %]</li>
 	<li>[% alreadyindb %] not imported because already in borrowers table and overwrite disabled [% IF ( lastalreadyindb ) %](last was [% lastalreadyindb %])[% END %]</li>
 	<li>[% invalid %] not imported because they are not in the expected format [% IF ( lastinvalid ) %](last was [% lastinvalid %])[% END %]</li>
@@ -113,6 +116,12 @@
 		<label for="uploadborrowers">Select the file to import: </label>
 		<input type="file" id="uploadborrowers" name="uploadborrowers" />
 	</li>
+        <li>
+            <label for "createpatronlist">Create patron list: </label>
+            <input name="createpatronlist" id="createpatronlist" value="1" type="checkbox">
+            <span class="hint">List name will be file name with timestamp</span>
+        </li>
+
 </ol></fieldset>
     <fieldset class="rows">
         <legend>Field to use for record matching</legend>
