@@ -14462,6 +14462,17 @@ The following item [% biblio.title %] has correctly been renewed and is now due 
     print "Upgrade to $DBversion done (Bug 15705 - Notify the user on auto renewing)\n";
 }
 
+$DBversion = '16.12.00.036';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('NumSavedReports', '20', NULL, 'By default, show this number of saved reports.', 'Integer');
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17465 - Add a System Preference to control number of Saved Reports displayed)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
