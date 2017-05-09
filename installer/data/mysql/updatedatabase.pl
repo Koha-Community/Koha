@@ -14410,6 +14410,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17762X - Add columns letter.lang and borrowers.lang to allow translation of notices)\n";
 }
 
+$DBversion = '16.12.00.034';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES ('OPACFineNoRenewalsBlockAutoRenew','0','','Block/Allow auto renewals if the patron owe more than OPACFineNoRenewals','YesNo')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15582 - Ability to block auto renewals if the OPACFineNoRenewals amount is reached)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
