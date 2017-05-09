@@ -23,7 +23,6 @@ use C4::Koha;
 use C4::Languages;
 use Koha::Database;
 use Koha::Localizations;
-use Koha::Exceptions;
 
 use base qw(Koha::Object);
 
@@ -91,8 +90,10 @@ sub translated_descriptions {
 }
 
 
+
 =head3 can_be_deleted
-my $overalltotal = Koha::ItemType->can_be_deleted();
+
+my $can_be_deleted = Koha::ItemType->can_be_deleted();
 
 Counts up the number of biblioitems and items with itemtype (code) and hands back the combined number of biblioitems and items with the itemtype
 
@@ -100,8 +101,8 @@ Counts up the number of biblioitems and items with itemtype (code) and hands bac
 
 sub can_be_deleted {
     my ($self) = @_;
-    my $nb_items = Koha::Items->search( { 'itype' => $self->itemtype} )->count;
-    my $nb_biblioitems = Koha::Biblioitems->search( { 'itemtype' => $self->itemtype} )->count;
+    my $nb_items = Koha::Items->search( { itype => $self->itemtype } )->count;
+    my $nb_biblioitems = Koha::Biblioitems->search( { itemtype => $self->itemtype } )->count;
     return $nb_items + $nb_biblioitems == 0 ? 1 : 0;
 }
 
