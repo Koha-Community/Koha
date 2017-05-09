@@ -431,6 +431,12 @@ __PACKAGE__->table("deletedborrowers");
   is_nullable: 0
   size: 25
 
+=head2 login_attempts
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 1
+
 =head2 overdrive_auth_token
 
   data_type: 'text'
@@ -620,13 +626,15 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 25,
   },
+  "login_attempts",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
   "overdrive_auth_token",
   { data_type => "text", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:01:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:77wtFNqtEjJry9Qo/d1GrQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:24:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SpP0xoSTFIweqTp1muUwvg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

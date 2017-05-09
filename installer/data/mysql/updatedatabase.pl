@@ -14473,6 +14473,26 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17465 - Add a System Preference to control number of Saved Reports displayed)\n";
 }
 
+$DBversion = '16.12.00.037';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('FailedLoginAttempts','','','Number of login attempts before lockout the patron account','Integer');
+    |);
+
+    unless( column_exists( 'borrowers', 'login_attempts' ) ) {
+        $dbh->do(q|
+            ALTER TABLE borrowers ADD COLUMN login_attempts INT(4) DEFAULT 0 AFTER lastseen
+        |);
+        $dbh->do(q|
+            ALTER TABLE deletedborrowers ADD COLUMN login_attempts INT(4) DEFAULT 0 AFTER lastseen
+        |);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18314 - Add FailedLoginAttempts and borrowers.login_attempts)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.

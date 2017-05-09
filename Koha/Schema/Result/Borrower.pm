@@ -434,6 +434,12 @@ __PACKAGE__->table("borrowers");
   is_nullable: 0
   size: 25
 
+=head2 login_attempts
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 1
+
 =head2 overdrive_auth_token
 
   data_type: 'text'
@@ -635,6 +641,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 25,
   },
+  "login_attempts",
+  { data_type => "integer", default_value => 0, is_nullable => 1 },
   "overdrive_auth_token",
   { data_type => "text", is_nullable => 1 },
 );
@@ -1370,8 +1378,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:01:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dc49uW1FevMTWMaWeRVHgA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:24:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7llO928plwtX2Q+I9nQA8A
 
 __PACKAGE__->belongs_to(
     "guarantor",
