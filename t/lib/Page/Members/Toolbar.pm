@@ -50,13 +50,13 @@ sub _getToolbarActionElements {
     my ($self) = @_;
     my $d = $self->getDriver();
 
-    my $editA = $d->find_element("#editpatron", 'css');
-    my $changePasswordA = $d->find_element("#changepassword", 'css');
-    my $duplicateA = $d->find_element("#duplicate", 'css');
-    my $printButton = $d->find_element("#duplicate + div > button", 'css');
-    my $searchToHoldA = $d->find_element("#searchtohold", 'css');
-    my $addNewMessage = $d->find_element("#addnewmessageLabel", 'css');
-    my $moreButton = $d->find_element("//button[contains(.,'More')]", 'xpath');
+    my $editA = eval { $d->find_element("#editpatron", 'css'); };
+    my $changePasswordA = eval { $d->find_element("#changepassword", 'css'); };
+    my $duplicateA = eval { $d->find_element("#duplicate", 'css'); };
+    my $printButton = eval { $d->find_element("#duplicate + div > button", 'css'); };
+    my $searchToHoldA = eval { $d->find_element("#searchtohold", 'css'); };
+    my $addNewMessage = eval { $d->find_element("#addnewmessageLabel", 'css'); };
+    my $moreButton = eval { $d->find_element("//button[contains(.,'More')]", 'xpath'); };
 
     my $e = {};
     $e->{edit} = $editA if $editA;
