@@ -58,7 +58,7 @@ sub get_enrollable {
 
     # Only clubs with no end date or an end date in the future can be enrolled in
     $params->{'-and'} = [
-        -or => [ date_end => { '>=' => \'CURRENT_DATE()' }, date_end => undef],
+        -or => [ date_end => { '>=' => \'CAST(now() AS date)' }, date_end => undef],
         -or => [ 'me.branchcode' => $borrower->branchcode, 'me.branchcode' => undef ]
     ];
 

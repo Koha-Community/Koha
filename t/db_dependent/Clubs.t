@@ -124,6 +124,16 @@ is( $club_template->club_template_enrollment_fields->count,
     2, 'Club template has two enrollment fields' );
 
 ## Create a club based on this template
+Koha::Club->new(
+    {
+        club_template_id => $club_template->id,
+        name             => "Test Expired Club",
+        branchcode       => $branchcode,
+        date_start       => '1900-01-01',
+        date_end         => '1900-01-02',
+    }
+)->store();
+
 my $club = Koha::Club->new(
     {
         club_template_id => $club_template->id,
