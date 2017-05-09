@@ -124,9 +124,10 @@ generate_config_file() {
 
 getmysqlhost() {
     awk '
-        /^\[/ { inclient = 0 }
-        /^\[client\]/ { inclient = 1 }
-        inclient && /^ *host *=/ { print $3 }' \
+        BEGIN { FS="=" }
+        $1 ~/\[/ { inclient=0 }
+        $1 ~/\[client\]/ { inclient=1; next }
+        inclient==1 && $1 ~/host/ { gsub(/ /, "", $2); print $2 }' \
         /etc/mysql/koha-common.cnf
 }
 
