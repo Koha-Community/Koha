@@ -315,11 +315,6 @@ if ( $op eq 'view' ) {
                     $this_item->{incart} = 1;
                 }
 
-                if ( $query->param('rss') ) {
-                    $this_item->{title} = $content->biblionumber->title;
-                    $this_item->{author} = $content->biblionumber->author;
-                }
-
                 $this_item->{biblionumber} = $biblionumber;
                 push @items, $this_item;
             }
