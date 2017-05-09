@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 24;
 use Data::Dumper;
 use Koha::Database;
 use t::lib::Mocks;
@@ -135,16 +135,12 @@ my $item_type = $builder->build_object({ class => 'Koha::ItemTypes' });
 is( $item_type->can_be_deleted, 1, 'An item type that is not used can be deleted');
 
 my $item = $builder->build_object({ class => 'Koha::Items', value => { itype => $item_type->itemtype }});
-
 is( $item_type->can_be_deleted, 0, 'An item type that is used by an item cannot be deleted' );
+$item->delete;
 
-my $biblio = $builder->build_object({ class => 'Koha::Biblioitems', value => { itemtype => $item_type->itemtype }});
-
+my $biblioitem = $builder->build_object({ class => 'Koha::Biblioitems', value => { itemtype => $item_type->itemtype }});
 is ( $item_type->can_be_deleted, 0, 'An item type that is used by an item and a biblioitem cannot be deleted' );
-
-is ( $item->delete, 1, 'An item has been deleted' );
-
-is ( $biblio->delete, 1, 'A biblioitem has been deleted' );
+$biblioitem->delete;
 
 is ( $item_type->can_be_deleted, 1, 'The item type that was being used by the removed item and biblioitem can now be deleted' );
 

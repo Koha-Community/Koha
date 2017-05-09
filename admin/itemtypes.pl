@@ -139,13 +139,13 @@ if ( $op eq 'add_form' ) {
     $op          = 'list';
 
  } elsif ( $op eq 'delete_confirm' ) {
-    my $ItemType = Koha::ItemTypes->find($itemtype_code);
-    my $overalltotal = $ItemType->can_be_deleted();
-    if ($overalltotal == 0) {
+    my $itemtype = Koha::ItemTypes->find($itemtype_code);
+    my $can_be_deleted = $itemtype->can_be_deleted();
+    if ($can_be_deleted == 0) {
         push @messages, { type => 'error', code => 'cannot_be_deleted'};
         $op = 'list';
     } else {
-        $template->param( itemtype => $ItemType, );
+        $template->param( itemtype => $itemtype, );
     }
 
 } elsif ( $op eq 'delete_confirmed' ) {
