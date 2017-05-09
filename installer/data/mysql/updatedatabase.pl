@@ -14421,6 +14421,47 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15582 - Ability to block auto renewals if the OPACFineNoRenewals amount is reached)\n";
 }
 
+$DBversion = '16.12.00.035';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'issues', 'auto_renew_error' ) ) {
+        $dbh->do(q{
+           ALTER TABLE issues ADD COLUMN auto_renew_error VARCHAR(32) DEFAULT NULL AFTER auto_renew;
+        });
+    }
+
+    if( !column_exists( 'old_issues', 'auto_renew_error' ) ) {
+        $dbh->do(q{
+            ALTER TABLE old_issues ADD COLUMN auto_renew_error VARCHAR(32) DEFAULT NULL AFTER auto_renew;
+        });
+    }
+
+    $dbh->do(q{
+        INSERT INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS', 'notification on auto renewing', 'Auto renewals',
+"Dear [% borrower.firstname %] [% borrower.surname %],
+[% IF checkout.auto_renew_error %]
+The following item [% biblio.title %] has not been correctly renewed
+[% IF checkout.auto_renew_error == 'too_many' %]
+You have reach the maximum of checkouts possible.
+[% ELSIF checkout.auto_renew_error == 'on_reserve' %]
+This item is on hold for another patron.
+[% ELSIF checkout.auto_renew_error == 'restriction' %]
+You are currently restricted.
+[% ELSIF checkout.auto_renew_error == 'overdue' %]
+You have overdues.
+[% ELSIF checkout.auto_renew_error == 'auto_too_late' %]
+It\'s too late to renew this checkout.
+[% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
+You have too much unpaid fines.
+[% END %]
+[% ELSE %]
+The following item [% biblio.title %] has correctly been renewed and is now due [% checkout.date_due %]
+[% END %]", 'email');
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15705 - Notify the user on auto renewing)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
