@@ -2270,6 +2270,9 @@ depending on how many rows are in serial table.
 The issue number calculation is based on subscription frequency, first acquisition
 date, and $publisheddate.
 
+The routine is used to skip irregularities when calculating the next issue
+date (in GetNextDate) or the next issue number (in GetNextSeq).
+
 =cut
 
 sub GetFictiveIssueNumber {
@@ -2295,8 +2298,8 @@ sub GetFictiveIssueNumber {
             $delta = ($fa_year == $year)
                    ? ($month - $fa_month)
                    : ( ($year-$fa_year-1)*12 + (12-$fa_month+$month) );
-        } elsif($unit eq 'year') {
-            $delta = $year - $fa_year;
+        } elsif( $unit eq 'year' ) {
+            $delta = _delta_units( [ $fa_year, $fa_month, $fa_day ], [ $year, $month, $day ], 'year' );
         }
         if($frequency->{'unitsperissue'} == 1) {
             $issueno = $delta * $frequency->{'issuesperunit'} + $subscription->{'countissuesperunit'};
@@ -2306,6 +2309,27 @@ sub GetFictiveIssueNumber {
         }
     }
     return $issueno;
+}
+
+sub _delta_units {
+# wrapper around N_Delta_YMD
+# Note that N_Delta_YMD returns 29 days between e.g. 22-2-72 and 22-3-72
+# while we expect 1 month.
+    my ( $date1, $date2, $unit ) = @_;
+    my @delta = N_Delta_YMD( @$date1, @$date2 );
+    if( $delta[2] > 27 ) {
+        # Check if we could add a month
+        my @jump = Add_Delta_YM( @$date1, $delta[0], 1 + $delta[1] );
+        if( Delta_Days( @jump, @$date2 ) >= 0 ) {
+            $delta[1]++;
+        }
+    }
+    if( $delta[1] >= 12 ) {
+        $delta[0]++;
+        $delta[1] -= 12;
+    }
+    # if unit is year, we only return full years
+    return $unit eq 'month' ? $delta[0] * 12 + $delta[1] : $delta[0];
 }
 
 sub _get_next_date_day {
@@ -2372,23 +2396,24 @@ sub _get_next_date_month {
 sub _get_next_date_year {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    my ($fa_year, $fa_month, $fa_day) = split /-/, $subscription->{firstacquidate};
+    my @newissue; # ( yy, mm, dd )
+    my $delta_days = int( 365 / $freqdata->{issuesperunit} );
 
-    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
-        $subscription->{countissuesperunit} = 1;
-        ($year) = Add_Delta_YM($year,$month,$day, $freqdata->{"unitsperissue"},0);
-        $month = $fa_month;
-        my $days_in_month = Days_in_Month($year, $month);
-        $day = $fa_day <= $days_in_month ? $fa_day : $days_in_month;
-    } else {
-        # Try to guess the next day in year
-        my $days_in_year = Days_in_Year($year,12); #Sum the days of all the months of this year
-        my $delta_days = int(($days_in_year - ($fa_day - 1)) / $freqdata->{issuesperunit});
-        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
+    if( $freqdata->{issuesperunit} == 1 ) {
+        # Add full years
+        @newissue = Add_Delta_YM( $year, $month, $day, $freqdata->{"unitsperissue"}, 0 );
+    } elsif ( $subscription->{countissuesperunit} < $freqdata->{issuesperunit} ) {
+        # Add rounded number of days based on frequency.
+        @newissue = Add_Delta_Days( $year, $month, $day, $delta_days );
         $subscription->{countissuesperunit}++;
+    } else {
+        # We finished a cycle of issues within a unit.
+        # Subtract delta * (issues - 1), add 1 year
+        @newissue = Add_Delta_Days( $year, $month, $day, -$delta_days * ($freqdata->{issuesperunit} - 1) );
+        @newissue = Add_Delta_YM( @newissue, 1, 0 );
+        $subscription->{countissuesperunit} = 1;
     }
-
-    return ($year, $month, $day);
+    return @newissue;
 }
 
 =head2 GetNextDate
