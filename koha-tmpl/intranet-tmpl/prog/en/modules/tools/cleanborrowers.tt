@@ -11,6 +11,7 @@
             return checkForm( this );
         });
     });
+
         /**
          *  checkForm(form)
          *  This function check the form is correctly filled.
@@ -34,6 +35,12 @@
               }
               return true;
           }
+
+    $(document).ready(function() {
+        $('#branch').change(function() {
+            $('#selectlibrary').submit();
+        });
+    });
 </script>
 
 </head>
