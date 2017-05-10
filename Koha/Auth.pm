@@ -35,6 +35,8 @@ use Koha::Exception::UnknownProgramState;
 
 use Koha::Libraries;
 
+$ENV{"KOHA_REST_API_DEBUG"} = 0 unless defined $ENV{"KOHA_REST_API_DEBUG"};
+
 #Define the headers, POST-parameters and cookies extracted from the various web-frameworks'
 # request-objects and passed to the authentication system as normalized values.
 our @authenticationHeaders = ('X-Koha-Date', 'Authorization');
