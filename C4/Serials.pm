@@ -23,6 +23,7 @@ use Modern::Perl;
 use C4::Auth qw(haspermission);
 use C4::Context;
 use DateTime;
+use DateTime::Format::MySQL;
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
 use C4::Biblio;
@@ -235,7 +236,7 @@ sub GetSerialInformation {
         }
     }
     $data->{ "status" . $data->{'serstatus'} } = 1;
-    $data->{'subscriptionexpired'} = HasSubscriptionExpired( $data->{'subscriptionid'} ) && $data->{'status'} == 1;
+    $data->{'subscriptionexpired'} = C4::Serials::HasSerialExpired( $data ) && $data->{'status'} == 1;
     $data->{'abouttoexpire'} = abouttoexpire( $data->{'subscriptionid'} );
     $data->{cannotedit} = not can_edit_subscription( $data );
     return $data;
@@ -1714,6 +1715,49 @@ sub HasSubscriptionExpired {
         }
     }
     return 0;    # Notice that you'll never get here.
+}
+
+=head2 HasSerialExpired
+
+$has_expired = HasSerialExpired($serial)
+
+the serial has expired when the serials.publisheddate is beyond the subscription expiration date.
+
+Used to check if individual serials can still be received even if the subscription
+has already expired.
+
+@param {HASHRef} Serial
+
+@returns : 0 if the serial has not expired
+           1 if the serial has expired
+           2 if has serial does not have a valid expiration date set
+           undef if something bad/strange hapened. This is VERY ODD default behaviour.
+
+=cut
+
+sub HasSerialExpired {
+    my ($serial) = @_;
+
+    return unless ($serial);
+
+    #Normalize dates for comparison
+    my ($expirationdate, $publisheddate);
+    eval {
+        $expirationdate = DateTime::Format::MySQL->parse_date($serial->{enddate} || GetExpirationDate($serial->{subscriptionid}));
+        $publisheddate =  Koha::DateUtils::dt_from_string($serial->{publisheddate});
+    };
+    if ($@) { #DateTime::Format can be finicky so let's not die on parsing errors.
+        warn $@;
+        return;
+    }
+
+    if (!defined $expirationdate) {
+        return 2;
+    }
+    if (DateTime->compare($publisheddate, $expirationdate) == -1) { #publisheddate < expirationdate
+        return 0;
+    }
+    return 1;
 }
 
 =head2 SetDistributedto

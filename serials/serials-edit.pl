@@ -153,7 +153,7 @@ foreach my $serialid (@serialids) {
 
         $serinfo->{'editdisable'} = (
             (
-                HasSubscriptionExpired( $serinfo->{subscriptionid} )
+                C4::Serials::HasSerialExpired( $serinfo )
                 && $serinfo->{'status1'}
             )
             || $serinfo->{'cannotedit'}
