@@ -27,6 +27,7 @@ use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
 use Date::Calc qw/Today check_date Date_to_Days/;
 use List::MoreUtils qw( uniq );
+use JSON qw(to_json);
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -324,6 +325,25 @@ sub ModMember {
 
     my $patron = Koha::Patrons->find( $new_borrower->{borrowernumber} );
 
+    my $borrowers_log = C4::Context->preference("BorrowersLog");
+    if ( $borrowers_log && $patron->cardnumber ne $new_borrower->{cardnumber} )
+    {
+        logaction(
+            "MEMBERS",
+            "MODIFY",
+            $data{'borrowernumber'},
+            to_json(
+                {
+                    cardnumber_replaced => {
+                        previous_cardnumber => $patron->cardnumber,
+                        new_cardnumber      => $new_borrower->{cardnumber},
+                    }
+                },
+                { utf8 => 1, pretty => 1 }
+            )
+        );
+    }
+
     delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
 
     my $execute_success = $patron->store if $patron->set($new_borrower);
@@ -355,7 +375,7 @@ sub ModMember {
             Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
         }
 
-        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if C4::Context->preference("BorrowersLog");
+        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if $borrowers_log;
     }
     return $execute_success;
 }
