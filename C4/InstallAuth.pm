@@ -20,6 +20,7 @@ package C4::InstallAuth;
 use strict;
 #use warnings; FIXME - Bug 2505
 use Digest::MD5 qw(md5_base64);
+use File::Spec;
 
 require Exporter;
 use C4::Context;
@@ -233,6 +234,7 @@ sub checkauth {
     my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tt";
+    my $sessdir = File::Spec->catdir( File::Spec->tmpdir, 'cgisess_' . C4::Context->config('database') ); # same construction as in C4/Auth
 
     # state variables
     my $loggedin = 0;
@@ -243,7 +245,7 @@ sub checkauth {
         C4::Context->_new_userenv($sessionID);
         my $session =
           new CGI::Session( "driver:File;serializer:yaml", $sessionID,
-            { Directory => '/tmp' } );
+            { Directory => $sessdir } );
         if ( $session->param('cardnumber') ) {
             C4::Context->set_userenv(
                 $session->param('number'),
@@ -283,7 +285,7 @@ sub checkauth {
     }
     unless ($userid) {
         my $session =
-          new CGI::Session( "driver:File;serializer:yaml", undef, { Directory => '/tmp' } );
+          new CGI::Session( "driver:File;serializer:yaml", undef, { Directory => $sessdir } );
         $sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
