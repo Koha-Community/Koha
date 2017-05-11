@@ -152,17 +152,26 @@ if ($op eq ""){
         my $duplifound = 0;
         # Check if this import_record_id was selected
         next if not grep { $_ eq $$biblio{import_record_id} } @import_record_id_selected;
+        # With this we know from which index from the http params we get the data
+        my $index;
+        for (my $i = 0; $i <= $#import_record_id_selected; $i++) {
+            if ($import_record_id_selected[$i] eq $$biblio{import_record_id}) {
+              $index = $i;
+              last;
+            }
+        }
+
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
         my $match = GetImportRecordMatches( $biblio->{'import_record_id'}, 1 );
         my $biblionumber=$#$match > -1?$match->[0]->{'biblionumber'}:0;
-        my $c_overlay = shift @overlay;
-        my $c_quantity = shift( @quantities ) || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
-        my $c_budget_id = shift( @budgets_id ) || $input->param('all_budget_id') || $budget_id;
-        my $c_discount = shift ( @discount);
+        my $c_overlay = $overlay[$index];
+        my $c_quantity = $quantities[$index] || GetMarcQuantity($marcrecord, C4::Context->preference('marcflavour') ) || 1;
+        my $c_budget_id = $budgets_id[$index] || $input->param('all_budget_id') || $budget_id;
+        my $c_discount = $discount[$index];
         $c_discount = $c_discount / 100 if $c_discount && $c_discount > 1;
-        my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
-        my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
+        my $c_sort1 = $sort1[$index] || $input->param('all_sort1') || '';
+        my $c_sort2 = $sort2[$index] || $input->param('all_sort2') || '';
 
         # INSERT the biblio if no match found, or if we want to overlay the existing match
         if ( not($biblionumber) || $c_overlay ) {
@@ -336,7 +345,7 @@ if ($op eq ""){
                 currency           => $cgiparams->{'all_currency'},
             );
             # get the price if there is one.
-            my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
+            my $price= $prices[$index] || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
             if ($price){
                 # in France, the cents separator is the , but sometimes, ppl use a .
                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
