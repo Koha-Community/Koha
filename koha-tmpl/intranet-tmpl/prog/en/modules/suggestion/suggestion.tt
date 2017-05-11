@@ -210,16 +210,54 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     <fieldset class="rows">
       <legend>Bibliographic information</legend>
       <ol>
-        <li><span class="label">Title:</span>[% title |html %]</li>
-        <li><span class="label">Author:</span>[% author |html %]</li>
-        <li><span class="label">Copyright date:</span>[% copyrightdate |html %]</li>
-        <li><span class="label">ISBN or ISSN or other standard number:</span>[% isbn |html %]</li>
-        <li><span class="label">Publisher:</span>[% publishercode |html %]</li>
-        <li><span class="label">Publication place:</span>[% place |html %]</li>
-        <li><span class="label">Collection title:</span>[% collectiontitle |html %]</li>
-        <li><span class="label">Document type:</span>
-            [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', itemtype, 0 ) %]
-        </li>
+            [% IF ( title ) %]
+                <li>
+                    <span class="label">Title:</span>
+                    [% title |html %]
+                </li>
+            [% END %]
+            [% IF ( author ) %]
+                <li>
+                    <span class="label">Author:</span>
+                    [% author |html %]
+                </li>
+            [% END %]
+            [% IF ( copyrightdate ) %]
+                <li>
+                    <span class="label">Copyright date:</span>
+                    [% copyrightdate |html %]
+                </li>
+            [% END %]
+            [% IF ( isbn ) %]
+                <li>
+                    <span class="label">ISBN or ISSN or other standard number:</span>
+                    [% isbn |html %]
+                </li>
+            [% END %]
+            [% IF ( publishercode ) %]
+                <li>
+                    <span class="label">Publisher:</span>
+                    [% publishercode |html %]
+                </li>
+            [% END %]
+            [% IF ( place ) %]
+                <li>
+                    <span class="label">Publication place:</span>
+                    [% place |html %]
+                </li>
+            [% END %]
+            [% IF ( collectiontitle ) %]
+                <li>
+                    <span class="label">Collection title:</span>
+                    [% collectiontitle |html %]
+                </li>
+            [% END %]
+            [% IF ( itemtype ) %]
+                <li>
+                    <span class="label">Document type:</span>
+                    [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', itemtype, 0 ) %]
+                </li>
+            [% END %]
         [% IF ( patron_reason_loop ) %]
           <li><span class="label">Reason for suggestion: </span>
             [% FOREACH patron_reason_loo IN patron_reason_loop %]
@@ -227,7 +265,12 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             [% END %]
           </li>
         [% END %]
-        <li><span class="label">Notes:</span>[% note |html %]</li>
+            [% IF ( note ) %]
+                <li>
+                    <span class="label">Notes:</span>
+                    [% note |html %]
+                </li>
+            [% END %]
       </ol>
     </fieldset>
     <fieldset class="rows"> <legend>Suggestion management</legend>
