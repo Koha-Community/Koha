@@ -81,6 +81,40 @@ sub exception_holidays {
     return $self->{exception_holidays};
 }
 
+=head cleanupCalendar
+@STATIC
+
+    Koha::Calendar::cleanupCalendar( {daysOld => 362} );
+
+Removes all the special holidays which are more than <daysOld>.
+@PARAM1 HASHRef,
+Defaults:
+    daysOld => 362, #How many days of special holidays we preserve to the past?
+@RETURNS 1 if operation succeeded
+@THROWS die-signal if there was an error with the DB-query.
+
+Pending tests, shame on me!
+=cut
+
+sub cleanupCalendar {
+    my ($params) = @_;
+
+    my $dbh = C4::Context->dbh; #I know I shouldn't use this, but the Koha::Calendar-module doesn't use DBIx either.
+
+    my $daysOld = $params->{daysOld} || 362;
+
+    my $cleanup_sth = $dbh->prepare(
+        "DELETE FROM special_holidays WHERE TO_DAYS(DATE(CONCAT(year,'-',month,'-',day))) < (TO_DAYS(NOW()) - ?);"
+    );
+    $cleanup_sth->execute( $daysOld );
+    my $exception_holidays = undef; #invalidate cache
+
+    if ($cleanup_sth->errstr) {
+        die $cleanup_sth->errstr;
+    }
+    return 1;
+}
+
 sub single_holidays {
     my ( $self, $date ) = @_;
     my $branchcode = $self->{branchcode};

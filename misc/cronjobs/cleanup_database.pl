@@ -60,6 +60,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --merged           purged completed entries from need_merge_authorities.
    --import DAYS      purge records from import tables older than DAYS days.
                       Defaults to 60 days if no days specified.
+   --calendar DAYS    purge rows from koha.special_holidays-table older than DAYS days.
+                      Defaults to 362 days if no days specified.
    --z3950            purge records from import tables that are the result
                       of Z39.50 searches
    --fees DAYS        purge entries accountlines older than DAYS days, where
@@ -96,6 +98,7 @@ my $zebraqueue_days;
 my $mail;
 my $purge_merged;
 my $pImport;
+my $calendar;
 my $pLogs;
 my $pSearchhistory;
 my $pZ3950;
@@ -119,6 +122,7 @@ GetOptions(
     'zebraqueue:i'      => \$zebraqueue_days,
     'merged'            => \$purge_merged,
     'import:i'          => \$pImport,
+    'calendar:i'        => \$calendar,
     'z3950'             => \$pZ3950,
     'logs:i'            => \$pLogs,
     'fees:i'            => \$fees_days,
@@ -153,6 +157,7 @@ unless ( $sessions
     || $mail
     || $purge_merged
     || $pImport
+    || $calendar
     || $pLogs
     || $fees_days
     || $pSearchhistory
@@ -246,6 +251,17 @@ if ($pImport) {
     print "Purging records from import tables.\n" if $verbose;
     PurgeImportTables();
     print "Done with purging import tables.\n" if $verbose;
+}
+
+if ($calendar) {
+    my $daysOld = $calendar || 362;
+    print "Purging koha.special_holidays from '$calendar' days ago.\n" if $verbose;
+    eval {
+        Koha::Calendar::cleanupCalendar();
+    };
+    if ($@) {
+        warn "Exception while purging the Calendar:\n".$@;
+    }
 }
 
 if ($pZ3950) {

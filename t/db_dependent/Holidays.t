@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use DateTime;
 use DateTime::TimeZone;
@@ -74,6 +74,44 @@ subtest 'exception_holidays() tests' => sub {
         qr/Invalid local time for date in time zone: America\/Santiago/,
         'Avoid invalid datetime due to DST'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cleanupCalendar() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    $dbh->do("DELETE FROM special_holidays");
+    # Clear cache
+    Koha::Caches->get_instance->flush_all;
+
+    my $branch = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $calendar = Koha::Calendar->new( branchcode => $branch );
+
+    my $olddate = dt_from_string("2015-01-01");
+    C4::Calendar->new( branchcode => $branch )->insert_single_holiday(
+        day         => $olddate->day(),
+        month       => $olddate->month(),
+        year        => $olddate->year(),
+        title       => '$olddate',
+        description => '$olddate',
+    );
+
+    my $today = dt_from_string();
+    C4::Calendar->new( branchcode => $branch )->insert_single_holiday(
+        day         => $today->day(),
+        month       => $today->month(),
+        year        => $today->year(),
+        title       => "$today",
+        description => "$today",
+    );
+
+    Koha::Calendar::cleanupCalendar();
+    is ( $calendar->is_holiday($olddate), 0, 'Old holiday has been removed' );
+    is ( $calendar->is_holiday($today), 1, 'Holiday from this year' );
 
     $schema->storage->txn_rollback;
 };
