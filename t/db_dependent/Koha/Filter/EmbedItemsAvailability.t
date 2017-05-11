@@ -18,6 +18,8 @@
 use Modern::Perl;
 
 use Test::More tests => 1;
+use Test::MockModule;
+
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -36,8 +38,26 @@ subtest 'EmbedItemsAvailability tests' => sub {
 
     $schema->storage->txn_begin();
 
+    my $biblio = Test::MockModule->new('C4::Biblio');
+    $biblio->mock( 'GetMarcFromKohaField', sub {
+        my ( $kohafield, $frameworkcode ) = @_;
+        if ( $kohafield eq 'biblio.biblionumber' ) {
+            if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+                return ( '001', '@' );
+            }
+            else {
+                return ( '999', 'c' );
+            }
+        }
+        else {
+            my $func_ref = $biblio->original( 'GetMarcFromKohaField' );
+            &$func_ref( $kohafield, $frameworkcode );
+        }
+    });
+
     # MARC21 tests
     t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
     # Create a dummy record
     my ( $biblionumber, $biblioitemnumber ) = AddBiblio(MARC::Record->new(), '');
 
