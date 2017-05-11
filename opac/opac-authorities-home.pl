@@ -124,7 +124,7 @@ if ( $op eq "do_search" ) {
 
     # Opac search history
     if (C4::Context->preference('EnableOpacSearchHistory')) {
-        unless ( $startfrom ) {
+        if ( $startfrom == 1) {
             my $path_info = $query->url(-path_info=>1);
             my $query_cgi_history = $query->url(-query=>1);
             $query_cgi_history =~ s/^$path_info\?//;
