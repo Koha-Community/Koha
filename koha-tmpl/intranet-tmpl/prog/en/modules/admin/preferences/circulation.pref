@@ -547,6 +547,10 @@ Circulation:
                   no: "Don't allow"
             - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
         -
+            - pref: PickupExpiredHoldsOverReportDuration
+              class: integer
+            - "For how many days holds expired by the 'ExpireReservesMaxPickUpDelay'-syspref are visible in the 'Hold Over'-tab in /circ/waitingreserves.pl ?"
+        -
             - If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
               class: currency

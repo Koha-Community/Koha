@@ -154,6 +154,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesMaxPickUpDelay','0','','Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay','YesNo'),
+('PickupExpiredHoldsOverReportDuration','1',NULL,"For how many days holds expired by the 'ExpireReservesMaxPickUpDelay'-syspref are visible in the 'Hold Over'-tab in /circ/waitingreserves.pl ?",'Integer'),
 ('ExpireReservesMaxPickUpDelayCharge','0',NULL,'If ExpireReservesMaxPickUpDelay is enabled, and this field has a non-zero value, than a borrower whose waiting hold has expired will be charged this amount.','free'),
 ('ExpireReservesOnHolidays', '1', NULL, 'If false, reserves at a library will not be canceled on days the library is not open.', 'YesNo'),
 ('ExcludeHolidaysFromMaxPickUpDelay', '0', NULL, 'If ON, reserves max pickup delay takes into accountthe closed days.', 'YesNo'),

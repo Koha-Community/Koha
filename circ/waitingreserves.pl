@@ -79,6 +79,9 @@ $template->param( all_branches => 1 ) if $all_branches;
 my (@reservloop, @overloop);
 my ($reservcount, $overcount);
 my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch($default);
+my $expiredReserves = $all_branches ? C4::Reserves::GetExpiredReserves() : C4::Reserves::GetExpiredReserves({branchcode => $default});
+warn Data::Dumper::Dumper $expiredReserves;
+push @getreserves, @$expiredReserves;
 # get reserves for the branch we are logged into, or for all branches
 
 my $today = DateTime->now();
@@ -105,7 +108,9 @@ foreach my $num (@getreserves) {
     $getreserv{'waitingdate'} = $num->{'waitingdate'};
     my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
-    $num->{'branchcode'} = Koha::Holds->find($num->{'reserve_id'})->branchcode;
+    if(!$num->{'branchcode'}) {
+        $num->{'branchcode'} = Koha::Holds->find($num->{'reserve_id'})->branchcode;
+    }
     my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $num );
 
     $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?

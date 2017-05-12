@@ -50,6 +50,7 @@ use Koha::Patrons;
 
 use DateTime;
 use List::MoreUtils qw( firstidx any );
+use Scalar::Util qw(blessed);
 use Carp;
 use Data::Dumper;
 use YAML::XS;
@@ -692,6 +693,79 @@ sub GetReservesForBranch {
     return (@transreserv);
 }
 
+=head GetExpiredReserves
+
+    my $expiredReserves = C4::Reserves::GetExpiredReserves(
+            {branchcode => 'CPL',
+            from => DateTime->new(...), #DateTime or undef
+                #defaults to 'PickupExpiredHoldsOverReportDuration' days ago.
+                #respects Koha::Calendar for the given branch, skipping closed days.
+            to   => DateTime->now(), #DateTime or undef
+                #defaults to now()
+        });
+
+@RETURNS ARRAYRef of expired reserves from the given duration.
+=cut
+
+sub GetExpiredReserves {
+    my ($params) = @_;
+
+    my $pickupExpiredHoldsOverReportDuration = C4::Context->preference('PickupExpiredHoldsOverReportDuration');
+    return [] unless $pickupExpiredHoldsOverReportDuration;
+
+    my $branchcode = $params->{branchcode};
+    if ($params->{from}) {
+        unless (blessed($params->{from}) && $params->{from}->isa('DateTime')) {
+            Koha::Exception::BadParameter->throw(error => "GetExpiredReserves():> Parameter 'from' is not a DateTime-object or undef!");
+        }
+    }
+    if ($params->{to}) {
+        unless (blessed($params->{from}) && $params->{from}->isa('DateTime')) {
+            Koha::Exception::BadParameter->throw(error => "GetExpiredReserves():> Parameter 'from' is not a DateTime-object or undef!");
+        }
+    }
+
+    #Calculate the days for which we get the expired reserves.
+    my $fromDate   = $params->{from};
+    my $toDate     = $params->{to}   || DateTime->now(time_zone => C4::Context->tz());
+    unless ($fromDate) {
+        $fromDate = DateTime->now( time_zone => C4::Context->tz() );
+
+        #Look for previous open days
+        if ($branchcode) {
+            my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+            foreach my $i (1..$pickupExpiredHoldsOverReportDuration) {
+                $fromDate = $calendar->prev_open_day($fromDate);
+            }
+        }
+        #If no branch has been specified we cannot use a calendar, so simply just go back in time.
+        else {
+            $fromDate = DateTime->now(time_zone => C4::Context->tz())->subtract(days => $pickupExpiredHoldsOverReportDuration);
+        }
+    }
+
+    my $dbh = C4::Context->dbh;
+
+    my @params = ($fromDate->ymd(), $toDate->ymd());
+    my $query = "
+        SELECT *
+        FROM   old_reserves
+        WHERE   priority='0'
+        AND pickupexpired BETWEEN ? AND ?
+    ";
+    if ( $branchcode ) {
+        push @params, $branchcode;
+        $query .= " AND branchcode=? ";
+    }
+    $query .= "ORDER BY waitingdate" ;
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@params);
+
+    my $data = $sth->fetchall_arrayref({});
+    return ($data) ? $data : [];
+}
+
 =head2 GetReserveStatus
 
   $reservestatus = GetReserveStatus($itemnumber);
@@ -909,6 +983,7 @@ sub CancelExpiredReserves {
         }
 
         my $expiration = _reserve_last_pickup_date( $res );
+        $cancel_params->{pickupexpired} = $expiration;
         if ( $today > $expiration ) {
             CancelReserve($cancel_params);
         }
@@ -933,7 +1008,7 @@ sub AutoUnsuspendReserves {
 
 =head2 CancelReserve
 
-  CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber, ] [ charge_cancel_fee => 1 ] });
+  CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber, ], pickupexpired => DateTime->new(year => 2015, ...), [ charge_cancel_fee => 1 ] });
 
 Cancels a reserve. If C<charge_cancel_fee> is passed and the C<ExpireReservesMaxPickUpDelayCharge> syspref is set, charge that fee to the patron's account.
 
@@ -945,6 +1020,13 @@ sub CancelReserve {
     my $reserve_id = $params->{'reserve_id'};
     # Filter out only the desired keys; this will insert undefined values for elements missing in
     # \%params, but GetReserveId filters them out anyway.
+    my $pickupexpired = $params->{pickupexpired};
+    if ($pickupexpired) {
+        unless (blessed($pickupexpired) && $pickupexpired->isa('DateTime')) {
+            Koha::Exception::BadParameter->throw(error => "CancelReserve():> Parameter 'pickupexpired' is not a DateTime-object or undef!");
+        }
+    }
+
     $reserve_id = GetReserveId( { biblionumber => $params->{'biblionumber'}, borrowernumber => $params->{'borrowernumber'}, itemnumber => $params->{'itemnumber'} } ) unless ( $reserve_id );
 
     return unless ( $reserve_id );
@@ -958,14 +1040,24 @@ sub CancelReserve {
         logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
+        my @params;
         my $query = "
             UPDATE reserves
-            SET    cancellationdate = now(),
+            SET    cancellationdate = DATE(NOW()),
+        ";
+        if ($pickupexpired) {
+            push @params, $pickupexpired->ymd();
+            $query .= "
+                   pickupexpired    = ?,
+            ";
+        }
+        push @params, $reserve_id;
+        $query .= "
                    priority         = 0
             WHERE  reserve_id = ?
         ";
         my $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
+        $sth->execute( @params );
 
         $query = "
             INSERT INTO old_reserves
