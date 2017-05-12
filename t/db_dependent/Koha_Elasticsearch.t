@@ -15,9 +15,158 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 1;                      # last test to print
+use Test::More tests => 2;
+use Test::MockModule;
+
+use t::lib::Mocks;
+use MARC::Record;
+use Koha::SearchEngine::Elasticsearch::Indexer;
+use JSON::XS;
+
+my $schema = Koha::Database->schema;
 
 use_ok('Koha::SearchEngine::Elasticsearch');
+
+subtest 'get_fixer_rules() tests' => sub {
+
+    plan tests => 47;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my @mappings;
+
+    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
+    $se->mock( '_foreach_mapping', sub {
+        my ($self, $sub ) = @_;
+
+        foreach my $map ( @mappings ) {
+            $sub->(
+                $map->{name},
+                $map->{type},
+                $map->{facet},
+                $map->{suggestible},
+                $map->{sort},
+                $map->{marc_type},
+                $map->{marc_field}
+            );
+        }
+    });
+
+    my $see = Koha::SearchEngine::Elasticsearch->new({ index => 'biblios' });
+
+    @mappings = (
+        {
+            name => 'author',
+            type => 'string',
+            facet => 1,
+            suggestible => 1,
+            sort => '~',
+            marc_type => 'marc21',
+            marc_field => '100a',
+        },
+        {
+            name => 'author',
+            type => 'string',
+            facet => 1,
+            suggestible => 1,
+            sort => '~',
+            marc_type => 'marc21',
+            marc_field => '110a',
+        },
+    );
+
+    my $marc_record = MARC::Record->new();
+    $marc_record->append_fields(
+        MARC::Field->new( '001', '1234567' ),
+        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
+        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
+        MARC::Field->new( '110', '', '', 'a' => 'Corp Author' ),
+        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
+    );
+    my @records = ( $marc_record );
+
+    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' });
+    my $conv = $importer->_convert_marc_to_json( \@records )->next();
+    is( $conv->{author}[0][0], "Author", "First mapped author should be 100a");
+    is( $conv->{author}[1][0], "Corp Author", "Second mapped author should be 110a");
+
+    my $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', -split => 1)});
+    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
+    is( $result->[3], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[4], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', -split => 1)});
+    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
+    is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[8], q{move_field(_id,es_id)});
+
+    $mappings[0]->{type}  = 'boolean';
+    $mappings[1]->{type}  = 'boolean';
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', -split => 1)});
+    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
+    is( $result->[3], q{unless exists('} . $mappings[0]->{name} . q{') add_field('} . $mappings[0]->{name} . q{', 0) end});
+    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
+    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', -split => 1)});
+    is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
+    is( $result->[8], q{unless exists('} . $mappings[1]->{name} . q{') add_field('} . $mappings[1]->{name} . q{', 0) end});
+    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[10], q{move_field(_id,es_id)});
+
+    $mappings[0]->{type}  = 'sum';
+    $mappings[1]->{type}  = 'sum';
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', )});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', )});
+    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
+    is( $result->[3], q{sum('} . $mappings[0]->{name} . q{')});
+    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', )});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', )});
+    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', )});
+    is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
+    is( $result->[8], q{sum('} . $mappings[1]->{name} . q{')});
+    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', )});
+    is( $result->[10], q{move_field(_id,es_id)});
+
+    $mappings[0]->{type}  = 'string';
+    $mappings[0]->{facet} = 0;
+    $mappings[1]->{type}  = 'string';
+    $mappings[1]->{facet} = 0;
+
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
+    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
+    is( $result->[4], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[6], q{move_field(_id,es_id)});
+
+    $mappings[0]->{suggestible}  = 0;
+    $mappings[1]->{suggestible}  = 0;
+
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[2], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
+    is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[4], q{move_field(_id,es_id)});
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{move_field(_id,es_id)});
+    is( $result->[1], undef, q{No mapping when marc_type doesn't match marchflavour} );
+
+    $schema->storage->txn_rollback;
+
+};
+
+1;
