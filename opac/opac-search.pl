@@ -224,13 +224,11 @@ $template->param(search_languages_loop => $languages_limit_loop,);
 my $itemtypes = GetItemTypesCategorized;
 # add translated_description to itemtypes
 foreach my $itemtype ( keys %{$itemtypes} ) {
-    # Itemtypes search categories don't have (yet) translated descriptions, they are auth values
+    # Itemtypes search categories don't have (yet) translated descriptions, they are auth values (and could still have no descriptions too BZ 18400)
     my $translated_description = getitemtypeinfo( $itemtype, 'opac' )->{translated_description};
-    $itemtypes->{$itemtype}->{translated_description} =
-            ( $translated_description ) ? $translated_description : $itemtypes->{$itemtype}->{description};
+    $itemtypes->{$itemtype}->{translated_description} = $translated_description || $itemtypes->{$itemtype}->{description} || q{};
 }
-my $itemtypes_copy = { %$itemtypes }; #Sometime itemtypes can be corrupted in advanced_srch_type loop
-                                      #Making a copy ensure it is clean
+
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @advancedsearchesloop;
@@ -250,13 +248,13 @@ if ( $yaml =~ /\S/ ) {
     }
 }
 
+my @sorted_itemtypes = sort { $itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} } keys %$itemtypes;
 foreach my $advanced_srch_type (@advanced_search_types) {
     $advanced_srch_type =~ s/^\s*//;
     $advanced_srch_type =~ s/\s*$//;
    if ($advanced_srch_type eq 'itemtypes') {
    # itemtype is a special case, since it's not defined in authorized values
         my @itypesloop;
-        my @sorted_itemtypes = ( sort {$itemtypes->{$a}->{translated_description} cmp $itemtypes->{$b}->{translated_description} } keys %$itemtypes_copy );
         foreach my $thisitemtype ( @sorted_itemtypes ) {
             next if $hidingrules->{itype} && any { $_ eq $thisitemtype } @{$hidingrules->{itype}};
             next if $hidingrules->{itemtype} && any { $_ eq $thisitemtype } @{$hidingrules->{itemtype}};
