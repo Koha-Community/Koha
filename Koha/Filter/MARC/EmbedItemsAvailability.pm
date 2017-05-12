@@ -90,7 +90,7 @@ sub _processrecord {
     else {
         # no field, create one
         $destination_field = MARC::Field->new( '999', '', '', x => $not_onloan_items );
-        $record->append_fields([$destination_field]);
+        $record->append_fields($destination_field);
     }
 
     return $record;

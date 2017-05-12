@@ -142,10 +142,10 @@ subtest 'EmbedItemsAvailability tests' => sub {
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
     $record = GetMarcBiblio($biblionumber);
-    ok( !defined $record->field('999')->subfield('x'), q{The record doesn't originally contain 999$x} );
+    ok( !defined $record->subfield('999', 'x'), q{The record doesn't originally contain 999$x} );
     # Apply filter
     $processor->process($record);
-    is($record->field('999')->subfield('x'), 1, 'There is only one item with undef onloan');
+    is($record->subfield('999', 'x'), 1, 'There is only one item with undef onloan');
 
     $schema->storage->txn_rollback();
 };
