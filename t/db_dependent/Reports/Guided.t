@@ -18,13 +18,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Warn;
 
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
 use Koha::Reports;
+use Koha::Notice::Messages;
 
 use_ok('C4::Reports::Guided');
 can_ok(
@@ -353,6 +354,58 @@ count(h.reservedate) AS 'holds'
     FROM biblio_metadata t1
     LEFT JOIN biblio_metadata t2 USING ( biblionumber )|;
     is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Query with multiple instances of marcxml and biblioitems should have them all replaced");
+};
+
+subtest 'Email report test' => sub {
+
+    plan tests => 8;
+
+    my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com' } })->{ borrowernumber };
+    my $id2 = $builder->build({ source => 'Borrower',value => { surname => 'nomailer', email => undef } })->{ borrowernumber };
+    my $report1 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT surname,borrowernumber,email FROM borrowers WHERE borrowernumber IN ($id1,$id2)" } })->{ id };
+    my $report2 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT potato FROM mashed" } })->{ id };
+
+    my $letter1 = $builder->build({
+            source => 'Letter',
+            value => {
+                content => "[% surname %]",
+                branchcode => "",
+                message_transport_type => 'email'
+            }
+        });
+    my $letter2 = $builder->build({
+            source => 'Letter',
+            value => {
+                content => "[% firstname %]",
+                branchcode => "",
+                message_transport_type => 'email'
+            }
+        });
+
+    my $message_count = Koha::Notice::Messages->search({})->count;
+
+    my ( $emails, $errors ) = C4::Reports::Guided::EmailReport();
+    is( $errors->[0]{FATAL}, 'MISSING_PARAMS', "Need to enter required params");
+
+    ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module}, code => $letter2->{code}});
+    is( $errors->[0]{FATAL}, 'NO_LETTER', "Must have a letter that exists");
+
+    warning_like { ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report2, module => $letter1->{module} , code => $letter1->{code} }) }
+        qr/^DBD::mysql::st execute failed/,
+        'Error from bad report';
+    is( $errors->[0]{FATAL}, 'REPORT_FAIL', "Bad report returns failure");
+
+    ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code} });
+    is( $errors->[0]{NO_FROM_COL} == 1 && $errors->[1]{NO_EMAIL_COL} == 2  && $errors->[2]{NO_FROM_COL} == 2, 1, "Correct warnings from the routine");
+
+    ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh' });
+    is( $errors->[0]{NO_EMAIL_COL}, 2, "Warning only for patron with no email");
+
+    is( $message_count,  Koha::Notice::Messages->search({})->count, "Messages not added without commit");
+
+    ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh' });
+    is( $emails->[0]{letter}->{content}, "mailer", "Message has expected content");
+
 };
 
 $schema->storage->txn_rollback;
