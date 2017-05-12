@@ -296,13 +296,14 @@ $(document).ready(function(){
         $("#guarantorsearch").val(LABEL_SET_TO_PATRON);
     });
 
-    $("#select_city").change(function(){
+    $(document.body).on('change','select[name="select_city"]',function(){
+        $('select[name="select_city"]').val( $(this).val() );
         var myRegEx=new RegExp(/(.*)\|(.*)\|(.*)\|(.*)/);
-        document.form.select_city.value.match(myRegEx);
-        document.form.zipcode.value=RegExp.$1;
-        document.form.city.value=RegExp.$2;
-        document.form.state.value=RegExp.$3;
-        document.form.country.value=RegExp.$4;
+        $(this).val().match(myRegEx);
+        $('input[name="zipcode"]').val( RegExp.$1 );
+        $('input[name="city"]').val( RegExp.$2 );
+        $('input[name="state"]').val( RegExp.$3 );
+        $('input[name="country"]').val( RegExp.$4 );
     });
 
     $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
