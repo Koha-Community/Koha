@@ -1075,7 +1075,6 @@ $(document).ready(function() {
             [% FOREACH patron_attribute IN pa_loo.items %]
                 <li data-category_code="[% patron_attribute.category_code %]">
                     <label for="[% patron_attribute.form_id %]">[% patron_attribute.description %]: </label>
-                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
                         [% IF ( patron_attribute.use_dropdown ) %]
                             <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
                                 <option value=""></option>
@@ -1094,6 +1093,7 @@ $(document).ready(function() {
                         [% ELSE %]
                             <textarea rows="2" cols="30" id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">[% patron_attribute.value %]</textarea>
                         [% END %]
+                        <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
                         <a href="#" onclick="clear_entry(this); return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
                         [% IF ( patron_attribute.repeatable ) %]
                         <a href="#" onclick="clone_entry(this); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
