@@ -1,0 +1,155 @@
+{
+  "/messaging_preferences": {
+    "get": {
+      "x-mojo-to": "Patron::Message::Preference#list",
+      "operationId": "listMessagingPreferences",
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "*"
+        },
+        "allow-owner": true,
+        "allow-guarantor": true
+      },
+      "tags": ["notices"],
+      "parameters": [{
+        "name": "borrowernumber",
+        "in": "query",
+        "description": "Patron's borrowernumber",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "categorycode",
+        "in": "query",
+        "description": "Categorycode to find default messaging preferences for a category",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A messaging preference object",
+          "schema": {
+              "$ref" : "../definitions.json#/messagingpreference"
+          }
+        },
+        "400": {
+          "description": "Bad parameter given",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Preferences not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Patron::Message::Preference#edit",
+      "operationId": "editMessagingPreferences",
+      "description": "Modifies patron's messaging preferences. Please note that not all parameters defined in body object's documentation can actually be used for each message option due to dynamic configuration. Make a GET request first to see whether an option is configurable or if message transport type is available.",
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "*"
+        },
+        "allow-owner": true,
+        "allow-guarantor": true
+      },
+      "tags": ["notices"],
+      "parameters": [
+        {
+          "name": "borrowernumber",
+          "in": "query",
+          "description": "Patron's borrowernumber",
+          "required": false,
+          "type": "integer"
+        }, {
+          "name": "categorycode",
+          "in": "query",
+          "description": "Categorycode to find default messaging preferences for a category",
+          "required": false,
+          "type": "integer"
+        }, {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing information on messaging preferences",
+          "required": true,
+          "schema": { "$ref" : "../definitions.json#/messagingpreference" }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A messaging preferences object",
+          "schema": {
+              "$ref" : "../definitions.json#/messagingpreference"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron or category not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

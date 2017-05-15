@@ -281,6 +281,54 @@ sub store {
     return $self;
 }
 
+sub TO_JSON {
+    my ($self, $params) = @_;
+
+    my $json = {};
+    my $pref;
+    $params->{'options'} ||= Koha::Patron::Message::Preferences->get_options;
+    my $transports = $self->message_transport_types;
+
+    foreach my $option (@{$params->{'options'}}) {
+        foreach my $param (keys %$option) {
+            if ($param eq 'message_attribute_id' &&
+                    $option->{$param} == $self->message_attribute_id) {
+                $pref = $option;
+                last;
+            }
+        }
+    }
+
+    foreach my $conf (keys %$pref) {
+        if ($conf =~ /^transport_/) {
+            my $mtt = $conf =~ s/^transport_//r;
+            if ($mtt eq 'sms' && !C4::Context->preference('SMSSendDriver')) {
+                next;
+            }
+            if ($mtt eq 'phone' &&
+                !C4::Context->preference('TalkingTechItivaPhoneNotification')) {
+                next;
+            }
+            $json->{'transport_types'}->{$mtt} = $transports->{$mtt} ?
+                                Mojo::JSON->true : Mojo::JSON->false;
+        }
+    }
+
+    $json->{'days_in_advance'} = {
+        configurable => $pref->{'takes_days'} ?
+                                Mojo::JSON->true : Mojo::JSON->false,
+        value => defined $self->days_in_advance ?
+                                0+$self->days_in_advance : undef
+    };
+    $json->{'digest'} = {
+        configurable => $pref->{'has_digest'} ?
+                            Mojo::JSON->true : Mojo::JSON->false,
+        value => $self->wants_digest ? Mojo::JSON->true : Mojo::JSON->false
+    };
+
+    return $json;
+}
+
 =head3 validate
 
 Makes a basic validation for object.

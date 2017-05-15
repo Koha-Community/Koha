@@ -124,6 +124,35 @@ sub search_with_message_name {
     return $self->SUPER::search($params, $attributes);
 }
 
+sub TO_JSON {
+    my ($self) = @_;
+
+    my $preferences = {};
+    my $options = $self->get_options;
+    foreach my $preference ($self->as_list) {
+        $preferences->{$preference->message_name} = $preference->TO_JSON({
+            options => $options
+        });
+    }
+
+    # If some preferences are not stored even though they are valid options,
+    # then add those options to the returned HASHref as well
+    foreach my $option (@$options) {
+        unless ($preferences->{$option->{'message_name'}}) {
+            my $message_attribute_id = Koha::Patron::Message::Attributes->find({
+                message_name => $option->{'message_name'}
+            })->message_attribute_id;
+            $preferences->{$option->{'message_name'}} =
+                Koha::Patron::Message::Preference->new({
+                    borrowernumber => -1,
+                    message_attribute_id => $message_attribute_id,
+                })->TO_JSON({ options => $options });
+        }
+    }
+
+    return $preferences;
+}
+
 =head3 type
 
 =cut

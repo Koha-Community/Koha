@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "transport_types": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "boolean"
+        },
+        "phone": {
+          "type": "boolean"
+        },
+        "print": {
+          "type": "boolean"
+        },
+        "sms": {
+          "type": "boolean"
+        }
+      }
+    },
+    "days_in_advance": {
+      "type": "object",
+      "properties": {
+        "configurable": {
+          "description": "Can this message have a value for days in advance",
+          "type": "boolean",
+          "readOnly": true
+        },
+        "value": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 30
+        }
+      }
+    },
+    "digest": {
+      "type": "object",
+      "properties": {
+        "configurable": {
+          "description": "Can this message be requested as digest",
+          "type": "boolean",
+          "readOnly": true
+        },
+        "value": {
+          "description": "Is digest enabled",
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
