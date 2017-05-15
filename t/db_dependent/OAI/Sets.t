@@ -17,40 +17,20 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Context;
-use Test::More tests => 148;
+
+use Test::More tests => 144;
 use Test::MockModule;
 use Test::Warn;
+use MARC::Record;
 
+use Koha::Database;
+use C4::Biblio;
+use C4::OAI::Sets;
 
-BEGIN {
-    use_ok('C4::OAI::Sets');
-    use_ok('MARC::Record');
-    use_ok('C4::Biblio');
-}
-can_ok(
-    'C4::OAI::Sets', qw(
-        GetOAISets
-        GetOAISet
-        GetOAISetBySpec
-        ModOAISet
-        DelOAISet
-        AddOAISet
-        GetOAISetsMappings
-        GetOAISetMappings
-        ModOAISetMappings
-        GetOAISetsBiblio
-        DelOAISetsBiblio
-        CalcOAISetsBiblio
-        ModOAISetsBiblios
-        UpdateOAISetsBiblio
-        AddOAISetsBiblios )
-);
-
-
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
 $dbh->do('DELETE FROM oai_sets');
 $dbh->do('DELETE FROM oai_sets_descriptions');
 $dbh->do('DELETE FROM oai_sets_mappings');
@@ -632,4 +612,4 @@ sub create_helper_biblio {
     return $biblionumber;
 }
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
