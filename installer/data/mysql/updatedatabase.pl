@@ -14407,7 +14407,7 @@ if( CheckVersion( $DBversion ) ) {
         VALUES ('TranslateNotices',  '0',  NULL,  'Allow notices to be translated',  'YesNo') ");
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 17762X - Add columns letter.lang and borrowers.lang to allow translation of notices)\n";
+    print "Upgrade to $DBversion done (Bug 17762 - Add columns letter.lang and borrowers.lang to allow translation of notices)\n";
 }
 
 $DBversion = '16.12.00.034';
