@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 43;
+use Test::More tests => 44;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -725,6 +725,16 @@ C4::HoldsQueue::CreateQueue();
 
 my $queue_rs = $schema->resultset('TmpHoldsqueue');
 is( $queue_rs->count(), 1, "Hold queue contains one hold from chosen from three possible items" );
+
+subtest 'Trivial test for UpdateTransportCostMatrix' => sub {
+    plan tests => 1;
+    my $recs = [
+        { frombranch => $library1->{branchcode}, tobranch => $library2->{branchcode}, cost => 1, disable_transfer => 0 },
+        { frombranch => $library2->{branchcode}, tobranch => $library3->{branchcode}, cost => 0, disable_transfer => 1 },
+    ];
+    C4::HoldsQueue::UpdateTransportCostMatrix( $recs );
+    is( $schema->resultset('TransportCost')->count, 2, 'UpdateTransportCostMatrix added two records' );
+};
 
 # Cleanup
 $schema->storage->txn_rollback;
