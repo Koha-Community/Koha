@@ -525,7 +525,7 @@ sub CalcOAISetsBiblio {
     };
     ModOAISetsBiblios($oai_sets_biblios);
 
-ModOAISetsBiblios truncate oai_sets_biblios table and call AddOAISetsBiblios.
+ModOAISetsBiblios deletes all records from oai_sets_biblios table and calls AddOAISetsBiblios.
 This table is then used in opac/oai.pl.
 
 =cut
@@ -537,7 +537,7 @@ sub ModOAISetsBiblios {
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        TRUNCATE TABLE oai_sets_biblios
+        DELETE FROM oai_sets_biblios
     };
     my $sth = $dbh->prepare($query);
     $sth->execute;
