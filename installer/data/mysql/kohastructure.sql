@@ -2269,7 +2269,7 @@ CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves)
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
   `created_on` datetime NOT NULL, -- creation time
   `allow_change_from_owner` tinyint(1) default 1, -- can owner change contents?
-  `allow_change_from_others` tinyint(1) default 0 -- can others change contents?
+  `allow_change_from_others` tinyint(1) default 0, -- can others change contents?
   PRIMARY KEY  (`shelfnumber`),
   CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in Members.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
