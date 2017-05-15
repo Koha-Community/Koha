@@ -17,9 +17,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::MockModule;
+use t::lib::Mocks;
 
 use MARC::Record;
+
+use Koha::Database;
+
+my $schema = Koha::Database->schema();
 
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
@@ -51,4 +57,69 @@ SKIP: {
 
     ok( $indexer->update_index(undef,$records), 'Update Index' );
 }
+
+subtest '_convert_marc_to_json() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my @mappings = (
+        {
+            name => 'author',
+            type => 'string',
+            facet => 1,
+            suggestible => 1,
+            sort => '~',
+            marc_type => 'marc21',
+            marc_field => '100a',
+        },
+        {
+            name => 'author',
+            type => 'string',
+            facet => 1,
+            suggestible => 1,
+            sort => '~',
+            marc_type => 'marc21',
+            marc_field => '110a',
+        },
+    );
+
+
+    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
+    $se->mock( '_foreach_mapping', sub {
+        my ($self, $sub ) = @_;
+
+        foreach my $map ( @mappings ) {
+            $sub->(
+                $map->{name},
+                $map->{type},
+                $map->{facet},
+                $map->{suggestible},
+                $map->{sort},
+                $map->{marc_type},
+                $map->{marc_field}
+            );
+        }
+    });
+
+    my $marc_record = MARC::Record->new();
+    $marc_record->append_fields(
+        MARC::Field->new( '001', '1234567' ),
+        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
+        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
+        MARC::Field->new( '110', '', '', 'a' => 'Corp Author' ),
+        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
+    );
+    my @records = ( $marc_record );
+
+    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' });
+    my $conv = $importer->_convert_marc_to_json( \@records )->next();
+    is( $conv->{author}[0][0], "Author", "First mapped author should be 100a");
+    is( $conv->{author}[1][0], "Corp Author", "Second mapped author should be 110a");
+
+    $schema->storage->txn_rollback;
+};
 

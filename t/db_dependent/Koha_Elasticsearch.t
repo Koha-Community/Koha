@@ -22,8 +22,6 @@ use Test::MockModule;
 
 use t::lib::Mocks;
 use MARC::Record;
-use Koha::SearchEngine::Elasticsearch::Indexer;
-use JSON::XS;
 
 my $schema = Koha::Database->schema;
 
@@ -31,7 +29,7 @@ use_ok('Koha::SearchEngine::Elasticsearch');
 
 subtest 'get_fixer_rules() tests' => sub {
 
-    plan tests => 47;
+    plan tests => 45;
 
     $schema->storage->txn_begin;
 
@@ -78,21 +76,6 @@ subtest 'get_fixer_rules() tests' => sub {
             marc_field => '110a',
         },
     );
-
-    my $marc_record = MARC::Record->new();
-    $marc_record->append_fields(
-        MARC::Field->new( '001', '1234567' ),
-        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
-        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
-        MARC::Field->new( '110', '', '', 'a' => 'Corp Author' ),
-        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
-    );
-    my @records = ( $marc_record );
-
-    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' });
-    my $conv = $importer->_convert_marc_to_json( \@records )->next();
-    is( $conv->{author}[0][0], "Author", "First mapped author should be 100a");
-    is( $conv->{author}[1][0], "Corp Author", "Second mapped author should be 110a");
 
     my $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
