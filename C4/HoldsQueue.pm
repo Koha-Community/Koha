@@ -100,7 +100,7 @@ sub UpdateTransportCostMatrix {
 
     my $sth = $dbh->prepare("INSERT INTO transport_cost (frombranch, tobranch, cost, disable_transfer) VALUES (?, ?, ?, ?)");
 
-    $dbh->do("TRUNCATE TABLE transport_cost");
+    $dbh->do("DELETE FROM transport_cost");
     foreach (@$records) {
         my $cost = $_->{cost};
         my $from = $_->{frombranch};
@@ -109,7 +109,7 @@ sub UpdateTransportCostMatrix {
             $cost ||= 0;
         }
         elsif ( !defined ($cost) || ($cost !~ m/(0|[1-9][0-9]*)(\.[0-9]*)?/o) ) {
-            warn  "Invalid $from -> $to cost $cost - must be a number >= 0, disablig";
+            warn  "Invalid $from -> $to cost $cost - must be a number >= 0, disabling";
             $cost = 0;
             $_->{disable_transfer} = 1;
         }
