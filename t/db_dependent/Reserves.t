@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 use Test::MockModule;
 use Test::Warn;
 
@@ -36,6 +36,7 @@ use Koha::Caches;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Libraries;
+use Koha::Notice::Templates;
 use Koha::Patron::Categories;
 
 BEGIN {
@@ -715,6 +716,67 @@ $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 # we reached the finish
 $schema->storage->txn_rollback();
+
+subtest '_koha_notify_reserve() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $wants_hold_and_email = {
+        wants_digest => '0',
+        transports => {
+            sms => 'HOLD',
+            email => 'HOLD',
+            },
+        letter_code => 'HOLD'
+    };
+
+    my $mp = Test::MockModule->new( 'C4::Members::Messaging' );
+    $mp->mock("GetMessagingPreferences",$wants_hold_and_email);
+
+    my $sms_hold_notice = $builder->build_object({
+            class => 'Koha::Notice::Templates',
+            value => {
+                message_transport_type => 'sms',
+                branchcode => '',
+                code => 'HOLD',
+            }
+        });
+
+    my $hold_borrower = $builder->build({
+            source => 'Borrower',
+            value => {
+                smsalertnumber=>'5555555555',
+                email=>'a@b.com',
+            }
+        })->{borrowernumber};
+
+    my $hold = $builder->build({
+            source => 'Reserve',
+            value => {
+               borrowernumber=>$hold_borrower
+            }
+        });
+
+    ModReserveAffect($hold->{itemnumber}, $hold->{borrowernumber}, 0);
+    my $sms_message_address = $schema->resultset('MessageQueue')->search({
+            letter_code     => 'HOLD',
+            message_transport_type => 'sms',
+            borrowernumber => $hold_borrower,
+        })->next()->to_address();
+    is($sms_message_address, undef ,"We should not populate the sms message with the sms number, sending will do so");
+
+    my $email_message_address = $schema->resultset('MessageQueue')->search({
+            letter_code     => 'HOLD',
+            message_transport_type => 'email',
+            borrowernumber => $hold_borrower,
+        })->next()->to_address();
+    is($email_message_address, undef ,"We should not populate the hold message with the email address, sending will do so");
+
+    $schema->storage->txn_rollback();
+
+};
 
 sub count_hold_print_messages {
     my $message_count = $dbh->selectall_arrayref(q{
