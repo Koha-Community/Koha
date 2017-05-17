@@ -1051,9 +1051,17 @@ sub SendQueuedMessages {
                 my $sms_provider = Koha::SMS::Providers->find( $member->{'sms_provider_id'} );
                 unless ( $sms_provider ) {
                     warn sprintf( "Patron %s has no sms provider id set!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
+                    _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
+                    next MESSAGE;
+                }
+                $message->{to_address} = $message->{to_address} ? $message->{to_address} : $member->{'smsalertnumber'};
+                unless ( $message->{to_address} && $member->{'smsalertnumber'} ) {
+                    _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
+                    warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
                     next MESSAGE;
                 }
                 $message->{to_address} .= '@' . $sms_provider->domain();
+                _update_message_to_address($message->{'message_id'},$message->{to_address});
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
             } else {
                 _send_message_by_sms( $message );
