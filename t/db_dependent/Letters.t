@@ -91,7 +91,7 @@ is( C4::Letters::EnqueueLetter(), undef, 'EnqueueLetter without argument returns
 my $my_message = {
     borrowernumber         => $borrowernumber,
     message_transport_type => 'sms',
-    to_address             => 'to@example.com',
+    to_address             => undef,
     from_address           => 'from@example.com',
 };
 my $message_id = C4::Letters::EnqueueLetter($my_message);
@@ -493,7 +493,8 @@ is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial
 }
 
 subtest 'SendQueuedMessages' => sub {
-    plan tests => 1;
+
+    plan tests => 2;
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
@@ -503,4 +504,15 @@ subtest 'SendQueuedMessages' => sub {
     );
     eval { C4::Letters::SendQueuedMessages(); };
     is( $@, '', 'SendQueuedMessages should not explode if the patron does not have a sms provider set' );
+
+    my $sms_pro = $builder->build({ source => 'SmsProvider', value => { domain => 'kidclamp.rocks' } });
+    ModMember( borrowernumber => $borrowernumber, smsalertnumber => '5555555555', sms_provider_id => $sms_pro->{id} );
+    $message_id = C4::Letters::EnqueueLetter($my_message); #using datas set around line 95 and forward
+    C4::Letters::SendQueuedMessages();
+    my $sms_message_address = $schema->resultset('MessageQueue')->search({
+        borrowernumber => $borrowernumber,
+        status => 'sent'
+    })->next()->to_address();
+    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email' );
+
 };
