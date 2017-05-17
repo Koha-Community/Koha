@@ -70,10 +70,13 @@ my $borrowernumber = AddMember(
     categorycode => $patron_category,
     branchcode   => $library->{branchcode},
     dateofbirth  => $date,
+    smsalertnumber => undef,
 );
 
 my $marc_record = MARC::Record->new;
 my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
+
+
 
 # GetMessageTransportTypes
 my $mtts = C4::Letters::GetMessageTransportTypes();
@@ -92,7 +95,7 @@ is( C4::Letters::EnqueueLetter(), undef, 'EnqueueLetter without argument returns
 my $my_message = {
     borrowernumber         => $borrowernumber,
     message_transport_type => 'sms',
-    to_address             => 'to@example.com',
+    to_address             => undef,
     from_address           => 'from@example.com',
 };
 my $message_id = C4::Letters::EnqueueLetter($my_message);
@@ -131,7 +134,6 @@ is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pendin
 # SendQueuedMessages
 my $messages_processed = C4::Letters::SendQueuedMessages();
 is($messages_processed, 1, 'all queued messages processed');
-
 $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is(
     $messages->[0]->{status},
@@ -279,6 +281,7 @@ my $prepared_letter = GetPreparedLetter((
 ));
 my $retrieved_library = Koha::Libraries->find($library->{branchcode});
 my $my_title_letter = $retrieved_library->branchname . qq| - $substitute->{status}|;
+my $biblio_timestamp = dt_from_string( GetBiblioData($biblionumber)->{timestamp} );
 my $my_content_letter = qq|Dear Jane Smith,
 According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.
 
@@ -293,7 +296,7 @@ The following item(s) is/are currently $substitute->{status}:
 
 Thank-you for your prompt attention to this matter.
 Don't forget your date of birth: | . output_pref({ dt => $date, dateonly => 1 }) . q|.
-Look at this wonderful biblio timestamp: | . output_pref({ dt => $date }) . ".\n";
+Look at this wonderful biblio timestamp: | . output_pref({ dt => $biblio_timestamp })  . ".\n";
 
 is( $prepared_letter->{title}, $my_title_letter, 'GetPreparedLetter returns the title correctly' );
 is( $prepared_letter->{content}, $my_content_letter, 'GetPreparedLetter returns the content correctly' );
@@ -445,45 +448,6 @@ warning_like {
 is($err->{'error'}, 'no_letter', "No TESTACQORDER letter was defined.");
 }
 
-subtest 'GetPreparedLetter' => sub {
-    plan tests => 4;
-
-    Koha::Notice::Template->new(
-        {
-            module                 => 'test',
-            code                   => 'test',
-            branchcode             => '',
-            message_transport_type => 'email'
-        }
-    )->store;
-    my $letter;
-    warning_like {
-        $letter = C4::Letters::GetPreparedLetter(
-            module      => 'test',
-            letter_code => 'test',
-        );
-    }
-    qr{^ERROR: nothing to substitute},
-'GetPreparedLetter should warn if tables, substiture and repeat are not set';
-    is( $letter, undef,
-'No letter should be returned by GetPreparedLetter if something went wrong'
-    );
-
-    warning_like {
-        $letter = C4::Letters::GetPreparedLetter(
-            module      => 'test',
-            letter_code => 'test',
-            substitute  => {}
-        );
-    }
-    qr{^ERROR: nothing to substitute},
-'GetPreparedLetter should warn if tables, substiture and repeat are not set, even if the key is passed';
-    is( $letter, undef,
-'No letter should be returned by GetPreparedLetter if something went wrong'
-    );
-
-};
-
 {
 warning_is {
     $err = SendAlerts( 'claimacquisition', [ $ordernumber ], 'TESTACQCLAIM' ) }
@@ -534,9 +498,52 @@ is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notificatio
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
 }
 
+subtest 'GetPreparedLetter' => sub {
+    plan tests => 4;
+
+    Koha::Notice::Template->new(
+        {
+            module                 => 'test',
+            code                   => 'test',
+            branchcode             => '',
+            message_transport_type => 'email'
+        }
+    )->store;
+    my $letter;
+    warning_like {
+        $letter = C4::Letters::GetPreparedLetter(
+            module      => 'test',
+            letter_code => 'test',
+        );
+    }
+    qr{^ERROR: nothing to substitute},
+'GetPreparedLetter should warn if tables, substiture and repeat are not set';
+    is( $letter, undef,
+'No letter should be returned by GetPreparedLetter if something went wrong'
+    );
+
+    warning_like {
+        $letter = C4::Letters::GetPreparedLetter(
+            module      => 'test',
+            letter_code => 'test',
+            substitute  => {}
+        );
+    }
+    qr{^ERROR: nothing to substitute},
+'GetPreparedLetter should warn if tables, substiture and repeat are not set, even if the key is passed';
+    is( $letter, undef,
+'No letter should be returned by GetPreparedLetter if something went wrong'
+    );
+
+};
+
+
 
 subtest 'TranslateNotices' => sub {
-    plan tests => 3;
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'TranslateNotices', '1' );
+
     $dbh->do(
         q|
         INSERT INTO letter (module, code, branchcode, name, title, content, message_transport_type, lang) VALUES
@@ -546,6 +553,7 @@ subtest 'TranslateNotices' => sub {
     my $substitute = {};
     my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'test',
+            tables                 => $tables,
             letter_code            => 'code',
             message_transport_type => 'email',
             substitute             => $substitute,
@@ -558,6 +566,7 @@ subtest 'TranslateNotices' => sub {
 
     $letter = C4::Letters::GetPreparedLetter(
             module                 => 'test',
+            tables                 => $tables,
             letter_code            => 'code',
             message_transport_type => 'email',
             substitute             => $substitute,
@@ -568,6 +577,7 @@ subtest 'TranslateNotices' => sub {
 
     $letter = C4::Letters::GetPreparedLetter(
             module                 => 'test',
+            tables                 => $tables,
             letter_code            => 'code',
             message_transport_type => 'email',
             substitute             => $substitute,
@@ -578,9 +588,24 @@ subtest 'TranslateNotices' => sub {
         'a test',
         'GetPreparedLetter should return the default notice if the one required does not exist'
     );
+
+    t::lib::Mocks::mock_preference( 'TranslateNotices', '' );
+
+    $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'test',
+            tables                 => $tables,
+            letter_code            => 'code',
+            message_transport_type => 'email',
+            substitute             => $substitute,
+            lang                   => 'es-ES',
+    );
+    is( $letter->{title}, 'a test',
+        'GetPreparedLetter should return the default notice if pref disabled but additional language exists' );
+
 };
 
 subtest 'SendQueuedMessages' => sub {
+
     plan tests => 1;
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     my $patron = Koha::Patrons->find($borrowernumber);
@@ -591,4 +616,5 @@ subtest 'SendQueuedMessages' => sub {
     );
     eval { C4::Letters::SendQueuedMessages(); };
     is( $@, '', 'SendQueuedMessages should not explode if the patron does not have a sms provider set' );
+
 };
