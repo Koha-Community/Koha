@@ -146,8 +146,13 @@ for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
-if ( Koha::Patrons->find( $borrowernumber )->is_debarred ) {
-    $template->param( 'userdebarred' => 1, 'flagged' => 1 );
+my $patron = Koha::Patrons->find( $borrowernumber );
+if ( $patron->is_debarred ) {
+    $template->param(
+        userdebarred => 1,
+        flagged => 1,
+        debarments => GetDebarments({ borrowernumber => $borrowernumber }),
+    );
     my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {
         $template->param( 'userdebarreddate' => output_pref( { dt => dt_from_string( $debar ), dateonly => 1 } ) );
@@ -163,7 +168,6 @@ if ( $category_type eq 'C') {
     $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
 }
 
-my $patron = Koha::Patrons->find($data->{borrowernumber});
 my @relatives;
 if ( my $guarantor = $patron->guarantor ) {
     $template->param( guarantor => $guarantor );
@@ -341,7 +345,6 @@ $template->param(
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
-    debarments => GetDebarments({ borrowernumber => $borrowernumber }),
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
