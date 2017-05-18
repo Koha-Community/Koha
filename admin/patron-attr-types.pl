@@ -131,7 +131,7 @@ sub error_add_attribute_type_form {
     $template->param(
         attribute_type_form => 1,
         confirm_op => 'add_attribute_type_confirmed',
-        authorised_value_category => $input->param('authorised_value_category'),
+        authorised_value_category => scalar $input->param('authorised_value_category'),
     );
 }
 

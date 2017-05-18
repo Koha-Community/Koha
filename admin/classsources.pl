@@ -34,7 +34,7 @@ my $input = new CGI;
 my $op          = $input->param('op') || '';
 my $source_code = $input->param('class_source');
 my $rule_code   = $input->param('sort_rule');
-
+my $sort_routine = $input->param('sort_routine');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/classsources.tt",
                  query => $input,
@@ -46,15 +46,16 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param(script_name => $script_name);
 $template->param($op => 1) if $op;
-
+my $description = $input->param('description');
+my $used = $input->param('used');
 my $display_lists = 0;
 if ($op eq "add_source") {
     add_class_source_form($template);
 } elsif ($op eq "add_source_confirmed") {
     add_class_source($template,
                      $source_code,
-                     $input->param('description'),
-                     $input->param('used') eq "used" ? 1 : 0,
+                     $description,
+                     $used eq "used" ? 1 : 0,
                      $rule_code);
     $display_lists = 1;
 } elsif ($op eq "delete_source") {
@@ -67,8 +68,8 @@ if ($op eq "add_source") {
 } elsif ($op eq "edit_source_confirmed") {
     edit_class_source($template,
                      $source_code,
-                     $input->param('description'),
-                     $input->param('used') eq "used" ? 1 : 0,
+                     $description,
+                     $used eq "used" ? 1 : 0,
                      $rule_code);
     $display_lists = 1;
 } elsif ($op eq "add_sort_rule") {
@@ -76,8 +77,8 @@ if ($op eq "add_source") {
 } elsif ($op eq "add_sort_rule_confirmed") {
     add_class_sort_rule($template,
                         $rule_code,
-                        $input->param('description'),
-                        $input->param('sort_routine'));
+                        $description,
+                        $sort_routine);
     $display_lists = 1;
 } elsif ($op eq "delete_sort_rule") {
     delete_sort_rule_form($template, $rule_code);
@@ -89,8 +90,8 @@ if ($op eq "add_source") {
 } elsif ($op eq "edit_sort_rule_confirmed") {
     edit_class_sort_rule($template,
                          $rule_code,
-                         $input->param('description'),
-                         $input->param('sort_routine'));
+                         $description,
+                         $sort_routine);
     $display_lists = 1;
 } else {
     $display_lists = 1;
