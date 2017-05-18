@@ -116,8 +116,8 @@ if ($op eq 'add_form') {
     elsif ( $id ) { # Update
         my $av = Koha::AuthorisedValues->new->find( $id );
 
-        $av->lib( $input->param('lib') || undef );
-        $av->lib_opac( $input->param('lib_opac') || undef );
+        $av->lib( scalar $input->param('lib') || undef );
+        $av->lib_opac( scalar $input->param('lib_opac') || undef );
         $av->category( $new_category );
         $av->authorised_value( $new_authorised_value );
         $av->imageurl( $imageurl );
@@ -155,7 +155,7 @@ if ($op eq 'add_form') {
     $op = 'list';
     $searchfield = $new_category;
 } elsif ($op eq 'delete') {
-    my $av = Koha::AuthorisedValues->new->find( $input->param('id') );
+    my $av = Koha::AuthorisedValues->new->find( $id );
     my $deleted = eval {$av->delete};
     if ( $@ or not $deleted ) {
         push @messages, {type => 'error', code => 'error_on_delete' };
