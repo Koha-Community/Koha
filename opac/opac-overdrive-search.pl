@@ -41,6 +41,6 @@ $template->{'VARS'}->{'q'} = $cgi->param('q');
 $template->{'VARS'}->{'limit'} = C4::Context->preference('OPACnumSearchResults') || 20;
 $template->{'VARS'}->{'OPACnumSearchResults'} = C4::Context->preference('OPACnumSearchResults') || 20;
 $template->{'VARS'}->{'OverDriveLibraryID'} = C4::Context->preference('OverDriveLibraryID');
-$template->param(overdrive_error => $cgi->param('overdrive_error'));
+$template->param(overdrive_error => scalar $cgi->param('overdrive_error'));
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

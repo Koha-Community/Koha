@@ -62,12 +62,12 @@ if ( $cgi->param('name') ) {    # Update or create club
     $club_template->set(
         {
             id          => $id                        || undef,
-            name        => $cgi->param('name')        || undef,
-            description => $cgi->param('description') || undef,
-            branchcode  => $cgi->param('branchcode')  || undef,
+            name        => scalar $cgi->param('name')        || undef,
+            description => scalar $cgi->param('description') || undef,
+            branchcode  => scalar $cgi->param('branchcode')  || undef,
             date_updated            => dt_from_string(),
-            is_email_required       => $cgi->param('is_email_required') ? 1 : 0,
-            is_enrollable_from_opac => $cgi->param('is_enrollable_from_opac') ? 1 : 0,
+            is_email_required       => scalar $cgi->param('is_email_required') ? 1 : 0,
+            is_enrollable_from_opac => scalar $cgi->param('is_enrollable_from_opac') ? 1 : 0,
         }
     )->store();
 

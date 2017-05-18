@@ -84,7 +84,7 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
         my $extension = $1;
         my $uploadFd = $input->upload($fieldname);
         if ($uploadFd && !$input->cgi_error) {
-            my $tmpfilename = $input->tmpFileName($input->param($fieldname));
+            my $tmpfilename = $input->tmpFileName(scalar $input->param($fieldname));
             $filename = $tmpfilename . '.' . $extension; # rename the tmp file with the extension
             $ok = ImportFramework($filename, $frameworkcode, 1) if (rename($tmpfilename, $filename));
         }

@@ -64,10 +64,10 @@ $date_end = $date_end ? dt_from_string($date_end) : undef;
 if ( $cgi->param('name') ) {    # Update or create club
     $club->set(
         {
-            club_template_id => $cgi->param('club_template_id') || undef,
-            name             => $cgi->param('name')             || undef,
-            description      => $cgi->param('description')      || undef,
-            branchcode       => $cgi->param('branchcode')       || undef,
+            club_template_id => scalar $cgi->param('club_template_id') || undef,
+            name             => scalar $cgi->param('name')             || undef,
+            description      => scalar $cgi->param('description')      || undef,
+            branchcode       => scalar $cgi->param('branchcode')       || undef,
             date_start       => $date_start,
             date_end         => $date_end,
             date_updated     => dt_from_string(),

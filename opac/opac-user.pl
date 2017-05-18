@@ -318,8 +318,8 @@ if (C4::Context->preference("OPACAmazonCoverImages") or
 
 $template->param(
     OverDriveCirculation => C4::Context->preference('OverDriveCirculation') || 0,
-    overdrive_error      => $query->param('overdrive_error') || undef,
-    overdrive_tab        => $query->param('overdrive_tab') || 0,
+    overdrive_error      => scalar $query->param('overdrive_error') || undef,
+    overdrive_tab        => scalar $query->param('overdrive_tab') || 0,
 );
 
 my $patron_messages = Koha::Patron::Messages->search(

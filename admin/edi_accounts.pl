@@ -73,22 +73,22 @@ else {
         # validate & display
         my $id     = $input->param('id');
         my $fields = {
-            description        => $input->param('description'),
-            host               => $input->param('host'),
-            username           => $input->param('username'),
-            password           => $input->param('password'),
-            vendor_id          => $input->param('vendor_id'),
-            upload_directory   => $input->param('upload_directory'),
-            download_directory => $input->param('download_directory'),
-            san                => $input->param('san'),
-            transport          => $input->param('transport'),
+            description        => scalar $input->param('description'),
+            host               => scalar $input->param('host'),
+            username           => scalar $input->param('username'),
+            password           => scalar $input->param('password'),
+            vendor_id          => scalar $input->param('vendor_id'),
+            upload_directory   => scalar $input->param('upload_directory'),
+            download_directory => scalar $input->param('download_directory'),
+            san                => scalar $input->param('san'),
+            transport          => scalar $input->param('transport'),
             quotes_enabled     => defined $input->param('quotes_enabled'),
             invoices_enabled   => defined $input->param('invoices_enabled'),
             orders_enabled     => defined $input->param('orders_enabled'),
             responses_enabled  => defined $input->param('responses_enabled'),
             auto_orders        => defined $input->param('auto_orders'),
-            id_code_qualifier  => $input->param('id_code_qualifier'),
-            plugin             => $input->param('plugin'),
+            id_code_qualifier  => scalar $input->param('id_code_qualifier'),
+            plugin             => scalar $input->param('plugin'),
         };
 
         if ($id) {
@@ -105,7 +105,7 @@ else {
     elsif ( $op eq 'delete_confirmed' ) {
 
         $schema->resultset('VendorEdiAccount')
-          ->search( { id => $input->param('id'), } )->delete_all;
+          ->search( { id => scalar $input->param('id'), } )->delete_all;
     }
 
     # we do a default dispaly after deletes and saves

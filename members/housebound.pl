@@ -86,13 +86,13 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received the input from the profile edit form.  We must save the
     # changes, and return to simple display.
     $houseboundprofile->set({
-        day           => $input->param('day')           // q{},
-        frequency     => $input->param('frequency')     // q{},
-        fav_itemtypes => $input->param('fav_itemtypes') // q{},
-        fav_subjects  => $input->param('fav_subjects')  // q{},
-        fav_authors   => $input->param('fav_authors')   // q{},
-        referral      => $input->param('referral')      // q{},
-        notes         => $input->param('notes')         // q{},
+        day           => scalar $input->param('day')           // q{},
+        frequency     => scalar $input->param('frequency')     // q{},
+        fav_itemtypes => scalar $input->param('fav_itemtypes') // q{},
+        fav_subjects  => scalar $input->param('fav_subjects')  // q{},
+        fav_authors   => scalar $input->param('fav_authors')   // q{},
+        referral      => scalar $input->param('referral')      // q{},
+        notes         => scalar $input->param('notes')         // q{},
     });
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_store' }
@@ -103,13 +103,13 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # save it, and return to simple display.
     $houseboundprofile = Koha::Patron::HouseboundProfile->new({
         borrowernumber => $patron->borrowernumber,
-        day            => $input->param('day')           // q{},
-        frequency      => $input->param('frequency')     // q{},
-        fav_itemtypes  => $input->param('fav_itemtypes') // q{},
-        fav_subjects   => $input->param('fav_subjects')  // q{},
-        fav_authors    => $input->param('fav_authors')   // q{},
-        referral       => $input->param('referral')      // q{},
-        notes          => $input->param('notes')         // q{},
+        day            => scalar $input->param('day')           // q{},
+        frequency      => scalar $input->param('frequency')     // q{},
+        fav_itemtypes  => scalar $input->param('fav_itemtypes') // q{},
+        fav_subjects   => scalar $input->param('fav_subjects')  // q{},
+        fav_authors    => scalar $input->param('fav_authors')   // q{},
+        referral       => scalar $input->param('referral')      // q{},
+        notes          => scalar $input->param('notes')         // q{},
     });
     my $success = eval { return $houseboundprofile->store };
     push @messages, { type => 'error', code => 'error_on_profile_create' }
@@ -130,11 +130,11 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received input for editing a visit.  We must store and return to
     # simple display.
     $visit->set({
-        borrowernumber      => $input->param('borrowernumber')      // q{},
+        borrowernumber      => scalar $input->param('borrowernumber')      // q{},
         appointment_date    => dt_from_string($input->param('date') // q{}),
-        day_segment         => $input->param('segment')             // q{},
-        chooser_brwnumber   => $input->param('chooser')             // q{},
-        deliverer_brwnumber => $input->param('deliverer')           // q{},
+        day_segment         => scalar $input->param('segment')             // q{},
+        chooser_brwnumber   => scalar $input->param('chooser')             // q{},
+        deliverer_brwnumber => scalar $input->param('deliverer')           // q{},
     });
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_store' }
@@ -144,11 +144,11 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
     # We have received input for creating a visit.  We must store and return
     # to simple display.
     my $visit = Koha::Patron::HouseboundVisit->new({
-        borrowernumber      => $input->param('borrowernumber')      // q{},
+        borrowernumber      => scalar $input->param('borrowernumber')      // q{},
         appointment_date    => dt_from_string($input->param('date') // q{}),
-        day_segment         => $input->param('segment')             // q{},
-        chooser_brwnumber   => $input->param('chooser')             // q{},
-        deliverer_brwnumber => $input->param('deliverer')           // q{},
+        day_segment         => scalar $input->param('segment')             // q{},
+        chooser_brwnumber   => scalar $input->param('chooser')             // q{},
+        deliverer_brwnumber => scalar $input->param('deliverer')           // q{},
     });
     my $success = eval { return $visit->store };
     push @messages, { type => 'error', code => 'error_on_visit_create' }
