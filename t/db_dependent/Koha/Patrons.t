@@ -81,7 +81,7 @@ subtest 'library' => sub {
 };
 
 subtest 'guarantees' => sub {
-    plan tests => 8;
+    plan tests => 13;
     my $guarantees = $new_patron_1->guarantees;
     is( ref($guarantees), 'Koha::Patrons', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee' );
@@ -99,6 +99,53 @@ subtest 'guarantees' => sub {
     is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantees should return an array in a list context' );
     is( scalar(@guarantees), 2, 'new_patron_1 should have 2 guarantees' );
     $_->delete for @guarantees;
+
+    #Test return order of guarantees BZ 18635
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+
+    my $guarantor = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $order_guarantee1 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Zebra',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee2 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Yak',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee3 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Walrus',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee4 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Vulture',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee5 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Unicorn',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    $guarantees = $guarantor->guarantees();
+
+    is( $guarantees->next()->borrowernumber, $order_guarantee5, "Return first guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee4, "Return second guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee3, "Return third guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee2, "Return fourth guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee1, "Return fifth guarantor alphabetically" );
 };
 
 subtest 'category' => sub {
@@ -993,6 +1040,7 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
     #   + library_12
     # group2
     #   + library21
+    $nb_of_patrons = Koha::Patrons->search->count;
     my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
     my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
     my $library_11 = $builder->build( { source => 'Branch' } );
@@ -1063,8 +1111,8 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
         plan tests => 6;
 
         set_logged_in_user( $patron_11_1 );
-        my $total_number_of_patrons = $nb_of_patrons + 6; # 2 created before + 4 for these subtests
-        is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons');
+        my $total_number_of_patrons = $nb_of_patrons + 4; #we added four in these tests
+        is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons' );
         is( Koha::Patrons->search_limited->count, $total_number_of_patrons, 'patron_11_1 is allowed to see all patrons' );
 
         set_logged_in_user( $patron_11_2 );
@@ -1356,9 +1404,9 @@ subtest 'generate_userid' => sub {
     $patron_2->delete;
 };
 
-
+$nb_of_patrons = Koha::Patrons->search->count;
 $retrieved_patron_1->delete;
-is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );
+is( Koha::Patrons->search->count, $nb_of_patrons - 1, 'Delete should have deleted the patron' );
 
 subtest 'Log cardnumber change' => sub {
     plan tests => 3;
