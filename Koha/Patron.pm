@@ -441,7 +441,7 @@ Returns the guarantees (list of Koha::Patron) of this patron
 sub guarantees {
     my ( $self ) = @_;
 
-    return Koha::Patrons->search( { guarantorid => $self->borrowernumber } );
+    return Koha::Patrons->search( { guarantorid => $self->borrowernumber }, { order_by => { -asc => ['surname','firstname'] } } );
 }
 
 =head3 housebound_profile
