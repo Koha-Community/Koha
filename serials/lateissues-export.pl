@@ -57,7 +57,7 @@ while ( $content =~ /
     $header =~ s/^\s+|\s+$//g; # Trim whitespaces
     push @headers, $header;
 
-    $field =~ s/[^\.]*\.{1}//; # Remove the table name if exists.
+    $field =~ s/[^.]+\.//; # Remove the table name if exists.
     $field =~ s/^\s+|\s+$//g; # Trim whitespaces
     push @fields, $field;
 }
