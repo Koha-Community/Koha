@@ -203,11 +203,9 @@ sub getletter {
     $lang = 'default' unless( $lang && C4::Context->preference('TranslateNotices') );
 
 
-    if ( C4::Context->preference('IndependentBranches')
-            and $branchcode
-            and C4::Context->userenv ) {
-
-        $branchcode = C4::Context->userenv->{'branch'};
+    my $only_my_library = C4::Context->only_my_library;
+    if ( $only_my_library and $branchcode ) {
+        $branchcode = C4::Context::mybranch();
     }
     $branchcode //= '';
 
