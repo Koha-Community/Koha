@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2016-11-20 20:17-0300\n"
-"PO-Revision-Date: 2016-10-07 10:40+0000\n"
+"POT-Creation-Date: 2017-05-11 13:58-0300\n"
+"PO-Revision-Date: 2016-12-08 18:18+0000\n"
 "Last-Translator: Cédric <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot en òc (totenoc.eu)\n"
 "Language: oc\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1475836812.000000\n"
+"X-POOTLE-MTIME: 1481221113.000000\n"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:48
@@ -1001,6 +1001,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each> "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21
@@ -1333,9 +1341,9 @@ msgid "Biography:"
 msgstr "Biografia&nbsp;:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:58
-#, fuzzy, c-format
+#, c-format
 msgid "Biography: "
-msgstr "Biografia&nbsp;:"
+msgstr "Biografia : "
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:152
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
@@ -1688,9 +1696,9 @@ msgid "Content"
 msgstr "Contengut"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:91
-#, fuzzy, c-format
+#, c-format
 msgid "Content: "
-msgstr "Contengut"
+msgstr "Contengut : "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:229
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
@@ -1718,7 +1726,7 @@ msgstr "Copenaga, Danemarc"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:427
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128c.tt:419
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128c.tt:421
-#, fuzzy, c-format
+#, c-format
 msgid "Cor anglais"
 msgstr "Còr anglés"
 
@@ -1950,7 +1958,7 @@ msgid "Emulsion on film:"
 msgstr "Emulsion&nbsp;:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_122.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "Era identifier"
 msgstr "Periòde cronologic"
 
@@ -2425,9 +2433,9 @@ msgid "Illustration codes 4:"
 msgstr "Illustracions dins lo tèxte - 4:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Illustration: "
-msgstr "Illustracion"
+msgstr "Illustracion : "
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:266
 #, c-format
@@ -2548,9 +2556,9 @@ msgid "Koha &rsaquo; UNIMARC field 210c builder"
 msgstr "Assistent de sasida de la zòna UNIMARC 210c"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; UNIMARC field 225a builder"
-msgstr "Assistent de sasida de la zòna UNIMARC 210c"
+msgstr "Koha &rsaquo; Assistent de sasida de la zòna UNIMARC 225a"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARC_compact.xsl:63
 #, c-format
@@ -2660,9 +2668,9 @@ msgid "Literary genre"
 msgstr "Genre literari"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:41
-#, fuzzy, c-format
+#, c-format
 msgid "Literary genre: "
-msgstr "Genre literari"
+msgstr "Genre literari : "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:10
 #, c-format
@@ -5210,7 +5218,7 @@ msgstr "artefactes"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:318
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:320
-#, fuzzy, c-format
+#, c-format
 msgid "as a separate supplement to a journal, monograph, etc."
 msgstr "suplement separat d'una revista, d'una monografia, etc."
 
@@ -5286,7 +5294,7 @@ msgstr "b - Ressorsa textuala manuscrita"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:696
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:832
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:834
-#, fuzzy, c-format
+#, c-format
 msgid "b - catalogue"
 msgstr "b - catalòg"
 
@@ -5564,7 +5572,7 @@ msgstr "blues"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:323
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121a.tt:325
-#, fuzzy, c-format
+#, c-format
 msgid "bound into a journal, monograph, etc."
 msgstr "religat en periodic, monografia, etc."
 
@@ -5862,7 +5870,7 @@ msgstr "caseïna"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:217
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:89
-#, fuzzy, c-format
+#, c-format
 msgid "catalogue"
 msgstr "catalòg"
 
@@ -5912,7 +5920,7 @@ msgstr "cançon / musica aleatòria"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:84
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "chanson, polyphonic"
 msgstr "cançon, polifonic"
 
@@ -6360,7 +6368,7 @@ msgstr "musica country"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_116.tt:807
 #, c-format
 msgid "crayon"
-msgstr ""
+msgstr "gredon"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:584
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:586
@@ -6436,7 +6444,7 @@ msgstr "d -contient des informations biographiques"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1048
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_105.tt:1050
-#, fuzzy, c-format
+#, c-format
 msgid "d - humour, satire"
 msgstr "d -umor, satira"
 
@@ -6622,7 +6630,7 @@ msgstr "dioramas"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_700-4.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid "dir. de publication"
 msgstr "director de publicacion"
 
@@ -6881,7 +6889,7 @@ msgid "electronic resource"
 msgstr "ressorsa electronica"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:29
-#, fuzzy, c-format
+#, c-format
 msgid "electronic ressource"
 msgstr "ressorsa electronica"
 
@@ -8719,7 +8727,7 @@ msgstr "memòrias"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124c.tt:85
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124c.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "mental or cognitive map"
 msgstr "carta mentala o cognitiva"
 
@@ -8784,15 +8792,15 @@ msgstr "micro opac"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:34
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "microfiche"
 msgstr "microficha"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:39
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "microfiche cassette"
-msgstr "casseta microficha"
+msgstr "caisseta microficha"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:24
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_130.tt:26
@@ -9090,9 +9098,9 @@ msgstr "multimedia"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:49
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_106.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "multimedia (e.g. an item in regular print with a microfiche supplement)"
-msgstr "multimedia (per ex. un document papièr amb un suplement microficha)"
+msgstr "multimèdia (per ex. un document papièr amb un suplement microficha)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125a.tt:74
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125a.tt:76
@@ -9160,7 +9168,7 @@ msgstr "musica"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:164
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:166
-#, fuzzy, c-format
+#, c-format
 msgid "musical revue and comedy"
 msgstr "revista musicala e comèdia"
 
@@ -10843,19 +10851,19 @@ msgstr "perfil"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:234
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:236
-#, fuzzy, c-format
+#, c-format
 msgid "programme music"
 msgstr "musica a programa"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:103
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:97
-#, fuzzy, c-format
+#, c-format
 msgid "programmed text books"
 msgstr "manuals d'ensenhament programat"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:263
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_110.tt:265
-#, fuzzy, c-format
+#, c-format
 msgid "programmed texts"
 msgstr "manuals d'ensenhament programat"
 
@@ -10867,7 +10875,7 @@ msgstr "manuals d'ensenhament programat"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:745
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:812
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:814
-#, fuzzy, c-format
+#, c-format
 msgid "programmes and pressbooks"
 msgstr "programas e press-books"
 

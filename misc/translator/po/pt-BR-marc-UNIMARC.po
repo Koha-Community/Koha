@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha ILS 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-20 20:18-0300\n"
-"PO-Revision-Date: 2015-11-21 04:18+0000\n"
-"Last-Translator: Tiago <trmurakami@gmail.com>\n"
+"POT-Creation-Date: 2017-05-11 14:00-0300\n"
+"PO-Revision-Date: 2017-04-17 18:47+0000\n"
+"Last-Translator: Jose Ricardo <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1448079520.000000\n"
+"X-POOTLE-MTIME: 1492454867.000000\n"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:48
@@ -1008,6 +1008,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each>"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21
@@ -1346,9 +1354,9 @@ msgid "Biography:"
 msgstr "Biografia:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:58
-#, fuzzy, c-format
+#, c-format
 msgid "Biography: "
-msgstr "Biografia:"
+msgstr "Biografia: "
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:152
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
@@ -1701,9 +1709,9 @@ msgid "Content"
 msgstr "Conteúdo"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:91
-#, fuzzy, c-format
+#, c-format
 msgid "Content: "
-msgstr "Conteúdo"
+msgstr "Conteúdo: "
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:229
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:277
@@ -2323,7 +2331,7 @@ msgstr "Hemisfério:"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:3
 #, fuzzy, c-format
 msgid "Hide coded information filters"
-msgstr "Filtros de informação codificada"
+msgstr "Filtros de informação"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:22
@@ -2439,7 +2447,7 @@ msgstr "Códigos ilustração 4:"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:69
 #, fuzzy, c-format
 msgid "Illustration: "
-msgstr "Ilustração"
+msgstr "Ilustração: "
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:266
 #, c-format
@@ -2562,7 +2570,7 @@ msgstr "Koha &rsaquo; Construtor do campo 210c UNIMARC"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:2
 #, fuzzy, c-format
 msgid "Koha &rsaquo; UNIMARC field 225a builder"
-msgstr "Koha &rsaquo; Construtor do campo 210c UNIMARC"
+msgstr "Koha &rsaquo; Construtor do campo 225a UNIMARC"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARC_compact.xsl:63
 #, c-format
@@ -2674,7 +2682,7 @@ msgstr "Genero literário"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:41
 #, fuzzy, c-format
 msgid "Literary genre: "
-msgstr "Genero literário"
+msgstr "Gênero literário: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_125b.tt:10
 #, c-format
@@ -3281,7 +3289,7 @@ msgstr "Periodicidade"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:146
 #, fuzzy, c-format
 msgid "Periodicity: "
-msgstr "Periodicidade"
+msgstr "Periodicidade: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:814
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:816
@@ -3314,7 +3322,7 @@ msgstr "Dimensão física"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:24
 #, fuzzy, c-format
 msgid "Physical presentation: "
-msgstr "Dimensão física"
+msgstr "Aparência física: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:260
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:262
@@ -3516,7 +3524,7 @@ msgstr "Regularidade"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:170
 #, fuzzy, c-format
 msgid "Regularity: "
-msgstr "Regularidade"
+msgstr "Regularidade: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:71
 #, c-format
@@ -3690,7 +3698,7 @@ msgstr "Tipo de periódico"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:133
 #, fuzzy, c-format
 msgid "Serial type: "
-msgstr "Tipo de periódico"
+msgstr "Tipo de serial: "
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:131
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:125
@@ -3713,7 +3721,7 @@ msgstr "Alterar nível"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:2
 #, fuzzy, c-format
 msgid "Show coded information filters"
-msgstr "Filtros de informação codificada"
+msgstr "Mostrar filtros de informação "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:50
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:52
@@ -4670,7 +4678,7 @@ msgstr "Tipos de vídeo"
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:120
 #, fuzzy, c-format
 msgid "Video types: "
-msgstr "Tipos de vídeo"
+msgstr "Tipos de vídeos: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:980
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115a.tt:982
