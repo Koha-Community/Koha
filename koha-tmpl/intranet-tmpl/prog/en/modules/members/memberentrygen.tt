@@ -56,9 +56,7 @@ $(document).ready(function() {
                 $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
                 return;
             }
-            if( $(this).next().val() != '' ) {
-                $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
-            }
+            $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
         });
 
         $(".toggler").toggle();
