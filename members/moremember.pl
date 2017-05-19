@@ -326,6 +326,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     patron          => $patron,
+    borrower        => $patron, # TODO Still needed by includes,
     detailview      => 1,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
@@ -336,11 +337,11 @@ $template->param(
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
     overdues_exist  => $overdues_exist,
-    StaffMember     => ($category_type eq 'S'),
-    is_child        => ($category_type eq 'C'),
+    StaffMember     => $category_type eq 'S',
+    is_child        => $category_type eq 'C',
     samebranch      => $samebranch,
     quickslip       => $quickslip,
-    housebound_role => $patron->housebound_role,
+    housebound_role => scalar $patron->housebound_role,
     privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
