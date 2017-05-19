@@ -81,7 +81,7 @@ subtest 'library' => sub {
 };
 
 subtest 'guarantees' => sub {
-    plan tests => 8;
+    plan tests => 13;
     my $guarantees = $new_patron_1->guarantees;
     is( ref($guarantees), 'Koha::Patrons', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee' );
@@ -99,6 +99,53 @@ subtest 'guarantees' => sub {
     is( ref(\@guarantees), 'ARRAY', 'Koha::Patron->guarantees should return an array in a list context' );
     is( scalar(@guarantees), 2, 'new_patron_1 should have 2 guarantees' );
     $_->delete for @guarantees;
+
+    #Test return order of guarantees BZ 18635
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+
+    my $guarantor = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    my $order_guarantee1 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Zebra',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee2 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Yak',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee3 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Walrus',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee4 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Vulture',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    my $order_guarantee5 = $builder->build_object( { class => 'Koha::Patrons' ,  value => {
+            surname => 'Xerus',
+            firstname => 'Unicorn',
+            guarantorid => $guarantor->borrowernumber
+        }
+    })->borrowernumber;
+
+    $guarantees = $guarantor->guarantees();
+
+    is( $guarantees->next()->borrowernumber, $order_guarantee5, "Return first guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee4, "Return second guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee3, "Return third guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee2, "Return fourth guarantor alphabetically" );
+    is( $guarantees->next()->borrowernumber, $order_guarantee1, "Return fifth guarantor alphabetically" );
 };
 
 subtest 'category' => sub {
@@ -937,8 +984,9 @@ subtest 'account_locked' => sub {
     $patron->delete;
 };
 
+$nb_of_patrons = Koha::Patrons->search->count;
 $retrieved_patron_1->delete;
-is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );
+is( Koha::Patrons->search->count, $nb_of_patrons - 1, 'Delete should have deleted the patron' );
 
 $schema->storage->txn_rollback;
 
