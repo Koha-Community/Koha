@@ -39,7 +39,10 @@ LOCKDIR=__ZEBRA_LOCK_DIR__
 ZEBRASRV=__PATH_TO_ZEBRA__/zebrasrv
 ZEBRAOPTIONS="-v none,fatal,warn"
 
-test -f $ZEBRASRV || exit 0
+if [ ! -f $ZEBRASRV ]; then
+    echo "Error: Zebra is not installed!" 2>&1
+    exit 1
+fi
 
 OTHERUSER=''
 if [[ $EUID -eq 0 ]]; then
