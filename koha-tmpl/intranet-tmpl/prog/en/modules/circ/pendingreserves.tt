@@ -191,7 +191,13 @@ $(document).ready(function() {
 <input type="text" size="10" id="to" name="to" value="[% to | $KohaDates %]" class="datepickerto" />
 </li>
 </ol>
-<p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to [% IF ( HoldsToPullEndDate ) %][% HoldsToPullEndDate %] days ahead[% ELSE %]today[% END %], set other date ranges as needed. )</i></p>
+
+[% IF ( HoldsToPullEndDate ) %]
+    <p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to [% HoldsToPullEndDate %] days ahead. Set other date ranges as needed.)</i></p>
+[% ELSE %]
+    <p><i>(Inclusive, default is [% HoldsToPullStartDate %] days ago to today. Set other date ranges as needed.)</i></p>
+[% END %]
+
 <fieldset class="action"><input type="submit" name="run_report" value="Submit" class="submit"/></fieldset>
 </fieldset>
 </form>
