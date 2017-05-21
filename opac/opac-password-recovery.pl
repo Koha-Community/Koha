@@ -40,6 +40,7 @@ my $hasError;
 #email form error
 my $errNoBorrowerFound;
 my $errNoBorrowerEmail;
+my $errMultipleAccountsForEmail;
 my $errAlreadyStartRecovery;
 my $errTooManyEmailFound;
 my $errBadEmail;
@@ -54,20 +55,29 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     #try with the main email
     $email ||= '';    # avoid undef
     my $borrower;
-    my $search_results = [];
+    my $search_results;
 
     # Find the borrower by his userid or email
     if ($username) {
-        $search_results = [ Koha::Patrons->search( { userid => $username } ) ];
+        $search_results = Koha::Patrons->search( { userid => $username } );
     }
     elsif ($email) {
-        $search_results = [ Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } ) ];
+        $search_results = Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } );
     }
-    if ( not $search_results || scalar @$search_results > 1 ) {
+
+    if ( not $search_results || $search_results->count < 1) {
         $hasError           = 1;
         $errNoBorrowerFound = 1;
     }
-    elsif ( $borrower = shift @$search_results ) {    # One matching borrower
+    elsif ( $username && $search_results->count > 1) { # Multiple accounts for username
+        $hasError           = 1;
+        $errNoBorrowerFound = 1;
+    }
+    elsif ( $email && $search_results->count > 1) { # Muliple accounts for E-Mail
+        $hasError           = 1;
+        $errMultipleAccountsForEmail = 1;
+    }
+    elsif ( $borrower = $search_results->next() ) {    # One matching borrower
         $username ||= $borrower->userid;
         my @emails = ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
@@ -112,6 +122,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             errAlreadyStartRecovery => $errAlreadyStartRecovery,
             errBadEmail             => $errBadEmail,
             errNoBorrowerEmail      => $errNoBorrowerEmail,
+            errMultipleAccountsForEmail => $errMultipleAccountsForEmail,
             password_recovery       => 1,
             email                   => HTML::Entities::encode($email),
             username                => $username
