@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-10 18:13+0000\n"
+"PO-Revision-Date: 2017-05-19 12:21+0000\n"
 "Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1491848029.000000\n"
+"X-POOTLE-MTIME: 1495196467.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -1251,6 +1251,34 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
+msgstr "Géolocalisation du site principal: "
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+"Notez que cette valeur n'a pas d'effet si la préférence système UsageStats "
+"est positionné sur \"Ne pas partager\""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
+msgstr "Ne pas partager"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+"Notez que cette valeur n'a pas d'effet si la préférence système UsagerStats "
+"est positionné sur \"Ne pas partager\""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Share"
+msgstr "Partagez"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# libraries information (name, url, country)"
+msgstr "les informations des bibliothèques (nom, url, pays)"
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
 msgstr "Si ce champ est vide, les données seront envoyées anonymement."
 
@@ -1496,15 +1524,15 @@ msgstr "relier automatiquement les autorités au moment de la sauvegarde de la n
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do"
-msgstr "Permettre de"
+msgstr "Conserver"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# Do not"
-msgstr "Ne pas"
+msgstr "Ne pas conserver"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerKeepStale# keep existing links to authority records for headings where the linker is unable to find a match."
-msgstr "garder les liens aux notices d'autorités même si elle ne sont pas valider."
+msgstr "les liens aux notices d'autorités là où le \"linker\" n'a pas réussi à faire un nouveau lien. (Positionné sur Conserver, cela veut dire que le \"Linker\"ne supprimera jamais un lien vers une autorité mais selon \"LinkerRelink\", le lien peut changer.)"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# Default"
@@ -1520,11 +1548,11 @@ msgstr "Dernière concordance"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# Use the"
-msgstr "Utiliser le module "
+msgstr "Utiliser le module"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerModule# linker module for matching headings to authority records."
-msgstr "pour la validation des notices d'autorités"
+msgstr "pour l'arrimage des vedettes vers les notices d'autorités."
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerOptions# (separate options with |)"
@@ -1532,19 +1560,19 @@ msgstr "(séparer les options avec la barre verticale | )"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerOptions# Set the following options for the authority linker"
-msgstr "Utiliser les options suivante pour la validation des autorités"
+msgstr "Utiliser les options suivantes pour la validation des autorités"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# Do"
-msgstr "Permettre de"
+msgstr "Relier"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# Do not"
-msgstr "Ne pas permettre de"
+msgstr "Ne pas relier"
 
 # Authorities > Linker
 msgid "authorities.pref#LinkerRelink# relink headings that have previously been linked to authority records."
-msgstr "valider les autorités qui ont été préalablement validées."
+msgstr "les vedettes qui ont été précédemment arrimées aux notices d'autorités."
 
 # Authorities > General
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC21 authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
@@ -2200,7 +2228,7 @@ msgstr "le personnel d'emprunter un exemplaire avec restriction d'âge."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllFinesNeedOverride# Don't require"
-msgstr "Ne pas pas demander"
+msgstr "Ne pas demander"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllFinesNeedOverride# Require"
@@ -2921,19 +2949,19 @@ msgstr "[% local_currency %] d'amendes."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Calculate \"No renewal before\" based on"
-msgstr "Calculer les amendes sur la base du nombre de jours de retard"
+msgstr "Calculer \"Pas de renouvellement avant\" sur la base de"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Only relevant for loans calculated in days, hourly loans are not affected."
-msgstr "Pertinent seulement pour les prêts calculés en jours, les prêts à l'heure ne sont pas touchés."
+msgstr "Seuls les prêts calculés en jours sont pris en compte, les prêts à l'heure ne sont pas touchés."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# date."
-msgstr "la date courante"
+msgstr "la date de retour."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# exact time."
-msgstr "la date courante"
+msgstr "l'heure exacte de la date de retour."
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -3525,7 +3553,7 @@ msgstr "un utilisateur d'une bibliothèque à placer une réservation sur un exe
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# . Ignore items with the following statuses when counting items"
-msgstr " jours pour les exemplaires avec plus de"
+msgstr ". Ignorer les exemplaires avec les statuts suivants lors du décompte des exemplaires"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# Don't enable"
@@ -3541,15 +3569,15 @@ msgstr " jours pour les exemplaires avec plus de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# holds"
-msgstr " réservations."
+msgstr " réservations"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# on the record"
-msgstr " réservations."
+msgstr "sur la notice"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# over the number of holdable items on the record"
-msgstr "la réduction de la durée du prêt à"
+msgstr "au delà du nombre d'exemplaire pouvant être réservés sur la notice"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# the reduction of loan period to"
@@ -3969,11 +3997,11 @@ msgstr " dans l'OPAC."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the staff client."
-msgstr " dans l'in tranet."
+msgstr " dans l'intranet."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# not at all."
-msgstr " pas à tous."
+msgstr "nulle part."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaExtensions# (separated with |)."
@@ -3989,7 +4017,7 @@ msgstr "Ne pas activer"
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaYouTube# Embed"
-msgstr "Media HTML5"
+msgstr "Activer"
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaYouTube# YouTube links as videos."
@@ -4881,7 +4909,9 @@ msgstr "Ne pas autoriser"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetCheckoutsVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's checkouts to the patron's guarantor\"."
-msgstr "les utilisateurs de choisir s'ils souhaitent monter leurs prêts à leur garant\"."
+msgstr ""
+"les utilisateurs de choisir s'ils souhaitent montrer leurs prêts à leur "
+"garant."
 
 # OPAC > Policy
 msgid "opac.pref#AllowPurchaseSuggestionBranchChoice# Allow"
@@ -4989,19 +5019,19 @@ msgstr "Interdire"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Production"
-msgstr "Production"
+msgstr "production"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# Sandbox"
-msgstr "Bac à sable"
+msgstr "bac à sable"
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# mode."
-msgstr "Conserver"
+msgstr "."
 
 # OPAC > Payments
 msgid "opac.pref#EnablePayPalOpacPayments# patrons to make payments from the OPAC via PayPal in"
-msgstr "les utilisateurs à faire des commentaires sur des documents l'OPAC."
+msgstr "les utilisateurs à faire des paiements à l'opac via Paypal dans un mode"
 
 # OPAC > Appearance
 msgid "opac.pref#GoogleIndicTransliteration# Don't show"
@@ -5053,7 +5083,7 @@ msgstr "Limiter les utilisateurs à créer"
 
 # OPAC > Policy
 msgid "opac.pref#MaxOpenSuggestions# open suggestions. Leave empty for no limit. **Note: this setting does not affect anonymous suggestions"
-msgstr "des suggestions. Laissez vide pour aucune limite. **Note: ce paramètre n'affecte pas les suggestions anonymes."
+msgstr "suggestions. Laissez vide pour aucune limite. **Note: ce paramètre n'affecte pas les suggestions anonymes."
 
 # OPAC > Appearance
 msgid "opac.pref#NoLoginInstructions# Show the following HTML on the OPAC login form when a patron is not logged in:"
@@ -5221,15 +5251,15 @@ msgstr ". Notez que ce développement est disponible seulement pour MARC21 et UN
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# For search results in the OPAC, show the item's"
-msgstr "Dans les résultats de recherche sur l'OPAC, afficher les exemplaires."
+msgstr "Dans les résultats de recherche sur l'OPAC, afficher les exemplaires"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# current location"
-msgstr "localisation actuelle"
+msgstr "de la localisation actuelle"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsLibrary# home library"
-msgstr "site d'appartenance"
+msgstr "du site d'appartenance"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in OPAC search results:"
@@ -6249,7 +6279,9 @@ msgstr "Interdire"
 
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# staff to set the ability for a patron's checkouts to be viewed by linked patrons in the OPAC."
-msgstr "au personnel de permettre aux prêts d'un utilisateur d'être vus par les utilisateurs liés à l'OPAC."
+msgstr ""
+"au personnel de paramétrer la possibilité pour un utilisateur de voir les "
+"prêts d'un compte lié (garant) à l'OPAC."
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -6357,11 +6389,11 @@ msgstr "Ne pas vérifier"
 
 # Patrons > General
 msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do"
-msgstr "À moins d'être outrepassé, vérifier"
+msgstr "À moins d'être outrepassé par la catégorie de l'utilisateur, vérifier"
 
 # Patrons > General
 msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do not"
-msgstr "À moins d'être outrepassé, ne pas vérifier"
+msgstr "À moins d'être outrepassé par la catégorie de l'utilisateur, ne pas vérifier"
 
 # Patrons > General
 msgid "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the default fields to be used during a patron search"
@@ -6389,7 +6421,7 @@ msgstr "Ne pas autoriser"
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them. Note: this only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
-msgstr "les utilisateurs à choisir quelles notifications ils reçoivent et quand ils les recoivent. Notez que cela ne s'applique qu'à certains types de notifications."
+msgstr "le personnel à choisir quelles notifications les utilisateurs doivent recevoir et quand ils doivent les recevoir. Notez que cela ne s'applique qu'à certains types de notifications."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -6401,7 +6433,7 @@ msgstr "Autoriser"
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
-msgstr "paramétrage des notifications de l'utilisateur à l'OPAC (note : la préférence EnhancedMessagingPreferences doit être activée)."
+msgstr "le paramétrage des notifications de l'utilisateur à l'OPAC (note : la préférence EnhancedMessagingPreferences doit être activée)."
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -7674,4 +7706,3 @@ msgstr "Retourner seulement"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "lignes d'un rapport demandé par le service Web de rapports."
-
