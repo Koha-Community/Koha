@@ -296,8 +296,11 @@ subtest 'Handle ids duplication' => sub {
 
     my ($doreturn, $messages, $new_checkout, $borrower) = AddReturn( $item->{barcode}, undef, undef, undef, dt_from_string );
 
-    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $new_checkout->{issue_id} });
-    is( $account_lines->count, 1, 'One account line should exist on new issue_id' );
+    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $original_checkout->issue_id });
+    is( $account_lines->count, 0, 'No account lines should exist on old issue_id' );
+
+    $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $new_checkout->{issue_id} });
+    is( $account_lines->count, 2, 'Two account lines should exist on new issue_id' );
 
     isnt( $original_checkout->issue_id, $new_checkout->{issue_id}, 'AddReturn should return the issue with the new issue_id' );
     isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
