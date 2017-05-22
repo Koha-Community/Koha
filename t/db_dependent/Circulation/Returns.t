@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Members;
 use Koha::Database;
+use Koha::Account::Lines;
 use Koha::DateUtils;
 use Koha::Items;
 
@@ -263,9 +264,15 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
 };
 
 subtest 'Handle ids duplication' => sub {
-    plan tests => 2;
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+    t::lib::Mocks::mock_preference( 'CalculateFinesOnReturn', 1 );
+    t::lib::Mocks::mock_preference( 'finesMode', 'production' );
+    Koha::IssuingRules->search->update({ chargeperiod => 1, fine => 1, firstremind => 1, });
 
     my $biblio = $builder->build( { source => 'Biblio' } );
+    my $itemtype = $builder->build( { source => 'Itemtype', value => { rentalcharge => 5 } } );
     my $item = $builder->build(
         {
             source => 'Item',
@@ -274,19 +281,25 @@ subtest 'Handle ids duplication' => sub {
                 notforloan => 0,
                 itemlost   => 0,
                 withdrawn  => 0,
-
+                itype      => $itemtype->{itemtype},
             }
         }
     );
     my $patron = $builder->build({source => 'Borrower'});
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    my $checkout = AddIssue( $patron, $item->{barcode} );
-    $builder->build({ source => 'OldIssue', value => { issue_id => $checkout->issue_id } });
+    my $original_checkout = AddIssue( $patron->unblessed, $item->{barcode}, dt_from_string->subtract( days => 50 ) );
+    $builder->build({ source => 'OldIssue', value => { issue_id => $original_checkout->issue_id } });
+    my $old_checkout = Koha::Old::Checkouts->find( $original_checkout->issue_id );
 
-    my ($doreturn, $messages, $issue, $borrower) = AddReturn( $item->{barcode} );
-    my $old_checkout = Koha::Old::Checkouts->find( $checkout->issue_id );
+    AddRenewal( $patron->borrowernumber, $item->{itemnumber} );
 
-    isnt( $checkout->issue_id, $issue->{issue_id}, 'AddReturn should return the issue with the new issue_id' );
+    my ($doreturn, $messages, $new_checkout, $borrower) = AddReturn( $item->{barcode}, undef, undef, undef, dt_from_string );
+
+    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $new_checkout->{issue_id} });
+    is( $account_lines->count, 1, 'One account line should exist on new issue_id' );
+
+    isnt( $original_checkout->issue_id, $new_checkout->{issue_id}, 'AddReturn should return the issue with the new issue_id' );
     isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
 };
 
