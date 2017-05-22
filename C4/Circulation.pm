@@ -2175,6 +2175,7 @@ sub MarkIssueReturned {
     $schema->txn_do(sub {
         $dbh->do( $query, undef, @bind );
 
+        my $original_issue_id = $issue_id;
         my $id_already_exists = $dbh->selectrow_array(
             q|SELECT COUNT(*) FROM old_issues WHERE issue_id = ?|,
             undef, $issue_id
@@ -2190,6 +2191,8 @@ sub MarkIssueReturned {
         }
 
         $dbh->do(q|INSERT INTO old_issues SELECT * FROM issues WHERE issue_id = ?|, undef, $issue_id);
+
+        $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $issue_id, $original_issue_id);
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy == 2) {
