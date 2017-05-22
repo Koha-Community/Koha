@@ -38,7 +38,8 @@ var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the p
 
 [% INCLUDE 'acquisitions-toolbar.inc' %]
         [% IF ( validate ) %]
-            <META HTTP-EQUIV=Refresh CONTENT="0; url=[% scriptname %]?booksellerid=[% booksellerid %]">
+            [% SET metacontent = '0; url=' _  scriptname  _ '?booksellerid=' _  booksellerid %]
+            <META HTTP-EQUIV=Refresh CONTENT="[% metacontent %]">
         [% ELSE %]
         [% IF ( booksellername ) %]
             <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a></h1>
