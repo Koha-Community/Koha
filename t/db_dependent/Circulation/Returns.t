@@ -263,7 +263,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
 };
 
 subtest 'Handle ids duplication' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     my $biblio = $builder->build( { source => 'Biblio' } );
     my $item = $builder->build(
@@ -283,8 +283,10 @@ subtest 'Handle ids duplication' => sub {
     my $checkout = AddIssue( $patron, $item->{barcode} );
     $builder->build({ source => 'OldIssue', value => { issue_id => $checkout->issue_id } });
 
-    my @a = AddReturn( $item->{barcode} );
+    my ($doreturn, $messages, $issue, $borrower) = AddReturn( $item->{barcode} );
     my $old_checkout = Koha::Old::Checkouts->find( $checkout->issue_id );
+
+    isnt( $checkout->issue_id, $issue->{issue_id}, 'AddReturn should return the issue with the new issue_id' );
     isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
 };
 

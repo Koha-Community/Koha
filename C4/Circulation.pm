@@ -1939,8 +1939,9 @@ sub AddReturn {
             }
 
             eval {
-                MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                my $issue_id = MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
                     $circControlBranch, $return_date, $borrower->{'privacy'} );
+                $issue->{issue_id} = $issue_id;
             };
             if ( $@ ) {
                 $messages->{'Wrongbranch'} = {
@@ -2205,6 +2206,8 @@ sub MarkIssueReturned {
             $item->last_returned_by( $patron );
         }
     });
+
+    return $issue_id;
 }
 
 =head2 _debar_user_on_return
