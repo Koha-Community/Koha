@@ -110,8 +110,6 @@ elsif ( $phase eq 'Build new' ) {
     if ( $op eq 'convert' ) {
         my $report_id = $input->param('report_id');
         my $report    = C4::Reports::Guided::get_saved_report($report_id);
-        warn $report_id;
-        use Data::Printer colored => 1; warn p $report;
         if ($report) {
             my $updated_sql = C4::Reports::Guided::convert_sql( $report->{savedsql} );
             C4::Reports::Guided::update_sql(
