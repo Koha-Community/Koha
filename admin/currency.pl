@@ -95,7 +95,7 @@ if ( $op eq 'add_form' ) {
     # TODO rewrite the following when Koha::Acquisition::Orders will use Koha::Objects
     my $schema = Koha::Database->schema;
     my $nb_of_orders = $schema->resultset('Aqorder')->search( { currency => $currency->currency } )->count;
-    my $nb_of_vendors = Koha::Acquisition::Booksellers->search( { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } });
+    my $nb_of_vendors = Koha::Acquisition::Booksellers->search( { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } })->count;
     $template->param(
         currency     => $currency,
         nb_of_orders => $nb_of_orders,
