@@ -326,7 +326,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 $template->param( $data->{'categorycode'} => 1 );
 $template->param(
     patron          => $patron,
-    borrower        => $patron, # TODO Still needed by includes,
     detailview      => 1,
     borrowernumber  => $borrowernumber,
     othernames      => $data->{'othernames'},
