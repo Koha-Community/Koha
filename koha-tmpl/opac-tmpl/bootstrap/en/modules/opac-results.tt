@@ -222,7 +222,7 @@
 
                                             [% # Cell 4: Search result details and controls %]
                                             <td class="bibliocol">
-                                                <div class="coverimages">
+                                                <div class="coverimages [% SEARCH_RESULT.itemtype %] ">
                                                     <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">
                                                         [% IF ( OPACLocalCoverImages ) %]
                                                             <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber %]" id="local-thumbnail[% loop.count %]"></span>
