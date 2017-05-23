@@ -1052,7 +1052,7 @@ sub SendQueuedMessages {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     next MESSAGE;
                 }
-                $message->{to_address} = $message->{to_address} ? $message->{to_address} : $member->{'smsalertnumber'};
+                $message->{to_address} ||= $member->{'smsalertnumber'};
                 unless ( $message->{to_address} && $member->{'smsalertnumber'} ) {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
