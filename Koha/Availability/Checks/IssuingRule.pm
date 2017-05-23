@@ -27,6 +27,7 @@ use C4::Reserves;
 
 use Koha::IssuingRules;
 use Koha::Items;
+use Koha::Logger;
 
 use Koha::Exceptions;
 use Koha::Exceptions::Checkout;
@@ -122,6 +123,10 @@ sub new {
                     $rule->unblessed, { expiry => 10 });
         }
     }
+
+    my $logger = Koha::Logger->get;
+    $logger->debug('Issuing Rule: ' . Data::Dumper::Dumper($rule->unblessed))
+        if $rule;
 
     # Store effective issuing rule into object
     $self->{'effective_issuing_rule'} = $rule;
