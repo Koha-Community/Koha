@@ -12997,6 +12997,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18663 - Missing db update for ExportRemoveFields)\n";
 }
 
+$DBversion = "16.05.14.002";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('TalkingTechItivaPhoneNotification','0',NULL,'If ON, enables Talking Tech I-tiva phone notifications','YesNo');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18600 - Missing db update for TalkingTechItivaPhoneNotification)\n";
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug sss
 # if there is anything in the atomicupdate, read and execute it.
