@@ -2176,30 +2176,31 @@ sub MarkIssueReturned {
         $dbh->do( $query, undef, @bind );
 
         my $original_issue_id = $issue_id;
-        my $id_already_exists = $dbh->selectrow_array(
-            q|SELECT COUNT(*) FROM old_issues WHERE issue_id = ?|,
-            undef, $issue_id
-        );
+        my $issue = Koha::Checkouts->find( $issue_id ); # FIXME should be fetched earlier
 
-        if ( $id_already_exists ) {
-            my $new_issue_id = $dbh->selectrow_array(q|SELECT MAX(issue_id)+1 FROM old_issues|);
-            $dbh->do(
-                q|UPDATE issues SET issue_id = ? WHERE issue_id = ?|,
-                undef, $new_issue_id, $issue_id
-            );
+        # Create the old_issues entry
+        my $old_checkout_data = $issue->unblessed;
+
+        if ( Koha::Old::Checkouts->find( $issue_id ) ) {
+            my $new_issue_id = Koha::Old::Checkouts->search(
+                {},
+                { columns => [ { max_issue_id => { max => 'issue_id' } } ] }
+            )->get_column('max_issue_id') + 1;
             $issue_id = $new_issue_id;
         }
+        $old_checkout_data->{issue_id} = $issue_id;
+        my $old_checkout = Koha::Old::Checkout->new($old_checkout_data)->store;
 
-        $dbh->do(q|INSERT INTO old_issues SELECT * FROM issues WHERE issue_id = ?|, undef, $issue_id);
-
-        $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $issue_id, $original_issue_id);
+        # Update the fines
+        $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $old_checkout->issue_id, $issue->issue_id);
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy == 2) {
-            $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $issue_id);
+            $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $old_checkout->issue_id);
         }
 
-        $dbh->do(q|DELETE FROM issues WHERE issue_id = ?|, undef, $issue_id);
+        # Delete the issue
+        $issue->delete;
 
         ModItem( { 'onloan' => undef }, undef, $itemnumber );
 
