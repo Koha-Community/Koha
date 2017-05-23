@@ -343,7 +343,6 @@ my $translated_language = C4::Languages::language_get_description( $subtag, $sub
 
 $template->param(
     patron          => $patron,
-    borrower        => $patron, # TODO Still needed by includes,
     translated_language => $translated_language,
     detailview      => 1,
     borrowernumber  => $borrowernumber,
