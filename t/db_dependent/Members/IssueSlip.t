@@ -397,20 +397,9 @@ EOS
 };
 
 subtest 'bad calls' => sub {
-    plan tests => 2;
-    AddIssue( $borrower, $barcode1, $today, undef, $yesterday );
+    plan tests => 1;
     my $slip = IssueSlip();
-    isnt( $slip, undef, 'IssueSlip should return if no param passed FIXME, should return undef' );
-    my $empty_slip = <<EOS;
-Checked out:
-
-
-Overdues:
-
-EOS
-
-    $slip = IssueSlip(undef, $borrowernumber+1);
-    is( $slip->{content}, $empty_slip, 'IssueSlip should not return an empty slip if the borrowernumber passed in param does not exist. But it is what it does for now (FIXME)' );
+    is( $slip, undef, 'IssueSlip should return if no valid borrowernumber is passed' );
 };
 
 $schema->storage->txn_rollback;

@@ -1174,6 +1174,7 @@ sub IssueSlip {
     #return unless $borrowernumber;
 
     my $patron = Koha::Patrons->find( $borrowernumber );
+    return unless $patron;
 
     my @issues = @{ GetPendingIssues($borrowernumber) };
 
