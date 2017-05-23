@@ -12988,6 +12988,15 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "16.05.14.001";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('ExportRemoveFields','',NULL,'List of fields for non export in circulation.pl (separated by a space)','Free');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18663 - Missing db update for ExportRemoveFields)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug sss
 # if there is anything in the atomicupdate, read and execute it.
