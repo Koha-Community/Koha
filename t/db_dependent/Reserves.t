@@ -733,14 +733,30 @@ subtest '_koha_notify_reserve() tests' => sub {
     };
 
     my $mp = Test::MockModule->new( 'C4::Members::Messaging' );
+
     $mp->mock("GetMessagingPreferences",$wants_hold_and_email);
 
-    my $sms_hold_notice = $builder->build_object({
-            class => 'Koha::Notice::Templates',
+    $dbh->do('DELETE FROM letter');
+
+    my $email_hold_notice = $builder->build({
+            source => 'Letter',
+            value => {
+                message_transport_type => 'email',
+                branchcode => '',
+                code => 'HOLD',
+                module => 'reserves',
+                lang => 'default',
+            }
+        });
+
+    my $sms_hold_notice = $builder->build({
+            source => 'Letter',
             value => {
                 message_transport_type => 'sms',
                 branchcode => '',
                 code => 'HOLD',
+                module => 'reserves',
+                lang=>'default',
             }
         });
 
