@@ -66,9 +66,10 @@
                         <td>[% PROCESS authresult summary=resul.summary %]</td>
                         <td>[% resul.used | html %] times</td>
                         <td>
-                [% IF ( resul.to_report ) %]
-                            <a href="javascript:report('[% resul.to_report |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]')"><img alt="choose" src="[% interface | html %]/[% theme | html %]/images/arrow.gif" width="32" /></a>
-                [% END %]
+                        [% IF ( resul.to_report ) %]
+                            <button class="choosebt">Choose</button>
+                            <p class="toreport" style="display:none">[% resul.to_report |replace('\n', '\\n') |replace('\r', '\\r') |html %]</p>
+                        [% END %]
                         </td>
                     </tr>
                 [% END %]
@@ -83,6 +84,12 @@
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
+        $(document).ready(function(){
+            $(".choosebt").on("click",function(){
+                var toreport = $(this).siblings(".toreport").text();
+                report(toreport);
+            });
+        });
         function report(summary){
             var doc   = opener.document;
             var field = doc.getElementById('[% index | html %]');
