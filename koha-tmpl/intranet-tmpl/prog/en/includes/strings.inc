@@ -21,6 +21,7 @@
     var NOT_RENEWABLE_AUTO_TOO_MUCH_OWEING = _("Automatic renewal failed, patron has unpaid fines");
     var NOT_RENEWABLE_AUTO_ACCOUNT_EXPIRED = _("Automatic renewal failed, account expired");
     var NOT_RENEWABLE_AUTO_RENEW = _("Scheduled for automatic renewal");
+    var NOT_RENEWABLE_DENIED = _("Renewal denied by syspref");
     var RENEWALS_REMAINING = _("%s of %s renewals remaining");
     var HOLD_IS_SUSPENDED = _("Hold is <strong>suspended</strong>");
     var UNTIL = _("until %s");

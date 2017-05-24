@@ -431,6 +431,13 @@ $(document).ready(function() {
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "onsite_checkout" ) {
                             // Don't display something if it's an onsite checkout
+                        } else if ( oObj.can_renew_error == "item_denied_renewal" ) {
+                            content += "<span class='renewals-disabled'>"
+                                    + NOT_RENEWABLE_DENIED
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
                         } else {
                             content += "<span class='renewals-disabled'>"
                                     + oObj.can_renew_error

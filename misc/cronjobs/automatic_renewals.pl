@@ -88,7 +88,8 @@ while ( my $auto_renew = $auto_renews->next ) {
         or $error eq 'auto_account_expired'
         or $error eq 'auto_too_late'
         or $error eq 'auto_too_much_oweing'
-        or $error eq 'auto_too_soon' ) {
+        or $error eq 'auto_too_soon'
+        or $error eq 'item_denied_renewal' ) {
         if ( not $auto_renew->auto_renew_error or $error ne $auto_renew->auto_renew_error ) {
             $auto_renew->auto_renew_error($error)->store;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew

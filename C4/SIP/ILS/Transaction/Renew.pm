@@ -51,6 +51,7 @@ sub do_renew_for  {
     } else {
         $renewerror=~s/on_reserve/Item unavailable due to outstanding holds/;
         $renewerror=~s/too_many/Item has reached maximum renewals/;
+        $renewerror=~s/item_denied_renewal/Item renewal is not allowed/;
         $self->screen_msg($renewerror);
         $self->renewal_ok(0);
     }

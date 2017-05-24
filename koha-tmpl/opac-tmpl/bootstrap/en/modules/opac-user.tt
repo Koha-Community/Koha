@@ -85,6 +85,8 @@
                                             <li>It is too soon after the checkout date for this item to be renewed.</li>
                                         [% ELSIF error == 'on_reserve' %]
                                             <li>This item is on hold for another borrower.</li>
+                                        [% ELSIF error == 'item_denied_renewal' %]
+                                            <li>Item renewal is not allowed.</li>
                                         [% END %]
                                     [% END %]
                                 </ul>
@@ -316,6 +318,8 @@
                                                     [% ELSIF ( ISSUE.too_soon ) %]
                                                         No renewal before [% ISSUE.soonestrenewdate | html %]
                                                         <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                    [% ELSIF ( ISSUE.item_denied_renewal ) %]
+                                                        Renewal not allowed
                                                     [% END %]
                                                     </td>
                                                 [% END %]
