@@ -488,7 +488,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('TagsModeration','0','','Require tags from patrons to be approved before becoming visible.','YesNo'),
 ('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.','Integer'),
 ('TagsShowOnList','6','','Number of tags to display on search results list.  0 is off.','Integer'),
-('TalkingTechItivaPhoneNotification','0',NULL,'If ON, enables Talking Tech I-tiva phone notifications','YesNo'),
 ('template','prog','','Define the preferred staff interface template','Themes'),
 ('ThingISBN','0','','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo'),
 ('TimeFormat','24hr','12hr|24hr','Defines the global time format for visual output.','Choice'),
