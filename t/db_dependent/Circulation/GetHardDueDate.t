@@ -145,6 +145,7 @@ my $sampleissuingrule1 = {
     holds_per_record   => 1,
     article_requests   => 'yes',
     no_auto_renewal_after => undef,
+    no_auto_renewal_after_hard_limit => undef,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
