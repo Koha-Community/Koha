@@ -2172,7 +2172,12 @@ sub MarkIssueReturned {
     push @bind, $issue_id;
 
     # FIXME Improve the return value and handle it from callers
+    my $do_not_lock = ( exists $ENV{_} && $ENV{_} =~ m|prove| ) || $ENV{KOHA_NO_TABLE_LOCKS};
     $schema->txn_do(sub {
+
+        C4::Context->dbh->do(q|LOCK TABLE old_issues READ|) unless $do_not_lock;
+        C4::Context->dbh->do(q|LOCK TABLE old_issues WRITE|) unless $do_not_lock;
+
         $dbh->do( $query, undef, @bind );
 
         my $original_issue_id = $issue_id;
@@ -2209,6 +2214,8 @@ sub MarkIssueReturned {
             my $patron = Koha::Patrons->find( $borrowernumber );
             $item->last_returned_by( $patron );
         }
+
+        C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
     });
 
     return $issue_id;
