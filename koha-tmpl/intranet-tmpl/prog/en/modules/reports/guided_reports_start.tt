@@ -32,9 +32,16 @@
 [% INCLUDE 'calendar.inc' %]
 <style type="text/css">
     #sql { width: 90%; height: 9em;}
+    #update_sql .modal-dialog { width: 80%; }
+    ins { background-color: #e6ffe6; }
+    del { background-color: #ffe6e6; }
+    #col1, #col2 { width:45%; float:left; }
+    #col1 ins, #col2 del { display: none; }
+    .show_sql { font-family: monospace; }
 </style>
 [% IF ( saved1 ) %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min.js"></script>
 [% INCLUDE 'datatables.inc' %]
 [% END %]
 
@@ -172,11 +179,17 @@ $("#delColumn").on("click",function(){
         var ltitle = $(this).text();
         var report_id = $(this).data("report_id");
         var page = $(this).attr("href");
-        $("#update_sql .modal-body").load(page + " div");
+        $("#update_sql .modal-body").load(page + " div", function(){
+            var diff1 = $("#col1 .show_sql").text();
+            var diff2 = $("#col2 .show_sql").text();
+            var diffs = diffString( escape(diff1), escape(diff2) );
+            $("#col1 .show_sql,#col2 .show_sql").html(diffs);
+        });
         $('#update_sql').modal('show');
         $("#update_sql_button").attr("href", "/cgi-bin/koha/reports/guided_reports.pl?phase=Use saved&op=convert&report_id=" + report_id);
     });
-    $("#update_sql").on("hidden", function(){
+
+    $("#update_sql").on("hidden.bs.modal", function(){
         $("#update_sql_label").html("");
         $("#update_sql .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
     });

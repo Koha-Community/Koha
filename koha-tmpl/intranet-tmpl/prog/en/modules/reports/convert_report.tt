@@ -1,16 +1,21 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Reports &rsaquo; Convert report</title>
+    <title>Koha &rsaquo; Reports &rsaquo; Convert report</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
-    <body id="report_convert" class="catalog">
-        <div id="main" style="direction: ltr;">
+    <body id="rep_report_convert" class="rep">
+        <div>
             [% IF msg == 'no_report' %]
                 There is no valid report for this id.
             [% ELSIF msg == 'can_be_updated' %]
-                <h3>Existing sql</h3>
-                <pre>[% current_sql %]</pre>
-                <h3>Updated sql</h3>
-                <pre>[% updated_sql %]</pre>
+                <div id="col1">
+                    <h3>Existing SQL</h3>
+                    <span class="show_sql">[% current_sql | html_entity %]</span>
+                </div>
+
+                <div id="col2">
+                    <h3>Updated SQL</h3>
+                    <span class="show_sql">[% updated_sql | html_entity %]</span>
+                </div>
             [% ELSE %]
                 Something went wrong.
             [% END %]
