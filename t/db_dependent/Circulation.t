@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 119;
+use Test::More tests => 120;
 
 use Data::Dumper;
 use DateTime;
@@ -226,7 +226,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
 C4::Context->dbh->do("DELETE FROM accountlines");
 {
 # CanBookBeRenewed tests
-
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', '' ); #Ensure pref doesn't affect current tests
     # Generate test biblio
     my $title = 'Silence in the library';
     my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
@@ -2458,7 +2458,121 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron,$item->{barcode},$ten_days_go, undef, undef, undef);
     is( $needsconfirmation->{RENEW_ISSUE}, 1, "This is a renewal");
     is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");
+};
 
+subtest 'ItemsDeniedRenewal preference' => sub {
+    plan tests => 16;
+
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', '' );
+
+    $dbh->do('DELETE FROM issues');
+    $dbh->do('DELETE FROM items');
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+        q{
+        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
+                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        },
+        {},
+        '*', '*', '*', 25,
+        20,  14,  'days',
+        10,   7,
+        undef,  0,
+        .10, 1
+    );
+
+    my $deny_book = $builder->build_object({ class => 'Koha::Items', value => {
+        withdrawn => 1,
+        itype => 'HIDE',
+        location => 'PROC',
+        itemcallnumber => undef,
+        itemnotes => "",
+        }
+    });
+    my $allow_book = $builder->build_object({ class => 'Koha::Items', value => {
+        withdrawn => 0,
+        itype => 'NOHIDE',
+        location => 'NOPROC'
+        }
+    });
+
+    my $idr_borrower = $builder->build_object({ class => 'Koha::Patrons'});
+    my $future = dt_from_string->add( days => 1 );
+    my $deny_issue = $builder->build_object({ class => 'Koha::Checkouts', value => {
+        returndate => undef,
+        renewals => 0,
+        auto_renew => 0,
+        borrowernumber => $idr_borrower->borrowernumber,
+        itemnumber => $deny_book->itemnumber,
+        onsite_checkout => 0,
+        date_due => $future,
+        }
+    });
+    my $allow_issue = $builder->build_object({ class => 'Koha::Checkouts', value => {
+        returndate => undef,
+        renewals => 0,
+        auto_renew => 0,
+        borrowernumber => $idr_borrower->borrowernumber,
+        itemnumber => $allow_book->itemnumber,
+        onsite_checkout => 0,
+        date_due => $future,
+        }
+    });
+
+    my $idr_rules;
+
+    my ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal allowed when no rules' );
+    is( $idr_error, undef, 'Renewal allowed when no rules' );
+
+    $idr_rules="withdrawn: [1]";
+
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 0, 'Renewal blocked when 1 rules (withdrawn)' );
+    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 1 rule (withdrawn)' );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal allowed when 1 rules not matched (withdrawn)' );
+    is( $idr_error, undef, 'Renewal allowed when 1 rules not matched (withdrawn)' );
+
+    $idr_rules="withdrawn: [1]\ntype: [HIDE,INVISILE]";
+
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 0, 'Renewal blocked when 2 rules matched (withdrawn, itype)' );
+    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 2 rules matched (withdrawn,itype)' );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal allowed when 2 rules not matched (withdrawn, itype)' );
+    is( $idr_error, undef, 'Renewal allowed when 2 rules not matched (withdrawn, itype)' );
+
+    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]\nlocation: [PROC]";
+
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 0, 'Renewal blocked when 3 rules matched (withdrawn, itype, location)' );
+    is( $idr_error, 'item_denied_renewal', 'Renewal blocked when 3 rules matched (withdrawn,itype, location)' );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $allow_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
+    is( $idr_error, undef, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
+
+    $idr_rules="itemcallnumber: [NULL]";
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 0, 'Renewal blocked for undef when NULL in pref' );
+
+    $idr_rules="itemnotes: ['']";
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 0, 'Renewal blocked for empty string when "" in pref' );
 };
 
 subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
