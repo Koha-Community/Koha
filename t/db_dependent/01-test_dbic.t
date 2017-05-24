@@ -10,8 +10,6 @@ use Test::MockModule;
 use Koha::Database;
 use Koha::Libraries;
 
-my $verbose = 0;
-
 subtest "Scenario: Show how caching prevents Test::DBIx::Class from working properly and how to circumvent it", sub {
   my ($firstSchema, $cachedSchema, $cachedSchema2, $firstLibCount, $libCount);
 
@@ -22,15 +20,11 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
 
   $firstLibCount = Koha::Libraries->search->count; # first count normal conn
 
-  print "\$firstLibCount '$firstLibCount'\n" if $verbose;
-
   ok($cachedSchema = Koha::Database::get_schema_cached(),
   '  And the DB connection is cached');
 
   unlike(getConnectionDBName($cachedSchema), qr/sqlite/i,
   '  And the cached DB connection type is not sqlite');
-  print "getConnectionDBName() -> ".getConnectionDBName($cachedSchema)."\n" if $verbose;
-
 
   use_ok('Test::DBIx::Class');
   my $db = Test::MockModule->new('Koha::Database');
