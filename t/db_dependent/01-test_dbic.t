@@ -38,8 +38,7 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
   ok(1,
   'Step: Given Test::DBIx::Class (T:D:C) is loaded and DB accessor is mocked. Connection from cache is still used.');
 
-  ok($libCount = Koha::Libraries->search->count,
-  '  When the libraries are counted');
+  $libCount = Koha::Libraries->search->count;
 
   is($libCount, $firstLibCount,
   '  Then we got the same count as without T:D:C');
@@ -55,8 +54,7 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
   ok(Koha::Database::flush_schema_cache(),
   'Step: Given the DB connection cache is flushed');
 
-  ok(! ($libCount = Koha::Libraries->search->count),
-  '  When the libraries are counted');
+  $libCount = Koha::Libraries->search->count;
 
   is($libCount, 0,
   '  Then we got 0 libraries because fixtures are not deployed');
@@ -77,8 +75,7 @@ subtest "Scenario: Show how caching prevents Test::DBIx::Class from working prop
   ],
   'Step: Given we deploy T:D:C Fixtures');
 
-  ok($libCount = Koha::Libraries->search->count,
-  '  When the libraries are counted');
+  $libCount = Koha::Libraries->search->count;
 
   is($libCount, 1,
   '  Then we got the count from fixtures');
