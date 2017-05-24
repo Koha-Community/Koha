@@ -3,6 +3,19 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Files for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".confirmdelete").on("click", function(){
+            $(this).parents('tr').addClass("warn");
+            if(confirm(_("Are you sure you want to delete this file?"))){
+                return true;
+            } else {
+                $(this).parents('tr').removeClass("warn");
+                return false;
+            }
+        });
+});
+</script>
 </head>
 <body id="pat_files" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -44,7 +57,7 @@
                                  <td>[% f.file_type %]</td>
                                  <td>[% f.file_description %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers %]<td><a href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]">Delete</a></td>[% END %]
+                                 [% IF CAN_user_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
                             </tr>
                         [% END %]
                     </tbody>
