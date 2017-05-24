@@ -1656,17 +1656,22 @@ sub _cancel_items_receipt {
 @results = &SearchOrders({
     ordernumber => $ordernumber,
     search => $search,
-    biblionumber => $biblionumber,
     ean => $ean,
     booksellerid => $booksellerid,
     basketno => $basketno,
+    basketname => $basketname,
+    basketgroupname => $basketgroupname,
     owner => $owner,
     pending => $pending
     ordered => $ordered
+    biblionumber => $biblionumber,
+    budget_id => $budget_id
 });
 
-Searches for orders.
+Searches for orders filtered by criteria.
 
+C<$ordernumber> Finds matching orders or transferred orders by ordernumber.
+C<$search> Finds orders matching %$search% in title, author, or isbn.
 C<$owner> Finds order for the logged in user.
 C<$pending> Finds pending orders. Ignores completed and cancelled orders.
 C<$ordered> Finds orders to receive only (status 'ordered' or 'partial').
