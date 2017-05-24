@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-16 13:08-0300\n"
+"POT-Creation-Date: 2017-05-15 01:26-0300\n"
 "PO-Revision-Date: 2013-12-13 06:12+0000\n"
 "Last-Translator: khdw <khaidaw@yahoo.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -355,7 +355,7 @@ msgstr "%s %s %s %s (%s)"
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:13
 #, c-format
 msgid "%s %s sent you a cart from our online catalog."
 msgstr ""
@@ -810,12 +810,6 @@ msgstr "Утас:"
 msgid "%s Please correct this and resubmit. "
 msgstr ""
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr ""
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
 #, fuzzy, c-format
@@ -931,6 +925,37 @@ msgstr "Бусад ашиглагчдийн таагууд. "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:43
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
 
 #. %1$s:  IF error 
@@ -3398,7 +3423,7 @@ msgstr "Зохиогчид"
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:43
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:39
 #, fuzzy, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -3697,7 +3722,7 @@ msgstr "Ярих дугаар"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
@@ -3883,7 +3908,7 @@ msgstr "Ангилал"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.classification 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:117
 #, fuzzy, c-format
 msgid "Classification: %s "
 msgstr "Ангилал: "
@@ -4036,7 +4061,7 @@ msgstr "Цуглуулга: "
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:75
 #, fuzzy, c-format
 msgid "Collection: %s "
 msgstr "Цуглуулга: "
@@ -4164,7 +4189,7 @@ msgstr "Зохиогчийн эрхийн огноо:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:87
 #, fuzzy, c-format
 msgid "Copyright year: %s "
 msgstr "Зохиогчийн эрх: "
@@ -4487,7 +4512,7 @@ msgstr "Дею"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.dewey 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:111
 #, fuzzy, c-format
 msgid "Dewey: %s "
 msgstr "Дею: "
@@ -5264,7 +5289,7 @@ msgid "Help"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:9
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:11
 #, c-format
 msgid "Hi,"
 msgstr ""
@@ -5479,7 +5504,7 @@ msgid "ISBN: "
 msgstr "ISBN: "
 
 #. %1$s:  BIBLIO_RESULT.ISBN 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:54
 #, fuzzy, c-format
 msgid "ISBN: %s "
 msgstr "ISBN: %s"
@@ -5655,7 +5680,7 @@ msgstr ""
 #. %1$s:  OPACBaseURL 
 #. %2$s:  BIBLIO_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:142
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, fuzzy, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr "10; url=/cgi-bin/koha/mainpage.pl"
@@ -5813,7 +5838,7 @@ msgid "Items in your cart: "
 msgstr "Таны сагсыг илгээх "
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:147
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #, fuzzy, c-format
 msgid "Items: "
 msgstr "Зүйлс"
@@ -5898,7 +5923,7 @@ msgstr "LCCN:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:123
 #, fuzzy, c-format
 msgid "LCCN: %s "
 msgstr "LCCN:"
@@ -6286,81 +6311,6 @@ msgstr "MARC харагдац"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:63
-#, c-format
-msgid "MESSAGE 10:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, c-format
-msgid "MESSAGE 11:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, c-format
-msgid "MESSAGE 12:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, c-format
-msgid "MESSAGE 13:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:71
-#, c-format
-msgid "MESSAGE 14:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, c-format
-msgid "MESSAGE 15:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, c-format
-msgid "MESSAGE 1:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, c-format
-msgid "MESSAGE 2:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, c-format
-msgid "MESSAGE 3:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, c-format
-msgid "MESSAGE 4:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, c-format
-msgid "MESSAGE 5:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, c-format
-msgid "MESSAGE 6:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, c-format
-msgid "MESSAGE 7:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:59
-#, c-format
-msgid "MESSAGE 8:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, c-format
-msgid "MESSAGE 9:"
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
 #, c-format
@@ -6939,7 +6889,7 @@ msgstr "Санамжууд"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:93
 #, fuzzy, c-format
 msgid "Notes : %s "
 msgstr "Санамжууд:"
@@ -7434,7 +7384,7 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:15
 #, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
@@ -7691,7 +7641,7 @@ msgstr "Дараахаар хэвлэгдсэн :"
 #. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:60
 #, fuzzy, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -8472,7 +8422,7 @@ msgid "Self checkout help"
 msgstr "Өөрөө авах тусламж"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
@@ -8525,7 +8475,7 @@ msgstr "Цуглуулгыг сонгох"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:112
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:105
 #, fuzzy, c-format
 msgid "Serial: %s "
 msgstr "Цувралуудыг засварлах"
@@ -8963,7 +8913,7 @@ msgstr "Субьект(үүд):"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:81
 #, fuzzy, c-format
 msgid "Subject: %s "
 msgstr "Обьект"
@@ -8973,7 +8923,7 @@ msgstr "Обьект"
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:913
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:914
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -8993,7 +8943,7 @@ msgid "Submit changes"
 msgstr "Өөрчлөлтүүдийг тушаах"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:907
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:908
 #, fuzzy
 msgid "Submit update request"
 msgstr "Таны саналыг тушаах"
@@ -9528,12 +9478,6 @@ msgstr "Энэ зүйл таны сагс руу нэмэгдсэн байна"
 msgid "The subscription expired on %s"
 msgstr "Энэ захиалга %s-д хугацаа нь дуусна"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr ""
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -9628,12 +9572,6 @@ msgstr ""
 "үзүүлнэ. Манай цуглуулга дахь зүйлсийг харахаар доорхи дурын субьект дээр "
 "дарна уу."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -9653,34 +9591,10 @@ msgstr "Энэ цуврал захиалга"
 msgid "This item does not exist."
 msgstr "Энэ зүйл таны сагсанд аль хэдийн байна "
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:99
 #, fuzzy, c-format
 msgid "This item is already checked out to you."
 msgstr "Энэ зүйл таны сагсанд аль хэдийн байна"
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, fuzzy, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Энэ зүйл таны сагсанд аль хэдийн байна "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, fuzzy, c-format
-msgid "This item is not for loan. %s "
-msgstr "Энэ зүйл таны сагсанд аль хэдийн байна "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, fuzzy, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Энэ зүйл таны сагсанд аль хэдийн байна "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -9933,7 +9847,7 @@ msgstr "URL(үүд)"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:128
 #, fuzzy, c-format
 msgid "URL: %s "
 msgstr ": %s"
@@ -9950,7 +9864,7 @@ msgid "Unable to connect to PayPal."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 msgid "Unable to update your setting!"
 msgstr ""
 
@@ -9985,7 +9899,7 @@ msgstr "Нэгтгэсэн гарчиг"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:106
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:99
 #, fuzzy, c-format
 msgid "Unified title: %s "
 msgstr "Нэрийн эхний үсгүүд:"
@@ -10339,12 +10253,6 @@ msgid ""
 "before asking for a discharge."
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, fuzzy, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "АЛДАА "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
@@ -10443,12 +10351,6 @@ msgstr "Та дараах зээлтэй байна:"
 msgid "You have already requested this title."
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, fuzzy, c-format
 msgid "You have no fines or charges"
@@ -10521,13 +10423,6 @@ msgstr "Та авахын тул ямар нэг номын санг сонго�
 msgid "You must select at least one item. "
 msgstr "Та дор хаяж нэг зүйлийг сонгох ёстой. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr ""
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -10567,12 +10462,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Таны нууц үг өөрчлөгдсөн байна "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, fuzzy, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Таны нууц үг өөрчлөгдсөн байна "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
 #, fuzzy, c-format
@@ -10580,12 +10469,6 @@ msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
 "renew your account."
 msgstr "Холбоо барих мэдээлэл"
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, c-format
-msgid "Your account has expired. %s "
-msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
@@ -10619,7 +10502,7 @@ msgstr ""
 msgid "Your cart"
 msgstr "Жагсаалтууд"
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:1
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:4
 #, fuzzy, c-format
 msgid "Your cart "
 msgstr "Жагсаалтууд "
@@ -10843,7 +10726,7 @@ msgid "Your search returned %s results."
 msgstr "%s үр дүнгүүдийг буцаасан."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 #, fuzzy
 msgid "Your setting has been updated!"
 msgstr "Таны нууц үг өөрчлөгдсөн байна"

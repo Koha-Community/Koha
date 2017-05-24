@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-16 12:44-0300\n"
-"PO-Revision-Date: 2017-04-23 15:08+0000\n"
+"POT-Creation-Date: 2017-05-14 23:18-0300\n"
+"PO-Revision-Date: 2017-05-17 19:22+0000\n"
 "Last-Translator: Eugenios <eugenios.papadopoulos@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: el\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1492960125.000000\n"
+"X-POOTLE-MTIME: 1495048976.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -386,7 +386,7 @@ msgstr "%s %s από %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:13
 #, c-format
 msgid "%s %s sent you a cart from our online catalog."
 msgstr "%s %s σας έστειλε το καλάθι από τον κατάλογό."
@@ -846,11 +846,11 @@ msgid ""
 "reset your password for you. %s %s Your password contains leading and/or "
 "trailing spaces. %s "
 msgstr ""
-"%s Οι κωδικοί δεν ταιριάζουν. Παρακαλώ πληκτρολογήστε ξανά το νέο κωδικό σας "
-". %s %s Ο νέος κωδικός πρέπει να αποτελείται τουλάχιστον από %s χαρακτήρες. %"
-"s %s Ο κωδικός σας καταχωρήθηκε εσφαλμένα. Αν το πρόβλημα παραμείνει, "
-"παρακαλούμε ζητήστε από το προσωπικό να ρυθμίσει τον κωδικό για σας. %s %s Ο "
-"κωδικός σας περιέχει κενά (στην αρχή ή στο τέλος). %s  "
+"%s Οι κωδικοί δεν ταιριάζουν. Παρακαλώ πληκτρολογήστε ξανά το νέο κωδικό "
+"σας . %s %s Ο νέος κωδικός πρέπει να αποτελείται τουλάχιστον από %s "
+"χαρακτήρες. %s %s Ο κωδικός σας καταχωρήθηκε εσφαλμένα. Αν το πρόβλημα "
+"παραμείνει, παρακαλούμε ζητήστε από το προσωπικό να ρυθμίσει τον κωδικό για "
+"σας. %s %s Ο κωδικός σας περιέχει κενά (στην αρχή ή στο τέλος). %s  "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -865,12 +865,6 @@ msgstr "%s Τηλέφωνο:"
 #, c-format
 msgid "%s Please correct this and resubmit. "
 msgstr "%s Παρακαλώ διορθώστε το και υποβάλετε ξανά. "
-
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "%s Επικοινωνήστε με το προσωπικό της βιβλιοθήκης. "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
@@ -992,6 +986,48 @@ msgstr ""
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
 "%s Οι κωδικοί δεν ταιριάζουν. %s Ο κωδικός που επιλέξατε είναι πολύ μικρός."
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:43
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
+msgstr ""
+"%s Το σύστημα δεν αναγνωρίζει το barcode. %s 'Έχετε δανειστεί πάρα πολλά "
+"αντίτυπα και δεν μπορείτε να δανειστείτε άλλα. %s Το αντίτυπο έχει δανειστεί "
+"σε κάποιον άλλο. %s Δεν μπορείτε να ανανεώσετε αυτό το αντίτυπο ξανά. %s "
+"Αυτό το αντίτυπο δεν δανείζεται. %s Έχετε οφειλές στην βιβλιοθήκη %s και δεν "
+"μπορείτε να δανειστείτε. %s Αυτό το αντίτυπο έχει αποσυρθεί από την συλλογή. "
+"%s Το αντίτυπο υπόκειται σε περιορισμούς. %s Το αντίτυπο είναι σε κράτηση "
+"για άλλο μέλος. %s Το αντίτυπο ανήκει σε άλλο παράρτημα. %s Ο λογαριασμός "
+"σας έχει λήξει. %s Ο λογαριασμός σας έχει απενεργοποιηθεί. %s Αυτή η κάρτα "
+"έχει δηλωθεί χαμένη. %s Τα στοιχεία επικοινωνίας μοιάζουν να είναι ελλιπή. %"
+"s Η ημερομηνία λήξης δεν είναι έγκυρη. %s Παρακαλώ επικοινωνήστε με ένα "
+"μέλος του προσωπικού της βιβλιοθήκης. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -3799,7 +3835,7 @@ msgstr "Συγγραφέας(είς)"
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:43
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:39
 #, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr "Συγγραφέας(-είς): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
@@ -4099,7 +4135,7 @@ msgstr "Ταξινομικός Αριθμός %s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
@@ -4281,7 +4317,7 @@ msgstr "Ταξινόμηση"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.classification 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:117
 #, c-format
 msgid "Classification: %s "
 msgstr "Ταξινόμηση: %s "
@@ -4430,7 +4466,7 @@ msgstr "Συλλογή: "
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:75
 #, c-format
 msgid "Collection: %s "
 msgstr "Συλλογή: %s "
@@ -4557,7 +4593,7 @@ msgstr "Ημερομηνία copyright:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:87
 #, c-format
 msgid "Copyright year: %s "
 msgstr "Έτος Κατοχύρωσης Πνευματικής Ιδιοκτησίας: %s "
@@ -4886,7 +4922,7 @@ msgstr "Dewey"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.dewey 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:111
 #, c-format
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
@@ -5676,7 +5712,7 @@ msgid "Help"
 msgstr "Βοήθεια"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:9
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:11
 #, c-format
 msgid "Hi,"
 msgstr "Γεια σας,"
@@ -5890,7 +5926,7 @@ msgid "ISBN: "
 msgstr "ISBN: "
 
 #. %1$s:  BIBLIO_RESULT.ISBN 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:54
 #, c-format
 msgid "ISBN: %s "
 msgstr "ISBN: %s"
@@ -6079,7 +6115,7 @@ msgstr "Άμεση διαγραφή"
 #. %1$s:  OPACBaseURL 
 #. %2$s:  BIBLIO_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:142
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr ""
@@ -6237,7 +6273,7 @@ msgid "Items in your cart: "
 msgstr "Τεκμήρια στο καλάθι σας: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:147
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #, c-format
 msgid "Items: "
 msgstr "Τεκμήρια: "
@@ -6319,7 +6355,7 @@ msgstr "LCCN:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:123
 #, c-format
 msgid "LCCN: %s "
 msgstr "LCCN: %s "
@@ -6706,81 +6742,6 @@ msgstr "Προβολή MARC: %s"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:63
-#, c-format
-msgid "MESSAGE 10:"
-msgstr "ΜΗΝΥΜΑ 10:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, c-format
-msgid "MESSAGE 11:"
-msgstr "ΜΗΝΥΜΑ 11:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, c-format
-msgid "MESSAGE 12:"
-msgstr "ΜΗΝΥΜΑ 12:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, c-format
-msgid "MESSAGE 13:"
-msgstr "ΜΗΝΥΜΑ 13:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:71
-#, c-format
-msgid "MESSAGE 14:"
-msgstr "ΜΗΝΥΜΑ 14:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "ΜΗΝΥΜΑ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, c-format
-msgid "MESSAGE 1:"
-msgstr "ΜΗΝΥΜΑ 1:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, c-format
-msgid "MESSAGE 2:"
-msgstr "ΜΗΝΥΜΑ 2:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, c-format
-msgid "MESSAGE 3:"
-msgstr "ΜΗΝΥΜΑ 3:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, c-format
-msgid "MESSAGE 4:"
-msgstr "ΜΗΝΥΜΑ 4:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, c-format
-msgid "MESSAGE 5:"
-msgstr "ΜΗΝΥΜΑ 5:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, c-format
-msgid "MESSAGE 6:"
-msgstr "ΜΗΝΥΜΑ 6:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, c-format
-msgid "MESSAGE 7:"
-msgstr "ΜΗΝΥΜΑ 7:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:59
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "ΜΗΝΥΜΑ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, c-format
-msgid "MESSAGE 9:"
-msgstr "ΜΗΝΥΜΑ 9:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
 #, c-format
@@ -7358,7 +7319,7 @@ msgstr "Σημειώσεις"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:93
 #, c-format
 msgid "Notes : %s "
 msgstr "Σημειώσεις: %s"
@@ -7870,7 +7831,7 @@ msgstr ""
 "με αυτή που κάνατε εγγραφή στη βιβλιοθήκη."
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:15
 #, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
@@ -8135,7 +8096,7 @@ msgstr "Εκδόθηκε από :"
 #. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:60
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
 msgstr "Εκδόθηκε από: %s %s τόπος: %s %s %s , %s %s %s , %s %s "
@@ -8911,7 +8872,7 @@ msgid "Self checkout help"
 msgstr "Βοήθεια συστήματος αυτόματου δανεισμού"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
@@ -8963,7 +8924,7 @@ msgstr "Συλλογή περιοδικών εκδόσεων"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:112
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:105
 #, c-format
 msgid "Serial: %s "
 msgstr "Περιοδικό: %s"
@@ -9419,7 +9380,7 @@ msgstr "Θέμα(τα):"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:81
 #, c-format
 msgid "Subject: %s "
 msgstr "Θέματα: %s "
@@ -9429,7 +9390,7 @@ msgstr "Θέματα: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:913
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:914
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -9448,7 +9409,7 @@ msgid "Submit changes"
 msgstr "Υποβολή αλλαγών"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:907
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:908
 msgid "Submit update request"
 msgstr "Υποβολή της αίτησης ενημέρωσης"
 
@@ -9993,12 +9954,6 @@ msgstr "Η κοινοποίηση δεν αφαιρέθηκε."
 msgid "The subscription expired on %s"
 msgstr "Η συνδρομή έληξε στις %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "Το σύστημα δεν αναγνωρίζει αυτό το barcode. %s "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -10101,12 +10056,6 @@ msgstr ""
 "μας. Κάντε κλικ πάνω σε ένα θέμα για να δείτε τα τεκμήρια που σχετίζονται με "
 "αυτό."
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, c-format
-msgid "This card has been declared lost. %s "
-msgstr "Αυτή η κάρτα έχει δηλωθεί ότι είναι χαμένη. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10130,34 +10079,10 @@ msgstr "Αυτή είναι μία περιοδική έκδοση"
 msgid "This item does not exist."
 msgstr "Το αντίτυπο δεν υπάρχει."
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "Αυτό το τεκμήριο έχει αποσυρθεί από τη συλλογή. %s "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:99
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Αυτό το τεκμήριο είναι ήδη δανεισμένο σε σας."
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "Αυτό το τεκμήριο είναι δανεισμένο σε κάποιο άλλο μέλος. %s "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, c-format
-msgid "This item is not for loan. %s "
-msgstr "Αυτό το τεκμήριο δε δανείζεται. %s "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "Αυτό το τεκμήριο είναι σε κράτηση για έναν άλλο χρήστη. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -10417,7 +10342,7 @@ msgstr "URL(s)"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:128
 #, c-format
 msgid "URL: %s "
 msgstr "URL: %s "
@@ -10434,7 +10359,7 @@ msgid "Unable to connect to PayPal."
 msgstr "Αδυναμία σύνδεσης με το PayPal."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 msgid "Unable to update your setting!"
 msgstr "Αδυναμία ενημέρωσης των ρυθμίσεων!"
 
@@ -10469,7 +10394,7 @@ msgstr "Ενιαίος τίτλος"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:106
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:99
 #, c-format
 msgid "Unified title: %s "
 msgstr "Ενιαίος τίτλος: %s "
@@ -10519,7 +10444,7 @@ msgstr "Χρησιμοποιήθηκε για / από: "
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:38
 #, c-format
 msgid "Username:"
-msgstr "ΌνομαΧρήστη:"
+msgstr "Όνομα Χρήστη:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:35
 #, c-format
@@ -10837,12 +10762,6 @@ msgstr ""
 "Δεν μπορείτε να απαλλαγείτε, έχετε δανεισμένα τεκμήρια. Πρέπει να γίνει "
 "πρώτα επιστροφή των τεκμηρίων για να μπορέσετε να ζητήσετε απαλλαγή."
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "Δεν μπορείτε να ανανεώσετε ξανά αυτό το τεκμήριο. %s "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
@@ -10938,14 +10857,6 @@ msgstr "Έχετε πιστωτικό:"
 msgid "You have already requested this title."
 msgstr "Έχετε ήδη ζητήσει αυτό τον τίτλο."
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr ""
-"Έχετε δανειστεί πολλά τεκμήρια και δεν μπορείτε να δανειστείτε περισσότερα. "
-"%s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, c-format
 msgid "You have no fines or charges"
@@ -11025,14 +10936,6 @@ msgstr "Πρέπει να επιλέξετε μία βιβλιοθήκη για 
 msgid "You must select at least one item. "
 msgstr "Πρέπει να επιλέξετε τουλάχιστον ένα τεκμήριο. "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr ""
-"Έχετε εκκρεμότητες στη Βιβλιοθήκη %s και δεν μπορείτε να δανειστείτε. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -11080,12 +10983,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr "Ο λογαριασμός σας είναι σε κατάσταση αδράνειας. %s Σχόλιο:"
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, c-format
-msgid "Your account has been suspended. %s "
-msgstr "Ο λογαριασμός σας έχει διακοπεί. %s "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
 #, c-format
@@ -11095,12 +10992,6 @@ msgid ""
 msgstr ""
 "Ο λογαριασμός σας έχει λήξει από %s. Παρακαλoύμε επικοινωνήστε με τη "
 "Βιβλιοθήκη για ανανέωση του λογαριασμού σας."
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, c-format
-msgid "Your account has expired. %s "
-msgstr "Ο λογαριασμός σας έχει λήξει. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
@@ -11136,7 +11027,7 @@ msgstr "Η κάρτα σας θα λήξει στις "
 msgid "Your cart"
 msgstr "Το καρότσι σας"
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:1
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:4
 #, c-format
 msgid "Your cart "
 msgstr "Το καρότσι σας "
@@ -11366,7 +11257,7 @@ msgid "Your search returned %s results."
 msgstr "Η αναζήτησή σας επέστρεψε %s αποτελέσματα."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 msgid "Your setting has been updated!"
 msgstr "Οι ρυθμίσεις ενημερώθηκαν!"
 

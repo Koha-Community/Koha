@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-04-16 13:28-0300\n"
+"POT-Creation-Date: 2017-05-15 03:39-0300\n"
 "PO-Revision-Date: 2012-06-23 09:35+0200\n"
 "Last-Translator: bunyarit <bun072@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -358,7 +358,7 @@ msgstr "%s %s %s %s (%s)"
 
 #. %1$s:  firstname 
 #. %2$s:  surname 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:12
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:13
 #, c-format
 msgid "%s %s sent you a cart from our online catalog."
 msgstr ""
@@ -813,12 +813,6 @@ msgstr ""
 msgid "%s Please correct this and resubmit. "
 msgstr ""
 
-#. %1$s:  END # / IF circ_error_UNKNOWN_BARCODE 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, fuzzy, c-format
-msgid "%s Please see a member of the library staff. "
-msgstr "กรุณาพบเจ้าหน้าที่ห้องสมุด "
-
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:514
 #, fuzzy, c-format
@@ -934,6 +928,37 @@ msgstr "แท็กจากผู้ใช้อื่น "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
+msgstr ""
+
+#. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
+#. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
+#. %3$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
+#. %4$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
+#. %5$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
+#. %6$s:  ELSIF ( circ_error_DEBT ) 
+#. %7$s:  amount 
+#. %8$s:  ELSIF ( circ_error_WTHDRAWN ) 
+#. %9$s:  ELSIF ( circ_error_RESTRICTED ) 
+#. %10$s:  ELSIF ( circ_error_RESERVED ) 
+#. %11$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
+#. %12$s:  ELSIF ( circ_error_EXPIRED ) 
+#. %13$s:  ELSIF ( circ_error_DEBARRED ) 
+#. %14$s:  ELSIF ( circ_error_CARD_LOST ) 
+#. %15$s:  ELSIF ( circ_error_GNA ) 
+#. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
+#. %17$s:  END 
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:43
+#, c-format
+msgid ""
+"%s The system does not recognize this barcode. %s You have checked out too "
+"many items and can't check out any more. %s This item is checked out to "
+"someone else. %s You cannot renew this item again. %s This item is not for "
+"loan. %s You owe the library %s and cannot check out. %s This item has been "
+"withdrawn from the collection. %s This item is restricted. %s This item is "
+"on hold for another patron. %s This item belongs to another branch. %s Your "
+"account has expired. %s Your account has been suspended. %s This card has "
+"been declared lost. %s Your contact information seems to be incomplete. %s "
+"Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
 
 #. %1$s:  IF error 
@@ -3640,7 +3665,7 @@ msgstr ""
 #. %14$s:  END 
 #. %15$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:43
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:39
 #, c-format
 msgid "Author(s): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 msgstr ""
@@ -3939,7 +3964,7 @@ msgstr "เลขเรียกหนังสือ"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
@@ -4127,7 +4152,7 @@ msgstr "การจัดหมวดหมู่"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.classification 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:117
 #, c-format
 msgid "Classification: %s "
 msgstr ""
@@ -4279,7 +4304,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.seriestitle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:75
 #, fuzzy, c-format
 msgid "Collection: %s "
 msgstr "ปี"
@@ -4407,7 +4432,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.copyrightdate 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:87
 #, c-format
 msgid "Copyright year: %s "
 msgstr ""
@@ -4727,7 +4752,7 @@ msgstr "ระบบดิวอี้"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.dewey 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:118
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:111
 #, c-format
 msgid "Dewey: %s "
 msgstr ""
@@ -5498,7 +5523,7 @@ msgid "Help"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:9
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:11
 #, c-format
 msgid "Hi,"
 msgstr ""
@@ -5713,7 +5738,7 @@ msgid "ISBN: "
 msgstr ""
 
 #. %1$s:  BIBLIO_RESULT.ISBN 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:53
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:54
 #, c-format
 msgid "ISBN: %s "
 msgstr ""
@@ -5888,7 +5913,7 @@ msgstr ""
 #. %1$s:  OPACBaseURL 
 #. %2$s:  BIBLIO_RESULT.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:142
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:136
 #, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 msgstr ""
@@ -6046,7 +6071,7 @@ msgid "Items in your cart: "
 msgstr "กำลังส่งไปยังกล่องรายการที่เลือกของคุณ "
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:147
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:139
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:141
 #, c-format
 msgid "Items: "
 msgstr ""
@@ -6128,7 +6153,7 @@ msgstr "LCCN:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.lccn 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:123
 #, c-format
 msgid "LCCN: %s "
 msgstr ""
@@ -6513,81 +6538,6 @@ msgstr "มุมมองแบบ MARC"
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:63
-#, c-format
-msgid "MESSAGE 10:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, fuzzy, c-format
-msgid "MESSAGE 11:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, fuzzy, c-format
-msgid "MESSAGE 12:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, fuzzy, c-format
-msgid "MESSAGE 13:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:71
-#, c-format
-msgid "MESSAGE 14:"
-msgstr ""
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:73
-#, c-format
-msgid "MESSAGE 15:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, fuzzy, c-format
-msgid "MESSAGE 1:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, fuzzy, c-format
-msgid "MESSAGE 2:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, fuzzy, c-format
-msgid "MESSAGE 3:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, fuzzy, c-format
-msgid "MESSAGE 4:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, fuzzy, c-format
-msgid "MESSAGE 5:"
-msgstr "ข้อความ 15:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, fuzzy, c-format
-msgid "MESSAGE 6:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, fuzzy, c-format
-msgid "MESSAGE 7:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:59
-#, c-format
-msgid "MESSAGE 8:"
-msgstr "ข้อความ 8:"
-
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, fuzzy, c-format
-msgid "MESSAGE 9:"
-msgstr "ข้อความ 8:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:354
 #, c-format
@@ -7161,7 +7111,7 @@ msgstr "หมายเหตุ"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.notes 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:93
 #, c-format
 msgid "Notes : %s "
 msgstr ""
@@ -7652,7 +7602,7 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:14
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:15
 #, c-format
 msgid ""
 "Please note that the attached file is a MARC bibliographic records file "
@@ -7905,7 +7855,7 @@ msgstr "จัดพิมพ์โดย :"
 #. %9$s:  BIBLIO_RESULT.item('size') 
 #. %10$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:60
 #, c-format
 msgid "Published by: %s %s in %s %s %s , %s %s %s , %s %s "
 msgstr ""
@@ -8686,7 +8636,7 @@ msgid "Self checkout help"
 msgstr "วิธีใช้ระบบยืมด้วยตนเอง"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
@@ -8738,7 +8688,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.serial 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:112
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:105
 #, c-format
 msgid "Serial: %s "
 msgstr ""
@@ -9174,7 +9124,7 @@ msgstr "หัวเรื่อง:"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.subject 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:88
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:81
 #, c-format
 msgid "Subject: %s "
 msgstr ""
@@ -9184,7 +9134,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:913
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:914
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
@@ -9204,7 +9154,7 @@ msgid "Submit changes"
 msgstr "บันทึกความเปลี่ยนแปลง"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:907
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:908
 #, fuzzy
 msgid "Submit update request"
 msgstr "ส่งข้อเสนอแนะของคุณ"
@@ -9734,12 +9684,6 @@ msgstr "คุณได้ใส่รายการนี้ลงไปใน
 msgid "The subscription expired on %s"
 msgstr "การบอกรับเป็นสมาชิกจะหมดอายุในวันที่ %s"
 
-#. %1$s:  ELSIF ( circ_error_max_loans_allowed ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
-#, fuzzy, c-format
-msgid "The system does not recognize this barcode. %s "
-msgstr "<em>ข้อความ 1:</em> ระบบไม่สามารถอ่านค่าบาร์โคดนี้ได้ "
-
 #. %1$s:  ERROR.scrubbed 
 #. %2$s:  ELSIF ( ERROR.scrubbed_all_bad ) 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:64
@@ -9833,12 +9777,6 @@ msgstr ""
 "&quot;คลาวด์ (Cluod)&quot; นี้จะแสดงหัวข้อในรายการทรัพยากรห้องสมุดที่มีผู้ใช้มากที่สุด "
 "คุณสามารถคลิกหัวเรื่องใดๆ บริเวณด้านล่างเพื่อดูรายการในคอลเลกชันของเราได้"
 
-#. %1$s:  ELSIF ( circ_error_GNA ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:69
-#, fuzzy, c-format
-msgid "This card has been declared lost. %s "
-msgstr "<em>ข้อความ 13:</em> รายการอันนี้สูญหายไปแล้ว. "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -9858,34 +9796,10 @@ msgstr "นี่เป็นการบอกรับเป็นสมาช
 msgid "This item does not exist."
 msgstr "<em>ข้อความ 5:</em> รายการนี้ไม่อนุญาตให้ยืม "
 
-#. %1$s:  ELSIF ( circ_error_RESTRICTED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:57
-#, fuzzy, c-format
-msgid "This item has been withdrawn from the collection. %s "
-msgstr "<em>ข้อความ 7:</em> รายการนี้ได้เอาออกจาก collection ไปแล้ว "
-
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:99
 #, fuzzy, c-format
 msgid "This item is already checked out to you."
 msgstr "มีรายการนี้อยู่ในกล่องรายการที่เลือกของคุณแล้ว"
-
-#. %1$s:  ELSIF ( circ_error_NO_MORE_RENEWALS ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:49
-#, fuzzy, c-format
-msgid "This item is checked out to someone else. %s "
-msgstr "<em>ข้อความ 3:</em> รายการนี้ำได้ถูกยืมไปแล้ว "
-
-#. %1$s:  ELSIF ( circ_error_DEBT ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:53
-#, fuzzy, c-format
-msgid "This item is not for loan. %s "
-msgstr "<em>ข้อความ 5:</em> รายการนี้ไม่อนุญาตให้ยืม "
-
-#. %1$s:  ELSIF ( circ_error_ITEMNOTSAMEBRANCH ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:61
-#, fuzzy, c-format
-msgid "This item is on hold for another patron. %s "
-msgstr "<em>ข้อความ 9:</em> รายการนี้จองไว้สำหรับผู้ใช้คนอื่น "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
@@ -10132,7 +10046,7 @@ msgstr "URL(s)"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.url 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:135
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:128
 #, c-format
 msgid "URL: %s "
 msgstr ""
@@ -10149,7 +10063,7 @@ msgid "Unable to connect to PayPal."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 msgid "Unable to update your setting!"
 msgstr ""
 
@@ -10184,7 +10098,7 @@ msgstr "ชื่อเรื่องรวม"
 #. For the first occurrence,
 #. %1$s:  BIBLIO_RESULT.unititle 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:106
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:99
 #, c-format
 msgid "Unified title: %s "
 msgstr ""
@@ -10535,12 +10449,6 @@ msgid ""
 "before asking for a discharge."
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_NOT_FOR_LOAN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:51
-#, fuzzy, c-format
-msgid "You cannot renew this item again. %s "
-msgstr "<em>ข้อความ 4:</em> คุณไม่สามารถต่ออายุการยืมรายการนี้ซ้ำได้ "
-
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
 #, c-format
@@ -10632,12 +10540,6 @@ msgstr "คุณมีเครดิตของ:"
 msgid "You have already requested this title."
 msgstr ""
 
-#. %1$s:  ELSIF ( circ_error_ISSUED_TO_ANOTHER ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
-#, fuzzy, c-format
-msgid "You have checked out too many items and can't check out any more. %s "
-msgstr "<em>ข้อความ 2:</em> คุณได้ยืมหลายรายการแล้ว และระบบไม่สามารถให้ยืมได้อีก "
-
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:169
 #, fuzzy, c-format
 msgid "You have no fines or charges"
@@ -10710,13 +10612,6 @@ msgstr "คุณจะต้องเลือกห้องสมุดเพ
 msgid "You must select at least one item. "
 msgstr "คุณจะต้องเลือกอย่างน้อยหนึ่งรายการ "
 
-#. %1$s:  amount 
-#. %2$s:  ELSIF ( circ_error_WTHDRAWN ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:55
-#, fuzzy, c-format
-msgid "You owe the library %s and cannot check out. %s "
-msgstr "<em>ข้อความ 6:</em> คุณมียอดค้างชำระเงินอยู่  %s และไม่สามารถให้ยืมได้ "
-
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
@@ -10756,12 +10651,6 @@ msgstr ""
 msgid "Your account has been frozen. %s Comment: "
 msgstr " <em>ข้อความ 12:</em> บัญชีของคุณถูกระงับการใช้งานชั่วคราว "
 
-#. %1$s:  ELSIF ( circ_error_CARD_LOST ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:67
-#, fuzzy, c-format
-msgid "Your account has been suspended. %s "
-msgstr " <em>ข้อความ 12:</em> บัญชีของคุณถูกระงับการใช้งานชั่วคราว "
-
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
 #, fuzzy, c-format
@@ -10769,12 +10658,6 @@ msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
 "renew your account."
 msgstr "ข้อมูลติดต่อ"
-
-#. %1$s:  ELSIF ( circ_error_DEBARRED ) 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:65
-#, fuzzy, c-format
-msgid "Your account has expired. %s "
-msgstr "<em>ข้อความ 11:</em> บัญชีของคุณหมดอายุการใช้งานแล้ว "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
@@ -10808,7 +10691,7 @@ msgstr ""
 msgid "Your cart"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:1
+#: opac-tmpl/bootstrap/en/modules/opac-sendbasket.tt:4
 #, c-format
 msgid "Your cart "
 msgstr ""
@@ -11027,7 +10910,7 @@ msgid "Your search returned %s results."
 msgstr "ผลลัพธ์ที่ได้ทั้งหมดจำนวน %s รายการ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
 #, fuzzy
 msgid "Your setting has been updated!"
 msgstr "รหัสผ่านของคุณได้รับการเปลี่ยนแปลงเรียบร้อยแล้ว"
