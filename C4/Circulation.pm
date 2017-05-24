@@ -58,7 +58,7 @@ use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Carp;
-use List::MoreUtils qw( uniq );
+use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
 use Date::Calc qw(
   Today
@@ -2617,6 +2617,8 @@ sub CanBookBeRenewed {
     my $item      = GetItem($itemnumber)      or return ( 0, 'no_item' );
     my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return ( 0, 'no_checkout' );
     return ( 0, 'onsite_checkout' ) if $issue->onsite_checkout;
+    return ( 0, 'item_denied_renewal') if _item_denied_renewal({ item => $item });
+
 
     $borrowernumber ||= $issue->borrowernumber;
     my $patron = Koha::Patrons->find( $borrowernumber )
@@ -4121,6 +4123,40 @@ sub _CalculateAndUpdateFine {
         }
     }
 }
+
+sub _item_denied_renewal {
+    my ($params) = @_;
+
+    my $item = $params->{item};
+    return unless $item;
+
+    my $yaml = C4::Context->preference('ItemsDeniedRenewal');
+    my @lines = split /\n/, $yaml;
+    my $denyingrules;
+    foreach my $line (@lines){
+        my ($field,$array) = split /:/, $line;
+        $array =~ s/[ [\]\r]//g;
+        my @array = split /,/, $array;
+        @array = map { $_ eq 'NULL' ? undef : $_ } @array;
+        @array = map { $_ eq '""' || $_ eq "''" ? undef : $_ } @array;
+        $denyingrules->{$field} = \@array;
+    }
+    return unless $denyingrules;
+    foreach my $field (keys %$denyingrules) {
+        my $val = $item->{$field};
+        if( !defined $val) {
+            if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
+                return 1;
+            }
+        } elsif (any { $val eq $_ } @{$denyingrules->{$field}}) {
+           # If the results matches the values in the syspref
+           # We return true if match found
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 1;
 
