@@ -57,11 +57,10 @@ my $intranet = Plack::App::CGIBin->new(
 my $opac = Plack::App::CGIBin->new(
     root => $ENV{DEV_INSTALL}? "$home/opac": "$home/opac/cgi-bin/opac"
 )->to_app;
-my $apiv1  = builder {
-    my $server = Mojo::Server::PSGI->new;
-    $server->load_app("$home/api/v1/app.pl");
-    $server->to_psgi_app;
-};
+
+# my $api  = Plack::App::CGIBin->new(
+#     root => '/usr/share/koha/api/'
+# )->to_app;
 
 builder {
 
