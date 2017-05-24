@@ -476,6 +476,17 @@ Circulation:
                   yes: Block
                   no: Allow
             - his/her auto renewals.
+        -
+            - pref: ItemsDeniedRenewal
+              type: textarea
+              class: code
+            - Define custom rules to deny specific items from renewal.
+            - "<br />Can name any field in the items table followed by a colon then a space then"
+            - "a bracketed list of values separated by commas."
+            - "e.g."
+            - "<br />ccode: [NEWFIC,NULL,DVD]"
+            - "<br />itype: [NEWBK,\"\"]"
+            - "<br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
     Checkin Policy:
         -
             - pref: HoldsAutoFill
