@@ -78,12 +78,12 @@
     <h3>
         [% IF ( print_basket ) %]
             [% BIBLIO_RESULT.title |html %]
-                [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
+                [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
         [% ELSE %]
                 <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
                 [% BIBLIO_RESULT.title |html %]
-                [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
+                [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
         [% END %]
     </h3>
@@ -253,7 +253,7 @@
 
                 </td> [% END %]
             <td><a href="[% BIBLIO_RESULT.dest %]?biblionumber=[% BIBLIO_RESULT.biblionumber %]" class="open_title">
-                        [% BIBLIO_RESULT.title |html %]
+                        [% BIBLIO_RESULT.title |html %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
                     </a>
                         [% BIBLIO_RESULT.author %]
                         <p>[% IF ( BIBLIO_RESULT.publishercode ) %]- [% BIBLIO_RESULT.publishercode %]

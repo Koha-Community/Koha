@@ -61,9 +61,12 @@ if (C4::Context->preference('TagsEnabled')) {
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
+    my $fw = GetFrameworkCode($biblionumber);
+
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
     my $record           = &GetMarcBiblio($biblionumber);
+    $dat->{subtitle}     = GetRecordValue('subtitle', $record, $fw);
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
