@@ -1,19 +1,20 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use Test::More tests => 13;
 
-use C4::Context;
-
-use Test::More tests => 9;
+use Koha::Database;
+use t::lib::TestBuilder;
 
 BEGIN {
         use_ok('C4::ImportBatch');
 }
 
 # Start transaction
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 # clear
 $dbh->do('DELETE FROM import_batches');
@@ -118,6 +119,22 @@ my $record_from_import_biblio_without_items = C4::ImportBatch::GetRecordFromImpo
 $original_record->leader($record_from_import_biblio_without_items->leader());
 is_deeply( $record_from_import_biblio_without_items, $original_record, 'GetRecordFromImportBiblio should return the record without items by default' );
 
+# Add a few tests for GetItemNumbersFromImportBatch
+my @a = GetItemNumbersFromImportBatch( $id_import_batch1 );
+is( @a, 0, 'No item numbers expected since we did not commit' );
+my $itemno = $builder->build({ source => 'Item' })->{itemnumber};
+# Link this item to the import item to fool GetItemNumbersFromImportBatch
+my $sql = "UPDATE import_items SET itemnumber=? WHERE import_record_id=?";
+$dbh->do( $sql, undef, $itemno, $import_record_id );
+@a = GetItemNumbersFromImportBatch( $id_import_batch1 );
+is( @a, 2, 'Expecting two items now' );
+is( $a[0], $itemno, 'Check the first returned itemnumber' );
+# Now delete the item and check again
+$dbh->do( "DELETE FROM items WHERE itemnumber=?", undef, $itemno );
+@a = GetItemNumbersFromImportBatch( $id_import_batch1 );
+is( @a, 0, 'No item numbers expected since we deleted the item' );
+$dbh->do( $sql, undef, undef, $import_record_id ); # remove link again
+
 # fresh data
 my $sample_import_batch3 = {
     matcher_id => 3,
@@ -144,3 +161,5 @@ is( $batch3_clean, "0E0", "Batch 3 has been cleaned" );
 C4::ImportBatch::DeleteBatch( $id_import_batch3 );
 my $batch3_results = $dbh->do('SELECT * FROM import_batches WHERE import_batch_id = "$id_import_batch3"');
 is( $batch3_results, "0E0", "Batch 3 has been deleted");
+
+$schema->storage->txn_rollback;
