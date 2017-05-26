@@ -714,14 +714,9 @@ $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
-# we reached the finish
-$schema->storage->txn_rollback();
-
 subtest '_koha_notify_reserve() tests' => sub {
 
     plan tests => 2;
-
-    $schema->storage->txn_begin;
 
     my $wants_hold_and_email = {
         wants_digest => '0',
@@ -790,8 +785,6 @@ subtest '_koha_notify_reserve() tests' => sub {
         })->next()->to_address();
     is($email_message_address, undef ,"We should not populate the hold message with the email address, sending will do so");
 
-    $schema->storage->txn_rollback();
-
 };
 
 sub count_hold_print_messages {
@@ -803,3 +796,6 @@ sub count_hold_print_messages {
     });
     return $message_count->[0]->[0];
 }
+
+# we reached the finish
+$schema->storage->txn_rollback();
