@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 66;
+use Test::More tests => 67;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -31,6 +31,7 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
 
+use Koha::Account::Lines;
 use Koha::Database;
 use Koha::Patron;
 
@@ -46,7 +47,15 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM issuingrules');
-my $loggedinuser = $builder->build({ source => 'Borrower' });
+my $loggedinuser = $builder->build({
+    source => 'Borrower',
+    value => {
+        gonenoaddress => 0,
+        lost => 0,
+        debarred => undef,
+        debarredcomment => undef,
+    }
+});
 
 Koha::Auth::PermissionManager->grantPermission(
     Koha::Patrons->find($loggedinuser->{borrowernumber}),
@@ -60,7 +69,15 @@ $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
 
-my $patron = $builder->build({ source => 'Borrower', value => { flags => 0 } });
+my $patron = $builder->build({ source => 'Borrower',
+    value => {
+        flags => 0,
+        gonenoaddress => undef,
+        lost => undef,
+        debarred => undef,
+        debarredcomment => undef,
+    }
+});
 my $borrowernumber = $patron->{borrowernumber};
 my $patron_session = C4::Auth::get_session('');
 $patron_session->param('number', $borrowernumber);
@@ -201,6 +218,52 @@ $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(200)
   ->json_is({ renewable => Mojo::JSON->true, error => undef });
+
+subtest 'test restricted renewability due to patron restrictions' => sub {
+    plan tests => 12;
+
+    my $kp = Koha::Patrons->find($patron->{borrowernumber});
+
+    $kp->set({ debarred => '9999-12-12' })->store;
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id
+                           . "/renewability");
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is({ renewable => Mojo::JSON->false, error => 'debarred' });
+    $kp->set({ debarred => undef })->store;
+
+    $kp->set({ lost => 1 })->store;
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id
+                           . "/renewability");
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is({ renewable => Mojo::JSON->false, error => 'cardlost' });
+    $kp->set({ lost => undef })->store;
+
+    $kp->set({ gonenoaddress => 1 })->store;
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id
+                           . "/renewability");
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is({ renewable => Mojo::JSON->false, error => 'gonenoaddress' });
+    $kp->set({ gonenoaddress => undef })->store;
+
+    my $accountline = Koha::Account::Line->new({
+        borrowernumber => $kp->borrowernumber,
+        amountoutstanding => 9999999999,
+        accountno => 0,
+    })->store;
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id
+                           . "/renewability");
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is({ renewable => Mojo::JSON->false, error => 'debt' });
+    $accountline->delete;
+};
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
