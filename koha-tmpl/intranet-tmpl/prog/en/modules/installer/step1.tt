@@ -1,3 +1,4 @@
+[% BLOCK txt_continue %]Continue to the next step[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo;
     [% UNLESS ( language ) %] Choose your language [% END %]
@@ -46,8 +47,7 @@
                             [% END %]
                         </select>
                     </div>
-
-                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                    <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
                 </form>
             [% END %]
 
@@ -55,7 +55,7 @@
                 [% UNLESS ( checkmodule ) %]
                     [% IF ( missing_modules ) %]
                         <h2>Web installer &rsaquo; Perl modules missing</h2>
-                        <p>Some Perl modules are missing. <span class="label label-danger">Required</span> modules <b>must</b> be installed before you may continue.<br />
+                        <p>Some Perl modules are missing. <span class="label label-danger">Important: </span>Required modules must be installed before you may continue.<br />
                         <ul>
                             [% FOREACH missing_module IN missing_modules %]
                                 <li><strong>[% missing_module.name %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
@@ -88,7 +88,7 @@
 
                     <form name="checkmodules" role="form" action="install.pl">
                         <input type="hidden" name="step" value="2" />
-                        <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                        <p> <input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /> </p>
                     </form>
                 [% END # IF checkmodule%]
             [% END # IF language %]

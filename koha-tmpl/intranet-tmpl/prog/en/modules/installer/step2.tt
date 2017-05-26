@@ -1,3 +1,5 @@
+[% USE HtmlTags %]
+[% BLOCK txt_continue %]Continue to the next step[% END %]
 [% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Database settings</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
@@ -11,11 +13,11 @@
                 <h2>Web installer &rsaquo; Database settings</h2>
                 <h3>Database settings:</h3>
                 <ul>
-                    <li><em>Database type : </em> <code>[% dbms %]</code></li>
-                    <li><em>Database name : </em> <code>[% dbname %]</code></li>
-                    <li><em>Database host : </em> <code>[% hostname %]</code></li>
-                    <li><em>Database port : </em> <code>[% port %]</code> (probably okay if blank)</li>
-                    <li><em>Database user : </em> <code>[% user %]</code></li>
+                    <li><em>Database type: </em> [%- dbms | $HtmlTags tag=>'code' -%]</li>
+                    <li><em>Database name: </em> [%- dbname | $HtmlTags tag=>'code' -%]</li>
+                    <li><em>Database host: </em> [%- hostname | $HtmlTags tag=>'code'-%]</li>
+                    <li><em>Database port: </em> [%- port| $HtmlTags tag=>'code' -%] (probably okay if blank)</li>
+                    <li><em>Database user: </em> [%- user | $HtmlTags tag=>'code' -%]</li>
                 </ul>
 
                 [% IF ( dbconnection ) %]
@@ -24,23 +26,23 @@
                             <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
                             [% IF ( checkdatabasecreated ) %]
                                 <ul>
-                                    <li>Database <code>[% dbname %]</code> exists.</li>
+                                    <li>Database [% dbname | $HtmlTags tag=>'code'%] exists.</li>
                                 [% IF ( checkgrantaccess ) %]
-                                    <li>User <code>[% user %]</code> has all required privileges on database <code>[% dbname %]</code>.</li>
+                                    <li>User [% user | $HtmlTags tag=>'code' %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
                                     </ul>
                                 [% ELSE %]
                                     </ul>
-                                    <p class="error">user <code>[% user %]</code> doesn't have enough privilege on database <code>[% dbname %]</code> </p>
-                                    <p class="tip"> Ask for or make a change in the user's privileges. Need help? See [% IF ( mysql ) %]
-                                            <a href="http://dev.mysql.com/doc/refman/4.1/en/grant.html">
+                                    <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code'%].</p>
+                                    <p class="tip">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
+                                    <p>Need help? See manual for [% IF ( mysql ) %]
+                                            <a href="http://dev.mysql.com/doc/refman/4.1/en/grant.html">MySQL</a>
                                         [% ELSE %]
-                                            <a href="http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html">
+                                            <a href="http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html">PostgreSQL</a>
                                         [% END %]
-                                        this page</a>. User <code>[% user %]</code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code>[% dbname %]</code>
                                     </p>
                                 [% END %]
                             [% ELSE %]
-                                <div class="alert alert-danger" role="alert"><p>No database named <code>[% dbname %]</code> detected.</p></div>
+                                <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' %] detected.</p></div>
                                 <p>Please create the database before continuing.</p>
                             [% END %]
                         [% ELSE %]
@@ -48,23 +50,22 @@
                             <div class="tip">
                                 <ul>
                                     <li>Check that your database is running.</li>
-                                    <li>Check your database settings in <code>koha-conf.xml</code>. </li>
-                                    <li>Check the hostname setting in <code>koha-conf.xml</code>.
-                                    Some database servers require <code>127.0.0.1</code> rather than <code>localhost</code>.</li>
+                                    <li>Check your database settings in [% 'koha-conf.xml' | $HtmlTags Tag=>'code' %].</li>
+                                    <li>Check the hostname setting in [% INCLUDE txt_kohaconf_xml %]. Some database servers require [% '127.0.0.1' | $HtmlTags tag=>'code' %] rather than [% 'localhost' | $HtmlTags tag=>'code' %].</li>
                                 </ul>
                             </div>
-                            <p>Please correct these errors and <a href="/cgi-bin/koha/installer/install.pl">start the installer</a> again.
+                            <p>Please correct these errors. <a href="/cgi-bin/koha/installer/install.pl">Then start the installer again.</a>
                         [% END %]
                         [% UNLESS ( error ) %]
                             <input type="hidden" name="step" value="3" />
-                            <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                            <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
                         [% END %]
                     </form>
                 [% ELSE %]
                     <form name="checkinformation" method="post" action="install.pl">
                         <input type="hidden" name="step" value="2" />
                         <input type="hidden" name="checkdb" value="1" />
-                        <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                        <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /> </p>
                     </form>
                 [% END # / IF dbconnection %]
             </div> <!-- / #installer-step2 -->
