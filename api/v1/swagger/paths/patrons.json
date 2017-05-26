@@ -556,7 +556,10 @@
       "x-koha-authorization": {
         "permissions": {
           "borrowers": "1"
-        }
+        },
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "allow-guarantee": true
       }
     },
     "post": {
@@ -685,6 +688,7 @@
       "x-koha-authorization": {
         "allow-owner": true,
         "allow-guarantor": true,
+        "allow-guarantee": true,
         "permissions": {
           "borrowers": "1"
         }

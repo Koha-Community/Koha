@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 121;
+use Test::More tests => 130;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -115,7 +115,13 @@ $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403);
 
-$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($patron->{ borrowernumber }-1));
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/".$librarian->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(403)
+  ->json_is('/required_permissions', {"borrowers" => "*"});
+
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons?guarantorid=".$librarian->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
@@ -139,6 +145,20 @@ $tx->req->cookies({name => 'CGISESSID', value => $session2->id});
 $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/guarantorid', $guarantor->{borrowernumber});
+
+# Get guarantor's guarantees without permission
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons?guarantorid=".$guarantor->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session2->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/0/borrowernumber', $patron->{borrowernumber});
+
+# Get guarantor's guarantees without permission
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $guarantor->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/borrowernumber', $guarantor->{borrowernumber});
 
 my $password_obj = {
     current_password    => $password,

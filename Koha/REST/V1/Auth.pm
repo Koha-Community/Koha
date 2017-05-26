@@ -227,16 +227,18 @@ sub authenticate_api_request {
 
     my $permissions = $authorization->{'permissions'};
     # Check if the user is authorized
-    my ($owner_access, $guarantor_access);
+    my ($owner_access, $guarantor_access, $guarantee_access);
     if ( haspermission($user->userid, $permissions)
         or $owner_access = allow_owner($c, $authorization, $user)
-        or $guarantor_access = allow_guarantor($c, $authorization, $user) ) {
+        or $guarantor_access = allow_guarantor($c, $authorization, $user)
+        or $guarantee_access = allow_guarantee($c, $authorization, $user) ) {
 
         validate_query_parameters( $c, $spec );
 
         # Store information on owner/guarantor access
         $c->stash('is_owner_access', 1) if $owner_access;
         $c->stash('is_guarantor_access', 1) if $guarantor_access;
+        $c->stash('is_guarantee_access', 1) if $guarantee_access;
 
         # Everything is ok
         return 1;
@@ -310,8 +312,31 @@ sub allow_guarantor {
 
     my $guarantees = $user->guarantees->as_list;
     foreach my $guarantee (@{$guarantees}) {
-        return 1 if check_object_ownership($c, $guarantee);
+        return 1 if check_object_ownership($c, $guarantee, {
+            guarantorid => \&_object_ownership_by_guarantorid
+        });
     }
+}
+
+=head3 allow_guarantee
+
+Same as "allow_guarantor", but checks if the object is owned by C<$user>'s
+guarantor.
+
+=cut
+
+sub allow_guarantee {
+    my ($c, $authorization, $user) = @_;
+
+    if (!$c || !$user || !$authorization || !$authorization->{'allow-guarantee'}){
+        return;
+    }
+
+    my $guarantor = Koha::Patrons->find($user->guarantorid);
+    return unless $guarantor;
+    return 1 if check_object_ownership($c, $guarantor, {
+        guarantorid => \&_object_ownership_by_borrowernumber
+    });
 }
 
 =head3 check_object_ownership
@@ -327,7 +352,7 @@ the subroutine that you created.
 =cut
 
 sub check_object_ownership {
-    my ($c, $user) = @_;
+    my ($c, $user, $additional_checks) = @_;
 
     return if not $c or not $user;
 
@@ -338,6 +363,9 @@ sub check_object_ownership {
         reserve_id      => \&_object_ownership_by_reserve_id,
         message_id      => \&_object_ownership_by_message_id,
     };
+    foreach my $check (keys %$additional_checks) {
+        $parameters->{$check} = $additional_checks->{$check};
+    }
 
     foreach my $param ( keys %{ $parameters } ) {
         my $check_ownership = $parameters->{$param};
@@ -398,6 +426,18 @@ sub _object_ownership_by_checkout_id {
     $issue = Koha::Old::Checkouts->find($issue_id) unless $issue;
     return $issue && $issue->borrowernumber
             && $user->borrowernumber == $issue->borrowernumber;
+}
+
+=head3 _object_ownership_by_guarantorid
+
+Compares C<$borrowernumber> to currently logged in C<$user>'s guarantorid.
+
+=cut
+
+sub _object_ownership_by_guarantorid {
+    my ($c, $user, $borrowernumber) = @_;
+
+    return $user->guarantorid == $borrowernumber;
 }
 
 =head3 _object_ownership_by_message_id
