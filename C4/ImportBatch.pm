@@ -1059,7 +1059,12 @@ sub GetImportBatchRangeDesc {
 sub GetItemNumbersFromImportBatch {
     my ($batch_id) = @_;
     my $dbh = C4::Context->dbh;
-    my  $sth = $dbh->prepare("SELECT items.itemnumber FROM import_batches,import_records,import_items, items WHERE import_batches.import_batch_id=import_records.import_batch_id AND import_records.import_record_id=import_items.import_record_id AND items.itemnumber=import_items.itemnumber AND import_batches.import_batch_id=?");
+    my $sql = q|
+SELECT itemnumber FROM import_items
+INNER JOIN items USING (itemnumber)
+INNER JOIN import_records USING (import_record_id)
+WHERE import_batch_id = ?|;
+    my  $sth = $dbh->prepare( $sql );
     $sth->execute($batch_id);
     my @items ;
     while ( my ($itm) = $sth->fetchrow_array ) {
