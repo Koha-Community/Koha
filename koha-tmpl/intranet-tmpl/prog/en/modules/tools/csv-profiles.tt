@@ -161,8 +161,7 @@ function reloadPage(p) {
                 <li class="marc_specific"><label for="encoding">Encoding: </label>
                     <select name="encoding" id="encoding">
                         [% FOREACH encoding IN encodings %]
-                            [% IF csv_profile.encoding == encoding
-                                OR NOT csv_profile AND encoding == 'utf8' %]
+                            [% IF csv_profile.encoding == encoding OR NOT csv_profile AND encoding == 'utf8' %]
                                 <option selected="selected">[% encoding %]</option>
                             [% ELSE %]
                                 <option>[% encoding %]</option>
