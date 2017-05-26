@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
+[% USE HtmlTags %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange rates &rsaquo;
 [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
@@ -52,7 +53,7 @@
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of currency '[% '<span class="ex">' _ currency.currency _ '</span>' %]'
+[% IF op == 'delete_confirm' %]Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]
 [% ELSIF op == 'list' %]Currencies
 [% END %]
 </div>
@@ -152,7 +153,7 @@
 [% IF op =='delete_confirm' %]
     [% IF nb_of_orders or nb_of_vendors %]
     <div class="dialog alert">
-        <h3>Cannot delete currency '[% '<span class="ex">' _ currency.currency _ '</span>' %]'</h3>
+        <h3>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
         <p>
             [% IF nb_of_orders %]
                 This currency is used by [% nb_of_orders %] orders.
@@ -167,7 +168,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm deletion of currency '[% '<span class="ex">' _ currency.currency _ '</span>' %]'</h3>
+        <h3>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
         <table>
             <tr><th>Currency</th>
                 <td>[% currency.currency %]</td>
