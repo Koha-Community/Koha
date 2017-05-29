@@ -65,7 +65,8 @@ sub store {
     $self->allow_change_from_others( 0 )
         unless defined $self->allow_change_from_others;
 
-    $self->created_on( dt_from_string );
+    $self->created_on( dt_from_string )
+        unless defined $self->created_on;
 
     return $self->SUPER::store( $self );
 }
