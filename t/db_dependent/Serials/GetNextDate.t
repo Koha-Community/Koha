@@ -372,13 +372,13 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-16', 'January has 31 days');
+is($publisheddate, '1970-01-16', 'Jan 16');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-02-01');
+is($publisheddate, '1970-02-01', 'Feb 1');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-02-15', 'February has only 28 days');
+is($publisheddate, '1970-02-16', 'Feb 16');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-03-01');
+is($publisheddate, '1970-03-01', 'Mar 1' );
 
 # TEST CASE - 2 issues per month, irregularities
 $subscription = {
@@ -389,15 +389,15 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-16', 'January has 31 days');
+is($publisheddate, '1970-01-16', 'Jan 16' );
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-02-15', 'February has only 28 days');
+is($publisheddate, '1970-02-16', 'Feb 16 (skipping Feb 1)' );
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-04-01');
+is($publisheddate, '1970-04-01', 'Apr 1 (skipping Mar 1 and 16)' );
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-04-16', 'April has 30 days');
+is($publisheddate, '1970-04-16', 'Apr 16' );
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-05-01');
+is($publisheddate, '1970-05-01', 'May 1' );
 
 # TEST CASE - 1 issue per year, no irregularity
 $id = AddSubscriptionFrequency({

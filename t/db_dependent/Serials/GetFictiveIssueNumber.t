@@ -3,7 +3,7 @@
 # This test deals with GetFictiveIssueNumber (from C4::Serials)
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Database;
 use C4::Serials;
@@ -97,7 +97,50 @@ subtest 'Tests for yearly frequencies' => sub {
 
 };
 
-# TODO: subtest 'Tests for monthly frequencies' => sub {
+subtest 'Tests for monthly frequencies' => sub {
+    plan tests => 8;
+
+    # First add a few frequencies
+    my $freq_1i_5m = AddSubscriptionFrequency({
+        description => "1 issue per 5 months",
+        unit => 'month',
+        issuesperunit => 1,
+        unitsperissue => 5,
+    });
+    my $freq_4i_1m = AddSubscriptionFrequency({
+        description => "4 issue per month",
+        unit => 'month',
+        issuesperunit => 4,
+        unitsperissue => 1,
+    });
+
+    # TEST CASE - 1 issue per 5 months
+    my $subscription = {
+        periodicity => $freq_1i_5m,
+        firstacquidate => '1972-02-10',
+        countissuesperunit => 1,
+    };
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-07-09'), 1, 'Jul 9 still 1' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-07-10'), 2, 'Jul 10 goes to 2' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1973-05-09'), 3, 'May 9 still 3' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1973-05-10'), 4, 'May 10 goes to 4' );
+
+    # TEST CASE - 4 issue per 1 months
+    $subscription = {
+        periodicity => $freq_4i_1m,
+        firstacquidate => '1972-02-22',
+        countissuesperunit => 1,
+    };
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-02-28'), 1, 'Feb 28 still 1' );
+    $subscription->{countissuesperunit} = 2;
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-02-29'), 2, 'Feb 29 goes to 2' );
+    $subscription->{countissuesperunit} = 4;
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-03-21'), 4, 'Mar 21 still 4' );
+    $subscription->{countissuesperunit} = 1;
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-03-22'), 5, 'Mar 22 goes to 5' );
+
+};
+
 # TODO: subtest 'Tests for weekly frequencies' => sub {
 # TODO: subtest 'Tests for dayly frequencies' => sub {
 
