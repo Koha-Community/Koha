@@ -602,14 +602,14 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
   `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of patron
-  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
-  `contactfirstname` text, -- used for children to include first name of guarentor
-  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
-  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
+  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarantor or organization name
+  `contactfirstname` text, -- used for children to include first name of guarantor
+  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarantor
+  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarantors or organizations
   `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
-  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
+  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
@@ -627,7 +627,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
-  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
@@ -1638,16 +1638,16 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
   `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of the patron
-  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
-  `contactfirstname` text, -- used for children to include first name of guarentor
-  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
-  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
+  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarantor or organization name
+  `contactfirstname` text, -- used for children to include first name of guarantor
+  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarantor
+  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarantors or organizations
   `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
-  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
+  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
-  `password` varchar(60) default NULL, -- patron/borrower's encrypted password
+  `password` varchar(60) default NULL, -- patron/borrower's Bcrypt encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
   `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
   `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
@@ -1663,7 +1663,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
   `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
-  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
   `privacy_guarantor_checkouts` tinyint(1) NOT NULL DEFAULT '0', -- controls if relatives can see this patron's checkouts
