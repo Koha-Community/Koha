@@ -69,16 +69,16 @@
                                         [% ELSE %]
                                             <td>-</td>
                                         [% END %]
-                                        [% IF ( messaging_preference.transport_sms ) %]
-                                            [% IF ( SMSSendDriver ) %]
-                                                <td>
-                                                    [% IF ( messaging_preference.transports_sms ) %]
-                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
-                                                    [% END %]
-                                                </td>
-                                            [% END %]
+                                        [% IF ( SMSSendDriver ) %]
+                                            <td>
+                                                [% IF ( messaging_preference.transports_sms ) %]
+                                                    <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                [% ELSE %]
+                                                    <input type="checkbox" id="sms[% messaging_preference.message_attribute_id %]" name="[% messaging_preference.message_attribute_id %]" value="sms" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
+                                                [% END %]
+                                            </td>
+                                        [% ELSE %]
+                                            <td>-</td>
                                         [% END %]
                                         [% IF ( TalkingTechItivaPhone ) %]
                                             <td>
