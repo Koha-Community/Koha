@@ -19,7 +19,7 @@ $dbh->{AutoCommit} = 0;
 teardown();
 
 subtest 'CRUD' => sub {
-    plan tests => 12;
+    plan tests => 13;
     my $patron = $builder->build({
         source => 'Borrower',
     });
@@ -42,6 +42,13 @@ subtest 'CRUD' => sub {
     is( $shelf->allow_change_from_owner, 1, 'The default value for allow_change_from_owner should be 1' );
     is( $shelf->allow_change_from_others, 0, 'The default value for allow_change_from_others should be 0' );
     is( output_pref($shelf->created_on), output_pref(dt_from_string), 'The creation time should have been set to today' );
+
+    my $shelf_18672 = Koha::Virtualshelves->find( $shelf->shelfnumber ); # Bug 18672
+    my $created_18672 = $shelf_18672->created_on;
+    sleep 2; # Wait 2 seconds, then store
+    $shelf->store;
+    $shelf_18672 = Koha::Virtualshelves->find( $shelf->shelfnumber );
+    is($shelf_18672->created_on, $created_18672, 'Creation date is the same after update (Bug 18672)' );
 
     my $retrieved_shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
 
