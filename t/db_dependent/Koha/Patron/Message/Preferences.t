@@ -47,6 +47,15 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     $schema->storage->txn_begin;
 
     my $attribute = build_a_test_attribute();
+    my $letter = build_a_test_letter();
+    my $mtt = build_a_test_transport_type();
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $attribute->message_attribute_id,
+        message_transport_type => $mtt->message_transport_type,
+        is_digest              => 0,
+        letter_module          => $letter->module,
+        letter_code            => $letter->code,
+    })->store;
 
     subtest 'Test for a patron' => sub {
         plan tests => 3;
@@ -369,7 +378,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
     };
 
     subtest 'Bad parameter' => sub {
-        plan tests => 13;
+        plan tests => 19;
 
         $schema->storage->txn_begin;
 
@@ -417,7 +426,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             .' was the days_in_advance.');
 
         eval { Koha::Patron::Message::Preference->new({
-                borrowernumber => $patron->{'borrowernumber'},
+                borrowernumber => $patron->borrowernumber,
                 message_transport_types => ['nonexistent']
             })->store };
         is (ref $@, 'Koha::Exceptions::BadParameter',
@@ -427,7 +436,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             .' was the message_transport_type.');
         eval {
             Koha::Patron::Message::Preference->new({
-                borrowernumber => $patron->{'borrowernumber'},
+                borrowernumber => $patron->borrowernumber,
                 message_attribute_id => $attribute->message_attribute_id,
                 message_transport_types => ['sms'],
                 wants_digest => 1,
@@ -440,6 +449,35 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
         like ($@->error, qr/^Message transport option/, 'Exception s because of given'
             .' message_transport_type is not a valid option.');
 
+        eval {
+            Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->borrowernumber,
+                message_attribute_id => $attribute->message_attribute_id,
+                message_transport_types => [],
+                wants_digest => 1,
+            })->store };
+        is (ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'wants_digest', 'The previous exception tells us it'
+            .' was the wants_digest');
+        like ($@->error, qr/^Digest not available/, 'Exception s because of given'
+            .' digest is not available for this transport.');
+
+        eval {
+            Koha::Patron::Message::Preference->new({
+                borrowernumber => $patron->borrowernumber,
+                message_attribute_id => -1,
+                message_transport_types => [],
+            })->store };
+        is (ref $@, 'Koha::Exceptions::BadParameter',
+            'Adding a message preference with invalid message_transport_type'
+            .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'message_attribute_id', 'The previous exception tells'
+            .' us it was the message_attribute_id');
+        like ($@->error, qr/^Message attribute with id -1 not found/, 'Exception '
+            .' is because of given message attribute id is not found.');
+
         $schema->storage->txn_rollback;
     };
 
@@ -449,6 +487,15 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
         $schema->storage->txn_begin;
 
         my $attribute = build_a_test_attribute();
+        my $letter = build_a_test_letter();
+        my $mtt = build_a_test_transport_type();
+        Koha::Patron::Message::Transport->new({
+            message_attribute_id   => $attribute->message_attribute_id,
+            message_transport_type => $mtt->message_transport_type,
+            is_digest              => 0,
+            letter_module          => $letter->module,
+            letter_code            => $letter->code,
+        })->store;
         my $patron    = build_a_test_patron();
         my $preference = Koha::Patron::Message::Preference->new({
             borrowernumber => $patron->borrowernumber,
@@ -570,7 +617,7 @@ sub build_a_test_category_preference {
         message_attribute_id => $attr->message_attribute_id,
         wants_digest         => $params->{digest} ? 1 : 0,
         days_in_advance      => $params->{days_in_advance}
-                                 ? $params->{days_in_advance} : 0,
+                                 ? $params->{days_in_advance} : undef,
     })->store;
 
     Koha::Patron::Message::Transport::Preference->new({

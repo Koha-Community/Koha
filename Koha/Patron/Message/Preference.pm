@@ -325,35 +325,40 @@ sub validate {
         }
     }
 
-    my $attr;
-    if ($self->days_in_advance || $self->wants_digest) {
-        $attr = Koha::Patron::Message::Attributes->find(
-            $self->message_attribute_id
+    my $attr = Koha::Patron::Message::Attributes->find(
+        $self->message_attribute_id
+    );
+    unless ($attr) {
+        Koha::Exceptions::BadParameter->throw(
+            error => 'Message attribute with id '.$self->message_attribute_id
+            .' not found',
+            parameter => 'message_attribute_id'
         );
     }
-    if ($self->days_in_advance) {
+    if (defined $self->days_in_advance) {
         if ($attr && $attr->takes_days == 0) {
             Koha::Exceptions::BadParameter->throw(
                 error => 'days_in_advance cannot be defined for '.
-                $attr->message_name . ' .',
+                $attr->message_name . '.',
                 parameter => 'days_in_advance',
             );
         }
         elsif ($self->days_in_advance < 0 || $self->days_in_advance > 30) {
             Koha::Exceptions::BadParameter->throw(
                 error => 'days_in_advance has to be a value between 0-30 for '.
-                $attr->message_name . ' .',
+                $attr->message_name . '.',
                 parameter => 'days_in_advance',
             );
         }
     }
-    if ($self->wants_digest) {
+    if (defined $self->wants_digest) {
         my $transports = Koha::Patron::Message::Transports->search({
             message_attribute_id => $self->message_attribute_id,
-            is_digest            => 1,
+            is_digest            => $self->wants_digest,
         });
         Koha::Exceptions::BadParameter->throw(
-            error => 'Digest not available for '.$attr->message_name.' .',
+            error => (!$self->wants_digest ? 'No d' : 'D').'igest not available '.
+            'for '.$attr->message_name.'.',
             parameter => 'wants_digest',
         ) if $transports->count == 0;
     }

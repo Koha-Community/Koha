@@ -52,6 +52,13 @@ subtest 'Test Koha::Patron::Message::Transport::Preferences' => sub {
     my $letter    = build_a_test_letter({
         mtt => $mtt->message_transport_type
     });
+    Koha::Patron::Message::Transport->new({
+        message_attribute_id   => $attribute->message_attribute_id,
+        message_transport_type => $mtt->message_transport_type,
+        is_digest              => 0,
+        letter_module          => $letter->module,
+        letter_code            => $letter->code,
+    })->store;
 
     subtest 'For a patron' => sub {
         my $patron    = build_a_test_patron();
