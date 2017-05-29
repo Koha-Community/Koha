@@ -1655,7 +1655,7 @@ subtest 'SendCirculationAlert test' => sub {
     Koha::Patron::Message::Preference->new({
         borrowernumber => $patron->{'borrowernumber'},
         message_attribute_id => $attribute->message_attribute_id,
-        days_in_advance => 0,
+        days_in_advance => undef,
         wants_digest => 0,
         message_transport_types => ['email'],
     })->store;
