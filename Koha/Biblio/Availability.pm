@@ -172,6 +172,9 @@ sub swaggerize {
         availability => $availability,
         item_availabilities => $item_availabilities,
     };
+    if (defined $self->{'hold_queue_length'}) {
+        $hash->{'hold_queue_length'} = 0+$self->{'hold_queue_length'};
+    }
     return $hash;
 }
 

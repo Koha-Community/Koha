@@ -187,6 +187,7 @@ sub _item_looper {
         found => undef,
         borrowernumber => $patron->borrowernumber,
     })->as_list;
+    $self->{'hold_queue_length'} = scalar(@holds) || 0;
     foreach my $item (@items) {
         # Break out of loop after $limit items are found available
         if (defined $limit && @{$self->{'item_availabilities'}} >= $limit) {

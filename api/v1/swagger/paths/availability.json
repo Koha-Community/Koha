@@ -23,7 +23,20 @@
           "description": "Hold availability information for items of biblio.",
           "schema": {
             "type": "array",
-            "items": { "$ref": "../definitions.json#/availability~1biblio" }
+            "items": {
+              "allOf": [
+                { "$ref": "../definitions.json#/availability~1biblio" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "hold_queue_length": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  }
+                }
+              ]
+            }
           }
         },
         "400": {

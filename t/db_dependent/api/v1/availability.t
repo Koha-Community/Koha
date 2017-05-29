@@ -45,7 +45,7 @@ subtest '/availability/biblio' => sub {
     plan tests => 2;
 
     subtest '/hold' => sub {
-        plan tests => 30;
+        plan tests => 34;
 
         $schema->storage->txn_begin;
 
@@ -57,6 +57,8 @@ subtest '/availability/biblio' => sub {
             Koha::Biblios->find($item->biblionumber),
             Koha::Biblioitems->find($item->biblioitemnumber)
         );
+        my $item3 = build_a_test_item();
+
         my ($patron, $session_id) = create_user_and_session();
         $patron = Koha::Patrons->find($patron);
         my $route = '/api/v1/availability/biblio/hold';
@@ -68,7 +70,17 @@ subtest '/availability/biblio' => sub {
           ->json_has('/0/availability')
           ->json_is('/0/availability/available' => Mojo::JSON->true)
           ->json_is('/0/item_availabilities/0/availability/available' => Mojo::JSON->true)
-          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true);
+          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true)
+          ->json_is('/0/hold_queue_length' => 0);
+
+        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber,
+                                 $item3->biblionumber);
+        $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$item3->biblionumber );
+        $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+        $tx->req->env( { REMOTE_ADDR => $remote_address } );
+        $t->request_ok($tx)
+          ->status_is(200)
+          ->json_is('/0/hold_queue_length' => 1);
 
         $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$item->biblionumber.'&limit_items=1' );
         $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
@@ -134,15 +146,22 @@ subtest '/availability/biblio' => sub {
     };
 
     subtest '/search' => sub {
-        plan tests => 15;
+        plan tests => 19;
 
         $schema->storage->txn_begin;
 
         set_default_circulation_rules();
         set_default_system_preferences();
 
+        my ($patron, $session_id) = create_user_and_session();
+        $patron = Koha::Patrons->find($patron);
+
         my $item = build_a_test_item();
         my $item2 = build_a_test_item(
+            Koha::Biblios->find($item->biblionumber),
+            Koha::Biblioitems->find($item->biblioitemnumber)
+        );
+        my $item3 = build_a_test_item(
             Koha::Biblios->find($item->biblionumber),
             Koha::Biblioitems->find($item->biblioitemnumber)
         );
@@ -154,7 +173,13 @@ subtest '/availability/biblio' => sub {
           ->json_has('/0/availability')
           ->json_is('/0/availability/available' => Mojo::JSON->true)
           ->json_is('/0/item_availabilities/0/availability/available' => Mojo::JSON->true)
-          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true);
+          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true)
+          ->json_is('/0/hold_queue_length' => 0);
+
+        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber,
+                                 $item3->biblionumber);
+        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber,
+                                 $item3->biblionumber);
 
         $item2->notforloan('1')->store;
         $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$item->biblionumber );
@@ -165,9 +190,12 @@ subtest '/availability/biblio' => sub {
           ->json_is('/0/availability/available' => Mojo::JSON->true)
           ->json_is('/0/item_availabilities/0/itemnumber' => $item->itemnumber)
           ->json_is('/0/item_availabilities/0/availability/available' => Mojo::JSON->true)
-          ->json_is('/0/item_availabilities/1/itemnumber' => $item2->itemnumber)
-          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->false)
-          ->json_is('/0/item_availabilities/1/availability/unavailabilities/Item::NotForLoan' => {
+          ->json_is('/0/item_availabilities/2/itemnumber' => $item2->itemnumber)
+          ->json_is('/0/item_availabilities/2/availability/available' => Mojo::JSON->false)
+          ->json_is('/0/item_availabilities/1/itemnumber' => $item3->itemnumber)
+          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true)
+          ->json_is('/0/hold_queue_length' => 2)
+          ->json_is('/0/item_availabilities/2/availability/unavailabilities/Item::NotForLoan' => {
             code => "Not For Loan",
             status => 1,
             });
