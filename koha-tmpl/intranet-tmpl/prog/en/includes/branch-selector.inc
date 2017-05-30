@@ -1,10 +1,10 @@
 [%# First check to see if we have anything selected, otherwise we select all %]
 [% selectall = 1 %]
-[% FOREACH branch IN branches;
-    IF branch.selected;
-        selectall = 0;
-    END;
-END %]
+[% FOREACH branch IN branches %]
+    [% IF branch.selected %]
+        [% selectall = 0 %]
+    [% END %]
+[% END %]
 <div class="branchselector">
     <p><a href="#" id="checkall"> <i class="fa fa-check"></i> Select all</a> | <a href="#" id="checknone"> <i class="fa fa-remove"></i> Clear all</a></p>
     <div class="branchgridrow">
