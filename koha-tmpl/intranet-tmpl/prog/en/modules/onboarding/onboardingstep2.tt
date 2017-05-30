@@ -2,12 +2,12 @@
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo; Add a patron category</title>
-[% IF (categories && categories.count > 1 )
-    # This if statement checks if the categories variable handed to this template
-    # by onboarding.pl has data in it. If the categories variable does have data
-    # in it this means that the user has previously imported sample patron category
-    # data and so we do not need to show them the create patron category screen 1,
-    #instead we can display a screen with ubtton redirecting the user to step 3 %]
+[%# The following if statement checks if the categories variable handed to this template %]
+[%# by onboarding.pl has data in it. If the categories variable does have data %]
+[%# in it this means that the user has previously imported sample patron category %]
+[%# data and so we do not need to show them the create patron category screen 1, %]
+[%#instead we can display a screen with ubtton redirecting the user to step 3 %]
+[% IF (categories && categories.count > 1 ) %]
     <meta http-equiv="refresh" content="0; url=/cgi-bin/koha/installer/onboarding.pl?step=3">
 [% END %]
 [% INCLUDE 'installer-doc-head-close.inc' %]
