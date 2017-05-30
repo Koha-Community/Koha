@@ -3,7 +3,7 @@
 # This test deals with GetFictiveIssueNumber (from C4::Serials)
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Database;
 use C4::Serials;
@@ -141,7 +141,44 @@ subtest 'Tests for monthly frequencies' => sub {
 
 };
 
-# TODO: subtest 'Tests for weekly frequencies' => sub {
+subtest 'Tests for weekly frequencies' => sub {
+    plan tests => 4;
+
+    # First add a few frequencies
+    my $freq_1i_7w = AddSubscriptionFrequency({
+        description => "1 issue per 7 weeks",
+        unit => 'week',
+        issuesperunit => 1,
+        unitsperissue => 7,
+    });
+    my $freq_3i_1w = AddSubscriptionFrequency({
+        description => "3 issues per week",
+        unit => 'week',
+        issuesperunit => 3,
+        unitsperissue => 1,
+    });
+
+    # TEST CASE - 1 issue per 7 weeks
+    my $subscription = {
+        periodicity => $freq_1i_7w,
+        firstacquidate => '1972-02-10',
+        countissuesperunit => 1,
+    };
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-03-29'), 1, 'Mar 29 still 1' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-03-30'), 2, 'Mar 30 goes to 2' );
+
+    # TEST CASE - 3 issue per 1 week
+    $subscription = {
+        periodicity => $freq_3i_1w,
+        firstacquidate => '1972-02-03',
+        countissuesperunit => 1,
+    };
+    $subscription->{countissuesperunit} = 3;
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-02-09'), 3, 'Feb 9 still 3' );
+    $subscription->{countissuesperunit} = 1;
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-02-10'), 4, 'Feb 10 goes to 4' );
+};
+
 # TODO: subtest 'Tests for dayly frequencies' => sub {
 
 $schema->storage->txn_rollback;
