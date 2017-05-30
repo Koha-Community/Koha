@@ -230,8 +230,8 @@ $(document).ready(function() {
 <input type="hidden" name="updtype" value="[% updtype %]" />
 <input type="hidden" name="destination" value="[% destination %]" />
 <input type="hidden" name="check_member" value="[% check_member %]" />
-<input type="hidden" name="borrowernumber" value="[% UNLESS opduplicate %][% borrowernumber %][% END %]" />
-<input type="hidden" name="nodouble"  value="[% UNLESS opduplicate %][% nodouble %][% END %]" />
+<input type="hidden" name="borrowernumber" value="[% borrowernumber UNLESS opduplicate %]" />
+<input type="hidden" name="nodouble"  value="[% nodouble UNLESS opduplicate %]" />
 <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
 [% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
 [% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />
@@ -302,7 +302,7 @@ $(document).ready(function() {
                 <label for="firstname">
                 [% END %]
                 First name: </label>
-                <input type="text" id="firstname" name="firstname" size="20"  value="[% UNLESS opduplicate %][% firstname | html %][% END %]" />
+                <input type="text" id="firstname" name="firstname" size="20"  value="[% firstname | html UNLESS opduplicate %]" />
                 [% IF ( mandatoryfirstname ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -315,7 +315,7 @@ $(document).ready(function() {
                 [% END %]
                 Date of birth: </label>
 
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% UNLESS opduplicate %][% dateofbirth %][% END %]" class="datepicker" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% dateofbirth UNLESS opduplicate %]" class="datepicker" />
 
         [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
         [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
@@ -330,7 +330,7 @@ $(document).ready(function() {
                     <label for="initials">
                 [% END %]
                 Initials: </label>
-                <input type="text" id="initials" name="initials" size="20"  value="[% UNLESS opduplicate %][% initials | html %][% END %]" />
+                <input type="text" id="initials" name="initials" size="20"  value="[% initials | html UNLESS opduplicate %]" />
                 [% IF ( mandatoryinitials ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -343,7 +343,7 @@ $(document).ready(function() {
 			<label for="othernames">
 			[% END %]
             Other name: </label>
-            <input type="text" id="othernames" name="othernames" size="20"  value="[% UNLESS opduplicate %][% othernames | html %][% END %]" />
+            <input type="text" id="othernames" name="othernames" size="20"  value="[% othernames | html UNLESS opduplicate %]" />
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
 		</li>
@@ -779,13 +779,13 @@ $(document).ready(function() {
 			Expiry date (leave blank for auto calc): </label>
             [% IF ( dateformat == "metric" ) %]
 				[% UNLESS ( opadd ) %]
-                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% UNLESS opduplicate %][% dateexpiry %][% END %]" class="datepickerto" />
+                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry UNLESS opduplicate %]" class="datepickerto" />
 				[% ELSE %]
                     <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" class="datepickerto" />
 				[% END %]
 			[% ELSE %]
 				[% UNLESS ( opadd ) %]
-                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% UNLESS opduplicate %][% dateexpiry %][% END %]" class="datepickerto" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry UNLESS opduplicate %]" class="datepickerto" />
 				[% ELSE %]
                 <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" class="datepickerto" />
 				[% END %]
@@ -802,7 +802,7 @@ $(document).ready(function() {
 				<label for="opacnote">
             [% END %]
 			OPAC note: </label>
-            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% UNLESS opduplicate %][% opacnote | html %][% END %]</textarea>
+            <textarea id="opacnote" name="opacnote" cols="55" rows="5">[% opacnote | html UNLESS opduplicate %]</textarea>
 			<div class="hint">This message appears on this patron's user page in the OPAC</div>
 	  [% IF ( mandatoryopacnote ) %]<span class="required">Required</span>[% END %]
 		</li>
@@ -815,7 +815,7 @@ $(document).ready(function() {
 				<label for="borrowernotes">
 			[% END %]
 			Circulation note: </label>
-            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% UNLESS opduplicate %][% borrowernotes | html %][% END %]</textarea>
+            <textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrowernotes | html UNLESS opduplicate %]</textarea>
 			<div class="hint">This message displays when checking out to this patron</div>
 	  [% IF ( mandatoryborrowernotes ) %]<span class="required">Required</span>[% END %]
 		</li>
