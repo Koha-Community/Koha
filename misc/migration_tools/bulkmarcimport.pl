@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 # Import an iso2709 file into Koha 3
 
-use strict;
-use warnings;
+use Modern::Perl;
 #use diagnostics;
 BEGIN {
     # find Koha's Perl modules
@@ -24,6 +23,8 @@ use C4::Koha;
 use C4::Debug;
 use C4::Charset;
 use C4::Items;
+use C4::MarcModificationTemplates;
+
 use YAML;
 use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
@@ -44,6 +45,8 @@ my $cleanisbn = 1;
 my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 my $framework = '';
 my $localcust;
+my $marc_mod_template = '';
+my $marc_mod_template_id = -1;
 
 $|=1;
 
@@ -80,6 +83,7 @@ GetOptions(
     'dedupbarcode' => \$dedup_barcode,
     'framework=s' => \$framework,
     'custom:s'    => \$localcust,
+    'marcmodtemplate:s' => \$marc_mod_template,
 );
 $biblios ||= !$authorities;
 $insert  ||= !$update;
@@ -113,6 +117,19 @@ if(defined $localcust) { #local customize module
     }
     require $localcust if $localcust;
     $localcust=\&customize if $localcust;
+}
+
+if($marc_mod_template ne '') {
+    my @templates = GetModificationTemplates();
+    foreach my $this_template (@templates) {
+    if($this_template->{'name'} eq $marc_mod_template) {
+        $marc_mod_template_id = $this_template->{'template_id'};
+        last;
+    }
+    }
+    if($marc_mod_template_id < 0) {
+    die "Can't located MARC modification template '$marc_mod_template'\n";
+    }
 }
 
 my $dbh = C4::Context->dbh;
@@ -264,6 +281,10 @@ RECORD: while (  ) {
         }
     }
     SetUTF8Flag($record);
+    if($marc_mod_template_id > 0) {
+    print "Modifying MARC\n";
+    ModifyRecordWithTemplate( $marc_mod_template_id, $record );
+    }
     &$localcust($record) if $localcust;
     my $isbn;
     # remove trailing - in isbn (only for biblios, of course)
@@ -804,6 +825,13 @@ that is called for each MARC record.
 If no filename is passed, LocalChanges.pm is assumed to be in the
 migration_tools subdirectory. You may pass an absolute file name or a file name
 from the migration_tools directory.
+
+=item B<-marcmodtemplate>=I<TEMPLATE>
+
+This parameter allows you to specify the name of an existing MARC
+modification template to apply as the MARC records are imported (these
+templates are created in the "MARC modification templates" tool in Koha).
+If not specified, no MARC modification templates are used (default).
 
 =back
 
