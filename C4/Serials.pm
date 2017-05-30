@@ -2248,15 +2248,8 @@ sub GetFictiveIssueNumber {
         my ($year, $month, $day) = split /-/, $publisheddate;
         my ($fa_year, $fa_month, $fa_day) = split /-/, $subscription->{'firstacquidate'};
         my $wkno;
-        my $delta;
+        my $delta = _delta_units( [$fa_year, $fa_month, $fa_day], [$year, $month, $day], $unit );
 
-        if($unit eq 'day') {
-            $delta = Delta_Days($fa_year, $fa_month, $fa_day, $year, $month, $day);
-        } elsif($unit eq 'week') {
-            $delta = int( Delta_Days($fa_year, $fa_month, $fa_day, $year, $month, $day) / 7);
-        } elsif( $unit eq 'month' || $unit eq 'year' ) {
-            $delta = _delta_units( [$fa_year, $fa_month, $fa_day], [$year, $month, $day], $unit );
-        }
         if($frequency->{'unitsperissue'} == 1) {
             $issueno = $delta * $frequency->{'issuesperunit'} + $subscription->{'countissuesperunit'};
         } else {
@@ -2268,10 +2261,17 @@ sub GetFictiveIssueNumber {
 }
 
 sub _delta_units {
-# wrapper around N_Delta_YMD
-# Note that N_Delta_YMD returns 29 days between e.g. 22-2-72 and 22-3-72
-# while we expect 1 month.
     my ( $date1, $date2, $unit ) = @_;
+
+    if( $unit eq 'day' ) {
+        return Delta_Days( @$date1, @$date2 );
+    } elsif( $unit eq 'week' ) {
+        return int( Delta_Days( @$date1, @$date2 ) / 7 );
+    }
+
+    # In case of months or years, this is a wrapper around N_Delta_YMD.
+    # Note that N_Delta_YMD returns 29 days between e.g. 22-2-72 and 22-3-72
+    # while we expect 1 month.
     my @delta = N_Delta_YMD( @$date1, @$date2 );
     if( $delta[2] > 27 ) {
         # Check if we could add a month
@@ -2291,14 +2291,24 @@ sub _delta_units {
 sub _get_next_date_day {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
-        ($year,$month,$day) = Add_Delta_Days($year,$month, $day , $freqdata->{unitsperissue} );
-        $subscription->{countissuesperunit} = 1;
-    } else {
-        $subscription->{countissuesperunit}++;
-    }
+    my @newissue; # ( yy, mm, dd )
+    # We do not need $delta_days here, since it would be zero where used
 
-    return ($year, $month, $day);
+    if( $freqdata->{issuesperunit} == 1 ) {
+        # Add full days
+        @newissue = Add_Delta_Days(
+            $year, $month, $day, $freqdata->{"unitsperissue"} );
+    } elsif ( $subscription->{countissuesperunit} < $freqdata->{issuesperunit} ) {
+        # Add zero days
+        @newissue = ( $year, $month, $day );
+        $subscription->{countissuesperunit}++;
+    } else {
+        # We finished a cycle of issues within a unit.
+        # No subtraction of zero needed, just add one day
+        @newissue = Add_Delta_Days( $year, $month, $day, 1 );
+        $subscription->{countissuesperunit} = 1;
+    }
+    return @newissue;
 }
 
 sub _get_next_date_week {
