@@ -212,13 +212,11 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-03');
-# when more than 1 issue per week, date is automatically set to the same day of
-# week as firstacquidate
+is($publisheddate, '1970-01-04');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-01-08');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-10');
+is($publisheddate, '1970-01-11');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-01-15');
 
@@ -231,13 +229,13 @@ $subscription = {
 };
 $publisheddate = $subscription->{firstacquidate};
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-03');
+is($publisheddate, '1970-01-04');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-10');
+is($publisheddate, '1970-01-11');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-01-22');
 $publisheddate = GetNextDate($subscription, $publisheddate);
-is($publisheddate, '1970-01-24');
+is($publisheddate, '1970-01-25');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 is($publisheddate, '1970-01-29');
 
