@@ -114,8 +114,7 @@
                                         <label for="ignore_modify_[% pm.borrowernumber %]">Ignore</label>
                                         | <a target="_blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% pm.borrowernumber %]" >Patron details</a>
                                     </div>
-                                  [% IF !pm.extended_attributes and pm.size > 3 or
-                                         pm.extended_attributes and pm.size > 4  %]
+                                  [% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and pm.size > 4 %]
                                   [%# timestamp+verification_token+borrowernumber=3 %]
                                     <div class="members-update-table">
                                         <table>

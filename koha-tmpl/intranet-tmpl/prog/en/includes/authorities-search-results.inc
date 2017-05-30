@@ -1,11 +1,9 @@
 [% BLOCK showreference %]
-[%#
-    Parameters:
-    heading: the heading itself
-    linkType: currently 'seefrom' or 'seealso', controls the label for the entry
-    type:
-    authid: if it is a linked authority, its authid
-%]
+[%# Parameters: %]
+[%# heading: the heading itself %]
+[%# linkType: currently 'seefrom' or 'seealso', controls the label for the entry type: %]
+[%# authid: if it is a linked authority, its authid %]
+
     [% SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' %]
     [% SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=' %]
 
@@ -102,12 +100,8 @@
                 <span class="seefrom">used for/see from:</span>
                 [% FOREACH seefro IN summary.seefrom %]
                     <div class="authref">
-                    [% PROCESS showreference
-                        heading=seefro.heading
-                        linkType='seefrom'
-                        type=seefro.type
-                        authid=seefro.authid
-                    %]
+                    [%# Following on one line for translatability %]
+                    [% PROCESS showreference heading=seefro.heading linkType='seefrom' type=seefro.type authid=seefro.authid %]
                     </div>
                 [% END %]
             </div>
@@ -117,12 +111,8 @@
                 <span class="seealso">see also:</span>
                 [% FOREACH seeals IN summary.seealso %]
                     <div class="authref">
-                    [% PROCESS showreference
-                        heading=seeals.heading
-                        linkType='seealso'
-                        type=seeals.type
-                        authid=seeals.authid
-                    %]
+                    [%# Following on one line for translatability %]
+                    [% PROCESS showreference heading=seeals.heading linkType='seealso' type=seeals.type authid=seeals.authid %]
                     </div>
                 [% END %]
             </div>
