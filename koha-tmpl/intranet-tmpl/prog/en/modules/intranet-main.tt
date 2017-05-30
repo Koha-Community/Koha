@@ -119,13 +119,8 @@ var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this news item? This
         </div><!-- /yui-u -->
 </div><!-- /yui-g -->
 <div class="yui-g">
-            [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) 
-                    || ( CAN_user_tools_moderate_tags && pendingtags )
-                    || ( CAN_user_borrowers && pending_borrower_modifications )
-                    || ( CAN_user_acquisition && pendingsuggestions )
-                    || ( CAN_user_borrowers && pending_discharge_requests )
-                    || pending_article_requests
-            ) %]
+            [%# Following statment must be in one line for translatability %]
+            [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && pending_borrower_modifications ) || ( CAN_user_acquisition && pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) || pending_article_requests) %]
                 <div id="area-pending">
                     [% IF pending_article_requests %]
                     <div class="pending-info" id="article_requests_pending">
