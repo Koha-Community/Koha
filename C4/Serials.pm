@@ -2291,9 +2291,7 @@ sub GetFictiveIssueNumber {
         if($unit eq 'day') {
             $delta = Delta_Days($fa_year, $fa_month, $fa_day, $year, $month, $day);
         } elsif($unit eq 'week') {
-            ($wkno, $year) = Week_of_Year($year, $month, $day);
-            my ($fa_wkno, $fa_yr) = Week_of_Year($fa_year, $fa_month, $fa_day);
-            $delta = ($fa_yr == $year) ? ($wkno - $fa_wkno) : ( ($year-$fa_yr-1)*52 + (52-$fa_wkno+$wkno) );
+            $delta = int( Delta_Days($fa_year, $fa_month, $fa_day, $year, $month, $day) / 7);
         } elsif( $unit eq 'month' || $unit eq 'year' ) {
             $delta = _delta_units( [$fa_year, $fa_month, $fa_day], [$year, $month, $day], $unit );
         }
@@ -2344,26 +2342,26 @@ sub _get_next_date_day {
 sub _get_next_date_week {
     my ($subscription, $freqdata, $year, $month, $day) = @_;
 
-    my ($wkno, $yr) = Week_of_Year($year, $month, $day);
-    my $fa_dow = Day_of_Week(split /-/, $subscription->{firstacquidate});
+    my @newissue; # ( yy, mm, dd )
+    my $delta_days = int( 7 / $freqdata->{issuesperunit} );
 
-    if ($subscription->{countissuesperunit} + 1 > $freqdata->{issuesperunit}){
-        $subscription->{countissuesperunit} = 1;
-        $wkno += $freqdata->{unitsperissue};
-        if($wkno > 52){
-            $wkno = $wkno % 52;
-            $yr++;
-        }
-        ($year,$month,$day) = Monday_of_Week($wkno, $yr);
-        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $fa_dow - 1);
-    } else {
-        # Try to guess the next day of week
-        my $delta_days = int((7 - ($fa_dow - 1)) / $freqdata->{issuesperunit});
-        ($year,$month,$day) = Add_Delta_Days($year, $month, $day, $delta_days);
+    if( $freqdata->{issuesperunit} == 1 ) {
+        # Add full weeks (of 7 days)
+        @newissue = Add_Delta_Days(
+            $year, $month, $day, 7 * $freqdata->{"unitsperissue"} );
+    } elsif ( $subscription->{countissuesperunit} < $freqdata->{issuesperunit} ) {
+        # Add rounded number of days based on frequency.
+        @newissue = Add_Delta_Days( $year, $month, $day, $delta_days );
         $subscription->{countissuesperunit}++;
+    } else {
+        # We finished a cycle of issues within a unit.
+        # Subtract delta * (issues - 1), add 1 week
+        @newissue = Add_Delta_Days( $year, $month, $day,
+            -$delta_days * ($freqdata->{issuesperunit} - 1) );
+        @newissue = Add_Delta_Days( @newissue, 7 );
+        $subscription->{countissuesperunit} = 1;
     }
-
-    return ($year, $month, $day);
+    return @newissue;
 }
 
 sub _get_next_date_month {
