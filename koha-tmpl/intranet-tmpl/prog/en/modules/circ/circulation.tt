@@ -799,9 +799,7 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% END %]
 
             [% IF ( charges ) %]
-                [% INCLUDE 'blocked-fines.inc'
-                    fines = chargesamount
-                %]
+                [% INCLUDE 'blocked-fines.inc' fines = chargesamount %]
             [% END %]
 
             [% IF ( charges_guarantees ) %]
