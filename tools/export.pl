@@ -74,7 +74,7 @@ if ( $op eq 'export' ) {
     my $filename = $query->param('id_list_file');
     if ( $filename ) {
         my $mimetype = $query->uploadInfo($filename)->{'Content-Type'};
-        my @valid_mimetypes = qw( application/octet-stream text/csv text/plain );
+        my @valid_mimetypes = qw( application/octet-stream text/csv text/plain application/vnd.ms-excel );
         unless ( grep { /^$mimetype$/ } @valid_mimetypes ) {
             push @messages, { type => 'alert', code => 'invalid_mimetype' };
             $op = '';
