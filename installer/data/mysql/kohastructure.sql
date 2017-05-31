@@ -431,7 +431,8 @@ CREATE TABLE collections_tracking (
   transferred tinyint(1) DEFAULT '0',
   date_added datetime DEFAULT NULL,
   timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (collections_tracking_id)
+  PRIMARY KEY (collections_tracking_id),
+  CONSTRAINT `coltra-fk-items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
