@@ -198,11 +198,23 @@ sub message_transport_types {
         if ($self->{'_message_transport_types'}) {
             return $self->{'_message_transport_types'};
         }
-        map { $self->{'_message_transport_types'}->{$_->message_transport_type} =
-                Koha::Patron::Message::Transports->find({
-                    message_attribute_id => $self->message_attribute_id,
-                    message_transport_type => $_->message_transport_type,
-                    is_digest => $self->wants_digest})->letter_code }
+        map {
+            my $transport = Koha::Patron::Message::Transports->find({
+                message_attribute_id => $self->message_attribute_id,
+                message_transport_type => $_->message_transport_type,
+                is_digest => $self->wants_digest
+            });
+            unless ($transport) {
+                my $logger = Koha::Logger->get;
+                $logger->warn(
+                    $self->message_name . ' has no transport with '.
+                    $_->message_transport_type . ' (digest: '.
+                    ($self->wants_digest ? 'yes':'no').').'
+                );
+            }
+            $self->{'_message_transport_types'}->{$_->message_transport_type}
+                = $transport ? $transport->letter_code : ' ';
+        }
         Koha::Patron::Message::Transport::Preferences->search({
             borrower_message_preference_id => $self->borrower_message_preference_id,
         })->as_list;
@@ -228,12 +240,15 @@ Sets preference object values and additionally message_transport_types if given.
 sub set {
     my ($self, $params) = @_;
 
-    if ($params && $params->{'message_transport_types'}) {
-        $self->message_transport_types($params->{'message_transport_types'});
-        delete $params->{'message_transport_types'};
+    my $mtt = $params->{'message_transport_types'};
+    delete $params->{'message_transport_types'};
+
+    $self->SUPER::set($params) if $params;
+    if ($mtt) {
+        $self->message_transport_types($mtt);
     }
 
-    return $self->SUPER::set($params) if $params;
+    return $self;
 }
 
 =head3 store
@@ -354,7 +369,7 @@ sub validate {
     if (defined $self->wants_digest) {
         my $transports = Koha::Patron::Message::Transports->search({
             message_attribute_id => $self->message_attribute_id,
-            is_digest            => $self->wants_digest,
+            is_digest            => $self->wants_digest ? 1 : 0,
         });
         Koha::Exceptions::BadParameter->throw(
             error => (!$self->wants_digest ? 'No d' : 'D').'igest not available '.
@@ -377,11 +392,19 @@ sub _set_message_transport_types {
     $self->_validate_message_transport_types({ message_transport_types => $types });
     foreach my $type (@$types) {
         unless (exists $self->{'_message_transport_types'}->{$type}) {
-            $self->{'_message_transport_types'}->{$type} =
-            Koha::Patron::Message::Transports->find({
+            my $transport = Koha::Patron::Message::Transports->find({
                 message_attribute_id => $self->message_attribute_id,
-                message_transport_type => $type,
-                is_digest => $self->wants_digest})->letter_code;
+                message_transport_type => $type
+            });
+            unless ($transport) {
+                Koha::Exceptions::BadParameter->throw(
+                    error => 'No transport configured for '.$self->message_name.
+                        " transport type $type.",
+                    parameter => 'message_transport_types'
+                );
+            }
+            $self->{'_message_transport_types'}->{$type}
+                = $transport->letter_code;
         }
     }
     return $self;
@@ -402,20 +425,7 @@ sub _validate_message_transport_types {
             })) {
                 Koha::Exceptions::BadParameter->throw(
                     error => "Message transport type '$type' does not exist",
-                    parameter => 'message_transport_type',
-                );
-            }
-            my $tmp = (ref($self) eq __PACKAGE__) ? $self->unblessed : $params;
-            unless (Koha::Patron::Message::Transports->find({
-                    message_transport_type => $type,
-                    message_attribute_id => $tmp->{'message_attribute_id'},
-                    is_digest => $tmp->{'wants_digest'},
-            })) {
-                Koha::Exceptions::BadParameter->throw(
-                    error => "Message transport option '$type' (".
-                    ($tmp->{'wants_digest'} ? 'digest':'no digest').") for ".
-                    $self->message_name . 'does not exist',
-                    parameter => 'message_transport_type',
+                    parameter => 'message_transport_types',
                 );
             }
         }

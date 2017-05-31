@@ -24,12 +24,17 @@ use Test::More tests => 7;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Context;
+
 use Koha::Notice::Templates;
 use Koha::Patron::Categories;
 use Koha::Patron::Message::Attributes;
 use Koha::Patron::Message::Transport::Types;
 use Koha::Patron::Message::Transports;
 use Koha::Patrons;
+
+use File::Temp qw/tempfile/;
+use Log::Log4perl;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -189,7 +194,7 @@ subtest 'Test Koha::Patron::Message::Preference->message_transport_types' => sub
        'Method message_transport_types available');
 
     subtest 'get message_transport_types' => sub {
-        plan tests => 4;
+        plan tests => 5;
 
         $schema->storage->txn_begin;
 
@@ -228,6 +233,50 @@ subtest 'Test Koha::Patron::Message::Preference->message_transport_types' => sub
            $transport2->letter_code, 'Found correct message transport type and letter code.');
         ok(!$preference->message_transport_types->{'nonexistent'},
            'Didn\'t find nonexistent transport type.');
+
+        subtest 'test logging of warnings by invalid message transport type' => sub {
+            plan tests => 2;
+
+            my $log = mytempfile();
+            my $conf = mytempfile( <<"HERE"
+log4perl.logger.opac = WARN, OPAC
+log4perl.appender.OPAC=Log::Log4perl::Appender::TestBuffer
+log4perl.appender.OPAC.filename=$log
+log4perl.appender.OPAC.mode=append
+log4perl.appender.OPAC.layout=SimpleLayout
+log4perl.logger.intranet = WARN, INTRANET
+log4perl.appender.INTRANET=Log::Log4perl::Appender::TestBuffer
+log4perl.appender.INTRANET.filename=$log
+log4perl.appender.INTRANET.mode=append
+log4perl.appender.INTRANET.layout=SimpleLayout
+HERE
+            );
+            t::lib::Mocks::mock_config('log4perl_conf', $conf);
+            my $appenders = Log::Log4perl->appenders;
+            my $appender = Log::Log4perl->appenders->{OPAC};
+
+            my $pref = Koha::Patron::Message::Preferences->find(
+                $preference->borrower_message_preference_id
+            );
+            my $transports = $pref->message_transport_types;
+            is($appender, undef, 'Nothing in buffer yet');
+
+            my $mtt_new = build_a_test_transport_type();
+            Koha::Patron::Message::Transport::Preference->new({
+                borrower_message_preference_id =>
+                                $pref->borrower_message_preference_id,
+                message_transport_type => $mtt_new->message_transport_type,
+            })->store;
+            $pref = Koha::Patron::Message::Preferences->find(
+                $pref->borrower_message_preference_id
+            );
+            $transports = $pref->message_transport_types;
+            $appender = Log::Log4perl->appenders->{OPAC};
+            my $name = $pref->message_name;
+            my $tt = $mtt_new->message_transport_type;
+            like($appender->buffer, qr/WARN - $name has no transport with $tt/,
+                 'Logged invalid message transport type');
+        };
 
         $schema->storage->txn_rollback;
     };
@@ -432,22 +481,24 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
         is (ref $@, 'Koha::Exceptions::BadParameter',
             'Adding a message preference with invalid message_transport_type'
             .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_type', 'The previous exception tells us it'
-            .' was the message_transport_type.');
+        is ($@->parameter, 'message_transport_types', 'The previous exception '
+            .'tells us it was the message_transport_types.');
+
+        my $mtt_new = build_a_test_transport_type();
         eval {
             Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
                 message_attribute_id => $attribute->message_attribute_id,
-                message_transport_types => ['sms'],
+                message_transport_types => [$mtt_new->message_transport_type],
                 wants_digest => 1,
             })->store };
         is (ref $@, 'Koha::Exceptions::BadParameter',
             'Adding a message preference with invalid message_transport_type'
-            .' => Koha::Exceptions::BadParameter');
-        is ($@->parameter, 'message_transport_type', 'The previous exception tells us it'
-            .' was the message_transport_type.');
-        like ($@->error, qr/^Message transport option/, 'Exception s because of given'
-            .' message_transport_type is not a valid option.');
+           .' => Koha::Exceptions::BadParameter');
+        is ($@->parameter, 'message_transport_types', 'The previous exception '
+            .'tells us it was the message_transport_types.');
+        like ($@->error, qr/^No transport configured/, 'Exception is because of '
+            .'given message_transport_type is not a valid option.');
 
         eval {
             Koha::Patron::Message::Preference->new({
@@ -641,6 +692,13 @@ sub build_a_test_complete_preference {
     return (Koha::Patron::Message::Preferences->search({
         borrowernumber => $patron->borrowernumber
     })->next, $mtt1, $mtt2);
+}
+
+sub mytempfile {
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.logger.test', UNLINK => 1 );
+    print $fh $_[0]//'';
+    close $fh;
+    return $fn;
 }
 
 1;
