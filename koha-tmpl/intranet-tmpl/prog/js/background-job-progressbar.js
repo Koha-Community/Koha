@@ -42,7 +42,7 @@ function submitBackgroundJob(f) {
 
         // gather up form submission
         var inputs = [];
-        $(':input', f).each(function() {
+        $(':input:enabled', f).each(function() {
             if (this.type == 'radio' || this.type == 'checkbox') {
                 if (this.checked) {
                     inputs.push(this.name + '=' + encodeURIComponent(this.value));
