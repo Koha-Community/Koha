@@ -23,12 +23,12 @@ $(document).ready(function(){
   $("input[name='disable_input']").click(function() {
       var row = $(this).attr("id");
       row = row.replace("row","hint");
-      var editor = $(this).parent().find("[name='field_value']");
+      var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
       if ($(this).is(":checked")) {
-          $(editor).prop('disabled', true);
+          $(todisable).prop('disabled', true);
           $("#"+row).html(_("This subfield will be deleted"));
       } else {
-          $(editor).prop('disabled', false);
+          $(todisable).prop('disabled', false);
           $("#"+row).html("");
       }
   });
