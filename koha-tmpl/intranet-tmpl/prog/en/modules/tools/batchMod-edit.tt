@@ -24,7 +24,6 @@ $(document).ready(function(){
       row = row.replace("row","hint");
       var editor = $(this).parent().find("[name='field_value']");
       if ($(this).is(":checked")) {
-          $(this).val($(this).siblings("[name='subfield']").val());
           $(editor).prop('disabled', true);
           $("#"+row).html(_("This subfield will be deleted"));
       } else {
