@@ -27,8 +27,8 @@ subtest 'Tests for irregular frequency' => sub {
         periodicity => $freq_irr,
         firstacquidate => '1972-02-07',
     };
-    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-12-31'), 0, 'Irregular: should be zero' );
-    is( C4::Serials::GetFictiveIssueNumber($subscription, '1973-12-31'), 0, 'Irregular: still zero' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1972-12-31'), undef, 'Irregular: should be undef' );
+    is( C4::Serials::GetFictiveIssueNumber($subscription, '1973-12-31'), undef, 'Irregular: still undef' );
 };
 
 subtest 'Tests for yearly frequencies' => sub {
