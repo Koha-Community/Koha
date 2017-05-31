@@ -2232,6 +2232,8 @@ depending on how many rows are in serial table.
 The issue number calculation is based on subscription frequency, first acquisition
 date, and $publisheddate.
 
+Returns undef when called for irregular frequencies.
+
 The routine is used to skip irregularities when calculating the next issue
 date (in GetNextDate) or the next issue number (in GetNextSeq).
 
@@ -2242,26 +2244,24 @@ sub GetFictiveIssueNumber {
 
     my $frequency = GetSubscriptionFrequency($subscription->{'periodicity'});
     my $unit = $frequency->{unit} ? lc $frequency->{'unit'} : undef;
-    my $issueno = 0;
+    return if !$unit;
+    my $issueno;
 
-    if($unit) {
-        my ($year, $month, $day) = split /-/, $publisheddate;
-        my ($fa_year, $fa_month, $fa_day) = split /-/, $subscription->{'firstacquidate'};
-        my $wkno;
-        my $delta = _delta_units( [$fa_year, $fa_month, $fa_day], [$year, $month, $day], $unit );
+    my ( $year, $month, $day ) = split /-/, $publisheddate;
+    my ( $fa_year, $fa_month, $fa_day ) = split /-/, $subscription->{'firstacquidate'};
+    my $delta = _delta_units( [$fa_year, $fa_month, $fa_day], [$year, $month, $day], $unit );
 
-        if($frequency->{'unitsperissue'} == 1) {
-            $issueno = $delta * $frequency->{'issuesperunit'} + $subscription->{'countissuesperunit'};
-        } else {
-            # Assuming issuesperunit == 1
-            $issueno = int( ($delta + $frequency->{'unitsperissue'}) / $frequency->{'unitsperissue'} );
-        }
+    if( $frequency->{'unitsperissue'} == 1 ) {
+        $issueno = $delta * $frequency->{'issuesperunit'} + $subscription->{'countissuesperunit'};
+    } else { # issuesperunit == 1
+        $issueno = 1 + int( $delta / $frequency->{'unitsperissue'} );
     }
     return $issueno;
 }
 
 sub _delta_units {
     my ( $date1, $date2, $unit ) = @_;
+    # date1 and date2 are array refs in the form [ yy, mm, dd ]
 
     if( $unit eq 'day' ) {
         return Delta_Days( @$date1, @$date2 );
