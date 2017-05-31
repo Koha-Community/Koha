@@ -1177,22 +1177,30 @@ div.alert strong {
     list-style-position:inside;
 }
 
-.dialog button {
+.dialog button,
+.dialog a.approve {
     background: #fff none;
     border: 1px outset #999999;
     border-top-color: #666;
     border-left-color: #666;
+    color: #000;
     margin : .4em;
     padding : .4em;
     white-space: pre-line;
 }
 
-.dialog button:hover {
+.dialog button:hover,
+.dialog a.approve:hover {
     background-color : #ffc;
 }
 
-.dialog button:active {
+.dialog button:active,
+.dialog a.approve:active {
     border : 1px inset #999999;
+}
+
+.dialog a.approve {
+    display: inline-block;
 }
 
 .approve i.fa,
@@ -2636,6 +2644,10 @@ button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit
 
 .modal-body {
     overflow-y: auto;
+}
+
+.modal-dialog.modal-wide {
+    width: 80%;
 }
 
 .btn-group label,

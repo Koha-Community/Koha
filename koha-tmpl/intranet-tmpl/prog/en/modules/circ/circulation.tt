@@ -439,34 +439,24 @@ $(document).ready(function() {
 
         [% IF ( UNKNOWN_BARCODE ) %]
             <li>The barcode was not found: <span class="ex">[% barcode |html %]</span>
-	    [% IF ( fast_cataloging ) %]
-	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-            <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]">Add record using fast cataloging</a>
-		[% END %]
-	    [% END %]
 
-        [% IF ( FALLBACK ) %]
-            [% IF options %]
-                <br />The following items were found by searching:
-                [% FOREACH book IN options %]
-                    <br />
-                    <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
-                    [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
-                        <input type="hidden" name="restoreduedatespec" />
-                        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                        <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
-                        <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-                        <input type="hidden" name="branch" value="[% branch %]" />
-                        <input type="hidden" name="barcode" value="[% book.barcode %]" />
-                        <button type="submit" name="x"><i class="fa fa-check"></i> Check out [% book.barcode %]: [% book.title %]</button>
-                    </form>
-                [% END %]
-            [% ELSE %]
-                <br />No items were found by searching.
-            [% END %]
-        [% END %]
+                <div>
+                    [% IF ( FALLBACK ) %]
+                        [% IF options %]
+                            <button type="button" class="approve" data-toggle="modal" data-target="#itemSearchFallback"><i class="fa fa-search"></i> Show matching titles</button>
+                        [% ELSE %]
+                            <div>No items were found by searching.</div>
+                        [% END %]
+                    [% END %]
 
-     </li>
+                    [% IF ( fast_cataloging ) %]
+                        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
+                            <a class="approve" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]"><i class="fa fa-plus"></i> Add record using fast cataloging</a>
+                        [% END %]
+                    [% END %]
+                </div>
+
+            </li>
         [% END %]
 
         [% IF ( NOT_FOR_LOAN ) %]
@@ -546,6 +536,53 @@ $(document).ready(function() {
         [% END %]
 
 </div></div>
+
+        [% IF ( FALLBACK ) %]
+            [% IF options %]
+
+                <!-- Modal -->
+                <div class="modal" id="itemSearchFallback" tabindex="-1" role="dialog" aria-labelledby="itemSearchFallbackLabel">
+                    <div class="modal-dialog modal-wide" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 id="itemSearchFallbackLabel"><h3>Barcode not found. The following items were found by searching:</h3>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table_borrowers">
+                                    [% FOREACH book IN options %]
+                                        <tr>
+                                            <td>
+                                                <a class="popup" target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% book.biblionumber %]">[% book.title %]</a>
+                                                [% book.barcode %]
+                                            </td>
+                                            <td>
+                                                <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
+                                                    [% IF (forceallow) %]
+                                                        <input type="hidden" name="forceallow" value="1">
+                                                    [% END %]
+                                                    <input type="hidden" name="restoreduedatespec" />
+                                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                                                    <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+                                                    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+                                                    <input type="hidden" name="branch" value="[% branch %]" />
+                                                    <input type="hidden" name="barcode" value="[% book.barcode %]" />
+                                                    <button class="btn btn-default btn-xs" type="submit" name="x"><i class="fa fa-check"></i> Check out</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            [% END %]
+        [% END %]
+
 [% ELSE %]
   [% IF (forceallow) %]
       <div id="overridden_debarment" class="dialog alert">Restriction overridden temporarily</div>

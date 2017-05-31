@@ -81,6 +81,10 @@ $(document).ready(function() {
         $("#barcode").focus();
     });
 
+    $("#itemSearchFallback").ready(function(){
+        $("#itemSearchFallback").modal("show");
+    });
+
 });
 
 function export_checkouts(format) {
