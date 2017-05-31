@@ -63,7 +63,9 @@ $(document).ready(function(){
       <td>-</td>
       [% END %]
 
-      [% IF Koha.Preference('SMSSendDriver') %]<td>
+      [% IF Koha.Preference('SMSSendDriver') %]
+        [% IF ( messaging_preference.transport_sms ) %]
+          <td>
           [% IF ( messaging_form_inactive ) %]
               [% IF ( messaging_preference.transports_sms ) %]
                  <input type="checkbox"
@@ -89,9 +91,15 @@ $(document).ready(function(){
                  value="sms" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
-      </td>[% END %]
+          </td>
+        [% ELSE %]
+          <td>-</td>
+        [% END %]
+      [% END %]
 
-      [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]<td>
+      [% IF Koha.Preference('TalkingTechItivaPhoneNotification') %]
+        [% IF ( messaging_preference.transport_phone ) %]
+          <td>
           [% IF ( messaging_form_inactive ) %]
               [% IF ( messaging_preference.transports_phone ) %]
                  <input type="checkbox"
@@ -117,7 +125,11 @@ $(document).ready(function(){
                  value="phone" class="active_notify" data-attr-id="[% messaging_preference.message_attribute_id %]" />
               [% END %]
           [% END %]
-      </td>[% END %]
+          </td>
+        [% ELSE %]
+          <td>-</td>
+        [% END %]
+      [% END %]
 
       [% IF ( messaging_preference.transport_email ) %]
       <td>
