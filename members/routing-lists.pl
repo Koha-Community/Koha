@@ -51,8 +51,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $query, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $category = $patron->category;
-
 my $count;
 my @borrowerSubscriptions;
 ($count, @borrowerSubscriptions) = GetSubscriptionsFromBorrower($borrowernumber );
