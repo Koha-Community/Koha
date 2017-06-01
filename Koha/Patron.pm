@@ -806,6 +806,16 @@ sub has_permission {
     return C4::Auth::haspermission( $self->userid, $flagsrequired );
 }
 
+sub is_adult {
+    my ( $self ) = @_;
+    return $self->category->category_type =~ /^(A|I)$/ ? 1 : 0;
+}
+
+sub is_child {
+    my( $self ) = @_;
+    return $self->category->category_type eq 'C' ? 1 : 0;
+}
+
 =head3 type
 
 =cut
