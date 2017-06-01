@@ -7,7 +7,7 @@
 <![endif]-->
 <ul class="patronbriefinfo">
     [% IF ( patronimages ) %]
-        [% IF ( picture ) %]
+        [% IF ( patron.image ) %]
             <li>
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" id="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
             </li>
@@ -97,7 +97,7 @@
         [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% patron.borrowernumber %]&amp;src=circ">Modification log</a></li>
     [% END %]
     [% IF CAN_user_borrowers_edit_borrowers %]
-	[% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber %]">Notices</a></li>
+    [% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber %]">Notices</a></li>
     [% END %]
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF (  statisticsview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/statistics.pl?borrowernumber=[% patron.borrowernumber %]">Statistics</a></li>

@@ -53,7 +53,6 @@ use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patron::Debarments qw(GetDebarments);
-use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
@@ -275,10 +274,6 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
     }
 }
 
-# check to see if patron's image exists in the database
-# basically this gives us a template var to condition the display of
-# patronimage related interface on
-$template->param( picture => 1 ) if $patron->image;
 # Generate CSRF token for upload and delete image buttons
 $template->param(
     csrf_token => Koha::Token->new->generate_csrf({ session_id => $input->cookie('CGISESSID'),}),

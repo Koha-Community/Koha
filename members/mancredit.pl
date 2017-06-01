@@ -86,7 +86,6 @@ if ($add){
     }
 
     $template->param( adultborrower => 1 ) if ( $patron->category->category_type =~ /^(A|I)$/ );
-    $template->param( picture => 1 ) if $patron->image;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         my $attributes = GetBorrowerAttributes($borrowernumber);

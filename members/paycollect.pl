@@ -27,7 +27,6 @@ use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
-use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Account;
 use Koha::Token;
@@ -199,9 +198,6 @@ sub borrower_add_additional_fields {
     } elsif ( $b_ref->{category_type} eq 'A' || $b_ref->{category_type} eq 'I' ) {
         $b_ref->{adultborrower} = 1;
     }
-
-    my $patron_image = Koha::Patron::Images->find($b_ref->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         $b_ref->{extendedattributes} = GetBorrowerAttributes($b_ref->{borrowernumber});

@@ -88,6 +88,4 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-$template->param( picture => 1 ) if $patron and $patron->image;
-
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -51,8 +51,6 @@ my ($template, $loggedinuser, $cookie)
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-$template->param( picture => 1 ) if $patron->image;
-
 # Allow resending of messages in Notices tab
 my $op = $input->param('op') || q{};
 if ( $op eq 'resend_notice' ) {

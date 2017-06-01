@@ -619,7 +619,6 @@ if ( $patron ) {
         categoryname      => $patron->category->description,
         expiry            => $patron->dateexpiry,
         is_child          => ( $patron->category->category_type eq 'C' ),
-        picture           => ( $patron->image ? 1 : 0 ),
     );
 }
 

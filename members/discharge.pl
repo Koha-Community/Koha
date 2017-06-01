@@ -103,8 +103,6 @@ my @validated_discharges = Koha::Patron::Discharge::get_validated({
     borrowernumber => $borrowernumber,
 });
 
-$template->param( picture => 1 ) if $patron->image;
-
 $template->param(
     patron => $patron,
     can_be_discharged => $can_be_discharged,

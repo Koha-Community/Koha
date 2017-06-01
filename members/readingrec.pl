@@ -104,8 +104,6 @@ if (! $limit){
 	$limit = 'full';
 }
 
-$template->param( picture => 1 ) if $patron->image;
-
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($patron->borrowernumber);
     $template->param(

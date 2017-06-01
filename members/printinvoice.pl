@@ -116,8 +116,6 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
 
 $template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 
-$template->param( picture => 1 ) if $patron->image;
-
 $template->param(
     patron         => $patron,
     finesview      => 1,

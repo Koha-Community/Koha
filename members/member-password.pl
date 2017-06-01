@@ -103,8 +103,6 @@ if ( $category_type eq 'C') {
 
 $template->param( adultborrower => 1 ) if ( $category_type =~ /^(A|I)$/ );
 
-$template->param( picture => 1 ) if $patron->image;
-
 if ( C4::Context->preference('ExtendedPatronAttributes') ) {
     my $attributes = GetBorrowerAttributes( $bor->{'borrowernumber'} );
     $template->param(

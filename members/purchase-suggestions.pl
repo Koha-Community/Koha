@@ -60,8 +60,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-$template->param( picture => 1 ) if $patron->image;
-
 my $suggestions = SearchSuggestion( { suggestedby => $borrowernumber } );
 
 $template->param( suggestions => $suggestions );

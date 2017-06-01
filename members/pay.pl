@@ -40,7 +40,6 @@ use C4::Koha;
 use C4::Overdues;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patrons;
-use Koha::Patron::Images;
 
 use Koha::Patron::Categories;
 use URI::Escape;
@@ -140,8 +139,6 @@ sub add_accounts_to_template {
     }
     borrower_add_additional_fields($patron->unblessed);
 
-    my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
-    $template->param( picture => 1 ) if $patron_image;
     $template->param(
         patron   => $patron,
         accounts => \@accounts,

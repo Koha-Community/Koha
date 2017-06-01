@@ -18,7 +18,6 @@ use Koha::Patron::Categories;
 use Koha::Patrons;
 
 use C4::Output;
-use Koha::Patron::Images;
 use Koha::Token;
 
 my $input = new CGI;
@@ -189,7 +188,6 @@ if ($input->param('newflags')) {
     }
 
 $template->param( adultborrower => 1 ) if ( $category_type =~ /^(A|I)$/ );
-    $template->param( picture => 1 ) if $patron->image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});

@@ -114,7 +114,6 @@ else {
         );
     }
 
-    $template->param( picture => 1 ) if $patron->image;
 
     $template->param( adultborrower => 1 )
         if ( $patron_category->category_type eq 'A' || $patron_category->category_type eq 'I' );

@@ -62,9 +62,8 @@ my $patron = Koha::Patrons->find($borrowernumber);
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Get supporting cast
-my ( $branch, $category, $houseboundprofile, $visit, $patron_image );
+my ( $branch, $category, $houseboundprofile, $visit );
 if ( $patron ) { # FIXME This test is not needed - output_and_exit_if_error handles it
-    $patron_image = $patron->image;
     $category = Koha::Patron::Categories->new->find($patron->categorycode);
     $houseboundprofile = $patron->housebound_profile;
 }
@@ -170,7 +169,6 @@ if ( C4::Context->preference('ExtendedPatronAttributes') and $patron ) {
 
 $template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 $template->param(
-    picture            => $patron_image,
     housebound_profile => $houseboundprofile,
     visit              => $houseboundvisit,
     messages           => \@messages,
