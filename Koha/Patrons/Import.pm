@@ -23,10 +23,12 @@ use Carp;
 use Text::CSV;
 
 use C4::Members;
-use C4::Branch;
 use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
 
+use Koha::Libraries;
+use Koha::Patrons;
+use Koha::Patron::Categories;
 use Koha::DateUtils;
 
 =head1 NAME
@@ -401,7 +403,7 @@ Returns an array of borrowers' table columns.
 sub set_column_keys {
     my ($self, $extended) = @_;
 
-    my @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } C4::Members::columns();
+    my @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } Koha::Patrons->columns();
     push( @columnkeys, 'patron_attributes' ) if $extended;
 
     return @columnkeys;
@@ -450,8 +452,8 @@ sub check_branch_code {
     }
 
     # look for branch code
-    my $branch_name = GetBranchName( $branchcode );
-    unless( $branch_name ) {
+    my $library = Koha::Libraries->find( $branchcode );
+    unless( $library ) {
         push (@$missing_criticals, { key => 'branchcode', line => $line_number, lineraw => $borrowerline,
                                      value => $branchcode, branch_map => 1, });
     }
@@ -475,7 +477,7 @@ sub check_borrower_category {
     }
 
     # Looking for borrower category
-    my $category = GetBorrowercategory( $categorycode );
+    my $category = Koha::Patron::Categories->find($categorycode);
     unless( $category ) {
         push (@$missing_criticals, { key => 'categorycode', line => $line_number, lineraw => $borrowerline,
                                      value => $categorycode, category_map => 1, });

@@ -233,7 +233,10 @@
             </fieldset>
         [% END %]
 
-        <fieldset class="action"><input type="submit" value="Import" /></fieldset>
+        <fieldset class="action">
+            <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
+            <input type="submit" value="Import" />
+        </fieldset>
     </form>
 [% END %]
 
@@ -274,15 +277,6 @@
 you can supply dates in ISO format (e.g., '2010-10-28').
         </li>
     </ul>
-    </fieldset>
-    [% END %]
-    <fieldset class="action">
-        <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-        <input type="submit" value="Import" />
-    </fieldset>
-</form>
-[% END %]
-
 </div>
 </div>
 </div>

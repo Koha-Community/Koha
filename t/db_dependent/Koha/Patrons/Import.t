@@ -392,17 +392,19 @@ subtest 'test_set_column_keys' => sub {
 subtest 'test_set_column_keys' => sub {
     plan tests => 2;
 
+    my @columns = Koha::Patrons->columns;
     # Given ... nothing at all
     # When ... Then ...
     my @columnkeys_0 = $patrons_import->set_column_keys(undef);
-    is(scalar @columnkeys_0, 66, 'Got the expected array size from set column keys with undef extended');
+    # -1 because we do not want the borrowernumber column
+    is(scalar @columnkeys_0, @columns - 1, 'Got the expected array size from set column keys with undef extended');
 
     # Given ... extended.
     my $extended = 1;
 
     # When ... Then ...
     my @columnkeys_1 = $patrons_import->set_column_keys($extended);
-    is(scalar @columnkeys_1, 67, 'Got the expected array size from set column keys with extended');
+    is(scalar @columnkeys_1, @columns - 1 + $extended, 'Got the expected array size from set column keys with extended');
 };
 
 subtest 'test_set_patron_attributes' => sub {
