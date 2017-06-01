@@ -147,7 +147,6 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) { # FIXME This should be remov
     }
     $data->{$_} = dt_from_string( $userdate );
 }
-$data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
 for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
