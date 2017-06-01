@@ -101,8 +101,8 @@
 [% IF return_date_was_overriden && Borrowers.IsDebarred( borrower ) %]
     <div id="restricted_backdated" class="dialog message">
         <h3>
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">
-                [% borrower.firstname %] [% borrower.surname %]
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">
+                [% patron.firstname %] [% patron.surname %]
             </a>
             is restricted. Please verify this patron should still be restricted.
         </h3>
@@ -125,13 +125,13 @@
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% TransferWaitingAt %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
-[% IF ( wborcnum ) %]<h5>Hold for:</h5>
+[% IF ( patron.cardnumber ) %]<h5>Hold for:</h5>
         <ul>
-            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
-            [% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
+            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">
+            [% patron.surname %], [% patron.firstname %]</a> ([% patron.cardnumber %]) <span class="patron-category"> - [% patron.category.description %]</span> </li>
             [% INCLUDE display_holdpatron_address %]
-            [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
-            [% IF ( wboremail ) %]<li><a id="boremail" href="mailto:[% wboremail %]">[% wboremail %]</a></li>[% END %]
+            [% IF ( patron.phone ) %]<li>[% patron.phone %]</li>[% END %]
+            [% IF ( patron.email ) %]<li><a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a></li>[% END %]
         </ul>
 
     <form method="post" action="returns.pl" class="confirm">
@@ -140,7 +140,7 @@
             <input type="hidden" name="WT-From" value="[% wtransfertFrom %]" />
             <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
             <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
         <input type="hidden" name="return_date_override" value="[% return_date_override %]" />
@@ -173,23 +173,23 @@
                     <h4>Hold for:</h4>
                     <ul>
                     <li>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])
-                        <span class="patron-category"> - [% borcategory %]</span>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.surname %], [% patron.firstname %]</a> ([% patron.cardnumber %])
+                        <span class="patron-category"> - [% patron.category.description %]</span>
                     </li>
                     [% INCLUDE display_holdpatron_address %]
-                    [% IF ( borphone ) %]
-                        <li> [% borphone %]</li>
+                    [% IF ( patron.phone ) %]
+                        <li> [% patron.phone %]</li>
                     [% END %]
 
-                    [% IF ( boremail ) %]
-                        <li><a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a></li>
+                    [% IF ( patron.email ) %]
+                        <li><a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a></li>
                     [% END %]
 
-                    [% IF ( debarred ) %]
+                    [% IF ( patron.debarred ) %]
                         <li class="error">Patron is RESTRICTED</li>
                     [% END %]
 
-                    [% IF ( gonenoaddress ) %]
+                    [% IF ( patron.gonenoaddress ) %]
                         <li class="error">Patron's address is in doubt</li>
                     [% END %]
                     </ul>
@@ -207,7 +207,7 @@
                     [% END %]
 
                     <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                     <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
                     <input type="hidden" name="reserve_id" value="[% reserve_id %]" />
                     <input type="hidden" name="diffBranch" value="[% destbranch %]" />
@@ -248,12 +248,12 @@
                 <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
                 <h4>Hold for: </h4>
                     <ul>
-                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
+                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.surname %], [% patron.firstname %]</a> ([% patron.cardnumber %]) <span class="patron-category"> - [% patron.category.description %]</span> </li>
                         [% INCLUDE display_holdpatron_address %]
-                        [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
-                        [% IF ( boremail ) %]<li>[% IF ( transfertodo ) %][% boremail %][% ELSE %]<a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>[% END %]</li>[% END %]
-[% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
-[% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
+                        [% IF ( patron.phone ) %]<li>[% patron.phone %]</li>[% END %]
+                        [% IF ( patron.email ) %]<li>[% IF ( transfertodo ) %][% patron.email %][% ELSE %]<a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a>[% END %]</li>[% END %]
+[% IF ( patron.debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
+[% IF ( patron.gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
                     </ul>
         [% IF ( transfertodo ) %]
             <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
@@ -264,7 +264,7 @@
         <form method="post" action="returns.pl" class="confirm">
             <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
             <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and continue</button>
             [% FOREACH inputloo IN inputloop %]
@@ -368,25 +368,25 @@
                     [% END %]
                     <h5>Hold for:</h5>
                         <li>
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
-                                [% borsurname %], [% borfirstname %]
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">
+                                [% patron.surname %], [% patron.firstname %]
                             </a>
-                            ([% borcnum %])
-                            <span class="patron-category"> - [% borcategory %]</span>
+                            ([% patron.cardnumber %])
+                            <span class="patron-category"> - [% patron.category.description %]</span>
                         </li>
 
                         [% INCLUDE display_holdpatron_address %]
 
-                        [% IF ( borphone ) %]
-                            <li>[% borphone %]</li>
+                        [% IF ( patron.phone ) %]
+                            <li>[% patron.phone  %]</li>
                         [% END %]
 
-                        [% IF ( boremail ) %]
+                        [% IF ( patron.email ) %]
                             <li>
                                 [% IF ( transfertodo ) %]
-                                    [% boremail %]
+                                    [% patron.email %]
                                 [% ELSE %]
-                                    <a id="boremail" href="mailto:[% boremail %]">[% boremail %]</a>
+                                    <a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a>
                                 [% END %]
                             </li>
                         [% END %]
@@ -395,11 +395,11 @@
                             [% INCLUDE display_bormessagepref %]
                         [% END %]
 
-                        [% IF ( debarred ) %]
+                        [% IF ( patron.debarred ) %]
                             <li class="error">Patron is RESTRICTED</li>
                         [% END %]
 
-                        [% IF ( gonenoaddress ) %]
+                        [% IF ( patron.gonenoaddress ) %]
                             <li class="error">Patron's address is in doubt</li>
                         [% END %]
 
@@ -419,7 +419,7 @@
                     [% END %]
 
                     <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                     <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
                     <input type="hidden" name="reserve_id" value="[% reserve_id %]" />
                     <input type="hidden" name="diffBranch" value="[% destbranch %]" />
@@ -711,7 +711,7 @@
             $(".modal").on('hidden.bs.modal', function (e) { $("#barcode").focus(); });
 
             [% IF print_slip %]
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber %]&amp;biblionumber=[% biblionumber %]');
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]

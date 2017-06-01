@@ -177,11 +177,7 @@ if ( $query->param('reserve_id') ) {
             itembiblionumber => $biblio->biblionumber,
             iteminfo       => $biblio->author,
             name           => $name,
-            borrowernumber => $borrowernumber,
-            borcnum        => $patron->cardnumber,
-            borfirstname   => $patron->firstname,
-            borsurname     => $patron->surname,
-            borcategory    => $patron->category->description,
+            patron         => $patron,
             diffbranch     => 1,
         );
     }
@@ -293,7 +289,6 @@ if ($barcode) {
             ccode            => $item->ccode,
             itembiblionumber => $biblio->biblionumber,
             biblionumber     => $biblio->biblionumber,
-            borrower         => $borrower,
             additional_materials => $materials,
             issue            => $checkout,
         );
@@ -404,23 +399,8 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         my $patron = Koha::Patrons->find( $reserve->{'borrowernumber'} );
         my $name = $patron->surname . ", " . $patron->title . " " . $patron->firstname;
         $template->param(
-            # FIXME The full patron object should be passed to the template
-                wname           => $name,
-                wborfirstname   => $patron->firstname,
-                wborsurname     => $patron->surname,
-                wborcategory    => $patron->category->description,
-                wbortitle       => $patron->title,
-                wborphone       => $patron->phone,
-                wboremail       => $patron->email,
-                streetnumber    => $patron->streetnumber,
-                address         => $patron->address,
-                address2        => $patron->address2,
-                city            => $patron->city,
-                zipcode         => $patron->zipcode,
-                state           => $patron->state,
-                country         => $patron->country,
-                wborrowernumber => $reserve->{'borrowernumber'},
-                wborcnum        => $patron->cardnumber,
+            wname  => $name,
+            patron => $patron,
         );
     }
     $template->param(
@@ -454,22 +434,6 @@ if ( $messages->{'ResFound'}) {
             # FIXME The full patron object should be passed to the template
             found          => 1,
             name           => $patron->surname . ", " . $patron->title . " " . $patron->firstname,
-            borfirstname   => $patron->firstname,
-            borsurname     => $patron->surname,
-            borcategory    => $patron->category->description,
-            bortitle       => $patron->title,
-            borphone       => $patron->phone,
-            boremail       => $patron->email,
-            boraddress     => $patron->address,
-            boraddress2    => $patron->address2,
-            streetnumber   => $patron->streetnumber,
-            city           => $patron->city,
-            zipcode        => $patron->zipcode,
-            state          => $patron->state,
-            country        => $patron->country,
-            borcnum        => $patron->cardnumber,
-            debarred       => $patron->debarred,
-            gonenoaddress  => $patron->gonenoaddress,
             barcode        => $barcode,
             destbranch     => $reserve->{'branchcode'},
             borrowernumber => $reserve->{'borrowernumber'},
@@ -580,13 +544,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             } else {
                 $ri{return_overdue} = 1 if (DateTime->compare($duedate, $dropboxdate) == -1);
             }
-            $ri{borrowernumber} = $patron->borrowernumber;
-            $ri{borcnum}        = $patron->cardnumber;
-            $ri{borfirstname}   = $patron->firstname;
-            $ri{borsurname}     = $patron->surname;
-            $ri{bortitle}       = $patron->title;
-            $ri{bornote}        = $patron->borrowernotes;
-            $ri{borcategorycode}= $patron->categorycode;
+            $ri{patron} = $patron,
             $ri{borissuescount} = $patron->checkouts->count;
         }
         else {
