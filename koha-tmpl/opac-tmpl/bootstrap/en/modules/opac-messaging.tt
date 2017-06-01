@@ -77,6 +77,7 @@
                                             [% END %]
                                         [% END %]
                                         [% IF ( TalkingTechItivaPhone ) %]
+                                            [% IF ( messaging_preference.transport_phone ) %]
                                             <td>
                                               [% IF ( messaging_preference.transports_phone ) %]
                                               <input type="checkbox"
@@ -90,6 +91,9 @@
                                                          value="phone" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" />
                                               [% END %]
                                             </td>
+                                            [% ELSE %]
+                                                <td>-</td>
+                                            [% END %]
                                         [% END %]
 
                                         [% IF ( messaging_preference.transport_email ) %]
