@@ -17,6 +17,20 @@ sub labyrintti {
     my $notice;
 
     return try {
+        my $config = C4::Context->config('smsProviders');
+        if ($config && exists $config->{labyrintti}->{reportUrlAllowedIPs}) {
+            my @allowed_ips = split /\s|,/, $config->{labyrintti}->{reportUrlAllowedIPs};
+            my $ip = $c->tx->remote_address;
+            if (!@allowed_ips || !grep(/^$ip$/,@allowed_ips)) {
+                return $c->render( status  => 401,
+                                   openapi => { error => 'Unauthorized' });
+            }
+        }
+        else {
+            return $c->render( status  => 401,
+                               openapi => { error => 'Unauthorized' });
+        }
+
         $notice = Koha::Notice::Messages->find($message_id);
 
         if ($status eq "ERROR") {

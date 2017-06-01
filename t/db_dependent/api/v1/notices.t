@@ -20,6 +20,8 @@ use Modern::Perl;
 
 use Test::More tests => 8;
 use Test::Mojo;
+use Test::MockModule;
+
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -383,7 +385,7 @@ subtest 'delete() tests' => sub {
 };
 
 subtest 'Notices::Report::labyrintti() tests' => sub {
-    plan tests => 6;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -396,6 +398,14 @@ subtest 'Notices::Report::labyrintti() tests' => sub {
         }
     });
 
+    my $labyrintti_config = {
+        labyrintti => {
+            reportUrlAllowedIPs => '127.0.0.1,123.123.123.123'
+        }
+    };
+
+    t::lib::Mocks::mock_config('smsProviders', $labyrintti_config);
+
     my $message_id = $notice->{'message_id'};
 
     my $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
@@ -404,6 +414,21 @@ subtest 'Notices::Report::labyrintti() tests' => sub {
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)
       ->status_is(404);
+
+    # $tx->req->env({ REMOTE_ADDR => '123.123.123.123' }) not working?
+    # ..mock $tx->remote_address then.
+    my $module = Test::MockModule->new('Mojo::Transaction');
+    $module->mock('remote_address', sub {
+        my $self = shift;
+        return $self->original_remote_address(@_) if @_;
+        return '100.100.100.100'
+    });
+    $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
+        => form => { status => 'ERROR', message => 'Landline number' });
+    $tx->req->env({REMOTE_ADDR => '100.100.100.100'});
+    $t->request_ok($tx)
+      ->status_is(401);
+    $module->unmock_all();
 
     $tx = $t->ua->build_tx(POST => "/api/v1/notices/$message_id/report/labyrintti"
         => form => { status => 'ERROR', message => 'Landline number' });
@@ -416,6 +441,13 @@ subtest 'Notices::Report::labyrintti() tests' => sub {
     is($msg->status, 'failed', 'Labyrintti reported delivery as failed');
     is($msg->delivery_note, 'Landline number',
        'The correct delivery note was stored');
+
+    t::lib::Mocks::mock_config('smsProviders', {});
+    $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
+        => form => { status => 'ERROR', message => 'Landline number' });
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(401);
 
     $schema->storage->txn_rollback;
 };
