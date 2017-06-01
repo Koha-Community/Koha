@@ -72,8 +72,6 @@ $template->param(
     routinglistview => 1
 );
 
-$template->param( adultborrower => 1 ) if ( $category->category_type =~ /^(A|I)$/ );
-
 $template->param(
     patron            => $patron,
     findborrower      => $findborrower,

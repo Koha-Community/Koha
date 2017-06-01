@@ -99,7 +99,6 @@ if ( $category->category_type eq 'C') {
     $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
 }
 
-$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 if (! $limit){
 	$limit = 'full';
 }

@@ -466,9 +466,6 @@ if ($patron) {
         holds_count  => $holds->count(),
         WaitingHolds => $waiting_holds,
     );
-
-    my $category_type = $patron->category->category_type;
-    $template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );
 }
 
 #title

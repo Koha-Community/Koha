@@ -114,8 +114,6 @@ for (my $i=0;$i<$numaccts;$i++){
     push(@accountrows, \%row);
 }
 
-$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
-
 $template->param(
     patron               => $patron,
     finesview           => 1,

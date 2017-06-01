@@ -96,8 +96,6 @@ foreach my $accountline ( @{$accts}) {
     }
 }
 
-$template->param( adultborrower => 1 ) if ( $patron->category->category_type =~ /^(A|I)$/ );
-
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
     $template->param(

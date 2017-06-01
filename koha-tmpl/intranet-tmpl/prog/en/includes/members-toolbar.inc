@@ -15,7 +15,7 @@
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
-        [% IF adultborrower AND Koha.Preference("borrowerRelationship") %]
+        [% IF patron.is_adult AND Koha.Preference("borrowerRelationship") %]
             <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% patron.borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
         [% IF CAN_user_borrowers_edit_borrowers %]

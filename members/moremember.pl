@@ -196,8 +196,6 @@ my $relatives_issues_count =
   Koha::Database->new()->schema()->resultset('Issue')
   ->count( { borrowernumber => \@relatives } );
 
-$template->param( adultborrower => 1 ) if ( $category_type eq 'A' || $category_type eq 'I' );
-
 my %bor;
 $bor{'borrowernumber'} = $borrowernumber;
 

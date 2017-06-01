@@ -109,8 +109,6 @@ my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
 if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0) {
 
-    $template->param( adultborrower => 1 ) if $patron->category->category_type =~ /^(A|I)$/;
-
     $template->param(
         patron => $patron,
     );

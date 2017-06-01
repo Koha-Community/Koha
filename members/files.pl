@@ -114,10 +114,6 @@ else {
         );
     }
 
-
-    $template->param( adultborrower => 1 )
-        if ( $patron_category->category_type eq 'A' || $patron_category->category_type eq 'I' );
-
     $template->param(
         files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )
           ->GetFilesInfo(),
