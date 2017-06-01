@@ -99,7 +99,6 @@ if ($add){
 
     $template->param(
         finesview      => 1,
-        is_child       => ($patron->category->category_type eq 'C'), # FIXME is_child should be a Koha::Patron method
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

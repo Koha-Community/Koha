@@ -353,7 +353,6 @@ $template->param(
     totaldue_raw    => $total,
     overdues_exist  => $overdues_exist,
     StaffMember     => $category_type eq 'S',
-    is_child        => $category_type eq 'C',
     $category_type  => 1, # [% IF ( I ) %] = institutional/organisation
     samebranch      => $samebranch,
     quickslip       => $quickslip,

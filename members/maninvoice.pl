@@ -126,7 +126,6 @@ if ($add){
     $template->param(
         patron         => $patron,
         finesview      => 1,
-        is_child       => ($patron->category->category_type eq 'C'),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

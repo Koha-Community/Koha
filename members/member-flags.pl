@@ -200,7 +200,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 $template->param(
     patron         => $patron,
     loop           => \@loop,
-    is_child       => ( $category_type eq 'C' ),
     csrf_token =>
         Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
 );

@@ -111,7 +111,6 @@ $template->param(
     finesview           => 1,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    is_child            => ($patron->category->category_type eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
 );

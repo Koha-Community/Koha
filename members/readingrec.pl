@@ -115,7 +115,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 $template->param(
     patron            => $patron,
     readingrecordview => 1,
-    is_child          => ( $category->category_type eq 'C' ),
     loop_reading      => $issues,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

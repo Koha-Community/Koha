@@ -69,7 +69,7 @@
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]
-                [% IF ( is_child ) %]
+                [% IF ( patron.is_child ) %]
                     <li><a id="updatechild" href="#">Update child to adult patron</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
