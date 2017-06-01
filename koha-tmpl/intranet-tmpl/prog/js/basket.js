@@ -439,10 +439,11 @@ function vShelfAdd(biblist) {
 
 function showCart(){
 		var position = $("#cartmenulink").offset();
+        var toolbarh = $(".floating").outerHeight();
         var scrolld = $(window).scrollTop();
 		var top = position.top + $("#cartmenulink").outerHeight();
         if( scrolld > top ){
-            top = scrolld + 15;
+            top = scrolld + toolbarh + 15;
         }
         var left = position.left;
 		$("#cartDetails").css("position","absolute").css("top",top);
