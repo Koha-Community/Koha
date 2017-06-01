@@ -67,13 +67,9 @@ if ( !$borrowernumber ) {
 
 # get borrower details
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
-my $patron         = Koha::Patrons->find($borrowernumber);
+our $patron         = Koha::Patrons->find($borrowernumber);
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $category = $patron->category;
-our $borrower = $patron->unblessed;
-$borrower->{description} = $category->description;
-$borrower->{category_type} = $category->category_type;
 our $user = $input->remote_user;
 $user ||= q{};
 
@@ -142,16 +138,13 @@ sub add_accounts_to_template {
         }
         push @accounts, $account_line;
     }
-    borrower_add_additional_fields($borrower);
-
-    $template->param(%$borrower);
+    borrower_add_additional_fields($patron->unblessed);
 
     my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
     $template->param( picture => 1 ) if $patron_image;
     $template->param(
+        patron   => $patron,
         accounts => \@accounts,
-        borrower => $borrower,
-        categoryname => $borrower->{'description'},
         total    => $total,
     );
     return;

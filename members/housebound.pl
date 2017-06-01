@@ -63,9 +63,8 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 # Get supporting cast
 my ( $branch, $category, $houseboundprofile, $visit, $patron_image );
-if ( $patron ) {
+if ( $patron ) { # FIXME This test is not needed - output_and_exit_if_error handles it
     $patron_image = $patron->image;
-    $branch = Koha::Libraries->new->find($patron->branchcode);
     $category = Koha::Patron::Categories->new->find($patron->categorycode);
     $houseboundprofile = $patron->housebound_profile;
 }
@@ -158,7 +157,7 @@ if ( $method eq 'updateconfirm' and $houseboundprofile ) {
 $method = 'update_or_create' if ( !$houseboundprofile );
 
 # Ensure template has all patron details.
-$template->param(%{$patron->unblessed}) if ( $patron );
+$template->param( patron => $patron );
 
 # Load extended patron attributes if necessary (taken from members/files.pl).
 if ( C4::Context->preference('ExtendedPatronAttributes') and $patron ) {
@@ -174,8 +173,6 @@ $template->param(
     picture            => $patron_image,
     housebound_profile => $houseboundprofile,
     visit              => $houseboundvisit,
-    branch             => $branch,
-    category           => $category,
     messages           => \@messages,
     method             => $method,
     choosers           => $choosers,

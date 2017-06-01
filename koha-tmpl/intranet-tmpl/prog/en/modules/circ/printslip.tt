@@ -6,7 +6,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers print receipt</title>
 [% ELSIF ( caller == 'members' ) %]
 <title>Koha &rsaquo; Patrons &rsaquo; Print receipt for [% borrowernumber %]</title>
-[% ELSIF ( title ) %]
+[% ELSIF ( title ) %][%# FIXME title is never defined %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% title %]</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]

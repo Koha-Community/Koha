@@ -119,10 +119,6 @@ if ($do_it) {
         $result->{'biblionumber'}      = q{};
         $result->{'biblioitemnumber'}  = q{};
         $result->{'barcode'}           = q{};
-        $result->{'userfirstname'}     = q{};
-        $result->{'usersurname'}       = q{};
-        $result->{'borrowerfirstname'} = q{};
-        $result->{'borrowersurname'}   = q{};
 
         if ( substr( $result->{'info'}, 0, 4 ) eq 'item' || $result->{module} eq "CIRCULATION" ) {
 
@@ -141,8 +137,7 @@ if ($do_it) {
         if ( $result->{'user'} ) {
             my $patron = Koha::Patrons->find( $result->{'user'} );
             if ($patron) {
-                $result->{'userfirstname'} = $patron->firstname;
-                $result->{'usersurname'}   = $patron->surname;
+                $result->{librarian} = $patron;
             }
         }
 
@@ -151,8 +146,7 @@ if ($do_it) {
             if ( $result->{'object'} ) {
                 my $patron = Koha::Patrons->find( $result->{'object'} );
                 if ($patron) {
-                    $result->{'borrowerfirstname'} = $patron->firstname;
-                    $result->{'borrowersurname'}   = $patron->surname;
+                    $result->{patron} = $patron;
                 }
             }
         }

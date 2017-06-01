@@ -66,9 +66,6 @@ my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({
     borrowernumber => $borrowernumber
 });
 
-my $holds = $patron->holds;
-my $has_reserves = $holds->count;
-
 # Generating discharge if needed
 if ( $input->param('discharge') and $can_be_discharged ) {
     my $is_discharged = Koha::Patron::Discharge::is_discharged({
@@ -109,28 +106,7 @@ my @validated_discharges = Koha::Patron::Discharge::get_validated({
 $template->param( picture => 1 ) if $patron->image;
 
 $template->param(
-    # FIXME The patron object should be passed to the template
-    borrowernumber    => $borrowernumber,
-    title             => $patron->title,
-    initials          => $patron->initials,
-    surname           => $patron->surname,
-    borrowernumber    => $borrowernumber,
-    firstname         => $patron->firstname,
-    cardnumber        => $patron->cardnumber,
-    categorycode      => $patron->categorycode,
-    category_type     => $patron->category->category_type,
-    categoryname      => $patron->category->description,
-    address           => $patron->address,
-    streetnumber      => $patron->streetnumber,
-    streettype        => $patron->streettype,
-    address2          => $patron->address2,
-    city              => $patron->city,
-    zipcode           => $patron->zipcode,
-    country           => $patron->country,
-    phone             => $patron->phone,
-    email             => $patron->email,
-    branchcode        => $patron->branchcode,
-    has_reserves      => $has_reserves,
+    patron => $patron,
     can_be_discharged => $can_be_discharged,
     validated_discharges => \@validated_discharges,
 );

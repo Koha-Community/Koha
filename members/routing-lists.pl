@@ -52,9 +52,6 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $query, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $category = $patron->category;
-my $patron_info = $patron->unblessed;
-$patron_info->{description} = $category->description;
-$patron_info->{category_type} = $category->category_type;
 
 my $count;
 my @borrowerSubscriptions;
@@ -75,18 +72,12 @@ $template->param(
     routinglistview => 1
 );
 
-$template->param( adultborrower => 1 ) if ( $patron_info->{category_type} =~ /^(A|I)$/ );
-
-##################################################################################
-
-$template->param(%$patron_info);
+$template->param( adultborrower => 1 ) if ( $category->category_type =~ /^(A|I)$/ );
 
 $template->param(
+    patron            => $patron,
     findborrower      => $findborrower,
-    borrower          => $patron_info,
-    borrowernumber    => $borrowernumber,
-    branch            => $branch,
-    categoryname      => $patron_info->{description},
+    branch            => $branch, # FIXME This is confusing
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

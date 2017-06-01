@@ -848,7 +848,7 @@ if ( C4::Context->preference('reviewson') ) {
         }
     }
     for my $review (@$reviews) {
-        my $patron = Koha::Patrons->find( $review->{borrowernumber} );
+        my $patron = Koha::Patrons->find( $review->{borrowernumber} ); # FIXME Should be Koha::Review->reviewer or similar
 
         # setting some borrower info into this hash
         if ( $patron ) {

@@ -36,11 +36,6 @@ use Koha::Patron::Categories;
 
 my $input = CGI->new;
 
-#get borrower details
-my $data = undef;
-my $borrowernumber = undef;
-my $cardnumber = undef;
-
 my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tt",
 				query => $input,
 				type => "intranet",
@@ -52,40 +47,37 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => 
 my $op = $input->param('op') || '';
 my $patron;
 if ($input->param('cardnumber')) {
-    $cardnumber = $input->param('cardnumber');
+    my $cardnumber = $input->param('cardnumber');
     $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
 }
 if ($input->param('borrowernumber')) {
-    $borrowernumber = $input->param('borrowernumber');
+    my $borrowernumber = $input->param('borrowernumber');
     $patron = Koha::Patrons->find( $borrowernumber );
 }
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-$data = $patron->unblessed;
-$borrowernumber = $patron->borrowernumber;
-
 my $order = 'date_due desc';
 my $limit = 0;
 my $issues = ();
 # Do not request the old issues of anonymous patron
-if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
+if ( $patron->borrowernumber eq C4::Context->preference('AnonymousPatron') ){
     # use of 'eq' in the above comparison is intentional -- the
     # system preference value could be blank
     $template->param( is_anonymous => 1 );
 } else {
-    $issues = GetAllIssues($borrowernumber,$order,$limit);
+    $issues = GetAllIssues($patron->borrowernumber,$order,$limit);
 }
 
 #   barcode export
 if ( $op eq 'export_barcodes' ) {
     # FIXME This should be moved out of this script
-    if ( $data->{'privacy'} < 2) {
+    if ( $patron->privacy < 2) {
         my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
         my @barcodes =
           map { $_->{barcode} } grep { $_->{returndate} =~ m/^$today/o } @{$issues};
-        my $borrowercardnumber = $data->{cardnumber};
+        my $borrowercardnumber = $patron->cardnumber;
         my $delimiter = "\n";
         binmode( STDOUT, ":encoding(UTF-8)" );
         print $input->header(
@@ -100,13 +92,14 @@ if ( $op eq 'export_barcodes' ) {
     }
 }
 
-if ( $data->{'category_type'} eq 'C') {
+my $category = $patron->category;
+if ( $category->category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
     $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
     $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
 }
 
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' || $data->{'category_type'} eq 'I' );
+$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 if (! $limit){
 	$limit = 'full';
 }
@@ -114,21 +107,17 @@ if (! $limit){
 $template->param( picture => 1 ) if $patron->image;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
+    my $attributes = GetBorrowerAttributes($patron->borrowernumber);
     $template->param(
         ExtendedPatronAttributes => 1,
         extendedattributes => $attributes
     );
 }
 
-$template->param(%$data);
-
 $template->param(
+    patron            => $patron,
     readingrecordview => 1,
-    borrowernumber    => $borrowernumber,
-    privacy           => $data->{'privacy'},
-    categoryname      => $data->{description},
-    is_child          => ( $data->{category_type} eq 'C' ),
+    is_child          => ( $category->category_type eq 'C' ),
     loop_reading      => $issues,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

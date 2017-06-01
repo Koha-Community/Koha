@@ -130,11 +130,7 @@ while ( my $hold = $holds->next ) {
         $getreserv{'dotransfer'} = 1;
     }
 
-    my $borEmail = $patron->first_valid_email_address;
-
-    if ( $borEmail ) {
-        $getreserv{'borrowermail'}  = $borEmail;
-    }
+    $getreserv{patron} = $patron;
 
     if ($today > $calcDate) {
         if ($cancelall) {

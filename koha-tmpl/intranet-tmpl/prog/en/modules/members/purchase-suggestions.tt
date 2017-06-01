@@ -27,7 +27,7 @@
                 <h2>Purchase suggestions</h2>
 
                 <div id="toolbar" class="btn-toolbar">
-                    <a class="btn btn-default btn-sm" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% borrowernumber %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% borrowernumber %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                    <a class="btn btn-default btn-sm" id="newsuggestion" href="/cgi-bin/koha/suggestion/suggestion.pl?op=add&amp;suggestedby=[% patron.borrowernumber %]&amp;redirect=purchase_suggestions&amp;borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-plus"></i> New purchase suggestion</a>
                 </div>
 
                 [% IF suggestions %]

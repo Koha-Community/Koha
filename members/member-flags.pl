@@ -200,27 +200,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 $template->param(
-    borrowernumber => $bor->{'borrowernumber'},
-    cardnumber     => $bor->{'cardnumber'},
-    surname        => $bor->{'surname'},
-    firstname      => $bor->{'firstname'},
-    othernames     => $bor->{'othernames'},
-    categorycode   => $bor->{'categorycode'},
-    category_type  => $category_type,
-    categoryname   => $bor->{'description'},
-    address        => $bor->{address},
-    address2       => $bor->{'address2'},
-    streettype     => $bor->{streettype},
-    city           => $bor->{'city'},
-    state          => $bor->{'state'},
-    zipcode        => $bor->{'zipcode'},
-    country        => $bor->{'country'},
-    phone          => $bor->{'phone'},
-    phonepro       => $bor->{'phonepro'},
-    mobile         => $bor->{'mobile'},
-    email          => $bor->{'email'},
-    emailpro       => $bor->{'emailpro'},
-    branchcode     => $bor->{'branchcode'},
+    patron         => $patron,
     loop           => \@loop,
     is_child       => ( $category_type eq 'C' ),
     csrf_token =>

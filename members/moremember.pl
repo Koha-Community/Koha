@@ -139,7 +139,7 @@ my $category_type = $patron->category->category_type;
 my $data = $patron->unblessed;
 
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
-foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+foreach (qw(dateenrolled dateexpiry dateofbirth)) { # FIXME This should be removed
     my $userdate = $data->{$_};
     unless ($userdate) {
         $debug and warn sprintf "Empty \$data{%12s}", $_;
@@ -156,7 +156,7 @@ for (qw(gonenoaddress lost borrowernotes)) {
 
 if ( $patron->is_debarred ) {
     $template->param(
-        userdebarred => 1,
+        userdebarred => 1, # FIXME Template should use patron->is_debarred
         flagged => 1,
         debarments => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     );
@@ -216,7 +216,7 @@ else {
     $samebranch = 1;
 }
 my $library = Koha::Libraries->find( $data->{branchcode})->unblessed;
-@{$data}{keys %$library} = values %$library; # merge in all branch columns
+@{$data}{keys %$library} = values %$library; # merge in all branch columns # FIXME This is really ugly, we should pass the library instead
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
@@ -234,7 +234,7 @@ if ($print eq "page") {
 }
 
 # Show OPAC privacy preference is system preference is set
-if ( C4::Context->preference('OPACPrivacy') ) {
+if ( C4::Context->preference('OPACPrivacy') ) { # FIXME Should be moved the the template
     $template->param( OPACPrivacy => 1);
     $template->param( "privacy".$data->{'privacy'} => 1);
 }
@@ -285,7 +285,7 @@ $template->param(
 );
 
 
-$template->param(%$data);
+$template->param(%$data); # FIXME This should be removed and used $patron instead, but too many things are processed above
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
@@ -323,7 +323,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
     $template->param(messaging_form_inactive => 1);
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
-    $template->param(SMSnumber     => $data->{'smsalertnumber'});
     $template->param(TalkingTechItivaPhone => C4::Context->preference("TalkingTechItivaPhoneNotification"));
 }
 
@@ -352,9 +351,6 @@ $template->param(
     patron          => $patron,
     translated_language => $translated_language,
     detailview      => 1,
-    borrowernumber  => $borrowernumber,
-    othernames      => $data->{'othernames'},
-    categoryname    => $patron->category->description,
     was_renewed     => scalar $input->param('was_renewed') ? 1 : 0,
     todaysdate      => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     totalprice      => sprintf("%.2f", $totalprice),
@@ -367,7 +363,6 @@ $template->param(
     samebranch      => $samebranch,
     quickslip       => $quickslip,
     housebound_role => scalar $patron->housebound_role,
-    privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,

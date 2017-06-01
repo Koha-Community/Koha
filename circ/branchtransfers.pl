@@ -210,10 +210,7 @@ foreach my $code ( keys %$messages ) {
             $err{borrowernumber} = $messages->{'WasReturned'};
             my $patron = Koha::Patrons->find( $messages->{'WasReturned'} );
             if ( $patron ) { # Just in case...
-                $err{title}      = $patron->title;
-                $err{firstname}  = $patron->firstname;
-                $err{surname}    = $patron->surname;
-                $err{cardnumber} = $patron->cardnumber;
+                $err{patron} = $patron;
             }
         }
         $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );

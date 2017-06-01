@@ -119,8 +119,10 @@
                                         </td>
                                         <td>[% basket.expected_items %]</td>
                                         <td>
-                                            [% basket.authorisedby_firstname %]
-                                            [% basket.authorisedby_surname %]
+                                            [% IF basket.authorisedby %]
+                                                [% basket.authorisedby.firstname %]
+                                                [% basket.authorisedbysurname %]
+                                            [% END %]
                                         </td>
                                         <td><span title="[% basket.creationdate %]">[% basket.creationdate | $KohaDates %]</span></td>
                                         <td>

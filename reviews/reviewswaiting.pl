@@ -75,8 +75,7 @@ for my $review ( @$reviews ) {
     my $borrowernumber = $review->{borrowernumber};
     my $patron = Koha::Patrons->find( $borrowernumber);
     if ( $patron ) {
-        $review->{surname}     = $patron->surname;
-        $review->{firstname}   = $patron->firstname;
+        $review->{patron} = $patron;
     }
 }
 

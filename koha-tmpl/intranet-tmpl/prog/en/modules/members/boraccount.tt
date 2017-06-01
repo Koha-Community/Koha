@@ -20,15 +20,15 @@
 	<div id="yui-main">
 	<div class="yui-b">
 [% INCLUDE 'members-toolbar.inc' %]
-<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
+<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" /></form>
 
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-    <li class="active"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Account</a></li>
-	<li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]" >Pay fines</a></li>
-	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrowernumber %]" >Create manual invoice</a></li>
-	<li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrowernumber %]" >Create manual credit</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a></li>
+    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a></li>
+    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 <!-- The table with the account items -->

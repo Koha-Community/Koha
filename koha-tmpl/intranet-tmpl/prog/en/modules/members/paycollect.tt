@@ -2,37 +2,37 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% borrower.firstname %] [% borrower.surname %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% patron.firstname %] [% patron.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Pay fines for [% borrower.firstname %] [% borrower.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Pay fines for [% patron.firstname %] [% patron.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
 <div id="bd">
 <div id="yui-main">
 <div class="yui-b">
-[% INCLUDE 'members-toolbar.inc' borrowernumber=borrower.borrowernumber %]
+[% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
 
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
     <li>
-    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Account</a>
+    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a>
     </li>
     <li class="active">
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]" >Pay fines</a>
+    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual invoice</a>
+    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual credit</a>
+    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a>
     </li>
 </ul>
 <div class="tabs-container">
@@ -45,7 +45,7 @@
 [% IF ( pay_individual ) %]
     <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
     <input type="hidden" name="description" id="description" value="[% description %]" />
@@ -89,14 +89,14 @@
 </fieldset>
 
     <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
+        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
     </form>
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
     <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
     <fieldset class="rows">
     <legend>Write off an individual fine</legend>
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
     <input type="hidden" name="description" id="description" value="[% description %]" />
@@ -130,13 +130,13 @@
             </ol>
         </fieldset>
         <div class="action"><input type="submit" name="confirm_writeoff" id="confirm_writeoff" value="Write off this charge" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
+        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
     </form>
 [% ELSE %]
 
     <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
 
@@ -159,7 +159,7 @@
     </ol>
     </fieldset>
     <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
+        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
     </form>
 [% END %]
 </div></div>

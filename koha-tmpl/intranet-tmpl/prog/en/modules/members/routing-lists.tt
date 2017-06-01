@@ -57,7 +57,7 @@
                       </strong>
                     </a>
                     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                   </td>
                 </tr>
                 [% END %]
@@ -67,7 +67,7 @@
           [% ELSE %]
           <p>Patron does not belong to any subscription routing lists.</p>
           <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                     [% END %]
 
 </div>

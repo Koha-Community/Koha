@@ -47,11 +47,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $category = $patron->category;
-my $data = $patron->unblessed;
-$data->{description} = $category->description;
-$data->{category_type} = $category->category_type;
-
 my ( $total, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
 foreach my $accountline (@$accts) {
     if (   $accountline->{accounttype} ne 'F'
@@ -68,9 +63,7 @@ my $holds_rs = Koha::Holds->search(
 );
 
 $template->param(
-    %$data,
-
-    borrowernumber => $borrowernumber,
+    patron => $patron,
 
     accounts => $accts,
     totaldue => $total,

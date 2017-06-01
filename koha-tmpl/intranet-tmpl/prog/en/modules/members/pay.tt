@@ -4,7 +4,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname |html %] [% borrower.surname |html %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% patron.firstname |html %] [% patron.surname |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -12,28 +12,28 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% borrower.firstname |html %] [% borrower.surname |html %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% patron.firstname |html %] [% patron.surname |html %]</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-[% INCLUDE 'members-toolbar.inc' borrowernumber=borrower.borrowernumber %]
+[% INCLUDE 'members-toolbar.inc' borrowernumber=patron.borrowernumber %]
 
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-	<li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Account</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]" >Pay fines</a></li>
-	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual invoice</a></li>
-	<li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual credit</a></li>
+    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a></li>
+    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a></li>
+    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 
 [% IF ( accounts ) %]
     <form action="/cgi-bin/koha/members/pay.pl" method="post" id="pay-fines-form">
-	<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
 <p><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></p>
 <table id="finest">
 <thead>
@@ -120,11 +120,10 @@
 <input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
 [% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />[% END %]
 <input type="submit" id="payselected" name="payselected"  value="Pay selected" class="submit" />
-<a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
+<a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
 </fieldset>
 </form>
-[% ELSE %]
-    <p>[% borrower.firstname |html %] [% borrower.surname |html %] has no outstanding fines.</p>
+    <p>[% patron.firstname |html %] [% patron.surname |html %] has no outstanding fines.</p>
 [% END %]
 </div></div>
 

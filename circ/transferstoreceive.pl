@@ -114,13 +114,7 @@ while ( my $library = $libraries->next ) {
             # we check if we have a reserv for this transfer
             my $holds = $item->current_holds;
             if ( my $first_hold = $holds->next ) {
-                my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
-                # FIXME The full patron object should be passed to the template
-                $getransf{'borrowernum'}       = $patron->borrowernumber;
-                $getransf{'borrowername'}      = $patron->surname;
-                $getransf{'borrowerfirstname'} = $patron->firstname;
-                $getransf{'borrowermail'}      = $patron->email if $patron->email;
-                $getransf{'borrowerphone'}     = $patron->phone;
+                $getransf{patron} = Koha::Patrons->find( $first_hold->borrowernumber );
             }
             push( @transferloop, \%getransf );
         }

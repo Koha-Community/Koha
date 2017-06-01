@@ -138,8 +138,7 @@ for my $vendor (@suppliers) {
                 $basket->{$_} ||= 0;
             }
             if ( $patron ) {
-                $basket->{authorisedby_firstname} = $patron->firstname;
-                $basket->{authorisedby_surname} = $patron->surname;
+                $basket->{authorisedby} = $patron;
             }
             if ($basket->{basketgroupid}) {
                 my $basketgroup = C4::Acquisition::GetBasketgroup($basket->{basketgroupid});

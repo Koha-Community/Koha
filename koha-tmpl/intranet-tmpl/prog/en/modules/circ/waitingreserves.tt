@@ -90,10 +90,10 @@
                             [% UNLESS ( item_level_itypes ) %][% IF ( reserveloo.itemtype ) %]&nbsp; (<b>[% reserveloo.itemtype %]</b>)[% END %][% END %]
                             <br />Barcode: [% reserveloo.barcode %]
                     </td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernum %]">[% reserveloo.borrowername %], [% reserveloo.borrowerfirstname %]</a>
-                        [% IF ( reserveloo.borrowerphone ) %]<br />[% reserveloo.borrowerphone %][% END %]
-                        [% IF ( reserveloo.borrowermail ) %]<br /><a href="mailto:[% reserveloo.borrowermail %]?subject=Hold waiting: [% reserveloo.title %]">
-                        [% reserveloo.borrowermail %]</a>[% END %]
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.patron.borrowernumber %]">[% reserveloo.patron.surname%], [% reserveloo.patron.firstname %]</a>
+                        [% IF ( reserveloo.patron.phone ) %]<br />[% reserveloo.patron.phone %][% END %]
+                        [% IF ( reserveloo.patron.first_valid_email_address ) %]<br /><a href="mailto:[% reserveloo.patron.first_valid_email_address %]?subject=Hold waiting: [% reserveloo.title %]">
+                        [% reserveloo.patron.first_valid_email_address %]</a>[% END %]
                     </td>
                     <td>[% Branches.GetName( reserveloo.homebranch ) %]</td>
                     <td>[% Branches.GetName( reserveloo.holdingbranch ) %]</td>
@@ -161,9 +161,9 @@
                             [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]
                         <br />Barcode: [% overloo.barcode %]
                     </td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.borrowernum %]">[% overloo.borrowername %], [% overloo.borrowerfirstname %]</a><br />[% overloo.borrowerphone %]<br />
-                        [% IF ( overloo.borrowermail ) %]<a href="mailto:[% overloo.borrowermail %]?subject=Reservation: [% overloo.title |url %]">
-        [% overloo.borrowermail %]</a>[% END %]
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.patron.borrowernumber %]">[% overloo.patron.surname %], [% overloo.patron.firstname %]</a><br />[% overloo.patron.phone %]<br />
+                        [% IF ( overloo.patron.first_valid_email_address ) %]<a href="mailto:[% overloo.patron.first_valid_email_address %]?subject=Reservation: [% overloo.title |url %]">
+        [% overloo.patron.first_valid_email_address %]</a>[% END %]
                     </td>
                     <td>[% Branches.GetName( overloo.homebranch ) %]</td>
                     <td>[% Branches.GetName( overloo.holdingbranch ) %]</td>

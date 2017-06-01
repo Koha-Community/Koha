@@ -113,23 +113,7 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
     $template->param( adultborrower => 1 ) if $patron->category->category_type =~ /^(A|I)$/;
 
     $template->param(
-        # FIXME The patron object should be passed to the template
-        borrowernumber => $patron->borrowernumber,
-        surname => $patron->surname,
-        title => $patron->title,
-        cardnumber => $patron->cardnumber,
-        firstname => $patron->firstname,
-        categorycode => $patron->categorycode,
-        category_type => $patron->category->category_type,
-        categoryname  => $patron->category->description,
-        address => $patron->address,
-        address2 => $patron->address2,
-        city => $patron->city,
-        zipcode => $patron->zipcode,
-        country => $patron->country,
-        phone => $patron->phone,
-        email => $patron->email,
-        branchcode => $patron->branchcode,
+        patron => $patron,
     );
     if ($countissues >0) {
         $template->param(ItemsOnIssues => $countissues);

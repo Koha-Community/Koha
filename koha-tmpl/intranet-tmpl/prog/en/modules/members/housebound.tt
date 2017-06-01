@@ -57,7 +57,7 @@
               <h4>Manage housebound profile</h4>
               <form id="editform" method="post" name="editform"
                     action="/cgi-bin/koha/members/housebound.pl">
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                 [% IF ( housebound_profile ) %]
                   <input type="hidden" name="method" value="updateconfirm" />
                 [% ELSE %]
@@ -188,7 +188,7 @@
                 <fieldset class="action">
                   <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save changes</button>
                   <a class="cancel btn btn-link btn-sm"
-                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">
+                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]">
                     Cancel
                   </a>
                 </fieldset>
@@ -205,7 +205,7 @@
                 [% ELSE %]
                   <input type="hidden" name="method" value="addvisitconfirm" />
                 [% END %]
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                 <fieldset class="rows" id="instance">
                   <legend>Delivery details</legend>
                   <ol>
@@ -314,7 +314,7 @@
                 <fieldset class="action">
                   <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save</button>
                   <a class="cancel"
-                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">
+                     href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]">
                     Cancel
                   </a>
                 </fieldset>
@@ -371,7 +371,7 @@
                   </li>
                 </ol>
                 <div class="action">
-                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
+                  <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]&method=update_or_create"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
               </div>
               <div>
@@ -397,15 +397,15 @@
                         </a>
                       </td>
                       <td class="actions">
-                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"><i class="fa fa-pencil"></i> Edit</a>
-                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% borrowernumber %]"><i class="fa fa-trash"></i> Delete</a>
+                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&visit_id=[% entry.id %]&borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-pencil"></i> Edit</a>
+                        <a class="delete btn btn-default btn-xs" href="/cgi-bin/koha/members/housebound.pl?method=visit_delete&visit_id=[% entry.id %]&borrowernumber=[% patron.borrowernumber %]"><i class="fa fa-trash"></i> Delete</a>
                       </td>
                     </tr>
                     [% END %]
                 </table>
                 [% END %]
                 <div class="action">
-                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% borrowernumber %]"
+                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% patron.borrowernumber %]"
                     class="btn btn-default btn-sm">
                     <i class="fa fa-plus"></i> Add a new delivery
                   </a>

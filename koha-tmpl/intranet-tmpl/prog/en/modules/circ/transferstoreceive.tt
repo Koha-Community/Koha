@@ -50,16 +50,16 @@
                             [% IF ( reser.itemtype ) %] (<b>[% reser.itemtype %]</b>)[% END %]
                             <br />Barcode: [% reser.barcode %]
                     </td>
-                    <td>[% IF ( reser.borrowername ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.borrowernum %]">
-                            [% reser.borrowername %][%IF ( reser.borrowerfirstname ) %], [% reser.borrowerfirstname %][% END %]
+                    <td>[% IF ( reser.patron ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber %]">
+                            [% reser.patron.surname %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname %][% END %]
                         </a>
-                        [% IF ( reser.borrowerphone ) %]<br />[% reser.borrowerphone %][% END %]
-                            [% IF ( reser.borrowermail ) %]
+                        [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone %][% END %]
+                            [% IF ( reser.patron.email ) %]
                                 <br />
                                 [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.borrowermail %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
-                                    [% reser.borrowermail %]
+                                <a href="mailto:[% reser.patron.email %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
+                                    [% reser.patron.email %]
                                 </a>
                             [% END %]
                         [% ELSE %]

@@ -117,8 +117,7 @@ if ($op eq 'add_form') {
             exit;
         }
         $dropbox_disabled = BudgetHasChildren($budget_id);
-        my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
-        $budget->{budget_owner_name} = ( $patron ? $patron->firstname . ' ' . $patron->surname : '' );
+        $budget->{budget_owner} = Koha::Patrons->find( $budget->{budget_owner_id} );
     }
 
     # build budget hierarchy

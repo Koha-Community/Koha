@@ -17,7 +17,7 @@
 <script type="text/javascript">
     // <![CDATA[
 var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-var patron_homebranch = "[% Branches.GetName( borrower_branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
 var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
     [% itemloo.itemnumber %]: {
         homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
@@ -195,7 +195,7 @@ function checkMultiHold() {
     });
 
 
-[% UNLESS ( borrowernumber || borrowers || noitems ) %]
+[% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
     [% IF ( CircAutocompl ) %]
     $( "#patron" ).autocomplete({
         source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -265,7 +265,7 @@ function checkMultiHold() {
     <h1>Confirm holds</h1>
   [% END %]
 
-  [% UNLESS borrowernumber OR noitems %]
+  [% UNLESS patron OR patron.borrowernumber OR noitems %]
     [% IF ( messageborrower ) %]
       <div class="dialog alert"><h3>Patron not found</h3><p>No patron with this name, please, try another</p> </div>
     [% END %]
@@ -298,29 +298,29 @@ function checkMultiHold() {
       <h3>Cannot place hold</h3>
       <ul>
         [% IF ( exceeded_maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
         [% ELSIF ( exceeded_holds_per_record ) %]
-          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
         [% ELSIF ( alreadypossession ) %]
-          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>is already in possession</strong> of one item.</li>
+          <li> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>is already in possession</strong> of one item.</li>
         [% ELSIF ( alreadyreserved ) %]
-          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item.</li>
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>already has a hold</strong> on this item.</li>
         [% ELSIF ( ageRestricted ) %]
           <li><strong>Age restricted</strong></li>
         [% ELSIF ( none_available ) %]
           <li> <strong>No items are available</strong> to be placed on hold.</li>
         [% ELSIF ( maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> has too many holds.</li>
         [% END %]
       </ul>
     [% ELSE %]
         <h3>Cannot place hold on some items</h3>
         [% IF ( exceeded_maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
         [% ELSIF ( exceeded_holds_per_record ) %]
             [% FOREACH biblioloo IN biblioloop %]
                 [% IF (biblioloo.tooManyHoldsForThisRecord) %]
-                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
                 [% END %]
             [% END %]
         [% END %]
@@ -329,22 +329,22 @@ function checkMultiHold() {
     </div>
 [% END %]
 
-[% IF ( expiry || diffbranch || restricted || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
+[% IF ( expiry || diffbranch || patron.is_debarred || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
 <div class="dialog message"><ul>
     [% IF ( expiry ) %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Account has expired</strong></li>
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron,surname %]</a>: <strong>Account has expired</strong></li>
     [% END %]
 
-    [% IF restricted %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has restrictions</strong></li>
+    [% IF patron.is_debarred %]
+    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]#reldebarments">[% patron.firstname %] [% patron.surname %]</a>: <strong>Patron has restrictions</strong></li>
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
     [% END %]
 
     [% IF ( diffbranch ) %]
-    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> Patron's home library: ([% Branches.GetName(borrower_branchcode) %] / [% borrower_branchcode %] )</li>
+    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> Patron's home library: ([% Branches.GetName(patron.branchcode) %] / [% patron.branchcode %] )</li>
     [% END %]
 
 </ul></div>
@@ -362,7 +362,7 @@ function checkMultiHold() {
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         [% END %]
 
-        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
         <input type="hidden" name="type" value="str8" />
 
         [% IF ( multi_hold ) %]
@@ -381,8 +381,8 @@ function checkMultiHold() {
         [% END %]
 
        <ol> <li><span class="label">Patron:</span>
-            [% IF ( borrowernumber ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] ([% cardnumber %])</a>
+            [% IF ( patron.borrowernumber ) %]
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] ([% cardnumber %])</a>
             [% ELSE %]
                 Not defined yet
             [% END %]
@@ -459,7 +459,7 @@ function checkMultiHold() {
 </ol>
    [% UNLESS ( multi_hold ) %]
         <fieldset class="action">
-            [% IF ( borrowernumber ) %]
+            [% IF ( patron.borrowernumber ) %]
                 [% IF ( override_required ) %]
                     <input type="submit" class="warning" value="Place hold" />
                 [% ELSIF ( none_available ) %]
@@ -596,9 +596,9 @@ function checkMultiHold() {
                             Can't be cancelled when item is in transit
                     [% ELSE %]
                     [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
-                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">[% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) %]
+                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber %]">[% itemloo.ReservedFor.firstname %] [% itemloo.ReservedFor.surname %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) %]
                     since
-                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedForBorrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
+                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber %]&amp;CancelItemnumber=[% itemloo.itemnumber %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
 
                     [% END %]
                 [% ELSE %]
@@ -672,7 +672,7 @@ function checkMultiHold() {
             [% END %]
 
           [% IF ( biblioloo.alreadyres ) %]
-              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %]</a> <strong>already has a hold</strong> on this item </li>
           [% END %]
           [% IF ( biblioloo.none_avail ) %]
               <li> <strong>No items are available</strong> to be placed on hold</li>
@@ -694,7 +694,7 @@ function checkMultiHold() {
   [% END %]<!-- /multi_hold -->
 
     <fieldset class="action">
-        [% IF ( borrowernumber ) %]
+        [% IF ( patron AND patron.borrowernumber ) %]
             [% IF ( override_required ) %]
                 <input type="submit" class="warning" value="Place hold" />
             [% ELSIF ( none_available ) %]
@@ -708,7 +708,7 @@ function checkMultiHold() {
 	</fieldset>
 [% END %]
 
-[% UNLESS ( borrowernumber ) %]
+[% UNLESS ( patron ) %]
 [% IF ( reserveloop ) %]
 <form name="T[% time %]" action="modrequest.pl" method="post">
   [% IF ( multi_hold ) %]

@@ -95,7 +95,6 @@ if ($add){
     });
 
     my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
-    my $patron         = Koha::Patrons->find($borrowernumber);
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
   # get authorised values with type of MANUAL_INV
@@ -125,11 +124,9 @@ if ($add){
         );
     }
 
-    $template->param(%{ $patron->unblessed });
     $template->param(
+        patron         => $patron,
         finesview      => 1,
-        borrowernumber => $borrowernumber,
-        categoryname   => $patron->category->description,
         is_child       => ($patron->category->category_type eq 'C'),
     );
     output_html_with_http_headers $input, $cookie, $template->output;

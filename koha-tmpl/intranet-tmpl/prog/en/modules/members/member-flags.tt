@@ -2,7 +2,7 @@
 [% SET footerjs = 1 %]
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% surname %], [% firstname %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% patron.surname %], [% patron.firstname %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/treeview/jquery.treeview_[% KOHA_VERSION %].css"/>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -11,7 +11,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Set permissions for [% surname %], [% firstname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Set permissions for [% patron.surname %], [% patron.firstname %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -22,9 +22,9 @@
 
 <form method="post" action="/cgi-bin/koha/members/member-flags.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-    <input type="hidden" name="member" id="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="member" id="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="newflags" value="1" />
-    <h1>Set permissions for [% surname %], [% firstname %]</h1>
+    <h1>Set permissions for [% patron.surname %], [% patron.firstname %]</h1>
     <!-- <ul id="permissionstree"><li class="root">All privileges<ul> -->
     <ul id="permissionstree" class="treeview-grey">
         <!-- <li class="folder-close">One level down<ul> -->
@@ -64,7 +64,7 @@
     <!-- </ul></li></ul> -->
     </ul>
 
-<fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Cancel</a></fieldset>
+<fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></fieldset>
 
 </form>
 </div>

@@ -108,11 +108,9 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     );
 }
 
-$template->param(%{ $patron->unblessed });
-
 $template->param(
+    patron              => $patron,
     finesview           => 1,
-    borrowernumber      => $borrowernumber,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     is_child            => ($patron->category->category_type eq 'C'),

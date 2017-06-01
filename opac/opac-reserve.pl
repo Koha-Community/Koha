@@ -480,12 +480,8 @@ foreach my $biblioNum (@biblionumbers) {
         my $holds = $item->current_holds;
 
         if ( my $first_hold = $holds->next ) {
-            my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
             $itemLoopIter->{backgroundcolor} = 'reserved';
             $itemLoopIter->{reservedate}     = output_pref({ dt => dt_from_string($first_hold->reservedate), dateonly => 1 }); # FIXME Should be formatted in the template
-            $itemLoopIter->{ReservedForBorrowernumber} = $first_hold->borrowernumber;
-            $itemLoopIter->{ReservedForSurname}        = $patron->surname;
-            $itemLoopIter->{ReservedForFirstname}      = $patron->firstname;
             $itemLoopIter->{ExpectedAtLibrary}         = $first_hold->branchcode;
             $itemLoopIter->{waitingdate} = $first_hold->waitingdate;
         }

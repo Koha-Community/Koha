@@ -114,8 +114,8 @@
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_name %]</td>
-                <td>[% IF ( loop_budge.budget_owner_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner_borrowernumber %]">[% loop_budge.budget_owner_surname %], [% loop_budge.budget_owner_firstname %]</a>
+                <td>[% IF ( loop_budge.budget_owner ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber %]">[% loop_budge.budget_owner.surname %], [% loop_budge.budget_owner.firstname %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]

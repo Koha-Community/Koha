@@ -7,21 +7,21 @@
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( guarantor ) %]
-            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;guarantorid=[% guarantor.borrowernumber %]&amp;categorycode=[% categorycode %]">
+            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber %]&amp;guarantorid=[% guarantor.borrowernumber %]&amp;categorycode=[% patron.categorycode %]">
         [% ELSE %]
-            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">
+            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber %]&amp;categorycode=[% patron.categorycode %]">
         [% END %]
         <i class="fa fa-pencil"></i> Edit</a>
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF adultborrower AND Koha.Preference("borrowerRelationship") %]
-            <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
+            <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% patron.borrowernumber %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
         [% IF CAN_user_borrowers_edit_borrowers %]
-            <a id="changepassword" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
+            <a id="changepassword" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber %]"><i class="fa fa-lock"></i> Change password</a>
         [% END %]
-        <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
+        <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber %]&amp;categorycode=[% patron.categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
     [% END %]
 
     <div class="btn-group">
@@ -30,7 +30,7 @@
                 [% IF CAN_user_borrowers_edit_borrowers %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
-                [% IF Borrowers.HasOverdues( borrowernumber ) %]
+                [% IF Borrowers.HasOverdues( patron.borrowernumber ) %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
             </ul>
@@ -46,17 +46,17 @@
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=[% destination %]&amp;reregistration=y">Renew patron</a></li>
+                    <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber %]&amp;destination=[% destination %]&amp;reregistration=y">Renew patron</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to renew patrons" id="renewpatron" href="#">Renew patron</a></li>
                 [% END %]
                 [% IF ( CAN_user_permissions ) %]
-                    <li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]">Set permissions</a></li>
+                    <li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=[% patron.borrowernumber %]">Set permissions</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to set permissions" id="patronflags" href="#">Set permissions</a></li>
                 [% END %]
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
-                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% borrowernumber %]">Discharge</a></li>
+                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber %]">Discharge</a></li>
                 [% END %]
                 [% IF CAN_user_borrowers_edit_borrowers %]
                     [% IF ( NorwegianPatronDBEnable == 1 ) %]
@@ -98,7 +98,7 @@
                         <label for="message_type">Add a message for:</label>
                         <select name="message_type" id="message_type">
                             <option value="L">Staff - Internal note</option>
-                            <option value="B">OPAC - [% firstname | html %] [% surname | html %]</option>
+                            <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
                         </select>
                     </div>
                     [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
@@ -116,7 +116,7 @@
                     <div class="form-group">
                         <textarea rows="3" class="modal-textarea" name="borrower_message" id="borrower_message" ></textarea>
                     </div>
-                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                     <input type="hidden" name="batch" value="[% batch %]" />
                     <input type="hidden" name="branchcode" value="[% LoginBranchcode %]" />
                 </div>

@@ -52,13 +52,7 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $category = $patron->category;
-my $borrower= $patron->unblessed;
-$borrower->{description} = $category->description;
-$borrower->{category_type} = $category->category_type;
 
-$template->param(
-    categoryname    => $borrower->{'description'},
-);
 # Construct column names
 my $fields = C4::Members::Statistics::get_fields();
 our @statistic_column_names = split '\|', $fields;
@@ -92,11 +86,10 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 
 $template->param( picture => 1 ) if $patron->image;
 
-$template->param(%$borrower);
-
-$template->param( adultborrower => 1 ) if ( $borrower->{category_type} eq 'A' || $borrower->{category_type} eq 'I' );
+$template->param( adultborrower => 1 ) if ( $category->category_type eq 'A' || $category->category_type eq 'I' );
 
 $template->param(
+    patron             => $patron,
     statisticsview     => 1,
     datas              => $datas,
     column_names       => \@statistic_column_names,

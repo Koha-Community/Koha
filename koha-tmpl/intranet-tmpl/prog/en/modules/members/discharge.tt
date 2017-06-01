@@ -3,7 +3,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="discharge" class="discharge">
@@ -13,7 +13,7 @@
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% UNLESS blocking_error  %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+&rsaquo; [% UNLESS blocking_error  %]Discharge for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])[% END %]
 </div>
 
 <div id="doc3" class="yui-t1">
@@ -33,12 +33,12 @@
 [% UNLESS can_be_discharged %]
     <p>Cannot edit discharge: the patron has checked out items.</p>
 [% ELSE %]
-    [% IF has_reserves %]
+    [% IF patron.holds.count %]
         <p>Borrower has reserves: they will be canceled if the discharge is generated.</p>
     [% END %]
     <form method="post">
         <input type="submit" value="Generate discharge" name="discharge" />
-        <input type="hidden" value="[% borrowernumber %]" name="borrowernumber" />
+        <input type="hidden" value="[% patron.borrowernumber %]" name="borrowernumber" />
     </form>
 [% END %]
 

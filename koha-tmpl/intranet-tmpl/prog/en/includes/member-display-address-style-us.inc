@@ -1,16 +1,16 @@
-[% IF ( address or address2 ) %]
-    [% IF ( address ) %]
+[% IF ( patron.address or patron.address2 ) %]
+    [% IF ( patron.address ) %]
         [% SET roadtype_desc = '' %]
-        [% IF streettype %]
-            [% SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', streettype) %]
+        [% IF patron.streettype %]
+            [% SET roadtype_desc = AuthorisedValues.GetByCode('ROADTYPE', patron.streettype) %]
         [% END %]
-        <li class="patronaddress1">[% if (streetnumber) %][% streetnumber |html  %][% end %] [% address |html %] [% IF roadtype_desc %][% roadtype_desc |html  %] [% END %][% end %]</li>
+        <li class="patronaddress1">[% if (patron.streetnumber) %][% patron.streetnumber |html  %][% end %] [% patron.address |html %] [% IF roadtype_desc %][% roadtype_desc |html  %] [% END %][% end %]</li>
     [% END %]
-    [% IF ( address2 ) %]
-        <li class="patronaddress2">[% address2 |html  %]</li>
+    [% IF ( patron.address2 ) %]
+        <li class="patronaddress2">[% patron.address2 |html  %]</li>
     [% END %]
 [% END %]
-[% IF ( city ) %]<li class="patroncity">
-        [% city |html  %][% IF ( state ) %], [% state |html  %][% END %]
-        [% zipcode |html  %][% IF ( country ) %], [% country |html  %][% END %]</li>
+[% IF ( patron.city ) %]<li class="patroncity">
+        [% patron.city |html  %][% IF ( patron.state ) %], [% patron.state |html  %][% END %]
+        [% patron.zipcode |html  %][% IF ( patron.country ) %], [% patron.country |html  %][% END %]</li>
 [% END %]

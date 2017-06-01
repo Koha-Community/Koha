@@ -27,12 +27,12 @@
     <div class="dialog alert">Staff members are not allowed to access patron's checkout history</div>
 [% ELSIF is_anonymous %]
     <div class="dialog alert">This is the anonymous patron, so no circulation history is displayed. To get a list of anonymized loans, please run a report.</div>
-[% ELSIF ( privacy == 2)  %]
+[% ELSIF ( patron.privacy == 2)  %]
     <div class="dialog message">This patron has set the privacy rules to never keeping a circulation history.</div>
 [% ELSIF ( !loop_reading ) %]
     <div class="dialog message">This patron has no circulation history.</div>
 [% ELSE %]
-<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
+<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" /></form>
 
 
 <div id="tabs" class="toptabs">

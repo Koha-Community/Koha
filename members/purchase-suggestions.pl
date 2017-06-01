@@ -47,15 +47,9 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $category = $patron->category;
-my $data = $patron->unblessed;
-$data->{description} = $category->description;
-$data->{category_type} = $category->category_type;
-foreach my $key ( keys %$data ) {
-    $template->param( $key => $data->{$key} );
-}
 $template->param(
+    patron => $patron,
     suggestionsview  => 1,
-    categoryname => $data->{'description'},
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

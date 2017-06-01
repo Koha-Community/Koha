@@ -4,13 +4,13 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-    <title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
+    <title>Summary for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</title>
     [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_moremember-print" class="pat">
     <div id="main">
-        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">Account summary: [% firstname %] [% surname %] ([% cardnumber %])</a></h3>
+        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber %]">Account summary: [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</a></h3>
 
         <ul>
             [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -18,15 +18,15 @@
             [% ELSE %]
                 [% INCLUDE 'member-display-address-style-us.inc' %]
             [% END %]
-            <li>[% IF ( phone ) %][% phone %][% ELSE %](no phone number on file)[% END %]</li>
-            <li>[% IF ( email ) %][% email %][% ELSE %](no primary email on file)[% END %]</li>
-            [% IF ( emailpro ) %]
-                <li>[% emailpro %]</li>
+            <li>[% IF ( patron.phone ) %][% patron.phone %][% ELSE %](no phone number on file)[% END %]</li>
+            <li>[% IF ( patron.email ) %][% patron.email %][% ELSE %](no primary email on file)[% END %]</li>
+            [% IF ( patron.emailpro ) %]
+                <li>[% patron.emailpro %]</li>
             [% END %]
-            <li>Registration date: [% dateenrolled | $KohaDates %]</li>
-            <li>Expiration date: [% dateexpiry | $KohaDates %]</li>
-            <li>Library: [% Branches.GetName( branchcode ) %]</li>
-            <li>Category: [% description %]</li>
+            <li>Registration date: [% patron.dateenrolled | $KohaDates %]</li>
+            <li>Expiration date: [% patron.dateexpiry | $KohaDates %]</li>
+            <li>Library: [% Branches.GetName( patron.branchcode ) %]</li>
+            <li>Category: [% patron.category.description %]</li>
         </ul>
 
         [% IF ( issues ) %]

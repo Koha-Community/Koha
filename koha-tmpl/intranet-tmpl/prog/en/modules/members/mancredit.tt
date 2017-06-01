@@ -21,15 +21,15 @@
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-	<li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Account</a></li>
-	<li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]" >Pay fines</a></li>
-	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrowernumber %]" >Create manual invoice</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrowernumber %]" >Create manual credit</a></li>
+    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Account</a></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]" >Pay fines</a></li>
+    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual invoice</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 
 <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
-<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
+<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
 
 <fieldset class="rows">
 <legend>Manual credit</legend><ol>
@@ -43,7 +43,7 @@
     <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
 </ol></fieldset>
 
-<fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Cancel</a></fieldset>
+<fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></fieldset>
 </form>
 
 </div></div>

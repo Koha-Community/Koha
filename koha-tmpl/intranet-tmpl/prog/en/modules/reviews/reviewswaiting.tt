@@ -45,7 +45,7 @@
     <tbody>[% FOREACH review IN reviews %]
     <tr>
         <td>
-            [% IF ( review.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber %]">[% review.surname %], [% review.firstname %]</a>[% ELSE %](deleted patron)[% END %]
+            [% IF ( review.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% review.borrowernumber %]">[% review.patron.surname %], [% review.patron.firstname %]</a>[% ELSE %](deleted patron)[% END %]
         </td>
         <td>
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% review.biblionumber %]">[% review.bibliotitle %]</a>

@@ -130,9 +130,9 @@
                                   <li>Item is already at destination library.</li>
                               [% END %]
                               [% IF ( errmsgloo.errwasreturned ) %]
-                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.borrowernumber %]">
-                                  [% errmsgloo.firstname %] [% errmsgloo.surname %]
-                                  ([% errmsgloo.cardnumber %])</a> and has been returned.</li>
+                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber %]">
+                                  [% errmsgloo.patron.firstname %] [% errmsgloo.patron.surname %]
+                                  ([% errmsgloo.patron.cardnumber %])</a> and has been returned.</li>
                               [% END %]
                           [% END %]
                           </ul>

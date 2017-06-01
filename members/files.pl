@@ -69,7 +69,7 @@ if ( $op eq 'download' ) {
 else {
 
     my $patron_category = $patron->category;
-    $template->param(%{ $patron->unblessed});
+    $template->param( patron => $patron );
 
     my %errors;
 
@@ -105,10 +105,6 @@ else {
     } elsif ( $op eq 'delete' ) {
         $bf->DelFile( id => scalar $cgi->param('file_id') );
     }
-
-    $template->param(
-        categoryname    => $patron_category->description,
-    );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         my $attributes = GetBorrowerAttributes($borrowernumber);

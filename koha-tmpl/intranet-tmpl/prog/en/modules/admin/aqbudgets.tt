@@ -248,17 +248,17 @@
 
     <li>
         <span class="label">Owner: </span>
-        [% IF ( budget_owner_name ) %]
+        [% IF  budget_owner %]
             <span  id="budget_owner_name">
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner_id %]">
-                    [% budget_owner_name %]
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% budget_owner.borrowernumber %]">
+                    [% budget_owner.firstname %] [% budget_owner.surname %]
                 </a> |
             </span>
         [% END %]
         <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
         <a id="remove_owner" href="#"><i class="fa fa-trash"></i> Remove owner</a>
         <input type="hidden" name="budget_owner_id" id="budget_owner_id"
-            value="[% budget_owner_id %]" />
+            value="[% budget_owner.borrowernumber %]" />
     </li>
 
 

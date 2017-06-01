@@ -1,13 +1,13 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Delete patron [% firstname %] [% surname %]</title>
+<title>Koha &rsaquo; Delete patron [% patron.firstname %] [% patron.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_deletemem" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Delete patron [% firstname %] [% surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; Delete patron [% patron.firstname %] [% patron.surname %]</div>
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -29,18 +29,18 @@
             [% END %]
             </ul>
     </div>
-    [% ELSIF op == 'delete_confirm' and borrowernumber %]
-        [%# TODO add "patron does not exist" unless borrowernumber %]
+    [% ELSIF op == 'delete_confirm' and patron %]
+        [%# TODO add "patron does not exist" unless patron %]
         <div class="dialog alert">
-            <h3>Are you sure you want to delete the patron [% firstname %] [% surname %]? This cannot be undone.</h3>
+            <h3>Are you sure you want to delete the patron [% patron.firstname %] [% patron.surname %]? This cannot be undone.</h3>
             <form action="/cgi-bin/koha/members/deletemem.pl">
                 <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-                <input type="hidden" name="member" value="[% borrowernumber %]"/>
+                <input type="hidden" name="member" value="[% patron.borrowernumber %]"/>
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
             </form>
             <form action="/cgi-bin/koha/members/moremember.pl">
-                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]"/>
+                <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]"/>
                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
             </form>
         </div>

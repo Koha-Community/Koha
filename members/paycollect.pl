@@ -55,8 +55,6 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 my $borrower       = $patron->unblessed;
 my $category       = $patron->category;
-$borrower->{description} = $category->description;
-$borrower->{category_type} = $category->category_type;
 my $user           = $input->remote_user;
 
 my $branch         = C4::Context->userenv->{'branch'};
@@ -179,8 +177,7 @@ $template->param(%$borrower);
 
 $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
-    borrower      => $borrower,
-    categoryname  => $borrower->{description},
+    patron        => $patron,
     total         => $total_due,
     ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
 
