@@ -308,7 +308,7 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber 
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(500)
-  ->json_is('/error' => "Something went wrong, check Koha logs for details.");
+  ->json_is('/error' => "Something went wrong, check the logs.");
 delete $newpatron->{ falseproperty };
 
 $newpatron->{ cardnumber } = $patron-> { cardnumber };
@@ -363,14 +363,37 @@ $t->request_ok($tx)
   ->json_has($newpatron);
 
 subtest 'patch() tests' => sub {
-    plan tests => 3;
+    plan tests => 12;
 
     my ($borrowernumber, $session_id) =
     create_user_and_session({ authorized => 16 });
+    my ($patronnumber, $patron_session_id) =
+    create_user_and_session({ authorized => 0 });
 
     my $update = { surname => 'Koha-Suomi' };
     $tx = $t->ua->build_tx(PATCH => "/api/v1/patrons/" . $borrowernumber => json => $update );
     $tx->req->cookies({name => 'CGISESSID', value => $session_id});
+    $t->request_ok($tx)
+      ->status_is(200, 'Patron updated successfully')
+      ->json_hasnt('/');
+
+    $update = { firstname => 'Koha-Suomi' };
+    $tx = $t->ua->build_tx(PATCH => "/api/v1/patrons/" . $patronnumber => json => $update );
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session_id});
+    $t->request_ok($tx)
+      ->status_is(202, 'Patron updated successfully')
+      ->json_hasnt('/');
+
+    $update = { privacy => 0 };
+    $tx = $t->ua->build_tx(PATCH => "/api/v1/patrons/" . $patronnumber => json => $update );
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session_id});
+    $t->request_ok($tx)
+      ->status_is(200, 'Patron updated successfully')
+      ->json_hasnt('/');
+
+    $update = { smsalertnumber => '+35850000000' };
+    $tx = $t->ua->build_tx(PATCH => "/api/v1/patrons/" . $patronnumber => json => $update );
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session_id});
     $t->request_ok($tx)
       ->status_is(200, 'Patron updated successfully')
       ->json_hasnt('/');

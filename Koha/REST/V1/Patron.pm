@@ -109,13 +109,26 @@ sub edit {
         my $borrowernumber = $c->validation->param('borrowernumber');
         $patron = Koha::Patrons->find($borrowernumber);
         my $body = $c->req->json;
-        $body->{borrowernumber} = $c->validation->param('borrowernumber');
 
         if ($c->stash('is_owner_access') || $c->stash('is_guarantor_access')){
             if (C4::Context->preference('OPACPatronDetails')) {
                 die unless $patron->set($body)->validate;
-                my $m = Koha::Patron::Modification->new->validate_changes($body, "edit")->store();
-                return $c->render( status => 202, openapi => {});
+                my $verification
+                        = _parameters_require_modification_request($body);
+                if (keys %{$verification->{not_required}}) {
+                    Koha::Patrons->find($borrowernumber)->set(
+                        $verification->{not_required})->store;
+                    unless (keys %{$verification->{required}}) {
+                        return $c->render( status => 200, openapi => $patron );
+                    }
+                }
+                if (keys %{$verification->{required}}) {
+                    $verification->{required}->{borrowernumber} = $borrowernumber;
+                    my $m = Koha::Patron::Modification->new(
+                        $verification->{required}
+                    )->store();
+                    return $c->render( status => 202, openapi => {});
+                }
             } else {
                 return $c->render( status => 403,
                                    openapi => { error => "You need a permission to change Your personal details"});
@@ -133,9 +146,6 @@ sub edit {
     catch {
         unless ($patron) {
             return $c->render( status => 404, openapi => {error => "Patron not found"});
-        }
-        unless (blessed $_ && $_->can('rethrow')) {
-            return $c->render( status => 500, openapi => {error => "Something went wrong, check Koha logs for details."});
         }
         if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
             return $c->render( status => 409, openapi => { error => $_->error, conflict => $_->conflict });
@@ -155,14 +165,16 @@ sub edit {
         elsif ($_->isa('Koha::Exceptions::NoChanges')) {
             return $c->render( status => 204, openapi => {error => "No changes have been made"});
         }
-        else {
-            return $c->render( status => 500, openapi => {error => "Something went wrong, check Koha logs for details."});
-        }
         Koha::Exceptions::rethrow_exception($_);
     };
 }
 
 sub patch {
+    # TODO:
+    # Currently PUT implements a more PATCH-like feature where the whole object
+    # is not required. We can simply use the logic provided by current PUT for
+    # PATCH request. However, the PUT request should be fixed to require
+    # a complete patron object.
     return edit(@_);
 }
 
@@ -310,6 +322,36 @@ sub getstatus {
                 { error => "Something went wrong, check the logs." });
         }
     };
+}
+
+# Takes a HASHref of parameters
+# Returns a HASHref that contains
+# 1. not_required HASHref
+#       - parameters that do not need librarian confirmation
+# 2. required HASHref
+#       - parameters that do need librarian confirmation
+sub _parameters_require_modification_request {
+    my ($body) = @_;
+
+    my $not_required = {
+        'privacy' => 1,
+        'smsalertnumber' => 1,
+    };
+
+    my $params = {
+        not_required => {},
+        required     => {},
+    };
+    foreach my $param (keys %$body) {
+        if ($not_required->{$param}) {
+            $params->{not_required}->{$param} = $body->{$param};
+        }
+        else {
+            $params->{required}->{$param} = $body->{$param};
+        }
+    }
+
+    return $params;
 }
 
 1;
