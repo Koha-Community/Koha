@@ -289,7 +289,7 @@ sub DelDebarmentsAfterPayment {
     foreach my $debarment (@{ $debarments }){
         my $rule;
 
-        foreach my $liftRule (keys $liftDebarmentRules){
+        foreach my $liftRule (keys %$liftDebarmentRules){
             my $comment = $debarment->{'comment'};
             $rule = $liftRule if $comment =~ $liftRule;
         }
