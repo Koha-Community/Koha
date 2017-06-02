@@ -97,6 +97,7 @@
                     </li>
                 </ul>
             </li>
+            [% INCLUDE 'langmenu-staff-top.inc' %]
             <li>
                 <a class="toplinks" href="/cgi-bin/koha/help.pl" id="helper">Help</a>
             </li>

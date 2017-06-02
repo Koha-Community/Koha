@@ -1,6 +1,6 @@
+[% USE Koha %]
         </div>
-
-[% IF ( languages_loop && ! popup_window ) %]
+[% IF ( ( languages_loop ) && ( ! popup_window ) && ( Koha.Preference('StaffLangSelectorMode') == 'both' || Koha.Preference('StaffLangSelectorMode') == 'footer') ) %]
     [% UNLESS ( one_language_enabled ) %]
         <div id="changelanguage" class="navbar navbar-default navbar-fixed-bottom">
             <div class="container-fluid">
