@@ -1,3 +1,4 @@
 [% INCLUDE csv_headers/acqui/basket.tt %]
-[% FOREACH r IN rows %]"[% r.contractname %]",[% r.ordernumber %],[% r.entrydate %],[% r.isbn %],"[% r.author %]","[% r.title %]",[% r.publicationyear %],"[% r.publishercode %]","[% r.collectiontitle %]","[% r.notes %]",[% r.quantity %],[% r.rrp %],"[% r.deliveryplace %]","[% r.billingplace %]"
-[% END %]
+[%- FOREACH r IN rows -%]
+"[% r.contractname %]",[% r.ordernumber %],[% r.entrydate %],[% r.isbn %],"[% r.author %]","[% r.title %]",[% r.publicationyear %],"[% r.publishercode %]","[% r.collectiontitle %]","[% r.notes %]",[% r.quantity %],[% r.rrp %],"[% r.deliveryplace %]","[% r.billingplace %]"
+[% END -%]
