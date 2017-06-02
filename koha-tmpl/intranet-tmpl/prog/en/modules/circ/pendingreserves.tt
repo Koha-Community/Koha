@@ -133,6 +133,7 @@ $(document).ready(function() {
         <th class="string-sort">Libraries</th>
         <th>Available call numbers</th>
         <th>Available copy numbers</th>
+        <th>Itemnotes</th>
         <th>Available enumeration</th>
         <th class="string-sort">Available itypes</th>
         <th class="string-sort">Available locations</th>
@@ -167,6 +168,7 @@ $(document).ready(function() {
         </td>
         <td>[% reserveloo.itemcallnumber %]</td>
         <td>[% reserveloo.copyno %]</td>
+        <td>[% reserveloo.itemnotes %]<br/></td>
         <td>% reserveloo.enumchron %]</td>
         <td>
         [% FOREACH itype IN reserveloo.itypes %]

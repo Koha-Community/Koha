@@ -106,6 +106,8 @@ my $strsth =
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_enumchron,
             GROUP_CONCAT(DISTINCT items.copynumber
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_copynumber,
+            GROUP_CONCAT(DISTINCT items.itemnotes
+                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemnotes,
             biblio.title,
             biblio.author,
             count(DISTINCT items.itemnumber) as icount,
@@ -163,6 +165,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itemcallnumber  => $data->{l_itemcallnumber},
             enumchron       => $data->{l_enumchron},
             copyno          => $data->{l_copynumber},
+            itemnotes       => $data->{l_itemnotes},
             count           => $data->{icount},
             rcount          => $data->{rcount},
             pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
