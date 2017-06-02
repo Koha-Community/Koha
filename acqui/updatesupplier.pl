@@ -98,7 +98,7 @@ my @contacts;
 my %contact_info;
 
 foreach (qw(id name position phone altphone fax email notes orderacquisition claimacquisition claimissues acqprimary serialsprimary)) {
-    $contact_info{$_} = [ $input->param('contact_' . $_) ];
+    $contact_info{$_} = [ $input->multi_param('contact_' . $_) ];
 }
 
 for my $cnt (0..scalar(@{$contact_info{'id'}})) {
