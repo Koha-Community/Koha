@@ -68,7 +68,6 @@ BEGIN {
     
         CheckItemPreSave
     
-        GetLostItems
         GetItemsForInventory
         GetItemInfosOf
         GetItemsByBiblioitemnumber
