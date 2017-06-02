@@ -58,6 +58,7 @@ sub _new_schema {
     my $db_port   = $context->config("port") || '';
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
+    my $db_socket = $context->config("socket") || '';
     my $tls = $context->config("tls");
     my $tls_options;
     if( $tls && $tls eq 'yes' ) {
@@ -80,9 +81,28 @@ sub _new_schema {
         $encoding_query = "set client_encoding = 'UTF8';";
         $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
     }
+
+    #Build the dsn, it is typically like
+    # dbi:mysql:database=koha;host=localhost;port=3306
+    # dbi:mysql:database=koha;mysql_socket=/var/run/mysql/mysql.sock
+    # dbi:Pg:database=koha;host=/var/run/Pg
+    my $dsn = "dbi:$db_driver:database=$db_name;";
+    #Figure out if we are using sockets and for which DBRMS?
+    if ($db_socket) {
+        if ($db_driver eq 'Pg') {
+            $dsn .= "host=$db_socket;port=$db_port"; #https://www.postgresql.org/docs/9.2/static/libpq-connect.html#LIBPQ-CONNECT-HOST
+        }
+        else { #default to mysql
+            $dsn .= "mysql_socket=$db_socket";
+        }
+    }
+    else {
+        $dsn .= "host=$db_host;port=$db_port";
+    }
+
     my $schema = Koha::Schema->connect(
         {
-            dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
+            dsn => $dsn.($tls_options? $tls_options : ""),
             user => $db_user,
             password => $db_passwd,
             %encoding_attr,

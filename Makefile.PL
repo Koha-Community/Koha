@@ -418,6 +418,10 @@ Name of DBMS server.
 
 Port that DBMS server is listening on.
 
+=item DB_SOCKET
+
+Socket where the DBMS server is listening on.
+
 =item DB_NAME
 
 Name of the DBMS database for Koha.
@@ -463,6 +467,7 @@ System group that will own Koha's files.
 my %config_defaults = (
   'DB_TYPE'           => 'mysql',
   'DB_HOST'           => 'localhost',
+  'DB_SOCKET'         => '',
   'DB_NAME'           => 'koha',
   'DB_USER'           => 'kohaadmin',
   'DB_PASS'           => 'katikoan',
@@ -655,6 +660,7 @@ $config{'BIB_RETRIEVAL_CFG'}  = $config{'BIB_INDEX_MODE'} eq 'dom'
                                   ? 'retrieval-info-bib-dom.xml'
                                   : 'retrieval-info-bib-grs1.xml';
 
+$config{'DB_SOCKET'} = $ENV{DB_SOCKET} || '';
 
 if ($config{'INSTALL_MODE'} ne "dev") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
