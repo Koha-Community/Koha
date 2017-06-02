@@ -73,29 +73,9 @@ sub new {
 
     my $self = {};
 
-    # get basic information from context
-    $self->{'dbname'}   = C4::Context->config("database");
-    $self->{'dbms'}     = C4::Context->config("db_scheme") ? C4::Context->config("db_scheme") : "mysql";
-    $self->{'hostname'} = C4::Context->config("hostname");
-    $self->{'port'}     = C4::Context->config("port");
-    $self->{'user'}     = C4::Context->config("user");
-    $self->{'password'} = C4::Context->config("pass");
-    $self->{'tls'} = C4::Context->config("tls");
-    if( $self->{'tls'} && $self->{'tls'} eq 'yes' ) {
-        $self->{'ca'} = C4::Context->config('ca');
-        $self->{'cert'} = C4::Context->config('cert');
-        $self->{'key'} = C4::Context->config('key');
-        $self->{'tlsoptions'} = ";mysql_ssl=1;mysql_ssl_client_key=".$self->{key}.";mysql_ssl_client_cert=".$self->{cert}.";mysql_ssl_ca_file=".$self->{ca};
-        $self->{'tlscmdline'} =  " --ssl-cert ". $self->{cert} . " --ssl-key " . $self->{key} . " --ssl-ca ".$self->{ca}." "
-    }
-    $self->{'dbh'} = DBI->connect("DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}" .
-                                  ( $self->{port} ? ";port=$self->{port}" : "" ).
-                                  ( $self->{tlsoptions} ? $self->{tlsoptions} : ""),
-                                  $self->{'user'}, $self->{'password'});
+    $self->{'dbh'} = C4::Context->dbh();
     $self->{'language'} = undef;
     $self->{'marcflavour'} = undef;
-	$self->{'dbh'}->do('set NAMES "utf8"');
-    $self->{'dbh'}->{'mysql_enable_utf8'}=1;
 
     bless $self, $class;
     return $self;
