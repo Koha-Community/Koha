@@ -113,7 +113,7 @@ $(document).ready(function() {
             <ol>
               <li>
                 <label class="required" for="description">Description: </label>
-                <input type="text" id="description" name="description" value="[% description %]" class="required" required="required" /> <span class="required">Required</span>
+                <input type="text" id="description" name="description" value="[% description | html %]" class="required" required="required" /> <span class="required">Required</span>
               </li>
               <li>
                 <label for="unit">Unit: </label>
