@@ -80,27 +80,27 @@
       </form>
       <br />
         <table>
-		<tr>
-		<th>Name</th>
-		<th>Description</th>
-		<th>Area</th>
-		<th>Definition</th>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Area</th>
+                <th>Definition</th>
                 <th>Action</th>
-		</tr>
-		[% FOREACH definition IN definitions %]
-        <tr>
-			<td>[% definition.name %]</td>
-			<td>[% definition.description %]</td>
-			<td>[% definition.areaname %]</td>
-			<td>[% definition.saved_sql %]</td>
-                        <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-			<input type="hidden" name="id" value="[% definition.id %]" />
-			<input type="hidden" name="phase" value="Delete Definition" />
-                        <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
-			</form></td>
-			</tr>
-		[% END %]
-		</table>
+            </tr>
+            [% FOREACH definition IN definitions %]
+            <tr>
+                <td>[% definition.name | html %]</td>
+                <td>[% definition.description | html %]</td>
+                <td>[% definition.areaname %]</td>
+                <td>[% definition.saved_sql %]</td>
+                <td class="actions"><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+                    <input type="hidden" name="id" value="[% definition.id %]" />
+                    <input type="hidden" name="phase" value="Delete Definition" />
+                    <button type="submit" name="submit" class="btn btn-default btn-xs" id="delete"><i class="fa fa-trash"></i> Delete</button>
+                </form></td>
+            </tr>
+            [% END %]
+        </table>
                 [% ELSE %]
                 <div class="dialog message">There are no saved definitions. <a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition">Add a definition to the dictionary.</a></div>
 		[% END %]
@@ -133,8 +133,8 @@
     <ol>
       <li>
         <input type="hidden" name="phase" value="New Term step 3" />
-        <input type="hidden" name="definition_name" value="[% definition_name %]" />
-        <input type="hidden" name="definition_description" value="[% definition_description %]" />
+        <input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+        <input type="hidden" name="definition_description" value="[% definition_description | html %]" />
         <label for="area">Select table:</label><select name="area" id="area">
       [%- FOREACH area IN areas -%]
         <option value="[%- area.id -%]">[%- PROCESS area_name area=area.id -%]</option>
@@ -153,8 +153,8 @@
 <fieldset class="rows">
 <legend>Step 3 of 5: Choose a column</legend>
 <input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="definition_name" value="[% definition_name %]" />
-<input type="hidden" name="definition_description" value="[% definition_description %]" />
+<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
 
 <select id="availableColumns" name="columns" size="25" style="width:200px;height:300px;margin:1em;">
 [% FOREACH column IN columns %]
@@ -166,7 +166,7 @@
 
 <optgroup label="[% column.table %]">              
 [% ELSE %]               
-<option value="[% column.name %]">          
+<option value="[% column.name %]">
 [% IF ( column.description ) %][% column.description %]    
 [% ELSE %]               
 [% column.name %]                          
@@ -189,19 +189,19 @@
 <fieldset class="rows">
 <legend>Step 4 of 5: Specify a value</legend>
 <input type="hidden" name="area" value="[% area %]" />
-<input type="hidden" name="definition_name" value="[% definition_name %]" />
-<input type="hidden" name="definition_description" value="[% definition_description %]" />
+<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
 <input type="hidden" name="columnstring" value="[% columnstring %]" />
 
 [% FOREACH column IN columns %]
 <input type="hidden" name="criteria_column" value="[% column.name %]" />
 <ol><li><span class="label">Column: </span> [% column.name %]</li>
 [% IF ( column.distinct ) %]
-	<li><label for="[% column.name %]_value">Choose: </label> <select id="[% column.name %]_value" name="[% column.name %]_value"> 
-		[% FOREACH value IN column.values %]
-			<option value="[% value.availablevalues %]">[% value.availablevalues %]</option>
-		[% END %]
-	</select></li>
+    <li><label for="[% column.name %]_value">Choose: </label> <select id="[% column.name %]_value" name="[% column.name %]_value">
+        [% FOREACH value IN column.values %]
+            <option value="[% value.availablevalues %]">[% value.availablevalues %]</option>
+        [% END %]
+    </select></li>
 [% END %]
 [% IF ( column.date ) %]
     <li class="radio">
@@ -235,9 +235,9 @@
 
 [% IF ( step_5 ) %]
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="area" value="[% area %]" />    
-<input type="hidden" name="definition_name" value="[% definition_name %]" />           
-<input type="hidden" name="definition_description" value="[% definition_description %]" />
+<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="definition_name" value="[% definition_name | html %]" />
+<input type="hidden" name="definition_description" value="[% definition_description | html %]" />
 <input type="hidden" name="columnstring" value="[% columnstring %]" />
 
 <h3>Add new definition</h3>
@@ -246,10 +246,10 @@
   <legend>Step 5 of 5: Confirm details</legend>
   <ol>
     <li>
-      <span class="label">Name:</span>[%- definition_name -%]
+      <span class="label">Name:</span>[%- definition_name | html -%]
     </li>
     <li>
-      <span class="label">Description:</span>[%- definition_description -%]
+      <span class="label">Description:</span>[%- definition_description | html -%]
     </li>
     <li>
       <span class="label">Area:</span>[%- PROCESS area_name area=area -%]
