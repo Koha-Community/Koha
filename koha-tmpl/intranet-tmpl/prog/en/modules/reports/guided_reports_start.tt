@@ -857,7 +857,7 @@ $(document).ready(function() {
 <legend>Create report from SQL</legend>
 <ol>
     <li><label for="reportname" class="required">Report name:</label>
-        [% IF ( reportname ) %]<input type="text" class="required" required="required" id="reportname" name="reportname" value="[% reportname %]" size="50"/>
+        [% IF ( reportname ) %]<input type="text" class="required" required="required" id="reportname" name="reportname" value="[% reportname | html %]" size="50"/>
         [% ELSE %]<input type="text" class="required" required="required" id="reportname" name="reportname" size="50" />[% END %] <span class="required">Required</span>
     </li>
     [% PROCESS group_and_subgroup_selection %]
@@ -945,7 +945,7 @@ Sub report:<select name="subreport">
 <fieldset class="rows">
 <legend>Edit SQL report</legend>
 <ol>
-<li><label for="reportname" class="required">Report name: </label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" class="required" required="required" /> <span class="required">Required</span></li>
+<li><label for="reportname" class="required">Report name: </label><input type="text" id="reportname" name="reportname" value="[% reportname | html %]" size="50" class="required" required="required" /> <span class="required">Required</span></li>
 [% PROCESS group_and_subgroup_selection %]
 [% IF (public) %]
   <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</option> </select></li>
