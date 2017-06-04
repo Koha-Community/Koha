@@ -17,18 +17,17 @@
     var day_month_holidays = new Array();
     var hola= "[% code %]";
     [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
-    week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION %]"};
+    week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
     [% END %]
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
     holidates.push("[% HOLIDAYS_LOO.KEY %]");
-    holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE %]", description:"[% HOLIDAYS_LOO.DESCRIPTION %]"};
-
+    holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
     [% END %]
     [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
-    exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION %]"};
+    exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
     [% END %]
     [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
-    day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION %]"};
+    day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
     [% END %]
 
     function holidayOperation(formObject, opType) {
