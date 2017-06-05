@@ -68,6 +68,15 @@ sub new {
         $attributes->{verification_token} = $verification_token;
     }
 
+    # Delete Koha::Patron columns that are not modifiable via this class
+    my @columns = Koha::Patron::Modifications->columns;
+    my @patron_columns = Koha::Patrons->columns;
+    foreach my $attr (keys %$attributes) {
+        if (grep(/^$attr$/, @patron_columns) && !grep(/^$attr$/, @columns)) {
+            delete $attributes->{$attr};
+        }
+    }
+
     return $class->SUPER::new(@_);
 }
 
@@ -100,7 +109,7 @@ sub store {
         };
     }
 
-    return $self->SUPER::store();
+    return $self->validate->SUPER::store();
 }
 
 =head2 approve
@@ -204,7 +213,10 @@ sub approve {
 
 =head2 validate_changes
 
-my $patron_modifications = Koha::Patron::Modifications->new->validate_changes($body)->store;
+my $patron_modifications = Koha::Patron::Modifications->new({
+                                surname   => 'New',
+                                firstname => 'Me',
+                           })->store;
 
 Validates patron modifications
 
@@ -214,17 +226,12 @@ Throws Koha::Exceptions::NoChanges if no changes have been made
 
 =cut
 
-sub validate_changes {
-    my ($self, $changed_patron, $action) = @_;
+sub validate {
+    my ($self) = @_;
 
-    # delete empty fields
-    $changed_patron = $changed_patron->unblessed if ref($changed_patron) eq "Koha::Patron";
-    foreach my $key ( keys %{$changed_patron} ) {
-        delete $changed_patron->{$key} unless $changed_patron->{$key};
-        # delete fields that are not modifiable
-        eval { $self->_result->get_column($key) };
-        delete $changed_patron->{$key} if $@;
-    }
+    my $changes = $self->unblessed;
+    delete $changes->{timestamp};
+    delete $changes->{verification_token};
 
     my $mandatory_fields;
     my $BorrowerMandatoryField =
@@ -235,18 +242,14 @@ sub validate_changes {
         $mandatory_fields->{$_} = 1;
     }
 
-    if ( $action eq 'create' || $action eq 'new' ) {
-        $mandatory_fields->{'email'} = 1
-          if C4::Context->boolean_preference(
-            'PatronSelfRegistrationVerifyByEmail');
-    }
-
     my @empty_mandatory_fields;
     delete $mandatory_fields->{'cardnumber'};
 
     foreach my $key ( keys %$mandatory_fields ) {
-        push( @empty_mandatory_fields, $key )
-          unless ( defined( $changed_patron->{$key} ) && $changed_patron->{$key} );
+        if ( exists $changes->{$key} && (
+             !defined( $changes->{$key} ) || length( $changes->{$key} ) == 0 ) ) {
+            push( @empty_mandatory_fields, $key );
+        }
     }
     Koha::Exceptions::MissingParameter->throw(
         error => "Missing mandatory parameter",
@@ -255,45 +258,67 @@ sub validate_changes {
 
     my $minpw = C4::Context->preference('minPasswordLength');
     my @invalidFields;
-    if ($changed_patron->{'email'}) {
-        unless ( Email::Valid->address($changed_patron->{'email'}) ) {
+    if ($changes->{'email'}) {
+        unless ( Email::Valid->address($changes->{'email'}) ) {
             push(@invalidFields, "email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
-            my $patrons_with_same_email = Koha::Patrons->search( { email => $changed_patron->{email} })->count;
+            my $patrons_with_same_email = Koha::Patrons->search( { email => $changes->{email} })->count;
             if ( $patrons_with_same_email ) {
                 push @invalidFields, "duplicate_email";
             }
         }
     }
-    if ($changed_patron->{'emailpro'}) {
-        push(@invalidFields, "emailpro") if (!Email::Valid->address($changed_patron->{'emailpro'}));
+    if ($changes->{'emailpro'}) {
+        push(@invalidFields, "emailpro") if (!Email::Valid->address($changes->{'emailpro'}));
     }
-    if ($changed_patron->{'B_email'}) {
-        push(@invalidFields, "B_email") if (!Email::Valid->address($changed_patron->{'B_email'}));
+    if ($changes->{'B_email'}) {
+        push(@invalidFields, "B_email") if (!Email::Valid->address($changes->{'B_email'}));
     }
-    if ($changed_patron->{'password'}  && $minpw && (length($changed_patron->{'password'}) < $minpw) ) {
+    if ($changes->{'password'}  && $minpw && (length($changes->{'password'}) < $minpw) ) {
        push(@invalidFields, "password_invalid");
     }
-    if ($changed_patron->{'password'} ) {
-       push(@invalidFields, "password_spaces") if ($changed_patron->{'password'} =~ /^\s/ or $changed_patron->{'password'} =~ /\s$/);
+    if ($changes->{'password'} ) {
+       push(@invalidFields, "password_spaces") if ($changes->{'password'} =~ /^\s/ or $changes->{'password'} =~ /\s$/);
     }
     Koha::Exceptions::BadParameter->throw(
         error => "Invalid fields",
         parameter => [@invalidFields],
     ) if @invalidFields;
 
-    my $current_data = Koha::Patrons->find({ borrowernumber => $changed_patron->{borrowernumber} })->unblessed;
-    foreach my $key ( keys %{$changed_patron} ) {
-        if ( $current_data->{$key} eq $changed_patron->{$key} ) {
-            delete $changed_patron->{$key};
+    # Delete unchanged fields
+    my $patron = Koha::Patrons->find({
+        borrowernumber => $changes->{borrowernumber}
+    });
+    return $self unless $patron;
+    my $current_data = $patron->unblessed;
+    foreach my $key ( keys %{$changes} ) {
+        if ( defined $current_data->{$key} &&
+             $current_data->{$key} eq $changes->{$key} )
+        {
+            unless ($key eq 'borrowernumber') {
+                $self->set({ $key => undef });
+            }
+            delete $changes->{$key};
         }
     }
 
+    my $extended_attributes = try { from_json( $self->extended_attributes ) };
+    if (!keys %{$changes} && $extended_attributes) {
+        my %codes = map { $_->{code} => $_->{value} } @{$extended_attributes};
+        foreach my $code (keys %codes) {
+            delete $codes{$code} if Koha::Patron::Attributes->search({
+                    borrowernumber => $patron->borrowernumber,
+                    code           => $code,
+                    attribute      => $codes{$code}
+                })->count > 0;
+        }
+        delete $changes->{extended_attributes} unless keys %codes;
+    }
     Koha::Exceptions::NoChanges->throw(
-        error => "No changes has been made",
-    ) unless keys %{$changed_patron};
+        error => "No changes have been made",
+    ) unless keys %{$changes};
 
-    $self->set($changed_patron)->borrowernumber($current_data->{borrowernumber});
+    $self->set($changes);
     return $self;
 }
 

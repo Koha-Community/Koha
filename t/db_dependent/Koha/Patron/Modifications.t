@@ -19,9 +19,10 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use Digest::MD5 qw( md5_base64 md5_hex );
@@ -102,6 +103,7 @@ subtest 'store( extended_attributes ) tests' => sub {
     $schema->storage->txn_begin;
 
     Koha::Patron::Modifications->search->delete;
+    t::lib::Mocks::mock_preference('PatronSelfRegistrationBorrowerMandatoryField', '');
 
     my $patron
         = $builder->build( { source => 'Borrower' } )->{borrowernumber};
@@ -266,6 +268,68 @@ subtest 'approve tests' => sub {
 
     my $count = Koha::Patron::Attributes->search({ borrowernumber => $patron->borrowernumber, code => 'CODE_2' })->count;
     is( $count, 0, 'Attributes deleted when modification contained an empty one');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'validate() tests' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    Koha::Patron::Modifications->search->delete;
+
+    my $library_1 = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $patron_1
+        = $builder->build(
+        { source => 'Borrower', value => { branchcode => $library_1 } } )
+        ->{borrowernumber};
+
+    # Create new pending modification
+    lives_ok( sub { Koha::Patron::Modification->new({
+        verification_token => '12345678901',
+        surname            => 'Larsson',
+        firstname          => 'Larry',
+        borrowernumber     => $patron_1
+    })->validate->store }, 'Created a new, validated modification request' );
+
+    throws_ok( sub { Koha::Patron::Modification->new({
+        verification_token => '12345678901',
+        surname            => 'Larsson',
+        firstname          => 'Larry',
+        email              => 'invalid',
+        B_email            => 'invalid',
+        emailpro           => 'invalid',
+        borrowernumber     => $patron_1
+    })->validate }, 'Koha::Exceptions::BadParameter',
+        'Invalid email throws Koha::Exceptions::BadParameter' );
+    is($@->parameter->[0], 'email', 'email defined as bad parameter');
+    is($@->parameter->[1], 'emailpro', 'emailpro defined as bad parameter');
+    is($@->parameter->[2], 'B_email', 'B_email defined as bad parameter');
+
+    t::lib::Mocks::mock_preference('minPasswordLength', 10);
+    throws_ok( sub { Koha::Patron::Modification->new({
+        verification_token => '12345678901',
+        surname            => 'Larsson',
+        firstname          => 'Larry',
+        password           => ' short ',
+        borrowernumber     => $patron_1
+    })->validate }, 'Koha::Exceptions::BadParameter',
+        'Invalid password throws Koha::Exceptions::BadParameter' );
+    is($@->parameter->[0], 'password_invalid', 'invalid password');
+    is($@->parameter->[1], 'password_spaces', 'password has trailing spaces');
+
+    Koha::Patrons->find($patron_1)->set({
+        surname => 'Larssoni',
+        firstname => 'Larry'
+    })->store;
+    throws_ok( sub { Koha::Patron::Modification->new({
+        verification_token => '12345678901',
+        surname            => 'Larssoni',
+        firstname          => 'Larry',
+        borrowernumber     => $patron_1
+    })->validate }, 'Koha::Exceptions::NoChanges',
+        'No changes throws Koha::Exceptions::NoChanges' );
 
     $schema->storage->txn_rollback;
 };
