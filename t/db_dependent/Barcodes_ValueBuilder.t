@@ -16,7 +16,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 11;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
@@ -74,6 +74,35 @@ ok(length($scr) > 0, 'hbyymmincr javascript');
 ($nextnum, $scr) = C4::Barcodes::ValueBuilder::annual::get_barcode(\%args);
 is($nextnum, '2012-0035', 'annual barcode');
 is($scr, undef, 'annual javascript');
+
+($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+is($nextnum, '66620120700001', 'hbyyyyincr barcode');
+ok(length($scr) > 0, 'hbyyyyincr javascript');
+
+my $item_4 = $builder->build({
+    source => 'Item',
+    value => {
+        barcode => '11220170700001'
+    }
+});
+
+C4::Context->set_preference("barcodeprefix", "CPL: 112");
+
+my %args = (
+    year        => '2017',
+    mon         => '07',
+    day         => '30',
+    tag         => '952',
+    subfield    => 'p',
+    loctag      => '952',
+    locsubfield => 'a',
+    branchcode  => 'CPL'
+);
+
+($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+is($nextnum, '11220170700002', 'hbyyyyincr barcode');
+ok(length($scr) > 0, 'hbyyyyincr javascript');
+
 
 $schema->storage->txn_rollback;
 

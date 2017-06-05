@@ -93,9 +93,16 @@ Cataloging:
                   incremental: generated in the form 1, 2, 3.
                   annual: generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002.
                   hbyymmincr: generated in the form &lt;branchcode&gt;yymm0001.
+                  hbyyyyincr: generated in the form &lt;prefixcode&gt;yyyymm0001.
                   EAN13: incremental EAN-13 barcodes
                   vaarakirjastot: Vaarakirjastot, 1120000001 to 1129999999
                   "OFF": not generated automatically.
+        -
+            - "Define branch specific barcode prefix:"
+            - "This is a YAML config."
+            - pref: BarcodePrefix
+              type: textarea
+              class: code
         -
             - When a new item is added,
             - pref: PrefillItem

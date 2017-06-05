@@ -60,6 +60,9 @@ my $builder = sub {
     elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
     }
+    elsif ($autoBarcodeType eq 'hbyyyyincr'){ # Generates a barcode where hb = integer based on home branch code, yyyy = year, mm = month, incr = incremental number
+        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+    }
     elsif ($autoBarcodeType eq 'EAN13') {
         # not the best, two catalogers could add the same barcode easily this way :/
         my $query = "select max(abs(barcode)) from items";

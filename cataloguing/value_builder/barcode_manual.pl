@@ -61,6 +61,9 @@ my $builder = sub {
     elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
         ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyymmincr::get_barcode(\%args);
     }
+    elsif ($autoBarcodeType eq 'hbyyyyincr'){ # Generates a barcode where hb = integer based on home branch code, yyyy = year, incr = incremental number
+        ($nextnum, $scr) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+    }
 
 # default js body (if not filled by hbyymmincr)
     $scr or $scr = <<END_OF_JS;

@@ -172,6 +172,66 @@ sub get_barcode {
     return $nextnum;
 }
 
+package C4::Barcodes::ValueBuilder::hbyyyyincr;
+use C4::Context;
+use YAML::XS;
+my $DEBUG = 0;
+
+sub get_barcode {
+    my ($args) = @_;
+    my $nextnum;
+    my $barcode;
+    my $branchcode = $args->{branchcode};
+    my $query;
+    my $sth;
+
+    # Getting the barcodePrefixes
+    my $branchPrefixes = C4::Context->preference("BarcodePrefix");
+    my $yaml = YAML::XS::Load(
+                        Encode::encode(
+                            'UTF-8',
+                            $branchPrefixes,
+                            Encode::FB_CROAK
+                        )
+                    );
+
+    my $prefix = $yaml->{$branchcode} || '666';
+
+    $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) from items where barcode REGEXP ?";
+    $sth=C4::Context->dbh->prepare($query);
+    $sth->execute("^$prefix$args->{year}$args->{mon}");
+
+    while (my ($count)= $sth->fetchrow_array) {
+        warn "Examining Record: $count" if $DEBUG;
+        $nextnum = $count if $count;
+    }
+
+    $nextnum++;
+    $nextnum = sprintf("%0*d", "5",$nextnum);
+
+    $barcode = $prefix;
+    $barcode .= $args->{year}.$args->{mon}.$nextnum;
+
+    my $scr = "
+        for (i=0 ; i<document.f.field_value.length ; i++) {
+            if (document.f.tag[i].value == '$args->{loctag}' && document.f.subfield[i].value == '$args->{locsubfield}') {
+                fnum = i;
+            }
+        }
+
+    var branchcode = document.f.field_value[fnum].value.substring(0,3);
+    var json; //Variable which receives the results
+    var loc_url = '/cgi-bin/koha/cataloguing/barcode_ajax.pl?branchcode=' + branchcode; //Location
+
+    \$.getJSON(loc_url, function(jsonData){
+        json = jsonData;
+        \$('#' + id).val(json['barcode']);
+    });//$.getJSON ends here
+    ";
+
+    return $barcode, $scr;
+}
+
 1;
 
 

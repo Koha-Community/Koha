@@ -550,59 +550,116 @@ if ($op eq "additem") {
     if ($add_multiple_copies_submit) {
 
         use C4::Barcodes;
+        use C4::Barcodes::ValueBuilder;
         my $barcodeobj = C4::Barcodes->new;
         my $oldbarcode = $addedolditem->{'barcode'};
+        my $barcodePreference = C4::Context->preference('autoBarcode');
         my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
+        my %args;
 
-    # If there is a barcode and we can't find their new values, we can't add multiple copies
-	my $testbarcode;
-        $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
-	if ($oldbarcode && !$testbarcode) {
+        my $branchcodevalue;
+        my $length = scalar @tags;
 
-	    push @errors, "no_next_barcode";
-	    $itemrecord = $record;
-
-	} else {
-	# We add each item
-
-	    # For the first iteration
-	    my $barcodevalue = $oldbarcode;
-	    my $exist_itemnumber;
-
-
-	    for (my $i = 0; $i < $number_of_copies;) {
-
-		# If there is a barcode
-		if ($barcodevalue) {
-
-		    # Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
-		    $barcodevalue = $barcodeobj->next_value($oldbarcode) if ($i > 0 || $exist_itemnumber);
-
-		    # Putting it into the record
-		    if ($barcodevalue) {
-			$record->field($tagfield)->update($tagsubfield => $barcodevalue);
-		    }
-
-		    # Checking if the barcode already exists
-		    $exist_itemnumber = get_item_from_barcode($barcodevalue);
-		}
-
-		# Adding the item
-        if (!$exist_itemnumber) {
-            my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber);
-            set_item_default_location($oldbibitemnum);
-
-            # We count the item only if it was really added
-            # That way, all items are added, even if there was some already existing barcodes
-            # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
-            $i++;
+        # Finding the branchcode from values
+        for(my $i = 0; $i < $length; $i++){
+            if(@tags[$i] eq '952' && @subfields[$i] eq 'a'){
+                $branchcodevalue = @values[$i];
+            }
         }
 
-		# Preparing the next iteration
-		$oldbarcode = $barcodevalue;
-	    }
-	    undef($itemrecord);
-	}
+        ($args{year}, $args{mon}, $args{day}) = split('-', output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }));
+        ($args{tag},$args{subfield})       =  &GetMarcFromKohaField("items.barcode", '');
+        ($args{loctag},$args{locsubfield}) =  &GetMarcFromKohaField("items.homebranch", '');
+        $args{branchcode} = substr($branchcodevalue, 0, 3) if $branchcodevalue;
+
+        my ($new_barcode, $src) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+
+        # If there is a barcode and we can't find him new values, we can't add multiple copies
+        my $testbarcode;
+        if($new_barcode && $barcodePreference eq 'hbyyyyincr'){
+            $testbarcode = $new_barcode;
+        }else{
+            $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
+        }
+
+        if ($oldbarcode && !$testbarcode) {
+
+            push @errors, "no_next_barcode";
+            $itemrecord = $record;
+
+        }
+        else {
+            my ($new_barcode, $src) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args);
+
+            # We add each item
+
+            # For the first iteration
+            my $barcodevalue = $new_barcode;
+            $barcodevalue = $oldbarcode unless $barcodePreference eq 'hbyyyyincr';
+
+            my $exist_itemnumber;
+
+            for (my $i = 0; $i < $number_of_copies; $i++) {
+
+                # If there is a barcode
+                if ($barcodevalue) {
+
+                    # We have to get a new barcode value every run
+                    my ($new_barcode, $src) = C4::Barcodes::ValueBuilder::hbyyyyincr::get_barcode(\%args) if $barcodePreference eq 'hbyyyyincr';
+
+                    # Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
+                    $barcodevalue = $new_barcode if ($barcodePreference eq 'hbyyyyincr' && ($i > 0 || $exist_itemnumber));
+                    $barcodevalue = $barcodeobj->next_value($oldbarcode) if ($barcodePreference ne 'hbyyyyincr' && ($i > 0 || $exist_itemnumber));
+
+                    # Putting it into the record
+                    if ($barcodevalue) {
+                    $record->field($tagfield)->update($tagsubfield => $barcodevalue);
+                    }
+
+                    # Checking if the barcode already exists
+                    $exist_itemnumber = get_item_from_barcode($barcodevalue);
+                }
+
+                # Adding the item
+                if (!$exist_itemnumber) {
+                    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber);
+                    set_item_default_location($oldbibitemnum);
+
+                    if ($addToPrintLabelsList) {
+                        my $shelf = Koha::Virtualshelves->find( { owner => $loggedinuser, shelfname => 'labels printing'} );
+                        if (!$shelf) {
+                            $shelf = eval { Koha::Virtualshelf->new( {
+                                shelfname => 'labels printing',
+                                category => 1,
+                                owner => $loggedinuser,
+                                sortfield => undef,
+                                allow_add => 0,
+                                allow_delete_own => 1,
+                                allow_delete_other => 0,
+                                } )->store; };
+                        }
+                        my $content = Koha::Virtualshelfcontent->new(
+                            {
+                                shelfnumber => $shelf->shelfnumber,
+                                biblionumber => $biblionumber,
+                                borrowernumber => $loggedinuser,
+                                flags => $oldbibitemnum,
+                            }
+                        )->store;
+
+                    }
+
+                    # We count the item only if it was really added
+                    # That way, all items are added, even if there was some already existing barcodes
+                    # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
+                    $i++;
+                }
+
+                # Preparing the next iteration
+                $oldbarcode = $barcodevalue;
+            }
+            undef($itemrecord);
+        }
     }	
     if ($frameworkcode eq 'FA' && $fa_circborrowernumber){
         print $input->redirect(
