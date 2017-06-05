@@ -315,8 +315,11 @@ sub GetBasketAsCSV {
             my $bd = GetBiblioData( $order->{'biblionumber'} );
             my @biblioitems = GetBiblioItemByBiblioNumber( $order->{'biblionumber'});
             for my $biblioitem (@biblioitems) {
-                if ($biblioitem->{isbn} eq $order->{isbn}) {
-                    $order = {%$order, %$biblioitem};
+                if (    $biblioitem->{isbn}
+                    and $order->{isbn}
+                    and $biblioitem->{isbn} eq $order->{isbn} )
+                {
+                    $order = { %$order, %$biblioitem };
                 }
             }
             if ($contract) {
