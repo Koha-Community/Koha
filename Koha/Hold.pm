@@ -91,8 +91,11 @@ sub suspend_hold {
     }
 
     $self->suspend(1);
-    $self->suspend_until( $dt );
-
+    if ( defined $dt ){
+        $self->suspend_until( $dt->ymd );
+    } else {
+        $self->suspend_until( $dt );
+    }
     $self->store();
 
     logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, Dumper($self->unblessed) )
