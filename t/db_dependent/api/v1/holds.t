@@ -50,6 +50,7 @@ my $tx;
 
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 
 # User without any permissions
 my $nopermission = $builder->build({
@@ -158,7 +159,7 @@ my $post_data = {
 };
 my $put_data = {
     priority => 2,
-    suspend_until => $suspend_until,
+    suspend_until => $suspend_until
 };
 
 subtest "Test endpoints without authentication" => sub {
@@ -199,7 +200,7 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 21;
+    plan tests => 25;
 
     my $reserve_id3 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
@@ -243,7 +244,16 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
       ->status_is(200)
       ->json_is('/reserve_id', $reserve_id3)
       ->json_like('/suspend_until', qr/${suspend_until}T00:00:00\+\d\d:\d\d/)
-      ->json_is('/priority', 2);
+      ->json_is('/priority', 3);
+
+    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id3" => json => {
+        branchcode => $branchcode2
+    });
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx) # create hold to myself
+      ->status_is(200)
+      ->json_is('/reserve_id', $reserve_id3)
+      ->json_is('/branchcode', $branchcode2);
 };
 
 subtest "Test endpoints with permission" => sub {
@@ -262,7 +272,7 @@ subtest "Test endpoints with permission" => sub {
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_is('/0/borrowernumber', $nopermission->{borrowernumber})
+      ->json_is('/0/borrowernumber', $borrowernumber2)
       ->json_hasnt('/1');
 
     $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id" => json => $put_data);

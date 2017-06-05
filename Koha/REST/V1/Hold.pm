@@ -124,9 +124,16 @@ sub edit {
 
     my $body = $c->req->json;
 
-    my $branchcode = $body->{branchcode};
-    my $priority = $body->{priority};
-    my $suspend_until = $body->{suspend_until};
+    my $branchcode = $body->{branchcode} || $reserve->{branchcode};
+    my $priority;
+    if (!$c->stash('is_owner_access') && !$c->stash('is_guarantor_access')) {
+        $priority = defined $body->{priority}
+                    ? $body->{priority}
+                    : $reserve->{priority};
+    } else {
+        $priority = $reserve->{priority};
+    }
+    my $suspend_until = $body->{suspend_until} || $reserve->{suspend_until};
 
     if ($suspend_until) {
         $suspend_until = output_pref(dt_from_string($suspend_until, 'iso'));
