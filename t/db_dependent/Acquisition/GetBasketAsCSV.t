@@ -4,15 +4,16 @@ use Modern::Perl;
 
 use CGI;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Acquisition;
 use C4::Biblio;
 use Koha::Database;
-use Koha::CsvProfile;
-
+use Koha::CsvProfiles;
 use Koha::Acquisition::Orders;
+
 use t::lib::Mocks;
+use Try::Tiny;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -83,5 +84,12 @@ my $basket_csv3 = C4::Acquisition::GetBasketAsCSV($basketno, $query, $csv_profil
 is($basket_csv3, 'biblio.author,title,quantity
 "King, Stephen","Test Record",3
 ', 'CSV should be generated with user profile which does not have all headers defined');
+
+try {
+    my $basket_csv4 = C4::Acquisition::GetBasketAsCSV($basketno, $query, 'non_existant_profile_id');
+    fail("It is not possible to export basket using non-existant profile");
+} catch {
+    ok($_->isa("Koha::Exceptions::ObjectNotFound"), "Using non-existant profile should throw ObjectNotFound exception");
+};
 
 $schema->storage->txn_rollback();
