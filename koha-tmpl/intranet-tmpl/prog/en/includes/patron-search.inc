@@ -162,12 +162,9 @@ $(document).ready(function() {
         $('#filters').toggle();
         $('.filteraction').toggle();
     });
-    [% IF ( advsearch ) %]
-        $("#filteraction_on").toggle();
-        $("#filters").show();
-    [% ELSE %]
-        $("#filteraction_off").toggle();
-    [% END %]
+    [% IF ( advsearch ) %]$("#filteraction_on").toggle();
+    [% ELSE %]$("#filters").toggle();
+    $("#filteraction_off").toggle();[% END %]
     [% SET dateformat = Koha.Preference('dateformat') %]
     $("#searchfieldstype").change(function() {
       if ( $(this).val() == 'dateofbirth' ) {
