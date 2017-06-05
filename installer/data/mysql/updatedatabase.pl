@@ -14528,6 +14528,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (He pai ake te iti i te kore)\n";
 }
 
+$DBversion = '17.06.00.001';
+if( CheckVersion( $DBversion ) ) {
+
+    unless ( column_exists( 'export_format', 'used_for' ) ) {
+        $dbh->do(q|ALTER TABLE export_format ADD used_for varchar(255) DEFAULT 'export_records' AFTER type|);
+
+        $dbh->do(q|UPDATE export_format SET used_for = 'late_issues' WHERE type = 'sql'|);
+        $dbh->do(q|UPDATE export_format SET used_for = 'export_records' WHERE type = 'marc'|);
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 8612 - Add new column export_format.used_for)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
