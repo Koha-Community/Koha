@@ -31,6 +31,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Biblios;
+use Koha::Exceptions;
 use Koha::Items;
 use Koha::Number::Price;
 use Koha::Libraries;
@@ -293,7 +294,7 @@ sub GetBasketAsCSV {
     my @rows;
     if ($csv_profile_id) {
         my $csv_profile = Koha::CsvProfiles->find( $csv_profile_id );
-        die "There is no valid csv profile given" unless $csv_profile;
+        Koha::Exceptions::ObjectNotFound->throw( 'There is no valid csv profile given') unless $csv_profile;
 
         my $csv = Text::CSV_XS->new({'quote_char'=>'"','escape_char'=>'"','sep_char'=>$csv_profile->csv_separator,'binary'=>1});
         my $csv_profile_content = $csv_profile->content;
