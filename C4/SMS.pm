@@ -89,15 +89,17 @@ sub send_sms {
     my $driver = exists $params->{'driver'} ? $params->{'driver'} : $self->driver();
     return unless $driver;
 
-
     my ($sent, $sender);
 
     my $subpath = $driver;
     $subpath =~ s|::|/|;
 
-    my $conf_file =
-      File::Spec->catfile( C4::Context->config('sms_send_config'), $subpath )
-      . q{.yaml};
+    my $sms_send_config = C4::Context->config('sms_send_config');
+    my $conf_file = defined $sms_send_config
+        ? File::Spec->catfile( $sms_send_config, $subpath )
+        : $subpath;
+    $conf_file .= q{.yaml};
+
     my %args;
     if ( -f $conf_file ) {
         require YAML;
