@@ -193,15 +193,15 @@ $(document).ready(function(){
         [% FOREACH ite IN item %]
           <li>
             <div class="subfield_line" style="[% ite.visibility %]" id="subfield[% ite.tag %][% ite.subfield %][% ite.random %]">
+              [% SET mv = ite.marc_value %]
               [% IF ( ite.mandatory ) %]
-                <label class="required" for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
+                <label class="required" for="[%- mv.id -%]">
               [% ELSE %]
-                <label for="tag_[% ite.tag %]_subfield_[% ite.subfield %]_[% ite.random %]">
+                <label for="[%- mv.id -%]">
               [% END %]
                 [% ite.subfield %] - [% ite.marc_lib %]
               </label>
 
-              [% SET mv = ite.marc_value %]
               [% IF ( mv.type == 'select' ) -%]
                 <select name="[%- mv.name -%]" id="[%- mv.id -%]" size="1" tabindex="1" class="input_marceditor">
                   [%- FOREACH aval IN mv.values %]
