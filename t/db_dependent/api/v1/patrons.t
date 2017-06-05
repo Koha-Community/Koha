@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 130;
+use Test::More tests => 133;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -153,7 +153,15 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/0/borrowernumber', $patron->{borrowernumber});
 
-# Get guarantor's guarantees without permission
+Koha::Patrons->find($patron)->set({ guarantorid => undef })->store;
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons?guarantorid=".$guarantor->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session2->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->content_is('[]');
+Koha::Patrons->find($patron)->set({ guarantorid =>  $guarantor->{borrowernumber} })->store;
+
+# Get guarantee's guarantor without permission
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $guarantor->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)

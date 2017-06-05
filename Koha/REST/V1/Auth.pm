@@ -311,6 +311,18 @@ sub allow_guarantor {
     }
 
     my $guarantees = $user->guarantees->as_list;
+    unless (@$guarantees) {
+        # Allow access to /api/v1/patrons?guarantorid=XXX when $user's
+        # borrowernumber is XXX and user has no guarantees. This lets us return an
+        # empty array instead of HTTP 403.
+        if ($c->req->url->path =~
+            /^(\/?api\/v1\/patrons|\/?api\/v1\/app\.pl\/api\/v1\/patrons)/ &&
+           defined $c->req->query_params->to_hash->{guarantorid} &&
+           $c->req->query_params->to_hash->{guarantorid} eq $user->borrowernumber)
+        {
+            return 1;
+        }
+    }
     foreach my $guarantee (@{$guarantees}) {
         return 1 if check_object_ownership($c, $guarantee, {
             guarantorid => \&_object_ownership_by_guarantorid
