@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 103;
+use Test::More tests => 112;
 
 use DateTime;
 
@@ -50,6 +50,7 @@ $dbh->{RaiseError} = 1;
 
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
+$dbh->do('DELETE FROM borrowers');
 
 my $library = $builder->build({
     source => 'Branch',
@@ -258,9 +259,6 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         },
         $biblionumber
     );
-
-
-
 
     # Create borrowers
     my %renewing_borrower_data = (
@@ -1780,7 +1778,133 @@ subtest 'AddReturn | is_overdue' => sub {
     AddReturn( $item->{barcode}, $library->{branchcode}, undef, 1, undef, $five_days_ago );
     is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the FU fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+};
 
+subtest '_FixAccountForLostAndReturned' => sub {
+    plan tests => 2;
+
+    # Generate test biblio
+    my $biblio = MARC::Record->new();
+    my $title  = 'Koha for Dummies';
+    $biblio->append_fields(
+        MARC::Field->new( '100', ' ', ' ', a => 'Hall, Daria' ),
+        MARC::Field->new( '245', ' ', ' ', a => $title ),
+    );
+
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+
+    my $barcode = 'KD123456789';
+    my $branchcode  = $library2->{branchcode};
+
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+        {
+            homebranch       => $branchcode,
+            holdingbranch    => $branchcode,
+            barcode          => $barcode,
+            replacementprice => 99.00,
+            itype            => $itemtype
+        },
+        $biblionumber
+    );
+
+    my $patron = $builder->build( { source => 'Borrower' } );
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            borrowernumber => $patron->{borrowernumber},
+            accounttype    => 'L',
+            itemnumber     => $itemnumber,
+            amount => 99.00,
+            amountoutstanding => 99.00,
+        }
+    )->store();
+
+    C4::Circulation::_FixAccountForLostAndReturned( $itemnumber, $patron->{borrowernumber} );
+
+    $accountline->_result()->discard_changes();
+
+    is( $accountline->amountoutstanding, '0.000000', 'Lost fee has no outstanding amount' );
+    is( $accountline->accounttype, 'LR', 'Lost fee now has account type of LR ( Lost Returned )');
+};
+
+subtest '_FixOverduesOnReturn' => sub {
+    plan tests => 6;
+
+    # Generate test biblio
+    my $biblio = MARC::Record->new();
+    my $title  = 'Koha for Dummies';
+    $biblio->append_fields(
+        MARC::Field->new( '100', ' ', ' ', a => 'Hall, Kylie' ),
+        MARC::Field->new( '245', ' ', ' ', a => $title ),
+    );
+
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+
+    my $barcode = 'KD987654321';
+    my $branchcode  = $library2->{branchcode};
+
+    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+        {
+            homebranch       => $branchcode,
+            holdingbranch    => $branchcode,
+            barcode          => $barcode,
+            replacementprice => 99.00,
+            itype            => $itemtype
+        },
+        $biblionumber
+    );
+
+    my $patron = $builder->build( { source => 'Borrower' } );
+
+    ## Start with basic call, should just close out the open fine
+    my $accountline = Koha::Account::Line->new(
+        {
+            borrowernumber => $patron->{borrowernumber},
+            accounttype    => 'FU',
+            itemnumber     => $itemnumber,
+            amount => 99.00,
+            amountoutstanding => 99.00,
+            lastincrement => 9.00,
+        }
+    )->store();
+
+    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $itemnumber );
+
+    $accountline->_result()->discard_changes();
+
+    is( $accountline->amountoutstanding, '99.000000', 'Fine has the same amount outstanding as previously' );
+    is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
+
+
+    ## Run again, with exemptfine enabled
+    $accountline->set(
+        {
+            accounttype    => 'FU',
+            amountoutstanding => 99.00,
+        }
+    )->store();
+
+    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $itemnumber, 1 );
+
+    $accountline->_result()->discard_changes();
+
+    is( $accountline->amountoutstanding, '0.000000', 'Fine has been reduced to 0' );
+    is( $accountline->accounttype, 'FFOR', 'Open fine ( account type FU ) has been set to fine forgiven ( account type FFOR )');
+
+    ## Run again, with dropbox mode enabled
+    $accountline->set(
+        {
+            accounttype    => 'FU',
+            amountoutstanding => 99.00,
+        }
+    )->store();
+
+    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $itemnumber, 0, 1 );
+
+    $accountline->_result()->discard_changes();
+
+    is( $accountline->amountoutstanding, '90.000000', 'Fine has been reduced to 90' );
+    is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
 };
 
 subtest 'Set waiting flag' => sub {

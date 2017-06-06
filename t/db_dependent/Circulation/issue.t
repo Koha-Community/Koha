@@ -207,8 +207,8 @@ $sth = $dbh->prepare($query);
 $sth->execute;
 my $countaccount = $sth -> fetchrow_array;
 is ($countaccount,0,"0 accountline exists");
-is( C4::Circulation::AddIssuingCharge( $item_id1, $borrower_id1, 10 ),
-    1, "An issuing charge has been added" );
+is( ref( C4::Circulation::AddIssuingCharge( $item_id1, $borrower_id1, 10 ) ),
+    'Koha::Account::Offset', "An issuing charge has been added" );
 my $account_id = $dbh->last_insert_id( undef, undef, 'accountlines', undef );
 $sth->execute;
 $countaccount = $sth -> fetchrow_array;
