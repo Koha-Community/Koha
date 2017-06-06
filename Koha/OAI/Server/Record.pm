@@ -43,7 +43,7 @@ sub new {
 
     my $format = $args{metadataPrefix};
     my $record_dom;
-    if ( $format ne 'marcxml' ) {
+    if ( $format ne 'marcxml' && $format ne 'marc21' ) {
         my $args = {
             OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'"
         };
