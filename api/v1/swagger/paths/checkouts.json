@@ -261,7 +261,35 @@
       "operationId": "listhistoryCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [
-        { "$ref": "../parameters.json#/borrowernumberQueryParam" }
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "Sort by column name. E.g. 'date_due'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "description": "Ascending (asc) or descending (desc) order. Default ascending. E.g. 'desc'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "offset",
+          "in": "query",
+          "description": "Offset. Default 0.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Limit results. By default, returns all results.",
+          "required": false,
+          "type": "integer"
+        }
       ],
       "produces": [
         "application/json"

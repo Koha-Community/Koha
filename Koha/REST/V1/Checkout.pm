@@ -166,23 +166,58 @@ sub listhistory {
     my $c = shift->openapi->valid_input or return;
 
     my $borrowernumber = $c->validation->param('borrowernumber');
+    my $offset         = $c->validation->param('offset');
+    my $limit          = $c->validation->param('limit');
+    my $sort           = $c->validation->param('sort');
+    my $order          = $c->validation->param('order');
 
-    my %attributes = ( itemnumber => { "!=", undef } );
-    if ($borrowernumber) {
+    return try {
+        my %attributes = ( itemnumber => { "!=", undef } );
+        my $other_params = {};
+        if ($borrowernumber) {
         return $c->render( status => 404, openapi => {
             error => "Patron doesn't exist"
         }) unless Koha::Patrons->find($borrowernumber);
+            $attributes{borrowernumber} = $borrowernumber;
+        }
+        if (defined $offset) {
+            $other_params->{offset} = $offset;
+        }
+        if (defined $limit) {
+            $other_params->{rows} = $limit;
+        }
+        if (defined $order) {
+            if ($order =~ /^desc/i) {
+                $other_params->{order_by} = { '-desc' => 'issue_id' };
+            }
+            else {
+                $other_params->{order_by} = { '-asc' => 'issue_id' };
+            }
+        }
+        if (defined $sort) {
+            my @columns = Koha::Old::Checkouts->columns;
+            if (grep(/^$sort$/, @columns)) {
+                if (keys %{$other_params->{'order_by'}}) {
+                    foreach my $param (keys %{$other_params->{'order_by'}}) {
+                        $other_params->{order_by}->{$param} = $sort;
+                    }
+                } else {
+                    $other_params->{order_by}->{'-asc'} = $sort;
+                }
+            }
+        }
 
-        $attributes{borrowernumber} = $borrowernumber;
+        # Retrieve all the issues in the history, but only the issue_id due to possible perfomance issues
+        my $checkouts = Koha::Old::Checkouts->search(
+          \%attributes,
+          $other_params
+        );
+
+        return $c->render( status => 200, openapi => $checkouts );
     }
-
-    # Retrieve all the issues in the history, but only the issue_id due to possible perfomance issues
-    my $checkouts = Koha::Old::Checkouts->search(
-      \%attributes,
-      { columns => [qw/issue_id/]}
-    );
-
-    $c->render( status => 200, openapi => $checkouts );
+    catch {
+        Koha::Exceptions::rethrow_exception($_);
+    };
 }
 
 sub gethistory {

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -112,6 +112,9 @@ $t->request_ok($tx)
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber1 = create_item($biblionumber, 'TEST000001');
 my $itemnumber2 = create_item($biblionumber, 'TEST000002');
+my $itemnumber3 = create_item($biblionumber, 'TEST000003');
+my $itemnumber4 = create_item($biblionumber, 'TEST000004');
+my $itemnumber5 = create_item($biblionumber, 'TEST000005');
 
 my $date_due = DateTime->now->add(weeks => 2);
 
@@ -154,6 +157,119 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_hasnt('/0')
   ->json_hasnt('/error');
+
+subtest 'test sorting, limit and offset' => sub {
+    plan tests => 53;
+
+    my $id = Koha::Old::Checkouts->search({}, {
+        order_by => {'-desc' => 'issue_id'}})->next;
+    $id = ($id) ? $id->issue_id+1 : 1;
+
+    my $issue2 = Koha::Old::Checkout->new({
+        issue_id => $id,
+        borrowernumber => $borrowernumber,
+        itemnumber => $itemnumber1,
+        date_due => '5000-01-01',
+        issuedate => '4999-12-01',
+    })->store;
+    my $issue3 = Koha::Old::Checkout->new({
+        issue_id => $id+1,
+        borrowernumber => $borrowernumber,
+        itemnumber => $itemnumber1,
+        date_due => '6000-01-01',
+        issuedate => '5999-12-01',
+    })->store;
+    my $issue4 = Koha::Old::Checkout->new({
+        issue_id => $id+2,
+        borrowernumber => $borrowernumber,
+        itemnumber => $itemnumber1,
+        date_due => '3000-01-01',
+        issuedate => '2999-12-01',
+    })->store;
+    my $issue5 = Koha::Old::Checkout->new({
+        issue_id => $id+3,
+        borrowernumber => $borrowernumber,
+        itemnumber => $itemnumber1,
+        date_due => '4000-01-01',
+        issuedate => '3999-12-01',
+    })->store;
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borrowernumber");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_has('/2')
+      ->json_has('/3')
+      ->json_is('/0/issue_id' => $issue2->issue_id)
+      ->json_is('/1/issue_id' => $issue3->issue_id)
+      ->json_is('/2/issue_id' => $issue4->issue_id)
+      ->json_is('/3/issue_id' => $issue5->issue_id)
+      ->json_is('/0/itemnumber' => $issue2->itemnumber);
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
+        ."?borrowernumber=$borrowernumber&offset=2");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_hasnt('/2')
+      ->json_is('/0/issue_id' => $issue4->issue_id)
+      ->json_is('/1/issue_id' => $issue5->issue_id)
+      ->json_is('/0/itemnumber' => $issue4->itemnumber);
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
+        ."?borrowernumber=$borrowernumber&offset=2&order=desc");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_hasnt('/2')
+      ->json_is('/0/issue_id' => $issue3->issue_id)
+      ->json_is('/1/issue_id' => $issue2->issue_id)
+      ->json_is('/0/itemnumber' => $issue3->itemnumber);
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
+        ."?borrowernumber=$borrowernumber&offset=2&order=desc&limit=1");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_hasnt('/1')
+      ->json_is('/0/issue_id' => $issue3->issue_id)
+      ->json_is('/0/itemnumber' => $issue3->itemnumber);
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
+        ."?borrowernumber=$borrowernumber&sort=date_due");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_has('/2')
+      ->json_has('/3')
+      ->json_is('/0/issue_id' => $issue4->issue_id)
+      ->json_is('/1/issue_id' => $issue5->issue_id)
+      ->json_is('/2/issue_id' => $issue2->issue_id)
+      ->json_is('/3/issue_id' => $issue3->issue_id);
+
+      $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
+        ."?borrowernumber=$borrowernumber&sort=date_due&order=desc");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_has('/2')
+      ->json_has('/3')
+      ->json_is('/0/issue_id' => $issue3->issue_id)
+      ->json_is('/1/issue_id' => $issue2->issue_id)
+      ->json_is('/2/issue_id' => $issue5->issue_id)
+      ->json_is('/3/issue_id' => $issue4->issue_id);
+};
 
 Koha::Patrons->find($borrowernumber)->delete();
 
