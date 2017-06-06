@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 35;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::TestBuilder;
@@ -91,7 +91,8 @@ my $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borr
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is([]);
+  ->json_is('/total' => 0)
+  ->json_is('/records' => []);
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borrowernumber");
 $t->request_ok($tx)
@@ -129,8 +130,9 @@ $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borrowe
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/0/issue_id' => $issueId)
-  ->json_hasnt('/1')
+  ->json_is('/records/0/issue_id' => $issueId)
+  ->json_is('/total' => 1)
+  ->json_hasnt('/records/1')
   ->json_hasnt('/error');
 
 my $date_due_regexp = $date_due1->ymd . 'T' . $date_due1->hms . '\+' .'\d\d:\d\d';
@@ -155,11 +157,12 @@ $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borrowe
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_hasnt('/0')
+  ->json_is('/total' => 0)
+  ->json_is('/records' => [])
   ->json_hasnt('/error');
 
 subtest 'test sorting, limit and offset' => sub {
-    plan tests => 53;
+    plan tests => 59;
 
     my $id = Koha::Old::Checkouts->search({}, {
         order_by => {'-desc' => 'issue_id'}})->next;
@@ -198,77 +201,83 @@ subtest 'test sorting, limit and offset' => sub {
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_has('/1')
-      ->json_has('/2')
-      ->json_has('/3')
-      ->json_is('/0/issue_id' => $issue2->issue_id)
-      ->json_is('/1/issue_id' => $issue3->issue_id)
-      ->json_is('/2/issue_id' => $issue4->issue_id)
-      ->json_is('/3/issue_id' => $issue5->issue_id)
-      ->json_is('/0/itemnumber' => $issue2->itemnumber);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_has('/records/1')
+      ->json_has('/records/2')
+      ->json_has('/records/3')
+      ->json_is('/records/0/issue_id' => $issue2->issue_id)
+      ->json_is('/records/1/issue_id' => $issue3->issue_id)
+      ->json_is('/records/2/issue_id' => $issue4->issue_id)
+      ->json_is('/records/3/issue_id' => $issue5->issue_id)
+      ->json_is('/records/0/itemnumber' => $issue2->itemnumber);
 
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
         ."?borrowernumber=$borrowernumber&offset=2");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_has('/1')
-      ->json_hasnt('/2')
-      ->json_is('/0/issue_id' => $issue4->issue_id)
-      ->json_is('/1/issue_id' => $issue5->issue_id)
-      ->json_is('/0/itemnumber' => $issue4->itemnumber);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_has('/records/1')
+      ->json_hasnt('/records/2')
+      ->json_is('/records/0/issue_id' => $issue4->issue_id)
+      ->json_is('/records/1/issue_id' => $issue5->issue_id)
+      ->json_is('/records/0/itemnumber' => $issue4->itemnumber);
 
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
         ."?borrowernumber=$borrowernumber&offset=2&order=desc");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_has('/1')
-      ->json_hasnt('/2')
-      ->json_is('/0/issue_id' => $issue3->issue_id)
-      ->json_is('/1/issue_id' => $issue2->issue_id)
-      ->json_is('/0/itemnumber' => $issue3->itemnumber);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_has('/records/1')
+      ->json_hasnt('/records/2')
+      ->json_is('/records/0/issue_id' => $issue3->issue_id)
+      ->json_is('/records/1/issue_id' => $issue2->issue_id)
+      ->json_is('/records/0/itemnumber' => $issue3->itemnumber);
 
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
         ."?borrowernumber=$borrowernumber&offset=2&order=desc&limit=1");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_hasnt('/1')
-      ->json_is('/0/issue_id' => $issue3->issue_id)
-      ->json_is('/0/itemnumber' => $issue3->itemnumber);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_hasnt('/records/1')
+      ->json_is('/records/0/issue_id' => $issue3->issue_id)
+      ->json_is('/records/0/itemnumber' => $issue3->itemnumber);
 
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
         ."?borrowernumber=$borrowernumber&sort=date_due");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_has('/1')
-      ->json_has('/2')
-      ->json_has('/3')
-      ->json_is('/0/issue_id' => $issue4->issue_id)
-      ->json_is('/1/issue_id' => $issue5->issue_id)
-      ->json_is('/2/issue_id' => $issue2->issue_id)
-      ->json_is('/3/issue_id' => $issue3->issue_id);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_has('/records/1')
+      ->json_has('/records/2')
+      ->json_has('/records/3')
+      ->json_is('/records/0/issue_id' => $issue4->issue_id)
+      ->json_is('/records/1/issue_id' => $issue5->issue_id)
+      ->json_is('/records/2/issue_id' => $issue2->issue_id)
+      ->json_is('/records/3/issue_id' => $issue3->issue_id);
 
       $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history"
         ."?borrowernumber=$borrowernumber&sort=date_due&order=desc");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_has('/0')
-      ->json_has('/1')
-      ->json_has('/2')
-      ->json_has('/3')
-      ->json_is('/0/issue_id' => $issue3->issue_id)
-      ->json_is('/1/issue_id' => $issue2->issue_id)
-      ->json_is('/2/issue_id' => $issue5->issue_id)
-      ->json_is('/3/issue_id' => $issue4->issue_id);
+      ->json_is('/total' => 4)
+      ->json_has('/records/0')
+      ->json_has('/records/1')
+      ->json_has('/records/2')
+      ->json_has('/records/3')
+      ->json_is('/records/0/issue_id' => $issue3->issue_id)
+      ->json_is('/records/1/issue_id' => $issue2->issue_id)
+      ->json_is('/records/2/issue_id' => $issue5->issue_id)
+      ->json_is('/records/3/issue_id' => $issue4->issue_id);
 };
 
 Koha::Patrons->find($borrowernumber)->delete();

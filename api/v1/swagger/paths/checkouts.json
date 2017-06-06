@@ -298,7 +298,16 @@
         "200": {
           "description": "A list of checkouts history",
           "schema": {
-            "$ref": "../definitions.json#/checkouts"
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total number of all checkouts in history, excluding all limitations made by limit and offset query parameters. Please note that because of this, the number may not be equal to the array elements returned in 'records' array."
+              },
+              "records": {
+                "$ref": "../definitions.json#/checkouts"
+              }
+            }
           }
         },
         "401": {

@@ -207,13 +207,18 @@ sub listhistory {
             }
         }
 
-        # Retrieve all the issues in the history, but only the issue_id due to possible perfomance issues
+        my $checkouts_count = Koha::Old::Checkouts->search(
+          \%attributes,
+        )->count;
         my $checkouts = Koha::Old::Checkouts->search(
           \%attributes,
           $other_params
         );
 
-        return $c->render( status => 200, openapi => $checkouts );
+        return $c->render( status => 200, openapi => {
+            total => $checkouts_count,
+            records => $checkouts
+        });
     }
     catch {
         Koha::Exceptions::rethrow_exception($_);
