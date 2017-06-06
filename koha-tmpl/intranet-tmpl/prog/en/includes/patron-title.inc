@@ -5,7 +5,7 @@
         [%- IF invert_name %]
             [%- borrower.surname | html %], [% borrower.firstname | html %] [% IF borrower.othernames %] ([% borrower.othernames | html %]) [% END %]
         [%- ELSE %]
-            [%- borrower.firstname | html %] [% IF borrower.othernames %] ([% borrower.othernames | html %]) [% END %] [% borrower.surname | html %]
+            [% IF borrower.title %] <span class="patron-title">[%- borrower.title | html %] </span>[% END %][%- borrower.firstname | html %] [% IF borrower.othernames %] ([% borrower.othernames | html %]) [% END %] [% borrower.surname | html %]
         [%- END -%]
     [%- END -%]
     [%- IF ( borrower.cardnumber ) -%]
