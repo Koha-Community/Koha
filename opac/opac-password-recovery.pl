@@ -56,9 +56,9 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     my $borrower;
     my $search_results;
 
-    # Find the borrower by his userid or email
+    # Find the borrower by userid, card number, or email
     if ($username) {
-        $search_results = Koha::Patrons->search( { userid => $username } );
+        $search_results = Koha::Patrons->search( { -or => { userid => $username, cardnumber => $username } } );
     }
     elsif ($email) {
         $search_results = Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } );
