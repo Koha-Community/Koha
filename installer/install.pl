@@ -204,7 +204,7 @@ elsif ( $step && $step == 3 ) {
     # 1ST install, 3rd sub-step : insert the SQL files the user has selected
     #
 
-        my ($fwk_language, $list) = $installer->load_sql_in_order($all_languages, scalar $query->param('framework'));
+        my ($fwk_language, $list) = $installer->load_sql_in_order($all_languages, $query->multi_param('framework'));
         $template->param(
             "fwklanguage" => $fwk_language,
             "list"        => $list
