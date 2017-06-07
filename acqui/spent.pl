@@ -64,7 +64,7 @@ SELECT
     aqinvoices.invoicenumber,
     quantityreceived,
     unitprice,
-    datereceived
+    aqorders.datereceived
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
@@ -79,7 +79,7 @@ WHERE
     budget_id=? AND
     (datecancellationprinted IS NULL OR
         datecancellationprinted='0000-00-00') AND
-    datereceived IS NOT NULL
+    aqorders.datereceived IS NOT NULL
     GROUP BY aqorders.ordernumber
 EOQ
 my $sth = $dbh->prepare($query);
