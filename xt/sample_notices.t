@@ -22,7 +22,7 @@ use Test::More qw(no_plan);
 
 
 my $root_dir = 'installer/data/mysql';
-my $base_notices_file = "en/default/sample_notices.sql";
+my $base_notices_file = "en/mandatory/sample_notices.sql";
 my @trans_notices_files = qw(
     fr-FR/1-Obligatoire/sample_notices.sql
     fr-CA/obligatoire/sample_notices.sql
