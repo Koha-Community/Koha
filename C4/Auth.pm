@@ -748,7 +748,6 @@ sub _timeout_syspref {
 sub checkauth {
     my $query = shift;
     $debug and warn "Checking Auth";
-
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -768,7 +767,7 @@ sub checkauth {
     my $logout = $query->param('logout.x');
 
     my $anon_search_history;
-
+    my $cas_ticket = '';
     # This parameter is the name of the CAS server we want to authenticate against,
     # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
     my $casparam = $query->param('cas');
@@ -906,8 +905,45 @@ sub checkauth {
             }
         }
     }
+    elsif ($logout && $cas) {
+        # We got a cas single logout request from a cas server;
+        my $ticket = $query->param('cas_ticket');
+        # We've been called as part of the single logout destroy the session associated with the cas ticket
+        my $storage_method = C4::Context->preference('SessionStorage');
+        my $dsn;
+        my $dsn_options;
+        # shift this to a function make get_session use the function too
+        my $dbh            = C4::Context->dbh;
+        if ( $storage_method eq 'mysql' ) {
+            $dsn = "driver:MySQL;serializer:yaml;id:md5";
+            $dsn_options = { Handle => $dbh };
+        }
+        elsif (  $storage_method eq 'Pg' ) {
+            $dsn = "driver:PostgreSQL;serializer:yaml;id:md5";
+            $dsn_options = { Handle => $dbh };
+        }
+        elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
+            $dsn = "driver:memcached;serializer:yaml;id:md5";
+            my $memcached = Koha::Caches->get_instance()->memcached_cache;
+            $dsn_options =  { Memcached => $memcached };
+        }
+        else {
+            $dsn = "driver:File;serializer:yaml;id:md5";
+            my $dir = File::Spec->tmpdir;
+            my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
+            $dsn_options =  { Directory => "$dir/cgisess_$instance" };
+        }
+        my $success =  CGI::Session->find( $dsn, sub {delete_cas_session(@_, $ticket)}, $dsn_options );
+        sub delete_cas_session {
+            my $session = shift;
+            my $ticket = shift;
+            if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
+                $session->delete;
+                $session->flush;
+            }
+        }
+    }
     unless ( $userid || $sessionID ) {
-
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
 
@@ -938,7 +974,6 @@ sub checkauth {
         {
             my $password    = $query->param('password');
             my $shibSuccess = 0;
-
             my ( $return, $cardnumber );
 
             # If shib is enabled and we have a shib login, does the login match a valid koha user
@@ -956,7 +991,7 @@ sub checkauth {
             unless ($shibSuccess) {
                 if ( $cas && $query->param('ticket') ) {
                     my $retuserid;
-                    ( $return, $cardnumber, $retuserid ) =
+                    ( $return, $cardnumber, $retuserid, $cas_ticket ) =
                       checkpw( $dbh, $userid, $password, $query, $type );
                     $userid = $retuserid;
                     $info{'invalidCasLogin'} = 1 unless ($return);
@@ -1016,7 +1051,7 @@ sub checkauth {
                 }
                 else {
                     my $retuserid;
-                    ( $return, $cardnumber, $retuserid ) =
+                    ( $return, $cardnumber, $retuserid, $cas_ticket ) =
                       checkpw( $dbh, $q_userid, $password, $query, $type );
                     $userid = $retuserid if ($retuserid);
                     $info{'invalid_username_or_password'} = 1 unless ($return);
@@ -1142,6 +1177,7 @@ sub checkauth {
                     $session->param( 'ip',           $session->remote_addr() );
                     $session->param( 'lasttime',     time() );
                 }
+                $session->param('cas_ticket', $cas_ticket) if $cas_ticket;
                 C4::Context->set_userenv(
                     $session->param('number'),       $session->param('id'),
                     $session->param('cardnumber'),   $session->param('firstname'),
@@ -1374,9 +1410,9 @@ Possible return values in C<$status> are:
 =cut
 
 sub check_api_auth {
+
     my $query         = shift;
     my $flagsrequired = shift;
-
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
@@ -1470,7 +1506,7 @@ sub check_api_auth {
         # new login
         my $userid   = $query->param('userid');
         my $password = $query->param('password');
-        my ( $return, $cardnumber );
+        my ( $return, $cardnumber, $cas_ticket );
 
         # Proxy CAS auth
         if ( $cas && $query->param('PT') ) {
@@ -1479,7 +1515,7 @@ sub check_api_auth {
 
             # In case of a CAS authentication, we use the ticket instead of the password
             my $PT = $query->param('PT');
-            ( $return, $cardnumber, $userid ) = check_api_auth_cas( $dbh, $PT, $query );    # EXTERNAL AUTH
+            ( $return, $cardnumber, $userid, $cas_ticket ) = check_api_auth_cas( $dbh, $PT, $query );    # EXTERNAL AUTH
         } else {
 
             # User / password auth
@@ -1488,7 +1524,8 @@ sub check_api_auth {
                 # caller did something wrong, fail the authenticateion
                 return ( "failed", undef, undef );
             }
-            ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+            my $newuserid;
+            ( $return, $cardnumber, $newuserid, $cas_ticket ) = checkpw( $dbh, $userid, $password, $query );
         }
 
         if ( $return and haspermission( $userid, $flagsrequired ) ) {
@@ -1586,6 +1623,7 @@ sub check_api_auth {
                 $session->param( 'ip',           $session->remote_addr() );
                 $session->param( 'lasttime',     time() );
             }
+            $session->param( 'cas_ticket', $cas_ticket);
             C4::Context->set_userenv(
                 $session->param('number'),       $session->param('id'),
                 $session->param('cardnumber'),   $session->param('firstname'),
@@ -1792,9 +1830,11 @@ sub checkpw {
         # In case of a CAS authentication, we use the ticket instead of the password
         my $ticket = $query->param('ticket');
         $query->delete('ticket');                                   # remove ticket to come back to original URL
-        my ( $retval, $retcard, $retuserid ) = checkpw_cas( $dbh, $ticket, $query, $type );    # EXTERNAL AUTH
+        my ( $retval, $retcard, $retuserid, $cas_ticket ) = checkpw_cas( $dbh, $ticket, $query, $type );    # EXTERNAL AUTH
         if ( $retval ) {
-            @return = ( $retval, $retcard, $retuserid );
+            @return = ( $retval, $retcard, $retuserid, $cas_ticket );
+        } else {
+            @return = (0);
         }
         $passwd_ok = $retval;
     }

@@ -61,6 +61,22 @@ BEGIN {
         import C4::External::BakerTaylor qw(&image_url &link_url);
     }
 }
+my $logout='';
+# CAS Single Sign Out
+if (C4::Context->preference('casAuthentication')){
+    # Check we havent been hit by a logout call
+    my $xml = $query->param('logoutRequest');
+    if ($xml) {
+        my $dom = XML::LibXML->load_xml(string => $xml);
+        my $ticket;
+        foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
+            $ticket = $node->findvalue('./samlp:SessionIndex');
+        }
+        $query->param(-name =>'logout.x', -value => 1);
+        $query->param(-name =>'cas_ticket', -value => $ticket);
+        $logout=1;
+    }
+}
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -71,6 +87,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+if ($logout){
+    print $query->header;
+    exit;
+}
+
 
 my %renewed = map { $_ => 1 } split( ':', $query->param('renewed') );
 

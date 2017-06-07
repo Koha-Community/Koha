@@ -105,18 +105,20 @@ sub checkpw_cas {
             my $userid = $val->user();
             $debug and warn "User CAS authenticated as: $userid";
 
+            # we should store the CAS ticekt too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
+
             # Does it match one of our users ?
             my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
             $sth->execute($userid);
             if ( $sth->rows ) {
                 $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
+                return ( 1, $retnumber, $userid, $ticket );
             }
             $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
             $sth->execute($userid);
             if ( $sth->rows ) {
                 $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
+                return ( 1, $retnumber, $userid, $ticket );
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user
@@ -154,19 +156,21 @@ sub check_api_auth_cas {
 
             my $userid = $r->user;
 
+            # we should store the CAS ticket too, we need this for single logout https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html#233-single-logout
+
             # Does it match one of our users ?
             my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
             $sth->execute($userid);
             if ( $sth->rows ) {
                 $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
+                return ( 1, $retnumber, $userid, $PT );
             }
             $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
             return $r->user;
             $sth->execute($userid);
             if ( $sth->rows ) {
                 $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
+                return ( 1, $retnumber, $userid, $PT );
             }
 
             # If we reach this point, then the user is a valid CAS user, but not a Koha user
