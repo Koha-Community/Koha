@@ -124,6 +124,8 @@ subtest 'search_by_*_field + find_by_koha_field + get_description' => sub {
     $loc_cat->delete if $loc_cat;
     my $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => '' } );
     $mss->delete if $mss;
+    $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'c', frameworkcode => 'ACQ' } );
+    $mss->delete if $mss;
     $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => 'd', frameworkcode => '' } );
     $mss->delete if $mss;
     $mss = Koha::MarcSubfieldStructures->search( { tagfield => 952, tagsubfield => '5', frameworkcode => '' } );
