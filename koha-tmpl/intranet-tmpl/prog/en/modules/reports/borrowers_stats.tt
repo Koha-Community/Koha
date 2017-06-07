@@ -24,7 +24,7 @@
 [% IF ( do_it ) %]
 	[% FOREACH mainloo IN mainloop %]
 		<h1>Patrons statistics</h1>
-		[% IF ( mainloo.loopfilter ) %]
+        [% IF ( mainloo.loopfilter.size>0 ) %]
             <p>Filtered on:</p>
 			[% FOREACH loopfilte IN mainloo.loopfilter %]
 				<p>

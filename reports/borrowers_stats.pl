@@ -232,8 +232,6 @@ sub calculate {
     my @branchcodes = map { $_->branchcode } Koha::Libraries->search;
 	($status  ) and push @loopfilter,{crit=>"Status",  filter=>$status  };
 	($activity) and push @loopfilter,{crit=>"Activity",filter=>$activity};
-    push @loopfilter,{debug=>1, crit=>"Branches",filter=>join(" ", sort @branchcodes)};
-	push @loopfilter,{debug=>1, crit=>"(line, column)", filter=>"($line,$column)"};
 # year of activity
 	my ( $period_year, $period_month, $period_day )=Add_Delta_YM( Today(),-$period, 0);
 	my $newperioddate=$period_year."-".$period_month."-".$period_day;
@@ -252,12 +250,6 @@ sub calculate {
         $linefield = $line;
     }
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['categorycode']});
-    push @loopfilter,
-        {
-            debug  => 1,
-            crit   => "Patron category",
-            filter => join( ", ", map { $_->categorycode . ' (' . ( $_->description || 'NO_DESCRIPTION' ) . ')' } $patron_categories->as_list ),
-        };
 
     my $strsth;
     my @strparams; # bind parameters for the query
@@ -278,7 +270,6 @@ sub calculate {
 	$strsth .= " AND $status='1' " if ($status);
     $strsth .=" order by $linefield";
 	
-	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strsth};
 	my $sth = $dbh->prepare($strsth);
     $sth->execute(@strparams);
  	while (my ($celvalue) = $sth->fetchrow) {
@@ -325,7 +316,6 @@ sub calculate {
 	$strsth2 .= " AND $status='1' " if ($status);
 
     $strsth2 .= " order by $colfield";
-	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strsth2};
 	my $sth2 = $dbh->prepare($strsth2);
     $sth2->execute(@strparams2);
  	while (my ($celvalue) = $sth2->fetchrow) {
@@ -422,7 +412,6 @@ sub calculate {
         $strcalc .= " $colfield ";
     }
 
-	push @loopfilter, {sql=>1, crit=>"Query", filter=>$strcalc};
 	my $dbcalc = $dbh->prepare($strcalc);
 	(scalar(@calcparams)) ? $dbcalc->execute(@calcparams) : $dbcalc->execute();
 	
