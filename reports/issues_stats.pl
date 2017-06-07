@@ -135,6 +135,12 @@ if ($do_it) {
             print map { $_->{value} . $sep } @$x;
             print $line->{totalrow}, "\n";
         }
+# footer
+         print "TOTAL";
+         $cols = @$results[0]->{loopfooter};
+         print map {$sep.$_->{totalcol}} @$cols;
+         print $sep.@$results[0]->{total};
+
     }
     exit;
 }
