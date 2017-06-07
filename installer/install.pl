@@ -245,7 +245,7 @@ elsif ( $step && $step == 3 ) {
 
         my ( $fwk_language, $list ) =
           $installer->load_sql_in_order( $all_languages,
-            scalar $query->param('framework') );
+            $query->multi_param('framework') );
         $template->param(
             "fwklanguage" => $fwk_language,
             "list"        => $list
