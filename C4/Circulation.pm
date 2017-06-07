@@ -1419,6 +1419,27 @@ sub AddIssue {
                         $item->{'barcode'} );
                 }
             }
+            my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckin');
+            if ($yaml) {
+                $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
+                my $rules;
+                eval { $rules = YAML::Load($yaml); };
+                if ($@) {
+                    warn "Unable to parse UpdateNotForLoanStatusOnCheckin syspref : $@";
+                }
+                else {
+                    foreach my $key ( keys %$rules ) {
+                        if ( $item->{notforloan} eq $key ) {
+                            ModItem( { notforloan => $rules->{$key} }, undef, $item->{'itemnumber'} );
+                            last;
+                        }
+                        if ($item->{sub_location} eq $key) {
+                            ModItem( { sub_location => $rules->{$key} }, undef, $item->{'itemnumber'} );
+                            last;
+                        }
+                    }
+                }
+            }
 
             ModItem(
                 {
@@ -1897,6 +1918,10 @@ sub AddReturn {
                 if ( $item->{notforloan} eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->{notforloan}, to => $rules->{$key} };
                     ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber );
+                    last;
+                }
+                if ($item->{sub_location} eq $key) {
+                    ModItem( { sub_location => $rules->{$key} }, undef, $itemnumber );
                     last;
                 }
             }
