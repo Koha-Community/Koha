@@ -1,6 +1,6 @@
 [% USE Price %]
 [% SET NoIssuesCharge = Koha.Preference('noissuescharge') %]
-[% IF fines > 0 %]
+[% IF fines and fines > 0 %]
     <li>
         <span class="circ-hlt">Fees &amp; Charges:</span>
         Patron has outstanding fees &amp; charges of [% fines | $Price %].

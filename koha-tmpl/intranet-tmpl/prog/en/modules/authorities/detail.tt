@@ -90,7 +90,7 @@ function searchauthority() {
 <h1>Authority #[% authid %] ([% authtypetext %])</h1>
 
 <div id="action">
-    [% IF count > 0 %]
+    [% IF count %]
         Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid %]">[% count %] record(s)</a>
     [% ELSE %]
         This authority is not used in any records.
