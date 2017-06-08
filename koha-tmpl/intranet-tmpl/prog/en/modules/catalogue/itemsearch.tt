@@ -40,7 +40,7 @@
         <option value="!=" >is not</option>
       [% END %]
     </select>
-    [% values = CGI.param(name) %]
+    [% SET values = CGI.param(name) %]
     <select id="[% name %]" name="[% name %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 %]">
       [% IF (values == '') %]
         <option value="" selected="selected">

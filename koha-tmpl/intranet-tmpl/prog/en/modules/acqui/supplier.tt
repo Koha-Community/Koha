@@ -353,7 +353,7 @@ function delete_contact(ev) {
                 <p><strong>Discount: </strong>
                     [% discount | format("%.1f") %] %</p>
                 <p><strong>Tax rate: </strong>
-                    [% 0 + tax_rate * 100 %] %</p>
+                    [% ( tax_rate || 0 ) * 100 %] %</p>
                 [% IF deliverytime.defined %]
                     <p><strong>Delivery time: </strong>
                         [% deliverytime %] days</p>
