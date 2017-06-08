@@ -19,9 +19,10 @@ use List::Util qw( shuffle );
 
 use C4::Context;
 use Koha::DateUtils;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 use_ok('Koha::DateUtils');
 use_ok('C4::Search::History');
@@ -471,7 +472,5 @@ $result = $schema->resultset('SearchHistory')->search()->count;
 $result2 = $schema->resultset('SearchHistory')->search()->count;
 is($result2, $result+1, 'new search added to borrower');
 };
-
-$dbh->rollback;
 
 done_testing;
