@@ -586,8 +586,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.007";
 if (CheckVersion($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('UpdateNotForLoanStatusOnCheckin', '', 'NULL', 'This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value. E.g. ''-1: 0'' will cause an item that was set to ''Ordered'' to now be available for loan. Each pair of values should be on a separate line.', 'Free');");
-    print "Upgrade to $DBversion done (Bug 11629 - Add ability to update not for loan status on checkin)\n";
+    #Backported to KohaSuomi3.16 in commit cd522983254b8fd8d4d50cf229774abc91c77710
+    #$dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('UpdateNotForLoanStatusOnCheckin', '', 'NULL', 'This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value. E.g. ''-1: 0'' will cause an item that was set to ''Ordered'' to now be available for loan. Each pair of values should be on a separate line.', 'Free');");
+    print "Upgrade to $DBversion already backported (Bug 11629 - Add ability to update not for loan status on checkin)\n";
     SetVersion($DBversion);
 }
 
@@ -1043,13 +1044,14 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.047";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        ALTER TABLE collections
-            CHANGE colBranchcode colBranchcode VARCHAR( 10 ) NULL DEFAULT NULL,
-            ADD INDEX ( colBranchcode ),
-            ADD CONSTRAINT collections_ibfk_1 FOREIGN KEY (colBranchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
-    });
-    print "Upgrade to $DBversion done (Bug 8836 - Resurrect Rotating Collections)\n";
+    ##Koha-Suomi has a "better" riistokokoelma-tool
+    #$dbh->do(q{
+    #    ALTER TABLE collections
+    #        CHANGE colBranchcode colBranchcode VARCHAR( 10 ) NULL DEFAULT NULL,
+    #        ADD INDEX ( colBranchcode ),
+    #        ADD CONSTRAINT collections_ibfk_1 FOREIGN KEY (colBranchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+    #});
+    print "Upgrade to $DBversion not done, because Koha-Suomi has a better RotatingCollection tool (Bug 8836 - Resurrect Rotating Collections)\n";
     SetVersion($DBversion);
 }
 
@@ -1446,10 +1448,14 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.050";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT INTO permissions (module_bit, code, description) VALUES
-          (13, 'records_batchdel', 'Perform batch deletion of records (bibliographic or authority)')
-    |);
+    require Koha::Auth::PermissionManager;
+    my $pm = Koha::Auth::PermissionManager->new();
+    $pm->addPermission({module => 'tools', code => 'records_batchdel', description => 'Perform batch deletion of records (bibliographic or authority)'});
+    #Refactored for Koha::Auth::PermissionManager
+    #$dbh->do(q|
+    #    INSERT INTO permissions (module_bit, code, description) VALUES
+    #      (13, 'records_batchdel', 'Perform batch deletion of records (bibliographic or authority)')
+    #|);
     print "Upgrade to $DBversion done (Bug 12403: Add permission tools_records_batchdelitem)\n";
     SetVersion($DBversion);
 }
@@ -1476,22 +1482,25 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.053";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)');
-    });
-
-    $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'delete_all_items', 'Delete all items at once');
-    });
-
-    $dbh->do(q{
-        INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)');
-    });
-
-    # The delete_all_items permission should be added to users having the edit_items permission.
-    $dbh->do(q{
-        INSERT INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, module_bit, "delete_all_items" FROM user_permissions WHERE code="edit_items";
-    });
+    ## Permissions already exist in the KohaSuomi3.16 for some strange reason.
+    ## Introduced in 4f69a4a92135931e119f30957cf3e2d78e56ce17
+    #
+    #$dbh->do(q{
+    #    INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)');
+    #});
+    #
+    #$dbh->do(q{
+    #    INSERT INTO permissions (module_bit, code, description) VALUES ('9', 'delete_all_items', 'Delete all items at once');
+    #});
+    #
+    #$dbh->do(q{
+    #    INSERT INTO permissions (module_bit, code, description) VALUES ('13', 'items_batchmod_restricted', 'Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)');
+    #});
+    #
+    ## The delete_all_items permission should be added to users having the edit_items permission. (no they shouldnt, let superlibrarian decide)
+    #$dbh->do(q{
+    #    INSERT INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, module_bit, "delete_all_items" FROM user_permissions WHERE code="edit_items";
+    #});
 
     # Add 2 new prefs
     $dbh->do(q{
@@ -1824,14 +1833,16 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.011";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
-        (20, 'lists', 'Lists', 0)
-    |);
-    $dbh->do(q|
-        INSERT INTO permissions (module_bit, code, description) VALUES
-        (20, 'delete_public_lists', 'Delete public lists')
-    |);
+    ## Already in KohaSuomi3.16 by commit 4e501332ba4a5528532bbe2c323912ac75a7733f
+    #
+    #$dbh->do(q|
+    #    INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
+    #    (20, 'lists', 'Lists', 0)
+    #|);
+    #$dbh->do(q|
+    #    INSERT INTO permissions (module_bit, code, description) VALUES
+    #    (20, 'delete_public_lists', 'Delete public lists')
+    #|);
     print "Upgrade to $DBversion done (Bug 13417: Add permission to delete public lists)\n";
     SetVersion ($DBversion);
 }
@@ -1852,10 +1863,12 @@ if(CheckVersion($DBversion)) {
 
 $DBversion = "3.19.00.013";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT INTO permissions (module_bit, code, description) VALUES
-          (13, 'records_batchmod', 'Perform batch modification of records (biblios or authorities)')
-    |);
+    ## Already in KohaSuomi3.16 by commit 4e501332ba4a5528532bbe2c323912ac75a7733f
+    #
+    #$dbh->do(q|
+    #    INSERT INTO permissions (module_bit, code, description) VALUES
+    #      (13, 'records_batchmod', 'Perform batch modification of records (biblios or authorities)')
+    #|);
     print "Upgrade to $DBversion done (Bug 11395: Add permission tools_records_batchmod)\n";
     SetVersion($DBversion);
 }
@@ -2168,36 +2181,45 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.19.00.028";
 if( CheckVersion($DBversion) ) {
-    eval {
-        local $dbh->{PrintError} = 0;
-        $dbh->do(q{
-            ALTER TABLE issues DROP PRIMARY KEY
-        });
-    };
+    ## Kohasuomi3.16. Why would anybody want to drop the PK? Fix borken old DBs?
+    #eval {
+    #    local $dbh->{PrintError} = 0;
+    #    $dbh->do(q{
+    #        ALTER TABLE issues DROP PRIMARY KEY
+    #    });
+    #};
 
-    $dbh->do(q{
-        ALTER TABLE old_issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
-    });
-
+    ## KohaSuomi3.16, since time immemorial we have had issue_id just like that. Prim and proper.
+    #$dbh->do(q{
+    #    ALTER TABLE old_issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    #});
+    #
+    #This clause doesn't, hurt and is the desired end-result
     $dbh->do(q{
         ALTER TABLE old_issues CHANGE issue_id issue_id INT( 11 ) NOT NULL
     });
-
-    $dbh->do(q{
-        ALTER TABLE issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
-    });
-
-    $dbh->do(q{
-        UPDATE issues SET issue_id = issue_id + ( SELECT COUNT(*) FROM old_issues ) ORDER BY issue_id DESC
-    });
-
-    my $max_issue_id = $schema->resultset('Issue')->get_column('issue_id')->max();
-    if ($max_issue_id) {
-        $max_issue_id++;
-        $dbh->do(qq{
-            ALTER TABLE issues AUTO_INCREMENT = $max_issue_id
-        });
-    }
+    #
+    #$dbh->do(q{
+    #    ALTER TABLE issues ADD issue_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    #});
+    #
+    ## KohaSuomi3.16, our numberings are ordered as is.
+    ## This clause fails due to foreign key constraints. Prolly doesn't cascade both ways or all the way?
+    #$dbh->do(q{
+    #    UPDATE issues SET issue_id = issue_id + ( SELECT COUNT(*) FROM old_issues ) ORDER BY issue_id DESC
+    #});
+    #
+    ## Setting the autoincrement doesnt hurt, but this code might fail if environemnt is hurt.
+    ## To be safe, hide it. Better would be to monitor that the auto_increment stays on top of the old_issues-table,
+    ## or the code actually warns about it.
+    #
+    #my $max_issue_id = $schema->resultset('Issue')->get_column('issue_id')->max();
+    #if ($max_issue_id) {
+    #    $max_issue_id++;
+    #    $dbh->do(qq{
+    #        ALTER TABLE issues AUTO_INCREMENT = $max_issue_id
+    #    });
+    #}
 
     print "Upgrade to $DBversion done (Bug 13790: Add unique id issue_id to issues and oldissues tables)\n";
     SetVersion($DBversion);
@@ -2537,17 +2559,18 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.006";
 if ( CheckVersion($DBversion) ) {
-    # Remove the borrow permission flag (bit 7)
-    $dbh->do(q|
-        UPDATE borrowers
-        SET flags = flags - ( flags & (1<<7) )
-        WHERE flags IS NOT NULL
-            AND flags > 0
-    |);
-    $dbh->do(q|
-        DELETE FROM userflags WHERE bit=7;
-    |);
-    print "Upgrade to $DBversion done (Bug 7976: Remove the 'borrow' permission)\n";
+    ### KohaSuomi3.16 has this backported in commit 59004494311f57c5523873c247bd3806bc8d312d
+    ## Remove the borrow permission flag (bit 7)
+    #$dbh->do(q|
+    #    UPDATE borrowers
+    #    SET flags = flags - ( flags & (1<<7) )
+    #    WHERE flags IS NOT NULL
+    #        AND flags > 0
+    #|);
+    #$dbh->do(q|
+    #    DELETE FROM userflags WHERE bit=7;
+    #|);
+    print "Upgrade to $DBversion already backported (Bug 7976: Remove the 'borrow' permission)\n";
     SetVersion($DBversion);
 }
 
@@ -2632,14 +2655,15 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.010";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        ALTER TABLE message_queue
-            DROP message_id
-    |);
-    $dbh->do(q|
-        ALTER TABLE message_queue
-            ADD message_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
-    |);
+    ##KohaSuomi3.16 backported in commit c6f1b5d3edaa30f716acbf1bf3cb7effec322f8b
+    #$dbh->do(q|
+    #    ALTER TABLE message_queue
+    #        DROP message_id
+    #|);
+    #$dbh->do(q|
+    #    ALTER TABLE message_queue
+    #        ADD message_id INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST
+    #|);
     print "Upgrade to $DBversion done (Bug 7793: redefine the field message_id as PRIMARY KEY of message_queue)\n";
     SetVersion ($DBversion);
 }
@@ -2911,28 +2935,37 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.027";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q|
-        INSERT IGNORE INTO permissions (module_bit, code, description)
-        VALUES (1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
-    |);
+    require Koha::Auth::PermissionManager;
+    my $pm = Koha::Auth::PermissionManager->new();
+    $pm->addPermission({module => 'circulate', code => 'self_checkout', description => 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'});
+
+    ## KS3.16 compatibility
+    #$dbh->do(q|
+    #    INSERT IGNORE INTO permissions (module_bit, code, description)
+    #    VALUES (1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
+    #|);
 
     my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
 
-    $dbh->do(q|
-        UPDATE borrowers
-        SET flags=0
-        WHERE userid=?
-    |, undef, $AutoSelfCheckID);
+    $pm->revokeAllPermissions($AutoSelfCheckID); #userid is automatically casted to the proper type by Koha::Object::cast() so we don't have to
+    ## KS3.16 compatibility
+    #$dbh->do(q|
+    #    UPDATE borrowers
+    #    SET flags=0
+    #    WHERE userid=?
+    #|, undef, $AutoSelfCheckID);
+    #
+    #$dbh->do(q|
+    #    DELETE FROM user_permissions
+    #    WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
+    #|, undef, $AutoSelfCheckID);
 
-    $dbh->do(q|
-        DELETE FROM user_permissions
-        WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
-    |, undef, $AutoSelfCheckID);
-
-    $dbh->do(q|
-        INSERT INTO user_permissions(borrowernumber, module_bit, code)
-        SELECT borrowernumber, 1, 'self_checkout' FROM borrowers WHERE userid=?
-    |, undef, $AutoSelfCheckID);
+    $pm->grantPermission($AutoSelfCheckID, 'circulate', 'self_checkout');
+    ## KS3.16 comp
+    #$dbh->do(q|
+    #    INSERT INTO user_permissions(borrowernumber, module_bit, code)
+    #    SELECT borrowernumber, 1, 'self_checkout' FROM borrowers WHERE userid=?
+    #|, undef, $AutoSelfCheckID);
     print "Upgrade to $DBversion done (Bug 14298: AutoSelfCheckID user should only be able to access SCO)\n";
     SetVersion($DBversion);
 }
@@ -3822,6 +3855,7 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.23.00.022";
 if ( CheckVersion($DBversion) ) {
+    ## KS3.16 Problems here are because of failed initial data migration and missing borrowers.
     $dbh->do(q{ ALTER TABLE tags_all MODIFY COLUMN borrowernumber INT(11) });
     $dbh->do(q{ ALTER TABLE tags_all drop FOREIGN KEY tags_borrowers_fk_1 });
     $dbh->do(q{ ALTER TABLE tags_all ADD CONSTRAINT `tags_borrowers_fk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE });
@@ -4233,9 +4267,13 @@ if ( CheckVersion($DBversion) ) {
            });
 
 ## Add a permission for managing EDI
-   $dbh->do(q{
-           INSERT INTO permissions (module_bit, code, description) values (11, 'edi_manage', 'Manage EDIFACT transmissions');
-           });
+    require Koha::Auth::PermissionManager;
+    my $pm = Koha::Auth::PermissionManager->new();
+    $pm->addPermission({module => 'tools', code => 'edi_manage', description => 'Manage EDIFACT transmissions'});
+   ## KS3.16 comp
+   #$dbh->do(q{
+   #        INSERT INTO permissions (module_bit, code, description) values (11, 'edi_manage', 'Manage EDIFACT transmissions');
+   #        });
 
    print "Upgrade to $DBversion done (Bug 7736 - Edifact QUOTE and ORDER functionality))\n";
    SetVersion($DBversion);
@@ -4401,26 +4439,32 @@ $DBversion = "3.23.00.052";
 if ( CheckVersion($DBversion) ) {
 ## Insert permission
 
-    $dbh->do(q{
-        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
-        (13, 'upload_general_files', 'Upload any file'),
-        (13, 'upload_manage', 'Manage uploaded files');
-        });
+    require Koha::Auth::PermissionManager;
+    my $pm = Koha::Auth::PermissionManager->new();
+    $pm->addPermission({module => 'tools', code => 'upload_general_files', description => 'Upload any file'});
+    $pm->addPermission({module => 'tools', code => 'upload_manage', description => 'Manage uploaded files'});
+
+    ## KS3.16 comp
+    #$dbh->do(q{
+    #    INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+    #    (13, 'upload_general_files', 'Upload any file'),
+    #    (13, 'upload_manage', 'Manage uploaded files');
+    #    });
 ## Update user_permissions for current users (check count in uploaded_files)
 ## Note 9 == edit_catalogue and 13 == tools
 ## We do not insert if someone is superlibrarian, does not have edit_catalogue,
 ## or already has all tools
 
-        $dbh->do(q{
-                INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
-                SELECT borrowernumber, 13, 'upload_general_files'
-                FROM borrowers bo
-                WHERE flags<>1 AND flags & POW(2,13) = 0 AND
-                ( flags & POW(2,9) > 0 OR 
-                  (SELECT COUNT(*) FROM user_permissions
-                   WHERE borrowernumber=bo.borrowernumber AND module_bit=9 ) > 0 )
-                AND ( SELECT COUNT(*) FROM uploaded_files ) > 0
-                });
+    #    $dbh->do(q{
+    #            INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
+    #            SELECT borrowernumber, 13, 'upload_general_files'
+    #            FROM borrowers bo
+    #            WHERE flags<>1 AND flags & POW(2,13) = 0 AND
+    #            ( flags & POW(2,9) > 0 OR
+    #              (SELECT COUNT(*) FROM user_permissions
+    #               WHERE borrowernumber=bo.borrowernumber AND module_bit=9 ) > 0 )
+    #            AND ( SELECT COUNT(*) FROM uploaded_files ) > 0
+    #            });
 
     print "Upgrade to $DBversion done (Bug 14686 - New menu option and permission for file uploading)\n";
     SetVersion($DBversion);
@@ -4940,18 +4984,23 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "16.06.00.022";
 if ( CheckVersion($DBversion) ) {
-    $dbh->do(q{
-        INSERT IGNORE INTO `permissions`
-        (module_bit, code,             description) VALUES
-        (16,         'delete_reports', 'Delete SQL reports');
-    });
-    $dbh->do(q{
-        INSERT IGNORE INTO user_permissions
-        (borrowernumber,      module_bit,code)
-        SELECT borrowernumber,module_bit,'delete_reports'
-            FROM user_permissions
-            WHERE module_bit=16 AND code='create_reports';
-    });
+    require Koha::Auth::PermissionManager;
+    my $pm = Koha::Auth::PermissionManager->new();
+    $pm->addPermission({module => 'reports', code => 'delete_reports', description => 'Delete SQL reports'});
+
+    ## KS3.16 comp
+    #$dbh->do(q{
+    #    INSERT IGNORE INTO `permissions`
+    #    (module_bit, code,             description) VALUES
+    #    (16,         'delete_reports', 'Delete SQL reports');
+    #});
+    #$dbh->do(q{
+    #    INSERT IGNORE INTO user_permissions
+    #    (borrowernumber,      module_bit,code)
+    #    SELECT borrowernumber,module_bit,'delete_reports'
+    #        FROM user_permissions
+    #        WHERE module_bit=16 AND code='create_reports';
+    #});
 
     print "Upgrade to $DBversion done (Bug 16978 - Add delete reports user permission)\n";
     SetVersion($DBversion);
@@ -5032,6 +5081,15 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = '16.06.00.028';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    ## KS3.16 comp
+    ## We need to install Bug 18231 first because the DBIx changes already exist in DBIx schema and make DBIx operations fail,
+    ## like here
+    ##
+    require Koha::AtomicUpdater;
+    my $au = Koha::AtomicUpdater->new();
+    $au->applyAtomicUpdate(C4::Context->config("intranetdir").'installer/data/mysql/atomicupdate/Bug-18231-id_to_ussingrules_table.sql')
+            unless $au->find('Bug-18231');
+
     {
         print "Attempting upgrade to $DBversion (Bug 17135) ...\n";
         my $maintenance_script = C4::Context->config("intranetdir") . "/installer/data/mysql/fix_unclosed_nonaccruing_fines_bug17135.pl";
@@ -5130,6 +5188,12 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "16.06.00.033";
 if ( CheckVersion($DBversion) ) {
+    ## KS3.16 comp
+    ## DBD::mysql::db do failed: Table 'authorised_value_categories' already exists
+    ## It doesn't exist in the old DB and there is no other place where it is created??
+    ## How can it already exist here?
+    ## No matter, it doesn't change a thing
+    ##
     $dbh->do(q{
         CREATE TABLE authorised_value_categories (
         category_name VARCHAR(32) NOT NULL,
@@ -5662,26 +5726,30 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = '16.06.00.048';
 if( CheckVersion( $DBversion ) ) {
+    ## KS3.16 compat
+    ## These have been added in Bug 14686 already??
     $dbh->do(q|
         INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
         (13, 'upload_general_files', 'Upload any file'),
         (13, 'upload_manage', 'Manage uploaded files');
     |);
 
+    ## KS3.16 compat
+    ## No we dont
     # Update user_permissions for current users (check count in uploaded_files)
     # Note 9 == edit_catalogue and 13 == tools
     # We do not insert if someone is superlibrarian, does not have edit_catalogue,
     # or already has all tools
-    $dbh->do(q|
-        INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
-        SELECT borrowernumber, 13, 'upload_general_files'
-        FROM borrowers bo
-        WHERE flags<>1 AND flags & POW(2,13) = 0 AND
-            ( flags & POW(2,9) > 0 OR (
-                SELECT COUNT(*) FROM user_permissions
-                WHERE borrowernumber=bo.borrowernumber AND module_bit=9 ) > 0 )
-            AND ( SELECT COUNT(*) FROM uploaded_files ) > 0;
-    |);
+    #$dbh->do(q|
+    #    INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
+    #    SELECT borrowernumber, 13, 'upload_general_files'
+    #    FROM borrowers bo
+    #    WHERE flags<>1 AND flags & POW(2,13) = 0 AND
+    #        ( flags & POW(2,9) > 0 OR (
+    #            SELECT COUNT(*) FROM user_permissions
+    #            WHERE borrowernumber=bo.borrowernumber AND module_bit=9 ) > 0 )
+    #        AND ( SELECT COUNT(*) FROM uploaded_files ) > 0;
+    #|);
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 17663 - Forgotten userpermissions)\n";
@@ -5818,7 +5886,7 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE deletedbiblioitems DROP COLUMN marcxml;
     });
     SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 17196 - Move marcxml out of the biblioitems table)\n";
+    print "Upgrade to $DBversion done (Bug 17196 - Move marcxml out of the biblioitems table) - MAKE SURE YOU HAVE SOMETHING IN YOUR biblio_metadata and deletedbiblio_metadata. This update is destructive and you will lose your data if everything didn't go 100%\n";
 }
 
 $DBversion = '16.12.00.005';
