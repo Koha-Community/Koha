@@ -13,9 +13,9 @@ use C4::Items;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -23,16 +23,25 @@ my $builder = t::lib::TestBuilder->new;
 my $library = $builder->build( { source => 'Branch' })->{branchcode};
 my $library2 = $builder->build( { source => 'Branch' })->{branchcode};
 
+my $frameworkcode = ''; # FIXME We do not want to insert the whole mapping, but we should use another frameworkcode
 $dbh->do(q|
     DELETE FROM marc_subfield_structure
-    WHERE kohafield = 'items.new_status' OR kohafield = 'items.stocknumber'
-|);
+    WHERE ( kohafield = 'items.new_status' OR kohafield = 'items.stocknumber' )
+    AND frameworkcode = ?
+|, undef, $frameworkcode);
 
 my $new_tagfield = 'i';
 $dbh->do(qq|
     INSERT INTO marc_subfield_structure(tagfield, tagsubfield, kohafield, frameworkcode)
-    VALUES ( 952, '$new_tagfield', 'items.new_status', '' )
-|);
+    VALUES ( 952, ?, 'items.new_status', ? )
+|, undef, $new_tagfield, $frameworkcode);
+
+# Clear cache
+my $cache = Koha::Caches->get_instance();
+$cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+$cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 my $record = MARC::Record->new();
 $record->append_fields(
@@ -40,7 +49,7 @@ $record->append_fields(
     MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
     MARC::Field->new('942', ' ', ' ', c => 'ITEMTYPE_T'),
 );
-my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, '');
+my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, $frameworkcode);
 
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
     {
@@ -55,7 +64,7 @@ my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
 my $item = C4::Items::GetItem( $itemnumber );
 is ( $item->{new_status}, 'new_value', q|AddItem insert the 'new_status' field| );
 
-my ( $tagfield, undef ) = GetMarcFromKohaField('items.itemnumber', '');
+my ( $tagfield, undef ) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
 my $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
 is( $marc_item->subfield($tagfield, $new_tagfield), 'new_value', q|Koha mapping is correct|);
 
@@ -288,3 +297,10 @@ C4::Items::ToggleNewStatus( { rules => \@rules } );
 
 $modified_item = C4::Items::GetItem( $itemnumber );
 is( $modified_item->{new_status}, 'another_new_updated_value', q|ToggleNewStatus: conditions on biblioitems|);
+
+# Clear cache
+$cache = Koha::Caches->get_instance();
+$cache->clear_from_cache("MarcStructure-0-$frameworkcode");
+$cache->clear_from_cache("MarcStructure-1-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
