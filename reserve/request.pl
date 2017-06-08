@@ -311,7 +311,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     ## Here we go backwards again to create hash of biblioitemnumber to itemnumbers,
     ## when by definition all of the itemnumber have the same biblioitemnumber
-    my ( $itemnumbers_of_biblioitem, $iteminfos_of);
+    my ( $iteminfos_of );
     while ( my $item = $items->next ) {
         $item = $item->unblessed;
         my $biblioitemnumber = $item->{biblioitemnumber};
