@@ -85,8 +85,7 @@
                     <input type="hidden" name="unique_id" value="[% loop.count %]" /> <!-- FIXME on update, the unique_id should be filled -->
                     <div class="age">
                       <h5>Age in days</h5>
-                      <input class="age" required="required" type="number" value="[% rule.age %]" name="age_[% id %]" />
-                      <span class="required">Required</span>
+                      <input class="age" type="number" value="[% rule.age %]" name="age_[% id %]" />
                     </div>
                     <div class="blocks">
                       <h5>Conditions</h5>
@@ -124,10 +123,10 @@
                             [% END %]
                           </select>
                           =
-                          <input class="required" required="required" type="text" value="[% substitution.value %]" name="substitution_value_[% id %]" />
+                          <input type="text" value="[% substitution.value %]" name="substitution_value_[% id %]" />
                           <a class="add_block" href="#"><i class="fa fa-plus"></i> Add a substitution</a>
                           <a class="remove_block" href="#"><i class="fa fa-trash"></i> Remove substitution</a>
-                          <span class="required">Required</span>
+                          <span class="required">A field name is required</span>
                         </div>
                       [% END %]
                     </div>
@@ -148,7 +147,6 @@
             <div class="age">
               <h5>Age in days</h5>
               <input class="age" type="number" value="" name="age" />
-              <span class="required">Required</span>
             </div>
             <div class="blocks">
               <h5>Conditions</h5>
@@ -175,10 +173,10 @@
                   [% END %]
                 </select>
                 =
-                <input class="required" required="required" type="text" value="" name="substitution_value" />
+                <input type="text" value="" name="substitution_value" />
                 <a class="add_block" href="#"><i class="fa fa-plus"></i> Add a substitution</a>
                 <a class="remove_block" href="#"><i class="fa fa-trash"></i> Remove substitution</a>
-                <span class="required">Required</span>
+                <span class="required">A field name is required</span>
               </div>
             </div>
           </fieldset>
