@@ -117,7 +117,6 @@ $(document).ready(function() {
     });
 
     jQuery.validator.addClassRules("age", {
-        required: true,
         digits: true
     });
 
