@@ -21,7 +21,7 @@ package Koha::Deduplicator;
 use Modern::Perl;
 
 use C4::Matcher;
-use C4::Items qw(get_itemnumbers_of MoveItemFromBiblio);
+use C4::Items qw(MoveItemFromBiblio);
 use C4::Biblio qw(GetBiblionumberSlice GetMarcBiblio GetBiblioItemByBiblioNumber DelBiblio);
 use C4::Serials qw(CountSubscriptionFromBiblionumber);
 use C4::Reserves qw/MergeHolds/;
@@ -353,13 +353,11 @@ sub merge {
 
     # Moving items from the other record to the reference record
     # Also moving orders from the other record to the reference record, only if the order is linked to an item of the other record
-    my $itemnumbers = get_itemnumbers_of($frombiblio);
-    foreach my $itloop ($itemnumbers->{$frombiblio}) {
-        foreach my $itemnumber (@$itloop) {
-            my $res = MoveItemFromBiblio($itemnumber, $frombiblio, $tobiblio);
-            if (not defined $res) {
-                push @notmoveditems, $itemnumber;
-            }
+    my $items = Koha::Items->search({ biblionumber => $frombiblio });
+    while (my $item = $items->next) {
+        my $res = MoveItemFromBiblio($item->itemnumber, $frombiblio, $tobiblio);
+        if (not defined $res) {
+            push @notmoveditems, $item->itemnumber;
         }
     }
     # If some items could not be moved :
