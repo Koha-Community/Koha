@@ -114,6 +114,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.08'
     },
+    'XML::Compile::Schema' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '1.55',
+    },
     'XML::Dumper' => {
         'usage'    => 'Core',
         'required' => '1',
