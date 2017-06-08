@@ -9,9 +9,10 @@ use List::Util qw( shuffle );
 
 use C4::Context;
 use Koha::DateUtils;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 use_ok('Koha::DateUtils');
 use_ok('C4::Search::History');
@@ -344,7 +345,5 @@ sub delete_all {
         userid => $userid,
     });
 }
-
-$dbh->rollback;
 
 done_testing;
