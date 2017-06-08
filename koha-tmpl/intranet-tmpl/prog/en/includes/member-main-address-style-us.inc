@@ -72,7 +72,7 @@
         <select id="select_city" name="select_city">
             <option value="|||"></option>
             [% FOREACH c IN cities %]
-                [% IF c.city_name == city %]
+                [% IF c.city_name == city && c.city_state == state && c.city_zipcode == zipcode %]
                 <option value="[% c.city_zipcode %]|[% c.city_name %]|[% c.city_state %]|[% c.city_country %]" selected="selected">
                 [% ELSE %]
                 <option value="[% c.city_zipcode %]|[% c.city_name %]|[% c.city_state %]|[% c.city_country %]">
