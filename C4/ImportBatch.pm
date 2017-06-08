@@ -467,7 +467,7 @@ sub AddItemsToImportBiblio {
                                         VALUES (?, ?, ?)");
         $sth->bind_param(1, $import_record_id);
         $sth->bind_param(2, 'staged');
-        $sth->bind_param(3, $item_marc->as_xml());
+        $sth->bind_param(3, $item_marc->as_xml("USMARC"));
         $sth->execute();
         push @import_items_ids, $dbh->{'mysql_insertid'};
         $sth->finish();
