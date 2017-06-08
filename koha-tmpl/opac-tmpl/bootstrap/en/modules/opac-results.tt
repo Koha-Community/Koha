@@ -780,7 +780,7 @@ $(document).ready(function(){
             [% END %]
             param1 += "<\/optgroup>";
         [% END %]
-        [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+        [% IF ( add_to_some_private_shelves and add_to_some_private_shelves.count > 10 ) or ( add_to_some_public_shelves and add_to_some_public_shelves.count > 10 ) %]
             param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
         [% END %]
         param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
