@@ -53,7 +53,7 @@
                     </th>
                     [% FOREACH cell IN line.cells %]
                     <td headers="[% cell.rowvalue %] [% cell.colvalue %]">
-                    [% BLOCK spantitle %][% FOREACH lib IN cell.libs %][% lib.lib |html %][% END %][% END %]
+                    [% BLOCK spantitle %][% FOREACH lib IN cell.libs %][% lib.lib |html %] - [% END %][% END %]
                     <span title="[% INCLUDE spantitle %]">
                     [% cell.celvalue %] <br /><input type="checkbox" name="[% cell.celvalue %]" value="[% cell.celvalue %]" />
                     </span>
