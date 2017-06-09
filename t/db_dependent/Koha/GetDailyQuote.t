@@ -1,8 +1,24 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Test::More tests => 12;
+
 use C4::Koha qw( GetDailyQuote );
 use DateTime::Format::MySQL;
 use Koha::DateUtils qw(dt_from_string);
@@ -37,19 +53,14 @@ my $expected_quote = {
     timestamp   => '0000-00-00 00:00:00',
 };
 
-diag("Get a quote based on id");
 my $quote = GetDailyQuote('id'=>8);
-cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
+cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Correctly got quote by ID");
 is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
 
-
-diag("Get a random quote");
 $quote = GetDailyQuote('random'=>1);
 ok($quote, "Got a random quote.");
 cmp_ok($quote->{'id'}, '>', 0, 'Id is greater than 0');
 
-
-diag("Get a quote based on today's date");
 $dbh->do("UPDATE quotes SET timestamp = '0000-00-00 00:00:00';");
 my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string());
 my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
