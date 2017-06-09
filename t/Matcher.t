@@ -316,4 +316,3 @@ sub get_authors_matchpoint {
     return $matchpoint;
 }
 
-1;

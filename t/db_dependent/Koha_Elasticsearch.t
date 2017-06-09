@@ -151,5 +151,3 @@ subtest 'get_fixer_rules() tests' => sub {
     $schema->storage->txn_rollback;
 
 };
-
-1;

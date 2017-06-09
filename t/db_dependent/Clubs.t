@@ -231,4 +231,3 @@ is( $patron->get_enrollable_clubs->count,
 is( $club->club_enrollments->count, 1, 'There is 1 enrollment for club' );
 
 $schema->storage->txn_rollback();
-1;

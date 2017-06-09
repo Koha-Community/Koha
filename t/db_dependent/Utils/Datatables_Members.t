@@ -461,4 +461,3 @@ subtest 'ExtendedPatronAttributes' => sub {
 # End
 $schema->storage->txn_rollback;
 
-1;

@@ -56,4 +56,3 @@ is( Koha::Cities->search->count, $nb_of_cities + 1, 'Delete should have deleted 
 
 $schema->storage->txn_rollback;
 
-1;

@@ -213,4 +213,3 @@ subtest 'export without record_type' => sub {
 
 $schema->storage->txn_rollback;
 
-1;

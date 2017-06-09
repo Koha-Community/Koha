@@ -70,4 +70,3 @@ is( Koha::Reviews->search->count, $nb_of_reviews + 2, 'Delete should have delete
 
 $schema->storage->txn_rollback;
 
-1;

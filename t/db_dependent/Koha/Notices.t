@@ -68,4 +68,3 @@ is( Koha::Notice::Templates->search->count,
 
 $schema->storage->txn_rollback;
 
-1;

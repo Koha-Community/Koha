@@ -105,4 +105,3 @@ is( Koha::Checkouts->search->count, $nb_of_checkouts + 1, 'Delete should have de
 
 $schema->storage->txn_rollback;
 
-1;

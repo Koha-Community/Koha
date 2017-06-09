@@ -55,4 +55,3 @@ warning_is { $invalidTest = C4::SIP::Sip::Checksum::verify_cksum("1234567") }
             'verify_cksum prints the expected warning for an invalid checksum';
 is($invalidTest, 0, "Checksum: 1234567 is invalid as expected");
 
-1;

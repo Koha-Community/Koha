@@ -127,4 +127,3 @@ is( @$issues, 0,
 
 $schema->storage->txn_begin;
 
-1;

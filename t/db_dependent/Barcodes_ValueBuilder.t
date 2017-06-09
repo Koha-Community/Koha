@@ -77,4 +77,3 @@ is($scr, undef, 'annual javascript');
 
 $schema->storage->txn_rollback;
 
-1;

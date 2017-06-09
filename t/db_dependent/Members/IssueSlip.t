@@ -403,4 +403,3 @@ subtest 'bad calls' => sub {
 
 $schema->storage->txn_rollback;
 
-1;

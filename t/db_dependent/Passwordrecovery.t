@@ -194,4 +194,3 @@ ok( scalar @$letters == 2, "[SendPasswordRecoveryEmail] UPDATE == ON sends a new
 
 $schema->storage->txn_rollback();
 
-1;

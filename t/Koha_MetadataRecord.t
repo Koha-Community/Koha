@@ -141,4 +141,3 @@ subtest "new() tests" => sub {
     is( $metadata_record, undef, 'record object mandatory')
 };
 
-1;
