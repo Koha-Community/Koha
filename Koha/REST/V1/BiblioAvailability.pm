@@ -45,12 +45,7 @@ sub search {
         return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render(status => 500, openapi => { error => $_->{msg} });
-        }
-        else {
-            return $c->render(status => 500, openapi => { error => "Something went wrong, check the logs." });
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 }
 
@@ -91,10 +86,7 @@ sub hold {
         return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render(status => 500, openapi => { error => $_->{msg} });
-        }
-        elsif ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
+        if ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
             return $c->render(status => 401, openapi => { error => "Authentication required." });
         }
         elsif ($_->isa('Koha::Exceptions::NoPermission')) {
@@ -102,9 +94,7 @@ sub hold {
                 error => "Authorization failure. Missing required permission(s).",
                 required_permissions => $_->required_permissions} );
         }
-        else {
-            return $c->render(status => 500, openapi => { error => "Something went wrong, check the logs. $_" });
-        }
+        Koha::Exceptions::rethrow_exception($_);
     };
 }
 
