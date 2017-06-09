@@ -72,6 +72,7 @@ my $borrower = {
 };
 
 # No userenv, PickupLibrary
+t::lib::Mocks::mock_preference('IndependentBranches', '0');
 t::lib::Mocks::mock_preference('CircControl', 'PickupLibrary');
 is(
     C4::Context->preference('CircControl'),
