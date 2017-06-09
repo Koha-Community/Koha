@@ -1,18 +1,30 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
+
+#This test demonstrates why Koha uses the CSV parser and configration
+#it does.  Specifically, the test is for Unicode compliance in text
+#parsing and data.  This test requires other modules that Koha doesn't
+#actually use, in order to compare.  Therefore, running this test is not
+#necessary to test your Koha installation.
+
+use Modern::Perl;
 
 use Test::More tests => 32;
 use Test::Warn;
 BEGIN {
-    diag q{
-This test demonstrates why Koha uses the CSV parser and configration
-it does.  Specifically, the test is for Unicode compliance in text
-parsing and data.  This test requires other modules that Koha doesn't
-actually use, in order to compare.  Therefore, running this test is not
-necessary to test your Koha installation.
-};
 	use FindBin;
 	use lib $FindBin::Bin;
 	use_ok('Text::CSV');
