@@ -58,7 +58,7 @@ my $item = Koha::Item->new(
     {
         biblionumber     => $biblio->id,
         biblioitemnumber => $biblioitem->id,
-        itype => $itype->{itype},
+        itype => $itype->{itemtype},
     }
 )->store();
 ok( $item->id, 'Koha::Item created' );
