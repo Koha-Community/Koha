@@ -169,7 +169,7 @@ if ($do_it) {
         my $csvTemplate = C4::Templates::gettemplate('reports/csv/cash_register_stats.tt', 'intranet', $input);
             $csvTemplate->param(sep => $delimiter, rows => \@rows, total => \@total );
         print $csvTemplate->output;
-        exit(1);
+        exit;
     }
 
 }
