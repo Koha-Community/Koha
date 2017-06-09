@@ -6,6 +6,23 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/tags-review.js"></script>
+<script type="text/javascript">
+    var MSG_AJAX_APPROVE_FAILED = _("AJAX failed to approve tag: %s");
+    var MSG_AJAX_REJECTION_FAILED = _("AJAX failed to reject tag: %s");
+    var MSG_AJAX_TAG_PERMITTED = _("%s is permitted!");
+    var MSG_AJAX_TAG_PROHIBITED = _("%s is prohibited!");
+    var MSG_AJAX_TAG_UNCLASSIFIED = _("%s is neither permitted nor prohibited!");
+    var MSG_AJAX_ERROR = _("AJAX error (%s alert)");
+    var LABEL_SELECT_ALL = _("Select all");
+    var LABEL_CLEAR_ALL = _("Clear all");
+    var LABEL_SELECT_ALL_PENDING = _("Select all pending");
+    var LABEL_APPROVE = _("Approve");
+    var LABEL_APPROVED = _("Approved");
+    var LABEL_REJECT = _("Reject");
+    var LABEL_REJECTED = _("Rejected");
+    var LABEL_TESTING = _("Testing...");
+</script>
 <style type="text/css">
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
 .rejected { color: #CC0033; }
@@ -13,169 +30,6 @@
 .pending { color: #CCC; font-style: italic; }
 tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 </style>
-<script type="text/javascript">
-//<![CDATA[
-	// [% script_name %]
-	$.ajaxSetup({
-	  url: "/cgi-bin/koha/tags/review.pl",
-	  type: "POST",
-	  dataType: "script"
-	});
-	var ok_count  = 0;
-	var nok_count = 0;
-	var rej_count = 0;
-	var alerted = 0;
-	function pull_counts () {
-		ok_count  = parseInt(document.getElementById("terms_summary_approved_count"  ).innerHTML);
-		nok_count = parseInt(document.getElementById("terms_summary_unapproved_count").innerHTML);
-		rej_count = parseInt(document.getElementById("terms_summary_rejected_count"  ).innerHTML);
-	}
-	function count_approve () {
-		pull_counts();
-		if (nok_count > 0) {
-			$("#terms_summary_unapproved_count").html(nok_count -1);
-			$("#terms_summary_approved_count"  ).html( ok_count +1);
-		}
-	}
-	function count_reject () {
-		pull_counts();
-		if (nok_count > 0) {
-			$("#terms_summary_unapproved_count").html(nok_count -1);
-			$("#terms_summary_rejected_count"  ).html(rej_count +1);
-		}
-	}
-	function warn_once (evt) {
-		if (alerted <= 1 && ($(evt.target).is('.ok') || $(evt.target).is('.rej'))) {
-			alerted += 1;
-			window.alert("this is: " + this + "is '.ok': " + $(evt.target).is('.ok') + "  is '.rej': " + $(evt.target).is('.rej'));
-		}
-	}
-	var success_approve = function(tag){
-		// window.alert(_("AJAX approved tag: ") + tag);
-	};
-	var failure_approve = function(tag){
-                window.alert(_("AJAX failed to approve tag: %s").format(tag));
-	};
-	var success_reject  = function(tag){
-		// window.alert(_("AJAX rejected tag: ") + tag);
-	};
-	var failure_reject  = function(tag){
-                window.alert(_("AJAX failed to reject tag: %s").format(tag));
-	};
-	var success_test    = function(tag){
-                $('#verdict').html(_("%s is permitted!").format(tag));
-	};
-	var failure_test    = function(tag){
-                $('#verdict').html(_("%s is prohibited!").format(tag));
-	};
-	var indeterminate_test = function(tag){
-                $('#verdict').html(_("%s is neither permitted nor prohibited!").format(tag));
-	};
-
-	var success_test_call = function() {
-        $('#test_button').prop('disabled', false);
-        $('#test_button').html("<i class='fa fa-check-square-o' aria-hidden='true'></i>" +_(" Test"));
-	};
-	$(document).ready(function() {
-		$('.ajax_buttons' ).css({visibility:"visible"});
-            $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\"><\/i>"+_(" Select all")+"<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\"><\/i>"+_(" Clear all")+"<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> "+_("Select all pending")+"<\/a><\/div>");
-	    $("#CheckAll").click(function(){
-	        $(".checkboxed").checkCheckboxes();
-	        return false;
-	    });
-	    $("#CheckNone").click(function(){
-	        $(".checkboxed").unCheckCheckboxes();
-	        return false;
-	    });
-	    $("#CheckPending").click(function(){
-	        $(".checkboxed").checkCheckboxes(".pending");
-	        return false;
-	    });
-		$('body').click(function(event) {
-			pull_counts();
-			// window.alert(_("Click detected on ") + event.target + ": " + $(event.target).html);
-			if ($(event.target).is('.ok')) {
-				$.ajax({
-                    data: {ok: $(event.target).attr("title")},
-                        success: count_approve // success_approve
-				});
-                $(event.target).next(".rej").prop('disabled', false).css("color","#000");
-                $(event.target).next(".rej").html("<i class='fa fa-remove'></i>" + _(" Reject"));
-                $(event.target).prop('disabled', true).css("color","#666");
-                $(event.target).html("<i class='fa fa-check'></i>" + _(" Approved"));
-                var getelement = $(event.target).attr("title");
-                var gettitle = "span[data-title|=" + getelement + "]";
-                $(gettitle).text(_("Approved"));
-                if ($(gettitle).attr("class") == "pending"){
-                    $(gettitle).toggleClass("pending approved");
-                } else {
-                    $(gettitle).toggleClass("rejected approved");
-                }
-				return false;	// cancel submit
-			}
-			if ($(event.target).is('.rej')) {
-				$.ajax({
-                    data: {rej: $(event.target).attr("title")},
-                        success: count_reject // success_reject
-                    });
-                $(event.target).prev(".ok").prop('disabled', false).css("color","#000");
-                $(event.target).prev(".ok").html("<i class='fa fa-check'></i>" + _(" Approve"));
-                $(event.target).prop('disabled', true).css("color","#666");
-                $(event.target).html("<i class='fa fa-remove'></i>" + _(" Rejected"));
-                var getelement = $(event.target).attr("title");
-                var gettitle = "span[data-title|=" + getelement + "]";
-                $(gettitle).text(_("Rejected"));
-                if ($(gettitle).attr("class") == "pending"){
-                    $(gettitle).toggleClass("pending rejected");
-                } else {
-                    $(gettitle).toggleClass("approved rejected");
-                }
-				return false;	// cancel submit
-			}
-                if ($(event.target).is('#test_button')) {
-                    $(event.target).text(_("Testing...")).prop('disabled', true);
-                        $.ajax({
-                            data: {test: $('#test').attr("value")},
-                            success: success_test_call // success_reject
-                        });
-				return false;	// cancel submit
-			}
-		});
-		$("*").ajaxError(function(evt, request, settings){
-                        if ((alerted +=1) <= 1){ window.alert(_("AJAX error (%s alert)").format(alerted)); }
-		});
-        $("#tagst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                [% IF ( filter_approved_pending ) %]
-                    { "aTargets": [ 0,1,-2 ], "bSortable": false, "bSearchable": false }
-                [% ELSE %]
-                    { "aTargets": [ 0,1,-3 ], "bSortable": false, "bSearchable": false }
-                [% END %]
-            ],
-            "aoColumns": [
-                null,null,null,null,null,null,[% UNLESS ( filter_approved_pending ) %]null,[% END %]{ "sType": "title-string" }
-            ],
-            "aaSorting": [[ 4, "desc" ]],
-            "sPaginationType": "four_button"
-        }));
-        var reviewerField = $("#approver");
-        reviewerField.autocomplete({
-            source: "/cgi-bin/koha/circ/ysearch.pl",
-            minLength: 3,
-            select: function( event, ui ) {
-                reviewerField.val( ui.item.borrowernumber );
-                return false;
-            }
-        })
-        .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            return $( "<li></li>" )
-            .data( "ui-autocomplete-item", item )
-            .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
-            .appendTo( ul );
-        };
-	});
-//]]>
-</script>
 </head>
 <body id="tags_review" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -239,14 +93,14 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   <table id="tagst">
     <thead>
         <tr>
-		<th>&nbsp;</th>
-		<th>&nbsp;</th>
+            <th class="NoSort">&nbsp;</th>
+            <th class="NoSort">&nbsp;</th>
 		<th>Status</th>
 		<th>Term</th>
 		<th>Weight</th>
-		<th>Actions</th>
+            <th class="NoSort">Actions</th>
             [% UNLESS ( filter_approved_pending ) %]<th>Reviewer</th>[% END %]
-		<th>Date</th>
+        <th class="title-string">Date</th>
 	</tr>
     </thead>
     <tbody>
@@ -254,30 +108,30 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
         <tr>
             <td class="count">[% offset + loop.count %]
             </td>
-                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
-                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
+                [% IF ( tagloo.approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term|html %]" name="tags" class="pending" /></span>
+                [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term|html %]" name="tags" /></span>[% END %]
             </td>
             <td>
                 [% IF ( tagloo.approved == -1 ) %]
-                    <span class="rejected" data-title="[% tagloo.term %]">Rejected</span>
+                    <span class="rejected status[% offset + loop.count %]">Rejected</span>
                 [% ELSIF ( tagloo.approved == 1 ) %]
-                    <span class="approved" data-title="[% tagloo.term %]">Approved</span>
+                    <span class="approved status[% offset + loop.count %]">Approved</span>
                 [% ELSE %]
-                    <span class="pending" data-title="[% tagloo.term %]">Pending</span>
+                    <span class="pending status[% offset + loop.count %]">Pending</span>
                 [% END %]
             </td>
-            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term %]</a>
+            <td><a href="/cgi-bin/koha/tags/list.pl?tag=[% tagloo.term|uri %]">[% tagloo.term|html %]</a>
             </td>
             <td>[% tagloo.weight_total %]
             </td>
             [% IF ( tagloo.approved ) %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-                    [% IF ( tagloo.approved == -1 ) %]
-                <button class="ok btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button class="rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
+                [% IF ( tagloo.approved == -1 ) %]
+                    <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                    <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" disabled="disabled" type="submit" title="[% tagloo.term|html %]" value="Rejected" name="reject"><i class="fa fa-remove"></i> Rejected</button>
                 [% ELSE %]
-                <button class="ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
-                <button class="rej btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                    <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs"  disabled="disabled" type="submit" title="[% tagloo.term|html %]" value="Approved" name="approve"><i class="fa fa-check"></i> Approved</button>
+                    <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 [% END %]
                 </span>
             </td>
@@ -285,8 +139,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
             </td>
             [% ELSE %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">
-            <button class="ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
-                <button class="rej btn btn-default btn-xs" type="submit" title="[% tagloo.term %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
+                <button data-num="[% offset + loop.count %]" class="approval_btn ok btn btn-default btn-xs"  type="submit" title="[% tagloo.term|html %]" value="Approve" name="approve"><i class="fa fa-check"></i> Approve</button>
+                <button data-num="[% offset + loop.count %]" class="approval_btn rej btn btn-default btn-xs" type="submit" title="[% tagloo.term|html %]" value="Reject" name="reject"><i class="fa fa-remove"></i> Reject</button>
                 </span>
             </td>
             [% UNLESS ( filter_approved_pending ) %]<td>&nbsp;</td>[% END %]
@@ -329,7 +183,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    <div class="description">Enter a word or phrase to check against approved/rejected lists: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
    <input type="text" size="14" name="test" id="test" />
-   <fieldset class="action"><button type="submit" value="Test" class="btn btn-default btn-sm" id="test_button" name="op-test"><i class="fa fa-check-square-o" aria-hidden="true"></i> Test</button></fieldset>
+   <fieldset class="action"><button type="submit" value="Test" class="approval_btn btn btn-default btn-sm" id="test_button" name="op-test"><i class="fa fa-check-square-o" aria-hidden="true"></i> Test</button></fieldset>
    <div id="verdict">
 	[% IF ( test_term ) %]
 	[% IF ( verdict_ok ) %]
