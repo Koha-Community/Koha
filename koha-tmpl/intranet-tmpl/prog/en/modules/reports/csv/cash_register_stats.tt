@@ -1,5 +1,5 @@
 [% USE ItemTypes %]
-[% INCLUDE csv_headers/reports/cash_register_stats.tt %]
+[%- INCLUDE csv_headers/reports/cash_register_stats.tt %]
 [%- FOREACH row IN rows %]
     [%- FOREACH field IN row;
        field IF !loop.last;
