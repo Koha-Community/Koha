@@ -370,65 +370,64 @@
             [% END # / TagsInputEnabled && loggedinusername %]
 
             $(document).ready(function(){
-                $(".brief").click(function(){
+                $(".brief").click(function(e){
+                    e.preventDefault();
                     showLess();
-                    return false;
                 });
 
-                $(".detail").click(function(){
+                $(".detail").click(function(e){
+                    e.preventDefault();
                     showMore();
-                    return false;
                 });
 
-                $(".send").click(function(){
+                $(".send").click(function(e){
+                    e.preventDefault();
                     sendBasket();
-                    return false;
                 });
 
-                $(".download").click(function(){
+                $(".download").click(function(e){
+                    e.preventDefault();
                     downloadBasket();
-                    return false;
                 });
 
-                $(".print-large").click(function(){
+                $(".print-large").click(function(e){
                     e.preventDefault();
                     printBasket();
-                    return false;
                 });
 
-                $(".empty").click(function(){
+                $(".empty").click(function(e){
+                    e.preventDefault();
                     delBasket();
-                    return false;
                 });
 
-                $(".deleteshelf").click(function(){
+                $(".deleteshelf").click(function(e){
+                    e.preventDefault();
                     delSelRecords();
-                    return false;
                 });
 
-                $(".newshelf").click(function(){
+                $(".newshelf").click(function(e){
+                    e.preventDefault();
                     addSelToShelf();
-                    return false;
                 });
 
-                $(".hold").click(function(){
+                $(".hold").click(function(e){
+                    e.preventDefault();
                     holdSel();
-                    return false;
                 });
 
-                $("#tagsel_tag").click(function(){
+                $("#tagsel_tag").click(function(e){
+                    e.preventDefault();
                     tagSelected();
-                    return false;
                 });
 
-                $("#tagsel_button").click(function(){
+                $("#tagsel_button").click(function(e){
+                    e.preventDefault();
                     tagAdded();
-                    return false;
                 });
 
-                $("#tagsel_cancel").click(function(){
+                $("#tagsel_cancel").click(function(e){
+                    e.preventDefault();
                     tagCanceled();
-                    return false;
                 });
 
                 $("#CheckAll").click(function(){
@@ -468,9 +467,7 @@
                 }));
 
                 $(".cb").change(function(){
-                    if ($(this).prop("checked")){
-                        selRecord($(this).val(), true);
-                    }
+                    selRecord( $(this).val(), $(this).prop("checked") );
                     enableCheckboxActions();
                     return false;
                 });
