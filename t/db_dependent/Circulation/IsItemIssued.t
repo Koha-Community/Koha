@@ -92,4 +92,3 @@ is(
 
 $schema->storage->txn_rollback;
 
-1;

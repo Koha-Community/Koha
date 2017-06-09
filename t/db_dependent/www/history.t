@@ -67,4 +67,3 @@ my $history_page          = Encode::encode('UTF-8', $agent->text());
 like( $history_page, qr/$encoded_latin_name/, "Latin characters with umlauts show correctly on the history page." );
 like( $history_page, qr/$encoded_cyrillic_name/, "Cyrillic characters with umlauts show correctly on the history page." );
 
-1;

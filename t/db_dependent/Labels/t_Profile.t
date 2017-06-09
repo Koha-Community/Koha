@@ -95,4 +95,3 @@ is_deeply($updated_profile, $saved_profile, "Updated layout object verify succes
 my $del_results = $updated_profile->delete();
 ok($del_results ne -1, "Profile->delete() success");
 
-1;

@@ -54,4 +54,3 @@ is( Koha::MarcSubfieldStructures->search->count, $nb_of_fields + 1, 'Delete shou
 
 $schema->storage->txn_rollback;
 
-1;

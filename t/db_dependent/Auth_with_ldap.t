@@ -503,4 +503,3 @@ sub is_admin_bind {
 
 $schema->storage->txn_rollback();
 
-1;

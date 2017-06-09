@@ -171,4 +171,3 @@ is( Koha::Items->search->count, $nb_of_items + 1, 'Delete should have deleted th
 
 $schema->storage->txn_rollback;
 
-1;

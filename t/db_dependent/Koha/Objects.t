@@ -217,4 +217,3 @@ subtest 'Exceptions' => sub {
 };
 
 $schema->storage->txn_rollback;
-1;

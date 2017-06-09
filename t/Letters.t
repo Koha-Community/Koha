@@ -60,4 +60,3 @@ my $letter;
 $letter = C4::Letters::_parseletter( undef, 'reserves', {waitingdate => "2013-01-01"} );
 is( ref($letter), 'HASH');
 
-1;

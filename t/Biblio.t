@@ -193,4 +193,3 @@ warnings_like { $ret = UpdateTotalIssues() }
 
 ok( !defined $ret, 'UpdateTotalIssues returns carped warning if biblio record does not exist');
 
-1;

@@ -371,4 +371,3 @@ sub create_user_and_session {
     return ( $user->{borrowernumber}, $session->id );
 }
 
-1;

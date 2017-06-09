@@ -106,4 +106,3 @@ ok(length($scr) > 0, 'hbyyyyincr javascript');
 
 $schema->storage->txn_rollback;
 
-1;

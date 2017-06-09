@@ -111,4 +111,3 @@ is( $issues->[0]->{itemnumber}, $itemnumber3, '' );
 
 $schema->storage->txn_begin;
 
-1;

@@ -109,4 +109,3 @@ is($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 1
 my $del_results = $updated_layout->delete();
 ok( ! defined($del_results) , "Layout->delete() success");
 
-1;

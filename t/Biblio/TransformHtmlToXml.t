@@ -77,4 +77,3 @@ subtest "->TransformHtmlToXml (NORMARC) tests" => sub {
     run_tests('NORMARC');
 };
 
-1;

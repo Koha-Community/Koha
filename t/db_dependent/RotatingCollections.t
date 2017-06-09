@@ -335,4 +335,3 @@ is(
 #End transaction
 $dbh->rollback;
 
-1;

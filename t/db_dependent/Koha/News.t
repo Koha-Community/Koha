@@ -56,4 +56,3 @@ is( Koha::News->search->count, $nb_of_news + 1, 'Delete should have deleted the 
 
 $schema->storage->txn_rollback;
 
-1;

@@ -154,4 +154,3 @@ is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'upperagelim
 
 $schema->storage->txn_rollback;
 
-1;

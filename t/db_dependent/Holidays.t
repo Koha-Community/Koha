@@ -241,4 +241,3 @@ sub _add_exception {
 
 $schema->storage->txn_rollback;
 
-1;

@@ -190,4 +190,3 @@ if ($id_to_del2) {
     ok($id_to_del2 ne undef, "error, link to delete not working");
 }
 
-1;

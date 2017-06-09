@@ -93,4 +93,3 @@ is ( $history->histenddate(), undef, 'subscription history not empty after renew
 
 $schema->storage->txn_rollback;
 
-1;

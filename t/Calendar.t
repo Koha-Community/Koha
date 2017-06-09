@@ -320,4 +320,3 @@ my $holiday_for_another_branch = DateTime->new(
     is ( $cal->is_holiday($holiday_for_another_branch), 1, 'Holiday defined for CPL should be defined as an holiday' );
 }
 
-1;

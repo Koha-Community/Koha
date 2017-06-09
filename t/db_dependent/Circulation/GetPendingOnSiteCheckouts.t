@@ -82,4 +82,3 @@ is( scalar @$onsite_checkouts, 1, "There is 1 pending on-site checkout" );
 
 $schema->storage->txn_rollback;
 
-1;

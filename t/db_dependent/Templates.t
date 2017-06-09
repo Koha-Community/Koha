@@ -105,4 +105,3 @@ subtest 'Testing gettemplate' => sub {
     is( $template ? $template->output: '', '', 'Check output' );
 };
 
-1;

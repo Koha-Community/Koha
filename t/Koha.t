@@ -151,4 +151,3 @@ ok($@ eq '', 'NormalizeISSN does not throw exception when parsing invalid ISSN')
 is($issns[0], 'abc', 'Original ISSN passed through even if invalid');
 is(scalar(@issns), 1, 'zero additional variations returned of invalid ISSN');
 
-1;

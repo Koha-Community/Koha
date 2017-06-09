@@ -216,4 +216,3 @@ $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=
 $jsonresponse = decode_json $agent->content;
 is( $jsonresponse->{ aaData }[0]->{ status }, 'reverted', 'record marked as reverted' );
 
-1;

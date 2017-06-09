@@ -67,4 +67,3 @@ is(C4::Auth_with_cas::_url_with_get_params($cgi, 'intranet'),
 
 $dbh->rollback;
 
-1;

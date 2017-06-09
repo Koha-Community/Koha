@@ -68,4 +68,3 @@ sub get_default_search_class {
     return $default_search_class;
 }
 
-1;

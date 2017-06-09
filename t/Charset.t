@@ -70,5 +70,3 @@ ok( Encode::is_utf8($record->subfield('100','a')) &&
     'SetUTF8Flag sets the UTF-8 flag to all subfields' );
 
 is( nsb_clean("Le Moyen Âge"), "Le Moyen Âge", "nsb_clean removes  and " );
-
-1;

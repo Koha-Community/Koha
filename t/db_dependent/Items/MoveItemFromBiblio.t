@@ -95,4 +95,3 @@ is( $get_item_level_hold_2->{biblionumber}, $to_biblio->{biblionumber},   'MoveI
 
 $schema->storage->txn_rollback;
 
-1;

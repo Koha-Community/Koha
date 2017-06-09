@@ -61,4 +61,3 @@ for my $modules ( @modules ) {
 
 done_testing();
 
-1;

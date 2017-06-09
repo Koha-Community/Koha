@@ -443,4 +443,3 @@ sub teardown {
     $dbh->do(q|DELETE FROM issuingrules|);
 }
 
-1;

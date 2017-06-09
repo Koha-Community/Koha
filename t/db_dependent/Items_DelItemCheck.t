@@ -167,4 +167,3 @@ is( $test_item->{itemnumber}, undef,
 
 $schema->storage->txn_rollback;
 
-1;

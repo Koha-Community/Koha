@@ -57,4 +57,3 @@ is( Koha::Suggestions->search->count, $nb_of_suggestions + 1, 'Delete should hav
 
 $schema->storage->txn_rollback;
 
-1;

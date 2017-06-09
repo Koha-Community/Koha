@@ -471,4 +471,3 @@ sub testGetBiblionumberSlice() {
     is( $testOK, 1, 'C4::Biblio::GetBiblionumberSlice(), offset-parameter overriding.');
 }
 
-1;

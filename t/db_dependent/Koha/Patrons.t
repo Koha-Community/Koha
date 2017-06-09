@@ -945,4 +945,3 @@ is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have delete
 
 $schema->storage->txn_rollback;
 
-1;

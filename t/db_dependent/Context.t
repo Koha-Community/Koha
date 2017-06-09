@@ -149,4 +149,3 @@ sub TransformVersionToNum {
     $version =~ s/XXX$/999/;
     return $version;
 }
-1;

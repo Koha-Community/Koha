@@ -61,4 +61,3 @@ foreach my $filter (@filters) {
 #  ~ T, P or X followed by numeric characters
 #  ~ No checkdigit
 
-1;

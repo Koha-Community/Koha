@@ -66,4 +66,3 @@ is( $retrieved_transfer_1->itemnumber, $new_transfer_1->itemnumber, 'Find a tran
 
 $schema->storage->txn_rollback;
 
-1;

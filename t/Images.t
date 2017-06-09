@@ -69,4 +69,3 @@ is( $imagenumbers[1], 3, 'imagenumber is 3' );
 
 is( $imagenumbers[4], undef, 'imagenumber undef' );
 
-1;

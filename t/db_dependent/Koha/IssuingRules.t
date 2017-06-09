@@ -251,4 +251,3 @@ sub _test_rule {
 
 $schema->storage->txn_rollback;
 
-1;

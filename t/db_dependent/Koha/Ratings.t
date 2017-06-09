@@ -57,4 +57,3 @@ is( Koha::Ratings->search( { biblionumber => $biblionumber } )->count, 0, 'Delet
 
 is( int(Koha::Ratings->search( { biblionumber => $biblionumber } )->get_avg_rating), 0, 'get_avg_rating should return 0 if no rating exist' );
 
-1;

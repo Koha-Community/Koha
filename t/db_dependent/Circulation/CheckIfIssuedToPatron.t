@@ -130,4 +130,3 @@ is( $check_if_issued, 1, 'CheckIfIssuedToPatron returns true' );
 
 $dbh->rollback();
 
-1;

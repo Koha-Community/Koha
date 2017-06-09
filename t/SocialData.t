@@ -72,4 +72,3 @@ is( $report->{'without'}->[0]->{'original'},
 is( $report->{'without'}->[0]->{'isbn'}, '9780596526740',
     'testing get_report' );
 
-1;

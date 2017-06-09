@@ -85,4 +85,3 @@ isa_ok(Koha::Patrons->search_housebound_deliverers->next, "Koha::Patron");
 
 $schema->storage->txn_rollback;
 
-1;

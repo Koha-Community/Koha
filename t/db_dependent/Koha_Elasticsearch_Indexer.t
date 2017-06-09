@@ -52,4 +52,3 @@ SKIP: {
     ok( $indexer->update_index(undef,$records), 'Update Index' );
 }
 
-1;

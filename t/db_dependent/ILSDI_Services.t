@@ -198,4 +198,3 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     $schema->storage->txn_rollback;
 };
 
-1;

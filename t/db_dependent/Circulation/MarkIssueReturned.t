@@ -58,4 +58,3 @@ unlike ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, );
 
 $schema->storage->txn_rollback;
 
-1;

@@ -229,4 +229,3 @@ subtest 'build_query tests' => sub {
     );
 };
 
-1;

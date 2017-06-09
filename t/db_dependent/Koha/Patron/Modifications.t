@@ -446,4 +446,3 @@ subtest 'pending_count() and pending() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-1;

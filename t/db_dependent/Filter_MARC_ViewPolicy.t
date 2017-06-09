@@ -206,4 +206,3 @@ subtest 'Koha::Filter::MARC::ViewPolicy intranet tests' => sub {
     $schema->storage->txn_rollback();
 };
 
-1;

@@ -172,4 +172,3 @@ is( exists $impossible->{TOO_MANY}, '', 'Specific case 2 - Switch is allowed' );
 
 $schema->storage->txn_rollback;
 
-1;

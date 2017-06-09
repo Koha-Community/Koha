@@ -59,4 +59,3 @@ subtest 'read_from_file() tests' => sub {
     is( $result, undef, 'Returns undef on error confition' );
 };
 
-1;

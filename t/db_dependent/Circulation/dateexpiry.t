@@ -120,4 +120,3 @@ sub calc_date_due {
 
 $schema->storage->txn_rollback;
 
-1;

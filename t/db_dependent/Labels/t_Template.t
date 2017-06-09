@@ -135,4 +135,3 @@ foreach my $key (keys %{$expect_conv}) {
 my $del_results = $updated_template->delete();
 ok($del_results ne -1, "Template->delete() success");
 
-1;

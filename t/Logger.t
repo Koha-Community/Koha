@@ -79,4 +79,3 @@ sub mytempfile {
     return $fn;
 }
 
-1;

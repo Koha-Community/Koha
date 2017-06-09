@@ -102,4 +102,3 @@ ok( !@lists, 'DelPatronList works' );
 
 $schema->storage->txn_rollback;
 
-1;

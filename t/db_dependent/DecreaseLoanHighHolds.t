@@ -198,4 +198,3 @@ ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
 ok( !$needsconfirmation->{HIGHHOLDS}, "High holds checkout does not need confirmation" );
 
 $schema->storage->txn_rollback();
-1;

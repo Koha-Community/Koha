@@ -993,4 +993,3 @@ subtest 'UNIMARC + DOM' => sub {
     run_unimarc_search_tests('dom');
 };
 
-1;

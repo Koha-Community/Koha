@@ -57,4 +57,3 @@ is( $subtitles[1], 'Another Test Record Subtitle', 'Got second subtitle correctl
 
 $schema->storage->txn_rollback();
 
-1;

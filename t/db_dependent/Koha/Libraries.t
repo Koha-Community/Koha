@@ -434,4 +434,3 @@ sub create_helper_biblio {
 
 
 $schema->storage->txn_rollback;
-1;

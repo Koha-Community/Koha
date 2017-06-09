@@ -82,4 +82,3 @@ subtest 'lower_case() normalizer' => sub {
         'The \'lower_case\' normalizer only makes characters lower-case' );
 };
 
-1;

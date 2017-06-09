@@ -65,4 +65,3 @@ is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check
 
 $schema->storage->txn_rollback;
 
-1;

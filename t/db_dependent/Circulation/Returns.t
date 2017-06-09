@@ -323,4 +323,3 @@ subtest 'Handle ids duplication' => sub {
     isnt( $old_checkout->itemnumber, $item->{itemnumber}, 'If an item is checked-in, it should be moved to old_issues even if the issue_id already existed in the table' );
 };
 
-1;

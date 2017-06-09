@@ -86,4 +86,3 @@ isa_ok( $result->chooser, "Koha::Patron");
 
 $schema->storage->txn_rollback;
 
-1;

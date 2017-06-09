@@ -60,4 +60,3 @@ $send_sms = C4::SMS->send_sms({
 });
 is( $send_sms, 1, 'send_sms returns 1' );
 
-1;

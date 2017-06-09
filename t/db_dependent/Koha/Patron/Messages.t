@@ -93,4 +93,3 @@ sub get_nb_of_logactions {
     return scalar( @{ C4::Log::GetLogs( undef, undef, undef, ['MEMBERS'] ) } );
 }
 
-1;

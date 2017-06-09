@@ -109,4 +109,3 @@ sub is_testable {
 
 done_testing();
 
-1;

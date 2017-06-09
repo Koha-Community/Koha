@@ -183,4 +183,3 @@ sub create_helper_biblio {
     return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
 }
 
-1;

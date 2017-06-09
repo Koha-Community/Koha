@@ -130,4 +130,3 @@ foreach my $b ( $patrons->as_list() ) {
 
 $schema->storage->txn_rollback();
 
-1;

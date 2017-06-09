@@ -72,4 +72,3 @@ is( Koha::SMS::Providers->search->count,
 
 $schema->storage->txn_rollback;
 
-1;

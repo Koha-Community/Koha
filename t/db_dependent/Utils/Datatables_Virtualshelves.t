@@ -256,4 +256,3 @@ sub _add_biblio {
     return $biblionumber;
 }
 
-1;

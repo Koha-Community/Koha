@@ -87,4 +87,3 @@ is(scalar @{$mf_b_221->GetFilesInfo()}, 0, "GetFilesInfo() result count after De
 
 $dbh->rollback;
 
-1;
