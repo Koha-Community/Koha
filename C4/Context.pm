@@ -80,6 +80,7 @@ BEGIN {
 
         # Redefine multi_param if cgi version is < 4.08
         # Remove the "CGI::param called in list context" warning in this case
+        require CGI; # Can't check version without the require.
         if (!defined($CGI::VERSION) || $CGI::VERSION < 4.08) {
             no warnings 'redefine';
             *CGI::multi_param = \&CGI::param;
