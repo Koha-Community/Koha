@@ -478,4 +478,3 @@ subtest 'balance' => sub {
     $patron->delete;
 };
 
-1;

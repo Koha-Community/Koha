@@ -321,4 +321,3 @@ sub reset_config {
     return 1;
 }
 
-1;

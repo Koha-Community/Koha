@@ -128,4 +128,3 @@ is( ref(Koha::Patron::Discharge::request({ borrowernumber => $patron->{borrowern
 
 $schema->storage->txn_rollback;
 
-1;

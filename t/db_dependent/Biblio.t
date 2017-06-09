@@ -389,4 +389,3 @@ subtest 'deletedbiblio_metadata' => sub {
     is( $moved, $biblionumber, 'Found in deletedbiblio_metadata' );
 };
 
-1;

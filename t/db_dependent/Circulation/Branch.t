@@ -279,4 +279,3 @@ t::lib::Mocks::mock_preference( 'item-level_itypes', 0 );
 
 $schema->storage->txn_rollback;
 
-1;

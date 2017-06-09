@@ -988,4 +988,3 @@ subtest 'UNIMARC + DOM' => sub {
 # Make sure that following tests are not using our config settings
 Koha::Caches->get_instance('config')->flush_all;
 
-1;

@@ -71,4 +71,3 @@ is_deeply($result, [ { 'search' => 'an=1234', 'relevance' => 1, 'label' => 'Cook
 
 done_testing();
 
-1;

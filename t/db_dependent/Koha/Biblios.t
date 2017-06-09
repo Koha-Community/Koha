@@ -82,4 +82,3 @@ subtest 'subscriptions' => sub {
 
 $schema->storage->txn_rollback;
 
-1;

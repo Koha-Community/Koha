@@ -84,4 +84,3 @@ is( $check_valid_barcode, 0, 'CheckValidBarcode with an invalid barcode returns 
 
 $dbh->rollback();
 
-1;

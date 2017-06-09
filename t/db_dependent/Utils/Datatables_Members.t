@@ -475,5 +475,3 @@ sub set_logged_in_user {
         '',                      ''
     );
 }
-
-1;

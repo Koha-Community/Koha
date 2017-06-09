@@ -122,5 +122,3 @@ subtest '_convert_marc_to_json() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-1;

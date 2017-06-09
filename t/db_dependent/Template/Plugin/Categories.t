@@ -57,4 +57,3 @@ is( Koha::Template::Plugin::Categories->GetName(
 
 $schema->storage->txn_rollback;
 
-1;

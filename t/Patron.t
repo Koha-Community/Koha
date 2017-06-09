@@ -334,4 +334,3 @@ subtest 'Set tests' => sub {
     is( $patron->privacy,             '667789',                           'privacy field set ok' );
 };
 
-1;

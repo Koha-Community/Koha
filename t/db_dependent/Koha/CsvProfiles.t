@@ -55,4 +55,3 @@ is( Koha::CsvProfiles->search->count, $nb_of_csv_profiles + 1, 'Delete should ha
 
 $schema->storage->txn_rollback;
 
-1;

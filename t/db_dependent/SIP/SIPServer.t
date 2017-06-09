@@ -75,4 +75,3 @@ subtest 'Get_timeout' => sub {
     is( C4::SIP::SIPServer::get_timeout( $server, { transport => 1 } ), 30, "Fallback again" );
 };
 
-1;

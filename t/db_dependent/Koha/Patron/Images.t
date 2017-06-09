@@ -51,4 +51,3 @@ is( Koha::Patron::Images->search->count, $nb_of_images, 'Delete should have dele
 
 $schema->storage->txn_rollback;
 
-1;

@@ -37,4 +37,3 @@ warning_like { $result = true_p([]) }
              'Invalid boolean (reference) raises warning';
 is( $result, undef, 'recognizes a reference as not a boolean' );
 
-1;

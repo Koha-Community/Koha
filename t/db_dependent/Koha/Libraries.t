@@ -87,4 +87,3 @@ $retrieved_category_2->delete;
 is( Koha::LibraryCategories->search->count, $nb_of_categories + 2, 'Delete should have deleted the library category' );
 
 $schema->storage->txn_rollback;
-1;

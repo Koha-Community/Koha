@@ -103,4 +103,3 @@ subtest 'build_query tests' => sub {
         'holdingbranch not added to facets if DisplayLibraryFacets=home' );
 };
 
-1;

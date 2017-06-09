@@ -330,4 +330,3 @@ subtest 'Handle ids duplication' => sub {
     is( Koha::Checkouts->find( $issue_id )->issue_id, $issue_id, 'The issues entry should not have been removed' );
 };
 
-1;

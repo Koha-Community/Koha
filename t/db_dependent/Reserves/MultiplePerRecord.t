@@ -291,4 +291,3 @@ is( $can, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per re
 
 $schema->storage->txn_rollback;
 
-1;

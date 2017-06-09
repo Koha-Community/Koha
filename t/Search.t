@@ -170,4 +170,3 @@ subtest "_build_initial_query tests" => sub {
 };
 
 
-1;

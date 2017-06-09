@@ -250,4 +250,3 @@ sub _row_match {
 
 $schema->storage->txn_rollback;
 
-1;

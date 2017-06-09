@@ -194,4 +194,3 @@ cmp_deeply(
 
 $schema->storage->txn_rollback;
 
-1;

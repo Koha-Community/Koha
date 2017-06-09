@@ -76,4 +76,3 @@ subtest "Koha::Template::Plugin::Koha::Version tests" => sub {
 
 };
 
-1;
