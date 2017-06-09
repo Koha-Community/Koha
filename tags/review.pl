@@ -25,7 +25,7 @@ use Data::Dumper;
 use POSIX;
 use CGI qw ( -utf8 );
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
-
+use URI::Escape;
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use Koha::DateUtils;
@@ -63,14 +63,13 @@ if (is_ajax()) {
 	my ($tag, $js_reply);
 	if ($tag = $input->param('test')) {
 		my $check = is_approved($tag);
-		$js_reply = ( $check >=  1 ? 'success' :
-					  $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('$tag');\n";
+        $js_reply = ( $check >=  1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('".uri_escape($tag)."');\n";
 	}
 	if ($tag = $input->param('ok')) {
-		$js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('$tag');\n";
+        $js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('".uri_escape($tag)."');\n";
 	} 
 	if ($tag = $input->param('rej')) {
-		$js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('$tag');\n";
+        $js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('".uri_escape($tag)."');\n";
 	}
 	output_with_http_headers $input, undef, $js_reply, 'js';
 	exit;
