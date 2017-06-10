@@ -148,8 +148,9 @@ sub SendPasswordRecoveryEmail {
           { passwordreseturl => $uuidLink, user => $borrower->userid },
     );
 
-    # define to/from emails
-    my $kohaEmail = C4::Context->preference('KohaAdminEmailAddress');    # from
+    # define from emails
+    my $library = Koha::Libraries->find( $borrower->branchcode );
+    my $kohaEmail = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');  # send from patron's branch or Koha Admin
 
     C4::Letters::EnqueueLetter(
         {
