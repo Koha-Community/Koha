@@ -179,7 +179,7 @@ should be the empty string.
 
 #'
 # FIXME: In Koha 3.0 , the only account adjustment 'types' passed to this function
-# are :  
+# are:
 # 		'C' = CREDIT
 # 		'FOR' = FORGIVEN  (Formerly 'F', but 'F' is taken to mean 'FINE' elsewhere)
 # 		'N' = New Card fee
