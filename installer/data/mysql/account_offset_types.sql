@@ -9,4 +9,5 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Dropbox'),
 ('Rental Fee'),
 ('Fine Update'),
-('Fine');
+('Fine'),
+('Void Payment');

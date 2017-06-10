@@ -61,6 +61,7 @@
           [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
           [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
           [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
+          [% CASE 'VOID' %]Payment, Voided
           [% CASE 'N' %]New card
           [% CASE 'F' %]Fine
           [% CASE 'A' %]Account management fee
@@ -94,6 +95,7 @@
         [% IF ( reverse_col) %]
           [% IF ( account.payment ) %]
             <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
+            <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-ban"></i> Void</a>
           [% ELSE %][% SET footerjs = 1 %]
             &nbsp;
           [% END %]

@@ -48,7 +48,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
-my $borrowernumber=$input->param('borrowernumber');
+my $borrowernumber = $input->param('borrowernumber');
 my $action = $input->param('action') || '';
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
@@ -62,6 +62,11 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 if ( $action eq 'reverse' ) {
   ReversePayment( scalar $input->param('accountlines_id') );
+}
+elsif ( $action eq 'void' ) {
+    my $payment_id = scalar $input->param('accountlines_id');
+    my $payment    = Koha::Account::Lines->find( $payment_id );
+    $payment->void();
 }
 
 if ( $patron->is_child ) {
