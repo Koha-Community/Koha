@@ -191,6 +191,7 @@ tinyMCE.init({
                 <li><label for="branchurl">URL: </label><input type="text" name="branchurl" id="branchurl"  size="80" value="[% library.branchurl |html %]" class="url" /></li>
                 <li><label for="opac_info">OPAC info: </label><textarea name="opac_info" id="opac_info">[% library.opac_info |html %]</textarea></li>
                 <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip |html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
+                <li><label for="marcorgccode">MARC Organization Code</label> <input type="text" name="marcorgcode" id="marcorgcode" size="16" value="[% library.marcorgcode |html %]" /> <span class="hint">If not filled in defaults to system preference MARCOrgCode. You can obtain your code from <a href="http://www.loc.gov/marc/organizations/orgshome.html">Library of Congress</a>.</span>
                 <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes |html %]" /></li>
             </ol>
         </fieldset>

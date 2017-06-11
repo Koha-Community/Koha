@@ -76,6 +76,7 @@ if ( $op eq 'add_form' ) {
       branchip
       branchnotes
       opac_info
+      marcorgcode
     );
     my $is_a_modif = $input->param('is_a_modif');
 
