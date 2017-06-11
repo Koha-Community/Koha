@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 use Koha::Library;
 use Koha::Libraries;
@@ -27,6 +27,7 @@ use Koha::LibraryCategory;
 use Koha::LibraryCategories;
 use Koha::Database;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -39,6 +40,7 @@ my $new_library_1 = Koha::Library->new({
     branchcode => 'my_bc_1',
     branchname => 'my_branchname_1',
     branchnotes => 'my_branchnotes_1',
+    marcorgcode => 'US-MyLib',
 })->store;
 my $new_library_2 = Koha::Library->new({
     branchcode => 'my_bc_2',
@@ -85,5 +87,9 @@ is( Koha::Libraries->search->count, $nb_of_libraries + 1, 'Delete should have de
 
 $retrieved_category_2->delete;
 is( Koha::LibraryCategories->search->count, $nb_of_categories + 2, 'Delete should have deleted the library category' );
+
+t::lib::Mocks::mock_preference('MARCOrgCode', 'US-Default');
+is( $new_library_1->get_effective_marcorgcode, 'US-MyLib', 'If defined, use library\'s own marc org code');
+is( $new_library_2->get_effective_marcorgcode, 'US-Default', 'If not defined library\' marc org code, use the one from system preferences');
 
 $schema->storage->txn_rollback;
