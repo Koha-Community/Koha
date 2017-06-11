@@ -111,8 +111,8 @@
                     </div>
 
             <div class="row-fluid">
-              [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('itemtype').size > 0     and not expanded_options ) or
-                      ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) %]
+              [%# Following on one line for translatability %]
+              [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) %]
                 <div class="span12">
                     <div id="advsearches" class="toptabs">
                         <ul>
@@ -162,8 +162,8 @@
               [% END %]
 
                 <div class="row-fluid">
-                  [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('pubdate').size > 0     and not expanded_options ) or
-                          ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) %]
+                  [%# Following on one line for translatability %]
+                  [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                         <div id="pubrange">
                             <!-- PUB RANGE OPTION -->
@@ -178,8 +178,8 @@
                     </div>
                   [% END %]
 
-                  [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('language').size > 0     and not expanded_options ) or
-                          ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) %]
+                  [%# Following on one line for translatability %]
+                  [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                         <div id="langfilter">
                             <fieldset>
@@ -204,8 +204,8 @@
                     </div> <!-- / .span3 -->
                   [% END %]
 
-                  [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('location').size > 0     and not expanded_options ) or
-                          ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('location').size > 0 and expanded_options ) ) %]
+                  [%# Following on one line for translatability %]
+                  [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('location').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('location').size > 0 and expanded_options ) ) %]
                     [% UNLESS ( singleBranchMode ) %]
                         <div class="span3">
                             <!-- AVAILABILITY LIMITS -->
@@ -243,8 +243,8 @@
                     [% END # / UNLESS singleBranchMode %]
                   [% END %]
 
-                  [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('sorting').size > 0     and not expanded_options ) or
-                          ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('sorting').size > 0 and expanded_options ) ) %]
+                  [%# Following on one line for translatability %]
+                  [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('sorting').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('sorting').size > 0 and expanded_options ) ) %]
                     <div class="span3">
                     <!-- RANK LIMITS -->
                         <div id="sortby">
@@ -261,8 +261,8 @@
                   [% END %]
                 </div> <!-- / .row-fluid -->
 
-                [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('subtype').size > 0     and not expanded_options ) or
-                        ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('subtype').size > 0 and expanded_options ) ) %]
+                [%# Following on one line for translatability %]
+                [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('subtype').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('subtype').size > 0 and expanded_options ) ) %]
                     <div class="row-fluid">
                         [% IF ( usmarc ) %]
                             <!-- SUBTYPE LIMITS -->
