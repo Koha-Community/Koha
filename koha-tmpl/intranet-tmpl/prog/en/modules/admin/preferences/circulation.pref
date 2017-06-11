@@ -168,6 +168,12 @@ Circulation:
 
     Checkout Policy:
         -
+            - pref: AutoReturnCheckedOutItems
+              choices:
+                  yes: Don't
+                  no: Do
+            - require librarians to manually confirm a checkout where the item is already checked out to another patron.
+        -
             - pref: AllowTooManyOverride
               choices:
                   yes: Allow

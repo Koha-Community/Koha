@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 127;
+use Test::More tests => 128;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -105,6 +105,8 @@ my $item = {
 my $borrower = {
     branchcode => $library2->{branchcode}
 };
+
+t::lib::Mocks::mock_preference('AutoReturnCheckedOutItems', 0);
 
 # No userenv, PickupLibrary
 t::lib::Mocks::mock_preference('IndependentBranches', '0');
@@ -1916,6 +1918,64 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
         }
     );
 };
+
+subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
+    plan tests => 2;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value  => {
+                branchcode => $library->{branchcode},
+                firstname => "Happy",
+                surname => "Gilmore",
+            }
+        }
+    );
+    my $patron2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value  => {
+                branchcode => $library->{branchcode},
+                firstname => "Billy",
+                surname => "Madison",
+            }
+        }
+    );
+
+    C4::Context->_new_userenv('xxx');
+    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Random Library', '', '', '');
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $biblionumber = $biblioitem->{biblionumber};
+    my $item = $builder->build(
+        {   source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblionumber,
+            }
+        }
+    );
+
+    my ( $error, $question, $alerts );
+    my $issue = AddIssue( $patron1->unblessed, $item->{barcode} );
+
+    t::lib::Mocks::mock_preference('AutoReturnCheckedOutItems', 0);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron2, $item->{barcode} );
+    is( $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER question flag should be set if AutoReturnCheckedOutItems is disabled and item is checked out to another' );
+
+    t::lib::Mocks::mock_preference('AutoReturnCheckedOutItems', 1);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron2, $item->{barcode} );
+    is( $alerts->{RETURNED_FROM_ANOTHER}->{patron}->borrowernumber, $patron1->borrowernumber, 'RETURNED_FROM_ANOTHER alert flag should be set if AutoReturnCheckedOutItems is enabled and item is checked out to another' );
+
+    t::lib::Mocks::mock_preference('AutoReturnCheckedOutItems', 0);
+};
+
 
 subtest 'AddReturn | is_overdue' => sub {
     plan tests => 5;

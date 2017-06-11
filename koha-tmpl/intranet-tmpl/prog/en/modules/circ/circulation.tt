@@ -74,6 +74,10 @@
     <div class="dialog message">High demand item. <b>Loan period was not shortened due to override.</b> Shortened due date would have been [% alert.HIGHHOLDS.returndate | $KohaDates %] ([% alert.HIGHHOLDS.duration  | html %] days).</div>
 [% END %]
 
+[% IF alert.RETURNED_FROM_ANOTHER %]
+    <div class="dialog alert">Item was checked out to [% alert.RETURNED_FROM_ANOTHER.patron.firstname %] [% alert.RETURNED_FROM_ANOTHER.patron.surname %] ([% alert.RETURNED_FROM_ANOTHER.patron.cardnumber %]) and was returned automatically.</div>
+[% END %]
+
 [% IF ( nopermission ) %]
     <div class="dialog alert">Staff members are not allowed to discharge borrowers, nor borrowers to request a discharge.</div>
 [% END %]

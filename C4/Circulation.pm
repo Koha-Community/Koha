@@ -886,11 +886,15 @@ sub CanBookBeIssued {
             $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
             $issuingimpossible{branch_to_return} = $message;
         } else {
+            if ( C4::Context->preference('AutoReturnCheckedOutItems') ) {
+                $alerts{RETURNED_FROM_ANOTHER} = { patron => $patron };
+            } else {
             $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
             $needsconfirmation{issued_firstname} = $patron->firstname;
             $needsconfirmation{issued_surname} = $patron->surname;
             $needsconfirmation{issued_cardnumber} = $patron->cardnumber;
             $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
+            }
         }
     }
 
