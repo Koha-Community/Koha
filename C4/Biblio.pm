@@ -568,6 +568,11 @@ sub LinkBibHeadingsToAuthorities {
 # of change to a core API just before the 3.0 release.
 
                     if ( C4::Context->preference('marcflavour') eq 'MARC21' ) {
+                        my $userenv = C4::Context->userenv;
+                        my $library;
+                        if ( $userenv && $userenv->{'branch'} ) {
+                            $library = Koha::Libraries->find( $userenv->{'branch'} );
+                        }
                         $marcrecordauth->insert_fields_ordered(
                             MARC::Field->new(
                                 '667', '', '',
@@ -582,7 +587,7 @@ sub LinkBibHeadingsToAuthorities {
                         $cite =~ s/[\s\,]*$//;
                         $cite =
                             "Work cat.: ("
-                          . C4::Context->preference('MARCOrgCode') . ")"
+                          . ( $library ? $library->get_effective_marcorgcode : C4::Context->preference('MARCOrgCode') ) . ")"
                           . $bib->subfield( '999', 'c' ) . ": "
                           . $cite;
                         $marcrecordauth->insert_fields_ordered(

@@ -23,9 +23,12 @@
 use Modern::Perl;
 use C4::Context;
 
+use Koha::Libraries;
+
 my $builder = sub {
     my ( $params ) = @_;
-    my $org = C4::Context->preference('MARCOrgCode');
+    my $library = Koha::Libraries->find( C4::Context->userenv->{'branch'} );
+    my $org = $library->get_effective_marcorgcode;
     return <<"HERE";
 <script type=\"text/javascript\">
 //<![CDATA[

@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Context;
+
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -52,6 +54,12 @@ sub add_to_categories {
     for my $category ( @$categories ) {
         $self->_result->add_to_categorycodes( $category->_result );
     }
+}
+
+sub get_effective_marcorgcode {
+    my ( $self )  = @_;
+
+    return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
 
 =head3 type
