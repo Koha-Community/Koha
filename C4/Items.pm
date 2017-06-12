@@ -76,6 +76,7 @@ BEGIN {
 	GetItemsLocationInfo
 	GetHostItemsInfo
         GetItemnumbersForBiblio
+        get_itemnumbers_of
 	get_hostitemnumbers_of
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
@@ -1391,6 +1392,41 @@ sub GetItemnumbersForBiblio {
     return \@items;
 }
 
+=head2 get_itemnumbers_of
+
+  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
+
+Given a list of biblionumbers, return the list of corresponding itemnumbers
+for each biblionumber.
+
+Return a reference on a hash where keys are biblionumbers and values are
+references on array of itemnumbers.
+
+=cut
+
+sub get_itemnumbers_of {
+    my @biblionumbers = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = '
+        SELECT itemnumber,
+            biblionumber
+        FROM items
+        WHERE biblionumber IN (?' . ( ',?' x scalar @biblionumbers - 1 ) . ')
+    ';
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@biblionumbers);
+
+    my %itemnumbers_of;
+
+    while ( my ( $itemnumber, $biblionumber ) = $sth->fetchrow_array ) {
+        push @{ $itemnumbers_of{$biblionumber} }, $itemnumber;
+    }
+
+    return \%itemnumbers_of;
+}
+
 =head2 get_hostitemnumbers_of
 
   my @itemnumbers_of = get_hostitemnumbers_of($biblionumber);
@@ -1426,9 +1462,18 @@ sub get_hostitemnumbers_of {
     foreach my $hostfield ( $marcrecord->field($tag) ) {
         my $hostbiblionumber = $hostfield->subfield($biblio_s);
         my $linkeditemnumber = $hostfield->subfield($item_s);
-        my $is_from_biblio = Koha::Items->search({ itemnumber => $linkeditemnumber, biblionumber => $hostbiblionumber });
-        push @returnhostitemnumbers, $linkeditemnumber
-          if $is_from_biblio;
+        my @itemnumbers;
+        if ( my $itemnumbers =
+            get_itemnumbers_of($hostbiblionumber)->{$hostbiblionumber} )
+        {
+            @itemnumbers = @$itemnumbers;
+        }
+        foreach my $itemnumber (@itemnumbers) {
+            if ( $itemnumber eq $linkeditemnumber ) {
+                push( @returnhostitemnumbers, $itemnumber );
+                last;
+            }
+        }
     }
 
     return @returnhostitemnumbers;

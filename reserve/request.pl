@@ -293,10 +293,12 @@ foreach my $biblionumber (@biblionumbers) {
     my $fixedRank = $count+1;
 
     my %itemnumbers_of_biblioitem;
+    my @itemnumbers;
 
     ## $items is array of 'item' table numbers
-    my $items = Koha::Items->search({ biblionumber => $biblionumber });
-    my @itemnumbers = $items->get_column('itemnumber');
+    if (my $items = get_itemnumbers_of($biblionumber)->{$biblionumber}){
+        @itemnumbers  = @$items;
+    }
     my @hostitems = get_hostitemnumbers_of($biblionumber);
     if (@hostitems){
         $template->param('hostitemsflag' => 1);
