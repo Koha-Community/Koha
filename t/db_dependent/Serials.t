@@ -18,7 +18,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 49;
+use Test::More tests => 48;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -264,8 +264,6 @@ subtest 'test_updateClaim' => sub {
     is($late_or_missing_issues_1_2[0]->{claims_count}, $claim_count_1, 'Got the expected unchanged claim count from update claim');
     is($late_or_missing_issues_1_2[0]->{status}, 3, 'Got the expected unchanged claim status from update claim');
 };
-
-is(C4::Serials::getsupplierbyserialid(),undef, 'test getting supplier idea');
 
 is(C4::Serials::check_routing(), undef, 'test checking route');
 
