@@ -351,7 +351,7 @@ sub validateObjectType {
 =head getObjectType
 @OVERLOAD
 Get the type of objects this factory creates.
-@RETURN String, the object package this factory creates. eg. Koha::Borrower
+@RETURN String, the object package this factory creates. eg. Koha::Patron
 =cut
 
 sub getObjectType {

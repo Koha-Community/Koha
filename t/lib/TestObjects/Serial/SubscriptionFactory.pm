@@ -27,7 +27,7 @@ use C4::Context;
 use C4::Serials;
 
 use t::lib::TestObjects::PatronFactory;
-use Koha::Borrowers;
+use Koha::Patrons;
 use t::lib::TestObjects::Acquisition::BooksellerFactory;
 use Koha::Acquisition::Booksellers;
 use t::lib::TestObjects::BiblioFactory;
@@ -52,7 +52,7 @@ sub getObjectType {
             {
                 internalnotes => 'MagazineName-CPL-1', #MANDATORY! Used as the hash-key
                 receiveSerials => 3, #DEFAULT undef, receives this many serials using the default values.
-                librarian => 12 || Koha::Borrower, #DEFAULT creates a "Subscription Master" Borrower
+                librarian => 12 || Koha::Patron, #DEFAULT creates a "Subscription Master" Borrower
                 branchcode => 'CPL', #DEFAULT
                 aqbookseller => 54 || Koha::Acquisition::Bookseller, #DEFAULT creates a 'Bookselling Vendor'.
                 cost => undef, #DEFAULT
@@ -180,7 +180,7 @@ sub validateAndPopulateDefaultValues {
     my $year = $now->year();
 
     if ($object->{librarian}) {
-        $object->{librarian} = Koha::Borrowers->cast($object->{librarian});
+        $object->{librarian} = Koha::Patrons->cast($object->{librarian});
     }
     else {
         $object->{librarian} = t::lib::TestObjects::PatronFactory->createTestGroup([

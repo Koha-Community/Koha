@@ -43,7 +43,7 @@ sub getObjectType {
     my $sheet = t::lib::TestObjects::Labels::SheetFactory->createTestGroup([
                         {'name' => 'Sheetilian',
                          'version'   => '1.1',
-                         'author' => '1024' || Koha::Borrower,
+                         'author' => '1024' || Koha::Patron,
                          'sheet' => JSON String, #see validateAndPopulateDefaultValues()
                         },
                     ], 'name', $testContext1, $testContext2, $testContext3);
@@ -99,7 +99,7 @@ sub validateAndPopulateDefaultValues {
     $object->{name} = 'Simplex' unless ($object->{name});
     my $borrower;
     try {
-        $borrower = Koha::Borrowers->cast($object->{author});
+        $borrower = Koha::Patrons->cast($object->{author});
         $object->{author}->{borrowernumber} = $borrower->borrowernumber;
     } catch {
         if (blessed($_) && ($_->isa('Koha::Exception::UnknownObject') || $_->isa('Koha::Exception::BadParameter'))) {
