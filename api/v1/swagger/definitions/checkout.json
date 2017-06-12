@@ -47,8 +47,12 @@
       "type": ["integer", "null"],
       "description": "Auto renewal"
     },
+    "auto_renew_error": {
+      "type": ["string", "null"],
+      "description": "automatic renewal error"
+    },
     "timestamp": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "Last update time",
       "format": "date-time"
     },
@@ -60,6 +64,15 @@
     "onsite_checkout": {
       "type": "integer",
       "description": "On site checkout"
+    },
+    "note": {
+      "type": ["string", "null"],
+      "description": "note text"
+    },
+    "notedate": {
+      "type": ["string", "null"],
+      "description": "datetime of issue note",
+      "format": "date-time"
     }
   }
 }

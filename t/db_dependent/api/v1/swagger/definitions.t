@@ -51,8 +51,6 @@ my $schema = Koha::Database->new->schema;
 my @definition_names = keys %{ $api_spec->{definitions} };
 
 subtest 'api/v1/definitions/*.json up-to-date with corresponding Koha-object' => sub {
-    plan tests => 2*(scalar(@definition_names) - 1);
-
     foreach my $name (@definition_names) {
         my $definition = $api_spec->{definitions}->{$name};
 
