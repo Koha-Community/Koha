@@ -1,12 +1,10 @@
 [% USE AuthorisedValues %]
 [% SET itemavailable = 1 %]
 
-[%#-
-This include takes two parameters: an item structure
-and an optional loan (issue) structure.  The issue
-structure is used by course reserves pages, which do
-not use an API to fetch items that populates item.datedue.
--%]
+[%#- This include takes two parameters: an item structure -%]
+[%#- and an optional loan (issue) structure.  The issue -%]
+[%#- structure is used by course reserves pages, which do -%]
+[%#- not use an API to fetch items that populates item.datedue. -%]
 
 [% IF ( item.itemlost ) %]
     [% SET itemavailable = 0 %]
