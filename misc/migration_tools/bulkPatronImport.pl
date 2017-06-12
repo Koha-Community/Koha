@@ -266,7 +266,7 @@ sub AddDebarment {
 
     my $r = C4::Context->dbh->do( $sql, {}, ( $borrowernumber, $expiration, $type, $comment, $manager_id, $created ) );
 
-    Koha::Borrower::Debarments::_UpdateBorrowerDebarmentFlags($borrowernumber);
+    Koha::Patron::Debarments::_UpdateBorrowerDebarmentFlags($borrowernumber);
 
     return $r;
 }
