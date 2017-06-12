@@ -104,6 +104,8 @@ sub login {
     my $password = $c->validation->param('password');
     my $patron;
 
+    $ENV{'REMOTE_ADDR'} = $c->tx->remote_address;
+
     return $c->render( status => 400, openapi => {
         error => "Either userid or cardnumber is required "
                              ."- neither given." }) unless ($userid);
