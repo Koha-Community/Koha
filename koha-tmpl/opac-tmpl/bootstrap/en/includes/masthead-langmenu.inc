@@ -1,9 +1,5 @@
-
-[% IF ( ( opaclanguagesdisplay )   &&
-        ( ! one_language_enabled ) &&
-        ( languages_loop )         &&
-        ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'top') )
-%]
+[%# Following on one line for translatability %]
+[% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && ( languages_loop ) && ( OpacLangSelectorMode == 'both' || OpacLangSelectorMode == 'top') ) %]
 <li class="dropdown">
   <a href="#" title="Switch languages" class="dropdown-toggle" id="langmenu" data-toggle="dropdown" role="button"><i class="icon-flag icon-white"></i> <span class="langlabel">Languages</span> <b class="caret"></b></a>
     <ul aria-labelledby="langmenu" role="menu" class="dropdown-menu">
