@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 1;
 use Test::Mojo;
 
 use Module::Load::Conditional;
@@ -27,7 +27,6 @@ use Swagger2;
 
 use C4::Context;
 use Koha::Database;
-use Koha::Util::Swagger;
 
 my $swaggerPath = C4::Context->config('intranetdir') . "/api/v1/swagger";
 my $swagger     = Swagger2->new( $swaggerPath . "/swagger.json" )->expand;
@@ -46,7 +45,7 @@ my $schema = Koha::Database->new->schema;
 #             --> If columns do not match properties, definition is not ok.
 my @definition_names = keys %{ $api_spec->{definitions} };
 
-subtest 'api/v1/swagger/definitions/*.json up-to-date with corresponding Koha-object' => sub {
+subtest 'api/v1/definitions/*.json up-to-date with corresponding Koha-object' => sub {
     plan tests => 2*(scalar(@definition_names) - 1);
 
     foreach my $name (@definition_names) {
@@ -79,70 +78,6 @@ subtest 'api/v1/swagger/definitions/*.json up-to-date with corresponding Koha-ob
         }
     }
 };
-
-subtest 'Compare property data type to column data type' => sub {
-    foreach my $name (@definition_names) {
-        my $definition = $api_spec->{definitions}->{$name};
-
-        if ($definition->{type} eq "object") {
-            my $kohaObject = _koha_object($name);
-
-            next unless ($kohaObject && $kohaObject->can("_columns"));
-
-            my $columns = Koha::Database->new->schema->resultset( $kohaObject->_type )->result_source->{_columns};
-            my $properties = $definition->{properties};
-            foreach my $column_name (keys $columns) {
-                my $column = $columns->{$column_name};
-                my $property = $properties->{$column_name};
-                ok(defined $property->{type}, "$name: '$column_name' has a type definition");
-                if ($column->{is_nullable}) {
-                    if (ref($property->{type}) eq "ARRAY") {
-                        ok((grep { /null/ } @{$property->{type}}), "$name: '$column_name' is nullable and has data type 'null'");
-                    } else {
-                        ok($property->{type} eq "null", "$name: '$column_name' is nullable and has data type 'null'");
-                    }
-                } else {
-                    if (ref($property->{type}) eq "ARRAY") {
-                        is((grep { /null/ } @{$property->{type}}), 0, "$name: '$column_name' is not nullable and does not have data type 'null'");
-                    }
-                    else {
-                        ok($property->{type} ne "null", "$name: '$column_name' is not nullable and does not have data type 'null'");
-                    }
-                }
-                my $swagger_type = _get_property_type($property); # without "null"
-                my $expected_swagger_type = _expected_data_type($column); # without "null"
-
-                is($swagger_type, $expected_swagger_type, "$name: '$column_name' has correct data type '$swagger_type'");
-            }
-        }
-    }
-};
-
-sub _expected_data_type {
-    my ($column) = @_;
-
-    return Koha::Util::Swagger::column_type_to_swagger_type($column->{data_type});
-}
-
-sub _get_property_type {
-    my ($property) = @_;
-
-    my $type = $property->{type};
-    if (ref($type) eq "ARRAY") {
-        @$type = grep { !/null/ } @$type;
-        if (@$type == 1) {
-            $type = @$type[0];
-        } else {
-            # If we are here, we still have multiple types even after "null"
-            # is removed from the Swagger types.
-            # Why would we still have multiple types?
-            # Is "type": ["integer", "string"] allowed? If so, fix this test
-            return;
-        }
-    }
-
-    return $type;
-}
 
 sub _koha_object {
     my ($name) = @_;
