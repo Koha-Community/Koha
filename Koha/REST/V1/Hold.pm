@@ -55,6 +55,11 @@ sub add {
                            openapi => {error => "Borrower not found"} );
     }
 
+    if (my $problem = _opac_patron_restrictions($c, $borrower)) {
+        return $c->render( status => 403, openapi => {
+            error => "Reserve cannot be placed. Reason: $problem"} );
+    }
+
     unless ($biblionumber or $itemnumber) {
         return $c->render( status => 400, openapi => {
             error => "At least one of biblionumber, itemnumber should be given"
@@ -122,6 +127,11 @@ sub edit {
                            openapi => {error => "Reserve not found"} );
     }
 
+    if (my $problem = _opac_patron_restrictions($c->stash('koha.user'))) {
+        return $c->render( status => 403, openapi => {
+            error => "Reserve cannot be modified. Reason: $problem"} );
+    }
+
     my $body = $c->req->json;
 
     my $branchcode = $body->{branchcode} || $reserve->{branchcode};
@@ -163,6 +173,11 @@ sub delete {
         return $c->render( status => 404, openapi => {error => "Reserve not found"} );
     }
 
+    if (my $problem = _opac_patron_restrictions($c, $user)) {
+        return $c->render( status => 403, openapi => {
+            error => "Reserve cannot be cancelled. Reason: $problem"} );
+    }
+
     if ($user
         && ($c->stash('is_owner_access') || $c->stash('is_guarantor_access'))
         && !C4::Reserves::CanReserveBeCanceledFromOpac($reserve_id,
@@ -175,6 +190,37 @@ sub delete {
     C4::Reserves::CancelReserve({ reserve_id => $reserve_id });
 
     return $c->render( status => 200, openapi => {} );
+}
+
+# Restrict operations via REST API if patron has some restrictions.
+#
+# The following reasons can be returned:
+#
+# 1. debarred
+# 2. gonenoaddress
+# 3. cardexpired
+# 4. maximumholdsreached
+# 5. (cardlost, but this is returned via different error message. See KD-2165)
+#
+sub _opac_patron_restrictions {
+    my ($c, $patron) = @_;
+
+    $patron = ref($patron) eq 'Koha::Patron'
+                ? $patron
+                : Koha::Patrons->find($patron);
+    return 0 unless $patron;
+    return 0 if (!$c->stash('is_owner_access')
+                 && !$c->stash('is_guarantor_access'));
+
+    my @problems = $patron->status_not_ok;
+    foreach my $problem (@problems) {
+        $problem = ref($problem);
+        next if $problem =~ /Debt/;
+        next if $problem =~ /Checkout/;
+        $problem =~ s/Koha::Exceptions::(.*::)*//;
+        return lc($problem);
+    }
+    return 0;
 }
 
 1;

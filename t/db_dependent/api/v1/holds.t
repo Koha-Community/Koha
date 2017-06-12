@@ -39,16 +39,20 @@ use Koha::Patrons;
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 my $builder = t::lib::TestBuilder->new();
+my $schema  = Koha::Database->new->schema;
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+$schema->storage->txn_begin;
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 my $tx;
 
-my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+my $categorycode = $builder->build({
+    source => 'Category',
+    value => {
+        reservefee => 0
+    }
+})->{categorycode};
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 
@@ -60,8 +64,14 @@ my $nopermission = $builder->build({
         categorycode => $categorycode,
         flags        => 0,
         lost         => 0,
+        debarred     => undef,
+        debarredcomment => undef,
+        dateexpiry   => '0000-00-00',
+        gonenoaddress => undef,
     }
 });
+my $nopermission_patron = Koha::Patrons->find($nopermission->{borrowernumber});
+
 my $session_nopermission = C4::Auth::get_session('');
 $session_nopermission->param('number', $nopermission->{ borrowernumber });
 $session_nopermission->param('id', $nopermission->{ userid });
@@ -78,6 +88,10 @@ my $borrower = Koha::Patrons->find($builder->build({
         userid       => $nopermission->{ userid }."z",
         flags        => 80,
         lost         => 0,
+        debarred     => undef,
+        debarredcomment => undef,
+        dateexpiry   => '0000-00-00',
+        gonenoaddress => undef,
     }
 })->{'borrowernumber'});
 my $borrowernumber = $borrower->borrowernumber;
@@ -91,6 +105,10 @@ my $borrower2 = Koha::Patrons->find($builder->build({
         userid       => $nopermission->{ userid }."x",
         flags        => 16,
         lost         => 0,
+        debarred     => undef,
+        debarredcomment => undef,
+        dateexpiry   => '0000-00-00',
+        gonenoaddress => undef,
     }
 })->{'borrowernumber'});
 my $borrowernumber2 = $borrower2->borrowernumber;
@@ -104,6 +122,10 @@ my $borrower3 = Koha::Patrons->find($builder->build({
         userid       => $nopermission->{ userid }."y",
         flags        => 64,
         lost         => 0,
+        debarred     => undef,
+        debarredcomment => undef,
+        dateexpiry   => '0000-00-00',
+        gonenoaddress => undef,
     }
 })->{'borrowernumber'});
 my $borrowernumber3 = $borrower3->borrowernumber;
@@ -128,21 +150,20 @@ $session3->param('ip', '127.0.0.1');
 $session3->param('lasttime', time());
 $session3->flush;
 
-$dbh->do('DELETE FROM issues');
-$dbh->do('DELETE FROM items');
-
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber = create_item($biblionumber, 'TEST000001');
 
 my $biblionumber2 = create_biblio('RESTful Web APIs');
 my $itemnumber2 = create_item($biblionumber2, 'TEST000002');
 
-$dbh->do('DELETE FROM reserves');
-$dbh->do('DELETE FROM issuingrules');
-    $dbh->do(q{
-        INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)
-    }, {}, '*', '*', '*', 1);
+Koha::IssuingRules->delete;
+Koha::IssuingRule->new({
+    categorycode => '*',
+    branchcode   => '*',
+    itemtype     => '*',
+    reservesallowed => 1,
+    reservecharge => 0,
+})->store;
 
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
     $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
@@ -204,7 +225,7 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 25;
+    plan tests => 26;
 
     my $reserve_id3 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
@@ -224,6 +245,46 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
 
     my $borrno_tmp = $post_data->{'borrowernumber'};
     $post_data->{'borrowernumber'} = int $nopermission->{'borrowernumber'};
+
+    subtest 'test patron restrictions' => sub {
+        $nopermission_patron->set({ gonenoaddress => 1 })->store;
+        $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be placed. Reason: gonenoaddress');
+        $nopermission_patron->set({ gonenoaddress => 0 })->store;
+
+        $nopermission_patron->set({ debarred => "9999-12-31" })->store;
+        $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be placed. Reason: debarred');
+        $nopermission_patron->set({ debarred => undef })->store;
+
+        $nopermission_patron->set({ dateexpiry => "2000-01-01" })->store;
+        $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be placed. Reason: cardexpired');
+        $nopermission_patron->set({ dateexpiry => "0000-00-00" })->store;
+
+        $nopermission_patron->set({ lost => 1 })->store;
+        $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' =>
+                    "Patron's card has been marked as 'lost'. Access forbidden.");
+        $nopermission_patron->set({ lost => 0 })->store;
+    };
+
     $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
     $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
     $t->request_ok($tx) # create hold to myself
@@ -353,7 +414,7 @@ subtest "Test endpoints with permission" => sub {
 };
 
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 sub create_biblio {
     my ($title) = @_;
