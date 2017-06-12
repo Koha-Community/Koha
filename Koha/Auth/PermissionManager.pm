@@ -282,14 +282,14 @@ sub listKohaPermissionsAsHASH {
 
 =head getBorrowerPermissions
 
-    my $borrowerPermissions = $permissionManager->getBorrowerPermissions($borrower);     #Koha::Borrower
+    my $borrowerPermissions = $permissionManager->getBorrowerPermissions($borrower);     #Koha::Patron
     my $borrowerPermissions = $permissionManager->getBorrowerPermissions($dbix_borrower);#Koha::Schema::Resultset::Borrower
     my $borrowerPermissions = $permissionManager->getBorrowerPermissions(1012);          #koha.borrowers.borrowernumber
     my $borrowerPermissions = $permissionManager->getBorrowerPermissions('167A0012311'); #koha.borrowers.cardnumber
     my $borrowerPermissions = $permissionManager->getBorrowerPermissions('bill69');      #koha.borrowers.userid
 
 @RETURNS ARRAYRef of Koha::Auth::BorrowerPermission-objects
-@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Borrower
+@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Patron
 @THROWS Koha::Exception::BadParameter
 =cut
 
@@ -333,7 +333,7 @@ sub getBorrowerPermissions {
 
 Grants all permissions from the given module(s).
 
-@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Borrower
+@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Patron
 @THROWS Koha::Exception::BadParameter
 =cut
 
@@ -371,7 +371,7 @@ sub grantAllSubpermissions {
                                         );
 
 Adds a group of permissions to one user.
-@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Borrower
+@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Patron
 @THROWS Koha::Exception::BadParameter
 =cut
 
@@ -445,7 +445,7 @@ sub revokePermission {
 
     $permissionManager->revokeAllPermissions($borrower);
 
-@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Borrower
+@THROWS Koha::Exception::UnknownObject, if the given $borrower cannot be casted to Koha::Patron
 @THROWS Koha::Exception::BadParameter
 =cut
 
@@ -460,7 +460,7 @@ sub revokeAllPermissions {
 =head hasPermissions
 
 See if the given Borrower has all of the given permissions
-@PARAM1 Koha::Borrower, or any of the koha.borrowers-table's unique identifiers.
+@PARAM1 Koha::Patron, or any of the koha.borrowers-table's unique identifiers.
 @PARAM2 HASHRef of needed permissions,
     {
         borrowers => 'view_borrowers',
@@ -501,7 +501,7 @@ sub hasPermissions {
 =head hasPermission
 
 See if the given Borrower has the given permission
-@PARAM1 Koha::Borrower, or any of the koha.borrowers-table's unique identifiers.
+@PARAM1 Koha::Patron, or any of the koha.borrowers-table's unique identifiers.
 @PARAM2 Koha::Auth::PermissionModule or koha.permission_modules.module or koha.permission_modules.permission_module_id
 @PARAM3 Koha::Auth::Permission or koha.permissions.code or koha.permissions.permission_id or
                                '*' if we just need any permission for the given PermissionModule.

@@ -206,13 +206,13 @@ sub object_class {
 
 =head cast
 
-    my $borrower = Koha::Borrowers->cast('cardnumber');
-    my $borrower = Koha::Borrowers->cast($Koha::Borrower);
-    my $borrower = Koha::Borrowers->cast('userid');
-    my $borrower = Koha::Borrowers->cast('borrowernumber');
-    my $borrower = Koha::Borrowers->cast({borrowernumber => 123,
+    my $borrower = Koha::Patrons->cast('cardnumber');
+    my $borrower = Koha::Patrons->cast($Koha::Patron);
+    my $borrower = Koha::Patrons->cast('userid');
+    my $borrower = Koha::Patrons->cast('borrowernumber');
+    my $borrower = Koha::Patrons->cast({borrowernumber => 123,
                                                 });
-    my $borrower = Koha::Borrowers->cast({firstname => 'Olli-Antti',
+    my $borrower = Koha::Patrons->cast({firstname => 'Olli-Antti',
                                                     surname => 'Kivi',
                                                     address => 'Koskikatu 25',
                                                 });
@@ -221,9 +221,9 @@ Because there are gazillion million ways in Koha to invoke a Borrower, this is a
 omnibus for easily creating a Borrower-object from all the arcane invocations present
 in many parts of Koha.
 Just throw the crazy and unpredictable return values from myriad subroutines returning
-some kind of an borrowerish value to this casting function to get a brand new Koha::Borrower.
+some kind of an borrowerish value to this casting function to get a brand new Koha::Patron.
 @PARAM1 Scalar, or HASHRef.
-@RETURNS Koha::Borrower, possibly already in DB or a completely new one if nothing was
+@RETURNS Koha::Patron, possibly already in DB or a completely new one if nothing was
                          inferred from the DB.
 @THROWS Koha::Exception::BadParameter, if no idea what to do with the input.
 @THROWS Koha::Exception::UnknownObject, if we cannot find a Borrower with the given input.
