@@ -54,6 +54,7 @@ my $guarantor = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0,
+        lost         => 0,
     }
 });
 my $password = "secret";
@@ -63,7 +64,7 @@ my $patron = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0,
-        lost         => 1,
+        lost         => 0,
         gonenoaddress => 0,
         guarantorid    => $guarantor->{borrowernumber},
         password     => Koha::AuthUtils::hash_password($password),
@@ -79,6 +80,7 @@ my $librarian = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 16,
+        lost         => 0,
         password     => Koha::AuthUtils::hash_password("test"),
     }
 });
@@ -194,6 +196,7 @@ my $loggedinuser = $builder->build({
         categorycode => $categorycode,
         flags        => 1040, # borrowers and updatecharges (2^4 | 2^10)
         password     => Koha::AuthUtils::hash_password($password),
+        lost         => 0,
     }
 });
 
@@ -224,7 +227,7 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is('/borrowernumber' => $patron->{ borrowernumber })
   ->json_is('/surname' => $patron->{ surname })
-  ->json_is('/lost' => Mojo::JSON->true );
+  ->json_is('/lost' => Mojo::JSON->false );
 
 $tx = $t->ua->build_tx(GET => '/api/v1/patrons' => form => {surname => 'nonexistent'});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -427,6 +430,7 @@ my $borrower2 = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
+        lost         => 0,
     }
 });
 my $borrowernumber2 = $borrower2->{borrowernumber};
@@ -555,7 +559,8 @@ sub create_user_and_session {
         {
             source => 'Borrower',
             value  => {
-                flags => $flags
+                flags => $flags,
+                lost  => 0,
             }
         }
     );

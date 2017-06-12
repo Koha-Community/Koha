@@ -117,6 +117,7 @@ sub create_user_and_session {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             flags        => $flags,
+            lost         => 0,
         }
     });
     my $session = C4::Auth::get_session('');

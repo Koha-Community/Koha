@@ -54,7 +54,8 @@ my $loggedinuser = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
-        flags        => 1024
+        flags        => 1024,
+        lost         => 0,
     }
 });
 
@@ -64,6 +65,7 @@ my $borrower = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0,
+        lost         => 0,
     }
 });
 
@@ -72,6 +74,7 @@ my $borrower2 = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
+        lost         => 0,
     }
 });
 my $borrowernumber = $borrower->{borrowernumber};

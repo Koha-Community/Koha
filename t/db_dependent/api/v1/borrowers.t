@@ -48,6 +48,7 @@ subtest '/borrowers/status get() tests' => sub {
         value => {
             cardnumber => '11A01',
             password => $hashed_password,
+            lost     => 0,
         }
     });
     my $b = Koha::Patrons->find($user->{borrowernumber});

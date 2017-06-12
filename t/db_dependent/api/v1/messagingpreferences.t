@@ -286,6 +286,7 @@ sub create_user_and_session {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             flags        => $params->{'flags'} || 0,
+            lost         => 0,
         }
     });
 

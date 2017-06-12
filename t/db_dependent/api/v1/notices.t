@@ -463,6 +463,7 @@ sub create_user_and_session {
         value => {
             branchcode   => $branchcode,
             categorycode => $categorycode,
+            lost         => 0,
         }
     });
 

@@ -87,6 +87,7 @@ sub create_user_and_session {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             flags        => $flags,
+            lost         => 0,
         }
     });
 

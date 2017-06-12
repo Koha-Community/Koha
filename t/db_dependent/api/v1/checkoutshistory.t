@@ -51,7 +51,7 @@ $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM issuingrules');
 my $loggedinuser = $builder->build({ source => 'Borrower',
-                                    value => { flags => 1 } });
+                                    value => { flags => 1, lost => 0 } });
 
 Koha::Auth::PermissionManager->grantPermission(
     Koha::Patrons->find($loggedinuser->{borrowernumber}),
@@ -71,6 +71,7 @@ my $nopermission = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0,
+        lost         => 0,
     }
 });
 

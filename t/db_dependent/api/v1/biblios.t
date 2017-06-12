@@ -54,6 +54,7 @@ my $librarian = $builder->build({
         categorycode => 'S',
         branchcode => 'NPL',
         flags => 1, # editcatalogue
+        lost  => 0,
     },
 });
 
@@ -164,6 +165,7 @@ sub create_user_and_session {
         value => {
             categorycode => $categorycode,
             branchcode => $branchcode,
+            lost         => 0,
         },
     });
 

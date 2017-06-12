@@ -353,7 +353,8 @@ sub create_user_and_session {
         {
             source => 'Borrower',
             value  => {
-                flags => $flags
+                flags => $flags,
+                lost  => 0,
             }
         }
     );

@@ -49,6 +49,7 @@ my $borrower = $builder->build({
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags => 16,
+        lost  => 0,
     }
 });
 
@@ -58,6 +59,7 @@ my $librarian = $builder->build({
         categorycode => $categorycode,
         branchcode => $branchcode,
         flags => 4,
+        lost  => 0,
     },
 });
 

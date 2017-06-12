@@ -58,7 +58,8 @@ my $nopermission = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
-        flags        => 0
+        flags        => 0,
+        lost         => 0,
     }
 });
 my $session_nopermission = C4::Auth::get_session('');
@@ -75,7 +76,8 @@ my $borrower = Koha::Patrons->find($builder->build({
         categorycode => $categorycode,
         surname      => 'Test Surname',
         userid       => $nopermission->{ userid }."z",
-        flags        => 80
+        flags        => 80,
+        lost         => 0,
     }
 })->{'borrowernumber'});
 my $borrowernumber = $borrower->borrowernumber;
@@ -87,7 +89,8 @@ my $borrower2 = Koha::Patrons->find($builder->build({
         categorycode => $categorycode,
         surname      => 'Test Surname 2',
         userid       => $nopermission->{ userid }."x",
-        flags        => 16
+        flags        => 16,
+        lost         => 0,
     }
 })->{'borrowernumber'});
 my $borrowernumber2 = $borrower2->borrowernumber;
@@ -99,7 +102,8 @@ my $borrower3 = Koha::Patrons->find($builder->build({
         categorycode => $categorycode,
         surname      => 'Test Surname 3',
         userid       => $nopermission->{ userid }."y",
-        flags        => 64
+        flags        => 64,
+        lost         => 0,
     }
 })->{'borrowernumber'});
 my $borrowernumber3 = $borrower3->borrowernumber;

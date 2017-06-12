@@ -123,6 +123,11 @@ sub login {
     $patron = Koha::Patrons->find({ userid => $userid }) unless $patron;
     $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
 
+    if ($patron && $patron->lost) {
+        return $c->render( status => 403, openapi => { error =>
+                "Patron's card has been marked as 'lost'. Access forbidden." });
+    }
+
     my $session = _swaggerize_session($sessionid, $patron);
 
     $c->cookie(CGISESSID => $sessionid, { path => "/" });
@@ -234,6 +239,10 @@ sub authenticate_api_request {
         or $owner_access = allow_owner($c, $authorization, $user)
         or $guarantor_access = allow_guarantor($c, $authorization, $user)
         or $guarantee_access = allow_guarantee($c, $authorization, $user) ) {
+
+        Koha::Exceptions::Authorization::Unauthorized->throw(
+            error => "Patron's card has been marked as 'lost'. Access forbidden."
+        ) if $user && $user->lost;
 
         validate_query_parameters( $c, $spec );
 

@@ -100,7 +100,7 @@ subtest 'under() tests' => sub {
 };
 
 subtest 'post() test (login & logout)' => sub {
-    plan tests => 38;
+    plan tests => 41;
 
     $schema->storage->txn_begin;
 
@@ -113,9 +113,11 @@ subtest 'post() test (login & logout)' => sub {
         value => {
             branchcode   => $branchcode,
             categorycode => $categorycode,
+            lost     => 0,
             password => Koha::AuthUtils::hash_password($password),
         }
     });
+    my $patron = Koha::Patrons->find($borrower->{borrowernumber});
 
     my $auth_by_userid = {
         userid => $borrower->{userid},
@@ -170,6 +172,16 @@ subtest 'post() test (login & logout)' => sub {
     $t->request_ok($tx)
       ->status_is(401)
       ->json_is('/error', "Login failed.");
+
+    $patron->set({ lost => 1 })->store;
+    $tx = $t->ua->build_tx(POST => '/api/v1/auth/session' =>
+                           form => $auth_by_userid);
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_is('/error' =>
+            "Patron's card has been marked as 'lost'. Access forbidden.");
+    $patron->set({ lost => 0 })->store;
 
     $tx = $t->ua->build_tx(DELETE => '/api/v1/auth/session' =>
                            json => { sessionid => $sessionid."123" });
