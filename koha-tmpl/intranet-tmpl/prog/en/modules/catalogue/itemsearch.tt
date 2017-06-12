@@ -98,247 +98,14 @@
 
 [%# Page starts here %]
 
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
   <title>Koha &rsaquo; Catalog &rsaquo; Item search</title>
   [% INCLUDE 'doc-head-close.inc' %]
-  <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-  [% INCLUDE 'datatables.inc' %]
-  <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
-  <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/itemsearchform.css" />
-  <script type="text/javascript">
-    //<![CDATA[
-    var authorised_values = [% authorised_values_json %];
-
-    function loadAuthorisedValuesSelect(select) {
-      var selected = select.find('option:selected');
-      var category = selected.data('authorised-values-category');
-      var form_field_value = select.siblings('.form-field-value');
-      if (category && category in authorised_values) {
-        var values = authorised_values[category];
-        var html = '<select name="q" class="form-field-value">\n';
-        for (i in values) {
-          var value = values[i];
-          html += '<option value="' + value.authorised_value + '">' + value.lib + '</option>\n';
-        }
-        html += '</select>\n';
-        var new_form_field_value = $(html);
-        new_form_field_value.val(form_field_value.val());
-        form_field_value.replaceWith(new_form_field_value);
-      } else {
-        if (form_field_value.prop('tagName').toLowerCase() == 'select') {
-          html = '<input name="q" type="text" class="form-field-value" />';
-          var new_form_field_value = $(html);
-          form_field_value.replaceWith(new_form_field_value);
-        }
-      }
-    }
-
-    function addNewField( link ) {
-      var form_field = $('div.form-field-select-text').last();
-      var copy = form_field.clone(true);
-      copy.find('input,select').not('[type="hidden"]').each(function() {
-        $(this).val('');
-      });
-      copy.find('.form-field-conjunction').prop('disabled', false);
-      form_field.after(copy);
-      link.remove();
-      copy.find('select.form-field-column').change();
-    }
-
-    function submitForm($form) {
-      var tr = ''
-        + '    <tr>'
-        + '      <th>' + _("Title") + '</th>'
-        + '      <th>' + _("Publication date") + '</th>'
-        + '      <th>' + _("Publisher") + '</th>'
-        + '      <th>' + _("Collection") + '</th>'
-        + '      <th>' + _("Barcode") + '</th>'
-        + '      <th>' + _("Call number") + '</th>'
-        + '      <th>' + _("Home library") + '</th>'
-        + '      <th>' + _("Current location") + '</th>'
-        + '      <th>' + _("Shelving location") + '</th>'
-        + '      <th>' + _("Inventory number") + '</th>'
-        + '      <th>' + _("Status") + '</th>'
-        + '      <th>' + _("Checkouts") + '</th>'
-        + '      <th></th>'
-        + '    </tr>'
-      var table = ''
-        + '<table id="results">'
-        + '  <thead>' + tr + tr + '</thead>'
-        + '  <tbody></tbody>'
-        + '</table>';
-
-      var advSearchLink = $('<a>')
-        .attr('href', '/cgi-bin/koha/catalogue/search.pl')
-        .html(_("Go to advanced search"));
-      var editSearchLink = $('<a>')
-        .attr('href', '#')
-        .html(_("Edit search"))
-        .addClass('btn btn-default btn-xs')
-        .on('click', function(e) {
-          e.preventDefault();
-          $('#item-search-block').show();
-        });
-
-      var csvExportLink = $('<a>')
-        .attr('href', '#')
-        .html(_("Export results to CSV"))
-        .addClass('btn btn-default btn-xs')
-        .on('click', function(e) {
-          e.preventDefault();
-          $('#format-csv').prop('checked', true);
-          $('#itemsearchform').submit();
-          $('#format-html').prop('checked', true);
-        });
-      var barcodesExportLink = $('<a>')
-        .attr('href', '#')
-        .html(_("Export results to barcodes file"))
-        .addClass('btn btn-default btn-xs')
-        .on('click', function(e) {
-          e.preventDefault();
-          $('#format-barcodes').prop('checked', true);
-          $('#itemsearchform').submit();
-          $('#format-html').prop('checked', true);
-        });
-
-      var editSearchAndExportLinks = $('<p>')
-        .append(editSearchLink)
-        .append(' | ')
-        .append(csvExportLink)
-        .append(' ')
-        .append(barcodesExportLink);
-
-      var results_heading = $('<div>').addClass('results-heading')
-        .append("<h1>" + _("Item search results") + "</h1>")
-        .append($('<p>').append(advSearchLink))
-        .append(editSearchAndExportLinks);
-      $('#results-wrapper').empty()
-        .append(results_heading)
-        .append(table);
-
-      var params = [];
-      $form.find('select').not(':disabled').find('option:selected').each(function () {
-        var name = $(this).parents('select').first().attr('name');
-        var value = $(this).val();
-        params.push({ 'name': name, 'value': value });
-      });
-      $form.find('input[type="text"],input[type="hidden"]').not(':disabled').each(function () {
-        params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
-      });
-      $form.find('input[type="radio"]:checked').each(function() {
-        params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
-      });
-
-      $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
-        'bDestroy': true,
-        'bServerSide': true,
-        'bProcessing': true,
-        'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
-        'fnServerData': function(sSource, aoData, fnCallback) {
-          aoData.push( { 'name': 'format', 'value': 'json' } );
-          for (i in params) {
-            aoData.push(params[i]);
-          }
-          $.ajax({
-              'dataType': 'json',
-              'type': 'POST',
-              'url': sSource,
-              'data': aoData,
-              'success': function(json){
-                  fnCallback(json);
-              }
-          });
-        },
-        'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
-        'aoColumns': [
-          { 'sName': 'title' },
-          { 'sName': 'publicationyear' },
-          { 'sName': 'publishercode' },
-          { 'sName': 'ccode' },
-          { 'sName': 'barcode' },
-          { 'sName': 'itemcallnumber' },
-          { 'sName': 'homebranch' },
-          { 'sName': 'holdingbranch' },
-          { 'sName': 'location' },
-          { 'sName': 'stocknumber' },
-          { 'sName': 'notforloan' },
-          { 'sName': 'issues' },
-          { 'sName': 'checkbox', 'bSortable': false }
-        ],
-        "sPaginationType": "full_numbers"
-      })).columnFilter({
-        'sPlaceHolder': 'head:after',
-        'aoColumns': [
-          { 'type': 'text' },
-          { 'type': 'text' },
-          { 'type': 'text' },
-          { 'type': 'select', 'values': [% ccodes.json %] },
-          { 'type': 'text' },
-          { 'type': 'text' },
-          { 'type': 'select', 'values': [% branches.json %] },
-          { 'type': 'select', 'values': [% branches.json %] },
-          [% IF locations.size %]
-              { 'type': 'select', 'values': [% locations.json %] },
-          [% ELSE %]
-              null,
-          [% END %]
-          { 'type': 'text' },
-          [% IF notforloans.size %]
-              { 'type': 'select', 'values': [% notforloans.json %] },
-          [% ELSE %]
-              null,
-          [% END %]
-          { 'type': 'text' },
-          null
-        ]
-      });
-    }
-
-    $(document).ready(function () {
-      $('#toolbar').fixFloat();
-      // Add the "New field" link.
-      var form_field = $('div.form-field-select-text').last()
-      var NEW_FIELD = _("New field");
-      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
-      button_field_new.click(function(e) {
-          e.preventDefault();
-          addNewField( $(this) );
-      });
-      form_field.append(button_field_new);
-
-      // If a field is linked to an authorised values list, display the list.
-      $('div.form-field-select-text select').change(function() {
-        loadAuthorisedValuesSelect($(this));
-      }).change();
-
-      // Prevent user to select the 'All ...' option with other options.
-      $('div.form-field-select').each(function() {
-        $(this).find('select').filter(':last').change(function() {
-          values = $(this).val();
-          if (values.length > 1) {
-            var idx = $.inArray('', values);
-            if (idx != -1) {
-              values.splice(idx, 1);
-              $(this).val(values);
-            }
-          }
-        });
-      });
-
-      $('#itemsearchform').submit(function() {
-        var searchform = $(this);
-        var format = searchform.find('input[name="format"]:checked').val();
-        if (format == 'html') {
-          submitForm(searchform);
-          $("#item-search-block").hide();
-          return false;
-        }
-      });
-    });
-    //]]>
-  </script>
+  <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 </head>
+
 <body id="catalog_itemsearch" class="catalog">
   [% INCLUDE 'header.inc' %]
   [% INCLUDE 'home-search.inc' %]
@@ -426,4 +193,239 @@
   <div id="doc3" class="yui-t7">
       <div id="results-wrapper"></div>
 
-    [% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    <script type="text/javascript">
+        var authorised_values = [% authorised_values_json %];
+
+        function loadAuthorisedValuesSelect(select) {
+            var selected = select.find('option:selected');
+            var category = selected.data('authorised-values-category');
+            var form_field_value = select.siblings('.form-field-value');
+            if (category && category in authorised_values) {
+                var values = authorised_values[category];
+                var html = '<select name="q" class="form-field-value">\n';
+                for (i in values) {
+                    var value = values[i];
+                    html += '<option value="' + value.authorised_value + '">' + value.lib + '</option>\n';
+                }
+                html += '</select>\n';
+                var new_form_field_value = $(html);
+                new_form_field_value.val(form_field_value.val());
+                form_field_value.replaceWith(new_form_field_value);
+            } else {
+                if (form_field_value.prop('tagName').toLowerCase() == 'select') {
+                    html = '<input name="q" type="text" class="form-field-value" />';
+                    var new_form_field_value = $(html);
+                    form_field_value.replaceWith(new_form_field_value);
+                }
+            }
+        }
+
+    function addNewField( link ) {
+            var form_field = $('div.form-field-select-text').last();
+            var copy = form_field.clone(true);
+            copy.find('input,select').not('[type="hidden"]').each(function() {
+                $(this).val('');
+            });
+            copy.find('.form-field-conjunction').prop('disabled', false);
+            form_field.after(copy);
+      link.remove();
+            copy.find('select.form-field-column').change();
+        }
+
+        function submitForm($form) {
+            var tr = ''
+                + '    <tr>'
+                + '      <th>' + _("Title") + '</th>'
+                + '      <th>' + _("Publication date") + '</th>'
+                + '      <th>' + _("Publisher") + '</th>'
+                + '      <th>' + _("Collection") + '</th>'
+                + '      <th>' + _("Barcode") + '</th>'
+                + '      <th>' + _("Call number") + '</th>'
+                + '      <th>' + _("Home library") + '</th>'
+                + '      <th>' + _("Current location") + '</th>'
+                + '      <th>' + _("Shelving location") + '</th>'
+                + '      <th>' + _("Inventory number") + '</th>'
+                + '      <th>' + _("Status") + '</th>'
+                + '      <th>' + _("Checkouts") + '</th>'
+                + '      <th></th>'
+                + '    </tr>'
+            var table = ''
+                + '<table id="results">'
+                + '  <thead>' + tr + tr + '</thead>'
+                + '  <tbody></tbody>'
+                + '</table>';
+
+            var advSearchLink = $('<a>')
+                .attr('href', '/cgi-bin/koha/catalogue/search.pl')
+                .html(_("Go to advanced search"));
+            var editSearchLink = $('<a>')
+                .attr('href', '#')
+                .html(_("Edit search"))
+                .addClass('btn btn-default btn-xs')
+                .on('click', function(e) {
+                    e.preventDefault();
+                    $('#item-search-block').show();
+                });
+
+            var csvExportLink = $('<a>')
+                .attr('href', '#')
+                .html(_("Export results to CSV"))
+                .addClass('btn btn-default btn-xs')
+                .on('click', function(e) {
+                    e.preventDefault();
+                    $('#format-csv').prop('checked', true);
+                    $('#itemsearchform').submit();
+                    $('#format-html').prop('checked', true);
+                });
+            var barcodesExportLink = $('<a>')
+                .attr('href', '#')
+                .html(_("Export results to barcodes file"))
+                .addClass('btn btn-default btn-xs')
+                .on('click', function(e) {
+                    e.preventDefault();
+                    $('#format-barcodes').prop('checked', true);
+                    $('#itemsearchform').submit();
+                    $('#format-html').prop('checked', true);
+              });
+
+            var editSearchAndExportLinks = $('<p>')
+                .append(editSearchLink)
+                .append(' | ')
+                .append(csvExportLink)
+                .append(' ')
+                .append(barcodesExportLink);
+
+            var results_heading = $('<div>').addClass('results-heading')
+                .append("<h1>" + _("Item search results") + "</h1>")
+                .append($('<p>').append(advSearchLink))
+                .append(editSearchAndExportLinks);
+            $('#results-wrapper').empty()
+                .append(results_heading)
+                .append(table);
+
+            var params = [];
+            $form.find('select').not(':disabled').find('option:selected').each(function () {
+                var name = $(this).parents('select').first().attr('name');
+                var value = $(this).val();
+                params.push({ 'name': name, 'value': value });
+            });
+            $form.find('input[type="text"],input[type="hidden"]').not(':disabled').each(function () {
+                params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+            });
+            $form.find('input[type="radio"]:checked').each(function() {
+                params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+            });
+
+            $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bDestroy': true,
+                'bServerSide': true,
+                'bProcessing': true,
+                'sAjaxSource': '/cgi-bin/koha/catalogue/itemsearch.pl',
+                'fnServerData': function(sSource, aoData, fnCallback) {
+                    aoData.push( { 'name': 'format', 'value': 'json' } );
+                    for (i in params) {
+                        aoData.push(params[i]);
+                    }
+                    $.ajax({
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'url': sSource,
+                        'data': aoData,
+                        'success': function(json){
+                            fnCallback(json);
+                        }
+                    });
+                },
+                'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
+                'aoColumns': [
+                    { 'sName': 'title' },
+                    { 'sName': 'publicationyear' },
+                    { 'sName': 'publishercode' },
+          { 'sName': 'ccode' },
+                    { 'sName': 'barcode' },
+                    { 'sName': 'itemcallnumber' },
+                    { 'sName': 'homebranch' },
+                    { 'sName': 'holdingbranch' },
+                    { 'sName': 'location' },
+                    { 'sName': 'stocknumber' },
+                    { 'sName': 'notforloan' },
+                    { 'sName': 'issues' },
+                    { 'sName': 'checkbox', 'bSortable': false }
+                ],
+                "sPaginationType": "full_numbers"
+            })).columnFilter({
+                'sPlaceHolder': 'head:after',
+                'aoColumns': [
+                    { 'type': 'text' },
+                    { 'type': 'text' },
+                    { 'type': 'text' },
+          { 'type': 'select', 'values': [% ccodes.json %] },
+                    { 'type': 'text' },
+                    { 'type': 'text' },
+                    { 'type': 'select', 'values': [% branches.json %] },
+                    { 'type': 'select', 'values': [% branches.json %] },
+                    [% IF locations.size %]
+                        { 'type': 'select', 'values': [% locations.json %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    { 'type': 'text' },
+                    [% IF notforloans.size %]
+                        { 'type': 'select', 'values': [% notforloans.json %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    { 'type': 'text' },
+                    null
+                ]
+            });
+        }
+
+        $(document).ready(function () {
+            $('#toolbar').fixFloat();
+            // Add the "New field" link.
+            var form_field = $('div.form-field-select-text').last()
+            var NEW_FIELD = _("New field");
+      var button_field_new = $('<a href="#" class="button-field-new" title="Add a new field"><i class="fa fa-plus"></i> ' + NEW_FIELD + '</a>');
+      button_field_new.click(function(e) {
+          e.preventDefault();
+          addNewField( $(this) );
+            });
+      form_field.append(button_field_new);
+
+            // If a field is linked to an authorised values list, display the list.
+            $('div.form-field-select-text select').change(function() {
+                loadAuthorisedValuesSelect($(this));
+            }).change();
+
+            // Prevent user to select the 'All ...' option with other options.
+            $('div.form-field-select').each(function() {
+                $(this).find('select').filter(':last').change(function() {
+                    values = $(this).val();
+                    if (values.length > 1) {
+                        var idx = $.inArray('', values);
+                        if (idx != -1) {
+                            values.splice(idx, 1);
+                            $(this).val(values);
+                        }
+                    }
+                });
+                $('#itemsearchform').submit(function() {
+                  var searchform = $(this);
+                  var format = searchform.find('input[name="format"]:checked').val();
+                  if (format == 'html') {
+                    submitForm(searchform);
+                    $("#item-search-block").hide();
+                    return false;
+                  }
+                });
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

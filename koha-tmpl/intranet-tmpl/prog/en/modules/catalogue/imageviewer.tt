@@ -1,26 +1,8 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Details for [% biblio.title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( LocalCoverImages == 1 ) %]
-<script type="text/JavaScript">
-//<![CDATA[
-
-$(document).ready(function(){
-    showCover([% imagenumber %]);
-    $(".show_cover").on("click",function(e){
-        e.preventDefault();
-        var coverimg = $(this).data("coverimg");
-        showCover(coverimg);
-    });
-});
-
-function showCover(img) {
-    $('.thumbnail').attr('class', 'thumbnail');
-    $('#largeCoverImg').attr('src', '/cgi-bin/koha/catalogue/image.pl?imagenumber=' + img);
-    $('#' + img + '.thumbnail').attr('class', 'thumbnail selected');
-}
-//]]>
-</script>
 <style type="text/css">
 #largeCoverImg {
     border : 1px solid #CCCCCC;
@@ -105,4 +87,26 @@ img.thumbnail {
 [% INCLUDE 'biblio-view-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'catalog-strings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            showCover([% imagenumber %]);
+            $(".show_cover").on("click",function(e){
+                e.preventDefault();
+                var coverimg = $(this).data("coverimg");
+                showCover(coverimg);
+            });
+        });
+
+        function showCover(img) {
+            $('.thumbnail').attr('class', 'thumbnail');
+            $('#largeCoverImg').attr('src', '/cgi-bin/koha/catalogue/image.pl?imagenumber=' + img);
+            $('#' + img + '.thumbnail').attr('class', 'thumbnail selected');
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

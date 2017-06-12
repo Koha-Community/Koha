@@ -1,23 +1,13 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% biblio.title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" id="js">
-$(document).ready(function() {
-    $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        "aaSorting": [[ 4, "desc" ]],
-        "sPaginationType": "full_numbers"
-    }));
-}); </script>
-
 </head>
+
 <body id="catalog_issuehistory" class="catalog">
 
 [% INCLUDE 'header.inc' %]
@@ -103,4 +93,20 @@ $(document).ready(function() {
 [% INCLUDE 'biblio-view-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+[% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" id="js">
+        $(document).ready(function() {
+            $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "aaSorting": [[ 4, "desc" ]],
+                "sPaginationType": "full_numbers"
+            }));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

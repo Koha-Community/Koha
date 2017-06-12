@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo;
   [% IF ( unknownbiblionumber ) %]
@@ -7,31 +8,8 @@
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'browser-strings.inc' %]
-<!--[if lt IE 9]>
-<script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
-<![endif]-->
-<script type="text/javascript" src="[% interface %]/js/browser.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
-    browser.show();
-
-	 $(document).ready(function() {
-        $('#bibliotabs').tabs();
-        $("#Frameworks").on("change",function(){
-            Changefwk(this);
-        });
-	 });
-
-function Changefwk(FwkList) {
-	var fwk = FwkList.options[FwkList.selectedIndex].value;
-	window.location = "MARCdetail.pl?biblionumber=[% biblionumber %]&frameworkcode="+fwk;
-}
-
-//]]>
-</script>
 </head>
+
 <body id="catalog_MARCdetail" class="catalog">
 
 [% INCLUDE 'header.inc' %]
@@ -197,4 +175,26 @@ function Changefwk(FwkList) {
 </div>
 [% END %]
 </div>
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'catalog-strings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog.js"></script>
+    [% INCLUDE 'browser-strings.inc' %]
+    <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+    <script type="text/javascript">
+        var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+        browser.show();
+
+         $(document).ready(function() {
+            $('#bibliotabs').tabs();
+            $("#Frameworks").on("change",function(){
+                Changefwk(this);
+            });
+         });
+
+        function Changefwk(FwkList) {
+            var fwk = FwkList.options[FwkList.selectedIndex].value;
+            window.location = "MARCdetail.pl?biblionumber=[% biblionumber %]&frameworkcode="+fwk;
+        }
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

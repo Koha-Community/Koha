@@ -1,117 +1,12 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% USE Koha %]
 [% USE KohaDates %]
 <title>Koha &rsaquo; Catalog &rsaquo; Search history</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    // We show table ordered by descending dates by default
-    // (so that the more recent query is shown first)
-    $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aaSorting": [[ 1, "desc" ]],
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-            { "aTargets": [ 1 ], "sType": "title-string" },
-        ],
-        "sPaginationType": "full_numbers"
-    }));
-
-    $('#tabs').tabs();
-
-    // DataTables removes hidden rows from the DOM, so we can't expect a
-    // "regular" submit to work and we need to build another form containing
-    // all form elements, and then submit this form.
-    $('#tabs form').submit(function(e) {
-        e.preventDefault();
-
-        var form = $(this);
-        var table = form.find('table').dataTable();
-
-        var new_form = $('<form>')
-            .attr('action', form.attr('action'))
-            .attr('method', form.attr('method'));
-        form.find('input[type="hidden"]')
-            .add(table.$('input:checkbox:checked'))
-            .each(function() {
-                var input = $('<input type="hidden">')
-                    .attr('name', $(this).attr('name'))
-                    .attr('value', $(this).attr('value'));
-                new_form.append(input);
-            });
-        $(document.body).append(new_form);
-        new_form.submit();
-    });
-
-    $(".CheckNone").click(function(e){
-        e.preventDefault();
-        var form = $(this).parents("form").first();
-        form.find('table input[type="checkbox"]').prop('checked', false);
-        enableCheckboxActions(form);
-    });
-    $(".CheckAll").click(function(e){
-        e.preventDefault();
-        var form = $(this).parents("form").first();
-        form.find('table input[type="checkbox"]').prop('checked', true);
-        enableCheckboxActions(form);
-    });
-
-    $('#tabs table').on('click', 'input:checkbox', function() {
-        var form = $(this).parents("form").first();
-        enableCheckboxActions(form);
-    });
-
-    $(".action_delete").click(function(e){
-        e.preventDefault();
-        var form = $(this).parents("form").first();
-        var table = form.find('table').dataTable();
-        var ids = table.$("input:checkbox:checked");
-        if ( $(ids).length < 1 ) {
-            return false;
-        }
-
-        var msg;
-        if (ids.length == 1) {
-          msg = _("Are you sure you want to delete the selected search history entry?");
-        } else {
-          msg = _("Are you sure you want to delete the %s selected search history entries?").format(ids.length);
-        }
-
-        if ( confirm(msg) ) {
-            form.submit();
-        }
-        return false;
-    });
-
-    $('#tabs form').each(function() {
-        enableCheckboxActions($(this));
-    });
-});
-
-function enableCheckboxActions(form){
-    // Enable/disable controls if checkboxes are checked
-    var table = form.find('table').dataTable();
-    var checked_count = table.$("input:checkbox:checked").length;
-    if (checked_count) {
-      if (checked_count == 1) {
-        form.find(".selections").html(_("With selected search: "));
-      } else {
-        form.find(".selections").html(_("With %s selected searches: ").format(checked_count));
-      }
-      form.find(".selections-toolbar .links a").removeClass("disabled");
-    } else {
-      form.find(".selections").html(_("Select searches to: "));
-      form.find(".selections-toolbar .links a").addClass("disabled");
-    }
-}
-
-//]]>
-
-</script>
 </head>
+
 <body id="catalogue_search-history" class="catalogue">
 
 [% INCLUDE 'header.inc' %]
@@ -295,4 +190,113 @@ function enableCheckboxActions(form){
     </div>
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function() {
+        // We show table ordered by descending dates by default
+        // (so that the more recent query is shown first)
+        $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aaSorting": [[ 1, "desc" ]],
+            "aoColumnDefs": [
+                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ 1 ], "sType": "title-string" },
+            ],
+            "sPaginationType": "full_numbers"
+        }));
+
+        $('#tabs').tabs();
+
+        // DataTables removes hidden rows from the DOM, so we can't expect a
+        // "regular" submit to work and we need to build another form containing
+        // all form elements, and then submit this form.
+        $('#tabs form').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var table = form.find('table').dataTable();
+
+            var new_form = $('<form>')
+                .attr('action', form.attr('action'))
+                .attr('method', form.attr('method'));
+            form.find('input[type="hidden"]')
+                .add(table.$('input:checkbox:checked'))
+                .each(function() {
+                    var input = $('<input type="hidden">')
+                        .attr('name', $(this).attr('name'))
+                        .attr('value', $(this).attr('value'));
+                    new_form.append(input);
+                });
+            $(document.body).append(new_form);
+            new_form.submit();
+        });
+
+        $(".CheckNone").click(function(e){
+            e.preventDefault();
+            var form = $(this).parents("form").first();
+            form.find('table input[type="checkbox"]').prop('checked', false);
+            enableCheckboxActions(form);
+        });
+        $(".CheckAll").click(function(e){
+            e.preventDefault();
+            var form = $(this).parents("form").first();
+            form.find('table input[type="checkbox"]').prop('checked', true);
+            enableCheckboxActions(form);
+        });
+
+        $('#tabs table').on('click', 'input:checkbox', function() {
+            var form = $(this).parents("form").first();
+            enableCheckboxActions(form);
+        });
+
+        $(".action_delete").click(function(e){
+            e.preventDefault();
+            var form = $(this).parents("form").first();
+            var table = form.find('table').dataTable();
+            var ids = table.$("input:checkbox:checked");
+            if ( $(ids).length < 1 ) {
+                return false;
+            }
+
+            var msg;
+            if (ids.length == 1) {
+              msg = _("Are you sure you want to delete the selected search history entry?");
+            } else {
+              msg = _("Are you sure you want to delete the %s selected search history entries?").format(ids.length);
+            }
+
+            if ( confirm(msg) ) {
+                form.submit();
+            }
+            return false;
+        });
+
+        $('#tabs form').each(function() {
+            enableCheckboxActions($(this));
+        });
+    });
+
+    function enableCheckboxActions(form){
+        // Enable/disable controls if checkboxes are checked
+        var table = form.find('table').dataTable();
+        var checked_count = table.$("input:checkbox:checked").length;
+        if (checked_count) {
+          if (checked_count == 1) {
+            form.find(".selections").html(_("With selected search: "));
+          } else {
+            form.find(".selections").html(_("With %s selected searches: ").format(checked_count));
+          }
+          form.find(".selections-toolbar .links a").removeClass("disabled");
+        } else {
+          form.find(".selections").html(_("Select searches to: "));
+          form.find(".selections-toolbar .links a").addClass("disabled");
+        }
+    }
+
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
