@@ -78,7 +78,7 @@ BEGIN {
       &PrepareSerialsData &GetNextExpected    &ModNextExpected
       &GetPreviousSerialid
 
-      &GetSuppliersWithLateIssues             &getsupplierbyserialid
+      &GetSuppliersWithLateIssues
       &GetDistributedTo   &SetDistributedTo
       &getroutinglist     &delroutingmember   &addroutingmember
       &reorder_members
@@ -1918,33 +1918,6 @@ sub updateClaim {
             status = ?
         WHERE serialid in (| . join( q|,|, (q|?|) x @$serialids ) . q|)|,
         {}, CLAIMED, @$serialids );
-}
-
-=head2 getsupplierbyserialid
-
-$result = getsupplierbyserialid($serialid)
-
-this function is used to find the supplier id given a serial id
-
-return :
-hashref containing serialid, subscriptionid, and aqbooksellerid
-
-=cut
-
-sub getsupplierbyserialid {
-    my ($serialid) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $sth        = $dbh->prepare(
-        "SELECT serialid, serial.subscriptionid, aqbooksellerid
-         FROM serial 
-            LEFT JOIN subscription ON serial.subscriptionid = subscription.subscriptionid
-            WHERE serialid = ?
-        "
-    );
-    $sth->execute($serialid);
-    my $line   = $sth->fetchrow_hashref;
-    my $result = $line->{'aqbooksellerid'};
-    return $result;
 }
 
 =head2 check_routing
