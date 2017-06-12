@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 35;
 use Test::MockModule;
 use Test::Mojo;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use DateTime;
@@ -35,11 +36,13 @@ use Koha::Patron;
 use Koha::Old::Checkout;
 use Koha::Old::Checkouts;
 
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
-$dbh->{RaiseError} = 1;
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
@@ -47,9 +50,6 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 
-$dbh->do('DELETE FROM issues');
-$dbh->do('DELETE FROM items');
-$dbh->do('DELETE FROM issuingrules');
 my $loggedinuser = $builder->build({ source => 'Borrower',
                                     value => { flags => 1, lost => 0 } });
 
@@ -173,29 +173,29 @@ subtest 'test sorting, limit and offset' => sub {
         issue_id => $id,
         borrowernumber => $borrowernumber,
         itemnumber => $itemnumber1,
-        date_due => '5000-01-01',
-        issuedate => '4999-12-01',
+        date_due => '2020-01-01',
+        issuedate => '2029-12-01',
     })->store;
     my $issue3 = Koha::Old::Checkout->new({
         issue_id => $id+1,
         borrowernumber => $borrowernumber,
         itemnumber => $itemnumber1,
-        date_due => '6000-01-01',
-        issuedate => '5999-12-01',
+        date_due => '2030-01-01',
+        issuedate => '2039-12-01',
     })->store;
     my $issue4 = Koha::Old::Checkout->new({
         issue_id => $id+2,
         borrowernumber => $borrowernumber,
         itemnumber => $itemnumber1,
-        date_due => '3000-01-01',
-        issuedate => '2999-12-01',
+        date_due => '2000-01-01',
+        issuedate => '2009-12-01',
     })->store;
     my $issue5 = Koha::Old::Checkout->new({
         issue_id => $id+3,
         borrowernumber => $borrowernumber,
         itemnumber => $itemnumber1,
-        date_due => '4000-01-01',
-        issuedate => '3999-12-01',
+        date_due => '2010-01-01',
+        issuedate => '2019-12-01',
     })->store;
 
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/history?borrowernumber=$borrowernumber");
@@ -288,6 +288,8 @@ $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(404)
   ->json_has('/error');
+
+$schema->storage->txn_rollback;
 
 sub create_biblio {
     my ($title) = @_;
