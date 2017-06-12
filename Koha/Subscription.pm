@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Biblios;
 
 use base qw(Koha::Object);
 
@@ -34,6 +35,18 @@ Koha::Subscription - Koha Subscription Object class
 =head2 Class Methods
 
 =cut
+
+=head3 biblio
+
+Returns the biblio linked to this subscription as a Koha::Biblio object
+
+=cut
+
+sub biblio {
+    my ($self) = @_;
+
+    return Koha::Biblios->find($self->biblionumber);
+}
 
 =head3 type
 
