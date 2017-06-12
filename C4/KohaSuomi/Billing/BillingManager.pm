@@ -441,7 +441,8 @@ sub RemovePayment {
 	$borrowernumber = $guarantor;
     }
 
-    my @notes = split( /\|/, C4::Context->preference("RemoveFineOnReturn") );
+    my $RemoveFineOnReturn = C4::Context->preference("RemoveFineOnReturn");
+    my @notes = $RemoveFineOnReturn ? split( /\|/, $RemoveFineOnReturn ) : undef;
 
     foreach my $note (@notes) {
         my $msth = $dbh->prepare("UPDATE accountlines SET amountoutstanding = 0 WHERE itemnumber = ? and borrowernumber = ? and accounttype = 'B' and note = ?");
