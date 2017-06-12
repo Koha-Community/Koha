@@ -252,6 +252,7 @@ if (scalar keys %params > 0) {
             print "$line\n" unless $line =~ m|^\s*$|;
         }
     } elsif ($format eq 'json') {
+        $template->param(sEcho => scalar $cgi->param('sEcho'));
         output_with_http_headers $cgi, $cookie, $template->output, 'json';
     }
 
