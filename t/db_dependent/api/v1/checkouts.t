@@ -35,18 +35,17 @@ use Koha::Account::Lines;
 use Koha::Database;
 use Koha::Patron;
 
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
-$dbh->{RaiseError} = 1;
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 
-$dbh->do('DELETE FROM issues');
-$dbh->do('DELETE FROM items');
-$dbh->do('DELETE FROM issuingrules');
 my $loggedinuser = $builder->build({
     source => 'Borrower',
     value => {
@@ -178,11 +177,14 @@ $t->request_ok($tx)
   ->json_like('/date_due' => qr/$date_due2\+\d\d:\d\d/);
 
 
-$dbh->do('DELETE FROM issuingrules');
-$dbh->do(q{
-    INSERT INTO issuingrules (categorycode, branchcode, itemtype, renewalperiod, renewalsallowed)
-    VALUES (?, ?, ?, ?, ?)
-}, {}, '*', '*', '*', 7, 1);
+Koha::IssuingRules->delete;
+Koha::IssuingRule->new({
+    categorycode => '*',
+    branchcode   => '*',
+    itemtype     => '*',
+    renewalperiod   => 7,
+    renewalsallowed => 1,
+})->store;
 
 my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
@@ -283,6 +285,8 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is({ renewable => Mojo::JSON->false, error => 'too_many' });
 
+$schema->storage->txn_rollback;
+
 sub create_biblio {
     my ($title) = @_;
 
@@ -301,6 +305,7 @@ sub create_item {
 
     my $item = {
         barcode => $barcode,
+        itype   => 'BK',
     };
 
     my $itemnumber = C4::Items::AddItem($item, $biblionumber);
