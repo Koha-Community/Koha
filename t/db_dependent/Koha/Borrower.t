@@ -35,7 +35,7 @@ testIsSuperuser();
 
 =head testIsSuperuser
 @UNIT_TEST
-Tests Koha::Borrower->isSuperuser()
+Tests Koha::Patron->isSuperuser()
 =cut
 
 sub testIsSuperuser {
