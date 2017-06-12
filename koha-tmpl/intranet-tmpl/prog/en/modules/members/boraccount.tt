@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
+[% USE AuthorisedValues %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -78,6 +79,7 @@
           [% CASE 'CR' %]Credit
           [% CASE %][% account.accounttype %]
         [%- END -%]
+        [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) %][% END %]
         [%- IF account.description %], [% account.description %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.item.biblio.title |html %]</a>[% END %]</td>
       <td>[% account.note | html_line_break %]</td>

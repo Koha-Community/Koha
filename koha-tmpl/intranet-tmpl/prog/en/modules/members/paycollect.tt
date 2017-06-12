@@ -1,6 +1,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% patron.firstname %] [% patron.surname %]</title>
@@ -86,6 +87,18 @@
             <!-- default to paying all -->
         <input name="paid" id="paid" value="[% amountoutstanding %]" />
     </li>
+    [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
+    [% IF payment_types %]
+        <li>
+            <label for="payment_type">Payment type: </label>
+            <select name="payment_type" id="payment_type">
+                <option value=""></option>
+                [% FOREACH pt IN payment_types %]
+                    <option value="[% pt.authorised_value %]">[% pt.lib %]</option>
+                [% END %]
+            </select>
+        </li>
+    [% END %]
 </ol>
 </fieldset>
 
@@ -153,6 +166,18 @@
         <!-- default to paying all -->
         <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
     </li>
+    [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
+    [% IF payment_types %]
+        <li>
+            <label for="payment_type">Payment type: </label>
+            <select name="payment_type" id="payment_type">
+                <option value=""></option>
+                [% FOREACH pt IN payment_types %]
+                    <option value="[% pt.authorised_value %]">[% pt.lib %]</option>
+                [% END %]
+            </select>
+        </li>
+    [% END %]
     <li>
         <label for="selected_accts_notes">Note: </label>
         <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes %]</textarea>

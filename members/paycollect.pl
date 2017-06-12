@@ -19,19 +19,21 @@
 
 use Modern::Perl;
 use URI::Escape;
+use CGI qw ( -utf8 );
+
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
+
 use Koha::Patrons;
+use Koha::Patron::Categories;
+use Koha::AuthorisedValues;
 use Koha::Account;
 use Koha::Token;
-
-use Koha::Patron::Categories;
 
 my $input = CGI->new();
 
@@ -66,6 +68,7 @@ my $writeoff     = $input->param('writeoff_individual');
 my $select_lines = $input->param('selected');
 my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
+my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
 
 if ( $individual || $writeoff ) {
@@ -118,10 +121,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             my $line = Koha::Account::Lines->find($accountlines_id);
             Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                 {
-                    lines      => [$line],
-                    amount     => $total_paid,
-                    library_id => $branch,
-                    note       => $payment_note
+                    lines        => [$line],
+                    amount       => $total_paid,
+                    library_id   => $branch,
+                    note         => $payment_note,
+                    payment_type => $payment_type,
                 }
             );
             print $input->redirect(
@@ -149,21 +153,25 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     }
                   )->pay(
                     {
-                        amount => $total_paid,
-                        lines  => \@lines,
-                        note   => $note,
+                        amount       => $total_paid,
+                        lines        => \@lines,
+                        note         => $note,
+                        payment_type => $payment_type,
                     }
                   );
             }
             else {
                 my $note = $input->param('selected_accts_notes');
-                Koha::Account->new( { patron_id => $borrowernumber } )
-                  ->pay( { amount => $total_paid, note => $note } );
+                Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+                    {
+                        amount       => $total_paid,
+                        note         => $note,
+                        payment_type => $payment_type,
+                    }
+                );
             }
 
-            print $input->redirect(
-"/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
-            );
+            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
         }
     }
 } else {

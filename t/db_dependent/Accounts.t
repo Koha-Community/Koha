@@ -137,7 +137,7 @@ $dbh->do(q|DELETE FROM accountlines|);
 
 subtest "Koha::Account::pay tests" => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -175,7 +175,10 @@ subtest "Koha::Account::pay tests" => sub {
     my $borrowernumber = $borrower->borrowernumber;
     my $data = '20.00';
     my $payment_note = '$20.00 payment note';
-    $account->pay( { amount => $data, note => $payment_note } );
+    my $id = $account->pay( { amount => $data, note => $payment_note, payment_type => "TEST_TYPE" } );
+
+    my $accountline = Koha::Account::Lines->find( $id );
+    is( $accountline->payment_type, "TEST_TYPE", "Payment type passed into pay is set in account line correctly" );
 
     # There is now $280 in the account
     $sth = $dbh->prepare("SELECT amountoutstanding FROM accountlines WHERE borrowernumber=?");

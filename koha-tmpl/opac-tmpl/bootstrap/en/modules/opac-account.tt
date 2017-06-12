@@ -1,6 +1,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE AuthorisedValues %]
 [% USE Price %]
 [% SET ENABLE_OPAC_PAYMENTS = Koha.Preference('EnablePayPalOpacPayments') || plugins %]
 [% SET DISPLAY_PAYMENT_BLOCK = 0 %]
@@ -128,6 +129,7 @@
                                             [% CASE 'CR' %]Credit
                                             [% CASE %][% ACCOUNT_LINE.accounttype %]
                                           [%- END -%]
+                                          [%- IF ACCOUNT_LINE.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) %][% END %]
                                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description %][% END %]
                                           [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title %])[% END %]
                                         </td>

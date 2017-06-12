@@ -73,6 +73,7 @@ sub pay {
     my $library_id   = $params->{library_id};
     my $lines        = $params->{lines};
     my $type         = $params->{type} || 'payment';
+    my $payment_type = $params->{payment_type} || undef;
     my $account_type = $params->{account_type};
     my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
 
@@ -216,6 +217,7 @@ sub pay {
             amount            => 0 - $amount,
             description       => $description,
             accounttype       => $account_type,
+            payment_type      => $payment_type,
             amountoutstanding => 0 - $balance_remaining,
             manager_id        => $manager_id,
             note              => $note,
