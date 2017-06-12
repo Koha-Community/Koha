@@ -25,7 +25,11 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             extend: 'colvis',
             columns: included_ids,
             text: _("Column visibility"),
-        }
+        },
+        'excelHtml5',
+        'csvHtml5',
+        'copyHtml5',
+        'print',
     ];
 
     var table = $(selector);

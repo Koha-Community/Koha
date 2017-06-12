@@ -4,6 +4,9 @@
 [% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") %]
 [% Asset.js("lib/jquery/plugins/dataTables.buttons.min.js") %]
 [% Asset.js("lib/jquery/plugins/buttons.colVis.min.js") %]
+[% Asset.js("lib/jquery/plugins/jszip.min.js") %]
+[% Asset.js("lib/jquery/plugins/buttons.print.min.js") %]
+[% Asset.js("lib/jquery/plugins/buttons.html5.min.js") %]
 <script type="text/javascript">
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
