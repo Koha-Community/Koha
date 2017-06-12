@@ -104,13 +104,13 @@ validate the given input and make sure we get a Koha::Object or an Exception.
     }
 
     ### SOMEWHERE IN A SCRIPT FAR AWAY ###
-    my $borrower = Koha::Borrowers->cast('cardnumber');
-    my $borrower = Koha::Borrowers->cast($Koha::Borrower);
-    my $borrower = Koha::Borrowers->cast('userid');
-    my $borrower = Koha::Borrowers->cast('borrowernumber');
-    my $borrower = Koha::Borrowers->cast({borrowernumber => 123,
+    my $borrower = Koha::Patrons->cast('cardnumber');
+    my $borrower = Koha::Patrons->cast($Koha::Patron);
+    my $borrower = Koha::Patrons->cast('userid');
+    my $borrower = Koha::Patrons->cast('borrowernumber');
+    my $borrower = Koha::Patrons->cast({borrowernumber => 123,
                                         });
-    my $borrower = Koha::Borrowers->cast({firstname => 'Olli-Antti',
+    my $borrower = Koha::Patrons->cast({firstname => 'Olli-Antti',
                                                     surname => 'Kivi',
                                                     address => 'Koskikatu 25',
                                                     cardnumber => '11A001',
