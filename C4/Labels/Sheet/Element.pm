@@ -263,7 +263,7 @@ sub flattenCustomAttr {
     my $ca = $self->getCustomAttr();
 
     my @sb;
-    while (my ($key, $value) = each($ca)) {
+    while (my ($key, $value) = each(%$ca)) {
         push(@sb, "$key=$value");
     }
     return join(',', @sb);

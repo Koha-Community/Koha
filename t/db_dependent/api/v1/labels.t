@@ -27,8 +27,7 @@ use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
-use Koha::Account::Line;
-use Koha::PaymentsTransaction;
+use Koha::Auth::PermissionManager;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -46,6 +45,8 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_begin;
 
     my ($borrowernumber, $sessionid) = create_user_and_session();
+    Koha::Auth::PermissionManager->new->grantPermission(
+                            $borrowernumber, "labels", "sheets_get");
 
     # Test list.
     my $tx = $t->ua->build_tx(GET => "/api/v1/labels/sheets");
@@ -62,6 +63,8 @@ subtest 'list_sheet_versions() tests' => sub {
     $schema->storage->txn_begin;
 
     my ($borrowernumber, $sessionid) = create_user_and_session();
+    Koha::Auth::PermissionManager->new->grantPermission(
+                            $borrowernumber, "labels", "sheets_get");
 
     # Test list.
     my $tx = $t->ua->build_tx(GET => "/api/v1/labels/sheets/version");

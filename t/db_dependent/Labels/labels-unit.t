@@ -245,6 +245,7 @@ sub C4LabelsDataSourceSelector {
 
 subtest "Label Printing List" => \&labelPrintingList;
 sub labelPrintingList {
+    ok(1, 'no tests (why are they commented out?)');
     # eval {
     # C4::VirtualShelves::addItemToLabelPrintingList($biblio->{biblionumber}, $borrower->borrowernumber, $items->{'1N001'}->itemnumber);
     # C4::VirtualShelves::addItemToList($biblio->{biblionumber}, 'labels printing', $borrower->borrowernumber, $items->{'1N002'}->itemnumber);

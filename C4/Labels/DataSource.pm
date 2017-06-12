@@ -157,11 +157,11 @@ sub public_itemtype {
     my ($params) = @_;
     my $item = $params->[0]->{item};
     my $it = Koha::ItemTypes->find($item->{itype});
-    if (Encode::is_utf8($it->{description})) {
-        return $it->{description};
+    if (Encode::is_utf8($it->description)) {
+        return $it->description;
     }
     else {
-        return Encode::decode('UTF-8', $it->{description});
+        return Encode::decode('UTF-8', $it->description);
     }
 }
 
