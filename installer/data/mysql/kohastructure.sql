@@ -2685,6 +2685,7 @@ CREATE TABLE `accountlines` (
   `description` LONGTEXT,
   `dispute` LONGTEXT,
   `accounttype` varchar(5) default NULL,
+  `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
   `amountoutstanding` decimal(28,6) default NULL,
   `lastincrement` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
