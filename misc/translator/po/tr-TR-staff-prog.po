@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "POT-Creation-Date: 2017-05-15 03:48-0300\n"
-"PO-Revision-Date: 2017-04-18 11:53+0000\n"
-"Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
+"PO-Revision-Date: 2017-06-01 07:54+0000\n"
+"Last-Translator: Ugur <ugurbulgan@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1492516408.000000\n"
+"X-POOTLE-MTIME: 1496303649.000000\n"
 
 #. %1$s:  data.borrowernumber 
 #. %2$s:  UNLESS loop.last 
@@ -1120,7 +1120,7 @@ msgstr "%s %s (tutulan kayıt) %s"
 #. %10$s:  m.code 
 #. %11$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s An error occurred when updating this CSV profile. Perhaps it already "
 "exists. %s An error occurred when adding this CSV profile. %s An error "
@@ -1128,11 +1128,11 @@ msgid ""
 "updated successfully. %s CSV profile added successfully. %s CSV profile "
 "deleted successfully. %s This CSV profile already exists. %s %s %s "
 msgstr ""
-"%s %s Bu şehir güncellenirken bir hata oluştu. Zaten mevcut olabilir. %s Bu "
-"şehir eklenirken bir hata oluştu. Şehir kimliği zaten mevcut olabilir. %s Bu "
-"şehir silinirken bir hata oluştu. Sistem günlüklerini kontrol edin. %s Şehir "
-"başarıyla güncellendi. %s Şehir başarıyla eklendi. %s Şehir başarıyla "
-"silindi. %s Bu şehir zaten mevcut. %s %s %s"
+"%s %s Bu CSV profili güncellenirken bir hata oluştu. Zaten mevcut olabilir. %"
+"s Bu CSV profili eklenirken bir hata oluştu. %s Bu CSV profili silinirken "
+"bir hata oluştu. Sistem günlüklerini kontrol edin. %s CSV profili başarıyla "
+"güncellendi. %s CSV profili başarıyla eklendi. %s CSV profili başarıyla "
+"silindi. %s Bu CSV profili zaten var. %s %s %s"
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -2510,6 +2510,8 @@ msgid ""
 "%s %sThe file used does not have a valid format. Only csv and txt are "
 "allowed. %s%s %s "
 msgstr ""
+"%s %sKullanılan dosya geçerli bir biçimde değil. Sadece csv ve txt'e izin "
+"verilir. %s%s %s"
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
@@ -3379,9 +3381,9 @@ msgstr "%s İlk geciktirme %s %s İkinci geciktirme %s %s Üçüncü geciktirme 
 #. %3$s:  value.lib 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:185
-#, fuzzy, c-format
+#, c-format
 msgid "%s For loan %s %s %s "
-msgstr "%s aylar %s%s %s"
+msgstr "%s Ödünç vermek için %s%s %s"
 
 #. For the first occurrence,
 #. %1$s:  authtypecode 
@@ -4274,9 +4276,9 @@ msgstr "%s Bu bütçe için alınmayan sipariş bulunmamaktadır."
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:256
-#, fuzzy, c-format
+#, c-format
 msgid "%s There is no CSV profile defined. "
-msgstr "%s Tanımlanmış alan bulunmamaktadır. %s %s %s"
+msgstr "%s Tanımlı CSV profili yoktur."
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4355,9 +4357,9 @@ msgstr "%s %s %s %s %s için tanımlanmış bir yetkili değer yok "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:211
-#, fuzzy, c-format
+#, c-format
 msgid "%s This CSV Profile does not exist. %s "
-msgstr "%s Böyle bir sipariş numarası yok. %s "
+msgstr "%s Bu CSV profili mevcut değildir. %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4498,6 +4500,8 @@ msgid ""
 "%s [%% IF csv_profile.encoding == encoding OR NOT csv_profile AND encoding "
 "== 'utf8' %%] "
 msgstr ""
+"%s [%% IF csv_profile.encoding == encoding OR NOT csv_profile AND encoding =="
+" 'utf8' %%]"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/about.tt:111
@@ -9561,9 +9565,8 @@ msgstr "5"
 
 #. META http-equiv=refresh
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:2
-#, fuzzy
 msgid "5; url=/cgi-bin/koha/mainpage.pl"
-msgstr "10; url=/cgi-bin/koha/mainpage.pl"
+msgstr "5; url=/cgi-bin/koha/mainpage.pl"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:160
@@ -12051,11 +12054,12 @@ msgstr "Bu listeyi silmek istediğinizden emin misiniz %s?"
 #. %1$s:  firstname 
 #. %2$s:  surname 
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:34
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Are you sure you want to delete the patron %s %s? This cannot be undone."
 msgstr ""
-"Bu kullanıcıyı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+"Bu kullanıcıyı silmek istediğinizden emin misiniz %s %s? Bu işlem geri "
+"alınamaz."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:5
@@ -13574,8 +13578,8 @@ msgid ""
 "Because the \"UseTransportCostMatrix\" system preference is currently not "
 "enabled, the transport cost matrix is not being used. Go "
 msgstr ""
-"\"UseTransportCostMatrix\" sistem tercihi şu anda kapalı olduğundan, aktarım "
-"maliyet matrisi kullanılamıyor. Bu özelliği açmak isterseniz tıklayın. "
+"\"UseTransportCostMatrix\" sistem tercihi şu anda kapalı olduğundan, nakliye "
+"maliyet matrisi kullanılamıyor. "
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:50
 #, c-format
@@ -14307,9 +14311,9 @@ msgid "CSV - %s"
 msgstr "CSV - %s"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:229
-#, fuzzy, c-format
+#, c-format
 msgid "CSV profile ID"
-msgstr "CSV profili:"
+msgstr "CSV profil kimliği"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:175
 #, c-format
@@ -14324,9 +14328,9 @@ msgid "CSV profiles"
 msgstr "CSV Profilleri"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:233
-#, fuzzy, c-format
+#, c-format
 msgid "CSV separator"
-msgstr "CSV separatör: "
+msgstr "CSV ayırıcı"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:142
 #, c-format
@@ -14334,9 +14338,9 @@ msgid "CSV separator: "
 msgstr "CSV separatör: "
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:234
-#, fuzzy, c-format
+#, c-format
 msgid "CSV type"
-msgstr "Ceza türü"
+msgstr "CSV türü"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:333
 #, c-format
@@ -17684,7 +17688,7 @@ msgid "Contains"
 msgstr "İçerir"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "Content"
 msgstr "İçindekiler"
 
@@ -18187,9 +18191,9 @@ msgid "Create SQL reports"
 msgstr "SQL raporları oluştur"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:258
-#, fuzzy, c-format
+#, c-format
 msgid "Create a new CSV profile"
-msgstr "Yeni bir şablon oluştur"
+msgstr "Yeni bir CSV profili oluştur"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:415
 #, c-format
@@ -19521,9 +19525,9 @@ msgstr "TÜM teslim edilen materyalleri sil"
 
 #. %1$s:  csv_profile.profile 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:203
-#, fuzzy, c-format
+#, c-format
 msgid "Delete CSV Profile \"%s?\""
-msgstr "CSV profili seçiniz:"
+msgstr "\"%s\" CSV profili silinsin mi?"
 
 #. %1$s:  ean.ean 
 #. %2$s:  ean.branch.branchname 
@@ -22687,25 +22691,26 @@ msgid "Fields to display in report:"
 msgstr "Raporda görüntülenecek alanlar:"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
 "as a filter: it is compatible with other parameters. (File types accepted: ."
 "csv and .txt)"
 msgstr ""
-"Her satırda bir authid ile authids listesini içeren bir dosya. Bu liste bir "
-"filtre olarak çalışır: Diğer parametrelerle uyumludur."
+"Her satırda bir authid bulunan bir authids listesi içeren dosya. Bu liste "
+"bir filtre işlevi görür: diğer parametrelerle uyumludur. (Kabul edilen dosya "
+"türleri: .csv ve .txt)"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File containing a list of biblio numbers with one biblio number per line. "
 "This list works as a filter: it is compatible with other parameters. (File "
 "types accepted: .csv and .txt)"
 msgstr ""
-"Her satır başına bir bibliyo numarası ile bibliyo numaralarının bir "
-"listesini içeren dosya. Bu liste bir filtre gibi çalışır: Diğer parametreler "
-"ile uyumludur."
+"Her satıra bir adet bibliyo numarası olan bibliyo numaraları listesini "
+"içeren dosya. Bu liste bir filtre işlevi görür: diğer parametrelerle "
+"uyumludur. (Kabul edilen dosya türleri: .csv ve .txt)"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:194
@@ -32377,9 +32382,9 @@ msgid "Modify SRU search fields mapping"
 msgstr "SRU arama alanları eşleştirmeyi düzenle"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "Modify a CSV profile"
-msgstr "Bir CSV dışa aktarım profilini değiştir ya da sil"
+msgstr "Bir CSV profili değiştir"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:134
 #, c-format
@@ -33010,9 +33015,9 @@ msgstr "Yeni %s sunucu"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:108
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:221
-#, fuzzy, c-format
+#, c-format
 msgid "New CSV profile"
-msgstr "Yeni profil"
+msgstr "Yeni CSV profili"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:44
 #, c-format
@@ -34138,7 +34143,6 @@ msgstr "Hayır, onaylamıyorum"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:210
-#, fuzzy
 msgid "No, do not Delete"
 msgstr "Hayır, Silmeyin"
 
@@ -36288,9 +36292,9 @@ msgid "Patron category: "
 msgstr "Kullanıcı kategorisi: "
 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:211
-#, fuzzy, c-format
+#, c-format
 msgid "Patron count"
-msgstr "Kullanıcı hesap işaretleri"
+msgstr "Kullanıcı sayısı"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:93
 #, c-format
@@ -38600,9 +38604,9 @@ msgid "Profile ID"
 msgstr "Profil kimliği"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "Profile ID: "
-msgstr "Profil kimliği"
+msgstr "Profil kimliği:"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:175
 #, c-format
@@ -47316,13 +47320,13 @@ msgid "To item call number: "
 msgstr "Materyal yer numarasına: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:137
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "To modify a rule, create a new one with the same patron category and item "
 "type."
 msgstr ""
-"Bir kuralı değiştirmek için, aynı kullanıcı türü ve materyal türü ile yeni "
-"bir tane oluştur."
+"Bir kuralı değiştirmek için, aynı kullanıcı kategorisine ve materyal türüne "
+"sahip yeni bir kural oluşturun."
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:268
 #, c-format
@@ -48372,7 +48376,7 @@ msgstr "Bilinmeyen hata."
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:303
 #, c-format
 msgid "Unknown not-for-loan status"
-msgstr ""
+msgstr "Bilinmeyen ödünç verilmez durumu"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:50
 #, c-format
@@ -51871,27 +51875,30 @@ msgid "days ago"
 msgstr "gün önce"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:135
-#, fuzzy, c-format
+#, c-format
 msgid "default (all libraries), all patron categories, all item types"
 msgstr ""
-"varsayılan (tüm kütüphaneler), tüm kullanıcı türleri, tüm materyal türleri"
+"varsayılan (tüm kütüphaneler), tüm kullanıcı kategorileri, tüm materyal "
+"türleri"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:134
-#, fuzzy, c-format
+#, c-format
 msgid "default (all libraries), all patron categories, same item type"
 msgstr ""
-"varsayılan (tüm kütüphaneler), tüm kullanıcı türleri, aynı materyal türü"
+"varsayılan (tüm kütüphaneler), tüm kullanıcı kategorileri, aynı materyal türü"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:133
-#, fuzzy, c-format
+#, c-format
 msgid "default (all libraries), same patron category, all item types"
 msgstr ""
-"varsayılan (tüm kütüphaneler), aynı kullanıcı türü, tüm materyal türleri"
+"varsayılan (tüm kütüphaneler), aynı kullanıcı kategorisi, tüm materyal "
+"türleri"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:132
-#, fuzzy, c-format
+#, c-format
 msgid "default (all libraries), same patron category, same item type"
-msgstr "varsayılan (tüm kütüphaneler), aynı kullanıcı türü, aynı materyal türü"
+msgstr ""
+"varsayılan (tüm kütüphaneler), aynı kullanıcı kategorisi, aynı materyal türü"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:24
 #, c-format
@@ -52945,24 +52952,24 @@ msgid "s/"
 msgstr "s/"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:131
-#, fuzzy, c-format
+#, c-format
 msgid "same library, all patron categories, all item types"
-msgstr "aynı kütüphane, tüm kullanıcı türleri, tüm materyal türleri"
+msgstr "aynı kütüphane, tüm kullanıcı kategorileri, tüm materyal türleri"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:130
-#, fuzzy, c-format
+#, c-format
 msgid "same library, all patron categories, same item type"
-msgstr "aynı kütüphane, aynı kullanıcı türü, aynı materyal türü"
+msgstr "aynı kütüphane, aynı kullanıcı kategorileri, aynı materyal türü"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "same library, same patron category, all item types"
-msgstr "aynı kütüphane, aynı üye türü, tüm materyal türleri"
+msgstr "aynı kütüphane, aynı kullanıcı kategorisi, tüm materyal türleri"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:128
-#, fuzzy, c-format
+#, c-format
 msgid "same library, same patron category, same item type"
-msgstr "aynı kütüphane, aynı kullanıcı türü, aynı materyal türü"
+msgstr "aynı kütüphane, aynı kullanıcı kategorisi, aynı materyal türü"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
 #, c-format
