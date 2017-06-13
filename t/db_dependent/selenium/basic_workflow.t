@@ -1,12 +1,34 @@
-use Modern::Perl;
+#!/usr/bin/perl
 
-#die "Do NOT execute this script on a production server, it could affect your data\n Edit it and remove this line if you really want to use it";
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+
+
+# wget https://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar # Does not work with 3.4, did not test the ones between
+# sudo apt-get install xvfb firefox-esr
+# SELENIUM_PATH=/home/vagrant/selenium-server-standalone-2.53.1.jar
+# Xvfb :1 -screen 0 1024x768x24 2>&1 >/dev/null &
+# DISPLAY=:1 java -jar $SELENIUM_PATH
+
+use Modern::Perl;
 
 use Time::HiRes qw(gettimeofday);
 use C4::Context;
 use C4::Biblio qw( AddBiblio ); # We shouldn't use it
 
-use Selenium::Remote::Driver;
 use Test::More tests => 20;
 use MARC::Record;
 use MARC::Field;
@@ -32,119 +54,118 @@ our $sample_data = {
         password2  => 'password'
     },
 };
+our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
 
+SKIP: {
+    eval { require Selenium::Remote::Driver; };
+    skip "Selenium::Remote::Driver is needed for selenium tests.", 20 if $@;
 
-#my $form_data;
-#while ( my ($entity_name, $values) = each %$sample_data ) {
-#    while ( my ( $field, $value ) = each %$values ) {
-#        push @{ $form_data->{$entity_name} }, { field => $field, value => $value };
-#    }
-#}
+    $cleanup_needed = 1;
 
-open our $fh, '>>', '/tmp/output.txt';
+    open my $fh, '>>', '/tmp/output.txt';
 
-my $driver = Selenium::Remote::Driver->new;
-our $start = gettimeofday;
-our $prev_time = $start;
-$driver->get($base_url."mainpage.pl");
-like( $driver->get_title(), qr(Log in to Koha), );
-auth( $driver, $login, $password );
-time_diff("main");
+    my $driver = Selenium::Remote::Driver->new;
+    $start = gettimeofday;
+    $prev_time = $start;
+    $driver->get($base_url."mainpage.pl");
+    like( $driver->get_title(), qr(Log in to Koha), );
+    auth( $driver, $login, $password );
+    time_diff("main");
 
-$driver->get($base_url.'admin/categories.pl');
-like( $driver->get_title(), qr(Patron categories), );
-$driver->find_element('//a[@id="newcategory"]')->click;
-like( $driver->get_title(), qr(New category), );
-fill_form( $driver, $sample_data->{category} );
-$driver->find_element('//input[@type="button"]')->click;
+    $driver->get($base_url.'admin/categories.pl');
+    like( $driver->get_title(), qr(Patron categories), );
+    $driver->find_element('//a[@id="newcategory"]')->click;
+    like( $driver->get_title(), qr(New category), );
+    fill_form( $driver, $sample_data->{category} );
+    $driver->find_element('//input[@type="button"]')->click;
 
-time_diff("add patron category");
-$driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
-like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
-fill_form( $driver, $sample_data->{patron} );
-$driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click;
-like( $driver->get_title(), qr(Patron details for $sample_data->{patron}{surname}), );
+    time_diff("add patron category");
+    $driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
+    like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
+    fill_form( $driver, $sample_data->{patron} );
+    $driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click;
+    like( $driver->get_title(), qr(Patron details for $sample_data->{patron}{surname}), );
 
-####$driver->get($base_url.'/members/members-home.pl');
-####fill_form( $driver, { searchmember => $sample_data->{patron}{cardnumber} } );
-####$driver->find_element('//div[@id="header_search"]/div/form/input[@type="submit"]')->click;
-####like( $driver->get_title(), qr(Patron details for), );
+    ####$driver->get($base_url.'/members/members-home.pl');
+    ####fill_form( $driver, { searchmember => $sample_data->{patron}{cardnumber} } );
+    ####$driver->find_element('//div[@id="header_search"]/div/form/input[@type="submit"]')->click;
+    ####like( $driver->get_title(), qr(Patron details for), );
 
-time_diff("add patron");
+    time_diff("add patron");
 
-our $borrowernumber = $dbh->selectcol_arrayref(q|SELECT borrowernumber FROM borrowers WHERE userid=?|, {}, $sample_data->{patron}{userid} );
-$borrowernumber = $borrowernumber->[0];
+    $borrowernumber = $dbh->selectcol_arrayref(q|SELECT borrowernumber FROM borrowers WHERE userid=?|, {}, $sample_data->{patron}{userid} )->[0];
 
-my @biblionumbers;
-for my $i ( 1 .. $number_of_biblios_to_insert ) {
-    my $biblio = MARC::Record->new();
-    my $title = 'test biblio '.$i;
-    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-        $biblio->append_fields(
-            MARC::Field->new('200', ' ', ' ', a => 'test biblio '.$i),
-            MARC::Field->new('200', ' ', ' ', f => 'test author '.$i),
-        );
-    } else {
-        $biblio->append_fields(
-            MARC::Field->new('245', ' ', ' ', a => 'test biblio '.$i),
-            MARC::Field->new('100', ' ', ' ', a => 'test author '.$i),
-        );
-    }
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
-    push @biblionumbers, $biblionumber;
-}
-
-time_diff("add biblio");
-
-my $itemtype = $dbh->selectcol_arrayref(q|SELECT itemtype FROM itemtypes|);
-$itemtype = $itemtype->[0];
-
-for my $biblionumber ( @biblionumbers ) {
-    $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
-    like( $driver->get_title(), qr(test biblio \d+ by test author), );
-    my $form = $driver->find_element('//form[@name="f"]');
-    my $inputs = $driver->find_child_elements($form, '//input[@type="text"]');
-    for my $input ( @$inputs ) {
-        next if $input->is_hidden();
-        $input->send_keys('t_value_bib'.$biblionumber);
+    my @biblionumbers;
+    for my $i ( 1 .. $number_of_biblios_to_insert ) {
+        my $biblio = MARC::Record->new();
+        my $title = 'test biblio '.$i;
+        if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
+            $biblio->append_fields(
+                MARC::Field->new('200', ' ', ' ', a => 'test biblio '.$i),
+                MARC::Field->new('200', ' ', ' ', f => 'test author '.$i),
+            );
+        } else {
+            $biblio->append_fields(
+                MARC::Field->new('245', ' ', ' ', a => 'test biblio '.$i),
+                MARC::Field->new('100', ' ', ' ', a => 'test author '.$i),
+            );
+        }
+        my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+        push @biblionumbers, $biblionumber;
     }
 
-    $driver->find_element('//input[@name="add_submit"]')->click;
-    like( $driver->get_title(), qr($biblionumber.*Items) );
+    time_diff("add biblio");
 
-    $dbh->do(q|UPDATE items SET notforloan=0 WHERE biblionumber=?|, {}, $biblionumber );
-    $dbh->do(q|UPDATE biblioitems SET itemtype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
-    $dbh->do(q|UPDATE items SET itype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
-}
+    my $itemtype = $dbh->selectcol_arrayref(q|SELECT itemtype FROM itemtypes|);
+    $itemtype = $itemtype->[0];
 
-time_diff("add items");
+    for my $biblionumber ( @biblionumbers ) {
+        $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
+        like( $driver->get_title(), qr(test biblio \d+ by test author), );
+        my $form = $driver->find_element('//form[@name="f"]');
+        my $inputs = $driver->find_child_elements($form, '//input[@type="text"]');
+        for my $input ( @$inputs ) {
+            next if $input->is_hidden();
+            $input->send_keys('t_value_bib'.$biblionumber);
+        }
 
-my $nb_of_checkouts = 0;
-for my $biblionumber ( @biblionumbers ) {
-    $driver->get($base_url."/circ/circulation.pl?borrowernumber=".$borrowernumber);
-    $driver->find_element('//input[@id="barcode"]')->send_keys('t_value_bib'.$biblionumber);
-    $driver->find_element('//fieldset[@id="circ_circulation_issue"]/button[@type="submit"]')->click;
-    $nb_of_checkouts++;
-    like( $driver->get_title(), qr(Checking out to $sample_data->{patron}{surname}) );
-    is( $driver->find_element('//a[@href="#checkouts"]')->get_attribute('text'), $nb_of_checkouts.' Checkout(s)', );
-}
+        $driver->find_element('//input[@name="add_submit"]')->click;
+        like( $driver->get_title(), qr($biblionumber.*Items) );
 
-time_diff("checkout");
+        $dbh->do(q|UPDATE items SET notforloan=0 WHERE biblionumber=?|, {}, $biblionumber );
+        $dbh->do(q|UPDATE biblioitems SET itemtype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
+        $dbh->do(q|UPDATE items SET itype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
+    }
 
-for my $biblionumber ( @biblionumbers ) {
-    $driver->get($base_url."/circ/returns.pl");
-    $driver->find_element('//input[@id="barcode"]')->send_keys('t_value_bib'.$biblionumber);
-    $driver->find_element('//form[@id="checkin-form"]/div/fieldset/input[@type="submit"]')->click;
-    like( $driver->get_title(), qr(Check in test biblio \d+) );
-}
+    time_diff("add items");
 
-time_diff("checkin");
+    my $nb_of_checkouts = 0;
+    for my $biblionumber ( @biblionumbers ) {
+        $driver->get($base_url."/circ/circulation.pl?borrowernumber=".$borrowernumber);
+        $driver->find_element('//input[@id="barcode"]')->send_keys('t_value_bib'.$biblionumber);
+        $driver->find_element('//fieldset[@id="circ_circulation_issue"]/button[@type="submit"]')->click;
+        $nb_of_checkouts++;
+        like( $driver->get_title(), qr(Checking out to $sample_data->{patron}{surname}) );
+        is( $driver->find_element('//a[@href="#checkouts"]')->get_attribute('text'), $nb_of_checkouts.' Checkout(s)', );
+    }
 
-close $fh;
-$driver->quit();
+    time_diff("checkout");
+
+    for my $biblionumber ( @biblionumbers ) {
+        $driver->get($base_url."/circ/returns.pl");
+        $driver->find_element('//input[@id="barcode"]')->send_keys('t_value_bib'.$biblionumber);
+        $driver->find_element('//form[@id="checkin-form"]/div/fieldset/input[@type="submit"]')->click;
+        like( $driver->get_title(), qr(Check in test biblio \d+) );
+    }
+
+    time_diff("checkin");
+
+    close $fh;
+    $driver->quit();
+};
 
 END {
-    cleanup();
+    cleanup() if $cleanup_needed;
 };
 
 sub auth {
