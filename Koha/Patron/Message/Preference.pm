@@ -321,8 +321,11 @@ sub TO_JSON {
                                 0+$self->days_in_advance : undef
     };
     $json->{'digest'} = {
-        configurable => $pref->{'has_digest'} ?
-                            Mojo::JSON->true : Mojo::JSON->false,
+        configurable => $self->wants_digest
+                            ? $pref->{'has_digest_off'} # can digest be unchecked?
+                                    ? Mojo::JSON->true : Mojo::JSON->false
+                            : $pref->{'has_digest'}     # can digest be checked?
+                                    ? Mojo::JSON->true : Mojo::JSON->false,
         value => $self->wants_digest ? Mojo::JSON->true : Mojo::JSON->false
     };
 
