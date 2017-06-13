@@ -279,6 +279,30 @@ sub expanded {
     return $c->render( status => 200, openapi => $checkouts_json );
 }
 
+sub deletehistory {
+    my $c = shift->openapi->valid_input or return;
+
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $patron;
+    return try {
+        my $patrons = Koha::Patrons->search({
+            'me.borrowernumber' => $borrowernumber
+        });
+        $patrons->anonymise_issue_history;
+        $patron = $patrons->next;
+
+        return $c->render( status => 200, openapi => {} );
+    }
+    catch {
+        unless ($patron) {
+            return $c->render( status => 404, openapi => {
+                error => "Patron doesn't exist"
+            });
+        }
+        Koha::Exceptions::rethrow_exception($_);
+    };
+}
+
 sub _opac_renewal_allowed {
     my ($user, $borrowernumber) = @_;
 

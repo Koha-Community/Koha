@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 35;
+use Test::More tests => 36;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -279,6 +279,60 @@ subtest 'test sorting, limit and offset' => sub {
       ->json_is('/records/1/issue_id' => $issue2->issue_id)
       ->json_is('/records/2/issue_id' => $issue5->issue_id)
       ->json_is('/records/3/issue_id' => $issue4->issue_id);
+};
+
+subtest 'delete() tests' => sub {
+    plan tests => 8;
+
+    my $anonymous_patron = $builder->build({
+        source => 'Borrower'
+    })->{borrowernumber};
+    t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_patron);
+
+    my $id = Koha::Old::Checkouts->search({}, {
+        order_by => {'-desc' => 'issue_id'}})->next;
+    $id = ($id) ? $id->issue_id+1 : 1;
+
+    my $issue1 = Koha::Old::Checkout->new({
+        issue_id => $id,
+        borrowernumber => $nopermission->{borrowernumber},
+        itemnumber => $itemnumber1,
+    })->store;
+    my $issue2 = Koha::Old::Checkout->new({
+        issue_id => $id+1,
+        borrowernumber => $nopermission->{borrowernumber},
+        itemnumber => $itemnumber1,
+    })->store;
+
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/checkouts/history"
+        ."?borrowernumber=".($borrowernumber+1));
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(403);
+
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/checkouts/history"
+        ."?borrowernumber=".$nopermission->{borrowernumber});
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    is(Koha::Old::Checkouts->search({
+        borrowernumber => $anonymous_patron,
+        issue_id => { 'in' => [$id, $id+1] }
+    })->count, 2, 'Found anonymized checkouts (anonymous patron)');
+
+    t::lib::Mocks::mock_preference('AnonymousPatron', undef);
+
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/checkouts/history"
+        ."?borrowernumber=$anonymous_patron");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    is(Koha::Old::Checkouts->search({
+        borrowernumber => undef,
+        issue_id => { 'in' => [$id, $id+1] }
+    })->count, 2, 'Found anonymized checkouts (undef patron)');
 };
 
 Koha::Patrons->find($borrowernumber)->delete();
