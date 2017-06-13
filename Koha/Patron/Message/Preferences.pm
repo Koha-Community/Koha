@@ -86,7 +86,8 @@ sub get_options {
         $choices->{$name}->{'message_attribute_id'} = $transport->message_attribute_id;
         $choices->{$name}->{'message_name'}         = $name;
         $choices->{$name}->{'takes_days'}           = $transport->get_column('takes_days');
-        $choices->{$name}->{'has_digest'}           = 1 if $transport->is_digest;
+        $choices->{$name}->{'has_digest'}           = $transport->is_digest ? 1 : 0;
+        $choices->{$name}->{'has_digest_off'}       = !$transport->is_digest ? 1 : 0;
         $choices->{$name}->{'transport_'.$transport->get_column('message_transport_type')} = ' ';
     }
 
