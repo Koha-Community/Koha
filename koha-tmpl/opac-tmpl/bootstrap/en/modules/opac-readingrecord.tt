@@ -139,7 +139,7 @@
                     </td>
                     <td>
                         [% SET normalized_isbn = biblio.normalized_isbn %]
-                        [% IF OPACAmazonCoverImages %]
+                        [% IF Koha.Preference('OPACAmazonCoverImages') %]
                             [% IF normalized_isbn %]
                                 <a href="http://www.amazon.com/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"
                                     ><img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail"
@@ -149,7 +149,7 @@
                             [% END %]
                         [% END %]
 
-                        [% IF GoogleJackets %]
+                        [% IF Koha.Preference( "GoogleJackets" ) %]
                             [% IF normalized_isbn %]
                                 <div title="[% biblio.biblionumber |url %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                             [% ELSE %]
@@ -157,13 +157,13 @@
                             [% END %]
                         [% END %]
 
-                        [% IF BakerTaylorEnabled || SyndeticsEnabled && SyndeticsCoverImages %]
+                        [% IF Koha.Preference( "BakerTaylorEnabled" ) || Koha.Preference( "SyndeticsEnabled" ) && Koha.Preference( "SyndeticsCoverImages" ) %]
                             [% SET normalized_upc = biblio.normalized_upc %]
                         [% END %]
-                        [% IF BakerTaylorEnabled %]
+                        [% IF Koha.Preference( "BakerTaylorEnabled" ) %]
                             [% bt_id = ( normalized_upc || normalized_isbn ) %]
                             [% IF ( bt_id ) %]
-                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                <a href="https://[% Koha.Preference( "BakerTaylorBookstoreURL" ) | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                             [% ELSE %]
                                 <span class="no-image">No cover image available</span>
                             [% END %]

@@ -89,18 +89,10 @@ my $old_checkouts = [
 
 if ( C4::Context->preference('BakerTaylorEnabled') ) {
     $template->param(
-        JacketImages            => 1,
-        BakerTaylorEnabled      => 1,
-        BakerTaylorImageURL     => &image_url(),
-        BakerTaylorLinkURL      => &link_url(),
-        BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+        JacketImages        => 1,
+        BakerTaylorImageURL => &image_url(),
+        BakerTaylorLinkURL  => &link_url(),
     );
-}
-
-for (qw(AmazonCoverImages GoogleJackets)) {    # BakerTaylorEnabled handled above
-    C4::Context->preference($_) or next;
-    $template->param( $_           => 1 );
-    $template->param( JacketImages => 1 );
 }
 
 my $saving_display = C4::Context->preference('OPACShowSavings');
