@@ -69,12 +69,11 @@
                 [% INCLUDE 'patroncards-errors.inc' %]
                 <div class="yui-g">
                     <div class="yui-u first">
-                        <h1>Upload images</h1>
+                        <h1>Upload additional images for patron cards</h1>
+                        <p>Manage additional images to use as logo, decoration or background on a patron card layout.</p>
                         <form name="upload_images" method="post" action="/cgi-bin/koha/patroncards/image-manage.pl" enctype="multipart/form-data">
                             <fieldset class="brief">
-                                <div class="hint">
-                                    <b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported. Images <b>must</b> be less than 500KB.
-                                </div>
+                                <div class="hint">Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 500KB.</div>
                                 <ol>
                                 <li>
                                     <label for="uploadfile">Select the file to upload: </label>
@@ -86,6 +85,10 @@
                                     <div class="hint">
                                         This will be the name by which you will refer to this image in the patron card layout editor.
                                     </div>
+                                    <div class="hint">
+                                        To replace an image, delete it, upload a new file and give it the same image name.
+                                    </div>
+
                                     <input type="text" id="image_name" name="image_name" size="20" />
                                 </li>
                                 </ol>
