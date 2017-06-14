@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 96;
+use Test::More tests => 98;
 
 use DateTime;
 
@@ -460,6 +460,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $now = dt_from_string();
     my $five_weeks = DateTime::Duration->new(weeks => 5);
     my $five_weeks_ago = $now - $five_weeks;
+    t::lib::Mocks::mock_preference('finesMode', 'production');
 
     my $passeddatedue1 = AddIssue($renewing_borrower, $barcode7, $five_weeks_ago);
     is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: " . $passeddatedue1->date_due);
@@ -489,10 +490,11 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
-
-    $fine = $schema->resultset('Accountline')->single( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $itemnumber7 } );
-    is( $fine->accounttype, 'F', 'Fine on renewed item is closed out properly' );
-    $fine->delete();
+    my $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $itemnumber7 } );
+    is( $fines->count, 2 );
+    is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
+    is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
+    $fines->delete();
 
     t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
