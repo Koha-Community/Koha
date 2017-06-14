@@ -90,7 +90,6 @@ function changeFramework(fw) {
     [% IF frameworkselect %]
           <li><label for="frameworkcode">Using framework:</label>
                       <select name="frameworkcode" id="frameworkcode">
-                                      <option value="Default">Default</option>
                                       [% FOREACH frameworkcodeloo IN frameworkselect %]
                                           [% IF frameworkcodeloo.authtypecode == frameworkcode1 %]
                                               <option value="[% frameworkcodeloo.value %]" selected="selected">
