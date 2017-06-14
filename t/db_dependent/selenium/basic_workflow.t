@@ -77,7 +77,7 @@ SKIP: {
     $driver->find_element('//a[@id="newcategory"]')->click;
     like( $driver->get_title(), qr(New category), );
     fill_form( $driver, $sample_data->{category} );
-    $driver->find_element('//input[@type="button"]')->click;
+    $driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click; #Fix for bug 16286
 
     time_diff("add patron category");
     $driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
