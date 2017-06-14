@@ -83,7 +83,7 @@ SKIP: {
     $driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
     like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
     fill_form( $driver, $sample_data->{patron} );
-    $driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click;
+    $driver->find_element('//button[@id="saverecord"]')->click; # Fix for bug 16400
     like( $driver->get_title(), qr(Patron details for $sample_data->{patron}{surname}), );
 
     ####$driver->get($base_url.'/members/members-home.pl');
