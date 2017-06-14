@@ -1930,6 +1930,8 @@ sub AddReturn {
 
             $circControlBranch = _GetCircControlBranch($item,$borrower);
             $is_overdue = $issue->is_overdue( $dropboxdate );
+        } else {
+            $is_overdue = $issue->is_overdue;
         }
 
         if ($borrowernumber) {
