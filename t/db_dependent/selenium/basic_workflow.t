@@ -126,6 +126,10 @@ SKIP: {
         my $inputs = $driver->find_child_elements($form, '//input[@type="text"]');
         for my $input ( @$inputs ) {
             next if $input->is_hidden();
+
+            my $id = $input->get_attribute('id');
+            next unless $id =~ m|^tag_952_subfield|;
+
             $input->send_keys('t_value_bib'.$biblionumber);
         }
 
