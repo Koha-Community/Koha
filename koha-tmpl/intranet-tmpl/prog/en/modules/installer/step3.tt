@@ -1,4 +1,3 @@
-[% BLOCK txt_continue %]Continue to the next step[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>Koha &rsaquo; Web installer &rsaquo;
@@ -71,7 +70,7 @@
                                  </p>
                             [% END %]
                         [% END %]
-                        <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                     </form>
                 [% END # / IF choosemarc %]
 
@@ -208,7 +207,7 @@
                         <div class="alert alert-success"><p>Database tables created</p></div>
                         <form action="install.pl" method="post">
                             <input type="hidden" name="step" value="3" />
-                            <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
+                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                         </form>
                     [% END %]
                 [% END # / IF importdatastructure %]
@@ -219,7 +218,7 @@
                     <form action="install.pl" method="post">
                         <input type="hidden" name="step" value="3" />
                         <input type="hidden" name="op" value="importdatastructure" />
-                        <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                     </form>
                 [% END # / proposeimport %]
 
@@ -231,7 +230,7 @@
                     [% ELSE %]
                         <h2>Web installer &rsaquo; Install basic configuration settings</h2>
                         <p>We are ready to do some basic configuration.</p>
-                        <p><a href="install.pl?step=3&amp;op=choosemarc" class="btn btn-primary">[% INCLUDE txt_continue %]</a></p>
+                        <p><a href="install.pl?step=3&amp;op=choosemarc" class="btn btn-primary">Continue to the next step</a></p>
                     [% END %]
                 [% END # / IF default %]
 

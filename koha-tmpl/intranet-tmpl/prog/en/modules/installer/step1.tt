@@ -1,4 +1,3 @@
-[% BLOCK txt_continue %]Continue to the next step[% END %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo;
     [% UNLESS ( language ) %] Choose your language [% END %]
@@ -47,7 +46,7 @@
                             [% END %]
                         </select>
                     </div>
-                    <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
+                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                 </form>
             [% END %]
 
@@ -88,7 +87,7 @@
 
                     <form name="checkmodules" role="form" action="install.pl">
                         <input type="hidden" name="step" value="2" />
-                        <p> <input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /> </p>
+                        <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
                     </form>
                 [% END # IF checkmodule%]
             [% END # IF language %]

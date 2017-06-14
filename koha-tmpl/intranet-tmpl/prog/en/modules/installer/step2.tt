@@ -1,5 +1,4 @@
 [% USE HtmlTags %]
-[% BLOCK txt_continue %]Continue to the next step[% END %]
 [% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web installer &rsaquo; Database settings</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
 </head>
@@ -58,14 +57,14 @@
                         [% END %]
                         [% UNLESS ( error ) %]
                             <input type="hidden" name="step" value="3" />
-                            <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /></p>
+                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                         [% END %]
                     </form>
                 [% ELSE %]
                     <form name="checkinformation" method="post" action="install.pl">
                         <input type="hidden" name="step" value="2" />
                         <input type="hidden" name="checkdb" value="1" />
-                        <p><input value="[% INCLUDE txt_continue %]" class="btn btn-primary" type="submit" /> </p>
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
                     </form>
                 [% END # / IF dbconnection %]
             </div> <!-- / #installer-step2 -->
