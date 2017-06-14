@@ -336,7 +336,12 @@ sub install_prefs {
                 my $id = $self->{file} . " $section";
                 my $text = $self->get_trans_text($id);
                 my $nsection = $text ? $text : $section;
-                $ntab->{$nsection} = $tab_content->{$section};
+                if( exists $ntab->{$nsection} ) {
+                    # When translations collide (see BZ 18634)
+                    push @{$ntab->{$nsection}}, @{$tab_content->{$section}};
+                } else {
+                    $ntab->{$nsection} = $tab_content->{$section};
+                }
             }
             $pref->{$tab} = $ntab;
         }
