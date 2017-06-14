@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 42;
+use Test::More tests => 43;
 
 use C4::Acquisition;
 
@@ -28,6 +28,11 @@ my $borrower1 = {
 my $borrower2 = {
     borrowernumber => 2,
     branchcode => 'B2',
+};
+
+my $borrower3 = {
+    borrowernumber => 3,
+    branchcode => 'B3',
 };
 
 # Baskets
@@ -185,6 +190,9 @@ ok( CanUserManageBasket($borrower2, $basket2, $flags) );
 ok( not CanUserManageBasket($borrower2, $basket3, $flags) );
 ok( CanUserManageBasket($borrower2, $basket4, $flags) );
 
+# Test for Bug
+# basket 4 is not managed by borrower3 but by other borrowers
+ok( not CanUserManageBasket($borrower3, $basket4, $flags) );
 
 # Mocked subs
 
