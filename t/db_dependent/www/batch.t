@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2012 C & P Bibliography Services
+# Copyright 2017 Koha Development Team
 #
 # This is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -19,7 +20,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 24;
+use Test::More tests => 26;
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -91,7 +92,7 @@ $agent->submit_form_ok(
             'item_action'     => 'always_add',
             'matcher'         => '',
             'comments'        => '',
-            'encoding'        => 'utf8',
+            'encoding'        => 'UTF-8',
             'parse_items'     => '1',
             'runinbackground' => '1',
             'record_type'     => 'biblio'
@@ -145,7 +146,7 @@ $agent->submit_form_ok(
             'item_action'     => 'always_add',
             'matcher'         => '1',
             'comments'        => '',
-            'encoding'        => 'utf8',
+            'encoding'        => 'UTF-8',
             'parse_items'     => '1',
             'runinbackground' => '1',
             'completedJobID'  => $jobID,
@@ -179,7 +180,6 @@ like( $jsonresponse->{ aaData }[0]->{ citation }, qr/$bookdescription/, 'found b
 is( $jsonresponse->{ aaData }[0]->{ status }, 'staged', 'record marked as staged' );
 is( $jsonresponse->{ aaData }[0]->{ overlay_status }, 'no_match', 'record has no matches' );
 
-my $biblionumber = $jsonresponse->{ aaData }[0]->{ import_record_id };
 # Back to the manage staged records page
 $agent->get($staged_records_uri);
 $agent->form_number(6);
@@ -189,6 +189,14 @@ $agent->click_ok( 'mainformsubmit', "imported records into catalog" );
 $agent->get("$intranet/cgi-bin/koha/tools/batch_records_ajax.pl?import_batch_id=$import_batch_id");
 $jsonresponse = decode_json $agent->content;
 is( $jsonresponse->{ aaData }[0]->{ status }, 'imported', 'record marked as imported' );
+
+my $biblionumber = $jsonresponse->{aaData}[0]->{matched};
+
+$agent->get_ok(
+    "$intranet/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber",
+    'getting imported bib' );
+$agent->content_contains( 'Details for ' . $bookdescription,
+    'bib is imported' );
 
 $agent->get($staged_records_uri);
 $agent->form_number(5);
