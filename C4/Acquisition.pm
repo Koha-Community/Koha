@@ -2132,8 +2132,8 @@ sub GetLateOrders {
         LEFT JOIN aqbooksellers       ON aqbasket.booksellerid       = aqbooksellers.id
         LEFT JOIN aqbasketgroups      ON aqbasket.basketgroupid      = aqbasketgroups.id
         WHERE aqorders.basketno = aqbasket.basketno
-        AND ( datereceived = ''
-            OR datereceived IS NULL
+        AND ( aqorders.datereceived = ''
+            OR aqorders.datereceived IS NULL
             OR aqorders.quantityreceived < aqorders.quantity
         )
         AND aqbasket.closedate IS NOT NULL
