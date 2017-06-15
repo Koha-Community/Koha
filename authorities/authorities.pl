@@ -404,6 +404,7 @@ sub build_tabs {
                             $subfield = '@';
                         }
                         next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
+                        next if $tagslib->{$tag}->{$subfield}->{hidden};
                         push(
                             @subfields_data,
                             &create_input(
@@ -419,6 +420,7 @@ sub build_tabs {
                             my $value    = $subfields[$subfieldcount][1];
                             next if ( length $subfield != 1 );
                             next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
+                            next if $tagslib->{$tag}->{$subfield}->{hidden};
                             push(
                                 @subfields_data,
                                 &create_input(
@@ -435,10 +437,7 @@ sub build_tabs {
                         next if ( length $subfield != 1 );
                         next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
                         next if ( $tag < 10 );
-                        next
-                        if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -4 )
-                            or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 5 )
-                        );    #check for visibility flag
+                        next if $tagslib->{$tag}->{$subfield}->{hidden};
                         next if ( defined( $field->subfield($subfield) ) );
                         push(
                             @subfields_data,
@@ -477,9 +476,7 @@ sub build_tabs {
                 my @subfields_data;
                 foreach my $subfield ( sort( keys %{ $tagslib->{$tag} } ) ) {
                     next if ( length $subfield != 1 );
-                    next if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -5 )
-                                or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 4 ) )
-                            ;    #check for visibility flag
+                    next if $tagslib->{$tag}->{$subfield}->{hidden};
                     next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
                     push(
                         @subfields_data,
