@@ -79,6 +79,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.07039'
     },
+    'Config::Simple' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '4.59'
+    },
     'Net::Z3950::ZOOM' => {
         'usage'    => 'Core',
         'required' => '1',
