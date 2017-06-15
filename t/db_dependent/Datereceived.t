@@ -109,6 +109,7 @@ my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = C4::Items::AddItem(
         holdingbranch    => 'MPL',
         barcode          => 'R00000342',
         replacementprice => 12.00,
+        itype            => 'BK',
         datereceived     => $datereceivedIso,
     },
     $biblionumber

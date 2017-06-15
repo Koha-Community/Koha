@@ -2070,7 +2070,7 @@ sub _mod_item_dates { # date formatting for date fields in item hash
 
         my $newstr;
         if( defined $dt  && ref($dt) eq 'DateTime' ) {
-            if( $key =~ /datetime/ ) {
+            if( $key =~ /datetime|datereceived/ ) {
                 $newstr = DateTime::Format::MySQL->format_datetime($dt);
             } else {
                 $newstr = DateTime::Format::MySQL->format_date($dt);

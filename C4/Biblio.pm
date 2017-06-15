@@ -2589,6 +2589,7 @@ sub UpdateDatereceived {
 
     my $bibdata;
     unless (ref $biblionumberOrBibliodata) { #We have a SCALAR, eg. a biblionumber.
+        return 'NO_BIBLIONUMBER' unless defined $biblionumberOrBibliodata;
         my @biblioitems = C4::Biblio::GetBiblioItemByBiblioNumber($biblionumberOrBibliodata);
         $bibdata = $biblioitems[0];
     }
@@ -2603,6 +2604,7 @@ sub UpdateDatereceived {
     }
     #Use the given DateTime or Use Now()
     $datereceived = ($datereceived) ? $datereceived->iso8601() : DateTime->now( time_zone => C4::Context->tz() )->iso8601();
+    $datereceived =~ s/T/ / if defined $datereceived;
 
     #Make sure to only update the datereceived for the Biblio if it hasn't been set yet.
     if ($bibdata->{datereceived}) {
