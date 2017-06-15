@@ -32,7 +32,7 @@ GetOptions(
     'x|xt'                        => \$testXt,
     's|sip2'                      => \$testSip2,
     'd|db'                        => \$testDb,
-    'g|git:i'                     => \$gitTailLength,
+    'g|git=i'                     => \$gitTailLength,
 );
 
 my $usage = <<USAGE;
