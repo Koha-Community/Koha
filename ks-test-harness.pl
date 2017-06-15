@@ -3,7 +3,7 @@
 # Copyright 2017 KohaSuomi
 #
 # This file is part of Koha.
-#
+# .
 
 use 5.22.0;
 use Carp;
