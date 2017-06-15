@@ -2175,10 +2175,10 @@ sub MarkIssueReturned {
     my $do_not_lock = ( exists $ENV{_} && $ENV{_} =~ m|prove| ) || $ENV{KOHA_NO_TABLE_LOCKS};
     $schema->txn_do(sub {
 
+        $dbh->do( $query, undef, @bind );
+
         C4::Context->dbh->do(q|LOCK TABLE old_issues READ|) unless $do_not_lock;
         C4::Context->dbh->do(q|LOCK TABLE old_issues WRITE|) unless $do_not_lock;
-
-        $dbh->do( $query, undef, @bind );
 
         my $original_issue_id = $issue_id;
         my $issue = Koha::Checkouts->find( $issue_id ); # FIXME should be fetched earlier
@@ -2195,6 +2195,8 @@ sub MarkIssueReturned {
         }
         $old_checkout_data->{issue_id} = $issue_id;
         my $old_checkout = Koha::Old::Checkout->new($old_checkout_data)->store;
+
+        C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
 
         # Update the fines
         $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $old_checkout->issue_id, $issue->issue_id);
@@ -2214,8 +2216,6 @@ sub MarkIssueReturned {
             my $patron = Koha::Patrons->find( $borrowernumber );
             $item->last_returned_by( $patron );
         }
-
-        C4::Context->dbh->do(q|UNLOCK TABLES|) unless $do_not_lock;
     });
 
     return $issue_id;
