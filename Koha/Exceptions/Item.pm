@@ -24,6 +24,7 @@ use Exception::Class (
     'Koha::Exceptions::Item::Damaged' => {
         isa => 'Koha::Exceptions::Item',
         description => "Item is marked as damaged.",
+        fields => ["code", "status"],
     },
     'Koha::Exceptions::Item::FromAnotherLibrary' => {
         isa => 'Koha::Exceptions::Item',

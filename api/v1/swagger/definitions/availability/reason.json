@@ -189,7 +189,16 @@
     "Item::Damaged": {
       "description": "Item is marked as damaged",
       "type": "object",
-      "properties": {}
+      "properties": {
+        "status": {
+          "description": "Item's damaged status number",
+          "type": ["integer", "null"]
+        },
+        "code": {
+          "description": "Status description (e.g. Damaged)",
+          "type": ["string", "null"]
+        }
+      }
     },
     "Item::FromAnotherLibrary": {
       "description": "Libraries are independent and this item is from another library than current patron.",

@@ -117,7 +117,15 @@ sub damaged {
 
     if ($self->item->damaged
         && !C4::Context->preference('AllowHoldsOnDamagedItems')) {
-        return Koha::Exceptions::Item::Damaged->new;
+        my $av = Koha::AuthorisedValues->search({
+            category => 'DAMAGED',
+            authorised_value => $self->item->damaged
+        });
+        my $code = $av->count ? $av->next->lib : '';
+        return Koha::Exceptions::Item::Damaged->new(
+            status => 0+$self->item->damaged,
+            code => $code,
+        );
     }
     return;
 }
