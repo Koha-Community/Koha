@@ -17,7 +17,7 @@ use Scalar::Util qw(blessed);
 my ($help, $dryRun);
 my ($verbose, $gitTailLength) = (0, 0);
 my ($clover, $tar, $reinstall);
-my ($testAll, $testBasic, $testXt, $testSip2, $testDb);
+my ($testAll, $testUnit, $testXt, $testSip2, $testDb);
 
 
 GetOptions(
@@ -28,7 +28,7 @@ GetOptions(
     'clover'                      => \$clover,
     'tar'                         => \$tar,
     'a|all'                       => \$testAll,
-    'b|basic'                     => \$testBasic,
+    'u|unit'                      => \$testUnit,
     'x|xt'                        => \$testXt,
     's|sip2'                      => \$testSip2,
     'd|db'                        => \$testDb,
@@ -54,7 +54,7 @@ Runs a ton of tests with other metrics if needed
 
   -a --all              Run all tests.
 
-  -b --basic            Basic tests t/*.t
+  -u --unit             Unit tests t/*.t
 
   -x --xt               XT tests
 
@@ -76,8 +76,8 @@ EXAMPLE
     ##Then run a big test suite
     ks-test-harness.pl --all --tar
 
-    ##Just fiddling with options here
-    ks-test-harness.pl --basic --db -v 1
+    ##If you are interested in unit tests and db tests only...
+    ks-test-harness.pl --unit --db -v 1
 
 USAGE
 
@@ -114,12 +114,18 @@ run();
 sub run {
     clearCoverDb() if $clover;
     C4::Installer::reinstall($verbose) if $reinstall;
-    runharness(_getAllTests()) if $testAll;
-    runharness(_getBasicTests()) if $testBasic;
-    runharness(_getXTTests()) if $testXt;
-    runharness(_getSIPTests()) if $testSip2;
-    runharness(_getDbDependentTests()) if $testDb;
-    runharness(_getGitTailTests()) if $gitTailLength;
+
+    my (@tests, $tests);
+    push(@tests, @{_getAllTests()})         if $testAll;
+    push(@tests, @{_getUnitTests()})        if $testUnit;
+    push(@tests, @{_getXTTests()})          if $testXt;
+    push(@tests, @{_getSIPTests()})         if $testSip2;
+    push(@tests, @{_getDbDependentTests()}) if $testDb;
+    push(@tests, @{_getGitTailTests()})     if $gitTailLength;
+
+    print "Selected the following test files:\n".join("\n",@tests)."\n" if $verbose;
+
+    runharness(_sortFilesByDir(\@tests));
     createCoverReport() if $clover;
     tar() if $tar;
 }
@@ -209,7 +215,7 @@ sub runharness {
 sub _getAllTests {
     return _getTests('.', '*.t');
 }
-sub _getBasicTests {
+sub _getUnitTests {
     return _getTests('t', '*.t', 1); #maxdepth 1
 }
 sub _getXTTests {
@@ -226,7 +232,7 @@ sub _getTests {
     $maxDepth = 999 unless(defined($maxDepth));
     my $files = _shell("/usr/bin/find $dir -maxdepth $maxDepth -name '$selector'");
     my @files = split(/\n/, $files);
-    return _sortFilesByDir(\@files);
+    return \@files;
 }
 sub _getGitTailTests {
     my $repo = Git->repository(Directory => '.');
@@ -286,8 +292,15 @@ sub _sortFilesByDir {
         carp "\$files is an ampty array?";
     }
 
+    #deduplicate files
+    my (%seen, @files);
+    @files = grep !$seen{$_}++, @$files;
+
+    print "After deduplication remains the following test files:\n".join("\n",@files)."\n" if $verbose;
+
+    #Sort by dirs
     my %dirsWithFiles;
-    foreach my $f (@$files) {
+    foreach my $f (@files) {
         my $dir = File::Basename::dirname($f);
         $dirsWithFiles{$dir} = [] unless $dirsWithFiles{$dir};
         push (@{$dirsWithFiles{$dir}}, $f);
