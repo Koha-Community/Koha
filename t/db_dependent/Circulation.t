@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 95;
+use Test::More tests => 96;
 
 use DateTime;
 
@@ -1630,6 +1630,83 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
         }
     );
     is( $debarments->[0]->{expiration}, $expected_expiration );
+};
+
+subtest 'AddReturn | is_overdue' => sub {
+    plan tests => 5;
+
+    t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
+    t::lib::Mocks::mock_preference('finesMode', 'production');
+    t::lib::Mocks::mock_preference('MaxFine', '100');
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber},
+            }
+        }
+    );
+
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            maxissueqty  => 99,
+            issuelength  => 6,
+            lengthunit   => 'days',
+            fine         => 1, # Charge 1 every day of overdue
+            chargeperiod => 1,
+        }
+    );
+    $rule->store();
+
+    my $one_day_ago   = dt_from_string->subtract( days => 1 );
+    my $five_days_ago = dt_from_string->subtract( days => 5 );
+    my $ten_days_ago  = dt_from_string->subtract( days => 10 );
+    $patron = Koha::Patrons->find( $patron->{borrowernumber} );
+
+    # No date specify, today will be used
+    AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
+    AddReturn( $item->{barcode}, $library->{branchcode} );
+    is( int($patron->account->balance()), 10, 'Patron should have a charge of 10 (10 days x 1)' );
+    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # specify return date 5 days before => no overdue
+    AddIssue( $patron->unblessed, $item->{barcode}, $five_days_ago ); # date due was 5d ago
+    AddReturn( $item->{barcode}, $library->{branchcode}, undef, undef, $ten_days_ago );
+    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue' );
+    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # specify return date 5 days later => overdue
+    AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
+    AddReturn( $item->{barcode}, $library->{branchcode}, undef, undef, $five_days_ago );
+    is( int($patron->account->balance()), 5, 'AddReturn: pass return_date => overdue' );
+    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # specify dropbox date 5 days before => no overdue
+    AddIssue( $patron->unblessed, $item->{barcode}, $five_days_ago ); # date due was 5d ago
+    AddReturn( $item->{barcode}, $library->{branchcode}, undef, 1, undef, $ten_days_ago );
+    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue' );
+    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # specify dropbox date 5 days later => overdue, or... not
+    AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
+    AddReturn( $item->{barcode}, $library->{branchcode}, undef, 1, undef, $five_days_ago );
+    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the FU fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
+    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
 };
 
 sub set_userenv {
