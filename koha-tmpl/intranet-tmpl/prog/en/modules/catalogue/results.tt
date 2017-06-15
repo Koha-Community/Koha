@@ -383,6 +383,16 @@
                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
                             </td>
                             <td>
+
+                                [% UNLESS ( item_level_itypes ) %]
+                                    <div class="result-biblio-itemtype">
+                                        [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
+                                            <img src="[% SEARCH_RESULT.imageurl %]" alt="[% SEARCH_RESULT.description %]" />
+                                        [% END %]
+                                        [% SEARCH_RESULT.description %]
+                                    </div>
+                                [% END %]
+
 			    [% IF ( SEARCH_RESULT.XSLTResultsRecord ) %]
                 [% SEARCH_RESULT.result_number %].
 				[% SEARCH_RESULT.XSLTResultsRecord %]
@@ -403,22 +413,9 @@
                                         [% ELSE %]
                                             &nbsp;
                                         [% END %]
-                                    <p>
-                                    [% UNLESS ( item_level_itypes ) %]
-                                    [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
-                                    <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="[% SEARCH_RESULT.description %]" />
-                                    [% END %]
-                                    [% SEARCH_RESULT.description %]
-                                    [% END %]
-                                    [% SEARCH_RESULT.summary %]</p>
+                                    <p>[% SEARCH_RESULT.summary %]</p>
                                 [% ELSE %]
                                     <p>
-                                    [% UNLESS ( item_level_itypes ) %]
-                                    [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
-                                    <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="" />
-                                    [% END %]
-                                    [% END %]
-
                                         [% IF ( SEARCH_RESULT.author ) %]
                                             <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
                                         [% ELSE %]
