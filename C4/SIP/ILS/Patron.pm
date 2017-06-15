@@ -62,6 +62,7 @@ sub new {
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     my $fee_limit = _fee_limit();
     my $fine_blocked = $fines_amount > $fee_limit;
+    my $circ_blocked =( C4::Context->preference('OverduesBlockCirc') ne "noblock" &&  defined $flags->{ODUES}->{itemlist} ) ? 1 : 0;
     {
     no warnings;    # any of these $kp->{fields} being concat'd could be undef
     %ilspatron = (
@@ -80,7 +81,7 @@ sub new {
         address         => $adr,
         home_phone      => $kp->{phone},
         email_addr      => $kp->{email},
-        charge_ok       => ( !$debarred && !$expired && !$fine_blocked),
+        charge_ok       => ( !$debarred && !$expired && !$fine_blocked && !$circ_blocked),
         renew_ok        => ( !$debarred && !$expired && !$fine_blocked),
         recall_ok       => ( !$debarred && !$expired && !$fine_blocked),
         hold_ok         => ( !$debarred && !$expired && !$fine_blocked),
