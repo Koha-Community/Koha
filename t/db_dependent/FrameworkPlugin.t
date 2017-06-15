@@ -183,7 +183,7 @@ sub mock_userenv {
 }
 
 sub all_perms {
-    my $p = $dbh->selectcol_arrayref("SELECT flag FROM userflags");
+    my $p = $dbh->selectcol_arrayref("SELECT module FROM permission_modules");
     my $rv= {};
     foreach my $module ( @$p ) {
         $rv->{ $module } = 1;
