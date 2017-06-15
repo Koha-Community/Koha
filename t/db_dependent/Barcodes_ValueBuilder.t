@@ -88,7 +88,7 @@ my $item_4 = $builder->build({
 
 C4::Context->set_preference("barcodeprefix", "CPL: 112");
 
-my %args = (
+%args = (
     year        => '2017',
     mon         => '07',
     day         => '30',
