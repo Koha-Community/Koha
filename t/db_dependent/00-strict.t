@@ -39,11 +39,13 @@ $Test::Strict::TEST_STRICT = 0;
 $Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'misc/plack/koha.psgi' ];
 
 my $ncpu;
-if ( $ENV{KOHA_JENKINS} ) {
-    $ncpu = 2; # works fastest on kc.org jenkins box
+if ( $ENV{KOHA_PROVE_CPUS} ) {
+    $ncpu = $ENV{KOHA_PROVE_CPUS} ; # set number of cpus to use
 } else {
     $ncpu = Sys::CPU::cpu_count();
 }
+
+print "Using $ncpu CPUs...\n";
 
 my $pm   = new Parallel::ForkManager($ncpu);
 
