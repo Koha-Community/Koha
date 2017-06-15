@@ -110,9 +110,8 @@ my $completed = 0;
 # if we haven't completed the batch in two minutes, it's not happening
 for my $counter ( 1 .. 24 ) {
     $agent->get(
-        "$intranet/cgi-bin/koha/tools/background-job-progress.pl?jobID=$jobID",
-        "get job progress"
-    );
+        "$intranet/cgi-bin/koha/tools/background-job-progress.pl?jobID=$jobID"
+    ); # get job progress
     $jsonresponse = decode_json $agent->content();
     if ( $jsonresponse->{'job_status'} eq 'completed' ) {
         $completed = 1;
