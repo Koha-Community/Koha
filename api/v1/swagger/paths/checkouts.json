@@ -352,7 +352,13 @@
       "operationId": "deletehistoryCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [
-        { "$ref": "../parameters.json#/borrowernumberQueryParam" }
+          {
+            "name": "borrowernumber",
+            "in": "query",
+            "description": "Internal borrower identifier",
+            "type": "integer",
+            "required": true
+          }
       ],
       "produces": [
         "application/json"

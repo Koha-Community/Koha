@@ -282,7 +282,7 @@ subtest 'test sorting, limit and offset' => sub {
 };
 
 subtest 'delete() tests' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     my $anonymous_patron = $builder->build({
         source => 'Borrower'
@@ -303,6 +303,11 @@ subtest 'delete() tests' => sub {
         borrowernumber => $nopermission->{borrowernumber},
         itemnumber => $itemnumber1,
     })->store;
+
+    $tx = $t->ua->build_tx(DELETE => "/api/v1/checkouts/history");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(400);
 
     $tx = $t->ua->build_tx(DELETE => "/api/v1/checkouts/history"
         ."?borrowernumber=".($borrowernumber+1));
