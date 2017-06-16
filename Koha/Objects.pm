@@ -20,6 +20,7 @@ package Koha::Objects;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw( none );
 
 use Koha::Database;
 
@@ -86,7 +87,7 @@ sub find {
 
     croak 'Cannot use "->find" in list context' if wantarray;
 
-    return unless @pars;
+    return if !@pars || none { defined($_) } @pars;
 
     my $result = $self->_resultset()->find( @pars );
 
