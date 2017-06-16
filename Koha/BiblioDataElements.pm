@@ -34,7 +34,7 @@ use Koha::Exception::FeatureUnavailable;
 
 use base qw(Koha::Objects);
 
-sub type {
+sub _type {
     return 'BiblioDataElement';
 }
 
@@ -288,10 +288,14 @@ sub markForReindex {
 
 sub find {
     my ($class, $biblionumber) = @_;
-    my $dbh = C4::Context->dbh();
-    my $sth = $dbh->prepare("SELECT * FROM biblio_data_elements WHERE biblioitemnumber = ?");
-    $sth->execute($biblionumber);
-    return $sth->fetchrow_hashref();
+    if (ref $biblionumber) {
+        return $class->SUPER::find($biblionumber);
+    } else {
+        my $dbh = C4::Context->dbh();
+        my $sth = $dbh->prepare("SELECT * FROM biblio_data_elements WHERE biblioitemnumber = ?");
+        $sth->execute($biblionumber);
+        return $sth->fetchrow_hashref();
+    }
 }
 
 =head2 delete

@@ -26,7 +26,7 @@ use Koha::Exception::DB;
 
 use base qw(Koha::Object);
 
-sub type {
+sub _type {
     return 'BiblioDataElement';
 }
 
