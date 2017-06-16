@@ -253,8 +253,7 @@ sub _getGitTailTests {
         }
     }
     print "Found these changed test files in Git history: @testFiles\n" if $verbose > 0;
-    return {} unless scalar(@testFiles);
-    return _sortFilesByDir(\@testFiles);
+    return \@testFiles;
 }
 
 ###DUPLICATION WARNING Duplicates C4::KohaSuomi::TestRunner::shell
