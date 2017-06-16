@@ -416,7 +416,7 @@ our $koha_to_index_name = {
     'match-heading' => 'Match-heading',
     'see-from'      => 'Match-heading-see-from',
     thesaurus       => 'Subject-heading-thesaurus',
-    any              => ''
+    all              => ''
 };
 
 sub build_authorities_query_compat {
