@@ -53,8 +53,7 @@ sub _get_castable_unique_columns {
 
 @PARAM1 Scalar, issue_id or atomicupdate_id
 @RETURNS Koha::AtomicUpdate
-@THROWS Koha::Exception::BadParameter, if @PARAM1 is not a scalar
-        Koha::Exception::DuplicateObject, if @PARAM1 matches both the issue_id and atomicupdate_id,
+@THROWS Koha::Exception::DuplicateObject, if @PARAM1 matches both the issue_id and atomicupdate_id,
                                           you should change your issue naming convention.
 =cut
 
@@ -62,9 +61,7 @@ sub find {
     my ( $self, $id ) = @_;
     return unless $id;
     if (ref($id)) {
-        my @cc1 = caller(1);
-        my @cc0 = caller(0);
-        Koha::Exception::BadParameter->throw(error => $cc1[3]."() -> ".$cc0[3]."():> Given \$id '$id' is not a scalar.");
+        return $self->SUPER::find($id);
     }
 
     my @results = $self->_resultset()->search({'-or' => [
