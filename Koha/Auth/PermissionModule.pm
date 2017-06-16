@@ -28,9 +28,6 @@ use base qw(Koha::Object);
 sub _type {
     return 'PermissionModule';
 }
-sub object_class {
-    return 'Koha::Auth::PermissionModule';
-}
 
 sub new {
     my ($class, $params) = @_;

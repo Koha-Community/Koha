@@ -32,9 +32,6 @@ use base qw(Koha::Object);
 sub _type {
     return 'BorrowerPermission';
 }
-sub object_class {
-    return 'Koha::Auth::BorrowerPermission';
-}
 
 =head NAME
 
