@@ -37,7 +37,6 @@ sub build_query_compat {
 
 sub build_authorities_query {
     shift;
-    C4::AuthoritiesMarc::SearchAuthorities(@_);
     return {
         marclist     => $_[0],
         and_or       => $_[1],
