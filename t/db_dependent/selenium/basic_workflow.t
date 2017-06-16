@@ -22,6 +22,18 @@
 # SELENIUM_PATH=/home/vagrant/selenium-server-standalone-2.53.1.jar
 # Xvfb :1 -screen 0 1024x768x24 2>&1 >/dev/null &
 # DISPLAY=:1 java -jar $SELENIUM_PATH
+#
+# Remove the rentalcharge:
+# % UPDATE itemtypes SET rentalcharge = 0;
+#
+# Then you can execute the test file.
+#
+# If you get:
+# Wide character in print at /usr/local/share/perl/5.20.2/Test2/Formatter/TAP.pm line 105.
+# #                   'Koha › Patrons › Add patron test_patron_surname (Adult)'
+# #     doesn't match '(?^u:Patron details for test_patron_surname)'
+#
+# Ignore and retry (FIXME LATER...)
 
 use Modern::Perl;
 
