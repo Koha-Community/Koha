@@ -45,13 +45,19 @@ my $borrowernumber_exists = grep { /^borrowernumber$/ } @columns;
 is( $borrowernumber_exists, 1, 'Koha::Objects->columns should return the table columns' );
 
 subtest 'find' => sub {
-    plan tests => 2;
+    plan tests => 4;
     my $patron = $builder->build({source => 'Borrower'});
     my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
     is( $patron_object->borrowernumber, $patron->{borrowernumber}, '->find should return the correct object' );
 
     eval { my @patrons = Koha::Patrons->find( $patron->{borrowernumber} ); };
     like( $@, qr|^Cannot use "->find" in list context|, "->find should not be called in list context to avoid side-effects" );
+
+    # Test sending undef to find; should not generate a warning
+    warning_is { $patron = Koha::Patrons->find( undef ); }
+        "", "Sending undef does not trigger a DBIx warning";
+    warning_is { $patron = Koha::Patrons->find( undef, undef ); }
+        "", "Sending two undefs does not trigger a DBIx warning too";
 };
 
 subtest 'update' => sub {
