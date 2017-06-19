@@ -159,6 +159,7 @@ sub _item_looper {
     $first_item_avail->common_biblio_checks($biblio);
     $first_item_avail->common_biblioitem_checks($biblioitem);
     $first_item_avail->common_patron_checks;
+    $first_item_avail->common_issuing_rule_checks;
     if (keys %{$first_item_avail->unavailabilities} > 0) {
         $self->available(0);
     }
