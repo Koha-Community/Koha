@@ -33,10 +33,14 @@
         </div>
     [% END %]
 
-    [% IF ( OpacNav ||  OpacNavBottom  ) %]
+    [% IF ( OpacNav ||  OpacNavBottom  ) && Koha.Preference( 'opacuserlogin' ) == 1 %]
         <div class="span7">
-    [% ELSE %]
+    [% ELSIF Koha.Preference( 'opacuserlogin' ) == 1 %]
         <div class="span9">
+    [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
+        <div class="span10">
+    [% ELSE %]
+        <div class="span12">
     [% END %]
             [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
                 <form id="news-branch-select" class="form-inline" name="news-branch-select" method="get" action="/cgi-bin/koha/opac-main.pl">
