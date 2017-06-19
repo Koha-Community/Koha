@@ -578,7 +578,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             invalidateSearchResults();
             Search.Reconnect();
         } else {
-            humanMsg.displayMsg( '<h3>' + _("Internal search error") + '</h3><p>' + error + '</p><p>' + _("Please refresh the page and try again.") + '</p>', { className: 'humanError' } );
+            humanMsg.displayMsg( '<h3>' + _("Internal search error") + '</h3><p>' + error.responseText + '</p><p>' + _("Please refresh the page and try again.") + '</p>', { className: 'humanError' } );
         }
     }
 
