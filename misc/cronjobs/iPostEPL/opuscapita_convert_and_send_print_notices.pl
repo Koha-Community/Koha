@@ -20,7 +20,6 @@ use Digest::MD5 qw(md5_hex);
 use C4::Context;
 use File::Copy;
 use Text::Undiacritic qw(undiacritic);
-use Switch;
 
 # Get and set some global variables + initialize targetfile
 our $branch=$ARGV[0];
@@ -55,12 +54,11 @@ sub hdiacritic {
     $oldchar=$char;
 
     unless ( $char =~/[A-Za-z0-9ÅåÄäÖöÉéÜüÁá]/ ) {
-      switch ($char) {
-        case 'Ʒ' { $char='Z'; }
-        case 'ʒ' { $char='z'; }
-        case 'ß' { $char='B'; }
-        case 'ʻ' { $char='\''; }
-      }
+      if    ($char eq 'Ʒ') { $char='Z';  }
+      elsif ($char eq 'ʒ') { $char='z';  }
+      elsif ($char eq 'ẞ') { $char='SS'; }
+      elsif ($char eq 'ß') { $char='ss'; }
+      elsif ($char eq 'ʻ') { $char='\''; }
       $char=undiacritic($char) unless "$oldchar" ne "$char";
     }
     $retstring=$retstring . $char;
