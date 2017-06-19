@@ -22,7 +22,7 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 15;
+use Test::More tests => 10;
 use Koha::Database;
 
 BEGIN {
@@ -31,7 +31,6 @@ BEGIN {
 
 ok( my $installer = C4::Installer->new(), 'Testing NewInstaller' );
 is( ref $installer, 'C4::Installer', 'Testing class of object' );
-is( $installer->{'dbname'}, C4::Context->config('database'), 'Testing DbName' );
 is(
     $installer->{'dbms'},
     C4::Context->config('db_scheme')
@@ -39,15 +38,6 @@ is(
     : 'mysql',
     'Testing DbScheme'
 );
-is(
-    $installer->{'hostname'},
-    C4::Context->config('hostname'),
-    'Testing Hostname'
-);
-is( $installer->{'port'},     C4::Context->config('port'), 'Testing Port' );
-is( $installer->{'user'},     C4::Context->config('user'), 'Testing User' );
-is( $installer->{'password'}, C4::Context->config('pass'), 'Testing Password' );
-
 # The borrower table is known to have columns and constraints.
 my $schema = Koha::Database->new->schema;
 my $source = $schema->source('Borrower');

@@ -73,6 +73,9 @@ sub new {
 
     my $self = {};
 
+    # get basic information from context
+    $self->{'dbms'}  = C4::Context->config("db_scheme")
+                        ? C4::Context->config("db_scheme") : "mysql";
     $self->{'dbh'} = C4::Context->dbh();
     $self->{'language'} = undef;
     $self->{'marcflavour'} = undef;
