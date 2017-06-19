@@ -684,11 +684,21 @@ sub ImportFramework
                     # Process both tables
                     my $numDeleted = 0;
                     my $numDeletedAux = 0;
-                    if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension, $frameworktype)) >= 0) {
-                        $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                        if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
+                    if ($frameworktype eq "authority"){
+                        if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['authtypecode', 'tagfield'], $extension, $frameworktype)) >= 0) {
                             $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
-                            $ok = ($numDeleted > 0)?$numDeleted:0;
+                            if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['authtypecode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
+                                $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
+                                $ok = ($numDeleted > 0)?$numDeleted:0;
+                            }
+                        }
+                    } else {
+                        if (($numDeletedAux = _import_table($dbh, $table, $frameworkcode, $dom, ['frameworkcode', 'tagfield'], $extension, $frameworktype)) >= 0) {
+                            $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
+                            if (($numDeletedAux = _import_table($dbh, $subtable, $frameworkcode, $dom, ['frameworkcode', 'tagfield', 'tagsubfield'], $extension, $frameworktype)) >= 0) {
+                                $numDeleted += $numDeletedAux if ($numDeletedAux > 0);
+                                $ok = ($numDeleted > 0)?$numDeleted:0;
+                            }
                         }
                     }
                 } else {
@@ -841,11 +851,11 @@ sub _import_table
                 push @fieldsName, $hashRef->{Field};
             }
         };
-        $ok = _import_table_csv($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, \@fieldsName);
+        $ok = _import_table_csv($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, \@fieldsName, $frameworktype);
     } elsif ($format eq 'ods') {
-        $ok = _import_table_ods($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete);
+        $ok = _import_table_ods($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype);
     } else {
-        $ok = _import_table_excel($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete);
+        $ok = _import_table_excel($dbh, $table, $frameworkcode, $dom, $PKArray, \%fields2Delete, $frameworktype);
     }
     if ($ok) {
         if (($ok = scalar(keys %fields2Delete)) > 0) {
@@ -896,7 +906,7 @@ sub _processRow_DB
 # Process the rows of a worksheet and insert/update them in a mysql table.
 sub _processRows_Table
 {
-    my ($dbh, $frameworkcode, $nodeR, $table, $PKArray, $format, $fields2Delete) = @_;
+    my ($dbh, $frameworkcode, $nodeR, $table, $PKArray, $format, $fields2Delete, $frameworktype) = @_;
 
     my $query;
     my @fields = ();
@@ -922,7 +932,7 @@ sub _processRows_Table
                 chop($updateStr) if ($updateStr);
             } else {
                 # Get data from row
-                my ($dataFields, $dataFieldsR) = _getDataFields($frameworkcode, $nodeR, \@fields, $format);
+                my ($dataFields, $dataFieldsR) = _getDataFields($frameworkcode, $nodeR, \@fields, $format, $frameworktype);
                 if (scalar(@fields) == scalar(@$dataFieldsR)) {
                     $ok = _processRow_DB($dbh, $table, $fields, $dataStr, $updateStr, $dataFieldsR, $dataFields, $PKArray, \@fieldsPK, $fields2Delete);
                 } else {
@@ -942,8 +952,7 @@ sub _processRows_Table
 # Import worksheet from the csv file to the mysql table
 sub _import_table_csv
 {
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $fields) = @_;
-
+    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $fields, $frameworktype) = @_;
     my $row = '';
     my $partialRow = '';
     my $numFields = @$fields;
@@ -992,17 +1001,31 @@ sub _import_table_csv
                 for my $value (@arrData) {
                     if ( grep { $_ == $j } @empty_indexes ) {
                         # empty field
-                    } elsif ($fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode) {
-                        $dataFields{$fields->[$j]} = $frameworkcode;
-                        push @values, $frameworkcode;
-                    } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
-                        $dataFields{$fields->[$j]} = undef;
-                        push @values, undef;
+                    } elsif ($frameworktype eq "authority"){
+                        if ($fields->[$j] eq 'authtypecode' && $value ne $frameworkcode) {
+                            $dataFields{$fields->[$j]} = $frameworkcode;
+                            push @values, $frameworkcode;
+                        } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
+                            $dataFields{$fields->[$j]} = undef;
+                            push @values, undef;
+                        } else {
+                            $dataFields{$fields->[$j]} = $value;
+                            push @values, $value;
+                        }
+                        $j++
                     } else {
-                        $dataFields{$fields->[$j]} = $value;
-                        push @values, $value;
+                        if ($fields->[$j] eq 'frameworkcode' && $value ne $frameworkcode) {
+                            $dataFields{$fields->[$j]} = $frameworkcode;
+                            push @values, $frameworkcode;
+                        } elsif ($fields->[$j] eq 'isurl' && defined $value && $value eq q{}) {
+                            $dataFields{$fields->[$j]} = undef;
+                            push @values, undef;
+                        } else {
+                            $dataFields{$fields->[$j]} = $value;
+                            push @values, $value;
+                        }
+                        $j++
                     }
-                    $j++
                 }
                 $ok = _processRow_DB($dbh, $table, $fieldsStr, $dataStr, $updateStr, \@values, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
             }
@@ -1017,7 +1040,7 @@ sub _import_table_csv
 # Import worksheet from the ods content.xml file to the mysql table
 sub _import_table_ods
 {
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete) = @_;
+    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype) = @_;
 
     my $xc = XML::LibXML::XPathContext->new($dom);
     $xc->registerNs('xmlns:office','urn:oasis:names:tc:opendocument:xmlns:office:1.0');
@@ -1027,7 +1050,7 @@ sub _import_table_ods
     @nodes = $xc->findnodes('//table:table[@table:name="' . $table . '"]');
     if (@nodes == 1 && $nodes[0]->hasChildNodes()) {
         my $nodeR = $nodes[0]->firstChild;
-        return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, 'ods', $fields2Delete);
+        return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, 'ods', $fields2Delete, $frameworktype);
     } else {
         Koha::Logger->get->warn("Error _import_table_ods there's not worksheet for $table");
     }
@@ -1038,7 +1061,7 @@ sub _import_table_ods
 # Import worksheet from the excel-xml file to the mysql table
 sub _import_table_excel
 {
-    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete) = @_;
+    my ($dbh, $table, $frameworkcode, $dom, $PKArray, $fields2Delete, $frameworktype) = @_;
 
     my $xc = XML::LibXML::XPathContext->new($dom);
     $xc->registerNs('xmlns','urn:schemas-microsoft-com:office:spreadsheet');
@@ -1051,7 +1074,7 @@ sub _import_table_excel
             my @nodesT = $nodes[$i]->getElementsByTagNameNS('urn:schemas-microsoft-com:office:spreadsheet', 'Table');
             if (@nodesT == 1 && $nodesT[0]->hasChildNodes()) {
                 my $nodeR = $nodesT[0]->firstChild;
-                return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, undef, $fields2Delete);
+                return _processRows_Table($dbh, $frameworkcode, $nodeR, $table, $PKArray, undef, $fields2Delete, $frameworktype);
             }
         }
     } else {
@@ -1088,7 +1111,7 @@ sub _getDataNodeODS
 # Get the data from a row of a spreadsheet
 sub _getDataFields
 {
-    my ($frameworkcode, $node, $fields, $format) = @_;
+    my ($frameworkcode, $node, $fields, $format, $frameworktype) = @_;
 
     my $dataFields = {};
     my @dataFieldsA = ();
@@ -1115,11 +1138,20 @@ sub _getDataFields
             if ($ok) {
                 $data //= '';
                 $data = '' if ($data eq '#');
-                if ( $fields->[$i] eq 'frameworkcode' ) {
-                    $data = $frameworkcode;
-                }
-                elsif ( $fields->[$i] eq 'isurl' ) {
-                    $data = undef if defined $data && $data eq q{};
+                if ($frameworktype eq "authority") {
+                    if ( $fields->[$i] eq 'authtypecode' ) {
+                        $data = $frameworkcode;
+                    }
+                    elsif ( $fields->[$i] eq 'isurl' ) {
+                        $data = undef if defined $data && $data eq q{};
+                    }
+                } else {
+                    if ( $fields->[$i] eq 'frameworkcode' ) {
+                        $data = $frameworkcode;
+                    }
+                    elsif ( $fields->[$i] eq 'isurl' ) {
+                        $data = undef if defined $data && $data eq q{};
+                    }
                 }
                 $dataFields->{$fields->[$i]} = $data;
                 push @dataFieldsA, $data;

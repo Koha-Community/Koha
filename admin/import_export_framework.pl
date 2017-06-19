@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use CGI::Cookie;
@@ -26,7 +25,6 @@ use C4::Auth qw( check_cookie_auth );
 use C4::ImportExportFramework qw( createODS ExportFramework ImportFramework );
 
 my %cookies = CGI::Cookie->fetch();
-my $authenticated = 0;
 my ($auth_status);
 if (exists $cookies{'CGISESSID'}) {
     ($auth_status, undef) = check_cookie_auth(
@@ -34,13 +32,10 @@ if (exists $cookies{'CGISESSID'}) {
         { parameters => 'manage_marc_frameworks' },
     );
 }
-if ($auth_status eq 'ok') {
-    $authenticated = 1;
-}
 
 my $input = CGI->new;
 
-unless ($authenticated) {
+unless ($auth_status eq 'ok') {
     print $input->header(-type => 'text/plain', -status => '403 Forbidden');
     exit 0;
 }
