@@ -226,6 +226,12 @@ __PACKAGE__->table("issuingrules");
   extra: {list => ["no","yes","bib_only","item_only"]}
   is_nullable: 0
 
+=head2 note
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 100
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -309,6 +315,8 @@ __PACKAGE__->add_columns(
     extra => { list => ["no", "yes", "bib_only", "item_only"] },
     is_nullable => 0,
   },
+  "note",
+  { data_type => "varchar", is_nullable => 1, size => 100 },
 );
 
 =head1 PRIMARY KEY

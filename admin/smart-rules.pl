@@ -185,6 +185,7 @@ elsif ($op eq 'add') {
     my $article_requests = $input->param('article_requests') || 'no';
     my $overduefinescap = $input->param('overduefinescap') || undef;
     my $cap_fine_to_replacement_price = $input->param('cap_fine_to_replacement_price') eq 'on';
+    my $note = $input->param('note');
     $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";
 
     my $params = {
@@ -219,6 +220,7 @@ elsif ($op eq 'add') {
         overduefinescap               => $overduefinescap,
         cap_fine_to_replacement_price => $cap_fine_to_replacement_price,
         article_requests              => $article_requests,
+        note                          => $note,
     };
 
     my $issuingrule = Koha::IssuingRules->find({categorycode => $bor, itemtype => $itemtype, branchcode => $br});

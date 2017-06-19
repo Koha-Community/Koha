@@ -877,6 +877,7 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   onshelfholds tinyint(1) NOT NULL default 0, -- allow holds for items that are on shelf
   opacitemholds char(1) NOT NULL default 'N', -- allow opac users to place specific items on hold
   article_requests enum('no','yes','bib_only','item_only') NOT NULL DEFAULT 'no', -- allow article requests to be placed,
+  `note` varchar(100) default NULL, -- description of rule, reason for setting rule
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)

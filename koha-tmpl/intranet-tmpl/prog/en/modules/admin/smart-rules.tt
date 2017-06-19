@@ -97,6 +97,7 @@
                 <th>Item level holds</th>
                 <th>Article requests</th>
                 <th>Rental discount (%)</th>
+                <th>Note</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -222,7 +223,8 @@
                                                                 <span>Item only</span>
                                                             [% END %]
                                                         </td>
-							<td>[% rule.rentaldiscount | html %]</td>
+                                                        <td>[% rule.rentaldiscount | html %]</td>
+                                                        <td>[% rule.note | html %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                                           <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype | html %]&amp;categorycode=[% rule.categorycode | html %]&amp;branch=[% rule.current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
@@ -324,6 +326,7 @@
                         </select>
                     </td>
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
+                    <td><input type="text" name="note" id="note" size="15" value=""></td>
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
@@ -362,6 +365,7 @@
                       <th>Item level holds</th>
                       <th>Article requests</th>
                       <th>Rental discount (%)</th>
+                      <th>Note</th>
                       <th>&nbsp;</th>
                     </tr>
                   </tfoot>
