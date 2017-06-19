@@ -896,7 +896,7 @@ database column.
 =cut
 
 sub get_cardnumber_length {
-    my ( $min, $max ) = ( 0, 16 ); # borrowers.cardnumber is a nullable varchar(16)
+    my ( $min, $max ) = ( 0, 32 ); # borrowers.cardnumber is a nullable varchar(20)
     $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
     if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
         # Is integer and length match
