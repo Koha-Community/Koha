@@ -1784,7 +1784,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
   UNIQUE KEY `cardnumber` (`cardnumber`),
-  UNIQUE KEY `othernames` (`othernames`),
+  UNIQUE KEY `othernames_3` (`othernames`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
