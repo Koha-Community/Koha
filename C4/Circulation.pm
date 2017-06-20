@@ -2186,10 +2186,11 @@ sub MarkIssueReturned {
         my $old_checkout_data = $issue->unblessed;
 
         if ( Koha::Old::Checkouts->find( $issue_id ) ) {
-            my $new_issue_id = Koha::Old::Checkouts->search(
+            my $new_issue_id = ( Koha::Old::Checkouts->search(
                 {},
                 { columns => [ { max_issue_id => { max => 'issue_id' } } ] }
-            )->get_column('max_issue_id') + 1;
+            )->get_column('max_issue_id') )[0];
+            $new_issue_id++;
             $issue_id = $new_issue_id;
         }
         $old_checkout_data->{issue_id} = $issue_id;
