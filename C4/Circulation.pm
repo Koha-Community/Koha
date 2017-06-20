@@ -2180,7 +2180,6 @@ sub MarkIssueReturned {
         C4::Context->dbh->do(q|LOCK TABLE old_issues READ|) unless $do_not_lock;
         C4::Context->dbh->do(q|LOCK TABLE old_issues WRITE|) unless $do_not_lock;
 
-        my $original_issue_id = $issue_id;
         my $issue = Koha::Checkouts->find( $issue_id ); # FIXME should be fetched earlier
 
         # Create the old_issues entry
