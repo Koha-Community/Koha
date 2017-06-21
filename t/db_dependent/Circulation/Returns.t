@@ -47,6 +47,17 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
+Koha::IssuingRules->search->delete;
+my $rule = Koha::IssuingRule->new(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        maxissueqty  => 99,
+        issuelength  => 1,
+    }
+);
+$rule->store();
 
 subtest "InProcessingToShelvingCart tests" => sub {
 
