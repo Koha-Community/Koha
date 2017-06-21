@@ -19,7 +19,7 @@
     </div>
     [% END %]
     [% IF CAN_user_tools_manage_patron_lists %]
-        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/patron_lists/lists.pl"><i class="fa fa-edit"></i>Patron lists</a>
+        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/patron_lists/lists.pl"><i class="fa fa-edit"></i> Patron lists</a>
     [% END %]
 
 </div>
