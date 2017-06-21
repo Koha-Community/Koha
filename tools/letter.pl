@@ -66,6 +66,7 @@ my $code        = $input->param('code');
 my $module      = $input->param('module') || '';
 my $content     = $input->param('content');
 my $op          = $input->param('op') || '';
+my $redirect      = $input->param('redirect');
 my $dbh = C4::Context->dbh;
 
 our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
@@ -94,7 +95,12 @@ $template->param(
 
 if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
     add_validate();
-    $op = q{}; # we return to the default screen for the next operation
+    if( $redirect eq "just_save" ){
+        print $input->redirect("/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done");
+        exit;
+    } else {
+        $op = q{}; # we return to the default screen for the next operation
+    }
 }
 if ($op eq 'copy_form') {
     my $oldbranchcode = $input->param('oldbranchcode') || q||;
