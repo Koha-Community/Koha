@@ -549,7 +549,7 @@
                                 <ol>
                                     <li>
                                         <label class="required" for="shelfname">List name: </label>
-                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname |html %]" /></li>
+                                        <input type="text" id="shelfname" name="shelfname" maxlength="255" value="[% shelf.shelfname |html %]" required="required" class="required"/> <span class="required">Required</span></li>
                                     <li>
                                         <label for="sortfield" >Sort this list by: </label>
                                         <select name="sortfield" id="sortfield">
@@ -603,7 +603,7 @@
                             </fieldset>
 
                             <fieldset class="action">
-                                <input type="submit" onclick="Check(this.form); return false;" value="Save" class="btn" />
+                                <input type="submit" value="Save" class="btn" />
                                 [% IF referer == 'view' %]
                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]" class="cancel">Cancel</a>
                                 [% ELSE %]
@@ -937,24 +937,6 @@ $(function() {
 
     AdjustRemark();
 }); // document.ready
-
-function Check(f) {
-    var _alertString="";
-    var alertString2;
-
-    if(f.addshelf.value.length ==0){
-        _alertString += _("- You must enter a list name") + "\n";
-    }
-
-    if (_alertString.length==0) {
-        f.submit();
-    } else {
-        alertString2 = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
 
 function AdjustRemark() {
     var category;
