@@ -308,6 +308,17 @@ __PAZPAR2_TOGGLE_XML_POST__
             To disable and use GSM 03.38: leave blank -->
         <Unicode></Unicode>
     </arena>
+    <sonera>
+        <!-- Login details for SMS Gateway service -->
+        <user></user>
+        <passwd></passwd>
+        <url></url>
+        <!-- Send messages with separated billing. Uses 3 first chars of branchcode for defining clientid -->
+        <branchcode>
+            <clientid></clientid>
+        </branchcode>
+        <sourceName></sourceName> <!-- Displays as sender name in phones. Maxlength 11 chars -->
+    </sonera>
  </smsProviders>
 </config>
 </yazgfs>
