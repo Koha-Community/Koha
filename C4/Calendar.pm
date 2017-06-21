@@ -201,7 +201,7 @@ sub insert_week_day_holiday {
     croak "Invalid weekday $weekday" unless $weekday =~ m/^[0-6]$/;
 
     my $dbh = C4::Context->dbh();
-    my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (id,branchcode,weekday,day,month,title,description) values ( '',?,?,NULL,NULL,?,? )"); 
+    my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (branchcode,weekday,day,month,title,description) values ( ?,?,NULL,NULL,?,? )");
 	$insertHoliday->execute( $self->{branchcode}, $weekday, $options{title}, $options{description});
     $self->{'week_days_holidays'}->{$weekday}{title} = $options{title};
     $self->{'week_days_holidays'}->{$weekday}{description} = $options{description};
@@ -232,7 +232,7 @@ sub insert_day_month_holiday {
     my %options = @_;
 
     my $dbh = C4::Context->dbh();
-    my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (id,branchcode,weekday,day,month,title,description) values ('', ?, NULL, ?, ?, ?,? )");
+    my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (branchcode,weekday,day,month,title,description) values (?, NULL, ?, ?, ?,? )");
 	$insertHoliday->execute( $self->{branchcode}, $options{day},$options{month},$options{title}, $options{description});
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{title} = $options{title};
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{description} = $options{description};
@@ -269,7 +269,7 @@ sub insert_single_holiday {
 
 	my $dbh = C4::Context->dbh();
     my $isexception = 0;
-    my $insertHoliday = $dbh->prepare("insert into special_holidays (id,branchcode,day,month,year,isexception,title,description) values ('', ?,?,?,?,?,?,?)");
+    my $insertHoliday = $dbh->prepare("insert into special_holidays (branchcode,day,month,year,isexception,title,description) values (?,?,?,?,?,?,?)");
 	$insertHoliday->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
@@ -315,7 +315,7 @@ sub insert_exception_holiday {
 
     my $dbh = C4::Context->dbh();
     my $isexception = 1;
-    my $insertException = $dbh->prepare("insert into special_holidays (id,branchcode,day,month,year,isexception,title,description) values ('', ?,?,?,?,?,?,?)");
+    my $insertException = $dbh->prepare("insert into special_holidays (branchcode,day,month,year,isexception,title,description) values (?,?,?,?,?,?,?)");
 	$insertException->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
