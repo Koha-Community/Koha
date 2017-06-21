@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-14 21:42-0300\n"
+"POT-Creation-Date: 2017-06-16 02:49-0300\n"
 "PO-Revision-Date: 2016-09-06 13:39+0000\n"
 "Last-Translator: Erjon <it@uart.edu.al>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1252,24 +1252,6 @@ msgstr ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3572,12 +3554,6 @@ msgstr "Shuma e pa-paguar"
 #, c-format
 msgid "Amount to pay: "
 msgstr "Shuma për t'u paguar: "
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "U dërgua email tek adresa \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6281,6 +6257,11 @@ msgstr "Problematikat për një regjistrim"
 #, c-format
 msgid "Issues summary"
 msgstr "Përmbledhja e problematikave"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Ky titull nuk mund të kërkohet."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10278,6 +10259,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "Ky titull ju është dhënë tashmë në dorëzim."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Bashkëndaj listën me një përdorues tjetër"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11120,6 +11106,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, fuzzy, c-format
 msgid "You have successfully registered your new account."
@@ -11203,6 +11194,11 @@ msgstr ""
 "Do ju dërgohet njoftim nëpërmjet email nëse dikush pranon bashkëndarjen tuaj "
 "brenda dy javësh."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11228,6 +11224,12 @@ msgid ""
 "renew your account."
 msgstr ""
 "Llogaria juaj ka skaduar që nga %s. Ju lutemi të kontaktoni bibliotekën."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". Ju lutemi të kontaktoni bibliotekën për më tepër informacion."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11380,26 +11382,10 @@ msgstr "Listat tuaja"
 msgid "Your lists:"
 msgstr "Listat tuaja:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
 #, fuzzy, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Rinovimi i huazimit tuaj dështoi për arsye(t) e mëposhtme: %s %s Llogaria "
-"juaj ka skaduar. Ju lutemi kontaktoni me bibliotekën për më shumë "
-"informacion. %s E keni rinovuar këtë titull për maksimumin e herëve të "
-"lejuara. %s Ky titull është i rezervuar nga një përdorues tjetër. %s %s "
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Formulari nuk u procesua për shkak të problem(eve) më poshtë"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

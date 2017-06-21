@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-05-14 18:40-0300\n"
+"POT-Creation-Date: 2017-06-16 01:10-0300\n"
 "PO-Revision-Date: 2017-04-28 18:58+0000\n"
 "Last-Translator: BruceCrisp <brcrisp@sympatico.ca>\n"
 "Language-Team: \n"
@@ -1232,19 +1232,6 @@ msgid ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-msgstr ""
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
 
 #. For the first occurrence,
@@ -3479,12 +3466,6 @@ msgstr "Sumo pagenda"
 #, fuzzy, c-format
 msgid "Amount to pay: "
 msgstr "Sumo pagota: "
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "Retpoŝta mesaĝo estis sendita al \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6214,6 +6195,11 @@ msgstr "Numeroj por abono"
 #, fuzzy, c-format
 msgid "Issues summary"
 msgstr "Resumo pri numeroj"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Tiu ĉi estas surloka prunto, ĝi ne estas renovigebla."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10241,6 +10227,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "La ekzempleron vi jam prunteprenis."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Dividi liston kun alia kliento"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11083,6 +11074,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr "Vi atingis vian limon de proponoj por la nuna tempo."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11163,6 +11159,11 @@ msgstr ""
 "Vi ricevos retpoŝtan atentigon se iu akceptas vian kunhavaĵon dum la "
 "venontaj du semajnoj."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 #, fuzzy
@@ -11190,6 +11191,12 @@ msgid ""
 msgstr ""
 "Via konto eksvalidiĝis je %s. Bonvolu kontakti la bibliotekon se vi volas "
 "renovigi vian konton."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". Bonvolu kontakti la bibliotekon por pli da informoj."
 
 # Ĉu la angla ne devus esti la jena?: "Your account is frozen because it has NOT been discharged. "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
@@ -11346,27 +11353,10 @@ msgstr "Viaj listoj"
 msgid "Your lists:"
 msgstr "Viaj listoj:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
 #, fuzzy, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Via pruntoplilongigo malsukcesis pro la jena(j) kialo(j): %s %s Via konto "
-"eksvalidiĝis. Bonvolu kontakti la bibliotekon por pli da informoj. %s Vi jam "
-"renovigis tiun ĉi ekzempleron la maksimumajn permesitajn fojojn. %s Estas "
-"tro frue post la pruntodato por renovigi tiun ĉi ekzempleron. %s Tiu ĉi "
-"ekzemplero estas rezervita de alia kliento. %s %s "
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Formularo ne sendita pro la jena(j) problemo(j)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

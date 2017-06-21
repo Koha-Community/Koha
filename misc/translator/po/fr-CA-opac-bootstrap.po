@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inlibro-fr-CA-i-staff-t-prog-v-30611\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-14 19:02-0300\n"
-"PO-Revision-Date: 2017-05-15 12:39+0000\n"
+"POT-Creation-Date: 2017-06-16 01:22-0300\n"
+"PO-Revision-Date: 2017-05-25 15:59+0000\n"
 "Last-Translator: Marjorie <marjorie.barry-vila@ccsr.qc.ca>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1494851963.000000\n"
+"X-POOTLE-MTIME: 1495727968.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -1302,24 +1302,6 @@ msgstr ""
 "'voir aussi', controle l'étiquette pour le type d'entrée: identifiant de "
 "l'autorité: s'il s'agit d'une autorité liée, son identifiant %%] %s %s %s %s "
 "%s"
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3627,12 +3609,6 @@ msgstr "Montant non réglé"
 #, c-format
 msgid "Amount to pay: "
 msgstr "Montant à payer&nbsp;: "
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "Un courriel a été envoyé à \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6355,6 +6331,11 @@ msgstr "Numéros d'un abonnement"
 #, c-format
 msgid "Issues summary"
 msgstr "Abrégé des n° parus"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Ce titre est en prêt sur place uniquement, il ne peut être renouvelé."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10382,6 +10363,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "Ce document est déjà en prêt sur votre compte. "
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Partager une liste avec un autre utilisateur"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11236,6 +11222,11 @@ msgstr ""
 "Vous avez atteint la limite des suggestions que vous pouvez faire pour le "
 "moment."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11319,6 +11310,11 @@ msgstr ""
 "Vous allez recevoir un courriel si l'utilisateur accepte le partage de la "
 "liste dans les deux prochaines semaines."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11345,6 +11341,12 @@ msgid ""
 msgstr ""
 "Votre compte est expiré depuis le %s. Veuillez contacter votre bibliothèque "
 "pour plus d'information."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". Veuillez contacter votre bibliothèque pour plus d'information."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11496,28 +11498,10 @@ msgstr "Vos listes"
 msgid "Your lists:"
 msgstr "Vos listes :"
 
-# Une phrase était manquante.
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Votre renouvellement n'a pas fonctionné pour la(les) raison(s) suivante(s): "
-"%s %s Votre compte est expiré. Merci de contacter la bibliothèque pour plus "
-"d'informations. %s Vous avez atteint le maximum de renouvellements "
-"possibles. %s La date de prêt de cet exemplaire est trop récente pour le "
-"renouveler. %s Cet exemplaire est réservé par un autre utilisateur. %s %s "
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
+#, fuzzy, c-format
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Formulaire non soumis à cause du (des) problème(s) suivant(s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -12380,7 +12364,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:27
 #, c-format
 msgid "there was a problem processing your payment"
-msgstr "Il y a eu un problème avec votre payment"
+msgstr "Il y a eu un problème avec votre paiement"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:726

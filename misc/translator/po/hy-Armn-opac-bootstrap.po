@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-14 19:30-0300\n"
+"POT-Creation-Date: 2017-06-16 01:36-0300\n"
 "PO-Revision-Date: 2017-02-20 12:57+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1259,24 +1259,6 @@ msgstr ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3575,12 +3557,6 @@ msgstr "Չվճարված մեծություն"
 #, c-format
 msgid "Amount to pay: "
 msgstr "Վճարման ենթակա գումար "
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "Էլ. նամակ է ուղարկված \"%s\" "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6274,6 +6250,11 @@ msgstr "Համարներ բաժանորդագրության համար"
 #, c-format
 msgid "Issues summary"
 msgstr "Համարի համառոտագրություն"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Սա տեղային տացք է, այն հնարավոր չէ թարմացնել։"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10250,6 +10231,11 @@ msgstr "Այս նյութը նախատեսված է ավտոմատ թարմաց�
 msgid "This item is already checked out to you."
 msgstr "Այս նյութը արդեն տրված է քեզ։"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Համատեղ օգտագործիր ցուցակը այլ օգտատիրոջ հետ"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11077,6 +11063,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr "Դու հասել ես այս պահին քո կողմից դրվող առաջարկների սահմանին։"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11153,6 +11144,11 @@ msgstr ""
 "դու կստանաս էլ. փոստով ծանուցում եթե ինչ որ մեկը երկու շաբաթվա ընթացքում "
 "կընդունի քո համատեղումը։"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11177,6 +11173,12 @@ msgid ""
 msgstr ""
 "Քո քարտի ժամկետը լրացել է այս պահից %s։ Քո հաշվեհամարի թարմացման համար "
 "կապվիր գրադարանի հետ։"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". Խնդրում եմ կապվիր գրադարանավարի հետ, կամ օգտագործիր"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11327,27 +11329,10 @@ msgstr "Քո ցուցակները"
 msgid "Your lists:"
 msgstr "Քո ցուցակները։"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Քո տացքի թարմացումը ձախողվեց հետևյալ պատճառներով։ %s %s Քո հաշվեհամարը "
-"ժամկետանց է։ Մանրամասների համար կապվիր գրադարանի հետ։ %s Դու թարմացրել ես "
-"այս նյութը թույլատրված անգամներից ամենաշատ թվով։ %s Այս նյութի համար դուրս "
-"տրման ամսաթվից հետո շատ վաղ է թարմացումը։ %s Այս նյութը պահման մեջ է մեկ այլ "
-"ընթերցողի համար։ %s %s "
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
+#, fuzzy, c-format
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Ձևը չի գրանցված, հետևյալ պրոբլեմների պատճարով"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

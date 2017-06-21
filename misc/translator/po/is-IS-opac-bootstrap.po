@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-14 19:45-0300\n"
+"POT-Creation-Date: 2017-06-16 01:44-0300\n"
 "PO-Revision-Date: 2013-01-14 03:10+0200\n"
 "Last-Translator: Reynir Örn Bachmann <reynir.gudmundsson@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1175,19 +1175,6 @@ msgid ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-msgstr ""
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 msgstr ""
 
 #. For the first occurrence,
@@ -3429,12 +3416,6 @@ msgstr "Skuld"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "Amount to pay: "
-msgstr ""
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
 msgstr ""
 
 #. %1$s:  shelfname 
@@ -6134,6 +6115,11 @@ msgstr "Útgáfur fyrir áskrift"
 #, c-format
 msgid "Issues summary"
 msgstr "Samantekt af útgáfum"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Það er ekki hægt að biðja um þennan titil."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, fuzzy, c-format
@@ -10108,6 +10094,11 @@ msgid "This item is already checked out to you."
 msgstr ""
 "Þessi hlutur er merktur sem í útláni hjá þér. Spurning um að skila honum ?"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Það er búið að bæta þessum hlut í körfuna þína"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -10931,6 +10922,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11008,6 +11004,11 @@ msgid ""
 "two weeks."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11029,6 +11030,12 @@ msgstr "<em>SKILABOÐ 12:</em> Aðgangurinn þinn hefur verið frystur. "
 msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
 "renew your account."
+msgstr "Vara tengiliðaupplýsingar"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
 msgstr "Vara tengiliðaupplýsingar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
@@ -11179,22 +11186,10 @@ msgstr "Listinn þinn"
 msgid "Your lists:"
 msgstr "Listinn þinn:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
+#, fuzzy, c-format
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Eyðublað ekki sent inn vegna eftirfarandi vandarmál(a)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

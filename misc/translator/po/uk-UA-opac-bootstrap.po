@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
-"POT-Creation-Date: 2017-05-14 22:18-0300\n"
+"POT-Creation-Date: 2017-06-16 03:08-0300\n"
 "PO-Revision-Date: 2017-02-17 14:23+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -1253,24 +1253,6 @@ msgstr ""
 "%s [%%# Параметри: heading: сам заголовок linkType: на даний час „seefrom“ "
 "або „seealso“, контролює мітку для входження type: authid: якщо це є "
 "пов’язане авторитетне джерело, то це є authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Параметри: name: найменування вибраного елементаcategory: категорія "
-"авторитетного значенняdefault: вибране типове авторитетне значенняclass: CSS-"
-"клас вибраного елементаsize: розмір, що використовується для поля вводу "
-"(генерується, якщо авторитетне значення не існує). %%] %s [%% DEFAULT class "
-"= '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3749,12 +3731,6 @@ msgstr "Сума заборгованості"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "Amount to pay: "
-msgstr ""
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
 msgstr ""
 
 #. %1$s:  shelfname 
@@ -6487,6 +6463,11 @@ msgstr "Випуски для підписки"
 #, c-format
 msgid "Issues summary"
 msgstr "Звіт про випуски"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Цей заголовок не може бути запитаний."
 
 # варіант змінних id_type, return_type функції GetAvailability з ILS-DI
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
@@ -10486,6 +10467,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "Цей примірник вже виданий Вам."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Ділимося списком з іншим відвідувачем"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11321,6 +11307,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, fuzzy, c-format
 msgid "You have successfully registered your new account."
@@ -11403,6 +11394,11 @@ msgstr ""
 "Ви отримаєте повідомлення електронною поштою, якщо хтось приймає Ваш список "
 "протягом двох тижнів."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11429,6 +11425,13 @@ msgid ""
 msgstr ""
 "У Вашого облікового запису завершився термін дії станом на %s. Будь ласка, "
 "зверніться до бібліотеки, якщо Ви хочете продовжити свій обліковий запис."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ""
+". Будь ласка, зверніться до бібліотеки для отримання додаткової інформації."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11581,27 +11584,10 @@ msgstr "Ваші списки"
 msgid "Your lists:"
 msgstr "Ваші списки: "
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
 #, fuzzy, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Продовжити Ваше випожичання не вдалося з наступної причини: %s %s У Вашого "
-"облікового запису закінчився термін дії. Будь ласка, зв’яжіться з "
-"бібліотекою, щоб отримати додаткові відомості. %s Ви продовжували цей "
-"примірник максимальну дозволену кількість разів. %s Цей примірник "
-"зарезервований для іншого відвідувача. %s %s "
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Форма не прийнята через наступну(і) проблему(и)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

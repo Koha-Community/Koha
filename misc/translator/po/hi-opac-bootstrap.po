@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-05-14 19:18-0300\n"
+"POT-Creation-Date: 2017-06-16 01:30-0300\n"
 "PO-Revision-Date: 2016-12-29 12:41+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1239,23 +1239,6 @@ msgstr ""
 "%s [%%# पैरामीटर: शीर्षक: शीर्षक में ही LinkType: वर्तमान 'से देखना' या 'भी देखना', "
 "को नियंत्रित करता प्रविष्टि प्रकार के लिए लेबल authid: यदि यह एक जुड़ा अधिकार है अपने "
 "authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# पैरामीटर: नाम: चुनिंदा तत्व श्रेणी का नाम: अधिकृत मूल्य वर्ग डिफ़ॉल्ट: डिफ़ॉल्ट "
-"अधिकृत मूल्य वर्ग का चयन करने के लिए: आकार इनपुट (उत्पन्न करता है, तो अधिकृत मूल्य वर्ग "
-"करता है के लिए उपयोग करने के लिए चुनिंदा तत्व आकार की सीएसएस वर्ग मौजूद नहीं). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3531,12 +3514,6 @@ msgstr "राशि बकाया"
 #, c-format
 msgid "Amount to pay: "
 msgstr "भुगतान के लिए राशी"
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "एक ईमेल भेजा जा चूका हैं को \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6221,6 +6198,11 @@ msgstr "एक सदस्यता के लिए मुद्दे"
 #, c-format
 msgid "Issues summary"
 msgstr "मुद्दे सारांश"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "यह ऑन-साइट चेकआउट है, यह नवीनीकृत नहीं किया जा सकता."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10175,6 +10157,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "इस मद में पहले से ही आप के लिए निर्गम की है।"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "एक और संरक्षक के साथ एक सूची साझा करें"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -10992,6 +10979,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr "आप सुझावों की अपनी सीमा पर पहुँच गए हैं  आप इस समय जगह रख सकते हैं।"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11069,6 +11061,11 @@ msgstr ""
 "यदि कोई  दो सप्ताह के भीतर आपका शेयर स्वीकार करता है तो आपको एक ईमेल सूचना प्राप्त "
 "होगी।"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11093,6 +11090,12 @@ msgid ""
 msgstr ""
 "आपका खाता  के रूप में %s समाप्त हो गया है। यदि आप अपने खाते को नवीनीकृत करना चाहते "
 "पुस्तकालय से संपर्क करें।"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". अधिक जानकारी के लिए पुस्तकालय से संपर्क करें."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11242,26 +11245,10 @@ msgstr "आपकी सूचियाँ"
 msgid "Your lists:"
 msgstr "आपकी सूचियाँ:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"आपका ऋण नवीकरण निम्नलिखित कारण(ओं) की वजह से असफल: %s%s आपका खाता समाप्त हो गया "
-"है। अधिक जानकारी के लिए पुस्तकालय से संपर्क करें. %s आपके पास इस आइटम की अनुमति दी समय "
-"की अधिकतम संख्या नवीनीकरण किया है. %s यह भी जल्द ही होने के बाद इस मद के लिए चेकआउट "
-"तारीख नए सिरे से किया जा रहा है. %s इस मद में एक और संरक्षक के लिए होल्ड पर है. %s %s"
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
+#, fuzzy, c-format
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "फार्म नहीं निम्नलिखित समस्या (नों के कारण) प्रस्तुत"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

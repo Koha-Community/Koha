@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: German Koha Translation\n"
-"POT-Creation-Date: 2017-05-14 18:25-0300\n"
-"PO-Revision-Date: 2017-05-15 15:51+0000\n"
-"Last-Translator: Katrin <katrin.fischer@bsz-bw.de>\n"
+"POT-Creation-Date: 2017-06-16 01:00-0300\n"
+"PO-Revision-Date: 2017-06-19 13:14+0000\n"
+"Last-Translator: Marc <veron@veron.ch>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1494863498.000000\n"
+"X-POOTLE-MTIME: 1497878064.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -1278,24 +1278,6 @@ msgstr ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3593,12 +3575,6 @@ msgstr "Offener Betrag"
 #, c-format
 msgid "Amount to pay: "
 msgstr "Zu bezahlender Betrag:"
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "Eine E-Mail wurde gesendet an \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6317,6 +6293,11 @@ msgstr "Hefte eines Abonnements"
 #, c-format
 msgid "Issues summary"
 msgstr "Hefte Zusammenfassung"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Es ist noch zu früh nach der Ausleihe um dieses Exemplar zu verlängern."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10327,6 +10308,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "Dieses Exemplar ist bereits an Sie ausgeliehen."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, c-format
+msgid "This item is on hold for another patron."
+msgstr "Dieses Exemplar ist für einen anderen Benutzer vorgemerkt."
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11177,6 +11163,13 @@ msgstr ""
 "Sie haben das Maximum der Anschaffungsvorschläge erreicht, die Sie zurzeit "
 "einreichen können. "
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+"Sie haben für dieses Exemplare bereits die maximale Anzahl an Verlängerungen "
+"durchgeführt."
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11261,6 +11254,11 @@ msgstr ""
 "Sie erhalten eine E-Mail-Benachrichtigung, wenn jemand Ihre Freigabe zum "
 "Teilen innerhalb von zwei Wochen akzeptiert ."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr "Sie erhalten in Kürze eine E-Mail. "
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11287,6 +11285,14 @@ msgid ""
 msgstr ""
 "Ihr Benutzerkonto ist am %s abgelaufen. Falls Sie es erneuern möchten "
 "kontaktieren Sie bitte die Bibliothek."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ""
+"Ihr Benutzerkonto ist abgelaufen. Bitte kontaktieren Sie die Bibliothek für "
+"nähere Informationen."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11440,27 +11446,10 @@ msgstr "Ihre Listen"
 msgid "Your lists:"
 msgstr "Ihre Listen:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
 #, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Keine Verlängerung möglich: %s %s Ihr Konto ist nicht mehr gültig. Bitte "
-"kontaktieren Sie die Bibliothek für weitere Informationen. %s Die maximale "
-"Anzahl der Verlängerungen für dieses Exemplar erreicht. %s Erstmöglicher "
-"Zeitpunkt für eine Verlängerung nach der Ausleihe noch nicht errreicht. %s "
-"Dieses Exemplar ist für einen anderen Benutzer vorgemerkt. %s %s "
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Eine Verlängerung war aus den folgenden Gründen nicht möglich: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

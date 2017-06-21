@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-14 22:29-0300\n"
+"POT-Creation-Date: 2017-06-16 03:15-0300\n"
 "PO-Revision-Date: 2015-11-29 09:22+0000\n"
 "Last-Translator: Anthony <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -1220,22 +1220,6 @@ msgid ""
 msgstr ""
 "%s [%%# 参数：标题：此标题本身的linkType：现在 '见自' 或 '参见'，供款目类型使"
 "用的书标：authid：若是连结的权威，它是authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# 参数：名称：选定的范围：预设的容许值范围：指定类别的预设容许值：指定"
-"类别大小的CSS：输入用的大小(若未指定容许值范围)。%%] %s [%% DEFAULT class = "
-"'' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3491,12 +3475,6 @@ msgstr "待付总计"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:161
 #, c-format
 msgid "Amount to pay: "
-msgstr ""
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
 msgstr ""
 
 #. %1$s:  shelfname 
@@ -6144,6 +6122,11 @@ msgstr "订购期数"
 #, c-format
 msgid "Issues summary"
 msgstr "期刊摘要"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "不能预约此题名。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, fuzzy, c-format
@@ -10047,6 +10030,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "这个馆藏已经被您借出。"
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "与另位读者共享虚拟书架"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -10844,6 +10832,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr ""
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, fuzzy, c-format
 msgid "You have successfully registered your new account."
@@ -10918,6 +10911,11 @@ msgid ""
 "two weeks."
 msgstr "若有人在两周内接受您的共享邀请，将以电子邮件通知您。"
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -10940,6 +10938,12 @@ msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
 "renew your account."
 msgstr "您的读者证已到期%s。请与图书馆连系办理恢复事宜。"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr "，请与图书馆连络取得详情。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11082,24 +11086,10 @@ msgstr "您的虚拟书架"
 msgid "Your lists:"
 msgstr "您的清单"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
 #, fuzzy, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"因为以下的原因之一您的续借失败：%s %s 您的帐号到期，详情请洽图书馆。%s 您的续"
-"借次数已满。%s 此馆藏已被他人预约。%s %s "
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "因为下列的困难没有送出表单"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27

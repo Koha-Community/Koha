@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-14 21:35-0300\n"
+"POT-Creation-Date: 2017-06-16 02:45-0300\n"
 "PO-Revision-Date: 2016-12-20 11:40+0200\n"
 "Last-Translator: Paul <vilhan@biblia.sk>\n"
 "Language-Team: SVK\n"
@@ -1260,24 +1260,6 @@ msgstr ""
 "%s [%%# Parameters: heading: the heading itself linkType: currently "
 "'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
 "is a linked authority, its authid %%] %s %s %s %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET avs = AuthorisedValues.GetAuthValueDropbox( category, default ) 
-#. %3$s:  IF avs 
-#: opac-tmpl/bootstrap/en/includes/av-build-dropbox.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: name: the name of the select element category: the "
-"authorised value category default: the default authorised value to select "
-"class: the CSS class of the select element size: the size to use for the "
-"input (generated if the authorised value category does not exist). %%] %s "
-"[%% DEFAULT class = '' size = 20 %%] %s "
-msgstr ""
-"%s [%%# Parametre: názov: názov vybranej kategórie prvkov: predvolená "
-"hodnota povolených hodnôt: predvolená povolená hodnota pre vybranú triedu: "
-"trieda CSS vybranej veľkosti prvku: veľkosť použitá pri vstupe "
-"(vygenerovaná, ak nejestvuje povolená hodnota). %%] %s [%% DEFAULT class = "
-"'' size = 20 %%] %s "
 
 #. For the first occurrence,
 #. %1$s:  ind.label 
@@ -3571,12 +3553,6 @@ msgstr "Neuhradená čiastka"
 #, c-format
 msgid "Amount to pay: "
 msgstr "Dlžná suma: "
-
-#. %1$s:  email 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
-#, c-format
-msgid "An email has been sent to \"%s\". "
-msgstr "Email bol odoslaný \"%s\". "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:146
@@ -6263,6 +6239,11 @@ msgstr "Vydania na objednanie"
 #, c-format
 msgid "Issues summary"
 msgstr "Súhrn čísiel časopisov"
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
+#, fuzzy, c-format
+msgid "It is too soon after the checkout date for this item to be renewed."
+msgstr "Toto je lokálna výpožička, nemožno ju predĺžiť."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -10240,6 +10221,11 @@ msgstr ""
 msgid "This item is already checked out to you."
 msgstr "Tento exemplár vám už bol vypožičaný."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:91
+#, fuzzy, c-format
+msgid "This item is on hold for another patron."
+msgstr "Zdieľať zoznam s iným čitateľom"
+
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "This link is valid for 2 days starting now. "
@@ -11071,6 +11057,11 @@ msgstr ""
 msgid "You have reached your limit of suggestions you can place at this time."
 msgstr "Dosiahli ste limit návrhov, ktoré môžete nateraz podať."
 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
+#, c-format
+msgid "You have renewed this item the maximum number of times allowed."
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "You have successfully registered your new account."
@@ -11149,6 +11140,11 @@ msgstr ""
 "Do dvoch týždňov obdržíte oznámenie emailom, pokiaľ niekto akceptuje vaše "
 "zdieľanie."
 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#, c-format
+msgid "You will receive an email shortly. "
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
 msgid ""
@@ -11175,6 +11171,12 @@ msgid ""
 msgstr ""
 "Váš účet nie je platný od %s. Kontaktujte prosím Vašu knižnicu, ak si ho "
 "želáte obnoviť."
+
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:85
+#, fuzzy, c-format
+msgid ""
+"Your account has expired. Please contact the library for more information."
+msgstr ". Pre viac informácií, kontaktujte prosím Vašu knižnicu."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
 #, c-format
@@ -11325,27 +11327,10 @@ msgstr "Vaše zoznamy"
 msgid "Your lists:"
 msgstr "Vaše zoznamy:"
 
-#. %1$s:  FOREACH error IN RENEW_ERROR.split('\|') 
-#. %2$s:  IF error == 'card_expired' 
-#. %3$s:  ELSIF error == 'too_many' 
-#. %4$s:  ELSIF error == 'too_soon' 
-#. %5$s:  ELSIF error == 'on_reserve' 
-#. %6$s:  END 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
-#, c-format
-msgid ""
-"Your loan renewal failed because of the following reason(s): %s %s Your "
-"account has expired. Please contact the library for more information. %s You "
-"have renewed this item the maximum number of times allowed. %s It is too "
-"soon after the checkout date for this item to be renewed. %s This item is on "
-"hold for another patron. %s %s "
-msgstr ""
-"Obnovenie vašej pôžičky zlyhalo z nasledovných príčin: %s %s Váš účet je "
-"neplatný. Kontaktujte, prosím, vašu knižnicu pre viac informácií. %s Tento "
-"exemplár ste obnovili maximálny povolený počet krát. %s Je príliš skoro po "
-"dni výpožičky pre obnovu tohto exemplára. %s Tento exemplár je rezervovaný "
-"ďalšiemu čitateľovi. %s %s "
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:80
+#, fuzzy, c-format
+msgid "Your loan renewal failed because of the following reason(s): "
+msgstr "Formulár nebol odoslaný kvôli nasledujúcim problémom"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
