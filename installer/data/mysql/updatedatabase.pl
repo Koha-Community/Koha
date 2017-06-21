@@ -13860,6 +13860,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18600 - Missing db update for TalkingTechItivaPhoneNotification)\n";
 }
 
+$DBversion = "16.11.09.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (Koha 16.11.09)\n";
+    SetVersion($DBversion);
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
