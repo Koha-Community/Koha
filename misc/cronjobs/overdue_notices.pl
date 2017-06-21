@@ -468,7 +468,7 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND issues.borrowernumber = ?
     AND issues.branchcode = ?
     AND items.itemlost = 0
-/   AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
+    AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
