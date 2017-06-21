@@ -12,7 +12,7 @@
 [% BLOCK list_permissions %]
     <li>
         <label for="allow_changes_from">Allow changes to contents from: </label>
-        <select name="allow_changes_from" id="allow_changes_from">
+        <select name="allow_changes_from" id="allow_changes_from" onchange="AdjustRemark()">
 
             [% IF shelf.allow_change_from_owner %]<option value="0">Nobody</option>[% ELSE %]<option value="0" selected="selected">Nobody</option>[% END %]
 
@@ -25,7 +25,7 @@
             [% IF shelf.allow_change_from_others %]<option value="2" selected="selected">Anyone seeing this list</option>[% ELSE %]<option value="2">Anyone seeing this list</option>[% END %]
 
         </select>
-        &emsp; <span id="anyone_remark" style="color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
+        &emsp; <span id="anyone_remark" style="display:none;color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
     </li>
 [% END %]
 
@@ -217,6 +217,12 @@ $(document).ready(function(){
 });
 [% END %]
 
+[% IF shelf AND op == 'edit_form' %]
+$(document).ready(function(){
+    AdjustRemark();
+});
+[% END %]
+
     /**
      * This function checks if the adequate number of records are checked for merging
      */
@@ -305,6 +311,25 @@ function placeHold () {
             return false;
         }
     }
+
+function AdjustRemark() {
+    var category = $("#category").val();
+    var perms = $("#allow_changes_from").val();
+
+    if( perms < 2 ) {
+        $("#anyone_remark").hide();
+    } else if( category==1 ) {
+        // If we move to Private (without shares), show Anyone remark
+        // Note: the number of shares is not tested real-time
+        [% IF !shelf.is_shared %]
+            $("#anyone_remark").show();
+        [% ELSE %]
+            $("#anyone_remark").hide();
+        [% END %]
+    } else { // category==2
+        $("#anyone_remark").hide();
+    }
+}
 //]]>
 </script>
 </head>
@@ -556,7 +581,7 @@ function placeHold () {
             [% IF shelf.sortfield == "itemcallnumber" %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
             </select></li>
             <li><label for="category">Category: </label>
-                <select id="category" name="category">
+                <select id="category" name="category" onchange="AdjustRemark()">
                 [% IF shelf.is_private %]
                     <option value="1" selected="selected">Private</option>
                 [% ELSE %]
