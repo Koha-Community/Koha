@@ -59,7 +59,7 @@ sub GetCriteriumDesc{
     if ($displayby =~ /status/i) {
         unless ( grep { /$criteriumvalue/ } qw(ASKED ACCEPTED REJECTED CHECKED ORDERED AVAILABLE) ) {
             my $av = Koha::AuthorisedValues->search({ category => 'SUGGEST_STATUS', authorised_value => $criteriumvalue });
-            return $av->count ? $av->next->lib : 'Unkown';
+            return $av->count ? $av->next->lib : 'Unknown';
         }
         return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     }
@@ -67,7 +67,7 @@ sub GetCriteriumDesc{
         if $displayby =~ /branchcode/;
     if ( $displayby =~ /itemtype/ ) {
         my $av = Koha::AuthorisedValues->search({ category => 'SUGGEST_FORMAT', authorised_value => $criteriumvalue });
-        return $av->count ? $av->next->lib : 'Unkown';
+        return $av->count ? $av->next->lib : 'Unknown';
     }
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $patron = Koha::Patrons->find( $criteriumvalue );

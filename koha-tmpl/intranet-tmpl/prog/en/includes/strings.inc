@@ -9,7 +9,7 @@
     var NOT_CHECKED_OUT = _("not checked out");
     var TOO_MANY_RENEWALS = _("too many renewals");
     var ON_RESERVE = _("on hold");
-    var REASON_UNKNOWN = _("reason unkown");
+    var REASON_UNKNOWN = _("reason unknown");
     var TODAYS_CHECKOUTS = _("Today's checkouts");
     var PREVIOUS_CHECKOUTS = _("Previous checkouts");
     var BY = _("by _AUTHOR_");

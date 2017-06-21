@@ -42,7 +42,7 @@
     <option value="pl">Publisher location</option>
 
     [%# Use non-normalized st-year instead of st-numeric, %]
-    [%# since pubdate can include 'u' to signify unkown %]
+    [%# since pubdate can include 'u' to signify unknown %]
     [%# dates. See "Legal Characters" at: %]
     [%# http://www.loc.gov/marc/bibliographic/bd008a.html %]
     [%# This search is also for date ranges due to the %]
