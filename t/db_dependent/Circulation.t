@@ -402,7 +402,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     # Items can't fill hold for reasons
     ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
-    is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
+    is( $renewokay, 0, 'Cannot renew, item is marked not for loan, hold is blocked');
     ModItem({ notforloan => 0, itype => $itemtype }, $biblionumber, $itemnumber,1);
 
     # FIXME: Add more for itemtype not for loan etc.
@@ -587,6 +587,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
                     biblionumber  => $biblionumber,
                     homebranch    => $branch,
                     holdingbranch => $branch,
+                    notforloan    => 0,
                 }
             }
         );
@@ -646,6 +647,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
                 biblionumber => $biblionumber,
                 homebranch       => $branch,
                 holdingbranch    => $branch,
+                notforloan       => 0,
             }
         });
 
@@ -686,6 +688,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
                     biblionumber  => $biblionumber,
                     homebranch    => $branch,
                     holdingbranch => $branch,
+                    notforloan    => 0
                 }
             }
         );

@@ -2742,6 +2742,10 @@ sub CanBookBeRenewed {
     my $itemissue = GetItemIssue($itemnumber) or return ( 0, 'no_checkout' );
     return ( 0, 'onsite_checkout' ) if $itemissue->{onsite_checkout};
 
+    if (defined $item->{notforloan} && $item->{notforloan} != 0) {
+        return (0, 'non_renewable');
+    }
+
     $borrowernumber ||= $itemissue->{borrowernumber};
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
