@@ -682,17 +682,6 @@ FLUSH PRIVILEGES;
 eof
     fi #`
 
-    if [ "$op" = use ]
-    then
-        mysql --defaults-extra-file=/etc/mysql/koha-common.cnf --force <<eof
-CREATE USER \`$mysqluser\`@'$mysql_hostname' IDENTIFIED BY '$mysqlpwd';
-CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
-GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
-GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`@'$mysql_hostname';
-FLUSH PRIVILEGES;
-eof
-    fi #`
-
     if [ "$CLO_LETSENCRYPT" = "yes" ]; then
         APACHE_CONFIGFILE="apache-site-https.conf.in"
     else
