@@ -559,6 +559,19 @@ name="$1"
 
 set_upload_path $name
 
+if [ "$op" = use ] && [ "$CLO_DATABASE" = "" ] &&
+   ( [ ! -f "$PASSWDFILE" ] || [ ! `cat $PASSWDFILE | grep "^$name:"` ] )
+then
+    cat <<NO_DB
+--use-db must have a database name. It can be specified in a readable
+password file ($PASSWDFILE). Using --passwdfile overrides the default
+/usr/koha/passwd file. Each line of a passwd file should be in the format of:
+    instance:username:password:dbname
+A database name can also be specified using '--database dbname'.
+NO_DB
+    die;
+fi
+
 if [ "$USE_MEMCACHED" = "yes" ]; then
     set_memcached $name
 elif [ "$CLO_MEMCACHED_SERVERS" != "" ] || \
