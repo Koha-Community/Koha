@@ -122,6 +122,7 @@ sub search {
         my $s = Koha::Virtualshelves->find( $shelf->{shelfnumber} );
         $shelf->{can_manage_shelf} = $s->can_be_managed( $loggedinuser );
         $shelf->{can_delete_shelf} = $s->can_be_deleted( $loggedinuser );
+        $shelf->{is_shared} = $s->is_shared;
     }
     return {
         iTotalRecords => $iTotalRecords,

@@ -92,6 +92,7 @@ $(document).ready(function(){
             { 'mDataProp': 'dt_type' },
             { 'mDataProp': 'dt_shelfname' },
             { 'mDataProp': 'dt_count' },
+            { 'mDataProp': 'dt_is_shared' },
             { 'mDataProp': 'dt_owner' },
             { 'mDataProp': 'dt_sortby' },
             { 'mDataProp': 'dt_created_on' },
@@ -638,6 +639,7 @@ function AdjustRemark() {
                         <th class="NoVisible">Type</th>
                         <th>List name</th>
                         <th>Contents</th>
+                        <th>Type</th>
                         <th>Owner</th>
                         <th>Sort by</th>
                         <th>Creation date</th>
@@ -647,6 +649,7 @@ function AdjustRemark() {
                     <tr class="filters_row">
                         <th></th>
                         <th><input class="filter text_filter" id="searchshelfname_filter" placeholder="List name"></th>
+                        <th></th>
                         <th></th>
                         <th><input class="filter text_filter" id="searchowner_filter" placeholder="Owner"></th>
                         <th>

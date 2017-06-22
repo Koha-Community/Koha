@@ -13,6 +13,8 @@
                     "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber %]'>[% data.shelfname | html%]</a>",
                 "dt_count":
                     "[% data.count %] item(s)",
+                "dt_is_shared":
+                    "[% IF data.type == 2 %]Public[% ELSIF data.is_shared %]Shared[% ELSE %]Private[% END %]",
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner %]'>[% data.firstname %] [% data.surname %]</a>",
                 "dt_sortby":
