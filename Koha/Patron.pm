@@ -556,11 +556,13 @@ $PATRON, 0 otherwise.
 sub do_check_for_previous_checkout {
     my ( $self, $item ) = @_;
 
-    # Find all items for bib and extract item numbers.
-    my @items = Koha::Items->search({biblionumber => $item->{biblionumber}});
     my @item_nos;
-    foreach my $item (@items) {
-        push @item_nos, $item->itemnumber;
+    my $biblio = Koha::Biblios->find( $item->{biblionumber} );
+    if ( $biblio->serial ) {
+        push @item_nos, $item->{itemnumber};
+    } else {
+        # Get all itemnumbers for given bibliographic record.
+        @item_nos = $biblio->items->get_column( 'itemnumber' );
     }
 
     # Create (old)issues search criteria
