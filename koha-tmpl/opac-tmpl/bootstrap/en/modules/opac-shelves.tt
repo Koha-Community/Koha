@@ -602,7 +602,9 @@
                                             [% END %]
                                         </li>
                                     [% END %]
-                                    [% INCLUDE list_permissions %]
+                                    [% IF shelf.category == PUBLIC OR shelf.is_shared %]
+                                        [% INCLUDE list_permissions %]
+                                    [% END %]
                                 </ol>
                                 [% UNLESS Koha.Preference('OpacAllowPublicListCreation') OR category == PUBLIC %]
                                     <input type="hidden" name="category" value="[% PRIVATE %]" />
