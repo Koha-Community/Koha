@@ -73,6 +73,7 @@ sub do_checkout {
         foreach my $confirmation (keys %{$needsconfirmation}) {
             if ($confirmation eq 'RENEW_ISSUE'){
                 $self->screen_msg("Item already checked out to you: renewing item.");
+                last;
             } elsif ($confirmation eq 'RESERVED' or $confirmation eq 'RESERVE_WAITING') {
                 my $x = $self->{item}->available($patron_barcode);
                 if ($x) {
@@ -81,19 +82,24 @@ sub do_checkout {
                     $self->screen_msg("Item is reserved for another patron upon return.");
                     # $noerror = 0;
                 }
+                last;
             } elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
                 $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
                 $noerror = 0;
+                last;
             } elsif ($confirmation eq 'DEBT') {
                 $self->screen_msg('Outstanding Fines block issue');
                 $noerror = 0;
+                last;
             } elsif ($confirmation eq 'HIGHHOLDS') {
                 $overridden_duedate = $needsconfirmation->{$confirmation}->{returndate};
                 $self->screen_msg('Loan period reduced for high-demand item');
+                last;
             } elsif ($confirmation eq 'RENTALCHARGE') {
                 if ($self->{fee_ack} ne 'Y') {
                     $noerror = 0;
                 }
+                last;
             } else {
                 $self->screen_msg($needsconfirmation->{$confirmation});
                 $noerror = 0;
