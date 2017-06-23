@@ -70,7 +70,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 
 subtest 'Testing Patron Info Request V2' => sub {
     $schema->storage->txn_begin;
-    plan tests => 17;
+    plan tests => 18;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -185,6 +185,15 @@ sub test_request_patron_info_v2 {
     check_field( $respcode, $response, FID_HOME_PHONE, $patron2->{phone}, 'Verified home phone in BF' );
     # No check for custom fields here (unofficial PB, PC and PI)
     check_field( $respcode, $response, FID_SCREEN_MSG, '.+', 'We have a screen msg', 'regex' );
+
+    # Test customized patron name in AE with same sip request
+    # This implicitly tests C4::SIP::ILS::Patron->name
+    $server->{account}->{ae_field_template} = "X[% patron.surname %]Y";
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    undef $response;
+    $msg->handle_patron_info( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_PERSONAL_NAME, 'X' . $patron2->{surname} . 'Y', 'Check customized patron name' );
 
     # Check empty password and verify CQ again
     $siprequest = PATRON_INFO. 'engYYYYMMDDZZZZHHMMSS'.'Y         '.
