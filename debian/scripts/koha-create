@@ -66,6 +66,7 @@ Options:
   --defaultsql some.sql     Specify a default SQL file to be loaded on the DB.
   --configfile cfg_file     Specify an alternate config file for reading default values.
   --passwdfile passwd       Specify an alternate passwd file.
+  --dbhost host             Enforce the use of the specified DB server
   --database dbname         Enforce the use of the specified DB name (64 char limit)
   --adminuser n             Explicit the admin user ID in the DB. Relevant in
                             conjunction with --defaultsql and --populate-db.
@@ -430,7 +431,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,upload-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -480,6 +481,8 @@ while true ; do
             CLO_PASSWDFILE="$2" ; shift 2 ;;
         -b|--database)
             CLO_DATABASE="$2" ; shift 2 ;;
+        --dbhost)
+            CLO_DBHOST="$2" ; shift 2 ;;
         -a|--adminuser)
             CLO_ADMINUSER="$2" ; shift 2 ;;
         --enable-sru)
@@ -598,6 +601,7 @@ then
     mysqluser=`echo $passwdline | cut -d ":" -f 2`
     mysqlpwd=`echo $passwdline | cut -d ":" -f 3`
     mysqldb=`echo $passwdline | cut -d ":" -f 4`
+    mysqlhost=`echo $passwdline | cut -d ":" -f 5`
 fi
 
 # The order of precedence for MySQL database name is:
@@ -606,6 +610,7 @@ if [ "$mysqldb" = "" ]
 then
     mysqldb="koha_$name"
 fi
+
 if [ "$CLO_DATABASE" != "" ]
 then
     mysqldb="$CLO_DATABASE"
@@ -615,7 +620,16 @@ if [ "$mysqluser" = "" ]
 then
     mysqluser="koha_$name"
 fi
-mysqlhost="$(getmysqlhost)"
+
+if [ "$CLO_DBHOST" != "" ]
+then
+    mysqlhost="$CLO_DBHOST"
+fi
+
+if [ "$mysqlhost" = "" ]
+then
+    mysqlhost="$(getmysqlhost)"
+fi
 
 if [ "$op" = create ] || [ "$op" = request ] || [ "$op" = use ]
 then
