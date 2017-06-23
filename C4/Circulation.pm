@@ -2926,6 +2926,7 @@ sub AddRenewal {
     my $branch          = shift;
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
+    my $opacrenewal     = shift;
 
     my $item   = GetItem($itemnumber) or return;
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return;
@@ -3028,10 +3029,14 @@ sub AddRenewal {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
-    # Log the renewal
+    unless ( $opacrenewal ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
+        $branch = C4::Context->userenv ? C4::Context->userenv->{branch} : $branch;
+    }
+
+    # Add the renewal to stats
     UpdateStats(
         {
-            branch => C4::Context->userenv ? C4::Context->userenv->{branch} : $branch,
+            branch         => $branch,
             type           => 'renew',
             amount         => $charge,
             itemnumber     => $itemnumber,
