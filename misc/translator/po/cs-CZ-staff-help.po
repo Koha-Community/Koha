@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-11 13:59-0300\n"
-"PO-Revision-Date: 2017-02-09 14:41+0000\n"
+"POT-Creation-Date: 2017-06-15 21:11-0300\n"
+"PO-Revision-Date: 2017-06-14 10:10+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1486651268.000000\n"
+"X-POOTLE-MTIME: 1497435036.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -3392,12 +3392,12 @@ msgid ""
 "the libraries are placed in the StaticHoldsQueueWeight system preference."
 msgstr ""
 "Ve výchozím nastavení je fronta rezervací generována tak, že systém nejprve "
-"zkusí splnit požadavek jednotkami, které jsou k dispozici v knihovně, ve "
+"pokusí vykrýt požadavek jednotkami, které jsou k dispozici v knihovně, ve "
 "které má být rezervace vyzvednuta. Pokud zde žádné volné jednotky nejsou, "
-"potom skript build_holds_queue.pl vyzkouší knihovny podle seznamu "
-"definovaného v nastavení StaticHoldsQueueWeight. Pokud je nastavení "
-"RandomizeHoldsQueueWeight zakázáno (což je výchozí nastavení), skript "
-"použije knihovny v tom pořadí v jakém jsou vypsány v StaticHoldsQueueWeight."
+"potom skript build_holds_queue.pl vyzkouší najít volné jednotky v knihovnách "
+"uvedených na seznamu v nastavení StaticHoldsQueueWeight. Můžete rozhodnout "
+"jestli se využije pořadí knihoven, jak je zapsáno nebo se knihovna vybere "
+"náhodně."
 
 #: intranet-tmpl/prog/en/modules/help/admin/authorised_values.tt:11
 #, c-format
@@ -6579,9 +6579,10 @@ msgid ""
 "larger libraries before smaller libraries, you would want "
 "StaticHoldsQueueWeight to look something like \"LRG,MED,SML\"."
 msgstr ""
-"Například, pokud máte v systému tři knihovny rozdílných velikostí (malou, "
-"střední a velkou) a chcete, aby velké knihovny plnily rezervace přednostně, "
-"natavte předvolbu StaticHoldsQueueWeight zhruba takto: \"VEL,STR,MAL\"."
+"Například, pokud máte v systému tři knihovny/pobočky rozdílných velikostí "
+"(malou, střední a velkou) a chcete, aby velká knihovna plnila rezervace "
+"přednostně. Pak nastavte předvolbu StaticHoldsQueueWeight zhruba takto: "
+"\"VEL,STR,MAL\"."
 
 #: intranet-tmpl/prog/en/modules/help/tools/csv-profiles.tt:61
 #, c-format
@@ -10872,8 +10873,8 @@ msgid ""
 "Item being checked out meets the decreaseLoanHighHolds system preference "
 "criteria"
 msgstr ""
-"Půjčovaná jednotka splňuje kritéria decreaseLoanHighHolds - výpůjční lhůta "
-"bude zkrácena."
+"Půjčovaná jednotka splňuje kritéria pro zkrácení výpůjční doby na základě "
+"počtu čekajících rezervací (decreaseLoanHighHolds)"
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:110
 #, c-format
@@ -11373,10 +11374,10 @@ msgid ""
 "RandomizeHoldsQueueWeight, causing the script to request hold fulfillment "
 "not randomly, but by alphabetical order."
 msgstr ""
-"Ponechání prázdného parametru StaticHoldsQueueWeight v tomto okamžiku je "
+"Ponechání parametru StaticHoldsQueueWeight nevyplněného je v tomto okamžiku "
 "nežádoucí. Mohlo by dojít k tomu, že skript build_holds_queue bude ignorovat "
-"RandomizeHoldsQueueWeight, což by vedlo k tomu, že skript nebude přiřazovat "
-"rezervace náhodně, ale podle abecedy."
+"RandomizeHoldsQueueWeight, což by vedlo k tomu, že rezervace nebudou "
+"přiřazeny náhodně, ale podle abecedy."
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:44
 #, c-format
@@ -17323,7 +17324,7 @@ msgid ""
 "The rules are applied from most specific to less specific, using the first "
 "found in this order:"
 msgstr ""
-"Pravidla se aplikují z nejvíce specifických po méně konkrétní, s použitím "
+"Pravidla se aplikují od nejvíce specifických po méně konkrétní, s použitím "
 "prvního nalezeného v tomto pořadí:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/matching-rules.tt:7
@@ -20923,12 +20924,12 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Without periodicy: some very specific (usually high level science journals) "
-"don't have a true periodicity. When you subscribe to the title, you "
-"subscribe for 6 issues, which can arrive in 1 year... or 2... There is no "
-"regularity or known schedule."
+"Without periodicity: some very specific (usually high level science "
+"journals) don't have a true periodicity. When you subscribe to the title, "
+"you subscribe for 6 issues, which can arrive in 1 year... or 2... There is "
+"no regularity or known schedule."
 msgstr ""
 "Bez periodicy: některé velmi specifické (většinou vědecké časopisy vysoké "
 "úrovně ) nemají skutečnou periodicitu. Když si předplácíte titul, se "
