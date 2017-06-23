@@ -43,16 +43,15 @@ subtest 'CRUD' => sub {
     is( $shelf->allow_change_from_others, 0, 'The default value for allow_change_from_others should be 0' );
     is( output_pref($shelf->created_on), output_pref(dt_from_string), 'The creation time should have been set to today' );
 
-    my $shelf_18672 = Koha::Virtualshelves->find( $shelf->shelfnumber ); # Bug 18672
-    my $created_18672 = $shelf_18672->created_on;
-    sleep 2; # Wait 2 seconds, then store
+    # Test if creation date will not be overwritten by store
+    my $created = dt_from_string->subtract( hours => 1 );
+    $shelf->created_on( $created );
     $shelf->store;
-    $shelf_18672 = Koha::Virtualshelves->find( $shelf->shelfnumber );
-    is($shelf_18672->created_on, $created_18672, 'Creation date is the same after update (Bug 18672)' );
 
     my $retrieved_shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
 
     is( $retrieved_shelf->shelfname, $shelf->shelfname, 'Find should correctly return the shelfname' );
+    is( dt_from_string($retrieved_shelf->created_on), $created, 'Creation date is the same after update (Bug 18672)' );
 
     # Insert with the same name
     eval {
