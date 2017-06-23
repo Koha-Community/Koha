@@ -26,7 +26,6 @@ use Graphics::Magick;
 use XML::Simple;
 use POSIX qw(ceil);
 use autouse 'Data::Dumper' => qw(Dumper);
-use Clone qw(clone);
 
 use C4::Debug;
 use C4::Context;
@@ -131,10 +130,8 @@ if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page t
 CARD_ITEMS:
 foreach my $item (@{$items}) {
     if ($item) {
-
-#my $print_layout_xml = $layout_back_xml;
         my $print_layout_xml = (( ($cardscount % 2  == 1) && ( $layout_back_id ) ) ?
-            clone($layout_back_xml) : clone($layout_xml) );
+            $layout_back_xml : $layout_xml );
 
         $cardscount ++;
         my $borrower_number = $item->{'borrower_number'};
