@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -229,6 +229,21 @@ like(
 
 my $stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef, $borrower_id1, $item_id1, $branchcode_3 );
 ok( $stat, "Bug 17781 - 'Improper branchcode set during renewal' still fixed" );
+
+#Let's do an opac renewal - whatever branchcode we send should be used
+my $opac_renew_issue = $builder->build({ source=>"Issue",value=>{
+        date_due => '2017-01-01',
+        branch => $branchcode_1,
+        itype => $itemtype,
+        borrowernumber => $borrower_id1
+        }
+        });
+
+my $datedue4 = AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, "Stavromula", $datedue1, $daysago10, 1 );
+
+$stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef,  $opac_renew_issue->{borrowernumber},  $opac_renew_issue->{itemnumber}, "Stavromula" );
+ok( $stat, "Bug 18572 - 'Bug 18572 - OpacRenewalBranch is now respected" );
+
 
 
 #Test GetBiblioIssues
