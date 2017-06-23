@@ -94,7 +94,7 @@ sub build_issue_data {
         my ( $charge, $itemtype ) =
           GetIssuingCharges( $issue->{itemnumber}, $borrowernumber );
 
-        my $itemtype = Koha::ItemTypes->find( $itemtype );
+        $itemtype = Koha::ItemTypes->find( $itemtype );
         $row{'itemtype_description'} = $itemtype->description; #FIXME Should not it be translated_description
 
         $row{'charge'} = sprintf( "%.2f", $charge );
