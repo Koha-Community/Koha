@@ -62,6 +62,12 @@ __PACKAGE__->set_primary_key("frameworkcode");
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KY1w7J/5cBsz9VV7QEBKPw
 
+__PACKAGE__->has_many(
+    "marc_tag_structure",
+    "Koha::Schema::Result::MarcTagStructure",
+    { "foreign.frameworkcode" => "self.frameworkcode"},
+    { cascade_copy => 0, cascade_delete => 0 },
+);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
