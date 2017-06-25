@@ -449,6 +449,7 @@ my $scan = $params->{'scan'};
 my $count = C4::Context->preference('numSearchResults') || 20;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
+$offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
 my $hits;
