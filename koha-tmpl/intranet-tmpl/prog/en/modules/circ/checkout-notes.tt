@@ -83,9 +83,10 @@
     Checkout notes
 </div>
 
-<div id="doc" class="yui-t7"> <!-- <div id="doc3" class="yui-t2" -->
+[% IF Koha.Preference('CircSidebar') %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
     <div id="bd">
         <div id="yui-main">
+        [% IF Koha.Preference('CircSidebar') %]<div class="yui-b">[% END %]
 
             <h1>Checkout notes</h1>
 
@@ -127,20 +128,24 @@
                                 [% FOREACH note IN notes %]
                                     <tr>
                                         <td><input type="checkbox" name="issue_ids" value="[% note.issue_id %]"></td>
-                                        <td>[% note.item.biblionumber.title %] - [% note.item.biblionumber.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber.biblionumber %]">[% note.item.barcode %]</a>)</td>
+                                        <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
                                         <td>[% note.note %]</td>
                                         <td>[% note.notedate | $KohaDates %]</td>
-                                        <td>[% note.borrower.firstname %] [% note.borrower.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.borrower.borrowernumber %]">[% note.borrower.cardnumber %]</a>)</td>
-                                        <td>[% IF ( note.noteseen == 0 ) %]
-                                            <span id="status_[% note.issue_id %]">Not seen</span>
-                                        [% ELSIF ( note.noteseen == 1 ) %]
-                                            <span id="status_[% note.issue_id %]">Seen</span>
-                                        [% END %]</td>
-                                        <td class="actions">[% IF ( note.noteseen == 1 ) %]
-                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                                        [% ELSIF ( note.noteseen == 0 ) %]
-                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                                        [% END %]</td>
+                                        <td>[% IF note.borrower.title %][% note.borrower.title [% END %][% note.borrower.firstname %] [% note.borrower.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.borrower.borrowernumber %]">[% note.borrower.cardnumber %]</a>)</td>
+                                        <td>
+                                            [% IF ( note.noteseen == 0 ) %]
+                                                <span id="status_[% note.issue_id %]">Not seen</span>
+                                            [% ELSIF ( note.noteseen == 1 ) %]
+                                                <span id="status_[% note.issue_id %]">Seen</span>
+                                            [% END %]
+                                        </td>
+                                        <td class="actions">
+                                            [% IF ( note.noteseen == 1 ) %]
+                                                <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                            [% ELSIF ( note.noteseen == 0 ) %]
+                                                <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                            [% END %]
+                                        </td>
                                     </tr>
                                 [% END %]
                             </tbody>
@@ -157,7 +162,16 @@
 
             [% END %] <!-- selected_count -->
 
-        </div> <!-- yui-main -->
+        </div> <!-- yui-imain -->
+
+        [% IF Koha.Preference('CircSidebar') %]
+        </div>
+
+        <div class="yui-b noprint">
+            [% INCLUDE 'circ-nav.inc' %]
+        </div>
+        [% END %]
+
     </div> <!-- bd -->
 </div> <!-- doc3 -->
 

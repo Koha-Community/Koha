@@ -56,6 +56,7 @@ use Koha::Patron::Messages;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Patron::Modifications;
+use Koha::Checkouts;
 
 use Date::Calc qw(
   Today
@@ -144,6 +145,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     }
 );
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+$template->param( pending_checkout_notes => $pending_checkout_notes );
 
 my $force_allow_issue = $query->param('forceallow') || 0;
 if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {

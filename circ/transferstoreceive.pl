@@ -40,6 +40,7 @@ use Koha::Libraries;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
+use Koha::Checkouts;
 
 my $input = new CGI;
 my $itemnumber = $input->param('itemnumber');
@@ -125,11 +126,14 @@ while ( my $library = $libraries->next ) {
     push( @branchesloop, \%branchloop ) if %branchloop;
 }
 
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+
 $template->param(
     branchesloop => \@branchesloop,
     show_date    => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
-	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
-	latetransfers => $latetransfers ? 1 : 0,
+    TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
+    latetransfers => $latetransfers ? 1 : 0,
+    pending_checkout_notes => $pending_checkout_notes,
 );
 
 # Checking if there is a Fast Cataloging Framework

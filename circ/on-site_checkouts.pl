@@ -23,6 +23,7 @@ use C4::Circulation qw( GetPendingOnSiteCheckouts );
 use C4::Output;
 use C4::Koha;
 use Koha::BiblioFrameworks;
+use Koha::Checkouts;
 
 my $cgi = new CGI;
 
@@ -39,11 +40,12 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
-
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
 my $pending_onsite_checkouts = C4::Circulation::GetPendingOnSiteCheckouts();
 
 $template->param(
     pending_onsite_checkouts => $pending_onsite_checkouts,
+    pending_onsite_notes     => $pending_onsite_notes,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

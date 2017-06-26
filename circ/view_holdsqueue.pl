@@ -30,7 +30,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::HoldsQueue qw(GetHoldsQueueItems);
 use Koha::BiblioFrameworks;
-
+use Koha::Checkouts;
 use Koha::ItemTypes;
 
 my $query = new CGI;
@@ -63,6 +63,9 @@ if ( $run_report ) {
         run_report => $run_report,
     );
 }
+
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+$template->param( pending_checkout_notes => $pending_checkout_notes );
 
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );

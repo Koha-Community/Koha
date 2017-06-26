@@ -27,6 +27,7 @@ use C4::Koha;
 use C4::Debug;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
+use Koha::Checkouts;
 use Data::Dumper;
 
 =head1 branchoverdues.pl
@@ -98,10 +99,13 @@ foreach my $num (@getoverdues) {
     push( @overduesloop, \%overdueforbranch );
 }
 
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+
 # initiate the templates for the overdueloop
 $template->param(
     overduesloop => \@overduesloop,
     location     => $location,
+    pending_checkout_notes => $pending_checkout_notes,
 );
 
 # Checking if there is a Fast Cataloging Framework

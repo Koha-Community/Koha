@@ -27,6 +27,7 @@ use C4::Print;  # GetPrinters
 use C4::Koha;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
+use Koha::Checkouts;
 
 # this will be the script that chooses branch and printer settings....
 
@@ -126,11 +127,14 @@ if (scalar @updated and not scalar @recycle_loop) {
     print $query->redirect($referer || '/cgi-bin/koha/circ/circulation.pl');
 }
 
+my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
+
 $template->param(
     referer     => $referer,
     printerloop => \@printerloop,
     branch      => $branch,
     recycle_loop=> \@recycle_loop,
+    pending_checkout_notes => $pending_checkout_notes,
 );
 
 # Checking if there is a Fast Cataloging Framework

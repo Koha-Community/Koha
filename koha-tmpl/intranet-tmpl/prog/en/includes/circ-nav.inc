@@ -20,6 +20,9 @@
             [% IF ( fast_cataloging ) %][% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
             [% END %][% END %]
+            [% IF Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes %]
+                <li><a href="/cgi-bin/koha/circ/checkout-notes.pl">Checkout notes</a> [% IF pending_checkout_notes %]<span class="number_box"><a href="/cgi-bin/koha/circ/checkout-notes.pl">[% pending_checkout_notes %]</span>[% END %]</li>
+            [% END %]
         </ul>
 
         <h5>Circulation reports</h5>
