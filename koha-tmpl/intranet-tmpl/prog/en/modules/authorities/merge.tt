@@ -54,31 +54,32 @@ function changeFramework(fw) {
 
 
 <h1>Merging records</h1>
-[% IF ( result ) %]
-    [% IF ( errors ) %]
+
+[% IF ( errors ) %]
 
     [% FOREACH error IN errors %]
         <div class="dialog alert">
-
-                [% IF error.code == 'CANNOT_MOVE' %]
-                    The following items could not be moved from the old record to the new one: [% error.value %]
-                [% ELSIF error.code == 'FRAMEWORK_NOT_SELECTED' %]
-                    No framework has been selected. Please select a framework for merging.
-                [% ELSE %]
-                    [% error %]
-                [% END %]
-
-            <br />Therefore, the record to be merged has not been deleted.</div>
+            [% IF error.code == 'WRONG_COUNT' %]
+                Number of records provided for merging: [% error.value %]. Currently only 2 records can be merged at a time.
+            [% ELSIF error.code == 'DESTRUCTIVE_MERGE' %]
+                You cannot merge a record with itself. Please select two different authorities.
+            [% ELSIF error.code == 'WRONG_FRAMEWORK' %]
+                The Default framework cannot be used, or the framework does not exist. Please select another framework for merging.
+            [% ELSIF error.code == 'EMPTY_MARC' %]
+                Sorry, but we did not find any MARC tags in the reference record.
+            [% ELSE %]
+                [% error %]
+            [% END %]
+        </div>
     [% END %]
 
-    [% ELSE %]
+[% ELSIF ( result ) %]
+
         <script type="text/javascript">window.location.href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 %]"</script>
         <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 %]">Click here to see the merged record.</a></p>
-    [% END %]
 
-[% ELSE %]
+[% ELSIF ( choosereference ) %]
 
-[% IF ( choosereference ) %]
 <p>Please choose which record will be the reference for the merge. The record chosen as reference will be kept, and the other will be deleted.</p>
 <form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post">
     <fieldset class="rows">
@@ -92,11 +93,11 @@ function changeFramework(fw) {
                       <select name="frameworkcode" id="frameworkcode">
                                       [% FOREACH frameworkcodeloo IN frameworkselect %]
                                           [% IF frameworkcodeloo.authtypecode == frameworkcode1 %]
-                                              <option value="[% frameworkcodeloo.value %]" selected="selected">
+                                              <option value="[% frameworkcodeloo.authtypecode %]" selected="selected">
                                           [% ELSE %]
-                                              <option value="[% frameworkcodeloo.value %]">
+                                              <option value="[% frameworkcodeloo.authtypecode %]">
                                           [% END %]
-                                           [% frameworkcodeloo.frameworktext %]
+                                           [% frameworkcodeloo.authtypetext %]
                                            </option>
                                       [% END %]
                       </select></li>
@@ -108,21 +109,9 @@ function changeFramework(fw) {
     <fieldset class="action"><input type="submit" value="Next" /></fieldset>
     </fieldset>
 </form>
-[% ELSE %]
-[% IF ( errors ) %]
-    <div class="dialog alert">
-    [% FOREACH error IN errors %]
-        <p>
-                [% IF error.code == 'WRONG_COUNT' %]
-                    Number of records provided for merging: [% error.value %]. Currently only 2 records can be merged at a time.
-                [% ELSE %]
-                    [% error %]
-                [% END %]
 
-            </p>
-    [% END %]
-    </div>
 [% ELSE %]
+
 <form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
 <div class="yui-g">
@@ -141,8 +130,7 @@ function changeFramework(fw) {
 <fieldset class="action"><input type="submit" name="merge" value="Merge" /></fieldset>
 </div>
 </form>
-[% END %]
-[% END %]
+
 [% END %]
 
 </div>
