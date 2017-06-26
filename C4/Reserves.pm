@@ -2359,7 +2359,7 @@ sub ReserveSlip {
             'items'          => $reserve->itemnumber,
         },
         substitute => {
-            lastpickupdate => output_pref( { dt => $reserve->waiting_expires_on, dateonly => 1 })
+            lastpickupdate => output_pref( { dt => $reserve->waiting_expires_on })
         },
     );
 }
