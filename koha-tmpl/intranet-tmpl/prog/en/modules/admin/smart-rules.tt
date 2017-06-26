@@ -168,6 +168,7 @@ $(document).ready(function() {
             <tr>
                 <th>Patron category</th>
                 <th>Item type</th>
+                <th>Actions</th>
                 <th>Current checkouts allowed</th>
                 <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
@@ -211,6 +212,11 @@ $(document).ready(function() {
 									[% rule.translated_description %]
 								[% END %]
 							</td>
+                                                        <td class="actions">
+                                                          <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                        </td>
+
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
 									Unlimited
 								[% ELSE %]
@@ -295,7 +301,8 @@ $(document).ready(function() {
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                                           <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
-							</td>
+                                                        </td>
+
                 	</tr>
             	[% END %]
                 <tr id="edit_row">
@@ -314,6 +321,11 @@ $(document).ready(function() {
                             <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
                         [% END %]
                         </select>
+                    </td>
+                    <td class="actions">
+                        <input type="hidden" name="branch" value="[% current_branch %]"/>
+                        <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
+                        <button name="cancel" class="clear_edit btn btn-default btn-xs"><i class="fa fa-undo"></i> Clear</button>
                     </td>
                     <td><input type="text" name="maxissueqty" id="maxissueqty" size="3" /></td>
                     <td><input type="text" name="maxonsiteissueqty" id="maxonsiteissueqty" size="3" /></td>
@@ -395,6 +407,7 @@ $(document).ready(function() {
                     <tr>
                       <th>Patron category</th>
                       <th>Item type</th>
+                      <th>&nbsp;</th>
                       <th>Current checkouts allowed</th>
                       <th>Current on-site checkouts allowed</th>
                       <th>Loan period</th>
@@ -420,7 +433,7 @@ $(document).ready(function() {
                       <th>Item level holds</th>
                       <th>Article requests</th>
                       <th>Rental discount (%)</th>
-                      <th colspan="2">&nbsp;</th>
+                      <th>&nbsp;</th>
                     </tr>
                   </tfoot>
                 </tbody>
