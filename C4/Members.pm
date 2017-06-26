@@ -896,7 +896,9 @@ database column.
 =cut
 
 sub get_cardnumber_length {
-    my ( $min, $max ) = ( 0, 32 ); # borrowers.cardnumber is a nullable varchar(20)
+    my $borrower = Koha::Schema->resultset('Borrower');
+    my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
+    my ( $min, $max ) = ( 0, $field_size ); # borrowers.cardnumber is a nullable varchar(20)
     $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
     if ( my $cardnumber_length = C4::Context->preference('CardnumberLength') ) {
         # Is integer and length match
@@ -912,9 +914,7 @@ sub get_cardnumber_length {
         }
 
     }
-    my $borrower = Koha::Schema->resultset('Borrower');
-    my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
-    $min = $field_size if $min > $field_size;
+    $min = $max if $min > $max;
     return ( $min, $max );
 }
 
