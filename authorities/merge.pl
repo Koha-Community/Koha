@@ -27,6 +27,8 @@ use Koha::MetadataRecord::Authority;
 use C4::Koha;
 use C4::Biblio;
 
+use Koha::Exceptions;
+
 my $input  = new CGI;
 my @authid = $input->multi_param('authid');
 my $merge  = $input->param('merge');
@@ -87,14 +89,16 @@ else {
         push @errors, { code => "WRONG_COUNT", value => scalar(@authid) };
     }
     else {
-        my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid($authid[0]) || Koha::MetadataRecord::Authority->new();
-        my $recordObj2;
+        my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid($authid[0]);
+        Koha::Exceptions::ObjectNotFound->throw( "No authority record found for authid $authid[0]\n" ) if !$recordObj1;
 
+        my $recordObj2;
         if (defined $mergereference && $mergereference eq 'breeding') {
-            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_breeding($authid[1]) || Koha::MetadataRecord::Authority->new();
+            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_breeding($authid[1]);
         } else {
-            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_authid($authid[1]) || Koha::MetadataRecord::Authority->new();
+            $recordObj2 =  Koha::MetadataRecord::Authority->get_from_authid($authid[1]);
         }
+        Koha::Exceptions::ObjectNotFound->throw( "No authority record found for authid $authid[1]\n" ) if !$recordObj2;
 
         if ($mergereference) {
 

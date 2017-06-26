@@ -93,13 +93,6 @@ sub get_from_authid {
     return if ($@);
     $record->encoding('UTF-8');
 
-    # NOTE: GuessAuthTypeCode has no business in Koha::MetadataRecord::Authority, which is an
-    #       object-oriented class. Eventually perhaps there will be utility
-    #       classes in the Koha:: namespace, but there are not at the moment,
-    #       so this shim seems like the best option all-around.
-    require C4::AuthoritiesMarc;
-    $authtypecode ||= C4::AuthoritiesMarc::GuessAuthTypeCode($record);
-
     my $self = $class->SUPER::new( { authid => $authid,
                                      authtypecode => $authtypecode,
                                      schema => $marcflavour,
