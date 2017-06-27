@@ -33,7 +33,7 @@ my $borrowernumber = $cgi->param('borrowernumber');
 my $action         = $cgi->param('action');
 
 if ( $action eq 'del' ) {
-    DelDebarment( $cgi->param('borrower_debarment_id') );
+    DelDebarment( scalar $cgi->param('borrower_debarment_id') );
 } elsif ( $action eq 'add' ) {
     my $expiration = $cgi->param('expiration');
     if ($expiration) {
