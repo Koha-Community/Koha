@@ -1,8 +1,8 @@
 [% IF ( PAGE_NUMBERS ) %]
     <div class="pagination pagination-small noprint">
         <ul>
-            <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">First</a></li>
             [% IF ( previous_page_offset.defined ) %]
+                <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">First</a></li>
                 <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% previous_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">&laquo; Previous</a></li>
             [% END %]
             [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
@@ -14,8 +14,8 @@
             [% END %]
             [% IF ( next_page_offset ) %]
                 <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% next_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">Next &raquo;</a></li>
+                <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% last_page %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">Last</a></li>
             [% END %]
-            <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% last_page %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">Last</a></li>
         </ul>
     </div>
 [% END %]

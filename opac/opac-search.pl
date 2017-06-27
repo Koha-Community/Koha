@@ -852,7 +852,7 @@ for (my $i=0;$i<@servers;$i++) {
             my @page_numbers;
             # total number of pages there will be
             my $pages = ceil($hits / $results_per_page);
-            my $last_page = ($pages * $results_per_page) - $results_per_page;
+            my $last_page = $pages * ( $results_per_page - 1 );
             # default page number
             my $current_page_number = 1;
             if ($offset) {
