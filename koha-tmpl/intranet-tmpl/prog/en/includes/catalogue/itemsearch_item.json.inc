@@ -1,5 +1,6 @@
 [%- USE Branches -%]
 [%- USE Koha -%]
+[% USE AuthorisedValues %]
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
 [
@@ -8,7 +9,7 @@
   [%~ END %]",
   "[% (biblioitem.publicationyear || biblio.copyrightdate) |html %]",
   "[% biblioitem.publishercode |html %]",
-  "[% biblioitem.collectiontitle |html %]",
+  "[% AuthorisedValues.GetByCode( 'CCODE', item.ccode ) %]",
   "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]#item[% item.itemnumber %]" title="Go to item details">[% item.barcode |html %]</a>
   [%~ END %]",
