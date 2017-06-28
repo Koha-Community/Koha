@@ -15,7 +15,7 @@
             "sPaginationType": "four_button",
             "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
             ]
         } ));
 
@@ -23,7 +23,7 @@
             "sPaginationType": "four_button",
             "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
             "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
             ]
         } ));
     });
@@ -107,21 +107,19 @@
                     </div>
                 [% END %]
 
-                <table id="club-templates-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Public enrollment</th>
-                            <th>Email required</th>
-                            <th>Library</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        [% IF club_templates %]
+                [% IF club_templates %]
+                    <table id="club-templates-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Public enrollment</th>
+                                <th>Email required</th>
+                                <th>Library</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             [% FOREACH t IN club_templates %]
                                 <tr>
                                     <td>[% t.name %]</td>
@@ -141,15 +139,11 @@
                                         [% END %]
                                     </td>
                                     <td>[% Branches.GetName( t.branchcode ) %]</td>
-                                    <td>
+                                    <td class="actions">
                                         [% IF CAN_user_clubs_edit_templates %]
-                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="templates-add-modify.pl?id=[% t.id %]">
+                                            <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubbs/templates-add-modify.pl?id=[% t.id %]">
                                                 <i class="fa fa-pencil"></i> Edit
                                             </a>
-                                        [% END %]
-                                    </td>
-                                    <td>
-                                        [% IF CAN_user_clubs_edit_templates %]
                                             <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id %], "[% t.name | html %]", $(this) ); return false;'>
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
@@ -157,15 +151,11 @@
                                     </td>
                                 </tr>
                             [% END %]
-                        [% ELSE %]
-                            <tr>
-                                <td colspan="7">
-                                    No club templates defined.
-                                </td>
-                            </td>
-                        [% END %]
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                [% ELSE %]
+                    <div class="dialog message">No club templates defined.</div>
+                [% END %]
 
                 <h3>Clubs</h3>
 
@@ -186,26 +176,23 @@
                     </div>
                 [% END %]
 
-                <table id="clubs-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Template</th>
-                            <th>Description</th>
-                            <th>Public enrollment</th>
-                            <th>Email required</th>
-                            <th>Library</th>
-                            <th>Start date</th>
-                            <th>End date</th>
-                            <th>Enrolled patrons</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        [% IF clubs %]
+                [% IF clubs %]
+                    <table id="clubs-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Template</th>
+                                <th>Description</th>
+                                <th>Public enrollment</th>
+                                <th>Email required</th>
+                                <th>Library</th>
+                                <th>Start date</th>
+                                <th>End date</th>
+                                <th>Enrolled patrons</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             [% FOREACH c IN clubs %]
                                 <tr>
                                     <td>[% c.name %]</td>
@@ -240,39 +227,45 @@
                                         [% c.club_enrollments.count %]
                                     </td>
                                     <td class="actions">
-                                        [% IF ( c.club_enrollments.count ) %]
-                                            <a class="btn btn-xs btn-default" href="club-enrollments.pl?id=[% c.id %]">
-                                        [% ELSE %]
-                                            <a class="btn btn-xs btn-default disabled" href="club-enrollments.pl?id=[% c.id %]">
-                                        [% END %]
-                                            <i class="fa fa-list-ul"></i> Enrollments
-                                        </a>
-                                    </td>
-                                    <td class="actions">
-                                        [% IF CAN_user_clubs_edit_clubs %]
-                                            <a class="btn btn-xs btn-default" href="clubs-add-modify.pl?id=[% c.id %]">
-                                                <i class="fa fa-pencil"></i> Edit
+                                        <div class="dropdown">
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="clubactions[% c.id %]" role="button" data-toggle="dropdown" href="#">
+                                                Actions <b class="caret"></b>
                                             </a>
-                                        [% END %]
-                                    </td>
-                                    <td class="actions">
-                                        [% IF CAN_user_clubs_edit_clubs %]
-                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
-                                                <i class="fa fa-trash"></i> Delete
-                                            </a>
-                                        [% END %]
+                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id %]">
+                                                <li>
+                                                    [% IF ( c.club_enrollments.count ) %]
+                                                        <a class="btn btn-xs btn-default" href="club-enrollments.pl?id=[% c.id %]">
+                                                    [% ELSE %]
+                                                        <a class="btn btn-xs btn-default disabled" href="club-enrollments.pl?id=[% c.id %]">
+                                                    [% END %]
+                                                    <i class="fa fa-list-ul"></i> Enrollments
+                                                </li>
+                                                [% IF CAN_user_clubs_edit_clubs %]
+                                                    <li>
+                                                        <a class="btn btn-xs btn-default" href="clubs-add-modify.pl?id=[% c.id %]">
+                                                            <i class="fa fa-pencil"></i> Edit
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
+                                                            <i class="fa fa-trash"></i> Delete
+                                                        </a>
+                                                    </li>
+                                                [% END %]
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             [% END %]
-                        [% ELSE %]
-                            <tr>
-                                <td colspan="11">
-                                    No clubs defined.
-                                </td>
-                            </tr>
-                        [% END %]
-                    </tbody>
-                </table> <!-- /.clubs-table -->
+                        </tbody>
+                    </table> <!-- /.clubs-table -->
+                [% ELSE %]
+                    [% IF club_templates %]
+                        <div class="dialog message">No clubs defined.</div>
+                    [% ELSE %]
+                        <div class="dialog message">No clubs defined. A club template must be defined before a club can be defined.</div>
+                    [% END %]
+                [% END %]
             </div> <!-- /.yui-b -->
         </div> <!-- /.yui-main -->
         <div class="yui-b noprint">
