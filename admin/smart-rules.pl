@@ -256,10 +256,13 @@ elsif ($op eq "add-branch-cat") {
     my $categorycode  = $input->param('categorycode');
     my $maxissueqty   = $input->param('maxissueqty');
     my $maxonsiteissueqty = $input->param('maxonsiteissueqty');
+    my $max_holds = $input->param('max_holds');
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
     $maxonsiteissueqty =~ s/\s//g;
     $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
+    $max_holds =~ s/\s//g;
+    $max_holds = undef if $max_holds !~ /^\d+/;
 
     if ($branch eq "*") {
         if ($categorycode eq "*") {
@@ -267,21 +270,22 @@ elsif ($op eq "add-branch-cat") {
                                             FROM default_circ_rules");
             my $sth_insert = $dbh->prepare(q|
                 INSERT INTO default_circ_rules
-                    (maxissueqty, maxonsiteissueqty)
-                    VALUES (?, ?)
+                    (maxissueqty, maxonsiteissueqty, max_holds)
+                    VALUES (?, ?, ?)
             |);
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_circ_rules
                 SET maxissueqty = ?,
-                    maxonsiteissueqty = ?
+                    maxonsiteissueqty = ?,
+                    max_holds = ?
             |);
 
             $sth_search->execute();
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute($maxissueqty, $maxonsiteissueqty);
+                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $max_holds );
             } else {
-                $sth_insert->execute($maxissueqty, $maxonsiteissueqty);
+                $sth_insert->execute( $maxissueqty, $maxonsiteissueqty, $max_holds );
             }
         } else {
             my $sth_search = $dbh->prepare("SELECT count(*) AS total
@@ -289,21 +293,22 @@ elsif ($op eq "add-branch-cat") {
                                             WHERE categorycode = ?");
             my $sth_insert = $dbh->prepare(q|
                 INSERT INTO default_borrower_circ_rules
-                    (categorycode, maxissueqty, maxonsiteissueqty)
-                    VALUES (?, ?, ?)
+                    (categorycode, maxissueqty, maxonsiteissueqty, max_holds)
+                    VALUES (?, ?, ?, ?)
             |);
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_borrower_circ_rules
                 SET maxissueqty = ?,
-                    maxonsiteissueqty = ?
+                    maxonsiteissueqty = ?,
+                    max_holds = ?
                 WHERE categorycode = ?
             |);
             $sth_search->execute($categorycode);
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute($maxissueqty, $maxonsiteissueqty, $categorycode);
+                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $categorycode, $max_holds );
             } else {
-                $sth_insert->execute($categorycode, $maxissueqty, $maxonsiteissueqty);
+                $sth_insert->execute( $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds );
             }
         }
     } elsif ($categorycode eq "*") {
@@ -335,13 +340,14 @@ elsif ($op eq "add-branch-cat") {
                                         AND   categorycode = ?");
         my $sth_insert = $dbh->prepare(q|
             INSERT INTO branch_borrower_circ_rules
-            (branchcode, categorycode, maxissueqty, maxonsiteissueqty)
-            VALUES (?, ?, ?, ?)
+            (branchcode, categorycode, maxissueqty, maxonsiteissueqty, max_holds)
+            VALUES (?, ?, ?, ?, ?)
         |);
         my $sth_update = $dbh->prepare(q|
             UPDATE branch_borrower_circ_rules
             SET maxissueqty = ?,
                 maxonsiteissueqty = ?
+                max_holds = ?
             WHERE branchcode = ?
             AND categorycode = ?
         |);
@@ -349,9 +355,9 @@ elsif ($op eq "add-branch-cat") {
         $sth_search->execute($branch, $categorycode);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $branch, $categorycode);
+            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $max_holds, $branch, $categorycode);
         } else {
-            $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty);
+            $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds);
         }
     }
 }
@@ -547,6 +553,7 @@ my @sorted_branch_cat_rules = sort { $a->{'humancategorycode'} cmp $b->{'humanca
 foreach my $entry (@sorted_branch_cat_rules, @sorted_row_loop) {
     $entry->{unlimited_maxissueqty} = 1 unless defined($entry->{maxissueqty});
     $entry->{unlimited_maxonsiteissueqty} = 1 unless defined($entry->{maxonsiteissueqty});
+    $entry->{unlimited_max_holds} = 1 unless defined($entry->{max_holds});
 }
 
 @sorted_row_loop = sort by_category_and_itemtype @row_loop;

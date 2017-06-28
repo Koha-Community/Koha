@@ -485,6 +485,7 @@
                     <th>Patron category</th>
                     <th>Total current checkouts allowed</th>
                     <th>Total current on-site checkouts allowed</th>
+                    <th>Maximum total holds allowed (count)</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_cat_rule_loo IN branch_cat_rule_loop %]
@@ -511,6 +512,12 @@
                                 [% branch_cat_rule_loo.maxonsiteissueqty | html %]
                             [% END %]
                         </td>
+                        <td>[% IF ( branch_cat_rule_loo.unlimited_max_holds ) %]
+                                Unlimited
+                            [% ELSE %]
+                                [% branch_cat_rule_loo.max_holds %]
+                            [% END %]
+                        </td>
 
                         <td class="actions">
                             <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
@@ -527,6 +534,7 @@
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="maxonsiteissueqty" size="3" /></td>
+                    <td><input name="max_holds" size="3" /></td>
                     <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
                 </tr>
             </table>

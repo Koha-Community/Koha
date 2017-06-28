@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 54;
+use Test::More tests => 56;
 use MARC::Record;
 use Koha::Patrons;
 use C4::Items;
@@ -411,6 +411,73 @@ my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
 
+subtest 'Test max_holds per library/patron category' => sub {
+    plan tests => 6;
+
+    $dbh->do('DELETE FROM reserves');
+    $dbh->do('DELETE FROM issuingrules');
+
+    ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('TEST');
+    ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
+      AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
+        $bibnum );
+    $dbh->do(
+        q{
+            INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
+            VALUES (?, ?, ?, ?, ?)
+        },
+        {},
+        '*', '*', 'TEST', 99, 99
+    );
+    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
+    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
+    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
+
+    my $count =
+      Koha::Holds->search( { borrowernumber => $borrowernumbers[0] } )->count();
+    is( $count, 3, 'Patron now has 3 holds' );
+
+    my $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
+    is( $ret, 'OK', 'Patron can place hold with no borrower circ rules' );
+
+    my $rule_all = $schema->resultset('DefaultBorrowerCircRule')->new(
+        {
+            categorycode => $category->{categorycode},
+            max_holds    => 3,
+        }
+    )->insert();
+
+    my $rule_branch = $schema->resultset('BranchBorrowerCircRule')->new(
+        {
+            branchcode   => $branch_1,
+            categorycode => $category->{categorycode},
+            max_holds    => 5,
+        }
+    )->insert();
+
+    $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
+    is( $ret, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 3' );
+
+    $rule_branch->delete();
+
+    $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
+    is( $ret, 'tooManyReserves', 'Patron cannot place hold with only a category rule of 3' );
+
+    $rule_all->delete();
+    $rule_branch->max_holds(3);
+    $rule_branch->insert();
+
+    $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
+    is( $ret, 'tooManyReserves', 'Patron cannot place hold with only a branch/category rule of 3' );
+
+    $rule_branch->max_holds(5);
+    $rule_branch->update();
+    $rule_branch->max_holds(5);
+    $rule_branch->insert();
+
+    $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
+    is( $ret, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 5' );
+};
 
 # Helper method to set up a Biblio.
 sub create_helper_biblio {
