@@ -49,6 +49,8 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
 my $action = $input->param('action');
 my $ordernumber = $input->param('ordernumber');
 my $biblionumber = $input->param('biblionumber');
+my $basketno = $input->param('basketno');
+my $basket = Koha::Database->new()->schema()->resultset('Aqbasket')->find($basketno);
 my $referrer = $input->param('referrer') || $input->referer;
 my $del_biblio = $input->param('del_biblio') ? 1 : 0;
 
@@ -68,6 +70,7 @@ if($action and $action eq "confirmcancel") {
 $template->param(
     ordernumber => $ordernumber,
     biblionumber => $biblionumber,
+    basket => $basket,
     referrer => $referrer,
     del_biblio => $del_biblio,
 );
