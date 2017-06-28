@@ -1,4 +1,3 @@
-[% USE CGI %]
 [% USE JSON.Escape %]
 
 [% BLOCK form_label %]
@@ -34,57 +33,29 @@
     <label class="form-field-label" for="[% name %]">[% INCLUDE form_label label=name %]</label>
     <select id="[% name %]_op" name="[% name %]_op">
       <option value="=">is</option>
-      [% IF CGI.param(name _ '_op') == '!=' %]
-        <option value="!=" selected="selected">is not</option>
-      [% ELSE %]
-        <option value="!=" >is not</option>
-      [% END %]
+      <option value="!=" >is not</option>
     </select>
-    [% SET values = CGI.param(name) %]
     <select id="[% name %]" name="[% name %]" multiple="multiple" size="[% options.size < 4 ? options.size + 1 : 4 %]">
-      [% IF (values == '') %]
-        <option value="" selected="selected">
-      [% ELSE %]
-        <option value="">
-      [% END %]
+      <option value="" selected="selected">
         [% IF (empty_option) %][% INCLUDE form_label label=empty_option %][% ELSE %]<span>All</span>[% END %]
       </option>
       [% FOREACH option IN options %]
-        [% IF values != '' && values.grep(option.value).size %]
-          <option value="[% option.value %]" selected="selected">[% option.label %]</option>
-        [% ELSE %]
-          <option value="[% option.value %]">[% option.label %]</option>
-        [% END %]
+        <option value="[% option.value %]">[% option.label %]</option>
       [% END %]
     </select>
   </div>
 [% END %]
 
 [% BLOCK form_field_select_option %]
-  [% IF params.f == value %]
-    <option value="[% value %]" selected="selected">[% INCLUDE form_label label=value %]</option>
-  [% ELSE %]
-    <option value="[% value %]">[% INCLUDE form_label label=value %]</option>
-  [% END %]
+  <option value="[% value %]">[% INCLUDE form_label label=value %]</option>
 [% END %]
 
 [% BLOCK form_field_select_text %]
   <div class="form-field form-field-select-text">
-    [% IF params.exists('c') %]
-      <select name="c" class="form-field-conjunction">
-        <option value="and">AND</option>
-        [% IF params.c == 'or' %]
-          <option value="or" selected="selected">OR</option>
-        [% ELSE %]
-          <option value="or">OR</option>
-        [% END %]
-      </select>
-    [% ELSE %]
-      <select name="c" class="form-field-conjunction" disabled="disabled">
-        <option value="and">AND</option>
-        <option value="or">OR</option>
-      </select>
-    [% END %]
+    <select name="c" class="form-field-conjunction" disabled="disabled">
+      <option value="and">AND</option>
+      <option value="or">OR</option>
+    </select>
     <select name="f" class="form-field-column">
       [% INCLUDE form_field_select_option value='barcode' %]
       [% INCLUDE form_field_select_option value='itemcallnumber' %]
@@ -103,44 +74,14 @@
             [% IF field.tagsubfield %]
               [% marcfield = marcfield _ '$' _ field.tagsubfield %]
             [% END %]
-            [% IF params.f == "marc:$marcfield" %]
-              <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]" selected="selected">[% field.label %] ([% marcfield %])</option>
-            [% ELSE %]
-              <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]">[% field.label %] ([% marcfield %])</option>
-            [% END %]
+            <option value="marc:[% marcfield %]" data-authorised-values-category="[% field.authorised_values_category %]">[% field.label %] ([% marcfield %])</option>
           [% END %]
         </optgroup>
       [% END %]
     </select>
-    <input type="text" name="q" class="form-field-value" value="[% params.q %]" />
+    <input type="text" name="q" class="form-field-value" value="" />
     <input type="hidden" name="op" value="like" />
   </div>
-[% END %]
-
-[% BLOCK form_field_select_text_block %]
-  [% c = CGI.param('c').list %]
-  [% f = CGI.param('f').list %]
-  [% q = CGI.param('q').list %]
-  [% op = CGI.param('op').list %]
-  [% IF q.size %]
-    [% size = q.size - 1 %]
-    [% FOREACH i IN [0 .. size] %]
-      [%
-        params = {
-          f => f.$i
-          q = q.$i
-          op = op.$i
-        }
-      %]
-      [% IF i > 0 %]
-        [% j = i - 1 %]
-        [% params.c = c.$j %]
-      [% END %]
-      [% INCLUDE form_field_select_text params=params %]
-    [% END %]
-  [% ELSE %]
-    [% INCLUDE form_field_select_text %]
-  [% END %]
 [% END %]
 
 [% BLOCK form_field_radio_yes_no %]
@@ -455,7 +396,7 @@
             [% END %]
           </fieldset>
           <fieldset>
-            [% INCLUDE form_field_select_text_block %]
+            [% INCLUDE form_field_select_text %]
             <p class="hint">You can use the following wildcard characters: % _</p>
             <p class="hint">% matches any number of characters</p>
             <p class="hint">_ matches only a single character</p>
@@ -463,14 +404,12 @@
           <fieldset>
             <div class="form-field">
               <label class="form-field-label" for="itemcallnumber_from">From call number:</label>
-              [% value = CGI.param('itemcallnumber_from') %]
-              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="[% value %]" />
+              <input type="text" id="itemcallnumber_from" name="itemcallnumber_from" value="" />
               <span class="hint">(inclusive)</span>
             </div>
             <div class="form-field">
-              [% value = CGI.param('itemcallnumber_to') %]
               <label class="form-field-label" for="itemcallnumber_to">To call number:</label>
-              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="[% value %]" />
+              <input type="text" id="itemcallnumber_to" name="itemcallnumber_to" value="" />
               <span class="hint">(inclusive)</span>
             </div>
             [% INCLUDE form_field_radio_yes_no name="damaged" %]
