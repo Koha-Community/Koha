@@ -74,7 +74,12 @@ start_plack()
 
     _check_and_fix_perms $instancename
 
-    STARMANOPTS="-M FindBin --max-requests 50 --workers 2 \
+    PLACK_MAX_REQUESTS=$(run_safe_xmlstarlet $instancename plack_max_requests)
+    [ -z $PLACK_MAX_REQUESTS ] && PLACK_MAX_REQUESTS="50"
+    PLACK_WORKERS=$(run_safe_xmlstarlet $instancename plack_workers)
+    [ -z $PLACK_WORKERS ] && PLACK_WORKERS="2"
+
+    STARMANOPTS="-M FindBin --max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS} \
                  --user=${instancename}-koha --group ${instancename}-koha \
                  --pid ${PIDFILE} \
                  --daemonize \
