@@ -87,7 +87,7 @@
             <tbody>
                 [% FOREACH l IN lists %]
                     <tr>
-                        <td>[% l.name |html %]</td>
+                        <td><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id %]">[% l.name |html%]</a></td>
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
                             <div class="dropdown">
