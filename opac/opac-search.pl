@@ -288,7 +288,7 @@ foreach my $advanced_srch_type (@advanced_search_types) {
 				ccl => $advanced_srch_type,
                 code => $thisitemtype->{authorised_value},
                 description => $thisitemtype->{'lib_opac'} || $thisitemtype->{'lib'},
-                searchcategory => $itemtypes->{$thisitemtype}->{'searchcategory'},
+                searchcategory => $thisitemtype->{'searchcategory'},
                 imageurl => getitemtypeimagelocation( 'opac', $thisitemtype->{'imageurl'} ),
                 );
 		push @authvalueloop, \%row;
