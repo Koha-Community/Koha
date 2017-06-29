@@ -84,7 +84,7 @@ sub UpdateStats {
 # make some controls
     return () if ! defined $params;
 # change these arrays if new types of transaction or new parameters are allowed
-    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber accountno ccode);
+    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber accountno ccode location);
     my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout);
     my @allowed_accounts_types = qw (writeoff payment);
     my @circulation_mandatory_keys = qw (type branch borrowernumber itemnumber ccode itemtype);
@@ -123,6 +123,7 @@ sub UpdateStats {
     my $amount            = exists $params->{amount}         ? $params->{amount} :'';
     my $other             = exists $params->{other}          ? $params->{other} :'';
     my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype} :'';
+    my $location          = exists $params->{location}       ? $params->{location} :'';
     my $accountno         = exists $params->{accountno}      ? $params->{accountno} :'';
     my $ccode             = exists $params->{ccode}          ? $params->{ccode} :'';
 
@@ -131,14 +132,14 @@ sub UpdateStats {
         "INSERT INTO statistics
         (datetime,
          branch,          type,        value,
-         other,           itemnumber,  itemtype,
+         other,           itemnumber,  itemtype, location,
          borrowernumber,  proccode,    ccode)
-         VALUES (now(),?,?,?,?,?,?,?,?,?)"
+         VALUES (now(),?,?,?,?,?,?,?,?,?,?)"
     );
     $sth->execute(
-        $branch,         $type,        $amount,
-        $other,          $itemnumber,  $itemtype,
-        $borrowernumber, $accountno,   $ccode
+        $branch,     $type,     $amount,   $other,
+        $itemnumber, $itemtype, $location, $borrowernumber,
+        $accountno,  $ccode
     );
 }
 

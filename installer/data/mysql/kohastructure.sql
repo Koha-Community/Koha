@@ -2018,6 +2018,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `usercode` varchar(10) default NULL, -- unused in Koha
   `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
   `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
+  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL, -- unused in Koha
   `ccode` varchar(10) default NULL, -- foreign key from the items table, links transaction to a specific collection code
