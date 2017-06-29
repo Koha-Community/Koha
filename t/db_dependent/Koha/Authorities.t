@@ -127,7 +127,7 @@ subtest 'Testing reporting_tag_xml in MergeRequest' => sub {
     );
 };
 
-subtest 'Trivial tests for get_count_usage and linked_biblionumbers' => sub {
+subtest 'Trivial tests for get_usage_count and linked_biblionumbers' => sub {
     plan tests => 5;
 
     # NOTE: We are not testing $searcher->simple_search_compat here. Suppose

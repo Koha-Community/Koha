@@ -52,8 +52,6 @@ BEGIN {
     	&GetAuthority
     	&GetAuthorityXML
 
-    	&CountUsage
-    	&CountUsageChildren
     	&SearchAuthorities
     
         &BuildSummary
@@ -328,7 +326,7 @@ sub SearchAuthorities {
         ###
         if (! $skipmetadata) {
             for (my $z=0; $z<@finalresult; $z++){
-                my  $count=CountUsage($finalresult[$z]{authid});
+                my $count = Koha::Authorities->get_usage_count({ authid => $finalresult[$z]{authid} });
                 $finalresult[$z]{used}=$count;
             }# all $z's
         }
@@ -339,43 +337,6 @@ sub SearchAuthorities {
     # $oAuth[0]->destroy();
 
     return (\@finalresult, $nbresults);
-}
-
-=head2 CountUsage 
-
-  $count= &CountUsage($authid)
-
-counts Usage of Authid in bibliorecords. 
-
-=cut
-
-sub CountUsage {
-    my ($authid) = @_;
-        ### ZOOM search here
-        my $query;
-        $query= "an:".$authid;
-        # Should really be replaced with a real count call, this is a
-        # bad way.
-        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
-        my ($err,$res,$result) = $searcher->simple_search_compat($query,0,1);
-        if ($err) {
-            warn "Error: $err from search $query";
-            $result = 0;
-        }
-
-        return $result;
-}
-
-=head2 CountUsageChildren 
-
-  $count= &CountUsageChildren($authid)
-
-counts Usage of narrower terms of Authid in bibliorecords.
-
-=cut
-
-sub CountUsageChildren {
-  my ($authid) = @_;
 }
 
 =head2 GuessAuthTypeCode

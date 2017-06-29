@@ -77,14 +77,14 @@ if ( ! $record ) {
 }
 
 my $authority = Koha::Authorities->find( $authid );
-my $authtypecode = $authority->authtypecode;
+my $authtypecode = $authority ? $authority->authtypecode : q{};
 
 if ($display_hierarchy){
     $template->{VARS}->{'displayhierarchy'} = $display_hierarchy;
     $template->{VARS}->{'loophierarchies'} = GenerateHierarchy($authid);
 }
 
-my $count = CountUsage($authid);
+my $count = $authority ? $authority->get_usage_count : 0;
 
 my $authority_types = Koha::Authority::Types->search( {}, { order_by => ['authtypecode'] } );
 $template->param(

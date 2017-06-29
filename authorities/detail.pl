@@ -201,7 +201,7 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     $template->{VARS}->{'loophierarchies'} = GenerateHierarchy($authid);
 }
 
-my $count = CountUsage($authid);
+my $count = $authobj ? $authobj->get_usage_count : 0;
 
 # find the marc field/subfield used in biblio by this authority
 my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
