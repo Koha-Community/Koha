@@ -3,7 +3,7 @@
 use Modern::Perl;
 use C4::Stats;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 BEGIN {
     use_ok('C4::Stats');
@@ -124,6 +124,45 @@ is ($params->{itemtype},       $line->{itemtype},       "UpdateStats save itemty
 is ($params->{location},       $line->{location},       "UpdateStats save location param in location field of statistics table");
 is ($params->{accountno},      $line->{proccode},       "UpdateStats save accountno param in proccode field of statistics table");
 is ($params->{ccode},          $line->{ccode},          "UpdateStats save ccode param in ccode field of statistics table");
+
+$dbh->do(q|DELETE FROM statistics|);
+$params = {
+    branch         => "BRA",
+    itemnumber     => 31,
+    borrowernumber => 5,
+    amount         => 5.1,
+    other          => "bla",
+    itemtype       => "BK",
+    accountno      => 51,
+    ccode          => "CODE",
+    type           => "return"
+};
+UpdateStats($params);
+$sth = $dbh->prepare("SELECT * FROM statistics");
+$sth->execute();
+$line = ${ $sth->fetchall_arrayref( {} ) }[0];
+is( $line->{location}, undef,
+    "UpdateStats sets location to NULL if no location is passed in." );
+
+$dbh->do(q|DELETE FROM statistics|);
+$params = {
+    branch         => "BRA",
+    itemnumber     => 31,
+    borrowernumber => 5,
+    amount         => 5.1,
+    other          => "bla",
+    itemtype       => "BK",
+    location       => undef,
+    accountno      => 51,
+    ccode          => "CODE",
+    type           => "return"
+};
+UpdateStats($params);
+$sth = $dbh->prepare("SELECT * FROM statistics");
+$sth->execute();
+$line = ${ $sth->fetchall_arrayref( {} ) }[0];
+is( $line->{location}, undef,
+    "UpdateStats sets location to NULL if undef is passed in." );
 
 #
 # Test TotalPaid

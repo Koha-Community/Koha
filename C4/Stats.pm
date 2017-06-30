@@ -118,14 +118,14 @@ sub UpdateStats {
 # get the parameters
     my $branch            = $params->{branch};
     my $type              = $params->{type};
-    my $borrowernumber    = exists $params->{borrowernumber} ? $params->{borrowernumber} :'';
-    my $itemnumber        = exists $params->{itemnumber}     ? $params->{itemnumber} :'';
-    my $amount            = exists $params->{amount}         ? $params->{amount} :'';
-    my $other             = exists $params->{other}          ? $params->{other} :'';
-    my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype} :'';
-    my $location          = exists $params->{location}       ? $params->{location} :'';
-    my $accountno         = exists $params->{accountno}      ? $params->{accountno} :'';
-    my $ccode             = exists $params->{ccode}          ? $params->{ccode} :'';
+    my $borrowernumber    = exists $params->{borrowernumber} ? $params->{borrowernumber} : '';
+    my $itemnumber        = exists $params->{itemnumber}     ? $params->{itemnumber}     : '';
+    my $amount            = exists $params->{amount}         ? $params->{amount}         : '';
+    my $other             = exists $params->{other}          ? $params->{other}          : '';
+    my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype}       : '';
+    my $location          = exists $params->{location}       ? $params->{location}       : undef;
+    my $accountno         = exists $params->{accountno}      ? $params->{accountno}      : '';
+    my $ccode             = exists $params->{ccode}          ? $params->{ccode}          : '';
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
