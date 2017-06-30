@@ -199,7 +199,6 @@ foreach my $biblioNumber (@biblionumbers) {
 if ( $query->param('place_reserve') ) {
     my $reserve_cnt = 0;
     if ($maxreserves) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
         $reserve_cnt = $patron->holds->count;
     }
 
