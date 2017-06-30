@@ -32,6 +32,7 @@ use Koha::Logger;
 use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
+use Koha::CirculationRules;
 use Koha::Patron::Categories;
 use Koha::Caches;
 
@@ -97,6 +98,15 @@ elsif ($op eq 'delete-branch-cat') {
                                         AND categorycode = ?");
         $sth_delete->execute($branch, $categorycode);
     }
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => $branch,
+            categorycode => $categorycode,
+            itemtype     => undef,
+            rule_name    => 'max_holds',
+            rule_value   => undef,
+        }
+    );
 }
 elsif ($op eq 'delete-branch-item') {
     my $itemtype  = $input->param('itemtype');
@@ -287,10 +297,20 @@ elsif ($op eq "add-branch-cat") {
             $sth_search->execute();
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $max_holds );
+                $sth_update->execute( $maxissueqty, $maxonsiteissueqty );
             } else {
-                $sth_insert->execute( $maxissueqty, $maxonsiteissueqty, $max_holds );
+                $sth_insert->execute( $maxissueqty, $maxonsiteissueqty );
             }
+
+            Koha::CirculationRules->set_rule(
+                {
+                    branchcode   => undef,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'max_holds',
+                    rule_value   => $max_holds,
+                }
+            );
         } else {
             my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                             FROM default_borrower_circ_rules
@@ -310,10 +330,20 @@ elsif ($op eq "add-branch-cat") {
             $sth_search->execute($categorycode);
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $max_holds, $categorycode );
+                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $categorycode );
             } else {
-                $sth_insert->execute( $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds );
+                $sth_insert->execute( $categorycode, $maxissueqty, $maxonsiteissueqty );
             }
+
+            Koha::CirculationRules->set_rule(
+                {
+                    branchcode   => undef,
+                    categorycode => $categorycode,
+                    itemtype     => undef,
+                    rule_name    => 'max_holds',
+                    rule_value   => $max_holds,
+                }
+            );
         }
     } elsif ($categorycode eq "*") {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
@@ -363,6 +393,16 @@ elsif ($op eq "add-branch-cat") {
         } else {
             $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds);
         }
+
+        Koha::CirculationRules->set_rule(
+            {
+                branchcode   => $branch,
+                categorycode => $categorycode,
+                itemtype     => undef,
+                rule_name    => 'max_holds',
+                rule_value   => $max_holds,
+            }
+        );
     }
 }
 elsif ($op eq "add-branch-item") {
