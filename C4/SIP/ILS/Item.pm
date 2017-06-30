@@ -67,6 +67,7 @@ use Koha::Items;
         hold_queue => [],
     },
 );
+
 =cut
 
 sub new {
