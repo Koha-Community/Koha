@@ -209,17 +209,6 @@ $(document).ready(function() {
                 [% PROCESS options_for_libraries libraries => Branches.all() %]
             </select>
         </li>
-			<!-- FIXME Not working yet
-			<li><label for="itemtypeslimit">Item Type: </label><select name="itemtypeslimit" id="itemtypeslimit">
-                <option value="">All</option>
-                [% FOREACH itemtypeloo IN itemtypeloop %]
-                [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.value %]" selected="selected">[% itemtypeloo.description %]</option>
-				[% ELSE %]
-				<option value="[% itemtypeloo.value %]">[% itemtypeloo.description %]</option>
-				[% END %]
-                [% END %]
-            </select></li>
-			-->
     </ol></fieldset>
     <fieldset class="action">    <input type="submit" value="Submit" />
         <input type="hidden" name="run_report" value="1" /></fieldset>
