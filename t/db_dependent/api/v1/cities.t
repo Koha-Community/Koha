@@ -224,9 +224,17 @@ subtest 'update() tests' => sub {
 
     my $city_id = $builder->build( { source => 'City' } )->{cityid};
 
+    # Full object update on PUT
+    my $city_with_updated_field = {
+        city_name    => "London",
+        city_state   => "City State",
+        city_zipcode => "City Zipcode",
+        city_country => "City Country"
+    };
+
     # Unauthorized attempt to update
     my $tx = $t->ua->build_tx( PUT => "/api/v1/cities/$city_id" => json =>
-          { city_name => 'New unauthorized name change' } );
+          $city_with_updated_field );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $unauthorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
@@ -248,14 +256,6 @@ subtest 'update() tests' => sub {
       ->json_is( "/errors" =>
           [ { message => "Missing property.", path => "/body/city_zipcode" } ]
       );
-
-    # Full object update on PUT
-    my $city_with_updated_field = {
-        city_name    => "London",
-        city_state   => "City State",
-        city_zipcode => "City Zipcode",
-        city_country => "City Country"
-    };
 
     $tx = $t->ua->build_tx(
         PUT => "/api/v1/cities/$city_id" => json => $city_with_updated_field );
