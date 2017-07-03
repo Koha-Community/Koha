@@ -79,43 +79,43 @@ subtest 'get_fixer_rules() tests' => sub {
 
     my $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
-    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet.$append', -split => 1)});
     is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
-    is( $result->[3], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[3], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[4], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
-    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', -split => 1)});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet.$append', -split => 1)});
     is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
-    is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[8], q{move_field(_id,es_id)});
 
     $mappings[0]->{type}  = 'boolean';
     $mappings[1]->{type}  = 'boolean';
     $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
-    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet.$append', -split => 1)});
     is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
     is( $result->[3], q{unless exists('} . $mappings[0]->{name} . q{') add_field('} . $mappings[0]->{name} . q{', 0) end});
-    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
-    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', -split => 1)});
+    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet.$append', -split => 1)});
     is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
     is( $result->[8], q{unless exists('} . $mappings[1]->{name} . q{') add_field('} . $mappings[1]->{name} . q{', 0) end});
-    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[10], q{move_field(_id,es_id)});
 
     $mappings[0]->{type}  = 'sum';
     $mappings[1]->{type}  = 'sum';
     $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', )});
-    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet', )});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet.$append', )});
     is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
     is( $result->[3], q{sum('} . $mappings[0]->{name} . q{')});
-    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', )});
+    is( $result->[4], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort.$append', )});
     is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', )});
-    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet', )});
+    is( $result->[6], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__facet.$append', )});
     is( $result->[7], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
     is( $result->[8], q{sum('} . $mappings[1]->{name} . q{')});
-    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', )});
+    is( $result->[9], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', )});
     is( $result->[10], q{move_field(_id,es_id)});
 
     $mappings[0]->{type}  = 'string';
@@ -126,10 +126,10 @@ subtest 'get_fixer_rules() tests' => sub {
     $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
     is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__suggestion.input.$append')});
-    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[2], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
     is( $result->[4], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__suggestion.input.$append')});
-    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[5], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[6], q{move_field(_id,es_id)});
 
     $mappings[0]->{suggestible}  = 0;
@@ -137,9 +137,9 @@ subtest 'get_fixer_rules() tests' => sub {
 
     $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
-    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[2], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
-    is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort', -split => 1)});
+    is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[4], q{move_field(_id,es_id)});
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
