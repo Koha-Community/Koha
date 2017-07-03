@@ -62,19 +62,6 @@ if ( $run_report ) {
     );
 }
 
-# getting all itemtypes
-my $itemtypes = Koha::ItemTypes->search({}, {order_by => 'itemtype'});;
-my @itemtypesloop;
-while ( my $itemtype = $itemtypes->next ) {
-    push @itemtypesloop, {
-        value       => $itemtype->itemtype,
-    };
-}
-
-$template->param( # FIXME Could be improved passing the $itemtypes iterator directly to the template
-   itemtypeloop => \@itemtypesloop,
-);
-
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
 
