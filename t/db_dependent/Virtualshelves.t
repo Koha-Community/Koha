@@ -262,10 +262,10 @@ subtest 'Shelf permissions' => sub {
     is( $public_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
     is( $public_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Public list should not be managed by someone else' );
 
-    is( $public_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 0, 'The owner should not be able to add biblios to his list' );
+    is( $public_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 0, 'The owner should not be able to add biblios to their list' );
     is( $public_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 0, 'Public list should not be modified (add) by someone else' );
 
-    is( $public_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 0, 'The owner should not be able to remove biblios to his list' );
+    is( $public_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 0, 'The owner should not be able to remove biblios to their list' );
     is( $public_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 0, 'Public list should not be modified (remove) by someone else' );
 
 
@@ -306,10 +306,10 @@ subtest 'Shelf permissions' => sub {
     is( $private_shelf->can_be_managed( $patron1->{borrowernumber} ), 1, 'The owner should be able to manage his list' );
     is( $private_shelf->can_be_managed( $patron2->{borrowernumber} ), 0, 'Private list should not be managed by someone else' );
 
-    is( $private_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 0, 'The owner should not be able to add biblios to his list' );
+    is( $private_shelf->can_biblios_be_added( $patron1->{borrowernumber} ), 0, 'The owner should not be able to add biblios to their list' );
     is( $private_shelf->can_biblios_be_added( $patron2->{borrowernumber} ), 0, 'Private list should not be modified (add) by someone else' );
 
-    is( $private_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 0, 'The owner should not be able to remove biblios to his list' );
+    is( $private_shelf->can_biblios_be_removed( $patron1->{borrowernumber} ), 0, 'The owner should not be able to remove biblios to their list' );
     is( $private_shelf->can_biblios_be_removed( $patron2->{borrowernumber} ), 0, 'Private list should not be modified (remove) by someone else' );
 
 
