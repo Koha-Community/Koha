@@ -183,19 +183,21 @@ subtest 'edit() tests' => sub {
     };
 
     t::lib::Mocks::mock_preference('EnhancedMessagingPreferences', 1);
-    my $tx = $t->ua->build_tx(PUT => $path);
+    my $tx = $t->ua->build_tx(PUT => $path => json => $edited_preference);
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)
       ->status_is(401);
 
     $tx = $t->ua->build_tx(PUT => "$path?borrowernumber="
-                           .$another_patron->borrowernumber);
+                           .$another_patron->borrowernumber
+                           => json => $edited_preference);
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)
       ->status_is(403);
 
-    $tx = $t->ua->build_tx(PUT => "$path?categorycode=$categorycode");
+    $tx = $t->ua->build_tx(PUT => "$path?categorycode=$categorycode"
+                           => json => $edited_preference);
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)
