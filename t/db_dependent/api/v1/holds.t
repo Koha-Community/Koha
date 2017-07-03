@@ -191,9 +191,9 @@ subtest "Test endpoints without authentication" => sub {
     plan tests => 8;
     $t->get_ok('/api/v1/holds')
       ->status_is(401);
-    $t->post_ok('/api/v1/holds')
+    $t->post_ok('/api/v1/holds' => json => $post_data)
       ->status_is(401);
-    $t->put_ok('/api/v1/holds/0')
+    $t->put_ok('/api/v1/holds/0' => json => $put_data)
       ->status_is(401);
     $t->delete_ok('/api/v1/holds/0')
       ->status_is(401);
