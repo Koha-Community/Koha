@@ -870,7 +870,7 @@ our $PERL_DEPS = {
     'Mojolicious::Plugin::OpenAPI' => {
         'usage'    => 'REST API',
         'required' => '1',
-        'min_ver'  => '1.13',
+        'min_ver'  => '1.17',
     },
     'JSON::Validator' => {
         'usage'    => 'REST API',
