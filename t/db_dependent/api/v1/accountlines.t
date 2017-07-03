@@ -46,7 +46,7 @@ $t->get_ok('/api/v1/accountlines')
 $t->put_ok("/api/v1/accountlines/11224409" => json => {'amount' => -5})
     ->status_is(401);
 
-$t->post_ok("/api/v1/accountlines/11224408/payment")
+$t->post_ok("/api/v1/accountlines/11224408/payment" => json => {'amount' => 5 })
     ->status_is(401);
 
 my $loggedinuser = $builder->build({
