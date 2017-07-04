@@ -1443,6 +1443,14 @@ sub merge {
 
     my @record_to;
     @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $auth_tag_to_report_to && $MARCto && $MARCto->field($auth_tag_to_report_to);
+    # Exceptional: If MARCto and authtypeto exist but $auth_tag_to_report_to
+    # is empty, make sure that $9 and $a remain (instead of clearing the
+    # reference) in order to allow for data recovery.
+    # Note: We need $a too, since a single $9 does not pass ModBiblio.
+    if( $MARCto && $authtypeto && !@record_to  ) {
+        push @record_to, [ 'a', ' ' ]; # do not remove the space
+    }
+
     my @record_from;
     if( !$authfrom && $MARCfrom && $MARCfrom->field('1..','2..') ) {
     # postponed merge, authfrom was deleted and MARCfrom only contains the old reporting tag (and possibly a 100 for UNIMARC)
@@ -1457,7 +1465,7 @@ sub merge {
     # For a deleted authority record, we scan all auth controlled fields
     my $dbh = C4::Context->dbh;
     my $sql = "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode=?";
-    my $tags_using_authtype = $authtypefrom ? $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode )) : $dbh->selectcol_arrayref( "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode IS NOT NULL AND authtypecode<>''" );
+    my $tags_using_authtype = $authtypefrom && $authtypefrom->authtypecode ? $dbh->selectcol_arrayref( $sql, undef, ( $authtypefrom->authtypecode )) : $dbh->selectcol_arrayref( "SELECT DISTINCT tagfield FROM marc_subfield_structure WHERE authtypecode IS NOT NULL AND authtypecode<>''" );
     my $tags_new;
     if( $authtypeto && ( !$authtypefrom || $authtypeto->authtypecode ne $authtypefrom->authtypecode )) {
         $tags_new = $dbh->selectcol_arrayref( $sql, undef, ( $authtypeto->authtypecode ));
@@ -1493,7 +1501,7 @@ sub merge {
                     $update = 1;
                     next;
                 }
-                my $newtag = $tags_new
+                my $newtag = $tags_new && @$tags_new
                   ? _merge_newtag( $tag, $tags_new )
                   : $tag;
                 my $field_to = MARC::Field->new(
@@ -1512,7 +1520,7 @@ sub merge {
                         $field_to->add_subfields( $subfield->[0], $subfield->[1] );
                     }
                 }
-                if ($tags_new) {
+                if ($tags_new && @$tags_new) {
                     $marcrecord->delete_field($field);
                     append_fields_ordered( $marcrecord, $field_to );
                 } else {

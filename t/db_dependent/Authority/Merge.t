@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use Getopt::Long;
 use MARC::Record;
@@ -327,6 +327,37 @@ subtest "Test some specific postponed merge issues" => sub {
     $restored_mocks->{auth_mod}->unmock_all;
     $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
     is( $biblio->subfield('109', '9'), $id, 'If the 109 is no longer present, another modify merge would not bring it back' );
+};
+
+subtest "Graceful resolution of missing reporting tag" => sub {
+    plan tests => 2;
+
+    # Simulate merge with authority in Default fw without reporting tag
+    # We expect data loss in biblio, but we keep $a and the reference in $9
+    # in order to allow a future merge to restore data.
+
+    # Accomplish the above by clearing reporting tag in $authtype2
+    my $fw2 = Koha::Authority::Types->find( $authtype2 );
+    $fw2->auth_tag_to_report('')->store;
+
+    my $authmarc = MARC::Record->new;
+    $authmarc->append_fields( MARC::Field->new( '109', '', '', 'a' => 'aa', b => 'bb' ));
+    my $id1 = AddAuthority( $authmarc, undef, $authtype1 );
+    my $id2 = AddAuthority( $authmarc, undef, $authtype2 );
+
+    my $biblio = MARC::Record->new;
+    $biblio->append_fields(
+        MARC::Field->new( '609', '', '', a => 'aa', 9 => $id1 ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $biblio, '' );
+
+    # Merge
+    merge({ mergefrom => $id1, MARCfrom => $authmarc, mergeto => $id2, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
+    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    is( $biblio->subfield('612', '9'), $id2, 'id2 saved in $9' );
+    is( $biblio->subfield('612', 'a'), ' ', 'Kept an empty $a too' );
+
+    $fw2->auth_tag_to_report('112')->store;
 };
 
 sub set_mocks {
