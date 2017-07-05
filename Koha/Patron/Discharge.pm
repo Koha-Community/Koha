@@ -13,8 +13,6 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
 
-my $rs = Koha::Database->new->schema->resultset('Discharge');
-
 sub count {
     my ($params) = @_;
     my $values = {};
@@ -30,6 +28,7 @@ sub count {
         $values->{validated} = { '!=', undef };
     }
 
+    my $rs = Koha::Database->new->schema->resultset('Discharge');
     return $rs->search( $values )->count;
 }
 
@@ -67,6 +66,7 @@ sub request {
     return unless $borrowernumber;
     return unless can_be_discharged({ borrowernumber => $borrowernumber });
 
+    my $rs = Koha::Database->new->schema->resultset('Discharge');
     return $rs->create({
         borrower => $borrowernumber,
         needed   => dt_from_string,
@@ -92,6 +92,7 @@ sub discharge {
     });
 
     # Generate the discharge
+    my $rs = Koha::Database->new->schema->resultset('Discharge');
     my $discharge = $rs->search({ borrower => $borrowernumber }, { order_by => { -desc => 'needed' }, rows => 1 });
     if( $discharge->count > 0 ) {
         $discharge->update({ validated => dt_from_string });
@@ -163,6 +164,7 @@ sub get_pendings {
         ( defined $branchcode ? ( 'borrower.branchcode' => $branchcode ) : () ),
     };
 
+    my $rs = Koha::Database->new->schema->resultset('Discharge');
     my @rs = $rs->search( $cond, { join => 'borrower' } );
     return \@rs;
 }
@@ -178,6 +180,7 @@ sub get_validated {
         ( defined $branchcode ? ( 'borrower.branchcode' => $branchcode ) : () ),
     };
 
+    my $rs = Koha::Database->new->schema->resultset('Discharge');
     my @rs = $rs->search( $cond, { join => 'borrower' } );
     return \@rs;
 }
