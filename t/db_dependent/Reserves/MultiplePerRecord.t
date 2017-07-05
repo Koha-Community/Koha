@@ -72,6 +72,12 @@ my $biblio = $builder->build(
         },
     }
 );
+my $biblioitem = $builder->build(
+    {
+        source => 'Biblioitem',
+        value  => { biblionumber => $biblio->{biblionumber} }
+    }
+);
 my $item1 = $builder->build(
     {
         source => 'Item',
