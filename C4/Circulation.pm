@@ -1938,7 +1938,7 @@ sub AddReturn {
             eval {
                 my $issue_id = MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
                     $circControlBranch, $return_date, $borrower->{'privacy'} );
-                $issue->{issue_id} = $issue_id;
+                $issue->issue_id($issue_id);
             };
             unless ( $@ ) {
                 if ( ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) || $return_date ) {
