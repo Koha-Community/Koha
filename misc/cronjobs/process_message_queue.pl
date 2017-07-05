@@ -31,6 +31,7 @@ use Getopt::Long;
 
 my $username = undef;
 my $password = undef;
+my $limit    = undef;
 my $method = 'LOGIN';
 my $help = 0;
 my $verbose = 0;
@@ -38,6 +39,7 @@ my $verbose = 0;
 GetOptions(
     'u|username:s'      => \$username,
     'p|password:s'      => \$password,
+    'l|limit:s'         => \$limit,
     'm|method:s'        => \$method,
     'h|help|?'          => \$help,
     'v|verbose'         => \$verbose,
@@ -53,6 +55,7 @@ advance_notices.pl script.
 This script has the following parameters :
     -u --username: username of mail account
     -p --password: password of mail account
+    -l --limit: The maximum number of messages to process for this run
     -m --method: authentication method required by SMTP server (See perldoc Sendmail.pm for supported authentication types.)
     -h --help: this message
     -v --verbose: provides verbose output to STDOUT
@@ -63,5 +66,13 @@ die $usage if $help;
 
 cronlogaction();
 
-C4::Letters::SendQueuedMessages( { verbose => $verbose, username => $username, password => $password, method => $method } );
+C4::Letters::SendQueuedMessages(
+    {
+        verbose  => $verbose,
+        username => $username,
+        password => $password,
+        method   => $method,
+        limit    => $limit,
+    }
+);
 
