@@ -48,7 +48,7 @@ sub club_template {
 
     return unless $self->club_template_id();
 
-    return Koha::Club::Templates->find( $self->club_template_id() );
+    return scalar Koha::Club::Templates->find( $self->club_template_id() );
 }
 
 =head3 club_fields
@@ -84,7 +84,7 @@ sub branch {
 
     return unless $self->branchcode();
 
-    return Koha::Libraries->find( $self->branchcode() );
+    return scalar Koha::Libraries->find( $self->branchcode() );
 }
 
 =head3 type
