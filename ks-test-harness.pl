@@ -3,7 +3,7 @@
 # Copyright 2017 KohaSuomi
 #
 # This file is part of Koha.
-# .
+#
 
 use 5.22.0;
 use Carp;
@@ -16,17 +16,19 @@ use Scalar::Util qw(blessed);
 
 my ($help, $dryRun);
 my ($verbose, $gitTailLength) = (0, 0);
-my ($clover, $tar, $reinstall);
-my ($testAll, $testUnit, $testXt, $testSip2, $testDb);
-
+my ($clover, $tar, $junit);
+my ($run);
+my ($testAll, $testUnit, $testXt, $testSip2, $testDb, $testCompile);
 
 GetOptions(
     'h|help'                      => \$help,
     'v|verbose:i'                 => \$verbose,
-    'reinstall'                   => \$reinstall,
     'dry-run'                     => \$dryRun,
     'clover'                      => \$clover,
     'tar'                         => \$tar,
+    'junit'                       => \$junit,
+    'run'                         => \$run,
+    'c|compile'                   => \$testCompile,
     'a|all'                       => \$testAll,
     'u|unit'                      => \$testUnit,
     'x|xt'                        => \$testXt,
@@ -43,14 +45,21 @@ Runs a ton of tests with other metrics if needed
 
   -v --verbose          Integer, the level of verbosity
 
-  --reinstall           Reinstall the default Koha database. This operation is only allowed
-                        on databases whose name starts with "koha_ci"
-
   --tar                 Create a testResults.tar.gz from all tests and deliverables
 
   --dry-run             Don't run tests or other metrics. Simply show what would happen.
 
-  --clover              Run Devel::Cover and output Clover-reports
+  --clover              Run Devel::Cover and output Clover-reports.
+                        Clover reports are stored to testResults/clover/clover.xml
+
+  --junit               Run test via TAP::Harness::Junit instead of TAP::Harness. Junit xml results
+                        are stored to testResults/junit/*.xml
+
+  --run                 Actually run the tests. Without this flag, the script will simply compile and run
+                        without doing any work or changes.
+                        You can use this to test that this script is actually compilable.
+
+  -c --compile          Only check if Perl files compile, using t/00-load.t
 
   -a --all              Run all tests.
 
@@ -71,13 +80,7 @@ Runs a ton of tests with other metrics if needed
 
 EXAMPLE
 
-    ##First run a smoke test for latest changes
-    ks-test-harness.pl --git 5 --tar
-    ##Then run a big test suite
-    ks-test-harness.pl --all --tar
-
-    ##If you are interested in unit tests and db tests only...
-    ks-test-harness.pl --unit --db -v 1
+  ks-test-harness.pl --tar --clover --junit --run
 
 USAGE
 
@@ -86,36 +89,14 @@ if ($help) {
     exit 0;
 }
 
-use File::Basename;
-use TAP::Harness::JUnit;
+use KSTestHarness;
 use Git;
-use C4::Installer;
-
-my $dir = File::Basename::dirname($0);
-chdir $dir;
 
 
-##Prepare directories to store test results
-my $testResultsDir = 'testResults';
-my $testResultsArchive = 'testResults.tar.gz';
-my $junitDir =  $testResultsDir.'/junit';
-my $cloverDir = $testResultsDir.'/clover';
-my $cover_dbDir = $testResultsDir.'/cover_db';
-my @archivableDirs = ($junitDir, $cloverDir);
-mkdir $testResultsDir unless -d $testResultsDir;
-_shell("rm -r $junitDir");
-_shell("rm -r $cloverDir");
-mkdir $junitDir unless -d $junitDir;
-mkdir $cloverDir unless -d $cloverDir;
-unlink $testResultsArchive if -e $testResultsArchive;
-
-
-run();
+run() if $run;
 sub run {
-    clearCoverDb() if $clover;
-    C4::Installer::reinstall($verbose) if $reinstall;
-
     my (@tests, $tests);
+    push(@tests, @{_getCompileTest()})      if $testCompile;
     push(@tests, @{_getAllTests()})         if $testAll;
     push(@tests, @{_getUnitTests()})        if $testUnit;
     push(@tests, @{_getXTTests()})          if $testXt;
@@ -125,93 +106,22 @@ sub run {
 
     print "Selected the following test files:\n".join("\n",@tests)."\n" if $verbose;
 
-    runharness(_sortFilesByDir(\@tests));
-    createCoverReport() if $clover;
-    tar() if $tar;
+    my $ksTestHarness = KSTestHarness->new(
+        resultsDir => undef,
+        tar        => $tar,
+        clover     => $clover,
+        junit      => $junit,
+        testFiles  => \@tests,
+        dryRun     => $dryRun,
+        verbose    => $verbose,
+        lib        => [$ENV{KOHA_PATH}.'/lib', $ENV{KOHA_PATH}],
+    );
+    $ksTestHarness->run();
 }
 
-=head2 clearCoverDb
-
-Empty previous coverage test results
-
-=cut
-
-sub clearCoverDb {
-    my $cmd = "/usr/bin/cover -delete $cover_dbDir";
-    print "$cmd\n" if $dryRun;
-    _shell($cmd) unless $dryRun;
+sub _getCompileTest {
+    return _getTests('t', '00-load.t');
 }
-
-=head2 createCoverReport
-
-Create Clover coverage reports
-
-=cut
-
-sub createCoverReport {
-    my $cmd = "/usr/bin/cover -report clover -outputdir $testResultsDir/clover $cover_dbDir";
-    print "$cmd\n" if $dryRun;
-    _shell($cmd) unless $dryRun;
-}
-
-=head2 tar
-
-Create a tar.gz-package out of test deliverables
-
-=cut
-
-sub tar {
-    my $cmd = "/bin/tar -czf $testResultsArchive @archivableDirs";
-    print "$cmd\n" if $dryRun;
-    _shell($cmd) unless $dryRun;
-}
-
-=head2 runharness
-
-Runs all given test files
-
-=cut
-
-sub runharness {
-    my ($files) = @_;
-    unless (ref($files) eq 'HASH') {
-        carp "\$files is not a HASHRef";
-    }
-
-    foreach my $dir (sort keys %$files) {
-        my @tests = sort @{$files->{$dir}};
-        unless (scalar(@tests)) {
-            carp "\@tests is empty?";
-        }
-
-        ##Prepare test harness params
-        my $dirToPackage = $dir;
-        $dirToPackage =~ s!^\./!!; #Drop leading "current"-dir chars
-        $dirToPackage =~ s!/!\.!gsm; #Change directories to dot-separated packages
-        my $xmlfile = $testResultsDir.'/junit'.'/'.$dirToPackage.'.xml';
-        my @exec = (
-            $EXECUTABLE_NAME,
-            '-w',
-        );
-        push(@exec, "-MDevel::Cover=-db,$cover_dbDir,-silent,1,-coverage,all") if $clover;
-
-        if ($dryRun) {
-            print "TAP::Harness::JUnit would run tests with this config:\nxmlfile => $xmlfile\npackage => $dirToPackage\nexec => @exec\ntests => @tests\n";
-        }
-        else {
-            my $harness = TAP::Harness::JUnit->new({
-                xmlfile => $xmlfile,
-#                package => $dirToPackage,
-                package => "",
-                verbosity => 1,
-                namemangle => 'perl',
-                exec       => \@exec,
-            });
-            $harness->runtests(@tests);
-        }
-    }
-}
-
 sub _getAllTests {
     return _getTests('.', '*.t');
 }
@@ -270,39 +180,3 @@ sub _shell {
     return $rv;
 }
 
-=head2 _sortFilesByDir
-
-Sort files in arrays by directory
-@RETURNS HASHRef of directory-name keys and test file names
-        {
-            't/db_dependent' => [
-                't/db_dependent/01-test.t',
-            ],
-            ...
-        }
-=cut
-
-sub _sortFilesByDir {
-    my ($files) = @_;
-    unless (ref($files) eq 'ARRAY') {
-        carp "\$files is not an ARRAYRef";
-    }
-    unless (scalar(@$files)) {
-        carp "\$files is an ampty array?";
-    }
-
-    #deduplicate files
-    my (%seen, @files);
-    @files = grep !$seen{$_}++, @$files;
-
-    print "After deduplication remains the following test files:\n".join("\n",@files)."\n" if $verbose;
-
-    #Sort by dirs
-    my %dirsWithFiles;
-    foreach my $f (@files) {
-        my $dir = File::Basename::dirname($f);
-        $dirsWithFiles{$dir} = [] unless $dirsWithFiles{$dir};
-        push (@{$dirsWithFiles{$dir}}, $f);
-    }
-    return \%dirsWithFiles;
-}
