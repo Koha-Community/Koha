@@ -1,7 +1,9 @@
 #!/usr/bin/env perl
 
 use Modern::Perl;
-use Test::More tests => 25;
+use Module::Load::Conditional qw/check_install/;
+use Test::More;
+use Test::MockModule;
 
 use t::lib::Mocks;
 
@@ -9,8 +11,17 @@ use Koha::Schema;
 use_ok('C4::Members');
 
 BEGIN {
-    use Test::DBIx::Class;
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 25;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
 }
+
+use Test::DBIx::Class;
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 my $dbh = C4::Context->dbh;
 my $rs = [];
