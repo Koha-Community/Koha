@@ -749,7 +749,7 @@ $template->param(
             displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
-            showbranchlist => C4::Context->preference('showBranchListOnSearchResults')||1, # KD#1869 - Show or hide list of holding branches on search results display
+            showbranchlist => C4::Context->preference('showBranchListOnSearchResults'), # KD#1869 - Show or hide list of holding branches on search results display
 );
 
 if ($query_desc || $limit_desc) {
