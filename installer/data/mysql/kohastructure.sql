@@ -983,7 +983,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `itemnumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier added by Koha
   `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
   `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
-  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
+  `barcode` varchar(30) default NULL, -- item barcode (MARC21 952$p)
   `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
   `datereceived` timestamp NULL, -- When this Item was received.
   `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
