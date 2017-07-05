@@ -331,10 +331,13 @@ if (@$barcodes) {
     $template_params->{messages} = $messages;
 
     my $item = Koha::Items->find({ barcode => $barcode });
-    my $biblio = $item->biblio;
+    my ( $biblio, $mss );
 
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.notforloan', authorised_value => { not => undef } });
-    $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorised_value : undef;
+    if ( $item ) {
+        $biblio = $item->biblio;
+        my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.notforloan', authorised_value => { not => undef } });
+        $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorised_value : undef;
+    }
 
     # Fix for bug 7494: optional checkout-time fallback search for a book
 
@@ -412,10 +415,6 @@ if (@$barcodes) {
         );
     }
 
-    $template->param(
-        itembiblionumber => $biblio->biblionumber
-    );
-
 
     # FIXME If the issue is confirmed, we launch another time checkouts->count, now display the issue count after issue
     $patron = Koha::Patrons->find( $borrowernumber );
@@ -424,6 +423,7 @@ if (@$barcodes) {
     if ( $item ) {
         $template_params->{item} = $item;
         $template_params->{biblio} = $biblio;
+        $template_params->{itembiblionumber} = $biblio->biblionumber;
     }
     push @$checkout_infos, $template_params;
   }
