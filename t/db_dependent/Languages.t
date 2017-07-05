@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
@@ -94,3 +94,9 @@ $sth->execute();
 my $LangRfc4646 = $sth->fetchall_arrayref({});
 
 is(scalar(@$LangRfc4646),scalar(@$DistinctLangRfc4646),"No unexpected language_rfc4646_to_iso639 duplicates.");
+
+my $i = 0;
+foreach my $pair (@$DistinctLangRfc4646){
+    $i++ if $pair->{rfc4646_subtag} eq C4::Languages::get_rfc4646_from_iso639( $pair->{iso639_2_code} );
+}
+is($i,scalar(@$DistinctLangRfc4646),"get_rfc4646_from_iso639 returns correct rfc for all iso values.");

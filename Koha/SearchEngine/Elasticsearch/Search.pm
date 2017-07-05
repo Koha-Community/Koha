@@ -447,6 +447,7 @@ sub _convert_facets {
         ccode          => 'CollectionCodes',
         holdingbranch  => 'HoldingLibrary',
         homebranch     => 'HomeLibrary',
+        ln             => 'Language',
     );
     my @facetable_fields =
       Koha::SearchEngine::Elasticsearch->get_facetable_fields;

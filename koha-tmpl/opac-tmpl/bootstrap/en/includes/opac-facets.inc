@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE AuthorisedValues %]
+[% USE Languages %]
 [% IF ( opacfacets && facets_loop && total ) %]
     <div id="search-facets">
         <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
@@ -27,6 +28,7 @@
                         [% IF facets_loo.type_label_Series %]<h5 id="facet-series">Series</h5>[% END %]
                         [% IF facets_loo.type_label_ItemTypes %]<h5 id="facet-itemtypes">Item types</h5>[% END %]
                         [% IF facets_loo.type_label_CollectionCodes %]<h5 id="facet-collections">Collections</h5>[% END %]
+                        [% IF facets_loo.type_label_Language %]<h5 id="facet-languages">Languages</h5>[% END %]
                         [% UNLESS singleBranchMode %]
                             [% IF ( facets_loo.type_label_HomeLibrary ) %]<h5 id="facet-home-libraries">Home libraries</h5>[% END %]
                             [% IF ( facets_loo.type_label_HoldingLibrary ) %]<h5 id="facet-holding-libraries">Holding libraries</h5>[% END %]
@@ -39,6 +41,7 @@
                             [% END %]
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,1) || facet.facet_label_value %][% END %]
+                            [% IF facets_loo.type_label_Language %][% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %][% END %]
                                 <li>
                                   [% IF facet.active %]
                                     [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]

@@ -622,6 +622,20 @@ sub getlanguage {
     return $language;
 }
 
+=head2 get_rfc4646_from_iso639
+
+    Select a language rfc4646 code given an iso639 code
+
+=cut
+
+sub get_rfc4646_from_iso639 {
+
+    my $iso_code = shift;
+    my $rfc_subtag = Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find({iso639_2_code=>$iso_code})->rfc4646_subtag;
+    return $rfc_subtag;
+
+}
+
 1;
 
 __END__

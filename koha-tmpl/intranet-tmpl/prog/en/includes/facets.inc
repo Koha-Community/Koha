@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE AuthorisedValues %]
+[% USE Languages %]
 [% IF ( opacfacets ) %]
 [% IF ( facets_loop ) %]
 <div id="search-facets">
@@ -23,6 +24,7 @@
 [% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
 [% IF facets_loo.type_label_Location %]<span id="facet-locations">Locations</span>[% END %]
 [% IF facets_loo.type_label_CollectionCodes %]<span id="facet-collections">Collections</span>[% END %]
+[% IF facets_loo.type_label_Language %]<span id="facet-languages">Languages</span>[% END %]
 <ul>
   [% SET url = "/cgi-bin/koha/catalogue/search.pl?" _ query_cgi _ limit_cgi %]
   [% IF ( sort_by ) %]
@@ -30,6 +32,7 @@
   [% END %]
   [% FOREACH facet IN facets_loo.facets %]
   [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,0) || facet.facet_label_value %][% END %]
+  [% IF facets_loo.type_label_Language %][% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %][% END %]
     <li>
       [% IF facet.active %]
         [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]

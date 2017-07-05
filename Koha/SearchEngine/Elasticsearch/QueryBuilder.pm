@@ -111,13 +111,14 @@ sub build_query {
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
     $res->{aggregations} = {
-        author => { terms => { field => "author__facet" } },
-        subject => { terms => { field => "subject__facet" } },
-        itype => { terms => { field => "itype__facet" } },
-        location => { terms => { field => "location__facet" } },
-        'su-geo' => { terms => { field => "su-geo__facet" } },
+        author         => { terms => { field => "author__facet" } },
+        subject        => { terms => { field => "subject__facet" } },
+        itype          => { terms => { field => "itype__facet" } },
+        location       => { terms => { field => "location__facet" } },
+        'su-geo'       => { terms => { field => "su-geo__facet" } },
         'title-series' => { terms => { field => "title-series__facet" } },
-        ccode => { terms => { field => "ccode__facet" } },
+        ccode          => { terms => { field => "ccode__facet" } },
+        ln             => { terms => { field => "ln__facet" } },
     };
 
     my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
