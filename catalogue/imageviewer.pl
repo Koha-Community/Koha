@@ -45,8 +45,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 my $imagenumber = $query->param('imagenumber');
 my $biblio = Koha::Biblios->find( $biblionumber );
-my $itemcount = $biblio->items->count;;
-
+my $itemcount = $biblio ? $biblio->items->count : 0;
 my @items = GetItemsInfo($biblionumber);
 
 my $norequests = 1;
@@ -110,7 +109,7 @@ my $count_deletedorders_using_biblio = scalar @deletedorders_using_biblio ;
 $template->param (countdeletedorders => $count_deletedorders_using_biblio);
 
 $biblio = Koha::Biblios->find( $biblionumber );
-my $holds = $biblio->holds;
-$template->param( holdcount => $holds->count );
+my $hold_count = $biblio ? $biblio->holds->count : 0;
+$template->param( holdcount => $hold_count );
 
 output_html_with_http_headers $query, $cookie, $template->output;
