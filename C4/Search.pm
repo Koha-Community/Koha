@@ -332,6 +332,7 @@ sub getRecords {
 
     my @servers = @$servers_ref;
     my @sort_by = @$sort_by_ref;
+    $offset = 0 if $offset < 0;
 
     # Initialize variables for the ZOOM connection and results object
     my $zconn;

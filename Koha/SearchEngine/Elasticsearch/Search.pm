@@ -149,6 +149,7 @@ sub search_compat {
     ) = @_;
     my %options;
     $options{offset} = $offset;
+    $offset = 0 if $offset < 0;
     $options{expanded_facet} = $expanded_facet;
     my $results = $self->search($query, undef, $results_per_page, %options);
 
