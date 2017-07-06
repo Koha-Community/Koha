@@ -154,7 +154,7 @@ sub getFileNameElements {
         __PACKAGE__."->getIssueNameElements($fileName):> \$fileName cannot contain the comment-character '\x23'.".
         " It will screw up the make build chain.") if $fileName =~ /\x23/;
 
-    if ($fileName =~ /^(\w{1,3})(?:\W|[_])(\d+)(?:(?:\W|[_])(\d+))?(?:\W|[_])(.+?)\.(\w{1,5})$/) {
+    if ($fileName =~ /^([a-zA-Z]{1,3})(?:\W|[_])?(\d+)(?:(?:\W|[_])(\d+))?(?:(?:\W|[_])(.+?))?\.(\w{1,5})$/) {
         return ($1, $2, $3, $4, $5);
     }
 
