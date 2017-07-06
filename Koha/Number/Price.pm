@@ -87,8 +87,11 @@ sub _format_params {
 
     my $int_curr_symbol = q||;
     my %format_params = (
+        decimal_fill      => '2',
+        decimal_point     => '.',
         int_curr_symbol   => $int_curr_symbol,
         mon_thousands_sep => ',',
+        thousands_sep     => ',',
         mon_decimal_point => '.'
     );
 
