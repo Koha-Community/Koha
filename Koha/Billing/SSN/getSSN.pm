@@ -19,7 +19,7 @@ use utf8;
 use strict;
 use warnings;
 
-sub getssn() {
+sub getssn {
   # Return ssn using configured ssn interface. This is just to keep
   # the code in output filters cleaner (this functionality doesn't need
   # to be duplicated in each of them)
