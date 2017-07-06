@@ -1,9 +1,13 @@
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 30;
 
 use Test::MockModule;
 use t::lib::Mocks;
+
+# Number formating depends by default on system environement
+# See http://search.cpan.org/~wrw/Number-Format/Format.pm
+use POSIX qw(setlocale LC_NUMERIC);
 
 use Koha::Acquisition::Currencies;
 my $budget_module = Test::MockModule->new('Koha::Acquisition::Currencies');
@@ -11,6 +15,7 @@ my $currency;
 $budget_module->mock( 'get_active', sub { return $currency; } );
 use_ok('Koha::Number::Price');
 
+my $orig_locale = setlocale(LC_NUMERIC);
 my $format = {
     p_cs_precedes => 1, # Force to place the symbol at the beginning
     p_sep_by_space => 0, # Force to not add a space between the symbol and the number
@@ -43,6 +48,14 @@ is( Koha::Number::Price->new->unformat,    '0', 'US: unformat 0' );
 is( Koha::Number::Price->new(3)->unformat, '3', 'US: unformat 3' );
 is( Koha::Number::Price->new(1234567890)->unformat,
     '1234567890', 'US: unformat 1234567890' );
+
+# Bug 18900 - Check params are not from system environement
+setlocale(LC_NUMERIC, "fr_FR.UTF-8");
+is( Koha::Number::Price->new(12345678.9)->format( { %$format, with_symbol => 1 } ),
+    '12,345,678.90', 'US: format 12,345,678.90 with symbol' );
+is( Koha::Number::Price->new('12,345,678.90')->unformat,
+    '12345678.9', 'US: unformat 12345678.9' );
+setlocale(LC_NUMERIC, $orig_locale);
 
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'FR' );
 $currency = Koha::Acquisition::Currency->new({
