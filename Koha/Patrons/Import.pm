@@ -158,7 +158,7 @@ sub import_patrons {
 
         # Default date enrolled and date expiry if not already set.
         $borrower{dateenrolled} = $self->today_iso() unless $borrower{dateenrolled};
-        $borrower{dateexpiry} = GetExpiryDate( $borrower{categorycode}, $borrower{dateenrolled} ) unless $borrower{dateexpiry};
+        $borrower{dateexpiry} = Koha::Patron::Categories->find( $borrower{categorycode} )->get_expiry_date( $borrower{dateenrolled} ) unless $borrower{dateexpiry};
 
         my $borrowernumber;
         my $member;
