@@ -9,7 +9,7 @@ use POSIX qw(strftime);
 use Koha::Database;
 use Koha::Item;
 use Koha::Biblio;
-use Koha::BiblioItem;
+use Koha::Biblioitem;
 use C4::Biblio;
 use utf8;
 use List::MoreUtils qw(uniq);
@@ -223,7 +223,7 @@ sub getBarcodeValue{
 sub getItemsByIsbns {
     my $self = shift;
     my @isbnArray = $_[0];
-    my $resultSet = $self->getSchema()->resultset(Koha::BiblioItem->type());
+    my $resultSet = $self->getSchema()->resultset(Koha::Biblioitem->_type());
     my $result = -1;
 
     if(@isbnArray > 0){
@@ -236,7 +236,7 @@ sub getItemByColumns {
     my $self = shift;
     my $columns = $_[0];
 
-    my $resultSet = $self->getSchema()->resultset(Koha::BiblioItem->type());
+    my $resultSet = $self->getSchema()->resultset(Koha::Biblioitem->_type());
     my $result = -1;
 
     if($columns){
@@ -331,7 +331,7 @@ sub createBiblioItem{
             #&& ($self->validate({'params', \@isbn , 'data', $data }) || $self->validate({'params', \@ean , 'data', $data }) || $self->validate({'params', \@identifierParams , 'data', $data }) )
         ){
 
-            my $biblioItem  = new Koha::BiblioItem;
+            my $biblioItem  = new Koha::Biblioitem;
             $biblioItem->set({'biblionumber', $data->{'biblio'}});
             $biblioItem->set({'itemtype', $data->{'productform'}});
             $biblioItem->set({'timestamp', $data->{'timestamp'}});
