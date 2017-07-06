@@ -102,9 +102,7 @@ subtest 'borrowers.flags to Koha-Suomi permission' => sub {
 
         is(scalar(@$permissions), $number_of_borrowers_permissions,
            'Patron has all borrowers permissions');
-        my $expected_permission = Koha::Auth::Permissions->find({
-            code => 'view_borrowers' })->permission_id;
-        is($permissions->[0]->permission_id, $expected_permission,
+        is($manager->hasPermission($patron, 'borrowers', 'view_borrowers'), 1,
            'Patron has view_borrowers');
     };
 
