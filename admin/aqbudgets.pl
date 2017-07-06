@@ -237,7 +237,7 @@ if ( $op eq 'list' ) {
     );
 
     my @budgets = @{
-        GetBudgetHierarchy( $$period{budget_period_id}, C4::Context->userenv->{branch}, ( $show_mine ? $borrower_id : 0 ))
+        GetBudgetHierarchy( $$period{budget_period_id}, undef, ( $show_mine ? $borrower_id : 0 ))
     };
 
     my $period_total = 0;
@@ -248,6 +248,7 @@ if ( $op eq 'list' ) {
     my @budgets_to_display;
     foreach my $budget (@budgets) {
         # PERMISSIONS
+        next unless CanUserUseBudget($borrowernumber, $budget, $staffflags);
         unless(CanUserModifyBudget($borrowernumber, $budget, $staffflags)) {
             $budget->{'budget_lock'} = 1;
         }
