@@ -82,7 +82,7 @@ sub new {
 
     # Get all .pref file names
     opendir my $fh, $self->{path_pref_en};
-    my @pref_files = grep { /.pref/ } readdir($fh);
+    my @pref_files = grep { /.pref$/ } readdir($fh);
     close $fh;
     $self->{pref_files} = \@pref_files;
 
