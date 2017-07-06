@@ -19,6 +19,25 @@
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
         $(document).ready(function(){
+            [% IF tag_number == 'rancor' %]
+            function RancorReplaceField( new_text ){
+                var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
+                cur_field.setText(new_text);
+                return true;
+            }
+                [% IF ( clear ) %]
+                var new_line = "";
+                [% ELSE %]
+                var new_line = "
+                [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
+                    [%- SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r    ') -%]
+                    [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
+                        [%- marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') -%]
+                    [%- END -%]
+                [%- END -%]‡9[% authid %]";
+                [% END %]
+                RancorReplaceField( new_line );
+            [% ELSE %]
             var index_start = "[% index %]";
             var whichfield;
             try {
@@ -88,13 +107,14 @@
             }
 
             [% UNLESS ( clear ) %]
-            [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
-                SetSubfieldValues(
-                    "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
-                [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
-                    ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
+                    SetSubfieldValues(
+                        "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                    [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
+                        ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                    [% END %]
+                    );
                 [% END %]
-                );
             [% END %]
                 var indicators = field_start.getElementsByClassName('indicator flat');
                 [% IF update_ind1 %]
@@ -124,6 +144,7 @@
                 [% END %]
                 }
             }
+            [% END %]
 
             opener.close();
             window.close();

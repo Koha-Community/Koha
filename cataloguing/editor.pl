@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output;
 use DBIx::Class::ResultClass::HashRefInflator;
 use Koha::Database;
+use Koha::MarcSubfieldStructures;
 
 my $input = CGI->new;
 
@@ -55,6 +56,9 @@ $template->{VARS}->{editable_batches} = [ $schema->resultset('ImportBatch')->sea
 
 # Needed information for cataloging plugins
 $template->{VARS}->{DefaultLanguageField008} = pack( 'A3', C4::Context->preference('DefaultLanguageField008') || 'eng' );
+
+my $authtags = Koha::MarcSubfieldStructures->search({ authtypecode => { '!=' => '' }, 'frameworkcode' => '' });
+$template->{VARS}->{authtags} = $authtags;
 
 # Z39.50 servers
 my $dbh = C4::Context->dbh;

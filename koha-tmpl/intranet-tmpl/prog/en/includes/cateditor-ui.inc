@@ -3,6 +3,14 @@
 <script src="[% interface %]/lib/koha/cateditor/marc-mode.js"></script>
 <script src="[% interface %]/lib/require.js"></script>
 <script>
+    var authInfo = {
+        [%- FOREACH authtag = authtags -%]
+            [% authtag.tagfield %]: {
+                subfield: '[% authtag.tagsubfield %]',
+                authtypecode: '[% authtag.authtypecode %]',
+                },
+        [%- END -%]
+    };
 require.config( {
     baseUrl: '[% interface %]/lib/koha/cateditor/',
     config: {
