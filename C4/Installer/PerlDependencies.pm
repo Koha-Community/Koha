@@ -947,6 +947,11 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '3.69', # same for Wheezy/Jessie
     },
+    'HTML::Template' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '2.95'
+    },
     'Readonly' => {
         'usage'    => 'Make script happy',
         'required' => '0',
