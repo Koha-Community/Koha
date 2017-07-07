@@ -38,9 +38,9 @@ exit;
 
 my $quiet = ($verbose) ? '' : ' -q ';
 
-my $userflags_file = `find -name userflags.sql`;
+my $userflags_file = `find -name userflags.sql -not -path "*/blib/*"`;
 chomp $userflags_file;
-my $userperms_file = `find -name userpermissions.sql`;
+my $userperms_file = `find -name userpermissions.sql -not -path "*/blib/*"`;
 chomp $userperms_file;
 die "File $userflags_file is not writable" unless (-w $userflags_file);
 die "File $userperms_file is not writable" unless (-w $userperms_file);
