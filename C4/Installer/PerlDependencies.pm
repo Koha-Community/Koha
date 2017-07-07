@@ -602,6 +602,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.09',
     },
+    'DateTime::Format::HTTP' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.42',
+    },
     'DateTime::Format::RFC3339' => {
         'usage'    => 'Core',
         'required' => '1',
