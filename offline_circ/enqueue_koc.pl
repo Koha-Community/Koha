@@ -34,7 +34,6 @@ use C4::Members;
 use C4::Stats;
 use Koha::UploadedFiles;
 use Koha::Checkouts;
-use Koha::Upload;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
