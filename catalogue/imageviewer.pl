@@ -108,7 +108,6 @@ $template->param (countorders => $count_orders_using_biblio);
 my $count_deletedorders_using_biblio = scalar @deletedorders_using_biblio ;
 $template->param (countdeletedorders => $count_deletedorders_using_biblio);
 
-$biblio = Koha::Biblios->find( $biblionumber );
 my $hold_count = $biblio ? $biblio->holds->count : 0;
 $template->param( holdcount => $hold_count );
 
