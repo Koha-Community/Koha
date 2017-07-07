@@ -346,8 +346,6 @@ $template->param(
     samebranch      => $samebranch,
     quickslip       => $quickslip,
     privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
-    SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     debarments => GetDebarments({ borrowernumber => $borrowernumber }),
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,

@@ -645,8 +645,6 @@ $template->param(
     AudioAlerts           => C4::Context->preference("AudioAlerts"),
     fast_cataloging   => $fast_cataloging,
     CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),
-    SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
-    AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
