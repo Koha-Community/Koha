@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::TestBuilder;
 
 use DateTime;
 use Koha::Caches;
 use Koha::DateUtils;
+use POSIX qw(tzset);
 
 use_ok('Koha::Calendar');
 
@@ -65,5 +66,21 @@ is($forwarded_dt->ymd, $today->ymd, '0 day should return start dt');
 
 $forwarded_dt = $calendar->days_forward($today, -2);
 is($forwarded_dt->ymd, $today->ymd, 'negative day should return start dt');
+
+subtest 'crossing_DST' => sub {
+
+    plan tests => 2;
+
+    $ENV{TZ} = 'America/New_York';
+    tzset;
+    my $tz = DateTime::TimeZone->new( name => 'local' );
+    my $start_date = dt_from_string( "2016-03-09 02:29:00",undef,$tz );
+    my $end_date = dt_from_string("2017-01-01");
+    my $days_between = $calendar->days_between($start_date,$end_date);
+    is($days_between->{days}, 298, "Days calculated correctly");
+    my $hours_between = $calendar->hours_between($start_date,$end_date);
+    is($hours_between->{minutes}, 428671, "Hours (in minutes) calculated correctly");
+
+};
 
 $schema->storage->txn_rollback();
