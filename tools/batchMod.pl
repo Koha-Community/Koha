@@ -125,7 +125,12 @@ if ($op eq "action") {
         my @simple_items_display = map {
             my $itemnumber = $_;
             my $item = Koha::Items->find($itemnumber);
-            { itemnumber => $itemnumber, barcode => ($item->barcode || q||), biblionumber => $item->biblio->biblionumber }} @itemnumbers;
+            {
+                itemnumber   => $itemnumber,
+                barcode      => $item ? ( $item->barcode // q{} ) : q{},
+                biblionumber => $item ? $item->biblio->biblionumber : q{},
+            };
+        } @itemnumbers;
 	    $template->param("simple_items_display" => \@simple_items_display);
 	}
 

@@ -1442,6 +1442,7 @@ sub GetMarcPrice {
 =head2 MungeMarcPrice
 
 Return the best guess at what the actual price is from a price field.
+
 =cut
 
 sub MungeMarcPrice {

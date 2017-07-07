@@ -666,7 +666,7 @@ sub DelItem {
 
     unless ($biblionumber) {
         my $item = Koha::Items->find( $itemnumber );
-        $biblionumber = $item->biblio->biblionumber;
+        $biblionumber = $item ? $item->biblio->biblionumber : undef;
     }
 
     # If there is no biblionumber for the given itemnumber, there is nothing to delete
