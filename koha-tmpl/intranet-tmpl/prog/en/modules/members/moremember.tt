@@ -577,16 +577,16 @@ function validate1(date) {
         </fieldset>
     </form>
 
-    [% IF SuspendHoldsIntranet %]
+    [% IF Koha.Preference('SuspendHoldsIntranet') %]
     <fieldset class="action">
         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
             <input type="hidden" name="from" value="borrower" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="submit" value="Suspend all holds" />
 
-            [% IF AutoResumeSuspendedHolds %]
+            [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
             <label for="suspend_until">until</label>
-            <input type="text" size="10" id="suspend_until" name="suspend_until datepicker"/>
+            <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker"/>
             <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
             [% END %]
         </form>
