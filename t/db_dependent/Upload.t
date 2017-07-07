@@ -10,6 +10,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;
+use Koha::Auth::PermissionManager;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::UploadedFile;
@@ -246,29 +247,21 @@ subtest 'Testing allows_add_by' => sub {
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         undef, 'Patron is not allowed to do anything' );
 
+    my $manager = Koha::Auth::PermissionManager->new;
     # add some permissions: edit_catalogue
-    my $fl = 2**9; # edit_catalogue
-    $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
+    $manager->grantAllSubpermissions($patronid, [ 'editcatalogue' ]);
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         undef, 'Patron is still not allowed to add uploaded files' );
 
     # replace flags by all tools
-    $fl = 2**13; # tools
-    $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
+    $manager->revokeAllPermissions($patronid);
+    $manager->grantAllSubpermissions($patronid, [ 'tools' ]);
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron should be allowed now to add uploaded files' );
 
     # remove all tools and add upload_general_files only
-    $fl = 0; # no modules
-    $schema->resultset('Borrower')->find( $patronid )->update({ flags => $fl });
-    $builder->build({
-        source => 'UserPermission',
-        value  => {
-            borrowernumber => $patronid,
-            module_bit     => { module_bit => { flag => 'tools' } },
-            code           => 'upload_general_files',
-        },
-    });
+    $manager->revokeAllPermissions($patronid);
+    $manager->grantPermission($patronid, 'tools', 'upload_general_files');
     is( Koha::Uploader->allows_add_by( $patron->{userid} ),
         1, 'Patron is still allowed to add uploaded files' );
 };
