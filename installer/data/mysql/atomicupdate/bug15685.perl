@@ -1,0 +1,11 @@
+$DBversion = 'XXX';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        ALTER TABLE aqbasket
+            ADD COLUMN create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15685: Allow creation of items (AcqCreateItem) to be customizable per-basket)\n";
+}
