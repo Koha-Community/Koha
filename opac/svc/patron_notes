@@ -79,13 +79,13 @@ if ($is_ajax) {
             $issue->set({ notedate => dt_from_string(), note => $clean_note })->store;
             if($clean_note) { # only send email if note not empty
                 my $branch = Koha::Libraries->find( $issue->branchcode );
-                my $biblio = GetBiblioFromItemNumber($issue->itemnumber);
+                my $biblionumber = $issue->item->biblionumber;
                 my $letter = C4::Letters::GetPreparedLetter (
                     module => 'circulation',
                     letter_code => 'PATRON_NOTE',
                     branchcode => $branch,
                     tables => {
-                        'biblio' => $biblio->{biblionumber},
+                        'biblio' => $biblionumber,
                         'borrowers' => $member->{borrowernumber},
                     },
                 );

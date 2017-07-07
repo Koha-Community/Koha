@@ -53,11 +53,11 @@ $template->param(
 my $issue_id = $query->param('issue_id');
 my $issue = Koha::Checkouts->find( $issue_id );
 my $itemnumber = $issue->itemnumber;
-my $biblio = GetBiblioFromItemNumber($itemnumber);
+my $biblio = $issue->item->biblio;
 $template->param(
     issue_id   => $issue_id,
-    title      => $biblio->{'title'},
-    author     => $biblio->{'author'},
+    title      => $biblio->title,
+    author     => $biblio->author,
     note       => $issue->note,
     itemnumber => $issue->itemnumber,
 );
@@ -75,7 +75,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                 letter_code => 'PATRON_NOTE',
                 branchcode => $branch,
                 tables => {
-                    'biblio' => $biblio->{biblionumber},
+                    'biblio' => $biblio->biblionumber,
                     'borrowers' => $member->{borrowernumber},
                 },
             );
