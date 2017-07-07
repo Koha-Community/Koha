@@ -631,8 +631,12 @@ sub getlanguage {
 sub get_rfc4646_from_iso639 {
 
     my $iso_code = shift;
-    my $rfc_subtag = Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find({iso639_2_code=>$iso_code})->rfc4646_subtag;
-    return $rfc_subtag;
+    my $rfc_subtag = Koha::Database->new()->schema->resultset('LanguageRfc4646ToIso639')->find({iso639_2_code=>$iso_code});
+    if ( $rfc_subtag ) {
+        return $rfc_subtag->rfc4646_subtag;
+    } else {
+        return;
+    }
 
 }
 
