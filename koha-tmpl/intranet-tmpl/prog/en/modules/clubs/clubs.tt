@@ -36,7 +36,7 @@
                 data: { id: id },
                 success: function( data ) {
                     if ( data.success ) {
-                        tTable.fnDeleteRow(a.closest("tr")[0]);
+                        location.reload();
                     } else {
                         alert(_("Unable to delete template!"));
                     }
@@ -54,7 +54,7 @@
                 data: { id: id },
                 success: function( data ) {
                     if ( data.success ) {
-                        cTable.fnDeleteRow(a.closest("tr")[0]);
+                        location.reload();
                     } else {
                         alert(_("Unable to delete club!"));
                     }
@@ -232,22 +232,21 @@
                                                 Actions <b class="caret"></b>
                                             </a>
                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id %]">
-                                                <li>
-                                                    [% IF ( c.club_enrollments.count ) %]
-                                                        <a class="btn btn-xs btn-default" href="club-enrollments.pl?id=[% c.id %]">
-                                                    [% ELSE %]
-                                                        <a class="btn btn-xs btn-default disabled" href="club-enrollments.pl?id=[% c.id %]">
-                                                    [% END %]
-                                                    <i class="fa fa-list-ul"></i> Enrollments
-                                                </li>
+                                                [% IF ( c.club_enrollments.count ) %]
+                                                    <li>
+                                                        <a href="club-enrollments.pl?id=[% c.id %]">
+                                                            <i class="fa fa-list-ul"></i> Enrollments
+                                                        </a>
+                                                    </li>
+                                                [% END %]
                                                 [% IF CAN_user_clubs_edit_clubs %]
                                                     <li>
-                                                        <a class="btn btn-xs btn-default" href="clubs-add-modify.pl?id=[% c.id %]">
+                                                        <a href="clubs-add-modify.pl?id=[% c.id %]">
                                                             <i class="fa fa-pencil"></i> Edit
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
+                                                        <a href="#" onclick='ConfirmDeleteClub([% c.id %], "[% c.name | html %]", $(this) ); return false;'>
                                                             <i class="fa fa-trash"></i> Delete
                                                         </a>
                                                     </li>
