@@ -104,7 +104,7 @@ is_instance()
 {
     local instancename=$1
 
-    if find /etc/koha/sites -mindepth 1 -maxdepth 1 \
+    if find -L /etc/koha/sites -mindepth 1 -maxdepth 1 \
                          -type d -printf '%f\n'\
           | grep -q -x "$instancename" ; then
         return 0
@@ -239,7 +239,7 @@ adjust_paths_dev_install()
 
 get_instances()
 {
-    find /etc/koha/sites -mindepth 1 -maxdepth 1\
+    find -L /etc/koha/sites -mindepth 1 -maxdepth 1\
                          -type d -printf '%f\n' | sort
 }
 
