@@ -240,7 +240,7 @@ sub SearchAuthorities {
         $query="\@or $orderstring $query" if $orderstring;
     }
 
-    $offset=0 unless $offset;
+    $offset = 0 if not defined $offset or $offset < 0;
     my $counter = $offset;
     $length=10 unless $length;
     my @oAuth;
