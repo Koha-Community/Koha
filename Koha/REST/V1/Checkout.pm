@@ -80,7 +80,7 @@ sub renew {
         # TODO: Create Koha::Availability::Renew for checking renewability
         #       via Koha::Availability
         my $patron_checks = Koha::Availability::Checks::Patron->new(
-            Koha::Patrons->find($borrowernumber)
+            scalar Koha::Patrons->find($borrowernumber)
         );
         if (!$error && (my $err = $patron_checks->debt_renew_opac ||
             $patron_checks->debarred || $patron_checks->gonenoaddress ||
