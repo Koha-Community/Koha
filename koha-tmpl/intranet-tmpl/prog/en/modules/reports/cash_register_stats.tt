@@ -186,9 +186,9 @@ $(document).ready(function() {
                         <option value="ALL">All</option>
                         [% FOREACH branchloo IN branchloop %]
                             [% IF ( branchloo.selected ) %]
-                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                            <option value="[% branchloo.branchcode %]" selected="selected">[% branchloo.branchname %]</option>
                             [% ELSE %]
-                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                            <option value="[% branchloo.branchcode %]">[% branchloo.branchname %]</option>
                             [% END %]
                         [% END %]
                     </select>
