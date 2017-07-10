@@ -54,7 +54,7 @@ my $loggedinuser = $builder->build({ source => 'Borrower',
                                     value => { flags => 1, lost => 0 } });
 
 Koha::Auth::PermissionManager->grantPermission(
-    Koha::Patrons->find($loggedinuser->{borrowernumber}),
+    scalar Koha::Patrons->find($loggedinuser->{borrowernumber}),
     'circulate', 'circulate_remaining_permissions'
 );
 
