@@ -238,6 +238,12 @@
                                                             <i class="fa fa-list-ul"></i> Enrollments
                                                         </a>
                                                     </li>
+                                                [% ELSE %]
+                                                    <li class="disabled">
+                                                        <a href="club-enrollments.pl?id=[% c.id %]">
+                                                            <i class="fa fa-list-ul"></i> Enrollments
+                                                        </a>
+                                                    </li>
                                                 [% END %]
                                                 [% IF CAN_user_clubs_edit_clubs %]
                                                     <li>
