@@ -175,7 +175,8 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
     is( $stat->itemtype, $ilevel_itemtype,
         "item-level itype recorded on statistics for return");
     warning_like { AddIssue( $borrower, $item_without_itemtype->{ barcode } ) }
-                 qr/^item-level_itypes set but no itemtype set for item/,
+                 [qr/^item-level_itypes set but no itemtype set for item/,
+                 qr/^item-level_itypes set but no itemtype set for item/],
                  'Item without itemtype set raises warning on AddIssue';
     warning_like { AddReturn( $item_without_itemtype->{ barcode }, $branch ) }
                  qr/^item-level_itypes set but no itemtype set for item/,

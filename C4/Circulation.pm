@@ -2877,7 +2877,7 @@ sub AddRenewal {
                     VALUES (now(),?,?,?,?,?,?,?,?)"
         );
         $sth->execute( $borrowernumber, $accountno, $charge, $manager_id,
-            "Renewal of Rental Item " . $item_object->title . " $item->{'barcode'}",
+            "Renewal of Rental Item " . $biblio->title . " $item->{'barcode'}",
             'Rent', $charge, $itemnumber );
     }
 
