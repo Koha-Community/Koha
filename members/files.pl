@@ -64,6 +64,7 @@ if ( $op eq 'download' ) {
 }
 else {
     my $patron = Koha::Patrons->find( $borrowernumber );
+    my $patron_category = $patron->category;
     $template->param(%{ $patron->unblessed});
 
     my %errors;
@@ -102,7 +103,7 @@ else {
     }
 
     $template->param(
-        categoryname    => $patron->category->description,
+        categoryname    => $patron_category->description,
         RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 
@@ -116,7 +117,9 @@ else {
 
     $template->param( picture => 1 ) if $patron->image;
 
-    $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' || $data->{category_type} eq 'I' );
+    $template->param( adultborrower => 1 )
+        if ( $patron_category->category_type eq 'A' || $patron_category->category_type eq 'I' );
+
     $template->param(
         files => Koha::Patron::Files->new( borrowernumber => $borrowernumber )
           ->GetFilesInfo(),

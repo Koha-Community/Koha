@@ -104,11 +104,13 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         }
     }
 }
-$template->param(firstname => $patron->firstname,
-							surname => $patron->surname,
-							minpasslen => $minpasslen,
-							passwdview => 1,
+$template->param(
+    firstname  => $patron->firstname,
+    surname    => $patron->surname,
+    minpasslen => $minpasslen,
+    passwdview => 1
 );
+
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 
