@@ -62,6 +62,9 @@ __PACKAGE__->set_primary_key("frameworkcode");
 # Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KY1w7J/5cBsz9VV7QEBKPw
 
+# FIXME This should not be needed, we need to add the FK at DB level
+# It cannot be done now because the default framework (frameworkcode=='')
+# does not exist in DB
 __PACKAGE__->has_many(
     "marc_tag_structure",
     "Koha::Schema::Result::MarcTagStructure",
