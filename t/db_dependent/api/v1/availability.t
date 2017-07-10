@@ -54,8 +54,8 @@ subtest '/availability/biblio' => sub {
 
         my $item = build_a_test_item();
         my $item2 = build_a_test_item(
-            Koha::Biblios->find($item->biblionumber),
-            Koha::Biblioitems->find($item->biblioitemnumber)
+            scalar Koha::Biblios->find($item->biblionumber),
+            scalar Koha::Biblioitems->find($item->biblioitemnumber)
         );
         my $item3 = build_a_test_item();
 
@@ -158,12 +158,12 @@ subtest '/availability/biblio' => sub {
 
         my $item = build_a_test_item();
         my $item2 = build_a_test_item(
-            Koha::Biblios->find($item->biblionumber),
-            Koha::Biblioitems->find($item->biblioitemnumber)
+            scalar Koha::Biblios->find($item->biblionumber),
+            scalar Koha::Biblioitems->find($item->biblioitemnumber)
         );
         my $item3 = build_a_test_item(
-            Koha::Biblios->find($item->biblionumber),
-            Koha::Biblioitems->find($item->biblioitemnumber)
+            scalar Koha::Biblios->find($item->biblionumber),
+            scalar Koha::Biblioitems->find($item->biblioitemnumber)
         );
         my $route = '/api/v1/availability/biblio/search';
         my $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$item->biblionumber );
@@ -330,8 +330,8 @@ subtest '/availability/item' => sub {
 
         my $item = build_a_test_item();
         my $item2 = build_a_test_item(
-            Koha::Biblios->find($item->biblionumber),
-            Koha::Biblioitems->find($item->biblioitemnumber)
+            scalar Koha::Biblios->find($item->biblionumber),
+            scalar Koha::Biblioitems->find($item->biblioitemnumber)
         );
         my $route = '/api/v1/availability/biblio/search';
         my $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$item->biblionumber );
