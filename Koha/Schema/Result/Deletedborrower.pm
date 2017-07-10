@@ -52,8 +52,9 @@ __PACKAGE__->table("deletedborrowers");
 
 =head2 othernames
 
-  data_type: 'mediumtext'
+  data_type: 'varchar'
   is_nullable: 1
+  size: 50
 
 =head2 initials
 
@@ -451,7 +452,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "mediumtext", is_nullable => 1 },
   "othernames",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "varchar", is_nullable => 1, size => 50 },
   "initials",
   { data_type => "text", is_nullable => 1 },
   "streetnumber",
