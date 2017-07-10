@@ -327,7 +327,8 @@ sub simple_search_compat {
     return ('No query entered', undef, undef) unless $query;
 
     my %options;
-    $options{offset} = $offset // 0;
+    $offset = 0 if not defined $offset or $offset < 0;
+    $options{offset} = $offset;
     $max_results //= 100;
 
     unless (ref $query) {
