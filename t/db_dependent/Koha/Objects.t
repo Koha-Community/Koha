@@ -24,7 +24,7 @@ use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
-use Koha::IssuingRules;
+use Koha::Notice::Templates;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -135,9 +135,12 @@ subtest 'find' => sub {
     ), undef, 'Additional where clause in find call' );
 
     # check find with a composite FK
-    my $rule = $builder->build({ source => 'Issuingrule' });
-    my @pk = ( $rule->{branchcode}, $rule->{categorycode}, $rule->{itemtype} );
-    is( ref(Koha::IssuingRules->find(@pk)), "Koha::IssuingRule",
+    my $letter = $builder->build({ source => 'Letter' });
+    my @pk = (
+        $letter->{module}, $letter->{code}, $letter->{branchcode},
+        $letter->{message_transport_type}, $letter->{lang}
+    );
+    is( ref(Koha::Notice::Templates->find(@pk)), "Koha::Notice::Template",
         'Find returned a Koha object for composite primary key' );
 
     is( Koha::Patrons->find(), undef, 'Find returns undef if no params passed' );
