@@ -823,7 +823,10 @@ sub CanUserManageBasket {
     my ($borrower, $basket, $userflags) = @_;
 
     if (!ref $borrower) {
-        $borrower = Koha::Patrons->find( $borrower );
+        # FIXME This needs to be replaced
+        # We should not accept both scalar and array
+        # Tests need to be updated
+        $borrower = Koha::Patrons->find( $borrower )->unblessed;
     }
     if (!ref $basket) {
         $basket = GetBasket($basket);
@@ -831,7 +834,7 @@ sub CanUserManageBasket {
 
     return 0 unless ($basket and $borrower);
 
-    my $borrowernumber = $borrower->borrowernumber;
+    my $borrowernumber = $borrower->{borrowernumber};
     my $basketno = $basket->{basketno};
 
     my $AcqViewBaskets = C4::Context->preference('AcqViewBaskets');
@@ -843,7 +846,7 @@ sub CanUserManageBasket {
         my ($flags) = $sth->fetchrow_array;
         $sth->finish;
 
-        $userflags = C4::Auth::getuserflags($flags, $borrower->userid, $dbh);
+        $userflags = C4::Auth::getuserflags($flags, $borrower->{userid}, $dbh);
     }
 
     unless ($userflags->{superlibrarian}
@@ -866,7 +869,7 @@ sub CanUserManageBasket {
         }
 
         if ($AcqViewBaskets eq 'branch' && defined $basket->{branch}
-        && $basket->{branch} ne $borrower->branchcode) {
+        && $basket->{branch} ne $borrower->{branchcode}) {
             return 0;
         }
     }
