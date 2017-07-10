@@ -45,7 +45,7 @@ __PACKAGE__->table("deleteditems");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 20
+  size: 30
 
 =head2 dateaccessioned
 
@@ -304,7 +304,7 @@ __PACKAGE__->add_columns(
   "biblioitemnumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "barcode",
-  { data_type => "varchar", is_nullable => 1, size => 20 },
+  { data_type => "varchar", is_nullable => 1, size => 30 },
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
