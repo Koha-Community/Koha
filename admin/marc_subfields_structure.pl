@@ -65,7 +65,8 @@ my $tagfield      = $input->param('tagfield');
 my $tagsubfield   = $input->param('tagsubfield');
 my $frameworkcode = $input->param('frameworkcode');
 my $pkfield       = "tagfield";
-my $offset        = $input->param('offset') || 0;
+my $offset        = $input->param('offset');
+$offset = 0 if not defined $offset or $offset < 0;
 my $script_name   = "/cgi-bin/koha/admin/marc_subfields_structure.pl";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

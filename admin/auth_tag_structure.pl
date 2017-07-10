@@ -35,7 +35,8 @@ my $authtypecode         = $input->param('authtypecode')         || '';    # set
 my $existingauthtypecode = $input->param('existingauthtypecode') || '';    # set when we have to create a new framework (in authtype) by copying an old one (in existingauthtype)
 
 my $searchfield = $input->param('searchfield') || 0;
-my $offset      = $input->param('offset') || 0;
+my $offset      = $input->param('offset');
+$offset = 0 if not defined $offset or $offset < 0;
 my $op          = $input->param('op')     || '';
 $searchfield =~ s/\,//g;
 
