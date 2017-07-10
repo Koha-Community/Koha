@@ -17,8 +17,18 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More;
 use t::lib::Mocks;
+
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 3;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
 
 # Mock the DB connexion and C4::Context
 use Test::DBIx::Class;

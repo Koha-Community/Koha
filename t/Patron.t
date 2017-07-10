@@ -17,15 +17,25 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More;
 use Test::Warn;
 use t::lib::Mocks;
 
+use Module::Load::Conditional qw/check_install/;
+
 BEGIN {
-    use Test::DBIx::Class;
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 11;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
     use_ok('Koha::Object');
     use_ok('Koha::Patron');
 }
+
+use Test::DBIx::Class;
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 my $object = Koha::Patron->new( { surname => 'Test Patron' } );
 is( $object->surname(), 'Test Patron', "Accessor returns correct value" );

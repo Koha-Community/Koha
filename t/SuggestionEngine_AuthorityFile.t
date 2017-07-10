@@ -28,8 +28,20 @@ use Test::More;
 use Test::MockModule;
 use t::lib::Mocks;
 
-# Mock the DB connexion and C4::Context
+use Module::Load::Conditional qw/check_install/;
+
+BEGIN {
+    if ( check_install( module => 'Test::DBIx::Class' ) ) {
+        plan tests => 3;
+    } else {
+        plan skip_all => "Need Test::DBIx::Class"
+    }
+}
+
+# Mock the DB connexion
 use Test::DBIx::Class;
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 use_ok('Koha::SuggestionEngine');
 

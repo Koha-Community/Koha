@@ -36,6 +36,8 @@ BEGIN {
 };
 
 use Test::DBIx::Class;
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
 
 my $dir = File::Temp->newdir();
 my @themes = ('prog', 'test');
