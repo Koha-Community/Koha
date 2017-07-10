@@ -1035,7 +1035,7 @@ sub _enforceCommandlineSuperuserBorrowerExists {
                                dateexpiry => '2099-12-31',
                                categorycode => $ctgr || 'NOCAT',
                                branchcode => $brnchcd,
-        });
+        })->store;
         $commandlineSuperuser = Koha::Patrons->find({userid => 'commandlineadmin'});
     }
     return $commandlineSuperuser;
