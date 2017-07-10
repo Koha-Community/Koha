@@ -1425,9 +1425,9 @@ sub GetCOinSBiblio {
             $isbn      = $record->subfield( '773', 'z' ) || '';
             $issn      = $record->subfield( '773', 'x' ) || '';
             if ($mtx eq 'journal') {
-                $title    .= "&amp;rft.title=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')));
+                $title    .= "&amp;rft.title=" . ( $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{} );
             } else {
-                $title    .= "&amp;rft.btitle=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')) || '');
+                $title    .= "&amp;rft.btitle=" . ( $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{} );
             }
             foreach my $rel ($record->subfield( '773', 'g' )) {
                 if ($pages) {
