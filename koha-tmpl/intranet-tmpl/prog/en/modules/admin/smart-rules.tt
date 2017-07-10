@@ -1,8 +1,17 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% USE Categories %]
 [% USE CirculationRules %]
 [% SET footerjs = 1 %]
+
+[% SET branchcode = humanbranch %]
+
+[% SET categorycodes = ['*'] %]
+[% FOREACH pc IN patron_categories %]
+    [% categorycodes.push( pc.id ) %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -126,18 +135,22 @@
                                                                 <a name="viewnote" data-toggle="popover" title="Note" data-content="[% rule.note | html %]" data-placement="top" data-trigger="hover">View note</a>
                                                             [% ELSE %]&nbsp;[% END %]
                                                         </td>
-							<td>[% IF ( rule.unlimited_maxissueqty ) %]
-									<span>Unlimited</span>
-								[% ELSE %]
-									[% rule.maxissueqty | html %]
-								[% END %]
-							</td>
-                            <td>[% IF rule.unlimited_maxonsiteissueqty %]
-                                    <span>Unlimited</span>
+							<td>
+                                [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxissueqty' ) %]
+                                [% IF rule_value  %]
+                                    [% rule_value | html %]
                                 [% ELSE %]
-                                    [% rule.maxonsiteissueqty | html %]
+                                    <span>Unlimited</span>
                                 [% END %]
-                            </td>
+							</td>
+							<td>
+                                [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxonsiteissueqty' ) %]
+                                [% IF rule_value  %]
+                                    [% rule_value | html %]
+                                [% ELSE %]
+                                    <span>Unlimited</span>
+                                [% END %]
+							</td>
 							<td>[% rule.issuelength | html %]</td>
 							<td>
 							    [% rule.lengthunit | html %]
@@ -396,8 +409,14 @@
                 </tr>
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
-                    <td><input type="text" name="maxissueqty" size="3" value="[% default_maxissueqty | html %]"/></td>
-                    <td><input type="text" name="maxonsiteissueqty" size="3" value="[% default_maxonsiteissueqty | html %]"/></td>
+                    <td>
+                        [% SET maxissueqty  = CirculationRules.Get( branchcode, undef, undef, 'maxissueqty' ) %]
+                        <input type="text" name="maxissueqty" size="3" value="[% maxissueqty | html %]"/>
+                    </td>
+                    <td>
+                        [% SET maxonsiteissueqty  = CirculationRules.Get( branchcode, undef, undef, 'maxonsiteissueqty' ) %]
+                        <input type="text" name="maxonsiteissueqty" size="3" value="[% maxonsiteissueqty | html %]"/>
+                    </td>
                     <td>
                         [% SET rule_value = CirculationRules.Get( current_branch, '*', undef, 'max_holds' ) %]
                         <input name="max_holds" size="3" value="[% rule_value | html %]" />
@@ -513,28 +532,32 @@
                     <th>Total holds allowed</th>
                     <th>&nbsp;</th>
                 </tr>
-                [% FOREACH branch_cat_rule_loo IN branch_cat_rule_loop %]
-                    [% UNLESS ( loop.odd ) %]
-                    <tr class="highlight">
-                    [% ELSE %]
+                [% FOREACH c IN categorycodes %]
+                    [% SET maxissueqty = CirculationRules.Get( branchcode, c, undef, 'maxissueqty' ) %]
+                    [% SET maxonsiteissueqty = CirculationRules.Get( branchcode, c, undef, 'maxonsiteissueqty' ) %]
+                    [% SET max_holds = CirculationRules.Get( branchcode, c, undef, 'max_holds' ) %]
+
+                    [% IF maxissueqty || maxissueqty || max_holds %]
                     <tr>
-                    [% END %]
-                        <td>[% IF ( branch_cat_rule_loo.default_humancategorycode ) %]
+                        <td>
+                            [% IF c == '*'%]
                                 <em>Default</em>
                             [% ELSE %]
-                                [% branch_cat_rule_loo.humancategorycode | html %]
+                                [% Categories.GetName(c) | html %]
                             [% END %]
                         </td>
-                        <td>[% IF ( branch_cat_rule_loo.unlimited_maxissueqty ) %]
-                                <span>Unlimited</span>
+                        <td>
+                            [% IF maxissueqty  %]
+                                [% maxissueqty | html %]
                             [% ELSE %]
-                                [% branch_cat_rule_loo.maxissueqty | html %]
+                                <span>Unlimited</span>
                             [% END %]
                         </td>
-                        <td>[% IF ( branch_cat_rule_loo.unlimited_maxonsiteissueqty ) %]
-                                <span>Unlimited</span>
+                        <td>
+                            [% IF maxonsiteissueqty  %]
+                                [% maxonsiteissueqty | html %]
                             [% ELSE %]
-                                [% branch_cat_rule_loo.maxonsiteissueqty | html %]
+                                <span>Unlimited</span>
                             [% END %]
                         </td>
                         <td>
@@ -542,14 +565,15 @@
                             [% IF rule_value.defined && rule_value != '' %]
                                 [% rule_value | html %]
                             [% ELSE %]
-                                Unlimited
+                                <span>Unlimited</span>
                             [% END %]
                         </td>
 
                         <td class="actions">
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% branch_cat_rule_loo.categorycode | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=[% c | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
+                    [% END %]
                 [% END %]
                 <tr>
                     <td>

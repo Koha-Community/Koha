@@ -91,28 +91,22 @@ elsif ($op eq 'delete-branch-cat') {
         if ($categorycode eq "*") {
             my $sth_delete = $dbh->prepare("DELETE FROM default_circ_rules");
             $sth_delete->execute();
-        } else {
-            my $sth_delete = $dbh->prepare("DELETE FROM default_borrower_circ_rules
-                                            WHERE categorycode = ?");
-            $sth_delete->execute($categorycode);
         }
     } elsif ($categorycode eq "*") {
         my $sth_delete = $dbh->prepare("DELETE FROM default_branch_circ_rules
                                         WHERE branchcode = ?");
         $sth_delete->execute($branch);
-    } else {
-        my $sth_delete = $dbh->prepare("DELETE FROM branch_borrower_circ_rules
-                                        WHERE branchcode = ?
-                                        AND categorycode = ?");
-        $sth_delete->execute($branch, $categorycode);
     }
-    Koha::CirculationRules->set_rule(
+    Koha::CirculationRules->set_rules(
         {
-            branchcode   => $branch,
-            categorycode => $categorycode,
+            categorycode => $categorycode eq '*' ? undef : $categorycode,
+            branchcode   => $branch eq '*'       ? undef : $branch,
             itemtype     => undef,
-            rule_name    => 'max_holds',
-            rule_value   => undef,
+            rules        => {
+                max_holds         => undef,
+                maxissueqty       => undef,
+                maxonsiteissueqty => undef,
+            }
         }
     );
 }
@@ -199,8 +193,6 @@ elsif ($op eq 'add') {
         firstremind                   => $firstremind,
         chargeperiod                  => $chargeperiod,
         chargeperiod_charge_at        => $chargeperiod_charge_at,
-        maxissueqty                   => $maxissueqty,
-        maxonsiteissueqty             => $maxonsiteissueqty,
         renewalsallowed               => $renewalsallowed,
         renewalperiod                 => $renewalperiod,
         norenewalbefore               => $norenewalbefore,
@@ -230,6 +222,18 @@ elsif ($op eq 'add') {
         Koha::IssuingRule->new()->set($params)->store();
     }
 
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $bor,
+            itemtype     => $itemtype,
+            branchcode   => $br,
+            rules        => {
+                maxissueqty       => $maxissueqty,
+                maxonsiteissueqty => $maxonsiteissueqty,
+            }
+        }
+    );
+
 }
 elsif ($op eq "set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
@@ -252,35 +256,59 @@ elsif ($op eq "set-branch-defaults") {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                         FROM default_circ_rules");
         my $sth_insert = $dbh->prepare("INSERT INTO default_circ_rules
-                                        (maxissueqty, maxonsiteissueqty, holdallowed, hold_fulfillment_policy, returnbranch)
-                                        VALUES (?, ?, ?, ?, ?)");
+                                        (holdallowed, hold_fulfillment_policy, returnbranch)
+                                        VALUES (?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE default_circ_rules
-                                        SET maxissueqty = ?, maxonsiteissueqty = ?, holdallowed = ?, hold_fulfillment_policy = ?, returnbranch = ?");
+                                        SET holdallowed = ?, hold_fulfillment_policy = ?, returnbranch = ?");
 
         $sth_search->execute();
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $holdallowed, $hold_fulfillment_policy, $returnbranch);
+            $sth_update->execute($holdallowed, $hold_fulfillment_policy, $returnbranch);
         } else {
-            $sth_insert->execute($maxissueqty, $maxonsiteissueqty, $holdallowed, $hold_fulfillment_policy, $returnbranch);
+            $sth_insert->execute($holdallowed, $hold_fulfillment_policy, $returnbranch);
         }
+
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => undef,
+                rules        => {
+                    maxissueqty       => $maxissueqty,
+                    maxonsiteissueqty => $maxonsiteissueqty,
+                }
+            }
+        );
     } else {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                         FROM default_branch_circ_rules
                                         WHERE branchcode = ?");
         my $sth_insert = $dbh->prepare("INSERT INTO default_branch_circ_rules
-                                        (branchcode, maxissueqty, maxonsiteissueqty, holdallowed, hold_fulfillment_policy, returnbranch)
-                                        VALUES (?, ?, ?, ?, ?, ?)");
+                                        (branchcode, holdallowed, hold_fulfillment_policy, returnbranch)
+                                        VALUES (?, ?, ?, ?)");
         my $sth_update = $dbh->prepare("UPDATE default_branch_circ_rules
-                                        SET maxissueqty = ?, maxonsiteissueqty = ?, holdallowed = ?, hold_fulfillment_policy = ?, returnbranch = ?
+                                        SET holdallowed = ?, hold_fulfillment_policy = ?, returnbranch = ?
                                         WHERE branchcode = ?");
         $sth_search->execute($branch);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $holdallowed, $hold_fulfillment_policy, $returnbranch, $branch);
+            $sth_update->execute($holdallowed, $hold_fulfillment_policy, $returnbranch, $branch);
         } else {
-            $sth_insert->execute($branch, $maxissueqty, $maxonsiteissueqty, $holdallowed, $hold_fulfillment_policy, $returnbranch);
+            $sth_insert->execute($branch, $holdallowed, $hold_fulfillment_policy, $returnbranch);
         }
+
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => $branch,
+                rules        => {
+                    maxissueqty       => $maxissueqty,
+                    maxonsiteissueqty => $maxonsiteissueqty,
+                }
+            }
+        );
     }
     Koha::CirculationRules->set_rule(
         {
@@ -306,125 +334,56 @@ elsif ($op eq "add-branch-cat") {
 
     if ($branch eq "*") {
         if ($categorycode eq "*") {
-            #FIXME This block is will probably be never used
-            my $sth_search = $dbh->prepare("SELECT count(*) AS total
-                                            FROM default_circ_rules");
-            my $sth_insert = $dbh->prepare(q|
-                INSERT INTO default_circ_rules
-                    (maxissueqty, maxonsiteissueqty)
-                    VALUES (?, ?)
-            |);
-            my $sth_update = $dbh->prepare(q|
-                UPDATE default_circ_rules
-                SET maxissueqty = ?,
-                    maxonsiteissueqty = ?,
-            |);
-
-            $sth_search->execute();
-            my $res = $sth_search->fetchrow_hashref();
-            if ($res->{total}) {
-                $sth_update->execute( $maxissueqty, $maxonsiteissueqty );
-            } else {
-                $sth_insert->execute( $maxissueqty, $maxonsiteissueqty );
-            }
-
-            Koha::CirculationRules->set_rule(
+            Koha::CirculationRules->set_rules(
                 {
-                    branchcode   => undef,
                     categorycode => undef,
                     itemtype     => undef,
-                    rule_name    => 'max_holds',
-                    rule_value   => $max_holds,
+                    branchcode   => undef,
+                    rules        => {
+                        max_holds         => $max_holds,
+                        maxissueqty       => $maxissueqty,
+                        maxonsiteissueqty => $maxonsiteissueqty,
+                    }
                 }
             );
         } else {
-            my $sth_search = $dbh->prepare("SELECT count(*) AS total
-                                            FROM default_borrower_circ_rules
-                                            WHERE categorycode = ?");
-            my $sth_insert = $dbh->prepare(q|
-                INSERT INTO default_borrower_circ_rules
-                    (categorycode, maxissueqty, maxonsiteissueqty)
-                    VALUES ( ?, ?, ?)
-            |);
-            my $sth_update = $dbh->prepare(q|
-                UPDATE default_borrower_circ_rules
-                SET maxissueqty = ?,
-                    maxonsiteissueqty = ?,
-                WHERE categorycode = ?
-            |);
-            $sth_search->execute($categorycode);
-            my $res = $sth_search->fetchrow_hashref();
-            if ($res->{total}) {
-                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $categorycode );
-            } else {
-                $sth_insert->execute( $categorycode, $maxissueqty, $maxonsiteissueqty );
-            }
-
-            Koha::CirculationRules->set_rule(
+            Koha::CirculationRules->set_rules(
                 {
                     branchcode   => undef,
                     categorycode => $categorycode,
                     itemtype     => undef,
-                    rule_name    => 'max_holds',
-                    rule_value   => $max_holds,
+                    rules        => {
+                        max_holds         => $max_holds,
+                        maxissueqty       => $maxissueqty,
+                        maxonsiteissueqty => $maxonsiteissueqty,
+                    }
                 }
             );
         }
     } elsif ($categorycode eq "*") {
-        my $sth_search = $dbh->prepare("SELECT count(*) AS total
-                                        FROM default_branch_circ_rules
-                                        WHERE branchcode = ?");
-        my $sth_insert = $dbh->prepare(q|
-            INSERT INTO default_branch_circ_rules
-            (branchcode, maxissueqty, maxonsiteissueqty)
-            VALUES (?, ?, ?)
-        |);
-        my $sth_update = $dbh->prepare(q|
-            UPDATE default_branch_circ_rules
-            SET maxissueqty = ?,
-                maxonsiteissueqty = ?
-            WHERE branchcode = ?
-        |);
-        $sth_search->execute($branch);
-        my $res = $sth_search->fetchrow_hashref();
-        if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $branch);
-        } else {
-            $sth_insert->execute($branch, $maxissueqty, $maxonsiteissueqty);
-        }
-    } else {
-        my $sth_search = $dbh->prepare("SELECT count(*) AS total
-                                        FROM branch_borrower_circ_rules
-                                        WHERE branchcode = ?
-                                        AND   categorycode = ?");
-        my $sth_insert = $dbh->prepare(q|
-            INSERT INTO branch_borrower_circ_rules
-            (branchcode, categorycode, maxissueqty, maxonsiteissueqty)
-            VALUES (?, ?, ?, ?)
-        |);
-        my $sth_update = $dbh->prepare(q|
-            UPDATE branch_borrower_circ_rules
-            SET maxissueqty = ?,
-                maxonsiteissueqty = ?
-            WHERE branchcode = ?
-            AND categorycode = ?
-        |);
-
-        $sth_search->execute($branch, $categorycode);
-        my $res = $sth_search->fetchrow_hashref();
-        if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $branch, $categorycode);
-        } else {
-            $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty);
-        }
-
-        Koha::CirculationRules->set_rule(
+        Koha::CirculationRules->set_rules(
             {
+                categorycode => undef,
+                itemtype     => undef,
                 branchcode   => $branch,
+                rules        => {
+                    max_holds         => $max_holds,
+                    maxissueqty       => $maxissueqty,
+                    maxonsiteissueqty => $maxonsiteissueqty,
+                }
+            }
+        );
+    } else {
+        Koha::CirculationRules->set_rules(
+            {
                 categorycode => $categorycode,
                 itemtype     => undef,
-                rule_name    => 'max_holds',
-                rule_value   => $max_holds,
+                branchcode   => $branch,
+                rules        => {
+                    max_holds         => $max_holds,
+                    maxissueqty       => $maxissueqty,
+                    maxonsiteissueqty => $maxonsiteissueqty,
+                }
             }
         );
     }
@@ -592,41 +551,6 @@ while (my $row = $sth2->fetchrow_hashref) {
 
 my @sorted_row_loop = sort by_category_and_itemtype @row_loop;
 
-my $sth_branch_cat;
-if ($branch eq "*") {
-    $sth_branch_cat = $dbh->prepare("
-        SELECT default_borrower_circ_rules.*, categories.description AS humancategorycode
-        FROM default_borrower_circ_rules
-        JOIN categories USING (categorycode)
-
-    ");
-    $sth_branch_cat->execute();
-} else {
-    $sth_branch_cat = $dbh->prepare("
-        SELECT branch_borrower_circ_rules.*, categories.description AS humancategorycode
-        FROM branch_borrower_circ_rules
-        JOIN categories USING (categorycode)
-        WHERE branch_borrower_circ_rules.branchcode = ?
-    ");
-    $sth_branch_cat->execute($branch);
-}
-
-my @branch_cat_rules = ();
-while (my $row = $sth_branch_cat->fetchrow_hashref) {
-    push @branch_cat_rules, $row;
-}
-my @sorted_branch_cat_rules = sort { $a->{'humancategorycode'} cmp $b->{'humancategorycode'} } @branch_cat_rules;
-
-# note undef maxissueqty so that template can deal with them
-foreach my $entry (@sorted_branch_cat_rules, @sorted_row_loop) {
-    $entry->{unlimited_maxissueqty}       = 1 unless defined($entry->{maxissueqty});
-    $entry->{unlimited_maxonsiteissueqty} = 1 unless defined($entry->{maxonsiteissueqty});
-    $entry->{unlimited_max_holds}         = 1 unless defined($entry->{max_holds});
-    $entry->{unlimited_holds_per_day}     = 1 unless defined($entry->{holds_per_day});
-}
-
-@sorted_row_loop = sort by_category_and_itemtype @row_loop;
-
 my $sth_branch_item;
 if ($branch eq "*") {
     $sth_branch_item = $dbh->prepare("
@@ -667,7 +591,6 @@ foreach my $entry (@sorted_branch_item_rules) {
 
 $template->param(show_branch_cat_rule_form => 1);
 $template->param(branch_item_rule_loop => \@sorted_branch_item_rules);
-$template->param(branch_cat_rule_loop => \@sorted_branch_cat_rules);
 
 my $sth_defaults;
 if ($branch eq "*") {

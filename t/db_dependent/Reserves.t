@@ -189,8 +189,6 @@ $requesters{$branch_3} = Koha::Patron->new({
 
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do('DELETE FROM branch_item_rules');
-$dbh->do('DELETE FROM branch_borrower_circ_rules');
-$dbh->do('DELETE FROM default_borrower_circ_rules');
 $dbh->do('DELETE FROM default_branch_item_rules');
 $dbh->do('DELETE FROM default_branch_circ_rules');
 $dbh->do('DELETE FROM default_circ_rules');
@@ -203,18 +201,18 @@ $dbh->do(
 
 # CPL allows only its own patrons to request its items
 $dbh->do(
-    q{INSERT INTO default_branch_circ_rules (branchcode, maxissueqty, holdallowed, returnbranch)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO default_branch_circ_rules (branchcode, holdallowed, returnbranch)
+      VALUES (?, ?, ?)},
     {},
-    $branch_1, 10, 1, 'homebranch',
+    $branch_1, 1, 'homebranch',
 );
 
 # ... while FPL allows anybody to request its items
 $dbh->do(
-    q{INSERT INTO default_branch_circ_rules (branchcode, maxissueqty, holdallowed, returnbranch)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO default_branch_circ_rules (branchcode, holdallowed, returnbranch)
+      VALUES (?, ?, ?)},
     {},
-    $branch_2, 10, 2, 'homebranch',
+    $branch_2, 2, 'homebranch',
 );
 
 my $bibnum2 = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->biblionumber;

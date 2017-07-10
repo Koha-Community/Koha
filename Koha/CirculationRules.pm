@@ -145,17 +145,21 @@ sub set_rules {
     my $itemtype     = $params->{itemtype};
     my $rules        = $params->{rules};
 
-    foreach my $rule (@$rules) {
-        Koha::CirculationRules->set_rule(
+    my $rule_objects = [];
+    while ( my ( $rule_name, $rule_value ) = each %$rules ) {
+        my $rule_object = Koha::CirculationRules->set_rule(
             {
                 branchcode   => $branchcode,
                 categorycode => $categorycode,
                 itemtype     => $itemtype,
-                rule_name    => $rule->{rule_name},
-                rule_value   => $rule->{rule_value},
+                rule_name    => $rule_name,
+                rule_value   => $rule_value,
             }
         );
+        push( @$rule_objects, $rule_object );
     }
+
+    return $rule_objects;
 }
 
 =head3 type

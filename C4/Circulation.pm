@@ -389,10 +389,20 @@ sub TooMany {
  
     # given branch, patron category, and item type, determine
     # applicable issuing rule
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
-        {   categorycode => $cat_borrower,
+    my $maxissueqty_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => $cat_borrower,
             itemtype     => $type,
-            branchcode   => $branch
+            branchcode   => $branch,
+            rule_name    => 'maxissueqty',
+        }
+    );
+    my $maxonsiteissueqty_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => $cat_borrower,
+            itemtype     => $type,
+            branchcode   => $branch,
+            rule_name    => 'maxonsiteissueqty',
         }
     );
 
@@ -400,7 +410,7 @@ sub TooMany {
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
     # rule
-    if (defined($issuing_rule) and defined($issuing_rule->maxissueqty)) {
+    if (defined($maxissueqty_rule) and defined($maxissueqty_rule->rule_value)) {
         my @bind_params;
         my $count_query = q|
             SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
@@ -408,7 +418,7 @@ sub TooMany {
             JOIN items USING (itemnumber)
         |;
 
-        my $rule_itemtype = $issuing_rule->itemtype;
+        my $rule_itemtype = $maxissueqty_rule->itemtype;
         if ($rule_itemtype eq "*") {
             # matching rule has the default item type, so count only
             # those existing loans that don't fall under a more
@@ -429,8 +439,8 @@ sub TooMany {
                                     AND   itemtype <> '*'
                                   ) ";
             }
-            push @bind_params, $issuing_rule->branchcode;
-            push @bind_params, $issuing_rule->categorycode;
+            push @bind_params, $maxissueqty_rule->branchcode;
+            push @bind_params, $maxissueqty_rule->categorycode;
             push @bind_params, $cat_borrower;
         } else {
             # rule has specific item type, so count loans of that
@@ -446,7 +456,7 @@ sub TooMany {
 
         $count_query .= " AND borrowernumber = ? ";
         push @bind_params, $borrower->{'borrowernumber'};
-        my $rule_branch = $issuing_rule->branchcode;
+        my $rule_branch = $maxissueqty_rule->branchcode;
         if ($rule_branch ne "*") {
             if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
                 $count_query .= " AND issues.branchcode = ? ";
@@ -461,8 +471,8 @@ sub TooMany {
 
         my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_checkouts_allowed = $issuing_rule->maxissueqty;
-        my $max_onsite_checkouts_allowed = $issuing_rule->maxonsiteissueqty;
+        my $max_checkouts_allowed = $maxissueqty_rule ? $maxissueqty_rule->rule_value : 0;
+        my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : 0;
 
         if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
@@ -547,7 +557,7 @@ sub TooMany {
         }
     }
 
-    if ( not defined( $issuing_rule ) and not defined($branch_borrower_circ_rule->{maxissueqty}) ) {
+    if ( not defined( $maxissueqty_rule ) and not defined($branch_borrower_circ_rule->{maxissueqty}) ) {
         return { reason => 'NO_RULE_DEFINED', max_allowed => 0 };
     }
 
@@ -1586,14 +1596,11 @@ maxonsiteissueqty - maximum of on-site checkouts that a
 patron of the given category can have at the given
 branch.  If the value is undef, no limit.
 
-This will first check for a specific branch and
-category match from branch_borrower_circ_rules. 
-
-If no rule is found, it will then check default_branch_circ_rules
-(same branch, default category).  If no rule is found,
-it will then check default_borrower_circ_rules (default 
-branch, same category), then failing that, default_circ_rules
-(default branch, default category).
+This will check for different branch/category combinations in the following order:
+branch and category
+branch only
+category only
+default branch and category
 
 If no rule has been found in the database, it will default to
 the buillt in rule:
@@ -1610,44 +1617,54 @@ wildcards.
 sub GetBranchBorrowerCircRule {
     my ( $branchcode, $categorycode ) = @_;
 
-    my $rules;
-    my $dbh = C4::Context->dbh();
-    $rules = $dbh->selectrow_hashref( q|
-        SELECT maxissueqty, maxonsiteissueqty
-        FROM branch_borrower_circ_rules
-        WHERE branchcode = ?
-        AND   categorycode = ?
-    |, {}, $branchcode, $categorycode ) ;
-    return $rules if $rules;
+    # Set search prededences
+    my @params = (
+        {
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => undef,
+        },
+        {
+            branchcode   => $branchcode,
+            categorycode => undef,
+            itemtype     => undef,
+        },
+        {
+            branchcode   => undef,
+            categorycode => $categorycode,
+            itemtype     => undef,
+        },
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+        },
+    );
 
-    # try same branch, default borrower category
-    $rules = $dbh->selectrow_hashref( q|
-        SELECT maxissueqty, maxonsiteissueqty
-        FROM default_branch_circ_rules
-        WHERE branchcode = ?
-    |, {}, $branchcode ) ;
-    return $rules if $rules;
-
-    # try default branch, same borrower category
-    $rules = $dbh->selectrow_hashref( q|
-        SELECT maxissueqty, maxonsiteissueqty
-        FROM default_borrower_circ_rules
-        WHERE categorycode = ?
-    |, {}, $categorycode ) ;
-    return $rules if $rules;
-
-    # try default branch, default borrower category
-    $rules = $dbh->selectrow_hashref( q|
-        SELECT maxissueqty, maxonsiteissueqty
-        FROM default_circ_rules
-    |, {} );
-    return $rules if $rules;
-
-    # built-in default circulation rule
-    return {
-        maxissueqty => undef,
+    # Initialize default values
+    my $rules = {
+        maxissueqty       => undef,
         maxonsiteissueqty => undef,
     };
+
+    # Search for rules!
+    foreach my $rule_name (qw( maxissueqty maxonsiteissueqty )) {
+        foreach my $params (@params) {
+            my $rule = Koha::CirculationRules->search(
+                {
+                    rule_name => $rule_name,
+                    %$params,
+                }
+            )->next();
+
+            if ( $rule ) {
+                $rules->{$rule_name} = $rule->rule_value;
+                last;
+            }
+        }
+    }
+
+    return $rules;
 }
 
 =head2 GetBranchItemRule

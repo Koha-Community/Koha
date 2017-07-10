@@ -54,7 +54,6 @@ my $rule = Koha::IssuingRule->new(
         categorycode => '*',
         itemtype     => '*',
         branchcode   => '*',
-        maxissueqty  => 99,
         issuelength  => 1,
     }
 );

@@ -27,6 +27,7 @@ use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
 use Koha::Checkouts;
+use Koha::CirculationRules;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -38,7 +39,6 @@ our $dbh = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM branch_item_rules|);
 $dbh->do(q|DELETE FROM issues|);
-$dbh->do(q|DELETE FROM branch_borrower_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_circ_rules|);
 $dbh->do(q|DELETE FROM default_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_item_rules|);
@@ -91,14 +91,24 @@ my $issuingrule = $builder->build({
         branchcode         => $branch->{branchcode},
         categorycode       => '*',
         itemtype           => '*',
-        maxissueqty        => 2,
-        maxonsiteissueqty  => 1,
         lengthunit         => 'days',
         issuelength        => 5,
         hardduedate        => undef,
         hardduedatecompare => 0,
     },
 });
+Koha::CirculationRules->search()->delete();
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $branch->{branchcode},
+        categorycode => '*',
+        itemtype     => '*',
+        rules        => {
+            maxissueqty       => 2,
+            maxonsiteissueqty => 1,
+        }
+    }
+);
 
 t::lib::Mocks::mock_userenv({ patron => $patron });
 
@@ -155,16 +165,18 @@ my $yet_another_item = $builder->build({
 ( $impossible, undef, undef, undef ) = C4::Circulation::CanBookBeIssued( $patron, $yet_another_item->{barcode} );
 is( $impossible->{TOO_MANY}, 'TOO_MANY_CHECKOUTS', 'Not a specific case, $delta should not be incremented' );
 
-$dbh->do(q|DELETE FROM issuingrules|);
-my $borrower_circ_rule = $builder->build({
-    source => 'DefaultCircRule',
-    value => {
-        branchcode         => $branch->{branchcode},
-        categorycode       => '*',
-        maxissueqty        => 2,
-        maxonsiteissueqty  => 1,
-    },
-});
+Koha::CirculationRules->search()->delete();
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $branch->{branchcode},
+        categorycode => '*',
+        itemtype     => '*',
+        rules        => {
+            maxissueqty       => 2,
+            maxonsiteissueqty => 1,
+        }
+    }
+);
 ( $impossible, undef, undef, $messages ) = C4::Circulation::CanBookBeIssued( $patron, $another_item->{barcode} );
 is( $messages->{ONSITE_CHECKOUT_WILL_BE_SWITCHED}, 1, 'Specific case 2 - Switch is allowed' );
 is( exists $impossible->{TOO_MANY}, '', 'Specific case 2 - Switch is allowed' );

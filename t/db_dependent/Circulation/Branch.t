@@ -21,6 +21,7 @@ use C4::Circulation;
 use C4::Items;
 use C4::Biblio;
 use C4::Context;
+use Koha::CirculationRules;
 
 use Koha::Patrons;
 
@@ -53,7 +54,6 @@ $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM itemtypes|);
 $dbh->do(q|DELETE FROM branch_item_rules|);
-$dbh->do(q|DELETE FROM branch_borrower_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_circ_rules|);
 $dbh->do(q|DELETE FROM default_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_item_rules|);
@@ -152,31 +152,53 @@ is_deeply(
 "Without parameter, GetBranchBorrower returns undef (unilimited) for maxissueqty and maxonsiteissueqty if no rules defined"
 );
 
-my $query = q|
-    INSERT INTO branch_borrower_circ_rules
-    (branchcode, categorycode, maxissueqty, maxonsiteissueqty)
-    VALUES( ?, ?, ?, ? )
-|;
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch1->{branchcode},
+        categorycode => $samplecat->{categorycode},
+        itemtype     => undef,
+        rules        => {
+            maxissueqty       => 5,
+            maxonsiteissueqty => 6,
+        }
+    }
+);
 
-$dbh->do(
-    $query, {},
-    $samplebranch1->{branchcode},
-    $samplecat->{categorycode}, 5, 6
+my $query = q|
+    INSERT INTO default_branch_circ_rules
+    (branchcode, holdallowed, returnbranch)
+    VALUES( ?, ?, ? )
+|;
+$dbh->do( $query, {}, $samplebranch2->{branchcode}, 1, 'holdingbranch' );
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch2->{branchcode},
+        categorycode => undef,
+        itemtype     => undef,
+        rules        => {
+            maxissueqty       => 3,
+            maxonsiteissueqty => 2,
+        }
+    }
 );
 
 $query = q|
-    INSERT INTO default_branch_circ_rules
-    (branchcode, maxissueqty, maxonsiteissueqty, holdallowed, returnbranch)
-    VALUES( ?, ?, ?, ?, ? )
-|;
-$dbh->do( $query, {}, $samplebranch2->{branchcode},
-    3, 2, 1, 'holdingbranch' );
-$query = q|
     INSERT INTO default_circ_rules
-    (singleton, maxissueqty, maxonsiteissueqty, holdallowed, returnbranch)
-    VALUES( ?, ?, ?, ?, ? )
+    (singleton, holdallowed, returnbranch)
+    VALUES( ?, ?, ? )
 |;
-$dbh->do( $query, {}, 'singleton', 4, 5, 3, 'homebranch' );
+$dbh->do( $query, {}, 'singleton', 3, 'homebranch' );
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => undef,
+        rules        => {
+            maxissueqty       => 4,
+            maxonsiteissueqty => 5,
+        }
+    }
+);
 
 $query =
 "INSERT INTO branch_item_rules (branchcode,itemtype,holdallowed,returnbranch) VALUES( ?,?,?,?)";

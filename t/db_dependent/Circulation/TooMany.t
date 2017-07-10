@@ -26,6 +26,7 @@ use C4::Context;
 
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Database;
+use Koha::CirculationRules;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -43,11 +44,11 @@ $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM itemtypes|);
 $dbh->do(q|DELETE FROM branch_item_rules|);
-$dbh->do(q|DELETE FROM branch_borrower_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_circ_rules|);
 $dbh->do(q|DELETE FROM default_circ_rules|);
 $dbh->do(q|DELETE FROM default_branch_item_rules|);
 $dbh->do(q|DELETE FROM issuingrules|);
+Koha::CirculationRules->search()->delete();
 
 my $builder = t::lib::TestBuilder->new();
 t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
@@ -106,16 +107,17 @@ subtest 'no rules exist' => sub {
 
 subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
     plan tests => 4;
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            itemtype           => '*',
-            maxissueqty        => 0,
-            maxonsiteissueqty  => 0,
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => 0,
+                maxonsiteissueqty => 0,
+            }
         },
-    });
+    );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
         C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
@@ -214,16 +216,17 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
 
 subtest '1 Issuingrule exist 1 1: issue is allowed' => sub {
     plan tests => 4;
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            itemtype           => '*',
-            maxissueqty        => 1,
-            maxonsiteissueqty  => 1,
-        },
-    });
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is(
         C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
@@ -253,16 +256,17 @@ subtest '1 Issuingrule exist 1 1: issue is allowed' => sub {
 
 subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
     plan tests => 5;
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            itemtype           => '*',
-            maxissueqty        => 1,
-            maxonsiteissueqty  => 1,
-        },
-    });
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
 
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string() );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
@@ -308,16 +312,17 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
 
 subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
     plan tests => 5;
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            itemtype           => '*',
-            maxissueqty        => 1,
-            maxonsiteissueqty  => 1,
-        },
-    });
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
 
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string(), undef, undef, undef, { onsite_checkout => 1 } );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
@@ -366,15 +371,17 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
     # DefaultBorrowerCircRule, DefaultBranchCircRule, DefaultBranchItemRule ans DefaultCircRule.pm
 
     plan tests => 10;
-    my $issuingrule = $builder->build({
-        source => 'BranchBorrowerCircRule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            maxissueqty        => 1,
-            maxonsiteissueqty  => 1,
-        },
-    });
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => undef,
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
 
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string(), undef, undef, undef );
     like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
