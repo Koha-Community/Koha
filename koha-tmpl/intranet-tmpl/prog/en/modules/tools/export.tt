@@ -164,7 +164,11 @@ $(document).ready(function() {
             <select id="output_format" name="output_format">
                 <option value="iso2709">marc</option>
                 <option value="xml">xml</option>
-                <option value="csv">csv</option>
+                [% IF csv_profiles %]
+                    <option value="csv">csv</option>
+                [% ELSE %]
+                    <option value="csv" disabled data-toggle="tooltip" data-placement="left" title="You must create a CSV profile for MARC exports to use this option.">csv</option>
+                [% END %]
             </select>
         </li>
         <li class="csv_profiles">
