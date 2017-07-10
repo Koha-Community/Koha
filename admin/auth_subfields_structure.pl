@@ -52,7 +52,8 @@ my $input        = new CGI;
 my $tagfield     = $input->param('tagfield');
 my $tagsubfield  = $input->param('tagsubfield');
 my $authtypecode = $input->param('authtypecode');
-my $offset       = $input->param('offset') || 0;
+my $offset       = $input->param('offset');
+$offset = 0 if not defined $offset or $offset < 0;
 my $op           = $input->param('op') || '';
 my $script_name  = "/cgi-bin/koha/admin/auth_subfields_structure.pl";
 
