@@ -13,6 +13,6 @@
     [% END %]
     [% IF ( next_page_offset ) %]
         <li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% next_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Next &gt;&gt;</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% last_page %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Last</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% last_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Last</a></li>
     [% END %]
 </ul></nav>[% END %]
