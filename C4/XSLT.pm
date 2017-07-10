@@ -292,12 +292,12 @@ sub buildKohaItemsNamespace {
 
         my $reservestatus = C4::Reserves::GetReserveStatus( $item->{itemnumber} );
 
-        if ( $itemtypes->{ $item->{itype} }->{notforloan} || $item->{notforloan} || $item->{onloan} || $item->{withdrawn} || $item->{itemlost} || $item->{damaged} ||
+        if ( ( $item->{itype} && $itemtypes->{ $item->{itype} }->{notforloan} ) || $item->{notforloan} || $item->{onloan} || $item->{withdrawn} || $item->{itemlost} || $item->{damaged} ||
              (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") ){ 
             if ( $item->{notforloan} < 0) {
                 $status = "On order";
             } 
-            if ( $item->{itemnotforloan} > 0 || $item->{notforloan} > 0 || $itemtypes->{ $item->{itype} }->{notforloan} == 1 ) {
+            if ( $item->{itemnotforloan} && $item->{itemnotforloan} > 0 || $item->{notforloan} && $item->{notforloan} > 0 || $item->{itype} && $itemtypes->{ $item->{itype} }->{notforloan} && $itemtypes->{ $item->{itype} }->{notforloan} == 1 ) {
                 $status = "reference";
             }
             if ($item->{onloan}) {
@@ -333,7 +333,7 @@ sub buildKohaItemsNamespace {
           . "<holdingbranch>$holdingbranch</holdingbranch>"
           . "<location>$location</location>"
           . "<ccode>$ccode</ccode>"
-          . "<status>$status</status>"
+          . "<status>".( $status // q{} )."</status>"
           . "<itemcallnumber>$itemcallnumber</itemcallnumber>"
           . "<stocknumber>$stocknumber</stocknumber>"
           . "</item>";
