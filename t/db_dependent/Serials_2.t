@@ -8,6 +8,7 @@ use MARC::Record;
 use C4::Biblio qw( AddBiblio );
 use C4::Members qw( AddMember );
 use Koha::Database;
+use Koha::Auth::PermissionManager;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use_ok('C4::Serials');
@@ -120,7 +121,6 @@ is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 1,
 is( C4::Serials::can_claim_subscription($subscription_from_another_branch), 1,
 "With IndependentBranches, superlibrarian can claim a subscription from another branch"
 );
-
 
 set_flags( 'superserials', $borrowernumber );
 is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 1,
@@ -264,32 +264,21 @@ sub Mock_userenv {
 sub set_flags {
     my ( $flags, $borrowernumber ) = @_;
     my $superlibrarian_flags = 1;
+    Koha::Auth::PermissionManager->revokeAllPermissions($borrowernumber);
     if ( $flags eq 'superlibrarian' ) {
-        $dbh->do(
-            q|
-            UPDATE borrowers SET flags=? WHERE borrowernumber=?
-        |, {}, $superlibrarian_flags, $borrowernumber
+        Koha::Auth::PermissionManager->grantPermission(
+            $borrowernumber,
+            'superlibrarian',
+            'superlibrarian'
         );
         $userenv->{flags} = $superlibrarian_flags;
     }
     else {
-        $dbh->do(
-            q|
-            UPDATE borrowers SET flags=? WHERE borrowernumber=?
-        |, {}, 0, $borrowernumber
-        );
         $userenv->{flags} = 0;
-        my ( $module_bit, $code ) = ( '15', $flags );
-        $dbh->do(
-            q|
-            DELETE FROM user_permissions where borrowernumber=?
-        |, {}, $borrowernumber
-        );
-
-        $dbh->do(
-            q|
-            INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES ( ?, ?, ? )
-        |, {}, $borrowernumber, $module_bit, $code
+        Koha::Auth::PermissionManager->grantPermission(
+            $borrowernumber,
+            undef,
+            $flags
         );
     }
 }
