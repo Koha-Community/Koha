@@ -1721,43 +1721,61 @@ Neither C<$branchcode> nor C<$itemtype> should be '*'.
 
 sub GetBranchItemRule {
     my ( $branchcode, $itemtype ) = @_;
-    my $dbh = C4::Context->dbh();
-    my $result = {};
 
-    my @attempts = (
-        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
-            FROM branch_item_rules
-            WHERE branchcode = ?
-              AND itemtype = ?', $branchcode, $itemtype],
-        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
-            FROM default_branch_circ_rules
-            WHERE branchcode = ?', $branchcode],
-        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
-            FROM default_branch_item_rules
-            WHERE itemtype = ?', $itemtype],
-        ['SELECT holdallowed, returnbranch, hold_fulfillment_policy
-            FROM default_circ_rules'],
+    # Set search precedences
+    my @params = (
+        {
+            branchcode   => $branchcode,
+            categorycode => undef,
+            itemtype     => $itemtype,
+        },
+        {
+            branchcode   => $branchcode,
+            categorycode => undef,
+            itemtype     => undef,
+        },
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => $itemtype,
+        },
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+        },
     );
 
-    foreach my $attempt (@attempts) {
-        my ($query, @bind_params) = @{$attempt};
-        my $search_result = $dbh->selectrow_hashref ( $query , {}, @bind_params )
-          or next;
+    # Initialize default values
+    my $rules = {
+        holdallowed             => undef,
+        hold_fulfillment_policy => undef,
+        returnbranch            => undef,
+    };
 
-        # Since branch/category and branch/itemtype use the same per-branch
-        # defaults tables, we have to check that the key we want is set, not
-        # just that a row was returned
-        $result->{'holdallowed'}  = $search_result->{'holdallowed'}  unless ( defined $result->{'holdallowed'} );
-        $result->{'hold_fulfillment_policy'} = $search_result->{'hold_fulfillment_policy'} unless ( defined $result->{'hold_fulfillment_policy'} );
-        $result->{'returnbranch'} = $search_result->{'returnbranch'} unless ( defined $result->{'returnbranch'} );
+    # Search for rules!
+    foreach my $rule_name (qw( holdallowed hold_fulfillment_policy returnbranch )) {
+        foreach my $params (@params) {
+            my $rule = Koha::CirculationRules->search(
+                {
+                    rule_name => $rule_name,
+                    %$params,
+                }
+            )->next();
+
+            if ( $rule ) {
+                $rules->{$rule_name} = $rule->rule_value;
+                last;
+            }
+        }
     }
-    
-    # built-in default circulation rule
-    $result->{'holdallowed'} = 2 unless ( defined $result->{'holdallowed'} );
-    $result->{'hold_fulfillment_policy'} = 'any' unless ( defined $result->{'hold_fulfillment_policy'} );
-    $result->{'returnbranch'} = 'homebranch' unless ( defined $result->{'returnbranch'} );
 
-    return $result;
+    # built-in default circulation rule
+    $rules->{holdallowed} = 2                 unless ( defined $rules->{holdallowed} );
+    $rules->{hold_fulfillment_policy} = 'any' unless ( defined $rules->{hold_fulfillment_policy} );
+    $rules->{returnbranch} = 'homebranch'     unless ( defined $rules->{returnbranch} );
+
+    return $rules;
 }
 
 =head2 AddReturn

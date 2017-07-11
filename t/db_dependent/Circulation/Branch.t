@@ -44,6 +44,7 @@ can_ok( 'C4::Circulation', qw(
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
+my $query;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -53,10 +54,7 @@ $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM itemtypes|);
-$dbh->do(q|DELETE FROM branch_item_rules|);
-$dbh->do(q|DELETE FROM default_branch_circ_rules|);
-$dbh->do(q|DELETE FROM default_circ_rules|);
-$dbh->do(q|DELETE FROM default_branch_item_rules|);
+$dbh->do(q|DELETE FROM circulation_rules|);
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -164,12 +162,6 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $query = q|
-    INSERT INTO default_branch_circ_rules
-    (branchcode, holdallowed, returnbranch)
-    VALUES( ?, ?, ? )
-|;
-$dbh->do( $query, {}, $samplebranch2->{branchcode}, 1, 'holdingbranch' );
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch2->{branchcode},
@@ -178,6 +170,8 @@ Koha::CirculationRules->set_rules(
         rules        => {
             patron_maxissueqty       => 3,
             patron_maxonsiteissueqty => 2,
+            holdallowed              => 1,
+            returnbranch             => 'holdingbranch',
         }
     }
 );
@@ -196,27 +190,44 @@ Koha::CirculationRules->set_rules(
         rules        => {
             patron_maxissueqty       => 4,
             patron_maxonsiteissueqty => 5,
+            holdallowed              => 3,
+            returnbranch             => 'homebranch',
         }
     }
 );
 
-$query =
-"INSERT INTO branch_item_rules (branchcode,itemtype,holdallowed,returnbranch) VALUES( ?,?,?,?)";
-my $sth = $dbh->prepare($query);
-$sth->execute(
-    $samplebranch1->{branchcode},
-    $sampleitemtype1->{itemtype},
-    5, 'homebranch'
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch1->{branchcode},
+        categorycode => undef,
+        itemtype     => $sampleitemtype1->{itemtype},
+        rules        => {
+            holdallowed       => 5,
+            returnbranch      => 'homebranch',
+        }
+    }
 );
-$sth->execute(
-    $samplebranch2->{branchcode},
-    $sampleitemtype1->{itemtype},
-    5, 'holdingbranch'
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch2->{branchcode},
+        categorycode => undef,
+        itemtype     => $sampleitemtype1->{itemtype},
+        rules        => {
+            holdallowed       => 5,
+            returnbranch      => 'holdingbranch',
+        }
+    }
 );
-$sth->execute(
-    $samplebranch2->{branchcode},
-    $sampleitemtype2->{itemtype},
-    5, 'noreturn'
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch2->{branchcode},
+        categorycode => undef,
+        itemtype     => $sampleitemtype2->{itemtype},
+        rules        => {
+            holdallowed       => 5,
+            returnbranch      => 'noreturn',
+        }
+    }
 );
 
 #Test GetBranchBorrowerCircRule

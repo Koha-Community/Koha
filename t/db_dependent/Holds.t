@@ -47,6 +47,7 @@ my $borrowers_count = 5;
 
 $dbh->do('DELETE FROM itemtypes');
 $dbh->do('DELETE FROM reserves');
+$dbh->do('DELETE FROM circulation_rules');
 my $insert_sth = $dbh->prepare('INSERT INTO itemtypes (itemtype) VALUES (?)');
 $insert_sth->execute('CAN');
 $insert_sth->execute('CANNOT');
@@ -351,24 +352,35 @@ ok(
 # Test branch item rules
 
 $dbh->do('DELETE FROM issuingrules');
+$dbh->do('DELETE FROM circulation_rules');
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
       VALUES (?, ?, ?, ?)},
     {},
     '*', '*', '*', 25
 );
-$dbh->do('DELETE FROM branch_item_rules');
-$dbh->do('DELETE FROM default_branch_circ_rules');
-$dbh->do('DELETE FROM default_branch_item_rules');
-$dbh->do('DELETE FROM default_circ_rules');
-$dbh->do(q{
-    INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
-    VALUES (?, ?, ?, ?)
-}, {}, $branch_1, 'CANNOT', 0, 'homebranch');
-$dbh->do(q{
-    INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
-    VALUES (?, ?, ?, ?)
-}, {}, $branch_1, 'CAN', 1, 'homebranch');
+Koha::CirculationRules->set_rules(
+    {
+        branchcode => $branch_1,
+        itemtype   => 'CANNOT',
+        categorycode => undef,
+        rules => {
+            holdallowed => 0,
+            returnbranch => 'homebranch',
+        }
+    }
+);
+Koha::CirculationRules->set_rules(
+    {
+        branchcode => $branch_1,
+        itemtype   => 'CAN',
+        categorycode => undef,
+        rules => {
+            holdallowed => 1,
+            returnbranch => 'homebranch',
+        }
+    }
+);
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);

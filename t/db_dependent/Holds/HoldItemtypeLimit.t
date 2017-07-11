@@ -3,6 +3,7 @@
 use Modern::Perl;
 
 use C4::Context;
+use Koha::CirculationRules;
 
 use Test::More tests => 4;
 
@@ -64,10 +65,6 @@ $dbh->do("DELETE FROM biblioitems");
 $dbh->do("DELETE FROM transport_cost");
 $dbh->do("DELETE FROM tmp_holdsqueue");
 $dbh->do("DELETE FROM hold_fill_targets");
-$dbh->do("DELETE FROM default_branch_circ_rules");
-$dbh->do("DELETE FROM default_branch_item_rules");
-$dbh->do("DELETE FROM default_circ_rules");
-$dbh->do("DELETE FROM branch_item_rules");
 
 $dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$bib_title', '2011-02-01')");
 
@@ -89,8 +86,18 @@ my $itemnumber =
   $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber")
   or BAIL_OUT("Cannot find newly created item");
 
-$dbh->do("DELETE FROM default_circ_rules");
-$dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy ) VALUES ( 2, 'any' )");
+$dbh->do("DELETE FROM circulation_rules");
+Koha::CirculationRules->set_rules(
+    {
+        itemtype     => undef,
+        categorycode => undef,
+        branchcode   => undef,
+        rules        => {
+            holdallowed             => 2,
+            hold_fulfillment_policy => 'any',
+        }
+    }
+);
 
 # Itemtypes match
 my $reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );

@@ -424,24 +424,31 @@
                     </td>
                     <td>
                         <select name="holdallowed">
-                            [% IF ( default_holdallowed_any ) %]
-                            <option value="2" selected="selected">
+                            [% SET holdallowed = CirculationRules.Get( branchcode, undef, undef, 'holdallowed' ) %]
+                            <option value="">
+                                Not set
+                            </option>
+
+                            [% IF holdallowed == 2 %]
+                                <option value="2" selected="selected">
                             [% ELSE %]
-                            <option value="2">
+                                <option value="2">
                             [% END %]
                                 From any library
                             </option>
-                            [% IF ( default_holdallowed_same ) %]
-                            <option value="1" selected="selected">
+
+                            [% IF holdallowed == 1 %]
+                                <option value="1" selected="selected">
                             [% ELSE %]
-                            <option value="1">
+                                <option value="1">
                             [% END %]
                                 From home library
                             </option>
-                            [% IF ( default_holdallowed_none ) %]
-                            <option value="0" selected="selected">
+
+                            [% IF holdallowed == 0 %]
+                                <option value="0" selected="selected">
                             [% ELSE %]
-                            <option value="0">
+                                <option value="0">
                             [% END %]
                                 No holds allowed
                             </option>
@@ -449,7 +456,13 @@
                     </td>
                     <td>
                         <select name="hold_fulfillment_policy">
-                            [% IF default_hold_fulfillment_policy == 'any' %]
+                            [% SET hold_fulfillment_policy = CirculationRules.Get( branchcode, undef, undef, 'hold_fulfillment_policy' ) %]
+
+                            <option value="">
+                                Not set
+                            </option>
+
+                            [% IF hold_fulfillment_policy == 'any' %]
                                 <option value="any" selected="selected">
                                     any library
                                 </option>
@@ -459,7 +472,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF default_hold_fulfillment_policy == 'homebranch' %]
+                            [% IF hold_fulfillment_policy == 'homebranch' %]
                                 <option value="homebranch" selected="selected">
                                     item's home library
                                 </option>
@@ -469,7 +482,7 @@
                                 </option>
                             [% END %]
 
-                            [% IF default_hold_fulfillment_policy == 'holdingbranch' %]
+                            [% IF hold_fulfillment_policy == 'holdingbranch' %]
                                 <option value="holdingbranch" selected="selected">
                                     item's holding library
                                 </option>
@@ -482,21 +495,27 @@
                     </td>
                     <td>
                         <select name="returnbranch">
-                            [% IF ( default_returnbranch == 'homebranch' ) %]
+                            [% SET returnbranch = CirculationRules.Get( branchcode, undef, undef, 'returnbranch' ) %]
+
+                            <option value="">
+                                Not set
+                            </option>
+
+                            [% IF returnbranch == 'homebranch' %]
                             <option value="homebranch" selected="selected">
                             [% ELSE %]
                             <option value="homebranch">
                             [% END %]
                                 Item returns home
                             </option>
-                            [% IF ( default_returnbranch == 'holdingbranch' ) %]
+                            [% IF returnbranch == 'holdingbranch' %]
                             <option value="holdingbranch" selected="selected">
                             [% ELSE %]
                             <option value="holdingbranch">
                             [% END %]
                                 Item returns to issuing library
                             </option>
-                            [% IF ( default_returnbranch == 'noreturn' ) %]
+                            [% IF returnbranch == 'noreturn' %]
                             <option value="noreturn" selected="selected">
                             [% ELSE %]
                             <option value="noreturn">
@@ -702,48 +721,48 @@
                     <th>Return policy</th>
                     <th>&nbsp;</th>
                 </tr>
-                [% FOREACH branch_item_rule_loo IN branch_item_rule_loop %]
-                    [% UNLESS ( loop.odd ) %]
-                    <tr class="highlight">
-                    [% ELSE %]
-                    <tr>
+                [% FOREACH i IN itemtypeloop %]
+                    [% SET holdallowed = CirculationRules.Get( branchcode, undef, i.itemtype, 'holdallowed' ) %]
+                    [% SET hold_fulfillment_policy = CirculationRules.Get( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
+                    [% SET returnbranch = CirculationRules.Get( branchcode, undef, i.itemtype, 'returnbranch' ) %]
+
+                    [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
+                        <tr>
+                            <td>
+                                [% i.translated_description %]
+                            </td>
+                            <td>
+                                [% IF holdallowed == 2 %]
+                                    <span>From any library</span>
+                                [% ELSIF holdallowed == 1 %]
+                                    <span>From home library</span>
+                                [% ELSE %]
+                                    <span>No holds allowed</span>
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF hold_fulfillment_policy == 'any' %]
+                                    <span>any library</span>
+                                [% ELSIF hold_fulfillment_policy == 'homebranch' %]
+                                    <span>item's home library</span>
+                                [% ELSIF hold_fulfillment_policy == 'holdingbranch' %]
+                                    <span>item's holding library</span>
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF returnbranch == 'homebranch' %]
+                                    <span>Item returns home</span>
+                                [% ELSIF returnbranch == 'holdingbranch' %]
+                                    <span>Item returns to issuing branch</span>
+                                [% ELSIF returnbranch == 'noreturn' %]
+                                    <span>Item floats</span>
+                                [% END %]
+                            </td>
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% i.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                            </td>
+                        </tr>
                     [% END %]
-                        <td>[% IF ( branch_item_rule_loo.default_translated_description ) %]
-                                <em>Default</em>
-                            [% ELSE %]
-                                [% branch_item_rule_loo.translated_description | html %]
-                            [% END %]
-                        </td>
-                        <td>[% IF ( branch_item_rule_loo.holdallowed_any ) %]
-                                <span>From any library</span>
-                            [% ELSIF ( branch_item_rule_loo.holdallowed_same ) %]
-                                <span>From home library</span>
-                            [% ELSE %]
-                                <span>No holds allowed</span>
-                            [% END %]
-                        </td>
-                        <td>[% IF ( branch_item_rule_loo.hold_fulfillment_policy == 'any' ) %]
-                                <span>any library</span>
-                            [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'homebranch' ) %]
-                                <span>item's home library</span>
-                            [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'holdingbranch' ) %]
-                                <span>item's holding library</span>
-                            [% END %]
-                        </td>
-                        <td>[% IF ( branch_item_rule_loo.returnbranch == 'homebranch' ) %]
-                                <span>Item returns home</span>
-                            [% ELSIF ( branch_item_rule_loo.returnbranch == 'holdingbranch' ) %]
-                                <span>Item returns to issuing branch</span>
-                            [% ELSIF ( branch_item_rule_loo.returnbranch == 'noreturn' ) %]
-                                <span>Item floats</span>
-                            [% ELSE %]
-                                <span>Error - unknown option</span>
-                            [% END %]
-                        </td>
-                        <td class="actions">
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% branch_item_rule_loo.itemtype | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
-                    </tr>
                 [% END %]
                 <tr>
                     <td>
