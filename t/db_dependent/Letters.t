@@ -179,15 +179,38 @@ is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
 
 
 # getletter
-my $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
-is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
-is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
-is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
-is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
-is( $letter->{is_html}, 1, 'GetLetters gets the boolean is_html correctly' );
-is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
-is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
-is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
+subtest 'getletter' => sub {
+    plan tests => 16;
+    my $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
+    is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
+    is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
+    is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
+    is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
+    is( $letter->{is_html}, 1, 'GetLetters gets the boolean is_html correctly' );
+    is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
+    is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
+    is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', sub {
+        return { branch => "anotherlib" }
+    });
+
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+    $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
+    is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
+    is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
+    is( $letter->{code}, 'my code', 'GetLetters gets the code correctly' );
+    is( $letter->{name}, 'my name', 'GetLetters gets the name correctly' );
+    is( $letter->{is_html}, 1, 'GetLetters gets the boolean is_html correctly' );
+    is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
+    is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
+    is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
+
+    $context->unmock('userenv');
+};
+
+
 
 # Regression test for Bug 14206
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES ('FFL','my module','my code','my name',1,?,?,'print')|, undef, $title, $content );
@@ -195,6 +218,8 @@ my $letter14206_a = C4::Letters::getletter('my module', 'my code', 'FFL' );
 is( $letter14206_a->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type not passed, correct mtt detected' );
 my $letter14206_b = C4::Letters::getletter('my module', 'my code', 'FFL', 'print');
 is( $letter14206_b->{message_transport_type}, 'print', 'Bug 14206 - message_transport_type passed, correct mtt detected'  );
+
+
 
 # test for overdue_notices.pl
 my $overdue_rules = {
