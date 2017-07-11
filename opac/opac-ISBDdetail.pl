@@ -174,7 +174,7 @@ for my $itm (@items) {
         && !$itemtypes->{$itm->{'itype'}}->{notforloan}
         && $itm->{'itemnumber'};
 
-    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $patron->unblessed)
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed( $itm, ( $patron ? $patron->unblessed : {} ) )
       unless $allow_onshelf_holds;
 }
 

@@ -127,9 +127,9 @@ if(my $cart_list = $query->cookie("bib_list")){
 }
 
 my $allow_onshelf_holds;
-my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
+my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@all_items) {
-    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed($itm, $patron);
+    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed( $itm, ( $patron ? $patron->unblessed : {} ) );
     last if $allow_onshelf_holds;
 }
 
