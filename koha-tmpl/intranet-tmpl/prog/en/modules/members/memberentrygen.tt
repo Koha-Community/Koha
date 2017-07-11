@@ -757,7 +757,7 @@ $(document).ready(function() {
 				[% UNLESS ( opadd ) %]
                 <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry UNLESS opduplicate %]" class="datepickerto" />
 				[% ELSE %]
-                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" class="datepickerto" />
+                <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" class="datepickerto" />
 				[% END %]
 			[% END %]
 		[% IF ( mandatorydateexpiry ) %]<span class="required">Required</span>[% END %]
