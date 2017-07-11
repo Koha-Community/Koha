@@ -1762,17 +1762,24 @@ sub checkpw {
 
     my @return;
     my $patron = Koha::Patrons->find({ userid => $userid });
+    my $check_internal_as_fallback = 0;
+    my $passwd_ok = 0;
+    # Note: checkpw_* routines returns:
+    # 1 if auth is ok
+    # 0 if auth is nok
+    # -1 if user bind failed (LDAP only)
+    # 2 if DB user is used (internal only)
 
     if ( $patron and $patron->account_locked ) {
-        @return = (0);
+        # Nothing to check, account is locked
     } elsif ($ldap) {
         $debug and print STDERR "## checkpw - checking LDAP\n";
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval ) {
             @return = ( $retval, $retcard, $retuserid );
-        } else {
-            @return = (0);
         }
+        $passwd_ok = 1 if $retval == 1;
+        $check_internal_as_fallback = 1 if $retval == 0;
 
     } elsif ( $cas && $query && $query->param('ticket') ) {
         $debug and print STDERR "## checkpw - checking CAS\n";
@@ -1783,9 +1790,8 @@ sub checkpw {
         my ( $retval, $retcard, $retuserid ) = checkpw_cas( $dbh, $ticket, $query, $type );    # EXTERNAL AUTH
         if ( $retval ) {
             @return = ( $retval, $retcard, $retuserid );
-        } else {
-            @return = (0);
         }
+        $passwd_ok = $retval;
     }
 
     # If we are in a shibboleth session (shibboleth is enabled, and a shibboleth match attribute is present)
@@ -1804,23 +1810,25 @@ sub checkpw {
             my ( $retval, $retcard, $retuserid ) = C4::Auth_with_shibboleth::checkpw_shib($shib_login);    # EXTERNAL AUTH
             if ( $retval ) {
                 @return = ( $retval, $retcard, $retuserid );
-            } else {
-                @return = (0);
             }
+            $passwd_ok = $retval;
         }
+    } else {
+        $check_internal_as_fallback = 1;
     }
 
     # INTERNAL AUTH
-    @return = checkpw_internal( $dbh, $userid, $password, $no_set_userenv) unless @return;
+    if ( $check_internal_as_fallback ) {
+        @return = checkpw_internal( $dbh, $userid, $password, $no_set_userenv);
+        $passwd_ok = 1 if $return[0] > 0; # 1 or 2
+    }
 
-    if ( $return[0] == 0 ) {
+    unless ( $passwd_ok ) { # Auth failed
         $patron->update({ login_attempts => $patron->login_attempts + 1 }) if $patron;
-    } elsif ( $return[0] == 1 ) {
-        if ( $patron ) {
-            # FIXME Koha::Object->update should return a Koha::Object to allow chaining
-            $patron->update({ login_attempts => 0 });
-            $patron->store;
-        }
+    } elsif ( $patron ) {
+        # FIXME Koha::Object->update should return a Koha::Object to allow chaining
+        $patron->update({ login_attempts => 0 });
+        $patron->store;
     }
     return @return;
 }
