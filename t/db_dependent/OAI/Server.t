@@ -47,6 +47,11 @@ BEGIN {
     use_ok('Koha::OAI::Server::ResumptionToken');
 }
 
+warn "HTTP::OAI version 4.03 or greater will make this test fail.\n".
+     'Use the following command to downgrade: sudo cpanm HTTP::OAI@3.28'."\n".
+     "https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17704"
+	if $HTTP::OAI::VERSION > 3.28;
+
 use constant NUMBER_OF_MARC_RECORDS => 10;
 
 # Mocked CGI module in order to be able to send CGI parameters to OAI Server
