@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 84;
+use Test::More tests => 88;
 use Test::MockModule;
 use Test::Warn;
 
@@ -175,6 +175,7 @@ $sms_module->mock(
 );
 
 $messages_processed = C4::Letters::SendQueuedMessages();
+$messages = C4::Letters::GetQueuedMessages();
 is( $messages->[0]->{status}, 'failed',
     'Message is in failed status' );
 is( $messages->[0]->{delivery_note}, 'Bad phone number',
