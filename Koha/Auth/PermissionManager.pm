@@ -186,6 +186,31 @@ sub getPermissionModule {
     };
 }
 
+=head getPermissionModuleFromPermission
+
+    my $permission = $permissionManager->getPermissionModuleFromPermission('edit_catalogue'); #koha.permission_modules.module
+    $permission->module; # returns editcatalogue
+
+@RETURNS Koha::Auth::PermissionModule-object
+@THROWS Koha::Exception::BadParameter
+=cut
+
+sub getPermissionModuleFromPermission {
+    my ($self, $permissionId) = @_;
+
+    try {
+        my $permission = Koha::Auth::Permissions->cast($permissionId);
+        return $self->getPermissionModule($permission->module);
+    } catch {
+        if (blessed($_) && $_->isa('Koha::Exception::UnknownObject')) {
+            #We catch this type of exception, and simply return nothing, since there was no such PermissionModule
+        }
+        else {
+            die $_;
+        }
+    };
+}
+
 =head delPermissionModule
 
     $permissionManager->delPermissionModule('cataloguing'); #koha.permission_modules.module
@@ -405,7 +430,8 @@ sub grantPermissions {
         Scalar koha.borrowers.userid or
 @PARAM2 Koha::Auth::PermissionModule-object
         Scalar koha.permission_modules.module or
-        Scalar koha.permission_modules.permission_module_id
+        Scalar koha.permission_modules.permission_module_id or
+        undef, in this case attempts to find permission module via @PARAM3
 @PARAM3 Koha::Auth::Permission-object or
         Scalar koha.permissions.code or
         Scalar koha.permissions.permission_id
@@ -417,6 +443,9 @@ sub grantPermissions {
 sub grantPermission {
     my ($self, $borrower, $permissionModule, $permission) = @_;
 
+    unless (defined $permissionModule) {
+        $permissionModule = $self->getPermissionModuleFromPermission($permission);
+    }
     my $borrowerPermission = Koha::Auth::BorrowerPermission->new({borrower => $borrower, permissionModule => $permissionModule, permission => $permission});
     $borrowerPermission->store();
     return $borrowerPermission;
@@ -436,6 +465,9 @@ same parameters as grantPermission()
 sub revokePermission {
     my ($self, $borrower, $permissionModule, $permission) = @_;
 
+    unless (defined $permissionModule) {
+        $permissionModule = $self->getPermissionModuleFromPermission($permission);
+    }
     my $borrowerPermission = Koha::Auth::BorrowerPermission->new({borrower => $borrower, permissionModule => $permissionModule, permission => $permission});
     $borrowerPermission->delete();
     return $borrowerPermission;

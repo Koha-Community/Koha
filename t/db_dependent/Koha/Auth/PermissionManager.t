@@ -52,12 +52,14 @@ eval { #run in a eval-block so we don't die without tearing down the test contex
 
     ##Test getBorrowerPermissions
     $permissionManager->grantPermission($borrowers->{'1A01'}, 'circulate', 'force_checkout');
-    $permissionManager->grantPermission($borrowers->{'1A01'}, 'circulate', 'manage_restrictions');
+    $permissionManager->grantPermission($borrowers->{'1A01'}, undef, 'manage_restrictions');
     $permissionsList = $permissionManager->getBorrowerPermissions($borrowers->{'1A01'});
     is($permissionsList->[0]->getPermission->code, 'force_checkout', "PermissionManager, getBorrowerPermissions:> Check 1.");
     is($permissionsList->[1]->getPermission->code, 'manage_restrictions', "PermissionManager, getBorrowerPermissions:> Check 2.");
-    $permissionManager->revokePermission($borrowers->{'1A01'}, 'circulate', 'force_checkout');
+    $permissionManager->revokePermission($borrowers->{'1A01'}, undef, 'force_checkout');
     $permissionManager->revokePermission($borrowers->{'1A01'}, 'circulate', 'manage_restrictions');
+    $permissionsList = $permissionManager->getBorrowerPermissions($borrowers->{'1A01'});
+    is(@$permissionsList, 0, "PermissionManager, getBorrowerPermissions:> All revoked.");
 
     ##Test grantPermissions && revokeAllPermissions
     $permissionManager->grantPermissions($borrowers->{'1A01'},
@@ -213,6 +215,9 @@ eval { #run in a eval-block so we don't die without tearing down the test contex
     $permissionManager->grantPermission($borrowers->{'1A01'}, 'superlibrarian', 'superlibrarian');
     ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'staffaccess', 'staff_access_permissions'), "PermissionManager, superuser permission:> Superuser has all permissions 1.");
     ok($permissionManager->hasPermission($borrowers->{'1A01'}, 'tools', 'batch_upload_patron_images'), "PermissionManager, superuser permission:> Superuser has all permissions 2.");
+
+    # getPermissionModuleFromPermission
+    is($permissionManager->getPermissionModuleFromPermission('override_renewals')->module, 'circulate', 'PermissionManager, getPermissionModuleFromPermission:> override_renewals belongs to circulate permission module');
 };
 if ($@) { #Catch all leaking errors and gracefully terminate.
     warn $@;
