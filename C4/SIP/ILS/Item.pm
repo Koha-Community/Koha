@@ -12,6 +12,7 @@ use warnings;
 use Carp;
 
 #use C4::SIP::SIPServer;
+use C4::SIP::Sip qw(get_logger);
 use C4::SIP::ILS::Transaction;
 
 use C4::Debug;
@@ -73,7 +74,7 @@ sub new {
     my $itemnumber = GetItemnumberFromBarcode($item_id);
 	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
 	if (! $item) {
-                C4::SIP::SIPServer::get_logger()->debug("new ILS::Item('$item_id'): not found");
+                C4::SIP::Sip::get_logger()->debug("new ILS::Item('$item_id'): not found");
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
 	}
@@ -102,7 +103,7 @@ sub new {
 	$self = $item;
 	bless $self, $type;
 
-    C4::SIP::SIPServer::get_logger()->debug("new ILS::Item('$item_id'): found with title '$self->{title}'");
+    C4::SIP::Sip::get_logger()->debug("new ILS::Item('$item_id'): found with title '$self->{title}'");
 
     return $self;
 }
@@ -164,7 +165,7 @@ sub hold_patron_name {
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
-        C4::SIP::SIPServer::get_logger()->debug("While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
+        C4::SIP::Sip::get_logger()->debug("While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
         return;
     }
     my $email = $holder->{email} || '';

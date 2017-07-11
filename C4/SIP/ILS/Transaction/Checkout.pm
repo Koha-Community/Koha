@@ -12,6 +12,7 @@ use Data::Dumper;
 use CGI qw ( -utf8 );
 
 use C4::SIP::ILS::Transaction;
+use C4::SIP::Sip qw(get_logger);
 
 use C4::Context;
 use C4::Circulation;
@@ -46,7 +47,7 @@ sub new {
 
 sub do_checkout {
 	my $self = shift;
-	C4::SIP::SIPServer::get_logger()->debug("ILS::Transaction::Checkout performing checkout...");
+	C4::SIP::Sip::get_logger()->debug("ILS::Transaction::Checkout performing checkout...");
 	my $pending        = $self->{item}->pending_queue;
 	my $shelf          = $self->{item}->hold_shelf;
 	my $barcode        = $self->{item}->id;
@@ -103,7 +104,7 @@ sub do_checkout {
             } else {
                 $self->screen_msg($needsconfirmation->{$confirmation});
                 $noerror = 0;
-                C4::SIP::SIPServer::get_logger()->debug("Blocking checkout Reason:$confirmation");
+                C4::SIP::Sip::get_logger()->debug("Blocking checkout Reason:$confirmation");
             }
         }
     }

@@ -263,16 +263,16 @@ sub new {
         # it's using the 2.00 login process, so it must support 2.00.
         $protocol_version = 2;
     }
-    C4::SIP::SIPServer::get_logger()->debug("Sip::MsgType::new('$class', '".
+    C4::SIP::Sip::get_logger()->debug("Sip::MsgType::new('$class', '".
                                              substr($msg, 0, 10).
                                             "...', '$msgtag'): seq.no '$seqno', protocol $protocol_version");
 
     # warn "SIP PROTOCOL: $protocol_version";
     if ( !exists( $handlers{$msgtag} ) ) {
-        C4::SIP::SIPServer::get_logger()->warn("new Sip::MsgType: Skipping message of unknown type '$msgtag' in '$msg'");
+        C4::SIP::Sip::get_logger()->warn("new Sip::MsgType: Skipping message of unknown type '$msgtag' in '$msg'");
         return;
     } elsif ( !exists( $handlers{$msgtag}->{protocol}->{$protocol_version} ) ) {
-        C4::SIP::SIPServer::get_logger()->warn("new Sip::MsgType: Skipping message '$msgtag' unsupported by protocol rev. '$protocol_version'");
+        C4::SIP::Sip::get_logger()->warn("new Sip::MsgType: Skipping message '$msgtag' unsupported by protocol rev. '$protocol_version'");
         return;
     }
 
@@ -304,7 +304,7 @@ sub _initialize {
         $self->{fields}->{$field} = undef;
     }
 
-    C4::SIP::SIPServer::get_logger()->debug("Sip::MsgType::_initialize('$self->{name}', '$msg', '$proto->{template}', '$proto->{template_len}', ...)");
+    C4::SIP::Sip::get_logger()->debug("Sip::MsgType::_initialize('$self->{name}', '$msg', '$proto->{template}', '$proto->{template_len}', ...)");
 
     $self->{fixed_fields} = [ unpack( $proto->{template}, $msg ) ];    # see http://perldoc.perl.org/5.8.8/functions/unpack.html
 
@@ -314,9 +314,9 @@ sub _initialize {
         $fn = substr( $field, 0, 2 );
 
         if ( !exists( $self->{fields}->{$fn} ) ) {
-            C4::SIP::SIPServer::get_logger()->warn("Unsupported field '$fn' in $self->{name}, message '$msg'");
+            C4::SIP::Sip::get_logger()->warn("Unsupported field '$fn' in $self->{name}, message '$msg'");
         } elsif ( defined( $self->{fields}->{$fn} ) ) {
-            C4::SIP::SIPServer::get_logger()->warn("Duplicate field '$fn' (previous value '$self->{fields}->{$fn}') in $self->{name} message '$msg'");
+            C4::SIP::Sip::get_logger()->warn("Duplicate field '$fn' (previous value '$self->{fields}->{$fn}') in $self->{name} message '$msg'");
         } else {
             $self->{fields}->{$fn} = substr( $field, 2 );
         }
@@ -352,7 +352,7 @@ sub handle {
         $error_detection = 1;
 
         if ( !verify_cksum($msg) ) {
-            C4::SIP::SIPServer::get_logger()->warn("Checksum failed on message '$msg'");
+            C4::SIP::Sip::get_logger()->warn("Checksum failed on message '$msg'");
 
             # REQUEST_SC_RESEND with error detection
             $last_response = REQUEST_SC_RESEND_CKSUM;
@@ -368,7 +368,7 @@ sub handle {
 
         # We received a non-ED message when ED is supposed to be active.
         # Warn about this problem, then process the message anyway.
-        C4::SIP::SIPServer::get_logger()->warn("Received message without error detection: '$msg'");
+        C4::SIP::Sip::get_logger()->warn("Received message without error detection: '$msg'");
         $error_detection = 0;
         $self = C4::SIP::Sip::MsgType->new( $msg, 0 );
     } else {
@@ -381,7 +381,7 @@ sub handle {
         return substr( $msg, 0, 2 );
     }
     unless ( $self->{handler} ) {
-        C4::SIP::SIPServer::get_logger()->warn("No handler defined for '$msg'");
+        C4::SIP::Sip::get_logger()->warn("No handler defined for '$msg'");
         $last_response = REQUEST_SC_RESEND;
         print("$last_response\r");
         return REQUEST_ACS_RESEND;
@@ -504,7 +504,7 @@ sub handle_checkout {
 
         # Off-line transactions need to be recorded, but there's
         # not a lot we can do about it
-        C4::SIP::SIPServer::get_logger()->warn("received no-block checkout from terminal '$account->{id}'");
+        C4::SIP::Sip::get_logger()->warn("received no-block checkout from terminal '$account->{id}'");
 
         $status = $ils->checkout_no_block( $patron_id, $item_id, $sc_renewal_policy, $trans_date, $nb_due_date );
     } else {
@@ -631,7 +631,7 @@ sub handle_checkin {
     if ( $no_block eq 'Y' ) {
 
         # Off-line transactions, ick.
-        C4::SIP::SIPServer::get_logger()->warn("received no-block checkin from terminal '$account->{id}'");
+        C4::SIP::Sip::get_logger()->warn("received no-block checkin from terminal '$account->{id}'");
         $status = $ils->checkin_no_block( $item_id, $trans_date, $return_date, $item_props, $cancel );
     } else {
         $status = $ils->checkin( $item_id, $trans_date, $return_date, $my_branch, $item_props, $cancel, $account->{checked_in_ok} );
@@ -749,19 +749,19 @@ sub handle_sc_status {
     } elsif ( $sc_protocol_version =~ /^2\./ ) {
         $new_proto = 2;
     } else {
-        C4::SIP::SIPServer::get_logger()->warn("Unrecognized protocol revision '$sc_protocol_version', falling back to '1'");
+        C4::SIP::Sip::get_logger()->warn("Unrecognized protocol revision '$sc_protocol_version', falling back to '1'");
         $new_proto = 1;
     }
 
     if ( $new_proto != $protocol_version ) {
-        C4::SIP::SIPServer::get_logger()->info("Setting protocol level to $new_proto");
+        C4::SIP::Sip::get_logger()->info("Setting protocol level to $new_proto");
         $protocol_version = $new_proto;
     }
 
     if ( $status == SC_STATUS_PAPER ) {
-        C4::SIP::SIPServer::get_logger()->warn("Self-Check unit '$self->{account}->{id}@$self->{account}->{institution}' out of paper");
+        C4::SIP::Sip::get_logger()->warn("Self-Check unit '$self->{account}->{id}@$self->{account}->{institution}' out of paper");
     } elsif ( $status == SC_STATUS_SHUTDOWN ) {
-        C4::SIP::SIPServer::get_logger()->warn("Self-Check unit '$self->{account}->{id}@$self->{account}->{institution}' shutting down");
+        C4::SIP::Sip::get_logger()->warn("Self-Check unit '$self->{account}->{id}@$self->{account}->{institution}' shutting down");
     }
 
     $self->{account}->{print_width} = $print_width;
@@ -801,10 +801,10 @@ sub login_core {
     my $pwd    = shift;
     my $status = 1;                 # Assume it all works
     if ( !exists( $server->{config}->{accounts}->{$uid} ) ) {
-        C4::SIP::SIPServer::get_logger()->warn("MsgType::login_core: Unknown login '$uid'");
+        C4::SIP::Sip::get_logger()->warn("MsgType::login_core: Unknown login '$uid'");
         $status = 0;
     } elsif ( $server->{config}->{accounts}->{$uid}->{password} ne $pwd ) {
-        C4::SIP::SIPServer::get_logger()->warn("MsgType::login_core: Invalid password for login '$uid'");
+        C4::SIP::Sip::get_logger()->warn("MsgType::login_core: Invalid password for login '$uid'");
         $status = 0;
     } else {
 
@@ -818,16 +818,16 @@ sub login_core {
 
         my $auth_status = api_auth( $uid, $pwd, $inst );
         if ( !$auth_status or $auth_status !~ /^ok$/i ) {
-            C4::SIP::SIPServer::get_logger()->warn("api_auth failed for SIP terminal '$uid' of '$inst': " . ($auth_status||'unknown') );
+            C4::SIP::Sip::get_logger()->warn("api_auth failed for SIP terminal '$uid' of '$inst': " . ($auth_status||'unknown') );
             $status = 0;
         } else {
-            C4::SIP::SIPServer::get_logger()->info("Successful login/auth for '$server->{account}->{id}' of '$inst'");
+            C4::SIP::Sip::get_logger()->info("Successful login/auth for '$server->{account}->{id}' of '$inst'");
 
             #
             # initialize connection to ILS
             #
             my $module = $server->{config}->{institutions}->{$inst}->{implementation};
-            C4::SIP::SIPServer::get_logger()->debug("login_core: " . Dumper($module) );
+            C4::SIP::Sip::get_logger()->debug("login_core: " . Dumper($module) );
 
             # Suspect this is always ILS but so we don't break any eccentic install (for now)
             if ( $module eq 'ILS' ) {
@@ -835,14 +835,14 @@ sub login_core {
             }
             $module->use;
             if ($@) {
-                C4::SIP::SIPServer::get_logger()->error("$server->{service}: Loading ILS implementation '$module' for institution '$inst' failed");
+                C4::SIP::Sip::get_logger()->error("$server->{service}: Loading ILS implementation '$module' for institution '$inst' failed");
                 die("Failed to load ILS implementation '$module' for $inst");
             }
 
             # like   ILS->new(), I think.
             $server->{ils} = $module->new( $server->{institution}, $server->{account} );
             if ( !$server->{ils} ) {
-                C4::SIP::SIPServer::get_logger()->error("$server->{service}: ILS connection to '$inst' failed");
+                C4::SIP::Sip::get_logger()->error("$server->{service}: ILS connection to '$inst' failed");
                 die("Unable to connect to ILS '$inst'");
             }
         }
@@ -865,7 +865,7 @@ sub handle_login {
     $pwd = $fields->{ (FID_LOGIN_PWD) };    # Terminal PWD, not patron PWD.
 
     if ( $uid_algorithm || $pwd_algorithm ) {
-        C4::SIP::SIPServer::get_logger()->error("LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm");
+        C4::SIP::Sip::get_logger()->error("LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm");
         $status = 0;
     } else {
         $status = login_core( $server, $uid, $pwd );
@@ -904,13 +904,13 @@ sub summary_info {
         return '';    # No detailed information required
     }
 
-    C4::SIP::SIPServer::get_logger()->debug("Summary_info: index == '$summary_type', field '$summary_map[$summary_type]->{fid}'");
+    C4::SIP::Sip::get_logger()->debug("Summary_info: index == '$summary_type', field '$summary_map[$summary_type]->{fid}'");
 
     my $func     = $summary_map[$summary_type]->{func};
     my $fid      = $summary_map[$summary_type]->{fid};
     my $itemlist = &$func( $patron, $start, $end, $server );
 
-    C4::SIP::SIPServer::get_logger()->debug("summary_info: list = (" . join(", ", @{$itemlist}) . ")");
+    C4::SIP::Sip::get_logger()->debug("summary_info: list = (" . join(", ", @{$itemlist}) . ")");
     foreach my $i ( @{$itemlist} ) {
         $resp .= add_field( $fid, $i->{barcode} );
     }
@@ -1179,7 +1179,7 @@ sub handle_item_status_update {
     $item_props = $fields->{ (FID_ITEM_PROPS) };
 
     if ( !defined($item_id) ) {
-        C4::SIP::SIPServer::get_logger()->warn("handle_item_status: received message without Item ID field");
+        C4::SIP::Sip::get_logger()->warn("handle_item_status: received message without Item ID field");
     } else {
         $item = $ils->find_item($item_id);
     }
@@ -1224,7 +1224,7 @@ sub handle_patron_enable {
     $patron_id  = $fields->{ (FID_PATRON_ID) };
     $patron_pwd = $fields->{ (FID_PATRON_PWD) };
 
-    C4::SIP::SIPServer::get_logger()->debug("handle_patron_enable: patron_id: '$patron_id', patron_pwd: '$patron_pwd'");
+    C4::SIP::Sip::get_logger()->debug("handle_patron_enable: patron_id: '$patron_id', patron_pwd: '$patron_pwd'");
 
     $patron = $ils->find_patron($patron_id);
 
@@ -1294,7 +1294,7 @@ sub handle_hold {
     } elsif ( $hold_mode eq '*' ) {
         $status = $ils->alter_hold( $patron_id, $patron_pwd, $item_id, $title_id, $expiry_date, $pickup_locn, $hold_type, $fee_ack );
     } else {
-        C4::SIP::SIPServer::get_logger()->warn("handle_hold: Unrecognized hold mode '$hold_mode' from terminal '$server->{account}->{id}'");
+        C4::SIP::Sip::get_logger()->warn("handle_hold: Unrecognized hold mode '$hold_mode' from terminal '$server->{account}->{id}'");
         $status = $ils->Transaction::Hold;    # new?
         $status->screen_msg("System error. Please contact library staff.");
     }
@@ -1342,7 +1342,7 @@ sub handle_renew {
     $ils->check_inst_id( $fields->{ (FID_INST_ID) }, "handle_renew" );
 
     if ( $no_block eq 'Y' ) {
-        C4::SIP::SIPServer::get_logger()->warn("handle_renew: received 'no block' renewal from terminal '$server->{account}->{id}'");
+        C4::SIP::Sip::get_logger()->warn("handle_renew: received 'no block' renewal from terminal '$server->{account}->{id}'");
     }
 
     $patron_id  = $fields->{ (FID_PATRON_ID) };
@@ -1509,7 +1509,7 @@ sub send_acs_status {
     $retries            = sprintf( "%03d", $policy->{retries} );
 
     if ( length($retries) != 3 ) {
-        C4::SIP::SIPServer::get_logger()->error("handle_acs_status: timeout field wrong size: '$timeout'");
+        C4::SIP::Sip::get_logger()->error("handle_acs_status: timeout field wrong size: '$timeout'");
         $retries = '000';
     }
 
@@ -1522,7 +1522,7 @@ sub send_acs_status {
     } elsif ( $protocol_version == 2 ) {
         $msg .= '2.00';
     } else {
-        C4::SIP::SIPServer::get_logger()->error("Bad setting for \$protocol_version, '$protocol_version' in send_acs_status");
+        C4::SIP::Sip::get_logger()->error("Bad setting for \$protocol_version, '$protocol_version' in send_acs_status");
         $msg .= '1.00';
     }
 
@@ -1542,7 +1542,7 @@ sub send_acs_status {
             }
         }
         if ( length($supported_msgs) < 16 ) {
-            C4::SIP::SIPServer::get_logger()->error("send_acs_status: supported messages '$supported_msgs' too short");
+            C4::SIP::Sip::get_logger()->error("send_acs_status: supported messages '$supported_msgs' too short");
         }
         $msg .= add_field( FID_SUPPORTED_MSGS, $supported_msgs );
     }
@@ -1552,7 +1552,7 @@ sub send_acs_status {
     if (   defined( $account->{print_width} )
         && defined($print_line)
         && $account->{print_width} < length($print_line) ) {
-        C4::SIP::SIPServer::get_logger()->warn("send_acs_status: print line '$print_line' too long.  Truncating");
+        C4::SIP::Sip::get_logger()->warn("send_acs_status: print line '$print_line' too long.  Truncating");
         $print_line = substr( $print_line, 0, $account->{print_width} );
     }
 
@@ -1572,7 +1572,7 @@ sub patron_status_string {
     my $patron = shift;
     my $patron_status;
 
-    C4::SIP::SIPServer::get_logger()->debug("patron_status_string: $patron->id charge_ok: $patron->charge_ok");
+    C4::SIP::Sip::get_logger()->debug("patron_status_string: $patron->id charge_ok: $patron->charge_ok");
     $patron_status = sprintf(
         '%s%s%s%s%s%s%s%s%s%s%s%s%s%s',
         denied( $patron->charge_ok ),

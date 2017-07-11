@@ -21,6 +21,7 @@ use C4::Members;
 use C4::Reserves;
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
+use C4::SIP::Sip qw(get_logger);
 
 use Koha::Libraries;
 use Koha::Logger;
@@ -32,16 +33,11 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-    my $logger;
     $kp = GetMember(cardnumber=>$patron_id) || GetMember(userid=>$patron_id);
     $debug and warn "new Patron (GetMember): " . Dumper($kp);
 
-    eval { $logger = C4::SIP::SIPServer::get_logger() };
-    if ($@) {
-        $logger = Koha::Logger->get({ interface => 'sip' });
-    }
     unless (defined $kp) {
-        $logger->debug("new ILS::Patron($patron_id): no such patron");
+        C4::SIP::Sip::get_logger()->debug("new ILS::Patron($patron_id): no such patron");
         return;
     }
     $kp = GetMember( borrowernumber => $kp->{borrowernumber});
@@ -129,7 +125,7 @@ sub new {
     $ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
     $self = \%ilspatron;
     $debug and warn Dumper($self);
-    $logger->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
+    C4::SIP::Sip::get_logger()->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
     bless $self, $type;
     return $self;
 }
@@ -364,7 +360,7 @@ sub enable {
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
         $self->{$field} = 1;
     }
-    C4::SIP::SIPServer::get_logger()->debug("Patron($self->{id})->enable: charge: $self->{charge_ok}, ".
+    C4::SIP::Sip::get_logger()->debug("Patron($self->{id})->enable: charge: $self->{charge_ok}, ".
                                             "renew:$self->{renew_ok}, recall:$self->{recall_ok}, hold:$self->{hold_ok}");
     $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;

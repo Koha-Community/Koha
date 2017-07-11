@@ -9,6 +9,7 @@ package C4::SIP::Sip::Configuration;
 use strict;
 use warnings;
 use XML::Simple qw(:strict);
+use C4::SIP::Sip qw(get_logger);
 
 my $parser = new XML::Simple(
     KeyAttr => {
@@ -63,7 +64,7 @@ sub find_service {
     my $portstr;
     foreach my $addr ( '', '*:', "$sockaddr:", "[$sockaddr]:" ) {
         $portstr = sprintf( "%s%s/%s", $addr, $port, lc $proto );
-        C4::SIP::SIPServer::get_logger()->debug("Configuration::find_service: Trying $portstr");
+        C4::SIP::Sip::get_logger()->debug("Configuration::find_service: Trying $portstr");
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );
     }
     return $self->{listeners}->{$portstr};

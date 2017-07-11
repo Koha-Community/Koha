@@ -18,13 +18,14 @@ use C4::SIP::Sip::Checksum qw(checksum);
 use base qw(Exporter);
 
 our @EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
-    denied sipbool boolspace write_msg
+    denied sipbool boolspace write_msg get_logger
     $error_detection $protocol_version $field_delimiter
     $last_response);
 
 our %EXPORT_TAGS = (
     all => [qw(y_or_n timestamp add_field maybe_add
         add_count denied sipbool boolspace write_msg
+        get_logger
         $error_detection $protocol_version
         $field_delimiter $last_response)]);
 
@@ -60,7 +61,7 @@ sub add_field {
     my ($i, $ent);
 
     if (!defined($value)) {
-        C4::SIP::SIPServer::get_logger()->debug("add_field: Undefined value being added to '$field_id'");
+        C4::SIP::Sip::get_logger()->debug("add_field: Undefined value being added to '$field_id'");
     }
     $value=~s/\r/ /g; # CR terminates a sip message
                       # Protect against them in sip text fields
@@ -113,7 +114,7 @@ sub add_count {
 
     $count = sprintf("%04d", $count);
     if (length($count) != 4) {
-		C4::SIP::SIPServer::get_logger()->debug("handle_patron_info: $label wrong size: '$count'");
+		C4::SIP::Sip::get_logger()->debug("handle_patron_info: $label wrong size: '$count'");
 		$count = ' ' x 4;
     }
     return $count;
@@ -183,10 +184,19 @@ sub write_msg {
     } else {
         STDOUT->autoflush(1);
         print $msg, $terminator;
-        C4::SIP::SIPServer::get_logger()->info("OUTPUT MSG: '$msg'");
+        C4::SIP::Sip::get_logger()->info("OUTPUT MSG: '$msg'");
     }
 
     $last_response = $msg;
+}
+
+sub get_logger {
+    my $logger;
+    eval { $logger = C4::SIP::SIPServer::get_logger(@_) };
+    if ($@) {
+        $logger = Koha::Logger->get({ interface => 'sip' });
+    }
+    return $logger;
 }
 
 1;
