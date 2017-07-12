@@ -22,9 +22,9 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::Exceptions;
 
-use Koha::RefundLostItemFeeRule;
+use Koha::CirculationRule;
 
-use base qw(Koha::Objects);
+use base qw(Koha::CirculationRules);
 
 =head1 NAME
 
@@ -41,7 +41,7 @@ Koha::RefundLostItemFeeRules - Koha RefundLostItemFeeRules object set class
 =cut
 
 sub _type {
-    return 'RefundLostItemFeeRule';
+    return 'CirculationRule';
 }
 
 =head3 object_class
@@ -49,7 +49,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::RefundLostItemFeeRule';
+    return 'Koha::CirculationRule';
 }
 
 =head3 should_refund
@@ -84,10 +84,17 @@ sub _effective_branch_rule {
     my $self   = shift;
     my $branch = shift;
 
-    my $specific_rule = $self->find({ branchcode => $branch });
+    my $specific_rule = $self->search(
+        {
+            branchcode   => $branch,
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
 
     return ( defined $specific_rule )
-                ? $specific_rule->refund
+                ? $specific_rule->rule_value
                 : $self->_default_rule;
 }
 
@@ -139,10 +146,17 @@ item fees on return. It defaults to 1 if no rule is defined.
 sub _default_rule {
 
     my $self = shift;
-    my $default_rule = $self->find({ branchcode => '*' });
+    my $default_rule = $self->search(
+        {
+            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
 
     return (defined $default_rule)
-                ? $default_rule->refund
+                ? $default_rule->rule_value
                 : 1;
 }
 

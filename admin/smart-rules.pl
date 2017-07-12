@@ -29,7 +29,6 @@ use Koha::Database;
 use Koha::IssuingRule;
 use Koha::IssuingRules;
 use Koha::Logger;
-use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
 use Koha::CirculationRules;
@@ -515,22 +514,28 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
     if ( $refund eq '*' ) {
         if ( $branch ne '*' ) {
             # only do something for $refund eq '*' if branch-specific
-            eval {
-                # Delete it so it picks the default
-                Koha::RefundLostItemFeeRules->find({
-                    branchcode => $branch
-                })->delete;
-            };
+            Koha::CirculationRules->set_rules(
+                {
+                    categorycode => undef,
+                    itemtype     => undef,
+                    branchcode   => $branch,
+                    rules        => {
+                        refund => undef
+                    }
+                }
+            );
         }
     } else {
-        my $refundRule =
-                Koha::RefundLostItemFeeRules->find({
-                    branchcode => $branch
-                }) // Koha::RefundLostItemFeeRule->new;
-        $refundRule->set({
-            branchcode => $branch,
-                refund => $refund
-        })->store;
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => undef,
+                itemtype     => undef,
+                branchcode   => $branch,
+                rules        => {
+                    refund => $refund
+                }
+            }
+        );
     }
 }
 

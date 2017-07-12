@@ -26,7 +26,7 @@ use Koha::Database;
 
 BEGIN {
     use_ok('Koha::Object');
-    use_ok('Koha::RefundLostItemFeeRule');
+    use_ok('Koha::CirculationRule');
     use_ok('Koha::RefundLostItemFeeRules');
 }
 
@@ -41,32 +41,55 @@ subtest 'Koha::RefundLostItemFeeRule::delete() tests' => sub {
     $schema->storage->txn_begin;
 
     # Clean the table
-    $schema->resultset('RefundLostItemFeeRule')->search()->delete;
+    $schema->resultset('CirculationRule')->search()->delete;
 
-    my $generated_default_rule = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            branchcode => '*'
+    my $generated_default_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => '*',
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+            }
         }
-    });
-    my $generated_other_rule = $builder->build({
-        source => 'RefundLostItemFeeRule'
-    });
+    );
+    my $generated_other_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+            }
+        }
+    );
 
-    my $default_rule = Koha::RefundLostItemFeeRules->find({
-            branchcode => '*' });
+    my $default_rule = Koha::CirculationRules->search(
+        {
+            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
     ok( defined $default_rule, 'Default rule created' );
-    ok( $default_rule->in_storage, 'Default rule actually in storage');
+    ok( $default_rule->_result->in_storage, 'Default rule actually in storage');
 
-    my $other_rule = Koha::RefundLostItemFeeRules->find({
-            branchcode => $generated_other_rule->{ branchcode }
-    });
+    my $other_rule = Koha::CirculationRules->search(
+        {
+            branchcode   => $generated_other_rule->{branchcode},
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
     ok( defined $other_rule, 'Other rule created' );
-    ok( $other_rule->in_storage, 'Other rule actually in storage');
+    ok( $other_rule->_result->in_storage, 'Other rule actually in storage');
 
     # deleting the regular rule
     $other_rule->delete;
-    ok( !$other_rule->in_storage, 'Other rule deleted from storage' );
+    ok( !$other_rule->_result->in_storage, 'Other rule deleted from storage' );
 
     # Rollback transaction
     $schema->storage->txn_rollback;
@@ -80,35 +103,59 @@ subtest 'Koha::RefundLostItemFeeRules::_default_rule() tests' => sub {
     $schema->storage->txn_begin;
 
     # Clean the table
-    $schema->resultset('RefundLostItemFeeRule')->search()->delete;
+    $schema->resultset('CirculationRule')->search()->delete;
 
-    my $generated_default_rule = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            branchcode => '*',
-            refund     => 1
+    my $generated_default_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => '*',
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1,
+            }
         }
-    });
-    my $generated_other_rule = $builder->build({
-        source => 'RefundLostItemFeeRule'
-    });
+    );
+    my $generated_other_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+            }
+        }
+    );
 
-    my $default_rule = Koha::RefundLostItemFeeRules->find({
-            branchcode => '*' });
+    my $default_rule = Koha::CirculationRules->search(
+        {
+            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
     ok( defined $default_rule, 'Default rule created' );
-    ok( $default_rule->in_storage, 'Default rule actually in storage');
-    ok( Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to refund' );
+    ok( $default_rule->_result->in_storage, 'Default rule actually in storage');
+    is( Koha::RefundLostItemFeeRules->_default_rule, 1, 'Default rule is set to refund' );
 
     # Change default rule to "Don't refund"
-    $default_rule->refund(0);
+    $default_rule->rule_value(0);
     $default_rule->store;
     # Re-read from DB, to be sure
-    $default_rule = Koha::RefundLostItemFeeRules->find({
-            branchcode => '*' });
+    $default_rule = Koha::CirculationRules->search(
+        {
+            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'refund',
+        }
+    )->next();
     ok( !Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to not refund' );
 
     $default_rule->delete;
-    ok( !$default_rule->in_storage, 'Default rule effectively deleted from storage' );
+    ok( !$default_rule->_result->in_storage, 'Default rule effectively deleted from storage' );
 
     ok( Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to refund if no default rule is present' );
 
@@ -124,27 +171,42 @@ subtest 'Koha::RefundLostItemFeeRules::_effective_branch_rule() tests' => sub {
     $schema->storage->txn_begin;
 
     # Clean the table
-    $schema->resultset('RefundLostItemFeeRule')->search()->delete;
+    $schema->resultset('CirculationRule')->search()->delete;
 
-    my $default_rule = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            branchcode => '*',
-            refund     => 1
+    my $default_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => '*',
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1,
+            }
         }
-    });
-    my $specific_rule_false = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            refund => 0
+    );
+    my $specific_rule_false = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 0,
+            }
         }
-    });
-    my $specific_rule_true = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            refund => 1
+    );
+    my $specific_rule_true = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1,
+            }
         }
-    });
+    );
 
     is( Koha::RefundLostItemFeeRules->_effective_branch_rule( $specific_rule_true->{ branchcode } ),
           1,'Specific rule is applied (true)');
@@ -225,34 +287,64 @@ subtest 'Koha::RefundLostItemFeeRules::should_refund() tests' => sub {
 
     t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'CheckinLibrary' );
 
-    $schema->resultset('RefundLostItemFeeRule')->search()->delete;
+    $schema->resultset('CirculationRule')->search()->delete;
 
-    my $default_rule = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            branchcode => '*',
-            refund     => 1
+    my $default_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => '*',
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1
+            }
         }
-    });
-    my $specific_rule_false = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            refund => 0
+    );
+    my $specific_rule_false = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 0
+            }
         }
-    });
-    my $specific_rule_true = $builder->build({
-        source => 'RefundLostItemFeeRule',
-        value  => {
-            refund => 1
+    );
+    my $specific_rule_true = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+                rule_value   => 1
+            }
         }
-    });
+    );
     # Make sure we have an unused branchcode
-    my $specific_rule_dummy = $builder->build({
-        source => 'RefundLostItemFeeRule'
-    });
+    my $specific_rule_dummy = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund',
+            }
+        }
+    );
     my $branch_without_rule = $specific_rule_dummy->{ branchcode };
-    Koha::RefundLostItemFeeRules
-        ->find({ branchcode => $branch_without_rule })
+    Koha::CirculationRules
+        ->search(
+            {
+                branchcode   => $branch_without_rule,
+                categorycode => undef,
+                itemtype     => undef,
+                rule_name    => 'refund'
+            }
+          )
+        ->next
         ->delete;
 
     my $params = {
@@ -271,7 +363,7 @@ subtest 'Koha::RefundLostItemFeeRules::should_refund() tests' => sub {
          1,'No rule for branch, global rule applied (true)');
 
     # Change the default value just to try
-    Koha::RefundLostItemFeeRules->find({ branchcode => '*' })->refund(0)->store;
+    Koha::CirculationRules->search({ branchcode => '*', rule_name => 'refund' })->next->rule_value(0)->store;
     t::lib::Mocks::mock_preference( 'RefundLostOnReturnControl', 'ItemHoldingBranch' );
     is( Koha::RefundLostItemFeeRules->should_refund( $params ),
          0,'No rule for branch, global rule applied (false)');

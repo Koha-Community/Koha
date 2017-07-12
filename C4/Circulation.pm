@@ -54,7 +54,6 @@ use Koha::Database;
 use Koha::Libraries;
 use Koha::Account::Lines;
 use Koha::Holds;
-use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
