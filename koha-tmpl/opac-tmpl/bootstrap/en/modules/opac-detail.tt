@@ -1180,13 +1180,11 @@
         <thead>
             <tr>
                 [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]
+                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
                     <th id="item_current_location" class="item_location">Current location</th>
                 [% END %]
-                [% UNLESS ( singleBranchMode ) %]
-                    [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                        <th id="item_home_location" class="item_location">Home library</th>
-                    [% END %]
+                [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
+                    <th id="item_home_location" class="item_location">Home library</th>
                 [% END %]
                 [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
                 <th id="item_callnumber" class="call_no">Call number</th>
@@ -1222,54 +1220,49 @@
                             [% ITEM_RESULT.description %]
                         </td>
                     [% END %]
-                    [% UNLESS singleBranchMode %]
-                        [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
-                            <td class="location" property="seller">
-                                <link property="itemOffered" href="#record" />
-                                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                                <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
-                                    [% IF ( ITEM_RESULT.branchurl ) %]
-                                        <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
-                                    [% ELSE %]
-                                        <span>[% ITEM_RESULT.branchname %]</span>
-                                    [% END %]
-                                </span>
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info %]</div>
-
-                                [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
-                                    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                    [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
+                        <td class="location" property="seller">
+                            <link property="itemOffered" href="#record" />
+                            <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                            <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
+                                [% IF ( ITEM_RESULT.branchurl ) %]
+                                    <a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>
+                                [% ELSE %]
+                                    <span>[% ITEM_RESULT.branchname %]</span>
                                 [% END %]
+                            </span>
+                            <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info %]</div>
 
-                            </td>
-                        [% END %]
+                            [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                                <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                            [% END %]
 
-                        [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                            <td class="location" property="seller">
-                                <link property="itemOffered" href="#record" />
-                                <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
-                                <span class="[% ITEM_RESULT.home_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
-                                    [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
-                                        [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
-                                        [% IF ( home_branch_url ) %]
-                                             <a href="[% home_branch_url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
-                                        [% ELSE %]
-                                            <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
-                                        [% END %]
+                        </td>
+                    [% END %]
+
+                    [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
+                        <td class="location" property="seller">
+                            <link property="itemOffered" href="#record" />
+                            <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
+                            <span class="[% ITEM_RESULT.home_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
+                                [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
+                                    [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
+                                    [% IF ( home_branch_url ) %]
+                                         <a href="[% home_branch_url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) %]</a>
                                     [% ELSE %]
                                         <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                     [% END %]
-                                </span>
-                                <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info %]</div>
-
-                                [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
-                                    <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                                [% ELSE %]
+                                    <span>[% Branches.GetName( ITEM_RESULT.homebranch ) %]</span>
                                 [% END %]
+                            </span>
+                            <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info %]</div>
 
-                            </td>
-                        [% END %]
+                            [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                                <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
+                            [% END %]
 
-                    [% ELSE %]
-                         <td class="location"><span class="shelvingloc">[% ITEM_RESULT.location_description %]</span></td>
+                        </td>
                     [% END %]
 
                     [% IF ( itemdata_ccode ) %]
@@ -1479,10 +1472,8 @@
         $(".holdingst").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aoColumns": [
                 [% IF ( item_level_itypes ) %]null,[% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' || singleBranchMode ) %]null,[% END %]
-                [% UNLESS ( singleBranchMode ) %]
-                    [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
-                [% END %]
+                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
+                [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
                 [% IF ( itemdata_ccode ) %]null,[% END %]
                 null,
                 [% IF ( itemdata_enumchron ) %]null,[% END %]
