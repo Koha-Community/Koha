@@ -18,220 +18,296 @@
 use Modern::Perl;
 
 
-use Test::More tests => 43;
+use Test::More tests => 3;
 use Test::Mojo;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Auth;
 use C4::Context;
 
 use Koha::Database;
-use Koha::Account::Line;
+use Koha::Account::Lines;
 
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 
-my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
-my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+my $path = '/api/v1/accountlines';
 
-$t->get_ok('/api/v1/accountlines')
-  ->status_is(401);
+subtest 'list() tests' => sub {
+    plan tests => 12;
 
-$t->put_ok("/api/v1/accountlines/11224409" => json => {'amount' => -5})
-    ->status_is(401);
+    $schema->storage->txn_begin;
 
-$t->post_ok("/api/v1/accountlines/11224408/payment" => json => {'amount' => 5 })
-    ->status_is(401);
+    my ($librarian, $session) = create_user_and_session(1024);
+    my ($borrower, $borrowersession) = create_user_and_session(0);
+    my ($borrower2, undef) = create_user_and_session(0);
 
-my $loggedinuser = $builder->build({
-    source => 'Borrower',
-    value => {
-        branchcode   => $branchcode,
-        categorycode => $categorycode,
-        flags        => 1024,
-        lost         => 0,
-    }
-});
+    my $borrowernumber = $borrower->{borrowernumber};
+    my $borrowernumber2 = $borrower2->{borrowernumber};
 
-my $borrower = $builder->build({
-    source => 'Borrower',
-    value => {
-        branchcode   => $branchcode,
-        categorycode => $categorycode,
-        flags        => 0,
-        lost         => 0,
-    }
-});
+    Koha::Account::Lines->search->delete;
+    Koha::Account::Line->new({
+        borrowernumber => $borrowernumber,
+        amount => 20, accounttype => 'A', amountoutstanding => 20
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrowernumber,
+        amount => 40, accounttype => 'F', amountoutstanding => 40
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrowernumber2,
+        amount => 80, accounttype => 'F', amountoutstanding => 80
+    })->store;
 
-my $borrower2 = $builder->build({
-    source => 'Borrower',
-    value => {
-        branchcode   => $branchcode,
-        categorycode => $categorycode,
-        lost         => 0,
-    }
-});
-my $borrowernumber = $borrower->{borrowernumber};
-my $borrowernumber2 = $borrower2->{borrowernumber};
+    $t->get_ok($path)
+      ->status_is(401);
 
-$dbh->do(q| DELETE FROM accountlines |);
-$dbh->do(q|
-    INSERT INTO accountlines (borrowernumber, amount, accounttype, amountoutstanding)
-    VALUES (?, 20, 'A', 20), (?, 40, 'F', 40), (?, 80, 'F', 80), (?, 10, 'F', 10)
-    |, undef, $borrowernumber, $borrowernumber, $borrowernumber, $borrowernumber2);
+    my $tx = $t->ua->build_tx(GET => "$path?borrowernumber=$borrowernumber2");
+    $tx->req->cookies({name => 'CGISESSID', value => $borrowersession->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(403);
 
-my $session = C4::Auth::get_session('');
-$session->param('number', $loggedinuser->{ borrowernumber });
-$session->param('id', $loggedinuser->{ userid });
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
+    $tx = $t->ua->build_tx(GET => "$path?borrowernumber=$borrowernumber");
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(200);
 
-my $borrowersession = C4::Auth::get_session('');
-$borrowersession->param('number', $borrower->{ borrowernumber });
-$borrowersession->param('id', $borrower->{ userid });
-$borrowersession->param('ip', '127.0.0.1');
-$borrowersession->param('lasttime', time());
-$borrowersession->flush;
+    my $json = $t->tx->res->json;
+    ok(ref $json eq 'ARRAY', 'response is a JSON array');
+    ok(scalar @$json == 2, 'response array contains 2 elements');
 
-my $tx = $t->ua->build_tx(GET => "/api/v1/accountlines?borrowernumber=$borrowernumber2");
-$tx->req->cookies({name => 'CGISESSID', value => $borrowersession->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(403);
+    $tx = $t->ua->build_tx(GET => $path);
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(200);
 
-$tx = $t->ua->build_tx(GET => "/api/v1/accountlines?borrowernumber=$borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(200);
+    $json = $t->tx->res->json;
+    ok(ref $json eq 'ARRAY', 'response is a JSON array');
+    ok(scalar @$json == 3, 'response array contains 3 elements');
 
-my $json = $t->tx->res->json;
-ok(ref $json eq 'ARRAY', 'response is a JSON array');
-ok(scalar @$json == 3, 'response array contains 3 elements');
-
-$tx = $t->ua->build_tx(GET => "/api/v1/accountlines");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(200);
-
-$json = $t->tx->res->json;
-ok(ref $json eq 'ARRAY', 'response is a JSON array');
-ok(scalar @$json == 4, 'response array contains 3 elements');
-
-# Editing accountlines tests
-my $put_data = {
-    'amount' => -19,
-    'amountoutstanding' => -19
+    $schema->storage->txn_rollback;
 };
 
-$tx = $t->ua->build_tx(
-    PUT => "/api/v1/accountlines/11224409"
-        => json => $put_data);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-    ->status_is(404);
+subtest 'edit() tests' => sub {
+    plan tests => 10;
 
-my $accountline_to_edit = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber2})->unblessed()->[0];
+    $schema->storage->txn_begin;
 
-$tx = $t->ua->build_tx(PUT => "/api/v1/accountlines/$accountline_to_edit->{accountlines_id}" => json => $put_data);
-$tx->req->cookies({name => 'CGISESSID', value => $borrowersession->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(403);
+    my ($librarian, $session) = create_user_and_session(1024);
+    my ($borrower, $borrowersession) = create_user_and_session(0);
 
-$tx = $t->ua->build_tx(
-    PUT => "/api/v1/accountlines/$accountline_to_edit->{accountlines_id}"
-        => json => $put_data);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-    ->status_is(200);
+    Koha::Account::Line->new({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 20, accounttype => 'A', amountoutstanding => 20
+    })->store;
 
-my $accountline_edited = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber2})->unblessed()->[0];
+    my $put_data = {
+        'amount' => -19,
+        'amountoutstanding' => -19
+    };
 
-is($accountline_edited->{amount}, '-19.000000');
-is($accountline_edited->{amountoutstanding}, '-19.000000');
+    $t->put_ok("/api/v1/accountlines/-9999" => json => {'amount' => -5})
+    ->status_is(401);
 
+    my $tx = $t->ua->build_tx( PUT => "$path/-9999" => json => $put_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+        ->status_is(404);
 
-# Payment tests
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/4562765765/payment" => json => { amount => 1000 });
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(404);
+    my $accountline_to_edit = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber}
+    })->unblessed()->[0];
 
-my $accountline_to_pay = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => 20})->unblessed()->[0];
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(400);
+    $tx = $t->ua->build_tx(PUT => "$path/$accountline_to_edit->{accountlines_id}"
+                           => json => $put_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $borrowersession->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(403);
 
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
-                       => json => { amount => 0 });
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(400);
+    $tx = $t->ua->build_tx(PUT => "$path/$accountline_to_edit->{accountlines_id}"
+            => json => $put_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+        ->status_is(200);
 
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
-                       => json => { amount => "no" });
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(400);
+    my $accountline_edited = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber}
+    })->unblessed()->[0];
 
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_pay->{accountlines_id}/payment"
-                       => json => { amount => 20 });
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(200);
-#$t->content_is('toto');
+    is($accountline_edited->{amount}, '-19.000000');
+    is($accountline_edited->{amountoutstanding}, '-19.000000');
 
-my $accountline_paid = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => -20})->unblessed()->[0];
-ok($accountline_paid);
-
-# Partial payment tests
-my $post_data = {
-    'amount' => 17,
-    'note' => 'Partial payment'
+    $schema->storage->txn_rollback;
 };
 
-$tx = $t->ua->build_tx(
-    POST => "/api/v1/accountlines/11224419/payment"
-        => json => $post_data);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-    ->status_is(404);
+subtest 'post() tests' => sub {
+    plan tests => 21;
 
-my $accountline_to_partiallypay = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => 80})->unblessed()->[0];
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_partiallypay->{accountlines_id}/payment" => json => {amount => 'foo'});
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(400);
+    $schema->storage->txn_begin;
 
-$tx = $t->ua->build_tx(POST => "/api/v1/accountlines/$accountline_to_partiallypay->{accountlines_id}/payment" => json => $post_data);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$tx->req->env({REMOTE_ADDR => '127.0.0.1'});
-$t->request_ok($tx)
-  ->status_is(200);
+    my ($librarian, $session) = create_user_and_session(1024);
+    my ($borrower, $borrowersession) = create_user_and_session(0);
+    my ($borrower2, undef) = create_user_and_session(0);
 
-$accountline_to_partiallypay = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => 80})->unblessed()->[0];
-is($accountline_to_partiallypay->{amountoutstanding}, '63.000000');
+    Koha::Account::Line->new({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 20, accounttype => 'A', amountoutstanding => 20
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 40, accounttype => 'F', amountoutstanding => 40
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 80, accounttype => 'F', amountoutstanding => 80
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 10, accounttype => 'F', amountoutstanding => 10
+    })->store;
 
-my $accountline_partiallypaid = Koha::Account::Lines->search({'borrowernumber' => $borrowernumber, 'amount' => -17})->unblessed()->[0];
-ok($accountline_partiallypaid);
+    $t->post_ok("$path/-9999/payment" => json => {amount => 5})
+      ->status_is(401);
 
-$dbh->rollback;
+    my $tx = $t->ua->build_tx(POST => "$path/-9999/payment" =>
+                              json => { amount => 1000 });
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(404);
+
+    my $accountline_to_pay = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 20
+    })->unblessed()->[0];
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_pay->{accountlines_id}/payment"
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(400);
+
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_pay->{accountlines_id}/payment"
+                 => json => { amount => 0 }
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(400);
+
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_pay->{accountlines_id}/payment"
+                => json => { amount => "no" }
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(400);
+
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_pay->{accountlines_id}/payment"
+                => json => { amount => 20 }
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    my $accountline_paid = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => -20
+    })->unblessed()->[0];
+    ok($accountline_paid);
+
+    # Partial payment tests
+    my $post_data = {
+        'amount' => 17,
+        'note' => 'Partial payment'
+    };
+    
+    $tx = $t->ua->build_tx(POST => "$path/-9999/payment"=> json => $post_data);
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+        ->status_is(404);
+    
+    my $accountline_to_partiallypay = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 80
+    })->unblessed()->[0];
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_partiallypay->{accountlines_id}/payment"
+                => json => {amount => 'foo'}
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(400);
+    
+    $tx = $t->ua->build_tx(
+        POST => "$path/$accountline_to_partiallypay->{accountlines_id}/payment"
+                    => json => $post_data
+    );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(200);
+    
+    $accountline_to_partiallypay = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => 80
+    })->unblessed()->[0];
+    is($accountline_to_partiallypay->{amountoutstanding}, '63.000000');
+    
+    my $accountline_partiallypaid = Koha::Account::Lines->search({
+        borrowernumber => $borrower->{borrowernumber},
+        amount => -17
+    })->unblessed()->[0];
+    ok($accountline_partiallypaid);
+
+    $schema->storage->txn_rollback;
+};
+
+sub create_user_and_session {
+    my ($flags) = @_;
+
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+
+    my $user = $builder->build({
+        source => 'Borrower',
+        value => {
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            flags        => $flags,
+            lost         => 0,
+        }
+    });
+
+    my $session = C4::Auth::get_session('');
+    $session->param('number', $user->{ borrowernumber });
+    $session->param('id', $user->{ userid });
+    $session->param('ip', '127.0.0.1');
+    $session->param('lasttime', time());
+    $session->flush;
+
+    return ($user, $session);
+}
+
+1;
