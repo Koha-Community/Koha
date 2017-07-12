@@ -93,5 +93,10 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'labels',          'sheets_get',                                  'Allow viewing all label sheets'),
    ( 'labels',          'sheets_new',                                  'Allow creating all label sheets'),
    ( 'labels',          'sheets_mod',                                  'Allow modifying all label sheets'),
-   ( 'labels',          'sheets_del',                                  'Allow deleting all label sheets')
+   ( 'labels',          'sheets_del',                                  'Allow deleting all label sheets'),
+   ( 'messages',        'get_message', 'Allows to get the messages in message queue.'),
+   ( 'messages',        'create_message', 'Allows to create a new message and queue it.'),
+   ( 'messages',        'update_message', 'Allows to update messages in message queue.'),
+   ( 'messages',        'delete_message', 'Allows to delete a message and queue it.'),
+   ( 'messages',        'resend_message', 'Allows to resend messages in message queue.')
 ;
