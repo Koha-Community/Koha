@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 12;
 use Test::Mojo;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Auth;
@@ -32,11 +33,14 @@ use Koha::Database;
 use Koha::Patron;
 use Koha::Items;
 
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
+$schema->storage->txn_begin;
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
@@ -99,7 +103,7 @@ $t->request_ok($tx)
   ->json_is('/biblionumber' => $biblionumber)
   ->json_is('/itemnotes_nonpublic' => $item->{itemnotes_nonpublic});
 
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 sub create_session {
     my (@borrowers) = @_;
