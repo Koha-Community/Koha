@@ -41,11 +41,6 @@ t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
-# Mock userenv branchcode
-my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
-my $module = new Test::MockModule('C4::Context');
-$module->mock('userenv', sub { { branch => $branchcode } });
-
 subtest 'get() tests' => sub {
     plan tests => 34;
 
@@ -54,6 +49,11 @@ subtest 'get() tests' => sub {
     # Create test context
     my ($borrowernumber, $sessionid)            = create_user_and_session();
     my ($librariannnumber, $librariansessionid) = create_user_and_session(2);
+
+    # Mock userenv branchcode
+    my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock('userenv', sub { { branch => $branchcode } });
 
     # 1. Patrons
     my $patron       = Koha::Patrons->find($borrowernumber);
