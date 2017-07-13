@@ -149,7 +149,7 @@ sub SendPasswordRecoveryEmail {
     );
 
     # define from emails
-    my $library = Koha::Libraries->find( $borrower->branchcode );
+    my $library = $borrower->library;
     my $kohaEmail = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');  # send from patron's branch or Koha Admin
 
     C4::Letters::EnqueueLetter(
