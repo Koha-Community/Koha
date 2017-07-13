@@ -10,6 +10,7 @@ BEGIN {
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
+    eval { use lib $FindBin::Bin; };
 }
 
 use open qw( :std :encoding(UTF-8) );

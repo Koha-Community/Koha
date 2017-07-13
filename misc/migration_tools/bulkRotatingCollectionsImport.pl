@@ -2,6 +2,11 @@
 
 use Modern::Perl;
 
+BEGIN {
+    use FindBin;
+    eval { use lib $FindBin::Bin; };
+}
+
 use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 

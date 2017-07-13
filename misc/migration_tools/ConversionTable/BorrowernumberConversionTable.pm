@@ -1,6 +1,12 @@
 package ConversionTable::BorrowernumberConversionTable;
 
 use Modern::Perl;
+
+BEGIN {
+    use FindBin;
+    eval { use lib "$FindBin::Bin/../"; };
+}
+
 use ConversionTable::ConversionTable;
 our @ISA = qw(ConversionTable::ConversionTable);
 

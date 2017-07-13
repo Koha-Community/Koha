@@ -2,6 +2,11 @@
 
 use Modern::Perl;
 
+BEGIN {
+    use FindBin;
+    eval { use lib $FindBin::Bin; };
+}
+
 use Getopt::Long;
 
 use C4::RotatingCollections;

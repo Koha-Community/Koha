@@ -3,6 +3,11 @@
 use Modern::Perl;
 use utf8;
 
+BEGIN {
+    use FindBin;
+    eval { use lib $FindBin::Bin; };
+}
+
 use C4::Context;
 use C4::Biblio;
 use MARC::Record;
