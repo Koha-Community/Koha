@@ -89,7 +89,8 @@ sub new {
                 parameter => 'biblionumber',
             );
         }
-        $self->biblio(Koha::Biblios->find($params->{'biblionumber'}));
+        my $biblio = Koha::Biblios->find($params->{'biblionumber'});
+        $self->biblio($biblio);
         unless ($self->biblio) {
             Koha::Exceptions::Biblio::NotFound->throw(
                 error => 'Biblio not found.',
@@ -118,7 +119,8 @@ sub new {
                 parameter => 'borrowernumber',
             );
         }
-        $self->patron(Koha::Patrons->find($params->{'borrowernumber'}));
+        my $patron = Koha::Patrons->find($params->{'borrowernumber'});
+        $self->patron($patron);
         unless ($self->patron) {
             Koha::Exceptions::Patron::NotFound->throw(
                 error => 'Patron not found.',

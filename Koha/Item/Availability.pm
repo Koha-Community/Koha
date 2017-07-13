@@ -82,7 +82,8 @@ sub new {
                 parameter => 'itemnumber',
             );
         }
-        $self->item(Koha::Items->find($params->{'itemnumber'}));
+        my $item = Koha::Items->find($params->{'itemnumber'});
+        $self->item($item);
         unless ($self->item) {
             Koha::Exceptions::Item::NotFound->throw(
                 error => 'Item not found.',
@@ -111,7 +112,8 @@ sub new {
                 parameter => 'borrowernumber',
             );
         }
-        $self->patron(Koha::Patrons->find($params->{'borrowernumber'}));
+        my $patron = Koha::Patrons->find($params->{'borrowernumber'});
+        $self->patron($patron);
         unless ($self->patron) {
             Koha::Exceptions::Patron::NotFound->throw(
                 error => 'Patron not found.',
