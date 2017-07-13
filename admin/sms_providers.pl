@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op     = $cgi->param('op');
+my $op     = $cgi->param('op') || '';
 my $id     = $cgi->param('id');
 my $name   = $cgi->param('name');
 my $domain = $cgi->param('domain');
