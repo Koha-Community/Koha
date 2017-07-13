@@ -37,7 +37,7 @@ subtest "Happy path", \&happyPath;
 sub happyPath {
   my ($bde);
 
-  $bde = Koha::BiblioDataElements->find($records->{'BDE-tester-1'}->{biblioitemnumber});
+  $bde = Koha::BiblioDataElements->find({ biblioitemnumber => $records->{'BDE-tester-1'}->{biblioitemnumber} });
   is($bde->{biblioitemnumber}, $records->{'BDE-tester-1'}->{biblioitemnumber}, "Bib1. biblionumber");
   is($bde->{deleted}, undef, "Bib1. deleted");
   is($bde->{primary_language}, 'swe', "Bib1. primary language");
@@ -48,7 +48,7 @@ sub happyPath {
   is($bde->{serial}, 0, "Bib1. serial");
   is($bde->{encoding_level}, 4, "Bib1. encoding level");
 
-  $bde = Koha::BiblioDataElements->find($records->{'BDE-tester-2'}->{biblioitemnumber});
+  $bde = Koha::BiblioDataElements->find({ biblioitemnumber => $records->{'BDE-tester-2'}->{biblioitemnumber} });
   is($bde->{biblioitemnumber}, $records->{'BDE-tester-2'}->{biblioitemnumber}, "Bib2. biblionumber");
   is($bde->{deleted}, undef, "Bib2. deleted");
   is($bde->{primary_language}, 'fin', "Bib2. primary language");

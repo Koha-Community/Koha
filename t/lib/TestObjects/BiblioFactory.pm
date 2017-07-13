@@ -241,7 +241,9 @@ sub deleteTestGroup {
 #        }
 
         #Remove biblio_data_elements
-        Koha::BiblioDataElements->delete($record->{biblioitemnumber});
+        Koha::BiblioDataElements->search({
+            biblioitemnumber => $record->{biblioitemnumber}
+        })->delete;
     }
 }
 #sub _deleteTestGroupFromIdentifiers {
