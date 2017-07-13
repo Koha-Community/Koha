@@ -78,19 +78,12 @@ my $item = $builder->build(
 subtest 'Test basic functionality' => sub {
     plan tests => 1;
 
-    my $rule = $builder->schema->resultset('Issuingrule')->find({
-        branchcode                    => '*',
-        categorycode                  => '*',
-        itemtype                      => '*',
-    });
-    $rule->delete if $rule;
-    my $issuingrule = $builder->build(
+    Koha::CirculationRules->set_rules(
         {
-            source => 'Issuingrule',
-            value  => {
-                branchcode                    => '*',
-                categorycode                  => '*',
-                itemtype                      => '*',
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rules        => {
                 fine                          => '1.00',
                 lengthunit                    => 'days',
                 finedays                      => 0,
@@ -98,8 +91,8 @@ subtest 'Test basic functionality' => sub {
                 chargeperiod                  => 1,
                 overduefinescap               => undef,
                 cap_fine_to_replacement_price => 0,
-            },
-        }
+            }
+        },
     );
 
     my $start_dt = DateTime->new(
@@ -125,13 +118,12 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
     plan tests => 2;
 
     t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
-    my $issuingrule = $builder->build(
+    Koha::CirculationRules->set_rules(
         {
-            source => 'Issuingrule',
-            value  => {
-                branchcode                    => '*',
-                categorycode                  => '*',
-                itemtype                      => '*',
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rules        => {
                 fine                          => '1.00',
                 lengthunit                    => 'days',
                 finedays                      => 0,
@@ -214,5 +206,5 @@ subtest 'Test cap_fine_to_replacement_pricew with overduefinescap' => sub {
 };
 
 sub teardown {
-    $dbh->do(q|DELETE FROM issuingrules|);
+    $dbh->do(q|DELETE FROM circulation_rules|);
 }

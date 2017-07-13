@@ -38,7 +38,7 @@ $schema->storage->txn_begin;
 our $dbh = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM issues|);
-$dbh->do(q|DELETE FROM issuingrules|);
+$dbh->do(q|DELETE FROM circulation_rules|);
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -81,18 +81,6 @@ my $item = $builder->build({
     },
 });
 
-my $issuingrule = $builder->build({
-    source => 'Issuingrule',
-    value => {
-        branchcode         => $branch->{branchcode},
-        categorycode       => '*',
-        itemtype           => '*',
-        lengthunit         => 'days',
-        issuelength        => 5,
-        hardduedate        => undef,
-        hardduedatecompare => 0,
-    },
-});
 Koha::CirculationRules->search()->delete();
 Koha::CirculationRules->set_rules(
     {
@@ -102,6 +90,13 @@ Koha::CirculationRules->set_rules(
         rules        => {
             maxissueqty       => 2,
             maxonsiteissueqty => 1,
+            branchcode        => $branch->{branchcode},
+            categorycode      => '*',
+            itemtype          => '*',
+            lengthunit        => 'days',
+            issuelength       => 5,
+            hardduedate        => undef,
+            hardduedatecompare => 0,
         }
     }
 );

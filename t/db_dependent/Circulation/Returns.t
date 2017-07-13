@@ -57,16 +57,16 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
-Koha::IssuingRules->search->delete;
-my $rule = Koha::IssuingRule->new(
+Koha::CirculationRules->search->delete;
+Koha::CirculationRules->set_rule(
     {
         categorycode => '*',
         itemtype     => '*',
         branchcode   => '*',
-        issuelength  => 1,
+        rule_name    => 'issuelength',
+        rule_value   => 1,
     }
 );
-$rule->store();
 
 subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
@@ -254,7 +254,18 @@ subtest 'Handle ids duplication' => sub {
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
     t::lib::Mocks::mock_preference( 'CalculateFinesOnReturn', 1 );
     t::lib::Mocks::mock_preference( 'finesMode', 'production' );
-    Koha::IssuingRules->search->update({ chargeperiod => 1, fine => 1, firstremind => 1, });
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                chargeperiod => 1,
+                fine         => 1,
+                firstremind  => 1,
+            }
+        }
+    );
 
     my $biblio = $builder->build( { source => 'Biblio' } );
     my $itemtype = $builder->build( { source => 'Itemtype', value => { rentalcharge => 5 } } );

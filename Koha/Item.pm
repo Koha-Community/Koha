@@ -29,7 +29,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Reserves;
 use Koha::Checkouts;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
 use Koha::Patrons;
@@ -369,10 +369,17 @@ sub article_request_type {
       :                                      undef;
     my $borrowertype = $borrower->categorycode;
     my $itemtype = $self->effective_itemtype();
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowertype, itemtype => $itemtype, branchcode => $branchcode });
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            rule_name    => 'article_requests',
+            categorycode => $borrowertype,
+            itemtype     => $itemtype,
+            branchcode   => $branchcode
+        }
+    );
 
-    return q{} unless $issuing_rule;
-    return $issuing_rule->article_requests || q{}
+    return q{} unless $rule;
+    return $rule->rule_value || q{}
 }
 
 =head3 current_holds

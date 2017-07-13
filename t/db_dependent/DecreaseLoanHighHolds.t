@@ -25,6 +25,7 @@ use Koha::Biblio;
 use Koha::Item;
 use Koha::Holds;
 use Koha::Hold;
+use Koha::CirculationRules;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -96,15 +97,14 @@ for my $i ( 0 .. 5 ) {
 my $item   = pop(@items);
 my $patron = pop(@patrons);
 
-$builder->build(
+Koha::CirculationRules->set_rules(
     {
-        source => 'Issuingrule',
-        value => {
-            branchcode => '*',
-            categorycode => '*',
-            itemtype => $item->itype,
-            issuelength => '14',
-            lengthunit => 'days',
+        branchcode   => '*',
+        categorycode => '*',
+        itemtype     => $item->itype,
+        rules        => {
+            issuelength     => '14',
+            lengthunit      => 'days',
             reservesallowed => '99',
         }
     }

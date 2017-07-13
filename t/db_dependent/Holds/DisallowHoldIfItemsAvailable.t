@@ -5,8 +5,9 @@ use Modern::Perl;
 use C4::Context;
 use C4::Circulation;
 use C4::Items;
-use Koha::IssuingRule;
 use Koha::Items;
+use Koha::CirculationRules;
+
 use Test::More tests => 6;
 
 use t::lib::TestBuilder;
@@ -80,18 +81,20 @@ my $item2  = $builder->build_sample_item({
 });
 
 # Test hold_fulfillment_policy
-my $rule = Koha::IssuingRule->new(
+$dbh->do("DELETE FROM circulation_rules");
+Koha::CirculationRules->set_rules(
     {
         categorycode => '*',
         itemtype     => $itemtype,
         branchcode   => '*',
-        issuelength  => 7,
-        lengthunit   => 8,
-        reservesallowed => 99,
-        onshelfholds => 2,
+        rules        => {
+            issuelength     => 7,
+            lengthunit      => 8,
+            reservesallowed => 99,
+            onshelfholds    => 2,
+        }
     }
 );
-$rule->store();
 
 my $is = IsAvailableForItemLevelRequest( $item1, $patron1);
 is( $is, 0, "Item cannot be held, 2 items available" );
@@ -213,7 +216,7 @@ my $hold = $builder->build({
     }
 });
 
-$rule = Koha::IssuingRule->new(
+Koha::IssuingRule->new(
     {
         categorycode => '*',
         itemtype     => $itemtype2,
@@ -223,8 +226,7 @@ $rule = Koha::IssuingRule->new(
         reservesallowed => 99,
         onshelfholds => 0,
     }
-);
-$rule->store();
+)->store();
 
 $is = IsAvailableForItemLevelRequest( $item3, $patron1);
 is( $is, 1, "Item can be held, items in transit are not available" );

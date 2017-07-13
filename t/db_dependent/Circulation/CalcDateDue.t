@@ -10,6 +10,8 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use C4::Calendar;
 
+use Koha::CirculationRules;
+
 use_ok('C4::Circulation');
 
 my $schema = Koha::Database->new->schema;
@@ -23,14 +25,19 @@ my $issuelength = 10;
 my $renewalperiod = 5;
 my $lengthunit = 'days';
 
-Koha::Database->schema->resultset('Issuingrule')->create({
-  categorycode => $categorycode,
-  itemtype => $itemtype,
-  branchcode => $branchcode,
-  issuelength => $issuelength,
-  renewalperiod => $renewalperiod,
-  lengthunit => $lengthunit,
-});
+Koha::CirculationRules->search()->delete();
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => $categorycode,
+        itemtype     => $itemtype,
+        branchcode   => $branchcode,
+        rules        => {
+            issuelength   => $issuelength,
+            renewalperiod => $renewalperiod,
+            lengthunit    => $lengthunit,
+        }
+    }
+);
 
 #Set syspref ReturnBeforeExpiry = 1 and useDaysMode = 'Days'
 t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 1);

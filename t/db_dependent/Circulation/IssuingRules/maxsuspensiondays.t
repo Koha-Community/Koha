@@ -29,17 +29,16 @@ my $patron_category = $builder->build({ source => 'Category' });
 t::lib::Mocks::mock_userenv({ branchcode => $branchcode });
 
 # Test without maxsuspensiondays set
-Koha::IssuingRules->search->delete;
-$builder->build(
+Koha::CirculationRules->search->delete;
+Koha::CirculationRules->set_rules(
     {
-        source => 'Issuingrule',
-        value  => {
-            categorycode => '*',
-            itemtype     => '*',
-            branchcode   => '*',
-            firstremind  => 0,
-            finedays     => 2,
-            lengthunit   => 'days',
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rules        => {
+            firstremind => 0,
+            finedays    => 2,
+            lengthunit  => 'days',
             suspension_chargeperiod => 1,
         }
     }
@@ -87,8 +86,16 @@ is(
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
 
 # Test with maxsuspensiondays = 10 days
-my $issuing_rule = Koha::IssuingRules->search->next;
-$issuing_rule->maxsuspensiondays( 10 )->store;
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rules        => {
+            maxsuspensiondays => 10,
+        }
+    }
+);
 
 my $daysafter10 = dt_from_string->add_duration(DateTime::Duration->new(days => 10));
 AddIssue( $borrower, $barcode, $daysago20 );

@@ -38,7 +38,6 @@ use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
-use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Checkouts;
 use Koha::Patrons;
@@ -252,27 +251,24 @@ is(
 );
 
 # Set a simple circ policy
-$dbh->do('DELETE FROM issuingrules');
-Koha::CirculationRules->search()->delete();
-$dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
-                                issuelength, lengthunit,
-                                renewalsallowed, renewalperiod,
-                                norenewalbefore, auto_renew,
-                                fine, chargeperiod)
-      VALUES (?, ?, ?, ?,
-              ?, ?,
-              ?, ?,
-              ?, ?,
-              ?, ?
-             )
-    },
-    {},
-    '*', '*', '*', 25,
-    14, 'days',
-    1, 7,
-    undef, 0,
-    .10, 1
+$dbh->do('DELETE FROM circulation_rules');
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => '*',
+        rules        => {
+            reservesallowed => 25,
+            issuelength     => 14,
+            lengthunit      => 'days',
+            renewalsallowed => 1,
+            renewalperiod   => 7,
+            norenewalbefore => undef,
+            auto_renew      => 0,
+            fine            => .10,
+            chargeperiod    => 1,
+        }
+    }
 );
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
@@ -394,7 +390,15 @@ subtest "CanBookBeRenewed tests" => sub {
     );
 
     # Testing of feature to allow the renewal of reserved items if other items on the record can fill all needed holds
-    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => '*',
+            rule_name    => 'onshelfholds',
+            rule_value   => '1',
+        }
+    );
     t::lib::Mocks::mock_preference('AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 1, 'Bug 11634 - Allow renewal of item with unfilled holds if other available items can fill those holds');
@@ -609,7 +613,15 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Bug 7413
     # Test premature manual renewal
-    $dbh->do('UPDATE issuingrules SET norenewalbefore = 7');
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => '*',
+            rule_name    => 'norenewalbefore',
+            rule_value   => '7',
+        }
+    );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 0, 'Bug 7413: Cannot renew, renewal is premature');
@@ -644,7 +656,7 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Change policy so that loans can only be renewed exactly on due date (0 days prior to due date)
     # and test automatic renewal again
-    $dbh->do('UPDATE issuingrules SET norenewalbefore = 0');
+    $dbh->do(q{UPDATE circulation_rules SET rule_value = '0' WHERE rule_name = 'norenewalbefore'});
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
@@ -654,7 +666,7 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Change policy so that loans can be renewed 99 days prior to the due date
     # and test automatic renewal again
-    $dbh->do('UPDATE issuingrules SET norenewalbefore = 99');
+    $dbh->do(q{UPDATE circulation_rules SET rule_value = '99' WHERE rule_name = 'norenewalbefore'});
     ( $renewokay, $error ) =
       CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic' );
@@ -678,43 +690,116 @@ subtest "CanBookBeRenewed tests" => sub {
         my $ten_days_ahead  = dt_from_string->add( days => 10 );
         AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 9');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '7',
+                    no_auto_renewal_after => '9',
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 10');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '7',
+                    no_auto_renewal_after => '10',
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_late', 'Cannot auto renew, too late - no_auto_renewal_after is inclusive(returned code is auto_too_late)' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 11');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '7',
+                    no_auto_renewal_after => '11',
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_soon', 'Cannot auto renew, too soon - no_auto_renewal_after is defined(returned code is auto_too_soon)' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 11');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '11',
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0,            'Do not renew, renewal is automatic' );
         is( $error,     'auto_renew', 'Cannot renew, renew is automatic' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => -1 ) );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => undef,
+                    no_auto_renewal_after_hard_limit => dt_from_string->add( days => -1 ),
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => -1 ) );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '7',
+                    no_auto_renewal_after => '15',
+                    no_auto_renewal_after_hard_limit => dt_from_string->add( days => -1 ),
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_late', 'Cannot renew, too late(returned code is auto_too_late)' );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 1 ) );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => undef,
+                    no_auto_renewal_after_hard_limit => dt_from_string->add( days => 1 ),
+                }
+            }
+        );
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
@@ -736,7 +821,17 @@ subtest "CanBookBeRenewed tests" => sub {
         my $ten_days_ahead = dt_from_string->add( days => 10 );
         AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
 
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 11');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '11',
+                }
+            }
+        );
         C4::Context->set_preference('OPACFineNoRenewalsBlockAutoRenew','1');
         C4::Context->set_preference('OPACFineNoRenewals','10');
         C4::Context->set_preference('OPACFineNoRenewalsIncludeCredit','1');
@@ -874,31 +969,89 @@ subtest "CanBookBeRenewed tests" => sub {
         my $ten_days_before = dt_from_string->add( days => -10 );
         my $ten_days_ahead  = dt_from_string->add( days => 10 );
         AddIssue( $renewing_borrower, $item_to_auto_renew->{barcode}, $ten_days_ahead, undef, $ten_days_before, undef, { auto_renew => 1 } );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 7, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = NULL');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '7',
+                    no_auto_renewal_after => '',
+                    no_auto_renewal_after_hard_limit => undef,
+                }
+            }
+        );
         my $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date, undef, 'GetLatestAutoRenewDate should return undef if no_auto_renewal_after or no_auto_renewal_after_hard_limit are not defined' );
         my $five_days_before = dt_from_string->add( days => -5 );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 5, no_auto_renewal_after_hard_limit = NULL');
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '5',
+                    no_auto_renewal_after_hard_limit => undef,
+                }
+            }
+        );
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'minute' ),
             $five_days_before->truncate( to => 'minute' ),
             'GetLatestAutoRenewDate should return -5 days if no_auto_renewal_after = 5 and date_due is 10 days before'
         );
         my $five_days_ahead = dt_from_string->add( days => 5 );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = NULL');
+        $dbh->do(q{UPDATE circulation_rules SET rule_value = '10' WHERE rule_name = 'norenewalbefore'});
+        $dbh->do(q{UPDATE circulation_rules SET rule_value = '15' WHERE rule_name = 'no_auto_renewal_after'});
+        $dbh->do(q{UPDATE circulation_rules SET rule_value = NULL WHERE rule_name = 'no_auto_renewal_after_hard_limit'});
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '15',
+                    no_auto_renewal_after_hard_limit => undef,
+                }
+            }
+        );
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'minute' ),
             $five_days_ahead->truncate( to => 'minute' ),
             'GetLatestAutoRenewDate should return +5 days if no_auto_renewal_after = 15 and date_due is 10 days before'
         );
         my $two_days_ahead = dt_from_string->add( days => 2 );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = NULL, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 2 ) );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '',
+                    no_auto_renewal_after_hard_limit => dt_from_string->add( days => 2 ),
+                }
+            }
+        );
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'day' ),
             $two_days_ahead->truncate( to => 'day' ),
             'GetLatestAutoRenewDate should return +2 days if no_auto_renewal_after_hard_limit is defined and not no_auto_renewal_after'
         );
-        $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 15, no_auto_renewal_after_hard_limit = ?', undef, dt_from_string->add( days => 2 ) );
+        Koha::CirculationRules->set_rules(
+            {
+                categorycode => '*',
+                branchcode   => '*',
+                itemtype     => '*',
+                rules        => {
+                    norenewalbefore       => '10',
+                    no_auto_renewal_after => '15',
+                    no_auto_renewal_after_hard_limit => dt_from_string->add( days => 2 ),
+                }
+            }
+        );
         $latest_auto_renew_date = GetLatestAutoRenewDate( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $latest_auto_renew_date->truncate( to => 'day' ),
             $two_days_ahead->truncate( to => 'day' ),
@@ -906,11 +1059,20 @@ subtest "CanBookBeRenewed tests" => sub {
         );
 
     };
-
     # Too many renewals
 
     # set policy to forbid renewals
-    $dbh->do('UPDATE issuingrules SET norenewalbefore = NULL, renewalsallowed = 0');
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => '*',
+            rules        => {
+                norenewalbefore => undef,
+                renewalsallowed => 0,
+            }
+        }
+    );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber);
     is( $renewokay, 0, 'Cannot renew, 0 renewals allowed');
@@ -1145,27 +1307,23 @@ subtest "Bug 13841 - Do not create new 0 amount fines" => sub {
 subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     $dbh->do('DELETE FROM issues');
     $dbh->do('DELETE FROM items');
-    $dbh->do('DELETE FROM issuingrules');
-    Koha::CirculationRules->search()->delete();
-    $dbh->do(
-        q{
-        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, issuelength, lengthunit, renewalsallowed, renewalperiod,
-                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-        },
-        {},
-        '*', '*', '*', 25,
-        14,  'days',
-        1,   7,
-        undef,  0,
-        .10, 1
-    );
+    $dbh->do('DELETE FROM circulation_rules');
     Koha::CirculationRules->set_rules(
         {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
             rules        => {
-                maxissueqty => 20
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 1,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+                maxissueqty     => 20
             }
         }
     );
@@ -1214,22 +1372,58 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
         undef, undef, undef
     );
 
-    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                onshelfholds => 0,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfholds are disabled' );
 
-    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 0");
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                onshelfholds => 0,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled and onshelfholds is disabled' );
 
-    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                onshelfholds => 1,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 0 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower cannot renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is disabled and onshelfhold is enabled' );
 
-    C4::Context->dbh->do("UPDATE issuingrules SET onshelfholds = 1");
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            rules        => {
+                onshelfholds => 1,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference( 'AllowRenewalIfOtherItemsAvailable', 1 );
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
@@ -1706,20 +1900,21 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
         }
     )->unblessed;
 
-    # And the issuing rule
-    Koha::IssuingRules->search->delete;
-    my $rule = Koha::IssuingRule->new(
+    # And the circulation rule
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
         {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
-            issuelength  => 1,
-            firstremind  => 1,        # 1 day of grace
-            finedays     => 2,        # 2 days of fine per day of overdue
-            lengthunit   => 'days',
+            rules        => {
+                issuelength => 1,
+                firstremind => 1,        # 1 day of grace
+                finedays    => 2,        # 2 days of fine per day of overdue
+                lengthunit  => 'days',
+            }
         }
     );
-    $rule->store();
 
     # Patron cannot issue item_1, they have overdues
     my $five_days_ago = dt_from_string->subtract( days => 5 );
@@ -2017,19 +2212,20 @@ subtest 'AddReturn | is_overdue' => sub {
         }
     )->unblessed;
 
-    Koha::IssuingRules->search->delete;
-    my $rule = Koha::IssuingRule->new(
+    Koha::CirculationRules->search->delete;
+    my $rule = Koha::CirculationRules->set_rules(
         {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
-            issuelength  => 6,
-            lengthunit   => 'days',
-            fine         => 1, # Charge 1 every day of overdue
-            chargeperiod => 1,
+            rules        => {
+                issuelength  => 6,
+                lengthunit   => 'days',
+                fine         => 1,        # Charge 1 every day of overdue
+                chargeperiod => 1,
+            }
         }
     );
-    $rule->store();
 
     my $now   = dt_from_string;
     my $one_day_ago   = dt_from_string->subtract( days => 1 );

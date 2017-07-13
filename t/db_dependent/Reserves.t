@@ -190,12 +190,17 @@ $requesters{$branch_3} = Koha::Patron->new({
 # to request its items, while $branch_2 will allow its items
 # to fill holds from anywhere.
 
-$dbh->do('DELETE FROM issuingrules');
-$dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
-    {},
-    '*', '*', '*', 25
+$dbh->do('DELETE FROM circulation_rules');
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => '*',
+        categorycode => '*',
+        itemtype     => '*',
+        rules        => {
+            reservesallowed => 25,
+            holds_per_record => 1,
+        }
+    }
 );
 
 # CPL allows only its own patrons to request its items
@@ -545,6 +550,33 @@ my $limit = Koha::Item::Transfer::Limit->new(
 )->store();
 is( C4::Reserves::IsAvailableForItemLevelRequest($item, $patron, $pickup_branch), 0, "Item level request not available due to transfer limit" );
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '0' );
+
+my $itype = C4::Reserves::_get_itype($item);
+my $categorycode = $borrower->{categorycode};
+my $holdingbranch = $item->{holdingbranch};
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => $categorycode,
+        itemtype     => $itype,
+        branchcode   => $holdingbranch,
+        rules => {
+            onshelfholds => 1,
+        }
+    }
+);
+
+ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => $categorycode,
+        itemtype     => $itype,
+        branchcode   => $holdingbranch,
+        rules => {
+            onshelfholds => 0,
+        }
+    }
+);
+ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
 
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
 #   hold from A pos 1, today, no fut holds: MoveReserve should fill it

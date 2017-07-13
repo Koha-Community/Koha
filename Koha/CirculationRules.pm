@@ -1,7 +1,6 @@
 package Koha::CirculationRules;
 
-# Copyright Vaara-kirjastot 2015
-# Copyright Koha Development Team 2016
+# Copyright ByWater Solutions 2017
 #
 # This file is part of Koha.
 #
@@ -42,6 +41,10 @@ Koha::CirculationRules - Koha CirculationRule Object set class
 sub get_effective_rule {
     my ( $self, $params ) = @_;
 
+    $params->{categorycode} = '*' if exists($params->{categorycode}) && !defined($params->{categorycode});
+    $params->{branchcode}   = '*' if exists($params->{branchcode})   && !defined($params->{branchcode});
+    $params->{itemtype}     = '*' if exists($params->{itemtype})     && !defined($params->{itemtype});
+
     my $rule_name    = $params->{rule_name};
     my $categorycode = $params->{categorycode};
     my $itemtype     = $params->{itemtype};
@@ -55,6 +58,9 @@ sub get_effective_rule {
         $v = undef if $v and $v eq '*';
     }
 
+    my $order_by = $params->{order_by}
+      // { -desc => [ 'branchcode', 'categorycode', 'itemtype' ] };
+
     my $search_params;
     $search_params->{rule_name} = $rule_name;
 
@@ -65,14 +71,41 @@ sub get_effective_rule {
     my $rule = $self->search(
         $search_params,
         {
-            order_by => {
-                -desc => [ 'branchcode', 'categorycode', 'itemtype' ]
-            },
+            order_by => $order_by,
             rows => 1,
         }
     )->single;
 
     return $rule;
+}
+
+=head3 get_effective_rule
+
+=cut
+
+sub get_effective_rules {
+    my ( $self, $params ) = @_;
+
+    my $rules        = $params->{rules};
+    my $categorycode = $params->{categorycode};
+    my $itemtype     = $params->{itemtype};
+    my $branchcode   = $params->{branchcode};
+
+    my $r;
+    foreach my $rule (@$rules) {
+        my $effective_rule = $self->get_effective_rule(
+            {
+                rule_name    => $rule,
+                categorycode => $categorycode,
+                itemtype     => $itemtype,
+                branchcode   => $branchcode,
+            }
+        );
+
+        $r->{$rule} = $effective_rule->rule_value if $effective_rule;
+    }
+
+    return $r;
 }
 
 =head3 set_rule

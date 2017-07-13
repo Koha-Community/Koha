@@ -29,7 +29,7 @@ use Koha::Biblio;
 use Koha::Notice::Messages;
 use Koha::Patron;
 use Koha::Library::Group;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Caches;
 
 BEGIN {
@@ -46,7 +46,7 @@ our $cache = Koha::Caches->get_instance;
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-$dbh->do("DELETE FROM issuingrules");
+$dbh->do("DELETE FROM circulation_rules");
 
 my $biblio = Koha::Biblio->new()->store();
 ok( $biblio->id, 'Koha::Biblio created' );
@@ -172,33 +172,60 @@ $article_request->complete();
 $article_request->cancel();
 is( $biblio->article_requests_finished()->count(), 1, 'Canceled request not returned for article_requests_finished' );
 
-my $rule;
-$rule = $schema->resultset('Issuingrule')
-  ->new( { categorycode => '*', itemtype => '*', branchcode => '*', article_requests => 'yes' } )->insert();
+my $rule = Koha::CirculationRules->set_rule(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rule_name    => 'article_requests',
+        rule_value   => 'yes',
+    }
+);
 ok( $biblio->can_article_request($patron), 'Record is requestable with rule type yes' );
 is( $biblio->article_request_type($patron), 'yes', 'Biblio article request type is yes' );
 ok( $item->can_article_request($patron),   'Item is requestable with rule type yes' );
 is( $item->article_request_type($patron), 'yes', 'Item article request type is yes' );
 $rule->delete();
 
-$rule = $schema->resultset('Issuingrule')
-  ->new( { categorycode => '*', itemtype => '*', branchcode => '*', article_requests => 'bib_only' } )->insert();
+$rule = Koha::CirculationRules->set_rule(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rule_name    => 'article_requests',
+        rule_value   => 'bib_only',
+    }
+);
 ok( $biblio->can_article_request($patron), 'Record is requestable with rule type bib_only' );
 is( $biblio->article_request_type($patron), 'bib_only', 'Biblio article request type is bib_only' );
 ok( !$item->can_article_request($patron),  'Item is not requestable with rule type bib_only' );
 is( $item->article_request_type($patron), 'bib_only', 'Item article request type is bib_only' );
 $rule->delete();
 
-$rule = $schema->resultset('Issuingrule')
-  ->new( { categorycode => '*', itemtype => '*', branchcode => '*', article_requests => 'item_only' } )->insert();
+$rule = Koha::CirculationRules->set_rule(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rule_name    => 'article_requests',
+        rule_value   => 'item_only',
+    }
+);
 ok( $biblio->can_article_request($patron), 'Record is requestable with rule type item_only' );
 is( $biblio->article_request_type($patron), 'item_only', 'Biblio article request type is item_only' );
 ok( $item->can_article_request($patron),   'Item is not requestable with rule type item_only' );
 is( $item->article_request_type($patron), 'item_only', 'Item article request type is item_only' );
 $rule->delete();
 
-$rule = $schema->resultset('Issuingrule')
-  ->new( { categorycode => '*', itemtype => '*', branchcode => '*', article_requests => 'no' } )->insert();
+$rule = Koha::CirculationRules->set_rule(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rule_name    => 'article_requests',
+        rule_value   => 'no',
+    }
+);
 ok( !$biblio->can_article_request($patron), 'Record is requestable with rule type no' );
 is( $biblio->article_request_type($patron), 'no', 'Biblio article request type is no' );
 ok( !$item->can_article_request($patron),   'Item is not requestable with rule type no' );

@@ -114,11 +114,17 @@ my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionu
 
 my $dbh = C4::Context->dbh;
 $dbh->do('DELETE FROM reserves');
-$dbh->do('DELETE FROM issuingrules');
-    $dbh->do(q{
-        INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)
-    }, {}, '*', '*', '*', 1);
+$dbh->do('DELETE FROM circulation_rules');
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => '*',
+        rules        => {
+            reservesallowed => 1
+        }
+    }
+);
 
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $patron_1->borrowernumber,
     $biblio_1->biblionumber, undef, 1, undef, undef, undef, '', $item_1->itemnumber);

@@ -25,7 +25,6 @@ use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
-use Koha::IssuingRules;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -114,7 +113,7 @@ subtest 'new' => sub {
 };
 
 subtest 'find' => sub {
-    plan tests => 5;
+    plan tests => 4;
 
     # check find on a single PK
     my $patron = $builder->build({ source => 'Borrower' });
@@ -131,12 +130,6 @@ subtest 'find' => sub {
         $patron->{borrowernumber},
         { where => { surname => { '!=', $patron->{surname} }}},
     ), undef, 'Additional where clause in find call' );
-
-    # check find with a composite FK
-    my $rule = $builder->build({ source => 'Issuingrule' });
-    my @pk = ( $rule->{branchcode}, $rule->{categorycode}, $rule->{itemtype} );
-    is( ref(Koha::IssuingRules->find(@pk)), "Koha::IssuingRule",
-        'Find returned a Koha object for composite primary key' );
 
     is( Koha::Patrons->find(), undef, 'Find returns undef if no params passed' );
 };

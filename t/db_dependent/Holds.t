@@ -244,19 +244,27 @@ is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 my $foreign_biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
   = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_biblio->biblionumber);
-# Cleanup circulation rules
-$dbh->do('DELETE FROM circulation_rules');
-# $dbh->do(
-#     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
-#       VALUES (?, ?, ?, ?, ?)},
-#     {},
-#     '*', '*', '*', 25, 99
-# );
-$dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
-      VALUES (?, ?, ?, ?, ?)},
-    {},
-    '*', '*', 'CANNOT', 0, 99
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => '*',
+        rules        => {
+            reservesallowed  => 25,
+            holds_per_record => 99,
+        }
+    }
+);
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => 'CANNOT',
+        rules        => {
+            reservesallowed  => 0,
+            holds_per_record => 99,
+        }
+    }
 );
 
 # make sure some basic sysprefs are set
@@ -266,8 +274,8 @@ t::lib::Mocks::mock_preference('item-level_itypes', 1);
 # if IndependentBranches is OFF, a $branch_1 patron can reserve an $branch_2 item
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 
-ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status} eq 'OK',
+is(
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status}, 'OK',
     '$branch_1 patron allowed to reserve $branch_2 item with IndependentBranches OFF (bug 2394)'
 );
 
@@ -354,13 +362,17 @@ ok(
 
 # Test branch item rules
 
-$dbh->do('DELETE FROM issuingrules');
 $dbh->do('DELETE FROM circulation_rules');
-$dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
-    {},
-    '*', '*', '*', 25
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => '*',
+        rules        => {
+            reservesallowed  => 25,
+            holds_per_record => 99,
+        }
+    }
 );
 Koha::CirculationRules->set_rules(
     {
@@ -419,11 +431,16 @@ $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
 ( $item_bibnum, $item_bibitemnum, $itemnumber )
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
 
-$dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
-      VALUES (?, ?, ?, ?, ?)},
-    {},
-    '*', '*', 'ONLY1', 1, 99
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => '*',
+        branchcode   => '*',
+        itemtype     => 'ONLY1',
+        rules        => {
+            reservesallowed  => 1,
+            holds_per_record => 99,
+        }
+    }
 );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
@@ -444,20 +461,22 @@ subtest 'Test max_holds per library/patron category' => sub {
     plan tests => 6;
 
     $dbh->do('DELETE FROM reserves');
-    $dbh->do('DELETE FROM issuingrules');
     $dbh->do('DELETE FROM circulation_rules');
 
     $biblio = $builder->build_sample_biblio({ itemtype => 'TEST' });
     ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
       AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
         $biblio->biblionumber );
-    $dbh->do(
-        q{
-            INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
-            VALUES (?, ?, ?, ?, ?)
-        },
-        {},
-        '*', '*', 'TEST', 99, 99
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => 'TEST',
+            rules        => {
+                reservesallowed  => 99,
+                holds_per_record => 99,
+            }
+        }
     );
     AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
     AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );

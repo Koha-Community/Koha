@@ -115,19 +115,20 @@ my $item3 = $builder->build(
     }
 );
 
-my $rules_rs = Koha::Database->new()->schema()->resultset('Issuingrule');
-$rules_rs->delete();
+Koha::CirculationRules->delete();
 
 # Test GetMaxPatronHoldsForRecord and GetHoldRule
-my $rule1 = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => '*',
-        itemtype         => '*',
-        branchcode       => '*',
-        reservesallowed  => 1,
-        holds_per_record => 1,
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rules        => {
+            reservesallowed  => 1,
+            holds_per_record => 1,
+        }
     }
-)->insert();
+);
 
 t::lib::Mocks::mock_preference('item-level_itypes', 1); # Assuming the item type is defined at item level
 
@@ -144,15 +145,17 @@ is( $rule->{branchcode},       '*', 'Got rule with universal branchcode' );
 is( $rule->{reservesallowed},  1,   'Got reservesallowed of 1' );
 is( $rule->{holds_per_record}, 1,   'Got holds_per_record of 1' );
 
-my $rule2 = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => $category->{categorycode},
-        itemtype         => '*',
-        branchcode       => '*',
-        reservesallowed  => 2,
-        holds_per_record => 2,
+        categorycode => $category->{categorycode},
+        itemtype     => '*',
+        branchcode   => '*',
+        rules        => {
+            reservesallowed  => 2,
+            holds_per_record => 2,
+        }
     }
-)->insert();
+);
 
 $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
 is( $max, 2, 'GetMaxPatronHoldsForRecord returns max of 2' );
@@ -167,15 +170,17 @@ is( $rule->{branchcode},       '*',                       'Got rule with univers
 is( $rule->{reservesallowed},  2,                         'Got reservesallowed of 2' );
 is( $rule->{holds_per_record}, 2,                         'Got holds_per_record of 2' );
 
-my $rule3 = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => $category->{categorycode},
-        itemtype         => $itemtype1->{itemtype},
-        branchcode       => '*',
-        reservesallowed  => 3,
-        holds_per_record => 3,
+        categorycode => $category->{categorycode},
+        itemtype     => $itemtype1->{itemtype},
+        branchcode   => '*',
+        rules        => {
+            reservesallowed  => 3,
+            holds_per_record => 3,
+        }
     }
-)->insert();
+);
 
 $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
 is( $max, 3, 'GetMaxPatronHoldsForRecord returns max of 3' );
@@ -190,15 +195,17 @@ is( $rule->{branchcode},       '*',                       'Got rule with univers
 is( $rule->{reservesallowed},  3,                         'Got reservesallowed of 3' );
 is( $rule->{holds_per_record}, 3,                         'Got holds_per_record of 3' );
 
-my $rule4 = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => $category->{categorycode},
-        itemtype         => $itemtype2->{itemtype},
-        branchcode       => '*',
-        reservesallowed  => 4,
-        holds_per_record => 4,
+        categorycode => $category->{categorycode},
+        itemtype     => $itemtype2->{itemtype},
+        branchcode   => '*',
+        rules        => {
+            reservesallowed  => 4,
+            holds_per_record => 4,
+        }
     }
-)->insert();
+);
 
 $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
 is( $max, 4, 'GetMaxPatronHoldsForRecord returns max of 4' );
@@ -213,15 +220,17 @@ is( $rule->{branchcode},       '*',                       'Got rule with univers
 is( $rule->{reservesallowed},  4,                         'Got reservesallowed of 4' );
 is( $rule->{holds_per_record}, 4,                         'Got holds_per_record of 4' );
 
-my $rule5 = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => $category->{categorycode},
-        itemtype         => $itemtype2->{itemtype},
-        branchcode       => $library->{branchcode},
-        reservesallowed  => 5,
-        holds_per_record => 5,
+        categorycode => $category->{categorycode},
+        itemtype     => $itemtype2->{itemtype},
+        branchcode   => $library->{branchcode},
+        rules        => {
+            reservesallowed  => 5,
+            holds_per_record => 5,
+        }
     }
-)->insert();
+);
 
 $max = GetMaxPatronHoldsForRecord( $patron->{borrowernumber}, $biblio->{biblionumber} );
 is( $max, 5, 'GetMaxPatronHoldsForRecord returns max of 1' );
@@ -236,11 +245,7 @@ is( $rule->{branchcode},       $library->{branchcode},    'Got rule with specifi
 is( $rule->{reservesallowed},  5,                         'Got reservesallowed of 5' );
 is( $rule->{holds_per_record}, 5,                         'Got holds_per_record of 5' );
 
-$rule1->delete();
-$rule2->delete();
-$rule3->delete();
-$rule4->delete();
-$rule5->delete();
+Koha::CirculationRules->delete();
 
 my $holds = Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } );
 is( $holds->forced_hold_level, undef, "No holds does not force an item or record level hold" );
@@ -266,15 +271,17 @@ is( $holds->forced_hold_level, 'item', "Item level hold forces item level holds"
 $hold->delete();
 
 # Test multi-hold via AddReserve
-$rule = $rules_rs->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode     => '*',
-        itemtype         => '*',
-        branchcode       => '*',
-        reservesallowed  => 2,
-        holds_per_record => 2,
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        rules        => {
+            reservesallowed  => 2,
+            holds_per_record => 2,
+        }
     }
-)->insert();
+);
 
 my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
 is( $can->{status}, 'OK', 'Hold can be placed with 0 holds' );
