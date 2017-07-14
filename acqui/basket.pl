@@ -134,10 +134,10 @@ if ( $op eq 'delete_confirm' ) {
             my $biblio = Koha::Biblios->find( $biblionumber );
             my $countbiblio = CountBiblioInOrders($biblionumber);
             my $ordernumber = $myorder->{'ordernumber'};
-            my $has_subscriptions = $biblio->subscriptions->count;
+            my $cnt_subscriptions = $biblio->subscriptions->count;
             my $itemcount = $biblio->items->count;
             my $error;
-            if ($countbiblio == 0 && $itemcount == 0 && not $has_subscriptions ) {
+            if ($countbiblio == 0 && $itemcount == 0 && not $cnt_subscriptions ) {
                 $error = DelBiblio($myorder->{biblionumber}) }
             else {
                 push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
@@ -145,7 +145,7 @@ if ( $op eq 'delete_confirm' ) {
                                          author=> $myorder->{'author'},
                                          countbiblio=> $countbiblio,
                                          itemcount=>$itemcount,
-                                         subscriptions => $has_subscriptions};
+                                         subscriptions => $cnt_subscriptions};
             }
             if ($error) {
                 push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
@@ -474,20 +474,20 @@ sub get_order_infos {
         my $biblio = Koha::Biblios->find( $biblionumber );
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $order->{'ordernumber'};
-        my $has_subscriptions = $biblio->subscriptions->count;
+        my $cnt_subscriptions = $biblio->subscriptions->count;
         my $itemcount   = $biblio->items->count;
         my $holds_count = $biblio->holds->count;
         my @items = GetItemnumbersFromOrder( $ordernumber );
         my $itemholds  = $biblio->holds->search({ itemnumber => { -in => \@items } })->count;
 
         # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !($has_subscriptions) && !($holds_count);
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !($cnt_subscriptions) && !($holds_count);
         $line{items}                = ($itemcount) - (scalar @items);
         $line{left_item}            = 1 if $line{items} >= 1;
         $line{left_biblio}          = 1 if $countbiblio > 1;
         $line{biblios}              = $countbiblio - 1;
-        $line{left_subscription}    = 1 if $has_subscriptions;
-        $line{subscriptions}        = $has_subscriptions;
+        $line{left_subscription}    = 1 if $cnt_subscriptions;
+        $line{subscriptions}        = $cnt_subscriptions;
         ($holds_count >= 1) ? $line{left_holds} = 1 : $line{left_holds} = 0;
         $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
         $line{holds}                = $holds_count;
