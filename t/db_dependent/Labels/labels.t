@@ -87,7 +87,7 @@ sub instantiateSheetFromJSON {
     is($region->getBoundingBox(), 1, "Region boundingBox");
 
     my $elements = $region->getElements();
-    is(scalar(@$elements), 2, "Elements count");
+    is(scalar(@$elements), 3, "Elements count");
     my $element = $elements->[1];
     is($element->getDataSource(), 'homebranch.branchname', "Element dataSource");
     is($element->getPosition()->{left}, 13, "Element position left");
@@ -96,6 +96,12 @@ sub instantiateSheetFromJSON {
     is($element->getColour()->{g}, 196, "Element colour g");
     is($element->getColour()->{b}, 0, "Element colour b");
     is($element->getParent(), $region, "Element parent");
+    $element = $elements->[2];
+    is($element->getDataSource(), 'item.barcode', "Element dataSource");
+    is($element->getDataFormat(), 'barcode39', 'Element dataFormat');
+    my $customAttr = $element->getCustomAttr();
+    is($customAttr->{xScale}, '0.75', "Element customAttr - xScale");
+    is($customAttr->{yScale}, '1.0',  "Element customAttr - yScale");
 }
 
 my $expectedPdfFilePath = Cwd::abs_path(__FILE__);
@@ -125,60 +131,6 @@ sub verifyPdfOutput {
     my $resultText   = `pdftotext -layout -enc UTF-8 -eol unix $createdPdfFilePath -`;
     my $difference = Text::Diff::diff(\$expectedText, \$resultText, {});
     ok(not($difference), "The .pdf persists");
-}
-
-subtest "REST interfaces" => \&restInterfaces;
-sub restInterfaces {
-    my ($t) = t::lib::WebDriverFactory::getUserAgentDrivers('mojolicious');
-
-    $t = $t->post_ok('/labels/sheets' => json => undef);
-    $t->json_is('/name',      $sheet->getName());
-    $t->json_is('/version',   $sheet->getVersion());
-
-    $t = $t->get_ok('/labels/sheets');
-    $t->json_is('/0/name',    $sheet->getName());
-    $t->json_is('/0/version', $sheet->getVersion());
-
-    $t = $t->get_ok('/labels/sheets/'.$sheet->getId());
-    $t->json_is('/name',      $sheet->getName());
-    $t->json_is('/timestamp', $sheet->getTimestamp());
-
-    my $sheetilaptor; #delme
-    $t = $t->post_ok('/labels/sheets' => json => $sheetilaptor);
-    $t->json_is('/name',      $sheetilaptor->{name});
-    $t->json_is('/version',   $sheetilaptor->{version});
-
-    $sheetilaptor->{name} = "unistar";
-    $t = $t->put_ok('/labels/sheets/'.$sheetilaptor->{id} => json => $sheetilaptor);
-    $t->json_is('/name',      $sheetilaptor->{name});
-
-    #Get the old version since the last modified
-    $t = $t->get_ok('/labels/sheets/'.$sheetilaptor->{id}+'/'+$sheetilaptor->{version});
-    $t->json_is('/name',      "unititled");
-
-    #Make a third revision of $sheetilaptor
-    $sheetilaptor->{name} = "unisex";
-    $t = $t->put_ok('/labels/sheets/'.$sheetilaptor->{id} => json => $sheetilaptor);
-    $t->json_is('/name',      $sheetilaptor->{name});
-
-    #Get all the sheets and their versions
-    $t = $t->get_ok('/labels/sheets/versions');
-    $t->json_has('/0/1.2');
-    $t->json_has('/1/0.2');
-    $t->json_has('/1/0.3');
-    $t->json_has('/1/0.4');
-
-    #Delete the default version (newest)
-    $t = $t->delete_ok('/labels/sheets/'.$sheetilaptor->{id});
-    #Fail getting the newest version, since it is deleted, instead get the second version
-    $t = $t->get_ok('/labels/sheets/'+$sheetilaptor->{id});
-    $t->json_is('/name',      "unititled");
-
-    #Delete all sheetilaptor variants
-    $t = $t->delete_ok('/labels/sheets/'.$sheetilaptor->{id}+'/631373.00');
-
-    $t = $t->get_ok('/labels/sheets/versions');
-    $t->json_has('/0/1.2');
 }
 
 t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
