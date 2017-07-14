@@ -773,10 +773,11 @@ sub GetBudgetByCode {
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        SELECT *
+        SELECT aqbudgets.*
         FROM aqbudgets
+        JOIN aqbudgetperiods USING (budget_period_id)
         WHERE budget_code = ?
-        ORDER BY budget_id DESC
+        ORDER BY budget_period_active DESC, budget_id DESC
         LIMIT 1
     };
     my $sth = $dbh->prepare( $query );
