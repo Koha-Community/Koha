@@ -78,7 +78,7 @@ sub toHash {
 }
 sub setName {
     my ($self, $name) = @_;
-    unless ($name =~ /^.+$/) {
+    unless (defined $name && $name =~ /^.+$/) {
         Koha::Exception::BadParameter->throw(error => __PACKAGE__.":: Parameter 'name' is missing");
     }
     $self->{name} = $name;

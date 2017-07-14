@@ -74,11 +74,23 @@
   "/items/{itemnumber}": {
     "$ref": "paths/items.json#/~1items~1{itemnumber}"
   },
+  "/labels/sheets": {
+    "$ref": "paths/labels.json#/~1labels~1sheets"
+  },
+  "/labels/sheets/version": {
+    "$ref": "paths/labels.json#/~1labels~1sheets~1version"
+  },
+  "/labels/sheets/{sheet_identifier}/{sheet_version}": {
+    "$ref": "paths/labels.json#/~1labels~1sheets~1{sheet_identifier}~1{sheet_version}"
+  },
   "/libraries": {
     "$ref": "paths/libraries.json#/~1libraries"
   },
   "/libraries/{branchcode}": {
     "$ref": "paths/libraries.json#/~1libraries~1{branchcode}"
+  },
+  "/lists/{listname}/contents": {
+    "$ref": "paths/lists.json#/~1lists~1{listname}~1contents"
   },
   "/messaging_preferences": {
     "$ref": "paths/messagingpreferences.json#/~1messaging_preferences"
@@ -118,17 +130,5 @@
   },
   "/payments/pos/cpu/{invoicenumber}/report": {
     "$ref": "paths/payments/pos/cpu.json#/~1payments~1pos~1cpu~1{invoicenumber}~1report"
-  },
-  "/labels/sheets": {
-    "$ref": "paths/labels.json#/~1labels~1sheets"
-  },
-  "/labels/sheets/version": {
-    "$ref": "paths/labels.json#/~1labels~1sheets~1version"
-  },
-  "/labels/sheets/{sheet_identifier}/{sheet_version}": {
-    "$ref": "paths/labels.json#/~1labels~1sheets~1{sheet_identifier}~1{sheet_version}"
-  },
-  "/lists/{listname}/contents": {
-    "$ref": "paths/lists.json#/~1lists~1{listname}~1contents"
   }
 }
