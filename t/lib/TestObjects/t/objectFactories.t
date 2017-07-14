@@ -481,8 +481,7 @@ sub testLetterTemplateFactory {
     my $subtestContext = {};
     ##Create and Delete using dependencies in the $testContext instantiated in previous subtests.
     my $f = t::lib::TestObjects::LetterTemplateFactory->new();
-    my $hashLT = {letter_id => 'circulation-ODUE1-CPL-print',
-                module => 'circulation',
+    my $hashLT = {module => 'circulation',
                 code => 'ODUE1',
                 branchcode => 'CPL',
                 name => 'Notice1',
