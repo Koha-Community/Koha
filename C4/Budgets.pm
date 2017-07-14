@@ -916,7 +916,12 @@ sub CanUserUseBudget {
     my ($borrower, $budget, $userflags) = @_;
 
     if (not ref $borrower) {
-        $borrower = Koha::Patrons->find( $borrower )->unblessed;
+        $borrower = Koha::Patrons->find( $borrower );
+        if ( $borrower ) {
+            $borrower = $borrower->unblessed;
+        } else {
+            return 0;
+        }
     }
     if (not ref $budget) {
         $budget = GetBudget($budget);
@@ -999,7 +1004,12 @@ sub CanUserModifyBudget {
     my ($borrower, $budget, $userflags) = @_;
 
     if (not ref $borrower) {
-        $borrower = Koha::Patrons->find( $borrower )->unblessed;
+        $borrower = Koha::Patrons->find( $borrower );
+        if ( $borrower ) {
+            $borrower = $borrower->unblessed;
+        } else {
+            return 0;
+        }
     }
     if (not ref $budget) {
         $budget = GetBudget($budget);
