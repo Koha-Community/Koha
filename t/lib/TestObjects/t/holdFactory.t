@@ -70,7 +70,9 @@ is($holds2->{'better hold'}->{isbn},
 
 t::lib::TestObjects::ObjectFactory->tearDownTestContext($subtestContext);
 
-my $holds_deleted = C4::Reserves::GetReservesFromBiblionumber({biblionumber => $hold->{biblio}->{biblionumber}});
-ok (not(@$holds_deleted), "Holds deleted");
+my $holds = Koha::Holds->search({
+    biblionumber => $hold->{biblio}->{biblionumber}
+});
+is ($holds->count, 0, "Holds deleted");
 
 done_testing();
