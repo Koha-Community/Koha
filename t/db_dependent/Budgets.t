@@ -117,7 +117,8 @@ is( AddBudget(), undef, 'AddBuget without argument returns undef' );
 my $budgets = GetBudgets();
 is( @$budgets, 0, 'GetBudgets returns the correct number of budgets' );
 
-$bpid = AddBudgetPeriod($my_budgetperiod);
+$bpid = AddBudgetPeriod($my_budgetperiod); #this is an active budget
+
 my $my_budget = {
     budget_code      => 'ABCD',
     budget_amount    => '123.132000',
@@ -176,9 +177,26 @@ is( @$budgets, 1, 'GetBudgets With Order Getting Active budgetPeriod OK');
 my $budget_name = GetBudgetName( $budget_id );
 is($budget_name, $my_budget->{budget_name}, "Test the GetBudgetName routine");
 
+my $my_inactive_budgetperiod = { #let's add an inactive
+    budget_period_startdate   => '2010-01-01',
+    budget_period_enddate     => '2010-12-31',
+    budget_period_description => 'MODIF_MAPERI',
+    budget_period_active      => 0,
+};
+my $bpid_i = AddBudgetPeriod($my_inactive_budgetperiod); #this is an inactive budget
+
+my $my_budget_inactive = {
+    budget_code      => 'EFG',
+    budget_amount    => '123.132000',
+    budget_name      => 'Periodiques',
+    budget_notes     => 'This is a note',
+    budget_period_id => $bpid_i,
+};
+my $budget_id_inactive = AddBudget($my_budget_inactive);
+
 my $budget_code = $my_budget->{budget_code};
 my $budget_by_code = GetBudgetByCode( $budget_code );
-is($budget_by_code->{budget_id}, $budget_id, "GetBudgetByCode, check id");
+is($budget_by_code->{budget_id}, $budget_id, "GetBudgetByCode, check id"); #this should match the active budget, not the inactive
 is($budget_by_code->{budget_notes}, $my_budget->{budget_notes}, "GetBudgetByCode, check notes");
 
 my $second_budget_id = AddBudget({
@@ -195,7 +213,7 @@ ok( $budgets->[0]->{budget_name} lt $budgets->[1]->{budget_name}, 'default sort 
 
 is( DelBudget($budget_id), 1, 'DelBudget returns true' );
 $budgets = GetBudgets();
-is( @$budgets, 1, 'GetBudgets returns the correct number of budget periods' );
+is( @$budgets, 2, 'GetBudgets returns the correct number of budget periods' );
 
 
 # GetBudgetHierarchySpent and GetBudgetHierarchyOrdered
