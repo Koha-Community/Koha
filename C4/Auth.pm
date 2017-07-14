@@ -1775,10 +1775,10 @@ sub checkpw {
     } elsif ($ldap) {
         $debug and print STDERR "## checkpw - checking LDAP\n";
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
-        if ( $retval ) {
+        if ( $retval == 1 ) {
             @return = ( $retval, $retcard, $retuserid );
+            $passwd_ok = 1;
         }
-        $passwd_ok = 1 if $retval == 1;
         $check_internal_as_fallback = 1 if $retval == 0;
 
     } elsif ( $cas && $query && $query->param('ticket') ) {
@@ -1823,12 +1823,12 @@ sub checkpw {
         $passwd_ok = 1 if $return[0] > 0; # 1 or 2
     }
 
-    unless ( $passwd_ok ) { # Auth failed
-        $patron->update({ login_attempts => $patron->login_attempts + 1 }) if $patron;
-    } elsif ( $patron ) {
-        # FIXME Koha::Object->update should return a Koha::Object to allow chaining
-        $patron->update({ login_attempts => 0 });
-        $patron->store;
+    if( $patron ) {
+        if ( $passwd_ok ) {
+            $patron->update({ login_attempts => 0 });
+        } else {
+            $patron->update({ login_attempts => $patron->login_attempts + 1 });
+        }
     }
     return @return;
 }
