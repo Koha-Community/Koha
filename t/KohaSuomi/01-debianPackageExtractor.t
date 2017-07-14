@@ -93,3 +93,5 @@ subtest "KohaSuomi specific debian packages discovered", sub {
         ok(not($found), "$ksPackName not discovered");
     }
 };
+
+done_testing();
