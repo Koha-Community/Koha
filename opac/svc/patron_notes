@@ -27,10 +27,10 @@ use CGI;
 use C4::Output qw(:DEFAULT :ajax);
 use C4::Scrubber;
 use C4::Circulation;
-use C4::Members;
 use C4::Biblio;
 use Koha::Checkouts;
 use Koha::DateUtils;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -57,7 +57,7 @@ if ($is_ajax) {
         my $issue_id = $query->param('issue_id');
         my $clean_note = $scrubber->scrub($note);
         my $status = "saved";
-        my ($member, $issue);
+        my ($patron, $issue);
 
         my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user({
             template_name   => "opac-user.tt",
@@ -68,7 +68,7 @@ if ($is_ajax) {
 
         # verify issue_id
         if ( $issue_id =~ /\d+/ ) {
-            $member = GetMember(borrowernumber => $borrowernumber);
+            $patron = Koha::Patrons->find( $borrowernumber );
             $issue = Koha::Checkouts->find($issue_id);
             if ( $issue->borrowernumber != $borrowernumber ) {
                 $status = "fail";
@@ -86,10 +86,10 @@ if ($is_ajax) {
                     branchcode => $branch,
                     tables => {
                         'biblio' => $biblionumber,
-                        'borrowers' => $member->{borrowernumber},
+                        'borrowers' => $borrowernumber,
                     },
                 );
-                C4::Message->enqueue($letter, $member, 'email');
+                C4::Message->enqueue($letter, $patron->unblessed, 'email');
             } else { # note empty, i.e removed
                 $status = "removed";
             }
