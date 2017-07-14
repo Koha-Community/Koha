@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 133;
+use Test::More tests => 134;
 
 use C4::Budgets;
 
@@ -135,6 +135,7 @@ my $budget16 = {
 
 my $userenv = {};
 
+ok (!CanUserModifyBudget(0, undef, {}));
 
 ok (CanUserModifyBudget($borrower1, $budget1, {superlibrarian => 1}));
 ok (CanUserModifyBudget($borrower1, $budget1, {
