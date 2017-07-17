@@ -70,7 +70,7 @@ sub addItem{
     my $copyDetail = $_[0];
 
     if($copyDetail && $copyDetail->isa($self->getItemObjectName())){
-        push $self->{copyDetails}, $copyDetail;
+        push @{$self->{copyDetails}}, $copyDetail;
     }
 }
 
@@ -158,12 +158,12 @@ sub getIsbns {
      my $isbns = [];
      my $isbnSeller = $self->getSellerIdentifier();
      if($isbnSeller && $isbnSeller ne ''){
-         push $isbns, $isbnSeller;
+         push @$isbns, $isbnSeller;
      }
 
      my $isbnEan = $self->getEanIdentifier();
      if($isbnEan && $isbnEan ne '' ){
-         push $isbns, $isbnEan;
+         push @$isbns, $isbnEan;
      }
      return $isbns;
  }

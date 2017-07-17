@@ -72,12 +72,12 @@ sub getIsbns {
      my $isbns = [];
      my $isbnh = $self->getIsbnHyphen();
      if($isbnh && $isbnh ne '' ){
-         push $isbns, $isbnh;
+         push @$isbns, $isbnh;
      }
 
      my $control001 = $self->getControl001();
      if($control001 && $control001 ne ''){
-          push $isbns, $control001;
+          push @$isbns, $control001;
      }
      return $isbns;
  }

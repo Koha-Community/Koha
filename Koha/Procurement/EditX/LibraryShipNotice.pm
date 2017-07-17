@@ -139,7 +139,7 @@ sub addItem{
     my $item = $_[0];
 
     if($item && $item->isa($self->getItemObjectName())){
-        push $self->{items}, $item;
+        push @{$self->{items}}, $item;
     }
 }
 
