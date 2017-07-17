@@ -122,6 +122,12 @@ sub _mergeDefaultConfig {
     my $conf = $testServerConfigs->{ $params->{type} };
     Koha::Exception::BadParameter->throw(error => "t::lib::Page:> Unknown 'type'-parameter '".$params->{type}."'. Values 'opac', 'staff' and 'rest' are supported.")
                 unless $conf;
+
+    unless ($conf->{base_url} =~ /:\/\//) {
+        warn 't::lib::Page:> Missing protocol definition at '.
+            "KOHA_CONF.testservers.$params->{type}.base_url";
+    }
+
     #Merge given $params-config on top of the $KOHA_CONF's testservers-directives
     @$conf{keys %$params} = values %$params;
     return $conf;
