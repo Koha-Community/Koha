@@ -114,14 +114,15 @@ my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionu
 
 my $dbh = C4::Context->dbh;
 $dbh->do('DELETE FROM reserves');
-$dbh->do('DELETE FROM circulation_rules');
+Koha::CirculationRules->search()->delete();
 Koha::CirculationRules->set_rules(
     {
         categorycode => '*',
         branchcode   => '*',
         itemtype     => '*',
         rules        => {
-            reservesallowed => 1
+            reservesallowed => 1,
+            holds_per_record => 99
         }
     }
 );
