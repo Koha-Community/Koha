@@ -17,12 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 16;
 use Encode qw( is_utf8 );
 
 use MARC::Record;
-
-use t::lib::Mocks;
 
 use utf8;
 use open ':std', ':encoding(utf8)';
@@ -72,28 +70,5 @@ ok( Encode::is_utf8($record->subfield('100','a')) &&
     'SetUTF8Flag sets the UTF-8 flag to all subfields' );
 
 is( nsb_clean("Le Moyen Âge"), "Le Moyen Âge", "nsb_clean removes  and " );
-
-subtest 'SetMarcUnicodeFlag' => sub {
-    plan tests => 2;
-    # TODO This should be done in MARC::Record
-    my $leader                  = '012345678X0             ';
-    my $expected_marc21_leader  = '012345678a0             '; # position 9 of leader must be 'a'
-    my $expected_unimarc_leader = '012345678X0             '; # position 9 of leader must not be changed
-    # Note that position 9 of leader should be blank for UNIMARC, but as it is not related to encoding
-    # we do not want to change it
-
-    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
-    my $marc21_record = MARC::Record->new;
-    $marc21_record->leader($leader);
-    SetMarcUnicodeFlag( $marc21_record, C4::Context->preference('marcflavour') );
-    is( $marc21_record->leader, $expected_marc21_leader, 'Leader 9 for MARC21 mush be "a"' );
-
-    t::lib::Mocks::mock_preference( 'marcflavour',             'UNIMARC' );
-    t::lib::Mocks::mock_preference( 'UNIMARCField100Language', 'fre' );
-    my $unimarc_record = MARC::Record->new;
-    $unimarc_record->leader($leader);
-    SetMarcUnicodeFlag( $unimarc_record, C4::Context->preference('marcflavour') );
-    is( $unimarc_record->leader, $expected_unimarc_leader, 'Leader 9 for UNIMARC must be blank' );
-};
 
 1;
