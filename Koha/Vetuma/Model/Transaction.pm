@@ -247,7 +247,6 @@ sub addPaymentRow{
     my $transaction = $_[0];
 
     my $dbh = C4::Context->dbh;
-    my $strsth = 'INSERT INTO accountlines ';
 
     my $borrowernumber = $self->getBorrowerNumber();
     my $nextaccntno = getnextacctno($borrowernumber);
