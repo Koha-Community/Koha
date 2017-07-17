@@ -77,7 +77,9 @@ sub _get_biblio_from_xisbn {
 
     my $biblio = Koha::Biblios->find( $biblionumber );
     return unless $biblio;
-    $biblio->{normalized_isbn} = GetNormalizedISBN($biblio->biblioitem->isbn);
+    my $isbn = $biblio->biblioitem->isbn;
+    $biblio = $biblio->unblessed;
+    $biblio->{normalized_isbn} = GetNormalizedISBN($isbn);
     return $biblio;
 }
 
