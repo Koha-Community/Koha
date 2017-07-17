@@ -136,11 +136,14 @@
                             [% IF ( item_header_loop ) %]
                                 <table id="items" class="table table-bordered table-condensed table-striped">
                                     <caption>Holdings</caption>
+                                    <thead>
                                         <tr>
                                             [% FOREACH header IN item_header_loop %]
                                                 <th>[% header %]</th>
                                             [% END %]
                                         </tr>
+                                    </thead>
+                                    <tbody>
                                         [% FOREACH item IN item_loop %]
                                             <tr>
                                                 [% FOREACH sf_code IN item_subfield_codes %]
@@ -148,6 +151,7 @@
                                                 [% END %]
                                             </tr>
                                         [% END %]
+                                    </tbody>
                                 </table>
                             [% ELSE %]
                                 <p>No items available.</p>
