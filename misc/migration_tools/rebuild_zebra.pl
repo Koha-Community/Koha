@@ -684,6 +684,7 @@ sub get_raw_marc_record {
             warn "error retrieving biblio $record_number";
             return;
         }
+        _protectZebraFromTooManyItems($marc);
     } else {
         eval { $marc = GetAuthority($record_number); };
         if ($@) {
@@ -796,6 +797,36 @@ sub do_indexing {
     system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name init") if $reset_index;
     system("zebraidx -c $zebra_config $zebraidx_log_opt $noshadow -g $record_format -d $zebra_db_name $op $record_dir");
     system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name commit") unless $noshadow;
+}
+
+=head2 _protectZebraFromTooManyItems
+
+    _protectZebraFromTooManyItems($marcRecord);
+
+Finds the repeatable items-field inside the given MARC::Record and drops all but the first handful of new items.
+Zebra cannot index a record if it is over 1MB in size, and this limit can be reached by injecting the Item-data
+to the MARC-Record.
+For ex. serials have one MARC record with possibly thousands of items.
+
+=cut
+
+my ($itemsBarcodeFieldCode, $itemsBarcodeSubfieldCode, $serialFieldCode, $serialSubfieldCode);
+sub _protectZebraFromTooManyItems {
+    use Modern::Perl; #WTF this script doesn't even have warnings on. Goddamn
+    my ($marc) = @_;
+
+    my ($itemsBarcodeFieldCode, $itemsBarcodeSubfieldCode) = C4::Biblio::GetMarcFromKohaField('items.barcode','') unless $itemsBarcodeFieldCode;
+    my ($serialFieldCode, $serialSubfieldCode) = C4::Biblio::GetMarcFromKohaField('biblio.serial','')             unless $serialFieldCode;
+    if ($marc->subfield($serialFieldCode, $serialSubfieldCode)) { #Is a serial, has a subscription basically
+        my $maxIndexedItems = 500; #in MARC mode we should be able to create a ISO-format MARC21 record with this many items. Record size limit is 99999 characters.
+        my @fields = reverse $marc->field($itemsBarcodeFieldCode); #field actually returns fields
+        my $fCnt = scalar(@fields)-1;
+
+        if (scalar(@fields) > $maxIndexedItems) {
+            my @deletable = @fields[$maxIndexedItems..$fCnt];
+            $marc->delete_fields(@deletable); #Trim the rest of the items.
+        }
+    }
 }
 
 sub _flock {
