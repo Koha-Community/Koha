@@ -136,7 +136,7 @@ my $budget16 = {
 
 my $userenv = {};
 
-ok (!CanUserUseBudget(0, undef, {}));
+ok( !CanUserUseBudget( 0, undef, {} ), "CanUserUseBudget evaluates to false if DB user is passed" );
 
 ok (CanUserUseBudget($borrower1, $budget1, {superlibrarian => 1}));
 ok (CanUserUseBudget($borrower1, $budget1, {
