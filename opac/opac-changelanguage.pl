@@ -22,7 +22,10 @@ use CGI qw ( -utf8 );
 
 my $query    = new CGI;
 my $language = $query->param('language');
-my $url      = $query->referer() || '/';
+# Detect where the user came from and save that url
+my $requestedUrl = $query->url(-base => 1) ;
+# Use referer url if it matches $requestedUrl else use $requestedUrl as the url .
+my $url = $query->referer()=~$requestedUrl  ? $query->referer()  : $requestedUrl;
 
 # warn "Language : $query // $language // $url";
 
