@@ -56,6 +56,7 @@ sub settingUpTestContext {
         $borrowers = $borrowerFactory->createTestGroup([
                     {firstname  => 'Olli-Antti',
                      surname    => 'Kivi',
+                     othernames => 'AlasValas',
                      cardnumber => '1A01',
                      branchcode => 'CPL',
                      userid     => 'mini_admin',

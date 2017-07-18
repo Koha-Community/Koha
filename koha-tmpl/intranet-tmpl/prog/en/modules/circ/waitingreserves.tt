@@ -178,6 +178,7 @@
                         <br />Barcode: [% overloo.barcode %]
                     </td>
                     <td class="borrower">
+                        [% IF (overloo.borrowerothernames) %]<span class="title">[% overloo.borrowerothernames %]</span>[% END %]
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.borrowernum %]">[% overloo.borrowername %], [% overloo.borrowerfirstname %]</a><br />[% overloo.borrowerphone %]<br />
                         [% IF ( overloo.borrowermail ) %]<a href="mailto:[% overloo.borrowermail %]?subject=Reservation: [% overloo.title |url %]">
         [% overloo.borrowermail %]</a>[% END %]

@@ -123,6 +123,7 @@ sub _getHoldsRows {
         $row->{lastpickupdate} = $d->find_child_element($row, "td.lastpickupdate", 'css');
         $row->{resobjects}     = $d->find_child_element($row, "td.resobjects", 'css');
         $row->{borrower}       = $d->find_child_element($row, "td.borrower", 'css');
+        $row->{othernames}     = $d->find_child_element($row, "span.title", 'css');
         $row->{location}       = $d->find_child_element($row, "td.homebranch", 'css');
         $row->{copynumber}     = $d->find_child_element($row, "td.copynumber", 'css');
         $row->{enumchron}      = $d->find_child_element($row, "td.enumchron", 'css');
@@ -208,6 +209,8 @@ sub assertHoldRowsVisible {
         my $targetRow = $holdRows->{ $i };
         is($targetRow->{barcode}, $h->{barcode},
            "assertHoldRowsVisible: Row ".$i." barcodes '".$targetRow->{barcode}."' and '".$h->{barcode}."' match.");
+        is($targetRow->{othernames}->get_text(),$h->{borrower}->othernames,
+           "assertHoldRowsVisible: Row ".$i." othername '".$h->{borrower}->othernames."' contained in ".$targetRow->{othernames}->get_text()."'.");
     }
 
     return $self;
