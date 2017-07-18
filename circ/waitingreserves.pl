@@ -34,6 +34,7 @@ use C4::Koha;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Koha::ItemTypes;
+use Date::Calc qw/Date_to_Days/;
 
 my $input = new CGI;
 
@@ -113,7 +114,7 @@ foreach my $num (@getreserves) {
     }
     my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $num );
 
-    $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
+    $getreserv{'itemtype'}       = $itemtype->description if $itemtype; # FIXME Should not it be translated_description?
     $getreserv{'lastpickupdate'} = output_pref({ dt => $lastpickupdate, dateonly => 1 });
     $getreserv{'title'}          = $gettitle->{'title'};
     $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($gettitle->{'biblionumber'}), GetFrameworkCode($gettitle->{'biblionumber'}));
