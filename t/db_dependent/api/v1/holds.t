@@ -28,6 +28,7 @@ use C4::Reserves;
 
 use Koha::Database;
 use Koha::Biblios;
+use Koha::Biblioitems;
 use Koha::Items;
 use Koha::Patrons;
 
@@ -310,6 +311,7 @@ sub create_biblio {
     my ($title) = @_;
 
     my $biblio = Koha::Biblio->new( { title => $title } )->store;
+    my $biblioitem = Koha::Biblioitem->new({biblionumber => $biblio->biblionumber})->store;
 
     return $biblio->biblionumber;
 }
