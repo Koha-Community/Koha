@@ -54,11 +54,12 @@ Usage: $0 OUTPUT_DIRECTORY
                  parenthesis () to catch the barcode.
   -m --message  Choose which messages are printed, can be repeated.
   -l --library  Get print notices by branchcode, can be repeated.
+  -e --email    Get print notices by email postfix eg. \@mail.com, can be repeated.
 USAGE
     exit $_[0];
 }
 
-my ( $stylesheet, $help, $split, $HOLDbarcodeParsingRegexp, @messagecodes, @branchcodes );
+my ( $stylesheet, $help, $split, $HOLDbarcodeParsingRegexp, @messagecodes, @branchcodes, @emails );
 
 GetOptions(
     'h|help'  => \$help,
@@ -66,6 +67,7 @@ GetOptions(
     'holdbarcode=s' => \$HOLDbarcodeParsingRegexp,
     'message=s' => \@messagecodes,
     'library=s' => \@branchcodes,
+    'email=s' => \@emails,
 ) || usage(1);
 
 usage(0) if ($help);
@@ -87,6 +89,12 @@ if (@branchcodes) {
     my %seen = map { $_ => 1 } @branchcodes;
     @all_messages = grep { $seen{$_->{branchcode}} } @all_messages;
 }
+
+if (@emails) {
+    my %seen = map { $_ => 1 } @emails;
+    @all_messages = grep { $seen{email_trim($_->{from_address})} } @all_messages;
+}
+
 
 if (@messagecodes) {
     my %seen = map { $_ => 1 } @messagecodes;
@@ -208,3 +216,10 @@ sub fetchPickupLocations {
         push( @{ $messages_by_branch->{  $defaultBranch  } }, $message );
     }
 }
+
+sub  email_trim {
+    my $s = shift;
+    $s =~ s/^[^_]*@//;
+    $s = "@".$s;
+    return $s
+};
