@@ -41,6 +41,9 @@ subtest("Age limit threshold tests", sub {
     my ($b, $ilsPatron, $rv);
     eval { #start
 
+    my $hours = t::db_dependent::opening_hours_context::createContext;
+    C4::Context->set_preference("OpeningHours",$hours);
+
     ## Set the age limit ##
     C4::Context->set_preference("SSRules",'15:PT S');
 

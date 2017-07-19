@@ -22,6 +22,9 @@ my $now = DateTime->now(
 my $weekday = $now->day_of_week;
 my $startOfWeek = ($weekday > 1) ? $now->clone->subtract(days => $weekday-1) : $now->clone;
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 my $hours = t::db_dependent::opening_hours_context::createContext;
 
 subtest 'Opening hours happy path' => sub {
@@ -168,3 +171,5 @@ subtest 'Daily opening hours' => sub {
     };
     ok(0, $@) if $@;
 };
+
+$schema->storage->txn_rollback;
