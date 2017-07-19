@@ -169,30 +169,31 @@ if ( $query->param('reserve_id') ) {
         CancelReserve({ reserve_id => $reserve_id, charge_cancel_fee => !$forgivemanualholdsexpire });
     } else {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
+
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
         ModReserveAffect( $item, $borrowernumber, $diffBranchSend, $reserve_id );
-    }
-#   check if we have other reserves for this document, if we have a return send the message of transfer
-    my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
 
-    my $borr = GetMember( borrowernumber => $nextreservinfo );
-    my $name   = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
-    if ( $messages->{'transfert'} ) {
-        $template->param(
-            itemtitle      => $iteminfo->{'title'},
-            itemnumber     => $iteminfo->{'itemnumber'},
-            itembiblionumber => $iteminfo->{'biblionumber'},
-            iteminfo       => $iteminfo->{'author'},
-            name           => $name,
-            borrowernumber => $borrowernumber,
-            borcnum        => $borr->{'cardnumber'},
-            borothernames  => $borr->{'othernames'},
-            borfirstname   => $borr->{'firstname'},
-            borsurname     => $borr->{'surname'},
-            borcategory    => $borr->{'description'},
-            diffbranch     => 1,
-        );
+        if ( $diffBranchSend ) {
+            ModItemTransfer( $item, $userenv_branch, $diffBranchSend );
+
+            my $borr = GetMember( borrowernumber => $borrowernumber );
+            my $name   = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
+            $template->param(
+                itemtitle      => $iteminfo->{'title'},
+                itemnumber     => $iteminfo->{'itemnumber'},
+                itembiblionumber => $iteminfo->{'biblionumber'},
+                iteminfo       => $iteminfo->{'author'},
+                name           => $name,
+                borrowernumber => $borrowernumber,
+                borcnum        => $borr->{'cardnumber'},
+                borothernames  => $borr->{'othernames'},
+                borfirstname   => $borr->{'firstname'},
+                borsurname     => $borr->{'surname'},
+                borcategory    => $borr->{'description'},
+                diffbranch     => 1,
+            );
+        }
     }
 }
 
