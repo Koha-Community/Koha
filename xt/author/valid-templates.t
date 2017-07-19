@@ -19,6 +19,10 @@
 
 use Modern::Perl;
 
+use threads;    # used for parallel
+use Parallel::ForkManager;
+use Sys::CPU;
+
 =head1 NAME
 
 valid-templates.t
@@ -63,8 +67,18 @@ for my $theme ( grep { not /^\.|lib|js/ } readdir($dh) ) {
 }
 close $dh;
 
+my $ncpu;
+if ( $ENV{KOHA_PROVE_CPUS} ) {
+    $ncpu = $ENV{KOHA_PROVE_CPUS} ; # set number of cpus to use
+} else {
+    $ncpu = Sys::CPU::cpu_count();
+}
+
+my $pm   = new Parallel::ForkManager($ncpu);
+
 # Tests
 foreach my $theme ( @themes ) {
+    $pm->start and next;    # do the fork
     print "Testing $theme->{'type'} $theme->{'theme'} templates\n";
     if ( $theme->{'theme'} eq 'bootstrap' ) {
         run_template_test(
@@ -82,7 +96,10 @@ foreach my $theme ( @themes ) {
             $theme->{'includes'},
         );
     }
+    $pm->finish;
 }
+
+$pm->wait_all_children;
 
 done_testing();
 
