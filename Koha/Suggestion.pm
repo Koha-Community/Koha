@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 
 use base qw(Koha::Object);
 
@@ -34,6 +35,23 @@ Koha::Suggestion - Koha Suggestion object class
 =head2 Class Methods
 
 =cut
+
+=head3 store
+
+Override the default store behavior so that new suggestions have
+a suggesteddate of today
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    unless ( $self->suggesteddate() ) {
+        $self->suggesteddate( dt_from_string()->ymd );
+    }
+
+    return $self->SUPER::store();
+}
 
 =head3 type
 
