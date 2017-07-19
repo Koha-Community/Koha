@@ -1708,6 +1708,22 @@ VALUES ( 'zh', 'language', 'fr', 'Chinois');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'zh', 'language', 'de', 'Chinesisch');
 
+-- No linguistic information
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'zxx', 'language', 'No linguistic information', '2017-07-19');
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES ( 'zxx', 'zxx');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'zxx', 'language', 'en', 'No linguistic information');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'zxx', 'language', 'zxx', 'No linguistic information');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'zxx', 'language', 'fi', 'Ei kielellistä sisältöä');
+
 -- SCRIPTS
 -- Arabic
 INSERT INTO language_subtag_registry( subtag, type, description, added)
