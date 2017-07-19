@@ -317,7 +317,6 @@ $(document).ready(function(){
         $('input[name="country"]').val( RegExp.$4 );
     });
 
-    $("#dateofbirth").datepicker({ maxDate: "-1D", yearRange: "c-120:" });
     dateformat = $("#dateofbirth").siblings(".hint").first().html();
 
     if( $('#dateofbirth').length ) {
