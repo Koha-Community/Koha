@@ -637,6 +637,7 @@ CREATE TABLE `deleteditems` (
   `stack` tinyint(1) default NULL,
   `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
   `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
+  `damaged_on` datetime DEFAULT NULL, -- the date and time an item was last marked as damaged, NULL if not damaged
   `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
   `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
   `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
@@ -897,6 +898,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `stack` tinyint(1) default NULL,
   `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
   `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
+  `damaged_on` datetime DEFAULT NULL, -- the date and time an item was last marked as damaged, NULL if not damaged
   `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
   `itemlost_on` datetime DEFAULT NULL, -- the date and time an item was last marked as lost, NULL if not lost
   `withdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)

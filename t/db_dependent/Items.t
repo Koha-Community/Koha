@@ -24,6 +24,7 @@ use C4::Biblio;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Library;
+use Koha::DateUtils;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -106,6 +107,41 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->{itype}, undef, "Itemtype set correctly when not using item-level_itypes" );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'ModItem tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build({
+        source => 'Item',
+        value  => {
+            itemlost     => 0,
+            damaged      => 0,
+            withdrawn    => 0,
+            itemlost_on  => undef,
+            damaged_on   => undef,
+            withdrawn_on => undef,
+        }
+    });
+
+    my @fields = qw( itemlost withdrawn damaged );
+    for my $field (@fields) {
+        $item->{$field} = 1;
+        ModItem( $item, $item->{biblionumber}, $item->{itemnumber} );
+        my $post_mod_item = Koha::Items->find({ itemnumber => $item->{itemnumber} })->unblessed;
+        is( output_pref({ str => $post_mod_item->{$field."_on"}, dateonly => 1 }), output_pref({ dt => dt_from_string(), dateonly => 1 }), "When updating $field, $field"."_on is updated" );
+
+        $item->{$field} = 0;
+        ModItem( $item, $item->{biblionumber}, $item->{itemnumber} );
+        $post_mod_item = Koha::Items->find({ itemnumber => $item->{itemnumber} })->unblessed;
+        is( $post_mod_item->{$field."_on"}, undef, "When clearing $field, $field"."_on is cleared" );
+    }
+
+    $schema->storage->txn_rollback;
+
 };
 
 subtest 'GetHiddenItemnumbers tests' => sub {
@@ -732,6 +768,7 @@ subtest '_mod_item_dates' => sub {
     # check if itemlost_on was not touched
     $item->{itemlost_on} = '12345678';
     $item->{withdrawn_on} = '12/31/2015 23:59:00';
+    $item->{damaged_on} = '01/20/2017 09:00:00';
     $orgitem = { %$item };
     C4::Items::_mod_item_dates($item);
     is_deeply( $item, $orgitem, 'Colums with _on are not touched' );

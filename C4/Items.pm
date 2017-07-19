@@ -561,10 +561,10 @@ sub ModItem {
 
     $item->{'itemnumber'} = $itemnumber or return;
 
-    my @fields = qw( itemlost withdrawn );
+    my @fields = qw( itemlost withdrawn damaged );
 
     # Only call GetItem if we need to set an "on" date field
-    if ( $item->{itemlost} || $item->{withdrawn} ) {
+    if ( $item->{itemlost} || $item->{withdrawn} || $item->{damaged} ) {
         my $pre_mod_item = GetItem( $item->{'itemnumber'} );
         for my $field (@fields) {
             if (    defined( $item->{$field} )

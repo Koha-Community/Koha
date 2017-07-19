@@ -152,6 +152,9 @@
                     &nbsp;
                 [% END %]
             </li>
+            [% IF ITEM_DAT.damaged != "" && ITEM_DAT.damaged_on %]
+                <li><span class="label">Damaged on:</span>[% ITEM_DAT.damaged_on | $KohaDates %] &nbsp;</li>
+            [% END %]
             [% END %]
 
             [% IF itemwithdrawnloop %]
