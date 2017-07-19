@@ -56,7 +56,12 @@
                 buttonImage: '[% interface %]/lib/famfamfam/silk/calendar.png',
                 buttonImageOnly: true,
                 showButtonPanel: true,
-                showOtherMonths: true
+                showOtherMonths: true,
+                yearRange: "c-100:c+10"
+            });
+
+        $("#dateofbirth").datepicker({
+                yearRange: "c-100:c"
             });
 
             $( ".datepicker" ).datepicker();
