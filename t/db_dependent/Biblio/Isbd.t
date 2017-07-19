@@ -22,14 +22,14 @@ use Test::MockModule;
 use MARC::Record;
 use t::lib::Mocks qw( mock_preference );
 
+use Koha::Database;
+
 BEGIN {
         use_ok('C4::Biblio');
 }
 
-my $dbh = C4::Context->dbh;
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $template = '#200|<h2>Title : |{200a}{ by 200f}|</h2>';
 my $opac_template = '#200|<h2>Title : |{200a}{ (200f)}|</h2>';
@@ -41,10 +41,11 @@ $record->append_fields(
     MARC::Field->new('200', '', '', 'a' => 'Mountains'),
     MARC::Field->new('200', '', '', 'f' => 'Keith Lye'),
 );
-my ($bibnum, $title, $bibitemnum) = AddBiblio($record, '');
 
 my $isbd = GetISBDView({ record => $record });
 is($isbd, '<h2>Title : Mountains by Keith Lye</h2>', 'ISBD is correct');
 
 my $opacisbd = GetISBDView({ record => $record, template => 'opac' });
 is($opacisbd, '<h2>Title : Mountains (Keith Lye)</h2>', 'OPAC ISBD is correct');
+
+$schema->storage->txn_rollback;
