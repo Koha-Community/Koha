@@ -65,7 +65,6 @@ use Modern::Perl;
 use List::MoreUtils qw/uniq/;
 use vars qw(@ISA @EXPORT);
 
-use C4::Biblio qw(GetMarcSubfieldStructureFromKohaField);
 use Koha::SimpleMARC qw(read_field);
 
 

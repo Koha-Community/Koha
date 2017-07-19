@@ -332,9 +332,7 @@ sub _add_rowdata {
         date2 => 'biblioitems.publicationyear', #UNIMARC
     );
     foreach my $k (keys %fetch) {
-        my ($t, $f)= split '\.', $fetch{$k};
-        $row= C4::Biblio::TransformMarcToKohaOneField($t, $f, $record, $row);
-        $row->{$k}= $row->{$f} if $k ne $f;
+        $row->{$k} = C4::Biblio::TransformMarcToKohaOneField( $fetch{$k}, $record, q{} ); # default framework
     }
     $row->{date}//= $row->{date2};
     $row->{isbn}=_isbn_replace($row->{isbn});

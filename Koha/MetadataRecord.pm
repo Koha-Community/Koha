@@ -109,29 +109,16 @@ sub createMergeHash {
     }
 }
 
+=head2 getKohaField
+
+    $metadata->{$key} = $record->getKohaField($kohafield);
+
+=cut
+
 sub getKohaField {
     my ($self, $kohafield) = @_;
-
     if ($self->schema =~ m/marc/) {
-        my $frameworkcode = ""; # FIXME Why do we use the default framework?
-        my $mss = C4::Biblio::GetMarcSubfieldStructure( $frameworkcode );
-        my $tagfield = $mss->{$kohafield};
-
-        return '' if ref($tagfield) ne 'HASH';
-
-        my ($tag, $subfield) = ( $tagfield->{tagfield}, $tagfield->{tagsubfield} );
-        my @kohafield;
-        foreach my $field ( $self->record->field($tag) ) {
-            if ( $field->tag() < 10 ) {
-                push @kohafield, $field->data();
-            } else {
-                foreach my $contents ( $field->subfield($subfield) ) {
-                    push @kohafield, $contents;
-                }
-            }
-        }
-
-        return join ' | ', @kohafield;
+        return C4::Biblio::TransformMarcToKohaOneField($kohafield, $self->record); # Default framework used
     }
 }
 

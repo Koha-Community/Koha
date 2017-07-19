@@ -72,7 +72,9 @@ sub _get_biblio_from_xisbn {
     return unless ( !$errors && scalar @$results );
 
     my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[0] );
-    my $biblionumber = C4::Biblio::get_koha_field_from_marc('biblio', 'biblionumber', $record, '');
+    my $biblionumber = C4::Biblio::TransformMarcToKohaOneField(
+        'biblio.biblionumber', $record, # Default framework used
+    );
     return unless $biblionumber;
 
     my $biblio = Koha::Biblios->find( $biblionumber );

@@ -1498,8 +1498,13 @@ sub Item2Marc {
             defined($itemrecord->{$_}) && $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  
         } keys %{ $itemrecord } 
     };
-    my $itemmarc = C4::Biblio::TransformKohaToMarc($mungeditem);
-    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",C4::Biblio::GetFrameworkCode($biblionumber)||'');
+    my $framework = C4::Biblio::GetFrameworkCode( $biblionumber );
+    my $itemmarc = C4::Biblio::TransformKohaToMarc(
+        $mungeditem, $framework, { no_split => 1},
+    );
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField(
+        "items.itemnumber", $framework,
+    );
 
     my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($mungeditem->{'items.more_subfields_xml'});
     if (defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1) {
