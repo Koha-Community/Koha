@@ -326,6 +326,8 @@
                                 Age restricted
                             [% ELSIF itemloo.not_holdable == 'tooManyHoldsForThisRecord' %]
                                 Exceeded max holds per record
+                            [% ELSIF itemloo.not_holdable == 'tooManyReservesToday' %]
+                                Daily hold limit reached for patron
                             [% ELSIF itemloo.not_holdable == 'tooManyReserves' %]
                                 Too many holds
                             [% ELSIF itemloo.not_holdable == 'notReservable' %]
