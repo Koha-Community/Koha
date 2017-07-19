@@ -216,6 +216,9 @@ is ($countaccount,1,"1 accountline has been added");
 
 # Test AddRenewal
 
+my $se = Test::MockModule->new( 'C4::Context' );
+$se->mock( 'interface', sub {return 'intranet'});
+
 # Let's renew this one at a different library for statistical purposes to test Bug 17781
 C4::Context->set_userenv(@USERENV_DIFFERENT_LIBRARY);
 my $datedue3 = AddRenewal( $borrower_id1, $item_id1, $branchcode_1, $datedue1, $daysago10 );
@@ -230,14 +233,18 @@ like(
 my $stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef, $borrower_id1, $item_id1, $branchcode_3 );
 ok( $stat, "Bug 17781 - 'Improper branchcode set during renewal' still fixed" );
 
+$se->mock( 'interface', sub {return 'opac'});
+
 #Let's do an opac renewal - whatever branchcode we send should be used
-my $opac_renew_issue = $builder->build({ source=>"Issue",value=>{
+my $opac_renew_issue = $builder->build({
+    source=>"Issue",
+    value=>{
         date_due => '2017-01-01',
         branch => $branchcode_1,
         itype => $itemtype,
         borrowernumber => $borrower_id1
-        }
-        });
+    }
+});
 
 my $datedue4 = AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, "Stavromula", $datedue1, $daysago10, 1 );
 

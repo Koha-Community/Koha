@@ -2815,7 +2815,6 @@ sub AddRenewal {
     my $branch          = shift;
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
-    my $opacrenewal     = shift;
 
     my $item   = GetItem($itemnumber) or return;
     my $item_object = Koha::Items->find( $itemnumber ); # Should replace $item
@@ -2916,7 +2915,7 @@ sub AddRenewal {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
-    unless ( $opacrenewal ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
+    unless ( C4::Context->interface eq 'opac' ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
         $branch = C4::Context->userenv ? C4::Context->userenv->{branch} : $branch;
     }
 
