@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Suggestion;
 use Koha::Suggestions;
 use Koha::Database;
+use Koha::DateUtils;
 
 use t::lib::TestBuilder;
 
@@ -45,6 +46,8 @@ my $new_suggestion_2 = Koha::Suggestion->new(
         biblionumber => $biblio_2->{biblionumber},
     }
 )->store;
+
+is( $new_suggestion_1->suggesteddate, dt_from_string()->ymd, "If suggesteddate not passed in, it will default to today" );
 
 like( $new_suggestion_1->suggestionid, qr|^\d+$|, 'Adding a new suggestion should have set the suggestionid' );
 is( Koha::Suggestions->search->count, $nb_of_suggestions + 2, 'The 2 suggestions should have been added' );
