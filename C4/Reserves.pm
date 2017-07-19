@@ -314,10 +314,11 @@ sub CanItemBeReserved {
     my $ruleitemtype;    # itemtype of the matching issuing rule
     my $allowedreserves  = 0; # Total number of holds allowed across all records
     my $holds_per_record = 1; # Total number of holds allowed for this one given record
+    my $holds_per_day    = 0; # Total number of holds allowed per day for the given patron
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $item       = GetItem($itemnumber);
+    my $item       = C4::Items::GetItem($itemnumber);
     my $biblio     = Koha::Biblios->find( $item->{biblionumber} );
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
@@ -364,6 +365,7 @@ sub CanItemBeReserved {
         $ruleitemtype     = $rights->{itemtype};
         $allowedreserves  = $rights->{reservesallowed};
         $holds_per_record = $rights->{holds_per_record};
+        $holds_per_day    = $rights->{holds_per_day};
     }
     else {
         $ruleitemtype = '*';
@@ -379,6 +381,18 @@ sub CanItemBeReserved {
     );
     if ( $holds->count() >= $holds_per_record ) {
         return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
+    }
+
+    my $today_holds = Koha::Holds->search({
+        borrowernumber => $borrowernumber,
+        reservedate    => dt_from_string->date
+    });
+
+    if ( defined $holds_per_day &&
+          (   ( $holds_per_day > 0 && $today_holds->count() >= $holds_per_day )
+           or ( $holds_per_day == 0 ) )
+        )  {
+        return { status => 'tooManyReservesToday', limit => $holds_per_day };
     }
 
     # we retrieve count
@@ -2122,7 +2136,7 @@ sub GetHoldRule {
 
     my $sth = $dbh->prepare(
         q{
-         SELECT categorycode, itemtype, branchcode, reservesallowed, holds_per_record
+         SELECT categorycode, itemtype, branchcode, reservesallowed, holds_per_record, holds_per_day
            FROM issuingrules
           WHERE (categorycode in (?,'*') )
             AND (itemtype IN (?,'*'))
