@@ -73,6 +73,13 @@ overdue_notices.pl
    -list-all                      list all overdues
    -date         <yyyy-mm-dd>     emulate overdues run for this date
    -email        <email_type>     type of email that will be used. Can be 'email', 'emailpro' or 'B_email'. Repeatable.
+   -letternumbers <[1][2][3]>     The letters you want to generate. First and/or second and/or third...
+                                  Default behaviour is to generate all three letters "123".
+                                  For ex. "12" generates only the first and second overdue letter.
+                                  Ex. "13" Generates the first and third overdue letters.
+                                  Ex. "2" Generates only the second overdue letter.
+    -p, -preferemail              Generates message for one message type. Email, SMS or print, prefers email.
+    -s, -singlefine                Add only one overdue fee per messagetype per patron
 
 =head1 OPTIONS
 
@@ -302,6 +309,10 @@ my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
 my ( $date_input, $today );
+my $letternumbers = 123; #overdue notifications letter1, letter2, letter3 to generate.
+my $preferemail = 0; # Prevents generating email, sms and print letter. Generates only one if patron data is right, prefers email.
+my $singlefine;
+my %fine;
 
 GetOptions(
     'help|?'         => \$help,
@@ -321,6 +332,10 @@ GetOptions(
     'borcat=s'       => \@myborcat,
     'borcatout=s'    => \@myborcatout,
     'email=s'        => \@emails,
+    'letternumbers=s'  => \$letternumbers,
+    'p|preferemail'  => \$preferemail,
+    's|singlefine'   => \$singlefine,
+
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -469,6 +484,7 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND issues.branchcode = ?
     AND items.itemlost = 0
     AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
+    AND items.notforloan != 6
 END_SQL
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
@@ -491,7 +507,7 @@ END_SQL
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
-
+            next unless $letternumbers =~ $i; #Generate only the letters we want.
             $verbose and warn "branch '$branchcode', categorycode = $overdue_rules->{categorycode} pass $i\n";
 
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
@@ -677,6 +693,16 @@ END_SQL
                 @message_transport_types = @{ GetOverdueMessageTransportTypes( q{}, $overdue_rules->{categorycode}, $i) }
                     unless @message_transport_types;
 
+                if ($preferemail && scalar @emails_to_use && grep( /^email$/, @message_transport_types)) {
+                  $verbose and warn "Generating only email message for patron";
+                  @message_transport_types = 'email';
+                } elsif ($preferemail && $data->{smsalertnumber} && grep( /^sms$/, @message_transport_types)) {
+                  $verbose and warn "Generating only sms message for patron";
+                  @message_transport_types = 'sms';
+                } elsif ($preferemail && not scalar @emails_to_use && grep( /^print$/, @message_transport_types)) {
+                  $verbose and warn "Generating only print message for patron";
+                  @message_transport_types = 'print';
+                }
 
                 my $print_sent = 0; # A print notice is not yet sent for this patron
                 for my $mtt ( @message_transport_types ) {
@@ -715,6 +741,12 @@ END_SQL
                     my @misses = grep { /./ } map { /^([^>]*)[>]+/; ( $1 || '' ); } split /\</, $letter->{'content'};
                     if (@misses) {
                         $verbose and warn "The following terms were not matched and replaced: \n\t" . join "\n\t", @misses;
+                    }
+
+                    # Add single fine per lettercode or add fines for all the generated letters/Koha-Suomi Oy/PK KD1978
+                    if (! $singlefine || ! defined $fine{$i}{$borrowernumber}) {
+                      $fine{$i}{$borrowernumber} = 1;
+                      set_overdue_price($borrowernumber, $i, $overdue_rules->{categorycode}, $overdue_rules->{"letter$i"}, $branchcode);
                     }
 
                     if ($nomail) {
@@ -893,4 +925,31 @@ sub prepare_letter_for_printing {
     }
     return $return;
 }
+
+sub set_overdue_price {
+  my ($borrowernumber, $letternumber, $categorycode, $letter_code, $branchcode) = @_;
+
+  # Find right price from overdue rules.
+  my $fine = "fine".$letternumber;
+  my $price;
+  my $sth = C4::Context->dbh->prepare("SELECT ".$fine." FROM overduerules WHERE categorycode = ? and branchcode = ?");
+  $sth->execute($categorycode, $branchcode);
+  if (my $f = $sth->fetchrow_array) {
+    $price = $f;
+  }else {
+    my $sth2 = C4::Context->dbh->prepare("SELECT ".$fine." FROM overduerules WHERE categorycode = ?");
+    $sth2->execute($categorycode);
+    $price = $sth2->fetchrow_array
+  }
+ 
+  # Set overdue price to patron.
+  if ($letter_code =~ /1/) {
+    C4::Accounts::manualinvoice( $borrowernumber, undef, '1. huomautus', 'ODUE', $price, undef );
+  } elsif ($letter_code =~ /2/) {
+    C4::Accounts::manualinvoice( $borrowernumber, undef, '2. huomautus', 'ODUE', $price, undef );
+  } elsif ($letter_code =~ /CLAIM/) {
+    C4::Accounts::manualinvoice( $borrowernumber, undef, 'Lasku', 'ODUE', $price, undef );
+  }
+}
+
 
