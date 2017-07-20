@@ -1935,21 +1935,17 @@ sub AddReturn {
 
         if ($borrowernumber) {
             eval {
-                my $issue_id = MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
-                    $circControlBranch, $return_date, $borrower->{'privacy'} );
-                $issue->{issue_id} = $issue_id;
+                MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                    $circControlBranch, $return_date, $borrower->{privacy} );
             };
             unless ( $@ ) {
                 if ( ( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'} ) || $return_date ) {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item, borrower => $borrower, return_date => $return_date } );
                 }
             } else {
-                $messages->{'Wrongbranch'} = {
-                    Wrongbranch => $branch,
-                    Rightbranch => $message
-                };
-                carp $@;
-                return ( 0, { WasReturned => 0 }, $issue, $borrower );
+                carp "The checkin for the following issue failed, Please go to the about page, section 'data corrupted' to know how to fix this problem ($@)" . Dumper( $issue );
+
+                return ( 0, { WasReturned => 0, DataCorrupted => 1 }, $issue, $borrower );
             }
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
@@ -2174,23 +2170,14 @@ sub MarkIssueReturned {
     # FIXME Improve the return value and handle it from callers
     $schema->txn_do(sub {
 
+        # Update the returndate
         $dbh->do( $query, undef, @bind );
 
+        # Retrieve the issue
         my $issue = Koha::Checkouts->find( $issue_id ); # FIXME should be fetched earlier
 
         # Create the old_issues entry
-        my $old_checkout_data = $issue->unblessed;
-
-        if ( Koha::Old::Checkouts->find( $issue_id ) ) {
-            my $new_issue_id = ( Koha::Old::Checkouts->search(
-                {},
-                { columns => [ { max_issue_id => { max => 'issue_id' } } ] }
-            )->get_column('max_issue_id') )[0];
-            $new_issue_id++;
-            $issue_id = $new_issue_id;
-        }
-        $old_checkout_data->{issue_id} = $issue_id;
-        my $old_checkout = Koha::Old::Checkout->new($old_checkout_data)->store;
+        my $old_checkout = Koha::Old::Checkout->new($issue->unblessed)->store;
 
         # Update the fines
         $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $old_checkout->issue_id, $issue->issue_id);
@@ -2200,7 +2187,7 @@ sub MarkIssueReturned {
             $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $old_checkout->issue_id);
         }
 
-        # Delete the issue
+        # And finally delete the issue
         $issue->delete;
 
         ModItem( { 'onloan' => undef }, undef, $itemnumber );

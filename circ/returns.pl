@@ -550,6 +550,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'NotForLoanStatusUpdated' ) {
         $err{NotForLoanStatusUpdated} = $messages->{NotForLoanStatusUpdated};
     }
+    elsif ( $code eq 'DataCorrupted' ) {
+        $err{data_corrupted} = 1;
+    }
     else {
         die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
         # This forces the issue of staying in sync w/ Circulation.pm
