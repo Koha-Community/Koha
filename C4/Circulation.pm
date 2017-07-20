@@ -53,6 +53,8 @@ use Koha::Patron::Debarments;
 use Koha::Database;
 use Koha::Libraries;
 use Koha::Holds;
+use Koha::Issues;
+use Koha::OldIssues;
 use Carp;
 use List::MoreUtils qw( uniq );
 use Scalar::Util qw( looks_like_number );
@@ -1920,21 +1922,18 @@ sub AddReturn {
         }
 
         if ($borrowernumber) {
-            if ( ( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'} ) || $return_date ) {
-                _CalculateAndUpdateFine( { issue => $issue, item => $item, borrower => $borrower, return_date => $return_date } );
-            }
-
             eval {
                 MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
                     $circControlBranch, $return_date, $borrower->{'privacy'} );
             };
-            if ( $@ ) {
-                $messages->{'Wrongbranch'} = {
-                    Wrongbranch => $branch,
-                    Rightbranch => $message
-                };
-                carp $@;
-                return ( 0, { WasReturned => 0 }, $issue, $borrower );
+            unless ( $@ ) {
+                if ( ( C4::Context->preference('CalculateFinesOnReturn') && $issue->{'overdue'} ) || $return_date ) {
+                    _CalculateAndUpdateFine( { issue => $issue, item => $item, borrower => $borrower, return_date => $return_date } );
+                }
+            } else {
+                carp "The checkin for the following issue failed, Please go to the about page, section 'data corrupted' to know how to fix this problem ($@)" . Dumper( $issue );
+
+                return ( 0, { WasReturned => 0, DataCorrupted => 1 }, $issue, $borrower );
             }
 
             # FIXME is the "= 1" right?  This could be the borrower hash.
@@ -2147,21 +2146,15 @@ sub MarkIssueReturned {
 
     # FIXME Improve the return value and handle it from callers
     $schema->txn_do(sub {
+
+        # Update the returndate
         $dbh->do( $query, undef, @bind );
 
-        my $id_already_exists = $dbh->selectrow_array(
-            q|SELECT COUNT(*) FROM old_issues WHERE issue_id = ?|,
-            undef, $issue_id
-        );
+        # Retrieve the issue
+        my $issue = Koha::Issues->find( $issue_id ); # FIXME should be fetched earlier
 
-        if ( $id_already_exists ) {
-            my $new_issue_id = $dbh->selectrow_array(q|SELECT MAX(issue_id)+1 FROM old_issues|);
-            $dbh->do(
-                q|UPDATE issues SET issue_id = ? WHERE issue_id = ?|,
-                undef, $new_issue_id, $issue_id
-            );
-            $issue_id = $new_issue_id;
-        }
+        # Create the old_issues entry
+        my $old_checkout = Koha::OldIssue->new($issue->unblessed)->store;
 
         $dbh->do(q|INSERT INTO old_issues SELECT * FROM issues WHERE issue_id = ?|, undef, $issue_id);
 
@@ -2170,7 +2163,8 @@ sub MarkIssueReturned {
             $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $issue_id);
         }
 
-        $dbh->do(q|DELETE FROM issues WHERE issue_id = ?|, undef, $issue_id);
+        # And finally delete the issue
+        $issue->delete;
 
         ModItem( { 'onloan' => undef }, undef, $itemnumber );
 
