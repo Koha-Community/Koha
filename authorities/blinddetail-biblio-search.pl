@@ -86,20 +86,16 @@ if ($authid) {
     my $repet = ($query->param('repet') || 1) - 1;
     my $field = $fields[$repet];
 
-    # Get all values for each distinct subfield
-    my %subfields;
+    # Get all values for each distinct subfield and add to subfield loop
+    my %done_subfields;
     for ( $field->subfields ) {
         next if $_->[0] eq '9'; # $9 will be set with authid value
         my $letter = $_->[0];
-        next if defined $subfields{$letter};
+        $letter ||= '@';
+        next if defined $done_subfields{$letter};
         my @values = $field->subfield($letter);
-        $subfields{$letter} = \@values;
-    }
-
-    # Add all subfields to the subfield_loop
-    for( keys %subfields ) {
-        my $letter = $_ || '@';
-        push( @subfield_loop, {marc_subfield => $letter, marc_values => $subfields{$_}} );
+        push @subfield_loop, {marc_subfield => $letter, marc_values => @values };
+        $done_subfields{$letter} = 1;
     }
 
     push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
