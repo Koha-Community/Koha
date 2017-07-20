@@ -269,11 +269,10 @@ foreach my $biblionumber (@biblionumbers) {
         { # alreadypossession
             # Check to see if patron is allowed to place holds on records where the
             # patron already has an item from that record checked out
-            my $alreadypossession;
             if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
                 && CheckIfIssuedToPatron( $patron->borrowernumber, $biblionumber ) )
             {
-                $template->param( alreadypossession => $alreadypossession, );
+                $template->param( alreadypossession => 1, );
             }
         }
     }
