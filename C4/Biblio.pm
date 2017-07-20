@@ -2196,9 +2196,11 @@ sub TransformKohaToMarc {
         my @sfl = @{$tag_hr->{$tag}};
         @sfl = sort { $a->[0] cmp $b->[0]; } @sfl;
         @sfl = map { @{$_}; } @sfl;
-        $record->insert_fields_ordered(
-            MARC::Field->new($tag, " ", " ", @sfl)
-        );
+        # Special care for control fields: remove the subfield indication @
+        # and do not insert indicators.
+        my @ind = $tag < 10 ? () : ( " ", " " );
+        @sfl = grep { $_ ne '@' } @sfl if $tag < 10;
+        $record->insert_fields_ordered( MARC::Field->new($tag, @ind, @sfl) );
     }
     return $record;
 }
