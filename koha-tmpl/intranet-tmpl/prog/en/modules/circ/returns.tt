@@ -227,6 +227,7 @@ $(document).ready(function () {
         <p>This item must be checked in at following library: <strong>[% Branches.GetName( rightbranch ) %]</strong></p>
     </div>
 [% END %]
+
 <!-- case of a mistake in transfer loop -->
 [% IF ( WrongTransfer ) %]
     <div id="return2" class="dialog message">
@@ -624,7 +625,10 @@ $(document).ready(function () {
                     [% END %]
 
             [% END %]
-        [% ELSE %]
+
+            [% IF errmsgloo.data_corrupted %]
+                <p class="problem">The item has not been checked in due to a configuration issue in your system. You must ask an administrator to take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a> and search for the "data problems" section</p>
+            [% END %]
         [% END %]
     </div>
 
