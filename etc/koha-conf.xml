@@ -176,7 +176,7 @@ __PAZPAR2_TOGGLE_XML_POST__
 
         <!-- Koha settings -->
         <mode></mode>                               <!-- Use 2 for synchronized mode -->
-        <notificationAddress></notificationAddress> <!-- https://server/api/v1/pos/cpu/{invoicenumber}/report -->
+        <notificationAddress></notificationAddress> <!-- https://server/api/v1/payments/pos/cpu/{invoicenumber}/report -->
         <!-- Replace "server" with your server address, but keep {invoicenumber} as it is (it will be converted later into real id) -->
 
         <!-- SSL certificates -->
@@ -195,7 +195,7 @@ __PAZPAR2_TOGGLE_XML_POST__
         <mode></mode>                               <!-- Use 3 for online payments -->
 
         <!-- Replace "server" with your server address, but keep {invoicenumber} as it is (it will be converted later into real id) -->
-        <notificationAddress></notificationAddress> <!-- https://server/api/v1/pos/cpu/{invoicenumber}/report -->
+        <notificationAddress></notificationAddress> <!-- https://server/api/v1/payments/online/cpu/{invoicenumber}/report -->
         <returnAddress></returnAddress> <!-- Where to redirect user from CPU online shop after the payment is complete?
                                             e.g. https://server/cgi-bin/koha/opac-paycollect.pl -->
     </CPU>

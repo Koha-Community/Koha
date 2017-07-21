@@ -169,7 +169,11 @@ sub CompletePayment {
     my $dbh                 = C4::Context->dbh;
     my $manager_id          = 0;
     $manager_id             = C4::Context->userenv->{'number'} if C4::Context->userenv;
-    my $branch              = C4::Context->userenv->{'branch'} if C4::Context->userenv;
+    my $branch              = $self->is_self_payment == 1
+                                ? $self->user_branch
+                                : C4::Context->userenv
+                                    ? C4::Context->userenv->{'branch'}
+                                    : $self->user_branch;
     my $description = "";
     my $itemnumber;
     my $old_status;

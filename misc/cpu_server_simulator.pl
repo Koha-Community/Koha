@@ -245,7 +245,7 @@ sub CalculateResponseHash {
     my $resp = shift;
     my $data = "";
 
-    my $mode = 'online_payments';
+    $mode ||= 'online_payments';
 
     $data .= $resp->{Source} if defined $resp->{Source};
     $data .= "&" . $resp->{Id} if defined $resp->{Id};
@@ -268,15 +268,15 @@ sub _calc_pos_hash {
     my ($payment) = @_;
     my $data;
 
-    foreach my $param (sort keys $payment){
+    foreach my $param (sort keys %$payment){
         next if $param eq "Hash";
         my $value = $payment->{$param};
 
         if (ref($payment->{$param}) eq 'ARRAY') {
             my $product_hash = $value;
             $value = "";
-            foreach my $product (values $product_hash){
-                foreach my $product_data (sort keys $product){
+            foreach my $product (values @$product_hash){
+                foreach my $product_data (sort keys %$product){
                     $value .= $product->{$product_data} . "&";
                 }
             }

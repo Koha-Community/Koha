@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More;
 use Try::Tiny; #Even Selenium::Remote::Driver uses Try::Tiny :)
 
+use Koha::Database;
 use Koha::Auth::PermissionManager;
 use Koha::PaymentsTransaction;
 use Koha::PaymentsTransactions;
@@ -34,6 +35,11 @@ use t::lib::Page::Members::Paycollect;
 use t::lib::TestObjects::PatronFactory;
 use t::lib::TestObjects::SystemPreferenceFactory;
 use t::lib::TestObjects::FinesFactory;
+
+#### THIS TEST REQUIRES A CPU SIMULATOR SERVER
+#### and proper KOHA_CONF configurations
+#### /usr/bin/perl ./misc/cpu_server_simulator.pl daemon -m production -l http://*:3000
+#### KOHA_CONF -> pos -> CPU -> url http://127.0.0.1:3000/maksu.html
 
 ##Setting up the test context
 my $testContext = {};
@@ -100,6 +106,7 @@ $permissionManager->grantPermissions($borrowers->{'superuberadmin2'}, {superlibr
 eval {
     MakeFullPayment($fines);
     MakePartialPayment($fines);
+    CheckStatistics();
 };
 if ($@) { #Catch all leaking errors and gracefully terminate.
     warn $@;
@@ -199,4 +206,19 @@ sub MakePartialPayment {
     ->isFineAmount("Second2", $secondAmount)
     ->isFineAmountOutstanding("First2", sprintf("%.2f",$firstAmount-$partialPayment))
     ->isFineAmountOutstanding("Second2", $secondAmount);
+}
+
+sub CheckStatistics {
+    my $schema = Koha::Database->schema;
+
+    my $count = $schema->resultset('Statistic')->search({
+        branch     => 'CPL',
+        type       => 'payment',
+        borrowernumber => { '-in' => [
+            $borrowers->{'superuberadmin'}->borrowernumber,
+            $borrowers->{'superuberadmin2'}->borrowernumber,
+            ]
+        }
+    }, { order_by => { -asc => 'datetime' } })->count;
+    is($count, 2, 'Found two payments in statistics table');
 }

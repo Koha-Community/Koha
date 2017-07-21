@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More;
 use Try::Tiny;
 
+use Koha::Database;
 use Koha::Auth::PermissionManager;
 use Koha::Payment::Online;
 use Koha::PaymentsTransaction;
@@ -125,6 +126,7 @@ my $permissionManager = Koha::Auth::PermissionManager->new();
 $permissionManager->grantPermissions($borrowers->{'superuberadmin'}, {superlibrarian => 'superlibrarian'});
 eval {
     MakeOnlinePayment($fines);
+    CheckStatistics();
 };
 if ($@) { #Catch all leaking errors and gracefully terminate.
     warn $@;
@@ -165,4 +167,18 @@ sub MakeOnlinePayment {
     ->isFinePaid("First")       # Make sure fines are paid
     ->isFinePaid("Second")     # Also the second :)
     ->isEverythingPaid();      # and make sure total due is 0.00
+}
+
+sub CheckStatistics {
+    my $schema = Koha::Database->schema;
+
+    my $count = $schema->resultset('Statistic')->search({
+        branch     => 'CPL',
+        type       => 'payment',
+        borrowernumber => { '-in' => [
+            $borrowers->{'superuberadmin'}->borrowernumber,
+            ]
+        }
+    }, { order_by => { -asc => 'datetime' } })->count;
+    is($count, 1, 'Found one payments in statistics table');
 }

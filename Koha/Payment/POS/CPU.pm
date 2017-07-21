@@ -349,7 +349,7 @@ sub _calculate_payment_hash {
         if (ref($payment->{$param}) eq 'ARRAY') {
             my $product_hash = $value;
             $value = "";
-            foreach my $product (values %$product_hash){
+            foreach my $product (values @$product_hash){
                 foreach my $product_data (sort keys %$product){
                     $value .= $product->{$product_data} . "&";
                 }
