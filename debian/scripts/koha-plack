@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2015 Theke Solutions
+# Copyright 2016 Koha-Suomi
 #
 # This file is part of Koha.
 #
@@ -51,6 +52,11 @@ $scriptname -h|--help
     --restart             Restart the plack daemon for the specified instances
     --enable              Enable plack for the specified instances
     --disable             Disable plack for the specified instances
+    --debugger            Enable running Plack in debug mode
+    --debugger-key        Specify the key the IDE is expecting
+    --debugger-location   Specify the host:port for your debugger tool (defaults
+                          to localhost:9000)
+    --debugger-path       Specify the path for the debugger library
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
     --help|-h             Display this help message
@@ -79,13 +85,24 @@ start_plack()
     PLACK_WORKERS=$(run_safe_xmlstarlet $instancename plack_workers)
     [ -z $PLACK_WORKERS ] && PLACK_WORKERS="2"
 
-    STARMANOPTS="-M FindBin --max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS} \
+    environment="deployment"
+    daemonize="--daemonize"
+    logging="--access-log /var/log/koha/${instancename}/plack.log \
+             --error-log /var/log/koha/${instancename}/plack-error.log"
+    max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
+
+    if [ "$debug_mode" = "yes" ]; then
+        environment="development"
+        daemonize=""
+        logging="" # remote debugger takes care
+        max_requests_and_workers="--workers 1"
+        STARMAN="/usr/bin/perl -d ${STARMAN}"
+    fi
+
+    STARMANOPTS="-M FindBin ${max_requests_and_workers} \
                  --user=${instancename}-koha --group ${instancename}-koha \
-                 --pid ${PIDFILE} \
-                 --daemonize \
-                 --access-log /var/log/koha/${instancename}/plack.log \
-                 --error-log /var/log/koha/${instancename}/plack-error.log \
-                 -E deployment --socket ${PLACKSOCKET} ${PSGIFILE}"
+                 --pid ${PIDFILE} ${daemonize} ${logging} \
+                 -E ${environment} --socket ${PLACKSOCKET} ${PSGIFILE}"
 
     if ! is_plack_running ${instancename}; then
         export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
@@ -239,6 +256,10 @@ set_action()
 STARMAN=$(which starman)
 op=""
 quiet="no"
+debug_mode="no"
+debugger_key=""
+debugger_location="localhost:9000"
+debugger_path=""
 
 # Read command line parameters
 while [ $# -gt 0 ]; do
@@ -264,6 +285,18 @@ while [ $# -gt 0 ]; do
         --disable)
             set_action "disable"
             shift ;;
+        --debugger)
+            debug_mode="yes"
+            shift ;;
+        --debugger-key)
+            debugger_key="$2"
+            shift 2 ;;
+        --debugger-location)
+            debugger_location="$2"
+            shift 2 ;;
+        --debugger-path)
+            debugger_path="$2"
+            shift 2 ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
@@ -282,7 +315,23 @@ if [ $# -gt 0 ]; then
         if is_instance $name; then
 
             adjust_paths_dev_install $name
-            export DEV_INSTALL KOHA_HOME PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
+            export DEV_INSTALL
+            export KOHA_HOME
+            PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
+            # If debug mode is enabled, add the debugger lib path
+            # to PERL5LIB if appropriate
+            if [ "$debug_mode" = "yes" ]; then
+                if [ "$debugger_path" != "" ]; then
+                    PERL5LIB="${debugger_path}":$PERL5LIB
+                fi
+                export PERL5DB="BEGIN { require q(${debugger_path}/perl5db.pl) }"
+                export PERLDB_OPTS="RemotePort=${debugger_location} async=1 LogFile=/var/log/koha/${name}/plack-debug.log"
+                export DBGP_IDEKEY=${debugger_key}
+                export PLACK_DEBUG=1
+                export PERL5OPT="-d"
+            fi
+
+            export PERL5LIB
 
             case $op in
                 "start")
