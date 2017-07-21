@@ -33,6 +33,10 @@ my $builder = t::lib::TestBuilder->new();
 
 $schema->storage->txn_begin;
 
+# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
+# this affects the other REST api tests
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
 
