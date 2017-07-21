@@ -833,7 +833,7 @@
                 <xsl:when test="marc:subfield[@code='w']">
                     <a>
                     <xsl:attribute name="href">
-                        <xsl:text>/cgi-bin/koha/opac-search.pl?q=Control-number:</xsl:text>
+                        <xsl:text>/cgi-bin/koha/opac-search.pl?q=control-number:</xsl:text>
                         <xsl:call-template name="extractControlNumber">
                             <xsl:with-param name="subfieldW">
                                 <xsl:value-of select="marc:subfield[@code='w']"/>
