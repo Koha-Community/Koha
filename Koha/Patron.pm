@@ -36,6 +36,7 @@ use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
+use Koha::Account;
 
 use base qw(Koha::Object);
 
