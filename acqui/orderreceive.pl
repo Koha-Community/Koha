@@ -145,7 +145,7 @@ if ($AcqCreateItem eq 'receiving') {
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
         $item->{materials} = $descriptions->{lib} // '';
 
-        my $itemtype = Koha::ItemsTypes->find( $item->{itype} );
+        my $itemtype = Koha::ItemTypes->find( $item->{itype} );
         $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
         push @items, $item;
     }
