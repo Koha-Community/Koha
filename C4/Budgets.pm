@@ -343,8 +343,8 @@ sub GetBudgetSpent {
         SELECT SUM(shipmentcost) AS sum
         FROM aqinvoices
         WHERE shipmentcost_budgetid = ?
-          AND closedate IS NOT NULL
     |);
+
     $sth->execute($budget_id);
     my ($shipmentcost_sum) = $sth->fetchrow_array;
     $sum += $shipmentcost_sum;
@@ -364,16 +364,6 @@ sub GetBudgetOrdered {
     |);
 	$sth->execute($budget_id);
 	my $sum =  $sth->fetchrow_array;
-
-    $sth = $dbh->prepare(qq|
-        SELECT SUM(shipmentcost) AS sum
-        FROM aqinvoices
-        WHERE shipmentcost_budgetid = ?
-          AND closedate IS NULL
-    |);
-    $sth->execute($budget_id);
-    my ($shipmentcost_sum) = $sth->fetchrow_array;
-    $sum += $shipmentcost_sum;
 
 	return $sum;
 }
