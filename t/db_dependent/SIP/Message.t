@@ -54,15 +54,12 @@ my $mockILS = Test::MockObject->new;
 $mockILS->mock( 'check_inst_id', sub {} );
 $mockILS->mock( 'institution_id', sub { $branchcode; } );
 $mockILS->mock( 'find_patron', sub { $findpatron; } );
-$branch = $builder->build({
-    source => 'Branch',
-});
-$branchcode = $branch->{branchcode};
 
 # START testing
 subtest 'Testing Patron Status Request V2' => sub {
     $schema->storage->txn_begin;
     plan tests => 13;
+    $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_status_v2();
     $schema->storage->txn_rollback;
@@ -71,6 +68,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     $schema->storage->txn_begin;
     plan tests => 17;
+    $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
