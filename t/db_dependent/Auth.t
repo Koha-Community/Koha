@@ -29,6 +29,10 @@ my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 my $dbh     = C4::Context->dbh;
 
+# FIXME: SessionStorage defaults to mysql, but it seems to break transaction
+# handling
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+
 $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
