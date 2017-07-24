@@ -418,24 +418,6 @@ ALTER TABLE `collections`
   ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`colBranchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Table: collections_tracking
---
-
-DROP TABLE IF EXISTS collections_tracking;
-CREATE TABLE collections_tracking (
-  collections_tracking_id integer(11) NOT NULL auto_increment,
-  colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
-  itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
-  origin_branchcode varchar(10) DEFAULT NULL,
-  transfer_branch varchar(10) DEFAULT NULL,
-  transferred tinyint(1) DEFAULT '0',
-  date_added datetime DEFAULT NULL,
-  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (collections_tracking_id),
-  CONSTRAINT `coltra-fk-items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `branch_borrower_circ_rules`
 --
 
@@ -4321,6 +4303,24 @@ CREATE TABLE `vetuma_transaction_accountlines_link` (
     FOREIGN KEY (transaction_id) REFERENCES vetuma_transaction(transaction_id)
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Table: collections_tracking
+--
+
+DROP TABLE IF EXISTS collections_tracking;
+CREATE TABLE collections_tracking (
+  collections_tracking_id integer(11) NOT NULL auto_increment,
+  colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
+  itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
+  origin_branchcode varchar(10) DEFAULT NULL,
+  transfer_branch varchar(10) DEFAULT NULL,
+  transferred tinyint(1) DEFAULT '0',
+  date_added datetime DEFAULT NULL,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (collections_tracking_id),
+  CONSTRAINT `coltra-fk-items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
