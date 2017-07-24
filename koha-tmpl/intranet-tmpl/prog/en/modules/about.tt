@@ -131,6 +131,11 @@
                 The following ids exist in both the biblio and deletedbiblio table:
                 [% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]
             [% END %]
+            [% IF ai_items %]
+                <h3>Items</h3>
+                The following ids exist in both the items and deleteditems table:
+                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]
+            [% END %]
             [% IF ai_checkouts %]
                 <h3>Checkouts</h3>
                 The following ids exist in both the issues and old_issues table:
