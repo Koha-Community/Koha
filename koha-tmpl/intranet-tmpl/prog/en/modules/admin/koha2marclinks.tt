@@ -1,19 +1,27 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo;
-[% IF ( add_form ) %] Koha to MARC mapping &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
-[% IF ( else ) %]Koha to MARC mapping [% tagfield %][% END %]</title>
+<title>Koha &rsaquo; Administration &rsaquo; Koha to MARC mapping</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    [% IF tablename.default == 'biblio' %]
-        $("#tablename option:first").attr('selected','selected');
-    [% END %]
-    $('#tablename').change(function() {
-        $('#koha2marc').submit();
-    });
 });
+
+function AddFld(kohafield) {
+    var fieldstr = prompt( _("Adding a mapping for: ") + kohafield + ".\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );
+    var temp = fieldstr.split(',');
+    if( temp.length == 2 ) {
+        $('#add_field').val( kohafield+','+fieldstr );
+        $('#koha2marc').submit();
+    }
+}
+
+function RemFld(tagfield, subfield ) {
+    if( confirm( _("Mapping will be removed for: ") + tagfield + subfield + ".\n" + _("The change will be applied immediately." ))) {
+        $('#remove_field').val(tagfield+','+subfield);
+        $('#koha2marc').submit();
+    }
+}
 //]]>
 </script>
 </head>
@@ -22,106 +30,56 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a> &rsaquo; Connect [% tablename %].[% kohafield %] to a MARC subfield[% END %]
-[% IF ( else ) %]Koha to MARC mapping[% tagfield %][% END %]</div>
-[% IF ( add_form ) %]
-<div id="doc" class="yui-t7">
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a> &rsaquo;</div>
 
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-g">
-[% ELSE %]
 <div id="doc3" class="yui-t2">
 
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-[% END %]
 
-[% IF ( add_form ) %]
-<h1>Connect [% tablename %].[% kohafield %] to a MARC subfield</h1>
-    <p>Choose and validate 1 MARC subfield for <strong>[% tablename %].[% kohafield %]</strong>.</p>
-    <p><b>Note: </b>All frameworks will be modified which is usually what you need, but you have been warned.</p>
-    <fieldset class="rows">
-        <ol>
-        [% FOR i IN [ 0 .. 9 ] %]
-            [% marclist = "marclist$i" %]
-            <li>
-                <form action="[% script_name %]" method="post">
-                <input type="hidden" name="op" value="add_validate" />
-                <input type="hidden" name="tablename" value="[% tablename %]" />
-                <input type="hidden" name="kohafield" value="[% kohafield %]" />
-                <label>[% i %]00s</label>
-                <select name="marc" id="marc" size="1" width="570" style="width: 570px;">
-                    [% FOREACH value IN $marclist.values %]
-                        [% IF ( value == $marclist.default ) %]
-                            <option value="[% value %]" selected="selected">[% value %]</option>
-                        [% ELSE %]
-                            <option value="[% value %]">[% value %]</option>
-                        [% END %]
-                    [% END %]
-                </select>
-                <input type="submit" value="OK" />
-                </form>
-            </li>
-        [% END %]
-        </ol>
-    </fieldset>
-	<fieldset class="action">
-            <form action="[% script_name %]" name="Aform" method="post">
-                <input type="hidden" name="op" value="add_validate" />
-                <input type="hidden" name="tablename" value="[% tablename %]" />
-                <input type="hidden" name="kohafield" value="[% kohafield %]" />
-                <input type="hidden" name="choice" value="" />
-                <input type="submit" value="Click to &quot;Unmap&quot;" />
-            </form>
-	<a class="cancel" href="/cgi-bin/koha/admin/koha2marclinks.pl">Cancel</a>
-	</fieldset>
-[% END %]
+<h1>Koha to MARC mapping</h1>
+<br/>
+<form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
 
-
-[% IF ( else ) %]
-
-<h1>Koha to MARC mapping [% tagfield %]</h1>
-<form action="[% script_name %]" method="post" id="koha2marc">
-<p>
-    <select name="tablename" id="tablename" size="1">
-    [% FOREACH value IN tablename.values %]
-        [% IF ( value == tablename.default ) %]
-        <option value="[% value %]" selected="selected">[% value %]</option>
-        [% ELSE %]
-        <option value="[% value %]">[% value %]</option>
-        [% END %]
-    [% END %]
-    </select>
-</p>
-</form>
-<table>
-<tr>
+<table id="kohafields">
+<thead><tr>
     <th>Koha field</th>
     <th>Tag</th>
     <th>Subfield</th>
     <th>Lib</th>
     <th>&nbsp;</th>
-</tr>
+</tr></thead>
+<tbody>
 [% FOREACH loo IN loop %]
 <tr>
-    <td><a href="[% loo.edit %]">[% loo.kohafield %]</a></td>
+    <td>[% loo.kohafield %]</td>
     <td>[% loo.tagfield %]</td>
     <td>[% loo.tagsubfield %]</td>
     <td>[% loo.liblibrarian %]</td>
-    <td><a href="[% loo.edit %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a></td>
+    <td>
+        [% IF !loo.readonly %]
+            <a onclick="AddFld('[% loo.kohafield %]');" class="btn btn-default btn-xs">Add</a>
+            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield %]','[% loo.tagsubfield %]');" class="btn btn-default btn-xs">Remove</a> [% END %]
+        [% END %]
+    </td>
+    </td>
 </tr>
 [% END %]
+</tbody>
 </table>
-[% END %]
+
+<input id="remove_field" name="remove_field" type="hidden" value=""/>
+<input id="add_field" name="add_field" type="hidden" value=""/>
+
+</form>
 
 </div>
 </div>
-[% UNLESS ( add_form ) %]
+
 <div class="yui-b">
 [% INCLUDE 'admin-menu.inc' %]
 </div>
-[% END %]
+
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
