@@ -297,7 +297,7 @@ if (  C4::Context->preference('WebBasedSelfCheck')
         { Slice => {} }
     );
     my $items = $dbh->selectall_arrayref(
-        q|select i.itemnumber from items b join deleteditems di on i.itemnumber=di.itemnumber|,
+        q|select i.itemnumber from items i join deleteditems di on i.itemnumber=di.itemnumber|,
         { Slice => {} }
     );
     my $checkouts = $dbh->selectall_arrayref(
@@ -308,7 +308,7 @@ if (  C4::Context->preference('WebBasedSelfCheck')
         q|select r.reserve_id from reserves r join old_reserves o on r.reserve_id=o.reserve_id|,
         { Slice => {} }
     );
-    if ( @$patrons or @$biblios or @$checkouts or @$holds ) {
+    if ( @$patrons or @$biblios or @$items or @$checkouts or @$holds ) {
         $template->param(
             has_ai_issues => 1,
             ai_patrons    => $patrons,
