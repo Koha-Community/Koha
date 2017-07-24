@@ -246,7 +246,7 @@ my $opac_renew_issue = $builder->build({
     }
 });
 
-my $datedue4 = AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, "Stavromula", $datedue1, $daysago10, 1 );
+my $datedue4 = AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, "Stavromula", $datedue1, $daysago10 );
 
 $stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew' AND borrowernumber = ? AND itemnumber = ? AND branch = ?", undef,  $opac_renew_issue->{borrowernumber},  $opac_renew_issue->{itemnumber}, "Stavromula" );
 ok( $stat, "Bug 18572 - 'Bug 18572 - OpacRenewalBranch is now respected" );
