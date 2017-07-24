@@ -23,6 +23,7 @@ use Test::More;
 use Try::Tiny; #Even Selenium::Remote::Driver uses Try::Tiny :)
 
 use Koha::Auth::PermissionManager;
+use Koha::Patron::Modifications;
 
 use t::lib::Page::Mainpage;
 use t::lib::Page::Opac::OpacMain;
@@ -98,6 +99,12 @@ tearDown();
 done_testing;
 
 sub tearDown {
+    Koha::Patron::Modifications->search({
+        borrowernumber => $borrowers->{'1A01'}->borrowernumber
+    })->delete;
+    Koha::Patron::Modifications->search({
+        borrowernumber => $borrowers->{'superuberadmin'}->borrowernumber
+    })->delete;
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
 }
 
