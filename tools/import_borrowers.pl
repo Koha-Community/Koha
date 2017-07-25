@@ -227,15 +227,9 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         my $borrowernumber;
         my $member;
         if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
-            $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } )->unblessed;
-            if ($member) {
-                $borrowernumber = $member->{'borrowernumber'};
-            }
+            $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } );
         } elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
             $member = Koha::Patrons->find( { userid => $borrower{'userid'} } )->unblessed;
-            if ($member) {
-                $borrowernumber = $member->{'borrowernumber'};
-            }
         } elsif ($extended) {
             if (defined($matchpoint_attr_type)) {
                 foreach my $attr (@$patron_attributes) {
@@ -246,6 +240,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                     }
                 }
             }
+        }
+
+        if ($member) {
+            $member = $member->unblessed;
+            $borrowernumber = $member->{'borrowernumber'};
+        } else {
+            $member = {};
         }
 
         if ( C4::Members::checkcardnumber( $borrower{cardnumber}, $borrowernumber ) ) {
