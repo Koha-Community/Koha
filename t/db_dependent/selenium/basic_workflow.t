@@ -48,7 +48,7 @@ use MARC::Field;
 my $dbh = C4::Context->dbh;
 my $login = 'koha';
 my $password = 'koha';
-my $base_url= 'http://'.C4::Context->preference("staffClientBaseURL")."/cgi-bin/koha/";
+my $base_url= ( $ENV{KOHA_INTRANET_URL} || 'http://'.C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/";
 
 my $number_of_biblios_to_insert = 3;
 our $sample_data = {
