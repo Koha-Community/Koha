@@ -165,6 +165,9 @@ sub import_patrons {
         if ( defined($matchpoint) && ( $matchpoint eq 'cardnumber' ) && ( $borrower{'cardnumber'} ) ) {
             $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } );
         }
+        elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
+            $member = Koha::Patrons->find( { userid => $borrower{userid} } );
+        }
         elsif ($extended) {
             if ( defined($matchpoint_attr_type) ) {
                 foreach my $attr (@$patron_attributes) {
@@ -244,7 +247,8 @@ sub import_patrons {
                 );
                 next LINE;
             }
-            if ( $borrower{debarred} ) {
+            # Don't add a new restriction if the existing 'combined' restriction matches this one
+            if ( $borrower{debarred} && ( ( $borrower{debarred} ne $member->{debarred} ) || ( $borrower{debarredcomment} ne $member->{debarredcomment} ) ) ) {
 
                 # Check to see if this debarment already exists
                 my $debarrments = GetDebarments(
