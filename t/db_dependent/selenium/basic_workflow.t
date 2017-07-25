@@ -23,9 +23,6 @@
 # Xvfb :1 -screen 0 1024x768x24 2>&1 >/dev/null &
 # DISPLAY=:1 java -jar $SELENIUM_PATH
 #
-# Remove the rentalcharge:
-# % UPDATE itemtypes SET rentalcharge = 0;
-#
 # Then you can execute the test file.
 #
 # If you get:
@@ -50,6 +47,7 @@ my $login = 'koha';
 my $password = 'koha';
 my $base_url= ( $ENV{KOHA_INTRANET_URL} || 'http://'.C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/";
 
+
 my $number_of_biblios_to_insert = 3;
 our $sample_data = {
     category => {
@@ -64,6 +62,13 @@ our $sample_data = {
         userid     => 'test_username',
         password   => 'password',
         password2  => 'password'
+
+    },
+    itemtype => {
+        itemtype     => 'IT4TEST',
+        description  => 'Just an itemtype for tests',
+        rentalcharge => 0,
+        notforloan   => 0,
     },
 };
 our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
@@ -128,8 +133,8 @@ SKIP: {
 
     time_diff("add biblio");
 
-    my $itemtype = $dbh->selectcol_arrayref(q|SELECT itemtype FROM itemtypes|);
-    $itemtype = $itemtype->[0];
+    my $itemtype = $sample_data->{itemtype};
+    $dbh->do(q|INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan) VALUES (?, ?, ?, ?)|, undef, $itemtype->{itemtype}, $itemtype->{description}, $itemtype->{rentalcharge}, $itemtype->{notforloan});
 
     for my $biblionumber ( @biblionumbers ) {
         $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
@@ -149,8 +154,8 @@ SKIP: {
         like( $driver->get_title(), qr($biblionumber.*Items) );
 
         $dbh->do(q|UPDATE items SET notforloan=0 WHERE biblionumber=?|, {}, $biblionumber );
-        $dbh->do(q|UPDATE biblioitems SET itemtype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
-        $dbh->do(q|UPDATE items SET itype=? WHERE biblionumber=?|, {}, $itemtype, $biblionumber);
+        $dbh->do(q|UPDATE biblioitems SET itemtype=? WHERE biblionumber=?|, {}, $itemtype->{itemtype}, $biblionumber);
+        $dbh->do(q|UPDATE items SET itype=? WHERE biblionumber=?|, {}, $itemtype->{itemtype}, $biblionumber);
     }
 
     time_diff("add items");
@@ -217,6 +222,7 @@ sub cleanup {
     for my $i ( 1 .. $number_of_biblios_to_insert ) {
         $dbh->do(qq|DELETE items, biblio FROM biblio INNER JOIN items ON biblio.biblionumber = items.biblionumber WHERE biblio.title = "test biblio$i"|);
     };
+    $dbh->do(q|DELETE FROM itemtypes WHERE itemtype=?|, undef, $sample_data->{itemtype}{itemtype});
 }
 
 sub time_diff {
