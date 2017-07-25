@@ -114,37 +114,39 @@
         [% IF has_ai_issues %]
             <h2>Data problems</h2>
             <p>
-            The following tables have problems with their auto_increment values which may lead to data lost. You should not ignore this warning.
-            The problem is that innodb does not keep auto_increment across SQL server restarts (it is only set in memory).
+            Some of your tables have problems with their auto_increment values which may lead to data loss. <strong>You should not ignore this warning</strong>.
+            The problem is that InnoDB does not keep auto_increment across SQL server restarts (it is only set in memory).
             So on server startup the auto_increment values are set to max(table.id)+1.
             </p>
             <p>
             See the <a href="https://wiki.koha-community.org/wiki/DBMS_auto_increment_fix">related wiki page</a> to know how to avoid this problem.
             </p>
+
+            <h3>Problems found</h3>
             [% IF ai_patrons %]
-                <h3>Patrons</h3>
-                The following ids exist in both the borrowers and deletedborrowers table:
-                [% FOR p IN ai_patrons %][% p.borrowernumber %][% UNLESS loop.last %], [% END %][% END %]
+                <h4>Patrons</h4>
+                <p>The following ids exist in both <strong>borrowers</strong> and <strong>deletedborrowers</strong> tables:
+                [% FOR p IN ai_patrons %][% p.borrowernumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_biblios %]
-                <h3>Biblios</h3>
-                The following ids exist in both the biblio and deletedbiblio table:
-                [% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]
+                <h4>Biblios</h4>
+                <p>The following ids exist in both <strong>biblio</strong> and <strong>deletedbiblio</strong> tables:
+                [% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_items %]
-                <h3>Items</h3>
-                The following ids exist in both the items and deleteditems table:
-                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]
+                <h4>Items</h4>
+                <p>The following ids exist in both <strong>items</strong> and <strong>deleteditems</strong> tables:
+                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p
             [% END %]
             [% IF ai_checkouts %]
-                <h3>Checkouts</h3>
-                The following ids exist in both the issues and old_issues table:
-                [% FOR c IN ai_checkouts %][% c.issue_id %][% UNLESS loop.last %], [% END %][% END %]
+                <h4>Checkouts</h4>
+                <p>The following ids exist in both <strong>issues</strong> and <strong>old_issues</strong> tables:
+                [% FOR c IN ai_checkouts %][% c.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_holds %]
-                <h3>Holds</h3>
-                The following ids exist in both the holds and old_reserves table:
-                [% FOR h IN ai_holds %][% h.issue_id %][% UNLESS loop.last %], [% END %][% END %]
+                <h4>Holds</h4>
+                <p>The following ids exist in both <strong>holds</strong> and <strong>old_reserves</strong> table:
+                [% FOR h IN ai_holds %][% h.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
         [% END %]
 
