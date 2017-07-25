@@ -53,7 +53,7 @@ my $base_url= ( $ENV{KOHA_INTRANET_URL} || 'http://'.C4::Context->preference("st
 my $number_of_biblios_to_insert = 3;
 our $sample_data = {
     category => {
-        categorycode    => 'test_cat',
+        categorycode    => 'TEST_CAT',
         description     => 'test cat description',
         enrolmentperiod => '12',
         category_type   => 'A'
@@ -206,8 +206,8 @@ sub fill_form {
 
 sub cleanup {
     my $dbh = C4::Context->dbh;
-    $dbh->do(q|DELETE FROM categories WHERE categorycode = ?|, {}, $sample_data->{category}{categorycode});
     $dbh->do(q|DELETE FROM borrowers WHERE userid = ?|, {}, $sample_data->{patron}{userid});
+    $dbh->do(q|DELETE FROM categories WHERE categorycode = ?|, {}, $sample_data->{category}{categorycode});
     for my $i ( 1 .. $number_of_biblios_to_insert ) {
         $dbh->do(qq|DELETE FROM biblio WHERE title = "test biblio $i"|);
     };
