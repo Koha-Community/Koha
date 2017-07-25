@@ -62,7 +62,6 @@ our $sample_data = {
         userid     => 'test_username',
         password   => 'password',
         password2  => 'password'
-
     },
     itemtype => {
         itemtype     => 'IT4TEST',
@@ -70,6 +69,15 @@ our $sample_data = {
         rentalcharge => 0,
         notforloan   => 0,
     },
+    issuingrule => {
+        categorycode  => 'test_cat',
+        itemtype      => 'IT4test',
+        branchcode    => '*',
+        maxissueqty   => '5',
+        issuelength   => '5',
+        lengthunit    => 'days',
+        renewalperiod => '5',
+      },
 };
 our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
 
@@ -135,6 +143,9 @@ SKIP: {
 
     my $itemtype = $sample_data->{itemtype};
     $dbh->do(q|INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan) VALUES (?, ?, ?, ?)|, undef, $itemtype->{itemtype}, $itemtype->{description}, $itemtype->{rentalcharge}, $itemtype->{notforloan});
+
+    my $issuing_rules = $sample_data->{issuingrule};
+    $dbh->do(q|INSERT INTO issuingrules (categorycode, itemtype, branchcode, maxissueqty, issuelength, lengthunit, renewalperiod) VALUES (?, ?, ?, ?, ?, ?, ?)|, undef, $issuing_rules->{categorycode}, $issuing_rules->{itemtype}, $issuing_rules->{branchcode}, $issuing_rules->{maxissueqty}, $issuing_rules->{issuelength}, $issuing_rules->{lengthunit}, $issuing_rules->{renewalperiod});
 
     for my $biblionumber ( @biblionumbers ) {
         $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
@@ -223,6 +234,7 @@ sub cleanup {
         $dbh->do(qq|DELETE items, biblio FROM biblio INNER JOIN items ON biblio.biblionumber = items.biblionumber WHERE biblio.title = "test biblio$i"|);
     };
     $dbh->do(q|DELETE FROM itemtypes WHERE itemtype=?|, undef, $sample_data->{itemtype}{itemtype});
+    $dbh->do(q|DELETE FROM issuingrules WHERE categorycode=? AND itemtype=? AND branchcode=?|, undef, $sample_data->{issuingrule}{categorycode}, $sample_data->{issuingrule}{itemtype}, $sample_data->{issuingrule}{branchcode});
 }
 
 sub time_diff {
