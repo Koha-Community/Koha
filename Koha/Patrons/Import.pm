@@ -163,10 +163,7 @@ sub import_patrons {
         my $borrowernumber;
         my $member;
         if ( defined($matchpoint) && ( $matchpoint eq 'cardnumber' ) && ( $borrower{'cardnumber'} ) ) {
-            $member = GetMember( 'cardnumber' => $borrower{'cardnumber'} );
-            if ($member) {
-                $borrowernumber = $member->{'borrowernumber'};
-            }
+            $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } );
         }
         elsif ($extended) {
             if ( defined($matchpoint_attr_type) ) {
@@ -178,6 +175,13 @@ sub import_patrons {
                     }
                 }
             }
+        }
+
+        if ($member) {
+            $member = $member->unblessed;
+            $borrowernumber = $member->{'borrowernumber'};
+        } else {
+            $member = {};
         }
 
         if ( C4::Members::checkcardnumber( $borrower{cardnumber}, $borrowernumber ) ) {
