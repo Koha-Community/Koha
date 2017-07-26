@@ -25,7 +25,7 @@ use List::MoreUtils qw/ any uniq /;
 
 =head1 NAME 
 
-    Koha::Templates - Object for manipulating templates for use with Koha
+C4::Templates - Object for manipulating templates for use with Koha
 
 =cut
 
