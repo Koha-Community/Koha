@@ -1,7 +1,5 @@
 
-use strict;
-use warnings;
-use 5.010;
+use Modern::Perl;
 use C4::Context;
 use C4::Circulation;
 use C4::Members;
@@ -11,6 +9,10 @@ use Koha::Patrons;
 use t::lib::TestBuilder;
 
 use Test::More tests => 8;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
 C4::Context->_new_userenv(1234567);
 C4::Context->set_userenv(91, 'CLIstaff', '23529001223661', 'CPL',
                          'CPL', 'CPL', '', 'cc@cscnet.co.uk');
