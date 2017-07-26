@@ -172,7 +172,7 @@
             [% IF ai_holds %]
                 <h4>Holds</h4>
                 <p>The following ids exist in both <strong>holds</strong> and <strong>old_reserves</strong> table:
-                [% FOR h IN ai_holds %][% h.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                [% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
         [% END %]
 
