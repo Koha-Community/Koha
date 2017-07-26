@@ -222,16 +222,15 @@ sub fill_form {
 
 sub cleanup {
     my $dbh = C4::Context->dbh;
-    $dbh->do(q|DELETE FROM borrowers WHERE userid = ?|, {}, $sample_data->{patron}{userid});
-    $dbh->do(q|DELETE FROM categories WHERE categorycode = ?|, {}, $sample_data->{category}{categorycode});
-    for my $i ( 1 .. $number_of_biblios_to_insert ) {
-        $dbh->do(qq|DELETE FROM biblio WHERE title = "test biblio $i"|);
-    };
-
     $dbh->do(q|DELETE FROM issues where borrowernumber=?|, {}, $borrowernumber);
     $dbh->do(q|DELETE FROM old_issues where borrowernumber=?|, {}, $borrowernumber);
     for my $i ( 1 .. $number_of_biblios_to_insert ) {
         $dbh->do(qq|DELETE items, biblio FROM biblio INNER JOIN items ON biblio.biblionumber = items.biblionumber WHERE biblio.title = "test biblio$i"|);
+    };
+    $dbh->do(q|DELETE FROM borrowers WHERE userid = ?|, {}, $sample_data->{patron}{userid});
+    $dbh->do(q|DELETE FROM categories WHERE categorycode = ?|, {}, $sample_data->{category}{categorycode});
+    for my $i ( 1 .. $number_of_biblios_to_insert ) {
+        $dbh->do(qq|DELETE FROM biblio WHERE title = "test biblio $i"|);
     };
     $dbh->do(q|DELETE FROM itemtypes WHERE itemtype=?|, undef, $sample_data->{itemtype}{itemtype});
     $dbh->do(q|DELETE FROM issuingrules WHERE categorycode=? AND itemtype=? AND branchcode=?|, undef, $sample_data->{issuingrule}{categorycode}, $sample_data->{issuingrule}{itemtype}, $sample_data->{issuingrule}{branchcode});
