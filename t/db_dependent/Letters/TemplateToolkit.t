@@ -51,6 +51,12 @@ $schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new();
 
+# Koha-Suomi hack: This test is committing test data due to LOCK TABLES and
+# transaction incompatibility. Community solution is to either run this test via
+# prove, or define KOHA_NO_TABLE_LOCKS. Define the environment variable within
+# this test to avoid having to define it in dev environments/Jenkins containers.
+$ENV{KOHA_NO_TABLE_LOCKS} = 1;
+
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
