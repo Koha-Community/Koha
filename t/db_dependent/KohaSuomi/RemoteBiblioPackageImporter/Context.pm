@@ -6,7 +6,9 @@ use t::lib::TestObjects::MatcherFactory;
 sub prepareContext {
     my ($class, $testContext) = @_;
 
-    t::lib::TestObjects::SystemPreferenceFactory->createTestGroup({preference => 'VaaraAcqVendorConfigurations', value => <<SYSPREF});
+    t::lib::TestObjects::SystemPreferenceFactory->createTestGroup([{
+        preference => 'VaaraAcqVendorConfigurations',
+        value => <<SYSPREF}], undef, $testContext);
 ---
 BTJBiblios:
     host: testcluster.koha-suomi.fi
