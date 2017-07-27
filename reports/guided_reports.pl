@@ -51,7 +51,7 @@ my $usecache = C4::Context->ismemcached;
 
 my $phase = $input->param('phase') // '';
 my $flagsrequired;
-if ( $phase eq 'Build new' or $phase eq 'Delete Saved' ) {
+if ( ( $phase eq 'Build new' ) || ( $phase eq 'Create report from SQL' ) || ( $phase eq 'Edit SQL' ) ){
     $flagsrequired = 'create_reports';
 }
 elsif ( $phase eq 'Use saved' ) {
