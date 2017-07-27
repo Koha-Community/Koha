@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-15 21:44-0300\n"
-"PO-Revision-Date: 2017-03-17 13:19+0000\n"
+"POT-Creation-Date: 2017-07-16 11:48-0300\n"
+"PO-Revision-Date: 2017-07-26 09:16+0000\n"
 "Last-Translator: AnneliÖ <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1489756751.000000\n"
+"X-POOTLE-MTIME: 1501060583.000000\n"
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:82
 #, c-format
@@ -867,7 +867,7 @@ msgstr "(! tarkoittaa 'ei näkyvissä' tai 'ei supistettu')"
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:11
 #: intranet-tmpl/prog/en/modules/help/patroncards/home.tt:20
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:31
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:19
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:23
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:34
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:28
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:19
@@ -2502,6 +2502,11 @@ msgstr ""
 msgid "All three of these options will open up the issue receive form:"
 msgstr "Kaikki kolme valintaa avautuvat vastaanottolomakkeeseen:"
 
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:17
+#, c-format
+msgid "All uploaded images will be listed on the right hand side of this page."
+msgstr "Kaikki kuvat ovat listattuna sivun oikeassa laidassa."
+
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:117
 #, c-format
 msgid "Allow access to the reports module"
@@ -2647,13 +2652,6 @@ msgid ""
 msgstr ""
 "Ja synkronoi datasi jokaisesta lainauksen tietokoneesta klikkaamalla "
 "'Synkronoi'-linkkiä näytön oikeassa reunassa."
-
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:15
-#, c-format
-msgid ""
-"And the image will be listed with all of your others on the right hand side "
-"of the page."
-msgstr "Kuva löytyy muiden kuvien joukosta sivun oikealta laidalta."
 
 #: intranet-tmpl/prog/en/modules/help/suggestion/suggestion.tt:23
 #, c-format
@@ -3332,15 +3330,15 @@ msgid "Build sets"
 msgstr "Rakenna joukot"
 
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "By default all item types and all patrons are notified of check ins and "
 "check outs. To change this, click on the item type/patron category "
 "combination that you would like to stop notices for."
 msgstr ""
-"Oletuksena kaikki aineistolajit ja asiakastyypit saavat viestin lainauksista "
-"ja palautuksista. Jos haluat muuttaa tämän, valitse aineisto/asiakas -"
-"yhdistelmä, jonka viestejä haluat muuttaa."
+"Oletuksena kaikista aineistolajeista lähetään ja kaikki asiakastyypit saavat "
+"viestin lainauksista ja palautuksista. Jos haluat muuttaa tämän, valitse "
+"aineistolaji/asiakastyyppi -yhdistelmä, joille viestejä ei lähetetä."
 
 #: intranet-tmpl/prog/en/modules/help/tools/export.tt:26
 #, c-format
@@ -6307,7 +6305,7 @@ msgid ""
 msgstr "Lopuksi päätä, mitkä tiedoista korvataan, jos löytyy tuplia. "
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Finally, if you charge a rental fee for the item type and want to give a "
 "specific patron category a discount on that fee, enter the percentage "
@@ -6315,7 +6313,7 @@ msgid ""
 msgstr ""
 "Jos perit aineistolajista lainausmaksua ja haluat antaa jollekin "
 "asiakastyypille alennuksen tästä maksusta, syötä prosenttialennus (ilman %% "
-"merkkejä) 'Lainausmaksun alennus'-kenttään"
+"merkkiä) 'Lainausmaksun alennus'-kenttään"
 
 #: intranet-tmpl/prog/en/modules/help/members/memberentry.tt:72
 #, c-format
@@ -7475,12 +7473,12 @@ msgstr ""
 "sisällöstä. Tietueen pitää täsmätä vain yhteen ehtoon kuuluakseen joukkoon."
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Hold fees will be charged based on the rules you set for the patron category "
 "in administration"
 msgstr ""
-"Varausmaksut peritään asiakastyyppien ja kategorioiden hallinnan asetusten "
+"Varausmaksut peritään asiakastyypille ylläpidossa määritettyjen sääntöjen "
 "mukaan"
 
 #: intranet-tmpl/prog/en/modules/help/circ/reserveratios.tt:3
@@ -8970,15 +8968,14 @@ msgstr ""
 "asiakastietueen muutokset."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have set your ExportCircHistory preference, you will also see the "
 "option to export the patron's current checkout information using a CSV "
 "Profile or ISO2709 (MARC21) format."
 msgstr ""
-"Jos ExportWithCsvProfile-asetus on tehty, näet myös vaihtoehdon viedä "
-"asiakkaan olemassa olevien lainojen tiedot CSV-profiilin tai ISO2709 "
-"(MARC21) formaatin kautta."
+"Jos ExportCircHistory-asetus on päällä, on myös mahdollista viedä asiakkaan "
+"lainatiedot tiedostoksi CSV-profiilia käyttäen ISO2709 (MARC21) -muodossa."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation.tt:65
 #, c-format
@@ -9678,12 +9675,12 @@ msgstr ""
 "Varauksen huomioimatta jättäminen jättää niteen varaukseen, mutta jättää sen "
 "tilaksi 'Saatavana' (se ei peru varausta)"
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:7
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:9
 #, c-format
 msgid "Images must be under 500k in size."
 msgstr "Kuvien pitää olla alle 500k kooltaan."
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:5
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:7
 #, c-format
 msgid ""
 "Images uploaded using this tool will appear on the menu when creating patron "
@@ -9774,7 +9771,7 @@ msgstr ""
 "olet syöttänyt TransfersMaxDaysWarning -järjestelmäasetukseen."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Important: At the very least you will need to set a default circulation "
 "rule. This rule should be set for all item types, all libraries and all "
@@ -9786,11 +9783,12 @@ msgid ""
 "this holds issue. Koha needs to know what rule to fall back on."
 msgstr ""
 "Tärkeää: Ainakin oletuslainaussääntö pitää määritellä. Tämä sääntö pitää "
-"määritellä kaikille aineistolajeille, kaikille kirjastoille ja kaikille "
-"asiakastyypeille. Kun lainataan ja ei ole sääntöä kaikille kirjastoille, "
+"määritellä koskemaan kaikkia aineistolajeja, kaikkia kirjastoja ja kaikkia "
+"asiakastyyppejä. Sääntö pätee niissä tapauksissa, kun ei ole olemassa "
+"erityistä sääntöä. Kun lainataan ja ei ole sääntöä kaikille kirjastoille, "
 "kaikille aineistolajeille ja kaikille asiakastyypeille, asiakkaat eivät voi "
-"tehdä varauksia. Määrittele tiedot myös kirjastoittain, jos on erityisiä "
-"tarpeita. Koha tarvitsee tiedon, mitä sääntöä noudatetaan."
+"välttämättä tehdä varauksia. Määrittele tiedot myös kirjastoittain, jos on "
+"erityisiä tarpeita. Koha tarvitsee tiedon, mitä sääntöä noudatetaan."
 
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:13
 #, c-format
@@ -10554,7 +10552,7 @@ msgid ""
 msgstr ""
 "Älä käytä valuuttasymboleja summa-kentässä, vain numeroita ja desimaaleja"
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:11
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:13
 #, c-format
 msgid ""
 "In the center of the screen is a simple upload form, simply browse for the "
@@ -11864,7 +11862,7 @@ msgid "Most circulated items"
 msgstr "Eniten lainatut niteet"
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Most common patron category, usually used for a general 'Patron' category."
 msgstr ""
@@ -12594,7 +12592,7 @@ msgid ""
 msgstr ""
 "Kun sitaatteja on tuotu taulukkoon, voit muokata lähdetekstiä ja tekstiä."
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:13
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:15
 #, c-format
 msgid ""
 "Once the file is uploaded you will be presented with a confirmation message."
@@ -13354,7 +13352,7 @@ msgstr ""
 "ExtendedPatronAttributes -järjestelmäasetus."
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Patron categories allow you to organize your patrons into different roles, "
 "age groups, and patron categories."
@@ -13647,7 +13645,7 @@ msgstr "Philadelphia, PA 19107"
 msgid "Phone number: "
 msgstr "Puhelinnumero: "
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:9
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:11
 #, c-format
 msgid ""
 "Pictures uploaded with this tool should be at least 300dpi which is the "
@@ -14607,7 +14605,7 @@ msgstr "Katso koko dokumentaatio MARC-luettelointipohjille "
 msgid "See the full documentation for MARC Modification Templates in the "
 msgstr "Katso koko dokumentaatio MARC-muokkauksen pohjille "
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:19
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:23
 #, c-format
 msgid "See the full documentation for Managing Images in the "
 msgstr "Katso koko dokumentaatio kuvien käsittelylle "
@@ -17474,7 +17472,7 @@ msgstr ""
 "Kannattaa ensin asettaa perusasetukset ennen näiden asetusten tekoa."
 
 #: intranet-tmpl/prog/en/modules/help/admin/item_circulation_alerts.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "These preferences are set based on patron categories and item types."
 msgstr "Nämä asetukset perustuvat asiakastyyppiin ja aineistolajiin."
 
@@ -17875,7 +17873,7 @@ msgstr ""
 "aikaisemmin tallennetut kaavat."
 
 #: intranet-tmpl/prog/en/modules/help/admin/categorie.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This patron category is used strictly for statistical purposes, such as in "
 "house use of items."
@@ -18980,7 +18978,7 @@ msgstr ""
 "jotka haluat poistaa, klikkaa sen jälkeen 'Poista valitut hälytykset' ja "
 "vahvista niiden hälytysten poisto. %s "
 
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:17
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:19
 #, c-format
 msgid ""
 "To delete one or multiple of these images, click the checkbox to the right "
@@ -19442,6 +19440,13 @@ msgstr ""
 "Jos haluat uusia niteitä tällä sivulla, voit lukea uusittavien niteiden "
 "viivakoodit."
 
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:21
+#, c-format
+msgid ""
+"To replace an image, delete it, upload a new file and give it the same image "
+"name."
+msgstr "Korvataksesi kuvan, poista se ja lataa uusi kuva samalla nimellä."
+
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:91
 #, c-format
 msgid ""
@@ -19786,6 +19791,15 @@ msgstr "Päivitä asiakastiedoja"
 #, c-format
 msgid "Upload Koha plugin"
 msgstr "Lataa Kohan liitännäinen"
+
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:5
+#, c-format
+msgid ""
+"Upload additional images to use as logo, decoration or background on a "
+"patron card layout."
+msgstr ""
+"Lataa kuvatiedostoja käytettäväksi korttipohjien logona, koristeena ja "
+"taustalla."
 
 #: intranet-tmpl/prog/en/modules/help/tools/upload-cover-image.tt:3
 #, c-format
@@ -20378,7 +20392,7 @@ msgstr ""
 "sitaatin."
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "When finished, click 'Add' to save your changes. To modify a rule, create a "
 "new one with the same patron category and item type. If you would like to "
@@ -20813,7 +20827,7 @@ msgstr ""
 "annetaan -c (tai --confirm) -kytkin (flag), komentosarja tekee muutokset."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Without periodicity: some very specific (usually high level science "
 "journals) don't have a true periodicity. When you subscribe to the title, "
@@ -21842,22 +21856,22 @@ msgid "acquisition "
 msgstr "hankinta "
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "all libraries, all patron categories, all item types"
 msgstr "kaikki kirjastot, kaikki asiakastyypit, kaikki aineistolajit"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "all libraries, all patron categories, same item type"
 msgstr "kaikki kirjastot, kaikki asiakastyypit, sama aineistolaji"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "all libraries, same patron category, all item types"
 msgstr "kaikki kirjastot, sama asiakastyyppi, kaikki aineistolajit"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "all libraries, same patron category, same item type"
 msgstr "kaikki kirjastot, sama asiakastyyppi, sama aineistolaji"
 
@@ -22743,7 +22757,7 @@ msgstr "management "
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-batch.tt:11
 #: intranet-tmpl/prog/en/modules/help/patroncards/home.tt:20
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-profile.tt:31
-#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:19
+#: intranet-tmpl/prog/en/modules/help/patroncards/image-manage.tt:23
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-layout.tt:34
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:28
 #: intranet-tmpl/prog/en/modules/help/patroncards/manage.tt:19
@@ -23035,24 +23049,24 @@ msgid "routing "
 msgstr "kiertolista "
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "same library, all patron categories, all item types"
 msgstr "sama kirjasto, kaikki asiakastyypit, kaikki aineistolajit"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "same library, all patron categories, same item type"
 msgstr "sama kirjasto, kaikki asiakastyypit, sama aineistolaji"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "same library, same patron category, all item type"
 msgstr "sama kirjasto, sama asiakastyyppi, kaikki aineistolajit"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "same library, same patron category, same item type"
-msgstr "sama kirjasto, sama asiakastyyppi, sama aineistolajit"
+msgstr "sama kirjasto, sama asiakastyyppi, sama aineistolaji"
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:471
 #, c-format

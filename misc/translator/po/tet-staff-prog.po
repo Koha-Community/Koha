@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-16 00:08-0300\n"
+"POT-Creation-Date: 2017-07-16 13:19-0300\n"
 "PO-Revision-Date: 2017-04-06 03:49+0000\n"
 "Last-Translator: kaz <karenmyers1@hotmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -320,7 +320,7 @@ msgstr "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 #. %17$s:  lang 
 #. %18$s:  END 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:128
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:118
 #, c-format
 msgid ""
 "%s %s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %sHebrew "
@@ -1714,7 +1714,7 @@ msgstr "%s %s Manuál %s Livru tarde %s Suspensaun %s Kuitasaun %s "
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:71
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "%s %s No %s"
 msgstr "%s %s Lae %s"
@@ -2250,7 +2250,7 @@ msgstr "%s %s%s%sLa hetan template nota%s %s %s "
 #. %11$s:  type | html 
 #. %12$s:  END 
 #. %13$s:  END 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:36
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:34
 #, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
@@ -4675,7 +4675,7 @@ msgstr ""
 msgid "%s Unlimited %s %s %s "
 msgstr "%s Limite la iha %s %s %s "
 
-#. %1$s:  IF count > 0 
+#. %1$s:  IF count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:92
 #, c-format
 msgid "%s Used in "
@@ -4733,7 +4733,7 @@ msgstr "%s Sin %s Lae %s Herdado %s "
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
 #, c-format
 msgid "%s Yes%s, "
 msgstr "%s Sin%s, "
@@ -4805,23 +4805,6 @@ msgstr "%s ZIP/Kódigu postal: "
 #, c-format
 msgid "%s [#%% Branch-specific %%#] %s "
 msgstr ""
-
-#. %1$s:  BLOCK showreference 
-#. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
-#. %3$s:  SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=' 
-#. %4$s:  IF marcflavour == 'UNIMARC' 
-#. %5$s:  SWITCH type 
-#. %6$s:  CASE 'broader' 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: heading: the heading itself linkType: currently "
-"'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
-"is a linked authority, its authid %%] %s %s %s %s %s "
-msgstr ""
-"%s [%%# Parameters: heading: the heading itself linkType: currently "
-"'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
-"is a linked authority, its authid %%] %s %s %s %s %s "
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate 
@@ -5978,7 +5961,7 @@ msgstr "(%s), %s husi %s%s %s[%s] %s Rezervasaun hatuur tiona iha %s. "
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:547
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:97
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:95
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s, husi %s%s"
@@ -8578,8 +8561,8 @@ msgstr "&rsaquo; Rezultadu sira %s Logs %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
-#, c-format
-msgid "&rsaquo; Results %s&rsaquo; Average checkout period%s"
+#, fuzzy, c-format
+msgid "&rsaquo; Results %s&rsaquo; Average loan time%s"
 msgstr "&rsaquo; Rezultadu sira %s&rsaquo; Média períodu ba emprestimos%s"
 
 #. %1$s:  ELSE 
@@ -9896,8 +9879,8 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:267
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:275
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:199
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:79
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:84
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:77
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:558
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:145
@@ -10301,7 +10284,7 @@ msgstr "Akuisisaun e/ka jestaun ba sujestaun"
 msgid "Acquisition date"
 msgstr "Data akuisisaun"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:53
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:51
 #, c-format
 msgid "Acquisition date (yyyy-mm-dd)"
 msgstr "Data simu (tttt-ff-ll)"
@@ -10443,7 +10426,7 @@ msgstr "Asaun se la hetan hanesan: "
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:184
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:599
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:262
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:265
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:268
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
@@ -12746,7 +12729,7 @@ msgstr "Ita hakarak apaga imajen kliente ida ne'e ka lae? Labele kore."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:201
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:196
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:10
 #, fuzzy
 msgid "Are you sure you want to delete this news item? This cannot be undone."
@@ -13026,7 +13009,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:194
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:421
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:122
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:117
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:48
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:114
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:122
@@ -13512,7 +13495,7 @@ msgstr "Autor sira"
 msgid "Authors:"
 msgstr "Autor sira"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:261
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
 #, c-format
 msgid "Auto ordering"
 msgstr "Autu orden"
@@ -13537,7 +13520,7 @@ msgstr ""
 msgid "Automatic item modifications by age"
 msgstr "Modifikasaun item iha lote"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:191
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:188
 #, fuzzy, c-format
 msgid "Automatic ordering: "
 msgstr "Hafoun automaticamente"
@@ -13596,7 +13579,6 @@ msgstr "Localizasaun disponíval"
 msgid "Available since"
 msgstr "Disponivel dezde"
 
-#: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:54
 #, c-format
 msgid "Average checkout period"
@@ -13608,6 +13590,7 @@ msgid "Average checkout period statistics"
 msgstr "Estatistika períodu média ba emprestimos"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:35
+#: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:68
 #, c-format
 msgid "Average loan time"
@@ -13625,7 +13608,7 @@ msgstr "BIBTEX"
 msgid "BSD License"
 msgstr "Lisensa BSD"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:13
 #, c-format
 msgid "BT"
 msgstr ""
@@ -13697,7 +13680,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:166
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:294
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:647
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
@@ -14065,7 +14048,7 @@ msgstr "Lote %s"
 msgid "Batch ID"
 msgstr "Lote ID"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:74
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:73
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:44
 #, c-format
 msgid "Batch check out"
@@ -14658,7 +14641,7 @@ msgid "Brig C. McCoy"
 msgstr "Brig C. McCoy"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:13
 msgid "Broader Term"
 msgstr "Termu luan liu"
 
@@ -15271,7 +15254,7 @@ msgstr "Labele salva rejistu ne'e tanba kampu tuirmai seidauk prienxe:"
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:93
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:215
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:559
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:206
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:203
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:214
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:111
@@ -15404,7 +15387,6 @@ msgstr "Labele salva rejistu ne'e tanba kampu tuirmai seidauk prienxe:"
 msgid "Cancel"
 msgstr "Kansela"
 
-#: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:25
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:203
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:329
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:220
@@ -15440,6 +15422,11 @@ msgstr "Orden kansela tiona"
 #, c-format
 msgid "Cancel checkout and place a hold for %s"
 msgstr "Kansela fo empresta no hatuur rezerva ba %s"
+
+#: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:25
+#, fuzzy, c-format
+msgid "Cancel enrollment "
+msgstr "Folin atu sai membru: "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:484
 #, c-format
@@ -16570,7 +16557,7 @@ msgid "Checked in item."
 msgstr "Items fo fila ona."
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:87
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:128
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:35
 #, c-format
@@ -16600,7 +16587,7 @@ msgstr "Fo empresta ona dala %s"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:943
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:724
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:742
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:557
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:83
 #, c-format
@@ -16653,7 +16640,7 @@ msgstr "Tipu mensajen fo fila nian: "
 msgid "Checkin message: "
 msgstr "Mensajen fo fila: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:51
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
 #, c-format
 msgid "Checkin on"
 msgstr "Fo fila iha"
@@ -16730,7 +16717,7 @@ msgstr "Lista ba livru ne'ebe empresta ona"
 msgid "Checkout history for %s"
 msgstr "Lista ba livru ne'ebe empresta ona ba %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
 #, c-format
 msgid "Checkout on"
 msgstr "Fo empresta iha"
@@ -17150,7 +17137,7 @@ msgstr "Regra sirkulasaun no regra multa"
 msgid "Circulation and fines rules"
 msgstr "Regra sirkulasaun no regra multa"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:88
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:87
 #: intranet-tmpl/prog/en/includes/members-menu.inc:10
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:50
 #, c-format
@@ -18178,7 +18165,7 @@ msgstr "Komentáriu sira kona-ba arkivu ne'e: "
 msgid "Comments awaiting moderation"
 msgstr "Komentariu hein hela moderasaun"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:137
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:132
 #, c-format
 msgid "Comments pending approval"
 msgstr "Komentariu hein hela aprovasaun"
@@ -20347,7 +20334,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:608
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:5
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:238
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:307
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:295
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:295
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
@@ -20382,7 +20369,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:699
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:218
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:207
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:189
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:184
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:874
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:204
@@ -20394,8 +20381,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:246
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:139
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:131
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:142
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:223
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:413
 #: intranet-tmpl/prog/en/modules/members/files.tt:60
@@ -20451,7 +20438,7 @@ msgstr "Apaga perfil CSV \"%s?\""
 msgid "Delete EAN %s for %s?"
 msgstr "Apaga EAN %s ba %s?"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
 #, c-format
 msgid "Delete Images"
 msgstr "Apaga Imajen"
@@ -20667,7 +20654,7 @@ msgid "Delete remote"
 msgstr "Apaga remotu"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:154
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:157
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:460
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
 #, c-format
@@ -20723,7 +20710,7 @@ msgstr ""
 msgid "Delete this Tag"
 msgstr "Apaga Etiketa ida ne'e"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:213
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:210
 #, fuzzy, c-format
 msgid "Delete this account?"
 msgstr "Apaga osan ida ne'e"
@@ -20944,8 +20931,8 @@ msgstr "Dept."
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:136
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:598
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:220
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:217
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:261
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:266
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
@@ -21096,7 +21083,7 @@ msgstr "Sei ba biblioteka: "
 msgid "Destination record"
 msgstr "Rejistu destinu"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:78
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:77
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:718
@@ -21239,12 +21226,12 @@ msgstr "Ema hotu labele uza"
 msgid "Discharge"
 msgstr "Kuitasaun"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:159
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:154
 #, c-format
 msgid "Discharge requests pending"
 msgstr "Pedido kuitasaun pendentes"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:110
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:109
 #, fuzzy, c-format
 msgid "Discharges"
 msgstr "Kuitasaun"
@@ -21588,12 +21575,12 @@ msgstr "Download konfigurasaun"
 msgid "Download database"
 msgstr "Download banku de dados"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:253
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, fuzzy, c-format
 msgid "Download directory"
 msgstr "Download rejistu"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:129
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:126
 #, fuzzy, c-format
 msgid "Download directory: "
 msgstr "Download rejistu"
@@ -21664,7 +21651,7 @@ msgstr "Fo fila %s"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:746
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:110
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:552
 #, c-format
 msgid "Due date"
@@ -21913,7 +21900,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:80
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:250
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:607
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:307
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:294
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:294
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
@@ -21942,7 +21929,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:205
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:206
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:188
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:183
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:847
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:97
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:221
@@ -23681,8 +23668,8 @@ msgstr "Fiksaun"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:67
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:65
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:123
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:156
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:122
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:155
 #, c-format
 msgid "Field"
 msgstr "Kampu"
@@ -23862,7 +23849,7 @@ msgid "File: "
 msgstr "Arkivu: "
 
 #. %1$s:  SOURCE_FILE 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:102
 #, c-format
 msgid "File: %s"
 msgstr "Arkivu: %s"
@@ -23879,7 +23866,7 @@ msgstr "FileSaver library"
 msgid "Filename"
 msgstr "Filename"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:102
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:101
 #: intranet-tmpl/prog/en/includes/members-menu.inc:18
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #, c-format
@@ -24052,7 +24039,7 @@ msgstr "Intervalu ba prosesu aumenta multa"
 msgid "Fine grace period"
 msgstr "Periodu grasa multa nian"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:81
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:80
 #: intranet-tmpl/prog/en/includes/members-menu.inc:7
 #: intranet-tmpl/prog/en/modules/members/member.tt:405
 #, c-format
@@ -26083,7 +26070,7 @@ msgstr "Oras"
 msgid "Hours"
 msgstr "Oras"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:113
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:112
 #: intranet-tmpl/prog/en/includes/members-menu.inc:24
 #, c-format
 msgid "Housebound"
@@ -26169,7 +26156,7 @@ msgstr "I18N/L10N"
 msgid "IBERMARC"
 msgstr "IBERMARC"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:246
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:243
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:395
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:221
@@ -26653,7 +26640,7 @@ msgstr "Imajen 1"
 msgid "Image 2"
 msgstr "Imajen 2"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:124
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:127
 #, c-format
 msgid "Image ID"
 msgstr "Imajen ID"
@@ -26663,13 +26650,13 @@ msgstr "Imajen ID"
 msgid "Image file"
 msgstr "Arkivu imajen"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:84
 #, c-format
 msgid "Image name: "
 msgstr "Naran imajen: "
 
 #. %1$s:  IMAGE_NAME 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:100
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:103
 #, c-format
 msgid "Image name: %s"
 msgstr "Naran imajen: %s"
@@ -26748,7 +26735,7 @@ msgstr "Imajen la importa tanba kliente ida ne'e la iha iha database. %s"
 msgid "Image source: "
 msgstr "Imajen mai husi: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:101
 #, c-format
 msgid "Image successfully uploaded"
 msgstr "Imajen upload tiona"
@@ -26758,8 +26745,8 @@ msgstr "Imajen upload tiona"
 msgid "Image upload results :"
 msgstr "Rezultadu husi upload imajen :"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:158
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:170
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:161
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:173
 #, c-format
 msgid "Image(s) successfully deleted"
 msgstr "Imajen(s) apaga tiona"
@@ -27434,7 +27421,7 @@ msgstr "Fatura: %s"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:15
 #: intranet-tmpl/prog/en/includes/vendor-menu.inc:7
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:256
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:96
@@ -27447,7 +27434,7 @@ msgstr "Fatura sira"
 msgid "Invoices "
 msgstr "Fatura sira"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:175
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:172
 #, fuzzy, c-format
 msgid "Invoices enabled: "
 msgstr "Numeru fatura:"
@@ -30197,8 +30184,8 @@ msgstr ""
 "%s&rsaquo; Estatistika kliente%s"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:3
-#, c-format
-msgid "Koha &rsaquo; Reports &rsaquo; Average checkout period"
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Reports &rsaquo; Average loan time"
 msgstr "Koha &rsaquo; Relatoriu &rsaquo; Durasaun média de empréstimo"
 
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:4
@@ -32892,6 +32879,13 @@ msgstr "Jerir template sira modifikasaun MARC nian"
 msgid "Manage OAI Sets"
 msgstr "Jerir OAI Sets"
 
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:73
+#, c-format
+msgid ""
+"Manage additional images to use as logo, decoration or background on a "
+"patron card layout."
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:47
 #, c-format
 msgid "Manage all budgets"
@@ -33815,7 +33809,7 @@ msgstr "Modera kliente nia tags"
 msgid "Modification date"
 msgstr "Data modifikasaun"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:92
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:91
 #: intranet-tmpl/prog/en/includes/members-menu.inc:13
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:42
 #, c-format
@@ -34280,7 +34274,6 @@ msgstr "SEIDAUK FO FILA"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:77
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:172
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:38
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:121
 #, c-format
 msgid "NOTE:"
@@ -34300,7 +34293,7 @@ msgid ""
 "batchRebuildBiblioTables.pl."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
 #, c-format
 msgid "NT"
 msgstr ""
@@ -34337,7 +34330,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:192
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:41
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:126
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:129
 #: intranet-tmpl/prog/en/modules/members/files.tt:45
 #: intranet-tmpl/prog/en/modules/members/member.tt:399
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
@@ -34480,7 +34473,7 @@ msgid "Named: "
 msgstr "Ho naran: "
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
 msgid "Narrower Term"
 msgstr "Termu kloot liu"
 
@@ -34532,7 +34525,7 @@ msgstr "Nunka"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:49
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:190
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:185
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1129
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
@@ -34961,8 +34954,8 @@ msgstr "Template etiketa"
 msgid "New username:"
 msgstr "Username foun:"
 
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:125
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:158
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:124
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:157
 #, c-format
 msgid "New value"
 msgstr "Valor foun"
@@ -34982,7 +34975,7 @@ msgid "New vendor"
 msgstr "Vendedor foun"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:114
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:181
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:176
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:61
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:93
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:78
@@ -35391,7 +35384,7 @@ msgstr ""
 msgid "No image: "
 msgstr "Imajen la iha: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:165
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:168
 #, c-format
 msgid "No images are currently available. "
 msgstr "Imajen sira la disponivel agora. "
@@ -35790,7 +35783,7 @@ msgstr "Lae, labele apaga"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:164
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:573
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:236
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:228
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:129
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
@@ -36348,7 +36341,7 @@ msgstr "La iha buat ida atu rai"
 msgid "Notice"
 msgstr "Avizu"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:95
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:94
 #: intranet-tmpl/prog/en/includes/members-menu.inc:15
 #, c-format
 msgid "Notices"
@@ -36955,8 +36948,8 @@ msgstr ""
 msgid "Offset: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:124
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:157
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:123
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:156
 #, c-format
 msgid "Old value"
 msgstr "Valor uluk nian"
@@ -37116,8 +37109,9 @@ msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "Formatu PNG, GIF, JPEG, XPM deit bele tama. "
 
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
-#, c-format
-msgid "Only PNG, GIF, JPEG, XPM formats are supported. Images "
+#, fuzzy, c-format
+msgid ""
+"Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 500KB."
 msgstr "Formatu PNG, GIF, JPEG, XPM deit bele tama. Imajen sira "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:820
@@ -37406,7 +37400,7 @@ msgstr "Informasaun kona-ba prden enkomenda"
 msgid "Ordernumber"
 msgstr "Numeru orden"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:462
 #, c-format
 msgid "Orders"
@@ -37425,7 +37419,7 @@ msgstr ""
 msgid "Orders by fund"
 msgstr "Numerukartaun la hetan"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:167
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:164
 #, c-format
 msgid "Orders enabled: "
 msgstr ""
@@ -37840,7 +37834,7 @@ msgstr "Pasi Kallinen"
 
 #: intranet-tmpl/prog/en/columns.def:58
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:252
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:249
 #, c-format
 msgid "Password"
 msgstr "Password"
@@ -37876,7 +37870,7 @@ msgid "Password:"
 msgstr "Password:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:144
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:125
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:122
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:89
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:223
@@ -37930,7 +37924,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:111
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:167
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:295
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:713
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:21
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:562
@@ -38620,7 +38614,7 @@ msgstr "Kliente iha lote ho numeru %s"
 msgid "Patrons in list"
 msgstr "Kliente husi lista"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:152
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:147
 #: intranet-tmpl/prog/en/modules/members/member.tt:353
 #, c-format
 msgid "Patrons requesting modifications"
@@ -39965,7 +39959,7 @@ msgstr ""
 
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:186
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:181
 #, c-format
 msgid "Posted on %s%s by "
 msgstr "Hatama iha %s%s husi "
@@ -40647,7 +40641,7 @@ msgstr "Nota publiku"
 msgid "Publication date"
 msgstr "Data publikasaun"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:52
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:50
 #, c-format
 msgid "Publication date (yyyy-yyyy)"
 msgstr "Data publikasaun (tttt-tttt)"
@@ -40831,7 +40825,7 @@ msgstr "Publika husi: %s %s iha %s %s %s , %s %s %s , %s %s "
 msgid "Pull this many items"
 msgstr "Kaer item hira ne'e"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:107
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:106
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:37
 #, c-format
 msgid "Purchase suggestions"
@@ -40844,13 +40838,13 @@ msgstr "Sujestaun ida kona-ba livru ida biblioteka mak bele sosa"
 msgid "Qty."
 msgstr "Qty."
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:255
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:252
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:136
 #, c-format
 msgid "Qualifier"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:139
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:136
 #, c-format
 msgid "Qualifier:"
 msgstr ""
@@ -40951,12 +40945,12 @@ msgstr ""
 msgid "Quote uploader"
 msgstr "Uploader frase nian"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:257
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:254
 #, fuzzy, c-format
 msgid "Quotes"
 msgstr "Nota sira"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:159
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:156
 #, c-format
 msgid "Quotes enabled: "
 msgstr ""
@@ -40992,7 +40986,7 @@ msgstr "RRP ex impostu."
 msgid "RRP tax inc."
 msgstr "RRP impostu ink."
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
 #, c-format
 msgid "RT"
 msgstr ""
@@ -41384,7 +41378,7 @@ msgid "Rejected tags"
 msgstr "Etiketa lakohi ona"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
 msgid "Related Term"
 msgstr ""
 
@@ -41499,12 +41493,12 @@ msgstr ""
 msgid "Reminder: this action will modify all selected biblios!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:247
 #, fuzzy, c-format
 msgid "Remote host"
 msgstr "Hasai "
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:117
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:114
 #, fuzzy, c-format
 msgid "Remote host: "
 msgstr "Kustu substituisaun: "
@@ -41732,7 +41726,7 @@ msgstr "Husik hafoun hira (konta)"
 msgid "Renewals period: "
 msgstr "Períodu hafoun"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, c-format
 msgid "Renewed"
 msgstr "Hafoun ona"
@@ -42349,12 +42343,12 @@ msgstr "Hatuur fali"
 msgid "Reset filter"
 msgstr "Hatuur fali filtru"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:260
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:257
 #, c-format
 msgid "Responses"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:183
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:180
 #, fuzzy, c-format
 msgid "Responses enabled: "
 msgstr "Repetival: "
@@ -42727,7 +42721,7 @@ msgstr "Roteamentu"
 msgid "Routing list"
 msgstr "Lista roteamentu"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:84
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:83
 #, c-format
 msgid "Routing lists"
 msgstr "Lista roteamentu"
@@ -42828,8 +42822,8 @@ msgstr "Russel Garlick"
 msgid "Ryan Higgins"
 msgstr "Ryan Higgins"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:224
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:256
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:221
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:253
 #, fuzzy, c-format
 msgid "SAN"
 msgstr "HO"
@@ -42844,7 +42838,7 @@ msgstr "SAN-Ouest Provence"
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Provence, France"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:155
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:152
 #, fuzzy, c-format
 msgid "SAN: "
 msgstr "EAN: "
@@ -44263,7 +44257,7 @@ msgstr "Hili nota"
 msgid "Select notice:"
 msgstr "Hili avizu:"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:112
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:115
 #, c-format
 msgid "Select one or more images to delete. "
 msgstr "Hili imajen ida ka tan atu apaga. "
@@ -44331,7 +44325,7 @@ msgid "Select the file to stage: "
 msgstr "Hili file ida atu prepara: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:80
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:79
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:308
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:139
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:96
@@ -45390,8 +45384,8 @@ msgid "Sophie Meynieux"
 msgstr "Sophie Meynieux"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:209
-#, c-format
-msgid "Sorry, but there is no results for your search."
+#, fuzzy, c-format
+msgid "Sorry, but there are no results for your search."
 msgstr "Deskulpa, la iha rezultadu husi ita nia peskiza."
 
 #: intranet-tmpl/prog/en/modules/auth.tt:85
@@ -45963,7 +45957,7 @@ msgstr "Estatistika 2: "
 msgid "Statistical"
 msgstr "Estatístiku"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:98
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:97
 #: intranet-tmpl/prog/en/includes/members-menu.inc:16
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:238
 #, c-format
@@ -46452,7 +46446,7 @@ msgstr "Asuntu sira:"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:91
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:92
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:101
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:202
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:215
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:108
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:56
@@ -46473,7 +46467,7 @@ msgstr "Asuntu sira:"
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:75
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:87
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:654
-#: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:224
+#: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:213
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:663
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:78
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:680
@@ -46481,7 +46475,7 @@ msgstr "Asuntu sira:"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:158
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:83
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:173
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:172
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:121
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:45
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:132
@@ -46829,7 +46823,7 @@ msgstr "Sujestaun sira"
 msgid "Suggestions management"
 msgstr "Jestaun ba sujestaun"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:130
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:125
 #, c-format
 msgid "Suggestions pending approval"
 msgstr "Buka sujestaun"
@@ -47315,7 +47309,7 @@ msgstr "Marka ho:"
 msgid "Tags"
 msgstr "Etiketa sira"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:144
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:139
 #, c-format
 msgid "Tags pending approval"
 msgstr "Etiketa hein aprovasaun"
@@ -47772,7 +47766,7 @@ msgstr ""
 msgid "The destination should be filled."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:131
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:128
 #, c-format
 msgid ""
 "The download directory specifies the directory on the ftp site from which "
@@ -48274,7 +48268,7 @@ msgstr ""
 msgid "The unreceived orders from the following funds will be moved"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:136
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:133
 #, c-format
 msgid ""
 "The upload directory specifies the directory on the ftp site to which orders "
@@ -48316,7 +48310,7 @@ msgstr "Tema"
 msgid "There are no %s currently available."
 msgstr "La iha %s disponivel agora daudaun."
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:316
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:313
 #, fuzzy, c-format
 msgid "There are no EDI accounts. "
 msgstr "La iha notisias."
@@ -48492,7 +48486,7 @@ msgstr ""
 msgid "There are no pending offline operations."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:178
+#: intranet-tmpl/prog/en/modules/members/members-update.tt:177
 #, c-format
 msgid "There are no pending patron modifications."
 msgstr ""
@@ -49107,7 +49101,7 @@ msgstr "Vendedor ida ne'e la iha email ida"
 msgid "This vendor has no email defined for late issues."
 msgstr "Vendedor ida ne'e la iha email ida."
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #, c-format
 msgid ""
 "This will be the name by which you will refer to this image in the patron "
@@ -49601,6 +49595,13 @@ msgstr "Atu fo hatene bainhira simu ona:"
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:638
 #, c-format
 msgid "To notify patrons of new serial issues, you must "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:88
+#, c-format
+msgid ""
+"To replace an image, delete it, upload a new file and give it the same image "
+"name. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:29
@@ -50286,7 +50287,7 @@ msgstr "Tradusaun: "
 msgid "Translations"
 msgstr "Tradusaun sira"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:249
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:246
 #, fuzzy, c-format
 msgid "Transport"
 msgstr "Tranfere"
@@ -50297,7 +50298,7 @@ msgstr "Tranfere"
 msgid "Transport cost matrix"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:101
 #, fuzzy, c-format
 msgid "Transport: "
 msgstr "Transfere ba:"
@@ -50393,7 +50394,7 @@ msgstr "Tipu:"
 msgid "Type: "
 msgstr "Tipu: "
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
 #, c-format
 msgid "UF"
 msgstr ""
@@ -50871,7 +50872,7 @@ msgstr "Atualiza hela estrutura database"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:257
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:94
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:313
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:113
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:148
@@ -50899,6 +50900,11 @@ msgstr "Upload Plugin Koha"
 msgid "Upload New File"
 msgstr "Upload Arkivu Foun"
 
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
+#, fuzzy, c-format
+msgid "Upload additional images for patron cards"
+msgstr "Asinatura nia kampu adisional"
+
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:26
 #, c-format
 msgid "Upload another KOC file"
@@ -50915,12 +50921,12 @@ msgstr "Upload arkivu"
 msgid "Upload any type of file, manage uploads"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:254
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
 #, fuzzy, c-format
 msgid "Upload directory"
 msgstr "Tau diretamente"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:134
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:131
 #, fuzzy, c-format
 msgid "Upload directory: "
 msgstr "Progresu ba upload: "
@@ -50944,7 +50950,6 @@ msgstr "Atualiza arkivu:"
 msgid "Upload image"
 msgstr "Upload imajen"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:92
 #, c-format
 msgid "Upload images"
@@ -51218,7 +51223,7 @@ msgid "Used"
 msgstr "Uza ona"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
 #, fuzzy
 msgid "Used For"
 msgstr "Uza iha"
@@ -51269,7 +51274,7 @@ msgstr "Userid: "
 #: intranet-tmpl/prog/en/columns.def:57
 #: intranet-tmpl/prog/en/includes/patron-search.inc:41
 #: intranet-tmpl/prog/en/includes/patron-search.inc:43
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
 #: intranet-tmpl/prog/en/modules/members/member.tt:450
 #: intranet-tmpl/prog/en/modules/members/member.tt:452
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:123
@@ -51288,7 +51293,7 @@ msgstr "Username/password iha ona."
 msgid "Username:"
 msgstr "Username:"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:121
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:118
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:433
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:84
 #, c-format
@@ -51402,8 +51407,8 @@ msgstr "Variável: "
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:24
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:40
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:206
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:216
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:247
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:213
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:244
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:996
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:42
@@ -51422,7 +51427,7 @@ msgstr "Vendedor"
 msgid "Vendor "
 msgstr "Vendedor "
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:242
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:239
 #, fuzzy, c-format
 msgid "Vendor EDI accounts"
 msgstr "Vendedor la hetan"
@@ -52224,7 +52229,7 @@ msgstr "Invernu"
 msgid "With %s selected searches: "
 msgstr "Ho %s peskiza ne'ebe hili ona: "
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:197
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:194
 #, c-format
 msgid ""
 "With automatic ordering quotes generate orders without staff intervention. "
@@ -52479,7 +52484,7 @@ msgstr "Sin, taka (S)"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:187
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:336
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
@@ -53476,29 +53481,6 @@ msgstr "[% innerloo.tag_lib %] - Klik atu Haluan Etiketa ne'e"
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 
-#. %1$s: # timestamp+verification_token+borrowernumber=3 
-#: intranet-tmpl/prog/en/modules/members/members-update.tt:116
-#, c-format
-msgid ""
-"[%% IF !pm.extended_attributes and pm.size > 3 or pm.extended_attributes and "
-"pm.size > 4 %%] %s "
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:110
-#, fuzzy, c-format
-msgid ""
-"[%% IF ( ( CAN_user_tools_moderate_comments && pendingcomments ) || "
-"( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && "
-"pending_borrower_modifications ) || ( CAN_user_acquisition && "
-"pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) "
-"|| pending_article_requests ) %%] "
-msgstr ""
-"[%% IF ( ( CAN_user_tools_moderate_comments && pendingcomments ) || "
-"( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && "
-"pending_borrower_modifications ) || ( CAN_user_acquisition && "
-"pendingsuggestions ) || ( CAN_user_borrowers && "
-"pending_discharge_requests ) ) %%] "
-
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:128
 #, c-format
 msgid ""
@@ -53509,26 +53491,6 @@ msgstr ""
 "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
-
-#. %1$s:  IF ( batch_checkout_view ) 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:71
-#, c-format
-msgid ""
-"[%% IF Koha.Preference('BatchCheckouts') && Koha."
-"Preference('BatchCheckoutsValidCategories').split('\\|').grep('^' _ "
-"categorycode _ '$').size > 0 %%] %s"
-msgstr ""
-"[%% IF Koha.Preference('BatchCheckouts') && Koha."
-"Preference('BatchCheckoutsValidCategories').split('\\|').grep('^' _ "
-"categorycode _ '$').size > 0 %%] %s"
-
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:55
-#, c-format
-msgid ""
-"[%% IF Koha.Preference('intranetreadinghistory') AND "
-"CAN_user_circulate_circulate_remaining_permissions %%] "
-msgstr ""
 
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
@@ -53563,24 +53525,6 @@ msgstr ""
 "\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s "
 "[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
 "empty_option = \"All statuses\" %%] %s "
-
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:119
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
-"type=seeals.type authid=seeals.authid %%] "
-msgstr ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
-"type=seeals.type authid=seeals.authid %%] "
-
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:104
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
-"type=seefro.type authid=seefro.authid %%] "
-msgstr ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
-"type=seefro.type authid=seefro.authid %%] "
 
 #: intranet-tmpl/prog/en/includes/country-list.inc:1
 #, c-format
@@ -53623,24 +53567,6 @@ msgid ""
 "\", \"Vanuatu\", \"Vatican City\", \"Venezuela\", \"Vietnam\", \"Yemen\", "
 "\"Zambia\", \"Zimbabwe\", ] %%] "
 msgstr ""
-
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:99
-#, c-format
-msgid "[%% transport_types = [ 'FTP', 'SFTP', 'FILE' ] %%] "
-msgstr ""
-
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:42
-#, c-format
-msgid ""
-"[%%# Use non-normalized st-year instead of st-numeric, since pubdate can "
-"include 'u' to signify unkown dates. See \"Legal Characters\" at: http://www."
-"loc.gov/marc/bibliographic/bd008a.html This search is also for date ranges "
-"due to the special Zebra r=r CCL mapping for 'yr' %%] "
-msgstr ""
-"[%%# Use non-normalized st-year instead of st-numeric, since pubdate can "
-"include 'u' to signify unkown dates. See \"Legal Characters\" at: http://www."
-"loc.gov/marc/bibliographic/bd008a.html This search is also for date ranges "
-"due to the special Zebra r=r CCL mapping for 'yr' %%] "
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:62
 #, c-format
@@ -53910,11 +53836,6 @@ msgstr "batch_anonymise.pl"
 #, fuzzy, c-format
 msgid "be installed before you may continue."
 msgstr "Modulu iha kor mean tenke instala molok ita bele kontinua."
-
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
-#, c-format
-msgid "be less than 500KB. "
-msgstr "mak menus duke 500KB. "
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:83
 #, c-format
@@ -54538,7 +54459,7 @@ msgstr "iha "
 msgid "has all required privileges on database "
 msgstr "iha ona priviléjiu nesesáriu ho database ne'e "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:97
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:95
 #, c-format
 msgid "has never been checked out."
 msgstr "seidauk fo empresta."
@@ -54618,12 +54539,6 @@ msgstr "homebranch LA mapa ona"
 #, c-format
 msgid "homebranch defined"
 msgstr "homebranch define ona"
-
-#. %1$s:  PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm"  name=mc_1_src_c_1_n_1_norm
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:515
-#, fuzzy, c-format
-msgid "i %s "
-msgstr "iha %s "
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:259
 #, c-format
@@ -54969,7 +54884,7 @@ msgid "label_single_%s.pdf"
 msgstr "label_single_%s.pdf"
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:71
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "last on: %s"
 msgstr "ikus mai: %s"
@@ -55098,7 +55013,6 @@ msgstr "Modulu:"
 msgid "months "
 msgstr "fulan sira "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:58
 #, c-format
 msgid "must"
@@ -55474,7 +55388,7 @@ msgstr "biblioteka hanesan, tipu kliente hanesan, tipu item hanesan"
 msgid "seconds "
 msgstr "segundu "
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:117
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:111
 #, c-format
 msgid "see also:"
 msgstr "haree mos:"
@@ -55846,7 +55760,7 @@ msgstr "konsege atualiza"
 msgid "uri"
 msgstr "Ses"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:102
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:100
 #, c-format
 msgid "used for/see from:"
 msgstr "uza ba/haree husi:"
@@ -55857,7 +55771,7 @@ msgid "user "
 msgstr "utilizador "
 
 #. SELECT name=transport
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:105
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:102
 msgid "valid types of transport are FTP and SFTP"
 msgstr ""
 

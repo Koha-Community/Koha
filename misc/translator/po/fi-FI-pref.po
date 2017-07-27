@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2015-04-15 09:41-0300\n"
-"PO-Revision-Date: 2017-02-16 11:06+0000\n"
+"PO-Revision-Date: 2017-07-24 13:00+0000\n"
 "Last-Translator: AnneliÖ <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1487243182.000000\n"
+"X-POOTLE-MTIME: 1500901215.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -56,6 +56,8 @@ msgstr "ladata ja liittää yksittäisiä tiedostoja laskuun."
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\")."
 msgstr ""
+"Kun lasku perutaan, päivitä niteen osakentät, jos ne luotiin tilausta "
+"tehtäessä (esim. o=5|a=\"bar foo\")."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceived# Upon receiving items, update their subfields if they were created when placing an order (e.g. o=5|a=\"foo bar\")."
@@ -143,15 +145,20 @@ msgstr "Voit käyttää seuraavia kenttiä: hinta, lukumäärä, budjettikoodi, 
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcItemFieldsToOrder# <br/>For example:<br/>holdingbranch: 975$b<br/>itype: 975$9|975$z"
-msgstr ""
+msgstr "<br/>Esimerkiksi:<br/>holdingbranch: 975$b<br/>itype: 975$9|975$z"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcItemFieldsToOrder# Set the mapping values for new item records created from a MARC record in a staged file."
 msgstr ""
+"Määrittele arvojen vastaavuudet uusille nidetietueille, jotka luodaan "
+"välivarastoiduista MARC-tietueista."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#MarcItemFieldsToOrder# You can use the following fields: homebranch, holdingbranch, itype, nonpublic_note, public_note, loc, ccode, notforloan, uri, copyno, price, replacementprice and itemcallnumber. Special fields: quantity and budget_code"
 msgstr ""
+"Voit käyttää seuraavia kenttiä: homebranch, holdingbranch, itype, "
+"nonpublic_note, public_note, loc, ccode, notforloan, uri, copyno, price, "
+"replacementprice and itemcallnumber. Erityiskentät: quantity and budget_code"
 
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# English 2-page"
@@ -184,6 +191,9 @@ msgstr "(erottimena välilyönti)"
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# The following <a href='http://schema.koha-community.org/__VERSION__/tables/items.html' target='blank'>database columns</a> should be unique in an item:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"items.html' target='blank'>tietokannan sarakkeet</a> pitäisi olla niteellä "
+"uniikkeja:"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
@@ -1247,27 +1257,31 @@ msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
-msgstr ""
+msgstr "Pääkirjaston maantieteellinen sijainti: "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
 msgstr ""
+"Huomaa, että tällä arvolla ei ole vaikutusta, jos UsageStats-"
+"järjestelmäasetukseen on asetettu \"Älä jaa\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
-msgstr ""
+msgstr "Älä jaa"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
 msgstr ""
+"Huomaa, että tällä arvolla ei ole vaikutusta, jos UsageStats-"
+"järjestelmäasetukseen on asetettu \"Älä jaa\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Share"
-msgstr ""
+msgstr "Jaa"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# libraries information (name, url, country)"
-msgstr ""
+msgstr "kirjaston tiedot (nimi, url, maa)"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
@@ -1456,10 +1470,12 @@ msgstr "laajemmat/suppeammat termihierarkiat, kun näytetään aktoriteettejä."
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached biblio records if the number exceeds"
 msgstr ""
+"Kun päivitetään auktoriteettitietuetta, älä päivitä bibliografisia "
+"tietueita, jos määrä ylittää"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the merge_authority cron job will merge them.)"
-msgstr ""
+msgstr "tietuetta. (Rajan ylittyessä, merge_authority -cron job yhdistää ne."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# When updating biblio records from an attached authority record (\"merging\"), handle subfields of relevant biblio record fields in"
@@ -2239,15 +2255,15 @@ msgstr "henkilökunnan poistaa toisten kirjastojen jättämiä kommenteja."
 
 # Circulation > Interface
 msgid "circulation.pref#AllowCheckoutNotes# Allow"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowCheckoutNotes# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Interface
 msgid "circulation.pref#AllowCheckoutNotes# patrons to submit notes about checked out items."
-msgstr ""
+msgstr "asiakkaiden lisätä huomautuksia lainatuille niteille."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowFineOverride# Allow"
@@ -2631,15 +2647,15 @@ msgstr "Kirjautuneen käyttäjän kotikirjaston säännöt."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
-msgstr ""
+msgstr "Näytä"
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Deactivate"
-msgstr ""
+msgstr "Älä näytä"
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# the navigation sidebar on all Circulation pages."
-msgstr ""
+msgstr "navigointivalikko Lainaus- ja palautussivuilla."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -2671,15 +2687,15 @@ msgstr "on-site-lainoja kuten normaaleja lainoja."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CumulativeRestrictionPeriods# Cumulate"
-msgstr ""
+msgstr "Kumuloi"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CumulativeRestrictionPeriods# Don't cumulate"
-msgstr ""
+msgstr "Älä kumuloi"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CumulativeRestrictionPeriods# the restriction periods."
-msgstr ""
+msgstr "rajoitusaikoja."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longoverdue.pl script is called without the --charge parameter)"
@@ -2743,15 +2759,15 @@ msgstr "varauksen tekeminen useampaan teokseen kerrallaan hakutuloslistasta."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr ""
+msgstr "Ota huomioon"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr ""
+msgstr "Sulkupäivät, kun lasketaan viimeistä noutopäivää."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr ""
+msgstr "Älä ota huomioon"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -2783,15 +2799,15 @@ msgstr "vanhentuneiden varausten peruuntua kirjaston kiinni ollessa."
 
 # Circulation > Interface
 msgid "circulation.pref#ExportCircHistory# Don't show"
-msgstr ""
+msgstr "Älä näytä"
 
 # Circulation > Interface
 msgid "circulation.pref#ExportCircHistory# Show"
-msgstr ""
+msgstr "Näytä"
 
 # Circulation > Interface
 msgid "circulation.pref#ExportCircHistory# the export patron checkout history options."
-msgstr ""
+msgstr "asiakkaan lainahistorian viennin asetukset."
 
 # Circulation > Interface
 msgid "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 100a 200b 300c)"
@@ -2843,7 +2859,7 @@ msgstr "Peri varausmaksu"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# any time a hold is collected."
-msgstr ""
+msgstr "aina kun varaus lainataan."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# any time a hold is placed."
@@ -3008,7 +3024,7 @@ msgstr "tarkkaan kellonaikaan."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoticeBcc# Send all notices as a BCC to this email address"
-msgstr ""
+msgstr "Lähetä kaikista ilmoituksista kopio (BCC) tähän osoitteeseen"
 
 # Circulation > Interface
 msgid "circulation.pref#NoticeCSS# Include the stylesheet at"
@@ -3044,39 +3060,42 @@ msgstr "käyttäjän valita itse varauksen noutopiste(ttä)."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Allow"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Block"
-msgstr ""
+msgstr "Estä"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more than the value of OPACFineNoRenewals,"
 msgstr ""
+"jos asiakkaalla on maksuja enemmäin kuin OPACFineNoRenewals-asetuksessa "
+"määritetään,"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr ""
+msgstr "automaattinen lainojen uusinta."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
-msgstr ""
+msgstr "Salli"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup up holds at libraries where the item is available."
 msgstr ""
+"varausten noutamista sellaisista kirjastoista, joissa nide on saatavana."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron categories separated with a pipe '|')"
-msgstr ""
+msgstr "(lista asiakastyypeistä putkimerkillä \"|\" eroteltuna)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories not affected by OPACHoldsIfAvailableAtPickup"
-msgstr ""
+msgstr "Asiakastyypit, joihin ei vaikuta OPACHoldsIfAvailableAtPickup-asetus"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -4336,27 +4355,27 @@ msgstr "Open Libraryn hakutuloksia verkkokirjastossa."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Don't enable"
-msgstr ""
+msgstr "Älä salli"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Enable"
-msgstr ""
+msgstr "Salli"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# If you enable access, you must register auth return url of"
-msgstr ""
+msgstr "Jos sallit pääsyn, pitää autentikointi rekisteröidä osoitteessa:"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl"
-msgstr ""
+msgstr "http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items."
-msgstr ""
+msgstr "asiakkaiden nähdä OverDriven lainaushistorian ja lainatut niteet."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# with OverDrive."
-msgstr ""
+msgstr "OverDrivella."
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -4645,6 +4664,8 @@ msgstr "Muotoile postiosoitteet käyttäen"
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# French style ([Street number] [Address] - [ZIP/Postal Code] [City] - [Country])"
 msgstr ""
+"Ranskalaistyylinen ([katunumero] [osoite] - [postinumero] [postitoimipaikka] "
+"- [maa])"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [ZIP/Postal Code] [City] - [Country])"
@@ -4708,19 +4729,22 @@ msgstr "Näytä kellonaika"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# Allow"
-msgstr ""
+msgstr "Salli"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# Don't allow"
-msgstr ""
+msgstr "Älä salli"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# If set, notices will be translatable from the \"Notices and Slips\" interface. The language used to send a notice to a patron will be the one defined for the patron."
 msgstr ""
+"Jos asetettu, ilmoitukset ovat käännettävissä \"Ilmoitukset ja kuitit\" -"
+"osiossa. Asiakkaan tiedoissa määritellään, minkä kielinen ilmoitus "
+"lälhetetään."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
-msgstr ""
+msgstr "ilmoitusten kääntäminen toiselle kielelle."
 
 # I18N/L10N
 msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
@@ -4948,15 +4972,15 @@ msgstr "automaattisten palautuskehotusten lähettämisestä."
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# Don't log"
-msgstr ""
+msgstr "Älä tallenna lokia"
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# Log"
-msgstr ""
+msgstr "Kerää loki"
 
 # Logging > Logging
 msgid "logs.pref#RenewalLog# when items are renewed."
-msgstr ""
+msgstr "milloin lainat uusitaan."
 
 # Logging > Logging
 msgid "logs.pref#ReportsLog# Don't log"
@@ -5832,15 +5856,15 @@ msgstr "Näytä seuraava HTML-koodi etusivulla oikean sarakkeen kirjautumislomak
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Display"
-msgstr ""
+msgstr "Näytä"
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# Don't display"
-msgstr ""
+msgstr "Älä näytä"
 
 # OPAC > Features
 msgid "opac.pref#OpacNewsLibrarySelect# a branch selection list for news items in the OPAC."
-msgstr ""
+msgstr "uutisten kirjastovalikko(a) verkkokirjastossa."
 
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
@@ -6009,6 +6033,9 @@ msgstr "(erottele sarakkeet |-merkillä)"
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>tietokannan sarakkeet</a> eivät näy asiakkaan "
+"itserekisteröitymissivulla:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -6033,6 +6060,9 @@ msgstr "(erota sarakkeet |-merkillä)"
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>tietokannan sarakkeet</a> ovat pakollisia "
+"asiakastietojen rekisteröimissivulla:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
@@ -6041,6 +6071,9 @@ msgstr "(erota sarakkeet |-merkillä)"
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>tietokannan sarakkeet</a> eivät näy asiakkaan "
+"itserekisteröitymissivulla:"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -6473,6 +6506,9 @@ msgstr "(erota sarakkeet |-merkillä)"
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>tietokannan sarakkeet</a> ovat pakollisia "
+"asiakastietosivulla:"
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
@@ -6497,6 +6533,9 @@ msgstr "(erota sarakkeet |-merkillä)"
 # Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
 msgstr ""
+"Seuraavat <a href='http://schema.koha-community.org/__VERSION__/tables/"
+"borrowers.html' target='blank'>tietokannan sarakkeet</a> eivät näy "
+"asiakastietosivulla:"
 
 # Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
@@ -6592,11 +6631,11 @@ msgstr "asiakasmääreiden haku, muokkaus ja esittäminen näytöllä."
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#FailedLoginAttempts# Block a patron's account if it reaches"
-msgstr ""
+msgstr "Lukitse asiakkaan tili, jos kirjautuminen epäonnistuu"
 
 # Patrons > Norwegian patron database
 msgid "patrons.pref#FailedLoginAttempts# failed login attempts."
-msgstr ""
+msgstr "kertaa."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -6948,19 +6987,20 @@ msgstr "käytä"
 
 # Searching > Search Form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't load"
-msgstr ""
+msgstr "Älä lataa"
 
 # Searching > Search Form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Load"
-msgstr ""
+msgstr "Lataa"
 
 # Searching > Search Form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Load the unlogged history to the next user."
-msgstr ""
+msgstr "Lataa kirjautumattomana kertynyt hakuhistoria seuraavalle käyttäjälle."
 
 # Searching > Search Form
+#, fuzzy
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# history to the next client."
-msgstr ""
+msgstr "hakuhistoriaa seuraavalle asiakkaalle."
 
 # Searching > Results Display
 msgid "searching.pref#MaxSearchResultsItemsPerRecordStatusCheck# <br/>Availability statuses may show incorrectly in search results if a record has more items than the limit set. Statuses will display correctly in the record details."
@@ -7696,11 +7736,11 @@ msgstr "Kirjastokortit"
 
 # Tools > Reports
 msgid "tools.pref Reports"
-msgstr ""
+msgstr "Raportit"
 
 # Tools > Upload
 msgid "tools.pref Upload"
-msgstr ""
+msgstr "Lataa"
 
 # Tools > Patron cards
 msgid "tools.pref#ImageLimit# Limit the number of creator images stored in the database to"
@@ -7748,19 +7788,23 @@ msgstr "Vain virkailijaliittymässä"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# By default, show"
-msgstr ""
+msgstr "Oletuksena, näytä"
 
 # Tools > Reports
 msgid "tools.pref#NumSavedReports# reports on the Saved Reports page."
-msgstr ""
+msgstr "raporttia Tallennetut raportit -sivulla."
 
 # Tools > Upload
 msgid "tools.pref#UploadPurgeTemporaryFilesDays# Automatically delete temporary uploads older than"
 msgstr ""
+"Poista automaattisesti väliaikaiset tiedostot, jotka ovat vanhempia kuin"
 
 # Tools > Upload
 msgid "tools.pref#UploadPurgeTemporaryFilesDays# days in cleanup_database cron job. NOTE: If you leave this field empty, the cron job will not delete any files. On the other hand a value of 0 means: delete all temporary files."
 msgstr ""
+"päivää cleanup_datebase -cron jobilla. Huomaa: Jos jätät tämän tyhjäksi, "
+"cron job ei poista mitään tiedostoja. Toisaalta, arvo 0 tarkoittaa: poista "
+"kaikki väliaikaistiedostot."
 
 # Web services
 msgid "web_services.pref"
@@ -7897,4 +7941,3 @@ msgstr "Palauta vain"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "riviä raportista, joka on tehty nettipalvelun kautta."
-
