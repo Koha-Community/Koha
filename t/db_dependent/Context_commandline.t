@@ -19,7 +19,13 @@ use Modern::Perl;
 use Test::More;
 use Test::More tests => 2;
 
+use Koha::Database;
+
 use C4::Context;
+
+my $schema = Koha::Database->new->schema;
+
+$schema->storage->txn_begin;
 
 my $commandlineSuperuser = C4::Context::_enforceCommandlineSuperuserBorrowerExists();
 is($commandlineSuperuser->cardnumber, "commandlineadmin", "_enforceCommandlineSuperuserBorrowerExists() enforced");
@@ -27,5 +33,7 @@ is($commandlineSuperuser->cardnumber, "commandlineadmin", "_enforceCommandlineSu
 C4::Context->setCommandlineEnvironment();
 my $env = C4::Context->userenv();
 is($env->{id}, $commandlineSuperuser->{userid}, "setCommandlineEnvironment userenv set with 'commandlineadmin'");
+
+$schema->storage->txn_rollback;
 
 done_testing();
