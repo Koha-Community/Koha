@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-06-16 01:30-0300\n"
+"POT-Creation-Date: 2017-07-16 14:22-0300\n"
 "PO-Revision-Date: 2017-02-16 14:13+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,7 +317,7 @@ msgstr "%s %s %s %s %s %s %s : %s %s %s %s आईएसबीएन: %s %s "
 #. %17$s:  lang 
 #. %18$s:  END 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:128
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:118
 #, c-format
 msgid ""
 "%s %s %s %s %s %s %sEnglish %sFrench %sItalian %sGerman %sSpanish %sHebrew "
@@ -1785,7 +1785,7 @@ msgstr "%s %s मैनुअल %s अतिदेय %s सस्पेंश�
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:71
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "%s %s No %s"
 msgstr "%s %s नही %s"
@@ -2322,7 +2322,7 @@ msgstr "%s %s%s%sकोई पर्ची टेम्पलेट नही �
 #. %11$s:  type | html 
 #. %12$s:  END 
 #. %13$s:  END 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:36
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:34
 #, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
@@ -4677,7 +4677,7 @@ msgstr ""
 msgid "%s Unlimited %s %s %s "
 msgstr "%s असिमित %s %s %s "
 
-#. %1$s:  IF count > 0 
+#. %1$s:  IF count 
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:92
 #, c-format
 msgid "%s Used in "
@@ -4730,7 +4730,7 @@ msgstr "%s हाँ %s नही %s विरासत में मिला %
 
 #. %1$s:  IF ( issue.renewals ) 
 #. %2$s:  IF ( issue.lastreneweddate ) 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:70
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:68
 #, c-format
 msgid "%s Yes%s, "
 msgstr "%s हां %s, "
@@ -4799,23 +4799,6 @@ msgstr "%s ZIP/डाक कोडः"
 #, c-format
 msgid "%s [#%% Branch-specific %%#] %s "
 msgstr "%s [#%% शाखा-विशिष्ट %%#] %s "
-
-#. %1$s:  BLOCK showreference 
-#. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
-#. %3$s:  SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=' 
-#. %4$s:  IF marcflavour == 'UNIMARC' 
-#. %5$s:  SWITCH type 
-#. %6$s:  CASE 'broader' 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: heading: the heading itself linkType: currently "
-"'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
-"is a linked authority, its authid %%] %s %s %s %s %s "
-msgstr ""
-"%s [ %% # पैरामीटर: शीर्षक: ही बढ़ रहा LinkType: वर्तमान में 'seefrom' या "
-"'seealso', को नियंत्रित करता प्रविष्टि प्रकार के लिए लेबल authid: यदि यह एक जुड़ा "
-"अधिकार है अपने authid %% ] %s %s %s %s %s "
 
 #. %1$s:  ELSIF ( rule.hardduedateafter ) 
 #. %2$s:  rule.hardduedate 
@@ -5946,7 +5929,7 @@ msgstr "%s%s&nbsp;सीमा(ओ) केसाथ: "
 #. %3$s:  suggestions_loo.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:547
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:97
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:95
 #, c-format
 msgid "%s%s, by %s%s"
 msgstr "%s%s, द्वारा %s%s"
@@ -8517,8 +8500,8 @@ msgstr "&rsaquo; परिणाम %s लॉग %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
-#, c-format
-msgid "&rsaquo; Results %s&rsaquo; Average checkout period%s"
+#, fuzzy, c-format
+msgid "&rsaquo; Results %s&rsaquo; Average loan time%s"
 msgstr "&rsaquo; परिणाम %s&rsaquo; औसत चेक आउट अवधि%s"
 
 #. %1$s:  ELSE 
@@ -9822,8 +9805,8 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:267
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:275
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:199
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:79
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:84
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:77
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:82
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:558
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:145
@@ -10232,7 +10215,7 @@ msgstr "अधिग्रहण  ओर/या सुझाव प्रबं�
 msgid "Acquisition date"
 msgstr "अधिग्रहण दिनांक"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:53
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:51
 #, c-format
 msgid "Acquisition date (yyyy-mm-dd)"
 msgstr "अधिग्रहण दिनांक (yyyy-MM-dd)"
@@ -10368,7 +10351,7 @@ msgstr "क्रिया अगर कोई मिलान नहीं प�
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:184
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:599
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:262
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:265
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:252
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
@@ -12870,7 +12853,7 @@ msgstr "Arslan फारूक"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:193
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:414
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:133
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:128
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:47
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:114
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:122
@@ -13351,7 +13334,7 @@ msgstr "लेखकों"
 msgid "Authors:"
 msgstr "लेखकों:"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:261
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
 #, c-format
 msgid "Auto ordering"
 msgstr "ऑटो आदेश देने"
@@ -13378,7 +13361,7 @@ msgstr ""
 msgid "Automatic item modifications by age"
 msgstr "उम्र से स्वत: आइटम संशोधनों"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:191
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:188
 #, c-format
 msgid "Automatic ordering: "
 msgstr "स्वचालित आदेश:"
@@ -13432,7 +13415,6 @@ msgstr "उपलब्ध स्थानों"
 msgid "Available since"
 msgstr "के बाद से उपलब्ध"
 
-#: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:54
 #, c-format
 msgid "Average checkout period"
@@ -13444,6 +13426,7 @@ msgid "Average checkout period statistics"
 msgstr "औसत रूप Checkout अवधि के आँकड़े"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:35
+#: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:44
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:68
 #, c-format
 msgid "Average loan time"
@@ -13461,7 +13444,7 @@ msgstr "बिबटैक्स"
 msgid "BSD License"
 msgstr "BSD लाइसेंस"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:13
 #, c-format
 msgid "BT"
 msgstr "बीटी"
@@ -13526,7 +13509,7 @@ msgstr "वापस सूची में"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:166
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:294
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:45
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:647
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
@@ -13880,7 +13863,7 @@ msgstr "बैच  %s"
 msgid "Batch ID"
 msgstr "बैच आईडी"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:74
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:73
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:47
 #, c-format
 msgid "Batch check out"
@@ -14477,7 +14460,7 @@ msgid "Brig C. McCoy"
 msgstr "ब्रिगेडियर सी. McCoy"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:13
 msgid "Broader Term"
 msgstr "व्यापक शब्द"
 
@@ -15081,7 +15064,7 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:93
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:215
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:559
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:206
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:203
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:111
@@ -16351,7 +16334,7 @@ msgid "Checked in item."
 msgstr "मदों में चेक किया"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:87
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:128
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:35
 #, c-format
@@ -16381,7 +16364,7 @@ msgstr "चेकआउट %s बार"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:724
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:742
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:533
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:83
 #, c-format
@@ -16434,7 +16417,7 @@ msgstr "चेकइन संदेश प्रकारः"
 msgid "Checkin message: "
 msgstr "चेकइन संदेशः"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:51
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
 #, c-format
 msgid "Checkin on"
 msgstr "चैकइन पर"
@@ -16515,7 +16498,7 @@ msgstr "चेकआउट इतिहास"
 msgid "Checkout history for %s"
 msgstr "%s लिए चेकआउट इतिहास"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
 #, c-format
 msgid "Checkout on"
 msgstr "पर चेकआउट "
@@ -16924,7 +16907,7 @@ msgstr "परिसंचालन और जुर्माना नियम
 msgid "Circulation and fines rules"
 msgstr "वितरण और जुर्माना नियम"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:88
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:87
 #: intranet-tmpl/prog/en/includes/members-menu.inc:10
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:50
 #, c-format
@@ -17908,7 +17891,7 @@ msgstr "इस फाइल के बारे में टिप्पणि�
 msgid "Comments awaiting moderation"
 msgstr "टिप्पणियाँ की प्रतीक्षा कर रहा है मॉडरेशन"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:148
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:143
 #, c-format
 msgid "Comments pending approval"
 msgstr "टिप्पणियाँ विचाराधीन अनुमोदन"
@@ -20030,7 +20013,7 @@ msgstr "देरी के दिनों की संख्या एक च
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:608
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:5
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:238
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:307
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:295
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:279
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:220
@@ -20065,7 +20048,7 @@ msgstr "देरी के दिनों की संख्या एक च
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:699
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:218
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:207
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:200
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:195
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:870
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:194
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:196
@@ -20077,8 +20060,8 @@ msgstr "देरी के दिनों की संख्या एक च
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:246
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:139
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:131
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:142
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:223
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:413
 #: intranet-tmpl/prog/en/modules/members/files.tt:60
@@ -20132,7 +20115,7 @@ msgstr "सीएसवी प्रोफ़ाइल मिटाएँ \"%s?\
 msgid "Delete EAN %s for %s?"
 msgstr "हटाए EAN %sके लिए %s?"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:108
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:111
 #, c-format
 msgid "Delete Images"
 msgstr "छवि हटाए"
@@ -20337,7 +20320,7 @@ msgid "Delete remote"
 msgstr "एक रिमोट मिटाएँ"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:644
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:154
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:157
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:397
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
 #, c-format
@@ -20393,7 +20376,7 @@ msgstr "एक सीमा पर एकल छुट्टियों को 
 msgid "Delete this Tag"
 msgstr "हटाएँ इस टैग"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:213
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:210
 #, c-format
 msgid "Delete this account?"
 msgstr "इस रेकॉर्ड को मिटाएँ?"
@@ -20614,8 +20597,8 @@ msgstr "विभाग"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:136
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:598
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:220
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:217
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:261
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:250
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
@@ -20754,7 +20737,7 @@ msgstr "गंतव्य पुस्तकालय: "
 msgid "Destination record"
 msgstr "गंतव्य रिकार्ड"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:78
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:77
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:718
@@ -20897,12 +20880,12 @@ msgstr "सभी के लिए अक्षमता"
 msgid "Discharge"
 msgstr "डिस्चार्ज "
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:170
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:165
 #, c-format
 msgid "Discharge requests pending"
 msgstr "निर्वहन अनुरोध लंबित"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:110
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:109
 #, c-format
 msgid "Discharges"
 msgstr "डिस्चार्ज "
@@ -21246,12 +21229,12 @@ msgstr "डाउनलोड विन्यास"
 msgid "Download database"
 msgstr "डाउनलोड डाटाबेस"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:253
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, c-format
 msgid "Download directory"
 msgstr "डाउनलोड निर्देशिका"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:129
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:126
 #, c-format
 msgid "Download directory: "
 msgstr "डाउनलोड निर्देशिकाः"
@@ -21322,7 +21305,7 @@ msgstr "कारण %s"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:730
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:50
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:528
 #, c-format
 msgid "Due date"
@@ -21573,7 +21556,7 @@ msgstr "एड ग्रीष्मकाल (कुछ कोड और MARC �
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:80
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:250
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:607
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:307
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:294
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:278
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:219
@@ -21602,7 +21585,7 @@ msgstr "एड ग्रीष्मकाल (कुछ कोड और MARC �
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:205
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:213
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:206
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:199
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:194
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:847
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:97
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:221
@@ -23436,7 +23419,7 @@ msgid "File: "
 msgstr "फाइल:"
 
 #. %1$s:  SOURCE_FILE 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:99
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:102
 #, c-format
 msgid "File: %s"
 msgstr "फ़ाइल: %s"
@@ -23453,7 +23436,7 @@ msgstr "FileSaver पुस्तकालय"
 msgid "Filename"
 msgstr "फ़ाइलनाम"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:102
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:101
 #: intranet-tmpl/prog/en/includes/members-menu.inc:18
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
 #, c-format
@@ -23626,7 +23609,7 @@ msgstr "जुर्माना चार्ज अंतराल"
 msgid "Fine grace period"
 msgstr "जुर्माना अनुग्रह अवधि"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:81
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:80
 #: intranet-tmpl/prog/en/includes/members-menu.inc:7
 #: intranet-tmpl/prog/en/modules/members/member.tt:404
 #, c-format
@@ -25653,7 +25636,7 @@ msgstr "घंटा"
 msgid "Hours"
 msgstr "घंटे"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:113
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:112
 #: intranet-tmpl/prog/en/includes/members-menu.inc:24
 #, c-format
 msgid "Housebound"
@@ -25739,7 +25722,7 @@ msgstr "I18N/L10N"
 msgid "IBERMARC"
 msgstr "IBERMARC"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:246
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:243
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:395
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:324
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:221
@@ -26220,7 +26203,7 @@ msgstr "छवि 1"
 msgid "Image 2"
 msgstr "छवि 2"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:124
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:127
 #, c-format
 msgid "Image ID"
 msgstr "छवि ID"
@@ -26230,13 +26213,13 @@ msgstr "छवि ID"
 msgid "Image file"
 msgstr "छवि फ़ाइल"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:84
 #, c-format
 msgid "Image name: "
 msgstr "छवि नाम: "
 
 #. %1$s:  IMAGE_NAME 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:100
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:103
 #, c-format
 msgid "Image name: %s"
 msgstr "छवि नाम: %s"
@@ -26314,7 +26297,7 @@ msgstr "छवि आयात नहीं है क्योंकि इस 
 msgid "Image source: "
 msgstr "छवि स्रोतः"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:98
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:101
 #, c-format
 msgid "Image successfully uploaded"
 msgstr "छवि सफलतापूर्वक अपलोड"
@@ -26324,8 +26307,8 @@ msgstr "छवि सफलतापूर्वक अपलोड"
 msgid "Image upload results :"
 msgstr "छवि अपलोड परिणाम :"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:158
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:170
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:161
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:173
 #, c-format
 msgid "Image(s) successfully deleted"
 msgstr "छवि(यों) सफलतापूर्वक नष्ट कर दिया"
@@ -26993,7 +26976,7 @@ msgstr "चालान: %s"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:4
 #: intranet-tmpl/prog/en/includes/vendor-menu.inc:7
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:256
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:96
@@ -27006,7 +26989,7 @@ msgstr "चालान"
 msgid "Invoices "
 msgstr "चालान"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:175
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:172
 #, c-format
 msgid "Invoices enabled: "
 msgstr "चालान सक्षम:"
@@ -29714,8 +29697,8 @@ msgstr ""
 "संरक्षक सांख्यिकी%s"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:3
-#, c-format
-msgid "Koha &rsaquo; Reports &rsaquo; Average checkout period"
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Reports &rsaquo; Average loan time"
 msgstr "कोहा &rsaquo; रिपोर्ट &rsaquo; औसत चेकआउट अवधि"
 
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:4
@@ -32247,6 +32230,13 @@ msgstr "मार्क संशोधन टेम्पलेट प्रब
 msgid "Manage OAI Sets"
 msgstr "प्रबंधित OAI सेटस"
 
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:73
+#, c-format
+msgid ""
+"Manage additional images to use as logo, decoration or background on a "
+"patron card layout."
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, c-format
 msgid "Manage all budgets"
@@ -33162,7 +33152,7 @@ msgstr "संयमी संरक्षक टैग"
 msgid "Modification date"
 msgstr "परिवर्धन की तारीख़"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:92
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:91
 #: intranet-tmpl/prog/en/includes/members-menu.inc:13
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:42
 #, c-format
@@ -33627,7 +33617,6 @@ msgstr "में नहीं चेक"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:77
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:172
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:38
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:121
 #, c-format
 msgid "NOTE:"
@@ -33650,7 +33639,7 @@ msgstr ""
 "नोट: यदि आप इस मूल्य बदलते हैं तो आपको misc/batchRebuildBiblioTables.pl चलाने के "
 "लिए अपने व्यवस्थापक से पूछना चाहिए।"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
 #, c-format
 msgid "NT"
 msgstr "NT"
@@ -33682,7 +33671,7 @@ msgstr "नहुएल अंजलिनेत्ति"
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:81
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:128
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:126
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:129
 #: intranet-tmpl/prog/en/modules/members/files.tt:45
 #: intranet-tmpl/prog/en/modules/members/member.tt:398
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
@@ -33818,7 +33807,7 @@ msgid "Named: "
 msgstr "नाम: "
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:15
 msgid "Narrower Term"
 msgstr "संकरा टर्म"
 
@@ -33867,7 +33856,7 @@ msgstr "कभी नहीं"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:49
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:52
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:201
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:196
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1097
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:95
@@ -34290,7 +34279,7 @@ msgid "New vendor"
 msgstr "नई विक्रेता"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:109
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:192
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:187
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:61
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:78
@@ -34704,7 +34693,7 @@ msgstr "नही अगर सेटिंग्स को यह अनुम�
 msgid "No image: "
 msgstr "कोई छवि नही: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:165
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:168
 #, c-format
 msgid "No images are currently available. "
 msgstr "केवल छवि वर्तमान में उपलब्ध नही"
@@ -35108,7 +35097,7 @@ msgstr "नहीं, नष्ट नहीं करें"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:123
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:164
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:573
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:236
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:212
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:129
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
@@ -35675,7 +35664,7 @@ msgstr "कुछ भी नहीं सहेजने को"
 msgid "Notice"
 msgstr "सूचना"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:95
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:94
 #: intranet-tmpl/prog/en/includes/members-menu.inc:15
 #, c-format
 msgid "Notices"
@@ -36428,8 +36417,9 @@ msgid "Only PNG, GIF, JPEG, XPM formats are supported. "
 msgstr "केवल PNG, GIF, JPEG, XPM स्वरूपों का समर्थन कर रहे हैं।"
 
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
-#, c-format
-msgid "Only PNG, GIF, JPEG, XPM formats are supported. Images "
+#, fuzzy, c-format
+msgid ""
+"Only PNG, GIF, JPEG, XPM formats are supported. Maximum image size is 500KB."
 msgstr "केवल PNG, GIF, JPEG, XPM स्वरूपों का समर्थन कर रहे हैं। छवियाँ"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:826
@@ -36720,7 +36710,7 @@ msgstr "जानकारी आदेश"
 msgid "Ordernumber"
 msgstr "आदेशसंख्या"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:451
 #, c-format
 msgid "Orders"
@@ -36739,7 +36729,7 @@ msgstr "आदेश खड़ा कर रहे हैं:"
 msgid "Orders by fund"
 msgstr "कोष द्वारा आदेश"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:167
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:164
 #, c-format
 msgid "Orders enabled: "
 msgstr "आदेश सक्षम:"
@@ -37151,7 +37141,7 @@ msgstr "पासी Kallinen"
 
 #: intranet-tmpl/prog/en/columns.def:58
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:252
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:249
 #, c-format
 msgid "Password"
 msgstr "पासवर्ड"
@@ -37187,7 +37177,7 @@ msgid "Password:"
 msgstr "पासवर्ड:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:144
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:125
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:122
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:426
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:223
 #, c-format
@@ -37234,7 +37224,7 @@ msgstr "पेटेंट दस्तावेज़"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:103
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:167
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:295
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:713
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:21
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:538
@@ -37878,7 +37868,7 @@ msgstr "बैच संख्या में संरक्षक %s"
 msgid "Patrons in list"
 msgstr "सूची में संरक्षक"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:163
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:158
 #: intranet-tmpl/prog/en/modules/members/member.tt:352
 #, c-format
 msgid "Patrons requesting modifications"
@@ -39218,7 +39208,7 @@ msgstr "पर प्रविष्ट किया %s "
 
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:197
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:192
 #, c-format
 msgid "Posted on %s%s by "
 msgstr "पर प्रविष्ट किया %s%s द्वारा"
@@ -39885,7 +39875,7 @@ msgstr "सार्वजनिक टिप्पणीयाँ: "
 msgid "Publication date"
 msgstr "प्रकाशन तिथि"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:52
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:50
 #, c-format
 msgid "Publication date (yyyy-yyyy)"
 msgstr "प्रकाशन दिनांक (yyyy-yyyy)"
@@ -40069,7 +40059,7 @@ msgstr "प्रकाशित द्वारा: %s %s in %s %s %s , %s %s %
 msgid "Pull this many items"
 msgstr "यह कई आइटम खींचो"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:107
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:106
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:37
 #, c-format
 msgid "Purchase suggestions"
@@ -40082,13 +40072,13 @@ msgstr "खरीद सुझाव"
 msgid "Qty."
 msgstr "मात्रा."
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:255
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:252
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:136
 #, c-format
 msgid "Qualifier"
 msgstr "क्वालीफायर"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:139
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:136
 #, c-format
 msgid "Qualifier:"
 msgstr "क्वालीफायर:"
@@ -40194,12 +40184,12 @@ msgstr "ओपेक में बोली-ऑफ-द-दिन सुविध
 msgid "Quote uploader"
 msgstr "उद्धरण अपलोड करें"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:257
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:254
 #, c-format
 msgid "Quotes"
 msgstr "उद्धरणः"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:159
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:156
 #, c-format
 msgid "Quotes enabled: "
 msgstr "उद्धरण सक्षम:"
@@ -40235,7 +40225,7 @@ msgstr "RRP टैक्स अतिरिक्त"
 msgid "RRP tax inc."
 msgstr "RRP कर इंक।"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
 #, c-format
 msgid "RT"
 msgstr "RT"
@@ -40630,7 +40620,7 @@ msgid "Rejected tags"
 msgstr "अस्वीकृत टैग"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:21
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
 msgid "Related Term"
 msgstr "संबंधित शब्द"
 
@@ -40747,12 +40737,12 @@ msgstr "अनुस्मारक: इस कार्रवाई के स�
 msgid "Reminder: this action will modify all selected biblios!"
 msgstr "अनुस्मारक: इस कार्रवाई के सभी चयनित biblos संशोधित करेगा!"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:247
 #, c-format
 msgid "Remote host"
 msgstr "रिमोट होस्ट"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:117
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:114
 #, c-format
 msgid "Remote host: "
 msgstr "रिमोट होस्ट : "
@@ -40969,7 +40959,7 @@ msgstr "नवीनीकरण अवधि"
 msgid "Renewals allowed (count)"
 msgstr "अनुमति नवीकरण (गिनती)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:48
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:47
 #, c-format
 msgid "Renewed"
 msgstr "नवीनीकृत"
@@ -41525,12 +41515,12 @@ msgstr "रीसेट करें"
 msgid "Reset filter"
 msgstr "फिल्टर रीसेट करें "
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:260
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:257
 #, c-format
 msgid "Responses"
 msgstr "जवाब"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:183
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:180
 #, c-format
 msgid "Responses enabled: "
 msgstr "प्रतिक्रियायें सक्षम:"
@@ -41902,7 +41892,7 @@ msgstr "अनुमार्गण"
 msgid "Routing list"
 msgstr "सूची अनुमार्गण"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:84
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:83
 #, c-format
 msgid "Routing lists"
 msgstr "सूची अनुमार्गण"
@@ -42003,8 +41993,8 @@ msgstr "रसेल Garlick"
 msgid "Ryan Higgins"
 msgstr "रयान हिगिंस"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:224
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:256
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:221
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:253
 #, c-format
 msgid "SAN"
 msgstr "SAN"
@@ -42019,7 +42009,7 @@ msgstr "सैन-Ouest Provence"
 msgid "SAN-Ouest Provence, France"
 msgstr "सैन-Ouest Provence, फ्रांस"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:155
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:152
 #, c-format
 msgid "SAN: "
 msgstr "SAN: "
@@ -43438,7 +43428,7 @@ msgstr "चुनें नोट:"
 msgid "Select notice:"
 msgstr "चुनें नोटिस:"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:112
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:115
 #, c-format
 msgid "Select one or more images to delete. "
 msgstr "नष्ट करने के लिए एक या एक से अधिक छवियों का चयन करें।"
@@ -43506,7 +43496,7 @@ msgid "Select the file to stage: "
 msgstr "मंच का चयन करने के लिये फाईल: "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:41
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:80
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:79
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:300
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:139
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:96
@@ -44538,8 +44528,8 @@ msgid "Sophie Meynieux"
 msgstr "सोफी Meynieux"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:209
-#, c-format
-msgid "Sorry, but there is no results for your search."
+#, fuzzy, c-format
+msgid "Sorry, but there are no results for your search."
 msgstr "क्षमा करें, लेकिन आपकी खोज के लिए कोई परिणाम नहीं है।"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:77
@@ -45111,7 +45101,7 @@ msgstr "आंकड़े 2:"
 msgid "Statistical"
 msgstr "सांख्यिकी"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:98
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:97
 #: intranet-tmpl/prog/en/includes/members-menu.inc:16
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:236
 #, c-format
@@ -45599,7 +45589,7 @@ msgstr "विषय:"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:91
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:92
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:101
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:205
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:202
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:215
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:108
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:56
@@ -45971,7 +45961,7 @@ msgstr "सुझाव"
 msgid "Suggestions management"
 msgstr "सुझाव प्रबंधन"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:141
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:136
 #, c-format
 msgid "Suggestions pending approval"
 msgstr "सुझाव अनुमोदन के लिए लंबित"
@@ -46465,7 +46455,7 @@ msgstr "साथ टैग किया गया:"
 msgid "Tags"
 msgstr "टैग"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:155
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:150
 #, c-format
 msgid "Tags pending approval"
 msgstr "टैग अनुमोदन के लिए लंबित"
@@ -46946,7 +46936,7 @@ msgstr "इसी उपक्षेत्र -1(उपेक्षा) टै�
 msgid "The destination should be filled."
 msgstr "गंतव्य भरा जाना चाहिए।"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:131
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:128
 #, c-format
 msgid ""
 "The download directory specifies the directory on the ftp site from which "
@@ -47452,7 +47442,7 @@ msgstr ""
 msgid "The unreceived orders from the following funds will be moved"
 msgstr "निम्नलिखित धन से unreceived के आदेश ले जाया जाएगा"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:136
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:133
 #, c-format
 msgid ""
 "The upload directory specifies the directory on the ftp site to which orders "
@@ -47496,7 +47486,7 @@ msgstr "थीम्स"
 msgid "There are no %s currently available."
 msgstr "यहां नही हैं %s वर्तमान में उपलब्ध"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:316
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:313
 #, c-format
 msgid "There are no EDI accounts. "
 msgstr "इसमें कोई ईडीआई खाते नही हैं।"
@@ -48292,7 +48282,7 @@ msgstr "इस विक्रेता कोई ईमेल नही है"
 msgid "This vendor has no email defined for late issues."
 msgstr "इस विक्रेता कोई मीडिया देर के इश्यू के लिए परिभाषित किया गया है।"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:85
 #, c-format
 msgid ""
 "This will be the name by which you will refer to this image in the patron "
@@ -48779,6 +48769,13 @@ msgstr "प्राप्त करने पर सूचित करने �
 #, c-format
 msgid "To notify patrons of new serial issues, you must "
 msgstr "नया धारावाहिक मुद्दों के संरक्षक सूचित करने के लिए, तुम चाहिए"
+
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:88
+#, c-format
+msgid ""
+"To replace an image, delete it, upload a new file and give it the same image "
+"name. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:29
 #, c-format
@@ -49462,7 +49459,7 @@ msgstr "अनुवादः"
 msgid "Translations"
 msgstr "अनुवाद"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:249
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:246
 #, c-format
 msgid "Transport"
 msgstr "परिवहन"
@@ -49473,7 +49470,7 @@ msgstr "परिवहन"
 msgid "Transport cost matrix"
 msgstr "परिवहन लागत मैट्रिक्स"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:104
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:101
 #, c-format
 msgid "Transport: "
 msgstr "परिवहनः"
@@ -49569,7 +49566,7 @@ msgstr "प्रकार:"
 msgid "Type: "
 msgstr "प्रकार: "
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
 #, c-format
 msgid "UF"
 msgstr "यूएफ"
@@ -50006,7 +50003,7 @@ msgstr "डेटाबेस संरचना अद्यतन"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:257
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:259
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:47
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:94
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:97
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:305
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:108
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:148
@@ -50034,6 +50031,11 @@ msgstr "अपलोड कोहा प्लगइन करें"
 msgid "Upload New File"
 msgstr "नई फ़ाइल अपलोड करें"
 
+#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
+#, fuzzy, c-format
+msgid "Upload additional images for patron cards"
+msgstr "एक बैच या एक में संरक्षक छवियों को अपलोड एक समय में"
+
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:26
 #, c-format
 msgid "Upload another KOC file"
@@ -50050,12 +50052,12 @@ msgstr "कोई भी फ़ाइल अपलोड करें"
 msgid "Upload any type of file, manage uploads"
 msgstr "शब्द फ़ाइल के किसी भी प्रकार, अपलोड प्रबंधन"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:254
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
 #, c-format
 msgid "Upload directory"
 msgstr "अपलोड निर्देशिका करें"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:134
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:131
 #, c-format
 msgid "Upload directory: "
 msgstr "अपलोड निर्देशिका करें : "
@@ -50079,7 +50081,6 @@ msgstr "फ़ाइल अपलोड करेंः"
 msgid "Upload image"
 msgstr "अपलोड छवियाँ करे"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:72
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:92
 #, c-format
 msgid "Upload images"
@@ -50361,7 +50362,7 @@ msgid "Used"
 msgstr "प्रयुक्त"
 
 #. ABBR
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:17
 msgid "Used For"
 msgstr "के लिए प्रयोग करें"
 
@@ -50412,7 +50413,7 @@ msgstr "यूज़रआईडी: "
 #: intranet-tmpl/prog/en/columns.def:57
 #: intranet-tmpl/prog/en/includes/patron-search.inc:41
 #: intranet-tmpl/prog/en/includes/patron-search.inc:43
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
 #: intranet-tmpl/prog/en/modules/members/member.tt:449
 #: intranet-tmpl/prog/en/modules/members/member.tt:451
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:123
@@ -50431,7 +50432,7 @@ msgstr "प्रयोक्ता नाम/पासवर्ड पहले
 msgid "Username:"
 msgstr "प्रयोक्ता नाम:"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:121
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:118
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:425
 #, c-format
 msgid "Username: "
@@ -50544,8 +50545,8 @@ msgstr "परिवर्तनीयः"
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:24
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:40
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:206
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:216
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:247
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:213
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:244
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:996
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
@@ -50564,7 +50565,7 @@ msgstr "विक्रेता"
 msgid "Vendor "
 msgstr "विक्रेता "
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:242
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:239
 #, c-format
 msgid "Vendor EDI accounts"
 msgstr "विक्रेता ईडीआई खातों"
@@ -51304,7 +51305,7 @@ msgstr "सर्दी"
 msgid "With %s selected searches: "
 msgstr "साथ %sचयनित खोज :"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:197
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:194
 #, c-format
 msgid ""
 "With automatic ordering quotes generate orders without staff intervention. "
@@ -51556,7 +51557,7 @@ msgstr "हाँ, बन्द (Y)"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:187
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:321
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
@@ -52612,21 +52613,6 @@ msgstr "[% innerloo.tag_lib %] - इस टैग का विस्तार �
 msgid "[%% HOLIDAYS_LOO.DESCRIPTION.replace('\\\\\\r\\\\\\n', '"
 msgstr "[ %% HOLIDAYS_LOO.DESCRIPTION.replace ( '\\\\\\ आर \\\\\\ एन', '"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:121
-#, c-format
-msgid ""
-"[%% IF ( ( CAN_user_tools_moderate_comments && pendingcomments ) || "
-"( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && "
-"pending_borrower_modifications ) || ( CAN_user_acquisition && "
-"pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) "
-"|| pending_article_requests ) %%] "
-msgstr ""
-"[%% IF ( ( CAN_user_tools_moderate_comments && pendingcomments ) || "
-"( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && "
-"pending_borrower_modifications ) || ( CAN_user_acquisition && "
-"pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) "
-"|| pending_article_requests ) %%] "
-
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:128
 #, c-format
 msgid ""
@@ -52637,28 +52623,6 @@ msgstr ""
 "[ %% IF (CAN_user_editcatalogue_edit_catalogue || "
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription) "
 "%% ] "
-
-#. %1$s:  IF ( batch_checkout_view ) 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:71
-#, c-format
-msgid ""
-"[%% IF Koha.Preference('BatchCheckouts') && Koha."
-"Preference('BatchCheckoutsValidCategories').split('\\|').grep('^' _ "
-"categorycode _ '$').size > 0 %%] %s"
-msgstr ""
-"[ %% यदि कोहा.Preference ( 'BatchCheckouts') && कोहा.Preference "
-"( 'BatchCheckoutsValidCategories') विभाजन ( '\\ |')।।। ग्रेप ( '^' _ _ "
-"categorycode '$') का आकार> 0 %% ] %s"
-
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:55
-#, c-format
-msgid ""
-"[%% IF Koha.Preference('intranetreadinghistory') AND "
-"CAN_user_circulate_circulate_remaining_permissions %%] "
-msgstr ""
-"[ %% कोहा.Preference IF ( 'intranetreadinghistory') और "
-"CAN_user_circulate_circulate_remaining_permissions %% ] "
 
 #. %1$s:  IF locations.size 
 #. %2$s:  END 
@@ -52693,24 +52657,6 @@ msgstr ""
 "\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s "
 "[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
 "empty_option = \"All statuses\" %%] %s "
-
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:119
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
-"type=seeals.type authid=seeals.authid %%] "
-msgstr ""
-"[ %% प्रक्रिया showreference के मुखिया = seeals.heading LinkType = 'seealso' "
-"type = seeals.type authid = seeals.authid %% ] "
-
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:104
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
-"type=seefro.type authid=seefro.authid %%] "
-msgstr ""
-"[ %% प्रक्रिया showreference के मुखिया = seefro.heading LinkType = 'seefrom' "
-"type = seefro.type authid = seefro.authid %% ] "
 
 #: intranet-tmpl/prog/en/includes/country-list.inc:1
 #, c-format
@@ -52753,24 +52699,6 @@ msgid ""
 "\", \"Vanuatu\", \"Vatican City\", \"Venezuela\", \"Vietnam\", \"Yemen\", "
 "\"Zambia\", \"Zimbabwe\", ] %%] "
 msgstr ""
-
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:99
-#, c-format
-msgid "[%% transport_types = [ 'FTP', 'SFTP', 'FILE' ] %%] "
-msgstr "[ %% Transport_types = [ 'एफ़टीपी', 'SFTP', 'फाइल'] %% ] "
-
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:42
-#, c-format
-msgid ""
-"[%%# Use non-normalized st-year instead of st-numeric, since pubdate can "
-"include 'u' to signify unkown dates. See \"Legal Characters\" at: http://www."
-"loc.gov/marc/bibliographic/bd008a.html This search is also for date ranges "
-"due to the special Zebra r=r CCL mapping for 'yr' %%] "
-msgstr ""
-"[%%# सेंट-न्यूमेरिक के बजाय गैर सामान्यीकृत सेंट साल का प्रयोग करें, क्योंकि pubdate 'अप' "
-"अज्ञात तारीखों को सूचित करने के शामिल कर सकते हैं। देखें \"कानूनी अक्षर\" पर: http://www."
-"loc.gov/marc/bibliographic/bd008a.html इस खोज के लिए विशेष ज़ेबरा के कारण तिथि "
-"सीमाओं के लिए भी है r=r CCL mapping for 'yr' %%] "
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:62
 #, c-format
@@ -53030,11 +52958,6 @@ msgstr "टोकरीसमूह"
 msgid "batch_anonymise.pl"
 msgstr "batch_anonymise.pl"
 
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
-#, c-format
-msgid "be less than 500KB. "
-msgstr "500KB से भी कम हो। "
-
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:83
 #, c-format
 msgid "be mapped to a MARC subfield,"
@@ -53112,8 +53035,8 @@ msgstr "%s द्वारा"
 #. %11$s:  IF ( XISBN.editionstatement ) 
 #. %12$s:  XISBN.editionstatement 
 #. %13$s:  END 
-#. %14$s:  IF ( XISBN.editionresponsability ) 
-#. %15$s:  XISBN.editionresponsability 
+#. %14$s:  IF ( XISBN.editionresponsibility ) 
+#. %15$s:  XISBN.editionresponsibility 
 #. %16$s:  END 
 #. %17$s:  END 
 #. %18$s:  IF ( XISBN.pages ) 
@@ -53654,7 +53577,7 @@ msgstr "है "
 msgid "has all required privileges on database "
 msgstr "सभी डेटाबेस पर विशेषाधिकार आवश्यक है "
 
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:97
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:95
 #, c-format
 msgid "has never been checked out."
 msgstr "बाहर की जाँच की गई कभी नहीं किया है."
@@ -53727,12 +53650,6 @@ msgstr "homebranch नहीं प्रतिचित्रित"
 #, c-format
 msgid "homebranch defined"
 msgstr "homebranch परिभाषित"
-
-#. %1$s:  PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm"  name=mc_1_src_c_1_n_1_norm
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:515
-#, fuzzy, c-format
-msgid "i %s "
-msgstr "में %s "
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:259
 #, c-format
@@ -54082,7 +53999,7 @@ msgid "label_single_%s.pdf"
 msgstr "label_single_ %s .pdf"
 
 #. %1$s:  issue.lastreneweddate |$KohaDates with_hours => 1  
-#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:71
+#: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:69
 #, c-format
 msgid "last on: %s"
 msgstr "पर पिछले: %s"
@@ -54197,11 +54114,6 @@ msgstr "परिवर्धित"
 #, c-format
 msgid "months "
 msgstr "महीने"
-
-#: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:76
-#, c-format
-msgid "must"
-msgstr "आवश्यक"
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:30
 #, c-format
@@ -54549,7 +54461,7 @@ msgstr "वही पुस्तकालय, वही संरक्षक �
 msgid "seconds "
 msgstr "सेकंड: "
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:117
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:111
 #, c-format
 msgid "see also:"
 msgstr "यह भी देखें:"
@@ -54757,34 +54669,35 @@ msgstr "पाठ/html; charset = UTF-8"
 #. %2$s:  ELSIF ( error == 302 ) 
 #. %3$s:  ELSIF ( error == 303 ) 
 #. %4$s:  image_limit 
-#. %5$s:  ELSIF ( error == 401 ) 
-#. %6$s:  batch_id 
-#. %7$s:  ELSIF ( error == 402 ) 
-#. %8$s:  ELSIF ( error == 403 ) 
-#. %9$s:  batch_id 
-#. %10$s:  ELSIF ( error == 404 ) 
+#. %5$s:  ELSIF ( error == 304 ) 
+#. %6$s:  IMAGE_NAME 
+#. %7$s:  ELSIF ( error == 401 ) 
+#. %8$s:  batch_id 
+#. %9$s:  ELSIF ( error == 402 ) 
+#. %10$s:  ELSIF ( error == 403 ) 
 #. %11$s:  batch_id 
-#. %12$s:  ELSIF ( error == 405 ) 
+#. %12$s:  ELSIF ( error == 404 ) 
 #. %13$s:  batch_id 
-#. %14$s:  ELSE 
-#. %15$s:  END 
+#. %14$s:  ELSIF ( error == 405 ) 
+#. %15$s:  batch_id 
+#. %16$s:  END 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:25
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "that you have a library selected. %s An error has occurred while attempting "
 "to upload the image file. Please ask your system administrator to check the "
 "error log for more details. %s Image exceeds 500KB. Please resize and import "
 "again. %s The database image quota currently only allows a maximum of %s "
 "images to be stored at any one time. Please delete one or more images to "
-"free up quota space. %s An error has occurred and the item(s) was not added "
-"to batch %s. Please have your system administrator check the error log for "
-"details. %s The item(s) was not added because the library is not set. Please "
-"set your library before adding items to a batch. %s An error has occurred "
-"and the item(s) was not removed from batch %s. Please have your system "
-"administrator check the error log for details. %s An error has occurred and "
-"batch %s was not deleted. Please have your system administrator check the "
-"error log for details. %s An error has occurred and batch %s not fully de-"
-"duplicated. %s %s "
+"free up quota space. %s An image with the name '%s' already exists. %s An "
+"error has occurred and the item(s) was not added to batch %s. Please have "
+"your system administrator check the error log for details. %s The item(s) "
+"was not added because the library is not set. Please set your library before "
+"adding items to a batch. %s An error has occurred and the item(s) was not "
+"removed from batch %s. Please have your system administrator check the error "
+"log for details. %s An error has occurred and batch %s was not deleted. "
+"Please have your system administrator check the error log for details. %s An "
+"error has occurred and batch %s not fully de-duplicated. %s "
 msgstr ""
 "आप एक पुस्तकालय का चयन किया है कि. %s छवि फ़ाइल अपलोड करने का प्रयास करते समय एक "
 "त्रुटि हुई है। कृपया अधिक जानकारी के लिए त्रुटि लॉग की जाँच करने के लिए अपने सिस्टम "
@@ -54931,7 +54844,7 @@ msgstr "अपने डेटाबेस को अद्यतन"
 msgid "updated successfully"
 msgstr "अद्यतित सफलतापूर्वक"
 
-#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:102
+#: intranet-tmpl/prog/en/includes/authorities-search-results.inc:100
 #, c-format
 msgid "used for/see from:"
 msgstr "के लिए / से देख प्रयोग किया है:"
@@ -54942,7 +54855,7 @@ msgid "user "
 msgstr "उपयोगकर्ता "
 
 #. SELECT name=transport
-#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:105
+#: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:102
 msgid "valid types of transport are FTP and SFTP"
 msgstr "परिवहन के वैध प्रकार एफ़टीपी और SFTP हैं"
 
