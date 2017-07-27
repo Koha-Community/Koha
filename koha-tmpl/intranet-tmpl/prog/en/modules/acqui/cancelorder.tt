@@ -9,8 +9,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.booksellerid.id %]">[% basket.booksellerid.name | html %]</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketname | html %] ([% basket.basketno %]) for [% basket.booksellerid.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id %]">[% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketname | html %] ([% basket.basketno %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
     Cancel order
 </div>
 

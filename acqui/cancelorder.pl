@@ -35,6 +35,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Acquisition;
+use Koha::Acquisition::Baskets;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
@@ -50,7 +51,7 @@ my $action = $input->param('action');
 my $ordernumber = $input->param('ordernumber');
 my $biblionumber = $input->param('biblionumber');
 my $basketno = $input->param('basketno');
-my $basket = Koha::Database->new()->schema()->resultset('Aqbasket')->find($basketno);
+my $basket = Koha::Acquisition::Baskets->find({ basketno => $basketno }, { prefetch => 'booksellerid' });
 my $referrer = $input->param('referrer') || $input->referer;
 my $del_biblio = $input->param('del_biblio') ? 1 : 0;
 
