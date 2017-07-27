@@ -2176,8 +2176,6 @@ sub MarkIssueReturned {
         # Create the old_issues entry
         my $old_checkout = Koha::OldIssue->new($issue->unblessed)->store;
 
-        $dbh->do(q|INSERT INTO old_issues SELECT * FROM issues WHERE issue_id = ?|, undef, $issue_id);
-
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy == 2) {
             $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $issue_id);
