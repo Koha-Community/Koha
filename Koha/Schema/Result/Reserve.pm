@@ -115,6 +115,12 @@ __PACKAGE__->table("reserves");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 pickupexpired
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 lowestPriority
 
   accessor: 'lowest_priority'
@@ -187,6 +193,8 @@ __PACKAGE__->add_columns(
   "waitingdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "expirationdate",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "pickupexpired",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "lowestPriority",
   { accessor => "lowest_priority", data_type => "tinyint", is_nullable => 0 },
