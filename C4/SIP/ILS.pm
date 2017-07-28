@@ -211,28 +211,31 @@ sub checkin {
     else {
         $circ->alert(1);
         $circ->alert_type(99);
+        $circ->ok( 0 );
         $circ->screen_msg('Invalid Item');
+        return $circ;
     }
 
-    # It's ok to check it in if it exists, and if it was checked out
-    # or it was not checked out but the checked_in_ok flag was set
-    $circ->ok( ( $checked_in_ok && $item ) || ( $item && $item->{patron} ) );
-    syslog("LOG_DEBUG", "C4::SIP::ILS::checkin - using checked_in_ok") if $checked_in_ok;
-
-    if ( !defined( $item->{patron} ) ) {
-        $circ->screen_msg("Item not checked out") unless $checked_in_ok;
-	syslog("LOG_DEBUG", "C4::SIP::ILS::checkin - item not checked out");
-    }
-    else {
-        if ( $circ->ok ) {
-            $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{patron} ) );
-            delete $item->{patron};
-            delete $item->{due_date};
-            $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
+    if( !$circ->ok && $circ->alert_type && $circ->alert_type == 98 ) { # data corruption
+        $circ->screen_msg("Checkin failed: data problem");
+        syslog( "LOG_WARNING", "Problem with issue_id in issues and old_issues; check the about page" );
+    } elsif( !$item->{patron} ) {
+        if( $checked_in_ok ) { # Mark checkin ok although book not checked out
+            $circ->ok( 1 );
+            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - using checked_in_ok");
+        } else {
+            $circ->screen_msg("Item not checked out");
+            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item not checked out");
         }
+    } elsif( $circ->ok ) {
+        $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{patron} ) );
+        delete $item->{patron};
+        delete $item->{due_date};
+        $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
+    } else {
+        $circ->screen_msg("Checkin failed");
+        syslog( "LOG_WARNING", "Checkin failed: probably for Wrongbranch or withdrawn" );
     }
-
-    # END TRANSACTION
 
     return $circ;
 }
