@@ -45,7 +45,7 @@ use Koha::UploadedFiles;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS] [--deleted-catalog DAYS] [--deleted-patrons DAYS] [--old-issues DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -87,6 +87,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --deleted-catalog  DAYS Purge deleted catalog older than DAYS
                            in tables deleteditems, deletedbiblioitems, deletedbiblio_metadata and deletedbiblio
    --deleted-patrons DAYS  Purge deleted patrons older than DAYS days.
+   --old-issues DAYS       Purge old issues older than DAYS days.
 USAGE
     exit $_[0];
 }
@@ -116,6 +117,7 @@ my $oauth_tokens;
 my $pStatistics;
 my $pDeletedCatalog;
 my $pDeletedPatrons;
+my $pOldIssues;
 
 GetOptions(
     'h|help'            => \$help,
@@ -143,6 +145,7 @@ GetOptions(
     'statistics:i'      => \$pStatistics,
     'deleted-catalog:i' => \$pDeletedCatalog,
     'deleted-patrons:i' => \$pDeletedPatrons,
+    'old-issues:i'      => \$pOldIssues,
 ) || usage(1);
 
 # Use default values
@@ -180,6 +183,7 @@ unless ( $sessions
     || $pStatistics
     || $pDeletedCatalog
     || $pDeletedPatrons
+    || $pOldIssues
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -430,6 +434,18 @@ if ($pDeletedPatrons) {
     );
     $sth->execute($pDeletedPatrons);
     print "Done with purging deleted patrons.\n" if $verbose;
+}
+
+if ($pOldIssues) {
+    print "Purging old issues older than $pOldIssues days.\n" if $verbose;
+    $sth = $dbh->prepare(
+        q{
+            DELETE FROM old_issues
+            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+        }
+    );
+    $sth->execute($pOldIssues);
+    print "Done with purging old issues.\n" if $verbose;
 }
 
 exit(0);
