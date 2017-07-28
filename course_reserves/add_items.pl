@@ -56,7 +56,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-unless ( $item && $action eq 'lookup' ){
+if ( !$item && $action eq 'lookup' ){
     $template->param( ERROR_ITEM_NOT_FOUND => 1 );
     $template->param( UNKNOWN_BARCODE => $barcode ) if $barcode;
 }
