@@ -91,7 +91,12 @@ __PACKAGE__->add_columns(
     is_nullable   => 0,
   },
   "itemnumber",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  {
+    data_type      => "integer",
+    default_value  => 0,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
   "origin_branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "transfer_branch",
@@ -124,6 +129,23 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("collections_tracking_id");
+
+=head1 RELATIONS
+
+=head2 itemnumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Item>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "itemnumber",
+  "Koha::Schema::Result::Item",
+  { itemnumber => "itemnumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
 
 
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05

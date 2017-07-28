@@ -527,6 +527,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 collections_trackings
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CollectionsTracking>
+
+=cut
+
+__PACKAGE__->has_many(
+  "collections_trackings",
+  "Koha::Schema::Result::CollectionsTracking",
+  { "foreign.itemnumber" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 course_item
 
 Type: might_have
