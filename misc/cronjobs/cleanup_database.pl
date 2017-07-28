@@ -45,7 +45,7 @@ use Koha::UploadedFiles;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS] [--searchhistory DAYS] [--restrictions DAYS] [--all-restrictions] [--fees DAYS] [--temp-uploads] [--temp-uploads-days DAYS] [--uploads-missing 0|1 ] [--statistics DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -83,6 +83,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --temp-uploads-days DAYS Override the corresponding preference value.
    --uploads-missing FLAG Delete upload records for missing files when FLAG is true, count them otherwise
    --oauth-tokens     Delete expired OAuth2 tokens
+   --statistics DAYS       Purge entries from statistics older than DAYS days.
 USAGE
     exit $_[0];
 }
@@ -109,6 +110,7 @@ my $temp_uploads;
 my $temp_uploads_days;
 my $uploads_missing;
 my $oauth_tokens;
+my $pStatistics;
 
 GetOptions(
     'h|help'            => \$help,
@@ -133,6 +135,7 @@ GetOptions(
     'temp-uploads-days:i' => \$temp_uploads_days,
     'uploads-missing:i' => \$uploads_missing,
     'oauth-tokens'      => \$oauth_tokens,
+    'statistics:i'      => \$pStatistics,
 ) || usage(1);
 
 # Use default values
@@ -167,6 +170,7 @@ unless ( $sessions
     || $temp_uploads
     || defined $uploads_missing
     || $oauth_tokens
+    || $pStatistics
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -366,6 +370,18 @@ if ($oauth_tokens) {
 
     my $count = int Koha::OAuthAccessTokens->search({ expires => { '<=', time } })->delete;
     say "Removed $count expired OAuth2 tokens" if $verbose;
+}
+
+if ($pStatistics) {
+    print "Purging statistics older than $pStatistics days.\n" if $verbose;
+    $sth = $dbh->prepare(
+        q{
+            DELETE FROM statistics
+            WHERE datetime < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+        }
+    );
+    $sth->execute($pStatistics);
+    print "Done with purging statistics.\n" if $verbose;
 }
 
 exit(0);
