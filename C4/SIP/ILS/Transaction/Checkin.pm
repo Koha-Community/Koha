@@ -72,7 +72,9 @@ sub do_checkin {
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
     # cancellationdate, found, reservenotes, priority, timestamp
-
+    if( $messages->{DataCorrupted} ) {
+        $self->alert_type('98');
+    }
     if ($messages->{BadBarcode}) {
         $self->alert_type('99');
     }
