@@ -40,7 +40,7 @@ __PACKAGE__->table("atomicupdates");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 30
+  size: 128
 
 =head2 modification_time
 
@@ -62,7 +62,7 @@ __PACKAGE__->add_columns(
   "issue_id",
   { data_type => "varchar", is_nullable => 0, size => 20 },
   "filename",
-  { data_type => "varchar", is_nullable => 0, size => 30 },
+  { data_type => "varchar", is_nullable => 0, size => 128 },
   "modification_time",
   {
     data_type => "timestamp",
@@ -83,6 +83,20 @@ __PACKAGE__->add_columns(
 =cut
 
 __PACKAGE__->set_primary_key("atomicupdate_id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<atomic_issue_id>
+
+=over 4
+
+=item * L</issue_id>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("atomic_issue_id", ["issue_id"]);
 
 
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-08-20 16:04:49
