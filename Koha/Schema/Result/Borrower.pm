@@ -1083,6 +1083,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 label_sheets
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::LabelSheet>
+
+=cut
+
+__PACKAGE__->has_many(
+  "label_sheets",
+  "Koha::Schema::Result::LabelSheet",
+  { "foreign.author" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 message_queues
 
 Type: has_many
