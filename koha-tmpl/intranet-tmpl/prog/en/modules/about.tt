@@ -162,7 +162,7 @@
             [% IF ai_items %]
                 <h4>Items</h4>
                 <p>The following ids exist in both <strong>items</strong> and <strong>deleteditems</strong> tables:
-                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p
+                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_checkouts %]
                 <h4>Checkouts</h4>
@@ -174,6 +174,7 @@
                 <p>The following ids exist in both <strong>holds</strong> and <strong>old_reserves</strong> table:
                 [% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
+            <br/>
         [% END %]
 
         [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching %]
