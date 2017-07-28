@@ -633,7 +633,7 @@ subtest 'TranslateNotices' => sub {
 
 subtest 'SendQueuedMessages' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
@@ -652,7 +652,17 @@ subtest 'SendQueuedMessages' => sub {
         borrowernumber => $borrowernumber,
         status => 'sent'
     })->next()->to_address();
-    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email' );
+    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );
+    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber,status => 'sent'})->delete(); #clear borrower queue
+    $my_message->{to_address} = 'fixme@kidclamp.iswrong';
+    $message_id = C4::Letters::EnqueueLetter($my_message);
+    C4::Letters::SendQueuedMessages();
+    $sms_message_address = $schema->resultset('MessageQueue')->search({
+        borrowernumber => $borrowernumber,
+        status => 'sent'
+    })->next()->to_address();
+    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address is set incorrectly' );
+
 };
 
 subtest 'get_item_content' => sub {
