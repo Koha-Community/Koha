@@ -25,6 +25,7 @@ use C4::Reserves;
 use Koha::Database;
 use Koha::Biblios;
 use Koha::Checkouts;
+use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Items;
 
