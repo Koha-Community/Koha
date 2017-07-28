@@ -1052,12 +1052,12 @@ sub SendQueuedMessages {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     next MESSAGE;
                 }
-                $message->{to_address} ||= $member->{'smsalertnumber'};
-                unless ( $message->{to_address} && $member->{'smsalertnumber'} ) {
+                unless ( $member->{'smsalertnumber'} ) {
                     _set_message_status( { message_id => $message->{'message_id'}, status => 'failed' } );
                     warn sprintf( "No smsalertnumber found for patron %s!", $message->{'borrowernumber'} ) if $params->{'verbose'} or $debug;
                     next MESSAGE;
                 }
+                $message->{to_address}  = $member->{'smsalertnumber'}; #Sometime this is set to email - sms should always use smsalertnumber
                 $message->{to_address} .= '@' . $sms_provider->domain();
                 _update_message_to_address($message->{'message_id'},$message->{to_address});
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
