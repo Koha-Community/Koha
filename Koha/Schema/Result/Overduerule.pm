@@ -61,6 +61,12 @@ __PACKAGE__->table("overduerules");
   is_nullable: 1
   size: 1
 
+=head2 fine1
+
+  data_type: 'float'
+  default_value: 0
+  is_nullable: 0
+
 =head2 delay2
 
   data_type: 'integer'
@@ -79,6 +85,12 @@ __PACKAGE__->table("overduerules");
   is_nullable: 1
   size: 20
 
+=head2 fine2
+
+  data_type: 'float'
+  default_value: 0
+  is_nullable: 0
+
 =head2 delay3
 
   data_type: 'integer'
@@ -96,6 +108,12 @@ __PACKAGE__->table("overduerules");
   default_value: 0
   is_nullable: 1
 
+=head2 fine3
+
+  data_type: 'float'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -111,18 +129,24 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "debarred1",
   { data_type => "varchar", default_value => 0, is_nullable => 1, size => 1 },
+  "fine1",
+  { data_type => "float", default_value => 0, is_nullable => 0 },
   "delay2",
   { data_type => "integer", is_nullable => 1 },
   "debarred2",
   { data_type => "varchar", default_value => 0, is_nullable => 1, size => 1 },
   "letter2",
   { data_type => "varchar", is_nullable => 1, size => 20 },
+  "fine2",
+  { data_type => "float", default_value => 0, is_nullable => 0 },
   "delay3",
   { data_type => "integer", is_nullable => 1 },
   "letter3",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "debarred3",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
+  "fine3",
+  { data_type => "float", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
