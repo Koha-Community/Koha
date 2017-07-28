@@ -52,6 +52,13 @@ __PACKAGE__->table("collections");
   is_nullable: 1
   size: 10
 
+=head2 owningBranchcode
+
+  accessor: 'owning_branchcode'
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -77,6 +84,13 @@ __PACKAGE__->add_columns(
     accessor => "col_branchcode",
     data_type => "varchar",
     is_foreign_key => 1,
+    is_nullable => 1,
+    size => 10,
+  },
+  "owningBranchcode",
+  {
+    accessor => "owning_branchcode",
+    data_type => "varchar",
     is_nullable => 1,
     size => 10,
   },

@@ -42,9 +42,41 @@ collections.colId
 
   data_type: 'integer'
   default_value: 0
+  is_foreign_key: 1
   is_nullable: 0
 
 items.itemnumber
+
+=head2 origin_branchcode
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 transfer_branch
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
+=head2 transferred
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
+=head2 date_added
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 timestamp
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
 
 =cut
 
@@ -60,6 +92,25 @@ __PACKAGE__->add_columns(
   },
   "itemnumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "origin_branchcode",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "transfer_branch",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "transferred",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "date_added",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
+  "timestamp",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
