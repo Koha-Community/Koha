@@ -488,6 +488,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 floating_matrixes_from_branch
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::FloatingMatrix>
+
+=cut
+
+__PACKAGE__->has_many(
+  "floating_matrixes_from_branch",
+  "Koha::Schema::Result::FloatingMatrix",
+  { "foreign.from_branch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 floating_matrixes_to_branch
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::FloatingMatrix>
+
+=cut
+
+__PACKAGE__->has_many(
+  "floating_matrixes_to_branch",
+  "Koha::Schema::Result::FloatingMatrix",
+  { "foreign.to_branch" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 hold_fill_targets
 
 Type: has_many
