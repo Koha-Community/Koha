@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
@@ -1179,28 +1180,34 @@
     <table class="holdingst table table-bordered table-striped">
         <thead>
             <tr>
-                [% IF ( item_level_itypes ) %]<th id="item_itemtype" class="itype">Item type</th>[% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <th id="item_current_location" class="item_location">Current location</th>
-                [% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
-                    <th id="item_home_location" class="item_location">Home library</th>
-                [% END %]
-                [% IF ( itemdata_ccode ) %]<th id="item_ccode" class="collection">Collection</th>[% END %]
-                <th id="item_callnumber" class="call_no">Call number</th>
-                [% IF ( itemdata_enumchron ) %]<th id="item_enumchron" class="vol_info">Vol info</th>[% END %]
-                [% IF ( itemdata_uri ) %]<th id="item_url" class="url">URL</th>[% END %]
-                [% IF ( itemdata_copynumber ) %]<th id="item_copy" class="copynumber">Copy number</th>[% END %]
-                <th id="item_status" class="status">Status</th>
-                [% IF ( itemdata_itemnotes ) %]<th id="item_notes" class="notes">Notes</th>[% END %]
-                <th id="item_datedue" class="date_due">Date due</th>
-                [% IF ( OPACShowBarcode ) %]<th id="item_barcode" class="barcode">Barcode</th>[% END %]
-                [% IF holds_count.defined %]
-                    <th id="item_holds">Item holds</th>
-                [% ELSIF show_priority %]
-                    <th id="item_priority">Item hold queue priority</th>
-                [% END %]
-                [% IF ( ShowCourseReservesHeader ) %]<th id="item_coursereserves">Course reserves</th>[% END %]
+        [% IF ( item_level_itypes ) %]
+                <th id="item_itemtype" data-colname="item_itemtype" class="itype">Item type</th>[% END %]
+        [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
+                <th id="item_current_location" data-colname="item_current_location" class="item_location">Current location</th>[% END %]
+        [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]
+                <th id="item_home_location" data-colname="item_home_location" class="item_location">Home library</th>[% END %]
+        [% IF ( itemdata_ccode ) %]
+                <th id="item_ccode" data-colname="item_ccode" class="collection">Collection</th>[% END %]
+                <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
+        [% IF ( itemdata_enumchron ) %]
+                <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>[% END %]
+        [% IF ( itemdata_uri ) %]
+                <th id="item_url" data-colname="item_url" class="url">URL</th>[% END %]
+        [% IF ( itemdata_copynumber ) %]
+                <th id="item_copy" data-colname="item_copy" class="copynumber">Copy number</th>[% END %]
+                <th id="item_status" data-colname="item_status" class="status">Status</th>
+        [% IF ( itemdata_itemnotes ) %]
+                <th id="item_notes" data-colname="item_notes" class="notes">Notes</th>[% END %]
+                <th id="item_datedue" data-colname="item_datedue" class="date_due">Date due</th>
+        [% IF ( OPACShowBarcode ) %]
+                <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>[% END %]
+        [% IF holds_count.defined %]
+                <th id="item_holds" data-colname="item_holds">Item holds</th>
+        [% ELSIF show_priority %]
+                <th id="item_priority" data-colname="item_priority">Item hold queue priority</th>
+        [% END %]
+        [% IF ( ShowCourseReservesHeader ) %]
+                <th id="item_coursereserves" data-colname="item_coursereserves">Course reserves</th>[% END %]
             </tr>
         </thead>
         <tbody>
@@ -1361,6 +1368,7 @@
 
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 [% IF ( SocialNetworks ) %]
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
@@ -1427,6 +1435,17 @@
                 return element.html();
             }
         });
+
+        var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) %];
+        KohaTable(".holdingst", {
+            dom: 'B<"clearfix">t',
+            "columnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+            "bKohaColumnsUseNames": true
+        }, columns_settings);
+
 [% IF ( TagsInputEnabled && loggedinusername ) %]
         $(".tag_add").click(function(){
             var thisid = $(this).attr("id");
@@ -1469,29 +1488,6 @@
         [% ELSE %]
             var default_order_index = 0;
         [% END %]
-        $(".holdingst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumns": [
-                [% IF ( item_level_itypes ) %]null,[% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
-                [% IF ( OpacLocationBranchToDisplay == 'home' || OpacLocationBranchToDisplay == 'both' ) %]null,[% END %]
-                [% IF ( itemdata_ccode ) %]null,[% END %]
-                null,
-                [% IF ( itemdata_enumchron ) %]null,[% END %]
-                [% IF ( itemdata_uri ) %]null,[% END %]
-                [% IF ( itemdata_copynumber ) %]null,[% END %]
-                null,
-                [% IF ( itemdata_itemnotes ) %]null,[% END %]
-                { "sType": "title-string" },
-                [% IF ( OPACShowBarcode ) %]null,[% END %]
-                [% IF holds_count.defined %]
-                    null,
-                [% ELSIF show_priority %]
-                    null,
-                [% END %]
-                [% IF ( ShowCourseReservesHeader ) %]null,[% END %]
-            ],
-            "aaSorting": [[ default_order_index, 'asc' ]]
-        }));
 
         [% IF ( query_desc ) %][% IF ( OpacHighlightedWords ) %]var query_desc = "[% query_desc |replace("'", "\'") |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
             q_array = query_desc.split(" ");
