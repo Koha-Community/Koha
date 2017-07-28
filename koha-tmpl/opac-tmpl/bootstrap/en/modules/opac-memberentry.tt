@@ -997,8 +997,6 @@
                 $('#memberentry-form :radio').attr('disabled',true);
                 $('span.required').remove();
                 $('label.required').removeClass('required');
-            [% ELSE %]
-                $( "#borrower_dateofbirth" ).datepicker({ yearRange: "c-120:c" });
             [% END %]
 
             $("#memberentry-form").validate({

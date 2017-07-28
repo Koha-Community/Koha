@@ -60,7 +60,7 @@
                 yearRange: "c-100:c+10"
             });
 
-        $("#dateofbirth").datepicker({
+        $("#borrower_dateofbirth").datepicker({
                 yearRange: "c-100:c"
             });
 
