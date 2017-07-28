@@ -181,6 +181,8 @@ elsif ( defined $query->param('code') ) {
                       . ' .' );
             }
             else {
+                my $error_feedback =
+'The email address you are trying to use is not associated with a borrower at this library.';
                 my $auto_registration = C4::Context->preference('GoogleOpenIDConnectAutoRegister') // q{0};
                 my $borrower = Koha::Patrons->find( { email => $email } );
                 if (! $borrower && $auto_registration==1) {
@@ -190,20 +192,26 @@ elsif ( defined $query->param('code') ) {
                     my $delimiter = $firstname ? q{.} : q{};
                     my $userid = $firstname . $delimiter . $surname;
                     my $categorycode = C4::Context->preference('GoogleOpenIDConnectDefaultCategory') // q{};
+                    my $patron_category = Koha::Patron::Categories->find( $categorycode );
                     my $branchcode = C4::Context->preference('GoogleOpenIDConnectDefaultBranch') // q{};
-                    my $password = undef;
-                    my $borrowernumber = C4::Members::AddMember(
-                        cardnumber   => $cardnumber,
-                        firstname    => $firstname,
-                        surname      => $surname,
-                        email        => $email,
-                        categorycode => $categorycode,
-                        branchcode   => $branchcode,
-                        userid       => $userid,
-                        password     => $password
-                    );
-                    $borrower = Koha::Patrons->find( {
-                        borrowernumber => $borrowernumber } );
+                    my $library = Koha::Libraries->find( $branchcode );
+                    if (defined $patron_category && defined $library) {
+                        my $password = undef;
+                        my $borrowernumber = C4::Members::AddMember(
+                            cardnumber   => $cardnumber,
+                            firstname    => $firstname,
+                            surname      => $surname,
+                            email        => $email,
+                            categorycode => $categorycode,
+                            branchcode   => $branchcode,
+                            userid       => $userid,
+                            password     => $password
+                        );
+                        $borrower = Koha::Patrons->find( {
+                            borrowernumber => $borrowernumber } );
+                    } else {
+                        $error_feedback = 'The GoogleOpenIDConnectDefaultBranch or GoogleOpenIDConnectDefaultCategory system preferences are not configured properly. Please contact the library with this error message.';
+                    }
                 }
                 my ( $userid, $cookie, $session_id ) =
                   checkauth( $query, 1, {}, 'opac', $email );
@@ -214,9 +222,7 @@ elsif ( defined $query->param('code') ) {
                     );
                 }
                 else {
-                    loginfailed( $query,
-'The email address you are trying to use is not associated with a borrower at this library.'
-                    );
+                    loginfailed( $query, $error_feedback );
                 }
             }
         }
