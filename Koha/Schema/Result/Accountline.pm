@@ -250,6 +250,36 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 vetuma_transaction_accountlines_links
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::VetumaTransactionAccountlinesLink>
+
+=cut
+
+__PACKAGE__->has_many(
+  "vetuma_transaction_accountlines_links",
+  "Koha::Schema::Result::VetumaTransactionAccountlinesLink",
+  { "foreign.accountlines_id" => "self.accountlines_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 transactions
+
+Type: many_to_many
+
+Composing rels: L</vetuma_transaction_accountlines_links> -> transaction
+
+=cut
+
+__PACKAGE__->many_to_many(
+  "transactions",
+  "vetuma_transaction_accountlines_links",
+  "transaction",
+);
+
+
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-26 17:18:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RCQohhphtg+0+RszpB4wLg
 
