@@ -41,11 +41,17 @@ __PACKAGE__->table("payments_transactions");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 user_branch
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =head2 status
 
   data_type: 'enum'
   default_value: 'pending'
-  extra: {list => ["paid","pending","cancelled","unsent","processing"]}
+  extra: {list => ["paid","pending","cancelled","unsent"]}
   is_nullable: 1
 
 =head2 timestamp
@@ -71,12 +77,6 @@ __PACKAGE__->table("payments_transactions");
   default_value: 0
   is_nullable: 0
 
-=head2 user_branch
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -86,13 +86,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "accountlines_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "user_branch",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
   "status",
   {
     data_type => "enum",
     default_value => "pending",
-    extra => {
-      list => ["paid", "pending", "cancelled", "unsent", "processing"],
-    },
+    extra => { list => ["paid", "pending", "cancelled", "unsent"] },
     is_nullable => 1,
   },
   "timestamp",
@@ -108,8 +108,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 0 },
   "is_self_payment",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
-  "user_branch",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY

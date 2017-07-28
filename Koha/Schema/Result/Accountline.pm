@@ -220,6 +220,35 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 payments_transactions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PaymentsTransaction>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payments_transactions",
+  "Koha::Schema::Result::PaymentsTransaction",
+  { "foreign.accountlines_id" => "self.accountlines_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 payments_transactions_accountlines
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PaymentsTransactionsAccountline>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payments_transactions_accountlines",
+  "Koha::Schema::Result::PaymentsTransactionsAccountline",
+  { "foreign.accountlines_id" => "self.accountlines_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-01-26 17:18:34
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RCQohhphtg+0+RszpB4wLg

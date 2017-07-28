@@ -1218,6 +1218,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 payments_transactions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PaymentsTransaction>
+
+=cut
+
+__PACKAGE__->has_many(
+  "payments_transactions",
+  "Koha::Schema::Result::PaymentsTransaction",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
