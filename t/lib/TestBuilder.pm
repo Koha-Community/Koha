@@ -451,6 +451,9 @@ sub _gen_blob {
 sub _gen_default_values {
     my ($self) = @_;
     return {
+        Borrower => {
+            login_attempts => 0,
+        },
         Item => {
             more_subfields_xml => undef,
         },
