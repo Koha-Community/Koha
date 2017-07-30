@@ -110,18 +110,11 @@ function check(form) {
             [% uncertainpriceorder.basketname %]
         </td>
 	    <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber %]">[% uncertainpriceorder.title |html %]</a>
-            [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author %][% END %]
-            [% IF ( uncertainpriceorder.publishercode ) %]
-                <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode %]
-                [%- IF ( uncertainpriceorder.publicationyear ) %], [% uncertainpriceorder.publicationyear %][% END %]
-            [% END %]
-            [% IF ( uncertainpriceorder.isbn ) %]<br />[% uncertainpriceorder.isbn %][% END %]
-            <br />
-            <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% uncertainpriceorder.basketno %]">
-                Edit
-            </a>
-        </td>
+	        [% uncertainpriceorder.bibtitle %] / [% uncertainpriceorder.bibauthor %] <br /> [% uncertainpriceorder.bibpublishercode %], [% uncertainpriceorder.bibpublicationyear %]<br />[% uncertainpriceorder.bibisbn %]<br />
+	        <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% uncertainpriceorder.basketno %]">
+	            edit
+	        </a>
+	    </td>
         <td>
             [% uncertainpriceorder.firstname %] [% uncertainpriceorder.surname %]
         </td>
