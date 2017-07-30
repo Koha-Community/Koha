@@ -29,6 +29,7 @@ use C4::Members;
 use Koha::Holds;
 use Koha::Patron;
 use Koha::Patrons;
+use Koha::Patron::Categories;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Virtualshelves;
@@ -325,14 +326,13 @@ subtest "delete" => sub {
 subtest 'add_enrolment_fee_if_needed' => sub {
     plan tests => 4;
 
-    my $enrolmentfee_K  = 5;
-    my $enrolmentfee_J  = 10;
-    my $enrolmentfee_YA = 20;
-
-    my $dbh = C4::Context->dbh;
-    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_K, 'K');
-    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_J, 'J');
-    $dbh->do(q|UPDATE categories set enrolmentfee=? where categorycode=?|, undef, $enrolmentfee_YA, 'YA');
+    my $enrolmentfees = { K  => 5, J => 10, YA => 20 };
+    foreach( keys %{$enrolmentfees} ) {
+        ( Koha::Patron::Categories->find( $_ ) // $builder->build_object({ class => 'Koha::Patron::Categories', value => { categorycode => $_ } }) )->enrolmentfee( $enrolmentfees->{$_} )->store;
+    }
+    my $enrolmentfee_K  = $enrolmentfees->{K};
+    my $enrolmentfee_J  = $enrolmentfees->{J};
+    my $enrolmentfee_YA = $enrolmentfees->{YA};
 
     my %borrower_data = (
         firstname    => 'my firstname',
