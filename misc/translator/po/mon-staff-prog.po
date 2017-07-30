@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-05-15 01:26-0300\n"
+"POT-Creation-Date: 2017-07-16 16:29-0300\n"
 "PO-Revision-Date: 2013-12-13 06:12+0000\n"
 "Last-Translator: khdw <khaidaw@yahoo.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -602,7 +602,7 @@ msgstr "%s %s %s %s (%s) "
 #. %3$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) 
 #. %4$s:  END 
 #. %5$s:  IF ( item.restricted ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:708
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:714
 #, fuzzy, c-format
 msgid "%s %s %s Available %s %s "
 msgstr "%s %s %s %s (%s) "
@@ -691,7 +691,7 @@ msgstr "Сагсны дугаар: %s "
 #. %2$s:  PROCESS items_table tab="otherholdings" items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:836
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:842
 #, fuzzy, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s %s (%s) "
@@ -712,7 +712,7 @@ msgstr "%s %s %s %s (%s) "
 #. %14$s:  item.ExpectedAtLibrary 
 #. %15$s:  END 
 #. %16$s:  IF ( canreservefromotherbranches ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:684
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:690
 #, c-format
 msgid ""
 "%s %s %s Not for loan %s (%s) %s %s %s %s Waiting at %s since %s. %s Item-"
@@ -792,6 +792,15 @@ msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
 "Please create a new active budget and retry. "
 msgstr ""
+
+#. %1$s:  IF UsageStatsLastUpdateTime 
+#. %2$s:  UsageStatsLastUpdateTime 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:189
+#, fuzzy, c-format
+msgid "%s %s %s Your data have never been shared %s "
+msgstr "Дараахийг хайсан"
 
 #. %1$s:  IF ( savedreport.report_name ) 
 #. %2$s:  savedreport.report_name 
@@ -1227,6 +1236,7 @@ msgid ""
 "libraries are still using it. %s %s %s "
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
 #. %3$s:  CASE 'error_on_insert' 
@@ -1238,6 +1248,7 @@ msgstr ""
 #. %9$s:  CASE 
 #. %10$s:  m.code 
 #. %11$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:56
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:35
 #, c-format
 msgid ""
@@ -1879,7 +1890,7 @@ msgstr ""
 #. %2$s:  budget_loo.b_txt 
 #. %3$s:  IF !budget_loo.b_active 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:508
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:504
 #, fuzzy, c-format
 msgid "%s %s%s (inactive)%s "
 msgstr "Идэвхгүй "
@@ -1930,7 +1941,7 @@ msgstr "Лаборде "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:539
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:535
 #, fuzzy, c-format
 msgid "%s %s(tax inc.)%s(tax exc.)%s %s "
 msgstr "%s %s %s %s (%s) "
@@ -2087,7 +2098,7 @@ msgstr "%s %s %s %s (%s) "
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:966
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:972
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr ""
@@ -2541,7 +2552,7 @@ msgstr "%s - %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:595
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:591
 #, fuzzy, c-format
 msgid "%s (adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr ""
@@ -2681,7 +2692,7 @@ msgstr "%s бичлэг(үүд)"
 
 #. %1$s:  END 
 #. %2$s:  item.datedue 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:652
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:658
 #, fuzzy, c-format
 msgid "%s : due %s "
 msgstr ": due %s "
@@ -3522,6 +3533,16 @@ msgstr "%s-г %s рүү "
 msgid "%s Not defined yet %s "
 msgstr "Одоохондоо тодорхойлогдоогүй "
 
+#. %1$s:  UNLESS IsUsageStatsCountryValid 
+#. %2$s:  UsageStatsCountry 
+#. %3$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:116
+#, c-format
+msgid ""
+"%s Note: The value of your system preference 'UsageStatsCountry' is not "
+"valid (%s). Please select a valid one. %s "
+msgstr ""
+
 #. %1$s:  IF error.code == 'WRONG_COUNT' 
 #. %2$s:  error.value 
 #. %3$s:  ELSE 
@@ -4020,7 +4041,7 @@ msgstr "%s-н шинээр эрх олгогдсон утга "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:979
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:985
 #, fuzzy, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s-н шинээр эрх олгогдсон утга "
@@ -4162,6 +4183,13 @@ msgstr "%s =%s "
 msgid "%s You Searched for %s"
 msgstr "Дараахийг хайсан"
 
+#. %1$s:  ELSE 
+#. %2$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:238
+#, c-format
+msgid "%s You do not have anything public yet. %s "
+msgstr ""
+
 #. %1$s:  IF ( searchfield ) 
 #. %2$s:  searchfield 
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:154
@@ -4267,7 +4295,7 @@ msgid "%s already in your cart"
 msgstr "Таны хайлтыг сайжруулах"
 
 #. %1$s:  item.countanalytics 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:769
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #, fuzzy, c-format
 msgid "%s analytics"
 msgstr "Алдааны шинжилгээ:"
@@ -4479,7 +4507,7 @@ msgstr "%s-г %s рүү "
 #. %1$s:  IF searchmember 
 #. %2$s:  searchmember 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/members/member.tt:355
+#: intranet-tmpl/prog/en/modules/members/member.tt:359
 #, fuzzy, c-format
 msgid "%s for '%s'%s"
 msgstr "%s-г %s рүү "
@@ -4510,7 +4538,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  LoginBranchname 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:556
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:562
 #, fuzzy, c-format
 msgid "%s holdings"
 msgstr "Барилтууд"
@@ -4965,7 +4993,7 @@ msgid "%s times"
 msgstr "%s удаа"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:643
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:649
 #, fuzzy, c-format
 msgid "%s to "
 msgstr "%s-г %s рүү "
@@ -5366,7 +5394,7 @@ msgstr "%s %s %s %s(%s)"
 #. %2$s:  IF ( firstnamesuggestedby ) 
 #. %3$s:  firstnamesuggestedby 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:161
 #, fuzzy, c-format
 msgid "%s%s, %s%s ("
@@ -5484,7 +5512,7 @@ msgstr "Үйлчлүүлэгчийг сонгох: "
 #. %1$s:  IF (listincgst == 1) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:603
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:599
 #, fuzzy, c-format
 msgid "%s(tax inc.)%s(tax exc.)%s "
 msgstr "Идэвхгүй "
@@ -5494,9 +5522,9 @@ msgstr "Идэвхгүй "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:612
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:615
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:538
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:608
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:611
 #, fuzzy, c-format
 msgid "%s(tax inc.)%s(tax exc.)%s %s "
 msgstr "Идэвхгүй "
@@ -5843,7 +5871,7 @@ msgstr "%s %s %s %s (%s) "
 #. %24$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:293
 #: intranet-tmpl/prog/en/modules/serials/serial-issues-full.tt:70
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:899
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
 #, fuzzy, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
@@ -6446,7 +6474,7 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s - %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:794
+#: intranet-tmpl/prog/en/modules/about.tt:802
 #, fuzzy, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -6454,14 +6482,14 @@ msgid ""
 msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Болгар)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:828
+#: intranet-tmpl/prog/en/modules/about.tt:836
 #, fuzzy, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 msgstr "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Орос)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:835
+#: intranet-tmpl/prog/en/modules/about.tt:843
 #, fuzzy, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -6470,63 +6498,63 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Украйн)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:809
+#: intranet-tmpl/prog/en/modules/about.tt:817
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Еврей)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:834
+#: intranet-tmpl/prog/en/modules/about.tt:842
 #, fuzzy, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Урду)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:823
+#: intranet-tmpl/prog/en/modules/about.tt:831
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Перс)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:797
+#: intranet-tmpl/prog/en/modules/about.tt:805
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Хятад)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:810
+#: intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Хинди)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:796
+#: intranet-tmpl/prog/en/modules/about.tt:804
 #, fuzzy, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr "&#2476;&#2494;&#2434;&#2482;&#2494; (Бенгал)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:816
+#: intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Япон)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:824
+#: intranet-tmpl/prog/en/modules/about.tt:832
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:818
+#: intranet-tmpl/prog/en/modules/about.tt:826
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:822
+#: intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Малайз)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:832
+#: intranet-tmpl/prog/en/modules/about.tt:840
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Тайланд)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:792
+#: intranet-tmpl/prog/en/modules/about.tt:800
 #, fuzzy, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -6535,12 +6563,12 @@ msgstr ""
 "Getway II Ethiopia Co. (Иоханнес Мулугета (Багийн ахлагч), Тегена Ассефа, "
 "Абиуот Баю)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:817
+#: intranet-tmpl/prog/en/modules/about.tt:825
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Солонгос)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:808
+#: intranet-tmpl/prog/en/modules/about.tt:816
 #, fuzzy, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -6548,7 +6576,7 @@ msgid ""
 msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ])"
 
-#: intranet-tmpl/prog/en/modules/about.tt:799
+#: intranet-tmpl/prog/en/modules/about.tt:807
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Чех)"
@@ -6671,7 +6699,7 @@ msgstr "&nbsp;&nbsp;(формат: оооо-оооо)"
 msgid "&nbsp;Show inactive funds:"
 msgstr "Идэвхгүй"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:515
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:511
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:190
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:404
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:116
@@ -6748,7 +6776,7 @@ msgstr "&rsaquo; Засварлах жагсаалт %s "
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:181
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:170
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
 #, fuzzy, c-format
 msgid "&rsaquo; %s Edit (%s) %s New %s "
 msgstr "&rsaquo; Шинэ жагсаалтыг үүсгэх "
@@ -6792,7 +6820,7 @@ msgstr ""
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:324
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
 #, c-format
 msgid "&rsaquo; %s Unknown record %s Details for "
 msgstr ""
@@ -8032,7 +8060,7 @@ msgstr "&rsaquo; Хайлтын үр дүнгүүд"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/members/member.tt:318
+#: intranet-tmpl/prog/en/modules/members/member.tt:322
 #, fuzzy, c-format
 msgid "&rsaquo; Search results%sPatrons%s"
 msgstr "&rsaquo; Хайлтын үр дүнгүүд"
@@ -8216,6 +8244,11 @@ msgstr "Коха &rsaquo; Хэрэгслүүд &rsaquo; Stage MARC Records For I
 #, fuzzy, c-format
 msgid "&rsaquo; Upload results%sUpload local cover image%s"
 msgstr "Коха &rsaquo; Хэрэгслүүд &rsaquo; Stage MARC Records For Import"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:48
+#, fuzzy, c-format
+msgid "&rsaquo; Usage statistics"
+msgstr "&rsaquo; Каталогийн статистикүүд"
 
 #. %1$s:  IF ( status ) 
 #. %2$s:  ELSE 
@@ -8532,7 +8565,7 @@ msgid ""
 msgstr ""
 "(Оруулгат, өчигдрөөс 10 жилийн өмнө,  өнөөдөр \"хүртэл\" үүсгэж болно. )"
 
-#: intranet-tmpl/prog/en/modules/about.tt:814
+#: intranet-tmpl/prog/en/modules/about.tt:822
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Индонези)"
@@ -8576,7 +8609,7 @@ msgid "(Tax inc.)"
 msgstr "Шуудангийн хаяг"
 
 #. %1$s:  subscriptionsnumber 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:875
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
 #, fuzzy, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(Энэ гарчигт %s захиалгууд байна)."
@@ -8600,7 +8633,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:598
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:594
 #, fuzzy, c-format
 msgid "(adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr ""
@@ -8613,7 +8646,7 @@ msgstr ""
 msgid "(amounts will be rounded down)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:607
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:603
 #, fuzzy, c-format
 msgid "(budgeted cost * quantity) "
 msgstr "Төсөвлөгдсөн зардал: "
@@ -8914,7 +8947,7 @@ msgstr ", Охио, АНУ (MARC санхүүжилт, баримт бичгүү
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, АНУ (Коха 3.0 Zebra Integration санхүүжилт)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:805
+#: intranet-tmpl/prog/en/modules/about.tt:813
 #, fuzzy, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr "Паскал Налон (ENSMP) ба Жин Ив Лемайре (Чатед Сайнт Гермайн) "
@@ -9273,7 +9306,7 @@ msgstr ": зүйл авагдсан байна."
 #. %3$s:  HTML5MediaSet.srcblock 
 #. %4$s:  HTML5MediaSet.typeblock 
 #. %5$s:  HTML5MediaParent 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1029
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1035
 #, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -9405,6 +9438,12 @@ msgstr "Коха-н тухай"
 msgid "Abstracts / Summaries"
 msgstr "Оршилууд/дүгнэлтүүд"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:143
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:145
+#, c-format
+msgid "Academic"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:377
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:379
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:602
@@ -9519,7 +9558,7 @@ msgstr "Бүртгэлийн хураангуй:%s %s (%s)"
 msgid "Account type"
 msgstr "Бүртгэлийн төрөл"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:460
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:456
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:268
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:371
 #, c-format
@@ -9564,7 +9603,7 @@ msgid "Acquisition date: oldest to newest"
 msgstr "Фондод авалтын огноо:Хамгийн хуучнаас хамгийн шинэ хүртэл"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:354
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:563
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:569
 #, fuzzy, c-format
 msgid "Acquisition details"
 msgstr "Фондод авалтуудын тусламж"
@@ -9703,7 +9742,7 @@ msgstr "Таарах бичлэг олдоогүй үеийн үйлдэл: "
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:135
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:64
 #: intranet-tmpl/prog/en/modules/tags/review.tt:247
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:234
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:231
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:202
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:72
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:622
@@ -9752,7 +9791,7 @@ msgid "Actions:"
 msgstr "Үйлдлүүд"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:217
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:223
 #, fuzzy
 msgid "Activate filters"
 msgstr "Талбарыг арилгах"
@@ -9802,8 +9841,8 @@ msgstr ") болзолт огноо: %s"
 msgid "Actual cost:"
 msgstr "Бодит өртөг:"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:611
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:614
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:607
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:610
 #, fuzzy, c-format
 msgid "Actual cost: "
 msgstr "Бодит өртөг: "
@@ -9988,7 +10027,7 @@ msgstr "Төсөв нэмэх"
 msgid "Add by barcode(s) or itemnumbers(s): "
 msgstr "Бар код: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:203
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:200
 #, fuzzy, c-format
 msgid "Add by borrowernumber(s): "
 msgstr "Зээлдэгчийндугаар: "
@@ -10190,7 +10229,7 @@ msgstr ""
 msgid "Add patron attribute type"
 msgstr "Үйлчлүүлэгчийн шинж тэмдгийн төрлийг нэмэх"
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:212
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:209
 #, fuzzy, c-format
 msgid "Add patron(s)"
 msgstr "Үйлчлүүлэгчийг нэмэх"
@@ -10202,7 +10241,7 @@ msgstr "Үйлчлүүлэгчийг нэмэх"
 msgid "Add patrons"
 msgstr "Үйлчлүүлэгчийг нэмэх"
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:268
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:265
 #, c-format
 msgid ""
 "Add patrons by borrowernumber using the text area above or leave empty to "
@@ -10250,7 +10289,7 @@ msgstr "Өөр талбарыг нэмэх"
 msgid "Add rules"
 msgstr "Захиалгыг нэмэх"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:365
+#: intranet-tmpl/prog/en/modules/members/member.tt:369
 #, fuzzy, c-format
 msgid "Add selected patrons to:"
 msgstr "Үйлчлүүлэгчийг сонгох:"
@@ -10362,7 +10401,7 @@ msgstr "Зүйлсийг засварлах"
 msgid "Add/Update"
 msgstr "Сүүлд шинэчлэгдсэн:"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:326
+#: intranet-tmpl/prog/en/modules/members/member.tt:330
 #, fuzzy, c-format
 msgid "Added "
 msgstr "Нэмэх"
@@ -10424,7 +10463,7 @@ msgstr "Нэмэгдэл зохиолчид:"
 msgid "Additional attributes and identifiers"
 msgstr "Нэмэгдэл шинж тэмдэгтүүд ба хувьсагчид"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:413
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:419
 #, fuzzy, c-format
 msgid "Additional authors:"
 msgstr "Нэмэгдэл зохиолчид:"
@@ -10541,6 +10580,7 @@ msgstr "Хаяг : "
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:4
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:29
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:19
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:48
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:14
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
@@ -11272,7 +11312,7 @@ msgid "An error has occurred. Invoice cannot be created."
 msgstr "Алдаа гарлаа!"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:28
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 msgid "An error occurred on deleting this image"
 msgstr ""
 
@@ -11395,8 +11435,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:215
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:226
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:236
-#: intranet-tmpl/prog/en/modules/members/member.tt:492
-#: intranet-tmpl/prog/en/modules/members/member.tt:507
+#: intranet-tmpl/prog/en/modules/members/member.tt:496
+#: intranet-tmpl/prog/en/modules/members/member.tt:511
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:83
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:188
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:198
@@ -11788,7 +11828,7 @@ msgid "Are you sure you want to delete this course?"
 msgstr "Та эн бичлэгийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:28
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 #, fuzzy
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Та эн бичлэгийг устгахыг хүсэж байна уу?"
@@ -12007,15 +12047,15 @@ msgid "Are you sure you want to permanently delete this batch?"
 msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:7
-#, fuzzy
-msgid "Are you sure you want to remove card number(s): %s from this batch?"
-msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
-
-#. SCRIPT
 #: intranet-tmpl/prog/en/includes/doc-head-close.inc:55
 msgid "Are you sure you want to remove the selected items?"
 msgstr "Та сонгогдсон зүйлсийг арилгахыг хүсэж байна уу?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:7
+#, fuzzy
+msgid "Are you sure you want to remove the selected patron(s) from this batch?"
+msgstr "Та энэ зүйлийг устгахыг хүсэж байна уу?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:10
@@ -12133,7 +12173,7 @@ msgstr "Талбар"
 msgid "Area:"
 msgstr "Талбар:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:793
+#: intranet-tmpl/prog/en/modules/about.tt:801
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr ""
@@ -12177,8 +12217,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  subscription.branchname 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:877
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:878
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:883
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
 #, fuzzy, c-format
 msgid "At library: %s"
 msgstr "Шинэ номын сан"
@@ -12717,6 +12757,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:697
 #: intranet-tmpl/prog/en/modules/about.tt:784
+#: intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid "BSD License"
 msgstr "BSD Лиценз"
@@ -12784,7 +12825,7 @@ msgstr "Хэрэгслүүд рүү буцах"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:106
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:181
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:604
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:447
@@ -12792,7 +12833,7 @@ msgstr "Хэрэгслүүд рүү буцах"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:521
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:80
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:427
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:423
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:220
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:64
@@ -12946,7 +12987,7 @@ msgstr "Үндсэн параметрүүд"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:933
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:244
@@ -13012,7 +13053,7 @@ msgstr "Төсөв устгагдсан"
 msgid "Basket details"
 msgstr "Сагсны дэлгэрэнгүй мэдээлэл"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:932
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:938
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:245
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:347
@@ -13136,7 +13177,7 @@ msgstr "Багц"
 msgid "Batch ID"
 msgstr "Багц"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:70
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:74
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:47
 #, fuzzy, c-format
 msgid "Batch check out"
@@ -13262,7 +13303,7 @@ msgid "Batch record modification"
 msgstr "Санамжийг цуцлах"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:181
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:170
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
 #, fuzzy, c-format
 msgid "Batches"
 msgstr "Багц"
@@ -13583,7 +13624,7 @@ msgid ""
 "Borrower has reserves: they will be canceled if the discharge is generated."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:230
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:227
 #, fuzzy, c-format
 msgid "Borrower name"
 msgstr "Зээлдэгчийн дугаар"
@@ -13591,9 +13632,9 @@ msgstr "Зээлдэгчийн дугаар"
 #: intranet-tmpl/prog/en/columns.def:1 intranet-tmpl/prog/en/columns.def:117
 #: intranet-tmpl/prog/en/includes/patron-search.inc:36
 #: intranet-tmpl/prog/en/includes/patron-search.inc:38
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:232
-#: intranet-tmpl/prog/en/modules/members/member.tt:440
-#: intranet-tmpl/prog/en/modules/members/member.tt:442
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:229
+#: intranet-tmpl/prog/en/modules/members/member.tt:444
+#: intranet-tmpl/prog/en/modules/members/member.tt:446
 #, fuzzy, c-format
 msgid "Borrower number"
 msgstr "Зээлдэгчийн дугаар"
@@ -13721,7 +13762,7 @@ msgstr "Майк Жонсон"
 
 #. For the first occurrence,
 #. %1$s:  FOREACH letter IN alphabet.split(' ') 
-#: intranet-tmpl/prog/en/modules/members/member.tt:339
+#: intranet-tmpl/prog/en/modules/members/member.tt:343
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:216
 #, fuzzy, c-format
 msgid "Browse by last name: %s "
@@ -13792,7 +13833,7 @@ msgstr "Төсөв "
 msgid "Budgeted cost"
 msgstr "Төсөвлөгдсөн зардал: "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:602
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:598
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:331
 #, fuzzy, c-format
 msgid "Budgeted cost: "
@@ -13863,7 +13904,7 @@ msgstr "Коха &rsaquo; Түгээлт"
 msgid "By"
 msgstr "Өмнө:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:410
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:416
 #, fuzzy, c-format
 msgid "By "
 msgstr "Өмнө: "
@@ -14095,14 +14136,14 @@ msgstr "Холбоо барих утас"
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:158
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:183
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:595
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:601
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:520
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:432
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:536
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:635
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:433
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:429
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:183
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:226
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:65
@@ -14160,7 +14201,7 @@ msgid "Callnumber"
 msgstr "Холбоо барих утас"
 
 #. %1$s:  subscription.callnumber 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:886
 #, fuzzy, c-format
 msgid "Callnumber: %s "
 msgstr "Холбоо барих утас: "
@@ -14285,6 +14326,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:93
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:134
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:252
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:117
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:101
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:119
@@ -14364,7 +14406,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
-#: intranet-tmpl/prog/en/modules/members/member-password.tt:117
+#: intranet-tmpl/prog/en/modules/members/member-password.tt:120
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:167
@@ -14383,9 +14425,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:133
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:639
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:642
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:644
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:635
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:638
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:640
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:348
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:46
@@ -14735,7 +14777,7 @@ msgstr "Орлуулгын үнэ"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:148
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:163
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:116
-#: intranet-tmpl/prog/en/modules/members/member.tt:393
+#: intranet-tmpl/prog/en/modules/members/member.tt:397
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:291
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:427
@@ -14902,7 +14944,7 @@ msgstr "Кассет бичиж байна"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:324
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:42
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:319
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:40
@@ -15003,7 +15045,7 @@ msgstr "Шинэ худалдагч"
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:19
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:87
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:120
-#: intranet-tmpl/prog/en/modules/members/member.tt:396
+#: intranet-tmpl/prog/en/modules/members/member.tt:400
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:247
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:156
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:238
@@ -15053,7 +15095,7 @@ msgstr "Ангилалын нэр:"
 msgid "Category type: "
 msgstr "Ангилалын төрөл: "
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:489
+#: intranet-tmpl/prog/en/modules/members/member.tt:493
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:96
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:186
 #, c-format
@@ -15082,7 +15124,7 @@ msgstr "Ангилал: "
 
 #. %1$s:  categoryname 
 #. %2$s:  categorycode 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:61
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:65
 #, c-format
 msgid "Category: %s (%s)"
 msgstr "Ангилал: %s (%s)"
@@ -15332,7 +15374,7 @@ msgstr "Дэлгэрэнгүй мэдээллийн алдаанын архив�
 #: intranet-tmpl/prog/en/includes/adv-search.inc:37
 #: intranet-tmpl/prog/en/includes/prefs-admin-search.inc:25
 #: intranet-tmpl/prog/en/includes/printers-admin-search.inc:23
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:67
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:71
 #: intranet-tmpl/prog/en/includes/members-menu.inc:4
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:24
 #: intranet-tmpl/prog/en/includes/home-search.inc:42
@@ -15518,7 +15560,7 @@ msgstr "Авагдсан "
 #. %1$s:  END 
 #. %2$s:  UNLESS ( item.NOTSAMEBRANCH ) 
 #. %3$s:  IF item.onsite_checkout 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:639
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:645
 #, fuzzy, c-format
 msgid "Checked out %s %s %s by "
 msgstr "%s %s (%s) рүү авч байна "
@@ -15941,7 +15983,7 @@ msgstr ""
 msgid "Cindy Murdock Ames"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:401
+#: intranet-tmpl/prog/en/modules/members/member.tt:405
 #, c-format
 msgid "Circ note"
 msgstr "Түгээлтийн санамж"
@@ -16022,7 +16064,7 @@ msgstr "Түгээлтийн болон торгуулийн дүрмүүд"
 msgid "Circulation and fines rules"
 msgstr "Түгээлтийн болон торгуулийн дүрмүүд"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:84
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:88
 #: intranet-tmpl/prog/en/includes/members-menu.inc:10
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:50
 #, fuzzy, c-format
@@ -16232,7 +16274,7 @@ msgstr "Ангилалын эх үүсвэрийн код: "
 msgid "Classification sources"
 msgstr "Ангилалын эх үүсвэрүүд"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:510
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:516
 #, c-format
 msgid "Classification:"
 msgstr "Ангилал:"
@@ -16280,7 +16322,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:702
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:569
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:978
-#: intranet-tmpl/prog/en/modules/members/member.tt:521
+#: intranet-tmpl/prog/en/modules/members/member.tt:525
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:528
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:223
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1042
@@ -16301,12 +16343,12 @@ msgstr "Арилгах"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:137
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:179
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:215
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:575
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:581
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:370
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
 #: intranet-tmpl/prog/en/modules/members/pay.tt:73
-#: intranet-tmpl/prog/en/modules/members/member.tt:362
+#: intranet-tmpl/prog/en/modules/members/member.tt:366
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:196
@@ -16385,8 +16427,8 @@ msgstr "Шинэ багцыг үүсгэх"
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:85
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:198
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:202
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
 #, fuzzy, c-format
 msgid "Click 'Next' to continue "
@@ -16421,12 +16463,12 @@ msgstr "Үргэлжлүүлэхийн тул Дараагийн-г дарах "
 msgid "Click here to see the merged record."
 msgstr "Принтерийн төрхийг үүсгэж байна"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:180
 #, fuzzy, c-format
 msgid "Click on 'Finish' to complete and load the Koha Staff Interface. "
 msgstr "Дуусгахын тул Дуусгах-г дараад Коха Ажилтны Интерфейс-г ачаалах. "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1006
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1012
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr ""
@@ -16483,6 +16525,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:50
 #, c-format
 msgid "Click on the link to download the patron cards from the patron list."
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:256
+msgid "Click on the map to set the geolocation for %s"
 msgstr ""
 
 #. SCRIPT
@@ -16636,7 +16683,7 @@ msgstr "Анхдагч олголтын дүрмүүдийг тодорхойл�
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:259
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1070
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1076
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:113
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:168
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:475
@@ -16794,7 +16841,7 @@ msgstr "Үйлчлүүлэгчийг сонгох: "
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:77
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:96
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:594
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:13
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:166
@@ -16820,7 +16867,7 @@ msgstr "Цуглуулга: "
 #: intranet-tmpl/prog/en/columns.def:99
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:185
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:436
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:432
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:229
 #, fuzzy, c-format
@@ -16864,7 +16911,7 @@ msgstr "Бар кодтой зүйл үгүй: %s"
 msgid "Collection:"
 msgstr "Цуглуулга:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:492
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:498
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:131
 #, fuzzy, c-format
 msgid "Collection: "
@@ -17316,8 +17363,8 @@ msgstr "Холбоо барих мэдээлэл"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:78
 #: intranet-tmpl/prog/en/includes/patron-search.inc:81
-#: intranet-tmpl/prog/en/modules/members/member.tt:481
-#: intranet-tmpl/prog/en/modules/members/member.tt:484
+#: intranet-tmpl/prog/en/modules/members/member.tt:485
+#: intranet-tmpl/prog/en/modules/members/member.tt:488
 #, fuzzy, c-format
 msgid "Contains"
 msgstr "Хязгаарлалтууд"
@@ -17347,7 +17394,7 @@ msgstr "Материалууд "
 msgid "Continue"
 msgstr "Үргэлжил"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:250
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:254
 #, c-format
 msgid "Continue to log in to Koha"
 msgstr "Коха-д нэвтрэхээ үргэлжлүүлэх"
@@ -17519,9 +17566,9 @@ msgstr "Санамж алга"
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:111
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:91
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:157
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:601
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:607
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:451
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:434
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:430
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:184
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:227
 #, fuzzy, c-format
@@ -17575,7 +17622,7 @@ msgstr "Зохиогчийн эрхийн огноо:"
 msgid "Copyright year: %s "
 msgstr "Зохиогчийн эрх: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:506
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:512
 #, c-format
 msgid "Copyright:"
 msgstr "Зохиогчийн эрх:"
@@ -17594,6 +17641,12 @@ msgstr "Зохиогчийнэрхийногноо"
 #: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "Corey Fuimaono"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:163
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:165
+#, c-format
+msgid "Corporate"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:500
@@ -17654,7 +17707,7 @@ msgstr ""
 msgid "Could not find a system preference named "
 msgstr "Системийн эрхэмлэлийг нэмэх "
 
-#: intranet-tmpl/prog/en/modules/about.tt:860
+#: intranet-tmpl/prog/en/modules/about.tt:868
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -17741,6 +17794,12 @@ msgstr "Тоо "
 msgid "Country: "
 msgstr "Тоо "
 
+#. %1$s:  l.branchcountry 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:222
+#, fuzzy, c-format
+msgid "Country: %s"
+msgstr "Тоо "
+
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:57
 #, fuzzy, c-format
 msgid "Courier New"
@@ -17751,7 +17810,7 @@ msgstr "Үүсгэх"
 msgid "Course #"
 msgstr "Холбоо барих мэдээлэл"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:609
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:615
 #, c-format
 msgid "Course Reserves"
 msgstr ""
@@ -17850,7 +17909,7 @@ msgstr "Шинэ захиалга"
 msgid "Create a new template"
 msgstr "Шинэ жагсаалт үүсгэх"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:774
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:780
 #, fuzzy, c-format
 msgid "Create analytics"
 msgstr "Алдааны шинжилгээ:"
@@ -18003,7 +18062,7 @@ msgid "Created:"
 msgstr "Дараахаар үүсгэгдсэн "
 
 #: intranet-tmpl/prog/en/columns.def:120
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:935
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:941
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:620
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:331
 #, fuzzy, c-format
@@ -18108,7 +18167,7 @@ msgstr "Төнгөний төрөл"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:295
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:442
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:524
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:520
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:383
 #, c-format
 msgid "Currency:"
@@ -18116,7 +18175,7 @@ msgstr "Мөнгөний төрөл:"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:109
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:113
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:521
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:517
 #, fuzzy, c-format
 msgid "Currency: "
 msgstr "Мөнгөний төрөл: "
@@ -18138,7 +18197,7 @@ msgstr "Одоогийн номын сан"
 #. %1$s:  LoginBranchname 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:204
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:109
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:196
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:193
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:189
 #, fuzzy, c-format
 msgid "Current library: %s"
@@ -18146,7 +18205,7 @@ msgstr "Одоогийн номын сан"
 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:89
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:155
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:592
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:66
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:49
@@ -18213,7 +18272,7 @@ msgid "Currently available templates"
 msgstr "Зөвхөн одоогоор бэлэн байгаа зүйлс"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:637
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:643
 #, fuzzy, c-format
 msgid "Currently in local use %s "
 msgstr "Зөвхөн одоогоор бэлэн байгаа зүйлс"
@@ -18241,7 +18300,7 @@ msgstr "Худалдагчдийг хайх:"
 msgid "D Ruth Bavousett (3.12 Translation Manager)"
 msgstr "Коха-н баримт бичгийг унших"
 
-#: intranet-tmpl/prog/en/modules/about.tt:800
+#: intranet-tmpl/prog/en/modules/about.tt:808
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Дани)"
@@ -18266,7 +18325,7 @@ msgstr ""
 msgid "DVD video / Videodisc"
 msgstr "DVD видео / Видео диск"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:684
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:690
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:258
 #, c-format
@@ -18372,7 +18431,7 @@ msgstr "Өгөгдлийн сан "
 msgid "Database settings:"
 msgstr "Өгөгдлийн сангийн тохиргоонууд:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:194
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:198
 #, c-format
 msgid "Database tables created"
 msgstr "Өгөгдлийн сангийн хүснэгтүүд үүсгэгдсэн"
@@ -18406,7 +18465,7 @@ msgstr "Өгөгдлийн сан: "
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:447
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:518
-#: intranet-tmpl/prog/en/modules/about.tt:846
+#: intranet-tmpl/prog/en/modules/about.tt:854
 #, c-format
 msgid "Date"
 msgstr "Огноо"
@@ -18433,7 +18492,7 @@ msgid "Date added"
 msgstr "Нэмэгдсэн огноо"
 
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:889
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:895
 #, fuzzy, c-format
 msgid "Date arrived"
 msgstr "Хүлээн авагдсан огноо"
@@ -18485,9 +18544,9 @@ msgstr "Хамгийн сүүлд харагдсан огноо"
 #: intranet-tmpl/prog/en/columns.def:5
 #: intranet-tmpl/prog/en/includes/patron-search.inc:56
 #: intranet-tmpl/prog/en/includes/patron-search.inc:58
-#: intranet-tmpl/prog/en/modules/members/member.tt:395
-#: intranet-tmpl/prog/en/modules/members/member.tt:460
-#: intranet-tmpl/prog/en/modules/members/member.tt:462
+#: intranet-tmpl/prog/en/modules/members/member.tt:399
+#: intranet-tmpl/prog/en/modules/members/member.tt:464
+#: intranet-tmpl/prog/en/modules/members/member.tt:466
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:49
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:150
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:234
@@ -18528,7 +18587,7 @@ msgstr "Дамжуулалтын огноо"
 msgid "Date ordered "
 msgstr "Оройтсон захиалгууд "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:890
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:896
 #, fuzzy, c-format
 msgid "Date published"
 msgstr "Хэвлэгдсэн огноо"
@@ -18695,7 +18754,7 @@ msgid "DeAndre Carroll"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:217
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:223
 #, fuzzy
 msgid "Deactivate filters"
 msgstr "Принтерүүдийг хайх"
@@ -19106,7 +19165,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:219
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:383
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:249
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:246
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:128
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:139
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:223
@@ -19213,7 +19272,7 @@ msgid "Delete basket, orders, and records"
 msgstr "Бичлэгийг устгах"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:231
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:214
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:211
 #, fuzzy, c-format
 msgid "Delete batch"
 msgstr "Жагсаалтыг устгах"
@@ -19265,7 +19324,7 @@ msgstr " %s (%s)-д зориулсан бүтцийг устгах уу?"
 msgid "Delete fund %s?"
 msgstr "Төсвийг устгах уу?"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1014
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1020
 #, fuzzy, c-format
 msgid "Delete image"
 msgstr "Алсын Зураг"
@@ -19372,7 +19431,7 @@ msgstr "Сонгогдсоныг устгах"
 msgid "Delete selected alerts"
 msgstr "Сонгогдсоныг устгах"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:579
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:585
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:142
 #, fuzzy, c-format
 msgid "Delete selected items"
@@ -19656,7 +19715,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:471
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:498
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:520
-#: intranet-tmpl/prog/en/modules/about.tt:847
+#: intranet-tmpl/prog/en/modules/about.tt:855
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:48
 #, c-format
 msgid "Description"
@@ -19695,7 +19754,7 @@ msgstr "Төлбөрүүдийн тайлбар"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:122
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:238
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:435
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:441
 #: intranet-tmpl/prog/en/modules/members/files.tt:66
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:91
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:252
@@ -19737,7 +19796,7 @@ msgstr "Тайлбар: "
 msgid "Description: %s"
 msgstr "Тайлбар:  %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:561
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:567
 #, c-format
 msgid "Descriptions"
 msgstr "Тайлбарууд"
@@ -19763,7 +19822,7 @@ msgstr "Очих номын сан: "
 msgid "Destination record"
 msgstr "Очих номын сан:"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:74
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:660
@@ -19776,7 +19835,7 @@ msgstr "Очих номын сан:"
 msgid "Details"
 msgstr "Дэлгэрэнгүй мэдээлэл"
 
-#: intranet-tmpl/prog/en/modules/about.tt:807
+#: intranet-tmpl/prog/en/modules/about.tt:815
 #, fuzzy, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -19798,7 +19857,7 @@ msgstr "Холбоо барих утас:"
 msgid "Dewey/classification"
 msgstr "Ангилал"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:513
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:519
 #, c-format
 msgid "Dewey:"
 msgstr "Дею:"
@@ -19911,7 +19970,7 @@ msgstr "Төлбөр"
 msgid "Discharge requests pending"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:106
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:110
 #, fuzzy, c-format
 msgid "Discharges"
 msgstr "Төлбөр"
@@ -19923,7 +19982,7 @@ msgstr "Дискограф"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:293
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:340
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:577
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:573
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #, fuzzy, c-format
 msgid "Discount: "
@@ -20216,7 +20275,7 @@ msgid "Download "
 msgstr "Татах "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1052
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1058
 #, fuzzy
 msgid "Download Record"
 msgstr "Бичлэгийг татах"
@@ -20315,7 +20374,7 @@ msgid "Draw guide boxes: "
 msgstr "Замчлах хайрцгуудыг зурах "
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:220
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1048
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1054
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "Дублин кор (XML)"
@@ -20406,7 +20465,7 @@ msgstr "Хуулбарын бичлэг"
 
 #. %1$s:  batch_id 
 #. %2$s:  duplicate_count 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:190
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:187
 #, fuzzy, c-format
 msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Нэхэмжлэлийн дугаар: %s"
@@ -20604,7 +20663,7 @@ msgstr "Эд Суммерз (Зарим кодууд ба MARC шиг Перл �
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:205
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:206
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:190
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:798
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:804
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:97
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:221
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:37
@@ -20977,8 +21036,8 @@ msgstr "Хэвлэлтүүд "
 msgid "Edition: %s"
 msgstr "Хэвлэлтүүд"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:564
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:987
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:570
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:993
 #, c-format
 msgid "Editions"
 msgstr "Хэвлэлтүүд"
@@ -21011,8 +21070,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:34
 #: intranet-tmpl/prog/en/includes/patron-search.inc:31
 #: intranet-tmpl/prog/en/includes/patron-search.inc:33
-#: intranet-tmpl/prog/en/modules/members/member.tt:435
-#: intranet-tmpl/prog/en/modules/members/member.tt:437
+#: intranet-tmpl/prog/en/modules/members/member.tt:439
+#: intranet-tmpl/prog/en/modules/members/member.tt:441
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:33
 #, c-format
 msgid "Email"
@@ -21151,7 +21210,7 @@ msgstr "Огнооны завсрын төгсгөл"
 msgid "End of interval"
 msgstr "Огнооны завсрын төгсгөл"
 
-#: intranet-tmpl/prog/en/modules/about.tt:803
+#: intranet-tmpl/prog/en/modules/about.tt:811
 #, c-format
 msgid "English"
 msgstr "Англи хэл"
@@ -21550,7 +21609,7 @@ msgstr "%s %s %s %s (%s)"
 msgid "Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 msgstr "Эйсий сургууль (Жероме Висано, Михел Леренард, Пьере Куочоис)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:829
+#: intranet-tmpl/prog/en/modules/about.tt:837
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -21606,7 +21665,7 @@ msgstr "Агуулах"
 msgid "Everyone"
 msgstr "Агуулах"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:248
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:252
 #, c-format
 msgid "Everything went OK, update done."
 msgstr "Бүх зүйл амжилттай болов, шинэчлэл хийгдлээ."
@@ -21773,7 +21832,7 @@ msgid "Expires before:"
 msgstr "Дараахиас өмнө хугацаа дуусна:"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:122
-#: intranet-tmpl/prog/en/modules/members/member.tt:398
+#: intranet-tmpl/prog/en/modules/members/member.tt:402
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:82
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:239
 #, c-format
@@ -21812,7 +21871,7 @@ msgstr "Тайлбар: "
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:104
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:269
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:103
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:250
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:247
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:222
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:232
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:99
@@ -21876,7 +21935,7 @@ msgstr "Ном зүйн бичлэгийг засварлах"
 msgid "Export bibliographic, holdings, and authority records"
 msgstr "Ном зүй болон барилтуудын өгөгдлийг экспортлох"
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:217
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:214
 #, fuzzy, c-format
 msgid "Export card batch"
 msgstr "Экспортлох"
@@ -21957,7 +22016,7 @@ msgstr "Хүлээгдсэн"
 msgid "Export selected batches"
 msgstr "Экспортлох"
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:216
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:213
 #, fuzzy, c-format
 msgid "Export selected card(s)"
 msgstr "Үйлчлүүлэгчдийг импортлох"
@@ -22424,7 +22483,7 @@ msgstr "Шинэ номын сан"
 msgid "Filename"
 msgstr "Файлын нэр"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:98
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:102
 #: intranet-tmpl/prog/en/includes/members-menu.inc:18
 #: intranet-tmpl/prog/en/modules/members/files.tt:19
 #, fuzzy, c-format
@@ -22546,7 +22605,7 @@ msgstr "Дараахьд шүүгдсэн:"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:650
 #: intranet-tmpl/prog/en/modules/tags/review.tt:355
-#: intranet-tmpl/prog/en/modules/members/member.tt:415
+#: intranet-tmpl/prog/en/modules/members/member.tt:419
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:100
 #, c-format
 msgid "Filters"
@@ -22595,9 +22654,9 @@ msgstr "Торгууль бичих интервал"
 msgid "Fine grace period"
 msgstr "Торгуулийн өршөөлийн хугацаа"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:77
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:81
 #: intranet-tmpl/prog/en/includes/members-menu.inc:7
-#: intranet-tmpl/prog/en/modules/members/member.tt:400
+#: intranet-tmpl/prog/en/modules/members/member.tt:404
 #, c-format
 msgid "Fines"
 msgstr "Торгуулиууд"
@@ -22625,7 +22684,7 @@ msgstr "Буцаагдсан зүйлсийн торгуулийг тооцох�
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:685
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:180
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:184
 msgid "Finish"
 msgstr "Дуусгах"
 
@@ -22893,7 +22952,7 @@ msgstr ""
 msgid "Framework:"
 msgstr "Бүтэц"
 
-#: intranet-tmpl/prog/en/modules/about.tt:805
+#: intranet-tmpl/prog/en/modules/about.tt:813
 #, fuzzy, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais(Франц хэл) "
@@ -23286,8 +23345,8 @@ msgid "Fund:"
 msgstr "Фонд"
 
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:120
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:488
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:491
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:484
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:487
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:274
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:272
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:379
@@ -23351,7 +23410,7 @@ msgstr "GST:"
 msgid "Gaetan Boisson"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:806
+#: intranet-tmpl/prog/en/modules/about.tt:814
 #, fuzzy, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Галего (Галици)"
@@ -23445,6 +23504,12 @@ msgstr "Үүсгэлт"
 #, c-format
 msgid "Genevieve Plantin"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:197
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:224
+#, fuzzy, c-format
+msgid "Geolocation: "
+msgstr "Байршил"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:5
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:19
@@ -23578,6 +23643,12 @@ msgstr "Бүлэг"
 #, fuzzy, c-format
 msgid "Gone no address flag"
 msgstr "Лавлах хаяг:"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:168
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:170
+#, fuzzy, c-format
+msgid "Government"
+msgstr "Төлбөрүүд"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:112
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:612
@@ -24058,7 +24129,7 @@ msgstr "Үндсэн номын сан"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:620
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:429
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:425
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:179
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:233
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:244
@@ -24071,12 +24142,12 @@ msgstr "Үндсэн номын сан"
 msgid "Holding library:"
 msgstr "Үндсэн номын сан"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:559
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
 #, c-format
 msgid "Holdings"
 msgstr "Барилтууд"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:827
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:833
 #, fuzzy, c-format
 msgid "Holdings:"
 msgstr "Барилтууд"
@@ -24171,7 +24242,7 @@ msgstr "Хүлээгдэж байгаа барилтууд:"
 msgid "Holds waiting: %s"
 msgstr "Хүлээгдэж байгаа барилтууд:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:546
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:552
 #, fuzzy, c-format
 msgid "Holds:"
 msgstr "Барилтууд"
@@ -24250,6 +24321,7 @@ msgstr "Жил болгон ижил огноо дээр тохиодог бая
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:28
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:19
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:60
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:48
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:13
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:46
@@ -24343,7 +24415,7 @@ msgstr "Жил болгон ижил огноо дээр тохиодог бая
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:23
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:324
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:41
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:318
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:40
@@ -24358,7 +24430,7 @@ msgstr "Жил болгон ижил огноо дээр тохиодог бая
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:48
 #: intranet-tmpl/prog/en/modules/tags/review.tt:184
 #: intranet-tmpl/prog/en/modules/tags/list.tt:34
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:164
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:9
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:43
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:54
@@ -24380,7 +24452,7 @@ msgstr "Жил болгон ижил огноо дээр тохиодог бая
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:18
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:114
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:11
-#: intranet-tmpl/prog/en/modules/members/member.tt:318
+#: intranet-tmpl/prog/en/modules/members/member.tt:322
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:25
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:140
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:42
@@ -24501,11 +24573,11 @@ msgstr "Үндсэн номын сан"
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:620
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:51
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:593
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:599
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:16
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:428
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:424
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:178
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:221
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:256
@@ -24544,7 +24616,7 @@ msgstr "Үндсэн номын сан "
 #. %3$s:  ELSE 
 #. %4$s:  branch 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:62
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:66
 #, fuzzy, c-format
 msgid "Home library: %s%s%s%s%s"
 msgstr "Үндсэн номын сан:"
@@ -24562,7 +24634,7 @@ msgstr "Хэвтээ: "
 msgid "Horowhenua Library Trust"
 msgstr "Хоровхэнуа номын сангийн итгэмжлэл"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:607
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:613
 #, fuzzy, c-format
 msgid "Host records"
 msgstr "Шинэ бичлэг"
@@ -24603,7 +24675,7 @@ msgstr ""
 msgid "How to process items: "
 msgstr "Зүйлсийг хэрхэн боловсруулах вэ: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:798
+#: intranet-tmpl/prog/en/modules/about.tt:806
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Хорвати"
@@ -24742,8 +24814,8 @@ msgstr "ISBN/ISSN:"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:698
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:43
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:482
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:485
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:488
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:491
 #, c-format
 msgid "ISBN:"
 msgstr "ISBN:"
@@ -24847,8 +24919,8 @@ msgstr "ISSN"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:68
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:377
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:126
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:489
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:493
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:495
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:499
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:21
 #, c-format
 msgid "ISSN:"
@@ -25061,6 +25133,13 @@ msgstr ""
 "захиалгыг худалдагчтай холбоослох хэрэгтэй. Үо хэрэгсэхийн тул Зөвшөөрөх-г "
 "дарах, эсвэл Цуцлах-г дарж буцан худалдагчийг оруулах"
 
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:178
+#, c-format
+msgid ""
+"If you wish to share some of your data, please enable the functionality in "
+"the \"Share your usage statistics\" section of the admin module. "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:433
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:85
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:149
@@ -25225,7 +25304,7 @@ msgid "Image: "
 msgstr "Зураг: "
 
 #: intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:16
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:571
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:427
 #, fuzzy, c-format
 msgid "Images"
@@ -25401,7 +25480,7 @@ msgstr "(Шилжүүлэлтэнд)"
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:657
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:663
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "%s -с %s хүртэлх үр дүнгүүд %s-н"
@@ -25624,7 +25703,7 @@ msgstr "Интранет:"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:530
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:281
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:95
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:619
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:615
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:338
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:410
 #, fuzzy, c-format
@@ -25754,10 +25833,10 @@ msgid "Inventory date:"
 msgstr "Агуулах"
 
 #: intranet-tmpl/prog/en/columns.def:101
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:602
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:608
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:8
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:435
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:431
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:228
 #, fuzzy, c-format
@@ -25923,7 +26002,7 @@ msgstr "Дугаар"
 msgid "Issue "
 msgstr "Дугаар # "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:894
 #, c-format
 msgid "Issue #"
 msgstr "Дугаар #"
@@ -25986,7 +26065,7 @@ msgstr ""
 msgid "It is a duplicate. Edit existing record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:815
+#: intranet-tmpl/prog/en/modules/about.tt:823
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -25995,7 +26074,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:220
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:367
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:449
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:445
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:200
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:324
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:73
@@ -26346,14 +26425,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:722
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:740
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:184
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:591
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:20
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:445
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:554
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:486
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:413
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:437
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:433
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:187
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:230
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:165
@@ -26517,7 +26596,7 @@ msgstr "Нэхэмжлэлийн дугаар: %s"
 msgid "Items in your cart: %s"
 msgstr "Таны хайлтыг сайжруулах "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:420
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:416
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:170
 #, fuzzy, c-format
 msgid "Items list"
@@ -26617,6 +26696,11 @@ msgstr ", АНУ (Коха 3.0 хувилбарын менежер, Чанары
 #, fuzzy, c-format
 msgid "Jason Etheridge"
 msgstr "Хэмжээсүүд (хөгжмийн бичлэгүүд):"
+
+#: intranet-tmpl/prog/en/modules/about.tt:793
+#, c-format
+msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:762
 #: intranet-tmpl/prog/en/modules/about.tt:763
@@ -27612,6 +27696,11 @@ msgstr "Коха &rsaquo; Захиргаа &rsaquo; Фондууд ба Төсв
 msgid "Koha &rsaquo; Administration &rsaquo; Keyword to MARC mapping"
 msgstr "Коха &rsaquo; Захиргаа &rsaquo; Бичлэг тааруулах дүрмүүд"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:5
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Administration &rsaquo; Koha usage statistics"
+msgstr "Коха &rsaquo; Захиргаа &rsaquo; Бичлэг тааруулах дүрмүүд"
+
 #. %1$s:  IF op == 'editcategory' 
 #. %2$s:  IF category.categorycode 
 #. %3$s:  category.categorycode
@@ -27863,7 +27952,7 @@ msgstr "Коха &rsaquo; Худалдагч %s-г хайх"
 #. %5$s:  subtitl.subfield | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:21
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:27
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Details for %s %s %s%s "
@@ -29190,7 +29279,7 @@ msgstr "Коха талбар:"
 msgid "Koha full call number"
 msgstr "Коха-н бүрэн дуудах дугаар"
 
-#: intranet-tmpl/prog/en/modules/about.tt:841
+#: intranet-tmpl/prog/en/modules/about.tt:849
 #, fuzzy, c-format
 msgid "Koha history timeline"
 msgstr "Коха захиргаа"
@@ -29300,7 +29389,7 @@ msgstr "Коха хувилбар: "
 msgid "KohaAloha, New Zealand"
 msgstr "Шинэ худалдагч"
 
-#: intranet-tmpl/prog/en/modules/about.tt:805
+#: intranet-tmpl/prog/en/modules/about.tt:813
 #, fuzzy, c-format
 msgid "Kohala"
 msgstr "Коха"
@@ -29498,7 +29587,7 @@ msgstr "Хэл: "
 msgid "Languages"
 msgstr "Хэлнүүд"
 
-#: intranet-tmpl/prog/en/modules/about.tt:820
+#: intranet-tmpl/prog/en/modules/about.tt:828
 #, fuzzy, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Аноусак Антони Сүүпава"
@@ -29583,7 +29672,7 @@ msgid "Last returned by:"
 msgstr "Сүүлд шинэчлэгдсэн: "
 
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:603
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:260
 #, c-format
 msgid "Last seen"
@@ -29598,6 +29687,11 @@ msgstr "Сүүлд харагдсан:"
 #, fuzzy, c-format
 msgid "Last sync: "
 msgstr "Сүүлд харагдсан:"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:189
+#, fuzzy, c-format
+msgid "Last update: "
+msgstr "Сүүлд шинэчлэгдсэн: "
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:210
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:62
@@ -29630,7 +29724,7 @@ msgstr "Оройтсон"
 msgid "Late orders"
 msgstr "Оройтсон захиалгууд"
 
-#: intranet-tmpl/prog/en/modules/about.tt:819
+#: intranet-tmpl/prog/en/modules/about.tt:827
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Латин"
@@ -29667,6 +29761,12 @@ msgstr "Харагдацийн нэр "
 #, fuzzy, c-format
 msgid "Layouts"
 msgstr "Харагдацууд"
+
+#: intranet-tmpl/prog/en/modules/about.tt:792
+#: intranet-tmpl/prog/en/modules/about.tt:793
+#, c-format
+msgid "Leaflet"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:160
 #, fuzzy, c-format
@@ -29774,6 +29874,7 @@ msgstr "Номын санчийн интерфейс"
 msgid "Librarian:"
 msgstr "Номын санч:"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:216
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:220
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:98
 #, c-format
@@ -29786,6 +29887,11 @@ msgstr "Номын сангууд"
 #, fuzzy, c-format
 msgid "Libraries and groups"
 msgstr "Номын сангууд ба бүлгүүд"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:202
+#, fuzzy, c-format
+msgid "Libraries informations: "
+msgstr "Илүү их мэдээлэл "
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:108
 #, fuzzy, c-format
@@ -29809,7 +29915,7 @@ msgstr "Илүү их мэдээлэл "
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:37
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
-#: intranet-tmpl/prog/en/modules/members/member.tt:397
+#: intranet-tmpl/prog/en/modules/members/member.tt:401
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:126
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:138
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:64
@@ -29858,6 +29964,11 @@ msgstr "Коха &rsaquo; Захиргаа &rsaquo; Зүйлийн төрлүү�
 msgid "Library EANs"
 msgstr "Номын сан "
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:185
+#, fuzzy, c-format
+msgid "Library URL: "
+msgstr "Номын сан: "
+
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:144
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:148
 #, fuzzy, c-format
@@ -29874,6 +29985,11 @@ msgstr "Номын сан хүчингүй."
 msgid "Library management"
 msgstr "Номын сангийн зохицуулалт"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:123
+#, fuzzy, c-format
+msgid "Library name: "
+msgstr "Номын сангийн код "
+
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:235
 #, c-format
 msgid "Library of the patron:"
@@ -29889,6 +30005,11 @@ msgstr "Номын санг тохируулах"
 #, fuzzy, c-format
 msgid "Library transfer limits"
 msgstr "Номын сангийн салбарууд"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:127
+#, fuzzy, c-format
+msgid "Library type: "
+msgstr "Номын сангийн код "
 
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:65
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:362
@@ -29907,7 +30028,7 @@ msgstr "Номын сангийн ашиглалт"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:427
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:793
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:574
-#: intranet-tmpl/prog/en/modules/members/member.tt:503
+#: intranet-tmpl/prog/en/modules/members/member.tt:507
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:328
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:348
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:276
@@ -30146,8 +30267,8 @@ msgstr "Сүүлд шинэчлэгдсэн"
 msgid "Lists"
 msgstr "Жагсаалтууд"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:369
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:524
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:375
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:530
 #, c-format
 msgid "Lists that include this title: "
 msgstr ""
@@ -30165,7 +30286,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:5
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:14
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:8
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:28
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:6
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:7
@@ -30181,7 +30302,7 @@ msgstr "Самбарыг ачаалж байна..."
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:276
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:256
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:136
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1067
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1073
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:110
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:165
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:472
@@ -30311,7 +30432,7 @@ msgstr "Локал ашиглалт"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:503
 #: intranet-tmpl/prog/en/modules/tags/list.tt:45
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:487
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:432
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:428
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:225
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:67
@@ -30499,7 +30620,7 @@ msgstr ""
 msgid "Lucida Console"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:821
+#: intranet-tmpl/prog/en/modules/about.tt:829
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -30519,8 +30640,8 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:127
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:147
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:388
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:459
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:465
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:87
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:150
@@ -30536,7 +30657,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:223
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:46
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1051
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1057
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Юникод/UTF-8)"
@@ -30548,7 +30669,7 @@ msgstr "MARC (Юникод/UTF-8)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:222
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:45
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1050
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1056
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (Юникод бус/MARC-8)"
@@ -30578,8 +30699,8 @@ msgstr ""
 msgid "MARC Framework for %s%s (%s)%sdefault MARC framework%s"
 msgstr "<a1>MARC бүтцүүд</a> &rsaquo; Дараахийн MARC бүтэц  %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:388
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:458
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:464
 #, fuzzy, c-format
 msgid "MARC Preview:"
 msgstr "Урьдчилсан харагдац"
@@ -30653,7 +30774,7 @@ msgstr "Өөрчлөлтийн архив"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:137
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:253
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1064
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1070
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:107
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:469
@@ -30706,7 +30827,7 @@ msgstr "MARC21/USMARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:221
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:44
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1049
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1055
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -30715,6 +30836,7 @@ msgstr "MARCXML"
 #: intranet-tmpl/prog/en/modules/about.tt:763
 #: intranet-tmpl/prog/en/modules/about.tt:766
 #: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:790
 #, fuzzy, c-format
 msgid "MIT License"
 msgstr "Лицензүүд"
@@ -30733,7 +30855,7 @@ msgid "MJ Ray (2.0 Release Maintainer)"
 msgstr ", Франц (Коха 2.0 ба 2.2 Release Manager)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:225
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1047
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1053
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -30754,7 +30876,7 @@ msgstr ""
 msgid "Magnus Enger"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:811
+#: intranet-tmpl/prog/en/modules/about.tt:819
 #, fuzzy, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Мажар(Унгар)"
@@ -30769,6 +30891,12 @@ msgstr "Шуудан"
 #, c-format
 msgid "Main address"
 msgstr "Үндсэн хаяг"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:256
+#, fuzzy
+msgid "Main library"
+msgstr "Номын санг өөрчлөх"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:380
 #, c-format
@@ -31369,7 +31497,7 @@ msgstr "Зүйлийг нэмэх "
 msgid "Matchpoint components"
 msgstr "Үйлчлүлэгчийн жирийн сэтгэгдлүүд"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:438
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:434
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:231
 #, fuzzy, c-format
@@ -31377,7 +31505,7 @@ msgid "Materials"
 msgstr "Материал 1"
 
 #: intranet-tmpl/prog/en/columns.def:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:603
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:609
 #, fuzzy, c-format
 msgid "Materials specified"
 msgstr "Материал 1"
@@ -31701,7 +31829,7 @@ msgid "Missing issues:"
 msgstr "Байхгүй байгаа дугаарууд"
 
 #. %1$s:  subscription.missinglist 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:882
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:888
 #, fuzzy, c-format
 msgid "Missing issues: %s "
 msgstr "Байхгүй байгаа дугаарууд "
@@ -31752,7 +31880,7 @@ msgstr "Жирийн үйлчлүүлэгчийн таагууд"
 msgid "Modification date"
 msgstr "Хэвлэлтийн огноо 1"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:88
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:92
 #: intranet-tmpl/prog/en/includes/members-menu.inc:13
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:35
 #, c-format
@@ -31922,7 +32050,7 @@ msgstr "Бичлэг тааруулах дүрмийг өөрчлөх"
 msgid "Modify record using the following template: "
 msgstr "Бичлэг тааруулах дүрмийг өөрчлөх"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:582
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:588
 #, fuzzy, c-format
 msgid "Modify selected items"
 msgstr "Сонгогдсоныг устгах"
@@ -31932,6 +32060,11 @@ msgstr "Сонгогдсоныг устгах"
 #, fuzzy
 msgid "Modify selected records"
 msgstr "Сонгогдсоныг устгах"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:83
+#, c-format
+msgid "Modify the statistics you share with the Koha community"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:166
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:197
@@ -32265,7 +32398,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:126
 #: intranet-tmpl/prog/en/modules/members/files.tt:32
-#: intranet-tmpl/prog/en/modules/members/member.tt:394
+#: intranet-tmpl/prog/en/modules/members/member.tt:398
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:118
@@ -32402,12 +32535,12 @@ msgstr ""
 msgid "Near East University"
 msgstr "Ойрхи Дорнодын Их Сургууль"
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:810
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:801
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr ""
@@ -32887,8 +33020,8 @@ msgstr "Дараагийн &gt;&gt;"
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:51
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:58
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:85
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:198
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:202
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:213
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:29
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:70
 #, fuzzy
@@ -32954,6 +33087,10 @@ msgstr "Коха-н баримт бичгийг унших"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:91
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:94
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:206
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:209
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:120
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:326
@@ -32993,7 +33130,7 @@ msgstr "%s-г %s рүү"
 msgid "No (default)"
 msgstr "Анхдагч"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:451
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:447
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:326
 #, c-format
 msgid ""
@@ -33059,7 +33196,7 @@ msgstr "Принтерийн төрхүүдийг одоогоор тодорх�
 msgid "No active currency is defined. Please go to "
 msgstr "Принтерийн төрхүүдийг одоогоор тодорхойлоогүй байна."
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:42
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:46
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No address stored."
@@ -33076,7 +33213,7 @@ msgid ""
 "No circulation rule is defined for this patron and itemtype combination."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:45
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:49
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No city stored."
@@ -33129,7 +33266,7 @@ msgstr "Тайлбарууд"
 msgid "No email is configured for your user."
 msgstr "Таны хайлтанд үр дүнгүүд алга"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:51
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:55
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No email stored."
@@ -33199,7 +33336,7 @@ msgid "No images are currently available. "
 msgstr "Зөвхөн одоогоор бэлэн байгаа зүйлс "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:28
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 #, fuzzy
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "Энэ сонголборуудын талаарх дэлгэрэнгүй мэдээлэл энд байна:"
@@ -33417,13 +33554,13 @@ msgstr "Хүлээгдэж байгаа сагснууд алга"
 msgid "No pending on-site checkout."
 msgstr "Авагдаагүй."
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:48
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:52
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "No phone stored."
 msgstr "Хадгалагдсан утас алга."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:830
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:836
 #, c-format
 msgid "No physical items for this record"
 msgstr "Энэ бичлэгт зориулсан биет зүйлс алга"
@@ -33687,7 +33824,7 @@ msgstr "Хөгжмийн бус бичлэг"
 msgid "Non-public note:"
 msgstr "Нийтийн бус санамж:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:605
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:611
 #, fuzzy, c-format
 msgid "Non-public notes"
 msgstr "Нийтийн бус санамж:"
@@ -33787,12 +33924,12 @@ msgstr "Хэвийн"
 msgid "Normalization rule: "
 msgstr "Хэвийн болгох дүрэм: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:812
+#: intranet-tmpl/prog/en/modules/about.tt:820
 #, fuzzy, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Аксел Божер ба Томас Грамстад"
 
-#: intranet-tmpl/prog/en/modules/about.tt:813
+#: intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr ""
@@ -33869,7 +34006,7 @@ msgstr "Авагдаагүй."
 
 #: intranet-tmpl/prog/en/columns.def:82
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:348
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:430
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:426
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:180
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:223
 #, c-format
@@ -33898,7 +34035,7 @@ msgid "Not renewable"
 msgstr "Шинэчлэлүүд:"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:620
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:892
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:898
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:40
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:42
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:68
@@ -34020,7 +34157,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:454
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:455
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:656
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:439
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:435
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:189
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:232
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:329
@@ -34124,7 +34261,7 @@ msgstr "Юу ч олдсонгүй"
 msgid "Notice"
 msgstr "Санамж"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:91
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:95
 #: intranet-tmpl/prog/en/includes/members-menu.inc:15
 #, c-format
 msgid "Notices"
@@ -34184,7 +34321,7 @@ msgstr "Арван нэгдүгээр сар"
 msgid "Now"
 msgstr "Үгүй"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:205
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:209
 #, c-format
 msgid ""
 "Now we're ready to create the database tables and fill them with some "
@@ -34451,7 +34588,7 @@ msgstr ""
 msgid "OAI-DC"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:399
+#: intranet-tmpl/prog/en/modules/members/member.tt:403
 #, fuzzy, c-format
 msgid "OD/Checkouts"
 msgstr "Авалтууд"
@@ -34576,7 +34713,7 @@ msgid "OPAC view"
 msgstr "OPAC санамж:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:94
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:453
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:459
 #, fuzzy, c-format
 msgid "OPAC view:"
 msgstr "OPAC санамж:"
@@ -34784,7 +34921,7 @@ msgstr ""
 msgid "On:"
 msgstr "Дараахьд: %s"
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:204
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:201
 #, fuzzy, c-format
 msgid "One borrowernumber per line."
 msgstr "Бар кодийн файл:"
@@ -34825,7 +34962,7 @@ msgstr "Онлайн нийтийн ашиглалтын каталог"
 msgid "Online help"
 msgstr "Онлайн тусламж"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:441
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:447
 #, fuzzy, c-format
 msgid "Online resources:"
 msgstr "Онлайн нөөцүүд:"
@@ -34917,7 +35054,7 @@ msgstr "1- Индекс үзүүлэх"
 msgid "Open fresh record"
 msgstr "Худалдагчийг хайх"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:454
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:460
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:419
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:20
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:21
@@ -35077,7 +35214,7 @@ msgstr "Захиалгын хайлт"
 msgid "Order line:"
 msgstr "Дараахиар захиалах:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:934
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:940
 #, fuzzy, c-format
 msgid "Order number"
 msgstr "Картын дугаар:"
@@ -35255,7 +35392,7 @@ msgstr "Аутре оркестре"
 msgid "Other data"
 msgstr "Бусад өгөгдөл"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:557
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:563
 #, fuzzy, c-format
 msgid "Other holdings"
 msgstr "Барилтуудыг нэмэх"
@@ -35692,7 +35829,7 @@ msgid "Patron attributes: "
 msgstr "Үйлчлүүлэгчийн шинж тэмдгийн төрлүүд"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:39
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:169
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:166
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:45
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:56
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:115
@@ -35944,7 +36081,7 @@ msgid "Patron lists"
 msgstr "Үйлчлүүлэгчийн төлөв"
 
 #. OPTGROUP
-#: intranet-tmpl/prog/en/modules/members/member.tt:369
+#: intranet-tmpl/prog/en/modules/members/member.tt:373
 #, fuzzy
 msgid "Patron lists:"
 msgstr "Үйлчлүүлэгчийн дарцгууд:"
@@ -36199,7 +36336,7 @@ msgstr "Үйлчлүүлэгч: "
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:18
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:114
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:11
-#: intranet-tmpl/prog/en/modules/members/member.tt:318
+#: intranet-tmpl/prog/en/modules/members/member.tt:322
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:26
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:141
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:42
@@ -36219,7 +36356,7 @@ msgstr "Үйлчлүүлэгчид"
 msgid "Patrons and circulation"
 msgstr "Үйлчлүүлэгчил ба Түгээлт"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:355
+#: intranet-tmpl/prog/en/modules/members/member.tt:359
 #, fuzzy, c-format
 msgid "Patrons found for: "
 msgstr "Үйлчлүүлэгч олдсонгүй::"
@@ -36230,7 +36367,7 @@ msgid "Patrons from any library may put this item on hold. "
 msgstr "Үйлчлүүлэгч ямар нэг барилт хийгээгүй байна. "
 
 #. %1$s:  batch_id 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:221
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:218
 #, fuzzy, c-format
 msgid "Patrons in batch number %s"
 msgstr "Нэхэмжлэлийн дугаар: %s"
@@ -36241,7 +36378,7 @@ msgid "Patrons in list"
 msgstr "Замчлалын жагсаалт"
 
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:154
-#: intranet-tmpl/prog/en/modules/members/member.tt:348
+#: intranet-tmpl/prog/en/modules/members/member.tt:352
 #, fuzzy, c-format
 msgid "Patrons requesting modifications"
 msgstr "Үйлчлүүлэгчийн санамж:"
@@ -36620,8 +36757,8 @@ msgstr "Утас:"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:46
 #: intranet-tmpl/prog/en/includes/patron-search.inc:48
-#: intranet-tmpl/prog/en/modules/members/member.tt:450
-#: intranet-tmpl/prog/en/modules/members/member.tt:452
+#: intranet-tmpl/prog/en/modules/members/member.tt:454
+#: intranet-tmpl/prog/en/modules/members/member.tt:456
 #, fuzzy, c-format
 msgid "Phone number"
 msgstr "Бүртгэлийн төрөл"
@@ -36843,7 +36980,7 @@ msgstr "Төлөвлөж байна "
 msgid "Planning for %s by %s"
 msgstr "%s-с %s рүү төлбарийг нэхэмжилж байна"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:572
 #, c-format
 msgid "Play media"
 msgstr ""
@@ -36983,7 +37120,7 @@ msgstr "Шинэ захиалга"
 msgid "Please confirm whether this is a duplicate patron"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:190
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:194
 #, c-format
 msgid "Please contact your system administrator"
 msgstr "Системийн зохицуулагчтайгаа холбоо барина уу"
@@ -37394,7 +37531,7 @@ msgid "Please select or enter a sound."
 msgstr "- Барилт хийхийн тул зүйлийг сонгоно уу\\n "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:28
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:34
 #, fuzzy
 msgid "Please select the image file to upload. %sUpload%s"
 msgstr "Серверт хуулах файлаа сонгох:"
@@ -37495,7 +37632,7 @@ msgstr ""
 msgid "Policy for %s: %s"
 msgstr " %s-д зориулсан зүйлс алга"
 
-#: intranet-tmpl/prog/en/modules/about.tt:825
+#: intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Польш"
@@ -37538,7 +37675,7 @@ msgstr ""
 msgid "Port: "
 msgstr "Порт: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:826
+#: intranet-tmpl/prog/en/modules/about.tt:834
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Португаль"
@@ -37834,7 +37971,7 @@ msgstr "Холбообарихутас %S Бар код %S "
 msgid "Print card number as text under barcode: "
 msgstr "Холбообарихутас %S Бар код %S "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:767
 #, fuzzy, c-format
 msgid "Print label"
 msgstr "Хуудсыг хэвлэх"
@@ -37988,6 +38125,8 @@ msgstr "Хувийн"
 msgid "Privacy settings"
 msgstr "Төрхийн тохиргоонууд"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:153
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:155
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:98
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:541
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:543
@@ -38057,7 +38196,7 @@ msgstr "Ном зүйн бичлэгийг засварлах"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:6
-#: intranet-tmpl/prog/en/modules/members/member-password.tt:123
+#: intranet-tmpl/prog/en/modules/members/member-password.tt:127
 #, fuzzy, c-format
 msgid "Processing..."
 msgstr "Мэргэжлийн"
@@ -38147,6 +38286,8 @@ msgstr "Шинж чанарууд"
 msgid "Prosentient Systems, Australia"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:132
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:134
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:99
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:546
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:548
@@ -38194,7 +38335,7 @@ msgstr "Нийтийн санамж:"
 msgid "Public note:"
 msgstr "Нийтийн санамж:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:604
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:610
 #, fuzzy, c-format
 msgid "Public notes"
 msgstr "Нийтийн санамж"
@@ -38268,7 +38409,7 @@ msgstr "Хэвлэлт/Хуулбарлах огноо: Шинээс хуучи�
 msgid "Publication/Copyright date: oldest to newest"
 msgstr "Хэвлэлт/Хуулбарлах огноо: Хуучнаас шинэ рүү"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:429
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:435
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:156
 #, c-format
 msgid "Published by:"
@@ -38389,7 +38530,7 @@ msgstr "Хэвлэгч:%s "
 msgid "Pull this many items"
 msgstr "Ийм олон зүйлсийг авах"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:103
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:107
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:36
 #, fuzzy, c-format
 msgid "Purchase suggestions"
@@ -38428,7 +38569,7 @@ msgstr "Зургийн чанар"
 msgid "Quality assurance team:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:938
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:944
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:249
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:352
@@ -38462,8 +38603,8 @@ msgstr "Байгууллагыг хайх"
 msgid "Quantity to receive: "
 msgstr "Хүлээн авсан тоо хэмжээ: "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:464
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:467
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:460
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:463
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:259
 #, fuzzy, c-format
 msgid "Quantity: "
@@ -38626,7 +38767,7 @@ msgstr "Хүлээн авах"
 msgid "Receive a new shipment"
 msgstr "Шинэ илгээмжийг хүлээн авах"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:936
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:942
 #, fuzzy, c-format
 msgid "Receive date"
 msgstr "Хүлээн авагдсан "
@@ -38946,6 +39087,12 @@ msgstr ", АНУ (Коха 3.0 хувилбарын менежер, Чанары
 msgid "Relevance"
 msgstr "Хамаарал"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:173
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:175
+#, fuzzy, c-format
+msgid "Religious organization"
+msgstr "Байгууллага"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:27
 #, fuzzy, c-format
 msgid "Remaining circulation permissions"
@@ -39065,7 +39212,7 @@ msgid "Remove course reserves"
 msgstr "Аутре оркестре"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:232
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:215
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:212
 #, fuzzy, c-format
 msgid "Remove duplicates"
 msgstr "Хуулбаруудыг арилгах"
@@ -39110,7 +39257,7 @@ msgid "Remove selected items"
 msgstr "Сонгогдсон зүйлсийг арилгах"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:155
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:213
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:210
 #, fuzzy, c-format
 msgid "Remove selected patrons"
 msgstr "Сонгогдсон зүйлсийг арилгах"
@@ -39360,8 +39507,8 @@ msgstr ""
 msgid "Replace the current record's contents"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:594
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:597
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:590
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:593
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:330
 #, fuzzy, c-format
 msgid "Replacement cost: "
@@ -39669,8 +39816,8 @@ msgstr "Эгнүүлэх дүрмийн код алга байна"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:50
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:316
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:481
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:514
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:477
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:510
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:358
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:718
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:861
@@ -39735,6 +39882,12 @@ msgstr "Эгнүүлэх дүрмийн код алга байна"
 msgid "Requires override of hold policy"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:148
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:150
+#, fuzzy, c-format
+msgid "Research"
+msgstr "Шинэ хайлт"
+
 #: intranet-tmpl/prog/en/modules/members/notices.tt:85
 #, fuzzy, c-format
 msgid "Resend"
@@ -39793,7 +39946,7 @@ msgstr "Хязгаарлагдсан: "
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:171
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:172
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:431
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:427
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:181
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:224
 #, fuzzy, c-format
@@ -40110,7 +40263,7 @@ msgstr "Дараахь дахь холбоос товч:"
 msgid "Rollover:"
 msgstr "Холбоос товч:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:827
+#: intranet-tmpl/prog/en/modules/about.tt:835
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Румын"
@@ -40152,7 +40305,7 @@ msgstr "Замчлал"
 msgid "Routing list"
 msgstr "Замчлалын жагсаалт"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:80
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:84
 #, fuzzy, c-format
 msgid "Routing lists"
 msgstr "Замчлалын жагсаалт"
@@ -40450,11 +40603,11 @@ msgstr "Бямба"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:127
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:549
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:163
-#: intranet-tmpl/prog/en/modules/members/member-password.tt:117
+#: intranet-tmpl/prog/en/modules/members/member-password.tt:119
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:185
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:167
-#: intranet-tmpl/prog/en/modules/members/member.tt:381
+#: intranet-tmpl/prog/en/modules/members/member.tt:385
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
@@ -40463,7 +40616,7 @@ msgstr "Бямба"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:302
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:637
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:633
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
@@ -40492,7 +40645,7 @@ msgstr "Хадгалах "
 msgid "Save Changes"
 msgstr "Өөрчлөлтүүдийг хадгалах"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1045
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1051
 #, c-format
 msgid "Save Record"
 msgstr "Бичлэгийг хадгалах"
@@ -40745,6 +40898,12 @@ msgstr ""
 msgid "Scheduler tool"
 msgstr "Гүйцэтгэх ажлуудын хуваарийг гаргах"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:138
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:140
+#, fuzzy, c-format
+msgid "School"
+msgstr "Сургуулийн өмнөх"
+
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:324
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:601
@@ -40797,7 +40956,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:382
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:255
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:21
-#: intranet-tmpl/prog/en/modules/members/member.tt:520
+#: intranet-tmpl/prog/en/modules/members/member.tt:524
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:57
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:150
@@ -40944,7 +41103,7 @@ msgid "Search expired, please try again"
 msgstr "IP хаяг өөрчлөгдсөн, дахиж нэвтэрнэ үү"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:18
-#: intranet-tmpl/prog/en/modules/members/member.tt:422
+#: intranet-tmpl/prog/en/modules/members/member.tt:426
 #, fuzzy, c-format
 msgid "Search fields:"
 msgstr "Худалдагчдийг хайх:"
@@ -41254,7 +41413,7 @@ msgid "Search to hold"
 msgstr "Зогсоох үгүүдийг хайх"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:74
-#: intranet-tmpl/prog/en/modules/members/member.tt:477
+#: intranet-tmpl/prog/en/modules/members/member.tt:481
 #, fuzzy, c-format
 msgid "Search type:"
 msgstr "Замын төрлүүдийг хайх"
@@ -41294,7 +41453,7 @@ msgstr "Хайх утга: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:6
-#: intranet-tmpl/prog/en/modules/members/member.tt:418
+#: intranet-tmpl/prog/en/modules/members/member.tt:422
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:182
 #, fuzzy, c-format
 msgid "Search:"
@@ -41396,6 +41555,11 @@ msgstr "Илүү их мэдээлэл"
 msgid "See online help for advanced options"
 msgstr "Ахисан түвшний сонголборуудын онлайн тусламжийг харах"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:235
+#, c-format
+msgid "See your public page: "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:252
 #, c-format
 msgid "Seen"
@@ -41405,7 +41569,7 @@ msgstr "Харагдсан"
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:255
 #: intranet-tmpl/prog/en/modules/labels/result.tt:105
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:51
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:236
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:233
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:203
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:20
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
@@ -41484,7 +41648,7 @@ msgstr "Үйлчлүүлэгчийг сонгох:"
 msgid "Select a file to import into the borrowers table."
 msgstr "Зээлдэгчдийн хүснэгт рүү импортлохоор файлыг сонгох"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:499
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:495
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:397
 #, fuzzy, c-format
@@ -41541,12 +41705,12 @@ msgstr "Серверт хуулах файлаа сонгох: "
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:136
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:178
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:214
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:574
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:580
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:368
 #: intranet-tmpl/prog/en/modules/tags/review.tt:16
 #: intranet-tmpl/prog/en/modules/members/pay.tt:73
-#: intranet-tmpl/prog/en/modules/members/member.tt:360
+#: intranet-tmpl/prog/en/modules/members/member.tt:364
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:194
@@ -41596,7 +41760,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Өдөр сонгох: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1046
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1052
 #, fuzzy, c-format
 msgid "Select download format: "
 msgstr "Татах форматыг сонгох: "
@@ -41742,6 +41906,12 @@ msgstr "Холбоотой гарчгууд"
 #, fuzzy, c-format
 msgid "Select your MARC flavor"
 msgstr "Таны MARC төрхийг сонгох"
+
+#: intranet-tmpl/prog/en/modules/about.tt:786
+#: intranet-tmpl/prog/en/modules/about.tt:787
+#, fuzzy, c-format
+msgid "Select2"
+msgstr "Сонгох"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:4
 #, fuzzy, c-format
@@ -41915,7 +42085,7 @@ msgstr "Коха &rsaquo; Цувралууд &rsaquo; %s-н Цуврал цуг�
 msgid "Serial edition "
 msgstr "Цуглуулга "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:599
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:605
 #, fuzzy, c-format
 msgid "Serial enumeration / chronology"
 msgstr "Үүсгэлт:"
@@ -42036,7 +42206,7 @@ msgstr "Цувралууд"
 msgid "Series title"
 msgstr "Гарчгийн скрипт"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:422
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:428
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:378
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:381
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:151
@@ -42094,6 +42264,19 @@ msgstr "Дараахьд хайх"
 #, c-format
 msgid "Set due date to expiry:"
 msgstr ""
+
+#. IMG
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:199
+#, fuzzy
+msgid "Set geolocation"
+msgstr "Үйлчлүүлэгчдийг хайх"
+
+#. IMG
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:226
+#, fuzzy
+msgid "Set geolocation for [% l.branchname %]"
+msgstr ""
+"Барилтыг цуцалж дараахь рүү буцаах : <!-- TMPL_VAR NAME=\"homebranch\" -->"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:128
 #, fuzzy, c-format
@@ -42171,6 +42354,22 @@ msgstr "Хайж байна"
 #, fuzzy, c-format
 msgid "Sex"
 msgstr "Нээх"
+
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:87
+#, fuzzy, c-format
+msgid "Share my Koha usage statistics: "
+msgstr "Үйлчлүүлэгчдийн статистик"
+
+#: intranet-tmpl/prog/en/modules/admin/admin-home.tt:124
+#, c-format
+msgid ""
+"Share with the Koha community the usage statistics of your Koha installation."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/admin-home.tt:123
+#, fuzzy, c-format
+msgid "Share your usage statistics"
+msgstr "Үйлчлүүлэгчдийн статистик"
 
 #: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
@@ -42332,8 +42531,8 @@ msgstr ""
 msgid "Shortened due date would have been %s (%s days)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:388
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:459
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:465
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
 #, c-format
 msgid "Show"
@@ -42408,7 +42607,7 @@ msgstr "Каталог хайх:&nbsp;"
 
 #. For the first occurrence,
 #. %1$s:  hiddencount 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:814
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:820
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:543
 #, c-format
 msgid "Show all items (%s hidden)"
@@ -42628,6 +42827,12 @@ msgstr "Нэр эсвэл картын дугаар:"
 msgid "Social security or card number: "
 msgstr "Нэр эсвэл картын дугаар:"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:158
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:160
+#, fuzzy, c-format
+msgid "Society or association"
+msgstr "Ангилал"
+
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:37
 #, fuzzy, c-format
 msgid "Some Perl modules are missing."
@@ -42735,8 +42940,8 @@ msgstr "%S дараахийн захиалга: "
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:61
 #: intranet-tmpl/prog/en/includes/patron-search.inc:63
-#: intranet-tmpl/prog/en/modules/members/member.tt:465
-#: intranet-tmpl/prog/en/modules/members/member.tt:467
+#: intranet-tmpl/prog/en/modules/members/member.tt:469
+#: intranet-tmpl/prog/en/modules/members/member.tt:471
 #, fuzzy, c-format
 msgid "Sort field 1"
 msgstr "Коха талбар:"
@@ -42749,8 +42954,8 @@ msgstr "Коха талбар:"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:66
 #: intranet-tmpl/prog/en/includes/patron-search.inc:68
-#: intranet-tmpl/prog/en/modules/members/member.tt:470
-#: intranet-tmpl/prog/en/modules/members/member.tt:472
+#: intranet-tmpl/prog/en/modules/members/member.tt:474
+#: intranet-tmpl/prog/en/modules/members/member.tt:476
 #, fuzzy, c-format
 msgid "Sort field 2"
 msgstr "Коха талбар:"
@@ -42921,7 +43126,7 @@ msgstr "Төлбөрийн хэмжээ"
 msgid "Spent amount:"
 msgstr "Төлбөрийн хэмжээ"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:612
 #, fuzzy, c-format
 msgid "Spine label"
 msgstr "Файлын нэр"
@@ -43069,8 +43274,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:21
 #: intranet-tmpl/prog/en/includes/patron-search.inc:23
-#: intranet-tmpl/prog/en/modules/members/member.tt:425
-#: intranet-tmpl/prog/en/modules/members/member.tt:427
+#: intranet-tmpl/prog/en/modules/members/member.tt:429
+#: intranet-tmpl/prog/en/modules/members/member.tt:431
 #, fuzzy, c-format
 msgid "Standard"
 msgstr "NAB стандарт"
@@ -43195,8 +43400,8 @@ msgstr "Дараахьтай үйлчлүүлэгчийн анхааруулга
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:77
 #: intranet-tmpl/prog/en/includes/patron-search.inc:80
-#: intranet-tmpl/prog/en/modules/members/member.tt:480
-#: intranet-tmpl/prog/en/modules/members/member.tt:483
+#: intranet-tmpl/prog/en/modules/members/member.tt:484
+#: intranet-tmpl/prog/en/modules/members/member.tt:487
 #, fuzzy, c-format
 msgid "Starts with"
 msgstr "Дараахьтай үйлчлүүлэгчийн анхааруулга:"
@@ -43222,7 +43427,7 @@ msgstr "Эвдэрсэн "
 msgid "Statistic 1 done on: "
 msgstr "Үйлчлүүлэгчийн статистик "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:627
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:623
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:419
 #, fuzzy, c-format
@@ -43234,7 +43439,7 @@ msgstr "Үйлчлүүлэгчийн статистик "
 msgid "Statistic 2 done on: "
 msgstr "Үйлчлүүлэгчийн статистик "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:630
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:626
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:299
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:423
 #, fuzzy, c-format
@@ -43247,7 +43452,7 @@ msgstr "Үйлчлүүлэгчийн статистик "
 msgid "Statistical"
 msgstr "Үйлчлүүлэгчийн статистик"
 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:94
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:98
 #: intranet-tmpl/prog/en/includes/members-menu.inc:16
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:235
 #, c-format
@@ -43283,9 +43488,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:531
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:667
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:669
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:596
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:891
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:937
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:602
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:897
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:943
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:24
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:167
 #: intranet-tmpl/prog/en/modules/tags/review.tt:244
@@ -43491,8 +43696,8 @@ msgstr "Аравдугаар сар"
 msgid "Street Address"
 msgstr "Хаяг"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:455
-#: intranet-tmpl/prog/en/modules/members/member.tt:457
+#: intranet-tmpl/prog/en/modules/members/member.tt:459
+#: intranet-tmpl/prog/en/modules/members/member.tt:461
 #, fuzzy, c-format
 msgid "Street address"
 msgstr "Хаяг"
@@ -43677,7 +43882,7 @@ msgstr "Обьект"
 msgid "Subject: %s "
 msgstr "Обьект"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:497
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:503
 #, fuzzy, c-format
 msgid "Subjects:"
 msgstr "Обьект"
@@ -43792,6 +43997,12 @@ msgstr "Тушаах"
 msgid "Submit your suggestion"
 msgstr "Саналаас"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:178
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:180
+#, fuzzy, c-format
+msgid "Subscription"
+msgstr "Шинэ захиалга"
+
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:493
 #, fuzzy, c-format
 msgid "Subscription #"
@@ -43832,7 +44043,7 @@ msgid "Subscription closed %s "
 msgstr "Тайлбар:  %s "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:490
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:918
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:924
 #, fuzzy, c-format
 msgid "Subscription details"
 msgstr "Хэвлэлтийн дэлгэрэнгүй мэдээлэл"
@@ -43951,7 +44162,7 @@ msgid "Subscription:"
 msgstr "Шинэ захиалга"
 
 #: intranet-tmpl/prog/en/modules/serials/serial-issues.tt:19
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:562
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:568
 #, c-format
 msgid "Subscriptions"
 msgstr "Захиалгууд"
@@ -43992,7 +44203,7 @@ msgstr "<a1>Нийтl</a>: "
 msgid "Subtype limits"
 msgstr "'Тушаах'-г дарах"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:192
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:196
 #, c-format
 msgid "Success"
 msgstr ""
@@ -44023,7 +44234,7 @@ msgstr "Дараахаар үүсгэгдсэн"
 msgid "Suggested by:"
 msgstr "Дараахаар үүсгэгдсэн"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:409
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:405
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:161
 #, fuzzy, c-format
 msgid "Suggested by: "
@@ -44048,7 +44259,7 @@ msgstr "Хүсэгдсэн"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:526
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:47
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:402
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:158
 #, fuzzy, c-format
 msgid "Suggestion"
@@ -44196,8 +44407,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/patron-search.inc:26
 #: intranet-tmpl/prog/en/includes/patron-search.inc:28
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:118
-#: intranet-tmpl/prog/en/modules/members/member.tt:430
-#: intranet-tmpl/prog/en/modules/members/member.tt:432
+#: intranet-tmpl/prog/en/modules/members/member.tt:434
+#: intranet-tmpl/prog/en/modules/members/member.tt:436
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:20
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:36
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:71
@@ -44248,7 +44459,7 @@ msgstr ""
 msgid "Suspension in days (day)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:830
+#: intranet-tmpl/prog/en/modules/about.tt:838
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr ""
@@ -44369,7 +44580,7 @@ msgstr "%s эрхэмлэлүүд"
 msgid "Sèbastien Hinderer"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:833
+#: intranet-tmpl/prog/en/modules/about.tt:841
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -44444,6 +44655,11 @@ msgstr ""
 msgid ""
 "Tab:%s | $%s %s %s%s%s%s, repeatable%s%s, Mandatory%s%s, See %s%s%s, %s%s%s, "
 "%s%s%s, %s%s "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:790
+#, c-format
+msgid "TableDnD plug-in for jQuery"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
@@ -44567,8 +44783,8 @@ msgstr "Хуудаснууд:"
 msgid "Tags pending approval"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:377
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:533
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:383
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:539
 #, c-format
 msgid "Tags:"
 msgstr "Таагууд:"
@@ -44610,8 +44826,8 @@ msgstr "GST-д бүртгүүлсэн: "
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:342
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:558
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:561
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:557
 #, fuzzy, c-format
 msgid "Tax rate: "
 msgstr "GST: "
@@ -44730,7 +44946,7 @@ msgstr "Ахисан түвшнийн таамаглалын хэв"
 msgid "Testing..."
 msgstr "Самбарыг ачаалж байна..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:831
+#: intranet-tmpl/prog/en/modules/about.tt:839
 #, fuzzy, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Карен Майерс"
@@ -44827,12 +45043,15 @@ msgstr "Захиалгын хайлт"
 #: intranet-tmpl/prog/en/modules/about.tt:775
 #: intranet-tmpl/prog/en/modules/about.tt:778
 #: intranet-tmpl/prog/en/modules/about.tt:781
+#: intranet-tmpl/prog/en/modules/about.tt:787
+#: intranet-tmpl/prog/en/modules/about.tt:790
+#: intranet-tmpl/prog/en/modules/about.tt:793
 #, fuzzy, c-format
 msgid "The "
 msgstr "Түгээлтийн дамжуулалтууд "
 
 #. %1$s:  subscription.staffdisplaycount 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:885
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:891
 #, fuzzy, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "Та энэ захиалгыг устгахыг хүсэж байна уу?"
@@ -44890,7 +45109,7 @@ msgid ""
 "instead. To switch follow this page of wiki: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:626
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:622
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:418
 #, c-format
 msgid ""
@@ -45098,7 +45317,7 @@ msgstr ""
 msgid "The following barcodes were found: "
 msgstr ": бар код олдсонгүй "
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:188
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:192
 #, c-format
 msgid "The following error occurred while importing the database structure:"
 msgstr ""
@@ -45375,7 +45594,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  biblionumber 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:335
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:341
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:53
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:38
@@ -45664,7 +45883,7 @@ msgstr "Үйлчлүүлэгчийн ангилалуудыг тодорхойл
 msgid "There are no patron lists."
 msgstr "Үйлчлүүлэгчийн ангилалуудыг тодорхойлох."
 
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:267
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:264
 #, fuzzy, c-format
 msgid "There are no patrons in this batch yet"
 msgstr "Үйлчлүүлэгчийн шинж тэмдгийн төрлийг устгах"
@@ -45928,7 +46147,7 @@ msgid ""
 "existing invoice?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:874
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
 #, fuzzy, c-format
 msgid "This is a serial subscription"
 msgstr "Шинэ цуврал захиалгыг нэмэх"
@@ -46232,7 +46451,7 @@ msgstr ""
 msgid "This subscription depends on another supplier"
 msgstr "<b>%s</b> захиалга(ууд)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:879
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:885
 #, fuzzy, c-format
 msgid "This subscription is closed."
 msgstr "<b>%s</b> захиалга(ууд)"
@@ -46902,7 +47121,7 @@ msgstr "Нэмэлт програм:"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:105
 #: intranet-tmpl/prog/en/modules/tags/review.tt:184
 #: intranet-tmpl/prog/en/modules/tags/list.tt:34
-#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:168
+#: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:44
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:55
@@ -47214,7 +47433,7 @@ msgid "Total tax inc. (%s)"
 msgstr ") болзолт огноо: %s"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:460
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:606
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:602
 #, fuzzy, c-format
 msgid "Total: "
 msgstr "<a1>Нийтl</a>: "
@@ -47348,7 +47567,7 @@ msgid "Translate item type [% itemtype.itemtype %]"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:218
-#: intranet-tmpl/prog/en/modules/about.tt:789
+#: intranet-tmpl/prog/en/modules/about.tt:797
 #, fuzzy, c-format
 msgid "Translation"
 msgstr "Байгууллага"
@@ -47490,6 +47709,7 @@ msgid "UNIMARC"
 msgstr "MARC"
 
 #: intranet-tmpl/prog/en/columns.def:146
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:57
 #, fuzzy, c-format
 msgid "URL"
@@ -47499,6 +47719,11 @@ msgstr "URL байна:"
 #, c-format
 msgid "URL(s)"
 msgstr "URL(үүд)"
+
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:522
+#, fuzzy, c-format
+msgid "URL:"
+msgstr ": %s"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:191
 #, c-format
@@ -47574,7 +47799,7 @@ msgstr "Батлагдсан"
 msgid "Unauthorized user "
 msgstr "Эрх олгогдсон утга "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:668
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:674
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Бэлэн биш (алдагдсан)"
@@ -47584,7 +47809,7 @@ msgstr "Бэлэн биш (алдагдсан)"
 msgid "Uncertain"
 msgstr "Үүсгэлт"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:547
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:543
 #, fuzzy, c-format
 msgid "Uncertain price: "
 msgstr "Захиалгын үнэнүүд "
@@ -47852,7 +48077,7 @@ msgstr ""
 msgid "Update child to adult patron"
 msgstr "Насанд хүрсэн үйлчлүүлэгч"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:240
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:244
 #, fuzzy, c-format
 msgid "Update errors :"
 msgstr "Өгөгдлийн алдаа"
@@ -47874,7 +48099,7 @@ msgstr "Зүйлсийг засварлах"
 msgid "Update patron records"
 msgstr "Хуулбарын бичлэг"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:232
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:236
 #, fuzzy, c-format
 msgid "Update report :"
 msgstr "Энэ тайланг татах:"
@@ -47883,6 +48108,12 @@ msgstr "Энэ тайланг татах:"
 #, fuzzy, c-format
 msgid "Update succeeded"
 msgstr "Огноо:%s"
+
+#. INPUT type=submit
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:251
+#, fuzzy
+msgid "Update your statistics usage"
+msgstr "Каталогийн статистик"
 
 #. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:168
@@ -47895,7 +48126,7 @@ msgstr "Огноо:%s"
 msgid "Updated:"
 msgstr "Сүүлд шинэчлэгдсэн:"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:230
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:234
 #, c-format
 msgid "Updating database structure"
 msgstr ""
@@ -48105,6 +48336,12 @@ msgstr ""
 msgid "Upperage limit: "
 msgstr ""
 
+#. %1$s:  l.branchurl 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:223
+#, fuzzy, c-format
+msgid "Url: %s"
+msgstr "Цувралуудыг засварлах"
+
 #. %1$s:  missing_module.usage 
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:46
 #, fuzzy, c-format
@@ -48253,7 +48490,7 @@ msgstr ". Ашиглагч"
 msgid "Used For"
 msgstr ". Ашиглагч"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:608
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:614
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:72
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:192
 #, c-format
@@ -48301,8 +48538,8 @@ msgstr ". Ашиглагч "
 #: intranet-tmpl/prog/en/includes/patron-search.inc:41
 #: intranet-tmpl/prog/en/includes/patron-search.inc:43
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
-#: intranet-tmpl/prog/en/modules/members/member.tt:445
-#: intranet-tmpl/prog/en/modules/members/member.tt:447
+#: intranet-tmpl/prog/en/modules/members/member.tt:449
+#: intranet-tmpl/prog/en/modules/members/member.tt:451
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:122
 #, fuzzy, c-format
 msgid "Username"
@@ -48434,7 +48671,7 @@ msgstr "Хайгдаж болох: "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:200
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:216
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:247
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:931
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:937
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:63
@@ -48458,7 +48695,7 @@ msgid "Vendor EDI accounts"
 msgstr "Үйлчлүүлэгч олдсонгүй::"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:946
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:952
 #, fuzzy
 msgid "Vendor detail page"
 msgstr "Шинэ худалдагч"
@@ -48507,7 +48744,7 @@ msgstr "Нэхэмжлэл"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:535
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:286
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:99
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:623
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:619
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:340
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:414
 #, fuzzy, c-format
@@ -48519,8 +48756,8 @@ msgstr "Нэхэмжлэл "
 msgid "Vendor price must be a number"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:538
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:541
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:534
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
 #, fuzzy, c-format
 msgid "Vendor price: "
 msgstr "Шинэ худалдагч "
@@ -49001,14 +49238,14 @@ msgstr ""
 msgid "We"
 msgstr "1/долоо хоног"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:224
 #, c-format
 msgid "We are ready to do some basic configuration. Please "
 msgstr ""
 
 #. %1$s:  dbversion 
 #. %2$s:  kohaversion 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:216
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:220
 #, c-format
 msgid "We are upgrading from Koha %s to %s, you must "
 msgstr ""
@@ -49176,7 +49413,7 @@ msgstr "MARC бүтцүүд: %s "
 msgid "With selected searches: "
 msgstr "Сонгогдсон зүйлсийг арилгах "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:673
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:679
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:259
 #, fuzzy, c-format
 msgid "Withdrawn"
@@ -49323,6 +49560,10 @@ msgstr "Давтагдах боломжтой баярын өдрүүд"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:90
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:93
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:205
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:208
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:121
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:327
@@ -49579,6 +49820,11 @@ msgstr "Та энэ сагсыг хаахыг хүсэж байна уу?"
 msgid "You are not authorized to set permissions"
 msgstr "Та энэ сагсыг хаахыг хүсэж байна уу?"
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:79
+#, c-format
+msgid "You are not sharing any data with the Koha community"
+msgstr ""
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 msgid "You are offline and therefore cannot process pending operations"
@@ -49628,6 +49874,11 @@ msgstr ""
 msgid ""
 "You can enter a name for this import. It may be useful, when creating a "
 "record, to remember where the suggested MARC data comes from!"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:176
+#, c-format
+msgid "You can help the Koha community by sharing your statistics with us. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:291
@@ -50094,6 +50345,11 @@ msgstr ""
 msgid "Your configuration file still seems to be set up for 'grs1'."
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:99
+#, fuzzy, c-format
+msgid "Your country: "
+msgstr "Тоо "
+
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:82
 #, c-format
 msgid "Your data was processed. Here are the results:"
@@ -50296,7 +50552,7 @@ msgstr "Шуудангийн хаяг: "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:22
-#: intranet-tmpl/prog/en/modules/members/member.tt:376
+#: intranet-tmpl/prog/en/modules/members/member.tt:380
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
 #, fuzzy, c-format
 msgid "[ New list ]"
@@ -50376,8 +50632,7 @@ msgid "[% discount | format ("
 msgstr ""
 
 #. IMG
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:11
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:13
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:12
 msgid "[% firstname | html %] [% surname | html %] ([% cardnumber | html %])"
 msgstr ""
 
@@ -50412,7 +50667,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  IF ( batch_checkout_view ) 
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:67
+#: intranet-tmpl/prog/en/includes/circ-menu.inc:71
 #, c-format
 msgid ""
 "[%% IF Koha.Preference('BatchCheckouts') && Koha."
@@ -50479,6 +50734,48 @@ msgstr ""
 msgid ""
 "[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
 "type=seefro.type authid=seefro.authid %%] "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/country-list.inc:1
+#, c-format
+msgid ""
+"[%% SET countries = [ \"Afghanistan\", \"Albania\", \"Algeria\", \"Andorra"
+"\", \"Angola\", \"Antigua & Deps\", \"Argentina\", \"Armenia\", \"Australia"
+"\", \"Austria\", \"Azerbaijan\", \"Bahamas\", \"Bahrain\", \"Bangladesh\", "
+"\"Barbados\", \"Belarus\", \"Belgium\", \"Belize\", \"Benin\", \"Bhutan\", "
+"\"Bolivia\", \"Bosnia Herz.\", \"Botswana\", \"Brazil\", \"Brunei\", "
+"\"Bulgaria\", \"Burkina\", \"Burundi\", \"Cambodia\", \"Cameroon\", \"Canada"
+"\", \"Cape Verde\", \"Centr. Afr. Rep\", \"Chad\", \"Chile\", \"China\", "
+"\"Colombia\", \"Comoros\", \"Congo\", \"Costa Rica\", \"Croatia\", \"Cuba\", "
+"\"Cyprus\", \"Czech Republic\", \"Denmark\", \"Djibouti\", \"Dominica\", "
+"\"Dominican Rep.\", \"East Timor\", \"Ecuador\", \"Egypt\", \"El Salvador\", "
+"\"Equator. Guinea\", \"Eritrea\", \"Estonia\", \"Ethiopia\", \"Fiji\", "
+"\"Finland\", \"France\", \"Gabon\", \"Gambia\", \"Georgia\", \"Germany\", "
+"\"Ghana\", \"Greece\", \"Grenada\", \"Guatemala\", \"Guinea\", \"Guinea-"
+"Bissau\", \"Guyana\", \"Haiti\", \"Honduras\", \"Hungary\", \"Iceland\", "
+"\"India\", \"Indonesia\", \"Iran\", \"Iraq\", \"Ireland\", \"Israel\", "
+"\"Italy\", \"Ivory Coast\", \"Jamaica\", \"Japan\", \"Jordan\", \"Kazakhstan"
+"\", \"Kenya\", \"Kiribati\", \"Korea North\", \"Korea South\", \"Kosovo\", "
+"\"Kuwait\", \"Kyrgyzstan\", \"Laos\", \"Latvia\", \"Lebanon\", \"Lesotho\", "
+"\"Liberia\", \"Libya\", \"Liechtenstein\", \"Lithuania\", \"Luxembourg\", "
+"\"Macedonia\", \"Madagascar\", \"Malawi\", \"Malaysia\", \"Maldives\", \"Mali"
+"\", \"Malta\", \"Marshall Isl.\", \"Mauritania\", \"Mauritius\", \"Mexico\", "
+"\"Micronesia\", \"Moldova\", \"Monaco\", \"Mongolia\", \"Montenegro\", "
+"\"Morocco\", \"Mozambique\", \"Myanmar\", \"Namibia\", \"Nauru\", \"Nepal\", "
+"\"Netherlands\", \"New Zealand\", \"Nicaragua\", \"Niger\", \"Nigeria\", "
+"\"Norway\", \"Oman\", \"Pakistan\", \"Palau\", \"Panama\", \"Papua N. Guinea"
+"\", \"Paraguay\", \"Peru\", \"Philippines\", \"Poland\", \"Portugal\", "
+"\"Qatar\", \"Romania\", \"Russian Fed.\", \"Rwanda\", \"St Kitts & Nev.\", "
+"\"St Lucia\", \"Saint Vincent\", \"Samoa\", \"San Marino\", \"Sao Tome\", "
+"\"Saudi Arabia\", \"Senegal\", \"Serbia\", \"Seychelles\", \"Sierra Leone\", "
+"\"Singapore\", \"Slovakia\", \"Slovenia\", \"Solomon Islands\", \"Somalia\", "
+"\"South Africa\", \"Spain\", \"Sri Lanka\", \"Sudan\", \"Suriname\", "
+"\"Swaziland\", \"Sweden\", \"Switzerland\", \"Syria\", \"Taiwan\", "
+"\"Tajikistan\", \"Tanzania\", \"Thailand\", \"Togo\", \"Tonga\", \"Trinidad "
+"& Tob.\", \"Tunisia\", \"Turkey\", \"Turkmenistan\", \"Tuvalu\", \"Uganda\", "
+"\"Ukraine\", \"UAE\", \"United Kingdom\", \"USA\", \"Uruguay\", \"Uzbekistan"
+"\", \"Vanuatu\", \"Vatican City\", \"Venezuela\", \"Vietnam\", \"Yemen\", "
+"\"Zambia\", \"Zimbabwe\", ] %%] "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:99
@@ -50882,7 +51179,7 @@ msgstr ", %s-н өмнө"
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:991
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:997
 #, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -50909,6 +51206,11 @@ msgstr ""
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:790
+#, fuzzy, c-format
+msgid "by Denis Howlett is licensed under the "
+msgstr "Гүүрэн материалын төрлийн логонууд төсөл "
 
 #: intranet-tmpl/prog/en/modules/about.tt:778
 #, c-format
@@ -51285,7 +51587,7 @@ msgstr "Цахим шуудан"
 msgid "ending.ogg"
 msgstr "Үргэлжилж байна"
 
-#: intranet-tmpl/prog/en/modules/about.tt:795
+#: intranet-tmpl/prog/en/modules/about.tt:803
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -51532,7 +51834,7 @@ msgstr "Номын санг өөрчлөх"
 msgid "incoming_call.ogg"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:221
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, c-format
 msgid "install basic configuration settings"
 msgstr ""
@@ -51655,12 +51957,12 @@ msgstr "Үндсэн номын сан"
 msgid "item's home library "
 msgstr "Үндсэн номын сан:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:820
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:826
 #, fuzzy, c-format
 msgid "itemdata_copynumber"
 msgstr "Зүйлийгдуудахдугаар"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:819
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:825
 #, c-format
 msgid "itemdata_enumchron"
 msgstr ""
@@ -51770,6 +52072,11 @@ msgstr ""
 msgid "jquery.multiple.select.js"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/about.tt:789
+#, c-format
+msgid "jquery.tablednd.js"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:39
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:43
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:44
@@ -51814,6 +52121,11 @@ msgstr "Дараахьд хаагдсан: %s"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
 msgid "let blank for the entire field"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:787
+#, fuzzy, c-format
+msgid "library is licensed under "
+msgstr "Гүүрэн материалын төрлийн логонууд төсөл "
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:121
 #, fuzzy, c-format
@@ -52071,7 +52383,7 @@ msgstr "Үйлчлүүлэгчийн ангилал "
 msgid "patron_attributes"
 msgstr "Үйлчлүүлэгчийн шинж тэмдгийн төрлүүд"
 
-#: intranet-tmpl/prog/en/modules/members/member.tt:327
+#: intranet-tmpl/prog/en/modules/members/member.tt:331
 #, fuzzy, c-format
 msgid "patrons to "
 msgstr "Үйлчлүүлэгчийн ангилал "
@@ -52189,8 +52501,8 @@ msgid "release team"
 msgstr "Коха баг"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1012
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1014
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1018
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1020
 #, fuzzy
 msgid "remove this image"
 msgstr "Алсын зураг:"
@@ -52286,7 +52598,7 @@ msgstr "Үйлдэл"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "%S хоосноор тусгаарлах (ж.нь., 100a 200 606) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:827
 #, fuzzy, c-format
 msgid "serial"
 msgstr "Цувралуудыг засварлах"
@@ -52427,13 +52739,13 @@ msgstr "Саналаас"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:526
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:424
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:410
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:406
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:162
 #, fuzzy, c-format
 msgid "suggestion #%s"
 msgstr "Саналаас"
 
-#: intranet-tmpl/prog/en/modules/about.tt:804
+#: intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr ""
@@ -52495,6 +52807,13 @@ msgid ""
 "duplicated. %s %s "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/about.tt:787
+#, c-format
+msgid ""
+"the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
+"Public License version 2 (the \"GPL License\")"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:68
 #, fuzzy, c-format
 msgid "the biblioitems.itemtype field MUST :"
@@ -52552,7 +52871,7 @@ msgstr "Огноо: "
 msgid "to be placed on hold"
 msgstr "%s-д байрлуулсан барилт."
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:221
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:225
 #, c-format
 msgid "to continue the installation. "
 msgstr ""
@@ -52596,7 +52915,7 @@ msgstr "Огноо:%s"
 msgid "until %s"
 msgstr "Огноо:%s"
 
-#: intranet-tmpl/prog/en/modules/installer/step3.tt:217
+#: intranet-tmpl/prog/en/modules/installer/step3.tt:221
 #, c-format
 msgid "update your database"
 msgstr ""
@@ -52605,16 +52924,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "updated successfully"
 msgstr "Бар кодтой зүйл үгүй: %s"
-
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
-#, fuzzy, c-format
-msgid "url"
-msgstr "Долдугаар сар"
-
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:516
-#, fuzzy, c-format
-msgid "url:"
-msgstr "Цагууд:"
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:102
 #, c-format
@@ -52767,7 +53076,7 @@ msgid "z %s %s "
 msgstr "%s / %s "
 
 #. %1$s:  IF CAN_user_tools_items_batchdel 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:576
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:582
 #, fuzzy, c-format
 msgid "| Actions: %s "
 msgstr "Үйлдлүүд "
@@ -52788,7 +53097,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:178
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:219
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:252
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1063
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1069
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:106
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:207
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:161
@@ -52800,7 +53109,7 @@ msgstr ""
 msgid "×"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:791
+#: intranet-tmpl/prog/en/modules/about.tt:799
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "
@@ -52810,14 +53119,14 @@ msgid ""
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:415
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:421
 msgid ""
 "‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url "
 "%]"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:500
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:506
 msgid ""
 "‡[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]"
 msgstr ""

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-12 12:52+0000\n"
-"PO-Revision-Date: 2017-04-18 11:46+0000\n"
+"PO-Revision-Date: 2017-07-19 13:31+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1492515992.000000\n"
+"X-POOTLE-MTIME: 1500471118.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -1259,6 +1259,34 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "Zimbabve"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
+msgstr "Ana kütüphanenin coğrafi konumu:"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+"UsageStats sistem tercihi \"Paylaşma\" olarak ayarlandıysa, bu değerin "
+"hiçbir etkisi olmadığını unutmayın."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
+msgstr "Paylaşma"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
+msgstr ""
+"UsageStats sistem tercihi \"Paylaşma\" olarak ayarlandıysa, bu değerin "
+"hiçbir etkisi olmadığını unutmayın."
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# Share"
+msgstr "Paylaş"
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsLibrariesInfo# libraries information (name, url, country)"
+msgstr "Kütüphaneler bilgisi (ad, url, ülke)"
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
 msgstr "Bu alan boşsa, veri anonim olarak gönderilecektir."
 
@@ -1714,7 +1742,7 @@ msgstr "varsayılan sınıflandırma kaynağı olarak."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
-msgstr "varsayılan boş Eng."
+msgstr "Boş varsayılan değer ing."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008# Fill in the default language for field 008 Range 35-37 of MARC21 records (e.g. eng, nor, ger, see <a href=\"http://www.loc.gov/marc/languages/language_code.html\">MARC Code List for Languages</a>)"
@@ -2008,11 +2036,13 @@ msgstr "Materyalleri önceden doldururken (boşlukla ayrılmış) kullanılacak 
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# Use the languague (ISO 690-2)"
-msgstr "(ISO 690-2) dili kullanın"
+msgstr "Dili kullanın (ISO 690-2) "
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# as default language in the UNIMARC field 100 when creating a new record or in the field plugin."
-msgstr "yeni bir kayıt oluştururken veya alan eklentisi içerisinde 100 UNIMARC alanındaki varsayılan dil olarak."
+msgstr ""
+"Yeni bir kayıt oluştururken veya alan eklentisinde UNIMARC alanında 100 "
+"varsayılan dil olarak kullanılır."
 
 # Cataloging > Display
 msgid "cataloguing.pref#URLLinkText# Show"
@@ -2140,7 +2170,9 @@ msgstr "UNIMARC'tan yazarlar"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#z3950NormalizeAuthor# tags (separated by commas) to the correct author tags when importing a record using Z39.50."
-msgstr "Z39.50. kullanarak bir kayıt aktarırken yazar etiketlerine kullanılan doğru etiketler (virgüllerle ayrılan)"
+msgstr ""
+"Z39.50'ı kullanarak bir kayıt içe aktarırken doğru yazar tag'lerine ("
+"virgülle ayrılmış) tag'ler gönderir."
 
 # Circulation
 msgid "circulation.pref"
@@ -2180,7 +2212,12 @@ msgstr "Otomatik ödünç verme sistemi"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
-msgstr "Örneğin, | (bar) FSK|PEGI|Yaş| ile bölünmüş hedef kitle anahtar sözcüklerini  (Yakınındaki beyaz boşlukla değil |) giriniz. Koha’daki yaş eşleme sınırlamasının MARC eşlemesinde olduğundan emin olunuz örneğin, 521$a). FSK MARC alan değeri ya da PEGI 12 : Ödünç alanın 12 yaşında olması gerekir. Yaş sınırlaması uygulamamak için boş bırakınız, anlamına gelecektir."
+msgstr ""
+"Örneğin, | (bar) FSK|PEGI|Yaş| ile bölünmüş hedef kitle anahtar sözcüklerini "
+"(Yanında beyaz boşluk yok |) girin. Yaş sınırlandırmasını Koha to MARC "
+"mapping'de eşleştirmeyi unutmayın (ör. 521 $ a). Bir FSK 12 veya PEGI 12 "
+"MARC alanı değeri: ödünç alan kişinin 12 yaşında olması gerektiği anlamına "
+"gelir. Bir yaş kısıtlaması uygulamamak için boş bırakın."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following target audience values from checking out inappropriate materials:"
@@ -3893,19 +3930,21 @@ msgstr "arama sonuçlarında Google Kitaplarından kapak resimleri ve OPAC’tak
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# Show a tab with a HTML5 media player for files catalogued in field 856"
-msgstr "HTML5 ortam yürütücüsü ile 856 alanında kataloglanmış dosyalar için sekme gösteriniz"
+msgstr ""
+"856 alanında kataloglanmış dosyalar için bir HTML5 medya oynatıcısına sahip "
+"bir sekme gösterin"
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in OPAC and staff client."
-msgstr "OPAC ve personel istemci içerisinde."
+msgstr "OPAC ve personel istemcide."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the OPAC."
-msgstr "OPAC içerisinde"
+msgstr "OPAC'da."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# in the staff client."
-msgstr "personel istemci içerisinde."
+msgstr "personel istemcide."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaEnabled# not at all."
@@ -3917,7 +3956,7 @@ msgstr "( | ile ayrılmış)."
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaExtensions# Media file extensions"
-msgstr "Ortam dosya uzantıları"
+msgstr "Ortam dosyası uzantıları"
 
 # Enhanced Content > HTML5 Media
 msgid "enhanced_content.pref#HTML5MediaYouTube# Don't embed"
@@ -4413,7 +4452,7 @@ msgstr "I18N/L10N"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# Format postal addresses using"
-msgstr "Posta adreslerinin kullandığı format"
+msgstr "Posta adreslerinin kullandığı biçim"
 
 # I18N/L10N
 msgid "i18n_l10n.pref#AddressFormat# German style ([Address] [Street number] - [ZIP/Postal Code] [City] - [Country])"
@@ -7406,4 +7445,3 @@ msgstr "Sadece geri dönen"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "raporlar web hizmeti yoluyla talep edilen bir raporun satırları"
-
