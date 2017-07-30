@@ -204,9 +204,11 @@ sub getletter {
     my ( $module, $code, $branchcode, $message_transport_type ) = @_;
     $message_transport_type //= '%';
 
-    my $only_my_library = C4::Context->only_my_library;
-    if ( $only_my_library and $branchcode ) {
-        $branchcode = C4::Context::mybranch();
+    if ( C4::Context->preference('IndependentBranches')
+            and $branchcode
+            and C4::Context->userenv ) {
+
+        $branchcode = C4::Context->userenv->{'branch'};
     }
     $branchcode //= '';
 
