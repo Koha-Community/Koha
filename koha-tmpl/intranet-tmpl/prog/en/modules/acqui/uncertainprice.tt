@@ -114,9 +114,7 @@ function check(form) {
             [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author %][% END %]
             [% IF ( uncertainpriceorder.publishercode ) %]
                 <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode %]
-                [%- IF    ( uncertanpriceorder.publicationyear > 0) -%], [% uncertanpriceorder.publicationyear %]
-                [%- ELSIF ( uncertanpriceorder.copyrightdate   > 0) -%], [% uncertanpriceorder.copyrightdate %]
-                [% END %]
+                [%- IF ( uncertainpriceorder.publicationyear ) %], [% uncertainpriceorder.publicationyear %][% END %]
             [% END %]
             [% IF ( uncertainpriceorder.isbn ) %]<br />[% uncertainpriceorder.isbn %][% END %]
             <br />
