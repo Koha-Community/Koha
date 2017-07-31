@@ -248,11 +248,11 @@ subtest 'renew_account' => sub {
     for my $date ( '2016-03-31', '2016-11-30', dt_from_string() ) {
         my $dt = dt_from_string( $date, 'iso' );
         Time::Fake->offset( $dt->epoch );
-        my $a_month_ago                = $dt->clone->subtract( months => 1 )->truncate( to => 'day' );
-        my $a_year_later               = $dt->clone->add( months => 12 )->truncate( to => 'day' );
-        my $a_year_later_minus_a_month = $dt->clone->add( months => 11 )->truncate( to => 'day' );
-        my $a_month_later              = $dt->clone->add( months => 1  )->truncate( to => 'day' );
-        my $a_year_later_plus_a_month  = $dt->clone->add( months => 13 )->truncate( to => 'day' );
+        my $a_month_ago                = $dt->clone->subtract( months => 1, end_of_month => 'limit' )->truncate( to => 'day' );
+        my $a_year_later               = $dt->clone->add( months => 12, end_of_month => 'limit' )->truncate( to => 'day' );
+        my $a_year_later_minus_a_month = $dt->clone->add( months => 11, end_of_month => 'limit' )->truncate( to => 'day' );
+        my $a_month_later              = $dt->clone->add( months => 1 , end_of_month => 'limit' )->truncate( to => 'day' );
+        my $a_year_later_plus_a_month  = $dt->clone->add( months => 13, end_of_month => 'limit' )->truncate( to => 'day' );
         my $patron_category = $builder->build(
             {   source => 'Category',
                 value  => {
