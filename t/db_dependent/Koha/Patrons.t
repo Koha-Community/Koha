@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Test::More tests => 13;
 use Test::Warn;
+use Time::Fake;
+use DateTime;
 
 use C4::Members;
 
@@ -191,80 +193,85 @@ subtest 'is_expired' => sub {
 };
 
 subtest 'renew_account' => sub {
-    plan tests => 10;
-    my $a_month_ago                = dt_from_string->add( months => -1 )->truncate( to => 'day' );
-    my $a_year_later               = dt_from_string->add( months => 12 )->truncate( to => 'day' );
-    my $a_year_later_minus_a_month = dt_from_string->add( months => 11 )->truncate( to => 'day' );
-    my $a_month_later              = dt_from_string->add( months => 1  )->truncate( to => 'day' );
-    my $a_year_later_plus_a_month  = dt_from_string->add( months => 13 )->truncate( to => 'day' );
-    my $patron_category = $builder->build(
-        {   source => 'Category',
-            value  => {
-                enrolmentperiod     => 12,
-                enrolmentperioddate => undef,
+    plan tests => 30;
+
+    for my $date ( '2016-03-31', '2016-11-30', dt_from_string() ) {
+        my $dt = dt_from_string( $date, 'iso' );
+        Time::Fake->offset( $dt->epoch );
+        my $a_month_ago                = $dt->clone->subtract( months => 1 )->truncate( to => 'day' );
+        my $a_year_later               = $dt->clone->add( months => 12 )->truncate( to => 'day' );
+        my $a_year_later_minus_a_month = $dt->clone->add( months => 11 )->truncate( to => 'day' );
+        my $a_month_later              = $dt->clone->add( months => 1  )->truncate( to => 'day' );
+        my $a_year_later_plus_a_month  = $dt->clone->add( months => 13 )->truncate( to => 'day' );
+        my $patron_category = $builder->build(
+            {   source => 'Category',
+                value  => {
+                    enrolmentperiod     => 12,
+                    enrolmentperioddate => undef,
+                }
             }
-        }
-    );
-    my $patron = $builder->build(
-        {   source => 'Borrower',
-            value  => {
-                dateexpiry   => $a_month_ago,
-                categorycode => $patron_category->{categorycode},
+        );
+        my $patron = $builder->build(
+            {   source => 'Borrower',
+                value  => {
+                    dateexpiry   => $a_month_ago,
+                    categorycode => $patron_category->{categorycode},
+                }
             }
-        }
-    );
-    my $patron_2 = $builder->build(
-        {  source => 'Borrower',
-           value  => {
-               dateexpiry => $a_month_ago,
-               categorycode => $patron_category->{categorycode},
+        );
+        my $patron_2 = $builder->build(
+            {  source => 'Borrower',
+               value  => {
+                   dateexpiry => $a_month_ago,
+                   categorycode => $patron_category->{categorycode},
+                }
             }
-        }
-    );
-    my $patron_3 = $builder->build(
-        {  source => 'Borrower',
-           value  => {
-               dateexpiry => $a_month_later,
-               categorycode => $patron_category->{categorycode},
-           }
-        }
-    );
-    my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
-    my $retrieved_patron_2 = Koha::Patrons->find( $patron_2->{borrowernumber} );
-    my $retrieved_patron_3 = Koha::Patrons->find( $patron_3->{borrowernumber} );
+        );
+        my $patron_3 = $builder->build(
+            {  source => 'Borrower',
+               value  => {
+                   dateexpiry => $a_month_later,
+                   categorycode => $patron_category->{categorycode},
+               }
+            }
+        );
+        my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
+        my $retrieved_patron_2 = Koha::Patrons->find( $patron_2->{borrowernumber} );
+        my $retrieved_patron_3 = Koha::Patrons->find( $patron_3->{borrowernumber} );
 
-    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
-    t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
-    my $expiry_date = $retrieved_patron->renew_account;
-    is( $expiry_date, $a_year_later_minus_a_month, );
-    my $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
-    is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month );
-    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
-    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->renew_account should have logged' );
+        t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
+        t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
+        my $expiry_date = $retrieved_patron->renew_account;
+        is( $expiry_date, $a_year_later_minus_a_month, );
+        my $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
+        is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month );
+        my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
+        is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->renew_account should have logged' );
 
-    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'now' );
-    t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
-    $expiry_date = $retrieved_patron->renew_account;
-    is( $expiry_date, $a_year_later, );
-    $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
-    is( dt_from_string($retrieved_expiry_date), $a_year_later );
-    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
-    is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
+        t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'now' );
+        t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
+        $expiry_date = $retrieved_patron->renew_account;
+        is( $expiry_date, $a_year_later, );
+        $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
+        is( dt_from_string($retrieved_expiry_date), $a_year_later );
+        $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
+        is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
 
-    t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'combination' );
-    $expiry_date = $retrieved_patron_2->renew_account;
-    is( $expiry_date, $a_year_later );
-    $retrieved_expiry_date = Koha::Patrons->find( $patron_2->{borrowernumber} )->dateexpiry;
-    is( dt_from_string($retrieved_expiry_date), $a_year_later );
+        t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'combination' );
+        $expiry_date = $retrieved_patron_2->renew_account;
+        is( $expiry_date, $a_year_later );
+        $retrieved_expiry_date = Koha::Patrons->find( $patron_2->{borrowernumber} )->dateexpiry;
+        is( dt_from_string($retrieved_expiry_date), $a_year_later );
 
-    $expiry_date = $retrieved_patron_3->renew_account;
-    is( $expiry_date, $a_year_later_plus_a_month );
-    $retrieved_expiry_date = Koha::Patrons->find( $patron_3->{borrowernumber} )->dateexpiry;
-    is( dt_from_string($retrieved_expiry_date), $a_year_later_plus_a_month );
+        $expiry_date = $retrieved_patron_3->renew_account;
+        is( $expiry_date, $a_year_later_plus_a_month );
+        $retrieved_expiry_date = Koha::Patrons->find( $patron_3->{borrowernumber} )->dateexpiry;
+        is( dt_from_string($retrieved_expiry_date), $a_year_later_plus_a_month );
 
-    $retrieved_patron->delete;
-    $retrieved_patron_2->delete;
-    $retrieved_patron_3->delete;
+        $retrieved_patron->delete;
+        $retrieved_patron_2->delete;
+        $retrieved_patron_3->delete;
+    }
 };
 
 subtest "move_to_deleted" => sub {
