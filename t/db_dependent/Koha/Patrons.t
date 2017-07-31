@@ -242,31 +242,31 @@ subtest 'renew_account' => sub {
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'dateexpiry' );
         t::lib::Mocks::mock_preference( 'BorrowersLog',              1 );
         my $expiry_date = $retrieved_patron->renew_account;
-        is( $expiry_date, $a_year_later_minus_a_month, );
+        is( $expiry_date, $a_year_later_minus_a_month, "$a_month_ago + 12 months must be $a_year_later_minus_a_month" );
         my $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
-        is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month );
+        is( dt_from_string($retrieved_expiry_date), $a_year_later_minus_a_month, "$a_month_ago + 12 months must be $a_year_later_minus_a_month" );
         my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
         is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->renew_account should have logged' );
 
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'now' );
         t::lib::Mocks::mock_preference( 'BorrowersLog',              0 );
         $expiry_date = $retrieved_patron->renew_account;
-        is( $expiry_date, $a_year_later, );
+        is( $expiry_date, $a_year_later, "today + 12 months must be $a_year_later" );
         $retrieved_expiry_date = Koha::Patrons->find( $patron->{borrowernumber} )->dateexpiry;
-        is( dt_from_string($retrieved_expiry_date), $a_year_later );
+        is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
         $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
         is( $number_of_logs, 1, 'Without BorrowerLogs, Koha::Patron->renew_account should not have logged' );
 
         t::lib::Mocks::mock_preference( 'BorrowerRenewalPeriodBase', 'combination' );
         $expiry_date = $retrieved_patron_2->renew_account;
-        is( $expiry_date, $a_year_later );
+        is( $expiry_date, $a_year_later, "today + 12 months must be $a_year_later" );
         $retrieved_expiry_date = Koha::Patrons->find( $patron_2->{borrowernumber} )->dateexpiry;
-        is( dt_from_string($retrieved_expiry_date), $a_year_later );
+        is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
 
         $expiry_date = $retrieved_patron_3->renew_account;
-        is( $expiry_date, $a_year_later_plus_a_month );
+        is( $expiry_date, $a_year_later_plus_a_month, "$a_month_later + 12 months must be $a_year_later_plus_a_month" );
         $retrieved_expiry_date = Koha::Patrons->find( $patron_3->{borrowernumber} )->dateexpiry;
-        is( dt_from_string($retrieved_expiry_date), $a_year_later_plus_a_month );
+        is( dt_from_string($retrieved_expiry_date), $a_year_later_plus_a_month, "$a_month_later + 12 months must be $a_year_later_plus_a_month" );
 
         $retrieved_patron->delete;
         $retrieved_patron_2->delete;
