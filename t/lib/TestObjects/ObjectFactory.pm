@@ -230,6 +230,18 @@ sub tearDownTestContext {
         t::lib::TestObjects::FinesFactory->deleteTestGroup($stash->{fines});
         delete $stash->{fines};
     }
+
+    if (defined $ENV{'KOHA_OBJECTFACTORY_TRUNCATE_TABLES'}) {
+        my $schema = Koha::Database->schema;
+
+        my @tables = split(/[:,\s]+/, $ENV{'KOHA_OBJECTFACTORY_TRUNCATE_TABLES'});
+        foreach my $object ($schema->sources) {
+            my $table = $schema->class($object)->table;
+            if (grep(/^$table$/, @tables)) {
+                $schema->resultset($object)->search->delete;
+            }
+        }
+    }
 }
 
 =head getHashKey
