@@ -96,6 +96,7 @@ if ( $payment_method eq 'paypal' ) {
         'PAYMENTREQUEST_0_PAYMENTACTION'        => 'Sale',
         'PAYMENTREQUEST_0_ALLOWEDPAYMENTMETHOD' => 'InstantPaymentOnly',
         'PAYMENTREQUEST_0_DESC'                 => C4::Context->preference('PayPalChargeDescription'),
+        'SOLUTIONTYPE'                          => 'Sole',
     };
 
     my $response = $ua->request( POST $url, $nvp_params );
