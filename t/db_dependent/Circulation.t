@@ -1283,7 +1283,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { gonenoaddress => undef, lost => undef, debarred => undef, borrowernotes => "" } } );
 
     my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
     my $item_1 = $builder->build(
@@ -1294,6 +1294,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
                 notforloan    => 0,
                 itemlost      => 0,
                 withdrawn     => 0,
+                restricted    => 0,
                 biblionumber  => $biblioitem_1->{biblionumber}
             }
         }
@@ -1307,6 +1308,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
                 notforloan    => 0,
                 itemlost      => 0,
                 withdrawn     => 0,
+                restricted    => 0,
                 biblionumber  => $biblioitem_2->{biblionumber}
             }
         }
@@ -1320,25 +1322,25 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'confirmation' );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$alerts),  0 );
-    is( $question->{USERBLOCKEDOVERDUE}, 1 );
+    is( keys(%$error) + keys(%$alerts),  0, 'No key for error and alert ' . keys(%$error) . ' ' . keys(%$alerts) );
+    is( $question->{USERBLOCKEDOVERDUE}, 1, 'OverduesBlockCirc=confirmation, USERBLOCKEDOVERDUE should be set for question' );
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'block' );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts), 0 );
-    is( $error->{USERBLOCKEDOVERDUE},      1 );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( $error->{USERBLOCKEDOVERDUE},      1, 'OverduesBlockCirc=block, USERBLOCKEDOVERDUE should be set for error' );
 
     # Patron cannot issue item_1, they are debarred
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
     Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber}, expiration => $tomorrow } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts), 0 );
-    is( $error->{USERBLOCKEDWITHENDDATE}, output_pref( { dt => $tomorrow, dateformat => 'sql', dateonly => 1 } ) );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( $error->{USERBLOCKEDWITHENDDATE}, output_pref( { dt => $tomorrow, dateformat => 'sql', dateonly => 1 } ), 'USERBLOCKEDWITHENDDATE should be tomorrow' );
 
     Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber} } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts), 0 );
-    is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31' );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31', 'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments' );
 };
 
 subtest 'MultipleReserves' => sub {
