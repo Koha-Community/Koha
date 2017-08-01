@@ -66,6 +66,7 @@ sub getMultipleAuth {
 sub logout_cas {
     my ($query, $type) = @_;
     my ( $cas, $uri ) = _get_cas_and_service($query, undef, $type);
+    $uri =~ s/\?logout\.x=1//; # We don't want to keep triggering a logout, if we got here, the borrower is already logged out of Koha
     print $query->redirect( $cas->logout_url(url => $uri));
 }
 
