@@ -22,9 +22,13 @@ use Test::More;
 use Try::Tiny;
 use Scalar::Util qw(blessed);
 
+use Koha::Database;
 use C4::KohaSuomi::VendorConfig;
 use C4::KohaSuomi::AcquisitionIntegration;
 use t::db_dependent::KohaSuomi::RemoteBiblioPackageImporter::Context;
+
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
 
 C4::Context->setCommandlineEnvironment();
 Koha::Logger->setConsoleVerbosity(undef); #Put this to 4 to log all levels
@@ -77,5 +81,7 @@ sub tearDown {
     my ($testContext) = @_;
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
 }
+
+$schema->storage->txn_rollback;
 
 done_testing;
