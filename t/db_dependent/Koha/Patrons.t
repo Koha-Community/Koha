@@ -322,6 +322,7 @@ subtest 'renew_account' => sub {
         $retrieved_patron_2->delete;
         $retrieved_patron_3->delete;
     }
+    Time::Fake->reset;
 };
 
 subtest "move_to_deleted" => sub {
