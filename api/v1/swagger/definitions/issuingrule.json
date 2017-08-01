@@ -1,0 +1,144 @@
+{
+  "type": "object",
+  "properties": {
+    "issuingrules_id": {
+      "description": "internal issuing rule id",
+      "type": "integer"
+    },
+    "categorycode": {
+      "description": "patron category this rule is for (categories.categorycode)",
+      "type": "string"
+    },
+    "itemtype": {
+      "description": "item type this rule is for (itemtypes.itemtype)",
+      "type": "string"
+    },
+    "restrictedtype": {
+      "description": "not used? always NULL",
+      "type": ["integer", "null"]
+    },
+    "rentaldiscount": {
+      "description": "percent discount on the rental charge for this item",
+      "type": ["number", "null"]
+    },
+    "reservecharge": {
+      "description": "",
+      "type": ["number", "null"]
+    },
+    "fine": {
+      "description": "fine amount",
+      "type": ["number", "null"]
+    },
+    "finedays": {
+      "description": "suspension in days",
+      "type": ["integer", "null"]
+    },
+    "maxsuspensiondays": {
+      "description": "max suspension days",
+      "type": ["integer", "null"]
+    },
+    "firstremind": {
+      "description": "fine grace period",
+      "type": ["integer", "null"]
+    },
+    "chargeperiod": {
+      "description": "how often the fine amount is charged",
+      "type": ["integer", "null"]
+    },
+    "chargeperiod_charge_at": {
+      "description": "Should fine be given at the start ( 1 ) or the end ( 0 ) of the period",
+      "type": "integer"
+    },
+    "accountsent": {
+      "description": "not used? always NULL",
+      "type": ["integer", "null"]
+    },
+    "chargename": {
+      "description": "not used? always NULL",
+      "type": ["string", "null"]
+    },
+    "maxissueqty": {
+      "description": "total number of checkouts allowed",
+      "type": ["integer", "null"]
+    },
+    "maxonsiteissueqty": {
+      "description": "total number of on-site checkouts allowed",
+      "type": ["integer", "null"]
+    },
+    "issuelength": {
+      "description": "length of checkout in the unit set in issuingrules.lengthunit",
+      "type": ["integer", "null"]
+    },
+    "lengthunit": {
+      "description": "unit of checkout length (days, hours)",
+      "type": ["string", "null"]
+    },
+    "hardduedate": {
+      "description": "hard due date",
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "hardduedatecompare": {
+      "description": "type of hard due date (1 = after, 0 = on, -1 = before)",
+      "type": "integer"
+    },
+    "renewalsallowed": {
+      "description": "how many renewals are allowed",
+      "type": "integer"
+    },
+    "renewalperiod": {
+      "description": "renewal period in the unit set in issuingrules.lengthunit",
+      "type": ["integer", "null"]
+    },
+    "norenewalbefore": {
+      "description": "no renewal allowed until X days or hours before due date.",
+      "type": ["integer", "null"]
+    },
+    "auto_renew": {
+      "description": "automatic renewal",
+      "type": ["integer", "null"]
+    },
+    "no_auto_renewal_after": {
+      "description": "no auto renewal allowed after X days or hours after the issue date",
+      "type": ["integer", "null"]
+    },
+    "no_auto_renewal_after_hard_limit": {
+      "description": "no auto renewal allowed after a given date",
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "reservesallowed": {
+      "description": "how many holds are allowed",
+      "type": "integer"
+    },
+    "holds_per_record": {
+      "description": "How many holds a patron can have on a given bib",
+      "type": "integer"
+    },
+    "branchcode": {
+      "description": "the branch this rule is for (branches.branchcode)",
+      "type": "string"
+    },
+    "overduefinescap": {
+      "description": "the maximum amount of an overdue fine",
+      "type": ["number", "null"]
+    },
+    "cap_fine_to_replacement_price": {
+      "description": "cap the fine based on item's replacement price",
+      "type": "integer"
+    },
+    "onshelfholds": {
+      "description": "allow holds for items that are on shelf",
+      "type": "integer"
+    },
+    "opacitemholds": {
+      "description": "allow opac users to place specific items on hold",
+      "type": "string"
+    },
+    "article_requests": {
+      "description": "allow article requests to be placed,",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

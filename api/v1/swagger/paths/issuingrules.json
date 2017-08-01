@@ -1,0 +1,98 @@
+{
+  "/issuingrules/effective": {
+    "get": {
+      "x-mojo-to": "IssuingRule#get_effective",
+      "operationId": "getEffectiveIssuingRule",
+      "tags": ["issuingrules"],
+      "parameters": [{
+        "name": "branchcode",
+        "in": "query",
+        "description": "Target branchcode (internal library identifier). If parameter not given, assume logged in user's homebranch. Give empty value (e.g. issuingrules/effective?branchcode=&categorycode=ASD) to query issuing rules targetting all libraries.",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "itemtype",
+        "in": "query",
+        "description": "Target itemtype (internal item type identifier)",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "categorycode",
+        "in": "query",
+        "description": "Target patron categorycode (internal category identifier)",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "barcode",
+        "in": "query",
+        "description": "Target item (barcode)",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "itemnumber",
+        "in": "query",
+        "description": "Target item (internal item identifier)",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "borrowernumber",
+        "in": "query",
+        "description": "Target patron (internal patron identifier)",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "cardnumber",
+        "in": "query",
+        "description": "Target patron card number",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Effective issuing rule",
+          "schema": { "$ref": "../definitions.json#/issuingrule" }
+        },
+        "400": {
+          "description": "Bad parameter",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "One or more of the given parameters not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "manage_circ_rules"
+        }
+      }
+    }
+  }
+}
