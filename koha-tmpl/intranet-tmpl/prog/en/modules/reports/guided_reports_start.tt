@@ -94,10 +94,8 @@ $("#delColumn").on("click",function(){
         'aoColumnDefs': [
             { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
             { 'bSearchable': false, 'aTargets': [3] },
-            { "aTargets": [ 1, 2 ], "sType": "natural"  }
-        ],
-        "aoColumns": [
-            null,null,null,null,null,null,null,null,{ "sType": "title-string" },null,null,null,[% IF (usecache) %]null,[% END %]null,null[% IF has_obsolete_reports %],null[% END %]
+            { "aTargets": [ 1, 2 ], "sType": "natural"  },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         'oLanguage': {
             'sZeroRecords': _("No matching reports found")
@@ -374,9 +372,9 @@ canned reports and writing custom SQL reports.</p>
                     <th>Subgroup</th>
                     <th>Notes</th>
                     <th>Author</th>
-                    <th>Creation date</th>
-                    <th>Last edit</th>
-                    <th>Last run</th>
+                    <th class="title-string">Creation date</th>
+                    <th class="title-string">Last edit</th>
+                    <th class="title-string">Last run</th>
                     <th>Public</th>
                     [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
                     <th>Saved results</th>
