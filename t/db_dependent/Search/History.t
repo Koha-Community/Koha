@@ -7,6 +7,8 @@ use Test::Warn;
 use URI::Escape;
 use List::Util qw( shuffle );
 
+use t::lib::Mocks;
+
 use C4::Context;
 use Koha::DateUtils;
 my $dbh = C4::Context->dbh;
