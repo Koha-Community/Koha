@@ -147,7 +147,7 @@ if ( $op eq 'form' ) {
             my $holds = $biblio->holds;
             while ( my $hold = $holds->next ) {
                 eval{
-                    C4::Reserves::CancelReserve( { reserve_id => $hold->reserve_id } );
+                    $hold->cancel;
                 };
                 if ( $@ ) {
                     push @messages, {

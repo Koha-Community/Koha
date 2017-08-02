@@ -8,6 +8,7 @@ use Modern::Perl;
 use C4::SIP::ILS::Transaction;
 
 use C4::Reserves;	# AddReserve
+use Koha::Holds;
 use Koha::Patrons;
 use parent qw(C4::SIP::ILS::Transaction);
 
@@ -81,11 +82,16 @@ sub drop_hold {
 	}
     my $item = Koha::Items->find({ barcode => $self->{item}->id });
 
-      CancelReserve({
+    my $holds = Koha::Holds->search(
+        {
             biblionumber   => $item->biblionumber,
-        itemnumber     => $self->{item}->id,
-           borrowernumber => $patron->borrowernumber
-      });
+            itemnumber     => $self->{item}->id,
+            borrowernumber => $patron->borrowernumber
+        }
+    );
+    return $self unless $holds->count;
+
+    $holds->next->cancel;
 
 	$self->ok(1);
 	return $self;

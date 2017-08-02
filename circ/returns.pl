@@ -54,6 +54,7 @@ use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::BiblioFrameworks;
 use Koha::Checkouts;
+use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
 
@@ -159,7 +160,10 @@ if ( $query->param('reserve_id') ) {
     my $biblio = $item->biblio;
 
     if ( $cancel_reserve ) {
-        CancelReserve({ reserve_id => $reserve_id, charge_cancel_fee => !$forgivemanualholdsexpire });
+        my $hold = Koha::Holds->find( $reserve_id );
+        if ( $hold ) {
+            $hold->cancel( { charge_cancel_fee => !$forgivemanualholdsexpire } );
+        } # FIXME else?
     } else {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,

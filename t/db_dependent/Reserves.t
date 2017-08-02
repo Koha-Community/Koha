@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 70;
+use Test::More tests => 67;
 use Test::MockModule;
 use Test::Warn;
 
@@ -320,16 +320,10 @@ $holds = $biblio->holds;
 is($holds->count, 1, "Only one reserves for this biblio");
 my $reserve_id = $holds->next->reserve_id;
 
-$reserve = CancelReserve({reserve_id => $reserve_id});
-isa_ok($reserve, 'HASH', "CancelReserve return");
-is($reserve->{biblionumber}, $biblionumber);
+Koha::Holds->find( $reserve_id )->cancel;
 
 my $hold = Koha::Holds->find( $reserve_id );
-is($hold, undef, "CancelReserve should have cancel the reserve");
-
-$reserve = CancelReserve({reserve_id => $reserve_id});
-is($reserve, undef, "CancelReserve return undef if reserve does not exist");
-
+is($hold, undef, "Koha::Holds->cancel should have cancel the reserve");
 
 # Tests for bug 9761 (ConfirmFutureHolds): new CheckReserves lookahead parameter, and corresponding change in AddReturn
 # Note that CheckReserve uses its lookahead parameter and does not check ConfirmFutureHolds pref (it should be passed if needed like AddReturn does)
@@ -601,7 +595,7 @@ my $bz14464_reserve = AddReserve(
 
 ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
 
-CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
+Koha::Holds->find( $bz14464_reserve )->cancel( { charge_cancel_fee => 1 } );
 
 my $old_reserve = Koha::Database->new()->schema()->resultset('OldReserve')->find( $bz14464_reserve );
 is($old_reserve->get_column('found'), 'W', 'Bug 14968 - Keep found column from reserve');
@@ -628,7 +622,7 @@ $bz14464_reserve = AddReserve(
 
 ok( $bz14464_reserve, 'Bug 14464 - 2nd reserve correctly created' );
 
-CancelReserve({ reserve_id => $bz14464_reserve });
+Koha::Holds->find( $bz14464_reserve )->cancel();
 
 $bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
@@ -650,7 +644,7 @@ $bz14464_reserve = AddReserve(
 
 ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
 
-CancelReserve({ reserve_id => $bz14464_reserve, charge_cancel_fee => 1 });
+Koha::Holds->find( $bz14464_reserve )->cancel( { charge_cancel_fee => 1 } );
 
 $bz14464_fines = $patron->account->balance;
 is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserve with charge desired and configured' );

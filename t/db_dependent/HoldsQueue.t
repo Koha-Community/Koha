@@ -17,6 +17,7 @@ use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Items;
+use Koha::Holds;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -561,21 +562,21 @@ $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup branch matches home branch targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup eq home not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # With hold_fulfillment_policy = holdingbranch, hold should only be picked up if pickup branch = holdingbranch
 $dbh->do("DELETE FROM default_circ_rules");
@@ -586,21 +587,21 @@ $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup eq home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # With hold_fulfillment_policy = any, hold should be pikcup up reguardless of matching home or holding branch
 $dbh->do("DELETE FROM default_circ_rules");
@@ -611,21 +612,21 @@ $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup eq home, pickup ne holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup ne holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # End testing hold_fulfillment_policy
 
@@ -673,21 +674,21 @@ $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, und
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Item with incorrect itemtype not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Item with matching itemtype is targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Item targeted when hold itemtype is not set" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # End testing hold itemtype limit
 

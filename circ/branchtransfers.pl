@@ -33,6 +33,7 @@ use C4::Koha;
 use C4::Members;
 use Koha::BiblioFrameworks;
 use Koha::AuthorisedValues;
+use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
 
@@ -81,12 +82,15 @@ my $ignoreRs = 0;
 # Deal with the requests....
 if ( $request eq "KillWaiting" ) {
     my $item = $query->param('itemnumber');
-    CancelReserve({
+    my $holds = Koha::Holds->search(
         itemnumber     => $item,
         borrowernumber => $borrowernumber
     });
-    $cancelled   = 1;
-    $reqmessage  = 1;
+    if ( $holds->count ) {
+        $holds->next->cancel;
+        $cancelled   = 1;
+        $reqmessage  = 1;
+    } # FIXME else?
 }
 elsif ( $request eq "SetWaiting" ) {
     my $item = $query->param('itemnumber');
@@ -96,13 +100,16 @@ elsif ( $request eq "SetWaiting" ) {
     $reqmessage  = 1;
 }
 elsif ( $request eq 'KillReserved' ) {
-    my $biblio = $query->param('biblionumber');
-    CancelReserve({
-        biblionumber   => $biblio,
+    my $biblionumber = $query->param('biblionumber');
+    my $holds = Koha::Holds->search(
+        biblionumber   => $biblionumber,
         borrowernumber => $borrowernumber
     });
-    $cancelled   = 1;
-    $reqmessage  = 1;
+    if ( $holds->count ) {
+        $holds->next->cancel;
+        $cancelled   = 1;
+        $reqmessage  = 1;
+    } # FIXME else?
 }
 
 # collect the stack of books already transfered so they can printed...

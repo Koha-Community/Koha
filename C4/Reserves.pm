@@ -121,7 +121,6 @@ BEGIN {
         &CanBookBeReserved
         &CanItemBeReserved
         &CanReserveBeCanceledFromOpac
-        &CancelReserve
         &CancelExpiredReserves
 
         &AutoUnsuspendReserves
@@ -798,23 +797,27 @@ sub CancelExpiredReserves {
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "
-        SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() )
-        AND expirationdate IS NOT NULL
-    " );
-    $sth->execute();
 
-    while ( my $res = $sth->fetchrow_hashref() ) {
-        my $calendar = Koha::Calendar->new( branchcode => $res->{'branchcode'} );
-        my $cancel_params = { reserve_id => $res->{'reserve_id'} };
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $today = dt_from_string;
+    # FIXME To move to Koha::Holds->search_expired (?)
+    my $holds = Koha::Holds->search(
+        {
+            expirationdate => { '<', $dtf->format_date($today) }
+        }
+    );
+
+    while ( my $hold = $holds->next ) {
+        my $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
 
         next if !$cancel_on_holidays && $calendar->is_holiday( $today );
 
-        if ( $res->{found} eq 'W' ) {
+        my $cancel_params = {};
+        if ( $holds->found eq 'W' ) {
             $cancel_params->{charge_cancel_fee} = 1;
         }
+        $hold->cancel( $cancel_params );
 
-        CancelReserve($cancel_params);
     }
 }
 
@@ -954,11 +957,12 @@ sub ModReserve {
         $reserve_id = $hold->reserve_id;
     }
 
+    $hold ||= Koha::Holds->find($reserve_id);
+
     if ( $rank eq "del" ) {
-        CancelReserve({ reserve_id => $reserve_id });
+        $hold->cancel;
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
-        $hold ||= Koha::Holds->find($reserve_id);
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
@@ -1016,6 +1020,7 @@ sub ModReserveFill {
         }
     );
 
+    # FIXME Must call Koha::Hold->cancel ?
     Koha::Old::Hold->new( $hold->unblessed() )->store();
 
     $hold->delete();
@@ -1128,7 +1133,9 @@ sub ModReserveCancelAll {
     my ( $itemnumber, $borrowernumber ) = @_;
 
     #step 1 : cancel the reservation
-    my $CancelReserve = CancelReserve({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
+    my $holds = Koha::Holds->search({ itemnumber => $itemnumber, borrowernumber => $borrowernumber });
+    return unless $holds->count;
+    $holds->next->cancel;
 
     #step 2 launch the subroutine of the others reserves
     ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
@@ -1452,13 +1459,18 @@ sub _FixPriority {
 
     my $dbh = C4::Context->dbh;
 
-    unless ( $biblionumber ) {
-        my $hold = Koha::Holds->find( $reserve_id );
+    my $hold;
+    if ( $reserve_id ) {
+        $hold = Koha::Holds->find( $reserve_id );
+        return unless $hold;
+    }
+
+    unless ( $biblionumber ) { # FIXME This is a very weird API
         $biblionumber = $hold->biblionumber;
     }
 
-    if ( $rank eq "del" ) {
-         CancelReserve({ reserve_id => $reserve_id });
+    if ( $rank eq "del" ) { # FIXME will crash if called without $hold
+        $hold->cancel;
     }
     elsif ( $rank eq "W" || $rank eq "0" ) {
 
@@ -1894,7 +1906,8 @@ sub MoveReserve {
             RevertWaitingStatus({ itemnumber => $itemnumber });
         }
         elsif ( $cancelreserve eq 'cancel' || $cancelreserve ) { # cancel reserves on this item
-            CancelReserve( { reserve_id => $res->{'reserve_id'} } );
+            my $hold = Koha::Holds->find( $res->{reserve_id} );
+            $hold->cancel;
         }
     }
 }

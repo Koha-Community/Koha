@@ -1,6 +1,7 @@
 package Koha::Hold;
 
 # Copyright ByWater Solutions 2014
+# Copyright 2017 Koha Development team
 #
 # This file is part of Koha.
 #
@@ -30,6 +31,7 @@ use Koha::Patrons;
 use Koha::Biblios;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Old::Holds;
 
 use base qw(Koha::Object);
 
@@ -294,6 +296,58 @@ sub is_suspended {
     return $self->suspend();
 }
 
+
+=head3 cancel
+
+my $cancel_hold = $hold->cancel();
+
+Cancel a hold:
+- The hold will be moved to the old_reserves table with a priority=0
+- The priority of other holds will be updated
+- The patron will be charge (see ExpireReservesMaxPickUpDelayCharge) if the charge_cancel_fee parameter is set
+- a CANCEL HOLDS log will be done if the pref HoldsLog is on
+
+=cut
+
+sub cancel {
+    my ( $self, $params ) = @_;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            $self->cancellationdate(dt_from_string);
+            $self->priority(0);
+            $self->_move_to_old;
+            $self->delete;
+
+            # now fix the priority on the others....
+            C4::Reserves::_FixPriority({ biblionumber => $self->biblionumber });
+
+            # and, if desired, charge a cancel fee
+            my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+            if ( $charge && $params->{'charge_cancel_fee'} ) {
+                C4::Accounts::manualinvoice($self->borrowernumber, $self->itemnumber, '', 'HE', $charge);
+            }
+
+            C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, Dumper($self->unblessed) )
+                if C4::Context->preference('HoldsLog');
+        }
+    );
+    return $self;
+}
+
+=head3 _move_to_old
+
+my $is_moved = $hold->_move_to_old;
+
+Move a hold to the old_reserve table following the same pattern as Koha::Patron->move_to_deleted
+
+=cut
+
+sub _move_to_old {
+    my ($self) = @_;
+    my $hold_infos = $self->unblessed;
+    return Koha::Old::Hold->new( $hold_infos )->store;
+}
+
 =head3 type
 
 =cut
@@ -302,9 +356,11 @@ sub _type {
     return 'Reserve';
 }
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Kyle M Hall <kyle@bywatersolutions.com>
+
+Jonathan Druart <jonathan.druart@bugs.koha-community.org>
 
 =cut
 

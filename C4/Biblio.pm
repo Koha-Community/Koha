@@ -406,9 +406,8 @@ sub DelBiblio {
     # We delete any existing holds
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $holds = $biblio->holds;
-    require C4::Reserves;
     while ( my $hold = $holds->next ) {
-        C4::Reserves::CancelReserve({ reserve_id => $hold->reserve_id }); # TODO Replace with $hold->cancel
+        $hold->cancel;
     }
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio

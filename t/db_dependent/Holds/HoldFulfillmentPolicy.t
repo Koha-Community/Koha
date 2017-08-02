@@ -7,6 +7,7 @@ use C4::Context;
 use Test::More tests => 10;
 
 use t::lib::TestBuilder;
+use Koha::Holds;
 
 BEGIN {
     use_ok('C4::Reserves');
@@ -79,19 +80,19 @@ $dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy 
 my $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 my ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup branch matches home branch targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is($status, q{}, "Hold where pickup ne home, pickup eq home not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # With hold_fulfillment_policy = holdingbranch, hold should only be picked up if pickup branch = holdingbranch
 $dbh->do("DELETE FROM default_circ_rules");
@@ -101,19 +102,19 @@ $dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy 
 $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup eq home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # With hold_fulfillment_policy = any, hold should be pikcup up reguardless of matching home or holding branch
 $dbh->do("DELETE FROM default_circ_rules");
@@ -123,16 +124,16 @@ $dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy 
 $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup eq home, pickup ne holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
 $reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
 $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup ne holding targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;

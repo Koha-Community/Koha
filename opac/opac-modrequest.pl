@@ -29,6 +29,7 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Reserves;
 use C4::Auth;
+use Koha::Holds;
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -44,7 +45,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $reserve_id = $query->param('reserve_id');
 
 if ($reserve_id && $borrowernumber) {
-    CancelReserve({ reserve_id => $reserve_id }) if CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber);
+    if ( CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber) ) {
+        my $hold = Koha::Holds->find( $reserve_id );
+        $hold->cancel if $hold;
+    }
 }
 
 print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");

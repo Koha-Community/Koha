@@ -304,7 +304,7 @@ sub construct_objects_needed {
     AddReserve( $branchcode, $borrowernumber1, $biblionumber1, '', 1, undef, undef, '', 'Title', undef, undef );
     my $biblio = Koha::Biblios->find( $biblionumber1 );
     my $holds = $biblio->holds;
-    CancelReserve( { reserve_id => $holds->next->reserve_id } );
+    $holds->next->cancel if $holds->count;
 
     # ---------- Add 1 aqbudgets
     $query = '

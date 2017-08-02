@@ -775,7 +775,7 @@ sub CancelHold {
     return { code => 'RecordNotFound' } unless $hold;
     return { code => 'RecordNotFound' } unless ($hold->borrowernumber == $borrowernumber);
 
-    C4::Reserves::CancelReserve({reserve_id => $reserve_id});
+    $hold->cancel;
 
     return { code => 'Canceled' };
 }

@@ -91,7 +91,8 @@ if ( $action eq 'move' ) {
   AlterPriority( $where, $reserve_id );
 } elsif ( $action eq 'cancel' ) {
   my $reserve_id = $input->param('reserve_id');
-  CancelReserve({ reserve_id => $reserve_id });
+  my $hold = Koha::Holds->find( $reserve_id );
+  $hold->cancel if $hold;
 } elsif ( $action eq 'setLowestPriority' ) {
   my $reserve_id = $input->param('reserve_id');
   ToggleLowestPriority( $reserve_id );

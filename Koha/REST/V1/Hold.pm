@@ -155,7 +155,7 @@ sub delete {
     return $c->$cb({error => "Reserve not found"}, 404)
         unless $hold;
 
-    C4::Reserves::CancelReserve({ reserve_id => $reserve_id });
+    $hold->cancel;
 
     return $c->$cb({}, 200);
 }

@@ -8,6 +8,8 @@ use Test::More tests => 4;
 
 use t::lib::TestBuilder;
 
+use Koha::Holds;
+
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
@@ -94,19 +96,19 @@ $dbh->do("INSERT INTO default_circ_rules ( holdallowed, hold_fulfillment_policy 
 my $reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );
 my ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where itemtype matches item's itemtype targed" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Itemtypes don't match
 $reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $wrong_itemtype );
 ( $status ) = CheckReserves($itemnumber);
 is($status, q{}, "Hold where itemtype does not match item's itemtype not targeted" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # No itemtype set
 $reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Item targeted with no hold itemtype set" );
-CancelReserve( { reserve_id => $reserve_id } );
+Koha::Holds->find( $reserve_id )->cancel;
 
 # Cleanup
 $schema->storage->txn_rollback;

@@ -127,9 +127,10 @@ $holds = $patron->holds;
 is( $holds->next->borrowernumber, $borrowernumbers[0], "Test Koha::Patron->holds");
 
 
-CancelReserve({ 'reserve_id' => $reserve_id });
+Koha::Holds->find( $reserve_id )->cancel;
+
 $holds = $biblio->holds;
-is( $holds->count, $borrowers_count - 1, "Test CancelReserve()" );
+is( $holds->count, $borrowers_count - 1, "Koha::Hold->cancel" );
 
 $holds = $item->current_holds;
 $first_hold = $holds->next;
@@ -288,29 +289,28 @@ AddReserve(
 my $reserveid1 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-AddReserve(
+my $reserveid2 = AddReserve(
     $branch_1,
     $borrowernumbers[1],
     $bibnum,
     '',
     2,
 );
-my $reserveid2 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[1] })->next->reserve_id;
 
-CancelReserve({ reserve_id => $reserveid1 });
+my $hold1 = Koha::Holds->find( $reserveid1 );
+$hold1->cancel;
 
 my $hold2 = Koha::Holds->find( $reserveid2 );
 is( $hold2->priority, 1, "After cancelreserve, the 2nd reserve becomes the first on the waiting list" );
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-AddReserve(
+my $reserveid3 = AddReserve(
     $branch_1,
     $borrowernumbers[0],
     $bibnum,
     '',
     2,
 );
-my $reserveid3 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 
 my $hold3 = Koha::Holds->find( $reserveid3 );
 is( $hold3->priority, 2, "New reserve for patron 0, the reserve has a priority = 2" );

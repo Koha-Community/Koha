@@ -68,7 +68,7 @@ my $transfer_when_cancel_all = C4::Context->preference('TransferWhenCancelAllWai
 $template->param( TransferWhenCancelAllWaitingHolds => 1 ) if $transfer_when_cancel_all;
 
 my @cancel_result;
-# if we have a return from the form we launch the subroutine CancelReserve
+# if we have a return from the form we cancel the holds
 if ($item) {
     my $res = cancel( $item, $borrowernumber, $fbr, $tbr );
     push @cancel_result, $res if $res;
