@@ -240,8 +240,10 @@ sub CloseBasket {
     my $dbh        = C4::Context->dbh;
     $dbh->do('UPDATE aqbasket SET closedate=now() WHERE basketno=?', {}, $basketno );
 
-    $dbh->do( q{UPDATE aqorders SET orderstatus = 'ordered' WHERE basketno = ? AND orderstatus != 'complete'},
-        {}, $basketno);
+    $dbh->do(
+q{UPDATE aqorders SET orderstatus = 'ordered' WHERE basketno = ? AND orderstatus NOT IN ( 'complete', 'cancelled')},
+        {}, $basketno
+    );
     return;
 }
 
