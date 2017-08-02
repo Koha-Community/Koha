@@ -2178,7 +2178,8 @@ sub ReserveSlip {
         biblionumber => $biblionumber,
         borrowernumber => $borrowernumber
     }) or return;
-    my $reserve = GetReserveInfo($reserve_id) or return;
+    my $reserve = Koha::Holds->find($reserve_id) or return;
+    $reserve = $reserve->unblessed;
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',

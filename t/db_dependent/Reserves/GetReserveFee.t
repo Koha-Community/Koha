@@ -193,7 +193,6 @@ subtest 'Integration with AddIssue' => sub {
 
     $dbh->do( "DELETE FROM issues       WHERE borrowernumber = ?", undef, $patron1->{borrowernumber} );
     my $id = addreserve( $patron1->{borrowernumber} );
-    my $r = C4::Reserves::GetReserveInfo($id);
     is( acctlines( $patron1->{borrowernumber} ), 0, 'any_time_is_collected - Patron should not be charged yet (just checking to make sure)');
     C4::Circulation::AddIssue( $patron1, $item1->{barcode}, '2015-12-31', 0, undef, 0, {} );
     is( acctlines( $patron1->{borrowernumber} ), 1, 'any_time_is_collected - Patron should not be charged when checking out an item which was not placed hold for him' );

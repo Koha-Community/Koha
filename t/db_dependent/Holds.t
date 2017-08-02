@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 58;
+use Test::More tests => 57;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -211,11 +211,6 @@ ModReserveMinusPriority( $itemnumber, $reserve->{'reserve_id'} );
 $holds = $patron->holds;
 is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
 
-
-my $reserve2 = GetReserveInfo( $reserve->{'reserve_id'} );
-ok( $reserve->{'reserve_id'} eq $reserve2->{'reserve_id'}, "Test GetReserveInfo()" );
-
-
 $holds = $biblio->holds;
 $hold = $holds->next;
 AlterPriority( 'top', $hold->reserve_id );
@@ -323,7 +318,7 @@ my $reserveid2 = C4::Reserves::GetReserveId(
 
 CancelReserve({ reserve_id => $reserveid1 });
 
-$reserve2 = GetReserve( $reserveid2 );
+my $reserve2 = GetReserve( $reserveid2 );
 is( $reserve2->{priority}, 1, "After cancelreserve, the 2nd reserve becomes the first on the waiting list" );
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
