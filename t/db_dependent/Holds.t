@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 56;
+use Test::More tests => 55;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -197,13 +197,7 @@ AddReserve(
 );
 $patron = Koha::Patrons->find( $borrowernumber );
 $holds = $patron->holds;
-my $reserveid = C4::Reserves::GetReserveId(
-    {
-        biblionumber => $biblionumber,
-        borrowernumber => $borrowernumber
-    }
-);
-is( $reserveid, $holds->next->reserve_id, "Test GetReserveId" );
+my $reserveid = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 ModReserveMinusPriority( $itemnumber, $reserveid );
 $holds = $patron->holds;
 is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
@@ -291,12 +285,7 @@ AddReserve(
     1,
 );
 
-my $reserveid1 = C4::Reserves::GetReserveId(
-    {
-        biblionumber => $bibnum,
-        borrowernumber => $borrowernumbers[0]
-    }
-);
+my $reserveid1 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
 AddReserve(
@@ -306,12 +295,7 @@ AddReserve(
     '',
     2,
 );
-my $reserveid2 = C4::Reserves::GetReserveId(
-    {
-        biblionumber => $bibnum,
-        borrowernumber => $borrowernumbers[1]
-    }
-);
+my $reserveid2 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[1] })->next->reserve_id;
 
 CancelReserve({ reserve_id => $reserveid1 });
 
@@ -326,12 +310,7 @@ AddReserve(
     '',
     2,
 );
-my $reserveid3 = C4::Reserves::GetReserveId(
-    {
-        biblionumber => $bibnum,
-        borrowernumber => $borrowernumbers[0]
-    }
-);
+my $reserveid3 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 
 my $hold3 = Koha::Holds->find( $reserveid3 );
 is( $hold3->priority, 2, "New reserve for patron 0, the reserve has a priority = 2" );

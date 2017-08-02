@@ -846,15 +846,13 @@ sub CancelReserve {
     my ( $params ) = @_;
 
     my $reserve_id = $params->{'reserve_id'};
-    # Filter out only the desired keys; this will insert undefined values for elements missing in
-    # \%params, but GetReserveId filters them out anyway.
-    $reserve_id = GetReserveId( { biblionumber => $params->{'biblionumber'}, borrowernumber => $params->{'borrowernumber'}, itemnumber => $params->{'itemnumber'} } ) unless ( $reserve_id );
+    my $hold;
+    if ( $reserve_id ) {
+        $hold = Koha::Holds->find( $reserve_id );
+    } else {
+        $hold = Koha::Holds->search( $params ); # biblionumber, borrowernumber, itemnumber
+    }
 
-    return unless ( $reserve_id );
-
-    my $dbh = C4::Context->dbh;
-
-    my $hold = Koha::Holds->find( $reserve_id );
     return unless $hold;
 
     logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
@@ -866,6 +864,7 @@ sub CancelReserve {
                priority         = 0
         WHERE  reserve_id = ?
     ";
+    my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute( $reserve_id );
 
@@ -947,13 +946,19 @@ sub ModReserve {
     return if $rank eq "n";
 
     return unless ( $reserve_id || ( $borrowernumber && ( $biblionumber || $itemnumber ) ) );
-    $reserve_id = GetReserveId({ biblionumber => $biblionumber, borrowernumber => $borrowernumber, itemnumber => $itemnumber }) unless ( $reserve_id );
+
+    my $hold;
+    unless ( $reserve_id ) {
+        $hold = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber, itemnumber => $itemnumber });
+        return unless $hold; # FIXME Should raise an exception
+        $reserve_id = $hold->reserve_id;
+    }
 
     if ( $rank eq "del" ) {
         CancelReserve({ reserve_id => $reserve_id });
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
-        my $hold = Koha::Holds->find($reserve_id);
+        $hold ||= Koha::Holds->find($reserve_id);
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
@@ -1999,30 +2004,6 @@ sub RevertWaitingStatus {
     _FixPriority( { biblionumber => $reserve->{biblionumber} } );
 }
 
-=head2 GetReserveId
-
-  $reserve_id = GetReserveId({ biblionumber => $biblionumber, borrowernumber => $borrowernumber [, itemnumber => $itemnumber ] });
-
-  Returnes the first reserve id that matches the given criteria
-
-=cut
-
-sub GetReserveId {
-    my ( $params ) = @_;
-
-    return unless ( ( $params->{'biblionumber'} || $params->{'itemnumber'} ) && $params->{'borrowernumber'} );
-
-    foreach my $key ( keys %$params ) {
-        delete $params->{$key} unless defined( $params->{$key} );
-    }
-
-    my $hold = Koha::Holds->search( $params )->next();
-
-    return unless $hold;
-
-    return $hold->id();
-}
-
 =head2 ReserveSlip
 
   ReserveSlip($branchcode, $borrowernumber, $biblionumber)
@@ -2047,12 +2028,9 @@ sub ReserveSlip {
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
     my $patron = Koha::Patrons->find( $borrowernumber );
 
-    my $reserve_id = GetReserveId({
-        biblionumber => $biblionumber,
-        borrowernumber => $borrowernumber
-    }) or return;
-    my $reserve = Koha::Holds->find($reserve_id) or return;
-    $reserve = $reserve->unblessed;
+    my $hold = Koha::Holds->search({biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
+    return unless $hold;
+    my $reserve = $hold->unblessed;
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',

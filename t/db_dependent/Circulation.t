@@ -377,7 +377,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
     is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
-    my $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber});
+    my $reserveid = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next->reserve_id;
     my $reserving_borrower = Koha::Patrons->find( $reserving_borrowernumber )->unblessed;
     AddIssue($reserving_borrower, $barcode3);
     my $reserve = $dbh->selectrow_hashref(
@@ -516,7 +516,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
 
 
-    $reserveid = C4::Reserves::GetReserveId({ biblionumber => $biblionumber, itemnumber => $itemnumber, borrowernumber => $reserving_borrowernumber});
+    $reserveid = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next->reserve_id;
     CancelReserve({ reserve_id => $reserveid });
 
     # Bug 14101
