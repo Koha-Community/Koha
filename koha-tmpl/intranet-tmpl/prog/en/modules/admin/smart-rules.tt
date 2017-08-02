@@ -145,7 +145,7 @@ $(document).ready(function() {
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
-                <option value="*">All libraries</option>
+                <option value="*">Standard rules for all libraries</option>
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch, unfiltered => 1 ) %]
             </select>
         </form>
