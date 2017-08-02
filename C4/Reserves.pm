@@ -104,7 +104,6 @@ BEGIN {
     @EXPORT = qw(
         &AddReserve
 
-        &GetReserve
         &GetReservesForBranch
         &GetReserveStatus
 
@@ -255,25 +254,6 @@ sub AddReserve {
     }
 
     return $reserve_id;
-}
-
-=head2 GetReserve
-
-    $res = GetReserve( $reserve_id );
-
-    Return the current reserve.
-
-=cut
-
-sub GetReserve {
-    my ($reserve_id) = @_;
-
-    my $dbh = C4::Context->dbh;
-
-    my $query = "SELECT * FROM reserves WHERE reserve_id = ?";
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $reserve_id );
-    return $sth->fetchrow_hashref();
 }
 
 =head2 CanBookBeReserved
