@@ -257,20 +257,14 @@ if( @scanned_items ) {
 # status, or are still checked out.
 foreach my $item ( @scanned_items ) {
     $item->{notforloancode} = $item->{notforloan}; # save for later use
+    my $fc = $item->{'frameworkcode'} || '';
 
-    # Populating with authorised values
-    foreach my $field ( keys %$item ) {
-        # If the koha field is mapped to a marc field
-        my $fc = $item->{'frameworkcode'} || '';
-        my ($f, $sf) = GetMarcFromKohaField("items.$field", $fc);
-        if ($f and $sf) {
-            # We replace the code with it's description
-            my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $fc, tagfield => $f, tagsubfield => $sf, });
-            $av = $av->count ? $av->unblessed : [];
-            my $authvals = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
-            if ($authvals and defined $item->{$field} and defined $authvals->{$item->{$field}}) {
-              $item->{$field} = $authvals->{$item->{$field}};
-            }
+    # Populating with authorised values description
+    foreach my $field (qw/ location notforloan itemlost damaged withdrawn /) {
+        my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+            { frameworkcode => $fc, kohafield => "items.$field", authorised_value => $item->{$field} } );
+        if ( $av and defined $item->{$field} and defined $av->{lib} ) {
+            $item->{$field} = $av->{lib};
         }
     }
 
@@ -358,7 +352,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
 
-    my @keys = qw / title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged withdrawn stocknumber /;
+    my @keys = qw/ title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged withdrawn stocknumber /;
     for my $item ( @$loop ) {
         my @line;
         for my $key (@keys) {
