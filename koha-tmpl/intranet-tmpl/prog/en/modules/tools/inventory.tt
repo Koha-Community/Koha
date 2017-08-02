@@ -33,9 +33,15 @@ $(document).ready(function(){
         inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
             'sPaginationType': 'full_numbers',
             [% IF compareinv2barcd %]
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 1 ] } ],
+                // sort on callnumber
+                "aaSorting": [[ 1, "asc" ]],
             [% ELSE %]
-                "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] } ],
+                // first column contains checkboxes
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] },
+                ],
+                // 3rd column is callnumber
+                "aaSorting": [[ 2, "asc" ]],
             [% END %]
             'fnDrawCallback': function() {
                 //bind the click handler script to the newly created elements held in the table
