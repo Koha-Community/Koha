@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 72;
+use Test::More tests => 70;
 use Test::MockModule;
 use Test::Warn;
 
@@ -320,16 +320,12 @@ $holds = $biblio->holds;
 is($holds->count, 1, "Only one reserves for this biblio");
 my $reserve_id = $holds->next->reserve_id;
 
-$reserve = GetReserve($reserve_id);
-isa_ok($reserve, 'HASH', "GetReserve return");
-is($reserve->{biblionumber}, $biblionumber);
-
 $reserve = CancelReserve({reserve_id => $reserve_id});
 isa_ok($reserve, 'HASH', "CancelReserve return");
 is($reserve->{biblionumber}, $biblionumber);
 
-$reserve = GetReserve($reserve_id);
-is($reserve, undef, "GetReserve returns undef after deletion");
+my $hold = Koha::Holds->find( $reserve_id );
+is($hold, undef, "CancelReserve should have cancel the reserve");
 
 $reserve = CancelReserve({reserve_id => $reserve_id});
 is($reserve, undef, "CancelReserve return undef if reserve does not exist");

@@ -771,9 +771,9 @@ sub CancelHold {
 
     # Get the reserve or return an error code
     my $reserve_id = $cgi->param('item_id');
-    my $reserve = C4::Reserves::GetReserve($reserve_id);
-    return { code => 'RecordNotFound' } unless $reserve;
-    return { code => 'RecordNotFound' } unless ($reserve->{borrowernumber} == $borrowernumber);
+    my $hold = Koha::Holds->find( $reserve_id );
+    return { code => 'RecordNotFound' } unless $hold;
+    return { code => 'RecordNotFound' } unless ($hold->borrowernumber == $borrowernumber);
 
     C4::Reserves::CancelReserve({reserve_id => $reserve_id});
 

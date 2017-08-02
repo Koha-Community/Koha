@@ -118,11 +118,10 @@ sub edit {
     my ($c, $args, $cb) = @_;
 
     my $reserve_id = $args->{reserve_id};
-    my $reserve = C4::Reserves::GetReserve($reserve_id);
+    my $hold = Koha::Holds->find( $reserve_id );
 
-    unless ($reserve) {
-        return $c->$cb({error => "Reserve not found"}, 404);
-    }
+    return $c->$cb({error => "Reserve not found"}, 404)
+        unless $hold;
 
     my $body = $c->req->json;
 
@@ -142,20 +141,19 @@ sub edit {
     };
 
     C4::Reserves::ModReserve($params);
-    $reserve = Koha::Holds->find($reserve_id);
+    $hold = Koha::Holds->find($reserve_id);
 
-    return $c->$cb($reserve, 200);
+    return $c->$cb($hold, 200);
 }
 
 sub delete {
     my ($c, $args, $cb) = @_;
 
     my $reserve_id = $args->{reserve_id};
-    my $reserve = C4::Reserves::GetReserve($reserve_id);
+    my $hold = Koha::Holds->find( $reserve_id );
 
-    unless ($reserve) {
-        return $c->$cb({error => "Reserve not found"}, 404);
-    }
+    return $c->$cb({error => "Reserve not found"}, 404)
+        unless $hold;
 
     C4::Reserves::CancelReserve({ reserve_id => $reserve_id });
 

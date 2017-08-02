@@ -465,10 +465,10 @@ sub CanReserveBeCanceledFromOpac {
     my ($reserve_id, $borrowernumber) = @_;
 
     return unless $reserve_id and $borrowernumber;
-    my $reserve = GetReserve($reserve_id);
+    my $reserve = Koha::Holds->find($reserve_id);
 
-    return 0 unless $reserve->{borrowernumber} == $borrowernumber;
-    return 0 if ( $reserve->{found} eq 'W' ) or ( $reserve->{found} eq 'T' );
+    return 0 unless $reserve->borrowernumber == $borrowernumber;
+    return 0 if ( $reserve->found eq 'W' ) or ( $reserve->found eq 'T' );
 
     return 1;
 
@@ -874,48 +874,46 @@ sub CancelReserve {
 
     my $dbh = C4::Context->dbh;
 
-    my $reserve = GetReserve( $reserve_id );
-    if ($reserve) {
+    my $hold = Koha::Holds->find( $reserve_id );
+    return unless $hold;
 
-        my $hold = Koha::Holds->find( $reserve_id );
-        logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
-            if C4::Context->preference('HoldsLog');
+    logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
+        if C4::Context->preference('HoldsLog');
 
-        my $query = "
-            UPDATE reserves
-            SET    cancellationdate = now(),
-                   priority         = 0
-            WHERE  reserve_id = ?
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
+    my $query = "
+        UPDATE reserves
+        SET    cancellationdate = now(),
+               priority         = 0
+        WHERE  reserve_id = ?
+    ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $reserve_id );
 
-        $query = "
-            INSERT INTO old_reserves
-            SELECT * FROM reserves
-            WHERE  reserve_id = ?
-        ";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
+    $query = "
+        INSERT INTO old_reserves
+        SELECT * FROM reserves
+        WHERE  reserve_id = ?
+    ";
+    $sth = $dbh->prepare($query);
+    $sth->execute( $reserve_id );
 
-        $query = "
-            DELETE FROM reserves
-            WHERE  reserve_id = ?
-        ";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $reserve_id );
+    $query = "
+        DELETE FROM reserves
+        WHERE  reserve_id = ?
+    ";
+    $sth = $dbh->prepare($query);
+    $sth->execute( $reserve_id );
 
-        # now fix the priority on the others....
-        _FixPriority({ biblionumber => $reserve->{biblionumber} });
+    # now fix the priority on the others....
+    _FixPriority({ biblionumber => $hold->biblionumber });
 
-        # and, if desired, charge a cancel fee
-        my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
-        if ( $charge && $params->{'charge_cancel_fee'} ) {
-            manualinvoice($reserve->{'borrowernumber'}, $reserve->{'itemnumber'}, '', 'HE', $charge);
-        }
+    # and, if desired, charge a cancel fee
+    my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+    if ( $charge && $params->{'charge_cancel_fee'} ) {
+        manualinvoice($hold->borrowernumber, $hold->itemnumber, '', 'HE', $charge);
     }
 
-    return $reserve;
+    return $hold->unblessed;
 }
 
 =head2 ModReserve
@@ -1311,16 +1309,17 @@ Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was
 sub AlterPriority {
     my ( $where, $reserve_id ) = @_;
 
-    my $reserve = GetReserve( $reserve_id );
+    my $hold = Koha::Holds->find( $reserve_id );
+    return unless $hold;
 
-    if ( $reserve->{cancellationdate} ) {
-        warn "I cannot alter the priority for reserve_id $reserve_id, the reserve has been cancelled (".$reserve->{cancellationdate}.')';
+    if ( $hold->cancellationdate ) {
+        warn "I cannot alter the priority for reserve_id $reserve_id, the reserve has been cancelled (" . $hold->cancellationdate . ')';
         return;
     }
 
     if ( $where eq 'up' || $where eq 'down' ) {
 
-      my $priority = $reserve->{'priority'};
+      my $priority = $hold->priority;
       $priority = $where eq 'up' ? $priority - 1 : $priority + 1;
       _FixPriority({ reserve_id => $reserve_id, rank => $priority })
 
@@ -1333,6 +1332,7 @@ sub AlterPriority {
       _FixPriority({ reserve_id => $reserve_id, rank => '999999' });
 
     }
+    # FIXME Should return the new priority
 }
 
 =head2 ToggleLowestPriority
@@ -1468,8 +1468,8 @@ sub _FixPriority {
     my $dbh = C4::Context->dbh;
 
     unless ( $biblionumber ) {
-        my $res = GetReserve( $reserve_id );
-        $biblionumber = $res->{biblionumber};
+        my $hold = Koha::Holds->find( $reserve_id );
+        $biblionumber = $hold->biblionumber;
     }
 
     if ( $rank eq "del" ) {

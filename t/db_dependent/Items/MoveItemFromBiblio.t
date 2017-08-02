@@ -21,6 +21,7 @@ use Test::More tests => 8;
 use C4::Items;
 use C4::Reserves;
 use Koha::Database;
+use Koha::Holds;
 
 use t::lib::TestBuilder;
 use Data::Dumper qw|Dumper|;
@@ -85,13 +86,13 @@ is( $get_item2->{biblionumber}, $to_biblio->{biblionumber}, 'The item2 should ha
 my $get_item3 = C4::Items::GetItem( $item3->{itemnumber} );
 is( $get_item3->{biblionumber}, $to_biblio->{biblionumber}, 'The item3 should not have been moved' );
 
-my $get_bib_level_hold    = C4::Reserves::GetReserve( $bib_level_hold_not_to_move->{reserve_id} );
-my $get_item_level_hold_1 = C4::Reserves::GetReserve( $item_level_hold_not_to_move->{reserve_id} );
-my $get_item_level_hold_2 = C4::Reserves::GetReserve( $item_level_hold_to_move->{reserve_id} );
+my $get_bib_level_hold    = Koha::Holds->find( $bib_level_hold_not_to_move->{reserve_id} );
+my $get_item_level_hold_1 = Koha::Holds->find( $item_level_hold_not_to_move->{reserve_id} );
+my $get_item_level_hold_2 = Koha::Holds->find( $item_level_hold_to_move->{reserve_id} );
 
-is( $get_bib_level_hold->{biblionumber},    $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
-is( $get_item_level_hold_1->{biblionumber}, $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
-is( $get_item_level_hold_2->{biblionumber}, $to_biblio->{biblionumber},   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
+is( $get_bib_level_hold->biblionumber,    $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the biblio-level hold' );
+is( $get_item_level_hold_1->biblionumber, $from_biblio->{biblionumber}, 'MoveItemFromBiblio should not have moved the item-level hold placed on item 1' );
+is( $get_item_level_hold_2->biblionumber, $to_biblio->{biblionumber},   'MoveItemFromBiblio should have moved the item-level hold placed on item 2' );
 
 $schema->storage->txn_rollback;
 
