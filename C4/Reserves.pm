@@ -108,7 +108,6 @@ BEGIN {
         &GetReservesForBranch
         &GetReservesToBranch
         &GetReserveCount
-        &GetReserveInfo
         &GetReserveStatus
 
         &GetOtherReserves
@@ -1229,59 +1228,6 @@ sub ModReserveMinusPriority {
     $sth_upd->execute( $itemnumber, $reserve_id );
     # second step update all others reserves
     _FixPriority({ reserve_id => $reserve_id, rank => '0' });
-}
-
-=head2 GetReserveInfo
-
-  &GetReserveInfo($reserve_id);
-
-Get item and borrower details for a current hold.
-Current implementation this query should have a single result.
-
-=cut
-
-sub GetReserveInfo {
-    my ( $reserve_id ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $strsth="SELECT
-                   reserve_id,
-                   reservedate,
-                   reservenotes,
-                   reserves.borrowernumber,
-                   reserves.biblionumber,
-                   reserves.branchcode,
-                   reserves.waitingdate,
-                   notificationdate,
-                   reminderdate,
-                   priority,
-                   found,
-                   firstname,
-                   surname,
-                   phone,
-                   email,
-                   address,
-                   address2,
-                   cardnumber,
-                   city,
-                   zipcode,
-                   biblio.title,
-                   biblio.author,
-                   items.holdingbranch,
-                   items.itemcallnumber,
-                   items.itemnumber,
-                   items.location,
-                   barcode,
-                   notes
-                FROM reserves
-                LEFT JOIN items USING(itemnumber)
-                LEFT JOIN borrowers USING(borrowernumber)
-                LEFT JOIN biblio ON  (reserves.biblionumber=biblio.biblionumber)
-                WHERE reserves.reserve_id = ?";
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute($reserve_id);
-
-    my $data = $sth->fetchrow_hashref;
-    return $data;
 }
 
 =head2 IsAvailableForItemLevelRequest
