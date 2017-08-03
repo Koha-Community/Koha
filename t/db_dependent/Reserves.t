@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 67;
+use Test::More tests => 58;
 use Test::MockModule;
 use Test::Warn;
 
@@ -320,11 +320,6 @@ $holds = $biblio->holds;
 is($holds->count, 1, "Only one reserves for this biblio");
 my $reserve_id = $holds->next->reserve_id;
 
-Koha::Holds->find( $reserve_id )->cancel;
-
-my $hold = Koha::Holds->find( $reserve_id );
-is($hold, undef, "Koha::Holds->cancel should have cancel the reserve");
-
 # Tests for bug 9761 (ConfirmFutureHolds): new CheckReserves lookahead parameter, and corresponding change in AddReturn
 # Note that CheckReserve uses its lookahead parameter and does not check ConfirmFutureHolds pref (it should be passed if needed like AddReturn does)
 # Test 9761a: Add a reserve without date, CheckReserve should return it
@@ -568,86 +563,6 @@ $dbh->do(
     $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
 );
 ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
-
-# Tests for bug 14464
-
-$dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
-my $patron = Koha::Patrons->find( $borrowernumber );
-my $bz14464_fines = $patron->account->balance;
-is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines at beginning' );
-
-# First, test cancelling a reserve when there's no charge configured.
-t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 0);
-
-my $bz14464_reserve = AddReserve(
-    $branch_1,
-    $borrowernumber,
-    $bibnum,
-    undef,
-    '1',
-    undef,
-    undef,
-    '',
-    $title,
-    $itemnumber,
-    'W'
-);
-
-ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
-
-Koha::Holds->find( $bz14464_reserve )->cancel( { charge_cancel_fee => 1 } );
-
-my $old_reserve = Koha::Database->new()->schema()->resultset('OldReserve')->find( $bz14464_reserve );
-is($old_reserve->get_column('found'), 'W', 'Bug 14968 - Keep found column from reserve');
-
-$bz14464_fines = $patron->account->balance;
-is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
-
-# Then, test cancelling a reserve when there's no charge desired.
-t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
-
-$bz14464_reserve = AddReserve(
-    $branch_1,
-    $borrowernumber,
-    $bibnum,
-    undef,
-    '1',
-    undef,
-    undef,
-    '',
-    $title,
-    $itemnumber,
-    'W'
-);
-
-ok( $bz14464_reserve, 'Bug 14464 - 2nd reserve correctly created' );
-
-Koha::Holds->find( $bz14464_reserve )->cancel();
-
-$bz14464_fines = $patron->account->balance;
-is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge desired' );
-
-# Finally, test cancelling a reserve when there's a charge desired and configured.
-$bz14464_reserve = AddReserve(
-    $branch_1,
-    $borrowernumber,
-    $bibnum,
-    undef,
-    '1',
-    undef,
-    undef,
-    '',
-    $title,
-    $itemnumber,
-    'W'
-);
-
-ok( $bz14464_reserve, 'Bug 14464 - 1st reserve correctly created' );
-
-Koha::Holds->find( $bz14464_reserve )->cancel( { charge_cancel_fee => 1 } );
-
-$bz14464_fines = $patron->account->balance;
-is( int( $bz14464_fines ), 42, 'Bug 14464 - Fine applied after cancelling reserve with charge desired and configured' );
 
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
 #   hold from A pos 1, today, no fut holds: MoveReserve should fill it

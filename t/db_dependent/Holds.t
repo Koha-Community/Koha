@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 55;
+use Test::More tests => 53;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -127,11 +127,6 @@ $holds = $patron->holds;
 is( $holds->next->borrowernumber, $borrowernumbers[0], "Test Koha::Patron->holds");
 
 
-Koha::Holds->find( $reserve_id )->cancel;
-
-$holds = $biblio->holds;
-is( $holds->count, $borrowers_count - 1, "Koha::Hold->cancel" );
-
 $holds = $item->current_holds;
 $first_hold = $holds->next;
 $borrowernumber = $first_hold->borrowernumber;
@@ -219,7 +214,7 @@ is( $hold->priority, '1', "Test AlterPriority(), move up" );
 
 AlterPriority( 'bottom', $hold->reserve_id );
 $hold = Koha::Holds->find( $reserveid );
-is( $hold->priority, '5', "Test AlterPriority(), move to bottom" );
+is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 
 # Regression test for bug 2394
 #
@@ -275,49 +270,22 @@ ok(
     '... unless canreservefromotherbranches is ON (bug 2394)'
 );
 
-# Regression test for bug 11336
-($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-AddReserve(
-    $branch_1,
-    $borrowernumbers[0],
-    $bibnum,
-    '',
-    1,
-);
-
-my $reserveid1 = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
-
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-my $reserveid2 = AddReserve(
-    $branch_1,
-    $borrowernumbers[1],
-    $bibnum,
-    '',
-    2,
-);
-
-my $hold1 = Koha::Holds->find( $reserveid1 );
-$hold1->cancel;
-
-my $hold2 = Koha::Holds->find( $reserveid2 );
-is( $hold2->priority, 1, "After cancelreserve, the 2nd reserve becomes the first on the waiting list" );
-
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-my $reserveid3 = AddReserve(
-    $branch_1,
-    $borrowernumbers[0],
-    $bibnum,
-    '',
-    2,
-);
-
-my $hold3 = Koha::Holds->find( $reserveid3 );
-is( $hold3->priority, 2, "New reserve for patron 0, the reserve has a priority = 2" );
-
-ModReserve({ reserve_id => $reserveid2, rank => 'del' });
-$hold3 = Koha::Holds->find( $reserveid3 );
-is( $hold3->priority, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
+{
+    # Regression test for bug 11336 # Test if ModReserve correctly recalculate the priorities
+    ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
+    my $reserveid1 = AddReserve($branch_1, $borrowernumbers[0], $bibnum, '', 1);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
+    my $reserveid2 = AddReserve($branch_1, $borrowernumbers[1], $bibnum, '', 2);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
+    my $reserveid3 = AddReserve($branch_1, $borrowernumbers[2], $bibnum, '', 3);
+    my $hhh = Koha::Holds->search({ biblionumber => $bibnum });
+    my $hold3 = Koha::Holds->find( $reserveid3 );
+    is( $hold3->priority, 3, "The 3rd hold should have a priority set to 3" );
+    ModReserve({ reserve_id => $reserveid1, rank => 'del' });
+    ModReserve({ reserve_id => $reserveid2, rank => 'del' });
+    is( $hold3->discard_changes->priority, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
+}
 
 ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
