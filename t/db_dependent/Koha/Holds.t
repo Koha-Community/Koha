@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Test::More tests => 1;
+use Test::Warn;
 
 use C4::Reserves;
 use Koha::Holds;
@@ -34,7 +35,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'cancel' => sub {
-    plan tests => 10;
+    plan tests => 12;
     my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
     my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
     my $itemtype   = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
@@ -147,6 +148,73 @@ subtest 'cancel' => sub {
         my $hold_old = Koha::Old::Holds->find( $reserve_id );
         is( $hold_old->found, 'W', 'The found column should have been kept and a hold is cancelled' );
     };
+
+    subtest 'HoldsLog' => sub {
+        plan tests => 2;
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my @hold_info = (
+            $library->branchcode, $patron->borrowernumber,
+            $item->biblionumber,  '',
+            1,                    undef,
+            undef,                '',
+            "title for fee",      $item->itemnumber,
+        );
+
+        t::lib::Mocks::mock_preference('HoldsLog', 0);
+        my $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        Koha::Holds->find( $reserve_id )->cancel;
+        my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )->count;
+        is( $number_of_logs, 0, 'Without HoldsLog, Koha::Hold->cancel should not have logged' );
+
+        t::lib::Mocks::mock_preference('HoldsLog', 1);
+        $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        Koha::Holds->find( $reserve_id )->cancel;
+        $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )->count;
+        is( $number_of_logs, 1, 'With HoldsLog, Koha::Hold->cancel should have logged' );
+    };
+
+    subtest 'rollback' => sub {
+        plan tests => 3;
+        my $patron_category = $builder->build_object(
+            {
+                class => 'Koha::Patron::Categories',
+                value => { reservefee => 0 }
+            }
+        );
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { categorycode => $patron_category->categorycode }
+            }
+        );
+        my @hold_info = (
+            $library->branchcode, $patron->borrowernumber,
+            $item->biblionumber,  '',
+            1,                    undef,
+            undef,                '',
+            "title for fee",      $item->itemnumber,
+        );
+
+        t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge',42 );
+        my $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        my $hold       = Koha::Holds->find($reserve_id);
+
+        # Add a row with the same id to make the cancel fails
+        Koha::Old::Hold->new( $hold->unblessed )->store;
+
+        warning_like {
+            eval { $hold->cancel( { charge_cancel_fee => 1 } ) };
+        }
+        qr{.*DBD::mysql::st execute failed: Duplicate entry.*},
+          'DBD should have raised an error about dup primary key';
+
+        $hold = Koha::Holds->find($reserve_id);
+        is( ref($hold), 'Koha::Hold', 'The hold should not have been deleted' );
+        is( $patron->account->balance, 0,
+'If the hold has not been cancelled, the patron should not have been charged'
+        );
+    };
+
 };
 
 $schema->storage->txn_rollback;
