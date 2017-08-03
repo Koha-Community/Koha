@@ -143,12 +143,13 @@ OPAC:
                   both: "home and holding libraries"
             - for items on the OPAC record details page.
         -
-            - Display the shelving location under the
-            - pref: OpacLocationBranchToDisplayShelving
+            - 'Display the shelving location '
+            - pref: OpacLocationOnDetail
               choices:
-                  home: "home library"
-                  holding: "holding library"
-                  both: "home and holding libraries"
+                  home: "below the home library"
+                  holding: "below the holding library"
+                  both: "below both home and holding libraries"
+                  column: "on a separate column"
             - for items on the OPAC record details page.
         -
             - pref: OpacKohaUrl

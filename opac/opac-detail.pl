@@ -687,7 +687,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
         $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{translated_description};
     }
-    foreach (qw(ccode enumchron copynumber itemnotes uri)) {
+    foreach (qw(ccode enumchron copynumber itemnotes location_description uri)) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
 
@@ -759,7 +759,8 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      itemdata_enumchron      => $itemfields{enumchron},
                      itemdata_uri            => $itemfields{uri},
                      itemdata_copynumber     => $itemfields{copynumber},
-                     itemdata_itemnotes          => $itemfields{itemnotes},
+                     itemdata_itemnotes      => $itemfields{itemnotes},
+                     itemdata_location       => $itemfields{location_description},
                      subtitle                => $subtitle,
                      OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
     );
@@ -1190,8 +1191,7 @@ if ( C4::Context->preference('UseCourseReserves') ) {
 }
 
 $template->param(
-    'OpacLocationBranchToDisplay'         => C4::Context->preference('OpacLocationBranchToDisplay') ,
-    'OpacLocationBranchToDisplayShelving' => C4::Context->preference('OpacLocationBranchToDisplayShelving'),
+    'OpacLocationBranchToDisplay' => C4::Context->preference('OpacLocationBranchToDisplay'),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

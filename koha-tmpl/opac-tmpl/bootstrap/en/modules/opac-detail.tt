@@ -1188,6 +1188,8 @@
                 <th id="item_home_location" data-colname="item_home_location" class="item_location">Home library</th>[% END %]
         [% IF ( itemdata_ccode ) %]
                 <th id="item_ccode" data-colname="item_ccode" class="collection">Collection</th>[% END %]
+        [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
+                <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>[% END %]
                 <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
         [% IF ( itemdata_enumchron ) %]
                 <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>[% END %]
@@ -1240,7 +1242,7 @@
                             </span>
                             <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info %]</div>
 
-                            [% IF ( OpacLocationBranchToDisplayShelving == 'holding' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                            [% IF ( Koha.Preference('OpacLocationOnDetail') == 'holding' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
                                 <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
                             [% END %]
 
@@ -1265,7 +1267,7 @@
                             </span>
                             <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info %]</div>
 
-                            [% IF ( OpacLocationBranchToDisplayShelving == 'home' || OpacLocationBranchToDisplayShelving == 'both' ) %]
+                            [% IF ( Koha.Preference('OpacLocationOnDetail') == 'home' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
                                 <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span>
                             [% END %]
 
@@ -1275,6 +1277,11 @@
                     [% IF ( itemdata_ccode ) %]
                         <td class="collection">[% ITEM_RESULT.ccode %]</td>
                     [% END %]
+
+                    [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
+                        <td class="shelving_location">[% ITEM_RESULT.location_description %]</td>
+                    [% END %]
+
                     <td class="call_no" property="sku">
                         [% IF ( ITEM_RESULT.itemcallnumber ) %]
                             [% ITEM_RESULT.itemcallnumber %]
