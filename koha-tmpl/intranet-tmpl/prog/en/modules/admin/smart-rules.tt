@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
@@ -24,6 +25,89 @@ function clear_edit(){
     $(edit_row).find("select").prop('disabled', false);
     $(edit_row).find("select option:first").attr("selected", "selected");
     $(edit_row).find("td:last input[name='clear']").remove();
+}
+
+function change_tester_input(el) {
+    $(el).parent().find("span").css("display", "none");
+    $(el).parent().find("span").eq($("option:selected", el).index()).css("display", "inline");
+}
+
+function reset_tester_results() {
+    $("td[id^='tester_res_']").each(function() {
+        $(this).html("");
+    });
+}
+
+function tester_submit() {
+    var url = "/api/v1/issuingrules/effective";
+    var query_params = {};
+    $.each($("input[name^=tester_input_], select[name^=tester_input_]"), function () {
+        if ($(this).parent().css("display") === "none") {
+            return true;
+        }
+        var param = $(this).attr("name").replace("tester_input_", "");
+        if ($(this).val() || param === 'branchcode' && !$(this).val()) {
+            query_params[param] = $(this).val();
+        }
+    });
+    $.ajax({
+        url: "/api/v1/issuingrules/effective?"+$.param(query_params),
+        method: "GET",
+        statusCode: {
+            200: function(response) {
+                $("#tester_error").html("").css("display","none");
+                $.each(response, function (key,val) {
+                    if (key === "hardduedate") {
+                        var compare;
+                        switch (response.hardduedatecompare) {
+                            case -1:
+                                compare = _("Before");
+                                break;
+                            case 0:
+                                compare = _("Exactly on");
+                                break;
+                            case 1:
+                                compare = _("After");
+                                break;
+                            default:
+                                compare = _("Exactly on");
+                                break;
+                        }
+                        val = "("+compare+") " + response.hardduedate;
+                    }
+                    if (val === "*") {
+                        val = _("All");
+                    }
+                    $("#tester_res_"+key).html("" + val);
+                });
+            },
+            400: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            },
+            404: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            },
+            401: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            },
+            403: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            },
+            500: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            },
+            503: function(xhr) {
+                $("#tester_error").html('<i class="fa fa-exclamation-triangle"></i> ' + xhr.responseJSON.error).css("display", "block");
+                reset_tester_results();
+            }
+        },
+        dataType: "json"
+    });
 }
 
 var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this rule? This cannot be undone.");
@@ -105,6 +189,27 @@ $(document).ready(function() {
             e.preventDefault();
             clear_edit();
         });
+
+        $("#issuing-rules-tester-container").css("display", "none");
+        $("#toggle-tester").click(function() {
+            $("#issuing-rules-tester-container").toggle();
+        });
+        $("#tester_patron").val("cardnumber");
+        $("#tester_item").val("barcode");
+        $("#tester_branch").val($("#tester_branch option:first").val());
+        change_tester_input($("#tester_patron"));
+        change_tester_input($("#tester_item"));
+        change_tester_input($("#tester_branch"));
+        $("select[id^='tester_']").change(function(e) {
+            change_tester_input(this);
+        });
+
+        tester_submit();
+        $("#tester_submit").click(function () {
+            tester_submit();
+        });
+
+
 });
 //]]>
 </script>
@@ -427,9 +532,157 @@ $(document).ready(function() {
             </table>
         </form>
     </div>
+    <div id="issuing-rules-tester" class="container" style="width:auto;">
+    <a id="toggle-tester" class="btn btn-default btn-sm">Circulation and fine rules test tool</a>
+    <div id="issuing-rules-tester-container">
+    <h3>Circulation and fine rules test tool</h3>
+        <p>This test tool lets you search a row of circulation and fine rules for a specific patron, item and library.</p>
+        <p>Dropdown value for <strong>Library</strong> is determined via system preference <strong>CircControl</strong>. If the preference is set to item's library, then system preference <strong>HomeOrHoldingBranch</strong> defines the branch to use. You can test with any library by selecting the last option <i>Library</i>.</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Patron</th>
+                <th>Item</th>
+                <th>Library</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td>
+                    <select id="tester_patron" name="tester_patron">
+                        <option value="cardnumber">Card number</option>
+                        <option value="borrowernumber">Borrowernumber</option>
+                        <option value="categorycode">Categorycode</option>
+                    </select>
+                    <span><input type="text" name="tester_input_cardnumber" placeholder="Card number" /></span>
+                    <span><input type="text" name="tester_input_borrowernumber" placeholder="Borrowernumber" /></span>
+                    <span>
+                        <select name="tester_input_categorycode" id="tester_categorycode">
+                            <option value="">All</option>
+                        [% FOREACH patron_category IN patron_categories%]
+                            <option value="[% patron_category.categorycode %]">[% patron_category.description %]</option>
+                        [% END %]
+                        </select>
+                    </span>
+                </td>
+                <td>
+                    <select id="tester_item" name="tester_item">
+                        <option value="barcode">Barcode</option>
+                        <option value="itemnumber">Itemnumber</option>
+                        <option value="itemtype">Item type</option>
+                    </select>
+                    <span><input type="text" name="tester_input_barcode" placeholder="Barcode" /></span>
+                    <span><input type="text" name="tester_input_itemnumber" placeholder="Itemnumber" /></span>
+                    <span>
+                        <select name="tester_input_itemtype" id="tester_itemtype">
+                            <option value="">All</option>
+                        [% FOREACH itemtypeloo IN itemtypeloop %]
+                            <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
+                        [% END %]
+                        </select>
+                    </span>
+                </td>
+                <td>
+                    <select id="tester_branch" name="tester_branch">
+                    [% IF Koha.Preference('CircControl') == 'PatronLibrary' %]
+                        <option value="patronlibrary">Patron's home library</option>
+                    [% ELSIF Koha.Preference('CircControl') == 'ItemHomeLibrary' %]
+                        [% IF Koha.Preference('HomeOrHoldingBranch') == 'homebranch' %]
+                        <option value="itemhomelibrary">Item's home library</option>
+                        [% ELSE %]
+                        <option value="itemholdinglibrary">Item's holding library</option>
+                        [% END %]
+                    [% ELSE %]
+                        <option value="pickuplibrary">Current library ([% LoginBranchname %])</option>
+                    [% END %]
+                        <option value="library">Library</option>
+                    </select>
+                    <span></span>
+                    <span>
+                        <select name="tester_input_branchcode" id="tester_branchcode">
+                            <option value="">All</option>
+                            [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
+                        </select>
+                    </span>
+                </td>
+                <td><button type="submit" id="tester_submit" class="btn btn-default btn-xs"><i class="fa fa-search"></i> Find</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+            <tr>
+                <th>Library</th>
+                <th>Patron category</th>
+                <th>Item type</th>
+                <th>Current checkouts allowed</th>
+                <th>Current on-site checkouts allowed</th>
+                <th>Loan period</th>
+                <th>Unit</th>
+                <th>Hard due date</th>
+                <th>Fine amount</th>
+                <th>Fine charging interval</th>
+                <th>When to charge</th>
+                <th>Fine grace period</th>
+                <th>Overdue fines cap (amount)</th>
+                <th>Cap fine at replacement price</th>
+                <th>Suspension in days (day)</th>
+                <th>Max. suspension duration (day)</th>
+                <th>Renewals allowed (count)</th>
+                <th>Renewal period</th>
+                <th>No renewal before</th>
+                <th>Automatic renewal</th>
+                <th>No automatic renewal after</th>
+                <th>No automatic renewal after (hard limit)</th>
+                <th>Holds allowed (count)</th>
+                <th>Holds per record (count)</th>
+                <th>On shelf holds allowed</th>
+                <th>Item level holds</th>
+                <th>Article requests</th>
+                <th>Rental discount (%)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="tester_res_results">
+                <td id="tester_res_branchcode"></td>
+                <td id="tester_res_categorycode"></td>
+                <td id="tester_res_itemtype"></td>
+                <td id="tester_res_maxissueqty"></td>
+                <td id="tester_res_maxonsiteissueqty"></td>
+                <td id="tester_res_issuelength"></td>
+                <td id="tester_res_lengthunit"></td>
+                <td id="tester_res_hardduedate"></td>
+                <td id="tester_res_fine"></td>
+                <td id="tester_res_chargeperiod"></td>
+                <td id="tester_res_chargeperiod_charge_at"></td>
+                <td id="tester_res_firstremind"></td>
+                <td id="tester_res_overduefinescap"></td>
+                <td id="tester_res_cap_fine_to_replacement_price"></td>
+                <td id="tester_res_finedays"></td>
+                <td id="tester_res_maxsuspensiondays"></td>
+                <td id="tester_res_renewalsallowed"></td>
+                <td id="tester_res_renewalperiod"></td>
+                <td id="tester_res_norenewalbefore"></td>
+                <td id="tester_res_auto_renew"></td>
+                <td id="tester_res_no_auto_renewal_after"></td>
+                <td id="tester_res_no_auto_renewal_after_hard_limit"></td>
+                <td id="tester_res_reservesallowed"></td>
+                <td id="tester_res_holds_per_record"></td>
+                <td id="tester_res_onshelfholds"></td>
+                <td id="tester_res_opacitemholds"></td>
+                <td id="tester_res_article_requests"></td>
+                <td id="tester_res_rentaldiscount"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="tester_error" class="alert alert-danger"></div>
+    </div>
+    </div>
     <div id="defaults-for-this-library" class="container">
     <h3>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) %][% END %]</h3>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
+        <h4>Current system preference</h4>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
             <input type="hidden" name="branch" value="[% current_branch %]"/>
