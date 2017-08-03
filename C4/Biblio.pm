@@ -23,6 +23,7 @@ use Modern::Perl;
 use Carp;
 
 use Encode qw( decode is_utf8 );
+use List::MoreUtils qw( uniq );
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -721,7 +722,7 @@ sub GetBiblioData {
     return ($data);
 }    # sub GetBiblioData
 
-=head2 &GetBiblioItemData
+=head2 GetBiblioItemData
 
   $itemdata = &GetBiblioItemData($biblioitemnumber);
 
@@ -732,7 +733,6 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 
 =cut
 
-#'
 sub GetBiblioItemData {
     my ($biblioitemnumber) = @_;
     my $dbh                = C4::Context->dbh;
@@ -2560,7 +2560,7 @@ sub TransformHtmlToMarc {
 
 =head2 TransformMarcToKoha
 
-  $result = TransformMarcToKoha( $record, $frameworkcode )
+  $result = TransformMarcToKoha( $record, $frameworkcode, $limit )
 
 Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields. 
@@ -2572,111 +2572,32 @@ hash_ref
 
 sub TransformMarcToKoha {
     my ( $record, $frameworkcode, $limit_table ) = @_;
+    $frameworkcode //= q{};
+    $limit_table //= q{};
 
     my $result = {};
     if (!defined $record) {
         carp('TransformMarcToKoha called with undefined record');
         return $result;
     }
-    $limit_table = $limit_table || 0;
-    $frameworkcode //= '';
 
-    my $inverted_field_map = _get_inverted_marc_field_map($frameworkcode);
-
-    my %tables = ();
-    if ( defined $limit_table && $limit_table eq 'items' ) {
-        $tables{'items'} = 1;
-    } else {
-        $tables{'items'}       = 1;
-        $tables{'biblio'}      = 1;
-        $tables{'biblioitems'} = 1;
+    my %tables = ( biblio => 1, biblioitems => 1, items => 1 );
+    if( $limit_table eq 'items' ) {
+        %tables = ( items => 1 );
     }
 
-    # traverse through record
-  MARCFIELD: foreach my $field ( $record->fields() ) {
-        my $tag = $field->tag();
-        next MARCFIELD unless exists $inverted_field_map->{$tag};
-        if ( $field->is_control_field() ) {
-            my $kohafields = $inverted_field_map->{$tag}->{list};
-          ENTRY: foreach my $entry ( @{$kohafields} ) {
-                my ( $subfield, $table, $column ) = @{$entry};
-                my $value = $field->data;
-                next ENTRY unless exists $tables{$table};
-                next ENTRY if !$value;
-                my $key = _disambiguate( $table, $column );
-                if ( $result->{$key} ) {
-                    $result->{$key} .= " | " . $value
-                        unless $result->{$key} eq $value;
-                } else {
-                    $result->{$key} = $value;
-                }
-            }
-        } else {
-
-            # deal with subfields
-          MARCSUBFIELD: foreach my $sf ( $field->subfields() ) {
-                my $code = $sf->[0];
-                next MARCSUBFIELD unless exists $inverted_field_map->{$tag}->{sfs}->{$code};
-                my $value = $sf->[1];
-              SFENTRY: foreach my $entry ( @{ $inverted_field_map->{$tag}->{sfs}->{$code} } ) {
-                    my ( $table, $column ) = @{$entry};
-                    next SFENTRY unless exists $tables{$table};
-                    next SFENTRY if !$value;
-                    my $key = _disambiguate( $table, $column );
-                    if ( $result->{$key} ) {
-                        $result->{$key} .= " | " . $value
-                            unless $result->{$key} eq $value;
-                    } else {
-                        $result->{$key} = $value;
-                    }
-                }
-            }
-        }
-    }
-
-    # modify copyrightdate to keep only the 1st year found
-    if ( exists $result->{'copyrightdate'} ) {
-        my $temp = $result->{'copyrightdate'};
-        $temp =~ m/c(\d\d\d\d)/;
-        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) {    # search cYYYY first
-            $result->{'copyrightdate'} = $1;
-        } else {                                       # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'copyrightdate'} = $1;
-        }
-    }
-
-    # modify publicationyear to keep only the 1st year found
-    if ( exists $result->{'publicationyear'} ) {
-        my $temp = $result->{'publicationyear'};
-        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) {    # search cYYYY first
-            $result->{'publicationyear'} = $1;
-        } else {                                       # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'publicationyear'} = $1;
-        }
-    }
-
-    return $result;
-}
-
-sub _get_inverted_marc_field_map {
-    my ( $frameworkcode ) = @_;
-    my $field_map = {};
     my $mss = GetMarcSubfieldStructure( $frameworkcode );
-
     foreach my $kohafield ( keys %{ $mss } ) {
-        foreach my $fld ( @{ $mss->{$kohafield} } ) {
-            my $tag = $fld->{tagfield};
-            my $subfield = $fld->{tagsubfield};
-            my ( $table, $column ) = split /[.]/, $kohafield, 2;
-            push @{ $field_map->{$tag}->{list} },
-                [ $subfield, $table, $column ];
-            push @{ $field_map->{$tag}->{sfs}->{$subfield} },
-                [ $table, $column ];
-        }
+        my ( $table, $column ) = split /[.]/, $kohafield, 2;
+        next unless $tables{$table};
+        my $val = TransformMarcToKohaOneField(
+            $kohafield, $record, $frameworkcode,
+        );
+        next if !defined $val;
+        my $key = _disambiguate( $table, $column );
+        $result->{$key} = $val;
     }
-    return $field_map;
+    return $result;
 }
 
 =head2 _disambiguate
@@ -2708,15 +2629,6 @@ more.
 
 =cut
 
-sub CountItemsIssued {
-    my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            = $dbh->prepare('SELECT COUNT(*) as issuedCount FROM items, issues WHERE items.itemnumber = issues.itemnumber AND items.biblionumber = ?');
-    $sth->execute($biblionumber);
-    my $row = $sth->fetchrow_hashref();
-    return $row->{'issuedCount'};
-}
-
 sub _disambiguate {
     my ( $table, $column ) = @_;
     if ( $column eq "cn_sort" or $column eq "cn_source" ) {
@@ -2729,19 +2641,69 @@ sub _disambiguate {
 
 =head2 TransformMarcToKohaOneField
 
-    $value = TransformMarcToKohaOneField( 'biblio.title', $record, $frameworkcode );
+    $val = TransformMarcToKohaOneField( 'biblio.title', $marc, $frameworkcode );
 
 =cut
 
 sub TransformMarcToKohaOneField {
     my ( $kohafield, $marc, $frameworkcode ) = @_;
 
-    # It is not really useful to repeat all code from TransformMarcToKoha here.
-    # Since it is fast enough (by caching), we just extract the field.
-    my $koharec = TransformMarcToKoha( $marc, $frameworkcode );
-    my @temp = split /\./, $kohafield, 2;
-    $kohafield = _disambiguate( @temp ) if @temp > 1;
-    return $koharec ? $koharec->{$kohafield} : undef;
+    my ( @rv, $retval );
+    my @mss = GetMarcSubfieldStructureFromKohaField($kohafield, $frameworkcode);
+    foreach my $fldhash ( @mss ) {
+        my $tag = $fldhash->{tagfield};
+        my $sub = $fldhash->{tagsubfield};
+        foreach my $fld ( $marc->field($tag) ) {
+            if( $sub eq '@' || $fld->is_control_field ) {
+                push @rv, $fld->data if $fld->data;
+            } else {
+                push @rv, grep { $_ } $fld->subfield($sub);
+            }
+        }
+    }
+    return unless @rv;
+    $retval = join ' | ', uniq(@rv);
+
+    # Additional polishing for individual kohafields
+    if( $kohafield =~ /copyrightdate|publicationyear/ ) {
+        $retval = _adjust_pubyear( $retval );
+    }
+
+    return $retval;
+}
+
+=head2 _adjust_pubyear
+
+    Helper routine for TransformMarcToKohaOneField
+
+=cut
+
+sub _adjust_pubyear {
+    my $retval = shift;
+    # modify return value to keep only the 1st year found
+    if( $retval =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
+        $retval = $1;
+    } else {
+        # if no cYYYY, get the 1st date.
+        $retval =~ m/(\d\d\d\d)/;
+        $retval = $1;
+    }
+    return $retval;
+}
+
+=head2 CountItemsIssued
+
+    my $count = CountItemsIssued( $biblionumber );
+
+=cut
+
+sub CountItemsIssued {
+    my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare('SELECT COUNT(*) as issuedCount FROM items, issues WHERE items.itemnumber = issues.itemnumber AND items.biblionumber = ?');
+    $sth->execute($biblionumber);
+    my $row = $sth->fetchrow_hashref();
+    return $row->{'issuedCount'};
 }
 
 =head2 ModZebra
