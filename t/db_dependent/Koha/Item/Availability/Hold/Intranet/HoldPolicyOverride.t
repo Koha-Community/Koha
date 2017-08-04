@@ -62,6 +62,8 @@ my $rule = Koha::IssuingRule->new({
     branchcode   => $item->homebranch,
     itemtype     => $item->effective_itemtype,
     categorycode => '*',
+    ccode        => '*',
+    permanent_location => '*',
     holds_per_record => 0,
     reservesallowed => 0,
 })->store; # 1 reason

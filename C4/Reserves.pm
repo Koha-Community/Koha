@@ -379,7 +379,8 @@ sub CanItemBeReserved {
     }
 
     # we retrieve rights
-    if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->{'itype'}, $branchcode ) ) {
+    if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->{'itype'},
+            $branchcode, $item->{'ccode'}, $item->{'permanent_location'} ) ) {
         $ruleitemtype     = $rights->{itemtype};
         $allowedreserves  = $rights->{reservesallowed};
         $holds_per_record = $rights->{holds_per_record};
@@ -1443,7 +1444,8 @@ sub IsAvailableForItemLevelRequest {
         $item->{withdrawn}        ||
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
-    my $on_shelf_holds = _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+    my $on_shelf_holds = _OnShelfHoldsAllowed($itype,$borrower->{categorycode},
+        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location});
 
     if ( $on_shelf_holds == 1 ) {
         return 1;
@@ -1484,7 +1486,8 @@ sub OnShelfHoldsAllowed {
     my ($item, $borrower) = @_;
 
     my $itype = _get_itype($item);
-    return _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+    return _OnShelfHoldsAllowed($itype,$borrower->{categorycode},
+        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location});
 }
 
 sub _get_itype {
@@ -1515,9 +1518,15 @@ sub _get_itype {
 }
 
 sub _OnShelfHoldsAllowed {
-    my ($itype,$borrowercategory,$branchcode) = @_;
+    my ($itype,$borrowercategory,$branchcode,$ccode,$permanent_location) = @_;
 
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowercategory, itemtype => $itype, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $borrowercategory,
+        itemtype => $itype,
+        branchcode => $branchcode,
+        ccode => $ccode,
+        permanent_location => $permanent_location,
+    });
     return $issuing_rule ? $issuing_rule->onshelfholds : undef;
 }
 
@@ -2115,20 +2124,16 @@ sub OPACItemHoldsAllowed {
        }
     }
 
-    my $query = "SELECT opacitemholds,categorycode,itemtype,branchcode FROM issuingrules WHERE
-          (issuingrules.categorycode = ? OR issuingrules.categorycode = '*')
-        AND
-          (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
-        AND
-          (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')
-        ORDER BY
-          issuingrules.categorycode desc,
-          issuingrules.itemtype desc,
-          issuingrules.branchcode desc
-       LIMIT 1";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrower->{categorycode},$itype,$branchcode);
-    my $data = $sth->fetchrow_hashref;
+    my $rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $borrower->{categorycode},
+        itemtype => $itype,
+        branchcode => $branchcode,
+        ccode => $item->{ccode},
+        permanent_location => $item->{permanent_location},
+    });
+
+    return '' unless $rule;
+    my $data = $rule->unblessed;
     my $opacitemholds = uc substr ($data->{opacitemholds}, 0, 1);
     return '' if $opacitemholds eq 'N';
     return $opacitemholds;
@@ -2489,7 +2494,8 @@ sub GetMaxPatronHoldsForRecord {
 
         $branchcode = $item->homebranch if ( $controlbranch eq "ItemHomeLibrary" );
 
-        my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode );
+        my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode,
+            $item->ccode, $item->permanent_location );
         my $holds_per_record = $rule ? $rule->{holds_per_record} : 0;
         $max = $holds_per_record if $holds_per_record > $max;
     }
@@ -2499,7 +2505,8 @@ sub GetMaxPatronHoldsForRecord {
 
 =head2 GetHoldRule
 
-my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode );
+my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode, $ccode,
+                        $permanent_location );
 
 Returns the matching hold related issuingrule fields for a given
 patron category, itemtype, and library.
@@ -2507,24 +2514,30 @@ patron category, itemtype, and library.
 =cut
 
 sub GetHoldRule {
-    my ( $categorycode, $itemtype, $branchcode ) = @_;
+    my ( $categorycode, $itemtype, $branchcode, $ccode, $permanent_location ) = @_;
 
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare(
         q{
-         SELECT categorycode, itemtype, branchcode, reservesallowed, holds_per_record
+         SELECT categorycode, itemtype, branchcode, ccode, permanent_location,
+                reservesallowed, holds_per_record
            FROM issuingrules
           WHERE (categorycode in (?,'*') )
             AND (itemtype IN (?,'*'))
             AND (branchcode IN (?,'*'))
+            AND (ccode IN (?,'*'))
+            AND (permanent_location IN (?,'*'))
        ORDER BY categorycode DESC,
                 itemtype     DESC,
-                branchcode   DESC
+                branchcode   DESC,
+                ccode        DESC,
+                permanent_location DESC
         }
     );
 
-    $sth->execute( $categorycode, $itemtype, $branchcode );
+    $sth->execute( $categorycode, $itemtype, $branchcode, $ccode,
+                   $permanent_location );
 
     return $sth->fetchrow_hashref();
 }

@@ -273,6 +273,8 @@ $(document).ready(function() {
             <tr>
                 <th>Patron category</th>
                 <th>Item type</th>
+                <th>Collection code</th>
+                <th>Shelving location</th>
                 <th>Current checkouts allowed</th>
                 <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
@@ -314,6 +316,18 @@ $(document).ready(function() {
 									<em>All</em>
 								[% ELSE %]
 									[% rule.translated_description %]
+								[% END %]
+							</td>
+							<td>[% IF ( rule.default_ccode ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humanccode %]
+								[% END %]
+							</td>
+							<td>[% IF ( rule.default_permanent_location ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humanpermanent_location %]
 								[% END %]
 							</td>
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
@@ -399,7 +413,7 @@ $(document).ready(function() {
 							<td>[% rule.rentaldiscount %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]&amp;ccode=[% rule.ccode %]&amp;permanent_location=[% rule.permanent_location %]"><i class="fa fa-trash"></i> Delete</a>
 							</td>
                 	</tr>
             	[% END %]
@@ -417,6 +431,22 @@ $(document).ready(function() {
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
                             <option value="[% itemtypeloo.itemtype %]">[% itemtypeloo.translated_description %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="ccode" id="matrixccode">
+                            <option value="*">All</option>
+                        [% FOREACH ccodeloo IN ccodeloop %]
+                            <option value="[% ccodeloo.authorised_value %]">[% ccodeloo.lib %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="permanent_location" id="matrixpermanent_location">
+                            <option value="*">All</option>
+                        [% FOREACH locloo IN locloop %]
+                            <option value="[% locloo.authorised_value %]">[% locloo.lib %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -500,6 +530,8 @@ $(document).ready(function() {
                     <tr>
                       <th>Patron category</th>
                       <th>Item type</th>
+                      <th>Collection code</th>
+                      <th>Shelving location</th>
                       <th>Current checkouts allowed</th>
                       <th>Current on-site checkouts allowed</th>
                       <th>Loan period</th>
@@ -616,6 +648,8 @@ $(document).ready(function() {
                 <th>Library</th>
                 <th>Patron category</th>
                 <th>Item type</th>
+                <th>Collection code</th>
+                <th>Shelving location</th>
                 <th>Current checkouts allowed</th>
                 <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
@@ -648,6 +682,8 @@ $(document).ready(function() {
                 <td id="tester_res_branchcode"></td>
                 <td id="tester_res_categorycode"></td>
                 <td id="tester_res_itemtype"></td>
+                <td id="tester_res_ccode"></td>
+                <td id="tester_res_permanent_location"></td>
                 <td id="tester_res_maxissueqty"></td>
                 <td id="tester_res_maxonsiteissueqty"></td>
                 <td id="tester_res_issuelength"></td>

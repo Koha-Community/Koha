@@ -204,10 +204,10 @@ $dbh->do('DELETE FROM default_branch_item_rules');
 $dbh->do('DELETE FROM default_branch_circ_rules');
 $dbh->do('DELETE FROM default_circ_rules');
 $dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-      VALUES (?, ?, ?, ?)},
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, ccode, permanent_location, reservesallowed)
+      VALUES (?, ?, ?, ?, ?, ?)},
     {},
-    '*', '*', '*', 25
+    '*', '*', '*', '*', '*', 25
 );
 
 # CPL allows only its own patrons to request its items
@@ -562,20 +562,26 @@ my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
     {
         categorycode => $categorycode,
         itemtype     => $itype,
-        branchcode   => $holdingbranch
+        branchcode   => $holdingbranch,
+        ccode        => $item->{ccode},
+        permanent_location => $item->{permanent_location},
     }
 );
 
 $dbh->do(
-    "UPDATE issuingrules SET onshelfholds = 1 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
+    "UPDATE issuingrules SET onshelfholds = 1 WHERE categorycode = ? AND itemtype= ?
+        and branchcode = ? AND ccode = ? AND permanent_location = ?",
     undef,
-    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
+    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode,
+    $issuing_rule->ccode, $issuing_rule->permanent_location
 );
 ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
 $dbh->do(
-    "UPDATE issuingrules SET onshelfholds = 0 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
+    "UPDATE issuingrules SET onshelfholds = 0 WHERE categorycode = ? AND itemtype= ?
+        and branchcode = ? AND ccode = ? AND permanent_location = ?",
     undef,
-    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
+    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode,
+    $issuing_rule->ccode, $issuing_rule->permanent_location
 );
 ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
 

@@ -235,6 +235,8 @@ subtest 'Maximum checkouts reached' => sub {
         branchcode   => '*',
         itemtype     => '*',
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty => 1,
     })->store;
     my $availability = Koha::Item::Availability::Checkout->new({

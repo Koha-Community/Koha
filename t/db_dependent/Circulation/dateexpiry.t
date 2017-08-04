@@ -93,13 +93,13 @@ sub calc_date_due {
     # first test with empty expiry date
     # note that this expiry date will never lead to an issue btw !!
     $patron->{dateexpiry} = '0000-00-00';
-    my $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    my $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron, undef, $item );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry 0000-00-00" );
 
     # second test expiry date==today
     my $d2 = output_pref( { dt => $today, dateonly => 1, dateformat => 'sql' } );
     $patron->{dateexpiry} = $d2;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron, undef, $item );
     is( ref $d eq "DateTime" && DateTime->compare( $d->truncate( to => 'day' ), $today->truncate( to => 'day' ) ) == 0, 1, "CalcDateDue with expiry today" );
 
     # third test expiry date tomorrow
@@ -107,13 +107,13 @@ sub calc_date_due {
     my $tomorrow = $today->clone->add_duration($dur);
     $d2 = output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } );
     $patron->{dateexpiry} = $d2;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron, undef, $item );
     is( ref $d eq "DateTime" && $d->mdy() =~ /^\d+/, 1, "CalcDateDue with expiry tomorrow" );
 
     # fourth test far future
     $patron->{dateexpiry} = '9876-12-31';
     my $t1 = time;
-    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron );
+    $d = C4::Circulation::CalcDateDue( $today, $item->{itype}, $branch->{branchcode}, $patron, undef, $item );
     my $t2 = time;
     is( ref $d eq "DateTime" && $t2 - $t1 < 1, 1, "CalcDateDue with expiry in year 9876 in " . sprintf( "%6.4f", $t2 - $t1 ) . " seconds." );
 }

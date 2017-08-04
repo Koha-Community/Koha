@@ -53,6 +53,8 @@ my $rule = Koha::IssuingRule->new(
         categorycode => '*',
         itemtype     => '*',
         branchcode   => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty  => 99,
         issuelength  => 1,
     }

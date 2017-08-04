@@ -38,6 +38,8 @@ $builder->build(
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
+            ccode        => '*',
+            permanent_location => '*',
             firstremind  => 0,
             finedays     => 2,
             lengthunit   => 'days',

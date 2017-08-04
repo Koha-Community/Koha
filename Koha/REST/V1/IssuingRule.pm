@@ -42,18 +42,22 @@ sub get_effective {
     return try {
         my $params = $c->req->query_params->to_hash;
 
-        my ($categorycode, $itemtype, $branchcode);
+        my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location);
         my $user      = $c->stash('koha.user');
         my $patron    = _find_patron($params);
         my $item      = _find_item($params);
         $categorycode = _find_categorycode($params, $patron);
         $itemtype     = _find_itemtype($params, $item);
         $branchcode   = _find_branchcode($params, $item, $patron, $user);
+        $ccode        = _find_ccode($params, $item);
+        $permanent_location = _find_permanent_location($params, $item);
 
         my $rule = Koha::IssuingRules->get_effective_issuing_rule({
             categorycode => $categorycode,
             itemtype     => $itemtype,
             branchcode   => $branchcode,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         });
 
         return $c->render(status => 200, openapi => $rule);
@@ -149,6 +153,23 @@ sub _find_categorycode {
     return $categorycode;
 }
 
+sub _find_ccode {
+    my ($params, $item) = @_;
+
+    my $ccode;
+    if (defined $item && length $params->{ccode}) {
+        unless ($item->ccode eq $params->{ccode}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's ccode does not match given ccode"
+            );
+        }
+    }
+
+    return $item->ccode if $item;
+
+    return $params->{ccode};
+}
+
 sub _find_item {
     my ($params) = @_;
 
@@ -228,6 +249,23 @@ sub _find_patron {
     }
 
     return $patron;
+}
+
+sub _find_permanent_location {
+    my ($params, $item) = @_;
+
+    my $permanent_location;
+    if (defined $item && length $params->{permanent_location}) {
+        unless ($item->permanent_location eq $params->{permanent_location}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's permanent location does not match given location"
+            );
+        }
+    }
+
+    return $item->permanent_location if $item;
+
+    return $params->{permanent_location};
 }
 
 1;

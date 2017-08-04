@@ -101,6 +101,8 @@ sub set_default_circulation_rules {
         branchcode   => '*',
         itemtype     => '*',
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty => 3,
         renewalsallowed => 1,
         holds_per_record => 1,

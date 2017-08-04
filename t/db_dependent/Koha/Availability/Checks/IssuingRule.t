@@ -48,6 +48,8 @@ sub t_maximum_checkouts_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty => 1,
     })->store;
 
@@ -83,6 +85,8 @@ sub t_maximum_checkouts_not_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty => 2,
     })->store;
 
@@ -113,6 +117,8 @@ sub t_maximum_holds_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         reservesallowed => 1,
         holds_per_record => 2,
     })->store;
@@ -145,6 +151,8 @@ sub t_maximum_holds_not_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         reservesallowed => 2,
     })->store;
 
@@ -175,6 +183,8 @@ sub t_maximum_holds_for_record_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         reservesallowed => 2,
         holds_per_record => 1,
     })->store;
@@ -207,6 +217,8 @@ sub t_maximum_holds_for_record_not_reached {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         reservesallowed => 2,
         holds_per_record => 2,
     })->store;
@@ -253,6 +265,8 @@ sub t_on_shelf_holds_forbidden {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         holds_per_record => 1,
         reservesallowed => 1,
         onshelfholds => 1,
@@ -284,6 +298,8 @@ sub t_on_shelf_holds_forbidden_any_available {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         holds_per_record => 1,
         reservesallowed => 1,
         onshelfholds => 2,
@@ -355,6 +371,8 @@ sub t_on_shelf_holds_forbidden_all_available {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         holds_per_record => 1,
         reservesallowed => 1,
         onshelfholds => 0,
@@ -420,6 +438,8 @@ sub t_opac_item_level_hold_forbidden {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         holds_per_record => 1,
         reservesallowed => 1,
         opacitemholds => 'N',
@@ -447,6 +467,8 @@ sub t_opac_item_level_hold_not_forbidden {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         holds_per_record => 1,
         reservesallowed => 1,
         opacitemholds => 'Y',
@@ -475,6 +497,8 @@ sub t_zero_holds_allowed {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         reservesallowed => 0,
     })->store;
 
@@ -506,6 +530,8 @@ sub t_zero_checkouts_allowed {
         branchcode   => '*',
         itemtype     => $item->effective_itemtype,
         categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
         maxissueqty  => 0,
     })->store;
 

@@ -271,8 +271,8 @@ is_deeply(
 #With something in DB
 # Add a default rule: No renewal allowed
 $dbh->do(q|
-    INSERT INTO issuingrules( categorycode, itemtype, branchcode, issuelength, renewalsallowed )
-    VALUES ( '*', '*', '*', 10, 0 )
+    INSERT INTO issuingrules( categorycode, itemtype, branchcode, ccode, permanent_location, issuelength, renewalsallowed )
+    VALUES ( '*', '*', '*', '*', '*', 10, 0 )
 |);
 @renewcount = C4::Circulation::GetRenewCount();
 is_deeply(

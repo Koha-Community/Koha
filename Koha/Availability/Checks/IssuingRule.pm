@@ -71,6 +71,8 @@ sub new {
     my $categorycode  = $params->{'categorycode'};
     my $rule_itemtype = $params->{'rule_itemtype'};
     my $branchcode    = $params->{'branchcode'};
+    my $ccode         = $params->{'ccode'};
+    my $permanent_location = $params->{'permanent_location'};
 
     my $patron     = $self->_validate_parameter($params,
                         'patron',     'Koha::Patron');
@@ -89,6 +91,12 @@ sub new {
     unless ($categorycode) {
         $categorycode = $patron ? $patron->categorycode : undef;
     }
+    unless ($ccode) {
+        $ccode = $item ? $item->ccode : undef;
+    }
+    unless ($permanent_location) {
+        $permanent_location = $item ? $item->permanent_location : undef;
+    }
     if ($params->{'use_cache'}) {
         $self->{'use_cache'} = 1;
     } else {
@@ -103,7 +111,9 @@ sub new {
         my $cached = $cache->get_from_cache('issuingrule-.'
                                 .($categorycode?$categorycode:'*').'-'
                                 .($rule_itemtype?$rule_itemtype:'*').'-'
-                                .($branchcode?$branchcode:'*'));
+                                .($branchcode?$branchcode:'*')
+                                .($ccode?$ccode:'*').'-'
+                                .($permanent_location?$permanent_location:'*'));
         if ($cached) {
             $rule = Koha::IssuingRule->new->set($cached);
         }
@@ -114,12 +124,16 @@ sub new {
             categorycode => $categorycode,
             itemtype     => $rule_itemtype,
             branchcode   => $branchcode,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         });
         if ($rule && $self->use_cache) {
             $cache->set_in_cache('issuingrule-.'
                     .($categorycode?$categorycode:'*').'-'
                     .($rule_itemtype?$rule_itemtype:'*').'-'
-                    .($branchcode?$branchcode:'*'),
+                    .($branchcode?$branchcode:'*').'-'
+                    .($ccode?$ccode:'*').'-'
+                    .($permanent_location?$permanent_location:'*'),
                     $rule->unblessed, { expiry => 10 });
         }
     }

@@ -182,6 +182,8 @@ Koha::IssuingRule->new({
     categorycode => '*',
     branchcode   => '*',
     itemtype     => '*',
+    ccode        => '*',
+    permanent_location => '*',
     renewalperiod   => 7,
     renewalsallowed => 1,
 })->store;

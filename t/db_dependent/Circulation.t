@@ -167,12 +167,14 @@ is(
 # Set a simple circ policy
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
-    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype,
+                                ccode, permanent_location, reservesallowed,
                                 maxissueqty, issuelength, lengthunit,
                                 renewalsallowed, renewalperiod,
                                 norenewalbefore, auto_renew,
                                 fine, chargeperiod)
-      VALUES (?, ?, ?, ?,
+      VALUES (?, ?, ?,
+              ?, ?, ?,
               ?, ?, ?,
               ?, ?,
               ?, ?,
@@ -180,7 +182,8 @@ $dbh->do(
              )
     },
     {},
-    '*', '*', '*', 25,
+    '*', '*', '*',
+    '*', '*', 25,
     20, 14, 'days',
     1, 7,
     undef, 0,
@@ -947,11 +950,12 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $dbh->do('DELETE FROM issuingrules');
     $dbh->do(
         q{
-        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
-                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, ccode, permanent_location, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
+                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
         },
         {},
-        '*', '*', '*', 25,
+        '*', '*', '*',
+        '*', '*', 25,
         20,  14,  'days',
         1,   7,
         undef,  0,
@@ -1550,6 +1554,8 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
+            ccode        => '*',
+            permanent_location => '*',
             maxissueqty  => 99,
             issuelength  => 1,
             firstremind  => 1,        # 1 day of grace

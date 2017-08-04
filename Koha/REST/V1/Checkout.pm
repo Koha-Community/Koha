@@ -260,7 +260,9 @@ sub expanded {
         my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
             {   categorycode => $borrower->{categorycode},
                 itemtype     => $item->effective_itemtype,
-                branchcode   => $branchcode
+                branchcode   => $branchcode,
+                ccode        => $item->ccode,
+                permanent_location => $item->permanent_location,
             }
         );
         $checkout->{'max_renewals'} = $issuing_rule

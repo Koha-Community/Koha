@@ -276,7 +276,15 @@ sub article_request_type {
       :                                      undef;
     my $borrowertype = $borrower->categorycode;
     my $itemtype = $self->effective_itemtype();
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowertype, itemtype => $itemtype, branchcode => $branchcode });
+    my $ccode = $self->ccode;
+    my $permanent_location = $self->permanent_location;
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $borrowertype,
+        itemtype => $itemtype,
+        branchcode => $branchcode,
+        ccode => $ccode,
+        permanent_location => $permanent_location,
+    });
 
     return q{} unless $issuing_rule;
     return $issuing_rule->article_requests || q{}

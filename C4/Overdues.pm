@@ -248,7 +248,13 @@ sub CalcFine {
     my $start_date = $due_dt->clone();
     # get issuingrules (fines part will be used)
     my $itemtype = $item->{itemtype} || $item->{itype};
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $bortype, itemtype => $itemtype, branchcode => $branchcode });
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $bortype,
+        itemtype => $itemtype,
+        branchcode => $branchcode,
+        ccode => $item->{ccode},
+        permanent_location => $item->{permanent_location}
+    });
 
     return unless $issuing_rule; # If not rule exist, there is no fine
 

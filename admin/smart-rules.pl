@@ -68,10 +68,12 @@ my $language = C4::Languages::getlanguage();
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');
     my $categorycode = $input->param('categorycode');
+    my $ccode        = $input->param('ccode');
+    my $permanent_location = $input->param('permanent_location');
     $debug and warn "deleting $1 $2 $branch";
 
-    my $sth_Idelete = $dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=?");
-    $sth_Idelete->execute($branch, $categorycode, $itemtype);
+    my $sth_Idelete = $dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and ccode=? and permanent_location=?");
+    $sth_Idelete->execute($branch, $categorycode, $itemtype, $ccode, $permanent_location);
 }
 elsif ($op eq 'delete-branch-cat') {
     my $categorycode  = $input->param('categorycode');
@@ -122,6 +124,8 @@ elsif ($op eq 'add') {
     my $br = $branch; # branch
     my $bor  = $input->param('categorycode'); # borrower category
     my $itemtype  = $input->param('itemtype');     # item type
+    my $ccode = $input->param('ccode');
+    my $permanent_location = $input->param('permanent_location');
     my $fine = $input->param('fine');
     my $finedays     = $input->param('finedays');
     my $maxsuspensiondays = $input->param('maxsuspensiondays');
@@ -160,12 +164,14 @@ elsif ($op eq 'add') {
     my $article_requests = $input->param('article_requests') || 'no';
     my $overduefinescap = $input->param('overduefinescap') || undef;
     my $cap_fine_to_replacement_price = $input->param('cap_fine_to_replacement_price') eq 'on';
-    $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";
+    $debug and warn "Adding $br, $bor, $itemtype, $ccode, $permanent_location, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";
 
     my $params = {
         branchcode                    => $br,
         categorycode                  => $bor,
         itemtype                      => $itemtype,
+        ccode                         => $ccode,
+        permanent_location            => $permanent_location,
         fine                          => $fine,
         finedays                      => $finedays,
         maxsuspensiondays             => $maxsuspensiondays,
@@ -194,7 +200,13 @@ elsif ($op eq 'add') {
         article_requests              => $article_requests,
     };
 
-    my $issuingrule = Koha::IssuingRules->find({categorycode => $bor, itemtype => $itemtype, branchcode => $br});
+    my $issuingrule = Koha::IssuingRules->find({
+        categorycode => $bor,
+        itemtype => $itemtype,
+        branchcode => $br,
+        ccode => $ccode,
+        permanent_location => $permanent_location,
+    });
     if ($issuingrule) {
         $issuingrule->set($params)->store();
     } else {
@@ -473,12 +485,22 @@ my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['des
 
 my @row_loop;
 my $itemtypes = Koha::ItemTypes->search_with_localization;
+my $ccodes = Koha::AuthorisedValues->search({
+    category => 'CCODE',
+    branchcode => $branch eq '*' ? undef : $branch
+});
+my $locations = Koha::AuthorisedValues->search({
+    category => 'LOC',
+    branchcode => $branch eq '*' ? undef : $branch
+});
 
 my $sth2 = $dbh->prepare("
-    SELECT  issuingrules.*,
+    SELECT DISTINCT issuingrules.*,
             itemtypes.description AS humanitemtype,
             categories.description AS humancategorycode,
-            COALESCE( localization.translation, itemtypes.description ) AS translated_description
+            COALESCE( localization.translation, itemtypes.description ) AS translated_description,
+            a1.lib AS humanccode,
+            a2.lib AS humanpermanent_location
     FROM issuingrules
     LEFT JOIN itemtypes
         ON (itemtypes.itemtype = issuingrules.itemtype)
@@ -487,6 +509,8 @@ my $sth2 = $dbh->prepare("
     LEFT JOIN localization ON issuingrules.itemtype = localization.code
         AND localization.entity = 'itemtypes'
         AND localization.lang = ?
+    LEFT JOIN authorised_values a1 ON issuingrules.ccode = a1.authorised_value
+    LEFT JOIN authorised_values a2 ON issuingrules.permanent_location = a2.authorised_value
     WHERE issuingrules.branchcode = ?
 ");
 $sth2->execute($language, $branch);
@@ -496,7 +520,11 @@ while (my $row = $sth2->fetchrow_hashref) {
     $row->{humanitemtype} ||= $row->{itemtype};
     $row->{default_translated_description} = 1 if $row->{humanitemtype} eq '*';
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
+    $row->{'humanccode'} ||= $row->{'ccode'};
+    $row->{'humanpermanent_location'} ||= $row->{'permanent_location'};
     $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
+    $row->{'default_ccode'} = 1 if $row->{'ccode'} eq '*';
+    $row->{'default_permanent_location'} = 1 if $row->{'permanent_location'} eq '*';
     $row->{'fine'} = sprintf('%.2f', $row->{'fine'});
     if ($row->{'hardduedate'} && $row->{'hardduedate'} ne '0000-00-00') {
        my $harddue_dt = eval { dt_from_string( $row->{'hardduedate'} ) };
@@ -625,6 +653,8 @@ $template->param(default_rules => ($defaults ? 1 : 0));
 $template->param(
     patron_categories => $patron_categories,
                         itemtypeloop => $itemtypes,
+                        ccodeloop => $ccodes,
+                        locloop => $locations,
                         rules => \@sorted_row_loop,
                         humanbranch => ($branch ne '*' ? $branch : ''),
                         current_branch => $branch,

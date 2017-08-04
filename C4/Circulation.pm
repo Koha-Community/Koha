@@ -409,7 +409,9 @@ sub TooMany {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $cat_borrower,
             itemtype     => $type,
-            branchcode   => $branch
+            branchcode   => $branch,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
 
@@ -435,27 +437,33 @@ sub TooMany {
                                     SELECT itemtype FROM issuingrules
                                     WHERE branchcode = ?
                                     AND   (categorycode = ? OR categorycode = ?)
+                                    AND   ccode = ?
+                                    AND   permanent_location = ?
                                     AND   itemtype <> '*'
                                   ) ";
-            } else { 
-                $count_query .= " JOIN  biblioitems USING (biblionumber) 
+            } else {
+                $count_query .= " JOIN  biblioitems USING (biblionumber)
                                   WHERE biblioitems.itemtype NOT IN (
                                     SELECT itemtype FROM issuingrules
                                     WHERE branchcode = ?
                                     AND   (categorycode = ? OR categorycode = ?)
+                                    AND   ccode = ?
+                                    AND   permanent_location = ?
                                     AND   itemtype <> '*'
                                   ) ";
             }
             push @bind_params, $issuing_rule->branchcode;
             push @bind_params, $issuing_rule->categorycode;
+            push @bind_params, $issuing_rule->ccode;
+            push @bind_params, $issuing_rule->permanent_location;
             push @bind_params, $cat_borrower;
         } else {
             # rule has specific item type, so count loans of that
             # specific item type
             if (C4::Context->preference('item-level_itypes')) {
                 $count_query .= " WHERE items.itype = ? ";
-            } else { 
-                $count_query .= " JOIN  biblioitems USING (biblionumber) 
+            } else {
+                $count_query .= " JOIN  biblioitems USING (biblionumber)
                                   WHERE biblioitems.itemtype= ? ";
             }
             push @bind_params, $type;
@@ -707,7 +715,8 @@ sub CanBookBeIssued {
 
         my $branch = _GetCircControlBranch($item,$borrower);
         my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
-        $duedate = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+        $duedate = CalcDateDue( $issuedate, $itype, $branch, $borrower,
+                                undef,      $item );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -1223,7 +1232,8 @@ sub checkHighHolds {
           ? $biblio->{'itype'}
           : $biblio->{'itemtype'};
 
-        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branch, $borrower );
+        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branch,
+                                                     $borrower,  undef,  $item );
 
         my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
 
@@ -1364,7 +1374,9 @@ sub AddIssue {
                 my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
                     {   categorycode => $borrower->{categorycode},
                         itemtype     => $item->{itype},
-                        branchcode   => $branch
+                        branchcode   => $branch,
+                        ccode        => $item->{ccode},
+                        permanent_location => $item->{permanent_location},
                     }
                 );
 
@@ -1377,7 +1389,8 @@ sub AddIssue {
                   ( C4::Context->preference('item-level_itypes') )
                   ? $biblio->{'itype'}
                   : $biblio->{'itemtype'};
-                $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+                $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower,
+                                        undef,      $item );
 
             }
             $datedue->truncate( to => 'minute' );
@@ -1507,66 +1520,29 @@ sub AddIssue {
 
 =head2 GetLoanLength
 
-  my $loanlength = &GetLoanLength($borrowertype,$itemtype,branchcode)
+  my $loanlength = &GetLoanLength( $borrowertype,$itemtype,branchcode,
+                                   $ccode,$permanent_location )
 
 Get loan length for an itemtype, a borrower type and a branch
 
 =cut
 
 sub GetLoanLength {
-    my ( $borrowertype, $itemtype, $branchcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(qq{
-        SELECT issuelength, lengthunit, renewalperiod
-        FROM issuingrules
-        WHERE   categorycode=?
-            AND itemtype=?
-            AND branchcode=?
-            AND issuelength IS NOT NULL
+    my ( $borrowertype, $itemtype, $branchcode,
+        $ccode, $permanent_location ) = @_;
+
+    my $rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $borrowertype,
+        itemtype => $itemtype,
+        branchcode => $branchcode,
+        ccode => $ccode,
+        permanent_location => $permanent_location,
     });
-
-    # try to find issuelength & return the 1st available.
-    # check with borrowertype, itemtype and branchcode, then without one of those parameters
-    $sth->execute( $borrowertype, $itemtype, $branchcode );
-    my $loanlength = $sth->fetchrow_hashref;
-
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( $borrowertype, '*', $branchcode );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( '*', $itemtype, $branchcode );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( '*', '*', $branchcode );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( $borrowertype, $itemtype, '*' );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( $borrowertype, '*', '*' );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( '*', $itemtype, '*' );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
-
-    $sth->execute( '*', '*', '*' );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength
-      if defined($loanlength) && defined $loanlength->{issuelength};
+    return {
+        issuelength => $rule->issuelength,
+        lengthunit => $rule->lengthunit,
+        renewalperiod => $rule->renewalperiod,
+    } if $rule && defined $rule->issuelength;
 
     # if no rule is set => 0 day (hardcoded)
     return {
@@ -1580,19 +1556,24 @@ sub GetLoanLength {
 
 =head2 GetHardDueDate
 
-  my ($hardduedate,$hardduedatecompare) = &GetHardDueDate($borrowertype,$itemtype,branchcode)
+  my ($hardduedate,$hardduedatecompare) = &GetHardDueDate(
+    $borrowertype,$itemtype,branchcode,$ccode,$permanent_location
+  )
 
 Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a branch
 
 =cut
 
 sub GetHardDueDate {
-    my ( $borrowertype, $itemtype, $branchcode ) = @_;
+    my ( $borrowertype, $itemtype, $branchcode, $ccode,
+         $permanent_location ) = @_;
 
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrowertype,
             itemtype     => $itemtype,
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         }
     );
 
@@ -2300,7 +2281,9 @@ sub _debar_user_on_return {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
             itemtype     => $item->{itype},
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
     my $finedays = $issuing_rule ? $issuing_rule->finedays : undef;
@@ -2823,7 +2806,9 @@ sub CanBookBeRenewed {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
             itemtype     => $item->{itype},
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
 
@@ -2977,7 +2962,8 @@ sub AddRenewal {
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         dt_from_string( $issuedata->{date_due} ) :
                                         DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item, $borrower), $borrower, 'is a renewal');
+        $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item, $borrower), $borrower, 'is a renewal',
+                                $item);
     }
 
     # Update the issues record to have the new due date, and a new count
@@ -3092,7 +3078,9 @@ sub GetRenewCount {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
             itemtype     => $item->{itype},
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
 
@@ -3137,7 +3125,9 @@ sub GetSoonestRenewDate {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
             itemtype     => $item->{itype},
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
 
@@ -3197,7 +3187,9 @@ sub GetLatestAutoRenewDate {
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
             itemtype     => $item->{itype},
-            branchcode   => $branchcode
+            branchcode   => $branchcode,
+            ccode        => $item->{ccode},
+            permanent_location => $item->{permanent_location},
         }
     );
 
@@ -3250,7 +3242,7 @@ sub GetIssuingCharges {
     my $item_type;
 
     # Get the book's item type and rental charge (via its biblioitem).
-    my $charge_query = 'SELECT itemtypes.itemtype,rentalcharge FROM items
+    my $charge_query = 'SELECT itemtypes.itemtype,rentalcharge,ccode,permanent_location FROM items
         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber';
     $charge_query .= (C4::Context->preference('item-level_itypes'))
         ? ' LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype'
@@ -3270,9 +3262,11 @@ sub GetIssuingCharges {
             LEFT JOIN issuingrules ON borrowers.categorycode = issuingrules.categorycode
             WHERE borrowers.borrowernumber = ?
             AND (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
-            AND (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')|;
+            AND (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')
+            AND (issuingrules.ccode = ? OR issuingrules.ccode = '*')
+            AND (issuingrules.permanent_location = ? OR issuingrules.permanent_location = '*')|;
         my $discount_sth = $dbh->prepare($discount_query);
-        $discount_sth->execute( $borrowernumber, $item_type, $branch );
+        $discount_sth->execute( $borrowernumber, $item_type, $branch, $item_data->{ccode}, $item_data->{permanent_location} );
         my $discount_rules = $discount_sth->fetchall_arrayref({});
         if (@{$discount_rules}) {
             # We may have multiple rules so get the most specific
@@ -3556,7 +3550,7 @@ sub UpdateHoldingbranch {
 
 =head2 CalcDateDue
 
-$newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
+$newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower,$isrenewal,$item);
 
 this function calculates the due date given the start date and configured circulation rules,
 checking against the holidays calendar as per the 'useDaysMode' syspref.
@@ -3565,17 +3559,30 @@ C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
 C<$isrenewal> = Boolean: is true if we want to calculate the date due for a renewal. Else is false.
+C<$item> = Item object (either a Koha::Item or a HASHref containing item data)
 
 =cut
 
 sub CalcDateDue {
-    my ( $startdate, $itemtype, $branch, $borrower, $isrenewal ) = @_;
+    my ( $startdate, $itemtype, $branch, $borrower, $isrenewal, $item ) = @_;
 
     $isrenewal ||= 0;
 
+    my $ccode;
+    my $permanent_location;
+    if (ref($item) eq 'Koha::Item') {
+        $ccode = $item->ccode;
+        $permanent_location = $item->permanent_location;
+    }
+    elsif (ref($item) eq 'HASH') {
+        $ccode = $item->{ccode};
+        $permanent_location = $item->{permanent_location};
+    }
+
     # loanlength now a href
     my $loanlength =
-            GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch );
+            GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch,
+                           $ccode, $permanent_location );
 
     my $length_key = ( $isrenewal and defined $loanlength->{renewalperiod} )
             ? qq{renewalperiod}
@@ -3623,7 +3630,8 @@ sub CalcDateDue {
 
     # if Hard Due Dates are used, retrieve them and apply as necessary
     my ( $hardduedate, $hardduedatecompare ) =
-      GetHardDueDate( $borrower->{'categorycode'}, $itemtype, $branch );
+      GetHardDueDate( $borrower->{'categorycode'}, $itemtype, $branch, $ccode,
+        $permanent_location );
     if ($hardduedate) {    # hardduedates are currently dates
         $hardduedate->truncate( to => 'minute' );
         $hardduedate->set_hour(23);

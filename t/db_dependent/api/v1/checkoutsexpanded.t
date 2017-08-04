@@ -83,12 +83,16 @@ subtest 'get() tests' => sub {
         categorycode => $patron->categorycode,
         itemtype     => $item1->effective_itemtype,
         branchcode   => $item1->homebranch,
+        ccode        => $item1->ccode,
+        permanent_location => $item1->permanent_location,
         renewalsallowed => 5,
     })->store;
     Koha::IssuingRule->new({
         categorycode => $patron->categorycode,
         itemtype     => $item2->effective_itemtype,
         branchcode   => $item2->homebranch,
+        ccode        => $item2->ccode,
+        permanent_location => $item2->permanent_location,
         renewalsallowed => 1,
     })->store;
 

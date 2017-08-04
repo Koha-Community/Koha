@@ -143,9 +143,13 @@ my $sampleissuingrule1 = {
     opacitemholds      => 'N',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    hold_max_pickup_delay => undef,
+    hold_expiration_charge => undef,
     article_requests   => 'yes',
     no_auto_renewal_after => undef,
     no_auto_renewal_after_hard_limit => undef,
+    ccode => '*',
+    permanent_location => '*',
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -178,7 +182,11 @@ my $sampleissuingrule2 = {
     opacitemholds      => 'Y',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    hold_max_pickup_delay => undef,
+    hold_expiration_charge => undef,
     article_requests   => 'yes',
+    ccode => '*',
+    permanent_location => '*',
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -211,7 +219,11 @@ my $sampleissuingrule3 = {
     opacitemholds      => 'F',
     cap_fine_to_replacement_price => 0,
     holds_per_record   => 1,
+    hold_max_pickup_delay => undef,
+    hold_expiration_charge => undef,
     article_requests   => 'yes',
+    ccode => '*',
+    permanent_location => '*',
 };
 
 $query = 'INSERT INTO issuingrules (
@@ -244,8 +256,10 @@ $query = 'INSERT INTO issuingrules (
                 onshelfholds,
                 opacitemholds,
                 cap_fine_to_replacement_price,
-                article_requests
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                article_requests,
+                ccode,
+                permanent_location
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -278,6 +292,8 @@ $sth->execute(
     $sampleissuingrule1->{opacitemholds},
     $sampleissuingrule1->{cap_fine_to_replacement_price},
     $sampleissuingrule1->{article_requests},
+    $sampleissuingrule1->{ccode},
+    $sampleissuingrule1->{permanent_location},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -310,6 +326,8 @@ $sth->execute(
     $sampleissuingrule2->{opacitemholds},
     $sampleissuingrule2->{cap_fine_to_replacement_price},
     $sampleissuingrule2->{article_requests},
+    $sampleissuingrule2->{ccode},
+    $sampleissuingrule2->{permanent_location},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -342,6 +360,8 @@ $sth->execute(
     $sampleissuingrule3->{opacitemholds},
     $sampleissuingrule3->{cap_fine_to_replacement_price},
     $sampleissuingrule3->{article_requests},
+    $sampleissuingrule3->{ccode},
+    $sampleissuingrule3->{permanent_location},
 );
 
 my $rule = Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed;

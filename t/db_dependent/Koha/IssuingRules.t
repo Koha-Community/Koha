@@ -32,7 +32,7 @@ $schema->storage->txn_begin;
 
 my $builder      = t::lib::TestBuilder->new;
 
-my ($categorycode, $itemtype, $branchcode);
+my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location);
 
 subtest 'get_effective_issuing_rule' => sub {
     plan tests => 3;
@@ -43,6 +43,8 @@ subtest 'get_effective_issuing_rule' => sub {
     $categorycode = $patron->{'categorycode'};
     $itemtype     = $item->{'itype'};
     $branchcode   = $item->{'homebranch'};
+    $ccode        = $item->{'ccode'};
+    $permanent_location = $item->{'permanent_location'};
 
     subtest 'Call with undefined values' => sub {
         plan tests => 4;
@@ -55,6 +57,8 @@ subtest 'get_effective_issuing_rule' => sub {
             branchcode   => undef,
             categorycode => undef,
             itemtype     => undef,
+            ccode        => undef,
+            permanent_location => undef,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule by'
            .' providing undefined values, then undef is returned.');
@@ -62,6 +66,8 @@ subtest 'get_effective_issuing_rule' => sub {
             branchcode => '*',
             categorycode => '*',
             itemtype => '*',
+            ccode => '*',
+            permanent_location => '*',
         };
         ok(Koha::IssuingRule->new($new_rule)->store, 'Given I added an issuing '
            .' rule branchcode => *, categorycode => *, itemtype => *,');
@@ -69,6 +75,8 @@ subtest 'get_effective_issuing_rule' => sub {
             branchcode   => undef,
             categorycode => undef,
             itemtype     => undef,
+            ccode        => undef,
+            permanent_location => undef,
         });
         ok(_row_match($rule, $new_rule), 'When I attempt to get effective'
            .' issuing rule by providing undefined values, then the above one is'
@@ -76,7 +84,7 @@ subtest 'get_effective_issuing_rule' => sub {
     };
 
     subtest 'Get effective issuing rule in correct order' => sub {
-        plan tests => 18;
+        plan tests => 66;
 
         my $rule;
         Koha::IssuingRules->delete;
@@ -85,6 +93,8 @@ subtest 'get_effective_issuing_rule' => sub {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule, then undef'
                         .' is returned.');
@@ -93,6 +103,8 @@ subtest 'get_effective_issuing_rule' => sub {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         });
     };
 
@@ -152,12 +164,14 @@ sub test_effective_issuing_rules {
     my $default = '*';
 
     my $tmp_params = { %$params };
-    my @combinations = glob "{0,1}{0,1}{0,1}";
+    my @combinations = glob "{0,1}{0,1}{0,1}{0,1}{0,1}";
     foreach my $combination (@combinations) {
         my @vals = split //, $combination;
         $tmp_params->{branchcode} = $vals[0] ? $params->{branchcode} : '*';
         $tmp_params->{categorycode} = $vals[1] ? $params->{categorycode} : '*';
         $tmp_params->{itemtype} = $vals[2] ? $params->{itemtype} : '*';
+        $tmp_params->{ccode} = $vals[3] ? $params->{ccode} : '*';
+        $tmp_params->{permanent_location} = $vals[4] ? $params->{permanent_location} : '*';
         _test_rule($tmp_params);
     }
 }
@@ -168,7 +182,9 @@ sub _row_match {
     return 0 unless keys %$result_rule;
     return     $result_rule->branchcode eq $rule->{branchcode}
             && $result_rule->categorycode eq $rule->{categorycode}
-            && $result_rule->itemtype eq $rule->{itemtype};
+            && $result_rule->itemtype eq $rule->{itemtype}
+            && $result_rule->ccode eq $rule->{ccode}
+            && $result_rule->permanent_location eq $rule->{permanent_location};
 }
 
 sub _test_rule {
@@ -188,6 +204,8 @@ sub _test_rule {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
+            ccode        => $ccode,
+            permanent_location => $permanent_location,
         });
     ok(_row_match($result_rule, $rule), 'When I attempt to get effective '
        .'issuing rule, then the above one is returned.');

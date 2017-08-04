@@ -81,6 +81,8 @@ my $issuingrule = $builder->build({
         branchcode         => $branch->{branchcode},
         categorycode       => '*',
         itemtype           => '*',
+        ccode              => '*',
+        permanent_location => '*',
         maxissueqty        => 2,
         maxonsiteissueqty  => 1,
         lengthunit         => 'days',
@@ -150,6 +152,8 @@ my $borrower_circ_rule = $builder->build({
     value => {
         branchcode         => $branch->{branchcode},
         categorycode       => '*',
+        ccode              => '*',
+        permanent_location => '*',
         maxissueqty        => 2,
         maxonsiteissueqty  => 1,
     },

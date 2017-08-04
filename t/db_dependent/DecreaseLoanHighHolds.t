@@ -94,6 +94,8 @@ $builder->build(
             branchcode => '*',
             categorycode => '*',
             itemtype => '*',
+            ccode => '*',
+            permanent_location => '*',
             issuelength => '14',
             lengthunit => 'days',
             reservesallowed => '99',
@@ -108,7 +110,9 @@ my $orig_due = C4::Circulation::CalcDateDue(
     DateTime->now(time_zone => C4::Context->tz()),
     $item->effective_itemtype,
     $patron->branchcode,
-    $patron->unblessed
+    $patron->unblessed,
+    undef,
+    $item,
 );
 
 t::lib::Mocks::mock_preference( 'decreaseLoanHighHolds',               1 );

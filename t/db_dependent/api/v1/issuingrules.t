@@ -333,6 +333,12 @@ sub create_test_context {
 sub create_issuing_rule {
     my ($params) = @_;
 
+    $params->{categorycode} ||= '*';
+    $params->{itemtype} ||= '*';
+    $params->{branchcode} ||= '*';
+    $params->{ccode} ||= '*';
+    $params->{permanent_location} ||= '*';
+
     my $rule = $builder->build({
         source => 'Issuingrule',
         value => $params
