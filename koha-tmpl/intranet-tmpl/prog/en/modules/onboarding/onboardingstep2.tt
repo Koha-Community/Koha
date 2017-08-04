@@ -101,7 +101,11 @@
                                         </li>
                                         <li>
                                             <label for="enrolmentperiod">In months: </label>
-                                            <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]" />
+                                            [% IF category.enrolmentperiod %]
+                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="[% category.enrolmentperiod %]" />
+                                            [% ELSE %]
+                                                <input type="number" class="enrolmentperiod" name="enrolmentperiod" id="enrolmentperiod" min="0" size="3" value="" />
+                                            [% END %]
                                         </li>
                                         <li>
                                             <label for="enrolmentperioddate">Until date: </label>
