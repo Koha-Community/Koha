@@ -496,7 +496,6 @@ sub mocking_systempreferences_to_a_set_value {
         OpacMaintenance
         OpacPublic
         OpacSeparateHoldings
-        OPACShowBarcode
         OPACShowCheckoutName
         OpacShowFiltersPulldownMobile
         OPACShowHoldQueueDetails

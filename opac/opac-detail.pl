@@ -462,7 +462,6 @@ if ($session->param('busc')) {
 
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") );
-$template->param('OPACShowBarcode' => C4::Context->preference("OPACShowBarcode") );
 
 # adding items linked via host biblios
 

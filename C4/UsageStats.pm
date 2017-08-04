@@ -243,7 +243,6 @@ sub BuildReport {
         OpacMaintenance
         OpacPublic
         OpacSeparateHoldings
-        OPACShowBarcode
         OPACShowCheckoutName
         OpacShowFiltersPulldownMobile
         OPACShowHoldQueueDetails

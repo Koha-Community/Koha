@@ -1201,8 +1201,7 @@
         [% IF ( itemdata_itemnotes ) %]
                 <th id="item_notes" data-colname="item_notes" class="notes">Notes</th>[% END %]
                 <th id="item_datedue" data-colname="item_datedue" class="date_due">Date due</th>
-        [% IF ( OPACShowBarcode ) %]
-                <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>[% END %]
+                <th id="item_barcode" data-colname="item_barcode" class="barcode">Barcode</th>
         [% IF holds_count.defined %]
                 <th id="item_holds" data-colname="item_holds">Item holds</th>
         [% ELSIF show_priority %]
@@ -1336,7 +1335,7 @@
                     <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
                     [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes %]</td>[% END %]
                     <td class="date_due"><span title="[% ITEM_RESULT.datedue %]">[% ITEM_RESULT.datedue | $KohaDates as_due_date => 1 %]</span></td>
-                    [% IF ( OPACShowBarcode ) %]<td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode %]</td>[% END %]
+                        <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode %]</td>
                     [% IF holds_count.defined || show_priority %]
                         <td class="holds_count">
                             [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]
