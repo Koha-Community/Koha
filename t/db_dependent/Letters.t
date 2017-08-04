@@ -193,7 +193,9 @@ subtest 'getletter' => sub {
 
     my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', sub {
-        return { branch => "anotherlib" }
+        return {
+            flags  => 1,
+            branch => "anotherlib" }
     });
 
     t::lib::Mocks::mock_preference('IndependentBranches', 1);
