@@ -267,7 +267,7 @@ subtest 'renew_account' => sub {
                 value  => {
                     dateexpiry   => $a_month_ago,
                     categorycode => $patron_category->{categorycode},
-                    date_renewed => undef, # Force builder to not popular the column for new patron
+                    date_renewed => undef, # Force builder to not populate the column for new patron
                 }
             }
         );
