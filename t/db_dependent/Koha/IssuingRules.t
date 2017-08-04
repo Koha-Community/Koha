@@ -32,15 +32,17 @@ $schema->storage->txn_begin;
 
 my $builder      = t::lib::TestBuilder->new;
 
+my ($categorycode, $itemtype, $branchcode);
+
 subtest 'get_effective_issuing_rule' => sub {
     plan tests => 3;
 
     my $patron       = $builder->build({ source => 'Borrower' });
     my $item     = $builder->build({ source => 'Item' });
 
-    my $categorycode = $patron->{'categorycode'};
-    my $itemtype     = $item->{'itype'};
-    my $branchcode   = $item->{'homebranch'};
+    $categorycode = $patron->{'categorycode'};
+    $itemtype     = $item->{'itype'};
+    $branchcode   = $item->{'homebranch'};
 
     subtest 'Call with undefined values' => sub {
         plan tests => 4;
@@ -56,18 +58,19 @@ subtest 'get_effective_issuing_rule' => sub {
         });
         is($rule, undef, 'When I attempt to get effective issuing rule by'
            .' providing undefined values, then undef is returned.');
-        ok(Koha::IssuingRule->new({
+        my $new_rule = {
             branchcode => '*',
             categorycode => '*',
             itemtype => '*',
-        })->store, 'Given I added an issuing rule branchcode => *,'
-           .' categorycode => *, itemtype => *,');
+        };
+        ok(Koha::IssuingRule->new($new_rule)->store, 'Given I added an issuing '
+           .' rule branchcode => *, categorycode => *, itemtype => *,');
         $rule = Koha::IssuingRules->get_effective_issuing_rule({
             branchcode   => undef,
             categorycode => undef,
             itemtype     => undef,
         });
-        ok(_row_match($rule, '*', '*', '*'), 'When I attempt to get effective'
+        ok(_row_match($rule, $new_rule), 'When I attempt to get effective'
            .' issuing rule by providing undefined values, then the above one is'
            .' returned.');
     };
@@ -86,109 +89,11 @@ subtest 'get_effective_issuing_rule' => sub {
         is($rule, undef, 'When I attempt to get effective issuing rule, then undef'
                         .' is returned.');
 
-        ok(Koha::IssuingRule->new({
-            branchcode => '*',
-            categorycode => '*',
-            itemtype => '*',
-        })->store, 'Given I added an issuing rule branchcode => *, categorycode => *, itemtype => *,');
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
+        test_effective_issuing_rules({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
         });
-        ok(_row_match($rule, '*', '*', '*'), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => '*',
-            categorycode => '*',
-            itemtype => $itemtype,
-        })->store, "Given I added an issuing rule branchcode => *, categorycode => *, itemtype => $itemtype,");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, '*', '*', $itemtype), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => '*',
-            categorycode => $categorycode,
-            itemtype => '*',
-        })->store, "Given I added an issuing rule branchcode => *, categorycode => $categorycode, itemtype => *,");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, '*', $categorycode, '*'), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => '*',
-            categorycode => $categorycode,
-            itemtype => $itemtype,
-        })->store, "Given I added an issuing rule branchcode => *, categorycode => $categorycode, itemtype => $itemtype,");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, '*', $categorycode, $itemtype), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => $branchcode,
-            categorycode => '*',
-            itemtype => '*',
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => '*', itemtype => '*',");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, $branchcode, '*', '*'), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => $branchcode,
-            categorycode => '*',
-            itemtype => $itemtype,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => '*', itemtype => $itemtype,");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, $branchcode, '*', $itemtype), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => $branchcode,
-            categorycode => $categorycode,
-            itemtype => '*',
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => '*',");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, $branchcode, $categorycode, '*'), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
-
-        ok(Koha::IssuingRule->new({
-            branchcode => $branchcode,
-            categorycode => $categorycode,
-            itemtype => $itemtype,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => $itemtype,");
-        $rule = Koha::IssuingRules->get_effective_issuing_rule({
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-        });
-        ok(_row_match($rule, $branchcode, $categorycode, $itemtype), 'When I attempt to get effective issuing rule,'
-           .' then the above one is returned.');
     };
 
     subtest 'Performance' => sub {
@@ -241,11 +146,51 @@ subtest 'get_effective_issuing_rule' => sub {
     };
 };
 
-sub _row_match {
-    my ($rule, $branchcode, $categorycode, $itemtype) = @_;
+sub test_effective_issuing_rules {
+    my ($params) = @_;
 
-    return $rule->branchcode eq $branchcode && $rule->categorycode eq $categorycode
-            && $rule->itemtype eq $itemtype;
+    my $default = '*';
+
+    my $tmp_params = { %$params };
+    my @combinations = glob "{0,1}{0,1}{0,1}";
+    foreach my $combination (@combinations) {
+        my @vals = split //, $combination;
+        $tmp_params->{branchcode} = $vals[0] ? $params->{branchcode} : '*';
+        $tmp_params->{categorycode} = $vals[1] ? $params->{categorycode} : '*';
+        $tmp_params->{itemtype} = $vals[2] ? $params->{itemtype} : '*';
+        _test_rule($tmp_params);
+    }
+}
+
+sub _row_match {
+    my ($result_rule, $rule) = @_;
+
+    return 0 unless keys %$result_rule;
+    return     $result_rule->branchcode eq $rule->{branchcode}
+            && $result_rule->categorycode eq $rule->{categorycode}
+            && $result_rule->itemtype eq $rule->{itemtype};
+}
+
+sub _test_rule {
+    my ($rule) = @_;
+    my $result_rule;
+    my $rule_str = 'Added an issuing rule';
+    foreach my $param (keys %$rule) {
+        my $val = $rule->{$param};
+        $rule_str .= " $param => " . (
+            defined $val
+                ? length($val)>5 ? substr($val, 0, 3).'...' : $val
+                : 'undef'
+            ) . ',';
+    }
+    ok(Koha::IssuingRule->new($rule)->store, $rule_str);
+        $result_rule = Koha::IssuingRules->get_effective_issuing_rule({
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+        });
+    ok(_row_match($result_rule, $rule), 'When I attempt to get effective '
+       .'issuing rule, then the above one is returned.');
 }
 
 $schema->storage->txn_rollback;
