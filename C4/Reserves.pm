@@ -1020,7 +1020,7 @@ sub ModReserveFill {
         }
     );
 
-    # FIXME Must call Koha::Hold->cancel ?
+    # FIXME Must call Koha::Hold->cancel ? => No, should call ->filled and add the correct log
     Koha::Old::Hold->new( $hold->unblessed() )->store();
 
     $hold->delete();

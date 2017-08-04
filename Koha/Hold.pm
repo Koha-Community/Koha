@@ -316,7 +316,7 @@ sub cancel {
             $self->cancellationdate(dt_from_string);
             $self->priority(0);
             $self->_move_to_old;
-            $self->delete;
+            $self->SUPER::delete(); # Do not add a DELETE log
 
             # now fix the priority on the others....
             C4::Reserves::_FixPriority({ biblionumber => $self->biblionumber });
