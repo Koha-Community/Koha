@@ -61,7 +61,7 @@ $sth->execute;
 my @errors;
 while (my ($biblionumber)= $sth->fetchrow) {
     #now, parse the record, extract the item fields, and store them in somewhere else.
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     if (not defined $record) {
 	push @errors, $biblionumber;
 	next;

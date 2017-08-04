@@ -90,7 +90,7 @@ sub check_all_url {
         cb       => sub {
             return if $count > $maxconn;
             while ( my ($biblionumber) = $sth->fetchrow ) {
-                my $record = GetMarcBiblio($biblionumber);
+                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
                 for my $tag (@tags) {
                     foreach my $field ( $record->field($tag) ) {
                         my $url = $field->subfield('u');

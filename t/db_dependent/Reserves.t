@@ -529,7 +529,7 @@ t::lib::Mocks::mock_preference( 'AgeRestrictionMarker', 'FSK|PEGI|Age|K' );
 #Reserving an not-agerestricted Biblio by a Borrower with no dateofbirth is tested previously.
 
 #Set the ageRestriction for the Biblio
-my $record = GetMarcBiblio( $bibnum );
+my $record = GetMarcBiblio({ biblionumber =>  $bibnum });
 my ( $ageres_tagid, $ageres_subfieldid ) = GetMarcFromKohaField( "biblioitems.agerestriction" );
 $record->append_fields(  MARC::Field->new($ageres_tagid, '', '', $ageres_subfieldid => 'PEGI 16')  );
 C4::Biblio::ModBiblio( $record, $bibnum, $frameworkcode );

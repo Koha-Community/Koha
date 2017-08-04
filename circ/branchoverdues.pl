@@ -110,7 +110,7 @@ if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
 # now display infos
 foreach my $num (@getoverdues) {
     my %overdueforbranch;
-    my $record = GetMarcBiblio($num->{biblionumber});
+    my $record = GetMarcBiblio({ biblionumber => $num->{biblionumber} });
     if ($record){
         $overdueforbranch{'subtitle'} = GetRecordValue('subtitle',$record,'')->[0]->{subfield};
     }

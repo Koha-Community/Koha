@@ -78,7 +78,7 @@ if ($merge) {
     }
 
     # Rewriting the leader
-    $record->leader(GetMarcBiblio($ref_biblionumber)->leader());
+    $record->leader(GetMarcBiblio({ biblionumber => $ref_biblionumber })->leader());
 
     my $frameworkcode = $input->param('frameworkcode');
     my @notmoveditems;
@@ -115,7 +115,7 @@ if ($merge) {
     my $report_header = {};
     foreach my $biblionumber ($ref_biblionumber, @biblionumbers) {
         # build report
-        my $marcrecord = GetMarcBiblio($biblionumber);
+        my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
         my %report_record = (
             biblionumber => $biblionumber,
             fields => {},
@@ -202,7 +202,7 @@ if ($merge) {
         # Creating a loop for display
         my @records;
         foreach my $biblionumber (@biblionumbers) {
-            my $marcrecord = GetMarcBiblio($biblionumber);
+            my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
             my $frameworkcode = GetFrameworkCode($biblionumber);
             my $recordObj = new Koha::MetadataRecord({'record' => $marcrecord, schema => $marcflavour});
             my $record = {

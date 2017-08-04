@@ -2008,7 +2008,9 @@ sub searchResults {
             my $hostbiblionumber = $hostfield->subfield("0");
             my $linkeditemnumber = $hostfield->subfield("9");
             if(!$hostbiblionumber eq undef){
-                my $hostbiblio = GetMarcBiblio($hostbiblionumber, 1);
+                my $hostbiblio = GetMarcBiblio({
+                    biblionumber => $hostbiblionumber,
+                    embed_items  => 1 });
                 my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
                 if(!$hostbiblio eq undef){
                     my @hostitems = $hostbiblio->field($itemfield);

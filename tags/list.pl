@@ -62,7 +62,7 @@ else {
         my $taglist = get_tag_rows( { term => $tag } );
         for ( @{$taglist} ) {
             my $dat    = &GetBiblioData( $_->{biblionumber} );
-            my $record = &GetMarcBiblio( $_->{biblionumber} );
+            my $record = &GetMarcBiblio({ biblionumber => $_->{biblionumber} });
             $dat->{'subtitle'} =
               GetRecordValue( 'subtitle', $record,
                 GetFrameworkCode( $_->{biblionumber} ) );

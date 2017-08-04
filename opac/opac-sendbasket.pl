@@ -87,7 +87,9 @@ if ( $email_add ) {
 
         my $dat              = GetBiblioData($biblionumber);
         next unless $dat;
-        my $record           = GetMarcBiblio($biblionumber, 1);
+        my $record           = GetMarcBiblio({
+            biblionumber => $biblionumber,
+            embed_items  => 1 });
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 

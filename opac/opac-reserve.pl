@@ -159,7 +159,7 @@ foreach my $biblioNumber (@biblionumbers) {
 
     my @itemInfos = GetItemsInfo($biblioNumber);
 
-    my $marcrecord= GetMarcBiblio($biblioNumber);
+    my $marcrecord= GetMarcBiblio({ biblionumber => $biblioNumber });
 
     # flag indicating existence of at least one item linked via a host record
     my $hostitemsflag;
@@ -401,7 +401,7 @@ $template->param('item_level_itypes' => $itemLevelTypes);
 foreach my $biblioNum (@biblionumbers) {
 
     my @not_available_at = ();
-    my $record = GetMarcBiblio($biblioNum);
+    my $record = GetMarcBiblio({ biblionumber => $biblioNum });
     # Init the bib item with the choices for branch pickup
     my %biblioLoopIter;
 

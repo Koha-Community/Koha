@@ -36,8 +36,11 @@ $biblionumber = int($biblionumber);
 my $error = q{};
 
 my $include_items = ($format =~ /bibtex/) ? 0 : 1;
-my $marc = GetMarcBiblio($biblionumber, $include_items)
-    if $biblionumber;
+my $marc = $biblionumber
+    ? GetMarcBiblio({
+        biblionumber => $biblionumber,
+        embed_items  => $include_items })
+    : undef;
 
 if(!$marc) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");

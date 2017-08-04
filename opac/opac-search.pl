@@ -659,7 +659,7 @@ for (my $i=0;$i<@servers;$i++) {
             }
 
             if (C4::Context->preference('COinSinOPACResults')) {
-                my $record = GetMarcBiblio($res->{'biblionumber'});
+                my $record = GetMarcBiblio({ biblionumber => $res->{'biblionumber'} });
                 $res->{coins} = GetCOinSBiblio($record);
             }
             if ( C4::Context->preference( "Babeltheque" ) and $res->{normalized_isbn} ) {

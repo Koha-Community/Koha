@@ -113,7 +113,10 @@ foreach my $num (@getreserves) {
 
     $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
     $getreserv{'title'}          = $biblio->title;
-    $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($biblio->biblionumber), $biblio->frameworkcode);
+    $getreserv{'subtitle'}       = GetRecordValue(
+        'subtitle',
+        GetMarcBiblio({ biblionumber => $biblio->biblionumber }),
+        $biblio->frameworkcode);
     $getreserv{'biblionumber'}   = $biblio->biblionumber;
     $getreserv{'barcode'}        = $item->barcode;
     $getreserv{'homebranch'}     = $homebranch;

@@ -56,7 +56,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $record = GetMarcBiblio($biblionumber);
+my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
     $template->param( unknownbiblionumber => 1,

@@ -237,7 +237,7 @@ if ( $op eq 'view' ) {
             while ( my $content = $contents->next ) {
                 my $this_item;
                 my $biblionumber = $content->biblionumber;
-                my $record       = GetMarcBiblio($biblionumber);
+                my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 
                 if ( $xslfile ) {
                     $this_item->{XSLTBloc} = XSLTParse4Display( $biblionumber, $record, "XSLTListsDisplay",

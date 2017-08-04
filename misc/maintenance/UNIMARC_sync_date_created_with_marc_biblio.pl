@@ -87,7 +87,7 @@ my $sth_prepared;
 
 sub updateMarc {
     my $id     = shift;
-    my $biblio = GetMarcBiblio($id);
+    my $biblio = GetMarcBiblio({ biblionumber => $id });
 
     unless ($biblio) {
         $debug and warn '[ERROR] GetMarcBiblio did not return any biblio.';

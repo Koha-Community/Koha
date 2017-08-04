@@ -191,7 +191,7 @@ if ( $op eq 'form' ) {
 
             # Finally, modify the biblio
             my $error = eval {
-                my $record = GetMarcBiblio( $biblionumber );
+                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
                 ModifyRecordWithTemplate( $mmtid, $record );
                 my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
                 ModBiblio( $record, $biblionumber, $frameworkcode );

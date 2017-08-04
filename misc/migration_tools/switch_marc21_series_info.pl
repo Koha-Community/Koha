@@ -139,7 +139,7 @@ while ( my ( $biblionumber ) = $bibs_sth->fetchrow ) {
     my ( @newfields );
 
     # Get biblio marc
-    my $biblio = GetMarcBiblio( $biblionumber );
+    my $biblio = GetMarcBiblio({ biblionumber => $biblionumber });
 
     foreach my $field ( $biblio->field( '440' ) ) {
         my @newsubfields;

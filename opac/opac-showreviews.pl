@@ -91,7 +91,7 @@ for my $result (@$reviews){
     my $biblionumber = $result->{biblionumber};
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $biblioitem = $biblio->biblioitem;
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $borr = Koha::Patrons->find( $result->{borrowernumber} )->unblessed;
 	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);

@@ -66,7 +66,9 @@ exit 0;
 sub fetch_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $record = GetMarcBiblio( $biblionumber, $query->url_param('items') );
+    my $record = GetMarcBiblio({
+        biblionumber => $biblionumber,
+        embed_items  => $query->url_param('items') });
     if  (defined $record) {
         print $query->header(-type => 'text/xml',-charset => 'utf-8',);
         print $record->as_xml_record();
@@ -78,7 +80,7 @@ sub fetch_bib {
 sub update_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $old_record = GetMarcBiblio($biblionumber);
+    my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
     unless  (defined $old_record) {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
         return;
@@ -113,8 +115,9 @@ sub update_bib {
         }
 
         ModBiblio( $record, $biblionumber, '' );
-        my $new_record =
-          GetMarcBiblio( $biblionumber, $query->url_param('items') );
+        my $new_record = GetMarcBiblio({
+            biblionumber => $biblionumber,
+            embed_items  => $query->url_param('items') });
 
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;

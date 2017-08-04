@@ -70,7 +70,7 @@ my %alreadydone;
 my $counter;
 my %hash;
 while (my ($bibid) = $sth->fetchrow) {
-	my $record = GetMarcBiblio($bibid);
+    my $record = GetMarcBiblio({ biblionumber => $bibid });
 	my $isbnField = $record->field('010');
 	next unless $isbnField;
 	my $isbn=$isbnField->subfield('a');
@@ -182,8 +182,8 @@ exit;
 # 					# OK, on garde la notice d'autorit� on cherche les notices biblio et on les met �jour...
 # 					if ($fieldnumber eq '710') {
 # 						$sthBIBLIOS710->execute($authentry);
-# 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS710->fetchrow) {
-# 							my $inbiblio = GetMarcBiblio($bibid);
+#                        while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS710->fetchrow) {
+#                            my $inbiblio = GetMarcBiblio({ biblionumber => $bibid });
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
 # 								# !!!!! ici, il faut reconstruire l'entr� de la table de hachage comme ci dessus
@@ -203,7 +203,7 @@ exit;
 # 					if ($fieldnumber eq '711') {
 # 						$sthBIBLIOS711->execute($authentry);
 # 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS711->fetchrow) {
-# 							my $inbiblio = GetMarcBiblio($bibid);
+#                            my $inbiblio = GetMarcBiblio({ biblionumber => $bibid });
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
 # 								# !!!!! ici, il faut reconstruire l'entr� de la table de hachage comme ci dessus
@@ -223,7 +223,7 @@ exit;
 # 					if ($fieldnumber eq '712') {
 # 						$sthBIBLIOS712->execute($authentry);
 # 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS712->fetchrow) {
-# 							my $inbiblio = GetMarcBiblio($bibid);
+#                            my $inbiblio = GetMarcBiblio({ biblionumber => $bibid });
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
 # 								# !!!!! ici, il faut reconstruire l'entr� de la table de hachage comme ci dessus

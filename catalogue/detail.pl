@@ -63,7 +63,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
-my $record       = GetMarcBiblio($biblionumber);
+my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit

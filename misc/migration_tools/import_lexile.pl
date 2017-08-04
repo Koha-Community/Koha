@@ -152,7 +152,7 @@ while ( my $row = $csv->getline_hr($fh) ) {
 
     foreach my $biblionumber (@biblionumbers) {
         $counter++;
-        my $record = GetMarcBiblio($biblionumber);
+        my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 
         if ($verbose) {
             say "Found matching record! Biblionumber: $biblionumber";

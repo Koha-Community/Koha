@@ -91,7 +91,7 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
     #now, parse the record, extract the item fields, and store them in somewhere else.
     my $Koharecord;
     eval{
-	    $Koharecord = GetMarcBiblio($biblionumber);
+        $Koharecord = GetMarcBiblio({ biblionumber => $biblionumber });
     };
     if($@){
 	    warn 'pb when getting biblio '.$i.' : '.$@;

@@ -85,7 +85,7 @@ my $launcher = sub {
         );
 
         #get marc record
-        $marcrecord = GetMarcBiblio($biblionumber);
+        $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
 
         my $subfield_value_9 = $biblionumber;
         my $subfield_value_0 = $biblionumber;

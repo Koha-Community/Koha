@@ -46,7 +46,7 @@ if ($importid) {
     $record = C4::ImportBatch::GetRecordFromImportBiblio( $importid, 'embed_items' );
 }
 else {
-    $record =GetMarcBiblio($biblionumber);
+    $record =GetMarcBiblio({ biblionumber => $biblionumber });
 }
 if(!ref $record) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");

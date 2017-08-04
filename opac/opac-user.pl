@@ -204,7 +204,7 @@ if ($issues){
         }
         $issue->{'charges'} = $charges;
         $issue->{'rentalfines'} = $rentalfines;
-        my $marcrecord = GetMarcBiblio( $issue->{'biblionumber'} );
+        my $marcrecord = GetMarcBiblio({ biblionumber => $issue->{'biblionumber'} });
         $issue->{'subtitle'} = GetRecordValue('subtitle', $marcrecord, GetFrameworkCode($issue->{'biblionumber'}));
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );

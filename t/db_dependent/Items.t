@@ -557,7 +557,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
 
     my ($itemfield) =
       C4::Biblio::GetMarcFromKohaField( 'items.itemnumber', '' );
-    my $record = C4::Biblio::GetMarcBiblio($biblionumber);
+    my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     warning_is { C4::Biblio::EmbedItemsInMarcBiblio() }
     { carped => 'EmbedItemsInMarcBiblio: No MARC record passed' },
       'Should crap is no record passed.';

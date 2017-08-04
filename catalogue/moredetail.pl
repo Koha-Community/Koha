@@ -100,7 +100,7 @@ for my $itm (@all_items) {
                                ($itemnumber != $itm->{itemnumber}));
 }
 
-my $record=GetMarcBiblio($biblionumber);
+my $record=GetMarcBiblio({ biblionumber => $biblionumber });
 
 my $hostrecords;
 # adding items linked via host biblios

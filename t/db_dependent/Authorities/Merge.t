@@ -94,13 +94,13 @@ subtest 'Test merge A1 to A2 (within same authtype)' => sub {
     is( $rv, 1, 'We expect one biblio record (out of two) to be updated' );
 
     # Check the results
-    my $newbiblio1 = GetMarcBiblio($biblionumber1);
+    my $newbiblio1 = GetMarcBiblio({ biblionumber => $biblionumber1 });
     compare_fields( $biblio1, $newbiblio1, {}, 'count' );
     compare_fields( $biblio1, $newbiblio1, {}, 'order' );
     is( $newbiblio1->subfield('609', '9'), $authid1, 'Check biblio1 609$9' );
     is( $newbiblio1->subfield('609', 'a'), 'George Orwell',
         'Check biblio1 609$a' );
-    my $newbiblio2 = GetMarcBiblio($biblionumber2);
+    my $newbiblio2 = GetMarcBiblio({ biblionumber => $biblionumber2 });
     compare_fields( $biblio2, $newbiblio2, {}, 'count' );
     compare_fields( $biblio2, $newbiblio2, {}, 'order' );
     is( $newbiblio2->subfield('609', '9'), $authid1, 'Check biblio2 609$9' );
@@ -138,11 +138,11 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     is( $rv, 2, 'Both records are updated now' );
 
     #Check the results
-    my $biblio1 = GetMarcBiblio($biblionumber1);
+    my $biblio1 = GetMarcBiblio({ biblionumber => $biblionumber1 });
     compare_fields( $MARC1, $biblio1, {}, 'count' );
     compare_fields( $MARC1, $biblio1, {}, 'order' );
     is( $auth1new->field(109)->subfield('a'), $biblio1->field(109)->subfield('a'), 'Record1 values updated correctly' );
-    my $biblio2 = GetMarcBiblio( $biblionumber2 );
+    my $biblio2 = GetMarcBiblio({ biblionumber => $biblionumber2 });
     compare_fields( $MARC2, $biblio2, {}, 'count' );
     compare_fields( $MARC2, $biblio2, {}, 'order' );
     is( $auth1new->field(109)->subfield('a'), $biblio2->field(109)->subfield('a'), 'Record2 values updated correctly' );
@@ -154,7 +154,7 @@ subtest 'Test merge A1 to modified A1, test strict mode' => sub {
     ModBiblio( $MARC1, $biblionumber1, '' );
     @linkedrecords = ( $biblionumber1 );
     $rv = C4::AuthoritiesMarc::merge({ mergefrom => $authid1, MARCfrom => $auth1old, mergeto => $authid1, MARCto => $auth1new });
-    $biblio1 = GetMarcBiblio($biblionumber1);
+    $biblio1 = GetMarcBiblio({ biblionumber => $biblionumber1 });
     is( $biblio1->field(109)->subfield('b'), undef, 'Subfield overwritten in strict mode' );
     compare_fields( $MARC1, $biblio1, { 609 => 1 }, 'count' );
     my @old609 = $MARC1->field('609');
@@ -195,7 +195,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
         MARC::Field->new( '612', '', '', a => 'unrelated', 9 => 'other' ),
     );
     my ( $biblionumber ) = C4::Biblio::AddBiblio( $marc, '' );
-    my $oldbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    my $oldbiblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
 
     # Time to merge
     @linkedrecords = ( $biblionumber );
@@ -203,7 +203,7 @@ subtest 'Test merge A1 to B1 (changing authtype)' => sub {
     is( $retval, 1, 'We touched only one biblio' );
 
     # Get new marc record for compares
-    my $newbiblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    my $newbiblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     compare_fields( $oldbiblio, $newbiblio, {}, 'count' );
     # Exclude 109/609 and 112/612 in comparing order
     my $excl = { '109' => 1, '112' => 1, '609' => 1, '612' => 1 };
@@ -260,7 +260,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     DelAuthority({ authid => $authid1 }); # this triggers a merge call
 
     # See what happened in the biblio record
-    my $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
+    my $marc1 = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $marc1->field('609'), undef, 'Field 609 should be gone too' );
 
     # Now we simulate the delete as done in the cron job
@@ -282,7 +282,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
     $mocks->{auth_mod}->unmock_all;
     merge({ mergefrom => $authid1, biblionumbers => [ $biblionumber ] });
     # Final check
-    $marc1 = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $marc1 = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $marc1->field('609'), undef, 'Merge removed the 609 again even after deleting the authority record' );
 };
 
@@ -306,14 +306,14 @@ subtest "Test some specific postponed merge issues" => sub {
     # This proves the !authtypefrom condition in sub merge
     # Additionally, we test clearing subfield
     merge({ mergefrom => $id + 1, MARCfrom => $oldauthmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
-    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $biblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $biblio->subfield('609', '9'), $id, '612 moved to 609' );
     is( $biblio->subfield('609', 'c'), undef, '609c cleared correctly' );
 
     # Merge A to B postponed, delete B immediately (hits B < hits A)
     # This proves the !@record_to test in sub merge
     merge({ mergefrom => $id + 2, mergeto => $id + 1, MARCto => undef, biblionumbers => [ $biblionumber ] });
-    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $biblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $biblio->field('612'), undef, 'Last 612 must be gone' );
 
     # Show that we 'need' skip_merge; this example is far-fetched.
@@ -325,7 +325,7 @@ subtest "Test some specific postponed merge issues" => sub {
     my $restored_mocks = set_mocks();
     DelAuthority({ authid => $id, skip_merge => 1 }); # delete A
     $restored_mocks->{auth_mod}->unmock_all;
-    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $biblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $biblio->subfield('109', '9'), $id, 'If the 109 is no longer present, another modify merge would not bring it back' );
 };
 

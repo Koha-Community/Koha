@@ -78,7 +78,7 @@ $sth1->execute();
 
 # fetch info from the search
 while (my ($biblionumber, $frameworkcode) = $sth1->fetchrow_array){
-  my $record = GetMarcBiblio($biblionumber);
+  my $record = GetMarcBiblio({ biblionumber => $biblionumber });
  
   my $modok = ModBiblio($record, $biblionumber, $frameworkcode);
 

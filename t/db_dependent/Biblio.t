@@ -120,7 +120,7 @@ sub run_tests {
         '(GetBiblioData) Title field is empty in fresh biblio.');
 
     my ( $isbn_field, $isbn_subfield ) = get_isbn_field();
-    my $marc = GetMarcBiblio( $biblionumber );
+    my $marc = GetMarcBiblio({ biblionumber => $biblionumber });
     is( $marc->subfield( $isbn_field, $isbn_subfield ), $isbn, );
 
     # Add title
@@ -131,7 +131,7 @@ sub run_tests {
     is( $data->{ title }, $title,
         'ModBiblio correctly added the title field, and GetBiblioData.');
     is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after ModBiblio.');
-    $marc = GetMarcBiblio( $biblionumber );
+    $marc = GetMarcBiblio({ biblionumber => $biblionumber });
     my ( $title_field, $title_subfield ) = get_title_field();
     is( $marc->subfield( $title_field, $title_subfield ), $title, );
 
@@ -253,7 +253,9 @@ sub run_tests {
         "GetMarcPrice returns the correct value");
     my $newincbiblioitemnumber=$biblioitemnumber+1;
     $dbh->do("UPDATE biblioitems SET biblioitemnumber = ? WHERE biblionumber = ?;", undef, $newincbiblioitemnumber, $biblionumber );
-    my $updatedrecord = GetMarcBiblio($biblionumber, 0);
+    my $updatedrecord = GetMarcBiblio({
+        biblionumber => $biblionumber,
+        embed_items  => 0 });
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;

@@ -81,7 +81,9 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
 
-                my $record = GetMarcBiblio($biblionumber, 1);
+                my $record = GetMarcBiblio({
+                    biblionumber => $biblionumber,
+                    embed_items  => 1 });
                 my $framework = &GetFrameworkCode( $biblionumber );
                 $record_processor->options({
                     interface => 'opac',

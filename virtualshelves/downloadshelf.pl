@@ -71,7 +71,9 @@ if ($shelfid && $format) {
             else { #Other formats
                 while ( my $content = $contents->next ) {
                     my $biblionumber = $content->biblionumber;
-                    my $record = GetMarcBiblio($biblionumber, 1);
+                    my $record = GetMarcBiblio({
+                        biblionumber => $biblionumber,
+                        embed_items  => 1 });
                     if ($format eq 'iso2709') {
                         $output .= $record->as_usmarc();
                     }

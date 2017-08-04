@@ -144,7 +144,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
     my $thisratio = $data->{reservecount} / $data->{itemcount};
     my $ratiocalc = ($thisratio / $ratio);
     ($thisratio / $ratio) >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
-    my $record = GetMarcBiblio($data->{biblionumber});
+    my $record = GetMarcBiblio({ biblionumber => $data->{biblionumber} });
     $data->{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($data->{biblionumber}));
     push(
         @reservedata,

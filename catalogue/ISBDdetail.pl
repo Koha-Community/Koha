@@ -78,7 +78,9 @@ if ( not defined $biblionumber ) {
        exit;
 }
 
-my $record = GetMarcBiblio($biblionumber,1);
+my $record = GetMarcBiblio({
+    biblionumber => $biblionumber,
+    embed_items  => 1 });
 
 if ( not defined $record ) {
        # biblionumber invalid -> report and exit

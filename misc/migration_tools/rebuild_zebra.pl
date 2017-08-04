@@ -675,7 +675,7 @@ sub get_raw_marc_record {
 
     my $marc;
     if ($record_type eq 'biblio') {
-        eval { $marc = GetMarcBiblio($record_number, 1); };
+        eval { $marc = GetMarcBiblio({ biblionumber => $record_number, embed_items => 1 }); };
         if ($@ || !$marc) {
             # here we do warn since catching an exception
             # means that the bib was found but failed

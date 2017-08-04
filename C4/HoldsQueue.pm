@@ -146,7 +146,7 @@ sub GetHoldsQueueItems {
     $sth->execute(@bind_params);
     my $items = [];
     while ( my $row = $sth->fetchrow_hashref ){
-        my $record = GetMarcBiblio($row->{biblionumber});
+        my $record = GetMarcBiblio({ biblionumber => $row->{biblionumber} });
         if ($record){
             $row->{subtitle} = [ map { $_->{subfield} } @{ GetRecordValue( 'subtitle', $record, '' ) } ];
             $row->{parts} = GetRecordValue('parts',$record,'')->[0]->{subfield};

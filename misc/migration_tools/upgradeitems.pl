@@ -18,7 +18,7 @@ my $rqitemnumber=$dbh->prepare("SELECT itemnumber, biblionumber from items where
 $rqbiblios->execute;
 $|=1;
 while (my ($biblionumber)= $rqbiblios->fetchrow_array){
-    my $record=GetMarcBiblio($biblionumber);
+    my $record=GetMarcBiblio({ biblionumber => $biblionumber });
     foreach my $itemfield ($record->field('995')){
         my $marcitem=MARC::Record->new();
         $marcitem->encoding('UTF-8');

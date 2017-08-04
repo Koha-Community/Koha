@@ -103,7 +103,8 @@ while ( my $h = $holds_rs->next() ) {
         priority       => $h->priority(),
         itemtype_limit => $itemtype_limit,
         subtitle       => GetRecordValue(
-            'subtitle', GetMarcBiblio($biblionumber),
+            'subtitle',
+            GetMarcBiblio({ biblionumber => $biblionumber }),
             GetFrameworkCode($biblionumber)
         ),
         reservedate_formatted => $h->reservedate() ? output_pref(

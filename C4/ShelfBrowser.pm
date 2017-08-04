@@ -223,7 +223,7 @@ sub GetShelfInfo {
         my $this_biblio = GetBibData($item->{biblionumber});
         next unless defined $this_biblio;
         $item->{'title'} = $this_biblio->{'title'};
-        my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
+        my $this_record = GetMarcBiblio({ biblionumber => $this_biblio->{'biblionumber'} });
         $item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
         $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
         $item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);

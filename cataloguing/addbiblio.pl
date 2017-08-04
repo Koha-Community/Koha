@@ -770,7 +770,7 @@ my (
 );
 
 if (($biblionumber) && !($breedingid)){
-	$record = GetMarcBiblio($biblionumber);
+    $record = GetMarcBiblio({ biblionumber => $biblionumber });
 }
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;

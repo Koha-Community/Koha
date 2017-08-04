@@ -471,7 +471,7 @@ sub marcrecord2csv {
     my $output;
 
     # Getting the record
-    my $record = GetMarcBiblio($biblio);
+    my $record = GetMarcBiblio({ biblionumber => $biblio });
     return unless $record;
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblio, $itemnumbers );
     # Getting the framework

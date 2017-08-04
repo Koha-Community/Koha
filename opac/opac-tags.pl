@@ -232,7 +232,7 @@ if ($loggedinuser) {
     my $my_approved_tags = get_approval_rows({ approved => 1 });
     foreach my $tag (@$my_tags) {
         my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
-        my $record = &GetMarcBiblio( $tag->{biblionumber} );
+        my $record = &GetMarcBiblio({ biblionumber => $tag->{biblionumber} });
         $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
         $tag->{title} = $biblio->title;
         $tag->{author} = $biblio->author;

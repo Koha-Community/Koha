@@ -10,7 +10,7 @@ use Koha::RecordProcessor;
 use Data::Dumper;
 use C4::Biblio;
 
-my $record = GetMarcBiblio($ARGV[0]);
+my $record = GetMarcBiblio({ biblionumber => $ARGV[0] });
 
 print "Before: " . $record->as_formatted() . "\n";
 my $processor = Koha::RecordProcessor->new( { filters => ( $ARGV[1] ) });

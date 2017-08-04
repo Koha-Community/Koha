@@ -58,7 +58,11 @@ Keyword to MARC mapping for subtitle must be set for this method to return any p
 sub subtitles {
     my ( $self ) = @_;
 
-    return map { $_->{subfield} } @{ C4::Biblio::GetRecordValue( 'subtitle', C4::Biblio::GetMarcBiblio( $self->id ), $self->frameworkcode ) };
+    return map { $_->{subfield} } @{
+        C4::Biblio::GetRecordValue(
+            'subtitle',
+            C4::Biblio::GetMarcBiblio({ biblionumber => $self->id }),
+            $self->frameworkcode ) };
 }
 
 =head3 can_article_request

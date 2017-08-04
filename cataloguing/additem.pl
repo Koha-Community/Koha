@@ -411,7 +411,7 @@ $restrictededition = 0 if ($restrictededition != 0 &&  C4::Context->IsSuperLibra
 $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && haspermission($uid, {'editcatalogue' => 'fast_cataloging'}));
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
-my $record = GetMarcBiblio($biblionumber);
+my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 my $oldrecord = TransformMarcToKoha($record);
 my $itemrecord;
 my $nextop="additem";
@@ -724,7 +724,7 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 
 # now, build existiing item list
-my $temp = GetMarcBiblio( $biblionumber );
+my $temp = GetMarcBiblio({ biblionumber => $biblionumber });
 #my @fields = $record->fields();
 
 
@@ -748,7 +748,9 @@ if ( C4::Context->preference('EasyAnalyticalRecords') ) {
     foreach my $hostfield ($temp->field($analyticfield)){
         my $hostbiblionumber = $hostfield->subfield('0');
         if ($hostbiblionumber){
-            my $hostrecord = GetMarcBiblio($hostbiblionumber, 1);
+            my $hostrecord = GetMarcBiblio({
+                biblionumber => $hostbiblionumber,
+                embed_items  => 1 });
             if ($hostrecord) {
                 my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
                 foreach my $hostitem ($hostrecord->field($itemfield)){

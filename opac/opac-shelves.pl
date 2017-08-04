@@ -270,7 +270,7 @@ if ( $op eq 'view' ) {
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
                 my $this_item    = GetBiblioData($biblionumber);
-                my $record = GetMarcBiblio($biblionumber);
+                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
                 my $framework = GetFrameworkCode( $biblionumber );
                 $record_processor->options({
                     interface => 'opac',

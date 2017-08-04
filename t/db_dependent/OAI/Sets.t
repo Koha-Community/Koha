@@ -520,7 +520,7 @@ ModOAISetMappings($setVH_id, $mappingsVH);
 my $biblionumberVH = create_helper_biblio('Victor Hugo');
 
 #Update
-my $record = GetMarcBiblio($biblionumberVH);
+my $record = GetMarcBiblio({ biblionumber => $biblionumberVH });
 UpdateOAISetsBiblio($biblionumberVH, $record);
 
 #is biblio attached to setVH ?
@@ -575,7 +575,7 @@ ModOAISetMappings($setNotVH_id, $mappingsNotVH);
 my $biblionumberNotVH = create_helper_biblio('Sponge, Bob');
 
 #Update
-$record = GetMarcBiblio($biblionumberNotVH);
+$record = GetMarcBiblio({ biblionumber => $biblionumberNotVH });
 UpdateOAISetsBiblio($biblionumberNotVH, $record);
 
 my @setsNotEq = CalcOAISetsBiblio($record);

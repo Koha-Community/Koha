@@ -93,7 +93,7 @@ subtest 'EmbedItemsAvailability tests' => sub {
     my $processor = Koha::RecordProcessor->new( { filters => ('EmbedItemsAvailability') } );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     ok( !defined $record->field('999')->subfield('x'), q{The record doesn't originally contain 999$x} );
     # Apply filter
     $processor->process($record);
@@ -141,7 +141,7 @@ subtest 'EmbedItemsAvailability tests' => sub {
     $processor = Koha::RecordProcessor->new( { filters => ('EmbedItemsAvailability') } );
     is( ref($processor), 'Koha::RecordProcessor', 'Created record processor' );
 
-    $record = GetMarcBiblio($biblionumber);
+    $record = GetMarcBiblio({ biblionumber => $biblionumber });
     ok( !defined $record->subfield('999', 'x'), q{The record doesn't originally contain 999$x} );
     # Apply filter
     $processor->process($record);

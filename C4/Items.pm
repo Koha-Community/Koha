@@ -1321,7 +1321,7 @@ references on array of itemnumbers.
 
 sub get_hostitemnumbers_of {
     my ($biblionumber) = @_;
-    my $marcrecord = GetMarcBiblio($biblionumber);
+    my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
 
     return unless $marcrecord;
 

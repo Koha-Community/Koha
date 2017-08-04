@@ -49,7 +49,7 @@ while (my $biblionumber = $query->fetchrow){
     $count++;
     print "." unless $silent;
     print "\r$count" unless ($silent or ($count % 100)); 
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     
     if ($record) {
         ModBiblio($record, $biblionumber, GetFrameworkCode($biblionumber)) ;

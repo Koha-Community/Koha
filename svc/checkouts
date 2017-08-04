@@ -209,8 +209,10 @@ while ( my $c = $sth->fetchrow_hashref() ) {
                 as_due_date => 1
             }
         ),
-        subtitle =>
-          GetRecordValue( 'subtitle', GetMarcBiblio( $c->{biblionumber} ), GetFrameworkCode( $c->{biblionumber} ) ),
+        subtitle => GetRecordValue(
+            'subtitle',
+            GetMarcBiblio({ biblionumber => $c->{biblionumber} }),
+            GetFrameworkCode( $c->{biblionumber} ) ),
         lost    => $lost,
         damaged => $damaged,
         borrower => {

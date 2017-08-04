@@ -108,7 +108,7 @@ for my $biblionumber (@biblionumbers) {
         say " skipping. ERROR: Invalid biblionumber." if $verbose;
         next;
     }
-    my $record = C4::Biblio::GetMarcBiblio($biblionumber);
+    my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     unless ($record) {
         say " skipping. ERROR: Invalid record." if $verbose;
         next;

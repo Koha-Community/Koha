@@ -68,7 +68,9 @@ if ($bib_list && $format) {
         });
         foreach my $biblio (@bibs) {
 
-            my $record = GetMarcBiblio($biblio, 1);
+            my $record = GetMarcBiblio({
+                biblionumber => $biblio,
+                embed_items  => 1 });
             my $framework = &GetFrameworkCode( $biblio );
             $record_processor->options({
                 interface => 'opac',

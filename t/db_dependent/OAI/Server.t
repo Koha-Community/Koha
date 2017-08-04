@@ -86,7 +86,7 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     my $timestamp = $sth->fetchrow_array . 'Z';
     $timestamp =~ s/ /T/;
     $timestamp = manipulate_timestamp( $index, $biblionumber, $timestamp );
-    $record = GetMarcBiblio($biblionumber);
+    $record = GetMarcBiblio({ biblionumber => $biblionumber });
     $record = XMLin($record->as_xml_record);
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
     push @oaidc, {

@@ -109,7 +109,7 @@ while ( my $library = $libraries->next ) {
                 itemcallnumber => $item->itemcallnumber,
             );
 
-            my $record = GetMarcBiblio($biblio->biblionumber);
+            my $record = GetMarcBiblio({ biblionumber => $biblio->biblionumber });
             $getransf{'subtitle'} = GetRecordValue('subtitle', $record, $biblio->frameworkcode);
 
             # we check if we have a reserv for this transfer

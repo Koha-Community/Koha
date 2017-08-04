@@ -80,7 +80,7 @@ if ( $op eq 'form' ) {
             }
             my $holds_count = $biblio->holds->count;
             $biblio = $biblio->unblessed;
-            my $record = &GetMarcBiblio( $record_id );
+            my $record = &GetMarcBiblio({ biblionumber => $record_id });
             $biblio->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $record_id ) );
             $biblio->{itemnumbers} = C4::Items::GetItemnumbersForBiblio( $record_id );
             $biblio->{holds_count} = $holds_count;

@@ -47,7 +47,7 @@ if ($importid) {
     $record = MARC::Record->new_from_usmarc($marc);
 }
 else {
-    $record = GetMarcBiblio($biblionumber);
+    $record = GetMarcBiblio({ biblionumber => $biblionumber });
     my $framework = GetFrameworkCode($biblionumber);
     $record_processor->options({
         interface => 'opac',

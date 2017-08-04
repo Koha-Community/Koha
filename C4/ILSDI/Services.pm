@@ -214,7 +214,9 @@ sub GetRecords {
         }
 
         my $embed_items = 1;
-        my $record = GetMarcBiblio($biblionumber, $embed_items);
+        my $record = GetMarcBiblio({
+            biblionumber => $biblionumber,
+            embed_items  => $embed_items });
         if ($record) {
             $biblioitem->{marcxml} = $record->as_xml_record();
         }

@@ -121,7 +121,9 @@ sub get_all_biblios_iterator {
         while (1) {
             my $row = $rs->next();
             return if !$row;
-            my $marc = C4::Biblio::GetMarcBiblio( $row->biblionumber, 1 );
+            my $marc = C4::Biblio::GetMarcBiblio({
+                biblionumber => $row->biblionumber,
+                embed_items  => 1 });
             my $next = eval {
                 __PACKAGE__->new($marc, $row->biblionumber);
             };
@@ -158,7 +160,9 @@ If set to true, item data is embedded in the record. Default is to not do this.
 sub get_marc_biblio {
     my ($class, $bibnum, %options) = @_;
 
-    return C4::Biblio::GetMarcBiblio( $bibnum, ($options{item_data} ? 1 : 0 ) );
+    return C4::Biblio::GetMarcBiblio({
+        biblionumber => $bibnum,
+        embed_items  => ($options{item_data} ? 1 : 0 ) });
 }
 
 1;

@@ -439,7 +439,9 @@ sub redirect_mod_subscription {
 
 sub insert_additional_fields {
     my ( $additional_fields, $biblionumber, $subscriptionid ) = @_;
-    my $record = GetMarcBiblio( $biblionumber, 1 );
+    my $record = GetMarcBiblio({
+        biblionumber => $biblionumber,
+        embed_items  => 1 });
     for my $field ( @$additional_fields ) {
         my $af = Koha::AdditionalField->new({ id => $field->{id} })->fetch;
         if ( $af->{marcfield} ) {

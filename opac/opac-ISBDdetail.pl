@@ -93,7 +93,9 @@ if (scalar @items >= 1) {
     }
 }
 
-my $record = GetMarcBiblio($biblionumber,1);
+my $record = GetMarcBiblio({
+    biblionumber => $biblionumber,
+    embed_items  => 1 });
 if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;

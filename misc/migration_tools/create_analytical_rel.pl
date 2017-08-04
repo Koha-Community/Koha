@@ -81,7 +81,7 @@ _SUMMARY_
 sub process_bib {
     my $biblionumber = shift;
 
-    my $bib = GetMarcBiblio($biblionumber);
+    my $bib = GetMarcBiblio({ biblionumber => $biblionumber });
     unless (defined $bib) {
         print "\nCould not retrieve bib $biblionumber from the database - record is corrupt.\n";
         $num_bad_bibs++;

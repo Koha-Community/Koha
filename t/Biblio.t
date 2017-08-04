@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 46;
+        plan tests => 47;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -181,6 +181,10 @@ warning_is { $ret = RemoveAllNsb() }
 ok( !defined $ret, 'RemoveAllNsb returns undef if not passed rec');
 
 warning_is { $ret = GetMarcBiblio() }
+           { carped => 'GetMarcBiblio called without parameters'},
+           "GetMarcBiblio returns carped warning on no parameters";
+
+warning_is { $ret = GetMarcBiblio({ biblionumber => undef }) }
            { carped => 'GetMarcBiblio called with undefined biblionumber'},
            "GetMarcBiblio returns carped warning on undef biblionumber";
 

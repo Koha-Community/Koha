@@ -1475,7 +1475,7 @@ sub merge {
 
     my $counteditedbiblio = 0;
     foreach my $biblionumber ( @biblionumbers ) {
-        my $marcrecord = GetMarcBiblio( $biblionumber );
+        my $marcrecord = GetMarcBiblio({ biblionumber => $biblionumber });
         next if !$marcrecord;
         my $update = 0;
         foreach my $tagfield (@$tags_using_authtype) {

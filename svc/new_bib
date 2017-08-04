@@ -75,7 +75,7 @@ sub add_bib {
             $record->delete_field($field);
         }
         my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
-        my $new_record = GetMarcBiblio($biblionumber);
+        my $new_record = GetMarcBiblio({ biblionumber => $biblionumber });
         if ( $query->url_param('items') ) {
             foreach my $field ( $fullrecord->field($itemtag) ) {
                 my $one_item_record = $new_record->clone();
@@ -84,8 +84,9 @@ sub add_bib {
             }
         }
 
-        $new_record =
-          GetMarcBiblio( $biblionumber, $query->url_param('items') );
+        $new_record = GetMarcBiblio({
+            biblionumber => $biblionumber,
+            embed_items  => $query->url_param('items') });
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();

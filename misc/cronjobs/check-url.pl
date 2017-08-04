@@ -105,7 +105,7 @@ sub check_biblio {
     my $host            = $self->{ host_default };
     my $bad_url         = $self->{ bad_url      };
 
-    my $record = GetMarcBiblio( $biblionumber ); 
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     return unless $record->field('856');
 
     my @urls = ();

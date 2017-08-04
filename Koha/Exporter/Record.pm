@@ -65,7 +65,7 @@ sub _get_biblio_for_export {
     my $export_items = $params->{export_items} // 1;
     my $only_export_items_for_branch = $params->{only_export_items_for_branch};
 
-    my $record = eval { C4::Biblio::GetMarcBiblio($biblionumber); };
+    my $record = eval { C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber }); };
 
     return if $@ or not defined $record;
 

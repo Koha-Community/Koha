@@ -32,7 +32,7 @@ my $mmtid = $query->param('mmtid'); # Marc modification template id
 
 my $record;
 if ( $record_type eq 'biblio' ) {
-    $record = GetMarcBiblio( $record_id );
+    $record = GetMarcBiblio({ biblionumber => $record_id });
 } else {
     my $authority = Koha::MetadataRecord::Authority->get_from_authid( $record_id );
     $record = $authority->record;

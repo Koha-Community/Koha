@@ -28,7 +28,9 @@ if ($op eq "export") {
     my $biblionumber = $query->param("bib");
         if ($biblionumber){
 
-            my $marc = GetMarcBiblio($biblionumber, 1);
+            my $marc = GetMarcBiblio({
+                biblionumber => $biblionumber,
+                embed_items  => 1 });
 
             if ($format =~ /endnote/) {
                 $marc = marc2endnote($marc);
