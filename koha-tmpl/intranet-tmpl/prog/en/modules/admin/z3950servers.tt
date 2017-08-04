@@ -225,7 +225,7 @@
     [% IF id %]
         You searched for record [% id %]
     [% ELSIF searchfield %]
-        You searched for [% searchfield %]
+        You searched for [% searchfield |html %]
     [% END %]
     <table id="serverst">
         <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th></th>
