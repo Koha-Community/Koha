@@ -547,7 +547,7 @@
                             <li id="tab_holdings">
                         [% END %]
                         [% BLOCK holding_tab_title %][% IF SeparateHoldings %]<span>[% LoginBranchname %] holdings</span>[% ELSE %]<span>Holdings</span>[% END %][% END %]
-                            <a href="#holdings">[% INCLUDE holding_tab_title %] [% UNLESS too_many_items %][% ' ( ' _ (itemloop.size || 0) _ ' )' %][% END %]</a>
+                            <a href="#holdings">[% PROCESS holding_tab_title %] [% UNLESS too_many_items %][% ' ( ' _ (itemloop.size || 0) _ ' )' %][% END %]</a>
                         </li>
                         [% IF (SeparateHoldings) %]
                             <li><a href="#otherholdings">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' %]</a></li>
@@ -664,7 +664,7 @@
                             [% IF holds_count.defined || priority %]
                                 <div id="bib_holds">
                                     [% IF holds_count.defined %]
-                                        <span>Total holds: [% holds_count %]i</span>
+                                        <span>Total holds: [% holds_count %]</span>
                                     [% END %]
                                     [% IF priority %]
                                         [% IF holds_count.defined %]
@@ -1001,7 +1001,7 @@
                                                 [% IF ( XISBN.publishercode ) %]
                                                     <p>[% XISBN.publishercode |html %]
                                                         [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %]
-                                                        [% IF ( XISBN.publicationyear ) _ ', ' _ XISBN.publicationyear %][% END %]
+                                                        [% IF ( XISBN.publicationyear ) %][% ', ' _ XISBN.publicationyear %][% END %]
                                                         [% IF ( XISBN.pages ) %][% XISBN.pages %] [% XISBN.illus %] [% XISBN.size %][% END %]
                                                     </p>
                                                 [% END %]
