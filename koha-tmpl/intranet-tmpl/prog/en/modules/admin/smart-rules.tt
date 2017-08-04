@@ -682,7 +682,6 @@ $(document).ready(function() {
     <div id="defaults-for-this-library" class="container">
     <h3>Default checkout, hold and return policy[% IF humanbranch %] for [% Branches.GetName( humanbranch ) %][% END %]</h3>
         <p>You can set a default maximum number of checkouts, hold policy and return policy that will be used if none is defined below for a particular item type or category.</p>
-        <h4>Current system preference</h4>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
             <input type="hidden" name="branch" value="[% current_branch %]"/>
