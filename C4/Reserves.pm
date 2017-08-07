@@ -106,7 +106,6 @@ BEGIN {
         &GetReserve
         &GetReservesFromBorrowernumber
         &GetReservesForBranch
-        &GetReservesToBranch
         &GetReserveCount
         &GetReserveInfo
         &GetReserveStatus
@@ -641,33 +640,6 @@ SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?
         }
     }
     return $fee;
-}
-
-=head2 GetReservesToBranch
-
-  @transreserv = GetReservesToBranch( $frombranch );
-
-Get reserve list for a given branch
-
-=cut
-
-sub GetReservesToBranch {
-    my ( $frombranch ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "SELECT reserve_id,borrowernumber,reservedate,itemnumber,timestamp
-         FROM reserves
-         WHERE priority='0'
-           AND branchcode=?"
-    );
-    $sth->execute( $frombranch );
-    my @transreserv;
-    my $i = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $transreserv[$i] = $data;
-        $i++;
-    }
-    return (@transreserv);
 }
 
 =head2 GetReservesForBranch
