@@ -198,7 +198,7 @@ $(document).ready(function() {
     </form>
 
 		[% IF ( search ) %]
-        <p>You searched for <b>[% searchfield %]</b></p>
+        <p>You searched for <b>[% searchfield | html %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
             [% select_for_copy = BLOCK %]
