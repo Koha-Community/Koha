@@ -837,67 +837,6 @@ sub AutoUnsuspendReserves {
     map { $_->suspend(0)->suspend_until(undef)->store() } @holds;
 }
 
-=head2 CancelReserve
-
-  CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber, ] [ charge_cancel_fee => 1 ] });
-
-Cancels a reserve. If C<charge_cancel_fee> is passed and the C<ExpireReservesMaxPickUpDelayCharge> syspref is set, charge that fee to the patron's account.
-
-=cut
-
-sub CancelReserve {
-    my ( $params ) = @_;
-
-    my $reserve_id = $params->{'reserve_id'};
-    my $hold;
-    if ( $reserve_id ) {
-        $hold = Koha::Holds->find( $reserve_id );
-    } else {
-        $hold = Koha::Holds->search( $params ); # biblionumber, borrowernumber, itemnumber
-    }
-
-    return unless $hold;
-
-    logaction( 'HOLDS', 'CANCEL', $hold->reserve_id, Dumper($hold->unblessed) )
-        if C4::Context->preference('HoldsLog');
-
-    my $query = "
-        UPDATE reserves
-        SET    cancellationdate = now(),
-               priority         = 0
-        WHERE  reserve_id = ?
-    ";
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
-
-    $query = "
-        INSERT INTO old_reserves
-        SELECT * FROM reserves
-        WHERE  reserve_id = ?
-    ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
-
-    $query = "
-        DELETE FROM reserves
-        WHERE  reserve_id = ?
-    ";
-    $sth = $dbh->prepare($query);
-    $sth->execute( $reserve_id );
-
-    # now fix the priority on the others....
-    _FixPriority({ biblionumber => $hold->biblionumber });
-
-    # and, if desired, charge a cancel fee
-    my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
-    if ( $charge && $params->{'charge_cancel_fee'} ) {
-        manualinvoice($hold->borrowernumber, $hold->itemnumber, '', 'HE', $charge);
-    }
-
-    return $hold->unblessed;
-}
-
 =head2 ModReserve
 
   ModReserve({ rank => $rank,
