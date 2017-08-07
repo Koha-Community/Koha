@@ -79,8 +79,7 @@ else {
         MARC::Field->new('245', '', '', a => $title),
     );
 }
-my ($bibnum, $bibitemnum);
-($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
+my ( $bibnum ) = AddBiblio($bib, $frameworkcode);
 
 # Create a helper item instance for testing
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => 'CPL', holdingbranch => 'CPL' } , $bibnum);
@@ -214,7 +213,7 @@ $bib2->append_fields(
 );
 
 # create one item belonging to FPL and one belonging to CPL
-my ($bibnum2, $bibitemnum2) = AddBiblio($bib, '');
+my ( $bibnum2 ) = AddBiblio($bib, $frameworkcode);
 my ($itemnum_cpl, $itemnum_fpl);
 (undef, undef, $itemnum_cpl) = AddItem({
         homebranch => 'CPL',
