@@ -57,8 +57,7 @@ my $item_action                = $input->param('item_action');
 my $comments                   = $input->param('comments');
 my $record_type                = $input->param('record_type');
 my $encoding                   = $input->param('encoding') || 'UTF-8';
-my $format                     = $input->param('format') || 'ISO2709';
-my $to_marc_plugin             = $input->param('to_marc_plugin');
+my $format                     = $input->param('format');
 my $marc_modification_template = $input->param('marc_modification_template_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -90,8 +89,13 @@ if ($completedJobID) {
     my ( $errors, $marcrecords );
     if( $format eq 'MARCXML' ) {
         ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, $encoding);
-    } else {
+    } elsif( $format eq 'MARC' ) {
         ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File( $file, $record_type, $encoding );
+    } elsif( $format ) { # plugin
+        $errors = [];
+        $marcrecords = C4::ImportBatch::RecordsFromMarcPlugin( $file, $format, $encoding );
+    } else {
+        die "No format specified";
     }
     warn "$filename: " . ( join ',', @$errors ) if @$errors;
         # no need to exit if we have no records (or only errors) here
@@ -139,7 +143,7 @@ if ($completedJobID) {
       BatchStageMarcRecords(
         $record_type,    $encoding,
         $marcrecords,    $filename,
-        $to_marc_plugin, $marc_modification_template,
+        $marc_modification_template,
         $comments,       '',
         $parse_items,    0,
         50, staging_progress_callback( $job, $dbh )
