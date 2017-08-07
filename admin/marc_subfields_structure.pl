@@ -310,6 +310,11 @@ elsif ( $op eq 'add_validate' ) {
                         ),
                     );
                 } else {
+                    if( $frameworkcode ne q{} ) {
+                        # BZ 19096: Overwrite kohafield from Default when adding a new record
+                         my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
+                        $kohafield = $rec->kohafield if $rec;
+                    }
                     $sth_insert->execute(
                         $tagfield,
                         $tagsubfield,
