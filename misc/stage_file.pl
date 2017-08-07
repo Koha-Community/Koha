@@ -116,7 +116,7 @@ sub process_batch {
     print "... staging MARC records -- please wait\n";
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
     my ($batch_id, $num_valid_records, $num_items, @import_errors) =
-        BatchStageMarcRecords($record_type, $params->{encoding}, $marc_records, $params->{input_file}, undef, undef, $params->{batch_comment}, '', $params->{add_items}, 0,
+        BatchStageMarcRecords($record_type, $params->{encoding}, $marc_records, $params->{input_file}, undef, $params->{batch_comment}, '', $params->{add_items}, 0,
                               100, \&print_progress_and_commit);
     print "... finished staging MARC records\n";
 
