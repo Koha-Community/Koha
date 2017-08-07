@@ -47,7 +47,7 @@ use Modern::Perl;
 use URI::Escape;
 
 use C4::Context;
-use Data::Dumper;    # TODO remove
+use Koha::Exceptions;
 
 =head2 build_query
 
@@ -409,6 +409,16 @@ appropriate search object.
 
 =cut
 
+our $koha_to_index_name = {
+    mainmainentry   => 'Heading-Main',
+    mainentry       => 'Heading',
+    match           => 'Match',
+    'match-heading' => 'Match-heading',
+    'see-from'      => 'Match-heading-see-from',
+    thesaurus       => 'Subject-heading-thesaurus',
+    any              => ''
+};
+
 sub build_authorities_query_compat {
     my ( $self, $marclist, $and_or, $excluding, $operator, $value,
         $authtypecode, $orderby )
@@ -418,24 +428,15 @@ sub build_authorities_query_compat {
     # extensible hash form that is understood by L<build_authorities_query>.
     my @searches;
 
-    my %koha_to_index_name = (
-        mainmainentry   => 'Heading-Main',
-        mainentry       => 'Heading',
-        match           => 'Match',
-        'match-heading' => 'Match-heading',
-        'see-from'      => 'Match-heading-see-from',
-        thesaurus       => 'Subject-heading-thesaurus',
-        any              => '',
-    );
-
     # Make sure everything exists
     foreach my $m (@$marclist) {
-        confess "Invalid marclist field provided: $m" unless exists $koha_to_index_name{$m};
+        Koha::Exceptions::WrongParameter->throw("Invalid marclist field provided: $m")
+            unless exists $koha_to_index_name->{$m};
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         push @searches,
           {
-            where    => $koha_to_index_name{$marclist->[$i]},
+            where    => $koha_to_index_name->{$marclist->[$i]},
             operator => $operator->[$i],
             value    => $value->[$i],
           };
