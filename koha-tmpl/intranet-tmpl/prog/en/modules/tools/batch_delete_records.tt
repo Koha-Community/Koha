@@ -104,9 +104,9 @@ $(document).ready(function() {
       <div class="dialog error" style="margin:auto;">
     [% END %]
     [% IF message.code == 'biblio_not_exists' %]
-      The biblionumber [% message.biblionumber %] does not exist in the database.
+      The biblionumber [% message.biblionumber |html %] does not exist in the database.
     [% ELSIF message.code == 'authority_not_exists' %]
-      The authority id [% message.authid %] does not exist in the database.
+      The authority id [% message.authid |html %] does not exist in the database.
     [% ELSIF message.code == 'item_issued' %]
       At least one item is checked out on bibliographic record [% message.biblionumber %].
     [% ELSIF message.code == 'reserve_not_cancelled' %]
