@@ -58,7 +58,7 @@ $(document).ready(function(){
 		</thead>
 		<tbody>
 		    [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-			<tr><td>[% notfoundbarcode.barcode %]</td></tr>
+            <tr><td>[% notfoundbarcode.barcode |html %]</td></tr>
 		    [% END %]
 		</tbody>
 	    </table>
