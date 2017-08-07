@@ -210,7 +210,7 @@ $(document).ready(function() {
           <p>Search was:
             <ul>
               [% IF ( invoicenumber ) %]
-                <li>Invoice no.: [% invoicenumber %]</li>
+                <li>Invoice no.: [% invoicenumber |html %]</li>
               [% END %]
               [% IF booksellerid %]
                 <li>Vendor: [% suppliername %]</li>
@@ -248,19 +248,19 @@ $(document).ready(function() {
                 [% END %]
               [% END %]
               [% IF ( isbneanissn ) %]
-                <li>ISBN/EAN/ISSN: [% isbneanissn %]</li>
+                <li>ISBN/EAN/ISSN: [% isbneanissn |html %]</li>
               [% END %]
               [% IF ( title ) %]
-                <li>Title: [% title %]</li>
+                <li>Title: [% title |html %]</li>
               [% END %]
               [% IF ( author ) %]
-                <li>Author: [% author %]</li>
+                <li>Author: [% author |html %]</li>
               [% END %]
               [% IF ( publisher ) %]
-                <li>Publisher: [% publisher %]</li>
+                <li>Publisher: [% publisher |html %]</li>
               [% END %]
               [% IF ( publicationyear ) %]
-                <li>Publication year: [% publicationyear %]</li>
+                <li>Publication year: [% publicationyear |html %]</li>
               [% END %]
               [% IF ( branch ) %]
                 <li>Library: [% Branches.GetName( branch ) %]</li>
@@ -280,7 +280,7 @@ $(document).ready(function() {
         <ol>
           <li>
             <label for="invoicenumber">Invoice no:</label>
-            <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber %]" class="focus" />
+            <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber |html %]" class="focus" />
           </li>
           <li>
             <label for="supplier">Vendor:</label>
@@ -327,23 +327,23 @@ $(document).ready(function() {
           </li>
           <li>
             <label for="isbneanissn">ISBN / EAN / ISSN:</label>
-            <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn %]" />
+            <input type="text" id="isbneanissn" name="isbneanissn" value="[% isbneanissn |html %]" />
           </li>
           <li>
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title" value="[% title %]" />
+            <input type="text" id="title" name="title" value="[% title |html %]" />
           </li>
           <li>
             <label for="author">Author:</label>
-            <input type="text" id="author" name="author" value="[% author %]" />
+            <input type="text" id="author" name="author" value="[% author |html %]" />
           </li>
           <li>
             <label for="publisher">Publisher:</label>
-            <input type="text" id="publisher" name="publisher" value="[% publisher %]" />
+            <input type="text" id="publisher" name="publisher" value="[% publisher |html %]" />
           </li>
           <li>
             <label for="publicationyear">Publication year:</label>
-            <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear %]" />
+            <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear |html %]" />
           </li>
           <li>
             <label for="branch">Library:</label>
