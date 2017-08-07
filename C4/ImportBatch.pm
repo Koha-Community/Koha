@@ -352,8 +352,8 @@ sub ModAuthInBatch {
 
 ( $batch_id, $num_records, $num_items, @invalid_records ) =
   BatchStageMarcRecords(
-    $encoding,                   $marc_records,
-    $file_name,                  $to_marc_plugin,
+    $record_type,                $encoding,
+    $marc_records,               $file_name,
     $marc_modification_template, $comments,
     $branch_code,                $parse_items,
     $leave_as_staging,           $progress_interval,
@@ -367,7 +367,6 @@ sub BatchStageMarcRecords {
     my $encoding = shift;
     my $marc_records = shift;
     my $file_name = shift;
-    my $to_marc_plugin = shift;
     my $marc_modification_template = shift;
     my $comments = shift;
     my $branch_code = shift;
@@ -399,13 +398,6 @@ sub BatchStageMarcRecords {
         SetImportBatchItemAction($batch_id, 'ignore');
     }
 
-    $marc_records = Koha::Plugins::Handler->run(
-        {
-            class  => $to_marc_plugin,
-            method => 'to_marc',
-            params => { data => $marc_records }
-        }
-    ) if $to_marc_plugin && @$marc_records;
 
     my $marc_type = C4::Context->preference('marcflavour');
     $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
@@ -1554,6 +1546,44 @@ sub RecordsFromMARCXMLFile {
         push @marcRecords, $record if $record;
     } while( $record );
     return (\@errors, \@marcRecords);
+}
+
+=head2 RecordsFromMarcPlugin
+
+    Converts text of input_file into array of MARC records with to_marc plugin
+
+=cut
+
+sub RecordsFromMarcPlugin {
+    my ($input_file, $plugin_class, $encoding) = @_;
+
+    # Read input file
+    open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
+    my ( $text, $marc, @return );
+    $/ = "\035";
+    while (<IN>) {
+        s/^\s+//;
+        s/\s+$//;
+        next unless $_;
+        $text .= $_;
+    }
+    close IN;
+
+    # Convert to large MARC blob with plugin
+    $text = Koha::Plugins::Handler->run({
+        class  => $plugin_class,
+        method => 'to_marc',
+        params => { data => $text },
+    });
+
+    # Convert to array of MARC records
+    my $marc_type = C4::Context->preference('marcflavour');
+    foreach my $blob ( split(/\x1D/, $text) ) {
+        next if $blob =~ /^\s*$/;
+        my ($marcrecord) = MarcToUTF8Record($blob, $marc_type, $encoding);
+        push @return, $marcrecord;
+    }
+    return \@return;
 }
 
 # internal functions

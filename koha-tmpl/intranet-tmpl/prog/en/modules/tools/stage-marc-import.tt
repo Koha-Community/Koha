@@ -198,26 +198,12 @@ function cbUpload( status, fileid ) {
         <select name='format' id='format'>
             <option value='ISO2709'>MARC</option>
             <option value='MARCXML'>MARCXML</option>
+            [% FOREACH p IN plugins %]
+                <option value="[% p.metadata.class %]">Other formats, handled by plugin [% p.metadata.name %]</option>
+            [% END %]
         </select>
     </li>
 </ol></fieldset>
-
-  [% IF plugins %]
-    <fieldset class="rows">
-      <legend>Transform file to MARC:</legend>
-      <ol>
-        <li>
-          <label for="comments">Convert file to MARC using the following plugin: </label>
-          <select name="to_marc_plugin" id="to_marc_plugin">
-            <option value="">Do not use.</option>
-              [% FOREACH p IN plugins %]
-                <option value="[% p.metadata.class %]">[% p.metadata.name %]</option>
-              [% END %]
-          </select>
-        </li>
-      </ol>
-    </fieldset>
-  [% END %]
 
   [% IF MarcModificationTemplatesLoop %]
     <fieldset class="rows">
