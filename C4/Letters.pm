@@ -1632,6 +1632,20 @@ sub _get_tt_params {
     return $params;
 }
 
+=head2 get_item_content
+
+    my $item = Koha::Items->find(...)->unblessed;
+    my @item_content_fields = qw( date_due title barcode author itemnumber );
+    my $item_content = C4::Letters::get_item_content({
+                             item => $item,
+                             item_content_fields => \@item_content_fields
+                       });
+
+This function generates a tab-separated list of values for the passed item. Dates
+are formatted following the current setup.
+
+=cut
+
 sub get_item_content {
     my ( $params ) = @_;
     my $item = $params->{item};
