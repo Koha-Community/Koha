@@ -29,6 +29,8 @@ SKIP: {
 
     use_ok('Koha::ExternalContent::OverDrive');
 
+    t::lib::Mocks::mock_preference('SessionStorage','tmp');
+
     t::lib::Mocks::mock_preference('OverDriveClientKey', 'DUMMY');
     t::lib::Mocks::mock_preference('OverDriveClientSecret', 'DUMMY');
     t::lib::Mocks::mock_preference('OverDriveLibraryID', 'DUMMY');
