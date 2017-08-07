@@ -398,6 +398,7 @@ if (@$barcodes) {
                 $template_params->{getBarcodeMessageIteminfo} = $iteminfo->{'barcode'};
                 $template_params->{NEEDSCONFIRMATION} = 1;
                 $template_params->{onsite_checkout} = $onsite_checkout;
+                $template_params->{auto_renew} = $session->param('auto_renew');
                 $confirm_required = 1;
             }
         }
