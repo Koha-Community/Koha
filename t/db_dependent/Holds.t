@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 57;
+use Test::More tests => 56;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -125,9 +125,6 @@ is( Koha::Holds->waiting()->count(), 1, "Koha::Holds->waiting returns waiting ho
 my $patron = Koha::Patrons->find( $borrowernumbers[0] );
 $holds = $patron->holds;
 is( $holds->next->borrowernumber, $borrowernumbers[0], "Test Koha::Patron->holds");
-
-
-ok( GetReserveCount( $borrowernumbers[0] ), "Test GetReserveCount()" );
 
 
 CancelReserve({ 'reserve_id' => $reserve_id });

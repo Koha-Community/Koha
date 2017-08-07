@@ -106,7 +106,6 @@ BEGIN {
 
         &GetReserve
         &GetReservesForBranch
-        &GetReserveCount
         &GetReserveStatus
 
         &GetOtherReserves
@@ -473,30 +472,6 @@ sub CanReserveBeCanceledFromOpac {
 
     return 1;
 
-}
-
-=head2 GetReserveCount
-
-  $number = &GetReserveCount($borrowernumber);
-
-this function returns the number of reservation for a borrower given on input arg.
-
-=cut
-
-sub GetReserveCount {
-    my ($borrowernumber) = @_;
-
-    my $dbh = C4::Context->dbh;
-
-    my $query = "
-        SELECT COUNT(*) AS counter
-        FROM reserves
-        WHERE borrowernumber = ?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    my $row = $sth->fetchrow_hashref;
-    return $row->{counter};
 }
 
 =head2 GetOtherReserves

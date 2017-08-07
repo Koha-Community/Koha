@@ -142,8 +142,7 @@ if ($borrowernumber_hold && !$action) {
     # we check the reserves of the user, and if they can reserve a document
     # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
-    my $reserves_count =
-      GetReserveCount( $patron->borrowernumber );
+    my $reserves_count = $patron->holds->count;
 
     my $new_reserves_count = scalar( @biblionumbers );
 
