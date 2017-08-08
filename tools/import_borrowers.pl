@@ -121,12 +121,6 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             token  => scalar $input->param('csrf_token'),
         });
 
-    #create a patronlist
-    my $createpatronlist = $input->param('createpatronlist');
-    my $dt = dt_from_string();
-    my $timestamp = $dt->ymd('-').' '.$dt->hms(':');
-    my $patronlistname = $uploadborrowers. ' (' . $timestamp .')';
-
     push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};
     my $handle = $input->upload('uploadborrowers');
     my $uploadinfo = $input->uploadInfo($uploadborrowers);
