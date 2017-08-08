@@ -66,23 +66,26 @@ if ($do_it) {
     $toDate   = output_pref({ dt => eval { dt_from_string($input->param("to")) } || dt_from_string,
             dateformat => 'sql', dateonly => 1 }); #for sql query
 
-    my $whereTType = '';
+    my $whereTType = q{};
+    my @extra_params; # if we add conditions to the select we need extra params
 
     if ($transaction_type eq 'ALL') { #All Transactons
-        $whereTType = '';
+        $whereTType = q{};
     } elsif ($transaction_type eq 'ACT') { #Active
-        $whereTType = " accounttype IN ('Pay','C') AND ";
+        $whereTType = q{ AND accounttype IN ('Pay','C') };
     } else { #Single transac type
         if ($transaction_type eq 'FORW') {
-            $whereTType = " accounttype = 'FOR' OR accounttype = 'W' AND ";
+            $whereTType = q{ AND accounttype = 'FOR' OR accounttype = 'W' };
         } else {
-            $whereTType = " accounttype = '$transaction_type' AND ";
+            $whereTType = q{ AND accounttype = ? };
+            push @extra_params, $transaction_type;
         }
     }
 
-    my $whereBranchCode = '';
+    my $whereBranchCode = q{};
     if ($manager_branchcode ne 'ALL') {
-        $whereBranchCode = "AND m.branchcode = '$manager_branchcode'";
+        $whereBranchCode = q{ AND m.branchcode = ?};
+        push @extra_params, $manager_branchcode;
     }
 
 
@@ -98,13 +101,13 @@ if ($do_it) {
         LEFT JOIN branches br ON (br.branchcode = m.branchcode )
         LEFT JOIN items i ON (i.itemnumber = al.itemnumber)
         LEFT JOIN biblio bi ON (bi.biblionumber = i.biblionumber)
-        WHERE $whereTType
-        CAST(al.date AS DATE) BETWEEN ? AND ?
+        WHERE CAST(al.date AS DATE) BETWEEN ? AND ?
+        $whereTType
         $whereBranchCode
         ORDER BY al.date
     ";
-    my $sth_stats = $dbh->prepare($query) or die "Unable to prepare query" . $dbh->errstr;
-    $sth_stats->execute($fromDate, $toDate) or die "Unable to execute query " . $sth_stats->errstr;
+    my $sth_stats = $dbh->prepare($query) or die "Unable to prepare query $dbh->errstr";
+    $sth_stats->execute($fromDate, $toDate, @extra_params) or die "Unable to execute query $sth_stats->errstr";
 
     my @loopresult;
     my $grantotal = 0;
