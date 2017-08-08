@@ -117,6 +117,37 @@ sub libraries {
     );
 }
 
+=head3 all_libraries
+
+my @libraries = $group->libraries( { [invert => 1] } );
+
+Returns the libraries set as children of this group or any subgroup.
+
+=cut
+
+sub all_libraries {
+    my ( $self, $params ) = @_;
+
+    my @libraries;
+
+    my @children = $self->children;
+    foreach my $c (@children) {
+        if ( $c->branchcode ) {
+            push( @libraries, $c );
+        }
+        else {
+            push( @libraries, $c->all_libraries );
+        }
+    }
+
+    my %seen;
+    @libraries =
+      grep { !$seen{ $_->id }++ } @libraries;
+
+#    return wantarray ? @li : $children;
+    return @libraries;
+}
+
 =head3 libraries_not_direct_children
 
 my @libraries = $group->libraries_not_direct_children();

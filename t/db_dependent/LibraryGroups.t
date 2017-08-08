@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 13;
+use Test::More tests => 15;
 
 use t::lib::TestBuilder;
 
@@ -20,26 +20,17 @@ $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
+$dbh->do(q|DELETE FROM library_groups|);
 
 my $builder = t::lib::TestBuilder->new();
 
-my $library1 = $builder->build(
-    {
-        source => 'Branch',
-    }
-);
-
-my $library2 = $builder->build(
-    {
-        source => 'Branch',
-    }
-);
-
-my $library3 = $builder->build(
-    {
-        source => 'Branch',
-    }
-);
+my $library1 = $builder->build( { source => 'Branch' } );
+my $library2 = $builder->build( { source => 'Branch' } );
+my $library3 = $builder->build( { source => 'Branch' } );
+my $library4 = $builder->build( { source => 'Branch' } );
+my $library5 = $builder->build( { source => 'Branch' } );
+my $library6 = $builder->build( { source => 'Branch' } );
+my $library7 = $builder->build( { source => 'Branch' } );
 
 my $root_group =
   Koha::Library::Group->new( { title => "Test root group" } )->store();
@@ -77,3 +68,21 @@ $in_list = any { $_->id eq $groupA_library1->branchcode } @libraries_not_direct_
 ok( !$in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 1 is not in the list');
 $in_list = any { $_->id eq $groupA1_library2->branchcode } @libraries_not_direct_children;
 ok( $in_list, 'Method libraries_not_direct_children returns all libraries not direct descendants of group, library 2 is in the list');
+
+my $groupX = Koha::Library::Group->new( { title => "Group X" } )->store();
+my $groupX_library1 = Koha::Library::Group->new({ parent_id => $groupX->id,  branchcode => $library1->{branchcode} })->store();
+my $groupX_library2 = Koha::Library::Group->new({ parent_id => $groupX->id,  branchcode => $library2->{branchcode} })->store();
+my $groupX1 = Koha::Library::Group->new({ parent_id => $groupX->id, title => 'Group X1' })->store();
+my $groupX1_library3 = Koha::Library::Group->new({ parent_id => $groupX1->id,  branchcode => $library3->{branchcode} })->store();
+my $groupX1_library4 = Koha::Library::Group->new({ parent_id => $groupX1->id,  branchcode => $library4->{branchcode} })->store();
+my $groupX2 = Koha::Library::Group->new({ parent_id => $groupX->id, title => 'Group X2' })->store();
+my $groupX2_library5 = Koha::Library::Group->new({ parent_id => $groupX2->id,  branchcode => $library5->{branchcode} })->store();
+my $groupX2_library6 = Koha::Library::Group->new({ parent_id => $groupX2->id,  branchcode => $library6->{branchcode} })->store();
+
+my @branchcodes = sort( $library1->{branchcode}, $library2->{branchcode} );
+my @group_branchcodes = sort( map { $_->branchcode } $groupX->libraries->as_list );
+is_deeply( \@branchcodes, \@group_branchcodes, "Group libraries are returned correctly" );
+
+@branchcodes = sort( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library5->{branchcode}, $library6->{branchcode} );
+@group_branchcodes = sort( map { $_->branchcode } $groupX->all_libraries );
+is_deeply( \@branchcodes, \@group_branchcodes, "Group all_libraries are returned correctly" );
