@@ -25,9 +25,8 @@ use Data::Dumper;
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
 
-use Koha::Account::Line;
 use Koha::Account::Lines;
-use Koha::Account::Offset;
+use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
 
 =head1 NAME

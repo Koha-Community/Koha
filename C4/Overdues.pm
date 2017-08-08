@@ -34,9 +34,8 @@ use C4::Accounts;
 use C4::Log; # logaction
 use C4::Debug;
 use Koha::DateUtils;
-use Koha::Account::Line;
 use Koha::Account::Lines;
-use Koha::Account::Offset;
+use Koha::Account::Offsets;
 use Koha::IssuingRules;
 use Koha::Libraries;
 

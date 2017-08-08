@@ -26,9 +26,8 @@ use C4::Members;
 use C4::Circulation qw(ReturnLostItem);
 use C4::Log qw(logaction);
 use Koha::Account;
-use Koha::Account::Line;
 use Koha::Account::Lines;
-use Koha::Account::Offset;
+use Koha::Account::Offsets;
 
 use Data::Dumper qw(Dumper);
 
