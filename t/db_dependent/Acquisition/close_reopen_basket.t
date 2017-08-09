@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 10;
 use C4::Acquisition;
 use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Budgets;
@@ -81,5 +81,14 @@ C4::Acquisition::ReopenBasket( $basketno );
 @orders = C4::Acquisition::GetOrders( $basketno );
 is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 0, "No order are ordered, the basket is reopen" );
 is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new, the basket is reopen" );
+
+C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
+my ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
+is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
+is( $order->{orderstatus}, 'cancelled', 'DelOrder should have set status to cancelled' );
+C4::Acquisition::CloseBasket( $basketno );
+( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
+is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
+is( $order->{orderstatus}, 'cancelled', 'CloseBasket should not reset the status to ordered for cancelled orders' );
 
 $schema->storage->txn_rollback();
