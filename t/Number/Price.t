@@ -49,13 +49,20 @@ is( Koha::Number::Price->new(3)->unformat, '3', 'US: unformat 3' );
 is( Koha::Number::Price->new(1234567890)->unformat,
     '1234567890', 'US: unformat 1234567890' );
 
-# Bug 18900 - Check params are not from system environement
-setlocale(LC_NUMERIC, "fr_FR.UTF-8");
-is( Koha::Number::Price->new(12345678.9)->format( { %$format, with_symbol => 1 } ),
-    '12,345,678.90', 'US: format 12,345,678.90 with symbol' );
-is( Koha::Number::Price->new('12,345,678.90')->unformat,
-    '12345678.9', 'US: unformat 12345678.9' );
-setlocale(LC_NUMERIC, $orig_locale);
+SKIP: {
+    # Bug 18900 - Check params are not from system environement
+    setlocale(LC_NUMERIC, "fr_FR.UTF-8");
+    my $current_locale = setlocale(LC_NUMERIC);
+
+    skip "fr_FR.UTF-8 locale required for tests and missing", 2
+        unless $current_locale eq 'fr_FR.UTF-8';
+
+    is( Koha::Number::Price->new(12345678.9)->format( { %$format, with_symbol => 1 } ),
+        '12,345,678.90', 'US: format 12,345,678.90 with symbol' );
+    is( Koha::Number::Price->new('12,345,678.90')->unformat,
+        '12345678.9', 'US: unformat 12345678.9' );
+    setlocale(LC_NUMERIC, $orig_locale);
+}
 
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'FR' );
 $currency = Koha::Acquisition::Currency->new({
