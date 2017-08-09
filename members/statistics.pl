@@ -59,9 +59,6 @@ my $borrower= $patron->unblessed;
 $borrower->{description} = $category->description;
 $borrower->{category_type} = $category->category_type;
 
-foreach my $key ( keys %$borrower ) {
-    $template->param( $key => $borrower->{$key} );
-}
 $template->param(
     categoryname    => $borrower->{'description'},
 );
