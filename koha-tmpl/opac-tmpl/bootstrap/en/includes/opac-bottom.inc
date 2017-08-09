@@ -154,15 +154,15 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         return false;
     });
     $("#ulactioncontainer > ul > li > a.addtoshelf").on("click",function(){
-        Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]');
+        Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber | html %]');
         return false;
     });
     $(".addrecord").on("click",function(){
-        addRecord('[% biblionumber %]');
+        addRecord('[% biblionumber | html %]');
         return false;
     });
     $(".cartRemove").on("click",function(){
-        delSingleRecord('[% biblionumber %]');
+        delSingleRecord('[% biblionumber | html %]');
         return false;
     });
     $(".clearsh").on("click", function(){

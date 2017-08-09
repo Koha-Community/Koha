@@ -16,7 +16,7 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Details for [% bibliotitle %]</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="#">Full subscription history</a></li>
         </ul>
 
@@ -48,8 +48,8 @@
                         [% UNLESS ( popup ) %]
                             <h2>Full subscription history for [% bibliotitle %]</h2>
                             <div id="views">
-                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal view</a></span>
-                                <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber %]&amp;selectview=small">Brief history</a></span>
+                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Normal view</a></span>
+                                <span class="view"><a id="Briefhistory" href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=[% biblionumber | html %]&amp;selectview=small">Brief history</a></span>
                                 <span class="view"><span id="Fullhistory">Full history</span></span>
                             </div>
                         [% END %]
