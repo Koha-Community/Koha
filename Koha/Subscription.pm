@@ -45,7 +45,7 @@ Returns the biblio linked to this subscription as a Koha::Biblio object
 sub biblio {
     my ($self) = @_;
 
-    return Koha::Biblios->find($self->biblionumber);
+    return scalar Koha::Biblios->find($self->biblionumber);
 }
 
 =head3 type
