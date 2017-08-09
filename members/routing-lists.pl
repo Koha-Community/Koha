@@ -53,7 +53,7 @@ my ( $patron, $patron_info );
 if ($borrowernumber) {
     $patron = Koha::Patrons->find( $borrowernumber );
     my $category = $patron->category;
-    my $patron_info = $patron->unblessed;
+    $patron_info = $patron->unblessed;
     $patron_info->{description} = $category->description;
     $patron_info->{category_type} = $category->category_type;
 
