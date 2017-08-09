@@ -90,5 +90,3 @@ for my $staff_theme ( @staff_themes ) {
             or diag( Data::Dumper->Dump( [ $opac_icons ], [ 'opac_icons' ] ) );
     }
 }
-
-1;
