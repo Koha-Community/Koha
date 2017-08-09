@@ -41,6 +41,7 @@ use Algorithm::CheckDigits;
 use Data::Dumper;
 use Koha::Account;
 use Koha::AuthorisedValues;
+use Koha::Biblioitems;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::IssuingRules;

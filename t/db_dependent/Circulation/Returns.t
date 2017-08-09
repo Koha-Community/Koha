@@ -190,7 +190,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
     t::lib::Mocks::mock_preference( "IssueLog", 1 );
     t::lib::Mocks::mock_preference( "ReturnLog", 1 );
 
-    # Set item-level item types
+    # Set biblio level item types
     t::lib::Mocks::mock_preference( "item-level_itypes", 0 );
 
     # Create an itemtype for biblio-level item type
@@ -222,6 +222,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
         source => 'Item',
         value  => {
             biblionumber  => $biblionumber,
+            biblioitemnumber => $biblioitemnumber,
             homebranch    => $branch,
             holdingbranch => $branch,
             itype         => $ilevel_itemtype
@@ -231,6 +232,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
         source => 'Item',
         value  => {
             biblionumber  => $biblionumber,
+            biblioitemnumber => $biblioitemnumber,
             homebranch    => $branch,
             holdingbranch => $branch,
             itype         => undef
