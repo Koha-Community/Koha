@@ -49,6 +49,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::CirculationRules;
+use Koha::Account::Lines;
 
 use List::MoreUtils qw( firstidx any );
 use Carp;
@@ -566,13 +567,23 @@ sub GetOtherReserves {
 
 sub ChargeReserveFee {
     my ( $borrowernumber, $fee, $title ) = @_;
-    return if !$fee || $fee==0; # the last test is needed to include 0.00
-    my $accquery = qq{
-INSERT INTO accountlines ( borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding ) VALUES (?, ?, NOW(), ?, ?, 'Res', ?)
-    };
-    my $dbh = C4::Context->dbh;
-    my $nextacctno = &getnextacctno( $borrowernumber );
-    $dbh->do( $accquery, undef, ( $borrowernumber, $nextacctno, $fee, "Reserve Charge - $title", $fee ) );
+
+    return if !$fee || $fee == 0;    # the last test is needed to include 0.00
+
+    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $nextacctno = C4::Accounts::getnextacctno($borrowernumber);
+
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrowernumber,
+            accountno         => $nextacctno,
+            date              => dt_from_string(),
+            amount            => $fee,
+            description       => "Reserve Charge - $title",
+            accounttype       => 'Res',
+            amountoutstanding => $fee,
+        }
+    )->store();
 }
 
 =head2 GetReserveFee

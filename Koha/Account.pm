@@ -81,6 +81,7 @@ sub pay {
     my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
 
     my $userenv = C4::Context->userenv;
+    $library_id ||= $userenv ? $userenv->{branch} : undef;
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
@@ -219,6 +220,7 @@ sub pay {
             payment_type      => $payment_type,
             amountoutstanding => 0 - $balance_remaining,
             manager_id        => $manager_id,
+            branchcode        => $library_id,
             note              => $note,
         }
     )->store();
@@ -227,8 +229,6 @@ sub pay {
         $o->credit_id( $payment->id() );
         $o->store();
     }
-
-    $library_id ||= $userenv ? $userenv->{'branch'} : undef;
 
     UpdateStats(
         {

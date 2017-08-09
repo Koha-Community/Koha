@@ -107,6 +107,9 @@ sub chargelostitem{
     if ($usedefaultreplacementcost && $amount == 0 && $defaultreplacecost){
         $replacementprice = $defaultreplacecost;
     }
+
+    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
     # first make sure the borrower hasn't already been charged for this item
     # FIXME this should be more exact
     #       there is no reason a user can't lose an item, find and return it, and lost it again
@@ -137,6 +140,7 @@ sub chargelostitem{
                     itemnumber        => $itemnumber,
                     note              => $processingfeenote,
                     manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    branchcode        => $branchcode,
                 }
             )->store();
 
@@ -177,6 +181,7 @@ sub chargelostitem{
                     amountoutstanding => $replacementprice,
                     itemnumber        => $itemnumber,
                     manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    branchcode        => $branchcode,
                 }
             )->store();
 
@@ -241,6 +246,8 @@ sub manualinvoice {
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
 
+    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber    => $borrowernumber,
@@ -253,6 +260,7 @@ sub manualinvoice {
             itemnumber        => $itemnum || undef,
             note              => $note,
             manager_id        => $manager_id,
+            branchcode        => $branchcode,
         }
     )->store();
 

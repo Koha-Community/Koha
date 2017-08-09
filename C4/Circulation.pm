@@ -52,6 +52,7 @@ use Koha::Patrons;
 use Koha::Patron::Debarments;
 use Koha::Database;
 use Koha::Libraries;
+use Koha::Account::Lines;
 use Koha::Holds;
 use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
@@ -2878,15 +2879,23 @@ sub AddRenewal {
         my $accountno = C4::Accounts::getnextacctno( $borrowernumber );
         my $manager_id = 0;
         $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
-        $sth = $dbh->prepare(
-                "INSERT INTO accountlines
-                    (date, borrowernumber, accountno, amount, manager_id,
-                    description,accounttype, amountoutstanding, itemnumber)
-                    VALUES (now(),?,?,?,?,?,?,?,?)"
-        );
-        $sth->execute( $borrowernumber, $accountno, $charge, $manager_id,
-            "Renewal of Rental Item " . $biblio->title . " $item->{'barcode'}",
-            'Rent', $charge, $itemnumber );
+        my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        Koha::Account::Line->new(
+            {
+                date              => dt_from_string(),
+                borrowernumber    => $borrowernumber,
+                accountno         => $accountno,
+                amount            => $charge,
+                manager_id        => $manager_id,
+                accounttype       => 'Rent',
+                amountoutstanding => $charge,
+                itemnumber        => $itemnumber,
+                branchcode        => $branchcode,
+                description       => 'Renewal of Rental Item '
+                  . $biblio->title
+                  . " $item->{'barcode'}",
+            }
+        )->store();
     }
 
     # Send a renewal slip according to checkout alert preferencei
@@ -3220,6 +3229,8 @@ sub AddIssuingCharge {
     my $manager_id  = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
+    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber    => $checkout->borrowernumber,
@@ -3229,6 +3240,7 @@ sub AddIssuingCharge {
             amount            => $charge,
             amountoutstanding => $charge,
             manager_id        => $manager_id,
+            branchcode        => $branchcode,
             description       => 'Rental',
             accounttype       => 'Rent',
             date              => \'NOW()',

@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 41;
 use Test::MockModule;
 use Test::Warn;
 
@@ -69,6 +69,53 @@ $context->mock( 'userenv', sub {
         branch => $branchcode,
     };
 });
+my $userenv_branchcode = $branchcode;
+
+# Test chargelostitem
+my $itemtype = $builder->build( { source => 'Itemtype' } );
+my $item   = $builder->build( { source => 'Item', value => { itype => $itemtype->{itemtype} } } );
+my $patron = $builder->build( { source => 'Borrower' } );
+my $amount = '5.000000';
+my $description = "Test fee!";
+chargelostitem( $patron->{borrowernumber}, $item->{itemnumber}, $amount, $description );
+my ($accountline) = Koha::Account::Lines->search(
+    {
+        borrowernumber => $patron->{borrowernumber}
+    }
+);
+is( $accountline->amount, $amount, 'Accountline amount set correctly for chargelostitem' );
+is( $accountline->description, $description, 'Accountline description set correctly for chargelostitem' );
+is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for chargelostitem' );
+$dbh->do(q|DELETE FROM accountlines|);
+
+# Test manualinvoice, reuse some of the vars from testing chargelostitem
+my $type = 'L';
+my $note = 'Test note!';
+manualinvoice( $patron->{borrowernumber}, $item->{itemnumber}, $description, $type, $amount, $note );
+($accountline) = Koha::Account::Lines->search(
+    {
+        borrowernumber => $patron->{borrowernumber}
+    }
+);
+is( $accountline->accounttype, $type, 'Accountline type set correctly for manualinvoice' );
+is( $accountline->amount, $amount, 'Accountline amount set correctly for manualinvoice' );
+ok( $accountline->description =~ /^$description/, 'Accountline description set correctly for manualinvoice' );
+is( $accountline->note, $note, 'Accountline note set correctly for manualinvoice' );
+is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for manualinvoice' );
+
+# Test _FixAccountForLostAndReturned, use the accountline from the manualinvoice to test
+C4::Circulation::_FixAccountForLostAndReturned( $item->{itemnumber} );
+my ( $accountline_fee, $accountline_payment ) = Koha::Account::Lines->search(
+    {
+        borrowernumber => $patron->{borrowernumber}
+    }
+);
+is( $accountline_fee->accounttype, 'LR', 'Lost item fee account type updated to LR' );
+is( $accountline_fee->amountoutstanding, '0.000000', 'Lost item fee amount outstanding updated to 0' );
+is( $accountline_payment->accounttype, 'CR', 'Lost item fee account type is CR' );
+is( $accountline_payment->amount, "-$amount", 'Lost item refund amount is correct' );
+is( $accountline_payment->branchcode, $branchcode, 'Lost item refund branchcode is set correctly' );
+$dbh->do(q|DELETE FROM accountlines|);
 
 # Testing purge_zero_balance_fees
 
@@ -134,7 +181,7 @@ $dbh->do(q|DELETE FROM accountlines|);
 
 subtest "Koha::Account::pay tests" => sub {
 
-    plan tests => 13;
+    plan tests => 14;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -257,6 +304,7 @@ subtest "Koha::Account::pay tests" => sub {
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
     is( $line3->amountoutstanding, '0.000000', "Specified fine is paid" );
+    is( $payment->branchcode, $userenv_branchcode, 'Branchcode set correctly' );
 };
 
 subtest "Koha::Account::pay particular line tests" => sub {
