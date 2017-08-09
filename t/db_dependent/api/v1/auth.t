@@ -62,13 +62,13 @@ subtest 'under() tests' => sub {
       ->json_is('/error', 'Authorization failure. Missing required permission(s).');
 
     # 401 (session expired)
-    my $session = C4::Auth::get_session($session_id);
-    $session->delete;
-    $session->flush;
+    t::lib::Mocks::mock_preference( 'timeout', '1' );
+    ($borrowernumber, $session_id) = create_user_and_session();
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    sleep(2);
     $t->request_ok($tx)
       ->status_is(401)
       ->json_is('/error', 'Session has been expired.');
