@@ -41,6 +41,7 @@ use Algorithm::CheckDigits;
 use Data::Dumper;
 use Koha::Account;
 use Koha::AuthorisedValues;
+use Koha::Biblioitems;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Checkouts;
@@ -1820,10 +1821,9 @@ sub AddReturn {
     }
 
     my $itemnumber = $item->{ itemnumber };
-
-    my $item_level_itypes = C4::Context->preference("item-level_itypes");
-    my $biblio   = $item_level_itypes ? undef : Koha::Biblios->find( $item->{ biblionumber } ); # don't get bib data unless we need it
-    my $itemtype = $item_level_itypes ? $item->{itype} : $biblio->biblioitem->itemtype;
+    my $itemtype = C4::Context->preference("item-level_itypes")
+        ? $item->{itype}
+        : Koha::Biblioitems->find( $item->{biblioitemnumber} )->itemtype;
 
     my $issue  = Koha::Checkouts->find( { itemnumber => $itemnumber } );
     if ( $issue ) {
