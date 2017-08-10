@@ -97,6 +97,7 @@ sub _item_looper {
 
     my @items = $self->biblio->items;
     my @hostitemnumbers = C4::Items::get_hostitemnumbers_of($self->biblio->biblionumber);
+    @hostitemnumbers = grep defined, @hostitemnumbers;
     if (@hostitemnumbers) {
         my @hostitems = Koha::Items->search({
             itemnumber => { 'in' => @hostitemnumbers }
