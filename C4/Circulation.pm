@@ -1466,13 +1466,12 @@ sub AddIssue {
                     }
                 );
             }
+            logaction(
+                "CIRCULATION", "ISSUE",
+                $borrower->{'borrowernumber'},
+                $biblio->{'itemnumber'}
+            ) if C4::Context->preference("IssueLog");
         }
-
-        logaction(
-            "CIRCULATION", "ISSUE",
-            $borrower->{'borrowernumber'},
-            $biblio->{'itemnumber'}
-        ) if C4::Context->preference("IssueLog");
     }
     return $issue;
 }
