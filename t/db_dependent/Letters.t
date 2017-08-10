@@ -181,6 +181,7 @@ is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
 # getletter
 subtest 'getletter' => sub {
     plan tests => 16;
+    t::lib::Mocks::mock_preference('IndependentBranches', 0);
     my $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
     is( $letter->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
     is( $letter->{module}, 'my module', 'GetLetters gets the module correctly' );
