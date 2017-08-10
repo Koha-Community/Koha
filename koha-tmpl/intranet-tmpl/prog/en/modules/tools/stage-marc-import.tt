@@ -199,7 +199,7 @@ function cbUpload( status, fileid ) {
             <option value='ISO2709'>MARC</option>
             <option value='MARCXML'>MARCXML</option>
             [% FOREACH p IN plugins %]
-                <option value="[% p.metadata.class %]">Other formats, handled by plugin [% p.metadata.name %]</option>
+                <option value="[% p.metadata.class %]">[% p.metadata.name %] ( other format via plugin)</option>
             [% END %]
         </select>
     </li>
