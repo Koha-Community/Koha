@@ -441,10 +441,11 @@ Returns item record
 =cut
 
 sub _build_default_values_for_mod_marc {
-    my ($frameworkcode) = @_;
+    # Has no framework parameter anymore, since Default is authoritative
+    # for Koha to MARC mappings.
 
     my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "default_value_for_mod_marc-$frameworkcode";
+    my $cache_key = "default_value_for_mod_marc-";
     my $cached    = $cache->get_from_cache($cache_key);
     return $cached if $cached;
 
@@ -483,10 +484,8 @@ sub _build_default_values_for_mod_marc {
     while ( my ( $field, $default_value ) = each %$default_values ) {
         my $kohafield = $field;
         $kohafield =~ s|^([^\.]+)$|items.$1|;
-        $default_values_for_mod_from_marc{$field} =
-          $default_value
-          if C4::Koha::IsKohaFieldLinked(
-            { kohafield => $kohafield, frameworkcode => $frameworkcode } );
+        $default_values_for_mod_from_marc{$field} = $default_value
+            if C4::Biblio::GetMarcFromKohaField( $kohafield );
     }
 
     $cache->set_in_cache($cache_key, \%default_values_for_mod_from_marc);
@@ -505,7 +504,7 @@ sub ModItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
-    my $default_values = _build_default_values_for_mod_marc($frameworkcode);
+    my $default_values = _build_default_values_for_mod_marc();
     foreach my $item_field ( keys %$default_values ) {
         $item->{$item_field} = $default_values->{$item_field}
           unless exists $item->{$item_field};
@@ -1500,7 +1499,7 @@ sub Item2Marc {
     };
     my $framework = C4::Biblio::GetFrameworkCode( $biblionumber );
     my $itemmarc = C4::Biblio::TransformKohaToMarc(
-        $mungeditem, $framework, { no_split => 1},
+        $mungeditem, { no_split => 1},
     );
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField(
         "items.itemnumber", $framework,

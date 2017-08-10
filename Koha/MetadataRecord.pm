@@ -118,7 +118,7 @@ sub createMergeHash {
 sub getKohaField {
     my ($self, $kohafield) = @_;
     if ($self->schema =~ m/marc/) {
-        return C4::Biblio::TransformMarcToKohaOneField($kohafield, $self->record); # Default framework used
+        return C4::Biblio::TransformMarcToKohaOneField($kohafield, $self->record);
     }
 }
 

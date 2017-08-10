@@ -1109,43 +1109,54 @@ sub GetMarcSubfieldStructure {
 
 =head2 GetMarcFromKohaField
 
-  ($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
+    ( $field,$subfield ) = GetMarcFromKohaField( $kohafield );
+    @fields = GetMarcFromKohaField( $kohafield );
+    $field = GetMarcFromKohaField( $kohafield );
 
-Returns the MARC fields & subfields mapped to the koha field 
-for the given frameworkcode or default framework if $frameworkcode is missing
+    Returns the MARC fields & subfields mapped to $kohafield.
+    Since the Default framework is considered as authoritative for such
+    mappings, the former frameworkcode parameter is obsoleted.
+
+    In list context all mappings are returned; there can be multiple
+    mappings. Note that in the above example you could miss a second
+    mappings in the first call.
+    In scalar context only the field tag of the first mapping is returned.
 
 =cut
 
 sub GetMarcFromKohaField {
-    my ( $kohafield, $frameworkcode ) = @_;
-    return (0, undef) unless $kohafield;
-    my $mss = GetMarcSubfieldStructure( $frameworkcode );
+    my ( $kohafield ) = @_;
+    return unless $kohafield;
+    # The next call uses the Default framework since it is AUTHORITATIVE
+    # for all Koha to MARC mappings.
+    my $mss = GetMarcSubfieldStructure( '' ); # Do not change framework
     my @retval;
     foreach( @{ $mss->{$kohafield} } ) {
         push @retval, $_->{tagfield}, $_->{tagsubfield};
     }
-    return wantarray ? @retval : $retval[0];
+    return wantarray ? @retval : ( @retval ? $retval[0] : undef );
 }
 
 =head2 GetMarcSubfieldStructureFromKohaField
 
-    my $subfield_structure = &GetMarcSubfieldStructureFromKohaField($kohafield, $frameworkcode);
+    my $str = GetMarcSubfieldStructureFromKohaField( $kohafield );
 
-Returns a hashref where keys are marc_subfield_structure column names for the
-row where kohafield=$kohafield for the given framework code.
-In list context returns a list of those hashrefs in case duplicate Koha to
-MARC mappings exist.
-
-$frameworkcode is optional. If not given, then the default framework is used.
+    Returns marc subfield structure information for $kohafield.
+    The Default framework is used, since it is authoritative for kohafield
+    mappings.
+    In list context returns a list of all hashrefs, since there may be
+    multiple mappings. In scalar context the first hashref is returned.
 
 =cut
 
 sub GetMarcSubfieldStructureFromKohaField {
-    my ( $kohafield, $frameworkcode ) = @_;
+    my ( $kohafield ) = @_;
 
     return unless $kohafield;
 
-    my $mss = GetMarcSubfieldStructure( $frameworkcode );
+    # The next call uses the Default framework since it is AUTHORITATIVE
+    # for all Koha to MARC mappings.
+    my $mss = GetMarcSubfieldStructure(''); # Do not change framework
     return unless $mss->{$kohafield};
     return wantarray ? @{$mss->{$kohafield}} : $mss->{$kohafield}->[0];
 }
@@ -2158,24 +2169,26 @@ sub GetFrameworkCode {
 
 =head2 TransformKohaToMarc
 
-    $record = TransformKohaToMarc( $hash )
+    $record = TransformKohaToMarc( $hash [, $params ]  )
 
-This function builds partial MARC::Record from a hash
-Hash entries can be from biblio or biblioitems.
+This function builds a (partial) MARC::Record from a hash.
+Hash entries can be from biblio, biblioitems or items.
+The params hash includes the parameter no_split used in C4::Items.
 
 This function is called in acquisition module, to create a basic catalogue
-entry from user entry
+entry from user entry.
 
 =cut
 
 
 sub TransformKohaToMarc {
-    my ( $hash, $frameworkcode, $params ) = @_;
+    my ( $hash, $params ) = @_;
     my $record = MARC::Record->new();
     SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
-    # NOTE: Many older calls do not include a frameworkcode. In that case
-    # we default to Default framework.
-    my $mss = GetMarcSubfieldStructure( $frameworkcode//'' );
+
+    # In the next call we use the Default framework, since it is considered
+    # authoritative for Koha to Marc mappings.
+    my $mss = GetMarcSubfieldStructure( '' ); # do not change framework
     my $tag_hr = {};
     while ( my ($kohafield, $value) = each %$hash ) {
         foreach my $fld ( @{ $mss->{$kohafield} } ) {
@@ -2560,19 +2573,19 @@ sub TransformHtmlToMarc {
 
 =head2 TransformMarcToKoha
 
-  $result = TransformMarcToKoha( $record, $frameworkcode, $limit )
+    $result = TransformMarcToKoha( $record, undef, $limit )
 
 Extract data from a MARC bib record into a hashref representing
-Koha biblio, biblioitems, and items fields. 
+Koha biblio, biblioitems, and items fields.
 
 If passed an undefined record will log the error and return an empty
-hash_ref
+hash_ref.
 
 =cut
 
 sub TransformMarcToKoha {
     my ( $record, $frameworkcode, $limit_table ) = @_;
-    $frameworkcode //= q{};
+    # FIXME  Parameter $frameworkcode is obsolete and will be removed
     $limit_table //= q{};
 
     my $result = {};
@@ -2586,13 +2599,13 @@ sub TransformMarcToKoha {
         %tables = ( items => 1 );
     }
 
-    my $mss = GetMarcSubfieldStructure( $frameworkcode );
+    # The next call acknowledges Default as the authoritative framework
+    # for Koha to MARC mappings.
+    my $mss = GetMarcSubfieldStructure(''); # Do not change framework
     foreach my $kohafield ( keys %{ $mss } ) {
         my ( $table, $column ) = split /[.]/, $kohafield, 2;
         next unless $tables{$table};
-        my $val = TransformMarcToKohaOneField(
-            $kohafield, $record, $frameworkcode,
-        );
+        my $val = TransformMarcToKohaOneField( $kohafield, $record );
         next if !defined $val;
         my $key = _disambiguate( $table, $column );
         $result->{$key} = $val;
@@ -2641,15 +2654,17 @@ sub _disambiguate {
 
 =head2 TransformMarcToKohaOneField
 
-    $val = TransformMarcToKohaOneField( 'biblio.title', $marc, $frameworkcode );
+    $val = TransformMarcToKohaOneField( 'biblio.title', $marc );
+
+    Note: The authoritative Default framework is used implicitly.
 
 =cut
 
 sub TransformMarcToKohaOneField {
-    my ( $kohafield, $marc, $frameworkcode ) = @_;
+    my ( $kohafield, $marc ) = @_;
 
     my ( @rv, $retval );
-    my @mss = GetMarcSubfieldStructureFromKohaField($kohafield, $frameworkcode);
+    my @mss = GetMarcSubfieldStructureFromKohaField($kohafield);
     foreach my $fldhash ( @mss ) {
         my $tag = $fldhash->{tagfield};
         my $sub = $fldhash->{tagsubfield};
