@@ -31,7 +31,7 @@
         });
     });
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
-    var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+    var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') |html %]";
     var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
     var MSG_NOTHING_TO_SAVE = _("Nothing to save");
     var MSG_SAVING = _("Saving...");
