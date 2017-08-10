@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::More tests => 14;
-use File::Basename;
+use Cwd qw(abs_path);
 use File::Temp qw/tempfile/;
 
 use t::lib::Mocks;
@@ -12,6 +12,10 @@ use Koha::Database;
 use Koha::Plugins;
 
 BEGIN {
+    # Mock pluginsdir before loading Plugins module
+    my $path = abs_path(__FILE__);
+    $path =~ s/(\/[^\/]+){2}$//; # remove db_dependent and filename
+    t::lib::Mocks::mock_config( 'pluginsdir', $path );
     use_ok('C4::ImportBatch');
 }
 
@@ -182,7 +186,7 @@ subtest "RecordsFromMarcPlugin" => sub {
 100,a = Another
 245,a = Noise in the library|;
     close $fh;
-    t::lib::Mocks::mock_config( 'pluginsdir', dirname(__FILE__) . '/..' );
+
     my ( $plugin ) = Koha::Plugins->new->GetPlugins({ metadata => { name => 'MarcFieldValues' } });
     isnt( $plugin, undef, "Plugin found" );
     my $records = C4::ImportBatch::RecordsFromMarcPlugin( $name, ref $plugin, 'UTF-8' );
