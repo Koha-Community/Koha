@@ -63,13 +63,13 @@ if (is_ajax()) {
 	my ($tag, $js_reply);
 	if ($tag = $input->param('test')) {
 		my $check = is_approved($tag);
-        $js_reply = ( $check >=  1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('".uri_escape($tag)."');\n";
+        $js_reply = ( $check >=  1 ? 'success' : $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('".uri_escape_utf8($tag)."');\n";
 	}
 	if ($tag = $input->param('ok')) {
-        $js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('".uri_escape($tag)."');\n";
+        $js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('".uri_escape_utf8($tag)."');\n";
 	} 
 	if ($tag = $input->param('rej')) {
-        $js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('".uri_escape($tag)."');\n";
+        $js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('".uri_escape_utf8($tag)."');\n";
 	}
 	output_with_http_headers $input, undef, $js_reply, 'js';
 	exit;
