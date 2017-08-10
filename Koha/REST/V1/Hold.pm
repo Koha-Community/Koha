@@ -153,10 +153,16 @@ sub edit {
         reserve_id => $reserve_id,
         branchcode => $branchcode,
         rank => $priority,
-        suspend_until => $suspend_until,
     };
 
     C4::Reserves::ModReserve($params);
+
+    my $borrowernumber = $reserve->{borrowernumber};
+    if (C4::Reserves::CanReserveBeCanceledFromOpac($reserve_id, $borrowernumber)){
+        C4::Reserves::ToggleSuspend( $reserve_id, $suspend_until ) if
+            (defined $body->{suspend} || $suspend_until);
+    }
+
     $reserve = Koha::Holds->find($reserve_id);
 
     return $c->render( status => 200, openapi => $reserve );

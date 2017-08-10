@@ -225,7 +225,7 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 26;
+    plan tests => 36;
 
     my $reserve_id3 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
@@ -319,6 +319,26 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
       ->status_is(200)
       ->json_is('/reserve_id', $reserve_id3)
       ->json_is('/branchcode', $branchcode2);
+
+    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id3" => json => {
+        suspend_until => $suspend_until
+    });
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx) # create hold to myself
+      ->status_is(200)
+      ->json_is('/reserve_id', $reserve_id3)
+      ->json_is('/suspend', Mojo::JSON->true)
+      ->json_like('/suspend_until', qr/^$suspend_until/);
+
+    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id3" => json => {
+        suspend => Mojo::JSON->false
+    });
+    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
+    $t->request_ok($tx) # create hold to myself
+      ->status_is(200)
+      ->json_is('/reserve_id', $reserve_id3)
+      ->json_is('/suspend', Mojo::JSON->false)
+      ->json_is('/suspend_until', undef);
 };
 
 subtest "Test endpoints with permission" => sub {
