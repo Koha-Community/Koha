@@ -47,7 +47,25 @@ my $new_suggestion_2 = Koha::Suggestion->new(
     }
 )->store;
 
-is( $new_suggestion_1->suggesteddate, dt_from_string()->ymd, "If suggesteddate not passed in, it will default to today" );
+subtest 'store' => sub {
+    plan tests => 3;
+    my $suggestion  = Koha::Suggestion->new(
+        {   suggestedby  => $patron->{borrowernumber},
+            biblionumber => $biblio_1->{biblionumber},
+        }
+    )->store;
+
+    is( $suggestion->suggesteddate, dt_from_string()->ymd, "If suggesteddate not passed in, it will default to today" );
+    my $two_days_ago = dt_from_string->subtract( days => 2 );
+    my $two_days_ago_sql = output_pref({dt => $two_days_ago, dateformat => 'sql', dateonly => 1 });
+    $suggestion->suggesteddate($two_days_ago)->store;
+    $suggestion = Koha::Suggestions->find( $suggestion->suggestionid );
+    is( $suggestion->suggesteddate, $two_days_ago_sql, 'If suggesteddate passed in, it should be taken into account' );
+    $suggestion->reason('because!')->store;
+    $suggestion = Koha::Suggestions->find( $suggestion->suggestionid );
+    is( $suggestion->suggesteddate, $two_days_ago_sql, 'If suggestion id modified, suggesteddate should not be modified' );
+    $suggestion->delete;
+};
 
 like( $new_suggestion_1->suggestionid, qr|^\d+$|, 'Adding a new suggestion should have set the suggestionid' );
 is( Koha::Suggestions->search->count, $nb_of_suggestions + 2, 'The 2 suggestions should have been added' );
