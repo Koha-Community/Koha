@@ -261,8 +261,8 @@ if ($findborrower) {
 }
 
 # get the borrower information.....
-if ($borrowernumber) {
-    $patron = Koha::Patrons->find( $borrowernumber );
+$patron ||= Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
+if ($patron) {
     my $overdues = $patron->get_overdues;
     my $issues = $patron->checkouts;
     my $balance = $patron->account->balance;
@@ -443,8 +443,8 @@ if (@$barcodes) {
 ##################################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
-if ($borrowernumber) {
-    my $holds = Koha::Holds->search( { borrowernumber => $borrowernumber } );
+if ($patron) {
+    my $holds = Koha::Holds->search( { borrowernumber => $borrowernumber } ); # FIXME must be Koha::Patron->holds
     my $waiting_holds = $holds->waiting;
     $template->param(
         holds_count  => $holds->count(),

@@ -27,6 +27,11 @@ my $input = new CGI;
 my $flagsrequired = { permissions => 1 };
 my $member=$input->param('member');
 my $patron = Koha::Patrons->find( $member );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$member");
+    exit;
+}
+
 my $category_type = $patron->category->category_type;
 my $bor = $patron->unblessed;
 if( $category_type eq 'S' )  {

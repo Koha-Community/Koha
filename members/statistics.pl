@@ -50,8 +50,7 @@ my $borrowernumber = $input->param('borrowernumber');
 # Set informations for the patron
 my $patron = Koha::Patrons->find( $borrowernumber );
 unless ( $patron ) {
-    $template->param (unknowuser => 1);
-    output_html_with_http_headers $input, $cookie, $template->output;
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
 

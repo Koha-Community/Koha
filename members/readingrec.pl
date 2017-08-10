@@ -55,14 +55,18 @@ my $patron;
 if ($input->param('cardnumber')) {
     $cardnumber = $input->param('cardnumber');
     $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
-    $data = $patron->unblessed;
-    $borrowernumber = $data->{'borrowernumber'}; # we must define this as it is used to retrieve other data about the patron
 }
 if ($input->param('borrowernumber')) {
     $borrowernumber = $input->param('borrowernumber');
     $patron = Koha::Patrons->find( $borrowernumber );
-    $data = $patron->unblessed;
 }
+
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
+$data = $patron->unblessed;
+$borrowernumber = $patron->borrowernumber;
 
 my $order = 'date_due desc';
 my $limit = 0;

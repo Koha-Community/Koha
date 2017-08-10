@@ -50,6 +50,10 @@ my $action          = $input->param('action') || '';
 my $accountlines_id = $input->param('accountlines_id');
 
 my $patron = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 my $category = $patron->category;
 my $data = $patron->unblessed;
 $data->{description} = $category->description;

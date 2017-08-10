@@ -64,6 +64,11 @@ if ( $op eq 'download' ) {
 }
 else {
     my $patron = Koha::Patrons->find( $borrowernumber );
+    unless ( $patron ) {
+        print $cgi->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+        exit;
+    }
+
     my $patron_category = $patron->category;
     $template->param(%{ $patron->unblessed});
 

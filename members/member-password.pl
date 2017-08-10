@@ -49,6 +49,11 @@ my $newpassword2 = $input->param('newpassword2');
 my @errors;
 
 my $patron = Koha::Patrons->find( $member );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$member");
+    exit;
+}
+
 my $category_type = $patron->category->category_type;
 my $bor = $patron->unblessed;
 

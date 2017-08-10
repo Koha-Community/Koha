@@ -54,6 +54,10 @@ my $action = $input->param('action') || '';
 
 #get patron details
 my $patron = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 
 if ( $action eq 'reverse' ) {
   ReversePayment( $input->param('accountlines_id') );

@@ -73,6 +73,10 @@ if ( $op eq 'multi' ) {
 
 elsif ( $op eq 'update' ) {
     my $patron = Koha::Patrons->find( $borrowernumber );
+    unless ( $patron ) {
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+        exit;
+    }
     my $member = $patron->unblessed;
     $member->{'guarantorid'}  = 0;
     $member->{'categorycode'} = $catcode;

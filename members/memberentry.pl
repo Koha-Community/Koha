@@ -155,6 +155,11 @@ $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
     my $patron = Koha::Patrons->find( $borrowernumber );
+    unless ( $patron ) {
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+        exit;
+    }
+
     $borrower_data = $patron->unblessed;
     $borrower_data->{category_type} = $patron->category->category_type;
 }

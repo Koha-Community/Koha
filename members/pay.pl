@@ -68,6 +68,10 @@ if ( !$borrowernumber ) {
 
 # get borrower details
 my $patron = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 my $category = $patron->category;
 our $borrower = $patron->unblessed;
 $borrower->{description} = $category->description;

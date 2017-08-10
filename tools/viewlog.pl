@@ -74,6 +74,10 @@ if ( $src eq 'circ' ) {
     use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $patron = Koha::Patrons->find( $borrowernumber );
+    unless ( $patron ) {
+        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+        exit;
+    }
     $template->param( picture => 1 ) if $patron->image;
     my $data = $patron->unblessed;
 

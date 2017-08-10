@@ -50,6 +50,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get borrower details
 my $borrowernumber = $input->param('borrowernumber');
 my $patron         = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 my $borrower       = $patron->unblessed;
 my $category       = $patron->category;
 $borrower->{description} = $category->description;

@@ -48,36 +48,37 @@ my $borrowernumber = $query->param('borrowernumber');
 
 my $branch = C4::Context->userenv->{'branch'};
 
-# get the borrower information.....
-my ( $patron, $patron_info );
-if ($borrowernumber) {
-    $patron = Koha::Patrons->find( $borrowernumber );
-    my $category = $patron->category;
-    $patron_info = $patron->unblessed;
-    $patron_info->{description} = $category->description;
-    $patron_info->{category_type} = $category->category_type;
-
-  my $count;
-  my @borrowerSubscriptions;
-  ($count, @borrowerSubscriptions) = GetSubscriptionsFromBorrower($borrowernumber );
-  my @subscripLoop;
-
-    foreach my $num_res (@borrowerSubscriptions) {
-        my %getSubscrip;
-        $getSubscrip{subscriptionid}	= $num_res->{'subscriptionid'};
-        $getSubscrip{title}			= $num_res->{'title'};
-        $getSubscrip{borrowernumber}		= $num_res->{'borrowernumber'};
-        push( @subscripLoop, \%getSubscrip );
-    }
-
-    $template->param(
-        countSubscrip => scalar @subscripLoop,
-        subscripLoop  => \@subscripLoop,
-        routinglistview => 1
-    );
-
-    $template->param( adultborrower => 1 ) if ( $patron_info->{category_type} =~ /^(A|I)$/ );
+my $patron = Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
+unless ( $patron ) {
+    print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
 }
+
+my $category = $patron->category;
+my $patron_info = $patron->unblessed;
+$patron_info->{description} = $category->description;
+$patron_info->{category_type} = $category->category_type;
+
+my $count;
+my @borrowerSubscriptions;
+($count, @borrowerSubscriptions) = GetSubscriptionsFromBorrower($borrowernumber );
+my @subscripLoop;
+
+foreach my $num_res (@borrowerSubscriptions) {
+    my %getSubscrip;
+    $getSubscrip{subscriptionid} = $num_res->{'subscriptionid'};
+    $getSubscrip{title}          = $num_res->{'title'};
+    $getSubscrip{borrowernumber} = $num_res->{'borrowernumber'};
+    push( @subscripLoop, \%getSubscrip );
+}
+
+$template->param(
+    countSubscrip => scalar @subscripLoop,
+    subscripLoop  => \@subscripLoop,
+    routinglistview => 1
+);
+
+$template->param( adultborrower => 1 ) if ( $patron_info->{category_type} =~ /^(A|I)$/ );
 
 ##################################################################################
 

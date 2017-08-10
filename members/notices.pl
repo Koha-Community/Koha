@@ -34,6 +34,10 @@ my $input=new CGI;
 
 my $borrowernumber = $input->param('borrowernumber');
 my $patron = Koha::Patrons->find( $borrowernumber );
+unless ( $patron ) {
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 my $borrower = $patron->unblessed;
 
 my ($template, $loggedinuser, $cookie)
