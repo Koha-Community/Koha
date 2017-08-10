@@ -17,6 +17,7 @@
 #
 
 use Modern::Perl;
+use Data::Dumper;
 
 use MARC::Record;
 use C4::Biblio;
@@ -25,6 +26,9 @@ use Koha::Library;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+
+use Koha::MarcSubfieldStructures;
+use Koha::Caches;
 
 use Test::More tests => 12;
 
@@ -413,7 +417,7 @@ subtest 'SearchItems test' => sub {
     my $cache = Koha::Caches->get_instance();
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     my $item3_record = new MARC::Record;
@@ -444,7 +448,7 @@ subtest 'SearchItems test' => sub {
     # Clear cache
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-    $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+    $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
     ModItemFromMarc($item3_record, $biblionumber, $item3_itemnumber);
@@ -614,57 +618,19 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     $schema->storage->txn_begin();
 
     my $builder = t::lib::TestBuilder->new;
-    my $framework = $builder->build({
-        source => 'BiblioFramework',
-    });
+    my $framework = $builder->build({ source => 'BiblioFramework' });
+
     # Link biblio.biblionumber and biblioitems.biblioitemnumber to avoid _koha_marc_update_bib_ids to fail with 'no biblio[item]number tag for framework"
-    $builder->build({
-        source => 'MarcSubfieldStructure',
-        value => {
-            frameworkcode => $framework->{frameworkcode},
-            kohafield => 'biblio.biblionumber',
-            tagfield => '999',
-            tagsubfield => 'c',
-        }
-    });
-    $builder->build({
-        source => 'MarcSubfieldStructure',
-        value => {
-            frameworkcode => $framework->{frameworkcode},
-            kohafield => 'biblioitems.biblioitemnumber',
-            tagfield => '999',
-            tagsubfield => 'd',
-        }
-    });
-    my $mss_itemnumber = $builder->build({
-        source => 'MarcSubfieldStructure',
-        value => {
-            frameworkcode => $framework->{frameworkcode},
-            kohafield => 'items.itemnumber',
-            tagfield => '952',
-            tagsubfield => '9',
-        }
-    });
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '999', tagsubfield => [ 'c', 'd' ] })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '999', tagsubfield => 'c', kohafield => 'biblio.biblionumber' })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '999', tagsubfield => 'd', kohafield => 'biblioitems.biblioitemnumber' })->store;
 
-    my $mss_barcode = $builder->build({
-        source => 'MarcSubfieldStructure',
-        value => {
-            frameworkcode => $framework->{frameworkcode},
-            kohafield => 'items.barcode',
-            tagfield => '952',
-            tagsubfield => 'p',
-        }
-    });
-
-    my $mss_itemtype = $builder->build({
-        source => 'MarcSubfieldStructure',
-        value => {
-            frameworkcode => $framework->{frameworkcode},
-            kohafield => 'items.itype',
-            tagfield => '952',
-            tagsubfield => 'y',
-        }
-    });
+    # Same for item fields: itemnumber, barcode, itype
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => [ '9', 'p', 'y' ] })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => '9', kohafield => 'items.itemnumber' })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'p', kohafield => 'items.barcode' })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'y', kohafield => 'items.itype' })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
@@ -701,20 +667,13 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     $item = GetItem($item_itemnumber);
     is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
 
-    # Remove the mapping
-    my $dbh = C4::Context->dbh;
-    $dbh->do(q|
-        DELETE FROM marc_subfield_structure
-        WHERE kohafield = 'items.barcode'
-        AND frameworkcode = ?
-    |, undef, $framework->{frameworkcode} );
+    # Remove the mapping for barcode
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'p' })->delete;
 
     # And make sure the caches are cleared
     my $cache = Koha::Caches->get_instance();
-    $cache->clear_from_cache("MarcStructure-0-" . $framework->{frameworkcode});
-    $cache->clear_from_cache("MarcStructure-1-" . $framework->{frameworkcode});
-    $cache->clear_from_cache("default_value_for_mod_marc-" . $framework->{frameworkcode});
-    $cache->clear_from_cache("MarcSubfieldStructure-" . $framework->{frameworkcode});
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache("MarcSubfieldStructure-");
 
     # Update the MARC field with another value
     $item_record->delete_fields( $barcode_field );
@@ -729,6 +688,8 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     $item = GetItem($item_itemnumber);
     is ( $item->{barcode}, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
 
+    $cache->clear_from_cache("default_value_for_mod_marc-");
+    $cache->clear_from_cache( "MarcSubfieldStructure-" );
     $schema->storage->txn_rollback;
 };
 

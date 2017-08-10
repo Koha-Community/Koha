@@ -23,7 +23,7 @@ my $builder = t::lib::TestBuilder->new;
 my $library = $builder->build( { source => 'Branch' })->{branchcode};
 my $library2 = $builder->build( { source => 'Branch' })->{branchcode};
 
-my $frameworkcode = ''; # FIXME We do not want to insert the whole mapping, but we should use another frameworkcode
+my $frameworkcode = ''; # Use Default for Koha to MARC mappings
 $dbh->do(q|
     DELETE FROM marc_subfield_structure
     WHERE ( kohafield = 'items.new_status' OR kohafield = 'items.stocknumber' )
@@ -40,7 +40,7 @@ $dbh->do(qq|
 my $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
 
 my $record = MARC::Record->new();
@@ -302,5 +302,5 @@ is( $modified_item->{new_status}, 'another_new_updated_value', q|ToggleNewStatus
 $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
-$cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
+$cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");

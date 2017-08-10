@@ -14,12 +14,10 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Create/overwrite some Koha to MARC mappings in default framework
-my $mapping1 = Koha::MarcSubfieldStructures->find('','300','a') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'a' });
-$mapping1->kohafield( "mytable.nicepages" );
-$mapping1->store;
-my $mapping2 = Koha::MarcSubfieldStructures->find('','300','b') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'b' });
-$mapping2->kohafield( "mytable2.goodillustrations" );
-$mapping2->store;
+Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '300', tagsubfield => 'a' })->delete;
+Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'a', kohafield => "mytable.nicepages" })->store;
+Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '300', tagsubfield => 'b' })->delete;
+Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'b', kohafield => "mytable2.goodillustrations" })->store;
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
 my $record = C4::Biblio::TransformKohaToMarc({
@@ -44,10 +42,9 @@ is_deeply( \@subfields, [
 subtest "Multiple Koha to MARC mappings (BZ 10306)" => sub {
     plan tests => 4;
 
-    # 300a and 260d mapped to mytable.nicepages
-    my $mapping3 = Koha::MarcSubfieldStructures->find('','260','d') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '260', tagsubfield => 'd' });
-    $mapping3->kohafield( "mytable.nicepages" );
-    $mapping3->store;
+    # Add260d mapping so that 300a and 260d both map to mytable.nicepages
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '260', tagsubfield => 'd' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '260', tagsubfield => 'd', kohafield => "mytable.nicepages" })->store;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     # Include two values in goodillustrations too: should result in two
@@ -63,52 +60,39 @@ subtest "Multiple Koha to MARC mappings (BZ 10306)" => sub {
         "Check second 300b" );
 };
 
-subtest "Working with control fields in another framework" => sub {
-    plan tests => 2;
-
-    # Add a new framework
-    my $fw = t::lib::TestBuilder->new->build_object({
-        class => 'Koha::BiblioFrameworks'
-    });
+subtest "Working with control fields" => sub {
+    plan tests => 1;
 
     # Map a controlfield to 'fullcontrol'
-    my $mapping = Koha::MarcSubfieldStructure->new({ frameworkcode => $fw->frameworkcode, tagfield => '001', tagsubfield => '@', kohafield => 'fullcontrol' });
-    $mapping->store;
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '001', tagsubfield => '@' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '001', tagsubfield => '@', kohafield => "fullcontrol" })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
-    # First test in the wrong framework
     my @cols = ( notexist => 'i am not here', fullcontrol => 'all' );
     my $record = C4::Biblio::TransformKohaToMarc( { @cols } );
-    is( $record->field('001'), undef,
-        'With default framework we should not find a 001 controlfield' );
-    # Now include the framework parameter and test 001
-    $record = C4::Biblio::TransformKohaToMarc( { @cols }, $fw->frameworkcode );
-    is( $record->field('001')->data, "all", "Check controlfield 001 with right frameworkcode" );
-
-    # Remove from cache
-    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-".$fw->frameworkcode );
+    is( $record->field('001')->data, 'all', 'Verify field 001' );
 };
 
 subtest "Add test for no_split option" => sub {
     plan tests => 4;
 
-    my $fwc = t::lib::TestBuilder->new->build({ source => 'BiblioFramework' })->{frameworkcode};
-    Koha::MarcSubfieldStructure->new({ frameworkcode => $fwc, tagfield => '952', tagsubfield => 'a', kohafield => 'items.fld1' })->store;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => $fwc, tagfield => '952', tagsubfield => 'b', kohafield => 'items.fld1' })->store;
-    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-$fwc" );
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'a' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'a', kohafield => 'items.fld1' })->store;
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'b' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'b', kohafield => 'items.fld1' })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     # Test single value in fld1
     my @cols = ( 'items.fld1' => '01' );
-    my $record = C4::Biblio::TransformKohaToMarc( { @cols }, $fwc, { no_split => 1 } );
+    my $record = C4::Biblio::TransformKohaToMarc( { @cols }, { no_split => 1 } );
     is( $record->subfield( '952', 'a' ), '01', 'Check single in 952a' );
     is( $record->subfield( '952', 'b' ), '01', 'Check single in 952b' );
 
     # Test glued (composite) value in fld1
     @cols = ( 'items.fld1' => '01 | 02' );
-    $record = C4::Biblio::TransformKohaToMarc( { @cols }, $fwc, { no_split => 1 } );
+    $record = C4::Biblio::TransformKohaToMarc( { @cols }, { no_split => 1 } );
     is( $record->subfield( '952', 'a' ), '01 | 02', 'Check composite in 952a' );
     is( $record->subfield( '952', 'b' ), '01 | 02', 'Check composite in 952b' );
-
-    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-$fwc" );
 };
 
 # Cleanup

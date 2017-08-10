@@ -19,10 +19,11 @@ use Modern::Perl;
 
 use Test::More tests => 9;
 use Test::MockModule;
-
 use List::MoreUtils qw( uniq );
 use MARC::Record;
+
 use t::lib::Mocks qw( mock_preference );
+use t::lib::TestBuilder;
 
 use Koha::Database;
 use Koha::Caches;
@@ -47,7 +48,7 @@ subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     );
 
     # biblio.biblionumber must be mapped so this should return something
-    my $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber', '');
+    my $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber');
 
     ok(defined $marc_subfield_structure, "There is a result");
     is(ref $marc_subfield_structure, "HASH", "Result is a hashref");
@@ -58,13 +59,13 @@ subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     like($marc_subfield_structure->{tagfield}, qr/^\d{3}$/, "tagfield is a valid tagfield");
 
     # Add a test for list context (BZ 10306)
-    my @results = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber', '');
+    my @results = GetMarcSubfieldStructureFromKohaField('biblio.biblionumber');
     is( @results, 1, 'We expect only one mapping' );
     is_deeply( $results[0], $marc_subfield_structure,
         'The first entry should be the same hashref as we had before' );
 
     # foo.bar does not exist so this should return undef
-    $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar', '');
+    $marc_subfield_structure = GetMarcSubfieldStructureFromKohaField('foo.bar');
     is($marc_subfield_structure, undef, "invalid kohafield returns undef");
 
 };
@@ -73,12 +74,9 @@ subtest "GetMarcSubfieldStructure" => sub {
     plan tests => 5;
 
     # Add multiple Koha to Marc mappings
-    my $mapping1 = Koha::MarcSubfieldStructures->find('','399','a') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '399', tagsubfield => 'a' });
-    $mapping1->kohafield( "mytable.nicepages" );
-    $mapping1->store;
-    my $mapping2 = Koha::MarcSubfieldStructures->find('','399','b') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '399', tagsubfield => 'b' });
-    $mapping2->kohafield( "mytable.nicepages" );
-    $mapping2->store;
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '399', tagsubfield => [ 'a', 'b' ] })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '399', tagsubfield => 'a', kohafield => "mytable.nicepages" })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '399', tagsubfield => 'b', kohafield => "mytable.nicepages" })->store;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
     my $structure = C4::Biblio::GetMarcSubfieldStructure('');
 
@@ -95,13 +93,13 @@ subtest "GetMarcSubfieldStructure" => sub {
 };
 
 subtest "GetMarcFromKohaField" => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     #NOTE: We are building on data from the previous subtest
     # With: field 399 / mytable.nicepages
 
     # Check call in list context for multiple mappings
-    my @retval = C4::Biblio::GetMarcFromKohaField('mytable.nicepages', '');
+    my @retval = C4::Biblio::GetMarcFromKohaField('mytable.nicepages');
     is( @retval, 4, 'Should return two tags and subfields' );
     is( $retval[0], '399', 'Check first tag' );
     is( $retval[1], 'a', 'Check first subfield' );
@@ -109,8 +107,19 @@ subtest "GetMarcFromKohaField" => sub {
     is( $retval[3], 'b', 'Check second subfield' );
 
     # Check same call in scalar context
-    is( C4::Biblio::GetMarcFromKohaField('mytable.nicepages', ''), '399',
+    is( C4::Biblio::GetMarcFromKohaField('mytable.nicepages'), '399',
         'GetMarcFromKohaField returns first tag in scalar context' );
+
+    # Bug 19096 Default is authoritative
+    # If we add a new empty framework, we should still get the mappings
+    # from Default. CAUTION: This test passes intentionally the obsoleted
+    # framework parameter.
+    my $new_fw = t::lib::TestBuilder->new->build({source => 'BiblioFramework'});
+    @retval = C4::Biblio::GetMarcFromKohaField(
+        'mytable.nicepages', $new_fw->{frameworkcode},
+    );
+    is( @retval, 4, 'Still got two pairs of tags/subfields' );
+    is( $retval[0].$retval[1], '399a', 'Including 399a' );
 };
 
 # Mocking variables
