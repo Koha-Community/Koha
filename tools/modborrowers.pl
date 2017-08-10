@@ -146,7 +146,7 @@ if ( $op eq 'show' ) {
     # Construct drop-down list values
     my $branches = GetBranchesLoop;
     my @branches_option;
-    push @branches_option, { value => $_->{value}, lib => $_->{branchname} } for @$branches;
+    push @branches_option, { value => $_->{branchcode}, lib => $_->{branchname} } for @$branches;
     unshift @branches_option, { value => "", lib => "" };
     my $categories = GetBorrowercategoryList;
     my @categories_option;
