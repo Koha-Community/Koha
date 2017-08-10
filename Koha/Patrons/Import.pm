@@ -199,7 +199,7 @@ sub import_patrons {
         }
 
         # Check if the userid provided does not exist yet
-        if (  exists $borrower{userid}
+        if (  $matchpoint ne 'userid' and exists $borrower{userid}
                  and $borrower{userid}
              and not Check_Userid( $borrower{userid}, $borrower{borrowernumber} ) ) {
              push @errors, { duplicate_userid => 1, userid => $borrower{userid} };
