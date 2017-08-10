@@ -59,7 +59,7 @@ $record->append_fields(
     MARC::Field->new('100', ' ', ' ', a => 'Donald E. Knuth.'),
     MARC::Field->new('245', ' ', ' ', a => 'The art of computer programming'),
 );
-my ( $biblionumber, undef, undef ) = C4::Biblio::AddBiblio($record, '');
+my ( $biblionumber ) = C4::Biblio::AddBiblio($record, '');
 
 for my $callnumber ( shuffle @callnumbers ) {
     my ( $biblionumber, undef, $itemnumber ) = C4::Items::AddItem({
