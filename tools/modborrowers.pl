@@ -366,10 +366,10 @@ exit;
 
 sub GetBorrowerInfos {
     my ( %info ) = @_;
-    my $borrower = Koha::Patrons->find( \%info );
-    my $catdesc = $borrower->category->description;
-    if ( $borrower ) {
-        $borrower = $borrower->unblessed;
+    my $patron = Koha::Patrons->find( \%info );
+    my $borrower;
+    if ( $patron ) {
+        $borrower = $patron->unblessed;
         for ( qw(dateenrolled dateexpiry) ) {
             my $userdate = $borrower->{$_};
             unless ($userdate && $userdate ne "0000-00-00" and $userdate ne "9999-12-31") {
@@ -378,7 +378,7 @@ sub GetBorrowerInfos {
             }
             $borrower->{$_} = $userdate || '';
         }
-        $borrower->{category_description} = $catdesc;
+        $borrower->{category_description} = $patron->category->description;
         my $attr_loop = C4::Members::Attributes::GetBorrowerAttributes( $borrower->{borrowernumber} );
         $borrower->{patron_attributes} = $attr_loop;
     }
