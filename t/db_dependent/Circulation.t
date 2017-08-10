@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 98;
+use Test::More tests => 100;
 
 use DateTime;
 
@@ -453,7 +453,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
     my $datedue6 = AddIssue( $renewing_borrower, $barcode6);
-    is (defined $datedue6, 1, "Item 2 checked out, due date: $datedue6");
+    is (defined $datedue6, 1, "Item 2 checked out, due date: ".$datedue6->date_due);
 
     my $now = dt_from_string();
     my $five_weeks = DateTime::Duration->new(weeks => 5);
@@ -474,6 +474,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
             due            => Koha::DateUtils::output_pref($five_weeks_ago)
         }
     );
+
     t::lib::Mocks::mock_preference('RenewalLog', 0);
     my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
     my $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
@@ -493,6 +494,16 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
     is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
     $fines->delete();
+
+
+    my $old_issue_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["ISSUE"]) } );
+    my $old_renew_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    AddIssue( $renewing_borrower,$barcode7,Koha::DateUtils::output_pref({str=>$datedue6->date_due, dateformat =>'iso'}),0,$date, 0, undef );
+    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    is ($new_log_size, $old_renew_log_size + 1, 'renew log successfully added when renewed via issuing');
+    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["ISSUE"]) } );
+    is ($new_log_size, $old_issue_log_size, 'renew not logged as issue when renewed via issuing');
+
 
     t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
