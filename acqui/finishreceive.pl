@@ -62,7 +62,7 @@ my $new_ordernumber  = $ordernumber;
 $unitprice = Koha::Number::Price->new( $unitprice )->unformat();
 my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
 
-#need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
+#need old receivedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
     my @received_items = ();
     if ($basket->effective_create_items eq 'ordering') {
