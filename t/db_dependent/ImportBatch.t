@@ -187,6 +187,7 @@ subtest "RecordsFromMarcPlugin" => sub {
 245,a = Noise in the library|;
     close $fh;
 
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     my ( $plugin ) = Koha::Plugins->new->GetPlugins({ metadata => { name => 'MarcFieldValues' } });
     isnt( $plugin, undef, "Plugin found" );
     my $records = C4::ImportBatch::RecordsFromMarcPlugin( $name, ref $plugin, 'UTF-8' );
