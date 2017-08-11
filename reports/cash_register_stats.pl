@@ -106,8 +106,8 @@ if ($do_it) {
         $whereBranchCode
         ORDER BY al.date
     ";
-    my $sth_stats = $dbh->prepare($query) or die "Unable to prepare query $dbh->errstr";
-    $sth_stats->execute($fromDate, $toDate, @extra_params) or die "Unable to execute query $sth_stats->errstr";
+    my $sth_stats = $dbh->prepare($query) or die "Unable to prepare query " . $dbh->errstr;
+    $sth_stats->execute($fromDate, $toDate, @extra_params) or die "Unable to execute query " . $sth_stats->errstr;
 
     my @loopresult;
     my $grantotal = 0;
