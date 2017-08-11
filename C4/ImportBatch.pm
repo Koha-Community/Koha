@@ -1556,10 +1556,11 @@ sub RecordsFromMARCXMLFile {
 
 sub RecordsFromMarcPlugin {
     my ($input_file, $plugin_class, $encoding) = @_;
+    my ( $text, @return );
+    return \@return if !$input_file || !$plugin_class;
 
     # Read input file
     open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
-    my ( $text, $marc, @return );
     $/ = "\035";
     while (<IN>) {
         s/^\s+//;
@@ -1574,14 +1575,16 @@ sub RecordsFromMarcPlugin {
         class  => $plugin_class,
         method => 'to_marc',
         params => { data => $text },
-    });
+    }) if $text;
 
     # Convert to array of MARC records
-    my $marc_type = C4::Context->preference('marcflavour');
-    foreach my $blob ( split(/\x1D/, $text) ) {
-        next if $blob =~ /^\s*$/;
-        my ($marcrecord) = MarcToUTF8Record($blob, $marc_type, $encoding);
-        push @return, $marcrecord;
+    if( $text ) {
+        my $marc_type = C4::Context->preference('marcflavour');
+        foreach my $blob ( split(/\x1D/, $text) ) {
+            next if $blob =~ /^\s*$/;
+            my ($marcrecord) = MarcToUTF8Record($blob, $marc_type, $encoding);
+            push @return, $marcrecord;
+        }
     }
     return \@return;
 }
