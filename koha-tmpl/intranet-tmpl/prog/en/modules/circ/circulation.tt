@@ -865,7 +865,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                         [% IF message.manager_id %]
                             ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id %]">[% message.get_column('manager_firstname') %] [% message.get_column('manager_surname') %]</a> )
                         [% END %]
-                        <i>"[% message.message %]"</i>
+                        <i>"[% message.message | html %]"</i>
                     </span>
                     [% IF message.branchcode == branch OR Koha.Preference('AllowAllMessageDeletion') %]
                         [<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% message.message_id %]&amp;borrowernumber=[% message.borrowernumber %]" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>]
