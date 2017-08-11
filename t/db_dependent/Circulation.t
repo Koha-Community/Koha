@@ -506,6 +506,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["ISSUE"]) } );
     is ($new_log_size, $old_issue_log_size, 'renew not logged as issue when renewed via issuing');
 
+    $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $itemnumber7 } );
+    $fines->delete();
 
     t::lib::Mocks::mock_preference('OverduesBlockRenewing','blockitem');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber6);
