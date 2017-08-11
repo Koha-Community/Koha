@@ -35,6 +35,7 @@
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
       <arg><option>--configfile</option> /path/to/config</arg>
       <arg><option>--passwdfile</option> /path/to/passwd</arg>
+      <arg><option>--dbhost</option> host</arg>
       <arg><option>--database</option> database</arg>
       <arg><option>--adminuser</option> n</arg>
       <arg><option>--enable-sru</option></arg>
@@ -89,6 +90,13 @@
       <term><option>--database</option></term>
       <listitem>
         <para>MySQL database to use.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--dbhost</option></term>
+      <listitem>
+        <para>Database server hostname/IP to use.</para>
       </listitem>
     </varlistentry>
 
@@ -330,7 +338,7 @@
     <varlistentry>
       <term><option><filename>/etc/koha/passwd</filename></option></term>
       <listitem>
-        <para>Pre-selected database credentials are read from this file, if it exists. The format for this file is instancename:username:passwd:database. Database is optional, but the other three are required if you want to use pre-determined database user credentials.</para>
+        <para>Pre-selected database credentials are read from this file, if it exists. The format for this file is instancename:username:passwd:database:dbhost. Database is optional, but the other three are required if you want to use pre-determined database user credentials.</para>
       </listitem>
     </varlistentry>
   </variablelist>
