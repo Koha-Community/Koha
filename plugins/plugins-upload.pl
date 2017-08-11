@@ -47,7 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $uploadfilename = $input->param('uploadfile');
 my $uploadfile     = $input->upload('uploadfile');
-my $op             = $input->param('op');
+my $op             = $input->param('op') || q{};
 
 my ( $total, $handled, @counts, $tempfile, $tfh );
 
