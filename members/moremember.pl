@@ -36,6 +36,7 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 use CGI qw ( -utf8 );
+use HTML::Entities;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -116,6 +117,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 my $borrowernumber = $input->param('borrowernumber');
+$borrowernumber = HTML::Entities::encode($borrowernumber);
 my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
