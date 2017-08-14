@@ -3,7 +3,7 @@
 [%- INCLUDE empty_line.inc -%]
 [%- FOREACH row IN rows -%]
     [%- FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END -%]
-    [%- INCLUDE empty_line.inc %]
+    [%- INCLUDE empty_line.inc -%]
 [%- END -%]
 TOTAL[%- INCLUDE empty_line.inc -%]
 [%- FOREACH field IN total; field; sep IF !loop.last; END -%]
