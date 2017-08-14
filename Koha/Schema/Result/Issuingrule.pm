@@ -196,6 +196,17 @@ __PACKAGE__->table("issuingrules");
   default_value: 1
   is_nullable: 0
 
+=head2 hold_max_pickup_delay
+
+  data_type: 'smallint'
+  is_nullable: 1
+
+=head2 hold_expiration_charge
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
 =head2 branchcode
 
   data_type: 'varchar'
@@ -303,6 +314,10 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "holds_per_record",
   { data_type => "smallint", default_value => 1, is_nullable => 0 },
+  "hold_max_pickup_delay",
+  { data_type => "smallint", is_nullable => 1 },
+  "hold_expiration_charge",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "branchcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "overduefinescap",

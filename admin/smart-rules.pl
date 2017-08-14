@@ -147,6 +147,8 @@ elsif ($op eq 'add') {
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = $input->param('reservesallowed');
     my $holds_per_record  = $input->param('holds_per_record');
+    my $hold_max_pickup_delay = $input->param('hold_max_pickup_delay');
+    my $hold_expiration_charge = $input->param('hold_expiration_charge');
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
@@ -188,6 +190,8 @@ elsif ($op eq 'add') {
         no_auto_renewal_after_hard_limit => $no_auto_renewal_after_hard_limit,
         reservesallowed               => $reservesallowed,
         holds_per_record              => $holds_per_record,
+        hold_max_pickup_delay         => $hold_max_pickup_delay,
+        hold_expiration_charge        => $hold_expiration_charge,
         issuelength                   => $issuelength,
         lengthunit                    => $lengthunit,
         hardduedate                   => $hardduedate,

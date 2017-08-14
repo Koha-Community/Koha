@@ -132,7 +132,7 @@ sub set_waiting {
         $requested_expiration = dt_from_string($self->expirationdate);
     }
 
-    my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
+    my $max_pickup_delay = $self->max_pickup_delay;
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
     my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
 
@@ -156,7 +156,7 @@ sub set_waiting {
 =head3 waiting_expires_on
 
 Returns a DateTime for the date a waiting holds expires on.
-Returns undef if the system peference ReservesMaxPickUpDelay is not set.
+Returns undef if hold max pickup delay is not set in circulation rules.
 Returns undef if the hold is not waiting ( found = 'W' ).
 
 =cut
@@ -167,8 +167,8 @@ sub waiting_expires_on {
     my $found = $self->found;
     return unless $found && $found eq 'W';
 
-    my $ReservesMaxPickUpDelay = C4::Context->preference('ReservesMaxPickUpDelay');
-    return unless $ReservesMaxPickUpDelay;
+    my $hold_max_pickup_delay = $self->max_pickup_delay;
+    return unless $hold_max_pickup_delay;
 
     my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $self );
     return $lastpickupdate;
@@ -313,6 +313,66 @@ sub is_suspended {
     my ( $self ) = @_;
 
     return $self->suspend();
+}
+
+=head3 max_pickup_delay
+
+=cut
+
+sub max_pickup_delay {
+    my $self = shift;
+
+    my $rule = $self->_get_effective_issuing_rule();
+    return $rule ? defined $rule->hold_max_pickup_delay
+                    ? $rule->hold_max_pickup_delay : 7
+                    : 7;
+}
+
+=head3 expiration_charge
+
+=cut
+
+sub expiration_charge {
+    my $self = shift;
+
+    my $rule = $self->_get_effective_issuing_rule();
+    return $rule ? defined $rule->hold_expiration_charge
+                    ? $rule->hold_expiration_charge : 0
+                    : 0;
+}
+
+=head3 _get_effective_issuing_rule
+
+my $rule = $self->_get_effective_issuing_rule();
+
+Returns effective issuing rule for this hold
+
+=cut
+
+sub _get_effective_issuing_rule {
+    my $self = shift;
+
+    my $item;
+    my $itemtype;
+    if (defined $self->itemnumber) {
+        $item = $self->item;
+        $itemtype = $item->effective_itemtype if $item;
+    } else {
+        my $biblio = $self->biblio;
+        $itemtype = $biblio->itemtype if $biblio;
+    }
+
+    my $patron = $self->borrower;
+    my $categorycode = $patron->categorycode if $patron;
+    my $rule = Koha::IssuingRules->get_effective_issuing_rule({
+        categorycode => $patron->categorycode,
+        itemtype => $itemtype,
+        branchcode => $self->branchcode,
+        ccode => $item ? $item->ccode : undef,
+        permanent_location => $item ? $item->permanent_location : undef,
+    });
+
+    return $rule;
 }
 
 =head3 type

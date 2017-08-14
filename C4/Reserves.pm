@@ -1011,7 +1011,7 @@ sub AutoUnsuspendReserves {
 
   CancelReserve({ reserve_id => $reserve_id, [ biblionumber => $biblionumber, borrowernumber => $borrrowernumber, itemnumber => $itemnumber, ], pickupexpired => DateTime->new(year => 2015, ...), [ charge_cancel_fee => 1 ] });
 
-Cancels a reserve. If C<charge_cancel_fee> is passed and the C<ExpireReservesMaxPickUpDelayCharge> syspref is set, charge that fee to the patron's account.
+Cancels a reserve. If C<charge_cancel_fee> is passed and the hold expiration charge is defined in circulation rules, charge that fee to the patron's account.
 
 =cut
 
@@ -1079,7 +1079,7 @@ sub CancelReserve {
         _FixPriority({ biblionumber => $reserve->{biblionumber} });
 
         # and, if desired, charge a cancel fee
-        my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
+        my $charge = $hold->expiration_charge;
         if ( $charge && $params->{'charge_cancel_fee'} ) {
             manualinvoice($reserve->{'borrowernumber'}, $reserve->{'itemnumber'}, '', 'HE', $charge);
         }
@@ -1917,24 +1917,12 @@ sub _reserve_last_pickup_date {
     my $calendar = Koha::Calendar->new( branchcode => $branch);
     my $expiration;
 
-    # Getting the ReservesMaxPickUpDelayBranch
-    my $branches = C4::Context->preference("ReservesMaxPickUpDelayBranch");
+    my $hold = (ref($reserve) eq 'Koha::Hold') ?
+        $reserve : Koha::Holds->find($reserve->{reserve_id});
+    my $delay = $hold ? $hold->max_pickup_delay : 7;
 
-    my $yaml = YAML::XS::Load(
-                        Encode::encode(
-                            'UTF-8',
-                            $branches,
-                            Encode::FB_CROAK
-                        )
-                    );
+    $expiration = $calendar->days_forward( $startdate, $delay );
 
-    if ($yaml->{$branch}) {
-        my $delay = $yaml->{$branch};
-        $expiration = $calendar->days_forward( $startdate, $delay );
-    }
-    else {
-        $expiration = $calendar->days_forward( $startdate, C4::Context->preference('ReservesMaxPickUpDelay') );
-    }
        #It is necessary to set the time portion of DateTime as well, because we are actually getting the
        #  last pickup datetime and importantly days end at 23:59:59.
        #  Without this set, last pickup dates expire 1 day too early and frustrates patrons and staff alike!

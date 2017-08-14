@@ -24,7 +24,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 6;
+        plan tests => 5;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -57,10 +57,6 @@ is( scalar( @$letters ), 2, 'GetLetters returns the 2 inserted letters' );
 # Regression test for bug 10843
 # $dt->add takes a scalar, not undef
 my $letter;
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', undef);
-$letter = C4::Letters::_parseletter( undef, 'reserves', {waitingdate => "2013-01-01"} );
-is( ref($letter), 'HASH');
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 1);
 $letter = C4::Letters::_parseletter( undef, 'reserves', {waitingdate => "2013-01-01"} );
 is( ref($letter), 'HASH');
 

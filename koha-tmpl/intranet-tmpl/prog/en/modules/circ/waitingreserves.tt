@@ -77,7 +77,7 @@
                 <li><a href="#holdswaiting">Holds waiting: [% reservecount %]</a></li>
                 <li>
                     <a href="#holdsover">
-                        Holds waiting over [% ReservesMaxPickUpDelay %] days: [% overcount %]
+                        Expired holds: [% overcount %]
                     </a>
                 </li>
             </ul>
@@ -138,7 +138,7 @@
         [% END %]
         </div>
         <div id="holdsover">
-                [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay %] days.</p>[% END %]
+               <p>Holds listed here have been awaiting pickup for more than defined by the circulation rules.</p>
                [% IF ( overloop ) %]
                <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
                    <input type="hidden" name="cancelall" value="1" />

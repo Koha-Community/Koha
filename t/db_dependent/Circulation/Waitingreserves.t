@@ -23,13 +23,18 @@ use Test::More;
 use Try::Tiny;
 
 use t::lib::Page::Circulation::Waitingreserves;
+use t::lib::TestBuilder;
 use t::lib::TestObjects::ObjectFactory;
 use t::lib::TestObjects::HoldFactory;
 use t::lib::TestObjects::SystemPreferenceFactory;
 use Koha::Auth::PermissionManager;
+use Koha::Database;
+use Koha::IssuingRules;
 
 ##Enable debug mode for PageObject tests.
 #$ENV{KOHA_PAGEOBJECT_DEBUG} = 1;
+my $builder = t::lib::TestBuilder->new();
+my @stored_rules = Koha::IssuingRules->search->as_list;
 
 ##Setting up the test context
 my $testContext = {};
@@ -40,15 +45,24 @@ subtest "Setting up test context" => \&settingUpTestContext;
 sub settingUpTestContext {
     eval { #run in a eval-block so we don't die without tearing down the test context
 
+        Koha::IssuingRules->search->delete;
+        $builder->build({
+            source => 'Issuingrule',
+            value => {
+                branchcode => '*',
+                categorycode => '*',
+                itemtype =>'*',
+                ccode => '*',
+                permanent_location => '*',
+                hold_max_pickup_delay => 6,
+            }
+        });
         t::lib::TestObjects::SystemPreferenceFactory->createTestGroup([
             {preference => 'PickupExpiredHoldsOverReportDuration',
              value => 2,
             },
             {preference => 'ExpireReservesMaxPickUpDelay',
              value => 1,
-            },
-            {preference => 'ReservesMaxPickUpDelay',
-             value => 6,
             },
             ], undef, $testContext);
 
@@ -154,4 +168,8 @@ done_testing;
 
 sub tearDown {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
+    Koha::IssuingRules->delete;
+    foreach my $rule (@stored_rules) {
+        Koha::IssuingRule->new($rule->unblessed)->store;
+    }
 }

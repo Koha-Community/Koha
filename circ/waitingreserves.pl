@@ -86,7 +86,6 @@ push @getreserves, @$expiredReserves;
 # get reserves for the branch we are logged into, or for all branches
 
 my $today = DateTime->now();
-my $max_pickup_delay = C4::Context->preference('ReservesMaxPickUpDelay');
 
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
@@ -162,7 +161,6 @@ $template->param(
     overloop    => \@overloop,
     overcount   => $overcount,
     show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
-    ReservesMaxPickUpDelay => $max_pickup_delay,
     tab => $tab,
 );
 

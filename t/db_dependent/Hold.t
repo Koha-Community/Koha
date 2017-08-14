@@ -24,6 +24,7 @@ use Koha::Database;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Holds;
+use Koha::IssuingRules;
 use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
@@ -102,7 +103,18 @@ is( $hold->is_waiting, 1, 'The hold is waiting' );
 is( $hold->is_found, 1, 'The hold is found');
 ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
-t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', '5' );
+Koha::IssuingRules->search->delete;
+$builder->build({
+    source => 'Issuingrule',
+    value => {
+        branchcode => '*',
+        categorycode => '*',
+        itemtype =>'*',
+        ccode => '*',
+        permanent_location => '*',
+        hold_max_pickup_delay => 5,
+    }
+});
 $hold->found('T');
 isnt( $hold->is_waiting, 1, 'The hold is not waiting (T)' );
 is( $hold->is_found, 1, 'The hold is found');

@@ -276,7 +276,7 @@ sub GetPredueIssues {
 sub GetWaitingHolds {
     my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, reserves.waitingdate,
-                reserves.branchcode AS site, branches.branchname AS site_name,
+                reserves.reserve_id, reserves.branchcode AS site, branches.branchname AS site_name,
                 TO_DAYS(NOW())-TO_DAYS(reserves.waitingdate) AS days_since_waiting
                 FROM borrowers JOIN reserves USING (borrowernumber)
                 JOIN items USING (itemnumber)
@@ -289,13 +289,13 @@ sub GetWaitingHolds {
                 AND message_transport_type = 'phone'
                 AND message_name = 'Hold_Filled'
                 ";
-    my $pickupdelay = C4::Context->preference("ReservesMaxPickUpDelay");
     my $sth         = $dbh->prepare($query);
     $sth->execute();
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
         my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'} );
-
+        my $hold = Koha::Holds->find($issue->{'reserve_id'});
+        my $pickupdelay = $hold->max_pickup_delay;
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
         my $pickup_date = $waiting_date->clone->add( days => $pickupdelay );
         if ( $calendar->is_holiday($pickup_date) ) {

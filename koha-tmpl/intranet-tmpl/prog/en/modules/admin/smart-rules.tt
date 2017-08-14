@@ -296,6 +296,8 @@ $(document).ready(function() {
                 <th>No automatic renewal after (hard limit)</th>
                 <th>Holds allowed (count)</th>
                 <th>Holds per record (count)</th>
+                <th>Hold max. pickup delay</th>
+                <th>Hold expiration charge (amount)</th>
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
                 <th>Article requests</th>
@@ -390,6 +392,8 @@ $(document).ready(function() {
                             <td>[% rule.no_auto_renewal_after_hard_limit %]</td>
 							<td>[% rule.reservesallowed %]</td>
                                                         <td>[% rule.holds_per_record %]</td>
+                                                        <td>[% rule.hold_max_pickup_delay %]</td>
+                                                        <td>[% rule.hold_expiration_charge %]</td>
                                                         <td>
                                                             [% IF rule.onshelfholds == 1 %]
                                                                 Yes
@@ -497,6 +501,8 @@ $(document).ready(function() {
                     </td>
                     <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
                     <td><input type="text" name="holds_per_record" id="holds_per_record" size="2" /></td>
+                    <td><input type="text" name="hold_max_pickup_delay" id="hold_max_pickup_delay" size="2" /></td>
+                    <td><input type="text" name="hold_expiration_charge" id="hold_expiration_charge" size="4" /></td>
                     <td>
                         <select name="onshelfholds" id="onshelfholds">
                             <option value="1">Yes</option>
@@ -553,6 +559,8 @@ $(document).ready(function() {
                        <th>No automatic renewal after (hard limit)</th>
                       <th>Holds allowed (count)</th>
                       <th>Holds per record (count)</th>
+                      <th>Hold max. pickup delay</th>
+                      <th>Hold expiration charge (amount)</th>
                       <th>On shelf holds allowed</th>
                       <th>Item level holds</th>
                       <th>Article requests</th>
@@ -671,6 +679,8 @@ $(document).ready(function() {
                 <th>No automatic renewal after (hard limit)</th>
                 <th>Holds allowed (count)</th>
                 <th>Holds per record (count)</th>
+                <th>Hold max. pickup delay</th>
+                <th>Hold expiration charge (amount)</th>
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
                 <th>Article requests</th>
@@ -705,6 +715,8 @@ $(document).ready(function() {
                 <td id="tester_res_no_auto_renewal_after_hard_limit"></td>
                 <td id="tester_res_reservesallowed"></td>
                 <td id="tester_res_holds_per_record"></td>
+                <td id="tester_res_hold_max_pickup_delay"></td>
+                <td id="tester_res_hold_expiration_charge"></td>
                 <td id="tester_res_onshelfholds"></td>
                 <td id="tester_res_opacitemholds"></td>
                 <td id="tester_res_article_requests"></td>

@@ -936,6 +936,8 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `no_auto_renewal_after_hard_limit` date default NULL, -- no auto renewal allowed after a given date
   `reservesallowed` smallint(6) NOT NULL default "0", -- how many holds are allowed
   `holds_per_record` SMALLINT(6) NOT NULL DEFAULT 1, -- How many holds a patron can have on a given bib
+  `hold_max_pickup_delay` smallint(6), -- hold max pickup delay in days
+  `hold_expiration_charge` decimal(28,6) default NULL, -- hold expiration charge (amount)
   `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
   overduefinescap decimal(28,6) default NULL, -- the maximum amount of an overdue fine
   cap_fine_to_replacement_price BOOLEAN NOT NULL DEFAULT  '0', -- cap the fine based on item's replacement price

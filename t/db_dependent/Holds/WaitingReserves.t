@@ -4,6 +4,7 @@ use Modern::Perl;
 
 use C4::Reserves;
 use Koha::DateUtils;
+use Koha::IssuingRules;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -132,8 +133,21 @@ my $reserve1 = $builder->build({
     },
 });
 
+Koha::IssuingRules->search->delete;
+$builder->build({
+    source => 'Issuingrule',
+    value => {
+        branchcode => '*',
+        categorycode => '*',
+        itemtype =>'*',
+        ccode => '*',
+        permanent_location => '*',
+        hold_max_pickup_delay => 6,
+    }
+});
+my $rule = Koha::IssuingRules->search->next;
+
 t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 6);
 
 ModReserveAffect( $item1->{itemnumber}, $patron1->{borrowernumber});
 my $r = Koha::Holds->find($reserve1->{reserve_id});
@@ -235,7 +249,7 @@ my $reserve4 = $builder->build({
     },
 });
 
-t::lib::Mocks::mock_preference('ReservesMaxPickUpDelay', 10);
+$rule->hold_max_pickup_delay(10)->store;
 ModReserveAffect( $item4->{itemnumber}, $patron2->{borrowernumber}, 0, $reserve4->{reserve_id});
 
 my $r4 = Koha::Holds->find($reserve4->{reserve_id});

@@ -726,7 +726,6 @@ $(document).ready(function () {
                         [% END %]
                         <label for="dropboxcheck">Book drop mode</label>
                     </p>
-                    [% IF Koha.Preference('ExpireReservesMaxPickUpDelayCharge') %]
                     <p>
                         [% IF ( forgivemanualholdsexpire ) %]
                         <input type="checkbox" id="forgivemanualholdsexpire" name="forgivemanualholdsexpire" value="forgivemanualholdsexpire" checked="checked" />
@@ -735,7 +734,6 @@ $(document).ready(function () {
                         [% END %]
                         <label for="forgivemanualholdsexpire">Forgive fees for manually expired holds</label>
                     </p>
-                    [% END %] <!-- overduecharges -->
             </fieldset>
         </div>
     </form>

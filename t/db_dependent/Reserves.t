@@ -593,7 +593,7 @@ my $bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines at beginning' );
 
 # First, test cancelling a reserve when there's no charge configured.
-t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 0);
+$issuing_rule->hold_expiration_charge(0)->store;
 
 my $bz14464_reserve = AddReserve(
     $branch_1,
@@ -620,7 +620,7 @@ $bz14464_fines = $patron->account->balance;
 is( !$bz14464_fines || $bz14464_fines==0, 1, 'Bug 14464 - No fines after cancelling reserve with no charge configured' );
 
 # Then, test cancelling a reserve when there's no charge desired.
-t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
+$issuing_rule->hold_expiration_charge(42)->store;
 
 $bz14464_reserve = AddReserve(
     $branch_1,
