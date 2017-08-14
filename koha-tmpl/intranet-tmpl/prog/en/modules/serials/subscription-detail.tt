@@ -339,8 +339,8 @@ $(document).ready(function() {
             <li><span class="label">History end date:</span> [% histenddate %]</li>
             <li><span class="label">Received issues:</span>[% recievedlist %]</li>
             <li><span class="label">Missing issues:</span>[% missinglist %]</li>
-            <li><span class="label">Nonpublic note:</span>[% internalnotes FILTER html_line_break %]</li>
-            <li><span class="label">Public note:</span>[% notes FILTER html_line_break %]</li>
+            <li><span class="label">Nonpublic note:</span>[% internalnotes FILTER html_line_break |html %]</li>
+            <li><span class="label">Public note:</span>[% notes FILTER html_line_break |html %]</li>
             <li><span class="label">History staff note:</span>[% librariannote FILTER html_line_break %]</li>
             <li><span class="label">History OPAC note:</span>[% opacnote FILTER html_line_break %]</li>
         </ol>
