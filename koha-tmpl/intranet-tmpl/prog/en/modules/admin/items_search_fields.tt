@@ -26,7 +26,7 @@
 
           [% IF field_added %]
             <div class="dialog message">
-              Field successfully added: [% field_added.label %]
+              Field successfully added: [% field_added.label |html %]
             </div>
           [% ELSIF field_not_added %]
             <div class="dialog alert">
@@ -70,8 +70,8 @@
                     <tbody>
                       [% FOREACH field IN fields %]
                         <tr>
-                          <td>[% field.name %]</td>
-                          <td>[% field.label %]</td>
+                          <td>[% field.name |html %]</td>
+                          <td>[% field.label |html %]</td>
                           <td>[% field.tagfield %]</td>
                           <td>[% field.tagsubfield %]</td>
                           <td>[% field.authorised_values_category %]</td>

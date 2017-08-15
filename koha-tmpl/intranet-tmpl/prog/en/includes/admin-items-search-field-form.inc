@@ -2,7 +2,7 @@
   <li>
       [% IF field %]
           <span class="label">Name: </span>
-          [% field.name %]
+          [% field.name |html %]
           <input type="hidden" name="name" value="[% field.name %]">
       [% ELSE %]
           <label class="required" for="name">Name: </label>
@@ -13,7 +13,7 @@
   <li>
     <label class="required" for="label">Label: </label>
     [% IF field %]
-        <input type="text" name="label" id="label" value="[% field.label %]" class="required" required="required" />
+        <input type="text" name="label" id="label" value="[% field.label |html %]" class="required" required="required" />
     [% ELSE %]
         <input type="text" name="label" id="label" class="required" required="required" />
     [% END %]
