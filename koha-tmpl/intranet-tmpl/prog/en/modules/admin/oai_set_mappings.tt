@@ -56,7 +56,7 @@ function hideDialogBox() {
           <p><a href="/cgi-bin/koha/admin/oai_sets.pl">Return to sets management</a></p>
         </div>
       [% END %]
-      <h1>Mappings for set '[% setName %]' ([% setSpec %])</h1>
+      <h1>Mappings for set '[% setName |html %]' ([% setSpec |html %])</h1>
       [% UNLESS ( mappings ) %]
         <div class="dialog alert"><p><strong>Warning:</strong> No mappings have been defined for this set</p></div>
       [% END %]
