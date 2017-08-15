@@ -33,15 +33,15 @@ $(document).ready(function() {
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
 [% IF ( add_form ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% IF framework %][% framework.frameworktext |html %] ([% framework.frameworkcode %])[% ELSE %]Default MARC framework[% END%]</a>
 &rsaquo; [% action %] [% searchfield %]
 [% ELSIF ( else ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% IF framework %][% framework.frameworktext |html %] ([% framework.frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% IF framework %][% framework.frameworktext |html %] ([% framework.frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
 &rsaquo; Confirm deletion of tag '[% searchfield %]'
 [% ELSIF ( delete_confirmed ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode %]">[% IF framework %][% framework.frameworktext |html %] ([% framework.frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
 &rsaquo; Data deleted
 [% END %]
 </div>
@@ -56,7 +56,7 @@ $(document).ready(function() {
     <a class="btn btn-small" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% frameworkcode %]"><i class="fa fa-plus"></i> New tag</a>
 </div>[% END %]
 
-<h1>MARC Framework for [% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]default MARC framework[% END %]</h1>
+<h1>MARC Framework for [% IF ( frameworkcode ) %][% frameworktext |html %] ([% frameworkcode %])[% ELSE %]default MARC framework[% END %]</h1>
 
 [% IF ( add_form ) %]
 
@@ -142,11 +142,11 @@ $(document).ready(function() {
     <form action="[% script_name %]" method="post">
         <input type="hidden" name="op" value="framework_create_confirm" />
         <input type="hidden" name="frameworkcode" value="[% frameworkcode %]" />
-        Create framework for [% frameworkcode %] ([% frameworktext %]) using
+        Create framework for [% frameworkcode %] ([% frameworktext |html %]) using
         <select name="existingframeworkcode">
             <option value="">Default</option>
         [% FOREACH existingframeworkloo IN existingframeworkloop %]
-            <option value="[% existingframeworkloo.value %]">[% existingframeworkloo.frameworktext %]</option>
+            <option value="[% existingframeworkloo.value %]">[% existingframeworkloo.frameworktext |html %]</option>
         [% END %]
         </select>
         <input type="submit" value="OK" />
@@ -165,9 +165,9 @@ $(document).ready(function() {
             <option value="">Default</option>
             [% FOREACH frameworkloo IN frameworkloop %]
             [% IF ( frameworkloo.selected ) %]
-                <option value="[% frameworkloo.value %]" selected="selected">[% frameworkloo.frameworktext %]</option>
+                <option value="[% frameworkloo.value %]" selected="selected">[% frameworkloo.frameworktext |html %]</option>
                 [% ELSE %]
-                <option value="[% frameworkloo.value %]">[% frameworkloo.frameworktext %]</option>
+                <option value="[% frameworkloo.value %]">[% frameworkloo.frameworktext |html %]</option>
                 [% END %]
             [% END %]
         </select>
