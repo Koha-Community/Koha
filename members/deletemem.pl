@@ -76,7 +76,7 @@ my $countissues = scalar(@$issues);
 
 my $patron = Koha::Patrons->find( $member );
 unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$member");
     exit;
 }
 my $flags = C4::Members::patronflags( $patron->unblessed );
