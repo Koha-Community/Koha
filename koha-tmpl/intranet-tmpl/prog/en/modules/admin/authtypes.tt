@@ -160,8 +160,8 @@
         [% FOREACH authority_type IN authority_types %]
             <tr>
                 <td>[% authority_type.authtypecode %]</td>
-                <td>[% authority_type.authtypetext %]</td>
-                <td>[% authority_type.summary %]</td>
+                <td>[% authority_type.authtypetext |html %]</td>
+                <td>[% authority_type.summary |html %]</td>
                 <td>[% authority_type.auth_tag_to_report %]</td>
                 <td>
                   <div class="dropdown">
