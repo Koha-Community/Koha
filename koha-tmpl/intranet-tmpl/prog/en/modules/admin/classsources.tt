@@ -210,7 +210,7 @@
   [% FOREACH class_source IN class_sources %]
   <tr>
     <td>[% class_source.code %]</td>
-    <td>[% class_source.description %]</td>
+    <td>[% class_source.description |html %]</td>
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
     <td>[% class_source.sortrule %]</td>
     <td class="actions">
@@ -241,7 +241,7 @@
   [% FOREACH class_sort_rule IN class_sort_rules %]
   <tr>
     <td>[% class_sort_rule.rule %]</td>
-    <td>[% class_sort_rule.description %]</td>
+    <td>[% class_sort_rule.description |html %]</td>
     <td>[% class_sort_rule.sort_routine %]</td>
     <td class="actions">
       <a class="btn btn-mini" href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]"><i class="fa fa-pencil"></i> Edit</a>
