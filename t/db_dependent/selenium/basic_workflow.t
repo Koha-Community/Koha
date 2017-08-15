@@ -45,13 +45,9 @@ use MARC::Field;
 my $dbh      = C4::Context->dbh;
 my $login    = $ENV{KOHA_USER} || 'koha';
 my $password = $ENV{KOHA_PASS} || 'koha';
-my $base_url
-    = ( $ENV{KOHA_INTRANET_URL} || 'http://' . C4::Context->preference("staffClientBaseURL") )
-    . "/cgi-bin/koha/";
+my $base_url= ( $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/";
 my $selenium_addr = $ENV{SELENIUM_ADDR} || 'localhost';
 my $selenium_port = $ENV{SELENIUM_PORT} || 4444;
-
-
 
 my $number_of_biblios_to_insert = 3;
 our $sample_data = {

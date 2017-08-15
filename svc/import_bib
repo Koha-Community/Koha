@@ -98,7 +98,7 @@ sub import_bib {
     $sth = $dbh->prepare("SELECT overlay_status FROM import_records WHERE import_record_id =?");
     $sth->execute($import_record_id);
     my $match_status = $sth->fetchrow_arrayref->[0] || 'no_match';
-    my $url = 'http://'. C4::Context->preference('staffClientBaseURL') .'/cgi-bin/koha/catalogue/detail.pl?biblionumber='. $biblionumber;
+    my $url = C4::Context->preference('staffClientBaseURL') .'/cgi-bin/koha/catalogue/detail.pl?biblionumber='. $biblionumber;
 
     $result->{'status'} = "ok";
     $result->{'import_batch_id'} = $batch_id;

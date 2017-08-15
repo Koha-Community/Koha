@@ -41,7 +41,7 @@ $dbh->{ RaiseError } = 1;
 
 C4::Context->disable_syspref_cache();
 t::lib::Mocks::mock_preference('OPACBaseURL','http://localhost');
-t::lib::Mocks::mock_preference('staffClientBaseURL','localhost:8080');
+t::lib::Mocks::mock_preference('staffClientBaseURL','http://localhost:8080');
 
 my $opac_base_url = C4::Context->preference('OpacBaseURL');
 my $staff_base_url = C4::Context->preference('staffClientBaseURL');
