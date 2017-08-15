@@ -168,7 +168,7 @@ $(document).ready(function() {
 [% IF ( no_op_set ) %]
     <h1>Notices and Slips</h1>
     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
-      <input type="hidden" name="searchfield" value="[% searchfield %]" />
+      <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
     [% UNLESS independant_branch %]
       <p>
         Select a library :
