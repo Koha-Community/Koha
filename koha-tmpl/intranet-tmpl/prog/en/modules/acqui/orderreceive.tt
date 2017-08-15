@@ -123,7 +123,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]][% END %] (order #[% ordernumber %])</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Receive items from : [% name %] [% IF ( invoice ) %][[% invoice |html %]][% END %] (order #[% ordernumber %])</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -131,7 +131,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]] [% END %] (order #[% ordernumber %])</h1>
+<h1>Receive items from : [% name %] [% IF ( invoice ) %][[% invoice |html %]] [% END %] (order #[% ordernumber %])</h1>
 
 [% IF ( count ) %]
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post" onsubmit="return Check(this);">
