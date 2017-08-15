@@ -208,7 +208,7 @@ subtest '/availability/item' => sub {
     plan tests => 3;
 
     subtest '/hold' => sub {
-        plan tests => 17;
+        plan tests => 18;
 
         $schema->storage->txn_begin;
 
@@ -227,6 +227,10 @@ subtest '/availability/item' => sub {
           ->json_has('/0/availability')
           ->json_is('/0/availability/available' => Mojo::JSON->true);
 
+        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber,
+            $item->biblionumber, undef, undef, undef, undef, undef, undef,
+            $item->itemnumber);
+
         $patron->gonenoaddress('1')->store;
         $item->notforloan('1')->store;
         $tx = $t->ua->build_tx( GET => $route . '?itemnumber='.$item->itemnumber );
@@ -237,6 +241,7 @@ subtest '/availability/item' => sub {
           ->json_has('/0/availability')
           ->json_is('/0/availability/available' => Mojo::JSON->false)
           ->json_is('/0/itemnumber' => $item->itemnumber)
+          ->json_is('/0/hold_queue_length' => 1)
           ->json_is('/0/availability/unavailabilities/Patron::GoneNoAddress' => {})
           ->json_is('/0/availability/unavailabilities/Item::NotForLoan' => {
             code => "Not For Loan",

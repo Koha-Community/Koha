@@ -155,7 +155,7 @@ sub swaggerize {
         $availability->{'unavailabilities'} = $unavailabilities;
     }
 
-    return {
+    my $hash = {
         itemnumber => 0+$item->itemnumber,
         biblionumber => 0+$item->biblionumber,
         biblioitemnumber => 0+$item->biblioitemnumber,
@@ -168,6 +168,10 @@ sub swaggerize {
         itemnotes => $item->itemnotes,
         location => $item->location,
     };
+    $hash->{'hold_queue_length'} = Koha::Holds->search({
+        itemnumber => $item->itemnumber
+    })->count;
+    return $hash;
 }
 
 1;
