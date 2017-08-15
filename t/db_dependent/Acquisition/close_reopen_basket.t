@@ -79,8 +79,8 @@ is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 2, "2 or
 
 C4::Acquisition::ReopenBasket( $basketno );
 @orders = C4::Acquisition::GetOrders( $basketno );
-is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 0, "No order are ordered, the basket is reopen" );
-is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new, the basket is reopen" );
+is ( scalar( map { $_->{orderstatus} eq 'ordered' ? 1 : () } @orders ), 0, "No order is ordered, the basket is reopened" );
+is ( scalar( map { $_->{orderstatus} eq 'new' ? 1 : () } @orders ), 2, "2 orders are new, the basket is reopened" );
 
 C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
 my ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
