@@ -53,5 +53,3 @@ subtest 'build_authorities_query_compat() tests' => sub {
     'Koha::Exceptions::WrongParameter',
         'Exception thrown on invalid value in the marclist param';
 };
-
-1;
