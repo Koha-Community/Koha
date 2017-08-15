@@ -334,8 +334,8 @@
                 <div class="rows">
                 <div class="yui-u first">
                 <ol>
-                [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote %]</li>[% END %]
-                [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote %]</li>[% END %]
+                [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote |html %]</li>[% END %]
+                [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote |html %]</li>[% END %]
                 [% IF ( basketcontractno ) %]
                     <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
