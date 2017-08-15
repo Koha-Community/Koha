@@ -150,7 +150,7 @@
     [% IF datereceived %]
         Receipt summary for <i>[% name %]</i>
         [% IF ( invoice ) %]
-            <i>[ [% invoice %] ]</i>
+            <i>[ [% invoice |html %] ]</i>
         [% END %]
         on <i>[% datereceived | $KohaDates %]</i>
     [% ELSE %]
@@ -175,7 +175,7 @@
 	[% END %]
     <h1>
         [% IF datereceived %]
-            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% datereceived | $KohaDates %]</i>
+            Receipt summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice |html %] ] </i>[% END %] on <i>[% datereceived | $KohaDates %]</i>
         [% ELSE %]
             Receive orders from [% name %]
         [% END %]
@@ -218,7 +218,7 @@
 
 [% UNLESS no_orders_to_display %]
 <div id="acqui_receive_summary">
-<p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% datereceived | $KohaDates %]</p>
+<p><strong>Invoice number:</strong> [% invoice |html %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% datereceived | $KohaDates %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
   <div id="acqui_receive_search">
