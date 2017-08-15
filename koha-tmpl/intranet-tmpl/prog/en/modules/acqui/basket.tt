@@ -18,7 +18,7 @@
 [% USE AuthorisedValues %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for [% name|html %]</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno |html %]) for [% name|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
@@ -82,7 +82,7 @@
             function confirm_ediorder() {
                 var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an EDIFACT order?"));
                 if (is_confirmed) {
-                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno %]";
+                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno |html %]";
                 }
             }
 
@@ -107,7 +107,7 @@
                 var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
                 var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
                 if (is_confirmed) {
-                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno %]";
+                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno |html %]";
                 }
             }
 //]]>
@@ -197,7 +197,7 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a> &rsaquo;
-    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname|html %] [% IF ( basketno ) %]([% basketno %])[% END %] for [% name|html %]
+    [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname|html %] [% IF ( basketno ) %]([% basketno |html %])[% END %] for [% name|html %]
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -361,7 +361,7 @@
                 [% END %]
             </div>
         [% END %]
-        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
+        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno |html %]) for <a href="supplier.pl?booksellerid=[% booksellerid %]">[% name|html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
                 <div class="rows">
