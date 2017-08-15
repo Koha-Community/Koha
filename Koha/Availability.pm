@@ -226,7 +226,7 @@ sub _swaggerize_exception {
         $ret->{$name} = {};
         foreach my $field ($exceptions->{$ex}->Fields) {
             my $val = $exceptions->{$ex}->$field;
-            return unless $val;
+            last unless $val;
             if ($val =~ /^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/) {
                 eval {
                     $val = dt_from_string($val, 'sql')->strftime('%FT%T%z');
