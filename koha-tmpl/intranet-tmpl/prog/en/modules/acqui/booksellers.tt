@@ -122,7 +122,7 @@ $(document).ready(function() {
                                         <tr>
                                     [% END %]
                                         <td>[% basket.basketno %]</td>
-                                        <td>[% basket.basketname %]</td>
+                                        <td>[% basket.basketname |html %]</td>
                                         <td>
                                             <span title="[% basket.total_items %]">[% basket.total_items %]
                                                 [% IF basket.total_items_cancelled %]

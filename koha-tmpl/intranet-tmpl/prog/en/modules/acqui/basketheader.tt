@@ -18,7 +18,7 @@
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo;
     [% IF ( add_form ) %]
-        [% IF ( basketno ) %]Edit basket '[% basketname %]'
+        [% IF ( basketno ) %]Edit basket '[% basketname |html %]'
         [% ELSE %]Add a basket to [% booksellername %]
         [% END %]
     [% END %]
@@ -31,7 +31,7 @@
 
     [% IF ( add_form ) %]
         [% IF ( basketno ) %]
-            <h1>Edit basket [% basketname %]</h1>
+            <h1>Edit basket [% basketname |html %]</h1>
         [% ELSE %]<h1>Add a basket to [% booksellername %]</h1>
         [% END %]
     <form name="Aform" action="[% script_name %]" method="post" class="validated">
@@ -93,11 +93,11 @@
                 </li>
                 <li>
                     <label for="basketnote">Internal note: </label> &nbsp;
-                    <textarea name="basketnote" id="basketnote" rows="5" cols="40">[% basketnote %]</textarea>
+                    <textarea name="basketnote" id="basketnote" rows="5" cols="40">[% basketnote |html %]</textarea>
                 </li>
                 <li>
                     <label for="basketbooksellernote">Vendor note: </label> &nbsp;
-                    <textarea name="basketbooksellernote" id="basketbooksellernote" rows="5" cols="40">[% basketbooksellernote %]</textarea>
+                    <textarea name="basketbooksellernote" id="basketbooksellernote" rows="5" cols="40">[% basketbooksellernote |html %]</textarea>
                 </li>
                 [% IF ( contractloop ) %]
                     <li><label for="basketcontractnumber">Contract: </label>
