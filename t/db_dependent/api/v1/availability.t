@@ -208,7 +208,7 @@ subtest '/availability/item' => sub {
     plan tests => 3;
 
     subtest '/hold' => sub {
-        plan tests => 18;
+        plan tests => 19;
 
         $schema->storage->txn_begin;
 
@@ -242,6 +242,7 @@ subtest '/availability/item' => sub {
           ->json_is('/0/availability/available' => Mojo::JSON->false)
           ->json_is('/0/itemnumber' => $item->itemnumber)
           ->json_is('/0/hold_queue_length' => 1)
+          ->json_is('/0/ccode' => $item->ccode)
           ->json_is('/0/availability/unavailabilities/Patron::GoneNoAddress' => {})
           ->json_is('/0/availability/unavailabilities/Item::NotForLoan' => {
             code => "Not For Loan",

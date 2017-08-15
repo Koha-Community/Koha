@@ -155,6 +155,11 @@ sub swaggerize {
         $availability->{'unavailabilities'} = $unavailabilities;
     }
 
+    my $ccode_desc = Koha::AuthorisedValues->search({
+        category => 'CCODE',
+        authorised_value => $item->ccode
+    })->next;
+    $ccode_desc = $ccode_desc->lib if defined $ccode_desc;
     my $hash = {
         itemnumber => 0+$item->itemnumber,
         biblionumber => 0+$item->biblionumber,
@@ -167,6 +172,8 @@ sub swaggerize {
         itemcallnumber => $item->itemcallnumber,
         itemnotes => $item->itemnotes,
         location => $item->location,
+        ccode => $item->ccode,
+        ccode_description => $ccode_desc,
     };
     $hash->{'hold_queue_length'} = Koha::Holds->search({
         itemnumber => $item->itemnumber
