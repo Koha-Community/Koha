@@ -69,7 +69,7 @@ $(document).ready(function() {
 									</tr>
 									[% FOREACH field IN fields %]
 									<tr>
-										<td>[% field.field %]</td>
+                                        <td>[% field.field |html %]</td>
 										<td>[% field.fieldcode %]</td>
 										<td>[% field.subfieldcode %]</td>
                                         <td><a class="btn btn-default btn-xs" href="?op=delete&amp;id=[% field.id %]&amp;framework=[% field.frameworkcode %]"><i class="fa fa-trash"></i> Delete</a></td>
