@@ -45,7 +45,7 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Edit OAI set '[% spec %]'[% ELSE %] OAI sets configuration[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( op_new ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Add a new OAI set[% ELSIF ( op_mod ) %]<a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a> &rsaquo; Edit OAI set '[% spec |html %]'[% ELSE %] OAI sets configuration[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -58,7 +58,7 @@ $(document).ready(function() {
                 <h2>Add a new OAI set</h2>
                 <input type="hidden" name="op" value="savenew" />
             [% ELSIF ( op_mod ) %]
-                <h2>Edit OAI set '[% spec %]'</h2>
+                <h2>Edit OAI set '[% spec |html %]'</h2>
                     <input type="hidden" name="op" value="savemod" />
                     <input type="hidden" name="id" value="[% id %]" />
             [% END %]
@@ -109,13 +109,13 @@ $(document).ready(function() {
                 <tbody>
                     [% FOREACH set IN sets_loop %]
                         <tr>
-                            <td>[% set.spec %]</td>
-                            <td>[% set.name %]</td>
+                            <td>[% set.spec |html %]</td>
+                            <td>[% set.name |html %]</td>
                             <td>
                                 [% IF set.descriptions %]
                                     <ul>
                                         [% FOREACH desc IN set.descriptions %]
-                                            <li>[% desc.description %]</li>
+                                            <li>[% desc.description |html %]</li>
                                         [% END %]
                                     </ul>
                                 [% ELSE %]
