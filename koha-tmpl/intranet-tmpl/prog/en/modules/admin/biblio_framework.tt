@@ -3,7 +3,7 @@
 [% IF op == 'add_form' %]
 &rsaquo; [% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]
 [% ELSIF op == 'delete_confirm' %]
-&rsaquo; Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?
+&rsaquo; Delete framework for [% framework.frameworktext |html %] ([% framework.frameworkcode %])?
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -31,7 +31,7 @@
 [% IF op == 'add_form' %]
 &rsaquo; [% IF framework %]Modify framework text[% ELSE %]Add framework[% END %]
 [% ELSIF op == 'delete_confirm' %]
-&rsaquo; Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?
+&rsaquo; Delete framework for [% framework.frameworktext |html %] ([% framework.frameworkcode %])?
 [% END %]
 </div>
 
@@ -107,13 +107,13 @@
     <div class="dialog alert">
         [% IF biblios_use_this_framework %]
             <h3>This framework cannot be deleted</h3>
-            <p><strong><span class="ex">[% framework.frameworktext %] ([% framework.frameworkcode %])</span></strong></p>
+            <p><strong><span class="ex">[% framework.frameworktext |text %] ([% framework.frameworkcode %])</span></strong></p>
             <p>The framework is used [% biblios_use_this_framework %] times.</p>
             <form action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
                 <button type="submit"><i class="fa fa-fw fa-arrow-left"></i> Return to frameworks</button>
             </form>
         [% ELSE %]
-            <h3>Delete framework for [% framework.frameworktext %] ([% framework.frameworkcode %])?</h3>
+            <h3>Delete framework for [% framework.frameworktext |html %] ([% framework.frameworkcode %])?</h3>
             <form class="inline" action="/cgi-bin/koha/admin/biblio_framework.pl" method="post">
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode %]" />
@@ -209,7 +209,7 @@
     [% FOREACH loo IN frameworks %]
         <tr>
             <td>[% loo.frameworkcode %]</td>
-            <td>[% loo.frameworktext %]</td>
+            <td>[% loo.frameworktext |html %]</td>
             <td>
               <div class="dropdown">
                 <a class="btn btn-default btn-xs dropdown-toggle" id="frameworkactions[% loo.frameworkcode %]" role="button" data-toggle="dropdown" href="#">
@@ -230,7 +230,7 @@
                   <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Export [% loo.frameworktext %] framework</h3>
+                    <h3 id="exportLabelexportModal_[% loo.frameworkcode %][% loop.count %]">Export [% loo.frameworktext |html %] framework</h3>
                   </div>
                   <form action="import_export_framework.pl" name="form_[% loo.frameworkcode %]" method="get" target="_blank"  class="form_export">
                     <div class="modal-body">
