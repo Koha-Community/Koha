@@ -87,7 +87,7 @@
             <tbody>
                 [% FOREACH l IN lists %]
                     <tr>
-                        <td>[% l.name %]</td>
+                        <td>[% l.name |html %]</td>
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
                         <td>
                             <div class="dropdown">
