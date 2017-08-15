@@ -107,7 +107,7 @@
             </td>
             <td>
                 [% IF ( searchresult.code ) %]
-                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid %]">[% searchresult.code %]</a>
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid %]">[% searchresult.code |html %]</a>
                 [% ELSE %]
                     <abbr title="not available">n/a</abbr>
                 [% END %]
