@@ -17,17 +17,17 @@
     var day_month_holidays = new Array();
     var hola= "[% code %]";
     [% FOREACH WEEK_DAYS_LOO IN WEEK_DAYS_LOOP %]
-    week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
+    week_days["[% WEEK_DAYS_LOO.KEY %]"] = {title:"[% WEEK_DAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% WEEK_DAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
     [% END %]
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
     holidates.push("[% HOLIDAYS_LOO.KEY %]");
-    holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
+    holidays["[% HOLIDAYS_LOO.KEY %]"] = {title:"[% HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
     [% END %]
     [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
-    exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
+    exception_holidays["[% EXCEPTION_HOLIDAYS_LOO.KEY %]"] = {title:"[% EXCEPTION_HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
     [% END %]
     [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
-    day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') %]"};
+    day_month_holidays["[% DAY_MONTH_HOLIDAYS_LOO.KEY %]"] = {title:"[% DAY_MONTH_HOLIDAYS_LOO.TITLE | replace('"','\"') |html %]", description:"[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION | replace('"','\"') |html %]"};
     [% END %]
 
     function holidayOperation(formObject, opType) {
@@ -446,8 +446,8 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
   <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT %]">[% EXCEPTION_HOLIDAYS_LOO.DATE %]</span></a></td>
-  <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE %]</td>
-  <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION %]</td> 
+  <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE |html %]</td>
+  <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION |html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -469,8 +469,8 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
   <tr>
   <td>[% WEEK_DAYS_LOO.KEY %]</td>
   </td> 
-  <td>[% WEEK_DAYS_LOO.TITLE %]</td> 
-  <td>[% WEEK_DAYS_LOO.DESCRIPTION %]</td> 
+  <td>[% WEEK_DAYS_LOO.TITLE |html %]</td>
+  <td>[% WEEK_DAYS_LOO.DESCRIPTION |html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -495,8 +495,8 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
   [% FOREACH DAY_MONTH_HOLIDAYS_LOO IN DAY_MONTH_HOLIDAYS_LOOP %]
   <tr>
   <td><span title="[% DAY_MONTH_HOLIDAYS_LOO.DATE_SORT %]">[% DAY_MONTH_HOLIDAYS_LOO.DATE %]</span></td>
-  <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE %]</td> 
-  <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION %]</td> 
+  <td>[% DAY_MONTH_HOLIDAYS_LOO.TITLE |html %]</td>
+  <td>[% DAY_MONTH_HOLIDAYS_LOO.DESCRIPTION |html %]</td>
   </tr>
   [% END %] 
 </tbody>
@@ -517,8 +517,8 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
   <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch %]&amp;calendardate=[% HOLIDAYS_LOO.DATE %]"><span title="[% HOLIDAYS_LOO.DATE_SORT %]">[% HOLIDAYS_LOO.DATE %]</span></a></td>
-  <td>[% HOLIDAYS_LOO.TITLE %]</td>
-  <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') %]</td>
+  <td>[% HOLIDAYS_LOO.TITLE |html %]</td>
+  <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') |html %]</td>
 </tr>
   [% END %] 
 </tbody>
