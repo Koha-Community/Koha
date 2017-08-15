@@ -256,7 +256,7 @@ $(document).ready(function() {
         [% FOREACH item IN attribute.items %]
           <tr>
             <td>[% item.code |html %]</td>
-            <td>[% item.description %]</td>
+            <td>[% item.description |html %]</td>
             <td>
                 [% IF ( item.branches && item.branches.size > 0 ) %]
                     [% branches_str = "" %]
