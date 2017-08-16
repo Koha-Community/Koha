@@ -50,7 +50,7 @@
 [% END %]
 
 [% BLOCK show_contact %]
-    <h3>[% contact.name %]</h3>
+    <h3>[% contact.name |html %]</h3>
     <p><span class="label">Position: </span>[% contact.position |html %]</p>
     <p><span class="label">Phone: </span>[% contact.phone |html %]</p>
     <p><span class="label">Alternative phone: </span>[% contact.altphone |html %]</p>
@@ -156,7 +156,7 @@ function delete_contact(ev) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Update: [% name %][% ELSE %]Add vendor[% END %] [% ELSE %][% name %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name |html %]</a> &rsaquo; Update: [% name %][% ELSE %]Add vendor[% END %] [% ELSE %][% name |html %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -165,7 +165,7 @@ function delete_contact(ev) {
     <div class="yui-b">
     [% IF ( enter ) %]
         [% IF ( booksellerid ) %]
-        <h1>Update: [% name %]</h1>
+        <h1>Update: [% name |html %]</h1>
     [% ELSE %]
         <h1>Add vendor</h1>
     [% END %]
@@ -305,11 +305,11 @@ function delete_contact(ev) {
         </div>
     </form>
 [% ELSE %]
-    <h1>[% name %]</h1>
+    <h1>[% name |html %]</h1>
         <div class="yui-g">
             <div id="supplier-company-details" class="yui-u first">
                 <h2>Vendor details</h2>
-                <p><span class="label">Company name: </span>[% name %]</p>
+                <p><span class="label">Company name: </span>[% name |html %]</p>
                 <p><span class="label">Postal address: </span>[% postal |html %]</p>
                 <p><span class="label">Physical address: </span>[% address1 |html %][% address2 |html %][% address3 |html %][% address4 |html %]</p>
                 <p><span class="label">Phone: </span>[% phone |html %]</p>
