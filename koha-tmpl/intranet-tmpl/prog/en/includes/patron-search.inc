@@ -94,7 +94,7 @@
                     [% IF b.selected %]
                         <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
                     [% ELSE %]
-                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                        <option value="[% b.branchcode %]">[% b.branchname |html %]</option>
                     [% END %]
                 [% END %]
             </select>

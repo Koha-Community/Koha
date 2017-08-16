@@ -372,7 +372,7 @@ function filterByFirstLetterSurname(letter) {
                               [% IF patron_lists %]
                                   <optgroup label="Patron lists:">
                                       [% FOREACH pl IN patron_lists %]
-                                          <option value="[% pl.patron_list_id %]">[% pl.name %]</option>
+                                          <option value="[% pl.patron_list_id %]">[% pl.name |html %]</option>
                                       [% END %]
                                   </optgroup>
                               [% END %]
@@ -496,9 +496,9 @@ function filterByFirstLetterSurname(letter) {
                 <option value="">Any</option>
                 [% FOREACH cat IN categories %]
                   [% IF cat.selected %]
-                    <option selected="selected" value="[% cat.categorycode %]">[% cat.description %]</option>
+                    <option selected="selected" value="[% cat.categorycode %]">[% cat.description |html %]</option>
                   [% ELSE %]
-                    <option value="[% cat.categorycode %]">[% cat.description %]</option>
+                    <option value="[% cat.categorycode %]">[% cat.description |html %]</option>
                   [% END %]
                 [% END %]
               </select>
