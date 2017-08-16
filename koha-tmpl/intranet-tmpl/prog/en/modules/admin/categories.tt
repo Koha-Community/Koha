@@ -160,9 +160,9 @@
                         <option value="">All branches</option>
                         [% FOREACH branch IN branches_loop %]
                           [% IF branch.selected %]
-                            <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                            <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
                           [% ELSE %]
-                            <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                            <option value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
                           [% END %]
                         [% END %]
                     </select>
