@@ -293,6 +293,10 @@ $builder->build({
         },
 });
 
+# The following calls to GetBorrowersToExpunge are assuming that the pref
+# IndependentBranches is off.
+t::lib::Mocks::mock_preference('IndependentBranches', 0);
+
 my $owner = AddMember (categorycode => 'STAFFER', branchcode => $library2->{branchcode} );
 my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
 my @listpatrons = ($bor1inlist, $bor2inlist);
