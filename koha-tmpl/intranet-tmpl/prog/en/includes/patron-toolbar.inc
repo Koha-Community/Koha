@@ -7,14 +7,14 @@
     <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New patron <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                [% FOREACH category IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% category.categorycode %]">[% category.description %]</a></li>[% END %]
+                [% FOREACH category IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% category.categorycode %]">[% category.description |html %]</a></li>[% END %]
             </ul>
     </div>
     [% IF Koha.Preference('PatronQuickAddFields') || Koha.Preference('BorrowerMandatoryField') %]
     <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Quick add new patron <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                [% FOREACH category IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% category.categorycode %]&amp;quickadd=true">[% category.description %]</a></li>[% END %]
+                [% FOREACH category IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% category.categorycode %]&amp;quickadd=true">[% category.description |html %]</a></li>[% END %]
             </ul>
     </div>
     [% END %]

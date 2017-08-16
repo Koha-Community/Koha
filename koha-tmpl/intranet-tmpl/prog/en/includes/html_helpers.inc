@@ -3,7 +3,7 @@
         [% IF l.selected %]
             <option value="[% l.branchcode | html %]" selected="selected">[% l.branchname %]</option>
         [% ELSE %]
-            <option value="[% l.branchcode | html %]">[% l.branchname %]</option>
+            <option value="[% l.branchcode | html %]">[% l.branchname |html %]</option>
         [% END%]
     [% END %]
 [% END %]
