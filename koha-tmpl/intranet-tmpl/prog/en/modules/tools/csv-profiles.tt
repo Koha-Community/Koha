@@ -238,9 +238,9 @@ function reloadPage(p) {
                 [% FOREACH csv_profile IN csv_profiles %]
                 <tr>
                     <td>[% csv_profile.export_format_id %]</td>
-                    <td>[% csv_profile.profile %]</td>
-                    <td>[% csv_profile.description %]</td>
-                    <td>[% csv_profile.content %]</td>
+                    <td>[% csv_profile.profile |html %]</td>
+                    <td>[% csv_profile.description |html %]</td>
+                    <td>[% csv_profile.content |html %]</td>
                     <td>[% csv_profile.csv_separator %]</td>
                     [% IF csv_profile.type == 'sql' %]
                         <td>SQL</td>
