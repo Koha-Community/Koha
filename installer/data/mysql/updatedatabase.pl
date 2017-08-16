@@ -2946,26 +2946,28 @@ if ( CheckVersion($DBversion) ) {
     #|);
 
     my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
+    if ($AutoSelfCheckID) {
 
-    $pm->revokeAllPermissions($AutoSelfCheckID); #userid is automatically casted to the proper type by Koha::Object::cast() so we don't have to
-    ## KS3.16 compatibility
-    #$dbh->do(q|
-    #    UPDATE borrowers
-    #    SET flags=0
-    #    WHERE userid=?
-    #|, undef, $AutoSelfCheckID);
-    #
-    #$dbh->do(q|
-    #    DELETE FROM user_permissions
-    #    WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
-    #|, undef, $AutoSelfCheckID);
+        $pm->revokeAllPermissions($AutoSelfCheckID); #userid is automatically casted to the proper type by Koha::Object::cast() so we don't have to
+        ## KS3.16 compatibility
+        #$dbh->do(q|
+        #    UPDATE borrowers
+        #    SET flags=0
+        #    WHERE userid=?
+        #|, undef, $AutoSelfCheckID);
+        #
+        #$dbh->do(q|
+        #    DELETE FROM user_permissions
+        #    WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
+        #|, undef, $AutoSelfCheckID);
 
-    $pm->grantPermission($AutoSelfCheckID, 'circulate', 'self_checkout');
-    ## KS3.16 comp
-    #$dbh->do(q|
-    #    INSERT INTO user_permissions(borrowernumber, module_bit, code)
-    #    SELECT borrowernumber, 1, 'self_checkout' FROM borrowers WHERE userid=?
-    #|, undef, $AutoSelfCheckID);
+        $pm->grantPermission($AutoSelfCheckID, 'circulate', 'self_checkout');
+        ## KS3.16 comp
+        #$dbh->do(q|
+        #    INSERT INTO user_permissions(borrowernumber, module_bit, code)
+        #    SELECT borrowernumber, 1, 'self_checkout' FROM borrowers WHERE userid=?
+        #|, undef, $AutoSelfCheckID);
+    }
     print "Upgrade to $DBversion done (Bug 14298: AutoSelfCheckID user should only be able to access SCO)\n";
     SetVersion($DBversion);
 }
