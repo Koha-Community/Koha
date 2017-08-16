@@ -154,9 +154,9 @@ $(document).ready(function() {
                 <option value="">All branches</option>
                 [% FOREACH branch IN branches_loop %]
                   [% IF ( branch.selected ) %]
-                    <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                    <option selected="selected" value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
                   [% ELSE %]
-                    <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                    <option value="[% branch.branchcode %]">[% branch.branchname |html %]</option>
                   [% END %]
                 [% END %]
             </select>
@@ -168,7 +168,7 @@ $(document).ready(function() {
             <select name="category_code" id="category">
                 <option value=""></option>
                 [% FOREACH cat IN categories %]
-                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode %]" selected="selected">[% cat.description %]</option>[% ELSE %]<option value="[% cat.categorycode %]">[% cat.description %]</option>[% END %]
+                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode %]" selected="selected">[% cat.description |html %]</option>[% ELSE %]<option value="[% cat.categorycode %]">[% cat.description |html %]</option>[% END %]
                 [% END %]
             </select>
             <span>Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</span>
@@ -180,11 +180,11 @@ $(document).ready(function() {
                 [% FOREACH class IN classes_val_loop %]
                     [% IF class.authorised_value == category_class %]
                         <option value="[% class.authorised_value %]" selected="selected">
-                            [% class.lib %]
+                            [% class.lib |html %]
                         </option>
                     [% ELSE %]
                         <option value="[% class.authorised_value %]" >
-                            [% class.lib %]
+                            [% class.lib |html %]
                         </option>
                     [% END %]
                 [% END %]
