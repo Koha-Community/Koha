@@ -94,7 +94,7 @@
                     [% IF b.selected %]
                         <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
                     [% ELSE %]
-                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                        <option value="[% b.branchcode %]">[% b.branchname |html %]</option>
                     [% END %]
                 [% END %]
             </select>
@@ -107,9 +107,9 @@
                 <option value="">Any</option>
                 [% FOREACH category IN categories %]
                     [% IF category.categorycode == categorycode_filter %]
-                        <option value="[% category.categorycode %]" selected="selected">[% category.description %]</option>
+                        <option value="[% category.categorycode %]" selected="selected">[% category.description |html %]</option>
                     [% ELSE %]
-                        <option value="[% category.categorycode %]">[% category.description %]</option>
+                        <option value="[% category.categorycode %]">[% category.description |html %]</option>
                     [% END %]
                 [% END %]
             </select>
