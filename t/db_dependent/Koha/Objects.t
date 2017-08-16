@@ -19,11 +19,7 @@
 
 use Modern::Perl;
 
-<<<<<<< HEAD
-use Test::More tests => 10;
-=======
-use Test::More tests => 14;
->>>>>>> 5a26041... Bug 18539: Forbid list context calls for Koha::Objects->find
+use Test::More tests => 11;
 use Test::Warn;
 
 use Koha::Authority::Types;
