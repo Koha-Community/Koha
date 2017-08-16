@@ -4,7 +4,7 @@
 
 <p>While Koha stores the entire MARC record, it also stores common fields for easy access in various tables in the database. Koha to MARC mapping is used to tell Koha where to find these values in the MARC record. In many cases you will not have to change the default values set during installation. If you decide to change mappings here, make sure that you know what you are doing! We would recommend to test such changes first in a non-production environment.</p>
 
-<p>This script shows you all mappings from the Default framework and applies the changes you make to individual mappings to all other frameworks.</p>
+<p>Historically, the Koha to MARC mappings have been the same throughout all frameworks. But note that it was possible (before) to add or remove a mapping in an individual framework via Administration/MARC bibliographic framework. Since we now consider the Default framework as authoritative for these mappings, this form shows the mappings in Default and applies changes to all other frameworks.</p>
 
 <p>The mappings are found in three tables: biblio, biblioitems and items.</p>
 
