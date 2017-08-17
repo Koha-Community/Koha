@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 1;
 
 use Koha::MarcSubfieldStructure;
 use Koha::MarcSubfieldStructures;
@@ -30,27 +30,30 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $builder = t::lib::TestBuilder->new;
-my $nb_of_fields = Koha::MarcSubfieldStructures->search->count;
-my $framework = $builder->build({ source => 'BiblioFramework' });
-my $new_field_1 = Koha::MarcSubfieldStructure->new({
-    frameworkcode => $framework->{frameworkcode},
-    tagfield => 200,
-    tagsubfield => 'a',
-})->store;
-my $new_field_2 = Koha::MarcSubfieldStructure->new({
-    frameworkcode => $framework->{frameworkcode},
-    tagfield => 245,
-    tagsubfield => 'a',
-})->store;
+subtest 'Trivial tests' => sub {
+    plan tests => 3;
 
-is( Koha::MarcSubfieldStructures->search->count, $nb_of_fields + 2, 'The 2 fields should have been added' );
+    my $builder = t::lib::TestBuilder->new;
+    my $nb_of_fields = Koha::MarcSubfieldStructures->search->count;
+    my $framework = $builder->build({ source => 'BiblioFramework' });
+    my $new_field_1 = Koha::MarcSubfieldStructure->new({
+        frameworkcode => $framework->{frameworkcode},
+        tagfield => 200,
+        tagsubfield => 'a',
+    })->store;
+    my $new_field_2 = Koha::MarcSubfieldStructure->new({
+        frameworkcode => $framework->{frameworkcode},
+        tagfield => 245,
+        tagsubfield => 'a',
+    })->store;
 
-my $retrieved_fields = Koha::MarcSubfieldStructures->search({ frameworkcode => $framework->{frameworkcode}, tagfield => 200, tagsubfield => 'a' });
-is( $retrieved_fields->count, 1, 'Search for a field by frameworkcode, tagfield and tagsubfield should return the field' );
+    is( Koha::MarcSubfieldStructures->search->count, $nb_of_fields + 2, 'The 2 fields should have been added' );
 
-$retrieved_fields->next->delete;
-is( Koha::MarcSubfieldStructures->search->count, $nb_of_fields + 1, 'Delete should have deleted the field' );
+    my $retrieved_fields = Koha::MarcSubfieldStructures->search({ frameworkcode => $framework->{frameworkcode}, tagfield => 200, tagsubfield => 'a' });
+    is( $retrieved_fields->count, 1, 'Search for a field by frameworkcode, tagfield and tagsubfield should return the field' );
+
+    $retrieved_fields->next->delete;
+    is( Koha::MarcSubfieldStructures->search->count, $nb_of_fields + 1, 'Delete should have deleted the field' );
+};
 
 $schema->storage->txn_rollback;
-
