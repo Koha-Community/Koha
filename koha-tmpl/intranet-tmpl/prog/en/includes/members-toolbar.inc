@@ -199,7 +199,7 @@ function searchToHold(){
                 [% IF ( is_child ) %]
                     <li><a id="updatechild" href="#">Update child to adult patron</a></li>
                 [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li></li>
+                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
                 [% END %]
                 [% IF Koha.Preference('intranetreadinghistory') %]
                     [%IF ( privacy == 2 ) %]
@@ -249,7 +249,7 @@ function searchToHold(){
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default approve" type="submit"><i class="fa fa-check"></i> Save</button>
-                    <button class="btn btn-default deny" href="#" class="cancel" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+                    <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
                 </div>
             </form>
         </div>
