@@ -69,9 +69,13 @@ sub recovery {
             );
         }
 
+        my $link = $body->{'custom_link'};
+
         my $resend = ValidateBorrowernumber($patron->borrowernumber);
 
-        SendPasswordRecoveryEmail($patron, $patron->email, $resend);
+        SendPasswordRecoveryEmail($patron, $patron->email, $resend, {
+            url => $link
+        });
 
         return $c->render(status => 201, openapi => {
             status => 1,
@@ -84,6 +88,9 @@ sub recovery {
         }
         elsif ($_->isa('Koha::Exceptions::Patron::NotFound')) {
             return $c->render(status => 404, openapi => { error => $_->error });
+        }
+        elsif ($_->isa('Koha::Exceptions::WrongParameter')) {
+            return $c->render(status => 400, openapi => { error => $_->error });
         }
         Koha::Exceptions::rethrow_exception($_);
     };

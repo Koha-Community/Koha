@@ -22,6 +22,8 @@ use C4::Context;
 use C4::Letters;
 use Crypt::Eksblowfish::Bcrypt qw(en_base64);
 
+use Koha::Exceptions;
+
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
@@ -98,12 +100,19 @@ sub GetValidLinkInfo {
 
  It creates an email using the templates and sends it to the user, using the specified email
 
+ Parameters:
+ C<$borrower>   Koha::Patron
+ C<$userEmail>  to_address (the one specified in the request)
+ C<$update>     Update existing password recovery request
+ C<$params>     Additional parameters as follows:
+                  url:       Custom password reset link (third party integrations)
 =cut
 
 sub SendPasswordRecoveryEmail {
     my $borrower  = shift;    # Koha::Patron
     my $userEmail = shift;    #to_address (the one specified in the request)
     my $update    = shift;
+    my $params    = shift;
 
     my $schema = Koha::Database->new->schema;
 
@@ -137,6 +146,28 @@ sub SendPasswordRecoveryEmail {
     my $opacbase = C4::Context->preference('OPACBaseURL') || '';
     my $uuidLink = $opacbase
       . "/cgi-bin/koha/opac-password-recovery.pl?uniqueKey=$uuid_str";
+
+    # Custom $uuidLink. This feature is used for external integrations that handle
+    # password resetting inside the system via e.g. Koha's REST API.
+    if (defined $params->{url}) {
+        # Make sure host name exists in whitelist
+        my $url = $params->{url};
+        my $whitelist = C4::Context->preference(
+            'OpacResetPasswordHostWhitelist'
+        );
+        my @allowed_hosts = split /[,\s\|]/, $whitelist if defined $whitelist;
+        foreach my $allowed_host (@allowed_hosts) {
+           if ($url =~ /^https?:\/\/$allowed_host/) {
+                $url =~ s/{uuid}/$uuid_str/gi;
+                $uuidLink = $params->{url} = $url;
+                last;
+            }
+        }
+        Koha::Exceptions::WrongParameter->throw( error => 'System preference'
+              . ' OpacResetPasswordHostWhitelist does'
+              . " not contain the requested host of '$url'"
+        ) if $uuidLink ne $params->{url};
+    }
 
     # prepare the email
     my $letter = C4::Letters::GetPreparedLetter(

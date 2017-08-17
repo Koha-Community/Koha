@@ -44,7 +44,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'recovery() tests' => sub {
-    plan tests => 29;
+    plan tests => 31;
 
     $schema->storage->txn_begin;
 
@@ -144,6 +144,18 @@ subtest 'recovery() tests' => sub {
         'Password modification request found in database'
     );
 
+    my $notice_content = Koha::Notice::Messages->search({
+        borrowernumber => $patron->borrowernumber,
+        letter_code => 'PASSWORD_RESET',
+        message_transport_type => 'email'
+    }, {
+        order_by => { '-desc' => 'message_id' }
+    })->next->content;
+    like($notice_content,
+         qr/cgi-bin\/koha\/opac-password-recovery\.pl\?uniqueKey=/,
+         'Found Koha OPAC link in email'
+    );
+
     $tx = $t->ua->build_tx(POST => $url => json => {
         email      => $patron->email,
         userid     => $patron->userid
@@ -181,6 +193,58 @@ subtest 'recovery() tests' => sub {
         message_transport_type => 'email'
     })->count;
     is($notice, 3, 'Found password reset letters in message queue.');
+
+    subtest 'custom reset link' => sub {
+        plan tests => 5;
+
+        t::lib::Mocks::mock_preference(
+            'OpacResetPasswordHostWhitelist', ''
+        );
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://notallowed'
+        });
+        $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(400);
+
+        t::lib::Mocks::mock_preference(
+            'OpacResetPasswordHostWhitelist', 'allowed'
+        );
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://allowed/reset-password.pl?uniqueKey={uuid}'
+        });
+        $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(201);
+
+        my $rs = Koha::Database->new->schema->resultset('BorrowerPasswordRecovery');
+        my $uuid = quotemeta $rs->search({
+            borrowernumber => $patron->borrowernumber
+        }, {
+            order_by => { '-desc' => 'valid_until' }
+        })->next->uuid;
+        my $notice_to_external_service = Koha::Notice::Messages->search({
+            borrowernumber => $patron->borrowernumber,
+            letter_code => 'PASSWORD_RESET',
+            message_transport_type => 'email'
+        }, {
+            order_by => { '-desc' => 'message_id' }
+        })->next;
+        my $content = $notice_to_external_service->content;
+        like(
+             $content,
+             qr/https:\/\/allowed\/reset-password\.pl\?uniqueKey=$uuid/,
+             'Found custom link in email'
+        );
+    };
 
     $schema->storage->txn_rollback;
 };

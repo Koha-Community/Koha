@@ -1173,6 +1173,10 @@
             "email": {
               "description": "Patron's email (required)",
               "type": "string"
+            },
+            "complete_url": {
+              "description": "The location where patron will complete their password recovery. This location will be added into the password recovery email. To avoid malicious use, whitelist certain hosts in OpacResetPasswordHostWhitelist system preference and forbid all other custom links. Use {uuid} for adding the password recovery uuid into your custom link. It will be replaced by the actual uuid in the email.",
+              "type": "string"
             }
           },
           "required": ["email"]

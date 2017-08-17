@@ -378,6 +378,11 @@ OPAC:
                   no: "not allowed"
             - " to recover their password via e-mail in the OPAC"
         -
+            - "Allow the following "
+            - pref: OpacResetPasswordHostWhitelist
+              type: textarea
+            - " host names of third party services to be used as external password reset locations. Separate list elements by new line, whitespace, comma or |."
+        -
             - pref: OPACPatronDetails
               choices:
                   yes: Allow
