@@ -223,7 +223,7 @@ function validate1(date) {
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
 
-     [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames | html %]&rdquo;[% END %]
+    [% IF ( othernames ) %]&ldquo;[% othernames | html %]&rdquo;[% END %]
 
     <div class = "address">
         [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -234,46 +234,40 @@ function validate1(date) {
     </div>
 		    
 	<div class="rows">
-		<ol>
-        [% IF ( I ) %]
-            [% IF ( phonepro ) %]<li><span class="label">Organization phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
-            [% IF ( emailpro ) %]<li class="email"><span class="label">Organization email: </span>[% emailpro | html %]</li>[% END %]
-        [% ELSE %]
-            [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
-            [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
-            [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
-        [% END %]
-
-	[% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
-    [% UNLESS ( I ) %]
+    <ol>
+        [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
+        [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
+        [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
+        [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
         [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a title="[% email %]" href="mailto:[% email | url %]">[% email | html %]</a></li>[% END %]
         [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a title="[% emailpro %]" href="mailto:[% emailpro | url %]">[% emailpro | html %]</a></li>[% END %]
-    [% END %]
-    [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
-    [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %] ([% age %] years)</li>[% END %]
-    [% IF ( sex ) %]<li><span class="label">Gender:</span>
-    [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
-    </li>[% END %][% END %]
-    [% IF guarantees %]
-        <li>
-            <span class="label">Guarantees:</span>
-            <ul>
-                [% FOREACH guarantee IN guarantees %]
-                    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+        [% UNLESS ( I ) %]
+            [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
+            [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %] ([% age %] years)</li>[% END %]
+            [% IF ( sex ) %]<li><span class="label">Gender:</span>
+                [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
+            </li>[% END %]
+        [% END %]
+        [% IF guarantees %]
+            <li>
+                <span class="label">Guarantees:</span>
+                <ul>
+                    [% FOREACH guarantee IN guarantees %]
+                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                    [% END %]
+                </ul>
+            </li>
+        [% ELSIF guarantor %]
+            <li>
+                <span class="label">Guarantor:</span>
+                [% IF guarantor.borrowernumber %]
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
+                [% ELSE %]
+                    [% guarantor.firstname | html %] [% guarantor.surname | html %]
                 [% END %]
-            </ul>
-        </li>
-    [% ELSIF guarantor %]
-        <li>
-            <span class="label">Guarantor:</span>
-            [% IF guarantor.borrowernumber %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
-            [% ELSE %]
-                [% guarantor.firstname | html %] [% guarantor.surname | html %]
-            [% END %]
-        </li>
-    [% END %]
-</ol>
+            </li>
+        [% END %]
+    </ol>
 </div>
       <div class="action">
         [% IF ( guarantor.borrowernumber ) %]
@@ -400,7 +394,7 @@ function validate1(date) {
 <ol>
     <li><span class="label">Card number: </span>[% cardnumber %]</li>
 	<li><span class="label">Borrowernumber: </span> [% borrowernumber %]</li>
-    <li><span class="label">Category: </span>[% description %] ([% categorycode %])</li>
+    <li><span class="label">Category: </span>[% categoryname %] ([% categorycode %])</li>
     <li><span class="label">Registration date: </span>[% dateenrolled | $KohaDates %]</li>
     
     <li><span class="label">Expiration date: </span>
@@ -471,7 +465,6 @@ function validate1(date) {
  </div>
     <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=3">Edit</a></div>
  
-    [% UNLESS ( I ) %]
  <div id="patron-alternate-address" style="padding-top: 1em;">
     <h3>Alternate address</h3>
 
@@ -489,7 +482,6 @@ function validate1(date) {
     </div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=6">Edit</a></div>
-    [% END %]
 
  <div id="patron-alternative-contact" style="padding-top: 1em;">
  <h3>Alternative contact</h3>

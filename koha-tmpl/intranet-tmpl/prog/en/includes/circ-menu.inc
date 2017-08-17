@@ -23,7 +23,8 @@
         [% INCLUDE 'member-display-address-style-us.inc' %]
     [% END %]
 
-    [% IF ( phone ) %]<li class="patronphone">
+    [% IF ( phone || mobile || phonepro ) %]<li class="patronphone">
+    [% IF ( phone ) %]
         <a href="tel:[% phone | url %]">[% phone | html %]</a>
     [% ELSE %]
         [% IF ( mobile ) %]
@@ -32,8 +33,8 @@
             [% IF ( phonepro ) %]
                 <a href="tel:[% phonepro | url %]">[% phonepro | html %]</a>
             [% END %]
-        [% END %]</li>
-    [% END %]
+        [% END %]
+    [% END %]</li>[% END %]
     [% IF ( email ) %]
         <li class="email"> <a href="mailto:[% email | url %]" title="[% email | html %]">[% email | html %]</a></li>
     [% ELSE %]
