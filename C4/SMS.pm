@@ -92,7 +92,7 @@ sub send_sms {
     my ($sent, $sender);
 
     my $subpath = $driver;
-    $subpath =~ s|::|/|;
+    $subpath =~ s|::|/|g;
 
     my $sms_send_config = C4::Context->config('sms_send_config');
     my $conf_file = defined $sms_send_config
