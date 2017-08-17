@@ -23,6 +23,8 @@ use Encode;
 use Koha::Exception::ConnectionFailed;
 use Koha::Exception::SMSDeliveryFailure;
 
+use Try::Tiny;
+
 use vars qw{$VERSION @ISA};
 BEGIN {
         $VERSION = '0.06';
@@ -136,7 +138,15 @@ sub send_sms {
     }
 
     my $lwpcurl = LWP::Curl->new();
-    my $return = $lwpcurl->post($base_url, $parameters);
+    my $return;
+    try {
+        $return = $lwpcurl->post($base_url, $parameters);
+    } catch {
+        if ($_ =~ /Couldn't resolve host name \(6\)/) {
+            Koha::Exception::ConnectionFailed->throw(error => "Connection failed");
+        }
+        die $_;
+    };
 
     if ($lwpcurl->{retcode} == 6) {
         Koha::Exception::ConnectionFailed->throw(error => "Connection failed");

@@ -215,7 +215,8 @@ sub labyrintti_gateway {
     # Simulate Labyrintti Gateway response
 
     if ($params->{text} eq 'want_connection_error') {
-        $lwpcurl->{retcode} = 6;
+        Carp::croak("An error happened: Host https://labyrintti"
+                    ." Couldn't resolve host name (6)");
     }
     elsif ($params->{text} eq 'want_delivery_failure') {
         return 'message failed: a problem';
@@ -230,7 +231,8 @@ sub arena_gateway {
     # Simulate Arena Gateway response
 
     if ($params->{msg} eq 'want_connection_error') {
-        $lwpcurl->{retcode} = 6;
+        Carp::croak("An error happened: Host https://arena"
+                    ." Couldn't resolve host name (6)");
     }
     elsif ($params->{msg} eq 'want_delivery_failure') {
         return 'message failed: a problem';
