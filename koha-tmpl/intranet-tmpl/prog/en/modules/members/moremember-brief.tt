@@ -26,27 +26,17 @@
         </div>
 	<div class="rows">
 		<ol>
-        [% IF ( I ) %]
-            [% IF ( phonepro ) %]<li><span class="label">Organization phone: </span>[% phonepro %]</li>[% END %]
-            [% IF ( emailpro ) %]<li><span class="label">Organization email: </span>[% emailpro %]</li>[% END %]
-        [% ELSE %]
             [% IF ( phone ) %]<li><span class="label">Primary phone: </span>[% phone %]</li>[% END %]
             [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span>[% phonepro %]</li>[% END %]
             [% IF ( mobile ) %]<li><span class="label">Other phone: </span>[% mobile %]</li>[% END %]
-        [% END %]
-
-    [% IF ( P ) %]
-        [% IF ( phone ) %]<li><span class="label">Primary phone: </span>[% phone %]</li>[% END %]
-        [% IF ( mobile ) %]<li><span class="label">Other phone: </span>[% mobile %]</li>[% END %]
-    [% END %]
-	[% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
-    [% UNLESS ( I ) %]
-        [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
-        [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
-    [% END %]
-    <li><span class="label">Initials: </span>[% initials %]</li>
-    <li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %]</li>
-    <li><span class="label">Gender:</span>[% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]</li>[% END %]
+            [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
+            [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
+            [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
+            [% UNLESS ( I ) %]
+                [% IF ( inititals ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
+                [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %]</li>[% END %]
+                [% IF ( sex ) %]<li><span class="label">Gender:</span>[% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]</li>[% END %][% END %]
+            [% END %]
     [% IF ( isguarantee ) %]
         [% IF ( guaranteeloop ) %]
             <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber %]">[% guaranteeloo.name %]  </a></li>[% END %]</ul></li>
@@ -67,7 +57,7 @@
 	<ol>
     <li><span class="label">Card number: </span>[% cardnumber %]</li>
 	<li><span class="label">Borrowernumber: </span> [% borrowernumber %]</li>
-    <li><span class="label">Category: </span>[% description %] ([% categorycode %])</li>
+    <li><span class="label">Category: </span>[% categoryname %] ([% categorycode %])</li>
     <li><span class="label">Registration date: </span>[% dateenrolled | $KohaDates %]</li>
     <li><span class="label">Expiration date: </span>
     [% IF ( was_renewed ) %]
