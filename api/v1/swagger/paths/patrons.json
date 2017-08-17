@@ -1147,5 +1147,133 @@
         }
       }
     }
+  },
+  "/patrons/password/recovery": {
+    "post": {
+      "x-mojo-to": "Patron::Password#recovery",
+      "operationId": "addPasswordRecoveryRequest",
+      "description": "Creates a new password recovery request.",
+      "tags": ["password"],
+      "parameters": [{
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing fields for recovery request",
+        "required": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "userid": {
+              "description": "Patron's userid (this field or cardnumber required)",
+              "type": "string"
+            },
+            "cardnumber": {
+              "description": "Patron's cardnumber (this field or userid required)",
+              "type": "string"
+            },
+            "email": {
+              "description": "Patron's email (required)",
+              "type": "string"
+            }
+          },
+          "required": ["email"]
+        }
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "Password recovery request created",
+          "schema": { "$ref": "../definitions.json#/passwordRecovery" }
+        },
+        "400": {
+          "description": "Bad parameter(s)",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "403": {
+          "description": "Password recovery disabled, no access to this endpoint",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "One or more of the given parameters not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/patrons/password/recovery/complete": {
+    "post": {
+      "x-mojo-to": "Patron::Password#complete_recovery",
+      "operationId": "completePasswordRecoveryRequest",
+      "description": "Completes a password recovery request.",
+      "tags": ["password"],
+      "parameters": [{
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing fields for completing recovery request",
+        "required": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "uuid": {
+              "description": "Uuid generated in /patrons/password/recovery",
+              "type": "string"
+            },
+            "new_password": {
+              "description": "Patron's new password",
+              "type": "string"
+            },
+            "confirm_new_password": {
+              "description": "Confirm patron's new password",
+              "type": "string"
+            }
+          },
+          "required": ["uuid", "new_password", "confirm_new_password"]
+        }
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Password recovery completed",
+          "schema": { "type": "object" }
+        },
+        "400": {
+          "description": "Bad parameter(s)",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Uuid not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
   }
 }
