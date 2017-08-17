@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 
-use Koha::MarcSubfieldStructure;
 use Koha::MarcSubfieldStructures;
 use Koha::Database;
 
