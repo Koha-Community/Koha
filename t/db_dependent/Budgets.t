@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 142;
+use Test::More tests => 144;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -393,6 +393,87 @@ for my $infos (@order_infos) {
 is( GetBudgetHierarchySpent( $budget_id1 ), 160, "total spent for budget1 is 160" );
 is( GetBudgetHierarchySpent( $budget_id11 ), 100, "total spent for budget11 is 100" );
 is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget111 is 20" );
+
+# GetBudgetSpent and GetBudgetOrdered
+my $budget_period_amount = 100;
+my $budget_amount = 50;
+
+my $budget = AddBudgetPeriod(
+    {
+        budget_period_startdate   => '2017-08-22',
+        budget_period_enddate     => '2018-08-22',
+        budget_period_description => 'Test budget',
+        budget_period_active      => 1,
+        budget_period_total       => $budget_period_amount,
+    }
+);
+
+my $fund = AddBudget(
+    {
+        budget_code       => 'Test fund',
+        budget_name       => 'Test fund',
+        budget_period_id  => $budget,
+        budget_parent_id  => undef,
+        budget_amount     => $budget_amount,
+    }
+);
+
+my $vendor = Koha::Acquisition::Bookseller->new(
+    {
+        name         => "test vendor",
+        address1     => "test address",
+        phone        => "0123456",
+        active       => 1,
+        deliverytime => 5,
+    }
+)->store;
+
+my $vendorid = $vendor->id;
+
+my $basketnumber = C4::Acquisition::NewBasket( $vendorid, 1 );
+my ( $biblio, $biblioitem ) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
+
+my @orders = (
+    {
+        budget_id  => $fund,
+        pending_quantity => 1,
+        spent_quantity => 0,
+    },
+);
+
+my $invoiceident = AddInvoice( invoicenumber => 'invoice_test_clone', booksellerid => $vendorid, shipmentdate => '2017-08-22', shipmentcost => 6, shipmentcost_budgetid => $fund );
+my $test_invoice = GetInvoice( $invoiceident );
+my $individual_item_price = 10;
+
+my $order = Koha::Acquisition::Order->new(
+   {
+      basketno           => $basketnumber,
+      biblionumber       => $biblio,
+      budget_id          => $fund,
+      order_internalnote => "internalnote",
+      order_vendornote   => "vendor note",
+      quantity           => 2,
+      cost_tax_included  => $individual_item_price,
+      rrp_tax_included   => $individual_item_price,
+      listprice          => $individual_item_price,
+      ecost_tax_included => $individual_item_price,
+      discount           => 0,
+      uncertainprice     => 0,
+   }
+)->insert;
+
+ModReceiveOrder({
+   bibionumber       => $biblio,
+   order             => $order,
+   budget_id         => $fund,
+   quantityreceived  => 2,
+   invoice           => $test_invoice,
+   received_items    => [],
+} );
+
+is ( GetBudgetSpent( $fund ), 6, "total shipping cost is 6");
+is ( GetBudgetOrdered( $fund ), '20.000000', "total ordered price is 20");
+
 
 # CloneBudgetPeriod
 my $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
