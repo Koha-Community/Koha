@@ -81,14 +81,15 @@ if (!C4::Context->userenv){
     }
 }
 
-if (C4::Context->preference("AutoSwitchPatron") ) {
-    if (Koha::Patrons->search( { cardnumber => $query->param('barcode')} )->count() > 0) {
-        print $query->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=".$query->param('barcode'));
+my $barcodes = [];
+my $barcode =  $query->param('barcode');
+
+if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
+    if (Koha::Patrons->search( { cardnumber => $barcode} )->count() > 0) {
+        print $query->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=".$barcode);
     }
 }
 
-my $barcodes = [];
-my $barcode =  $query->param('barcode');
 # Barcode given by user could be '0'
 if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
     $barcodes = [ $barcode ];
