@@ -159,6 +159,10 @@ $(document).ready(function() {
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
 [% IF ( was_renewed ) %]<div class="dialog message">Patron's account has been renewed until [% expiry | $KohaDates %]</div>[% END %]
 
+[% IF autoswitched %]
+    <div id="autoswitched" class="dialog message">Patron was automatically switched by reading the patron card during checking out. Ensure you are working with the right patron.</div>
+[% END %]
+
 [% IF additional_materials %]
     <div id="materials" class="dialog message">Note about the accompanying materials: <br />
     [% additional_materials %]

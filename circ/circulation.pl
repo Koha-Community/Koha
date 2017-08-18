@@ -86,7 +86,7 @@ my $barcode =  $query->param('barcode');
 
 if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
     if (Koha::Patrons->search( { cardnumber => $barcode} )->count() > 0) {
-        print $query->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=".$barcode);
+        print $query->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$barcode&amp;autoswitched=1");
     }
 }
 
@@ -669,6 +669,7 @@ $template->param(
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
+    autoswitched              => $query->param("autoswitched"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
