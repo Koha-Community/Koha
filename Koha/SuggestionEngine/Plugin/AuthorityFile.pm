@@ -30,8 +30,7 @@ Plugin to get suggestions from Koha's authority file
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use Carp;
 
 use base qw(Koha::SuggestionEngine::Base);
