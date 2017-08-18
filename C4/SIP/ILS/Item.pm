@@ -72,14 +72,14 @@ use Koha::Items;
 =cut
 
 sub new {
-	my ($class, $item_id) = @_;
-	my $type = ref($class) || $class;
+    my ($class, $item_id) = @_;
+    my $type = ref($class) || $class;
     my $item = Koha::Items->find( { barcode => $item_id } );
     unless ( $item ) {
-		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
-		warn "new ILS::Item($item_id) : No item '$item_id'.";
+        syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
+        warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
-	}
+    }
     my $self = $item->unblessed;
     $self->{      'id'       } = $item->barcode;     # to SIP, the barcode IS the id.
     $self->{permanent_location}= $item->homebranch;
@@ -90,7 +90,7 @@ sub new {
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
     $self->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
-	# check if its on issue and if so get the borrower
+    # check if its on issue and if so get the borrower
     my $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
     if ($issue) {
         $self->{due_date} = dt_from_string( $issue->date_due, 'sql' )->truncate( to => 'minute' );
@@ -102,10 +102,10 @@ sub new {
     $self->{hold_queue} = $holds;
     $self->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$self->{hold_queue}} )];
     $self->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$self->{hold_queue}} )];
-	bless $self, $type;
+    bless $self, $type;
 
-    syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
-        $item_id, $self->{title}//'' );
+    syslog( "LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
+        $item_id, $self->{title} // '' );
 
     return $self;
 }
