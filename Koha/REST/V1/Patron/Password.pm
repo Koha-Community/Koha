@@ -31,6 +31,8 @@ use Koha::Patron::Password::Recovery qw(
 use Koha::Patrons;
 
 use Koha::Exceptions;
+use Koha::Exceptions::Authentication;
+use Koha::Exceptions::Authorization;
 
 use Try::Tiny;
 
@@ -70,12 +72,33 @@ sub recovery {
         }
 
         my $link = $body->{'custom_link'};
-
+        my $skip_mail =  0;
+        if ($body->{'skip_mail'}) {
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Authentication required while skip_mail parameter is on'
+            ) unless ref($c->stash('koha.user')) eq 'Koha::Patron';
+            if (my $user = $c->stash('koha.user')) {
+                Koha::Exceptions::Authorization::Unauthorized->throw(
+                    error => 'Permission get_password_reset_uuid required while '
+                            .'skip_mail parameter is on'
+                ) unless C4::Auth::haspermission($user->userid, {
+                    borrowers => 'get_password_reset_uuid'
+                });
+                $skip_mail = 1;
+            }
+        }
+        
         my $resend = ValidateBorrowernumber($patron->borrowernumber);
 
-        SendPasswordRecoveryEmail($patron, $patron->email, $resend, {
-            url => $link
+        my $ret = SendPasswordRecoveryEmail($patron, $patron->email, $resend, {
+            url => $link,
+            skip_mail => $skip_mail,
         });
+
+        if (ref($ret) eq 'HASH') {
+            $ret->{status} = 2;
+            return $c->render(status => 201, openapi => $ret);
+        }
 
         return $c->render(status => 201, openapi => {
             status => 1,
@@ -91,6 +114,12 @@ sub recovery {
         }
         elsif ($_->isa('Koha::Exceptions::WrongParameter')) {
             return $c->render(status => 400, openapi => { error => $_->error });
+        }
+        elsif ($_->isa('Koha::Exceptions::Authentication::Required')) {
+            return $c->render(status => 401, openapi => { error => $_->error });
+        }
+        elsif ($_->isa('Koha::Exceptions::Authorization::Unauthorized')) {
+            return $c->render(status => 403, openapi => { error => $_->error });
         }
         Koha::Exceptions::rethrow_exception($_);
     };

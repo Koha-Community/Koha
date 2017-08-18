@@ -1177,6 +1177,10 @@
             "complete_url": {
               "description": "The location where patron will complete their password recovery. This location will be added into the password recovery email. To avoid malicious use, whitelist certain hosts in OpacResetPasswordHostWhitelist system preference and forbid all other custom links. Use {uuid} for adding the password recovery uuid into your custom link. It will be replaced by the actual uuid in the email.",
               "type": "string"
+            },
+            "skip_email": {
+              "description": "If true, Koha will not enqueue password recovery email. Makes this endpoint return the letter, uuid and patron email. Requires permission borrowers.get_password_recovery_uuid. Useful for third party service integrations that wish to handle emailing instead of Koha.",
+              "type": "boolean"
             }
           },
           "required": ["email"]
@@ -1190,6 +1194,10 @@
         },
         "400": {
           "description": "Bad parameter(s)",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
           "schema": { "$ref": "../definitions.json#/error" }
         },
         "403": {

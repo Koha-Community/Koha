@@ -106,6 +106,9 @@ sub GetValidLinkInfo {
  C<$update>     Update existing password recovery request
  C<$params>     Additional parameters as follows:
                   url:       Custom password reset link (third party integrations)
+                  skip_mail: If true, will not enqueue the letter, but return it
+                             instead. Use this flag if you want a third party
+                             service to handle emailing instead of Koha.
 =cut
 
 sub SendPasswordRecoveryEmail {
@@ -178,6 +181,15 @@ sub SendPasswordRecoveryEmail {
         substitute =>
           { passwordreseturl => $uuidLink, user => $borrower->userid },
     );
+
+    if ($params->{skip_mail}) {
+        return {
+            to_address => $userEmail,
+            uuid       => $uuid_str,
+            uuidLink   => $uuidLink,
+            letter     => $letter->{content},
+        };
+    }
 
     # define to/from emails
     my $kohaEmail = C4::Context->preference('KohaAdminEmailAddress');    # from

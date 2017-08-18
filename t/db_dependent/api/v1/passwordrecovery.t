@@ -44,7 +44,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'recovery() tests' => sub {
-    plan tests => 31;
+    plan tests => 32;
 
     $schema->storage->txn_begin;
 
@@ -244,6 +244,78 @@ subtest 'recovery() tests' => sub {
              qr/https:\/\/allowed\/reset-password\.pl\?uniqueKey=$uuid/,
              'Found custom link in email'
         );
+    };
+
+    subtest 'skip letter enqueueing' => sub {
+        plan tests => 10;
+
+        t::lib::Mocks::mock_preference(
+            'OpacResetPasswordHostWhitelist', 'anotherallowed'
+        );
+        my ($service_borrowernumber, $service_session) = create_user_and_session({
+            borrowers => 'get_password_reset_uuid'
+        });
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://anotherallowed/reset-password.pl',
+            skip_mail => Mojo::JSON->true
+        });
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(401);
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://anotherallowed/reset-password.pl',
+            skip_mail => Mojo::JSON->true
+        });
+        $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(403);
+
+        Koha::Notice::Messages->search({
+            borrowernumber => $patron->borrowernumber,
+            letter_code => 'PASSWORD_RESET',
+            message_transport_type => 'email'
+        })->delete;
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://notallowed/reset-password.pl',
+            skip_mail => Mojo::JSON->true,
+        });
+        $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(400);
+
+        $tx = $t->ua->build_tx(POST => $url => json => {
+            email      => $patron->email,
+            userid     => $patron->userid,
+            custom_link => 'https://anotherallowed/reset-password.pl',
+            skip_mail => Mojo::JSON->true,
+        });
+        $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
+        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $t->request_ok($tx)
+          ->status_is(201);
+        my $uuid = $rs->search({
+            borrowernumber => $patron->borrowernumber
+        }, {
+            order_by => { '-desc' => 'valid_until' }
+        })->next->uuid;
+        $t->json_is('/uuid', $uuid);
+
+        is(Koha::Notice::Messages->search({
+            borrowernumber => $patron->borrowernumber,
+            letter_code => 'PASSWORD_RESET',
+            message_transport_type => 'email'
+        })->count, 0, 'Email not enqueued');
     };
 
     $schema->storage->txn_rollback;
