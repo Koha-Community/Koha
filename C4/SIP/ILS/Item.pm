@@ -67,16 +67,16 @@ use Koha::Biblios;
 =cut
 
 sub new {
-	my ($class, $item_id) = @_;
-	my $type = ref($class) || $class;
-	my $self;
+    my ($class, $item_id) = @_;
+    my $type = ref($class) || $class;
+    my $self;
     my $itemnumber = GetItemnumberFromBarcode($item_id);
-	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
-	if (! $item) {
-		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
-		warn "new ILS::Item($item_id) : No item '$item_id'.";
+    my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
+    if (! $item) {
+        syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
+        warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
-	}
+    }
     $item->{  'itemnumber'   } = $itemnumber;
     $item->{      'id'       } = $item->{barcode};     # to SIP, the barcode IS the id.
     $item->{permanent_location}= $item->{homebranch};
@@ -87,23 +87,23 @@ sub new {
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
     $item->{sip_media_type} = $itemtype->sip_media_type() if $itemtype;
 
-	# check if its on issue and if so get the borrower
-	my $issue = GetItemIssue($item->{'itemnumber'});
+    # check if its on issue and if so get the borrower
+    my $issue = GetItemIssue($item->{'itemnumber'});
     if ($issue) {
         $item->{due_date} = $issue->{date_due};
     }
-	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
-	$item->{patron} = $borrower->{'cardnumber'};
+    my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
+    $item->{patron} = $borrower->{'cardnumber'};
     my $biblio = Koha::Biblios->find( $item->{biblionumber } );
     my $holds = $biblio->current_holds->unblessed;
     $item->{hold_queue} = $holds;
-	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
-	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
-	$self = $item;
-	bless $self, $type;
+    $item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
+    $item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
+    $self = $item;
+    bless $self, $type;
 
-    syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
-        $item_id, $self->{title}//'' );
+    syslog( "LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
+        $item_id, $self->{title} //'' );
 
     return $self;
 }
