@@ -31,8 +31,7 @@ subjects to subject searches.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use Carp;
 use C4::Templates qw(gettemplate); # This is necessary for translatability
 
@@ -86,7 +85,7 @@ sub get_suggestions {
     foreach my $index (@indexes) {
         my $thissearch = $search;
         $thissearch = "$index:$thissearch"
-          unless ( $thissearch =~ s/OP!/$index=/g );
+          unless ( $thissearch =~ s/OP!/$index:/g );
         $template->{VARS}->{index} = $index;
         my $label = $template->output;
         push @results,
