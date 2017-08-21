@@ -143,9 +143,9 @@ sub _get_patron {
     my $librarian = 0;
 
     unless ($user) {
-        Koha::Exceptions::AuthenticationRequired->throw;
+        Koha::Exceptions::AuthenticationRequired->throw if $borrowernumber;
     }
-    if (haspermission($user->userid, { borrowers => 1 })) {
+    if ($user && haspermission($user->userid, { borrowers => 1 })) {
         $librarian = 1;
     }
     if ($borrowernumber) {

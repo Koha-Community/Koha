@@ -73,18 +73,17 @@ sub t_no_available_items_opac {
 
     my $availability = Koha::Biblio::Availability::Hold->new({
         biblio => $biblio,
-        patron => $patron,
         to_branch => $branch2->branchcode
     })->in_opac;
     my $expecting = 'Koha::Exceptions::Biblio::NoAvailableItems';
     my $expecting2 = 'Koha::Exceptions::Hold::ZeroHoldsAllowed';
 
     ok(!Koha::Item::Availability::Hold->new({
-            item => $item1, patron => $patron, to_branch => $branch2->branchcode,
+            item => $item1, to_branch => $branch2->branchcode,
         })->in_opac->available,
        'When I look at the first item of two in this biblio, it is not available.');
     ok(!Koha::Item::Availability::Hold->new({
-            item => $item2, patron => $patron
+            item => $item2,
         })->in_opac->available,
        'When I look at the second item of two in this biblio, it is not available.');
     ok(!$availability->available, 'Then, the biblio is not available.');
