@@ -108,12 +108,6 @@ sub in_opac {
     $self->reset;
 
     my $patron;
-    unless ($patron = $self->patron) {
-        Koha::Exceptions::MissingParameter->throw(
-            error => 'Missing parameter patron. This level of availability query '
-            .'requires Koha::Biblio::Availability::Hold to have a patron parameter.'
-        );
-    }
 
     # Check if holds are allowed in OPAC
     if (!C4::Context->preference('RequestOnOpac')) {
@@ -187,7 +181,7 @@ sub _item_looper {
         biblionumber => $biblio->biblionumber,
         found => undef,
         borrowernumber => $patron->borrowernumber,
-    })->as_list;
+    })->as_list if $patron;
     $self->{'hold_queue_length'} = scalar(@holds) || 0;
     foreach my $item (@items) {
         # Break out of loop after $limit items are found available
