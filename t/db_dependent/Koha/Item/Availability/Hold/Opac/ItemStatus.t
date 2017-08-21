@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 13;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -225,22 +225,6 @@ sub t_transfer_limit {
     is($availability->unavailable, 1, 'Then there is one reason for unavailability');
     is(ref($availability->unavailabilities->{$expecting}), $expecting, 'Then there'
        .' is an unavailability status indicating unability to transfer the item.');
-};
-
-subtest 'Given item has no barcode' => \&t_unknown_barcode;
-sub t_unknown_barcode {
-    plan tests => 4;
-
-    my $patron = build_a_test_patron();
-    my $item = build_a_test_item()->set({barcode=>undef})->store;
-    my $expecting = 'Koha::Exceptions::Item::UnknownBarcode';
-    my $availability = Koha::Item::Availability::Hold->new({item => $item, patron => $patron})->in_opac;
-
-    is($item->barcode, undef, 'When I look at the item, we see that it has undefined barcode.');
-    ok($availability->unavailable, 'When I request availability, then the item is not available.');
-    is($availability->unavailable, 1, 'Then there is only one unavailability reason.');
-    is(ref($availability->unavailabilities->{$expecting}), $expecting,
-       'Then there is an unavailability status indicating unknown barcode.');
 };
 
 subtest 'Given item is withdrawn' => \&t_withdrawn;

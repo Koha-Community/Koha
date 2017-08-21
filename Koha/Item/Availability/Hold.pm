@@ -129,13 +129,7 @@ sub in_opac {
     $self->reset;
 
     my $item = $self->item;
-    my $patron;
-    unless ($patron = $self->patron) {
-        Koha::Exceptions::MissingParameter->throw(
-            error => 'Missing parameter patron. This level of availability query '
-            .'requires Koha::Item::Availability::Hold to have a patron parameter.'
-        );
-    }
+    my $patron = $self->patron;
 
     # Check if holds are allowed in OPAC
     if (!C4::Context->preference('RequestOnOpac')) {
@@ -170,6 +164,8 @@ sub common_biblio_checks {
 
     my $bibcalc = Koha::Availability::Checks::Biblio->new($biblio);
 
+    return $self unless $self->patron;
+
     if ($reason = $bibcalc->forbid_holds_on_patrons_possessions($self->patron)) {
         $self->unavailable($reason);
     }
@@ -193,6 +189,8 @@ sub common_biblioitem_checks {
 
     my $bibitemcalc = Koha::Availability::Checks::Biblioitem->new($bibitem);
 
+    return $self unless $self->patron;
+
     if ($reason = $bibitemcalc->age_restricted($self->patron)) {
         $self->unavailable($reason);
     }
@@ -214,16 +212,19 @@ sub common_issuing_rule_checks {
     my $patron = $self->patron;
     my $branchcode = $params->{'branchcode'} ? $params->{'branchcode'}
                 : $self->_get_reservescontrol_branchcode($item, $patron);
-    my $holdrulecalc = Koha::Availability::Checks::IssuingRule->new({
+    my $args = {
         item => $item,
-        patron => $patron,
         branchcode => $branchcode,
         use_cache => $params->{'use_cache'},
-    });
+    };
+    $args->{patron} = $patron if $patron;
+    my $holdrulecalc = Koha::Availability::Checks::IssuingRule->new($args);
 
     if ($reason = $holdrulecalc->zero_holds_allowed) {
         $self->unavailable($reason);
     } else {
+        return $self unless $self->patron;
+
         if ($reason = $holdrulecalc->maximum_holds_reached) {
             $self->unavailable($reason);
         }
@@ -252,7 +253,6 @@ sub common_item_checks {
     $self->unavailable($reason) if $reason = $itemcalc->damaged;
     $self->unavailable($reason) if $reason = $itemcalc->lost;
     $self->unavailable($reason) if $reason = $itemcalc->restricted;
-    $self->unavailable($reason) if $reason = $itemcalc->unknown_barcode;
     $self->unavailable($reason) if $reason = $itemcalc->withdrawn;
     if ($reason = $itemcalc->notforloan) {
         unless ($reason->status < 0) {
@@ -261,11 +261,14 @@ sub common_item_checks {
             $self->note($reason);
         }
     }
-    $self->unavailable($reason) if $reason = $itemcalc->held_by_patron($patron, $params);
+
     $self->unavailable($reason) if $reason = $itemcalc->from_another_library;
     if ($self->to_branch && ($reason = $itemcalc->transfer_limit($self->to_branch))) {
         $self->unavailable($reason);
     }
+
+    return $self unless $self->patron;
+    $self->unavailable($reason) if $reason = $itemcalc->held_by_patron($patron, $params);
 
     return $self;
 }
@@ -306,6 +309,8 @@ sub common_patron_checks {
     my ($self) = @_;
     my $reason;
 
+    return $self unless $self->patron;
+
     my $patron = $self->patron;
     my $patroncalc = Koha::Availability::Checks::Patron->new($patron);
 
@@ -335,11 +340,12 @@ sub opac_specific_issuing_rule_checks {
     my $item = $self->item;
     my $patron = $self->patron;
     $branchcode ||= $self->_get_reservescontrol_branchcode($item, $patron);
-    my $holdrulecalc = Koha::Availability::Checks::IssuingRule->new({
+    my $args = {
         item => $item,
-        patron => $patron,
         branchcode => $branchcode,
-    });
+    };
+    $args->{patron} = $patron if $patron;
+    my $holdrulecalc = Koha::Availability::Checks::IssuingRule->new($args);
     if ($reason = $holdrulecalc->opac_item_level_hold_forbidden) {
         $self->unavailable($reason);
     }
@@ -357,6 +363,9 @@ sub _get_reservescontrol_branchcode {
         $branchcode = $patron->branchcode;
     } elsif ($item && $controlbranch eq 'ItemHomeLibrary') {
         $branchcode = $item->homebranch;
+    } elsif ($controlbranch eq 'PickupLibrary' && C4::Context->userenv
+             && C4::Context->userenv->{'branch'}) {
+        $branchcode = C4::Context->userenv->{'branch'}
     }
     return $branchcode;
 }

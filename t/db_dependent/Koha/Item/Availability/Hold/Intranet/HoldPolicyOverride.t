@@ -44,7 +44,6 @@ t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 0);
 # Create test item and patron, and add some reasons that will be need confirmation
 my $item = build_a_test_item();
 $item->set({
-    barcode => '',
     damaged => 1,
     itemlost => 1,
     notforloan => 1,
@@ -74,7 +73,7 @@ is(C4::Context->preference('AllowHoldPolicyOverride'), 1, 'Given librarians are 
 ok($availability->available, 'When librarian checks item availability for '
    .'patron, they see that the status is available.');
 ok(!$availability->unavailable, 'There are no reasons for unavailability.');
-is($availability->confirm, 8, 'There are 8 things to be confirmed.');
+is($availability->confirm, 7, 'There are 7 things to be confirmed.');
 
 t::lib::Mocks::mock_preference('AllowHoldPolicyOverride', 0);
 $availability = Koha::Item::Availability::Hold->new({item => $item, patron => $patron})->in_intranet;
@@ -83,7 +82,7 @@ is(C4::Context->preference('AllowHoldPolicyOverride'), 0, 'Changed setting - '
 ok(!$availability->available, 'When librarian checks item availability for '
    .'patron, they see that the it is NOT available.');
 ok(!$availability->confirm, 'There are no to be confirmed.');
-is($availability->unavailable, 8, 'There are 8 reasons for unavailability.');
+is($availability->unavailable, 7, 'There are 7 reasons for unavailability.');
 
 $schema->storage->txn_rollback;
 
