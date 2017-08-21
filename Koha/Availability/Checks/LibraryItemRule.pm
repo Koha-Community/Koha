@@ -45,8 +45,8 @@ sub new {
 
     my $independentBranch = C4::Context->preference('IndependentBranches');
     my $circcontrol       = C4::Context->preference('CircControl');
-    my $patron = $self->{'patron'} = $self->_validate_parameter($params,
-                                            'patron', 'Koha::Patron');
+    my $patron = $self->{'patron'} = $params->{'patron'} ?
+        $self->_validate_parameter($params, 'patron', 'Koha::Patron') : undef;
     my $item   = $self->{'item'} = $self->_validate_parameter($params,
                                             'item',   'Koha::Item');
 
@@ -63,6 +63,7 @@ sub new {
                                 undef, undef);
     } else {
         bless $self, $class;
+        $self->{'branchitemrule'} = undef;
         return $self;
     }
 
