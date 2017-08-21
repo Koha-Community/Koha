@@ -102,7 +102,7 @@ sub new {
             Koha::Exceptions::BadParameter->throw(
                 error => 'Parameter must be a Koha::Patron object.',
                 parameter => 'patron',
-            );
+            ) if $params->{'patron'};
         }
         $self->patron($params->{'patron'});
     } elsif (exists $params->{'borrowernumber'}) {
