@@ -468,6 +468,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RoutingListAddReserves','1','','If ON the patrons on routing lists are automatically added to holds on the issue.','YesNo'),
 ('RoutingListNote','To change this note edit <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped\">RoutingListNote</a> system preference.','70|10','Define a note to be shown on all routing lists','Textarea'),
 ('RoutingSerials','1',NULL,'If ON, serials routing is enabled','YesNo'),
+('SCOMainUserBlock','','70|10','Add a block of HTML that will display on the self checkout screen','Textarea'),
 ('SCOUserCSS','',NULL,'Add CSS to be included in the SCO module in an embedded <style> tag.','free'),
 ('SCOUserJS','',NULL,'Define custom javascript for inclusion in the SCO module','free'),
 ('SearchEngine','Zebra','Elasticsearch|Zebra','Search Engine','Choice'),

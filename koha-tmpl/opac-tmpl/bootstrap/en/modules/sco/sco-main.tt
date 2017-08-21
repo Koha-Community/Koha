@@ -320,7 +320,7 @@
                             </div> <!-- / .sco_entry -->
                         [% END # / IF validuser %]
                     [% END # / UNLESS ( hide_main %]
-
+                    [% IF ( Koha.Preference('SCOMainUserBlock' ) ) %]<div id="scomainuserblock">[% Koha.Preference('SCOMainUserBlock' ) %]</div>[% END %]
                 </div> <!-- / .span12 -->
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
