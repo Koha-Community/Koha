@@ -238,7 +238,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
             $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } );
         } elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
-            $member = Koha::Patrons->find( { userid => $borrower{'userid'} } )->unblessed;
+            $member = Koha::Patrons->find( { userid => $borrower{'userid'} } );
         } elsif ($extended) {
             if (defined($matchpoint_attr_type)) {
                 foreach my $attr (@$patron_attributes) {
