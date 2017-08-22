@@ -73,6 +73,8 @@ sub new {
     my $branchcode    = $params->{'branchcode'};
     my $ccode         = $params->{'ccode'};
     my $permanent_location = $params->{'permanent_location'};
+    my $sub_location  = $params->{'sub_location'};
+    my $genre         = $params->{'genre'};
 
     my $patron     = $self->_validate_parameter($params,
                         'patron',     'Koha::Patron');
@@ -97,6 +99,12 @@ sub new {
     unless ($permanent_location) {
         $permanent_location = $item ? $item->permanent_location : undef;
     }
+    unless ($sub_location) {
+        $sub_location = $item ? $item->sub_location : undef;
+    }
+    unless ($genre) {
+        $genre = $item ? $item->genre : undef;
+    }
     if ($params->{'use_cache'}) {
         $self->{'use_cache'} = 1;
     } else {
@@ -113,7 +121,9 @@ sub new {
                                 .($rule_itemtype?$rule_itemtype:'*').'-'
                                 .($branchcode?$branchcode:'*')
                                 .($ccode?$ccode:'*').'-'
-                                .($permanent_location?$permanent_location:'*'));
+                                .($permanent_location?$permanent_location:'*').'-'
+                                .($sub_location?$sub_location:'*').'-'
+                                .($genre?$genre:'*'));
         if ($cached) {
             $rule = Koha::IssuingRule->new->set($cached);
         }
@@ -126,6 +136,8 @@ sub new {
             branchcode   => $branchcode,
             ccode        => $ccode,
             permanent_location => $permanent_location,
+            sub_location => $sub_location,
+            genre        => $genre,
         });
         if ($rule && $self->use_cache) {
             $cache->set_in_cache('issuingrule-.'
@@ -133,7 +145,9 @@ sub new {
                     .($rule_itemtype?$rule_itemtype:'*').'-'
                     .($branchcode?$branchcode:'*').'-'
                     .($ccode?$ccode:'*').'-'
-                    .($permanent_location?$permanent_location:'*'),
+                    .($permanent_location?$permanent_location:'*').'-'
+                    .($sub_location?$sub_location:'*').'-'
+                    .($genre?$genre:'*'),
                     $rule->unblessed, { expiry => 10 });
         }
     }

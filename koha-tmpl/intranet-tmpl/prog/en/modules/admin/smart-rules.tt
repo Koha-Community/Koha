@@ -275,6 +275,8 @@ $(document).ready(function() {
                 <th>Item type</th>
                 <th>Collection code</th>
                 <th>Shelving location</th>
+                <th>Sub location</th>
+                <th>Genre</th>
                 <th>Current checkouts allowed</th>
                 <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
@@ -330,6 +332,18 @@ $(document).ready(function() {
 									<em>All</em>
 								[% ELSE %]
 									[% rule.humanpermanent_location %]
+								[% END %]
+							</td>
+							<td>[% IF ( rule.default_sub_location ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humansub_location %]
+								[% END %]
+							</td>
+							<td>[% IF ( rule.default_genre ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humangenre %]
 								[% END %]
 							</td>
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
@@ -417,7 +431,7 @@ $(document).ready(function() {
 							<td>[% rule.rentaldiscount %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]&amp;ccode=[% rule.ccode %]&amp;permanent_location=[% rule.permanent_location %]"><i class="fa fa-trash"></i> Delete</a>
+                                                          <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype %]&amp;categorycode=[% rule.categorycode %]&amp;branch=[% rule.current_branch %]&amp;ccode=[% rule.ccode %]&amp;permanent_location=[% rule.permanent_location %]&amp;sub_location=[% rule.sub_location %]&amp;genre=[% rule.genre %]"><i class="fa fa-trash"></i> Delete</a>
 							</td>
                 	</tr>
             	[% END %]
@@ -451,6 +465,22 @@ $(document).ready(function() {
                             <option value="*">All</option>
                         [% FOREACH locloo IN locloop %]
                             <option value="[% locloo.authorised_value %]">[% locloo.lib %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="sub_location" id="matrixsub_location">
+                            <option value="*">All</option>
+                        [% FOREACH locloo IN locloop %]
+                            <option value="[% locloo.authorised_value %]">[% locloo.lib %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="genre" id="matrixgenre">
+                            <option value="*">All</option>
+                        [% FOREACH genreloo IN genreloop %]
+                            <option value="[% genreloo.authorised_value %]">[% genreloo.lib %]</option>
                         [% END %]
                         </select>
                     </td>
@@ -538,6 +568,8 @@ $(document).ready(function() {
                       <th>Item type</th>
                       <th>Collection code</th>
                       <th>Shelving location</th>
+                      <th>Sub location</th>
+                      <th>Genre</th>
                       <th>Current checkouts allowed</th>
                       <th>Current on-site checkouts allowed</th>
                       <th>Loan period</th>
@@ -658,6 +690,8 @@ $(document).ready(function() {
                 <th>Item type</th>
                 <th>Collection code</th>
                 <th>Shelving location</th>
+                <th>Sub location</th>
+                <th>Genre</th>
                 <th>Current checkouts allowed</th>
                 <th>Current on-site checkouts allowed</th>
                 <th>Loan period</th>
@@ -694,6 +728,8 @@ $(document).ready(function() {
                 <td id="tester_res_itemtype"></td>
                 <td id="tester_res_ccode"></td>
                 <td id="tester_res_permanent_location"></td>
+                <td id="tester_res_sub_location"></td>
+                <td id="tester_res_genre"></td>
                 <td id="tester_res_maxissueqty"></td>
                 <td id="tester_res_maxonsiteissueqty"></td>
                 <td id="tester_res_issuelength"></td>

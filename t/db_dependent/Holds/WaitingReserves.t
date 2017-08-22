@@ -142,6 +142,8 @@ $builder->build({
         itemtype =>'*',
         ccode => '*',
         permanent_location => '*',
+        sub_location => '*',
+        genre => '*',
         hold_max_pickup_delay => 6,
     }
 });

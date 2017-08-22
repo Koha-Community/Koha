@@ -45,12 +45,16 @@ sub get_effective_issuing_rule {
     my $branchcode   = $params->{branchcode};
     my $ccode        = $params->{ccode};
     my $permanent_location = $params->{permanent_location};
+    my $sub_location = $params->{sub_location};
+    my $genre        = $params->{genre};
 
     my $search_categorycode = $default;
     my $search_itemtype     = $default;
     my $search_branchcode   = $default;
     my $search_ccode        = $default;
     my $search_permanent_location = $default;
+    my $search_sub_location = $default;
+    my $search_genre        = $default;
 
     if ($categorycode) {
         $search_categorycode = { 'in' => [ $categorycode, $default ] };
@@ -67,6 +71,12 @@ sub get_effective_issuing_rule {
     if ($permanent_location) {
         $search_permanent_location = { 'in' => [ $permanent_location, $default ] };
     }
+    if ($sub_location) {
+        $search_sub_location = { 'in' => [ $sub_location, $default ] };
+    }
+    if ($genre) {
+        $search_genre = { 'in' => [ $genre, $default ] };
+    }
 
     my $rule = $self->search({
         categorycode => $search_categorycode,
@@ -74,11 +84,13 @@ sub get_effective_issuing_rule {
         branchcode   => $search_branchcode,
         ccode        => $search_ccode,
         permanent_location => $search_permanent_location,
+        sub_location => $search_sub_location,
+        genre        => $search_genre,
     }, {
         order_by => {
             -desc => [
                 'branchcode', 'categorycode', 'itemtype', 'ccode',
-                'permanent_location'
+                'permanent_location', 'sub_location', 'genre',
             ]
         },
         rows => 1,

@@ -42,7 +42,8 @@ sub get_effective {
     return try {
         my $params = $c->req->query_params->to_hash;
 
-        my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location);
+        my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location,
+            $sub_location, $genre);
         my $user      = $c->stash('koha.user');
         my $patron    = _find_patron($params);
         my $item      = _find_item($params);
@@ -51,6 +52,8 @@ sub get_effective {
         $branchcode   = _find_branchcode($params, $item, $patron, $user);
         $ccode        = _find_ccode($params, $item);
         $permanent_location = _find_permanent_location($params, $item);
+        $sub_location = _find_sub_location($params, $item);
+        $genre        = _find_genre($params, $item);
 
         my $rule = Koha::IssuingRules->get_effective_issuing_rule({
             categorycode => $categorycode,
@@ -58,6 +61,8 @@ sub get_effective {
             branchcode   => $branchcode,
             ccode        => $ccode,
             permanent_location => $permanent_location,
+            sub_location => $sub_location,
+            genre        => $genre,
         });
 
         return $c->render(status => 200, openapi => $rule);
@@ -170,6 +175,23 @@ sub _find_ccode {
     return $params->{ccode};
 }
 
+sub _find_genre {
+    my ($params, $item) = @_;
+
+    my $ccode;
+    if (defined $item && length $params->{genre}) {
+        unless ($item->genre eq $params->{genre}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's genre does not match given genre"
+            );
+        }
+    }
+
+    return $item->genre if $item;
+
+    return $params->{genre};
+}
+
 sub _find_item {
     my ($params) = @_;
 
@@ -266,6 +288,23 @@ sub _find_permanent_location {
     return $item->permanent_location if $item;
 
     return $params->{permanent_location};
+}
+
+sub _find_sub_location {
+    my ($params, $item) = @_;
+
+    my $permanent_location;
+    if (defined $item && length $params->{sub_location}) {
+        unless ($item->sub_location eq $params->{sub_location}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's sub location does not match given location"
+            );
+        }
+    }
+
+    return $item->sub_location if $item;
+
+    return $params->{sub_location};
 }
 
 1;

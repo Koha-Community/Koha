@@ -150,6 +150,8 @@ my $sampleissuingrule1 = {
     no_auto_renewal_after_hard_limit => undef,
     ccode => '*',
     permanent_location => '*',
+    sub_location => '*',
+    genre => '*',
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -187,6 +189,8 @@ my $sampleissuingrule2 = {
     article_requests   => 'yes',
     ccode => '*',
     permanent_location => '*',
+    sub_location => '*',
+    genre => '*',
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -224,6 +228,8 @@ my $sampleissuingrule3 = {
     article_requests   => 'yes',
     ccode => '*',
     permanent_location => '*',
+    sub_location => '*',
+    genre => '*',
 };
 
 $query = 'INSERT INTO issuingrules (
@@ -258,8 +264,10 @@ $query = 'INSERT INTO issuingrules (
                 cap_fine_to_replacement_price,
                 article_requests,
                 ccode,
-                permanent_location
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                permanent_location,
+                sub_location,
+                genre
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -294,6 +302,8 @@ $sth->execute(
     $sampleissuingrule1->{article_requests},
     $sampleissuingrule1->{ccode},
     $sampleissuingrule1->{permanent_location},
+    $sampleissuingrule1->{sub_location},
+    $sampleissuingrule1->{genre},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -328,6 +338,8 @@ $sth->execute(
     $sampleissuingrule2->{article_requests},
     $sampleissuingrule2->{ccode},
     $sampleissuingrule2->{permanent_location},
+    $sampleissuingrule2->{sub_location},
+    $sampleissuingrule2->{genre},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -362,6 +374,8 @@ $sth->execute(
     $sampleissuingrule3->{article_requests},
     $sampleissuingrule3->{ccode},
     $sampleissuingrule3->{permanent_location},
+    $sampleissuingrule3->{sub_location},
+    $sampleissuingrule3->{genre},
 );
 
 my $rule = Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed;

@@ -40,6 +40,8 @@ $builder->build(
             branchcode   => '*',
             ccode        => '*',
             permanent_location => '*',
+            sub_location => '*',
+            genre        => '*',
             firstremind  => 0,
             finedays     => 2,
             lengthunit   => 'days',

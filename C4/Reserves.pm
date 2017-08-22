@@ -380,7 +380,8 @@ sub CanItemBeReserved {
 
     # we retrieve rights
     if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->{'itype'},
-            $branchcode, $item->{'ccode'}, $item->{'permanent_location'} ) ) {
+            $branchcode, $item->{'ccode'}, $item->{'permanent_location'},
+            $item->{'sub_location'}, $item->{'genre'} ) ) {
         $ruleitemtype     = $rights->{itemtype};
         $allowedreserves  = $rights->{reservesallowed};
         $holds_per_record = $rights->{holds_per_record};
@@ -1445,7 +1446,8 @@ sub IsAvailableForItemLevelRequest {
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
     my $on_shelf_holds = _OnShelfHoldsAllowed($itype,$borrower->{categorycode},
-        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location});
+        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location},
+        $item->{sub_location}, $item->{genre});
 
     if ( $on_shelf_holds == 1 ) {
         return 1;
@@ -1487,7 +1489,8 @@ sub OnShelfHoldsAllowed {
 
     my $itype = _get_itype($item);
     return _OnShelfHoldsAllowed($itype,$borrower->{categorycode},
-        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location});
+        $item->{holdingbranch}, $item->{ccode}, $item->{permanent_location},
+        $item->{sub_location}, $item->{genre});
 }
 
 sub _get_itype {
@@ -1518,7 +1521,8 @@ sub _get_itype {
 }
 
 sub _OnShelfHoldsAllowed {
-    my ($itype,$borrowercategory,$branchcode,$ccode,$permanent_location) = @_;
+    my ($itype,$borrowercategory,$branchcode,$ccode,$permanent_location,
+        $sub_location,$genre) = @_;
 
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({
         categorycode => $borrowercategory,
@@ -1526,6 +1530,8 @@ sub _OnShelfHoldsAllowed {
         branchcode => $branchcode,
         ccode => $ccode,
         permanent_location => $permanent_location,
+        sub_location => $sub_location,
+        genre => $genre,
     });
     return $issuing_rule ? $issuing_rule->onshelfholds : undef;
 }
@@ -2118,6 +2124,8 @@ sub OPACItemHoldsAllowed {
         branchcode => $branchcode,
         ccode => $item->{ccode},
         permanent_location => $item->{permanent_location},
+        sub_location => $item->{sub_location},
+        genre => $item->{genre},
     });
 
     return '' unless $rule;
@@ -2483,7 +2491,8 @@ sub GetMaxPatronHoldsForRecord {
         $branchcode = $item->homebranch if ( $controlbranch eq "ItemHomeLibrary" );
 
         my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode,
-            $item->ccode, $item->permanent_location );
+            $item->ccode, $item->permanent_location, $item->sub_location,
+            $item->genre );
         my $holds_per_record = $rule ? $rule->{holds_per_record} : 0;
         $max = $holds_per_record if $holds_per_record > $max;
     }
@@ -2494,7 +2503,7 @@ sub GetMaxPatronHoldsForRecord {
 =head2 GetHoldRule
 
 my $rule = GetHoldRule( $categorycode, $itemtype, $branchcode, $ccode,
-                        $permanent_location );
+                        $permanent_location, $sub_location, $genre );
 
 Returns the matching hold related issuingrule fields for a given
 patron category, itemtype, and library.
@@ -2502,30 +2511,35 @@ patron category, itemtype, and library.
 =cut
 
 sub GetHoldRule {
-    my ( $categorycode, $itemtype, $branchcode, $ccode, $permanent_location ) = @_;
+    my ( $categorycode, $itemtype, $branchcode, $ccode, $permanent_location,
+         $sub_location, $genre ) = @_;
 
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare(
         q{
          SELECT categorycode, itemtype, branchcode, ccode, permanent_location,
-                reservesallowed, holds_per_record
+                sub_location, genre, reservesallowed, holds_per_record
            FROM issuingrules
           WHERE (categorycode in (?,'*') )
             AND (itemtype IN (?,'*'))
             AND (branchcode IN (?,'*'))
             AND (ccode IN (?,'*'))
             AND (permanent_location IN (?,'*'))
+            AND (sub_location IN (?,'*'))
+            AND (genre IN (?,'*'))
        ORDER BY categorycode DESC,
                 itemtype     DESC,
                 branchcode   DESC,
                 ccode        DESC,
-                permanent_location DESC
+                permanent_location DESC,
+                sub_location DESC,
+                genre        DESC
         }
     );
 
     $sth->execute( $categorycode, $itemtype, $branchcode, $ccode,
-                   $permanent_location );
+                   $permanent_location, $sub_location, $genre );
 
     return $sth->fetchrow_hashref();
 }

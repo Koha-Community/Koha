@@ -57,6 +57,20 @@ __PACKAGE__->table("issuingrules");
   is_nullable: 0
   size: 80
 
+=head2 sub_location
+
+  data_type: 'varchar'
+  default_value: '*'
+  is_nullable: 0
+  size: 10
+
+=head2 genre
+
+  data_type: 'varchar'
+  default_value: '*'
+  is_nullable: 0
+  size: 10
+
 =head2 restrictedtype
 
   data_type: 'tinyint'
@@ -259,6 +273,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
   "permanent_location",
   { data_type => "varchar", default_value => "*", is_nullable => 0, size => 80 },
+  "sub_location",
+  { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
+  "genre",
+  { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
   "restrictedtype",
   { data_type => "tinyint", is_nullable => 1 },
   "rentaldiscount",
@@ -365,6 +383,10 @@ __PACKAGE__->set_primary_key("issuingrules_id");
 
 =item * L</permanent_location>
 
+=item * L</sub_location>
+
+=item * L</genre>
+
 =back
 
 =cut
@@ -377,6 +399,8 @@ __PACKAGE__->add_unique_constraint(
     "itemtype",
     "ccode",
     "permanent_location",
+    "sub_location",
+    "genre",
   ],
 );
 

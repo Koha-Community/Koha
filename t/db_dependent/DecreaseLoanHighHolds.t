@@ -96,6 +96,8 @@ $builder->build(
             itemtype => '*',
             ccode => '*',
             permanent_location => '*',
+            sub_location => '*',
+            genre => '*',
             issuelength => '14',
             lengthunit => 'days',
             reservesallowed => '99',

@@ -253,7 +253,9 @@ sub CalcFine {
         itemtype => $itemtype,
         branchcode => $branchcode,
         ccode => $item->{ccode},
-        permanent_location => $item->{permanent_location}
+        permanent_location => $item->{permanent_location},
+        sub_location => $item->{sub_location},
+        genre => $item->{genre},
     });
 
     return unless $issuing_rule; # If not rule exist, there is no fine

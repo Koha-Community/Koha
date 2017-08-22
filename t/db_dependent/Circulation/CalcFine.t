@@ -72,6 +72,8 @@ subtest 'Test basic functionality' => sub {
         itemtype                      => '*',
         ccode                         => '*',
         permanent_location            => '*',
+        sub_location                  => '*',
+        genre                         => '*',
     });
     $rule->delete if $rule;
     my $issuingrule = $builder->build(
@@ -83,6 +85,8 @@ subtest 'Test basic functionality' => sub {
                 itemtype                      => '*',
                 ccode                         => '*',
                 permanent_location            => '*',
+                sub_location                  => '*',
+                genre                         => '*',
                 fine                          => '1.00',
                 lengthunit                    => 'days',
                 finedays                      => 0,
@@ -124,6 +128,8 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
                 itemtype                      => '*',
                 ccode                         => '*',
                 permanent_location            => '*',
+                sub_location                  => '*',
+                genre                         => '*',
                 fine                          => '1.00',
                 lengthunit                    => 'days',
                 finedays                      => 0,

@@ -278,12 +278,16 @@ sub article_request_type {
     my $itemtype = $self->effective_itemtype();
     my $ccode = $self->ccode;
     my $permanent_location = $self->permanent_location;
+    my $sub_location = $self->sub_location;
+    my $genre = $self->genre;
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({
         categorycode => $borrowertype,
         itemtype => $itemtype,
         branchcode => $branchcode,
         ccode => $ccode,
         permanent_location => $permanent_location,
+        sub_location => $sub_location,
+        genre => $genre,
     });
 
     return q{} unless $issuing_rule;

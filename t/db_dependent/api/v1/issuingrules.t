@@ -338,6 +338,8 @@ sub create_issuing_rule {
     $params->{branchcode} ||= '*';
     $params->{ccode} ||= '*';
     $params->{permanent_location} ||= '*';
+    $params->{sub_location} ||= '*';
+    $params->{genre} ||= '*';
 
     my $rule = $builder->build({
         source => 'Issuingrule',

@@ -263,6 +263,8 @@ sub expanded {
                 branchcode   => $branchcode,
                 ccode        => $item->ccode,
                 permanent_location => $item->permanent_location,
+                sub_location => $item->sub_location,
+                genre        => $item->genre,
             }
         );
         $checkout->{'max_renewals'} = $issuing_rule
