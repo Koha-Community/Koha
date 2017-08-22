@@ -129,7 +129,7 @@ for my $bookseller ( @booksellers ) {
 
 $sample_supplier1->{id} = $id_supplier1;
 is( scalar(@booksellers), $count + 2, "Get  Supplier1 and Supplier2" );
-my @tab = ( $sample_supplier1, $sample_supplier2 );
+my @tab = ( $sample_supplier2, $sample_supplier1 );
 is_deeply( \@booksellers, \@tab,
     "Returns right fields of Supplier1 and Supplier2" );
 
