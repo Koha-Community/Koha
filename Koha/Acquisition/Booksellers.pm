@@ -23,11 +23,11 @@ use base qw( Koha::Objects );
 
 =head1 NAME
 
-Koha::Acquisition::Booksellers Object set class
+Koha::Acquisition::Booksellers object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Internal methods
 
 =head3 _type (internal)
 
