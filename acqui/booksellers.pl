@@ -85,7 +85,9 @@ my @suppliers;
 if ($booksellerid) {
     push @suppliers, scalar Koha::Acquisition::Booksellers->find( $booksellerid );
 } else {
-    @suppliers = Koha::Acquisition::Booksellers->search({ name => $supplier });
+    @suppliers = Koha::Acquisition::Booksellers->search(
+                        { name => { -like => "%$supplier%" } },
+                        { order_by => { -asc => 'name' } } );
 }
 
 my $supplier_count = @suppliers;
