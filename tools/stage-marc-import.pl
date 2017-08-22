@@ -57,7 +57,7 @@ my $item_action                = $input->param('item_action');
 my $comments                   = $input->param('comments');
 my $record_type                = $input->param('record_type');
 my $encoding                   = $input->param('encoding') || 'UTF-8';
-my $format                     = $input->param('format') || 'MARC';
+my $format                     = $input->param('format') || 'ISO2709';
 my $marc_modification_template = $input->param('marc_modification_template_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -91,7 +91,7 @@ if ($completedJobID) {
     my ( $errors, $marcrecords );
     if( $format eq 'MARCXML' ) {
         ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromMARCXMLFile( $file, $encoding);
-    } elsif( $format eq 'MARC' ) {
+    } elsif( $format eq 'ISO2709' ) {
         ( $errors, $marcrecords ) = C4::ImportBatch::RecordsFromISO2709File( $file, $record_type, $encoding );
     } else { # plugin based
         $errors = [];
