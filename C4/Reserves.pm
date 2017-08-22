@@ -812,7 +812,11 @@ sub CheckReserves {
         my $priority = 10000000;
         foreach my $res (@reserves) {
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
-                return ( "Waiting", $res, \@reserves ); # Found it
+                if ($res->{'found'} eq 'W') {
+                    return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
+                } else {
+                    return ( "Reserved", $res, \@reserves ); # Found determinated hold, e. g. the tranferred one
+                }
             } else {
                 my $borrowerinfo;
                 my $iteminfo;
