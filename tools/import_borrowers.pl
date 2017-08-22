@@ -137,6 +137,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     my $overwritten = $return->{overwritten};
     my $alreadyindb = $return->{already_in_db};
     my $invalid     = $return->{invalid};
+    my $imported_borrowers = $return->{imported_borrowers};
+
+    if ( $imported && $createpatronlist ) {
+        my $patronlist = AddPatronList({ name => $patronlistname });
+        AddPatronsToList({ list => $patronlist, borrowernumbers => $imported_borrowers });
+        $template->param('patronlistname' => $patronlistname);
+    }
 
     my $uploadinfo = $input->uploadInfo($uploadborrowers);
     foreach ( keys %$uploadinfo ) {

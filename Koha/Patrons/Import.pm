@@ -82,6 +82,7 @@ sub import_patrons {
     my $alreadyindb = 0;
     my $overwritten = 0;
     my $invalid     = 0;
+    my @imported_borrowers;
     my $matchpoint_attr_type = $self->set_attribute_types({ extended => $extended, matchpoint => $matchpoint, });
 
     # Use header line to construct key to column map
@@ -320,6 +321,7 @@ sub import_patrons {
                 }
 
                 $imported++;
+                push @imported_borrowers, $borrowernumber; #for patronlist
                 push(
                     @feedback,
                     {
@@ -350,6 +352,7 @@ sub import_patrons {
         overwritten   => $overwritten,
         already_in_db => $alreadyindb,
         invalid       => $invalid,
+        imported_borrowers => \@imported_borrowers,
     };
 }
 
