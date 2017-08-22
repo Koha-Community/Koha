@@ -110,7 +110,10 @@ if ( $op eq 'add_form' ) {
         $template->param(contractloop => \@contractloop,
                          basketcontractnumber => $basket->{'contractnumber'});
     }
-    my @booksellers = Koha::Acquisition::Booksellers->search;
+    my @booksellers = Koha::Acquisition::Booksellers->search(
+                        undef,
+                        { order_by => { -asc => 'name' } } );
+
     $template->param( add_form => 1,
                     basketname => $basket->{'basketname'},
                     basketnote => $basket->{'note'},

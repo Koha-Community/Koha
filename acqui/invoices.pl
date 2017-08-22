@@ -90,7 +90,7 @@ if ( $op and $op eq 'do_search' ) {
 }
 
 # Build suppliers list
-my @suppliers      = Koha::Acquisition::Booksellers->search;
+my @suppliers      = Koha::Acquisition::Booksellers->search( undef, { order_by => { -asc => 'name' } } );
 my $suppliers_loop = [];
 my $suppliername;
 foreach (@suppliers) {
