@@ -48,7 +48,8 @@ my $borrowernumber = $query->param('borrowernumber');
 
 my $branch = C4::Context->userenv->{'branch'};
 
-my $patron = Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
+my $patron;
+$patron = Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
 unless ( $patron ) {
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
