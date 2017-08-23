@@ -256,6 +256,8 @@ sub CalcFine {
         permanent_location => $item->{permanent_location},
         sub_location => $item->{sub_location},
         genre => $item->{genre},
+        circulation_level => $item->{circulation_level},
+        reserve_level => $item->{reserve_level},
     });
 
     return unless $issuing_rule; # If not rule exist, there is no fine

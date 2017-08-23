@@ -271,6 +271,8 @@ $(document).ready(function() {
             <table id="default-circulation-rules">
             <thead>
             <tr>
+                <th>Circulation level</th>
+                <th>Hold level</th>
                 <th>Patron category</th>
                 <th>Item type</th>
                 <th>Collection code</th>
@@ -310,6 +312,18 @@ $(document).ready(function() {
             <tbody>
 				[% FOREACH rule IN rules %]
 					<tr id="row_[% loop.count %]">
+							<td>[% IF ( rule.default_circulation_level ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humancirculation_level %]
+								[% END %]
+							</td>
+							<td>[% IF ( rule.default_reserve_level ) %]
+									<em>All</em>
+								[% ELSE %]
+									[% rule.humanreserve_level %]
+								[% END %]
+							</td>
 							<td>[% IF ( rule.default_humancategorycode ) %]
 									<em>All</em>
 								[% ELSE %]
@@ -436,6 +450,22 @@ $(document).ready(function() {
                 	</tr>
             	[% END %]
                 <tr id="edit_row">
+                    <td>
+                        <select name="circulation_level" id="matrixcirculation_level">
+                            <option value="*">All</option>
+                        [% FOREACH circlevelloo IN circlevelloop %]
+                            <option value="[% circlevelloo.authorised_value %]">[% circlevelloo.lib %]</option>
+                        [% END %]
+                        </select>
+                    </td>
+                    <td>
+                        <select name="reserve_level" id="matrixreserve_level">
+                            <option value="*">All</option>
+                        [% FOREACH reservelevelloo IN reservelevelloop %]
+                            <option value="[% reservelevelloo.authorised_value %]">[% reservelevelloo.lib %]</option>
+                        [% END %]
+                        </select>
+                    </td>
                     <td>
                         <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
@@ -564,6 +594,8 @@ $(document).ready(function() {
                 </tr>
                 <tfoot>
                     <tr>
+                      <th>Circulation level</th>
+                      <th>Hold level</th>
                       <th>Patron category</th>
                       <th>Item type</th>
                       <th>Collection code</th>
@@ -686,6 +718,8 @@ $(document).ready(function() {
             <thead>
             <tr>
                 <th>Library</th>
+                <th>Circulation level</th>
+                <th>Hold level</th>
                 <th>Patron category</th>
                 <th>Item type</th>
                 <th>Collection code</th>
@@ -730,6 +764,8 @@ $(document).ready(function() {
                 <td id="tester_res_permanent_location"></td>
                 <td id="tester_res_sub_location"></td>
                 <td id="tester_res_genre"></td>
+                <td id="tester_res_circulation_level"></td>
+                <td id="tester_res_reserve_level"></td>
                 <td id="tester_res_maxissueqty"></td>
                 <td id="tester_res_maxonsiteissueqty"></td>
                 <td id="tester_res_issuelength"></td>

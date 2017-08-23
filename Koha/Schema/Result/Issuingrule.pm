@@ -71,6 +71,20 @@ __PACKAGE__->table("issuingrules");
   is_nullable: 0
   size: 10
 
+=head2 circulation_level
+
+  data_type: 'varchar'
+  default_value: '*'
+  is_nullable: 0
+  size: 10
+
+=head2 reserve_level
+
+  data_type: 'varchar'
+  default_value: '*'
+  is_nullable: 0
+  size: 10
+
 =head2 restrictedtype
 
   data_type: 'tinyint'
@@ -277,6 +291,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
   "genre",
   { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
+  "circulation_level",
+  { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
+  "reserve_level",
+  { data_type => "varchar", default_value => "*", is_nullable => 0, size => 10 },
   "restrictedtype",
   { data_type => "tinyint", is_nullable => 1 },
   "rentaldiscount",
@@ -401,6 +419,8 @@ __PACKAGE__->add_unique_constraint(
     "permanent_location",
     "sub_location",
     "genre",
+    "circulation_level",
+    "reserve_level",
   ],
 );
 

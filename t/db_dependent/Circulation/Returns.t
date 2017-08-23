@@ -57,6 +57,8 @@ my $rule = Koha::IssuingRule->new(
         permanent_location => '*',
         sub_location => '*',
         genre        => '*',
+        circulation_level => '*',
+        reserve_level => '*',
         maxissueqty  => 99,
         issuelength  => 1,
     }

@@ -745,6 +745,8 @@ CREATE TABLE `deleteditems` (
   `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
   `genre` varchar(10) default NULL, -- GENRE (MARC21 952$G)
   `sub_location` varchar(10) default NULL, -- SUBLOC (MARC21 952$S)
+  `circulation_level` varchar(10) default NULL, -- authorized value defining circulation level for this item
+  `reserve_level` varchar(10) default NULL, -- authorized value defining reserve level for this item
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitemstocknumberidx` (`stocknumber`),
@@ -913,6 +915,8 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `permanent_location` varchar(80) NOT NULL default '*', -- item permanent location
   `sub_location` varchar(10) NOT NULL default '*', -- item sub location
   `genre` varchar(10) NOT NULL default '*', -- item genre
+  `circulation_level` varchar(10) NOT NULL default '*', -- item circulation level this rule is for (items.circulation_level)
+  `reserve_level` varchar(10) NOT NULL default '*', -- item reserve level this rule is for (items.reserve_level)
   `restrictedtype` tinyint(1) default NULL, -- not used? always NULL
   `rentaldiscount` decimal(28,6) default NULL, -- percent discount on the rental charge for this item
   `reservecharge` decimal(28,6) default NULL,
@@ -1020,6 +1024,8 @@ CREATE TABLE `items` ( -- holdings/item information
   `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
   `genre` varchar(10) default NULL, -- GENRE (MARC21 952$G)
   `sub_location` varchar(10) default NULL, -- SUBLOC (MARC21 952$S)
+  `circulation_level` varchar(10) default NULL, -- authorized value defining circulation level for this item
+  `reserve_level` varchar(10) default NULL, -- authorized value defining reserve level for this item
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itemstocknumberidx` (`stocknumber`),

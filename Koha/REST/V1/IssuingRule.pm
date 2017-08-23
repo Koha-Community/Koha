@@ -43,7 +43,7 @@ sub get_effective {
         my $params = $c->req->query_params->to_hash;
 
         my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location,
-            $sub_location, $genre);
+            $sub_location, $genre, $circulation_level, $reserve_level);
         my $user      = $c->stash('koha.user');
         my $patron    = _find_patron($params);
         my $item      = _find_item($params);
@@ -54,6 +54,8 @@ sub get_effective {
         $permanent_location = _find_permanent_location($params, $item);
         $sub_location = _find_sub_location($params, $item);
         $genre        = _find_genre($params, $item);
+        $circulation_level = _find_circulation_level($params, $item);
+        $reserve_level = _find_reserve_level($params, $item);
 
         my $rule = Koha::IssuingRules->get_effective_issuing_rule({
             categorycode => $categorycode,
@@ -63,6 +65,8 @@ sub get_effective {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         });
 
         return $c->render(status => 200, openapi => $rule);
@@ -156,6 +160,22 @@ sub _find_categorycode {
     }
 
     return $categorycode;
+}
+
+sub _find_circulation_level {
+    my ($params, $item) = @_;
+
+    if (defined $item && length $params->{circulation_level}) {
+        unless ($item->circulation_level eq $params->{circulation_level}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's circulation level does not match given level"
+            );
+        }
+    }
+
+    return $item->circulation_level if $item;
+
+    return $params->{circulation_level};
 }
 
 sub _find_ccode {
@@ -288,6 +308,22 @@ sub _find_permanent_location {
     return $item->permanent_location if $item;
 
     return $params->{permanent_location};
+}
+
+sub _find_reserve_level {
+    my ($params, $item) = @_;
+
+    if (defined $item && length $params->{reserve_level}) {
+        unless ($item->reserve_level eq $params->{reserve_level}) {
+            Koha::Exceptions::BadParameter->throw(
+                error => "Item's reserve level does not match given level"
+            );
+        }
+    }
+
+    return $item->reserve_level if $item;
+
+    return $params->{reserve_level};
 }
 
 sub _find_sub_location {

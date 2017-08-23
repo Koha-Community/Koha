@@ -414,6 +414,8 @@ sub TooMany {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
 
@@ -443,6 +445,8 @@ sub TooMany {
                                     AND   permanent_location = ?
                                     AND   sub_location = ?
                                     AND   genre = ?
+                                    AND   circulation_level = ?
+                                    AND   reserve_level = ?
                                     AND   itemtype <> '*'
                                   ) ";
             } else {
@@ -455,6 +459,8 @@ sub TooMany {
                                     AND   permanent_location = ?
                                     AND   sub_location = ?
                                     AND   genre = ?
+                                    AND   circulation_level = ?
+                                    AND   reserve_level = ?
                                     AND   itemtype <> '*'
                                   ) ";
             }
@@ -464,6 +470,8 @@ sub TooMany {
             push @bind_params, $issuing_rule->permanent_location;
             push @bind_params, $issuing_rule->sub_location;
             push @bind_params, $issuing_rule->genre;
+            push @bind_params, $issuing_rule->circulation_level;
+            push @bind_params, $issuing_rule->reserve_level;
             push @bind_params, $cat_borrower;
         } else {
             # rule has specific item type, so count loans of that
@@ -1387,6 +1395,8 @@ sub AddIssue {
                         permanent_location => $item->{permanent_location},
                         sub_location => $item->{sub_location},
                         genre        => $item->{genre},
+                        circulation_level => $item->{circulation_level},
+                        reserve_level => $item->{reserve_level},
                     }
                 );
 
@@ -1532,7 +1542,7 @@ sub AddIssue {
 
   my $loanlength = &GetLoanLength( $borrowertype,$itemtype,branchcode,
                                    $ccode,$permanent_location,$sub_location,
-                                   $genre )
+                                   $genre,$circulation_level,$reserve_level )
 
 Get loan length for an itemtype, a borrower type and a branch
 
@@ -1540,7 +1550,8 @@ Get loan length for an itemtype, a borrower type and a branch
 
 sub GetLoanLength {
     my ( $borrowertype, $itemtype, $branchcode,
-        $ccode, $permanent_location, $sub_location, $genre ) = @_;
+        $ccode, $permanent_location, $sub_location, $genre,
+        $circulation_level, $reserve_level ) = @_;
 
     my $rule = Koha::IssuingRules->get_effective_issuing_rule({
         categorycode => $borrowertype,
@@ -1550,6 +1561,8 @@ sub GetLoanLength {
         permanent_location => $permanent_location,
         sub_location => $sub_location,
         genre => $genre,
+        circulation_level => $circulation_level,
+        reserve_level => $reserve_level,
     });
     return {
         issuelength => $rule->issuelength,
@@ -1571,7 +1584,7 @@ sub GetLoanLength {
 
   my ($hardduedate,$hardduedatecompare) = &GetHardDueDate(
     $borrowertype,$itemtype,branchcode,$ccode,$permanent_location,$sub_location,
-    $genre
+    $genre,$circulation_level,$reserve_level
   )
 
 Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a branch
@@ -1580,7 +1593,8 @@ Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a
 
 sub GetHardDueDate {
     my ( $borrowertype, $itemtype, $branchcode, $ccode,
-         $permanent_location, $sub_location, $genre ) = @_;
+         $permanent_location, $sub_location, $genre,
+         $circulation_level, $reserve_level ) = @_;
 
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrowertype,
@@ -1590,6 +1604,8 @@ sub GetHardDueDate {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         }
     );
 
@@ -2302,6 +2318,8 @@ sub _debar_user_on_return {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
     my $finedays = $issuing_rule ? $issuing_rule->finedays : undef;
@@ -2829,6 +2847,8 @@ sub CanBookBeRenewed {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
 
@@ -3103,6 +3123,8 @@ sub GetRenewCount {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
 
@@ -3152,6 +3174,8 @@ sub GetSoonestRenewDate {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
 
@@ -3216,6 +3240,8 @@ sub GetLatestAutoRenewDate {
             permanent_location => $item->{permanent_location},
             sub_location => $item->{sub_location},
             genre        => $item->{genre},
+            circulation_level => $item->{circulation_level},
+            reserve_level => $item->{reserve_level},
         }
     );
 
@@ -3269,7 +3295,8 @@ sub GetIssuingCharges {
 
     # Get the book's item type and rental charge (via its biblioitem).
     my $charge_query = 'SELECT itemtypes.itemtype,rentalcharge,ccode,permanent_location,
-                                sub_location,genre FROM items
+                                sub_location,genre,circulation_level,reserve_level
+                        FROM items
         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber';
     $charge_query .= (C4::Context->preference('item-level_itypes'))
         ? ' LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype'
@@ -3293,11 +3320,14 @@ sub GetIssuingCharges {
             AND (issuingrules.ccode = ? OR issuingrules.ccode = '*')
             AND (issuingrules.permanent_location = ? OR issuingrules.permanent_location = '*')
             AND (issuingrules.sub_location = ? OR issuingrules.sub_location = '*')
-            AND (issuingrules.genre = ? OR issuingrules.genre = '*')|;
+            AND (issuingrules.genre = ? OR issuingrules.genre = '*')
+            AND (issuingrules.circulation_level = ? OR issuingrules.circulation_level = '*')
+            AND (issuingrules.reserve_level = ? OR issuingrules.reserve_level = '*')|;
         my $discount_sth = $dbh->prepare($discount_query);
         $discount_sth->execute( $borrowernumber, $item_type, $branch,
             $item_data->{ccode}, $item_data->{permanent_location},
             $item_data->{sub_location}, $item_data->{genre},
+            $item_data->{circulation_level}, $item_data->{reserve_level}
         );
         my $discount_rules = $discount_sth->fetchall_arrayref({});
         if (@{$discount_rules}) {
@@ -3604,23 +3634,30 @@ sub CalcDateDue {
     my $permanent_location;
     my $sub_location;
     my $genre;
+    my $circulation_level;
+    my $reserve_level;
     if (ref($item) eq 'Koha::Item') {
         $ccode = $item->ccode;
         $permanent_location = $item->permanent_location;
         $sub_location = $item->sub_location;
         $genre = $item->genre;
+        $circulation_level = $item->circulation_level;
+        $reserve_level = $item->reserve_level;
     }
     elsif (ref($item) eq 'HASH') {
         $ccode = $item->{ccode};
         $permanent_location = $item->{permanent_location};
         $sub_location = $item->{sub_location};
         $genre = $item->{genre};
+        $circulation_level = $item->{circulation_level};
+        $reserve_level = $item->{reserve_level};
     }
 
     # loanlength now a href
     my $loanlength =
             GetLoanLength( $borrower->{'categorycode'}, $itemtype, $branch,
-                           $ccode, $permanent_location, $sub_location, $genre );
+                           $ccode, $permanent_location, $sub_location, $genre,
+                           $circulation_level, $reserve_level );
 
     my $length_key = ( $isrenewal and defined $loanlength->{renewalperiod} )
             ? qq{renewalperiod}
@@ -3669,7 +3706,8 @@ sub CalcDateDue {
     # if Hard Due Dates are used, retrieve them and apply as necessary
     my ( $hardduedate, $hardduedatecompare ) =
       GetHardDueDate( $borrower->{'categorycode'}, $itemtype, $branch, $ccode,
-        $permanent_location, $sub_location, $genre );
+        $permanent_location, $sub_location, $genre, $circulation_level,
+        $reserve_level );
     if ($hardduedate) {    # hardduedates are currently dates
         $hardduedate->truncate( to => 'minute' );
         $hardduedate->set_hour(23);

@@ -98,6 +98,8 @@ $builder->build(
             permanent_location => '*',
             sub_location => '*',
             genre => '*',
+            circulation_level => '*',
+            reserve_level => '*',
             issuelength => '14',
             lengthunit => 'days',
             reservesallowed => '99',

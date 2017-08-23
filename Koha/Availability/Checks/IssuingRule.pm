@@ -75,6 +75,8 @@ sub new {
     my $permanent_location = $params->{'permanent_location'};
     my $sub_location  = $params->{'sub_location'};
     my $genre         = $params->{'genre'};
+    my $circulation_level = $params->{'circulation_level'};
+    my $reserve_level = $params->{'reserve_level'};
 
     my $patron     = $self->_validate_parameter($params,
                         'patron',     'Koha::Patron');
@@ -105,6 +107,13 @@ sub new {
     unless ($genre) {
         $genre = $item ? $item->genre : undef;
     }
+    unless ($circulation_level) {
+        $circulation_level = $item ? $item->circulation_level : undef;
+    }
+    unless ($reserve_level) {
+        $reserve_level = $item ? $item->reserve_level : undef;
+    }
+
     if ($params->{'use_cache'}) {
         $self->{'use_cache'} = 1;
     } else {
@@ -123,7 +132,9 @@ sub new {
                                 .($ccode?$ccode:'*').'-'
                                 .($permanent_location?$permanent_location:'*').'-'
                                 .($sub_location?$sub_location:'*').'-'
-                                .($genre?$genre:'*'));
+                                .($genre?$genre:'*').'-'
+                                .($circulation_level?$circulation_level:'*').'-'
+                                .($reserve_level?$reserve_level:'*'));
         if ($cached) {
             $rule = Koha::IssuingRule->new->set($cached);
         }
@@ -138,6 +149,8 @@ sub new {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         });
         if ($rule && $self->use_cache) {
             $cache->set_in_cache('issuingrule-.'
@@ -147,7 +160,9 @@ sub new {
                     .($ccode?$ccode:'*').'-'
                     .($permanent_location?$permanent_location:'*').'-'
                     .($sub_location?$sub_location:'*').'-'
-                    .($genre?$genre:'*'),
+                    .($genre?$genre:'*').'-'
+                    .($circulation_level?$circulation_level:'*').'-'
+                    .($reserve_level?$reserve_level:'*'),
                     $rule->unblessed, { expiry => 10 });
         }
     }

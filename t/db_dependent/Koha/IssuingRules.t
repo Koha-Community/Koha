@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 my $builder      = t::lib::TestBuilder->new;
 
 my ($categorycode, $itemtype, $branchcode, $ccode, $permanent_location,
-    $sub_location, $genre);
+    $sub_location, $genre, $circulation_level, $reserve_level);
 
 subtest 'get_effective_issuing_rule' => sub {
     plan tests => 3;
@@ -48,6 +48,8 @@ subtest 'get_effective_issuing_rule' => sub {
     $permanent_location = $item->{'permanent_location'};
     $sub_location = $item->{'sub_location'};
     $genre        = $item->{'genre'};
+    $circulation_level = $item->{'circulation_level'};
+    $reserve_level = $item->{'reserve_level'};
 
     subtest 'Call with undefined values' => sub {
         plan tests => 4;
@@ -64,6 +66,8 @@ subtest 'get_effective_issuing_rule' => sub {
             permanent_location => undef,
             sub_location => undef,
             genre        => undef,
+            circulation_level => undef,
+            reserve_level => undef,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule by'
            .' providing undefined values, then undef is returned.');
@@ -75,6 +79,8 @@ subtest 'get_effective_issuing_rule' => sub {
             permanent_location => '*',
             sub_location => '*',
             genre => '*',
+            circulation_level => '*',
+            reserve_level => '*',
         };
         ok(Koha::IssuingRule->new($new_rule)->store, 'Given I added an issuing '
            .' rule branchcode => *, categorycode => *, itemtype => *,');
@@ -86,6 +92,8 @@ subtest 'get_effective_issuing_rule' => sub {
             permanent_location => undef,
             sub_location => undef,
             genre => undef,
+            circulation_level => undef,
+            reserve_level => undef,
         });
         ok(_row_match($rule, $new_rule), 'When I attempt to get effective'
            .' issuing rule by providing undefined values, then the above one is'
@@ -93,7 +101,7 @@ subtest 'get_effective_issuing_rule' => sub {
     };
 
     subtest 'Get effective issuing rule in correct order' => sub {
-        plan tests => 258;
+        plan tests => 1026;
 
         my $rule;
         Koha::IssuingRules->delete;
@@ -106,6 +114,8 @@ subtest 'get_effective_issuing_rule' => sub {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule, then undef'
                         .' is returned.');
@@ -118,6 +128,8 @@ subtest 'get_effective_issuing_rule' => sub {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         });
     };
 
@@ -177,16 +189,19 @@ sub test_effective_issuing_rules {
     my $default = '*';
 
     my $tmp_params = { %$params };
-    my @combinations = glob "{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}";
+    my @combinations = glob "{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}{0,1}";
     foreach my $combination (@combinations) {
         my @vals = split //, $combination;
         $tmp_params->{branchcode} = $vals[0] ? $params->{branchcode} : '*';
-        $tmp_params->{categorycode} = $vals[1] ? $params->{categorycode} : '*';
-        $tmp_params->{itemtype} = $vals[2] ? $params->{itemtype} : '*';
-        $tmp_params->{ccode} = $vals[3] ? $params->{ccode} : '*';
-        $tmp_params->{permanent_location} = $vals[4] ? $params->{permanent_location} : '*';
-        $tmp_params->{sub_location} = $vals[5] ? $params->{sub_location} : '*';
-        $tmp_params->{genre} = $vals[6] ? $params->{genre} : '*';
+        $tmp_params->{circulation_level} = $vals[1] ? $params->{circulation_level} : '*';
+        $tmp_params->{reserve_level} = $vals[2] ? $params->{reserve_level} : '*';
+        $tmp_params->{categorycode} = $vals[3] ? $params->{categorycode} : '*';
+        $tmp_params->{itemtype} = $vals[4] ? $params->{itemtype} : '*';
+        $tmp_params->{ccode} = $vals[5] ? $params->{ccode} : '*';
+        $tmp_params->{permanent_location} = $vals[6] ? $params->{permanent_location} : '*';
+        $tmp_params->{sub_location} = $vals[7] ? $params->{sub_location} : '*';
+        $tmp_params->{genre} = $vals[8] ? $params->{genre} : '*';
+
         _test_rule($tmp_params);
     }
 }
@@ -201,7 +216,9 @@ sub _row_match {
             && $result_rule->ccode eq $rule->{ccode}
             && $result_rule->permanent_location eq $rule->{permanent_location}
             && $result_rule->sub_location eq $rule->{sub_location}
-            && $result_rule->genre eq $rule->{genre};
+            && $result_rule->genre eq $rule->{genre}
+            && $result_rule->circulation_level eq $rule->{circulation_level}
+            && $result_rule->reserve_level eq $rule->{reserve_level};
 }
 
 sub _test_rule {
@@ -225,6 +242,8 @@ sub _test_rule {
             permanent_location => $permanent_location,
             sub_location => $sub_location,
             genre        => $genre,
+            circulation_level => $circulation_level,
+            reserve_level => $reserve_level,
         });
     ok(_row_match($result_rule, $rule), 'When I attempt to get effective '
        .'issuing rule, then the above one is returned.');

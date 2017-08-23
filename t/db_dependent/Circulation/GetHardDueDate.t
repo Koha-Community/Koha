@@ -152,6 +152,8 @@ my $sampleissuingrule1 = {
     permanent_location => '*',
     sub_location => '*',
     genre => '*',
+    circulation_level => '*',
+    reserve_level => '*',
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -191,6 +193,8 @@ my $sampleissuingrule2 = {
     permanent_location => '*',
     sub_location => '*',
     genre => '*',
+    circulation_level => '*',
+    reserve_level => '*',
 };
 my $sampleissuingrule3 = {
     branchcode         => $samplebranch1->{branchcode},
@@ -230,6 +234,8 @@ my $sampleissuingrule3 = {
     permanent_location => '*',
     sub_location => '*',
     genre => '*',
+    circulation_level => '*',
+    reserve_level => '*',
 };
 
 $query = 'INSERT INTO issuingrules (
@@ -266,8 +272,10 @@ $query = 'INSERT INTO issuingrules (
                 ccode,
                 permanent_location,
                 sub_location,
-                genre
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                genre,
+                circulation_level,
+                reserve_level
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -304,6 +312,8 @@ $sth->execute(
     $sampleissuingrule1->{permanent_location},
     $sampleissuingrule1->{sub_location},
     $sampleissuingrule1->{genre},
+    $sampleissuingrule1->{circulation_level},
+    $sampleissuingrule1->{reserve_level},
 );
 $sth->execute(
     $sampleissuingrule2->{branchcode},
@@ -340,6 +350,8 @@ $sth->execute(
     $sampleissuingrule2->{permanent_location},
     $sampleissuingrule2->{sub_location},
     $sampleissuingrule2->{genre},
+    $sampleissuingrule2->{circulation_level},
+    $sampleissuingrule2->{reserve_level},
 );
 $sth->execute(
     $sampleissuingrule3->{branchcode},
@@ -376,6 +388,8 @@ $sth->execute(
     $sampleissuingrule3->{permanent_location},
     $sampleissuingrule3->{sub_location},
     $sampleissuingrule3->{genre},
+    $sampleissuingrule3->{circulation_level},
+    $sampleissuingrule3->{reserve_level},
 );
 
 my $rule = Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed;
