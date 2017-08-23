@@ -122,13 +122,19 @@ if(defined $localcust) { #local customize module
 if($marc_mod_template ne '') {
     my @templates = GetModificationTemplates();
     foreach my $this_template (@templates) {
-    if($this_template->{'name'} eq $marc_mod_template) {
-        $marc_mod_template_id = $this_template->{'template_id'};
-        last;
-    }
+	if($this_template->{'name'} eq $marc_mod_template) {
+	    if($marc_mod_template_id < 0) {
+		$marc_mod_template_id = $this_template->{'template_id'};
+	    } else {
+		print "WARNING: MARC modification template name " .
+		    "'$marc_mod_template' matches multiple templates. " .
+		    "Please rename these templates\n";
+		exit 1;
+	    }
+	}
     }
     if($marc_mod_template_id < 0) {
-    die "Can't located MARC modification template '$marc_mod_template'\n";
+	die "Can't located MARC modification template '$marc_mod_template'\n";
     }
 }
 
