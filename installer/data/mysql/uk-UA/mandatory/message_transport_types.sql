@@ -1,4 +1,4 @@
-TRUNCATE message_transport_types;
+-- TRUNCATE message_transport_types;
 
 INSERT INTO message_transport_types
 (message_transport_type)

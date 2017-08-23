@@ -1,91 +1,165 @@
-INSERT INTO `letter` (module, code, name, title, content)
-VALUES ('circulation','ODUE','Overdue Notice','Item Overdue','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nAccording to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nPhone: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nIf you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.\n\nThe following item(s) is/are currently overdue:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>\n\nThank-you for your prompt attention to this matter.\n\n<<branches.branchname>> Staff\n'),
-('claimacquisition','ACQCLAIM','Acquisition Claim','Item Not Received','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received.</order>'),
-('orderacquisition','ACQORDER','Acquisition order','Order','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\nPlease order for the library:\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (quantity: <<aqorders.quantity>>) ($<<aqorders.listprice>> each).</order>\r\n\r\nThank you,\n\n<<branches.branchname>>', 'email'),
-('serial','RLIST','Routing List','Serial is now available','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following issue is now available:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nPlease pick it up at your convenience.'),
-('members','ACCTDETAILS','Account Details Template - DEFAULT','Your new Koha account details.','Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nYour new Koha account details are:\r\n\r\nUser:  <<borrowers.userid>>\r\nPassword: <<borrowers.password>>\r\n\r\nIf you have any problems or questions regarding your account, please contact your Koha Administrator.\r\n\r\nThank you,\r\nKoha Administrator\r\nkohaadmin@yoursite.org'),
-('circulation','DUE','Item Due Reminder','Item Due Reminder','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item is now due:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'),
-('circulation','DUEDGST','Item Due Reminder (Digest)','Item Due Reminder','You have <<count>> items due'),
-('circulation','PREDUE','Advance Notice of Item Due','Advance Notice of Item Due','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item will be due soon:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'),
-('circulation','PREDUEDGST','Advance Notice of Item Due (Digest)','Advance Notice of Item Due','You have <<count>> items due soon'),
-('reserves', 'HOLD', 'Hold Available for Pickup', 'Hold Available for Pickup at <<branches.branchname>>', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>'),
-('circulation','CHECKIN','Item Check-in (Digest)','Check-ins','The following items have been checked in:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you.'),
-('circulation','CHECKOUT','Item Check-out (Digest)','Checkouts','The following items have been checked out:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.'),
-('reserves', 'HOLDPLACED', 'Hold Placed on Item', 'Hold Placed on Item','A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).'),
-('suggestions','ACCEPTED','Suggestion accepted', 'Purchase suggestion accepted','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your suggestion today. The item will be ordered as soon as possible. You will be notified by mail when the order is completed, and again when the item arrives at the library.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','AVAILABLE','Suggestion available', 'Suggested purchase available','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested is now part of the collection.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','ORDERED','Suggestion ordered', 'Suggested item ordered','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested has now been ordered. It should arrive soon, at which time it will be processed for addition into the collection.\n\nYou will be notified again when the book is available.\n\nIf you have any questions, please email us at <<branches.branchemail>>\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','REJECTED','Suggestion rejected', 'Purchase suggestion declined','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your request today, and has decided not to accept the suggestion at this time.\n\nThe reason given is: <<suggestions.reason>>\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('suggestions','TO_PROCESS','Notify fund owner', 'A suggestion is ready to be processed','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nA new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.author>>.\n\nThank you,\n\n<<branches.branchname>>'),
-('members', 'DISCHARGE', 'Discharge', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Discharge</h1>\r\n\r\nThe library <<borrowers.branchcode>> certifies that the following borrower :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Cardnumber : <<borrowers.cardnumber>>\r\n\r\nreturned all his documents.');
+-- Sample Notices.
 
-INSERT INTO `letter` (module, code, name, title, content, is_html)
-VALUES ('circulation','ISSUESLIP','Issue Slip','Issue Slip', '<h3><<branches.branchname>></h3>
-Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
-(<<borrowers.cardnumber>>) <br />
+INSERT INTO `letter` (module, code, name, title, content, message_transport_type) VALUES
 
+('circulation','ODUE','повідомлення про прострочення', 'Одиниця прострочена',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Згідно нашим поточним записам, у Вас є прострочені примірники. Наша бібліотека не стягує штрафи за запізнення, але, будь ласка, поверніть и продовжіть їх як можна швидше.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>>\n<<branches.branchaddress3>>\n Телефон: <<branches.branchphone>>\n Факс: <<branches.branchfax>>\n Електронічна пошта: <<branches.branchemail>>\n\nЯкщо Ви зареєстрували пароль у бібліотеці і маєте доступні продовження, то можете продовжити онлайн. Якщо примірник має прострочення більше 30-ти днів, Ви не зможете використовувати Ваш читацький квиток доки не повернете примірник. Наступн(ий/і) примірник(и) на даний час є простроченим(и):\n\n<item>"<<biblio.title>>" / <<biblio.author>>, <<items.itemcallnumber>>, Штрихкод: <<items.barcode>> Пеня: <<items.fine>></item>\n\n Спасибі Вам за невідкладну увагу до цього питання.\n\nБібліотекар\n<<branches.branchname>>\n',
+ 'email'),
+
+('claimacquisition','ACQCLAIM','претензія щодо надходження', 'Примірник не отримано',
+ '<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Номер замовлення <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> замовлено) (<<aqorders.listprice>> кожний) отримано не було.</order>',
+ 'email'),
+
+('orderacquisition','ACQORDER','замовлення надходжень','Замовлення',
+ '<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n Будь ласка, замовляйте для бібліотеки:\r\n\r\n<order>Номер замовлення <<aqorders.ordernumber>> (<<biblio.title>>) (кількість: <<aqorders.quantity>>) ($<<aqorders.listprice>> кожний).</order>\r\n\r\n Спасибі,\n\n<<branches.branchname>>',
+ 'email'),
+
+('serial','RLIST','список скерування', 'Серіальне видання вже доступне',
+ '<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nНаступний випуск вже доступний:\r\n\r\n<<biblio.title>> / <<biblio.author>> (<<items.barcode>>)\r\n\r\n Прохання забрати його в будь-який зручний для Вас час.',
+ 'email'),
+
+('members','ACCTDETAILS','шаблон даних облікового запису (типово)', 'Дані Вашого нового облікового запису в Koha',
+ 'Привіт <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\n Дані Вашого нового облікового запису в Koha такі:\r\n\r\n Користувач:  <<borrowers.userid>>\r\n Пароль: <<borrowers.password>>\r\n\r\n Якщо у Вас виникли проблеми чи питання з приводу Вашого облікового запису, будь ласка, звяжіться з адміністратором Koha\r\n\r\n Спасибі,\r\n адміністратор Koha\r\n kohaadmin@yoursite.org',
+ 'email'),
+
+('circulation','DUE','нагадування про повернення примірника', 'Нагадування про повернення примірника',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\n Наступний примірник тепер потрібно повернути:\r\n\r\n„<<biblio.title>>“, <<biblio.author>> (<<items.barcode>>)',
+ 'email'),
+
+('circulation','DUEDGST','нагадування про повернення примірників (збірка)', 'Нагадування про повернення примірників',
+ 'Вам необхідно повернути <<count>> примірників(а/ів)',
+ 'email'),
+
+('circulation','PREDUE','завчасне повідомлення про поверенення примірника', 'Завчасне повідомлення про поверенення примірника',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\n Наступний примірник незабаром потрібно буде повернути:\r\n\r\n„<<biblio.title>>“, <<biblio.author>> (<<items.barcode>>)',
+ 'email'),
+
+('circulation','PREDUEDGST','завчасне повідомлення про поверенення примірників (збірка)', 'Завчасне повідомлення про поверенення примірників',
+ 'Незабаром Вам потрібно повернути <<count>> примірник(а/ів)',
+ 'email'),
+
+('circulation','RENEWAL','продовження примірників', 'Продовження примірників',
+ 'Наступні примірники продовжено:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Дякуємо Вам за відвідування! <<branches.branchname>>.',
+ 'email');
+
+('reserves', 'HOLD', 'резервування, що очікує на отримання', 'Резервування, що очікує на отримання у бібліотеці – „<<branches.branchname>>“',
+ 'Шановн(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\n у Вас є резервування, що очікує на отримання до <<reserves.waitingdate>>:\r\n\r\n Заголовок: „<<biblio.title>>“\r\n Автор: <<biblio.author>>\r\n Номер примірника: <<items.copynumber>>\r\n Розташування: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>',
+ 'email'),
+
+('reserves', 'HOLD', 'резервування, що очікує на отримання', 'Резервування, що очікує на отримання у бібліотеці (повідомлення для друку)',
+'<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n\r\n\r\n Звернення про зміну стану обслуговування\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.city>> <<borrowers.zipcode>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>\r\n\r\n У Вас є зарезервований примірник, що вже доступний щоб забрати до <<reserves.waitingdate>>:\r\n\r\n Заголовок: „<<biblio.title>>“\r\n Автор: <<biblio.author>>\r\n Номер примірника: <<items.copynumber>>\r\n',
+ 'print'),
+
+('circulation','CHECKIN','повернення примірників (збірка)', 'Повернення',
+ 'Наступні примірники були повернуті:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Спасибі.',
+ 'email'),
+
+('circulation','CHECKOUT','видача примірників (збірка)', 'Видача',
+ 'Наступні примірники були видані:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Спасибі, що відвідали бібліотеку – „<<branches.branchname>>“.',
+ 'email'),
+
+('reserves', 'HOLDPLACED', 'на примірник встановлено резервування', 'На примірник встановлено резервування',
+ 'Встановлено резервування на наступний примірник: „<<biblio.title>>“ (<<biblio.biblionumber>>) відвідувачем: <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).',
+ 'email'),
+
+('suggestions','ACCEPTED','пропозиція прийнята', 'Пропозицію на придбання прийнято',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Ви запропонували бібліотеці отримати надходження зі заголовком „<<suggestions.title>>“, автор „<<suggestions.author>>“.\n\n Бібліотека розглянула сьогодні Вашу пропозицію. Примірник буде замовлений як можна швидше. Ви будете повідомлені поштою, коли замовлення завершено, і знову, коли примірник надійде до бібліотеки. \n\n Якщо у Вас є які-небудь питання, будь ласка, напишіть нам за адресою <<branches.branchemail>>.\n\n Спасибі,\n\n<<branches.branchname>>',
+ 'email'),
+
+('suggestions','AVAILABLE','пропозиція доступна', 'Пропозиція на придбання доступна',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Ви запропонували бібліотеці отримати надходження зі заголовком „<<suggestions.title>>“, автор „<<suggestions.author>>“.\n\n Ми раді повідомити Вам, що примірник, який Ви запитували, зараз є частиною фондів бібліотеки. \n\n Якщо у Вас є які-небудь питання, будь ласка, напишіть нам за адресою <<branches.branchemail>>.\n\n Спасибі,\n\n<<branches.branchname>>',
+ 'email'),
+
+('suggestions','ORDERED','пропозицію замовлено', 'Запропонований примірник замовлено',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Ви запропонували бібліотеці отримати надходження зі заголовком „<<suggestions.title>>“, автор „<<suggestions.author>>“.\n\n Ми раді повідомити Вам, що примірник, який Ви запитували, тепер замовлений. Він повинен прибути найближчим часом, і деякий час буде опрацьоуватися для додавання у фонди бібліотеки. \n\n Ви будете повідомлені ще раз, коли книга стане доступна.\n\n Якщо у Вас є які-небудь питання, будь ласка, напишіть нам за адресою <<branches.branchemail>>\n\n Спасибі,\n\n<<branches.branchname>>',
+ 'email'),
+
+('suggestions','REJECTED','пропозицію відхилено', 'Пропозицію на придбання відхилено',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Ви запропонували бібліотеці отримати надходження зі заголовком „<<suggestions.title>>“, автор „<<suggestions.author>>“.\n\n Бібліотека розглянула сьогодні Ваш запит, і вирішила на даний момент не приймати пропозицію.\n\n Причиною є: <<suggestions.reason>>\n\n Якщо у Вас є які-небудь питання, будь ласка, напишіть нам за адресою <<branches.branchemail>>.\n\n Спасибі,\n\n<<branches.branchname>>',
+ 'email'),
+
+('suggestions','TO_PROCESS','Увідомлення фондотримача', 'Пропозиція готова то обробки',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n нова пропозиція гоотова до обробки: „<<suggestions.title>>“ / <<suggestions.author>>.\n\n Спасибі,\n\n<<branches.branchname>>',
+ 'email')
+;
+
+
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type) VALUES
+('members', 'DISCHARGE', 'підтвердження на розрахування',
+'Розрахування для відвідувача — <<borrowers.firstname>> <<borrowers.surname>>', '
+<<today>>
+<h1>Підтвердження на розрахування</h1>
+<p><<branches.branchname>> засвідчує, що наступний відвідувач:<br>
+<<borrowers.firstname>> <<borrowers.surname>> (читацький квиток: <<borrowers.cardnumber>>)<br>
+повернув усі примірники.</p>',
+ 1, 'email');
+
+
+INSERT INTO `letter` (module, code, name, title, content, is_html) VALUES
+
+('circulation','ISSUESLIP','листок про видачу','Листок про видачу',
+ '<h3><<branches.branchname>></h3>
+Видача відвідувачу: <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(№ <<borrowers.cardnumber>>) <br />
 <<today>><br />
-
-<h4>Checked Out</h4>
+<h4>Видано</h4>
 <checkedout>
 <p>
 <<biblio.title>> <br />
-Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Штрихкод: <<items.barcode>><br />
+Дата очікування: <<issues.date_due>><br />
 </p>
 </checkedout>
-
-<h4>Overdues</h4>
+<h4>Прострочення</h4>
 <overdue>
 <p>
 <<biblio.title>> <br />
-Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Штрихкод: <<items.barcode>><br />
+Дата очікування: <<issues.date_due>><br />
 </p>
 </overdue>
-
 <hr>
-
-<h4 style="text-align: center; font-style:italic;">News</h4>
+<h4 style="text-align: center; font-style:italic;">Новини</h4>
 <news>
 <div class="newsitem">
 <h5 style="margin-bottom: 1px; margin-top: 1px"><b><<opac_news.title>></b></h5>
 <p style="margin-bottom: 1px; margin-top: 1px"><<opac_news.content>></p>
-<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Posted on <<opac_news.timestamp>></p>
+<p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px">Вивішено <<opac_news.timestamp>></p>
 <hr />
 </div>
-</news>', 1),
-('circulation','ISSUEQSLIP','Issue Quick Slip','Issue Quick Slip', '<h3><<branches.branchname>></h3>
-Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
-(<<borrowers.cardnumber>>) <br />
+</news>',
+ 1),
 
+('circulation','ISSUEQSLIP','швидкий листок про видачу','Швидкий листок про видачу',
+'<h3><<branches.branchname>></h3>
+Видача відвідувачу: <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(№ <<borrowers.cardnumber>>) <br />
 <<today>><br />
-
-<h4>Checked Out Today</h4>
+<h4>Видано сьогодні</h4>
 <checkedout>
 <p>
 <<biblio.title>> <br />
-Barcode: <<items.barcode>><br />
-Date due: <<issues.date_due>><br />
+Штрихкод: <<items.barcode>><br />
+Дата очікування: <<issues.date_due>><br />
 </p>
-</checkedout>', 1),
-('circulation','HOLD_SLIP','Hold Slip','Hold Slip', '<h5>Date: <<today>></h5>
+</checkedout>',
+ 1),
 
-<h3> Transfer to/Hold in <<branches.branchname>></h3>
-
+('circulation','HOLD_SLIP','листок про резервування','Листок про резервування',
+'<h5> Дата: <<today>></h5>
+<h3> Переміщення у підрозділ / Резервування у підрозділі: <<branches.branchname>></h3>
 <h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
-
 <ul>
     <li><<borrowers.cardnumber>></li>
     <li><<borrowers.phone>></li>
     <li> <<borrowers.address>><br />
          <<borrowers.address2>><br />
-         <<borrowers.city >>  <<borrowers.zipcode>>
+         <<borrowers.city>>  <<borrowers.zipcode>>
     </li>
     <li><<borrowers.email>></li>
 </ul>
 <br />
-<h3>ITEM ON HOLD</h3>
+<h3>ПРИМІРНИК ЗАРЕЗЕРВОВАНИЙ</h3>
 <h4><<biblio.title>></h4>
 <h5><<biblio.author>></h5>
 <ul>
@@ -93,77 +167,95 @@ Date due: <<issues.date_due>><br />
    <li><<items.itemcallnumber>></li>
    <li><<reserves.waitingdate>></li>
 </ul>
-<p>Notes:
+<p>Примітка:
 <pre><<reserves.reservenotes>></pre>
-</p>
-', 1),
-('circulation','TRANSFERSLIP','Transfer Slip','Transfer Slip', '<h5>Date: <<today>></h5>
+</p>',
+ 1),
 
-<h3>Transfer to <<branches.branchname>></h3>
-
-<h3>ITEM</h3>
+('circulation','TRANSFERSLIP','листок про переміщення','Листок про переміщення',
+'<h5>Дата: <<today>></h5>
+<h3>Переміщення у підрозділ: <<branches.branchname>></h3>
+<h3>ПРИМІРНИК</h3>
 <h4><<biblio.title>></h4>
 <h5><<biblio.author>></h5>
 <ul>
    <li><<items.barcode>></li>
    <li><<items.itemcallnumber>></li>
-</ul>', 1);
+</ul>',
+ 1);
 
-INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
-VALUES (
-'members',  'OPAC_REG_VERIFY',  '',  'Opac Self-Registration Verification Email',  '1',  'Verify Your Account',  'Hello!
 
-Your library account has been created. Please verify your email address by clicking this link to complete the signup process:
+INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`) VALUES
+('members',  'OPAC_REG_VERIFY',  '',  'електронний лист перевірки самостійної реєстрації через електронний каталог',  '1',
+ 'Підтвердіть Ваш обліковий запис',  'Привіт!
+ Було створено обліковий запис у Вашій бібліотеці. Для завершення процесу реєстрації, будь ласка, підтвердіть свою адресу електронної пошти, натиснувши на це посилання:
+ <<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
+ Якщо Ви не ініціювали цей запит, можете спокійно ігнорувати це одноразове повідомлення. Запит стане недійсним найближчим часом.');
 
-<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>
 
-If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly.'
-);
+-- INSERT INTO `letter` (module, code, name, title, content) VALUES
+-- ('circulation','RENEWAL','продовження примірників','Продовження',
+-- 'Наступні примірники продовжено:\r\n----\r\n<<biblio.title>>\r\n----\r\nДякуємо Вам за відвідування! <<branches.branchname>>.');
 
-INSERT INTO `letter` (module, code, name, title, content) VALUES ('circulation','RENEWAL','Item Renewal','Renewals','The following items have been renew:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
 
-INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
-VALUES ('members', 'SHARE_INVITE', '', 'Invitation for sharing a list', '0', 'Share list <<listname>>', 'Dear patron,
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content) VALUES
+('members', 'SHARE_INVITE', '', 'запрошення для спільного використання списку', '0', 'Спільне використання списку „<<listname>>“',
+ 'Дорог(ий/а) відвідувач(ка),
+ один з наших відвідувачів, <<borrowers.firstname>> <<borrowers.surname>>, запрошує Вас до спільного використання списку „<<listname>>“ у нашому бібліотечному каталозі.
+ Для доступу до цього спільного списку, будь ласка, натисніть на наступне посилання або ж скопіюйте і вставте його в адресний рядок браузера.
+ <<shareurl>>
+ У разі, якщо Ви не є відвідувач(ем/кою) нашої бібліотеки або не хочете приймати це запрошення, будь ласка, не звертайте уваги на цей лист. Відзначимо також, що це запрошення стане недісним протягом двох тижнів.
+ Дякуємо!
+ Ваша бібліотека.');
 
-One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog.
 
-To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar.
+INSERT INTO  letter (module, code, branchcode, name, is_html, title, content) VALUES
+('members', 'SHARE_ACCEPT', '', 'сповіщення про згоду на спільне використання', '0', 'Спільне використання списку „<<listname>>“ прийнято',
+ 'Дорог(ий/а) відвідувач(ка),
+ Ми хочемо повідомити Вам, що <<borrowers.firstname>> <<borrowers.surname>> прийняв Ваше запрошення щодо спільного використання Вашого списку „<<listname>>“ у нашому бібліотечному каталозі.
+ Дякуємо!
+ Ваша бібліотека.');
 
-<<shareurl>>
 
-In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks.
+INSERT INTO letter(module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
+('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'повідомлення про отримання', '0', 'Замовлення отримано',
+ 'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n Замовлення „<<aqorders.ordernumber>>“ (<<biblio.title>>) Отримано.\n\nВаша бібліотека.',
+ 'email'),
 
-Thank you.
+('members','MEMBERSHIP_EXPIRY','','закінчення терміну дії облікового запису', '0', 'Термін дії облікового запису завершується',
+ 'Дорог(ий/а) <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\n Термін чинності Вашого бібліотечного квитка незабаром завершиться, а саме:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nСпасибі,\r\n\r\nбібліотекар\r\n\r\n<<branches.branchname>>',
+ 'email');
 
-Your library.'
-);
-INSERT INTO  letter (module, code, branchcode, name, is_html, title, content)
-VALUES ( 'members', 'SHARE_ACCEPT', '', 'Notification about an accepted share', '0', 'Share on list <<listname>> accepted', 'Dear patron,
 
-We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog.
+INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type ) VALUES
+('circulation', 'OVERDUES_SLIP', '', 'квитанція про прострочення', '0', 'OVERDUES_SLIP',
+ 'Наступн(ий/і) примірник(и) на даний час вже прострочені:
+ <item>"<<biblio.title>>" / <<biblio.author>>, <<items.itemcallnumber>>, Штрихкод: <<items.barcode>> Пеня: <<items.fine>></item>',
+ 'print' );
 
-Thank you.
 
-Your library.'
-);
+INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
+('members','PASSWORD_RESET','','онлайн-скидання пароля',1,'Відновлення пароля Koha',
+ '<html>\r\n<p>Це повідомлення було відправлено у відповідь на Ваш запит про відновлення пароля для облікового запису <strong><<user>></strong>.\r\n</p>\r\n<p>\r\n Тепер Ви можете створити новий пароль, використовуючи наступне посилання:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>Це посилання буде чинним протягом 2-х днів з моменту приходу цього листа. Пізніш Вам необхідно буде повторити дію, якщо Ви не зміните свій пароль.</p>\r\n<p>Списибі.</p>\r\n</html>\r\n',
+ 'email');
 
-INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type)
-VALUES ('acquisition', 'ACQ_NOTIF_ON_RECEIV', '', 'Notification on receiving', 'Order received', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\n The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received.\n\nYour library.', 'email'),
-('members','MEMBERSHIP_EXPIRY','','Account expiration','Account expiration','Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nYour library card will expire soon, on:\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nThank you,\r\n\r\nLibrarian\r\n\r\n<<branches.branchname>>','email');
 
-INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type )
-VALUES ( 'circulation', 'OVERDUES_SLIP', '', 'Overdues Slip', '0', 'OVERDUES_SLIP', 'The following item(s) is/are currently overdue:
+INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
+ ('circulation', 'AR_CANCELED', '', 'запит статті - скасовано', 0, 'Запит статті скасовано',
+ '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Ваш запит на статтю зі  „<<biblio.title>>“ (<<items.barcode>>) був скасований з наступної причини:\r\n\r\n<<article_requests.notes>>\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n',
+ 'email'),
 
-<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>
-', 'print' );
+ ('circulation', 'AR_COMPLETED', '', 'запит статті - завершено', 0, 'Запит статті завершено',
+ '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Ми виконали Ваш запит на статтю зі  „<<biblio.title>>“ (<<items.barcode>>).\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n\r\n Ви можете забрати статтю у підрозділі „<<branches.branchname>>“.\r\n\r\n Спасибі!',
+ 'email'),
 
-INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type)
-VALUES ('members','PASSWORD_RESET','','Online password reset',1,'Koha password recovery','<html>\r\n<p>This email has been sent in response to your password recovery request for the account <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nYou can now create your new password using the following link:\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>This link will be valid for 2 days from this email\'s reception, then you must reapply if you do not change your password.</p>\r\n<p>Thank you.</p>\r\n</html>\r\n','email'
-);
+ ('circulation', 'AR_PENDING', '', 'запит статті - відкрито', 0, 'Надійшов запит статті',
+ '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Ми отритмали Ваш запит на статтю зі „<<biblio.title>>“ (<<items.barcode>>).\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n\r\n\r\n Спасибі!',
+ 'email'),
 
-INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
-('circulation', 'AR_CANCELED', '', 'Article Request - Email - Canceled', 0, 'Article Request Canceled', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nYour request for an article from <<biblio.title>> (<<items.barcode>>) has been canceled for the following reason:\r\n\r\n<<article_requests.notes>>\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n', 'email'),
-('circulation', 'AR_COMPLETED', '', 'Article Request - Email - Completed', 0, 'Article Request Completed', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nWe are have completed your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\nYou may pick your article up at <<branches.branchname>>.\r\n\r\nThank you!', 'email'),
-('circulation', 'AR_PENDING', '', 'Article Request - Email - Open', 0, 'Article Request Received', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nWe have received your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\n\r\nThank you!', 'email'),
-('circulation', 'AR_SLIP', '', 'Article Request - Print Slip', 0, 'Test', 'Article Request:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nTitle: <<biblio.title>>\r\nBarcode: <<items.barcode>>\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n', 'print'),
-('circulation', 'AR_PROCESSING', '', 'Article Request - Email - Processing', 0, 'Article Request Processing', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nWe are now processing your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\nThank you!', 'email');
+ ('circulation', 'AR_SLIP', '', 'запит статті - роздрук квитанції', 0, 'Тест', 'Запитувана стаття:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Заголовок: <<biblio.title>>\r\n Штрих-код: <<items.barcode>>\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n',
+ 'print'),
+
+ ('circulation', 'AR_PROCESSING', '', 'запит статті - обробка', 0, 'Обробка запиту статті', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Ми зараз обробляємо Ваш запит на статтю зі „<<biblio.title>>“ (<<items.barcode>>).\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n\r\n Спасибі!',
+ 'email');
+

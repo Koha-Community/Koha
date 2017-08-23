@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='SNG';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (215, 'SNG', 'Sujet (nom géographique)', '[215a][ -- 215y][ -- 215x][ -- 215z]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (215, 'SNG', 'Sujet (nom géographique)', '[215a][ -- 215y][ -- 215x][ -- 215z]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (215, 'SNG', 'Предметна рубрика (географічна назва)', '[215a][ -- 215y][ -- 215x][ -- 215z]');
 DELETE FROM auth_tag_structure WHERE authtypecode='SNG';
 DELETE FROM auth_subfield_structure WHERE authtypecode='SNG';
 

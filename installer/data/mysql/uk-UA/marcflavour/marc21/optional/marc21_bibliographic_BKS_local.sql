@@ -915,7 +915,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BKS', NULL, '982', '4', 0, 1, 'Relator code', 'Relator code',        8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('BKS', NULL, '982', '6', 0, 0, 'Linkage', 'Linkage',                  8, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('BKS', NULL, '982', '8', 0, 1, 'Field link and sequence number ', 'Field link and sequence number ', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('BKS', NULL, '982', '8', 0, 1, 'Field link and sequence number', 'Field link and sequence number', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('BKS', NULL, '982', 'a', 0, 0, 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('BKS', NULL, '982', 'b', 0, 0, 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('BKS', NULL, '982', 'c', 0, 0, 'Location of meeting', 'Location of meeting', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -973,7 +973,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('BKS', '', '987', 'a', 0, 0, 'Romanization/conversion identifier', 'Romanization/conversion identifier', 9, -6, '', '', '', NULL, '', '', NULL),
  ('BKS', '', '987', 'b', 0, 1, 'Agency that converted, created or reviewed', 'Agency that converted, created or reviewed', 9, -6, '', '', '', 0, '', '', NULL),
  ('BKS', '', '987', 'c', 0, 0, 'Date of conversion or review', 'Date of conversion or review', 9, -6, '', '', '', 0, '', '', NULL),
- ('BKS', '', '987', 'd', 0, 0, 'Status code', 'Status code ',           9, -6, '', '', '', 0, '', '', NULL),
+ ('BKS', '', '987', 'd', 0, 0, 'Status code', 'Status code',            9, -6, '', '', '', 0, '', '', NULL),
  ('BKS', '', '987', 'e', 0, 0, 'Version of conversion program used', 'Version of conversion program used', 9, -6, '', '', '', 0, '', '', NULL),
  ('BKS', '', '987', 'f', 0, 0, 'Note', 'Note',                          9, -6, '', '', '', 0, '', '', NULL);
 

@@ -1,6 +1,8 @@
-DELETE FROM authorised_values WHERE category='CCODE';
+-- DELETE FROM authorised_values WHERE category='CCODE';
 
-INSERT INTO `authorised_values` (category, authorised_value, lib, imageurl) VALUES 
-('CCODE','FIC', 'Художня література', NULL),
-('CCODE','REF', 'Довідник'          , NULL),
-('CCODE','NFIC','Наукова література', NULL);
+-- collection codes for an item
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES
+ ('CCODE','FIC', 'Художня література'),
+ ('CCODE','REF', 'Довідник'),
+ ('CCODE','NFIC','Наукова література');
+

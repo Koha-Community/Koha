@@ -1,48 +1,34 @@
-TRUNCATE cities;
+-- TRUNCATE cities;
 
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (1,'Львів','79000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (2,'Тернопіль','46000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (3,'Сімферополь','95000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (4,'Хмельницький','29000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (5,'Вінниця','21000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (6,'Луцьк','43000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (7,'Дніпропетровськ','49000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (8,'Ужгород','88000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (9,'Чернівці','14000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (10,'Херсон','73000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (11,'Чернігів','58000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (12,'Черкаси','18000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (13,'Суми','40000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (14,'Рівне','33000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (15,'Полтава','36000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (16,'Житомир','10000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (17,'Одеса','65000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (18,'Миколаїв','54000'); 
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (19,'Луганськ','91000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (20,'Кіровоград','25000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (21,'Івано-Франківськ','76000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (22,'Запоріжжя','69000');
-
-INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`) VALUES (23,'Донецьк','83000');
+-- authorized values for cities/states/countries to choose when adding/editing a patron/borrower
+--  `cityid`                       -- unique identifier added by Koha
+--  `city_name` varchar(100)       -- name of the city
+--  `city_state` VARCHAR( 100 )    -- name of the state/province
+--  `city_country` VARCHAR( 100 )  -- name of the country
+--  `city_zipcode` varchar(20)     -- zip or postal code
+INSERT INTO `cities` (`cityid`, `city_name`, `city_zipcode`, `city_country`, `city_state`) VALUES
+ (1, 'Львів',            '79000', 'Україна', 'Львівська область'),
+ (2, 'Тернопіль',        '46000', 'Україна', 'Тернопільська область'),
+ (3, 'Сімферополь',      '95000', 'Україна', 'Автономна Республіка Крим'),
+ (4, 'Хмельницький',     '29000', 'Україна', 'Хмельницька область'),
+ (5, 'Вінниця',          '21000', 'Україна', 'Вінницька область'),
+ (6, 'Луцьк',            '43000', 'Україна', 'Волинська область'),
+ (7, 'Дніпро',           '49000', 'Україна', 'Дніпрпетровська область'),
+ (8, 'Ужгород',          '88000', 'Україна', 'Закарпатська область'),
+ (9, 'Чернівці',         '14000', 'Україна', 'Чернівецька область'),
+ (10,'Херсон',           '73000', 'Україна', 'Херсонська область'),
+ (11,'Чернігів',         '58000', 'Україна', 'Чернігівська область'),
+ (12,'Черкаси',          '18000', 'Україна', 'Черкаська область'),
+ (13,'Суми',             '40000', 'Україна', 'Сумська область'),
+ (14,'Рівне',            '33000', 'Україна', 'Рівненська область'),
+ (15,'Полтава',          '36000', 'Україна', 'Полтавська область'),
+ (16,'Житомир',          '10000', 'Україна', 'Житомирська область'),
+ (17,'Одеса',            '65000', 'Україна', 'Одеська область'),
+ (18,'Миколаїв',         '54000', 'Україна', 'Миколаївська область'),
+ (19,'Луганськ',         '91000', 'Україна', 'Луганська область'),
+ (20,'Кропивницький',    '25000', 'Україна', 'Кіровоградська область'),
+ (21,'Івано-Франківськ', '76000', 'Україна', 'Івано-Франківська область'),
+ (22,'Запоріжжя',        '69000', 'Україна', 'Запорізька область'),
+ (23,'Донецьк',          '83000', 'Україна', 'Донецька область'),
+ (24,'Київ',             '01001', 'Україна', 'Київська область');
 

@@ -50,13 +50,13 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('FA', '', '082', 'b', 0, 0, 'Номер одиниці', '',                      0, 0, '', '', '', NULL, '', NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('CF', '084', '', 1, 'Індекс ББК', '', NULL);
+ ('FA', '084', '', 1, 'Індекс ББК', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('CF', NULL, '084', '2', 0, 0, 'Джерело індексу', '',                  0, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('CF', NULL, '084', '6', 0, 0, 'Елемент зв’язку', '',   0, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('CF', NULL, '084', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('CF', NULL, '084', 'a', 0, 1, 'Індекс ББК / індекс іншої класифікації', '',                       0, 0, NULL, NULL, '', NULL, '', '', NULL),
- ('CF', NULL, '084', 'b', 0, 0, 'Номер одиниці', '',                    0, -6, NULL, NULL, '', NULL, '', '', NULL);
+ ('FA', NULL, '084', '2', 0, 0, 'Джерело індексу', '',                  0, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('FA', NULL, '084', '6', 0, 0, 'Елемент зв’язку', '',   0, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('FA', NULL, '084', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('FA', NULL, '084', 'a', 0, 1, 'Індекс ББК / індекс іншої класифікації', '',                       0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('FA', NULL, '084', 'b', 0, 0, 'Номер одиниці', '',                    0, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('FA', '100', '', '', 'Автор', '', NULL);

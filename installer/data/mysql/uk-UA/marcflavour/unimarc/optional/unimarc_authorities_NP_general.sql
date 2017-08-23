@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='NP';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'NP', 'Auteur', '[200a][, 200b][ 200d][ ; 200c][ (200f)]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'NP', 'Auteur', '[200a][, 200b][ 200d][ ; 200c][ (200f)]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'NP', 'Автор (особа)', '[200a][, 200b][ 200d][ ; 200c][ (200f)]');
 DELETE FROM auth_tag_structure WHERE authtypecode='NP';
 DELETE FROM auth_subfield_structure WHERE authtypecode='NP';
 

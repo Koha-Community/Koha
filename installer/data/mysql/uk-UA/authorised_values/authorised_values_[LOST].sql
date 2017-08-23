@@ -1,7 +1,13 @@
-DELETE FROM authorised_values WHERE category='LOST';
+-- Availability status.
 
-INSERT INTO authorised_values (id, category, authorised_value, lib) VALUES (LAST_INSERT_ID( ) + 0,'LOST','2','Тривале прострочення (втрачено)');
-INSERT INTO authorised_values (id, category, authorised_value, lib) VALUES (LAST_INSERT_ID( ) + 1,'LOST','1','Втрачено');
-INSERT INTO authorised_values (id, category, authorised_value, lib) VALUES (LAST_INSERT_ID( ) + 2,'LOST','3','Втрачено і заплачено за примірник');
-INSERT INTO authorised_values (id, category, authorised_value, lib) VALUES (LAST_INSERT_ID( ) + 3,'LOST','5','Відсутнє при запиті на резервування');
-INSERT INTO authorised_values (id, category, authorised_value, lib) VALUES (LAST_INSERT_ID( ) + 4,'LOST','4','Відсутнє при інвентаризації');
+-- DELETE FROM authorised_values WHERE category='LOST';
+
+-- availability statuses
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES
+ ('LOST','1','Втрачено'),
+ ('LOST','2','Тривале прострочення (втрачено)'),
+ ('LOST','3','Втрачено і заплачено за примірник'),
+ ('LOST','4','Відсутнє при інвентаризації'),
+ ('LOST','5','Відсутнє при запиті на резервування');
+-- INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('LOST','0','Не втрачено');
+

@@ -1,5 +1,9 @@
 -- На основі MARC21-структури англійською „DEFAULT“
--- Переклад/адаптація: Сергій Дубик, Ольга Баркова (2011)
+-- Переклад/адаптація: Сергій Дубик (2011-2016), Ольга Баркова (2011)
+
+-- Changes:
+-- 2016.12.21: Add 083acmqyz268, 085abcfrstuvwyz68  and much more
+
 
 -- DELETE FROM biblio_framework WHERE frameworkcode='';
 -- INSERT INTO biblio_framework (frameworkcode, frameworktext) VALUES ('', '');
@@ -78,7 +82,9 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '015', '2', 0, 1, 'Джерело номера', '',                       0, 0, '', '', NULL, 0, '', '', NULL),
  ('', '', '015', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '015', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
- ('', '', '015', 'a', 0, 1, 'Номер в нац.бібліогр.', '',                0, 0, '', '', '', 0, '', '', NULL);
+ ('', '', '015', 'a', 0, 1, 'Номер в нац.бібліогр.', '',                0, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '015', 'q', 0, 1, 'Qualifying information', '',                0, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '015', 'z', 0, 1, 'Canceled/invalid national bibliography number', '',                0, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '016', '', 1, 'Контрольний номер національного бібліографічного агентства', '', '');
@@ -529,6 +535,19 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '082', 'b', 0, 0, 'Номер одиниці', '',                        0, 0, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '083', '', 1, 'Additional Dewey Decimal Classification Number', '', '');
+ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', NULL, '083', 'a', 0, 0, 'Classification number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', 'c', 0, 0, 'Classification number--Ending number of span', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', 'm', 0, 0, 'Standard or optional designation', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', 'q', 0, 0, 'Assigning agency', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', 'y', 0, 0, 'Table sequence number for internal subarrangement or add table', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', 'z', 0, 0, 'Table identification', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', '2', 0, 0, 'Edition number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', '6', 0, 0, 'Linkage', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '083', '8', 0, 0, 'Field link and sequence number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '084', '', 1, 'Індекс ББК', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '084', '2', 0, 0, 'Джерело індексу', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
@@ -536,6 +555,24 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '084', '8', 0, 1,'Зв’язок поля та його порядковий номер','',0, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '084', 'a', 0, 1, 'Індекс ББК / індекс іншої класифікації', '',                         0, 0, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '084', 'b', 0, 0, 'Номер одиниці', '',                      0, -6, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '085', '', 1, 'Synthesized Classification Number Components', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', NULL, '085', 'a', 0, 0, 'Number where instructions are found-single number or beginning number of span', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'b', 0, 0, 'Base number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'c', 0, 0, 'Classification number-ending number of span', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'f', 0, 0, 'Facet designator', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'r', 0, 0, 'Root number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 's', 0, 0, 'Digits added from classification number in schedule or external table', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 't', 0, 0, 'Digits added from internal subarrangement or add table', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'u', 0, 0, 'Number being analyzed', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'v', 0, 0, 'Number in internal subarrangement or add table where instructions are found', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'w', 0, 0, 'Table identification-Internal subarrangement or add table', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'y', 0, 0, 'Table sequence number for internal subarrangement or add table', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', 'z', 0, 0, 'Table identification', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', '6', 0, 0, 'Linkage', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '085', '8', 0, 0, 'Field link and sequence number', '',                    0, 0, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '086', '', 1, 'Класифікаційний номер документа органу державної влади', '', '');
@@ -615,7 +652,10 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '100', '4', 0, 0, 'Код відношення', '',                       1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '100', '6', 0, 0, 'Зв’язок', '',                              1, -6, '', '', '', 0, '', '', NULL),
  ('', '', '100', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 1, -6, '', '', '', 0, '', '', NULL),
- ('', 'PERSO_NAME', '100', 'a', 0, 0, 'Автор', '',                      1, 0, 'biblio.author', '', '', 0, '\'100b\',\'100c\',\'100q\',\'100d\',\'100e\',\'110a\',\'110b\',\'110c\',\'110d\',\'110e\',\'111a\',\'111e\',\'111c\',\'111d\',\'130a\',\'700a\',\'700b\',\'700c\',\'700q\',\'700d\',\'700e\',\'710a\',\'710b\',\'710c\',\'710d\',\'710e\',\'711a\',\'711e\',\'711c\',\'711d\',\'720a\',\'720e\',\'796a\',\'796b\',\'796c\',\'796q\',\'796d\',\'796e\',\'797a\',\'797b\',\'797c\',\'797d\',\'797e\',\'798a\',\'798e\',\'798c\',\'798d\',\'800a\',\'800b\',\'800c\',\'800q\',\'800d\',\'800e\',\'810a\',\'810b\',\'810c\',\'810d\',\'810e\',\'811a\',\'811e\',\'811c\',\'811d\',\'896a\',\'896b\',\'896c\',\'896q\',\'896d\',\'896e\',\'897a\',\'897b\',\'897c\',\'897d\',\'897e\',\'898a\',\'898e\',\'898c\',\'898d\',\'505r\'', '', NULL),
+ ('', 'PERSO_NAME', '100', 'a', 0, 0, 'Автор', '',                      1, 0, 'biblio.author', '', '', 0, '\'100b\',\'100c\',\'100q\',\'100d\',\'100e\',\'110a\',\'110b\',\'110c\',\'110d\',\'110e\',\'111a\',\'111e\',\'111c\',\'111d\',\'130a\',
+ \'700a\',\'700b\',\'700c\',\'700q\',\'700d\',\'700e\',\'710a\',\'710b\',\'710c\',\'710d\',\'710e\',\'711a\',\'711e\',\'711c\',\'711d\',\'720a\',\'720e\',\'796a\',\'796b\',\'796c\',\'796q\',\'796d\',\'796e\',\'797a\',\'797b\',\'797c\',\'797d\',
+ \'797e\',\'798a\',\'798e\',\'798c\',\'798d\',\'800a\',\'800b\',\'800c\',\'800q\',\'800d\',\'800e\',\'810a\',\'810b\',\'810c\',\'810d\',\'810e\',\'811a\',\'811e\',\'811c\',\'811d\',\'896a\',\'896b\',\'896c\',\'896q\',\'896d\',\'896e\',\'897a\',
+ \'897b\',\'897c\',\'897d\',\'897e\',\'898a\',\'898e\',\'898c\',\'898d\',\'505r\'', '', NULL),
  ('', '', '100', 'b', 0, 0, 'Династ. номер', '',                        1, -1, '', '', '', 0, '', '', NULL),
  ('', '', '100', 'c', 0, 0, 'Титул (звання)', '',                       1, -1, '', '', '', 0, '', '', NULL),
  ('', '', '100', 'd', 0, 0, 'Дата', '',                                 1, 0, '', '', '', 0, '', '', NULL),
@@ -1070,6 +1110,39 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '321', 'b', 0, 0, 'Дата існуючої періодичності', '',        3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '336', '', 1, 'Content Type', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '336', 'a', 0, 0, 'Content type term', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', 'b', 0, 0, 'Content type code', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', '0', 0, 0, 'Authority record control number or standard number', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', '2', 0, 0, 'Source', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', '3', 0, 0, 'Materials specified', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', '6', 0, 0, 'Linkage', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '336', '8', 0, 0, 'Field link and sequence number', '',      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '337', '', 1, 'Media Type', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '337', 'a', 0, 0, 'Media type term', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', 'b', 0, 0, 'Media type code', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', '0', 0, 0, 'Authority record control number or standard number', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', '2', 0, 0, 'Source', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', '3', 0, 0, 'Materials specified', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', '6', 0, 0, 'Linkage', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '337', '8', 0, 0, 'Field link and sequence number', '',      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '338', '', 1, 'Carrier Type', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '338', 'a', 0, 0, 'Carrier type term', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', 'b', 0, 0, 'Carrier type code', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', '0', 0, 0, 'Authority record control number or standard number', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', '2', 0, 0, 'Source', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', '3', 0, 0, 'Materials specified', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', '6', 0, 0, 'Linkage', '',      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '338', '8', 0, 0, 'Field link and sequence number', '',      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '340', '', 1, 'Фізичний носій', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '340', '3', 0, 0, 'Область застосування даних поля', '',      3, -6, '', '', '', NULL, '', '', NULL),
@@ -1128,6 +1201,71 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '343', 'g', 0, 0, 'Bearing unit', 'Bearing unit',             3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '343', 'h', 0, 0, 'Bearing reference direction', 'Bearing reference direction', 3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '343', 'i', 0, 0, 'Bearing reference meridian', 'Bearing reference meridian', 3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '344', '', 1, 'Sound Characteristics', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '344', '0', 0, 0, 'Authority record control number or standard number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', '2', 0, 0, 'Source', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', '3', 0, 0, 'Materials specified', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', '6', 0, 0, 'Linkage', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', '8', 0, 0, 'Field link and sequence number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'a', 0, 0, 'Type of recording', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'b', 0, 0, 'Recording medium', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'c', 0, 0, 'Playing speed', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'd', 0, 0, 'Groove characteristic', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'e', 0, 0, 'Track configuration', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'f', 0, 0, 'Tape configuration', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'g', 0, 0, 'Configuration of playback channels', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '344', 'h', 0, 0, 'Special playback characteristics', '',                      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '345', '', 1, 'Projection Characteristics of Moving Image', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '345', '0', 0, 0, 'Authority record control number or standard number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', '2', 0, 0, 'Source', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', '3', 0, 0, 'Materials specified', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', '6', 0, 0, 'Linkage', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', '8', 0, 0, 'Field link and sequence number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', 'a', 0, 0, 'Presentation format', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '345', 'b', 0, 0, 'Projection speed', '',                      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '346', '', 1, 'Video Characteristics', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '346', '0', 0, 0, 'Authority record control number or standard number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', '2', 0, 0, 'Source', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', '3', 0, 0, 'Materials specified', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', '6', 0, 0, 'Linkage', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', '8', 0, 0, 'Field link and sequence number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', 'a', 0, 0, 'Video format', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '346', 'b', 0, 0, 'Broadcast standard', '',                      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '347', '', 1, 'Digital File Characteristics', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '347', '0', 0, 0, 'Authority record control number or standard number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', '2', 0, 0, 'Source', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', '3', 0, 0, 'Materials specified', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', '6', 0, 0, 'Linkage', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', '8', 0, 0, 'Field link and sequence number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'a', 0, 0, 'File type', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'b', 0, 0, 'Encoding format', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'c', 0, 0, 'File size', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'd', 0, 0, 'Resolution', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'e', 0, 0, 'Regional encoding', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '347', 'f', 0, 0, 'Encoded bitrate', '',                      3, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '348', '', 1, 'Format of Notated Music', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '348', '0', 0, 0, 'Authority record control number or standard number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', '2', 0, 0, 'Source', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', '3', 0, 0, 'Materials specified', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', '6', 0, 0, 'Linkage', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', '8', 0, 0, 'Field link and sequence number', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', 'a', 0, 0, 'Format of notated music term', '',                      3, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '348', 'b', 0, 0, 'Format of notated music code', '',                      3, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '350', '', 1, 'Ціна (застаріле)', '', NULL);
@@ -1199,6 +1337,29 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '362', 'z', 0, 0, 'Джерело відомостей', '',                 3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '363', '', 1, 'Normalized Date and Sequential Designation', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', NULL, '363', '6', 0, 0, 'Linkage', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', '8', 0, 0, 'Field link and sequence number', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'a', 0, 0, 'First level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'b', 0, 0, 'Second level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'c', 0, 0, 'Third level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'd', 0, 0, 'Fourth level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'e', 0, 0, 'Fifth level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'f', 0, 0, 'Sixth level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'g', 0, 0, 'Alternative numbering scheme, first level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'h', 0, 0, 'Alternative numbering scheme, second level of enumeration', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'i', 0, 0, 'First level of chronology', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'j', 0, 0, 'Second level of chronology', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'k', 0, 0, 'Third level of chronology', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'l', 0, 0, 'Fourth level of chronology', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'm', 0, 0, 'Alternative numbering scheme, chronology', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'u', 0, 0, 'First level textual designation', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'v', 0, 0, 'First level of chronology, issuance', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'x', 0, 0, 'Nonpublic note', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '363', 'z', 0, 0, 'Public note', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '365', '', 1, 'Торговельна ціна', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '365', '2', 0, 0, 'Source of price type code', 'Source of price type code', 3, -1, '', '', '', NULL, '', '', NULL),
@@ -1233,6 +1394,125 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '366', 'j', 0, 0, 'ISO country code', 'ISO country code',     3, -1, '', '', '', NULL, '', '', NULL),
  ('', '', '366', 'k', 0, 0, 'MARC country code', 'MARC country code',   3, -1, '', '', '', NULL, '', '', NULL),
  ('', '', '366', 'm', 0, 0, 'Identification of agency', 'Identification of agency', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '370', '', 1, 'Associated Place', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '370', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', '2', 0, 0, 'Source of term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 'c', 0, 0, 'Associated country', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 'f', 0, 0, 'Other associated place', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 'g', 0, 0, 'Place of origin of work', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 's', 0, 0, 'Start period', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 't', 0, 0, 'End period', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 'u', 0, 0, 'Uniform Resource Identifier', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '370', 'v', 0, 0, 'Source of information', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '377', '', 1, 'Associated Language', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '377', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '377', '2', 0, 0, 'Source', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '377', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '377', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '377', 'a', 0, 0, 'Language code', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '377', 'l', 0, 0, 'Language term', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '380', '', 1, 'Form of Work', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '380', '0', 0, 0, 'Record control number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '380', '2', 0, 0, 'Source of term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '380', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '380', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '380', 'a', 0, 0, 'Form of work', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '381', '', 1, 'Other Distinguishing Characteristics of Work or Expression', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '381', '0', 0, 0, 'Record control number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', '2', 0, 0, 'Source of term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', 'a', 0, 0, 'Other distinguishing characteristic', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', 'u', 0, 0, 'Uniform Resource Identifier', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '381', 'v', 0, 0, 'Source of information', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '382', '', 1, 'Medium of Performance', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '382', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', '2', 0, 0, 'Source of term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', '3', 0, 0, 'Materials specified', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'a', 0, 0, 'Medium of performance', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'b', 0, 0, 'Soloist', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'd', 0, 0, 'Doubling instrument', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'e', 0, 0, 'Number of ensembles of the same type', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'n', 0, 0, 'Number of performers of the same medium', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'p', 0, 0, 'Alternative medium of performance', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'r', 0, 0, 'Total number of individuals performing alongside ensembles', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 's', 0, 0, 'Total number of performers', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 't', 0, 0, 'Total number of ensembles', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '382', 'v', 0, 0, 'Note', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '383', '', 1, 'Numeric Designation of Musical Work', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '383', '2', 0, 0, 'Source', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', 'a', 0, 0, 'Serial number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', 'b', 0, 0, 'Opus number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', 'c', 0, 0, 'Thematic index number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', 'd', 0, 0, 'Thematic index code', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '383', 'e', 0, 0, 'Publisher associated with opus number', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '384', '', 1, 'Key', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '384', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '384', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '384', 'a', 0, 0, 'Key', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '385', '', 1, 'Audience Characteristics', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '385', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', '2', 0, 0, 'Source', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', '3', 0, 0, 'Materials specified', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', 'a', 0, 0, 'Audience term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', 'b', 0, 0, 'Audience code', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', 'm', 0, 0, 'Demographic group term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '385', 'n', 0, 0, 'Demographic group code', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '386', '', 1, 'Creator/Contributor Characteristics', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '386', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', '2', 0, 0, 'Source', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', '3', 0, 0, 'Materials specified', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', 'a', 0, 0, 'Creator/contributor term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', 'b', 0, 0, 'Creator/contributor code', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', 'm', 0, 0, 'Demographic group term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '386', 'n', 0, 0, 'Demographic group code', '', 3, -1, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '388', '', 1, 'Time Period of Creation', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '388', '0', 0, 0, 'Authority record control number or standard number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '388', '2', 0, 0, 'Source of term', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '388', '3', 0, 0, 'Materials specified', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '388', '6', 0, 0, 'Linkage', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '388', '8', 0, 0, 'Field link and sequence number', '', 3, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '388', 'a', 0, 0, 'Time period of creation term', '', 3, -1, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '400', '', 1, 'Область серії / додаткова пошукова ознака — індивідуальне ім’я (застаріле, CAN/MARC), (локальне, США)', '', NULL);
@@ -1686,6 +1966,33 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '541', 'o', 0, 1, 'Назва одиниці вимірювання', '',            5, 1, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '542', '', 1, 'Information Relating to Copyright Status', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '542', 'a', 0, 0, 'Personal creator', '',    5, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '542', 'b', 0, 0, 'Personal creator death date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'c', 0, 0, 'Corporate creator', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'd', 0, 0, 'Copyright holder', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'e', 0, 0, 'Copyright holder contact information', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'f', 0, 0, 'Copyright statement', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'g', 0, 0, 'Copyright date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'h', 0, 0, 'Copyright renewal date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'i', 0, 0, 'Publication date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'j', 0, 0, 'Creation date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'k', 0, 0, 'Publisher', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'l', 0, 0, 'Copyright status', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'm', 0, 0, 'Publication status', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'n', 0, 0, 'Note', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'o', 0, 0, 'Research date', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'p', 0, 0, 'Country of publication or creation', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'q', 0, 0, 'Supplying agency', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'r', 0, 0, 'Jurisdiction of copyright assessment', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 's', 0, 0, 'Source of information', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', 'u', 0, 0, 'Uniform Resource Identifier', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', '3', 0, 0, 'Materials specified', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', '6', 0, 0, 'Linkage', '',    5, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '542', '8', 0, 0, 'Field link and sequence number', '',    5, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '543', '', 1, 'Примітка про супровідну інформацію (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '543', '6', 0, 0, 'Елемент зв’язку', '',                    5, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -1918,6 +2225,14 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '586', 'a', 0, 0, 'Примітка про нагороди', '',                5, -1, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '588', '', 1, 'Source of Description Note', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '588', '5', 0, 0, 'Institution to which field applies', '',      5, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '588', '6', 0, 0, 'Linkage', '',                      5, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '588', '8', 0, 1, 'Field link and sequence number', '', 5, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '588', 'a', 0, 0, 'Source of description note', '',                5, -1, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '590', '', 1, 'Примітка про автограф і колекцію', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '590', '6', 0, 0, 'Елемент зв’язку (RLIN)', '',               5, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -2050,6 +2365,23 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '630', 'z', 0, 1, 'Географічне ділення', '',                  6, 0, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '647', '', 1, 'Subject Added Entry-Named Event', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '647', '0', 0, 0, 'Authority record control number or standard number', '',                      6, -1, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', '2', 0, 0, 'Source of heading or term', '',                      6, -1, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', '3', 0, 0, 'Materials specified', '',      6, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', '6', 0, 0, 'Linkage', '',                      6, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', '8', 0, 1, 'Field link and sequence number', '',  6, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'a', 0, 0, 'Named event', '',               6, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'c', 0, 0, 'Location of named event', '',               6, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'd', 0, 1, 'Date of named event', '',             6, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'g', 0, 0, 'Miscellaneous information', '',                       6, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'v', 0, 1, 'Form subdivision', '',                       6, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'x', 0, 1, 'General subdivision', '',                      6, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'y', 0, 1, 'Chronological subdivision', '',                 6, 0, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '647', 'z', 0, 1, 'Geographic subdivision', '',                  6, 0, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '648', '', 1, 'Хронологічне поняття як додаткова предметна пошукова ознака', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '648', '2', 0, 0, 'Джерело рубрики чи терміну', '',           6, 0, NULL, NULL, '', NULL, '', '', NULL),
@@ -2070,7 +2402,12 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '650', '4', 0, 1, 'Код відношення', '',                       6, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '650', '6', 0, 0, 'Елемент зв’язку', '',                      6, -6, '', '', '', 0, '', '', NULL),
  ('', '', '650', '8', 0, 1, 'Зв’язок полів і номер послідовності', '',  6, -6, '', '', '', 0, '', '', NULL),
- ('', 'TOPIC_TERM', '650', 'a', 0, 0, 'Основна рубрика', '',            6, 0, 'bibliosubject.subject', '', '', 0, '\'6003\',\'600a\',\'600b\',\'600c\',\'600d\',\'600e\',\'600f\',\'600g\',\'600h\',\'600k\',\'600l\',\'600m\',\'600n\',\'600o\',\'600p\',\'600r\',\'600s\',\'600t\',\'600u\',\'600x\',\'600z\',\'600y\',\'600v\',\'6103\',\'610a\',\'610b\',\'610c\',\'610d\',\'610e\',\'610f\',\'610g\',\'610h\',\'610k\',\'610l\',\'610m\',\'610n\',\'610o\',\'610p\',\'610r\',\'610s\',\'610t\',\'610u\',\'610x\',\'610z\',\'610y\',\'610v\',\'6113\',\'611a\',\'611b\',\'611c\',\'611d\',\'611e\',\'611f\',\'611g\',\'611h\',\'611k\',\'611l\',\'611m\',\'611n\',\'611o\',\'611p\',\'611r\',\'611s\',\'611t\',\'611u\',\'611x\',\'611z\',\'611y\',\'611v\',\'630a\',\'630b\',\'630c\',\'630d\',\'630e\',\'630f\',\'630g\',\'630h\',\'630k\',\'630l\',\'630m\',\'630n\',\'630o\',\'630p\',\'630r\',\'630s\',\'630t\',\'630x\',\'630z\',\'630y\',\'630v\',\'6483\',\'648a\',\'648x\',\'648z\',\'648y\',\'648v\',\'6503\',\'650b\',\'650c\',\'650d\',\'650e\',\'650x\',\'650z\',\'650y\',\'650v\',\'6513\',\'651a\',\'651b\',\'651c\',\'651d\',\'651e\',\'651x\',\'651z\',\'651y\',\'651v\',\'653a\',\'6543\',\'654a\',\'654b\',\'654x\',\'654z\',\'654y\',\'654v\',\'6553\',\'655a\',\'655b\',\'655x\',\'655z\',\'655y\',\'655v\',\'6563\',\'656a\',\'656k\',\'656x\',\'656z\',\'656y\',\'656v\',\'6573\',\'657a\',\'657x\',\'657z\',\'657y\',\'657v\',\'658a\',\'658b\',\'658c\',\'658d\',\'658v\'', '', NULL),
+ ('', 'TOPIC_TERM', '650', 'a', 0, 0, 'Основна рубрика', '',            6, 0, 'bibliosubject.subject', '', '', 0, '\'6003\',\'600a\',\'600b\',\'600c\',\'600d\',\'600e\',\'600f\',\'600g\',\'600h\',\'600k\',\'600l\',\'600m\',\'600n\',\'600o\',
+ \'600p\',\'600r\',\'600s\',\'600t\',\'600u\',\'600x\',\'600z\',\'600y\',\'600v\',\'6103\',\'610a\',\'610b\',\'610c\',\'610d\',\'610e\',\'610f\',\'610g\',\'610h\',\'610k\',\'610l\',\'610m\',\'610n\',\'610o\',\'610p\',\'610r\',\'610s\',\'610t\',
+ \'610u\',\'610x\',\'610z\',\'610y\',\'610v\',\'6113\',\'611a\',\'611b\',\'611c\',\'611d\',\'611e\',\'611f\',\'611g\',\'611h\',\'611k\',\'611l\',\'611m\',\'611n\',\'611o\',\'611p\',\'611r\',\'611s\',\'611t\',\'611u\',\'611x\',\'611z\',\'611y\',
+ \'611v\',\'630a\',\'630b\',\'630c\',\'630d\',\'630e\',\'630f\',\'630g\',\'630h\',\'630k\',\'630l\',\'630m\',\'630n\',\'630o\',\'630p\',\'630r\',\'630s\',\'630t\',\'630x\',\'630z\',\'630y\',\'630v\',\'6483\',\'648a\',\'648x\',\'648z\',\'648y\',
+ \'648v\',\'6503\',\'650b\',\'650c\',\'650d\',\'650e\',\'650x\',\'650z\',\'650y\',\'650v\',\'6513\',\'651a\',\'651b\',\'651c\',\'651d\',\'651e\',\'651x\',\'651z\',\'651y\',\'651v\',\'653a\',\'6543\',\'654a\',\'654b\',\'654x\',\'654z\',\'654y\',
+ \'654v\',\'6553\',\'655a\',\'655b\',\'655x\',\'655z\',\'655y\',\'655v\',\'6563\',\'656a\',\'656k\',\'656x\',\'656z\',\'656y\',\'656v\',\'6573\',\'657a\',\'657x\',\'657z\',\'657y\',\'657v\',\'658a\',\'658b\',\'658c\',\'658d\',\'658v\'', '', NULL),
  ('', '', '650', 'b', 0, 0, 'Ін. геогр. рубрика', '',                   6, -1, '', '', '', 0, '', '', NULL),
  ('', '', '650', 'c', 0, 0, 'Місце події', '',                          6, -1, '', '', '', 0, '', '', NULL),
  ('', '', '650', 'd', 0, 0, 'Дати події', '',                           6, -1, '', '', '', 0, '', '', NULL),
@@ -2523,6 +2860,18 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '740', 'p', 0, 1, 'Заголовок частини/розділу твору', '',      7, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '751', '', 1, 'Added Entry-Geographic Name', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '751', '0', 0, 0, 'Authority record control number', '',          7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', '2', 0, 0, 'Source of heading or term', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', '3', 0, 0, 'Materials specified', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', '4', 0, 0, 'Relator code', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', '6', 0, 0, 'Linkage', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', '8', 0, 0, 'Field link and sequence number', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', 'a', 0, 0, 'Geographic name', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '751', 'e', 0, 0, 'Relator term', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '752', '', 1, 'Додаткове введення — ієрархічна назва місця', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '752', '2', 0, 0, 'Джерело рубрики або терміну', '',          7, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -2674,7 +3023,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '770', '6', 0, 0, 'Елемент зв’язку', '',                      7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '770', '7', 0, 0, 'Control subfield', 'Control subfield',     7, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '770', '8', 0, 1, 'Field link and sequence number', 'Field link and sequence number ', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', '', '770', '8', 0, 1, 'Field link and sequence number', 'Field link and sequence number', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '770', 'a', 0, 0, 'Main entry heading', 'Main entry heading', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '770', 'b', 0, 0, 'Edition', 'Edition',                       7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '770', 'c', 0, 0, 'Qualifying information', 'Qualifying information', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -3680,6 +4029,51 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '880', 'z', 0, 1, 'z', 'z',                                   8, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '882', '', 1, 'Replacement Record Information', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '882', '6', 0, 0, 'Linkage', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '882', '8', 0, 0, 'Field link and sequence number', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '882', 'a', 0, 0, 'Replacement title', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '882', 'i', 0, 0, 'Explanatory text', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '882', 'q', 0, 0, 'Replacement bibliographic record control number', '',                      8, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '883', '', 1, 'Machine-generated Metadata Provenance', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '883', '0', 0, 0, 'Authority record control number or standard number', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', '8', 0, 0, 'Field link and sequence number', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'a', 0, 0, 'Generation process', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'c', 0, 0, 'Confidence value', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'd', 0, 0, 'Generation date', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'q', 0, 0, 'Generation agency', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'x', 0, 0, 'Validity end date', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'u', 0, 0, 'Uniform Resource Identifier', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '883', 'w', 0, 0, 'Bibliographic record control number', '',                      8, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '884', '', 1, 'Description Conversion Information', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '884', 'a', 0, 0, 'Conversion process', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '884', 'g', 0, 0, 'Conversion date', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '884', 'k', 0, 0, 'Identifier of source metadata', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '884', 'q', 0, 0, 'Conversion agency', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '884', 'u', 0, 0, 'Uniform Resource Identifier', '',                      8, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '885', '', 1, 'Matching Information', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '885', '0', 0, 0, 'Authority record control number or standard number', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', '2', 0, 0, 'Source', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', '5', 0, 0, 'Institution to which field applies', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'a', 0, 0, 'Matching information', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'b', 0, 0, 'Status of matching and its checking', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'c', 0, 0, 'Confidence value', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'd', 0, 0, 'Generation date', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'w', 0, 0, 'Record control number', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'x', 0, 0, 'Nonpublic note', '',                      8, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '885', 'z', 0, 0, 'Public note', '',                      8, -6, '', '', '', NULL, '', '', NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '886', '', 1, 'Поле інформації про іноземний формат MARC', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '886', '0', 0, 1, 0, 0,                                       8, -6, '', '', '', NULL, '', '', NULL),
@@ -3786,7 +4180,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '898', '%', 0, 0, '% (RLIN)', '% (RLIN)',                     8, -6, '', '', '', 0, '', '', NULL),
  ('', NULL, '898', '4', 0, 1, 'Код відношення', '',                     8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '898', '6', 0, 0, 'Елемент зв’язку', '',                    8, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', NULL, '898', '8', 0, 1, 'Field link and sequence number ', 'Field link and sequence number ', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
+ ('', NULL, '898', '8', 0, 1, 'Field link and sequence number', 'Field link and sequence number', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', 'MEETI_NAME', '898', 'a', 0, 0, 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '898', 'b', 0, 0, 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '898', 'c', 0, 0, 'Location of meeting', 'Location of meeting', 8, -6, NULL, NULL, '', NULL, '', '', NULL),
