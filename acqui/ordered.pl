@@ -32,6 +32,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
+use Koha::InvoiceAdjustments;
 
 my $dbh     = C4::Context->dbh;
 my $input   = new CGI;
@@ -95,12 +96,19 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $total += $subtotal;
     }
 }
+
+my $adjustments = Koha::InvoiceAdjustments->search({budget_id => $fund_id, closedate => undef, encumber_open => 1 }, { join => 'invoiceid' } );
+while ( my $adj = $adjustments->next ){
+    $total += $adj->adjustment;
+}
+
 $total = sprintf( "%.2f", $total );
 
 $template->{VARS}->{'fund'}    = $fund_id;
 $template->{VARS}->{'ordered'} = \@ordered;
 $template->{VARS}->{'total'}   = $total;
 $template->{VARS}->{'fund_code'} = $fund_code;
+$template->{VARS}->{'adjustments'} = $adjustments;
 
 $sth->finish;
 

@@ -73,6 +73,16 @@
 [% END %]
     </tbody>
     <tfoot>
+    [% IF ( adjustments.count > 0 ) %]
+            [% FOREACH adjustment IN adjustments %]
+                <tr>
+                    <td></td>
+                    <td colspan="6">Adjustment cost for invoice [% adjustment.invoiceid %]</td>
+                    <td class="data total">[% adjustment.adjustment %]</td>
+                </tr>
+            [% END %]
+
+    [% END %]
     <tr>
         <td> Total </td>
         <td> </td>

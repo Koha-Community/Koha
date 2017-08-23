@@ -3,6 +3,8 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% SET footerjs = 1 %]
+[% USE AuthorisedValues %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Invoice</title>
 [% Asset.css("css/datatables.css") %]
@@ -81,6 +83,112 @@
             <a href="invoice.pl?op=delete&invoiceid=[% invoiceid %]" id="delete">Delete</a>
             [% END %]
         </fieldset>
+      </form>
+      <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
+          <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
+              <table id="invoice_adj_table">
+                  <tr>
+                     <th>Id</th>
+                     <th>Amount</th>
+                     <th>Reason</th>
+                     <th>Note</th>
+                     <th>Fund</th>
+                     <th>Encumber while invoice open</th>
+                     <th>&nbsp</th>
+                  </tr>
+                  [% IF (adjustments.count > 0) %]
+                  <tr><td colspan="7">Current adjustments</td></tr>
+                  [% total_adj = 0 %]
+                  [% FOREACH adjustment IN adjustments %]
+                  [% total_adj = total_adj + adjustment.adjustment %]
+                  <tr>
+                      <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id %]" />[% adjustment.adjustment_id %]</td>
+                      <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id %]" value="[% adjustment.adjustment | $Price %]" /></td>
+                      <td>
+                          [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                          [% IF reasons %]
+                          <select id="reason_[% adjustment.adjustment_id %]" name="reason">
+                                  <option value="">No reason</option>
+                              [% FOREACH reason IN reasons %]
+                                [% IF ( adjustment.reason == reason.authorised_value ) %]
+                                  <option selected="selected" value="[% reason.authorised_value %]">
+                                [% ELSE %]
+                                  <option value="[% reason.authorised_value %]">
+                                [% END %]
+                                  [% reason.lib %]
+                                  </option>
+                              [% END %]
+                          </select>
+                          [% ELSE %]
+                          <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
+                          <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id %]" value="" />
+                          [% END %]
+                      </td>
+                      <td><input type="text" name="note" id="note_new" value="[% adjustment.note %]"/></td>
+                      <td>
+                          <select id="budget_id_[% adjustment.adjustment_id %]" name="budget_id">
+                                  <option value="">No fund</option>
+                              [% FOREACH budget IN budgets_loop %]
+                                [% IF ( budget.budget_id == adjustment.budget_id ) %]
+                                  <option selected="selected" value="[% budget.budget_id %]">
+                                [% ELSE %]
+                                  <option value="[% budget.budget_id %]">
+                                [% END %]
+                                  [% budget.budget_name %]
+                                  </option>
+                              [% END %]
+                          </select>
+                      </td>
+                      [% IF adjustment.encumber_open %]
+                      <td>
+                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id %]"  value="[% adjustment.adjustment_id %]" checked/>
+                      </td>
+                      [% ELSE %]
+                      <td>
+                          <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id %]"  value="[% adjustment.adjustment_id %]" />
+                      </td>
+                      [% END %]
+                      <td>
+                          <a class="btn btn-default btn-xs" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id %]&invoiceid=[% invoiceid %]"><i class="fa fa-trash"></i> Delete</a>
+                      </td>
+                  </tr>
+                  [% END %]
+                  [% END %]
+                  <tr><td colspan="7">Add an adjustment</td></tr>
+                      <td><input type="hidden" name="adjustment_id" value="new" />New</td>
+                      <td><input type="text" name="adjustment" id="adjustment_new]" /></td>
+                      <td>
+                          [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                          [% IF reasons %]
+                          <select id="reason_[% adjustment.adjustment_id %]" name="reason">
+                                  <option value="">No reason</option>
+                                [% FOREACH reason IN reasons %]
+                                  <option value="[% reason.authorised_value %]">
+                                  [% reason.lib %]
+                                  </option>
+                                [% END %]
+                          </select>
+                          [% ELSE %]
+                          <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
+                          [% END %]
+                      </td>
+                      <td><input type="text" name="note" id="note_new" value=""/></td>
+                      <td>
+                          <select id="budget_id_[% adjustment.adjustment_id %]" name="budget_id">
+                               <option selected="selected" value="">No fund</option>
+                               [% FOREACH budget IN budgets_loop %]
+                               <option value="[% budget.budget_id %]">
+                               [% budget.budget_name %]
+                               </option>
+                               [% END %]
+                          </select>
+                      </td>
+                      <td><input type="checkbox" name="encumber_open" id="encumber_new" value="1" /></td>
+                      <td><input type="hidden" name="delete" value=""></td>
+                  </tr>
+                </table>
+          <input type="hidden" name="op" value="mod_adj" />
+          <input type="submit" value="Update adjustments" />
       </form>
       <p>
           <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid %]">Go to receipt page</a>
@@ -164,11 +272,11 @@
                 <th>&nbsp;</th>
               </tr>
               <tr>
-                <th colspan="2">Total + Shipment cost ([% currency.symbol %])</th>
+                <th colspan="2">Total + Adjustments + Shipment cost ([% currency.symbol %])</th>
                 <th class="tax_excluded"></th>
                 <th class="tax_included"></th>
                 <th>[% total_quantity %]</th>
-                <th class="tax_excluded">[% total_tax_excluded_shipment | $Price %]</th>
+                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
                 <th class="tax_included">[% total_tax_included_shipment | $Price %]</th>
                 <th>&nbsp;</th>
                 <th>[% total_tax_value | $Price %]</th>
@@ -177,7 +285,11 @@
             </tfoot>
           </table>
         [% ELSE %]
-            <div class="dialog message"><p>No orders yet</p></div>
+            <div class="dialog message"><p>No orders yet</p>
+            [% IF adjustments.count > 0 || shipmentcost > 0 %]
+            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price %]</p>
+            [% END %]
+            </div>
         [% END %]
         [% IF ( (Koha.Preference('AcqEnableFiles')) && files ) %]
             <br />

@@ -38,6 +38,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 use Koha::DateUtils;
 use Koha::Misc::Files;
+use Koha::InvoiceAdjustments;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -108,7 +109,47 @@ elsif ( $op && $op eq 'delete' ) {
         exit 0;
     }
 }
+elsif ( $op && $op eq 'del_adj' ) {
+    my $adjustment_id  = $input->param('adjustment_id');
+    my $del_adj = Koha::InvoiceAdjustments->find( $adjustment_id );
+    $del_adj->delete() if ($del_adj);
+}
+elsif ( $op && $op eq 'mod_adj' ) {
+    my @adjustment_id  = $input->multi_param('adjustment_id');
+    my @adjustment     = $input->multi_param('adjustment');
+    my @reason         = $input->multi_param('reason');
+    my @note           = $input->multi_param('note');
+    my @budget_id      = $input->multi_param('budget_id');
+    my @encumber_open  = $input->multi_param('encumber_open');
+    my %e_open = map { $_ => 1 } @encumber_open;
 
+    for( my $i=0; $i < scalar @adjustment; $i++ ){
+        if( $adjustment_id[$i] eq 'new' ){
+            next unless ( $adjustment[$i] || $reason[$i] );
+            my $new_adj = Koha::InvoiceAdjustment->new({
+                invoiceid => $invoiceid,
+                adjustment => $adjustment[$i],
+                reason => $reason[$i],
+                note => $note[$i],
+                budget_id => $budget_id[$i] || undef,
+                encumber_open => $encumber_open[$i],
+            });
+            $new_adj->store();
+        }
+        else {
+            my $old_adj = Koha::InvoiceAdjustments->find( $adjustment_id[$i] );
+            unless ( $old_adj->adjustment == $adjustment[$i] && $old_adj->reason eq $reason[$i] && $old_adj->budget_id == $budget_id[$i] && $old_adj->encumber_open == $e_open{$adjustment_id[$i]} && $old_adj->note eq $note[$i] ){
+                $old_adj->timestamp(undef);
+                $old_adj->adjustment( $adjustment[$i] );
+                $old_adj->reason( $reason[$i] );
+                $old_adj->note( $note[$i] );
+                $old_adj->budget_id( $budget_id[$i] || undef );
+                $old_adj->encumber_open( $e_open{$adjustment_id[$i]} ? 1 : 0 );
+                $old_adj->update();
+            }
+        }
+    }
+}
 
 my $details = GetInvoiceDetails($invoiceid);
 my $bookseller = Koha::Acquisition::Booksellers->find( $details->{booksellerid} );
@@ -158,6 +199,9 @@ foreach my $budget (@$budgets) {
     }
     push @budgets_loop, \%line;
 }
+
+my $adjustments = Koha::InvoiceAdjustments->search({ invoiceid => $details->{'invoiceid'} });
+if ( $adjustments ) { $template->param( adjustments => $adjustments ); }
 
 $template->param(
     invoiceid        => $details->{'invoiceid'},

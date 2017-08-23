@@ -22,6 +22,7 @@ use strict;
 use C4::Context;
 use Koha::Database;
 use Koha::Patrons;
+use Koha::InvoiceAdjustments;
 use C4::Debug;
 use vars qw(@ISA @EXPORT);
 
@@ -349,6 +350,11 @@ sub GetBudgetSpent {
     my ($shipmentcost_sum) = $sth->fetchrow_array;
     $sum += $shipmentcost_sum;
 
+    my $adjustments = Koha::InvoiceAdjustments->search({budget_id => $budget_id, closedate => { '!=' => undef } },{ join => 'invoiceid' });
+    while ( my $adj = $adjustments->next ){
+        $sum += $adj->adjustment;
+    }
+
 	return $sum;
 }
 
@@ -364,6 +370,21 @@ sub GetBudgetOrdered {
     |);
 	$sth->execute($budget_id);
 	my $sum =  $sth->fetchrow_array;
+
+    $sth = $dbh->prepare(qq|
+        SELECT SUM(shipmentcost) AS sum
+        FROM aqinvoices
+        WHERE shipmentcost_budgetid = ?
+          AND closedate IS NULL
+    |);
+    $sth->execute($budget_id);
+    my ($shipmentcost_sum) = $sth->fetchrow_array;
+    $sum += $shipmentcost_sum;
+
+    my $adjustments = Koha::InvoiceAdjustments->search({budget_id => $budget_id, encumber_open => 1, closedate => undef},{ join => 'invoiceid' });
+    while ( my $adj = $adjustments->next ){
+        $sum += $adj->adjustment;
+    }
 
 	return $sum;
 }
