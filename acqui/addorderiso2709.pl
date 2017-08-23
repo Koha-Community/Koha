@@ -221,6 +221,7 @@ if ($op eq ""){
             $price = Koha::Number::Price->new($price)->unformat;
             $orderinfo{tax_rate} = $bookseller->{tax_rate};
             my $c = $c_discount ? $c_discount : $bookseller->{discount} / 100;
+            $orderinfo{discount} = $c;
             if ( $bookseller->{listincgst} ) {
                 if ( $c_discount ) {
                     $orderinfo{ecost} = $price;
