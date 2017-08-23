@@ -17,11 +17,28 @@ Installation instructions can be found at:
 - [Koha Wiki](http://wiki.koha-community.org/wiki/Installation_Documentation)
 - OR in the INSTALL files that come in the tarball
 
-Koha 16.11.11 is a bugfix/maintenance release.
+Koha 16.11.11 is a security release.
 
-It includes 3 enhancements, 16 bugfixes.
+It includes 3 enhancements, 32 bugfixes.
 
+## Security bugs fixed
 
+- [[19035]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19035) Stored XSS in patron lists - lists.pl
+- [[19114]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19114) Stored XSS in parcels.pl
+- [[19112]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19112) Stored XSS in basketheader.pl page
+- [[19110]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19110) XSS Stored in branches.pl
+- [[19100]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19100) XSS Flaws in memberentry.pl
+- [[19105]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19105) XSS Stored in holidays.pl
+- [[16069]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16069) XSS issue in basket.pl
+- [[19079]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19079) XSS Flaws in Membership page
+- [[19033]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19033) XSS Flaws in Currencies and exchange page
+- [[19034]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19034) XSS Flaws in- Cities - Z39.50/SRU servers administration - Patron categories pages
+- [[19050]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19050) XSS Flaws in Quick spine label creator
+- [[19051]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19051) XSS Flaws in - Batch record deletion page - Batch item deletion page - Batch item modification page
+- [[19052]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19052) XSS Flaws in - vendor search page - Invoice search page
+- [[19054]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19054) XSS Flaws in Report - Top Most-circulated items
+- [[19078]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19078) XSS Flaws in System preferences
+- [[18726]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18726) OPAC XSS - biblionumber
 
 
 ## Enhancements
