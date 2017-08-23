@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='SAUTTIT';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (240, 'SAUTTIT', 'Auteur titre', '[240a][, 240b][ 240d][ ; 240c][ (240f)][. 240t]\n');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (240, 'SAUTTIT', 'Auteur titre', '[240a][, 240b][ 240d][ ; 240c][ (240f)][. 240t]\n');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (240, 'SAUTTIT', 'Автор та заголовок', '[240a][, 240b][ 240d][ ; 240c][ (240f)][. 240t]\n');
 DELETE FROM auth_tag_structure WHERE authtypecode='SAUTTIT';
 DELETE FROM auth_subfield_structure WHERE authtypecode='SAUTTIT';
 

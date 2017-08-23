@@ -14,18 +14,13 @@
 # http://www.library.lviv.ua/e-library/library_standarts/UkrMarc/, 2010
 # http://www.nbuv.gov.ua/library/ukrmarc.html, 2004
 #
-# 2) UNIMARC manual : bibliographic format 1994 / IFLA Universal
-#  Bibliographic Control and International MARC Core Programme (UBCIM). -
-#  "The following list represents the state of the format as at 1 March
-#  2000.  It includes the changes published in Update 3." -
-#  http://www.ifla.org/VI/3/p1996-1/sec-uni.htm.
-#  2006-03-15 a;
-#
-# 3) UNIMARC manual: bibliographic format / IFLA UNIMARC Core Activity; ed. By Alan Hopkinson.
+# 2) UNIMARC manual: bibliographic format / IFLA UNIMARC Core Activity; ed. By Alan Hopkinson.
 #  3rd ed. - München: Saur, 2008. (IFLA Series in Bibliographic Control, 36).
 #  ISBN 978-3-598-24284-7, 760 p.
 #  http://www.ifla.org/VI/8/unimarc-concise-bibliographic-format-2008.pdf
 # **************************************************************************
+
+SET FOREIGN_KEY_CHECKS=0;
 
 -- DELETE FROM biblio_framework WHERE frameworkcode='';
 -- INSERT INTO biblio_framework (frameworkcode, frameworktext) VALUES ('', 'За умовчанням');
@@ -38,13 +33,13 @@ DELETE FROM marc_subfield_structure WHERE frameworkcode='';
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '000', 1, '', 'Маркер запису', '', '');
-INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '000', '@', 0, 0, 'Маркер (контрольне поле довжиною 24 байти)', '', -1, 0, '', '', 'unimarc_leader.pl', 0, '', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue, maxlength) VALUES
+ ('', '', '000', '@', 0, 0, 'Маркер (контрольне поле довжиною 24 байти)', '', -1, 0, '', '', 'unimarc_leader.pl', 0, '', '', NULL, 24);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '001', '', '', 'Ідентифікатор запису', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '001', '@', 0, 0, 'Ідентифікатор біб-запису', '',             -1, 0, '', '', '', 0, '', '', NULL);
+ ('', '', '001', '@', 0, 0, 'Ідентифікатор запису', '',             -1, 0, 'biblio.biblionumber', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '005', '', '', 'Ідентифікатор версії', '', NULL);
@@ -103,8 +98,17 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '016', 'a', 0, 0, 'Код ISRC', 'ISRC',                         0, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '016', 'b', 0, 0, 'Характеристики', '',                       -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '016', 'd', 0, 0, 'Сфера доступності та/або ціна', '',      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '016', 'z', 1, 0, 'Помилковий ISRC', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+ ('', '', '016', 'd', 0, 0, 'Сфера доступності та/або ціна', '',        -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '016', 'z', 1, 0, 'Помилковий ISRC', '',                      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '017', '', 1, 'Інший стандартний ідентифікатор', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('', '', '017', '2', 0, 0, 'Джерело номеру/коду', '',                  -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '017', 'a', 0, 0, 'Стандартний номер', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '017', 'b', 0, 0, 'Уточнення', '',                            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '017', 'd', 0, 0, 'Ціна', '',                                 -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '017', 'z', 0, 1, 'Помиковий номер/код', '',                  -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '020', '', 1, 'Номер документа в національній бібліографії', '', '');
@@ -146,9 +150,18 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '071', 'b', 0, 0, 'Джерело', '',                            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '100', '', '', 'Дані загальної обробки', '', '');
+ ('', '073', '', 1, 'Міжнародний номер товару (EAN)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '100', 'a', 0, 0, 'Дані загальної обробки', '',               3, 1, '', '', 'unimarc_field_100.pl', 0, '', '', NULL);
+ ('', '', '073', 'a', 0, 0, 'Стандартний номер', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '073', 'b', 0, 0, 'Уточнення', '',                           -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '073', 'c', 0, 0, 'Додаткові коди, які йдуть за стандартним номером/кодом', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '073', 'd', 0, 0, 'Умови доступності та/або ціна', '',       -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '073', 'z', 0, 0, 'Помилковий номер/код', '',                -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('', '100', '', '', 'Дані загальної обробки', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue, maxlength) VALUES
+ ('', '', '100', 'a', 0, 0, 'Дані загальної обробки', '',               3, -1, '', '', 'unimarc_field_100.pl', 0, '', '', NULL, 36);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '101', 1, '', 'Мова документу', 'Мова', '');
@@ -320,7 +333,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '200', 'g', 0, 1, 'Наступні відомості про відповідальність', '', 0, 0, 'additionalauthors.author', '', '', 0, '', '', NULL),
  ('', '', '200', 'h', 0, 1, 'Позначення та/або номер частини', '',      0, 0, '', '', '', 0, '', '', NULL),
  ('', '', '200', 'i', 0, 1, 'Найменування частини', '',                 0, 0, '', '', '', 0, '', '', NULL),
- ('', '', '200', 'v', 0, 1, 'Позначення тому', '',                      -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '200', 'v', 0, 1, 'Позначення тому', '',                      0, 0, '', '', '', 0, '', '', NULL),
  ('', '', '200', 'z', 0, 1, 'Мова паралельної основної назви', '',      -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
@@ -602,45 +615,45 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '410', '', 1, 'Серії (поле зв’язку)', 'Серії', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '410', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '410', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', '3', 0, 0, 'Номер авторитетного запису', '',           -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', '5', 0, 0, 'Установа в якій поле застосовано', '',     -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', '@', 0, 0, 'номер ідентифікації примітки', '',         -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'a', 0, 0, 'Автор', '',                                -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'c', 0, 0, 'Місце публікації', '',                     -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'd', 0, 0, 'Дата публікації', '',                      -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'e', 0, 0, 'Відомості про видання', '',                -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'h', 0, 0, 'Номер розділу або частини', '',            -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'i', 0, 0, 'Назва розділу або частини', '',            -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'p', 0, 0, 'Фізичний опис', '',                        -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 't', 0, 0, 'Назва', '',                                1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'u', 0, 0, 'URL', '',                                  -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'v', 0, 0, 'Номер тому', '',                           -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '410', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
+ ('', '', '410', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '410', '1', 0, 1, 'Дані, які пов’язуються', '',               4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', '3', 0, 0, 'Номер авторитетного запису', '',           4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', '5', 0, 0, 'Установа в якій поле застосовано', '',     4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', '@', 0, 0, 'номер ідентифікації примітки', '',         4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'a', 0, 0, 'Автор', '',                                4, 0, '', '', 'unimarc_field_4XX.pl', 0, '', '', NULL),
+ ('', '', '410', 'c', 0, 0, 'Місце публікації', '',                     4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'd', 0, 0, 'Дата публікації', '',                      4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'e', 0, 0, 'Відомості про видання', '',                4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'h', 0, 0, 'Номер розділу або частини', '',            4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'i', 0, 0, 'Назва розділу або частини', '',            4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'p', 0, 0, 'Фізичний опис', '',                        4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 't', 0, 0, 'Назва', '',                                4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'u', 0, 0, 'URL', '',                                  4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'v', 0, 0, 'Номер тому', '',                           4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '410', 'z', 0, 0, 'CODEN', '',                                4, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '411', '', 1, 'Підсерії', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '411', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '411', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'h', 0, 0, 'Номер розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'i', 0, 0, 'Назва розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'p', 0, 0, 'Фізичний опис', '',                      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 't', 0, 0, 'Назва', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'u', 0, 0, 'URL', '',                                -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'v', 0, 0, 'Номер тому', '',                         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '411', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
+ ('', '', '411', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', '1', 0, 1, 'Дані, які пов’язуються', '',               4, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '411', '3', 0, 0, 'Номер авторитетного запису', '',         4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', '5', 0, 0, 'Установа в якій поле застосовано', '',   4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'a', 0, 0, 'Автор', '',                              4, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'c', 0, 0, 'Місце публікації', '',                   4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'd', 0, 0, 'Дата публікації', '',                    4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'e', 0, 0, 'Відомості про видання', '',              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'h', 0, 0, 'Номер розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'i', 0, 0, 'Назва розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'p', 0, 0, 'Фізичний опис', '',                      4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 't', 0, 0, 'Назва', '',                              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'u', 0, 0, 'URL', '',                                4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'v', 0, 0, 'Номер тому', '',                         4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '411', 'z', 0, 0, 'CODEN', '',                                4, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '421', '', 1, 'Додаток', '', '');
@@ -649,7 +662,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '421', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '421', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '421', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '421', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '421', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '421', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '421', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '421', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -670,7 +683,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '422', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '422', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '422', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '422', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '422', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '422', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '422', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '422', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -691,7 +704,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '423', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '423', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '423', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '423', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '423', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '423', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '423', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '423', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -712,7 +725,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '430', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '430', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '430', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '430', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '430', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '430', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '430', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '430', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -733,7 +746,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '431', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '431', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '431', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '431', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '431', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '431', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '431', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '431', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -754,7 +767,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '432', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '432', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '432', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '432', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '432', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '432', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '432', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '432', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -775,7 +788,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '433', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '433', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '433', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '433', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '433', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '433', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '433', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '433', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -796,7 +809,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '434', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '434', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '434', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '434', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '434', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '434', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '434', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '434', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -817,7 +830,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '435', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '435', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '435', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '435', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '435', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '435', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '435', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '435', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -838,7 +851,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '436', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '436', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '436', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '436', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '436', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '436', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '436', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '436', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -859,7 +872,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '437', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '437', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '437', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '437', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '437', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '437', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '437', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '437', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -880,7 +893,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '440', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '440', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '440', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '440', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '440', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '440', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '440', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '440', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -901,7 +914,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '441', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '441', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '441', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '441', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '441', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '441', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '441', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '441', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -922,7 +935,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '442', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '442', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '442', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '442', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '442', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '442', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '442', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '442', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -943,7 +956,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '443', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '443', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '443', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '443', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '443', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '443', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '443', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '443', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -964,7 +977,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '444', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '444', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '444', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '444', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '444', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '444', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '444', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '444', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -985,7 +998,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '445', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '445', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '445', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '445', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '445', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '445', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '445', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '445', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1006,7 +1019,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '446', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '446', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '446', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '446', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '446', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '446', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '446', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '446', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1027,7 +1040,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '447', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '447', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '447', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '447', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '447', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '447', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '447', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '447', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1048,7 +1061,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '448', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '448', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '448', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '448', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '448', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '448', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '448', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '448', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1069,7 +1082,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '451', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '451', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '451', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '451', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '451', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '451', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '451', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '451', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1090,7 +1103,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '452', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '452', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '452', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '452', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '452', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '452', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '452', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '452', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1111,7 +1124,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '453', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '453', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '453', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '453', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '453', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '453', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '453', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '453', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1133,7 +1146,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '454', '3', 0, 0, 'Номер авторитетного запису', '',           -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '454', '5', 0, 0, 'Установа в якій поле застосовано', '',     -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '454', '@', 0, 0, 'номер ідентифікації примітки', '',         -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '454', 'a', 0, 0, 'Автор', '',                                -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '454', 'a', 0, 0, 'Автор', '',                                -1, 0, '', '', 'unimarc_field_4XX.pl', 0, '', '', NULL),
  ('', '', '454', 'c', 0, 0, 'Місце публікації', '',                     -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '454', 'd', 0, 0, 'Дата публікації', '',                      -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '454', 'e', 0, 0, 'Відомості про видання', '',                -1, 0, '', '', '', 0, '', '', NULL),
@@ -1154,7 +1167,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '455', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '455', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '455', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '455', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '455', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '455', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '455', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '455', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1175,7 +1188,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '456', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '456', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '456', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '456', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '456', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '456', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '456', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '456', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1192,85 +1205,85 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '461', '', 1, 'Набір', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '461', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '461', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '461', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '461', '1', 0, 1, 'Дані, які пов’язуються', '',               4, 0, '', '', '', 0, '', '', NULL),
  ('', '', '461', '3', 0, 0, 'Номер авторитетного запису', '',           -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '461', '5', 0, 0, 'Установа в якій поле застосовано', '',     -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'a', 0, 0, 'Автор', '',                                -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'c', 0, 0, 'Місце публікації', '',                     -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'd', 0, 0, 'Дата публікації', '',                      -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'e', 0, 0, 'Відомості про видання', '',                -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'h', 0, 0, 'Номер розділу або частини', '',            -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'i', 0, 0, 'Назва розділу або частини', '',            -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'p', 0, 0, 'Фізичний опис', '',                        -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 't', 0, 0, 'Назва', '',                                -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'u', 0, 0, 'URL', '',                                  -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'v', 0, 0, 'Номер тому', '',                           -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '461', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'a', 0, 0, 'Автор', '',                                4, NULL, '', '', 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'c', 0, 0, 'Місце публікації', '',                     4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'd', 0, 0, 'Дата публікації', '',                      4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'e', 0, 0, 'Відомості про видання', '',                4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'h', 0, 0, 'Номер розділу або частини', '',            4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'i', 0, 0, 'Назва розділу або частини', '',            4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'p', 0, 0, 'Фізичний опис', '',                        4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 't', 0, 0, 'Назва', '',                                4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'u', 0, 0, 'URL', '',                                  4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'v', 0, 0, 'Номер тому', '',                           4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('', '', '461', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '461', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '462', '', 1, 'Піднабір', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '462', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '462', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', '1', 0, 1, 'Дані, які пов’язуються', '',               4, 0, '', '', '', 0, '', '', NULL),
  ('', '', '462', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '462', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'h', 0, 0, 'Номер розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'i', 0, 0, 'Назва розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'p', 0, 0, 'Фізичний опис', '',                      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 't', 0, 0, 'Назва', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'u', 0, 0, 'URL', '',                                -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'v', 0, 0, 'Номер тому', '',                         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '462', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'a', 0, 0, 'Автор', '',                              4, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'c', 0, 0, 'Місце публікації', '',                   4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'd', 0, 0, 'Дата публікації', '',                    4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'e', 0, 0, 'Відомості про видання', '',              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'h', 0, 0, 'Номер розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'i', 0, 0, 'Назва розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'p', 0, 0, 'Фізичний опис', '',                      4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 't', 0, 0, 'Назва', '',                              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'u', 0, 0, 'URL', '',                                4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'v', 0, 0, 'Номер тому', '',                         4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '462', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '462', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '463', '', 1, 'Окрема фізична одиниця', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '463', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '463', '1', 0, 1, 'Дані, які пов’язуються', '',              4, 0, '', '', '', 0, '', '', NULL),
  ('', '', '463', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '463', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'h', 0, 0, 'Номер розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'i', 0, 0, 'Назва розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'p', 0, 0, 'Фізичний опис', '',                      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 't', 0, 0, 'Назва', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'u', 0, 0, 'URL', '',                                -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'v', 0, 0, 'Номер тому', '',                         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '463', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'a', 0, 0, 'Автор', '',                              4, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'c', 0, 0, 'Місце публікації', '',                   4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'd', 0, 0, 'Дата публікації', '',                    4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'e', 0, 0, 'Відомості про видання', '',              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'h', 0, 0, 'Номер розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'i', 0, 0, 'Назва розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'p', 0, 0, 'Фізичний опис', '',                      4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 't', 0, 0, 'Назва', '',                              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'u', 0, 0, 'URL', '',                                4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'v', 0, 0, 'Номер тому', '',                         4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '463', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '463', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '464', '', 1, 'Аналітична одиниця', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '464', '0', 0, 0, 'Ідентифікатор бібліографічного запису', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '464', '1', 0, 1, 'Дані, які пов’язуються', '',               4, 0, '', '', '', 0, '', '', NULL),
  ('', '', '464', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '464', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'h', 0, 0, 'Номер розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'i', 0, 0, 'Назва розділу або частини', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'p', 0, 0, 'Фізичний опис', '',                      -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 't', 0, 0, 'Назва', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'u', 0, 0, 'URL', '',                                -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'v', 0, 0, 'Номер тому', '',                         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '464', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'a', 0, 0, 'Автор', '',                              4, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'c', 0, 0, 'Місце публікації', '',                   4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'd', 0, 0, 'Дата публікації', '',                    4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'e', 0, 0, 'Відомості про видання', '',              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'h', 0, 0, 'Номер розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'i', 0, 0, 'Назва розділу або частини', '',          4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'p', 0, 0, 'Фізичний опис', '',                      4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 't', 0, 0, 'Назва', '',                              4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'u', 0, 0, 'URL', '',                                4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'v', 0, 0, 'Номер тому', '',                         4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'x', 0, 0, 'Міжнародний стандартний номер серіального видання – ISSN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '464', 'y', 0, 0, 'Міжнародний стандартний книжковий номер — ISBN / Міжнародний стандартний музичний номер – ISMN', '', 4, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '464', 'z', 0, 0, 'CODEN', '',                                -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
@@ -1280,7 +1293,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '470', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '470', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '470', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '470', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '470', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '470', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '470', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '470', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1301,7 +1314,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '481', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '481', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '481', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '481', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '481', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '481', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '481', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '481', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1322,7 +1335,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '482', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '482', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '482', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '482', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '482', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '482', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '482', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '482', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1343,7 +1356,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '488', '1', 0, 1, 'Дані, які пов’язуються', '',               -1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '488', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '488', '5', 0, 0, 'Установа в якій поле застосовано', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '488', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '488', 'a', 0, 0, 'Автор', '',                              -1, NULL, NULL, NULL, 'unimarc_field_4XX.pl', NULL, NULL, NULL, NULL),
  ('', '', '488', 'c', 0, 0, 'Місце публікації', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '488', 'd', 0, 0, 'Дата публікації', '',                    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '488', 'e', 0, 0, 'Відомості про видання', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1360,26 +1373,26 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '500', '', 1, 'Уніфікована форма назви', 'Назва', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '500', '2', 0, 0, 'Код системи', '',                          -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', '3', 0, 0, 'Номер авторитетного запису', '',           -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'a', 0, 0, 'Уніфікована форма назви', 'Назва',         -1, 0, 'biblio.unititle', '', '', 0, '', '', NULL),
- ('', '', '500', 'b', 0, 0, 'Загальне визначення матеріалу носія документа', '', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'h', 0, 0, 'Номер розділу або частини', 'Номер',       -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'i', 0, 0, 'Найменування розділу або частини', '',     -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'j', 0, 0, 'Підрозділ форми твору', '',                -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'k', 0, 0, 'Дата публікації', 'Опубліковано',          -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'l', 0, 0, 'Підзаголовок форми (підназва форми)', '',  -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'm', 0, 0, 'Мова (якщо є частиною заголовка)', 'Мова', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'n', 0, 0, 'Змішана інформація', '',                   -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'q', 0, 0, 'Версія (або дата версії)', '',             -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'r', 0, 0, 'Засоби виконання (для музичних творів)', '', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 's', 0, 0, 'Числове визначення  музичних творів', '',  -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'u', 0, 0, 'Ключ  музичних творів', '',                -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'v', 0, 0, 'Визначення тому', '',                      -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'w', 0, 0, 'Відомості про аранжування (для музичних творів)', '', -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'x', 0, 0, 'Тематичний (предметний) підрозділ', '',    -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'y', 0, 0, 'Географічний підрозділ', '',               -1, 0, '', '', '', 0, '', '', NULL),
- ('', '', '500', 'z', 0, 0, 'Хронологічний підрозділ', '',              -1, 0, '', '', '', 0, '', '', NULL);
+ ('', '', '500', '2', 0, 0, 'Код системи', '',                           -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', '3', 0, 0, 'Номер авторитетного запису', '',            -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'a', 0, 0, 'Уніфікована форма назви', 'Назва',          -1, 0, 'biblio.unititle', '', '', 0, '', '', NULL),
+ ('', '', '500', 'b', 0, 0, 'Загальне визначення матеріалу носія документа','',-1,0,'','','',0,'', '', NULL),
+ ('', '', '500', 'h', 0, 0, 'Номер розділу або частини', 'Номер',        -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'i', 0, 0, 'Найменування розділу або частини', '',      -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'j', 0, 0, 'Підрозділ форми твору', '',                 -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'k', 0, 0, 'Дата публікації', 'Опубліковано',           -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'l', 0, 0, 'Підзаголовок форми (підназва форми)', '',   -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'm', 0, 0, 'Мова (якщо є частиною заголовка)', 'Мова',  -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'n', 0, 0, 'Змішана інформація', '',                    -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'q', 0, 0, 'Версія (або дата версії)', '',              -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'r', 0, 0, 'Засоби виконання (для музичних творів)', '',-1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 's', 0, 0, 'Числове визначення  музичних творів', '',   -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'u', 0, 0, 'Ключ  музичних творів', '',                 -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'v', 0, 0, 'Визначення тому', '',                       -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'w', 0, 0, 'Відомості про аранжування (для музичних творів)','',-1,0,'','','',0,'','',NULL),
+ ('', '', '500', 'x', 0, 0, 'Тематичний (предметний) підрозділ', '',     -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'y', 0, 0, 'Географічний підрозділ', '',                -1, 0, '', '', '', 0, '', '', NULL),
+ ('', '', '500', 'z', 0, 0, 'Хронологічний підрозділ', '',               -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '501', '', 1, 'Загальна уніфікована назва', '', '');
@@ -1685,7 +1698,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '531', 'r', 0, 0, 'Засоби виконання (для музичних творів)', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '531', 's', 0, 0, 'Числове визначення  музичних творів', '',  -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '531', 'u', 0, 0, 'Ключ  музичних творів', '',                -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('', '', '531', 'v', 0, 0, 'Визначення тому ', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '531', 'v', 0, 0, 'Визначення тому', '',                   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '531', 'w', 0, 0, 'Відомості про аранжування (для музичних творів)', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '531', 'x', 0, 0, 'Тематичний (предметний) підрозділ', '',    -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('', '', '531', 'y', 0, 0, 'Географічний підрозділ', '',               -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
@@ -1838,7 +1851,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '604', '', 1, 'Автор і назва як предметна рубрика', 'Предмет', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '604', '1', 1, 0, 'Ім’я чи найменування автора та назва твору, що зв’язуються', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+ ('', '', '604', '1', 0, 1, 'Ім’я чи найменування автора та назва твору, що зв’язуються', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '605', '', 1, 'Назва як предметна рубрика', 'Предмет', '');
@@ -1889,8 +1902,8 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '608', '2', 0, 0, 'Код системи', '',                        -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '608', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '608', '5', 0, 0, 'Організація, до якої застосовується поле', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '608', 'a', 0, 0, 'Початковий елемент заголовку', 'Предмет', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '608', '5', 0, 0, 'Організація, до якої застосовується поле','',-1,NULL,NULL,NULL,'', NULL, NULL, NULL, NULL),
+ ('', '', '608', 'a', 0, 0, 'Початковий елемент заголовку', 'Предмет', -1, NULL, NULL, NULL,'', NULL, NULL, NULL, NULL),
  ('', '', '608', 'j', 1, 0, 'Формальний підзаголовок', '',            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '608', 'x', 1, 0, 'Тематичний підзаголовок', '',            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '608', 'y', 1, 0, 'Географічний підзаголовок', '',          -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -1904,11 +1917,11 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '615', '', 1, 'Предметна категорія (попереднє)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '615', '2', 0, 0, 'Код системи', '',                        -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '615', '3', 0, 0, 'Номер авторитетного запису', '',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '615', 'a', 1, 0, 'Текст елемента предметної категорій', 'Предмет', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '615', 'm', 1, 0, 'Код підрозділу предметної категорії', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '615', 'n', 1, 0, 'Код предметної категорій', '',           -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '615', '2', 0, 0, 'Код системи', '',                           -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '615', '3', 0, 0, 'Номер авторитетного запису', '',            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '615', 'a', 1, 0, 'Текст елемента предметної категорій', 'Предмет',-1,NULL,NULL,NULL,'', NULL, NULL, NULL, NULL),
+ ('', '', '615', 'm', 1, 0, 'Код підрозділу предметної категорії', '',   -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '615', 'n', 1, 0, 'Код предметної категорій', '',              -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '615', 'x', 1, 0, 'Текст підрозділу предметної категорії', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
@@ -2177,7 +2190,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '856', 'i', 1, 0, 'Команди (Instruction)', 'Команди',       -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '856', 'j', 0, 0, 'Швидкість передачі даних (BPS — bits per second)', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '856', 'k', 0, 0, 'Пароль (Password)', 'Пароль',            -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
- ('', '', '856', 'l', 0, 0, 'Ім’я користувача (Logon/login) ', '',    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
+ ('', '', '856', 'l', 0, 0, 'Ім’я користувача (Logon/login)', '',    -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '856', 'm', 1, 0, 'Контактні дані для підтримки доступу (Contact for access assistance)', 'Контактні дані', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '856', 'n', 0, 0, 'Місце знаходження серверу, що позначений у підполі $a (Name of location of host)', 'адреса', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '856', 'o', 0, 0, 'Операційна система (Operating system)', 'Операційна система', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
@@ -2199,3 +2212,5 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '886', '2', 1, 0, 'Код правил каталогізації і форматів', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '886', 'a', 1, 0, 'Мітка поля вихідного формату', '',       -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '886', 'b', 1, 0, 'Індикатори та підполя вихідного формату', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+
+SET FOREIGN_KEY_CHECKS=1;

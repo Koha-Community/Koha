@@ -1,9 +1,12 @@
-DELETE FROM authorised_values WHERE category='IND_852';
+-- DELETE FROM authorised_values WHERE category='IND_852';
 
-INSERT INTO `authorised_values` (category, authorised_value, lib, imageurl) VALUES 
-('IND_852','##',    '# - відстуні дані про систему ростановки. # - відстуні дані про порядок ростановки.', NULL),
-('IND_852','0#',    '0 - розстановка за системою класифікації. # - Відстуні дані про порядок ростановки.', NULL);
+SET FOREIGN_KEY_CHECKS=0;
 
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES
+ ('IND_852','##',    '# - відсутні дані про систему розстановки. # - відсутні дані про порядок розстановки.'),
+ ('IND_852','0#',    '0 - розстановка за системою класифікації.  # - відсутні дані про порядок розповсюджувачів.');
+
+SET FOREIGN_KEY_CHECKS=1;
 
 /*
 Indicator 1: Shelving scheme

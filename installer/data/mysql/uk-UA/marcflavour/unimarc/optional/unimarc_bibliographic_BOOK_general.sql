@@ -5,7 +5,7 @@
 # version 0.8 (5.1.2011) - reformating by script csv2marc_structures.pl, exrtact local data to separate file
 # version 0.6 (29.3.2009) - виділення блоків полів з підполями (для полегшення керування та клонування)
 #
-# Serhij Dubyk (Сергієм Дубиком), serhijdubyk@gmail.com, 2009,2010,2011
+# Serhij Dubyk (Сергій Дубик), serhijdubyk@gmail.com, 2009,2010,2011
 #
 #   SOURCE FROM:
 #
@@ -14,18 +14,13 @@
 # http://www.library.lviv.ua/e-library/library_standarts/UkrMarc/, 2010
 # http://www.nbuv.gov.ua/library/ukrmarc.html, 2004
 #
-# 2) UNIMARC manual : bibliographic format 1994 / IFLA Universal
-#  Bibliographic Control and International MARC Core Programme (UBCIM). -
-#  "The following list represents the state of the format as at 1 March
-#  2000.  It includes the changes published in Update 3." -
-#  http://www.ifla.org/VI/3/p1996-1/sec-uni.htm.
-#  2006-03-15 a;
-#
-# 3) UNIMARC manual: bibliographic format / IFLA UNIMARC Core Activity; ed. By Alan Hopkinson.
+# 2) UNIMARC manual: bibliographic format / IFLA UNIMARC Core Activity; ed. By Alan Hopkinson.
 #  3rd ed. - München: Saur, 2008. (IFLA Series in Bibliographic Control, 36).
 #  ISBN 978-3-598-24284-7, 760 p.
 #  http://www.ifla.org/VI/8/unimarc-concise-bibliographic-format-2008.pdf
 # **************************************************************************
+
+SET FOREIGN_KEY_CHECKS=0;
 
 DELETE FROM biblio_framework WHERE frameworkcode='BOOK';
 INSERT INTO biblio_framework (frameworkcode, frameworktext) VALUES ('BOOK', 'книги (монографічні видання)');
@@ -38,18 +33,18 @@ DELETE FROM marc_subfield_structure WHERE frameworkcode='BOOK';
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '000', 1, '', 'Маркер запису', '', '');
- INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', '', '000', '@', 0, 0, 'Маркер (контрольне поле довжиною 24 байти)', '', -1, 0, '', '', 'unimarc_leader.pl', 0, '', '', NULL);
+ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue, maxlength) VALUES
+ ('BOOK', '', '000', '@', 0, 0, 'Маркер (контрольне поле довжиною 24 байти)', '', -1, 0, '', '', 'unimarc_leader.pl', 0, '', '', NULL, 24);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '001', '', '', 'Ідентифікатор запису', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', '', '001', '@', 0, 0, 'Номер ідентифікації примітки', '',     3, 1, '', '', '', 0, '', '', NULL);
+ ('BOOK', '', '001', '@', 0, 0, 'Ідентифікатор запису', '',     -1, 1, 'biblio.biblionumber', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '005', '', '', 'Ідентифікатор версії', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', '', '005', '@', 0, 0, 'Ідентифікатор версії', '',             3, 1, '', '', NULL, 0, '', '', NULL);
+ ('BOOK', '', '005', '@', 0, 0, 'Ідентифікатор версії', '',             0, 1, '', '', 'marc21_field_005.pl', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '010', '', 1, 'Міжнародний стандартний книжковий номер (ISBN)', 'ISBN', '');
@@ -82,8 +77,8 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '100', '', '', 'Дані загальної обробки', '', '');
-INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', '', '100', 'a', 0, 0, 'Дані загальної обробки', '',           3, 1, '', '', 'unimarc_field_100.pl', 0, '', '', NULL);
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue, maxlength) VALUES
+ ('BOOK', '', '100', 'a', 0, 0, 'Дані загальної обробки', '',           3, -1, '', '', 'unimarc_field_100.pl', 0, '', '', NULL, 36);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '101', 1, '', 'Мова документу', 'Мова', '');
@@ -138,7 +133,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('BOOK', '', '200', 'g', 0, 1, 'Наступні відомості про відповідальність', '', 0, 0, 'additionalauthors.author', '', '', 0, '', '', NULL),
  ('BOOK', '', '200', 'h', 0, 1, 'Позначення та/або номер частини', '',  0, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '200', 'i', 0, 1, 'Найменування частини', '',             0, 0, '', '', '', 0, '', '', NULL),
- ('BOOK', '', '200', 'v', 0, 1, 'Позначення тому', '',                  -1, 0, '', '', '', 0, '', '', NULL),
+ ('BOOK', '', '200', 'v', 0, 1, 'Позначення тому', '',                  0, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '200', 'z', 0, 1, 'Мова паралельної основної назви', '',  -1, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
@@ -228,7 +223,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '330', '', 1, 'Короткий звіт або резюме', 'Короткий зміст', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', '', '330', 'a', 0, 0, 'Текст примітки', '',                   1, 0, '', '', '', 0, '', '', NULL);
+ ('BOOK', '', '330', 'a', 0, 0, 'Текст примітки', '',                       1, 0, 'biblio.abstract', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '333', '', 1, 'Примітка про читацьке призначення', 'Приміти про особливості користування та поширення', '');
@@ -927,7 +922,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '604', '', 1, 'Автор і назва як предметна рубрика', 'Предмет', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('BOOK', NULL, '604', '1', 1, 0, 'Ім’я чи найменування автора та назва твору, що зв’язуються', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+ ('BOOK', NULL, '604', '1', 0, 1, 'Ім’я чи найменування автора та назва твору, що зв’язуються', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('BOOK', '605', '', 1, 'Назва як предметна рубрика', 'Предмет', '');
@@ -1055,7 +1050,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '700', '', '', 'Особисте ім’я - первинна  інтелектуальна відповідальність', 'Особисте ім’я', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '700', '3', 0, 0, 'Номер авторитетного запису', '',       -1, 0, '', '', '', 0, '', '', NULL),
- ('BOOK', '', '700', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', '', 0, '', '', NULL),
+ ('BOOK', '', '700', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', 'QUALIF', 0, '', '', NULL),
  ('BOOK', '', '700', 'a', 0, 0, 'Початковий елемент вводу', 'автор',    2, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '700', 'b', 0, 0, 'Частина імені, яка відрізняється від початкового елемента вводу', '', 2, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '700', 'c', 0, 0, 'Доповнення до імені окрім дат', '',    -1, 0, '', '', '', 0, '', '', NULL),
@@ -1068,7 +1063,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '701', '', 1, 'Ім’я особи – альтернативна інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '701', '3', 0, 0, 'Номер авторитетного запису', '',       -1, 0, '', '', '', 0, '', '', NULL),
- ('BOOK', '', '701', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', '', 0, '', '', NULL),
+ ('BOOK', '', '701', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', 'QUALIF', 0, '', '', NULL),
  ('BOOK', '', '701', 'a', 0, 0, 'Початковий елемент вводу', '',         2, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '701', 'b', 0, 0, 'Частина імені, яка відрізняється від початкового елемента вводу', '', 2, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '701', 'c', 0, 0, 'Доповнення до імені окрім дат', '',    -1, 0, '', '', '', 0, '', '', NULL),
@@ -1081,7 +1076,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '702', '', 1, 'Ім’я особи – вторинна інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '702', '3', 0, 0, 'Номер авторитетного запису', '',       -1, 0, '', '', '', 0, '', '', NULL),
- ('BOOK', '', '702', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', '', 0, '', '', NULL),
+ ('BOOK', '', '702', '4', 0, 0, 'Код відношення', '',                   -1, 0, '', '', 'QUALIF', 0, '', '', NULL),
  ('BOOK', '', '702', '5', 0, 0, 'Установа-утримувач примірника', '',    -1, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '702', 'a', 0, 0, 'Початковий елемент вводу', '',         2, 0, '', '', '', 0, '', '', NULL),
  ('BOOK', '', '702', 'b', 0, 0, 'Частина імені, яка відрізняється від початкового елемента вводу', '', 2, 0, '', '', '', 0, '', '', NULL),
@@ -1095,7 +1090,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '710', '', '', 'Найменування колективу - первинна  інтелектуальна відповідальність', 'Найменування колективу', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '710', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, '', NULL, NULL),
- ('BOOK', '', '710', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, '', NULL, NULL),
+ ('BOOK', '', '710', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, '', NULL, NULL),
  ('BOOK', '', '710', 'a', 0, 0, 'Початковий елемент заголовку', '',     2, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '710', 'b', 0, 0, 'Структурний підрозділ', '',            -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '710', 'c', 0, 0, 'Ідентифікаційні ознаки', '',           -1, NULL, '', '', '', NULL, '', NULL, NULL),
@@ -1110,7 +1105,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '711', '', 1, 'Найменування колективу - альтернативна  інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '711', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, '', NULL, NULL),
- ('BOOK', '', '711', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, '', NULL, NULL),
+ ('BOOK', '', '711', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, '', NULL, NULL),
  ('BOOK', '', '711', 'a', 0, 0, 'Початковий елемент заголовку', '',     2, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '711', 'b', 1, 0, 'Структурний підрозділ', '',            -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '711', 'c', 1, 0, 'Ідентифікаційні ознаки', '',           -1, NULL, '', '', '', NULL, '', NULL, NULL),
@@ -1125,7 +1120,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '712', '', 1, 'Найменування колективу - вторинна  інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '712', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, '', NULL, NULL),
- ('BOOK', '', '712', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, '', NULL, NULL),
+ ('BOOK', '', '712', '4', 0, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, '', NULL, NULL),
  ('BOOK', '', '712', '5', 0, 0, 'Установа-утримувач примірника', '',    -1, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '712', 'a', 0, 0, 'Початковий елемент заголовку', '',     2, NULL, '', '', '', NULL, '', NULL, NULL),
  ('BOOK', '', '712', 'b', 1, 0, 'Структурний підрозділ', '',            -1, NULL, '', '', '', NULL, '', NULL, NULL),
@@ -1141,7 +1136,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '720', '', '', 'Родове ім’я - первинна  інтелектуальна відповідальність', 'Родове ім’я', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '720', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('BOOK', '', '720', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('BOOK', '', '720', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, NULL, NULL, NULL),
  ('BOOK', '', '720', 'a', 0, 0, 'Початковий елемент заголовку/точки доступу', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('BOOK', '', '720', 'f', 0, 0, 'Дати', '',                             -1, NULL, '', '', '', NULL, NULL, NULL, NULL);
 
@@ -1149,7 +1144,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '721', '', 1, 'Родове ім’я - альтернативна  інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '721', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('BOOK', '', '721', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('BOOK', '', '721', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, NULL, NULL, NULL),
  ('BOOK', '', '721', 'a', 0, 0, 'Початковий елемент заголовку/точки доступу', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('BOOK', '', '721', 'f', 0, 0, 'Дати', '',                             -1, NULL, '', '', '', NULL, NULL, NULL, NULL);
 
@@ -1157,7 +1152,7 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '722', '', 1, 'Родове ім’я - вторинна інтелектуальна відповідальність', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', '', '722', '3', 0, 0, 'Номер авторитетного запису', '',       -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
- ('BOOK', '', '722', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
+ ('BOOK', '', '722', '4', 1, 0, 'Код відношення', '',                   -1, NULL, '', '', 'QUALIF', NULL, NULL, NULL, NULL),
  ('BOOK', '', '722', '5', 1, 0, 'Установа-утримувач примірника', '',    -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('BOOK', '', '722', 'a', 0, 0, 'Початковий елемент заголовку/точки доступу', '', -1, NULL, '', '', '', NULL, NULL, NULL, NULL),
  ('BOOK', '', '722', 'f', 0, 0, 'Дати', '',                             -1, NULL, '', '', '', NULL, NULL, NULL, NULL);
@@ -1175,3 +1170,26 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('BOOK', '830', '', 1, 'Загальні примітки каталогізатора', 'Примітки', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('BOOK', NULL, '830', 'a', 0, 0, 'Текст примітки', 'Примітка',         -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
+
+INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
+ ('BOOK', '852', '', 1, 'Місцезнаходження та шифр зберігання', '', '');
+INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden,
+                                      kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
+ ('BOOK', '', '852', '2', 0, 0, 'Код системи класифікації для розстановки фонду', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'a', 0, 0, 'Ідентифікатор організації', '',            8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'b', 0, 1, 'Найменування підрозділу, фонду чи колекції', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'c', 0, 0, 'Адреса', '',                               8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'd', 0, 0, 'Визначник місцезнаходження (в кодований формі)', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'e', 0, 0, 'Визначник місцезнаходження (не в кодований формі)', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'g', 0, 0, 'Префікс шифру зберігання', '',             8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'j', 0, 0, 'Шифр зберігання', 'Шифр замовлення',       8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'k', 0, 0, 'Форма заголовку/імені автора, що використовуються для організації фонду', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'l', 0, 0, 'Суфікс шифру зберігання', '',              8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'm', 0, 0, 'Ідентифікатор одиниці', '',                8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'n', 0, 0, 'Ідентифікатор екземпляра', '',             8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'p', 0, 0, 'Код країни основного місцезнаходження', '', 8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 't', 0, 0, 'Номер примірника', '',                     8, 0, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'x', 0, 0, 'Службова примітка', '',                    8, 4, '', '', '', 0, NULL, '', ''),
+ ('BOOK', '', '852', 'y', 0, 0, 'Загальнодоступна примітка', 'Нотатки',     8, 0, '', '', '', 0, NULL, '', '');
+
+SET FOREIGN_KEY_CHECKS=1;

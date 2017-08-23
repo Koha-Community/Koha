@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='CO';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'CO', 'Auteur (collectif/collectivité)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'CO', 'Auteur (collectif/collectivité)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'CO', 'Автор (колективи, організації)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f]');
 DELETE FROM auth_tag_structure WHERE authtypecode='CO';
 DELETE FROM auth_subfield_structure WHERE authtypecode='CO';
 

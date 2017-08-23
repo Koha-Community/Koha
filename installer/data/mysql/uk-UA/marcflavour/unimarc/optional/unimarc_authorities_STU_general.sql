@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='STU';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (230, 'STU', 'Sujet (titre uniforme)', '[230a][. 230i][. 230h][. 230m][. 230k][ -- 230x][ -- 230q][ -- 230y][ -- 230z][ -- 230l]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (230, 'STU', 'Sujet (titre uniforme)', '[230a][. 230i][. 230h][. 230m][. 230k][ -- 230x][ -- 230q][ -- 230y][ -- 230z][ -- 230l]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (230, 'STU', 'Предметна рубрика (уніфікований заголовок)', '[230a][. 230i][. 230h][. 230m][. 230k][ -- 230x][ -- 230q][ -- 230y][ -- 230z][ -- 230l]');
 DELETE FROM auth_tag_structure WHERE authtypecode='STU';
 DELETE FROM auth_subfield_structure WHERE authtypecode='STU';
 

@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='SCO';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'SCO', 'Sujet (collectivité)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f][ -- 210x][ -- 210z][ -- 210y]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'SCO', 'Sujet (collectivité)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f][ -- 210x][ -- 210z][ -- 210y]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (210, 'SCO', 'Предметна рубрика (найменування колективу)', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f][ -- 210x][ -- 210z][ -- 210y]');
 DELETE FROM auth_tag_structure WHERE authtypecode='SCO';
 DELETE FROM auth_subfield_structure WHERE authtypecode='SCO';
 

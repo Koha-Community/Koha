@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='SNC';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (250, 'SNC', 'Sujet (nom commun)', '[250a][ -- 250x][ -- 250y][ -- 250z] [(250b)]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (250, 'SNC', 'Sujet (nom commun)', '[250a][ -- 250x][ -- 250y][ -- 250z] [(250b)]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (250, 'SNC', 'Предметна рубрика (найменування теми)', '[250a][ -- 250x][ -- 250y][ -- 250z] [(250b)]');
 DELETE FROM auth_tag_structure WHERE authtypecode='SNC';
 DELETE FROM auth_subfield_structure WHERE authtypecode='SNC';
 

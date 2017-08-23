@@ -1,5 +1,6 @@
 DELETE FROM auth_types WHERE authtypecode='SAUT';
-INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'SAUT', 'Sujet (auteur)', '[200a][, 200b][(200g)][ 200d][ ; 200c][ (200f)][ -- 200x][ -- 200z][ -- 200y]');
+-- INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'SAUT', 'Sujet (auteur)', '[200a][, 200b][(200g)][ 200d][ ; 200c][ (200f)][ -- 200x][ -- 200z][ -- 200y]');
+INSERT INTO auth_types (auth_tag_to_report, authtypecode, authtypetext, summary) VALUES (200, 'SAUT', 'Предметна рубрика (ім’я особи)', '[200a][, 200b][(200g)][ 200d][ ; 200c][ (200f)][ -- 200x][ -- 200z][ -- 200y]');
 DELETE FROM auth_tag_structure WHERE authtypecode='SAUT';
 DELETE FROM auth_subfield_structure WHERE authtypecode='SAUT';
 
