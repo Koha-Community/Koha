@@ -65,6 +65,11 @@
       "description": "the date the hold expires",
       "format": "date"
     },
+    "pickupexpired": {
+      "type": ["string", "null"],
+      "description": "if hold has been waiting but it expired before it was picked up, the expiration date is set here",
+      "format": "date"
+    },
     "lowestPriority": {
       "type": "boolean",
       "description": "Controls if the hold is given the lowest priority on the queue"
