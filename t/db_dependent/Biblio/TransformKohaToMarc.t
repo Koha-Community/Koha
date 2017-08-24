@@ -91,7 +91,7 @@ subtest "Working with control fields in another framework" => sub {
 subtest "Add test for no_split option" => sub {
     plan tests => 4;
 
-    my $fwc = t::lib::TestBuilder->new->build({ source => 'MarcSubfieldStructure' })->{frameworkcode};
+    my $fwc = t::lib::TestBuilder->new->build({ source => 'BiblioFramework' })->{frameworkcode};
     Koha::MarcSubfieldStructure->new({ frameworkcode => $fwc, tagfield => '952', tagsubfield => 'a', kohafield => 'items.fld1' })->store;
     Koha::MarcSubfieldStructure->new({ frameworkcode => $fwc, tagfield => '952', tagsubfield => 'b', kohafield => 'items.fld1' })->store;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-$fwc" );
