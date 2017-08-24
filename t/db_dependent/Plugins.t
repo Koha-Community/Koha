@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 31;
 use File::Basename;
 use File::Temp qw( tempdir );
 use FindBin qw($Bin);
@@ -31,6 +31,9 @@ isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
 ok( $plugin->can('report'), 'Test plugin can report' );
 ok( $plugin->can('tool'), 'Test plugin can tool' );
 ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
+ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
+ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
+ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('uninstall'), 'Test plugin can install' );

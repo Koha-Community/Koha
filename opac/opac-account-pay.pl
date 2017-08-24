@@ -31,10 +31,24 @@ use C4::Output;
 use C4::Context;
 use Koha::Acquisition::Currencies;
 use Koha::Database;
+use Koha::Plugins::Handler;
 
 my $cgi = new CGI;
+my $payment_method = $cgi->param('payment_method');
+my @accountlines   = $cgi->multi_param('accountline');
 
-unless ( C4::Context->preference('EnablePayPalOpacPayments') ) {
+my $use_plugin;
+if ( $payment_method ne 'paypal' ) {
+    $use_plugin = Koha::Plugins::Handler->run(
+        {
+            class  => $payment_method,
+            method => 'opac_online_payment',
+            cgi    => $cgi,
+        }
+    );
+}
+
+unless ( C4::Context->preference('EnablePayPalOpacPayments') || $use_plugin ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
@@ -48,9 +62,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
-my $payment_method = $cgi->param('payment_method');
-my @accountlines = $cgi->multi_param('accountline');
 
 my $amount_to_pay =
   Koha::Database->new()->schema()->resultset('Accountline')->search( { accountlines_id => { -in => \@accountlines } } )
@@ -126,6 +137,15 @@ if ( $payment_method eq 'paypal' ) {
         $template->param( error => "PAYPAL_UNABLE_TO_CONNECT" );
         $error = 1;
     }
-}
 
-output_html_with_http_headers( $cgi, $cookie, $template->output ) if $error;
+    output_html_with_http_headers( $cgi, $cookie, $template->output ) if $error;
+}
+else {
+    Koha::Plugins::Handler->run(
+        {
+            class  => $payment_method,
+            method => 'opac_online_payment_begin',
+            cgi    => $cgi,
+        }
+    );
+}

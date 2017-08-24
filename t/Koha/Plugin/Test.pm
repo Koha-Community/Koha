@@ -43,6 +43,21 @@ sub to_marc {
     return "Koha::Plugin::Test::to_marc";
 }
 
+sub opac_online_payment {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::opac_online_payment";
+}
+
+sub opac_online_payment_begin {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::opac_online_payment_begin";
+}
+
+sub opac_online_payment_end {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::opac_online_payment_end";
+}
+
 sub configure {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::configure";;
