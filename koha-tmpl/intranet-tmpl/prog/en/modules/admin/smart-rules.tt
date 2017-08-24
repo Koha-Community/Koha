@@ -28,9 +28,20 @@ function clear_edit(){
 
 var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this rule? This cannot be undone.");
 
+
 $(document).ready(function() {
     $(".delete").on("click",function(){
         return confirmDelete(MSG_CONFIRM_DELETE);
+    });
+
+    $("#clone_rules").on("click",function(){
+        var library_dropdown = document.getElementById("branch");
+        var selected_library = library_dropdown.options[library_dropdown.selectedIndex].value;
+        if (selected_library === "*") {
+            var to_library = $("#tobranch option:selected").text();
+            var MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to " + to_library + " library? This will override the existing rules in " + to_library + " library.");
+            return confirmClone(MSG_CONFIRM_CLONE);
+        }
     });
 
         $('#cap_fine_to_replacement_price').on('change', function(){
@@ -156,7 +167,7 @@ $(document).ready(function() {
                 <select name="tobranch" id="tobranch">
                     [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
                 </select>
-                <input type="submit" value="Clone" />
+                <input type="submit" id="clone_rules" value="Clone" />
             </form>
         [% END %]
 

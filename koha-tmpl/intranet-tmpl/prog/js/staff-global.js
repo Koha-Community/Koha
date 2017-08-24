@@ -135,6 +135,10 @@ function confirmDelete(message) {
     return (confirm(message) ? true : false);
 }
 
+function confirmClone(message) {
+    return (confirm(message) ? true : false);
+}
+
 function playSound( sound ) {
     if ( ! ( sound.indexOf('http://') === 0 || sound.indexOf('https://') === 0  ) ) {
         sound = AUDIO_ALERT_PATH + sound;
