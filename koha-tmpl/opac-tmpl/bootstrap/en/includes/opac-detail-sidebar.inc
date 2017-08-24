@@ -9,16 +9,6 @@
         [% END %]
     [% END %]
     <li><a class="print-large" href="#">Print</a></li>
-<<<<<<< HEAD
-=======
-
-    [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-        [% IF Koha.Preference('ArticleRequests') %]
-            <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblionumber | html %]">Request article</a></li>
-        [% END %]
-    [% END %]
-
->>>>>>> Bug 18726: Fix XSS at the OPAC - biblionumber
     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
             <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber | html %]">Save to your lists</a></li>

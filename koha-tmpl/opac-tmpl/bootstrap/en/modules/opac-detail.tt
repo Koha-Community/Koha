@@ -943,13 +943,8 @@
 
                                 [% IF ( loggedinusername ) %]
                                     [% UNLESS ( loggedincommenter ) %]
-<<<<<<< HEAD
-                                       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber %]'); return false;">
-                                            Post or edit your comments on this item.
-=======
                                        <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | html %]'); return false;">
                                             Post your comments on this item.
->>>>>>> Bug 18726: Fix XSS at the OPAC - biblionumber
                                         </a></div>
                                     [% END %]
                                 [% ELSE %]
