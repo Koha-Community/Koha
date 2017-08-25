@@ -2698,10 +2698,11 @@ sub _adjust_pubyear {
     # modify return value to keep only the 1st year found
     if( $retval =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
         $retval = $1;
-    } else {
-        # if no cYYYY, get the 1st date.
-        $retval =~ m/(\d\d\d\d)/;
+    } elsif( $retval =~ m/(\d\d\d\d)/ && $1 > 0 ) {
         $retval = $1;
+    } elsif( $retval =~ m/(\d)[.Xx?]{3}|(\d\d)[.Xx?]{2}|(\d{3})[.Xx?]/ ) {
+        my $digits = $1 || $2 || $3;
+        $retval = $digits * ( 10 ** ( 4 - length($digits) ));
     }
     return $retval;
 }

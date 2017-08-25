@@ -19,7 +19,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -91,6 +91,19 @@ subtest 'Multiple mappings for one kohafield' => sub {
 
     is( C4::Biblio::TransformMarcToKohaOneField( 'biblio.field1', $marc ),
         '3a | 51', 'TransformMarcToKohaOneField returns biblio.field1' );
+};
+
+subtest 'Testing _adjust_pubyear' => sub {
+    plan tests => 8;
+
+    is( C4::Biblio::_adjust_pubyear('2004 c2000 2007'), 2000, 'First cYEAR' );
+    is( C4::Biblio::_adjust_pubyear('2004 2000 2007'), 2004, 'First year' );
+    is( C4::Biblio::_adjust_pubyear('18xx 1900'), 1900, '1900 has priority over 18xx' );
+    is( C4::Biblio::_adjust_pubyear('18xx'), 1800, '18xx on its own' );
+    is( C4::Biblio::_adjust_pubyear('197X'), 1970, '197X on its own' );
+    is( C4::Biblio::_adjust_pubyear('1...'), 1000, '1... on its own' );
+    is( C4::Biblio::_adjust_pubyear('12?? 13xx'), 1200, '12?? first' );
+    is( C4::Biblio::_adjust_pubyear('12? 1x'), '12? 1x', 'Too short' );
 };
 
 # Cleanup
