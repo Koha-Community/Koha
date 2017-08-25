@@ -10,6 +10,7 @@ use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
 use Koha::Virtualshelfcontents;
 
+use t::lib::Dates;
 use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
@@ -41,7 +42,7 @@ subtest 'CRUD' => sub {
     is( $number_of_shelves, 1, '1 shelf should have been inserted' );
     is( $shelf->allow_change_from_owner, 1, 'The default value for allow_change_from_owner should be 1' );
     is( $shelf->allow_change_from_others, 0, 'The default value for allow_change_from_others should be 0' );
-    is( output_pref($shelf->created_on), output_pref(dt_from_string), 'The creation time should have been set to today' );
+    is( t::lib::Dates::compare( $shelf->created_on, dt_from_string), 0, 'The creation time should have been set to today' );
 
     # Test if creation date will not be overwritten by store
     my $created = dt_from_string->subtract( hours => 1 );
@@ -51,7 +52,7 @@ subtest 'CRUD' => sub {
     my $retrieved_shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
 
     is( $retrieved_shelf->shelfname, $shelf->shelfname, 'Find should correctly return the shelfname' );
-    is( dt_from_string($retrieved_shelf->created_on), $created, 'Creation date is the same after update (Bug 18672)' );
+    is( t::lib::Dates::compare( $retrieved_shelf->created_on, $created), 0, 'Creation date is the same after update (Bug 18672)' );
 
     # Insert with the same name
     eval {
@@ -181,11 +182,11 @@ subtest 'Shelf content' => sub {
     )->store;
 
     $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
-    is( output_pref( dt_from_string $shelf->lastmodified ), output_pref($dt_yesterday), 'The lastmodified has been set to yesterday, will be useful for another test later' );
+    is( t::lib::Dates::compare( $shelf->lastmodified, $dt_yesterday), 0, 'The lastmodified has been set to yesterday, will be useful for another test later' );
     my $content1 = $shelf->add_biblio( $biblio1->{biblionumber}, $patron1->{borrowernumber} );
     is( ref($content1), 'Koha::Virtualshelfcontent', 'add_biblio to a shelf should return a Koha::Virtualshelfcontent object if inserted' );
     $shelf = Koha::Virtualshelves->find( $shelf->shelfnumber );
-    is( output_pref( dt_from_string( $shelf->lastmodified ) ), output_pref(dt_from_string), 'Adding a biblio to a shelf should update the lastmodified for the shelf' );
+    is( t::lib::Dates::compare( $shelf->lastmodified, dt_from_string), 0, 'Adding a biblio to a shelf should update the lastmodified for the shelf' );
     my $content2 = $shelf->add_biblio( $biblio2->{biblionumber}, $patron1->{borrowernumber} );
     $number_of_contents = Koha::Virtualshelfcontents->search->count;
     is( $number_of_contents, 2, '2 biblio should have been inserted' );
