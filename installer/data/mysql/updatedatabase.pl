@@ -14595,6 +14595,19 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 18801 - Update incorrect Default auth type codes)\n";
 }
 
+$DBversion = '17.06.00.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('GoogleOpenIDConnectAutoRegister',   '0',NULL,' Google OpenID Connect logins to auto-register patrons.','YesNo'),
+        ('GoogleOpenIDConnectDefaultCategory','','','This category code will be used to create Google OpenID Connect patrons.','Textarea'),
+        ('GoogleOpenIDConnectDefaultBranch',  '','','This branch code will be used to create Google OpenID Connect patrons.','Textarea');
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 16892: Add automatic patron registration via OAuth2 login)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
