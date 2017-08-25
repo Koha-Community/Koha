@@ -61,7 +61,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 $recordBiblionumber = GetMarcBiblio({
     biblionumber => $biblionumber,
-    embed_items  => 'embed_items' });
+    embed_items  => 1,
+});
 if( $recordBiblionumber ) {
     $formatted1 = $recordBiblionumber->as_formatted;
     my $biblio = Koha::Biblios->find( $biblionumber );
