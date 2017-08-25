@@ -26,7 +26,7 @@ $sth->execute();
 
 my $i=1;
 while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
- my $record = GetMarcBiblio($biblionumber);
+ my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     print ".";
     print "\r$i" unless $i %100;
     MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);

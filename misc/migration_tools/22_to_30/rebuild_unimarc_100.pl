@@ -29,7 +29,7 @@ print "Creating/updating field 100 if needed\n";
 while (my ($biblionumber,$time)=$sth->fetchrow ){
 #   my $record;
 # print "record : $biblionumber \n";
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber });
 # print "=> ".$record->as_formatted;
     MARCmodrecord($biblionumber,$record,$time) if ($record);
 #
