@@ -29,7 +29,11 @@ my $schema = Koha::Database->schema();
 
 eval { require Koha::SearchEngine::Elasticsearch::Indexer; };
 if ( $@ ) {
-    my $es_dep_msg = "Required module Catmandu::Importer::MARC is not installed";
+    my $missing_module;
+    if ( $@ =~ /Can\'t locate (.*?) / ) {
+        $missing_module = $1;
+    }
+    my $es_dep_msg = "Required module $missing_module is not installed";
     plan( skip_all => $es_dep_msg );
 }
 else {
