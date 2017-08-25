@@ -17,9 +17,24 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More;
+use Test::MockModule;
+use t::lib::Mocks;
 
 use MARC::Record;
+
+use Koha::Database;
+
+my $schema = Koha::Database->schema();
+
+eval { require Koha::SearchEngine::Elasticsearch::Indexer; };
+if ( $@ ) {
+    my $es_dep_msg = "Required module Catmandu::Importer::MARC is not installed";
+    plan( skip_all => $es_dep_msg );
+}
+else {
+    plan tests => 6;
+}
 
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
