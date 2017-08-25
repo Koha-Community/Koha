@@ -39,6 +39,8 @@
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl">View all plugins</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=report">View report plugins</a></li>
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">View tool plugins</a></li>
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=to_marc">View MARC conversion plugins</a></li>
+                                    <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=opac_online_payment">View online payment plugins</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -53,6 +55,10 @@
                                 <div class="dialog message">No plugins that can be used as a tool are installed</div>
                             [% ELSIF method == 'report' %]
                                 <div class="dialog message">No plugins that can create a report are installed</div>
+                            [% ELSIF method == 'to_marc' %]
+                                <div class="dialog message">No plugins that can convert files to MARC records are installed</div>
+                            [% ELSIF method == 'opac_online_payment' %]
+                                <div class="dialog message">No plugins that can process online payments via the public catalog are installed</div>
                             [% ELSE %]
                                 <div class="dialog message">Unknown plugin type <i>[% method %]</i></div>
                             [% END %]

@@ -80,12 +80,12 @@ $template->param(
 
 my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
 if ( $plugins_enabled ) {
-	my @plugins = Koha::Plugins->new()->GetPlugins({
-		method => 'opac_online_payment',
-	});
+    my @plugins = Koha::Plugins->new()->GetPlugins({
+        method => 'opac_online_payment',
+    });
     # Only pass in plugins where opac online payment is enabled
     @plugins = grep { $_->opac_online_payment } @plugins;
-	$template->param( plugins => \@plugins );
+    $template->param( plugins => \@plugins );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
