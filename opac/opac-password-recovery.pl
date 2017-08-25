@@ -31,7 +31,7 @@ my $repeatPassword = $query->param('repeatPassword');
 my $minPassLength  = C4::Context->preference('minPasswordLength');
 my $id             = $query->param('id');
 my $uniqueKey      = $query->param('uniqueKey');
-my $username       = $query->param('username');
+my $username       = $query->param('username') // q{};
 my $borrower_number;
 
 #errors
@@ -53,7 +53,6 @@ my $errPassTooShort;
 if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 
     #try with the main email
-    $email ||= '';    # avoid undef
     my $borrower;
     my $search_results;
 
@@ -65,7 +64,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         $search_results = Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } );
     }
 
-    if ( not $search_results || $search_results->count < 1) {
+    if ( !defined $search_results || $search_results->count < 1) {
         $hasError           = 1;
         $errNoBorrowerFound = 1;
     }
@@ -78,7 +77,6 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         $errMultipleAccountsForEmail = 1;
     }
     elsif ( $borrower = $search_results->next() ) {    # One matching borrower
-        $username ||= $borrower->userid;
         my @emails = ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
         my $firstNonEmptyEmail = '';
@@ -93,8 +91,8 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             $errNoBorrowerFound = 1;
         }
 
-# If we dont have an email yet. Get one of the borrower's email or raise an error.
-        elsif ( !$email && !( $email = $firstNonEmptyEmail ) ) {
+        # If there is no given email, and there is no email on record
+        elsif ( !$email && !$firstNonEmptyEmail ) {
             $hasError           = 1;
             $errNoBorrowerEmail = 1;
         }
