@@ -16,9 +16,9 @@ my @dirs = ( 'acqui', 'admin', 'authorities', 'basket',
     'mainpage.pl', 'Makefile.PL', 'members', 'misc', 'offline_circ', 'opac',
     'patroncards', 'reports', 'reserve', 'reviews',
     'rewrite-config.PL', 'rotating_collections', 'serials', 'services', 'skel',
-    'sms', 'suggestion', 'svc', 'tags', 'tools', 'virtualshelves' );
+    'suggestion', 'svc', 'tags', 'tools', 'virtualshelves' );
 
 $Test::Strict::TEST_STRICT = 0;
-$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl', 'misc/plack/koha.psgi' ];
+$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'misc/plack/koha.psgi' ];
 
 all_perl_files_ok(@dirs);
