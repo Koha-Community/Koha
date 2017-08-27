@@ -72,7 +72,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
             my $branch = Koha::Libraries->find( $issue->branchcode );
             my $letter = C4::Letters::GetPreparedLetter (
                 module => 'circulation',
-                letter_code => 'PATRON_NOTE',
+                letter_code => 'CHECKOUT_NOTE',
                 branchcode => $branch,
                 tables => {
                     'biblio' => $biblio->biblionumber,
