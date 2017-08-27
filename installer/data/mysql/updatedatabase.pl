@@ -14308,7 +14308,7 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q|
         INSERT IGNORE INTO letter (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`)
-        VALUES ('circulation', 'PATRON_NOTE', '', 'Patron note on item', '0', 'Patron issue note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.item>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
+        VALUES ('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
     |);
 
     $dbh->do(q|
