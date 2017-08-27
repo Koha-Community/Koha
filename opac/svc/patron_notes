@@ -82,7 +82,7 @@ if ($is_ajax) {
                 my $biblio = GetBiblioFromItemNumber($issue->itemnumber);
                 my $letter = C4::Letters::GetPreparedLetter (
                     module => 'circulation',
-                    letter_code => 'PATRON_NOTE',
+                    letter_code => 'CHECKOUT_NOTE',
                     branchcode => $branch,
                     tables => {
                         'biblio' => $biblio->{biblionumber},

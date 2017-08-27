@@ -1,0 +1,1 @@
+UPDATE letter SET code = 'CHECKOUT_NOTE', name = 'Checkout note on item set by patron', title = 'Checkout note', content = REPLACE(content, "<<biblio.item>>", "<<biblio.title>>") WHERE code = 'PATRON_NOTE';
