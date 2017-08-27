@@ -293,7 +293,7 @@ NOTE: Do not pass in the keyword 'WHERE.'
 sub get_batch_summary {
     my ( $params ) = @_;
     my @batches = ();
-    $params->{fields} = ['batch_id', 'count(batch_id) as _item_count'];
+    $params->{fields} = ['batch_id', 'description', 'count(batch_id) as _item_count'];
     my ( $query, @where_args ) = _build_query( $params, 'creator_batches' );
     $query .= " GROUP BY batch_id";
     my $sth = C4::Context->dbh->prepare($query);

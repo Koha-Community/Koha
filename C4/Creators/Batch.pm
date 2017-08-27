@@ -15,6 +15,7 @@ sub _check_params {
     my @valid_template_params = (
         'label_id',
         'batch_id',
+        'description',
         'item_number',
         'card_number',
         'branch_code',
@@ -43,6 +44,7 @@ sub new {
     my $type = ref($invocant) || $invocant;
     my $self = {
         batch_id        => 0,
+        description     => '',
         items           => [],
         branch_code     => 'NB',
         batch_stat      => 0,   # False if any data has changed and the db has not been updated
@@ -63,7 +65,7 @@ sub add_item {
         my $batch_id = $sth->fetchrow_array;
         $self->{'batch_id'}= ++$batch_id;
     }
-    my $query = "INSERT INTO creator_batches (batch_id, $number_type, branch_code, creator) VALUES (?,?,?,?);";
+    my $query = "INSERT INTO creator_batches (batch_id, description, $number_type, branch_code, creator) VALUES (?,?,?,?,?);";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($self->{'batch_id'}, $number, $self->{'branch_code'}, $1);
@@ -149,6 +151,7 @@ sub retrieve {
     while (my $record = $sth->fetchrow_hashref) {
         $self->{'branch_code'} = $record->{'branch_code'};
         $self->{'creator'} = $record->{'creator'};
+        $self->{'description'} = $record->{'description'};
         push (@{$self->{'items'}}, {$number_type => $record->{$number_type}, label_id => $record->{'label_id'}});
         $record_flag = 1;       # true if one or more rows were retrieved
     }

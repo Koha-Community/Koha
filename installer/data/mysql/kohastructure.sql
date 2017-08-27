@@ -1820,6 +1820,7 @@ SET character_set_client = utf8;
 CREATE TABLE `creator_batches` (
   `label_id` int(11) NOT NULL AUTO_INCREMENT,
   `batch_id` int(10) NOT NULL DEFAULT '1',
+  `description` mediumtext DEFAULT NULL,
   `item_number` int(11) DEFAULT NULL,
   `borrower_number` int(11) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

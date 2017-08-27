@@ -63,6 +63,7 @@ my @item_numbers;
 my $number_list;
 my $number_type = $cgi->param('number_type') || "barcode";
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || 0;
+my $description = $cgi->param('description') || '';
 @label_ids = $cgi->multi_param('label_id') if $cgi->param('label_id');
 @item_numbers = $cgi->multi_param('item_number') if $cgi->param('item_number');
 $number_list = $cgi->param('number_list') if $cgi->param('number_list');
@@ -99,6 +100,7 @@ elsif ($op eq 'add') {
     }
     if ($batch_id != 0) {$batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);}
     if ($batch_id == 0 || $batch == -2) {$batch = C4::Labels::Batch->new(branch_code => $branch_code);}
+    $template->param( description => $batch->{description} );
     if ($branch_code){
         foreach my $item_number (@item_numbers) {
             $err = $batch->add_item($item_number);
@@ -123,6 +125,7 @@ elsif ($op eq 'de_duplicate') {
 }
 else { # edit
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+    $template->param( description => $batch->{description} );
 }
 
 my $items = $batch->get_attr('items');

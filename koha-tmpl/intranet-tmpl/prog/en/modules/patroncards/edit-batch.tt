@@ -45,12 +45,16 @@
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
                                     <ol><li>
-                                    <input type="hidden" name="op" value="add" />
-                                    <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
-                                    <label for="bor_num_list">Add by borrowernumber(s):
-                                        <br /> <span class="hint">One borrowernumber per line.</span>
-                                    </label>
-                                    <textarea rows="5" id="bor_num_list" name="bor_num_list" tabindex="1" class="focus"></textarea>
+                                        <input type="hidden" name="op" value="add" />
+                                        <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
+                                        <label for="description">Batch description: </label>
+                                        <input type="text" name="description" value="[% description | html %]">
+                                        <a href="#" id="savedesc" data-batch_id="[% batch_id | html %]">Save description</a> <span id="change-status"></span>
+                                    </li><li>
+                                        <label for="bor_num_list">Add by borrowernumber(s):
+                                            <br /> <span class="hint">One borrowernumber per line.</span>
+                                        </label>
+                                        <textarea rows="5" id="bor_num_list" name="bor_num_list" tabindex="1" class="focus"></textarea>
                                     </li></ol>
                                     </fieldset>
                                 </div>
@@ -265,7 +269,33 @@
                 e.preventDefault();
                 var label_id = $(this).data("label-id");
                 var batch_id = $(this).data("batch-id");
-                GB_showCenter( _("Export single card"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id+'&label_id='+label_id, 400, 800);
+                GB_showCenter( _("Export single card"),'/cgi-bin/koha/patroncards/print.pl?batch_id=' + batch_id + '&label_id=' + label_id, 400, 800);
+            });
+            $("#savedesc").click(function(event){
+                var newdescription = $(this).siblings('input[name="description"]').val();
+                var batch_id = $(this).data('batch_id');
+                var ajaxData = {
+                    'newdescription': newdescription,
+                    'batch_id': batch_id,
+                    'card_element': "batch",
+                    'creator': "patroncard",
+                };
+
+                $.ajax({
+                    url: '/cgi-bin/koha/svc/creator_batches',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ajaxData,
+                })
+
+                .done(function(data){
+                    if (data.status == 'success') {
+                        $("input[name='description']").text(data.newdesc);
+                        $("#change-status").text(_("Saved"));
+                    } else {
+                        $("#change-status").text(_("Unable to save description"));
+                    }
+                });
             });
         });
     </script>

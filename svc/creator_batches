@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2017 Aleisha Amohia <aleisha@catalyst.net.nz>
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use JSON qw( encode_json );
+use CGI;
+use C4::Service;
+use C4::Context;
+use C4::Auth qw /check_cookie_auth/;
+use C4::Output qw(:DEFAULT :ajax);
+use C4::Patroncards::Batch;
+use C4::Labels::Batch;
+
+=head1 NAME
+
+svc/creator_batches - Web service for managing AJAX functionality for patroncards and label batches
+
+=head1 DESCRIPTION
+
+=cut
+
+# AJAX requests
+my $is_ajax = is_ajax();
+my $cgi = new CGI;
+my ( $auth_status, $sessionID ) = check_cookie_auth( $cgi->cookie('CGISESSID'), { catalogue => 1 } );
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+
+if ($is_ajax) {
+    my $batch_id = $cgi->param('batch_id');
+    my $description = $cgi->param('newdescription');
+    my $status = '';
+    my $dbh = C4::Context->dbh;
+    my $query = "UPDATE creator_batches SET description = ? WHERE batch_id = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($description, $batch_id);
+
+    # Check for success
+    my $creator = $cgi->param('creator');
+    if ( $creator eq 'patroncard' ) {
+        my $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
+        if ( $batch->{description} eq $description ) {
+            $status = 'success';
+        }
+    } elsif ( $creator eq 'label' ) {
+        my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+        if ( $batch->{description} eq $description ) {
+            $status = 'success';
+        }
+    }
+
+    my $json = encode_json ( { status => $status, newdesc => $description } );
+    output_with_http_headers $cgi, undef, $json, 'js';
+    exit;
+}
