@@ -220,6 +220,7 @@ if ( $op eq 'delete_confirm' ) {
     $template->param(
         confirm_close   => "1",
         booksellerid    => $booksellerid,
+        name            => $bookseller->name,
         basketno        => $basket->{'basketno'},
         basketname      => $basket->{'basketname'},
         basketgroupname => $basket->{'basketname'},
