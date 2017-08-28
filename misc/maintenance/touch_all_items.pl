@@ -79,7 +79,8 @@ $sth_fetch->execute();
 # fetch info from the search
 while (my ($biblionumber, $itemnumber, $itemcallnumber) = $sth_fetch->fetchrow_array){
    
-  my $modok = ModItem({itemcallnumber => $itemcallnumber}, $biblionumber, $itemnumber);
+  eval { ModItem({itemcallnumber => $itemcallnumber}, $biblionumber, $itemnumber); };
+  my $modok = $@ ? 0 : 1;
 
   if ($modok) {
      $goodcount++;
