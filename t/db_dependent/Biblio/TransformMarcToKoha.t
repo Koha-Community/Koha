@@ -94,7 +94,7 @@ subtest 'Multiple mappings for one kohafield' => sub {
 };
 
 subtest 'Testing _adjust_pubyear' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     is( C4::Biblio::_adjust_pubyear('2004 c2000 2007'), 2000, 'First cYEAR' );
     is( C4::Biblio::_adjust_pubyear('2004 2000 2007'), 2004, 'First year' );
@@ -104,6 +104,8 @@ subtest 'Testing _adjust_pubyear' => sub {
     is( C4::Biblio::_adjust_pubyear('1...'), 1000, '1... on its own' );
     is( C4::Biblio::_adjust_pubyear('12?? 13xx'), 1200, '12?? first' );
     is( C4::Biblio::_adjust_pubyear('12? 1x'), '12? 1x', 'Too short' );
+    is( C4::Biblio::_adjust_pubyear('198-'), '198-', 'Missing question mark' );
+    is( C4::Biblio::_adjust_pubyear('198-?'), '1980', '198-?' );
 };
 
 # Cleanup

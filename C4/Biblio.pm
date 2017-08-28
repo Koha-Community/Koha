@@ -2703,6 +2703,10 @@ sub _adjust_pubyear {
     } elsif( $retval =~ m/(\d)[.Xx?]{3}|(\d\d)[.Xx?]{2}|(\d{3})[.Xx?]/ ) {
         my $digits = $1 || $2 || $3;
         $retval = $digits * ( 10 ** ( 4 - length($digits) ));
+    } elsif( $retval =~ m/(\d)[-]{3}\?|(\d\d)[-]{2}\?|(\d{3})[-]\?/ ) {
+        # the form 198-? occurred in Dutch ISBD rules
+        my $digits = $1 || $2 || $3;
+        $retval = $digits * ( 10 ** ( 4 - length($digits) ));
     }
     return $retval;
 }
