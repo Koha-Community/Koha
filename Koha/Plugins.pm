@@ -74,7 +74,7 @@ sub GetPlugins {
     my @plugins;
 
     foreach my $plugin_class (@plugin_classes) {
-        if ( can_load( modules => { $plugin_class => undef } ) ) {
+        if ( can_load( modules => { $plugin_class => undef }, nocache => 1 ) ) {
             next unless $plugin_class->isa('Koha::Plugins::Base');
 
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
@@ -87,7 +87,9 @@ sub GetPlugins {
                 and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
             push @plugins, $plugin;
         } else {
-            warn $Module::Load::Conditional::ERROR;
+            my $error = $Module::Load::Conditional::ERROR;
+            # Do not warn the error if the plugin has been uninstalled
+            warn $error unless $error =~ m|^Could not find or check module '$plugin_class'|;
         }
     }
     return @plugins;
