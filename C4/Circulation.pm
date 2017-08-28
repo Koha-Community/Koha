@@ -1835,10 +1835,7 @@ sub AddReturn {
     }
 
     my $itemnumber = $item->{ itemnumber };
-
-    my $item_level_itypes = C4::Context->preference("item-level_itypes");
-    my $biblio   = $item_level_itypes ? undef : GetBiblioData( $item->{ biblionumber } ); # don't get bib data unless we need it
-    my $itemtype = $item_level_itypes ? $item->{itype} : $biblio->{itemtype};
+    my $itemtype = $item->{itype}; # GetItem called effective_itemtype
 
     my $issue  = GetItemIssue($itemnumber);
     if ($issue and $issue->{borrowernumber}) {
