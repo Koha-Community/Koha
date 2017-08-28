@@ -1821,9 +1821,7 @@ sub AddReturn {
     }
 
     my $itemnumber = $item->{ itemnumber };
-    my $itemtype = C4::Context->preference("item-level_itypes")
-        ? $item->{itype}
-        : Koha::Biblioitems->find( $item->{biblioitemnumber} )->itemtype;
+    my $itemtype = $item->{itype}; # GetItem called effective_itemtype
 
     my $issue  = Koha::Checkouts->find( { itemnumber => $itemnumber } );
     if ( $issue ) {
