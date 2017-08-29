@@ -69,11 +69,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 #parameters:
-my $booksellerid = $input->param('booksellerid');
-my $basketno = $input->param('basketno');
+my $booksellerid = scalar $input->param('booksellerid');
+my $basketno = scalar $input->param('basketno');
 my $basket;
-my $op = $input ->param('op');
-my $is_an_edit= $input ->param('is_an_edit');
+my $op = scalar $input->param('op');
+my $is_an_edit = scalar $input->param('is_an_edit');
 
 if ( $op eq 'add_form' ) {
     my @contractloop;
@@ -134,26 +134,26 @@ if ( $op eq 'add_form' ) {
     if ( $is_an_edit ) {
         ModBasketHeader(
             $basketno,
-            $input->param('basketname'),
-            $input->param('basketnote'),
-            $input->param('basketbooksellernote'),
-            $input->param('basketcontractnumber') || undef,
-            $input->param('basketbooksellerid'),
-            $input->param('deliveryplace'),
-            $input->param('billingplace'),
-            $input->param('is_standing') ? 1 : undef,
+            scalar $input->param('basketname'),
+            scalar $input->param('basketnote'),
+            scalar $input->param('basketbooksellernote'),
+            scalar $input->param('basketcontractnumber') || undef,
+            scalar $input->param('basketbooksellerid'),
+            scalar $input->param('deliveryplace'),
+            scalar $input->param('billingplace'),
+            scalar $input->param('is_standing') ? 1 : undef,
         );
     } else { #New basket
         $basketno = NewBasket(
             $booksellerid,
             $loggedinuser,
-            $input->param('basketname'),
-            $input->param('basketnote'),
-            $input->param('basketbooksellernote'),
-            $input->param('basketcontractnumber') || undef,
-            $input->param('deliveryplace'),
-            $input->param('billingplace'),
-            $input->param('is_standing') ? 1 : undef,
+            scalar $input->param('basketname'),
+            scalar $input->param('basketnote'),
+            scalar $input->param('basketbooksellernote'),
+            scalar $input->param('basketcontractnumber') || undef,
+            scalar $input->param('deliveryplace'),
+            scalar $input->param('billingplace'),
+            scalar $input->param('is_standing') ? 1 : undef,
         );
     }
     print $input->redirect('basket.pl?basketno='.$basketno);
