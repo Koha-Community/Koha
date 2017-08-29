@@ -100,7 +100,7 @@ unless (CanUserManageBasket($loggedinuser, $basket, $userflags)) {
         basketno => $basketno,
         basketname => $basket->{basketname},
         booksellerid => $booksellerid,
-        name => $bookseller->name,
+        booksellername => $bookseller->name,
     );
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
@@ -159,7 +159,7 @@ if ( $op eq 'delete_confirm' ) {
     DelBasket($basketno,);
     $template->param(
         delete_confirmed => 1,
-        name => $bookseller->name,
+        booksellername => $bookseller->name,
         booksellerid => $booksellerid,
     );
 } elsif ( !$bookseller ) {
@@ -214,7 +214,7 @@ if ( $op eq 'delete_confirm' ) {
     $template->param(
         confirm_close   => "1",
         booksellerid    => $booksellerid,
-        name            => $bookseller->name,
+        booksellername  => $bookseller->name,
         basketno        => $basket->{'basketno'},
         basketname      => $basket->{'basketname'},
         basketgroupname => $basket->{'basketname'},
@@ -405,7 +405,7 @@ if ( $op eq 'list' ) {
         billingplace         => $basket->{billingplace},
         active               => $bookseller->active,
         booksellerid         => $bookseller->id,
-        name                 => $bookseller->name,
+        booksellername       => $bookseller->name,
         books_loop           => \@books_loop,
         book_foot_loop       => \@book_foot_loop,
         cancelledorders_loop => \@cancelledorders_loop,
