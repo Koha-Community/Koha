@@ -147,7 +147,9 @@ if ($AcqCreateItem eq 'receiving') {
         $item->{materials} = $descriptions->{lib} // '';
 
         my $itemtype = Koha::ItemTypes->find( $item->{itype} );
-        $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
+        if (defined $itemtype) {
+            $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
+        }
         push @items, $item;
     }
     $template->param(items => \@items);
