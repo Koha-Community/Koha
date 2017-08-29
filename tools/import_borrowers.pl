@@ -39,7 +39,6 @@ use Modern::Perl;
 use C4::Auth;
 use C4::Output;
 use C4::Templates;
-use Koha::Patron::Debarments;
 use Koha::Patrons;
 use Koha::DateUtils;
 use Koha::Token;

@@ -29,6 +29,7 @@ use C4::Members::AttributeTypes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patron::Debarments;
 use Koha::DateUtils;
 
 =head1 NAME
