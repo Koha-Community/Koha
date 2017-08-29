@@ -233,17 +233,10 @@ $(document).ready(function() {
         [% END %]
     </h1>
     <div class="help">
-        <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
-        <ul>
-            <li>same library, same patron category, same item type</li>
-            <li>same library, same patron category, all item types</li>
-            <li>same library, all patron categories, same item type</li>
-            <li>same library, all patron categories, all item types</li>
-            <li>default (all libraries), same patron category, same item type</li>
-            <li>default (all libraries), same patron category, all item types</li>
-            <li>default (all libraries), all patron categories, same item type</li>
-            <li>default (all libraries), all patron categories, all item types</li>
-        </ul>
+        <p>The rules are applied from most specific to less specific, using this order:
+            <br />
+            library > circulation level > hold level > patron category > item type > collection code > shelving location > sub location > genre
+        </p>
         <p>To modify a rule, create a new one with the same patron category and item type.</p>
     </div>
     <div>
