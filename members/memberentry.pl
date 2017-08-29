@@ -316,7 +316,7 @@ if ($op eq 'save' || $op eq 'insert'){
                 : ()
     }
 
-    if ($newdata{othernames} && Koha::Patrons->search({
+    if (defined $newdata{othernames} && Koha::Patrons->search({
             othernames     => $newdata{othernames},
             borrowernumber => { '!=' => $borrowernumber },
         })->count)

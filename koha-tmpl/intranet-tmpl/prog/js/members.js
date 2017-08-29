@@ -419,6 +419,7 @@ $(document).ready(function(){
                 $("#phone, #phonepro, #B_phone, #SMSnumber").each(function(){
                     $(this).val($.trim($(this).val()));
                 });
+                updateOthername();
                 form.submit();
             }
     });
