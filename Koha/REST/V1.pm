@@ -53,6 +53,7 @@ sub startup {
                                 # Paths-, Parameters-, Definitions- & Info-object
                                 # is not allowed by the OpenAPI specification.
     });
+    $self->plugin( 'Koha::REST::Plugin::Pagination' );
 }
 
 1;
