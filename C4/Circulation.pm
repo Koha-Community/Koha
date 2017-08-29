@@ -834,6 +834,56 @@ sub CanBookBeIssued {
         }
     }
 
+    #
+    # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
+    #
+    if ( $issue && $issue->borrowernumber eq $borrower->{'borrowernumber'} ){
+
+        # Already issued to current borrower.
+        # If it is an on-site checkout if it can be switched to a normal checkout
+        # or ask whether the loan should be renewed
+
+        if ( $issue->onsite_checkout
+                and C4::Context->preference('SwitchOnSiteCheckouts') ) {
+            $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
+        } else {
+            my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
+                $borrower->{'borrowernumber'},
+                $item->{'itemnumber'},
+            );
+            if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
+                if ( $renewerror eq 'onsite_checkout' ) {
+                    $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
+                }
+                else {
+                    $issuingimpossible{NO_MORE_RENEWALS} = 1;
+                }
+            }
+            else {
+                $needsconfirmation{RENEW_ISSUE} = 1;
+            }
+        }
+    }
+    elsif ( $issue ) {
+
+        # issued to someone else
+
+        my $patron = Koha::Patrons->find( $issue->borrowernumber );
+
+        my ( $can_be_returned, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
+
+        unless ( $can_be_returned ) {
+            $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
+            $issuingimpossible{branch_to_return} = $message;
+        } else {
+            $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+            $needsconfirmation{issued_firstname} = $patron->firstname;
+            $needsconfirmation{issued_surname} = $patron->surname;
+            $needsconfirmation{issued_cardnumber} = $patron->cardnumber;
+            $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
+        }
+    }
+
     # JB34 CHECKS IF BORROWERS DON'T HAVE ISSUE TOO MANY BOOKS
     #
     my $switch_onsite_checkout = (
@@ -843,7 +893,7 @@ sub CanBookBeIssued {
       and $issue->borrowernumber == $borrower->{'borrowernumber'} ? 1 : 0 );
     my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
-    if ( $toomany ) {
+    if ( $toomany  & !$needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
             $needsconfirmation{PATRON_CANT} = 1;
         }
@@ -941,56 +991,6 @@ sub CanBookBeIssued {
         my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
         if ( $rentalCharge > 0 ){
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
-        }
-    }
-
-    #
-    # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
-    #
-    if ( $issue && $issue->borrowernumber eq $borrower->{'borrowernumber'} ){
-
-        # Already issued to current borrower.
-        # If it is an on-site checkout if it can be switched to a normal checkout
-        # or ask whether the loan should be renewed
-
-        if ( $issue->onsite_checkout
-                and C4::Context->preference('SwitchOnSiteCheckouts') ) {
-            $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
-        } else {
-            my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
-                $borrower->{'borrowernumber'},
-                $item->{'itemnumber'},
-            );
-            if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
-                if ( $renewerror eq 'onsite_checkout' ) {
-                    $issuingimpossible{NO_RENEWAL_FOR_ONSITE_CHECKOUTS} = 1;
-                }
-                else {
-                    $issuingimpossible{NO_MORE_RENEWALS} = 1;
-                }
-            }
-            else {
-                $needsconfirmation{RENEW_ISSUE} = 1;
-            }
-        }
-    }
-    elsif ( $issue ) {
-
-        # issued to someone else
-
-        my $patron = Koha::Patrons->find( $issue->borrowernumber );
-
-        my ( $can_be_returned, $message ) = CanBookBeReturned( $item, C4::Context->userenv->{branch} );
-
-        unless ( $can_be_returned ) {
-            $issuingimpossible{RETURN_IMPOSSIBLE} = 1;
-            $issuingimpossible{branch_to_return} = $message;
-        } else {
-            $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
-            $needsconfirmation{issued_firstname} = $patron->firstname;
-            $needsconfirmation{issued_surname} = $patron->surname;
-            $needsconfirmation{issued_cardnumber} = $patron->cardnumber;
-            $needsconfirmation{issued_borrowernumber} = $patron->borrowernumber;
         }
     }
 
