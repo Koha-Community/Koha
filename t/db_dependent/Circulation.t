@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 102;
+use Test::More tests => 103;
 
 use DateTime;
 
@@ -1780,6 +1780,7 @@ subtest 'Set waiting flag' => sub {
 
     my $biblio = $builder->build( { source => 'Biblio' } );
     my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
+
     my $item = $builder->build(
         {
             source => 'Item',
@@ -1793,8 +1794,6 @@ subtest 'Set waiting flag' => sub {
             }
         }
     );
-
-
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
@@ -1820,6 +1819,61 @@ subtest 'Set waiting flag' => sub {
     is( $hold->found, 'W', 'Hold is waiting' );
     ( $status ) = CheckReserves($item->{itemnumber});
     is( $status, 'Waiting', 'Now the hold is waiting');
+};
+
+subtest 'AddReturn | is_overdue' => sub {
+    plan tests => 3;
+
+    # Set a simple circ policy
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+    q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
+                                    maxissueqty, issuelength, lengthunit,
+                                    renewalsallowed, renewalperiod,
+                                    norenewalbefore, auto_renew,
+                                    fine, chargeperiod)
+          VALUES (?, ?, ?, ?,
+                  ?, ?, ?,
+                  ?, ?,
+                  ?, ?,
+                  ?, ?
+                 )
+        },
+        {},
+        '*',   '*', '*', 25,
+        1,     14,  'days',
+        1,     7,
+        undef, 0,
+        .10,   1
+    );
+
+    my $five_days_go = output_pref({ dt => dt_from_string->add( days => 5 ), dateonly => 1});
+    my $ten_days_go  = output_pref({ dt => dt_from_string->add( days => 10), dateonly => 1 });
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower' } );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber},
+            }
+        }
+    );
+
+    my $issue = AddIssue( $patron, $item->{barcode}, $five_days_go ); # date due was 10d ago
+    my $actualissue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
+    is( output_pref({ str => $actualissue->date_due, dateonly => 1}), $five_days_go, "First issue works");
+    my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron,$item->{barcode},$ten_days_go, undef, undef, undef);
+    is( $needsconfirmation->{RENEW_ISSUE}, 1, "This is a renewal");
+    is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");
+
 };
 
 sub set_userenv {
