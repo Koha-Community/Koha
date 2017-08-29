@@ -31,6 +31,33 @@ use Koha::Patron;
 
 use base qw(Koha::Objects);
 
+our $RESULTSET_PATRON_ID_MAPPING = {
+    Accountline          => 'borrowernumber',
+    ArticleRequest       => 'borrowernumber',
+    BorrowerAttribute    => 'borrowernumber',
+    BorrowerDebarment    => 'borrowernumber',
+    BorrowerFile         => 'borrowernumber',
+    BorrowerModification => 'borrowernumber',
+    ClubEnrollment       => 'borrowernumber',
+    Issue                => 'borrowernumber',
+    ItemsLastBorrower    => 'borrowernumber',
+    Linktracker          => 'borrowernumber',
+    Message              => 'borrowernumber',
+    MessageQueue         => 'borrowernumber',
+    OldIssue             => 'borrowernumber',
+    OldReserve           => 'borrowernumber',
+    Rating               => 'borrowernumber',
+    Reserve              => 'borrowernumber',
+    Review               => 'borrowernumber',
+    Statistic            => 'borrowernumber',
+    SearchHistory        => 'userid',
+    Suggestion           => 'suggestedby',
+    TagAll               => 'borrowernumber',
+    Virtualshelfcontent  => 'borrowernumber',
+    Virtualshelfshare    => 'borrowernumber',
+    Virtualshelve        => 'owner',
+};
+
 =head1 NAME
 
 Koha::Patron - Koha Patron Object class
@@ -205,6 +232,54 @@ sub anonymise_issue_history {
         $nb_rows += $old_issues_to_anonymise->update( { 'old_issues.borrowernumber' => $anonymous_patron } );
     }
     return $nb_rows;
+}
+
+=head3 merge
+
+    Koha::Patrons->search->merge( { keeper => $borrowernumber, patrons => \@borrowernumbers } );
+
+    This subroutine merges a list of patrons into another patron record. This is accomplished by finding
+    all related patron ids for the patrons to be merged in other tables and changing the ids to be that
+    of the keeper patron.
+
+=cut
+
+sub merge {
+    my ( $self, $params ) = @_;
+
+    my $keeper          = $params->{keeper};
+    my @borrowernumbers = @{ $params->{patrons} };
+
+    my $patron_to_keep = Koha::Patrons->find( $keeper );
+    return unless $patron_to_keep;
+
+    # Ensure the keeper isn't in the list of patrons to merge
+    @borrowernumbers = grep { $_ ne $keeper } @borrowernumbers;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $results;
+
+    foreach my $borrowernumber (@borrowernumbers) {
+        my $patron = Koha::Patrons->find( $borrowernumber );
+
+        next unless $patron;
+
+        # Unbless for safety, the patron will end up being deleted
+        $results->{merged}->{$borrowernumber}->{patron} = $patron->unblessed;
+
+        while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
+            my $rs = $schema->resultset($r)->search({ $field => $borrowernumber} );
+            $results->{merged}->{ $borrowernumber }->{updated}->{$r} = $rs->count();
+            $rs->update( { $field => $keeper });
+        }
+
+        $patron->delete();
+    }
+
+    $results->{keeper} = $patron_to_keep;
+
+    return $results;
 }
 
 =head3 type

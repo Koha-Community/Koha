@@ -107,6 +107,10 @@
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs list-remove" type="submit"><i class="fa fa-trash"></i> Remove selected</button>
                 </div>
+                |
+                <div class="btn-group">
+                    <button class="btn btn-default btn-xs merge-patrons"><i class="fa fa-compress"></i> Merge selected patrons</button>
+                </div>
             </div>
 
             <table id="patron-list-table">
@@ -127,7 +131,10 @@
                 <tbody>
                     [% FOREACH p IN list.patron_list_patrons %]
                         <tr>
-                            <td><input type="checkbox" name="patrons_to_remove" value="[% p.patron_list_patron_id %]" /></td>
+                            <td>
+                                <input type="checkbox" name="patrons_to_remove" class="selection" value="[% p.patron_list_patron_id %]" />
+                                <input type="hidden" id="borrowernumber_[% p.patron_list_patron_id %]" value="[% p.borrowernumber.id %]" />
+                            </td>
                             <td>
                                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber.borrowernumber %]">
                                     [% p.borrowernumber.cardnumber %]
@@ -152,7 +159,8 @@
             </table>
 
             <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
-            <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Remove selected patrons</button>
+            <button type="submit" class="btn btn-default btn-sm list-remove"><i class="fa fa-trash" aria-hidden="true"></i> Remove selected patrons</button>
+            <button class="btn btn-default btn-sm merge-patrons" type="submit"><i class="fa fa-compress"></i> Merge selected patrons</button>
         </form>
 
             </div>
@@ -227,6 +235,28 @@
             $("#add_patrons_by_search a").on("click", function(){
                 $("#add_patrons_by_barcode, #patron_search_line").show();
                 $("#add_patrons_by_search, #patron_barcodes_line, #patron_barcodes_submit").hide();
+            });
+
+            $('.merge-patrons').on('click', function() {
+                var checkedItems = $("input:checked");
+                if ($(checkedItems).length < 2) {
+                    alert(_("You must select one or more patrons to remove"));
+                    return false;
+                }
+                $(checkedItems).parents('tr').addClass("warn");
+                if (confirm(_("Are you sure you want to remove the selected patrons?"))) {
+                    var merge_patrons_url = '/cgi-bin/koha/members/merge-patrons.pl?' +
+                        $('.selection:checked')
+                        .map(function() {
+                            return "id=" + $( '#borrowernumber_' + $(this).val() ).val()
+                        }).get().join('&');
+
+                    window.location.href = merge_patrons_url;
+                    return false;
+                } else {
+                    $(checkedItems).parents('tr').removeClass("warn");
+                    return false;
+                }
             });
         });
     </script>

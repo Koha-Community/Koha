@@ -53,9 +53,10 @@
             <div id="searchheader">
               <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember | html %]'[% END %]</span></h3>
             </div>
-            [% IF CAN_user_tools_manage_patron_lists %]
+            [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers %]
               <div id="searchheader">
                   <div>
+                    [% IF CAN_user_tools_manage_patron_lists %]
                       <a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
                       |
                       <a href="#" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
@@ -79,8 +80,17 @@
 
                           <input id="add_to_patron_list_submit" type="submit" class="submit" value="Save">
                       </span>
+                    [% END %]
+
+                    [% IF CAN_user_tools_manage_patron_lists && CAN_user_borrowers %]
+                        |
+                    [% END %]
+
+                    [% IF CAN_user_borrowers %]
+                          <button id="merge-patrons" type="submit">Merge selected patrons</button>
+                    [% END %]
                   </div>
-              </div>
+                </div>
             [% END %]
 
             <table id="memberresultst">
@@ -228,6 +238,23 @@
     [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#merge-patrons').prop('disabled', true);
+            $('#memberresultst').on('change', 'input.selection', function() {
+                if ( $('.selection:checked').length > 1 ) {
+                    $('#merge-patrons').prop('disabled', false);
+                } else {
+                    $('#merge-patrons').prop('disabled', true);
+                }
+            });
+            $('#merge-patrons').on('click', function() {
+                var merge_patrons_url = 'merge-patrons.pl?' + $('.selection:checked')
+                    .map(function() {
+                       return "id=" + $(this).val()
+                    }).get().join('&');
+
+                window.location.href = merge_patrons_url;
+            });
+
             $('#add_to_patron_list_submit').prop('disabled', true);
             $('#new_patron_list').hide();
 
