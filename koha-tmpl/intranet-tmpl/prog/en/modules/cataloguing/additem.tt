@@ -51,6 +51,12 @@ $(document).ready(function(){
                 });
             });
 
+    $("#addnewitem").click(function(){
+        if ( confirm(_("Are you sure you want to add a new item? Any changes made on this page will be lost.")) ){
+            window.location.href = "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]";
+        }
+    });
+
     var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) %]
     // Skip the first column
     columns_settings.unshift( { cannot_be_toggled: "1" } );
@@ -355,7 +361,9 @@ function confirm_deletion() {
     <input type="hidden" name="tag" value="[% itemtagfield %]" />
     <input type="hidden" name="subfield" value="[% itemtagsubfield %]" />
     <input type="hidden" name="field_value" value="[% itemnumber %]" />
-    <input type="submit" value="Save changes" onclick="return Check(this.form)" />
+    <input type="submit" value="Save changes" onclick="return Check(this.form)">
+    <input type="button" id="addnewitem" value="Add a new item">
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">Cancel</a>
     [% END %]</fieldset>
     
     [%# Fields for fast cataloging %]
