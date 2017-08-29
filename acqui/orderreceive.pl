@@ -145,7 +145,9 @@ if ($AcqCreateItem eq 'receiving') {
         $item->{materials} = $descriptions->{lib} // '';
 
         my $itemtype = getitemtypeinfo($item->{itype});
-        $item->{itemtype} = $itemtype->{description};
+        if (defined $itemtype) {
+            $item->{itemtype} = $itemtype->{description};
+        }
         push @items, $item;
     }
     $template->param(items => \@items);
