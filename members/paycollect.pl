@@ -61,7 +61,6 @@ my $writeoff     = $input->param('writeoff_individual');
 my $select_lines = $input->param('selected');
 my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape $input->param('payment_note');
-my $accountno;
 my $accountlines_id;
 
 if ( $individual || $writeoff ) {
@@ -74,7 +73,6 @@ if ( $individual || $writeoff ) {
     $accountlines_id       = $input->param('accountlines_id');
     my $amount            = $input->param('amount');
     my $amountoutstanding = $input->param('amountoutstanding');
-    $accountno = $input->param('accountno');
     my $itemnumber  = $input->param('itemnumber');
     my $description  = $input->param('description');
     my $title        = $input->param('title');
@@ -84,7 +82,6 @@ if ( $individual || $writeoff ) {
     $template->param(
         accounttype       => $accounttype,
         accountlines_id    => $accountlines_id,
-        accountno         => $accountno,
         amount            => $amount,
         amountoutstanding => $amountoutstanding,
         title             => $title,
@@ -134,7 +131,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     {
                         borrowernumber    => $borrowernumber,
                         amountoutstanding => { '<>' => 0 },
-                        accountno         => { 'IN' => \@acc },
+                        accountlines_id   => { 'IN' => \@acc },
                     },
                     { order_by => 'date' }
                 );
