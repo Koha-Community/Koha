@@ -37,7 +37,7 @@ unless ( C4::Context->preference('useDischarge') ) {
     exit;
 }
 
-my $op = $input->param("op");
+my $op = $input->param("op") || '';
 
 # Getting the template and auth
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
