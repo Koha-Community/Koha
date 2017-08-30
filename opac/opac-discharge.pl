@@ -47,6 +47,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     debug         => 1,
 });
 
+my $can_be_discharged = Koha::Patron::Discharge::can_be_discharged({ borrowernumber => $loggedinuser });
+if ($can_be_discharged == 0) {
+    $template->param( has_checkouts => 1 );
+}
+
 if ( $op eq 'request' ) {
     my $success = Koha::Patron::Discharge::request({
         borrowernumber => $loggedinuser,
