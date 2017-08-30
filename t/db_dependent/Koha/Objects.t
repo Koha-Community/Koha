@@ -216,7 +216,8 @@ subtest '->is_paged and ->pager tests' => sub {
     $schema->storage->txn_begin;
 
     # Delete existing patrons
-    Koha::Patrons->search->delete;
+    Koha::Checkouts->delete;
+    Koha::Patrons->delete;
     # Create 10 patrons
     foreach (1..10) {
         $builder->build_object({ class => 'Koha::Patrons' });
