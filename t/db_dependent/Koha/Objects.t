@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -214,3 +214,21 @@ subtest 'Exceptions' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest '->is_paged tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    foreach (1..10) {
+        $builder->build_object({ class => 'Koha::Patrons' });
+    }
+
+    my $patrons = Koha::Patrons->search();
+    ok( !$patrons->is_paged, 'Search is not paged' );
+    $patrons = Koha::Patrons->search( undef, { 'page' => 1, 'rows' => 3 } );
+    ok( $patrons->is_paged, 'Search is paged' );
+
+    $schema->storage->txn_rollback;
+}
