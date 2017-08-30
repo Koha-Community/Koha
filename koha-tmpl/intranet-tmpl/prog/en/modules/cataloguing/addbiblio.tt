@@ -18,6 +18,12 @@
         $("#loading").hide();
     });
 	 $(document).ready(function() {
+
+        [% IF bib_doesnt_exist %]
+            $("#addbibliotabs").hide();
+            $("#toolbar").hide();
+        [% END %]
+
         $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
 			$("#"+ui.panel.id+" input:eq(0)").focus();
 		});
@@ -531,6 +537,13 @@ function Changefwk() {
         [% END %]
     [% END %]
 </div>
+
+[% IF bib_doesnt_exist %]
+    <div class="dialog alert">
+        The record you are trying to edit doesn't exist.<br>
+        <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Add a new record</a> or <a href="/cgi-bin/koha/catalogue/search.pl">do a catalog search</a>.
+    </div>
+[% END %]
 
 [% IF ( popup ) %]
         <input type="hidden" name="mode" value="popup" />
