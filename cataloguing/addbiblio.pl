@@ -729,6 +729,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+if ($biblionumber){
+    my $does_bib_exist = Koha::Biblios->find($biblionumber);
+    if (!defined $does_bib_exist){
+        $biblionumber = undef;
+        $template->param( bib_doesnt_exist => 1 );
+    }
+}
+
 if ($frameworkcode eq 'FA'){
     # We need to grab and set some variables in the template for use on the additems screen
     $template->param(
@@ -797,7 +805,7 @@ if ($parentbiblio) {
 }
 
 $is_a_modif = 0;
-    
+
 if ($biblionumber) {
     $is_a_modif = 1;
     my $title = C4::Context->preference('marcflavour') eq "UNIMARC" ? $record->subfield('200', 'a') : $record->title;
