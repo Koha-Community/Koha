@@ -18,8 +18,8 @@
             ]
         }));
 
-        $("a.delete_item").click(function(){
-            return confirm( _("Are you sure you want to remove this item from the course?"));
+        $(".delete_item").click(function(){
+            return confirmDelete(_("Are you sure you want to remove this item from the course?"));
         });
 
         $("#delete_course").click(function(){
@@ -207,11 +207,11 @@
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]
                                         [% IF cr.item.onloan %]
-                                            <a class="btn btn-mini disabled checkedout" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is checked out">
+                                            <a class="btn btn-mini disabled checkedout delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is checked out">
                                         [% ELSIF cr.item.itemlost %]
-                                            <a class="btn btn-mini disabled itemlost" href="#" class="delete_item" data-toggle="tooltip" data-placement="left" title="This item is lost">
+                                            <a class="btn btn-mini disabled itemlost delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is lost">
                                         [% ELSE %]
-                                            <a class="btn btn-mini" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" class="delete_item" >
+                                            <a class="btn btn-mini delete_item" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]" >
                                         [% END %]
                                         <i class="fa fa-trash"></i> Remove</a>
                                     [% END %]
