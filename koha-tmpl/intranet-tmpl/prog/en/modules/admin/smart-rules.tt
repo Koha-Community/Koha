@@ -41,22 +41,24 @@
         <p>To modify a rule, create a new one with the same patron category and item type.</p>
     </div>
     <div>
-        <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
-        Select a library :
-            <select name="branch" id="branch" style="width:20em;">
-                <option value="*">Standard rules for all libraries</option>
-                [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch, unfiltered => 1 ) %]
-            </select>
-        </form>
-        [% IF ( definedbranch ) %]
-            <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
-                <label for="tobranch"><strong>Clone these rules to:</strong></label>
-                <input type="hidden" name="frombranch" value="[% current_branch | html %]" />
-                <select name="tobranch" id="tobranch">
-                    [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
+        [% UNLESS restricted_to_own_library %]
+            <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
+            Select a library :
+                <select name="branch" id="branch" style="width:20em;">
+                    <option value="*">Standard rules for all libraries</option>
+                    [% PROCESS options_for_libraries libraries => Branches.all( selected => current_branch, unfiltered => 1 ) %]
                 </select>
-                <input type="submit" id="clone_rules" value="Clone" />
             </form>
+            [% IF ( definedbranch ) %]
+                <form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
+                    <label for="tobranch"><strong>Clone these rules to:</strong></label>
+                    <input type="hidden" name="frombranch" value="[% current_branch | html %]" />
+                    <select name="tobranch" id="tobranch">
+                        [% PROCESS options_for_libraries libraries => Branches.all( unfiltered => 1 ) %]
+                    </select>
+                    <input type="submit" id="clone_rules" value="Clone" />
+                </form>
+            [% END %]
         [% END %]
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">

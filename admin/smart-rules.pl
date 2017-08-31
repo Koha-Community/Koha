@@ -35,6 +35,7 @@ use Koha::Libraries;
 use Koha::CirculationRules;
 use Koha::Patron::Categories;
 use Koha::Caches;
+use Koha::Patrons;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -61,6 +62,12 @@ unless ( $branch ) {
         $branch = C4::Context::only_my_library() ? ( C4::Context::mybranch() || '*' ) : '*';
     }
 }
+
+my $uid = Koha::Patrons->find( $loggedinuser )->userid;
+my $restricted_to_own_library = $uid && haspermission( $uid, { parameters => 'manage_circ_rules_restricted' }, { no_inherit => 1 } );
+$template->param( restricted_to_own_library => $restricted_to_own_library );
+$branch = C4::Context::mybranch() if $restricted_to_own_library;
+
 $branch = '*' if $branch eq 'NO_LIBRARY_SET';
 
 my $op = $input->param('op') || q{};
