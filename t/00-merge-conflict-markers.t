@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More;
+use Test::More tests => 1;
 use File::Spec;
 use File::Find;
 use IO::File;
 
+my @failures;
 find({
     bydepth => 1,
     no_chdir => 1,
@@ -48,11 +48,8 @@ find({
             }
         }
         close $fh;
-        if ($marker_found) {
-            fail("$file contains merge conflict markers in line $line");
-        } else {
-            pass("$file has no merge conflict markers");
-        }
-    },
+        push @failures, $file if $marker_found;
+},
 }, File::Spec->curdir());
-done_testing();
+
+is( @failures, 0, 'Files should not contain merge markers' . ( @failures ? ( ' (' . join( ', ', @failures ) . ' )' ) : '' ) );
