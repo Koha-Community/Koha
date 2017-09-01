@@ -135,8 +135,6 @@ sub calc_date_due {
     $d2->add(days => 1);
     $d->truncate( to => 'day' );
     $d2->truncate( to => 'day' );
-    warn Data::Dumper::Dumper($d->datetime());
-    warn Data::Dumper::Dumper($d2->datetime());
     is ( DateTime->compare( $d, $d2) == 0, 1, "no problem with closed days");
 }
 
