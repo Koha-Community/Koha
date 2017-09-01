@@ -516,7 +516,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
 
 
-    my $hold = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next;
+    $hold = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next;
     $hold->cancel;
 
     # Bug 14101

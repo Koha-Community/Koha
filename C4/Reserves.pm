@@ -799,7 +799,6 @@ sub CancelExpiredReserves {
     my $dbh = C4::Context->dbh;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $today = dt_from_string;
     # FIXME To move to Koha::Holds->search_expired (?)
     my $holds = Koha::Holds->search(
         {

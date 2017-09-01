@@ -82,7 +82,7 @@ my $ignoreRs = 0;
 # Deal with the requests....
 if ( $request eq "KillWaiting" ) {
     my $item = $query->param('itemnumber');
-    my $holds = Koha::Holds->search(
+    my $holds = Koha::Holds->search({
         itemnumber     => $item,
         borrowernumber => $borrowernumber
     });
@@ -101,7 +101,7 @@ elsif ( $request eq "SetWaiting" ) {
 }
 elsif ( $request eq 'KillReserved' ) {
     my $biblionumber = $query->param('biblionumber');
-    my $holds = Koha::Holds->search(
+    my $holds = Koha::Holds->search({
         biblionumber   => $biblionumber,
         borrowernumber => $borrowernumber
     });
