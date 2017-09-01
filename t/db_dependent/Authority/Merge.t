@@ -353,7 +353,7 @@ subtest "Graceful resolution of missing reporting tag" => sub {
 
     # Merge
     merge({ mergefrom => $id1, MARCfrom => $authmarc, mergeto => $id2, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
-    $biblio = C4::Biblio::GetMarcBiblio( $biblionumber );
+    $biblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $biblio->subfield('612', '9'), $id2, 'id2 saved in $9' );
     is( $biblio->subfield('612', 'a'), ' ', 'Kept an empty $a too' );
 
