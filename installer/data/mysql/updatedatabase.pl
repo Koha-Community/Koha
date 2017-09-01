@@ -14608,6 +14608,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 16892: Add automatic patron registration via OAuth2 login)\n";
 }
 
+$DBversion = '17.06.00.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES  ('StaffLangSelectorMode','footer','top|both|footer','Select the location to display the language selector in staff client','Choice')
+        });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18718 - Language selector in staff header menu similar to OPAC )\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
