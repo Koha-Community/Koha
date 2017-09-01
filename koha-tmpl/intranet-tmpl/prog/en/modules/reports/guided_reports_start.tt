@@ -705,14 +705,29 @@ canned reports and writing custom SQL reports.</p>
 
 <div class="pages">[% pagination_bar %]</div>
 [% UNLESS ( errors ) %]
+<form method="POST" id="report_results">
+<input type="hidden" name="op" value="show">
 <table>
-<tr>[% FOREACH header_ro IN header_row %]<th>[% header_ro.cell %]</th>[% END %]</tr>
+<tr>[% FOREACH header_ro IN header_row %]
+        [% IF header_ro.cell == 'itemnumber' %]
+            <th>[% header_ro.cell %] <a href="" data-toggle="tooltip" title="Send visible items to batch modification" class="send_to_item_mod">^</a></th>
+        [% ELSE %]
+            <th>[% header_ro.cell %]</th>
+        [% END %]
+    [% END %]</tr>
 [% FOREACH result IN results %]
 <tr>
-    [% FOREACH cell IN result.cells %]<td>[% cell.cell %]</td>[% END %]
+    [% FOREACH cells IN result.cells %]
+        [% place = loop.index %]
+        [% IF header_row.$place.cell == 'itemnumber' %]
+            <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]">
+        [% END %]
+        <td>[% cells.cell %]</td>
+    [% END %]
 </tr>
 [% END %]
 </table>
+</form>
 [% END %]
 [% END %]
 
@@ -955,6 +970,9 @@ Sub report:<select name="subreport">
         }
 
         $(document).ready(function(){
+
+            $('[data-toggle="tooltip"]').tooltip();
+
             $('#limit').change(function() {
                 $('#limitselect').submit();
             });
@@ -974,6 +992,12 @@ Sub report:<select name="subreport">
 
             $("#delColumn").on("click",function(){
                 delColumn();
+            });
+
+            $(".send_to_item_mod").click(function(e){
+                e.preventDefault();
+                $("#report_results").attr("action","/cgi-bin/koha/tools/batchMod.pl");
+                $("#report_results").submit();
             });
 
             [% IF (saved1) %]
