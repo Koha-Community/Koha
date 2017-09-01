@@ -27,7 +27,6 @@ use C4::Koha;
 use C4::Biblio;
 
 use Koha::Authority::Types;
-use Koha::Exceptions;
 use Koha::MetadataRecord::Authority;
 
 my $input  = new CGI;
@@ -108,7 +107,10 @@ else {
         push @errors, { code => 'DESTRUCTIVE_MERGE' };
     } else {
         my $recordObj1 = Koha::MetadataRecord::Authority->get_from_authid($authid[0]);
-        Koha::Exceptions::ObjectNotFound->throw( "No authority record found for authid $authid[0]\n" ) if !$recordObj1;
+        if (!$recordObj1) {
+            push @errors, { code => "MISSING_RECORD", value => $authid[0] };
+        }
+
 
         my $recordObj2;
         if (defined $mergereference && $mergereference eq 'breeding') {
@@ -116,9 +118,19 @@ else {
         } else {
             $recordObj2 =  Koha::MetadataRecord::Authority->get_from_authid($authid[1]);
         }
-        Koha::Exceptions::ObjectNotFound->throw( "No authority record found for authid $authid[1]\n" ) if !$recordObj2;
+        if (!$recordObj2) {
+            push @errors, { code => "MISSING_RECORD", value => $authid[1] };
+        }
 
-        if ($mergereference) {
+        unless ( $recordObj1 && $recordObj2 ) {
+            if (@errors) {
+                $template->param( errors => \@errors );
+            }
+            output_html_with_http_headers $input, $cookie, $template->output;
+            exit;
+        }
+
+        if ($mergereference ) {
 
             my $framework;
             if ( $recordObj1->authtypecode ne $recordObj2->authtypecode && $mergereference ne 'breeding' ) {
