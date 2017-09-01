@@ -54,6 +54,7 @@ sub startup {
                                 # is not allowed by the OpenAPI specification.
     });
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
+    $self->plugin( 'Koha::REST::Plugin::Query' );
 }
 
 1;
