@@ -55,7 +55,7 @@ is(ref($suggestor), 'Koha::SuggestionEngine', 'Created suggestion engine');
 
 my $result = $suggestor->get_suggestions({search => 'Cookery'});
 
-is_deeply($result, [ { 'search' => 'an=1234', 'relevance' => 1, 'label' => 'Cooking' } ], "Suggested correct alternative to 'Cookery'");
+is_deeply($result, [ { 'search' => 'an:1234', 'relevance' => 1, 'label' => 'Cooking' } ], "Suggested correct alternative to 'Cookery'");
 
 done_testing();
 
