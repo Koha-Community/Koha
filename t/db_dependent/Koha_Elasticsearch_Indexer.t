@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use Module::Load::Conditional qw[can_load check_install requires];
 use Test::More;
 use Test::MockModule;
 use t::lib::Mocks;
@@ -27,10 +28,11 @@ use Koha::Database;
 
 my $schema = Koha::Database->schema();
 
-eval { require Koha::SearchEngine::Elasticsearch::Indexer; };
-if ( $@ ) {
+if ( ! can_load(
+    modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => undef, } )
+) {
     my $missing_module;
-    if ( $@ =~ /Can\'t locate (.*?) / ) {
+    if ( $Module::Load::Conditional::ERROR =~ /Can\'t locate (.*?) / ) {
         $missing_module = $1;
     }
     my $es_dep_msg = "Required module $missing_module is not installed";
