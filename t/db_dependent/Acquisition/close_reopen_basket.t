@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 14;
 use C4::Acquisition;
 use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Budgets;
@@ -86,9 +86,19 @@ C4::Acquisition::DelOrder( $biblionumber1, $ordernumber1 );
 my ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
 is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
 is( $order->{orderstatus}, 'cancelled', 'DelOrder should have set status to cancelled' );
+
 C4::Acquisition::CloseBasket( $basketno );
 ( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
 is( $order->{ordernumber}, $ordernumber1, 'The order returned by GetOrders should have been the right one' );
 is( $order->{orderstatus}, 'cancelled', 'CloseBasket should not reset the status to ordered for cancelled orders' );
+
+C4::Acquisition::ReopenBasket( $basketno );
+( $order ) = C4::Acquisition::GetOrders( $basketno, {cancelled => 1} );
+is( $order->{ordernumber}, $ordernumber1, 'The expected order is cancelled, the basket is reopened' );
+is( $order->{orderstatus}, 'cancelled', 'ReopenBasket should not reset the status for cancelled orders' );
+
+( $order ) = C4::Acquisition::GetOrders( $basketno, { cancelled => 0 } );
+is ( $order->{ordernumber}, $ordernumber2, "The expect order is not cancelled, the basket is reopened" );
+is ( $order->{orderstatus}, 'new', 'The expected order is new, the basket is reopened' );
 
 $schema->storage->txn_rollback();
