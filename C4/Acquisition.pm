@@ -264,7 +264,7 @@ sub ReopenBasket {
         UPDATE aqorders
         SET orderstatus = 'new'
         WHERE basketno = ?
-        AND orderstatus != 'complete'
+        AND orderstatus NOT IN ( 'complete', 'cancelled' )
         }, {}, $basketno);
     return;
 }
