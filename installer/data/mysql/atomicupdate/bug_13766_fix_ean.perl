@@ -1,10 +1,11 @@
 $DBversion = "XXX";
 if(CheckVersion($DBversion)) {
     # Drop index that might exist because of bug 5337
-    my $temp = $dbh->selectall_arrayref(q{
-        SHOW INDEXES FROM biblioitems WHERE key_name = 'ean' });
-    if( @$temp > 0 ) {
+    if( index_exists('biblioitems', 'ean')) {
         $dbh->do(q{ ALTER TABLE biblioitems DROP INDEX ean });
+    }
+    if( index_exists('deletedbiblioitems', 'ean')) {
+        $dbh->do(q{ ALTER TABLE deletedbiblioitems DROP INDEX ean });
     }
 
     # Change data type of column
