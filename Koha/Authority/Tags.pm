@@ -39,6 +39,10 @@ sub _type {
     return 'AuthTagStructure';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
     return 'Koha::Authority::Tag';
 }
