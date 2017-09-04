@@ -172,8 +172,8 @@ my $kohadir = C4::Context->config('intranetdir');
 my $bib_index_mode  = C4::Context->config('zebra_bib_index_mode')  // 'dom';
 my $auth_index_mode = C4::Context->config('zebra_auth_index_mode') // 'dom';
 
-my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
-my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
+my ($biblionumbertagfield,$biblionumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber","");
+my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
 my $marcxml_open = q{<?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://www.loc.gov/MARC21/slim">
@@ -497,7 +497,7 @@ sub export_marc_records_from_sth {
     print {$fh} $marcxml_open;
 
     my $i = 0;
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",'');
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",'');
     while (my ($record_number) = $sth->fetchrow_array) {
         print "." if ( $verbose_logging );
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
@@ -675,7 +675,7 @@ sub get_raw_marc_record {
 
     my $marc;
     if ($record_type eq 'biblio') {
-        eval { $marc = GetMarcBiblio({ biblionumber => $record_number, embed_items => 1 }); };
+        eval { $marc = C4::Biblio::GetMarcBiblio({ biblionumber => $record_number, embed_items => 1 }); };
         if ($@ || !$marc) {
             # here we do warn since catching an exception
             # means that the bib was found but failed
