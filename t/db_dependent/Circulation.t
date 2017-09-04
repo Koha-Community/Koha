@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 100;
+use Test::More tests => 101;
 
 use DateTime;
 
@@ -1727,6 +1727,53 @@ subtest 'AddReturn | is_overdue' => sub {
     is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the FU fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 
+};
+
+subtest 'Set waiting flag' => sub {
+    plan tests => 2;
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode} } } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+    my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode} } } );
+
+    my $biblio = $builder->build( { source => 'Biblio' } );
+    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library_1->{branchcode},
+                holdingbranch => $library_1->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber},
+            }
+        }
+    );
+
+
+
+    set_userenv( $library_2 );
+    my $reserve_id = AddReserve(
+        $library_2->{branchcode}, $patron_2->{borrowernumber}, $biblioitem->{biblionumber},
+        '', 1, undef, undef, '', undef, $item->{itemnumber},
+    );
+
+    set_userenv( $library_1 );
+    my $do_transfer = 1;
+    my ( $res, $rr ) = AddReturn( $item->{barcode}, $library_1->{branchcode} );
+    ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
+    my $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->found, 'T', 'Hold is in transit' );
+
+    set_userenv( $library_2 );
+    $do_transfer = 0;
+    AddReturn( $item->{barcode}, $library_2->{branchcode} );
+    ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
+    $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->found, 'W', 'Hold is waiting' );
 };
 
 sub set_userenv {
