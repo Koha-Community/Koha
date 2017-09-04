@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 90;
+use Test::More tests => 91;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -1251,6 +1251,53 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0 );
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31' );
+};
+
+subtest 'Set waiting flag' => sub {
+    plan tests => 2;
+
+    my $library_1 = $builder->build( { source => 'Branch' } );
+    my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode} } } );
+    my $library_2 = $builder->build( { source => 'Branch' } );
+    my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode} } } );
+
+    my $biblio = $builder->build( { source => 'Biblio' } );
+    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
+    my $item = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library_1->{branchcode},
+                holdingbranch => $library_1->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber},
+            }
+        }
+    );
+
+
+
+    set_userenv( $library_2 );
+    my $reserve_id = AddReserve(
+        $library_2->{branchcode}, $patron_2->{borrowernumber}, $biblioitem->{biblionumber},
+        '', 1, undef, undef, '', undef, $item->{itemnumber},
+    );
+
+    set_userenv( $library_1 );
+    my $do_transfer = 1;
+    my ( $res, $rr ) = AddReturn( $item->{barcode}, $library_1->{branchcode} );
+    ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
+    my $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->found, 'T', 'Hold is in transit' );
+
+    set_userenv( $library_2 );
+    $do_transfer = 0;
+    AddReturn( $item->{barcode}, $library_2->{branchcode} );
+    ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
+    $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->found, 'W', 'Hold is waiting' );
 };
 
 sub set_userenv {
