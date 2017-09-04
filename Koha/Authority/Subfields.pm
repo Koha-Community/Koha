@@ -39,6 +39,10 @@ sub _type {
     return 'AuthSubfieldStructure';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
     return 'Koha::Authority::Subfield';
 }
