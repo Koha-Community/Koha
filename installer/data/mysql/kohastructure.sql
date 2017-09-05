@@ -951,13 +951,15 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   opacitemholds char(1) NOT NULL default 'N', -- allow opac users to place specific items on hold
   article_requests enum('no','yes','bib_only','item_only') NOT NULL DEFAULT 'no', -- allow article requests to be placed,
   PRIMARY KEY (`issuingrules_id`),
-  UNIQUE KEY `issuingrules_selects` (`branchcode`,`categorycode`,`itemtype`,`ccode`,`permanent_location`,`sub_location`,`genre`),
+  UNIQUE KEY `issuingrules_selects` (`branchcode`,`categorycode`,`itemtype`,`ccode`,`permanent_location`,`sub_location`,`genre`,`circulation_level`,`reserve_level`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`),
   KEY `ccode` (`ccode`),
   KEY `permanent_location` (`permanent_location`),
   KEY `sub_location` (`sub_location`),
   KEY `genre` (`genre`),
+  KEY `circulation_level` (`circulation_level`),
+  KEY `reserve_level` (`reserve_level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
