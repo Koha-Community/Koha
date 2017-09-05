@@ -60,7 +60,7 @@ unless ( $patron ) {
 }
 
 if ( $action eq 'reverse' ) {
-  ReversePayment( $input->param('accountlines_id') );
+  ReversePayment( scalar $input->param('accountlines_id') );
 }
 
 if ( $patron->category->category_type eq 'C') {
