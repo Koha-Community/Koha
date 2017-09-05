@@ -69,7 +69,7 @@ my $individual   = $input->param('pay_individual');
 my $writeoff     = $input->param('writeoff_individual');
 my $select_lines = $input->param('selected');
 my $select       = $input->param('selected_accts');
-my $payment_note = uri_unescape $input->param('payment_note');
+my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $accountlines_id;
 
 if ( $individual || $writeoff ) {
