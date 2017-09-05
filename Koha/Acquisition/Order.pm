@@ -264,6 +264,53 @@ sub duplicate_to {
     return $new_order;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Acquisition::Order object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        basketno                      => 'basket_id',
+        biblionumber                  => 'biblio_id',
+        budget_id                     => 'fund_id',
+        budgetdate                    => undef,                    # unused
+        cancellationreason            => 'cancellation_reason',
+        claimed_date                  => 'last_claim_date',
+        datecancellationprinted       => 'cancellation_date',
+        datereceived                  => 'date_received',
+        discount                      => 'discount_rate',
+        entrydate                     => 'entry_date',
+        freight                       => 'shipping_cost',
+        invoiceid                     => 'invoice_id',
+        line_item_id                  => undef,                    # EDIFACT related
+        listprice                     => 'list_price',
+        order_internalnote            => 'internal_note',
+        order_vendornote              => 'vendor_note',
+        ordernumber                   => 'order_id',
+        orderstatus                   => 'status',
+        parent_ordernumber            => 'parent_order_id',
+        purchaseordernumber           => undef,                    # obsolete
+        quantityreceived              => 'quantity_received',
+        replacementprice              => 'replacement_price',
+        sort1                         => 'statistics_1',
+        sort1_authcat                 => 'statistics_1_authcat',
+        sort2                         => 'statistics_2',
+        sort2_authcat                 => 'statistics_2_authcat',
+        subscriptionid                => 'subscription_id',
+        suppliers_reference_number    => undef,                    # EDIFACT related
+        suppliers_reference_qualifier => undef,                    # EDIFACT related
+        suppliers_report              => undef,                    # EDIFACT related
+        tax_rate_bak                  => undef,                    # unused
+        tax_value_bak                 => undef,                    # unused
+        uncertainprice                => 'uncertain_price',
+        unitprice                     => 'unit_price',
+        unitprice_tax_excluded        => 'unit_price_tax_excluded',
+        unitprice_tax_included        => 'unit_price_tax_included'
+    };
+}
 
 =head2 Internal methods
 

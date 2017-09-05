@@ -670,5 +670,8 @@ sub koha_objects_class {
 sub koha_object_class {
     'Koha::Acquisition::Order';
 }
+__PACKAGE__->add_columns(
+    '+uncertainprice' => { is_boolean => 1 }
+);
 
 1;
