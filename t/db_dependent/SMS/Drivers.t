@@ -53,7 +53,7 @@ subtest 'Ensure driver is installed' => sub {
 };
 
 subtest 'Labyrintti::Driver tests' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -110,6 +110,21 @@ subtest 'Labyrintti::Driver tests' => sub {
         is($notice->status, 'failed', 'Delivery failed');
         is($notice->delivery_note, 'a problem',
            'An appropriate delivery note is stored.');
+    };
+
+    subtest 'Test unknown, non-blessed exception' => sub {
+        plan tests => 2;
+
+        my $notice = create_notice($patron);
+        my $message_id = $notice->message_id;
+
+        $notice->content('want_unknown_nonblessed_exception')->store;
+        C4::Letters::SendQueuedMessages();
+        $notice = Koha::Notice::Messages->find($message_id);
+        is($notice->status, 'failed', 'Delivery failed');
+        my $regex = qr/^Unknown non-blessed exception\. no idea what just happened at .*/;
+        like($notice->delivery_note, $regex,
+             'An appropriate delivery note is stored.');
     };
 
     subtest 'Test successful delivery' => sub {
@@ -220,6 +235,9 @@ sub labyrintti_gateway {
     }
     elsif ($params->{text} eq 'want_delivery_failure') {
         return 'message failed: a problem';
+    }
+    elsif ($params->{text} eq 'want_unknown_nonblessed_exception') {
+        die('no idea what just happened');
     }
 
     return 'OK 1';

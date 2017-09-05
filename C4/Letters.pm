@@ -36,6 +36,7 @@ use Koha::DateUtils;
 use Koha::SMS::Providers;
 
 use Koha::Email;
+use Koha::Exceptions;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 
 use Scalar::Util qw ( blessed );
@@ -1470,7 +1471,9 @@ sub _send_message_by_sms {
                 # failsafe: if we catch and unknown exception, set message status to failed
                 _set_message_status( { message_id => $message->{'message_id'},
                                status     => 'failed',
-                               delivery_note => 'Unknown exception.' } );
+                               delivery_note => "Unknown exception. "
+                                    . Koha::Exceptions::to_str($_)
+                } );
                 $_->rethrow();
             }
         }
@@ -1478,7 +1481,9 @@ sub _send_message_by_sms {
             # failsafe
             _set_message_status( { message_id => $message->{'message_id'},
                                status     => 'failed',
-                               delivery_note => 'Unknown non-blessed exception.' } );
+                               delivery_note => "Unknown non-blessed exception. "
+                                    . Koha::Exceptions::to_str($_)
+            } );
             die $_;
         }
     };
