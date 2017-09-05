@@ -226,7 +226,7 @@ if ( $op eq 'delete_confirm' ) {
     );
     }
 } elsif ($op eq 'reopen') {
-    ReopenBasket($query->param('basketno'));
+    ReopenBasket(scalar $query->param('basketno'));
     print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 }
 elsif ( $op eq 'ediorder' ) {
