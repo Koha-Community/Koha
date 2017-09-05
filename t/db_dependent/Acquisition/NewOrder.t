@@ -10,7 +10,7 @@ use MARC::Record;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -44,7 +44,7 @@ my ($biblionumber2, $biblioitemnumber2) = AddBiblio(MARC::Record->new, '');
 
 
 # returns undef and croaks if basketno, quantity, biblionumber or budget_id is missing
-my $order = eval { Koha::Acquisition::Order->new->insert };
+my $order = eval { Koha::Acquisition::Order->new->store };
 my $return_error = $@;
 ok(
     ( ! defined $order )
@@ -63,7 +63,7 @@ foreach my $mandatoryparams_key (@mandatoryparams_keys) {
     my %test_missing_mandatoryparams = %$mandatoryparams;
     delete $test_missing_mandatoryparams{$mandatoryparams_key};
     $order = eval {
-          Koha::Acquisition::Order->new( \%test_missing_mandatoryparams )->insert;
+          Koha::Acquisition::Order->new( \%test_missing_mandatoryparams )->store;
     };
     $return_error = $@;
     my $expected_error = "Cannot insert order: Mandatory parameter $mandatoryparams_key is missing";
@@ -81,10 +81,10 @@ $order = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber = $order->{ordernumber};
-$order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
-is( $order->{quantityreceived}, 0, 'Koha::Acquisition::Order->insert set quantityreceivedto 0 if undef is given' );
-is( $order->{entrydate}, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 'Koha::Acquisition::Order->insert set entrydate to today' );
+)->store;
+my $ordernumber = $order->ordernumber;
+$order = Koha::Acquisition::Orders->find( $ordernumber );
+is( $order->quantityreceived, 0, 'Koha::Acquisition::Order->insert set quantityreceivedto 0 if undef is given' );
+is( $order->entrydate, output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 'Koha::Acquisition::Order->store set entrydate to today' );
 
 $schema->storage->txn_rollback();

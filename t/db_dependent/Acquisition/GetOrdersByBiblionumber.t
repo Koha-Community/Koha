@@ -7,7 +7,7 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Budgets;
 use Koha::Database;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 
 use MARC::Record;
 
@@ -48,8 +48,8 @@ my $order1 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber1 = $order1->{ordernumber};
+)->store;
+my $ordernumber1 = $order1->ordernumber;
 
 my $order2 = Koha::Acquisition::Order->new(
     {
@@ -58,8 +58,8 @@ my $order2 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber2 = $order1->{ordernumber};
+)->store;
+my $ordernumber2 = $order2->ordernumber;
 
 my $order3 = Koha::Acquisition::Order->new(
     {
@@ -68,8 +68,8 @@ my $order3 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber3 = $order1->{ordernumber};
+)->store;
+my $ordernumber3 = $order3->ordernumber;
 
 my @orders = GetOrdersByBiblionumber();
 is(scalar(@orders), 0, 'GetOrdersByBiblionumber : no argument, return undef');

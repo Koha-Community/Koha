@@ -8,8 +8,8 @@ use C4::Biblio qw( AddBiblio DelBiblio );
 use C4::Budgets;
 use C4::Context;
 use Koha::Database;
-use Koha::Acquisition::Bookseller;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 
 # Start transaction
 my $schema = Koha::Database->new()->schema();
@@ -54,8 +54,8 @@ my $order1 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber1 = $order1->{ordernumber};
+)->store;
+my $ordernumber1 = $order1->ordernumber;
 
 my $order2 = Koha::Acquisition::Order->new(
     {
@@ -64,8 +64,8 @@ my $order2 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber2 = $order2->{ordernumber};
+)->store;
+my $ordernumber2 = $order2->ordernumber;
 
 my $nb_biblio = C4::Acquisition::GetBiblioCountByBasketno( $basketno );
 is ( $nb_biblio, 2, "There are 2 biblio for this basket" );

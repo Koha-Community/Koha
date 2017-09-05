@@ -33,6 +33,7 @@ use C4::Search;
 
 use Koha::Number::Price;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 
 use List::MoreUtils qw/any/;
 
@@ -134,7 +135,7 @@ if ($quantityrec > $origquantityrec ) {
             push @{$itemhash{$itemid[$i]}->{'ind_tag'}},$ind_tag[$i];
             push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];
         }
-        my $order = Koha::Acquisition::Order->fetch({ ordernumber => $new_ordernumber });
+        my $new_order = Koha::Acquisition::Orders->find( $new_ordernumber );
         foreach my $item (keys %itemhash){
             my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                           $itemhash{$item}->{'subfields'},
@@ -144,7 +145,7 @@ if ($quantityrec > $origquantityrec ) {
                                           'ITEM' );
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my (undef,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
-            $order->add_item( $itemnumber );
+            $new_order->add_item( $itemnumber );
         }
     }
 }

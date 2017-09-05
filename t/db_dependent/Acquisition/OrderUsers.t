@@ -5,8 +5,8 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Letters;
 use Koha::Database;
-use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 
 use t::lib::TestBuilder;
 
@@ -51,14 +51,13 @@ my $order = Koha::Acquisition::Order->new(
         budget_id        => $budgetid,
         entrydate        => '01-01-2014',
         currency         => $currency->{currency},
-        notes            => "This is a note1",
         orderstatus      => 1,
         quantityreceived => 0,
         rrp              => 10,
         ecost            => 10,
     }
-)->insert;
-my $ordernumber = $order->{ordernumber};
+)->store;
+my $ordernumber = $order->ordernumber;
 
 my $invoiceid = AddInvoice(
     invoicenumber => 'invoice',
@@ -82,11 +81,11 @@ C4::Acquisition::ModOrderUsers( $ordernumber, $borrowernumber );
 my $is_added = grep { /^$borrowernumber$/ } C4::Acquisition::GetOrderUsers( $ordernumber );
 is( $is_added, 1, 'ModOrderUsers should link patrons to an order' );
 
-$order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
+$order = Koha::Acquisition::Orders->find( $ordernumber );
 ModReceiveOrder(
     {
         biblionumber      => $biblionumber,
-        order             => $order,
+        order             => $order->unblessed,
         quantityreceived  => 1,
         cost              => 10,
         ecost             => 10,
@@ -99,11 +98,11 @@ ModReceiveOrder(
 my $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is( scalar( @$messages ), 0, 'The letter has not been sent to message queue on receiving the order, the order is not entire received');
 
-$order = Koha::Acquisition::Order->fetch({ ordernumber => $ordernumber });
+$order = Koha::Acquisition::Orders->find( $ordernumber );
 ModReceiveOrder(
     {
         biblionumber      => $biblionumber,
-        order             => $order,
+        order             => $order->unblessed,
         quantityreceived  => 1,
         cost              => 10,
         ecost             => 10,

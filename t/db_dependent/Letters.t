@@ -43,9 +43,9 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Bookseller::Contacts;
+use Koha::Acquisition::Orders;
 use Koha::Libraries;
 use Koha::Notice::Templates;
 my $schema = Koha::Database->schema;
@@ -435,8 +435,8 @@ my $order = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber,
         budget_id => $budgetid,
     }
-)->insert;
-my $ordernumber = $order->{ordernumber};
+)->store;
+my $ordernumber = $order->ordernumber;
 
 C4::Acquisition::CloseBasket( $basketno );
 my $err;

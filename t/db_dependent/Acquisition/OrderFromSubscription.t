@@ -9,7 +9,7 @@ use_ok('C4::Biblio');
 use_ok('C4::Budgets');
 use_ok('C4::Serials');
 
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 use Koha::Database;
 
 # Start transaction
@@ -68,16 +68,14 @@ my $order = Koha::Acquisition::Order->new({
     quantity => 1,
     currency => $curcode,
     listprice => $cost,
-    notes => "This is a note",
     basketno => $basketno,
     rrp => $cost,
     ecost => $cost,
-    tax_rate => 0.0500,
     orderstatus => 'new',
     subscriptionid => $subscription->{subscriptionid},
     budget_id => $budget_id,
-})->insert;
-my $ordernumber = $order->{ordernumber};
+})->store;
+my $ordernumber = $order->ordernumber;
 
 my $is_currently_on_order = subscriptionCurrentlyOnOrder( $subscription->{subscriptionid} );
 is ( $is_currently_on_order, 1, "The subscription is currently on order");

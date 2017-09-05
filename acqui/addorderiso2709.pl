@@ -45,7 +45,7 @@ use C4::Members;
 use Koha::Number::Price;
 use Koha::Libraries;
 use Koha::Acquisition::Currencies;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
 use Koha::Patrons;
 
@@ -305,7 +305,7 @@ if ($op eq ""){
                         )
                     };
 
-                    my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
+                    my $order = Koha::Acquisition::Order->new( \%orderinfo )->store;
                     $order->add_item( $_ ) for @itemnumbers;
                 }
             }
@@ -375,7 +375,7 @@ if ($op eq ""){
             )
         };
 
-        my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
+        my $order = Koha::Acquisition::Order->new( \%orderinfo )->store;
 
         # 4th, add items if applicable
         # parse the item sent by the form, and create an item just for the import_record_id we are dealing with

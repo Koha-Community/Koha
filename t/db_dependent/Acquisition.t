@@ -26,7 +26,7 @@ BEGIN {
     use_ok('C4::Acquisition');
     use_ok('C4::Biblio');
     use_ok('C4::Budgets');
-    use_ok('Koha::Acquisition::Order');
+    use_ok('Koha::Acquisition::Orders');
     use_ok('Koha::Acquisition::Booksellers');
 }
 
@@ -188,7 +188,6 @@ my @order_content = (
             ecost     => 38.15,
             rrp       => 40.15,
             discount  => 5.1111,
-            tax_rate   => 0.0515
         }
     },
     {
@@ -216,7 +215,6 @@ my @order_content = (
             ecost     => 38.1,
             rrp       => 11.0,
             discount  => 5.1,
-            tax_rate   => 0.1
         }
     },
     {
@@ -236,7 +234,6 @@ my @order_content = (
             rrp            => 11.00,
             discount       => 0,
             uncertainprice => 0,
-            tax_rate        => 0
         }
     },
     {
@@ -256,7 +253,6 @@ my @order_content = (
             rrp            => 10,
             discount       => 0,
             uncertainprice => 0,
-            tax_rate        => 0
         }
     },
     {
@@ -276,7 +272,6 @@ my @order_content = (
             rrp            => 10,
             discount       => 0,
             uncertainprice => 0,
-            tax_rate        => 0
         }
     }
 );
@@ -288,7 +283,8 @@ for ( 0 .. 5 ) {
       values %{ $order_content[$_]->{num} };
     @ocontent{ keys %{ $order_content[$_]->{str} } } =
       values %{ $order_content[$_]->{str} };
-    $ordernumbers[$_] = Koha::Acquisition::Order->new( \%ocontent )->insert->{ordernumber};
+      use Data::Printer colored => 1; warn p %ocontent;
+    $ordernumbers[$_] = Koha::Acquisition::Order->new( \%ocontent )->store->ordernumber;
     $order_content[$_]->{str}->{ordernumber} = $ordernumbers[$_];
 }
 
@@ -305,7 +301,7 @@ my $invoice = GetInvoice( $invoiceid );
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     {
         biblionumber      => $biblionumber4,
-        order             => GetOrder( $ordernumbers[4] ),
+        order             => Koha::Acquisition::Orders->find( $ordernumbers[4] )->unblessed,
         quantityreceived  => 1,
         invoice           => $invoice,
         budget_id          => $order_content[4]->{str}->{budget_id},
@@ -404,7 +400,7 @@ is(
     "AddClaim : Check claimed_date"
 );
 
-my $order2 = GetOrder( $ordernumbers[1] );
+my $order2 = Koha::Acquisition::Orders->find( $ordernumbers[1] )->unblessed;
 $order2->{order_internalnote} = "my notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
@@ -445,7 +441,7 @@ my $budgetid2 = C4::Budgets::AddBudget(
     }
 );
 
-my $order3 = GetOrder( $ordernumbers[2] );
+my $order3 = Koha::Acquisition::Orders->find( $ordernumbers[2] )->unblessed;
 $order3->{order_internalnote} = "my other notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
@@ -472,7 +468,7 @@ is( $neworder->{'quantityreceived'},
     2, 'Splitting up order received items on new order' );
 is( $neworder->{'budget_id'}, $budgetid2, 'Budget on new order is changed' );
 
-$order3 = GetOrder( $ordernumbers[2] );
+$order3 = Koha::Acquisition::Orders->find( $ordernumbers[2] )->unblessed;
 $order3->{order_internalnote} = "my third notes";
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {

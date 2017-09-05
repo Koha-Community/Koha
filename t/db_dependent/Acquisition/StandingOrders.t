@@ -8,7 +8,7 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
 use C4::Budgets;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -73,11 +73,10 @@ my $ordernumber = Koha::Acquisition::Order->new(
         unitprice                => 12,
         unitprice_tax_included   => 12,
         unitprice_tax_excluded   => 12,
-        tax_rate                 => 0,
         tax_rate_on_ordering     => 0,
         tax_rate_on_receiving    => 0,
     }
-)->insert->{ordernumber};
+)->store->ordernumber;
 
 isnt( $ordernumber, undef, 'standing order successfully created' );
 
@@ -98,12 +97,12 @@ my $invoiceid = AddInvoice(
     unknown       => "unknown"
 );
 
-my $order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
+my $order = Koha::Acquisition::Orders->find( $ordernumber );
 
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        order            => $order,
+        order            => $order->unblessed,
         quantityreceived => 2,
         invoiceid        => $invoiceid,
     }
@@ -112,16 +111,16 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
 isnt( $ordernumber, $new_ordernumber, "standing order split on receive" );
 
 #order has been updated, refetch
-$order = Koha::Acquisition::Order->fetch( { ordernumber => $ordernumber } );
-my $neworder = Koha::Acquisition::Order->fetch( { ordernumber => $new_ordernumber } );
+$order = Koha::Acquisition::Orders->find( $ordernumber );
+my $neworder = Koha::Acquisition::Orders->find( $new_ordernumber );
 
-is( $order->{orderstatus}, 'partial', 'original order set to partially received' );
-is( $order->{quantity}, 1, 'original order quantity unchanged' );
-is( $order->{quantityreceived}, 0, 'original order has no received items' );
-isnt( $order->{unitprice}, 12, 'original order does not get cost' );
-is( $neworder->{orderstatus}, 'complete', 'new order set to complete' );
-is( $neworder->{quantityreceived}, 2, 'new order has received items' );
-cmp_ok( $neworder->{unitprice}, '==', 12, 'new order does get cost' );
+is( $order->orderstatus, 'partial', 'original order set to partially received' );
+is( $order->quantity, 1, 'original order quantity unchanged' );
+is( $order->quantityreceived, 0, 'original order has no received items' );
+isnt( $order->unitprice, 12, 'original order does not get cost' );
+is( $neworder->orderstatus, 'complete', 'new order set to complete' );
+is( $neworder->quantityreceived, 2, 'new order has received items' );
+cmp_ok( $neworder->unitprice, '==', 12, 'new order does get cost' );
 
 $search_orders = SearchOrders( {
     basketno => $basketno,

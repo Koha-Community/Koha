@@ -1,95 +1,99 @@
 package Koha::Acquisition::Order;
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 use Modern::Perl;
+
+use Carp qw( croak );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
-use Carp qw( croak );
+use base qw(Koha::Object);
 
-use base qw( Class::Accessor );
+=head1 NAME
 
-# TODO fetch order from itemnumber (GetOrderFromItemnnumber)
-# TODO Move code from GetOrder
-sub fetch {
-    my ( $class, $params ) = @_;
-    my $ordernumber = $params->{ordernumber};
-    return unless $ordernumber;
-    my $schema = Koha::Database->new->schema;
+Koha::Acquisition::Order Object class
 
-    my $order =
-      $schema->resultset('Aqorder')->find( { ordernumber => $ordernumber },
-        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' } );
-    return $class->new( $order );
+=head1 API
+
+=head2 Class Methods
+
+=cut
+
+sub new {
+    my ( $self, $params ) = @_;
+
+    my $schema  = Koha::Database->new->schema;
+    my @columns = $schema->source('Aqorder')->columns;
+
+    my $values =
+      { map { exists $params->{$_} ? ( $_ => $params->{$_} ) : () } @columns };
+    return $self->SUPER::new($values);
 }
 
-sub insert {
+sub store {
     my ($self) = @_;
 
     my $schema  = Koha::Database->new->schema;
     # Override quantity for standing orders
-    $self->{quantity} = 1 if ( $self->{basketno} && $schema->resultset('Aqbasket')->find( $self->{basketno} )->is_standing );
+    $self->quantity(1) if ( $self->basketno && $schema->resultset('Aqbasket')->find( $self->basketno )->is_standing );
 
     # if these parameters are missing, we can't continue
     for my $key (qw( basketno quantity biblionumber budget_id )) {
         croak "Cannot insert order: Mandatory parameter $key is missing"
-          unless $self->{$key};
+          unless $self->$key;
     }
 
-    $self->{quantityreceived} ||= 0;
-    $self->{entrydate} ||=
-      output_pref( { dt => dt_from_string, dateformat => 'iso' } );
+    $self->quantityreceived(0) unless $self->quantityreceived;
+    $self->entrydate(output_pref( { dt => dt_from_string, dateformat => 'iso' } )) unless $self->entrydate;
 
-    my @columns = $schema->source('Aqorder')->columns;
+    $self->ordernumber(undef) unless $self->ordernumber;
+    $self = $self->SUPER::store( $self );
 
-    $self->{ordernumber} ||= undef;
-
-    my $rs = $schema->resultset('Aqorder')->create(
-        {
-            map {
-                exists $self->{$_} ? ( $_ => $self->{$_} ) : ()
-            } @columns
-        }
-    );
-    $self->{ordernumber} = $rs->id;
-
-    unless ( $self->{parent_ordernumber} ) {
-        $self->{parent_ordernumber} = $self->{ordernumber};
-        $rs->update( { parent_ordernumber => $self->{parent_ordernumber} } );
+    unless ( $self->parent_ordernumber ) {
+        $self->set( { parent_ordernumber => $self->ordernumber } );
+        $self = $self->SUPER::store( $self );
     }
 
     return $self;
 }
 
+=head3 add_item
+
+  $order->add_item( $itemnumber );
+
+Link an item to this order.
+
+=cut
+
 sub add_item {
     my ( $self, $itemnumber )  = @_;
+
     my $schema = Koha::Database->new->schema;
     my $rs = $schema->resultset('AqordersItem');
-    $rs->create({ ordernumber => $self->{ordernumber}, itemnumber => $itemnumber });
+    $rs->create({ ordernumber => $self->ordernumber, itemnumber => $itemnumber });
 }
 
-# TODO Move code from ModItemOrder
-sub update_item {
-    die "not implemented yet";
-}
+=head3 _type
 
-sub del_item {
-    die "not implemented yet";
-}
+=cut
 
-# TODO Move code from ModOrder
-sub update {
-    die "not implemented yet";
-}
-
-# TODO Move code from DelOrder
-sub delete {
-    die "not implemented yet";
-}
-
-# TODO Move code from TransferOrder
-sub transfer {
-    die "not implemented yet";
+sub _type {
+    return 'Aqorder';
 }
 
 1;

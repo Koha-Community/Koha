@@ -9,7 +9,7 @@ use C4::Biblio qw( AddBiblio );
 use C4::Budgets qw( AddBudget );
 use C4::Context;
 use Koha::Database;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -50,8 +50,8 @@ my $order1 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber1 = $order1->{ordernumber};
+)->store;
+my $ordernumber1 = $order1->ordernumber;
 
 my $order2 = Koha::Acquisition::Order->new(
     {
@@ -60,8 +60,8 @@ my $order2 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber2 = $order2->{ordernumber};
+)->store;
+my $ordernumber2 = $order2->ordernumber;
 
 my $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
 is( scalar(@$baskets), 1, 'Start: 1 basket' );

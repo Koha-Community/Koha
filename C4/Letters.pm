@@ -1525,7 +1525,7 @@ sub _get_tt_params {
             pk       => 'idnew',
         },
         aqorders => {
-            module   => 'Koha::Tmp::Orders', # Should Koha::Acquisition::Orders when will be based on Koha::Objects
+            module   => 'Koha::Acquisition::Orders',
             singular => 'order',
             plural   => 'orders',
             pk       => 'ordernumber',

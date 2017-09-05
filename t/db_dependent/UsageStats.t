@@ -31,7 +31,7 @@ BEGIN {
     use_ok( 'C4::AuthoritiesMarc', qw(AddAuthority) );
     use_ok('C4::Reserves');
     use_ok('MARC::Record');
-    use_ok('Koha::Acquisition::Order');
+    use_ok('Koha::Acquisition::Orders');
 }
 
 can_ok(

@@ -30,7 +30,7 @@ use t::lib::Mocks;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 use MARC::Record;
 
 my $schema = Koha::Database->new()->schema();
@@ -74,13 +74,13 @@ my $order = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber = $order->{ordernumber};
+)->store;
+my $ordernumber = $order->ordernumber;
 
 ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        order            => $order,
+        order            => $order->unblessed,
         quantityreceived => 2,
     }
 );
@@ -103,10 +103,10 @@ $order = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-$ordernumber = $order->{ordernumber};
+)->store;
+$ordernumber = $order->ordernumber;
 
-is( $order->{parent_ordernumber}, $order->{ordernumber},
+is( $order->parent_ordernumber, $order->ordernumber,
     "Insert an order should set parent_order=ordernumber, if no parent_ordernumber given"
 );
 
@@ -114,7 +114,7 @@ $order->add_item( $itemnumber1 );
 $order->add_item( $itemnumber2 );
 
 is(
-    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
     2,
     "Create items on ordering: 2 items should be linked to the order before receiving"
 );
@@ -122,7 +122,7 @@ is(
 my ( undef, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber,
-        order            => $order,
+        order            => $order->unblessed,
         quantityreceived => 1,
         received_items   => [ $itemnumber1 ],
     }
@@ -139,7 +139,7 @@ is( $new_order->{parent_ordernumber}, $ordernumber,
 );
 
 is(
-    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
     1,
     "Create items on ordering: 1 item should still be linked to the original order after receiving"
 );
@@ -157,7 +157,7 @@ is(
     "Create items on ordering: no item should be linked to the cancelled order"
 );
 is(
-    scalar( GetItemnumbersFromOrder( $order->{ordernumber} ) ),
+    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
     2,
     "Create items on ordering: items are not deleted after cancelling a receipt"
 );

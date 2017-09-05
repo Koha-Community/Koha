@@ -11,7 +11,7 @@ use C4::Biblio;
 use Koha::Database;
 use Koha::CsvProfile;
 
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
@@ -61,7 +61,7 @@ my $order = Koha::Acquisition::Order->new({
     biblionumber => $biblionumber,
     budget_id => $budget_id,
     entrydate => '2016-01-02',
-})->insert;
+})->store;
 
 # Use user CSV profile
 my $basket_csv1 = C4::Acquisition::GetBasketAsCSV($basketno, $query, $csv_profile->export_format_id);
@@ -72,7 +72,7 @@ is($basket_csv1, 'autor,title,quantity
 # Use default template
 my $basket_csv2 = C4::Acquisition::GetBasketAsCSV($basketno, $query);
 is($basket_csv2, 'Contract name,Order number,Entry date,ISBN,Author,Title,Publication year,Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,Billing place
-"",' . $order->{ordernumber}  . ',2016-01-02,,"King, Stephen","Test Record",,"","","",3,,"",""
+"",' . $order->ordernumber  . ',2016-01-02,,"King, Stephen","Test Record",,"","","",3,,"",""
 ', 'CSV should be generated with default template');
 
 my $basket_csv3 = C4::Acquisition::GetBasketAsCSV($basketno, $query, $csv_profile2->export_format_id);

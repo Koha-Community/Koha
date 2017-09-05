@@ -130,6 +130,7 @@ use C4::Budgets;
 use C4::Items;
 use C4::Output;
 use Koha::Acquisition::Currencies;
+use Koha::Acquisition::Orders;
 use C4::Barcodes;
 
 ### "-------------------- addorder.pl ----------"
@@ -224,7 +225,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # get CGI parameters
-my $orderinfo					= $input->Vars;
+my $orderinfo = $input->Vars;
 $orderinfo->{'list_price'}    ||=  0;
 $orderinfo->{'uncertainprice'} ||= 0;
 $orderinfo->{subscriptionid} ||= undef;
@@ -286,7 +287,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
         ModOrderUsers( $orderinfo->{ordernumber}, @order_users );
     }
     else { # else, it's a new line
-        $order->insert;
+        $order->store;
     }
 
     # now, add items if applicable

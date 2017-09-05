@@ -11,7 +11,7 @@ use C4::Budgets;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Order;
+use Koha::Acquisition::Orders;
 use MARC::Record;
 
 my $schema = Koha::Database->new()->schema();
@@ -65,8 +65,8 @@ my $order = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber = $order->{ordernumber};
+)->store;
+my $ordernumber = $order->ordernumber;
 $order->add_item( $itemnumber );
 
 # Begin tests
@@ -95,7 +95,7 @@ $orders = SearchOrders({ ordernumber => $ordernumber });
 is ( scalar( @$orders ), 1, 'SearchOrders returns 1 order with [old]ordernumber' );
 is ( $orders->[0]->{ordernumber}, $newordernumber, 'SearchOrders returns newordernumber if [old]ordernumber is given' );
 
-my $neworder = GetOrder( $newordernumber );
+my $neworder = Koha::Acquisition::Orders->find( $newordernumber )->unblessed;
 
 ModReceiveOrder({
     biblionumber => $biblionumber,

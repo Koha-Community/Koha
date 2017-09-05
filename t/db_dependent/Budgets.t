@@ -10,8 +10,8 @@ use C4::Biblio;
 use C4::Acquisition;
 use C4::Members qw( AddMember );
 
-use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 
 use t::lib::TestBuilder;
 
@@ -357,8 +357,8 @@ for my $infos (@order_infos) {
                 discount           => 0,
                 uncertainprice     => 0,
             }
-        )->insert;
-        my $ordernumber = $order->{ordernumber};
+        )->store;
+        my $ordernumber = $order->ordernumber;
         push @{ $budgets{$infos->{budget_id}} }, $ordernumber;
         $number_of_orders_to_move++;
     }
@@ -378,11 +378,11 @@ for my $infos (@order_infos) {
                 discount           => 0,
                 uncertainprice     => 0,
             }
-        )->insert;
-        my $ordernumber = $order->{ordernumber};
+        )->store;
+        my $ordernumber = $order->ordernumber;
         ModReceiveOrder({
               biblionumber     => $biblionumber,
-              order            => $order,
+              order            => $order->unblessed,
               budget_id        => $infos->{budget_id},
               quantityreceived => $item_quantity,
               invoice          => $invoice,

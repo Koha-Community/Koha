@@ -26,8 +26,8 @@ use C4::Context;
 use C4::Output;
 
 use Koha::Acquisition::Booksellers;
-use Koha::Acquisition::Currency;
 use Koha::Acquisition::Currencies;
+use Koha::Acquisition::Orders;
 
 my $input         = CGI->new;
 my $searchfield   = $input->param('searchfield') || $input->param('description') || q{};
@@ -92,9 +92,7 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'delete_confirm' ) {
     my $currency = Koha::Acquisition::Currencies->find($currency_code);
 
-    # TODO rewrite the following when Koha::Acquisition::Orders will use Koha::Objects
-    my $schema = Koha::Database->schema;
-    my $nb_of_orders = $schema->resultset('Aqorder')->search( { currency => $currency->currency } )->count;
+    my $nb_of_orders = Koha::Acquisition::Orders->search( { currency => $currency->currency } )->count;
     my $nb_of_vendors = Koha::Acquisition::Booksellers->search( { -or => { listprice => $currency->currency, invoiceprice => $currency->currency } })->count;
     $template->param(
         currency     => $currency,

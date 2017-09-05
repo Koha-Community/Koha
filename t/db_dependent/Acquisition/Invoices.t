@@ -4,8 +4,8 @@ use Modern::Perl;
 
 use C4::Biblio qw( AddBiblio );
 
-use Koha::Acquisition::Order;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 use Koha::Database;
 
 use Test::More tests => 24;
@@ -61,8 +61,8 @@ my $order1 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber1,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber1 = $order1->{ordernumber};
+)->store;
+my $ordernumber1 = $order1->ordernumber;
 
 my $order2 = Koha::Acquisition::Order->new(
     {
@@ -71,8 +71,8 @@ my $order2 = Koha::Acquisition::Order->new(
         biblionumber => $biblionumber2,
         budget_id => $budget->{budget_id},
     }
-)->insert;
-my $ordernumber2 = $order2->{ordernumber};
+)->store;
+my $ordernumber2 = $order2->ordernumber;
 
 my $order3 = Koha::Acquisition::Order->new(
     {
@@ -83,8 +83,8 @@ my $order3 = Koha::Acquisition::Order->new(
         ecost => 42,
         rrp => 42,
     }
-)->insert;
-my $ordernumber3 = $order3->{ordernumber};
+)->store;
+my $ordernumber3 = $order3->ordernumber;
 
 my $invoiceid1 = AddInvoice(invoicenumber => 'invoice1', booksellerid => $booksellerid, unknown => "unknown");
 my $invoiceid2 = AddInvoice(invoicenumber => 'invoice2', booksellerid => $booksellerid, unknown => "unknown",
@@ -97,7 +97,7 @@ my $invoice2 = GetInvoice( $invoiceid2 );
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber1,
-        order            => $order1,
+        order            => $order1->unblessed,
         quantityreceived => 2,
         invoice          => $invoice1,
     }
@@ -106,7 +106,7 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber2,
-        order            => $order2,
+        order            => $order2->unblessed,
         quantityreceived => 1,
         invoice          => $invoice2,
         rrp              => 42
@@ -116,7 +116,7 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
 ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {
         biblionumber     => $biblionumber3,
-        order            => $order3,
+        order            => $order3->unblessed,
         quantityreceived => 1,
         invoice          => $invoice2,
     }

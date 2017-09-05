@@ -1,4 +1,4 @@
-package Koha::Tmp::Order;
+package Koha::Acquisition::Orders;
 
 # This file is part of Koha.
 #
@@ -21,11 +21,13 @@ use Carp;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use Koha::Acquisition::Order;
+
+use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Tmp::Order - This is a temporary class to make notices working with orders
+Koha::Acquisition::Orders object set class
 
 =head1 API
 
@@ -39,6 +41,10 @@ Koha::Tmp::Order - This is a temporary class to make notices working with orders
 
 sub _type {
     return 'Aqorder';
+}
+
+sub object_class {
+    return 'Koha::Acquisition::Order';
 }
 
 1;
