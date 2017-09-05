@@ -57,7 +57,7 @@ my $action = $input->param('action') || '';
 my $data=GetMember('borrowernumber' => $borrowernumber);
 
 if ( $action eq 'reverse' ) {
-  ReversePayment( $input->param('accountlines_id') );
+  ReversePayment( scalar $input->param('accountlines_id') );
 }
 
 if ( $data->{'category_type'} eq 'C') {
