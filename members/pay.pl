@@ -264,13 +264,13 @@ sub payselected {
     foreach (@params) {
         if (/^incl_par_(\d+)$/) {
             my $index = $1;
-            push @lines_to_pay, $input->param("accountlines_id$index");
+            push @lines_to_pay, scalar $input->param("accountlines_id$index");
             $amt += $input->param("amountoutstanding$index");
         }
     }
     $amt = '&amt=' . $amt;
     my $sel = '&selected=' . join ',', @lines_to_pay;
-    my $notes = '&notes=' . join("%0A", map { $input->param("payment_note_$_") } @lines_to_pay );
+    my $notes = '&notes=' . join("%0A", map { scalar $input->param("payment_note_$_") } @lines_to_pay );
     my $redirect =
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber"
       . $amt
