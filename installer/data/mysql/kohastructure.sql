@@ -4386,6 +4386,23 @@ CREATE TABLE collections_tracking (
   CONSTRAINT `coltra-fk-items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Table structure for table 'batch_overlay_rules'
+--
+
+CREATE TABLE IF NOT EXISTS batch_overlay_rules (
+    id int(11) NOT NULL AUTO_INCREMENT,  -- unique identifier
+    name varchar(10) NOT NULL,           -- the code of this rule, eg. "BTJ", "LOC"
+    matcher_id int(11) NULL,             -- the first matcher used to merge the old record with the overlayed one
+    component_matcher_id int(11) NULL,   -- matcher to check if possible component parts already exist in the database
+    source varchar(20) NULL,             -- a tuple (,separated) of search type (Z3950,...) and the remote reporitory id, eg. "Z3950,16"
+    usagerule varchar(20) NULL,          -- An instruction to tell from where to identify the record which uses this rule. eg. "f003=~/LOC/"
+    PRIMARY KEY (id),
+    UNIQUE KEY name (name) ,
+    CONSTRAINT `batch_overlay_matcher_id_fk_1` FOREIGN KEY (`matcher_id`) REFERENCES `marc_matchers` (`matcher_id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

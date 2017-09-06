@@ -1,0 +1,172 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Batch Overlay</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% INCLUDE 'greybox.inc' %]
+
+</head>
+<body id="labels_label-batch-overlay" class="tools batchOverlay" onload="dofocus();">
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+        Batch Overlay
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div class="yui-gb">
+                [% IF batchOverlayErrors %]
+                    <div class="alert">
+                        <b>The following errors were detected when trying to find the requested MARC-records from external sources.</b>
+                        [% FOREACH error IN batchOverlayErrors %]
+                            [% IF error.errcode == 'UNKNOWN_MATCHER' %]<br />
+                                Couldn't find the merging matcher or a component part matcher with ids' [% error.term %]. Extremely unsafe to proceed, thus halting.
+                            [% END %]
+                            [% IF error.errcode == 'UNKNOWN_REMOTE_ID' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Couldn't find the correct bibliographic record source based on the field 003 [% error.term %].
+                            [% END %]
+                            [% IF error.errcode == 'REMOTE_SEARCH_TOOMANY' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Too many [% error.remotename %] search results for this search! [% error.term %]
+                            [% END %]
+                            [% IF error.errcode == 'REMOTE_SEARCH_NOTFOUND' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. No [% error.remotename %] search results for this search! [% error.term %]
+                            [% END %]
+                            [% IF error.errcode == 'BAD_ENCODING' %]<br />
+                                For record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% error.biblionumber %]" target="_blank">[% error.biblioname %]</a>. Bad encoding [% error.term %], should be UTF-8!
+                            [% END %]
+                        [% END %]
+                    </div>
+                [% END %]
+                [% IF duplicateSearchTerms %]
+                    <div class="alert">
+                        The following searches were given atleast twice. Extra searches are automatically removed.
+                        <br />
+                        <b>
+                        [% FOREACH term IN duplicateSearchTerms %]
+                            [% term %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        This means that you probably accidentally entered the same biblio twice.
+                    </div>
+                [% END %]
+                [% IF ambiguousSearchTerms %]
+                    <div class="alert">
+                        The following codes returned more than one biblio to overlay.
+                        <br />
+                        <b>
+                        [% FOREACH term IN ambiguousSearchTerms %]
+                            [% term %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        Please specify your search code by adding more search terms to narrow it down, or maybe the same biblio is duplicated in your database?
+                    </div>
+                [% END %]
+                [% IF localSearchErrors %]
+                    <div class="alert">
+                        The following search terms returned no results.
+                        <br />
+                        <b>
+                        [% FOREACH error IN localSearchErrors %]
+                            [% IF error.searcherror %][% error.searcherror %][% END %]<br />
+                        [% END %]
+                        </b>
+                        <br />
+                        Try another standard number, or simply use the title, author, publication date and/or some identifying information. Separate search elements with spaces.<br />
+                    </div>
+                [% END %]
+                [% IF reports %]
+                    [% FOREACH report IN reports %]
+                    <div class="report">
+                        <h3>+ [% report.header %][% IF report.similarity %] ([% report.similarity %])[% END %]</h3><br />
+                        <pre class="report_content [% IF report.similarity < 0.3 %]report_hidden[% END %]"><code>[% report.diff FILTER html %]</code></pre>
+                    </div>
+                    [% END %]
+                [% END %]
+
+                <div class="yui-u first" id="collect-batch-overlay">
+
+                    <form name="overlay_by_code" action="/cgi-bin/koha/tools/batchOverlay.pl" method="post">
+                        <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                        <ol><li>
+                        <label for="codes">Overlay by search term(s):
+                            <br /> <span class="hint">One search term per line.</span>
+                            <br /> <span class="hint">Search term should be the EAN, ISSN, ISBN, ISMN, Koha biblionumber or Koha barcode, but it can be anything searchable.</span>
+                            <br />
+                        </label>
+                        <textarea rows="25" id="codes" name="codesString" tabindex="1" class="focus">[% codesString %]</textarea>
+                        <br /> <input type="submit" name="overlay" id="overlay" value="Overlay us!">
+                        </li></ol>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="yui-u middle">
+                    <h4 class="hint">Hint: Click us!</h4>
+                    <span>
+                        <h4 class="toggler">+ A short introduction to batch overlaying</h4>
+                        <span>
+                            <p>This tools helps you to overlay large amounts of items quickly with the fully catalogued counterpart.</p>
+                            <p>Simply read barcodes into the large white text area on the left. The barcode can be anything in the item you are holding,
+                                but it must be present in the MARC-record. Each row represents a separate overlaying action so separate barcodes with new lines.
+                                Actually this should happen automatically when you read a barcode.</p>
+                            <p>Click "Overlay us!" to start the overlaying process.</p>
+                            <p>A report is generated and possible errors are shown on the top of the page. You can click the report titles to open and close
+                                the verbose MARCXML difference display. On the right side of the report title you can find a difference-score. The bigger the number,
+                                the larger the difference between the old bibliographic record and the new merged record. This is a good indication of how much
+                                the record changed during merging. You can also directly open a MARC-editing view by clicking the report title biblionumbers.</p>
+                            <b>A permission "tools => stage_marc_import" is needed to use this tool.</b>
+                        </span>
+                    </span>
+                    <span>
+                        <h4 class="toggler">+ Typical error scenarios</h4>
+                        <ul>
+                            <li>The record you are looking for doesn't exist in the Koha database (or you get too many results), try using a different query
+                                and test the results using basic keyword searching.</li>
+                            <li>You have found the record from your Koha database, but not from the external repository. Try an alternate way of accessing the
+                                repository (eg. z39.50 search) and searching with title + author.</li>
+                            <li>The standard identifier (EAN,ISBN,ISSN,...) is not correct. This is hard to fix, as the issue can be in our Koha database
+                                our in the external repository. Verify the standard identifier in our catalogue or try finding the record using title/author search.</li>
+                        </ul>
+                    </span>
+                    <span>
+                        <h4 class="toggler">+ How this all actually works?</h4>
+                        <ol>
+                            <li>Each line in the text box represents a basic keyword query, it is actually equivalent to searching straight from the search toolbar.
+                                The point of these searches is to find the correct bibliographic records from the Koha database for automatic overlaying.</li>
+                            <li>These searches should return only one result per row (query). From this result the cataloguing source(external repository)
+                                is decided based on the value in the field 003. Also the overlaying matcher and the possible component part matcher are decided
+                                based on preconfigured BatchOverlayRules.</li>
+                            <li>Then a search is performed on the external repository. Query is performed usually (in this order) EAN, ISBN or ISSN until a
+                                matching MARC record is found. If no record is found (or too many are found), then the cataloguer needs to take action to find
+                                the proper cataloguing resource.</li>
+                            <li>The parent record overlaying is based on the preselected Matcher, which defines the (sub)fields to preserve from the old record.
+                                The Matcher can be easily configured from <a href="/cgi-bin/koha/admin/matching-rules.pl" target="_blank">here</a> if you have
+                                proper permissions.</li>
+                            <li>After the parent record is overlayed, a new search for component parts begins. We search for records containing the same field 003
+                                as the parent and which have the parents field 001 as their subfield 77Xw value, from the parent's external repository. These are
+                                confirmed component parts and are selected for importing.</li>
+                            <li>Another Matcher, component part Matcher makes sure that the selected component part records don't already exists in the database
+                                and thus are not imported twice (which could make a real mess).</li>
+                            <li>Finally a report is generated about the actions taken and for easy verification of correctness.</li>
+                        </ol>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+<script type="text/javascript">
+    $(".report > h3").click(function() {$(this).siblings(".report_content").toggle()});
+    $(".report > h3").siblings(".report_hidden").toggle();
+    $(".toggler").click(function() {$(this).siblings().toggle()});
+    $(".toggler").siblings().toggle();
+</script>
+<style type="text/css">
+    div.report:nth-child(odd) {background-color: #EEEEEE;}
+    .yui-u.middle {width : 66%;}
+    fieldset.rows label {float: none;}
+    #codes {width: 100%;}
+</style>
+
+    [% INCLUDE 'intranet-bottom.inc' %]
