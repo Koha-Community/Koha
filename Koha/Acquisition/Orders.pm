@@ -31,17 +31,19 @@ Koha::Acquisition::Orders object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Internal methods
 
-=cut
-
-=head3 type
+=head3 _type (internal)
 
 =cut
 
 sub _type {
     return 'Aqorder';
 }
+
+=head3 object_class (internal)
+
+=cut
 
 sub object_class {
     return 'Koha::Acquisition::Order';

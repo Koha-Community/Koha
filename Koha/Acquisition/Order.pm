@@ -32,6 +32,10 @@ Koha::Acquisition::Order Object class
 
 =head2 Class Methods
 
+=head3 new
+
+Overloaded I<new> method for backwards compatibility.
+
 =cut
 
 sub new {
@@ -44,6 +48,12 @@ sub new {
       { map { exists $params->{$_} ? ( $_ => $params->{$_} ) : () } @columns };
     return $self->SUPER::new($values);
 }
+
+=head3 store
+
+Overloaded I<store> method for backwards compatibility.
+
+=cut
 
 sub store {
     my ($self) = @_;
@@ -88,7 +98,9 @@ sub add_item {
     $rs->create({ ordernumber => $self->ordernumber, itemnumber => $itemnumber });
 }
 
-=head3 _type
+=head2 Internal methods
+
+=head3 _type (internal)
 
 =cut
 
