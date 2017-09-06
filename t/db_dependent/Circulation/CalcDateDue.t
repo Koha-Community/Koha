@@ -2,12 +2,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use DBI;
 use DateTime;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+use C4::Calendar;
 
 use_ok('C4::Circulation');
 
@@ -51,7 +52,21 @@ t::lib::Mocks::mock_preference('useDaysMode', 'noDays');
 $borrower = {categorycode => 'B', dateexpiry => $dateexpiry};
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});
 $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
-is($date, $dateexpiry . 'T23:59:00', 'date expiry');
+is($date, $dateexpiry . 'T23:59:00', 'date expiry with useDaysMode to noDays');
+
+# Let's add a special holiday on 2013-01-01. With ReturnBeforeExpiry and
+# useDaysMode different from 'Days', return should forward the dateexpiry.
+my $calendar = C4::Calendar->new(branchcode => $branchcode);
+$calendar->insert_single_holiday(
+    day             => 1,
+    month           => 1,
+    year            => 2013,
+    title           =>'holidayTest',
+    description     => 'holidayDesc'
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
+is($date, '2012-12-31T23:59:00', 'date expiry should be 2013-01-01 -1 day');
+
 
 $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
 

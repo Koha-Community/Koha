@@ -3511,9 +3511,11 @@ sub CalcDateDue {
             }
         }
         if ( C4::Context->preference('useDaysMode') ne 'Days' ) {
-          # Don't return on a closed day
           my $calendar = Koha::Calendar->new( branchcode => $branch );
-          $datedue = $calendar->prev_open_day( $datedue );
+          if ( $calendar->is_holiday($datedue) ) {
+              # Don't return on a closed day
+              $datedue = $calendar->prev_open_day( $datedue );
+          }
         }
     }
 
