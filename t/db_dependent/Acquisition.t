@@ -283,7 +283,6 @@ for ( 0 .. 5 ) {
       values %{ $order_content[$_]->{num} };
     @ocontent{ keys %{ $order_content[$_]->{str} } } =
       values %{ $order_content[$_]->{str} };
-      use Data::Printer colored => 1; warn p %ocontent;
     $ordernumbers[$_] = Koha::Acquisition::Order->new( \%ocontent )->store->ordernumber;
     $order_content[$_]->{str}->{ordernumber} = $ordernumbers[$_];
 }
