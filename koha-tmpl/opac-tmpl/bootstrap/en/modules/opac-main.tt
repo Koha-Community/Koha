@@ -53,9 +53,17 @@
                 <!-- Logged in users have a branch code or it could be explicitly set -->
                 <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode %]"><img src="[% interface %]/[% theme %]/images/feed-icon-16x16.png"></a>
                 [% IF Branches.all.size == 1 %]
-                    RSS feed for [% IF ( branchcode ) %][% Branches.GetName( branchcode ) %][% END %] library news.
+                    [% IF branchcode %]
+                        RSS feed for [% Branches.GetName( branchcode ) %] library news.
+                    [% ELSE %]
+                        RSS feed for library news.
+                    [% END %]
                 [% ELSE %]
-                    RSS feed for [% IF ( branchcode ) %][% Branches.GetName( branchcode ) %] <i>and</i> [% END %] system-wide library news.
+                    [% IF branchcode %]
+                        RSS feed for [% Branches.GetName( branchcode ) %] and system-wide library news.
+                    [% ELSE %]
+                        RSS feed for system-wide library news.
+                    [% END %]
                 [% END %]
             </div>
         [% END %]
