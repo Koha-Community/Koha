@@ -28,6 +28,26 @@ use C4::Creators::Lib qw(get_font_types get_unit_values);
 use C4::Creators::PDF qw(StrWidth);
 use C4::Patroncards::Lib qw(unpack_UTF8 text_alignment leading box get_borrower_attributes);
 
+=head1 NAME
+
+C4::Patroncards::Patroncard
+
+=head1 SYNOPSIS
+
+    use C4::Patroncards::Patroncard;
+
+    # Please extend
+
+
+=head1 DESCRIPTION
+
+   This module allows you to ...
+
+=head1 FUNCTIONS
+
+=head2 new
+
+=cut
 
 sub new {
     my ($invocant, %params) = @_;
@@ -62,6 +82,10 @@ sub new {
     return $self;
 }
 
+=head2 draw_barcode
+
+=cut
+
 sub draw_barcode {
     my ($self, $pdf) = @_;
     # Default values for barcode scaling are set in constructor to work with pre-existing installations
@@ -79,6 +103,10 @@ sub draw_barcode {
     );
 }
 
+=head2 draw_guide_box
+
+=cut
+
 sub draw_guide_box {
     my ($self, $pdf) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
@@ -92,6 +120,10 @@ sub draw_guide_box {
     $obj_stream .= "Q\n";                              # restore the graphic state
     $pdf->Add($obj_stream);
 }
+
+=head2 draw_guide_grid
+
+=cut
 
 sub draw_guide_grid {
     my ($self, $pdf) = @_;
@@ -165,6 +197,9 @@ sub draw_guide_grid {
     $pdf->Text( $self->{'llx'} + $self->{'width'} - $strtop_len , $self->{'lly'} + $self->{'height'} - $font_size , $strtop );
 }
 
+=head2 draw_text
+
+=cut
 
 sub draw_text {
     my ($self, $pdf, %params) = @_;
@@ -268,6 +303,10 @@ sub draw_text {
     }
 }
 
+=head2 draw_image
+
+=cut
+
 sub draw_image {
     my ($self, $pdf) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
@@ -287,6 +326,10 @@ sub draw_image {
         $pdf->Add($obj_stream);
     }
 }
+
+=head2 draw_barcode
+
+=cut
 
 sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no common place for it atm...
     my $self = shift;
@@ -370,6 +413,3 @@ __END__
 Chris Nighswonger <cnighswonger AT foundations DOT edu>
 
 =cut
-
-
-
