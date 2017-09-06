@@ -123,6 +123,10 @@ sub draw_guide_box {
 
 =head2 draw_guide_grid
 
+    $patron_card->draw_guide_grid($pdf)
+
+Adds a grid to the PDF output ($pdf) to support layout design
+
 =cut
 
 sub draw_guide_grid {
