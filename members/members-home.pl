@@ -30,11 +30,8 @@ use Koha::List::Patron;
 use Koha::Patron::Categories;
 
 my $query = new CGI;
-my $branch = $query->param('branchcode');
 
-$branch = q{} unless defined $branch;
-
-my ($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie, $flags)
     = get_template_and_user({template_name => "members/member.tt",
                  query => $query,
                  type => "intranet",
@@ -58,9 +55,14 @@ else {
     $template->param(categories=>\@categories);
 }
 
+my $branch =
+  (      C4::Context->preference("IndependentBranchesPatronModifications")
+      || C4::Context->preference("IndependentBranches") )
+  && !$flags->{'superlibrarian'}
+  ? C4::Context->userenv()->{'branch'}
+  : undef;
 
-my $pending_borrower_modifications =
-  Koha::Patron::Modifications->pending_count( $branch );
+my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count( $branch );
 
 $template->param( 
         no_add => $no_add,
