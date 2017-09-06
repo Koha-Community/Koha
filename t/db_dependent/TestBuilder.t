@@ -397,7 +397,7 @@ subtest '->build parameter' => sub {
     warnings_are {
         $builder->build({
             source => 'Branch',
-            values => {
+            value => {
                 branchcode => 'BRANCH_1'
             }
         })
