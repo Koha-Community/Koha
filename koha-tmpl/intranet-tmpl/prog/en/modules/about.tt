@@ -1,3 +1,4 @@
+[% USE HtmlTags %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; About Koha</title>
@@ -139,40 +140,38 @@
 
         [% IF has_ai_issues %]
             <h2>Data problems</h2>
-            <p>
-            Some of your tables have problems with their auto_increment values which may lead to data loss. <strong>You should not ignore this warning</strong>.
-            The problem is that InnoDB does not keep auto_increment across SQL server restarts (it is only set in memory).
-            So on server startup the auto_increment values are set to max(table.id)+1.
-            </p>
-            <p>
-            See the <a href="https://wiki.koha-community.org/wiki/DBMS_auto_increment_fix">related wiki page</a> to know how to avoid this problem.
+            <p>Some of your tables have problems with their auto_increment values which may lead to data loss.</p>
+            <p><strong>You should not ignore this warning.</strong></p>
+            <p>The problem is that InnoDB does not keep auto_increment across SQL server restarts (it is only set in memory). So on server startup the auto_increment values are set to max(table.id)+1.</p>
+            <p>To know how to avoid this problem see the related wiki page:
+            <a href="https://wiki.koha-community.org/wiki/DBMS_auto_increment_fix">DBMS auto increment fix</a>
             </p>
 
             <h3>Problems found</h3>
             [% IF ai_patrons %]
                 <h4>Patrons</h4>
-                <p>The following ids exist in both <strong>borrowers</strong> and <strong>deletedborrowers</strong> tables:
-                [% FOR p IN ai_patrons %][% p.borrowernumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "borrowers" | $HtmlTags tag="strong" %] and [% "deletedborrowers" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR p IN ai_patrons %][% p.borrowernumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_biblios %]
                 <h4>Biblios</h4>
-                <p>The following ids exist in both <strong>biblio</strong> and <strong>deletedbiblio</strong> tables:
-                [% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblio" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR b IN ai_biblios %][% b.biblionumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_items %]
                 <h4>Items</h4>
-                <p>The following ids exist in both <strong>items</strong> and <strong>deleteditems</strong> tables:
-                [% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "items" | $HtmlTags tag="strong" %] and [% "deleteditems" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR i IN ai_items %][% i.itemnumber %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_checkouts %]
                 <h4>Checkouts</h4>
-                <p>The following ids exist in both <strong>issues</strong> and <strong>old_issues</strong> tables:
-                [% FOR c IN ai_checkouts %][% c.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "issues" | $HtmlTags tag="strong" %] and [% "old_issues" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR c IN ai_checkouts %][% c.issue_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_holds %]
                 <h4>Holds</h4>
-                <p>The following ids exist in both <strong>holds</strong> and <strong>old_reserves</strong> table:
-                [% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" %] and [% "old_reserves" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             <br/>
         [% END %]
