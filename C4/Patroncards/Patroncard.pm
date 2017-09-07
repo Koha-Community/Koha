@@ -203,6 +203,10 @@ sub draw_guide_grid {
 
 =head2 draw_text
 
+    $patron_card->draw_text($pdf)
+
+Draws text to PDF output ($pdf)
+
 =cut
 
 sub draw_text {
@@ -310,6 +314,10 @@ sub draw_text {
 
 =head2 draw_image
 
+    $patron_card->draw_image($pdf)
+
+Draws images to PDF output ($pdf)
+
 =cut
 
 sub draw_image {
@@ -334,6 +342,10 @@ sub draw_image {
 }
 
 =head2 draw_barcode
+
+    $patron_card->draw_barcode($pdf)
+
+Draws a barcode to PDF output ($pdf)
 
 =cut
 
