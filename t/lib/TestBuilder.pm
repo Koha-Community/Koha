@@ -86,7 +86,11 @@ sub build {
 # build returns a hash of column values for a created record, or undef
 # build does NOT update a record, or pass back values of an existing record
     my ($self, $params) = @_;
-    my $source  = $params->{source} || return;
+    my $source  = $params->{source};
+    if( !$source ) {
+        carp "Source parameter not specified!";
+        return;
+    }
     my $value   = $params->{value};
 
     my @unknowns = grep( !/^(source|value)$/, keys %{ $params });

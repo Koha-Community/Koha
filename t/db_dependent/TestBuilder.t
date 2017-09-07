@@ -36,12 +36,14 @@ our $builder;
 
 
 subtest 'Start with some trivial tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $builder = t::lib::TestBuilder->new;
     isnt( $builder, undef, 'We got a builder' );
 
-    is( $builder->build, undef, 'build without arguments returns undef' );
+    my $data;
+    warning_like { my $data = $builder->build; } qr/.+/, 'Catch a warning';
+    is( $data, undef, 'build without arguments returns undef' );
     is( ref( $builder->schema ), 'Koha::Schema', 'check schema' );
     is( ref( $builder->can('delete') ), 'CODE', 'found delete method' );
 
@@ -391,7 +393,7 @@ subtest 'build_object() tests' => sub {
 };
 
 subtest '->build parameter' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     # Test to make sure build() warns user of unknown parameters.
     warnings_are {
@@ -409,6 +411,12 @@ subtest '->build parameter' => sub {
             branchcode => 'BRANCH_2' # This is wrong!
         })
     } qr/unknown param/i, "Carp unknown parameters";
+
+    warnings_like {
+        $builder->build({
+            zource     => 'Branch', # Intentional spelling error
+        })
+    } qr/Source parameter not specified/, "Catch warning on missing source";
 };
 
 $schema->storage->txn_rollback;
