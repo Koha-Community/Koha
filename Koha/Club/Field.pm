@@ -46,7 +46,7 @@ Represents the value set at creation time for a Koha::Club::Template::Field
 sub club_template_field {
     my ( $self ) = @_;
 
-    return Koha::Club::Template::Fields->find( $self->club_template_field_id );
+    return scalar Koha::Club::Template::Fields->find( $self->club_template_field_id );
 }
 
 =head3 type
