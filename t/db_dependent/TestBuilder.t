@@ -42,7 +42,7 @@ subtest 'Start with some trivial tests' => sub {
     isnt( $builder, undef, 'We got a builder' );
 
     my $data;
-    warning_like { my $data = $builder->build; } qr/.+/, 'Catch a warning';
+    warning_like { $data = $builder->build; } qr/.+/, 'Catch a warning';
     is( $data, undef, 'build without arguments returns undef' );
     is( ref( $builder->schema ), 'Koha::Schema', 'check schema' );
     is( ref( $builder->can('delete') ), 'CODE', 'found delete method' );
