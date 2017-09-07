@@ -812,7 +812,7 @@ sub CancelExpiredReserves {
         next if !$cancel_on_holidays && $calendar->is_holiday( $today );
 
         my $cancel_params = {};
-        if ( $holds->found eq 'W' ) {
+        if ( $hold->found eq 'W' ) {
             $cancel_params->{charge_cancel_fee} = 1;
         }
         $hold->cancel( $cancel_params );
