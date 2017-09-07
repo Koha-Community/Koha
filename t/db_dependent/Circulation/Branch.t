@@ -65,21 +65,21 @@ my $samplebranch2 = $builder->build({ source => 'Branch' });
 # Add itemtypes
 my $no_circ_itemtype = $builder->build({
     source => 'Itemtype',
-    values => {
+    value => {
         rentalcharge => '0',
         notforloan   => 0
     }
 });
 my $sampleitemtype1 = $builder->build({
     source => 'Itemtype',
-    values => {
+    value => {
         rentalcharge => '10.0',
         notforloan   => 1
     }
 });
 my $sampleitemtype2 = $builder->build({
     source => 'Itemtype',
-    values => {
+    value => {
         rentalcharge => '5.0',
         notforloan   => 0
     }
@@ -87,7 +87,7 @@ my $sampleitemtype2 = $builder->build({
 # Add Category
 my $samplecat     = $builder->build({
     source => 'Category',
-    values => {
+    value => {
         hidelostitems => 0
     }
 });
