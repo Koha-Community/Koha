@@ -125,7 +125,7 @@ sub _start_search {
             return $self->_start_search( $args, 1 );
         }
 
-        _set_error_from_zoom( $args, $@ );
+        $self->_set_error_from_zoom( $args, $@ );
         $connection = undef;
     }
 
