@@ -569,7 +569,11 @@ sub TooMany {
 
 Check if a book can be issued.
 
-C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
+C<$issuingimpossible> and C<$needsconfirmation> are hashrefs.
+
+IMPORTANT: The assumption by users of this routine is that causes blocking
+the issue are keyed by uppercase labels and other returned
+data is keyed in lower case!
 
 =over 4
 
@@ -660,12 +664,6 @@ sticky due date is invalid or due date in the past
 =head3 TOO_MANY
 
 if the borrower borrows to much things
-
-=head3 NB
-
-The assumption by users of the routine is that causes blocking
-the issue are keyed by uppercase labels and other returned
-data is keyed in lower case
 
 =cut
 
