@@ -46,9 +46,9 @@ SKIP: {
 sub try_issue {
     my ($cardnumber, $item ) = @_;
     my $issuedate = '2011-05-16';
-    my $borrower = Koha::Patrons->find( { cardnumber => $cardnumber } )->unblessed;
-    my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $item );
-    my $issue = AddIssue($borrower, $item, undef, 0, $issuedate);
+    my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
+    my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $patron, $item );
+    my $issue = AddIssue($patron->unblessed, $item, undef, 0, $issuedate);
     return dt_from_string( $issue->due_date() );
 }
 

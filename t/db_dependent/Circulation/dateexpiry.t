@@ -47,15 +47,14 @@ subtest 'Tests for CalcDateDue related to dateexpiry' => sub {
 
 sub can_book_be_issued {
     my $item    = $builder->build( { source => 'Item' } );
-    my $patron  = $builder->build(
-        {   source => 'Borrower',
+    my $patron  = $builder->build_object(
+        {   class  => 'Koha::Patrons',
             value  => {
                 dateexpiry => '9999-12-31',
                 categorycode => $patron_category->{categorycode},
             }
         }
     );
-    $patron->{flags} = C4::Members::patronflags( $patron );
     my $duration = gettimeofday();
     my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
     $duration = gettimeofday() - $duration;
@@ -63,29 +62,27 @@ sub can_book_be_issued {
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is 9999-*' );
 
     $item = $builder->build( { source => 'Item' } );
-    $patron = $builder->build(
-        {   source => 'Borrower',
+    $patron = $builder->build_object(
+        {   class  => 'Koha::Patrons',
             value  => {
                 dateexpiry => '0000-00-00',
                 categorycode => $patron_category->{categorycode},
             }
         }
     );
-    $patron->{flags} = C4::Members::patronflags( $patron );
     ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
     is( $issuingimpossible->{EXPIRED}, 1, 'The patron should be considered as expired if dateexpiry is 0000-00-00' );
 
     my $tomorrow = dt_from_string->add_duration( DateTime::Duration->new( days => 1 ) );
     $item = $builder->build( { source => 'Item' } );
-    $patron = $builder->build(
-        {   source => 'Borrower',
+    $patron = $builder->build_object(
+        {   class  => 'Koha::Patrons',
             value  => {
                 dateexpiry => output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } ),
                 categorycode => $patron_category->{categorycode},
             },
         }
     );
-    $patron->{flags} = C4::Members::patronflags( $patron );
     ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is tomorrow' );
 

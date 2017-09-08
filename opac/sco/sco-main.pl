@@ -108,10 +108,10 @@ if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
 
-my $borrower;
+my ( $borrower, $patron );
 if ( $patronid ) {
-    $borrower = Koha::Patrons->find( { cardnumber => $patronid } );
-    $borrower = $borrower->unblessed if $borrower;
+    $patron = Koha::Patrons->find( { cardnumber => $patronid } );
+    $borrower = $patron->unblessed if $patron;
 }
 
 my $currencySymbol = "";
@@ -130,11 +130,11 @@ if ($op eq "logout") {
 elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
 }
-elsif ( $borrower and $op eq "checkout" ) {
+elsif ( $patron and $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
     ( $impossible, $needconfirm ) = CanBookBeIssued(
-        $borrower,
+        $patron,
         $barcode,
         undef,
         0,

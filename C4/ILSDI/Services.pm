@@ -550,7 +550,7 @@ sub GetServices {
     my $barcode = $item->{'barcode'} || '';
     $barcode = barcodedecode($barcode) if ( $barcode && C4::Context->preference('itemBarcodeInputFilter') );
     if ($barcode) {
-        my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $borrower, $barcode );
+        my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $barcode );
 
         # TODO push @availablefor, 'loan';
     }

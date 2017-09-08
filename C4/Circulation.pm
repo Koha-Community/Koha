@@ -567,7 +567,7 @@ sub TooMany {
 
 =head2 CanBookBeIssued
 
-  ( $issuingimpossible, $needsconfirmation, [ $alerts ] ) =  CanBookBeIssued( $borrower,
+  ( $issuingimpossible, $needsconfirmation, [ $alerts ] ) =  CanBookBeIssued( $patron,
                       $barcode, $duedate, $inprocess, $ignore_reserves, $params );
 
 Check if a book can be issued.
@@ -580,7 +580,7 @@ data is keyed in lower case!
 
 =over 4
 
-=item C<$borrower> hash with borrower informations (from Koha::Patron->unblessed)
+=item C<$patron> is a Koha::Patron
 
 =item C<$barcode> is the bar code of the book being issued.
 
@@ -671,7 +671,7 @@ if the borrower borrows to much things
 =cut
 
 sub CanBookBeIssued {
-    my ( $borrower, $barcode, $duedate, $inprocess, $ignore_reserves, $params ) = @_;
+    my ( $patron, $barcode, $duedate, $inprocess, $ignore_reserves, $params ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my %alerts;               # filled with messages that shouldn't stop issuing, but the librarian should be aware of.
@@ -685,6 +685,7 @@ sub CanBookBeIssued {
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
 	$item->{'itemtype'}=$item->{'itype'}; 
     my $dbh             = C4::Context->dbh;
+    my $patron_unblessed = $patron->unblessed;
 
     # MANDATORY CHECKS - unless item exists, nothing else matters
     unless ( $item->{barcode} ) {
@@ -702,9 +703,9 @@ sub CanBookBeIssued {
     unless ( $duedate ) {
         my $issuedate = $now->clone();
 
-        my $branch = _GetCircControlBranch($item,$borrower);
+        my $branch = _GetCircControlBranch($item, $patron_unblessed);
         my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
-        $duedate = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+        $duedate = CalcDateDue( $issuedate, $itype, $branch, $patron_unblessed );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -722,7 +723,6 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     if ( $patron->category->category_type eq 'X' && (  $item->{barcode}  )) {
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         &UpdateStats({
@@ -730,14 +730,14 @@ sub CanBookBeIssued {
                      type => 'localuse',
                      itemnumber => $item->{'itemnumber'},
                      itemtype => $item->{'itype'},
-                     borrowernumber => $borrower->{'borrowernumber'},
+                     borrowernumber => $patron->borrowernumber,
                      ccode => $item->{'ccode'}}
                     );
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
 
-    my $flags = C4::Members::patronflags( $borrower );
+    my $flags = C4::Members::patronflags( $patron_unblessed );
     if ( ref $flags ) {
         if ( $flags->{GNA} ) {
             $issuingimpossible{GNA} = 1;
@@ -749,10 +749,10 @@ sub CanBookBeIssued {
             $issuingimpossible{DEBARRED} = 1;
         }
     }
-    if ( !defined $borrower->{dateexpiry} || $borrower->{'dateexpiry'} eq '0000-00-00') {
+    if ( !defined $patron->dateexpiry || $patron->dateexpiry eq '0000-00-00') {
         $issuingimpossible{EXPIRED} = 1;
     } else {
-        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'sql', 'floating' );
+        my $expiry_dt = dt_from_string( $patron->dateexpiry, 'sql', 'floating' );
         $expiry_dt->truncate( to => 'day');
         my $today = $now->clone()->truncate(to => 'day');
         $today->set_time_zone( 'floating' );
@@ -767,7 +767,7 @@ sub CanBookBeIssued {
 
     # DEBTS
     my ($balance, $non_issue_charges, $other_charges) =
-      C4::Members::GetMemberAccountBalance( $borrower->{'borrowernumber'} );
+      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
 
     my $amountlimit = C4::Context->preference("noissuescharge");
     my $allowfineoverride = C4::Context->preference("AllowFineOverride");
@@ -777,8 +777,7 @@ sub CanBookBeIssued {
     my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
     $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
     if ( defined $no_issues_charge_guarantees ) {
-        my $p = Koha::Patrons->find( $borrower->{borrowernumber} );
-        my @guarantees = $p->guarantees();
+        my @guarantees = $patron->guarantees();
         my $guarantees_non_issues_charges;
         foreach my $g ( @guarantees ) {
             my ( $b, $n, $o ) = C4::Members::GetMemberAccountBalance( $g->id );
@@ -817,7 +816,7 @@ sub CanBookBeIssued {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
 
-    $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    $patron = Koha::Patrons->find( $patron->borrowernumber ); # FIXME Refetch just in case, to avoid regressions. But must not be needed
     if ( my $debarred_date = $patron->is_debarred ) {
          # patron has accrued fine days or has a restriction. $count is a date
         if ($debarred_date eq '9999-12-31') {
@@ -839,7 +838,7 @@ sub CanBookBeIssued {
     #
     # CHECK IF BOOK ALREADY ISSUED TO THIS BORROWER
     #
-    if ( $issue && $issue->borrowernumber eq $borrower->{'borrowernumber'} ){
+    if ( $issue && $issue->borrowernumber eq $patron->borrowernumber ){
 
         # Already issued to current borrower.
         # If it is an on-site checkout if it can be switched to a normal checkout
@@ -850,7 +849,7 @@ sub CanBookBeIssued {
             $messages{ONSITE_CHECKOUT_WILL_BE_SWITCHED} = 1;
         } else {
             my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
-                $borrower->{'borrowernumber'},
+                $patron->borrowernumber,
                 $item->{'itemnumber'},
             );
             if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
@@ -892,8 +891,8 @@ sub CanBookBeIssued {
           C4::Context->preference('SwitchOnSiteCheckouts')
       and $issue
       and $issue->onsite_checkout
-      and $issue->borrowernumber == $borrower->{'borrowernumber'} ? 1 : 0 );
-    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
+      and $issue->borrowernumber == $patron->borrowernumber ? 1 : 0 );
+    my $toomany = TooMany( $patron_unblessed, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
@@ -913,7 +912,7 @@ sub CanBookBeIssued {
     #
     # CHECKPREVCHECKOUT: CHECK IF ITEM HAS EVER BEEN LENT TO PATRON
     #
-    $patron = Koha::Patrons->find($borrower->{borrowernumber});
+    $patron = Koha::Patrons->find( $patron->borrowernumber ); # FIXME Refetch just in case, to avoid regressions. But must not be needed
     my $wants_check = $patron->wants_check_for_previous_checkout;
     $needsconfirmation{PREVISSUE} = 1
         if ($wants_check and $patron->do_check_for_previous_checkout($item));
@@ -980,8 +979,8 @@ sub CanBookBeIssued {
                 $issuingimpossible{ITEMNOTSAMEBRANCH} = 1;
                 $issuingimpossible{'itemhomebranch'} = $item->{C4::Context->preference("HomeOrHoldingBranch")};
             }
-            $needsconfirmation{BORRNOTSAMEBRANCH} = $borrower->{'branchcode'}
-              if ( $borrower->{'branchcode'} ne $userenv->{branch} );
+            $needsconfirmation{BORRNOTSAMEBRANCH} = $patron->branchcode
+              if ( $patron->branchcode ne $userenv->{branch} );
         }
     }
     #
@@ -990,7 +989,7 @@ sub CanBookBeIssued {
     my $rentalConfirmation = C4::Context->preference("RentalFeesCheckoutConfirmation");
 
     if ( $rentalConfirmation ){
-        my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
+        my ($rentalCharge) = GetIssuingCharges( $item->{'itemnumber'}, $patron->borrowernumber );
         if ( $rentalCharge > 0 ){
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
@@ -1001,7 +1000,7 @@ sub CanBookBeIssued {
         my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
         if ($restype) {
             my $resbor = $res->{'borrowernumber'};
-            if ( $resbor ne $borrower->{'borrowernumber'} ) {
+            if ( $resbor ne $patron->borrowernumber ) {
                 my $patron = Koha::Patrons->find( $resbor );
                 if ( $restype eq "Waiting" )
                 {
@@ -1031,7 +1030,7 @@ sub CanBookBeIssued {
 
     ## CHECK AGE RESTRICTION
     my $agerestriction  = $biblioitem->{'agerestriction'};
-    my ($restriction_age, $daysToAgeRestriction) = GetAgeRestriction( $agerestriction, $borrower );
+    my ($restriction_age, $daysToAgeRestriction) = GetAgeRestriction( $agerestriction, $patron->unblessed );
     if ( $daysToAgeRestriction && $daysToAgeRestriction > 0 ) {
         if ( C4::Context->preference('AgeRestrictionOverride') ) {
             $needsconfirmation{AGE_RESTRICTION} = "$agerestriction";
@@ -1043,7 +1042,7 @@ sub CanBookBeIssued {
 
     ## check for high holds decreasing loan period
     if ( C4::Context->preference('decreaseLoanHighHolds') ) {
-        my $check = checkHighHolds( $item, $borrower );
+        my $check = checkHighHolds( $item, $patron_unblessed );
 
         if ( $check->{exceeded} ) {
             if ($override_high_holds) {
@@ -1076,9 +1075,10 @@ sub CanBookBeIssued {
         require C4::Serials;
         my $is_a_subscription = C4::Serials::CountSubscriptionFromBiblionumber($biblionumber);
         unless ($is_a_subscription) {
+            # FIXME Should be $patron->checkouts($args);
             my $checkouts = Koha::Checkouts->search(
                 {
-                    borrowernumber => $borrower->{borrowernumber},
+                    borrowernumber => $patron->borrowernumber,
                     biblionumber   => $biblionumber,
                 },
                 {

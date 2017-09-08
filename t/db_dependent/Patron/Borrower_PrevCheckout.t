@@ -379,7 +379,7 @@ test_it($cpvPmappings, "PostReturn");
 
 # Our Patron
 my $CBBI_patron = $builder->build({source => 'Borrower'});
-$patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} )->unblessed;
+$patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} );
 # Our Items
 my $new_item = $builder->build({
     source => 'Item',
@@ -399,7 +399,7 @@ my $prev_item = $builder->build({
 });
 # Second is Checked Out
 BAIL_OUT("CanBookBeIssued Issue failed")
-    unless AddIssue($patron, $prev_item->{barcode});
+    unless AddIssue($patron->unblessed, $prev_item->{barcode});
 
 # Mappings
 my $CBBI_mappings = [

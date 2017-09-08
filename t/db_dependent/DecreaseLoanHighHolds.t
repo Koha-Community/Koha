@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Circulation;
 use Koha::Database;
-use Koha::Patron;
+use Koha::Patrons;
 use Koha::Biblio;
 use Koha::Item;
 use Koha::Holds;
@@ -184,10 +184,11 @@ is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
 
 t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
 
-my ( $un, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode );
+my $patron_object = Koha::Patrons->find( $patron_hr->{borrowernumber} );
+my ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_object, $item->barcode );
 ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
 
-( undef, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
+( undef, $needsconfirmation ) = CanBookBeIssued( $patron_object, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
 ok( !$needsconfirmation->{HIGHHOLDS}, "High holds checkout does not need confirmation" );
 
 $schema->storage->txn_rollback();

@@ -315,7 +315,7 @@ if (@$barcodes) {
     my $template_params = { barcode => $barcode };
     # always check for blockers on issuing
     my ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
-        $patron->unblessed,
+        $patron,
         $barcode, $datedue,
         $inprocess,
         undef,

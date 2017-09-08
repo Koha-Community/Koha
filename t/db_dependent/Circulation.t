@@ -1198,8 +1198,8 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
     my $otherbranch   = $builder->build( { source => 'Branch' } );
-    my $patron_1      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
-    my $patron_2      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_1      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_2      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -1218,7 +1218,7 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
 
     set_userenv($holdingbranch);
 
-    my $issue = AddIssue( $patron_1, $item->{barcode} );
+    my $issue = AddIssue( $patron_1->unblessed, $item->{barcode} );
     is( ref($issue), 'Koha::Schema::Result::Issue' );    # FIXME Should be Koha::Checkout
 
     my ( $error, $question, $alerts );
@@ -1360,7 +1360,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
     my $item_1 = $builder->build(
@@ -1395,7 +1395,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     # Patron cannot issue item_1, they have overdues
     my $yesterday = DateTime->today( time_zone => C4::Context->tz() )->add( days => -1 );
-    my $issue = AddIssue( $patron, $item_1->{barcode}, $yesterday );    # Add an overdue
+    my $issue = AddIssue( $patron->unblessed, $item_1->{barcode}, $yesterday );    # Add an overdue
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'confirmation' );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
@@ -1409,12 +1409,12 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     # Patron cannot issue item_1, they are debarred
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
-    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber}, expiration => $tomorrow } );
+    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->borrowernumber, expiration => $tomorrow } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . str($error, $question, $alerts) );
     is( $error->{USERBLOCKEDWITHENDDATE}, output_pref( { dt => $tomorrow, dateformat => 'sql', dateonly => 1 } ), 'USERBLOCKEDWITHENDDATE should be tomorrow' );
 
-    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber} } );
+    Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->borrowernumber } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
     is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . str($error, $question, $alerts) );
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31', 'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments' );
@@ -1458,7 +1458,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
         }
     );
 
-    my ( $error, $question, $alerts ) = CanBookBeIssued( $patron->unblessed, $item_1->{barcode} );
+    my ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_1->{barcode} );
     is( $error->{STATS}, 1, '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)' );
 
     # TODO There are other tests to provide here
@@ -1570,7 +1570,7 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
     plan tests => 5;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $biblionumber = $biblioitem->{biblionumber};
@@ -1600,7 +1600,7 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
     );
 
     my ( $error, $question, $alerts );
-    my $issue = AddIssue( $patron, $item_1->{barcode}, dt_from_string->add( days => 1 ) );
+    my $issue = AddIssue( $patron->unblessed, $item_1->{barcode}, dt_from_string->add( days => 1 ) );
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
@@ -2021,7 +2021,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     my $five_days_go = output_pref({ dt => dt_from_string->add( days => 5 ), dateonly => 1});
     my $ten_days_go  = output_pref({ dt => dt_from_string->add( days => 10), dateonly => 1 });
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -2038,7 +2038,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
         }
     );
 
-    my $issue = AddIssue( $patron, $item->{barcode}, $five_days_go ); # date due was 10d ago
+    my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $five_days_go ); # date due was 10d ago
     my $actualissue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
     is( output_pref({ str => $actualissue->date_due, dateonly => 1}), $five_days_go, "First issue works");
     my ($issuingimpossible, $needsconfirmation) = CanBookBeIssued($patron,$item->{barcode},$ten_days_go, undef, undef, undef);
