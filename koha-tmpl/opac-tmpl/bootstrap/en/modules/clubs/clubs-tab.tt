@@ -20,13 +20,13 @@
                     <td>[% e.club.name %]</td>
                     <td>[% e.club.description %]</td>
                     <td>[% e.date_enrolled | $KohaDates %]</td>
-                    [% IF e.club.club_template.is_enrollable_from_opac %]
-                        <td>
+                    <td>
+                        [% IF e.club.club_template.is_enrollable_from_opac %]
                             <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id %] )">
                                 <i class="icon-remove"></i> Cancel enrollment
                             </button>
-                        </td>
-                    [% END %]
+                        [% END %]
+                    </td>
                 </tr>
             [% END %]
         </tbody>
