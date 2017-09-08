@@ -58,14 +58,28 @@ get '/dbic_merge_pagination' => sub {
     $c->render( json => $filter, status => 200 );
 };
 
+get '/pagination_headers_without_page_size' => sub {
+    my $c = shift;
+    $c->add_pagination_headers({ total => 10, params => { _page => 2, firstname => 'Jonathan' } });
+    $c->render( json => { ok => 1 }, status => 200 );
+};
+
+get '/pagination_headers_without_page' => sub {
+    my $c = shift;
+    $c->add_pagination_headers({ total => 10, params => { _per_page => 4, firstname => 'Jonathan' } });
+    $c->render( json => { ok => 1 }, status => 200 );
+};
+
 # The tests
 
 use Test::More tests => 2;
 use Test::Mojo;
 
+use t::lib::Mocks;
+
 subtest 'add_pagination_headers() tests' => sub {
 
-    plan tests => 45;
+    plan tests => 64;
 
     my $t = Test::Mojo->new;
 
@@ -117,6 +131,30 @@ subtest 'add_pagination_headers() tests' => sub {
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=4.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
+
+    t::lib::Mocks::mock_preference('RESTdefaultPageSize', 3);
+    $t->get_ok('/pagination_headers_without_page_size')
+      ->status_is( 200 )
+      ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
+
+    $t->get_ok('/pagination_headers_without_page')
+      ->status_is( 200 )
+      ->header_is( 'X-Total-Count' => undef, 'X-Total-Count header absent' )
+      ->header_is( 'Link'          => undef, 'Link header absent' );
+
+
 };
 
 subtest 'dbic_merge_pagination() tests' => sub {
