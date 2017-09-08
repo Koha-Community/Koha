@@ -600,6 +600,8 @@ EOF
         plan tests => 2;
 
         my $code = 'ISSUESLIP';
+        my $now = dt_from_string;
+        my $one_minute_ago = dt_from_string->subtract( minutes => 1 );
 
         my $branchcode = $library->{branchcode};
 
@@ -647,10 +649,12 @@ EOF
 
         reset_template( { template => $template, code => $code, module => 'circulation' } );
 
-        C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        my $checkout = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        $checkout->set_columns( { timestamp => $now, issuedate => $one_minute_ago } )->update; # FIXME $checkout is a Koha::Schema::Result::Issues, must be a Koha::Checkout
         my $first_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
-        C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        $checkout = C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        $checkout->set_columns( { timestamp => $now, issuedate => $now } )->update;
         my $yesterday = dt_from_string->subtract( days => 1 );
         C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
         my $second_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
@@ -705,10 +709,12 @@ EOF
 
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
 
-        C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        $checkout = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
+        $checkout->set_columns( { timestamp => $now, issuedate => $one_minute_ago } )->update;
         my $first_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
-        C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        $checkout = C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
+        $checkout->set_columns( { timestamp => $now, issuedate => $now } )->update;
         C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
         my $second_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
