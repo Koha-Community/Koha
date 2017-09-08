@@ -1360,6 +1360,50 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31', 'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments' );
 };
 
+subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
+    plan tests => 1;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'X' }
+        }
+    );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode  => $patron_category->categorycode,
+                gonenoaddress => undef,
+                lost          => undef,
+                debarred      => undef,
+                borrowernotes => ""
+            }
+        }
+    );
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->branchcode,
+                holdingbranch => $library->branchcode,
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                restricted    => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+
+    my ( $error, $question, $alerts ) = CanBookBeIssued( $patron->unblessed, $item_1->{barcode} );
+    is( $error->{STATS}, 1, '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)' );
+
+    # TODO There are other tests to provide here
+};
+
 subtest 'MultipleReserves' => sub {
     plan tests => 3;
 

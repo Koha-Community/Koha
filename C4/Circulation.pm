@@ -720,7 +720,8 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    if ( $patron->category->category_type eq 'X' && (  $item->{barcode}  )) {
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         &UpdateStats({
                      branch => C4::Context->userenv->{'branch'},
@@ -814,7 +815,7 @@ sub CanBookBeIssued {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
 
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     if ( my $debarred_date = $patron->is_debarred ) {
          # patron has accrued fine days or has a restriction. $count is a date
         if ($debarred_date eq '9999-12-31') {
