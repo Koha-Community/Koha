@@ -60,7 +60,11 @@ It also adds X-Total-Count, containing the total results count.
 
             my $total    = $args->{total};
             my $req_page = $args->{params}->{_page};
-            my $per_page = $args->{params}->{_per_page};
+            my $per_page = $args->{params}->{_per_page} //
+                            C4::Context->preference('RESTdefaultPageSize');
+
+            # do we need to paginate?
+            return $c unless $req_page;
 
             my $pages = int $total / $per_page;
             $pages++
