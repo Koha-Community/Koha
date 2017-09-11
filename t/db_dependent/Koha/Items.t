@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Test::More tests => 9;
+use Test::Exception;
 
 use C4::Circulation;
 use Koha::Item;
@@ -156,14 +157,17 @@ subtest 'can_be_transferred' => sub {
     })->count, 1, 'Given we have added a transfer limit,');
     is($item->can_be_transferred({ to => $library2 }), 0,
        'Item can no longer be transferred between libraries.');
-    is($item->can_be_transferred({ to => $library2, $library1 }), 0,
+    is($item->can_be_transferred({ to => $library2, from => $library1 }), 0,
        'We get the same result also if we pass the from-library parameter.');
-    eval { $item->can_be_transferred({ to => undef }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when no library given.');
-    eval { $item->can_be_transferred({ to => 'heaven' }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
-    eval { $item->can_be_transferred({ to => $library2, from => 'hell' }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when invalid library is given.');
+    throws_ok { $item->can_be_transferred({ to => undef }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when no library given.';
+    throws_ok { $item->can_be_transferred({ to => 'heaven' }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when invalid library is given.';
+    throws_ok { $item->can_be_transferred({ to => $library2, from => 'hell' }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when invalid library is given.';
 };
 
 $retrieved_item_1->delete;

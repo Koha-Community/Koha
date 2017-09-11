@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+use Test::Exception;
 
 use C4::Biblio;
 use C4::Items;
@@ -184,15 +185,15 @@ subtest 'can_be_transferred' => sub {
     is($biblio->can_be_transferred({ to => $library2 }), 0, 'Given all of items'
         .' of the biblio are from same, transfer limited library, then transfer'
         .' is not possible.');
-    eval { $biblio->can_be_transferred({ to => undef }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when no'
-        .' library given.');
-    eval { $biblio->can_be_transferred({ to => 'heaven' }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when'
-        .' invalid library is given.');
-    eval { $biblio->can_be_transferred({ to => $library2, from => 'hell' }); };
-    is(ref($@), 'Koha::Exceptions::Library::NotFound', 'Exception thrown when'
-        .' invalid library is given.');
+    throws_ok { $biblio->can_be_transferred({ to => undef }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when no library given.';
+    throws_ok { $biblio->can_be_transferred({ to => 'heaven' }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when invalid library is given.';
+    throws_ok { $biblio->can_be_transferred({ to => $library2, from => 'hell' }); }
+              'Koha::Exceptions::Library::NotFound',
+              'Exception thrown when invalid library is given.';
 };
 
 $schema->storage->txn_rollback;
