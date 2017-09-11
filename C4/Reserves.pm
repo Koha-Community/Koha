@@ -126,8 +126,6 @@ BEGIN {
 
         &IsAvailableForItemLevelRequest
 
-        &OPACItemHoldsAllowed
-
         &AlterPriority
         &ToggleLowestPriority
 
@@ -1720,54 +1718,6 @@ sub _ShiftPriorityByDateAndPriority {
     }
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
-}
-
-=head2 OPACItemHoldsAllowed
-
-  OPACItemHoldsAllowed($item_record,$borrower_record);
-
-Checks issuingrules, using the borrowers categorycode, the itemtype, and branchcode to see
-if specific item holds are allowed, returns true if so.
-
-=cut
-
-sub OPACItemHoldsAllowed {
-    my ($item,$borrower) = @_;
-
-    my $branchcode = $item->{homebranch} or die "No homebranch";
-    my $itype;
-    my $dbh = C4::Context->dbh;
-    if (C4::Context->preference('item-level_itypes')) {
-       # We can't trust GetItem to honour the syspref, so safest to do it ourselves
-       # When GetItem is fixed, we can remove this
-       $itype = $item->{itype};
-    }
-    else {
-       my $query = "SELECT itemtype FROM biblioitems WHERE biblioitemnumber = ? ";
-       my $sth = $dbh->prepare($query);
-       $sth->execute($item->{biblioitemnumber});
-       if (my $data = $sth->fetchrow_hashref()){
-           $itype = $data->{itemtype};
-       }
-    }
-
-    my $query = "SELECT opacitemholds,categorycode,itemtype,branchcode FROM issuingrules WHERE
-          (issuingrules.categorycode = ? OR issuingrules.categorycode = '*')
-        AND
-          (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
-        AND
-          (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')
-        ORDER BY
-          issuingrules.categorycode desc,
-          issuingrules.itemtype desc,
-          issuingrules.branchcode desc
-       LIMIT 1";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrower->{categorycode},$itype,$branchcode);
-    my $data = $sth->fetchrow_hashref;
-    my $opacitemholds = uc substr ($data->{opacitemholds}, 0, 1);
-    return '' if $opacitemholds eq 'N';
-    return $opacitemholds;
 }
 
 =head2 MoveReserve
