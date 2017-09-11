@@ -104,7 +104,6 @@ BEGIN {
     @EXPORT = qw(
         &AddReserve
 
-        &GetReservesForBranch
         &GetReserveStatus
 
         &GetOtherReserves
@@ -560,41 +559,6 @@ SELECT COUNT(*) FROM reserves WHERE biblionumber=? AND borrowernumber<>?
         }
     }
     return $fee;
-}
-
-=head2 GetReservesForBranch
-
-  @transreserv = GetReservesForBranch($frombranch);
-
-=cut
-
-sub GetReservesForBranch {
-    my ($frombranch) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $query = "
-        SELECT reserve_id,borrowernumber,reservedate,itemnumber,waitingdate, expirationdate
-        FROM   reserves
-        WHERE   priority='0'
-        AND found='W'
-    ";
-    $query .= " AND branchcode=? " if ( $frombranch );
-    $query .= "ORDER BY waitingdate" ;
-
-    my $sth = $dbh->prepare($query);
-    if ($frombranch){
-     $sth->execute($frombranch);
-    } else {
-        $sth->execute();
-    }
-
-    my @transreserv;
-    my $i = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $transreserv[$i] = $data;
-        $i++;
-    }
-    return (@transreserv);
 }
 
 =head2 GetReserveStatus

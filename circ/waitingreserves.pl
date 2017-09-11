@@ -84,54 +84,53 @@ $template->param( all_branches => 1 ) if $all_branches;
 
 my (@reservloop, @overloop);
 my ($reservcount, $overcount);
-my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch($default);
+# FIXME - Is priority => 0 useful? If yes it must be moved to waiting, otherwise we need to remove it from here.
+my $holds = Koha::Holds->waiting->search({ priority => 0, ( $all_branches ? () : ( branchcode => $default ) ) }, { order_by => ['waitingdate'] });
 # get reserves for the branch we are logged into, or for all branches
 
 my $today = Date_to_Days(&Today);
 my $max_pickup_delay = C4::Context->preference('ReservesMaxPickUpDelay');
 
-foreach my $num (@getreserves) {
-    next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
+while ( my $hold = $holds->next ) {
+    next unless ($hold->waitingdate && $hold->waitingdate ne '0000-00-00');
 
-    my $itemnumber = $num->{'itemnumber'};
-    my $item = Koha::Items->find( $itemnumber );
+    my $item = $hold->item;
+    my $patron = $hold->borrower;
     my $biblio = $item->biblio;
-    my $borrowernum = $num->{'borrowernumber'};
     my $holdingbranch = $item->holdingbranch;
     my $homebranch = $item->homebranch;
 
     my %getreserv = (
-        itemnumber => $itemnumber,
-        borrowernum => $borrowernum,
+        title             => $biblio->title,
+        itemnumber        => $item->itemnumber,
+        waitingdate       => $hold->waitingdate,
+        borrowernum       => $patron->borrowernumber,
+        biblionumber      => $biblio->biblionumber,
+        barcode           => $item->barcode,
+        homebranch        => $homebranch,
+        holdingbranch     => $item->holdingbranch,
+        itemcallnumber    => $item->itemcallnumber,
+        enumchron         => $item->enumchron,
+        copynumber        => $item->copynumber,
+        borrowername      => $patron->surname, # FIXME Let's send $patron to the template
+        borrowerfirstname => $patron->firstname,
+        borrowerphone     => $patron->phone,
     );
 
-    my $patron = Koha::Patrons->find( $num->{borrowernumber} );
     my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
-    $getreserv{'waitingdate'} = $num->{'waitingdate'};
-    my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $num->{'expirationdate'});
+    my ( $expire_year, $expire_month, $expire_day ) = split (/-/, $hold->expirationdate);
     my $calcDate = Date_to_Days( $expire_year, $expire_month, $expire_day );
 
     $getreserv{'itemtype'}       = $itemtype->description; # FIXME Should not it be translated_description?
-    $getreserv{'title'}          = $biblio->title;
     $getreserv{'subtitle'}       = GetRecordValue(
         'subtitle',
         GetMarcBiblio({ biblionumber => $biblio->biblionumber }),
         $biblio->frameworkcode);
-    $getreserv{'biblionumber'}   = $biblio->biblionumber;
-    $getreserv{'barcode'}        = $item->barcode;
-    $getreserv{'homebranch'}     = $homebranch;
-    $getreserv{'holdingbranch'}  = $item->holdingbranch;
-    $getreserv{'itemcallnumber'} = $item->itemcallnumber;
-    $getreserv{'enumchron'}      = $item->enumchron;
-    $getreserv{'copynumber'}     = $item->copynumber;
     if ( $homebranch ne $holdingbranch ) {
         $getreserv{'dotransfer'} = 1;
     }
-    $getreserv{'borrowername'}      = $patron->surname;
-    $getreserv{'borrowerfirstname'} = $patron->firstname;
-    $getreserv{'borrowerphone'}     = $patron->phone;
 
-    my $borEmail = GetFirstValidEmailAddress( $borrowernum );
+    my $borEmail = $patron->first_valid_email_address;
 
     if ( $borEmail ) {
         $getreserv{'borrowermail'}  = $borEmail;
@@ -139,7 +138,7 @@ foreach my $num (@getreserves) {
 
     if ($today > $calcDate) {
         if ($cancelall) {
-            my $res = cancel( $itemnumber, $borrowernum, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
+            my $res = cancel( $item->itemnumber, $patron->borrowernumber, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
             push @cancel_result, $res if $res;
             next;
         } else {
