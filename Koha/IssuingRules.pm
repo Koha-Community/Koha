@@ -100,6 +100,21 @@ sub get_opacitemholds_policy {
     return $issuing_rule ? $issuing_rule->opacitemholds : undef;
 }
 
+sub get_onshelfholds_policy {
+    my ( $class, $params ) = @_;
+    my $item = $params->{item};
+    my $itemtype = $item->effective_itemtype;
+    my $patron = $params->{patron};
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {
+            ( $patron ? ( categorycode => $patron->categorycode ) : () ),
+            itemtype   => $itemtype,
+            branchcode => $item->holdingbranch
+        }
+    );
+    return $issuing_rule ? $issuing_rule->onshelfholds : undef;
+}
+
 =head3 type
 
 =cut

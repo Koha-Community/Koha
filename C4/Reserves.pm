@@ -1101,10 +1101,12 @@ sub IsAvailableForItemLevelRequest {
     # FIXME - a lot of places in the code do this
     #         or something similar - need to be
     #         consolidated
-    my $itype = _get_itype($item);
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    my $item_object = Koha::Items->find( $item->{itemnumber } );
+    my $itemtype = $item_object->effective_itemtype;
     my $notforloan_per_itemtype
       = $dbh->selectrow_array("SELECT notforloan FROM itemtypes WHERE itemtype = ?",
-                              undef, $itype);
+                              undef, $itemtype);
 
     return 0 if
         $notforloan_per_itemtype ||
@@ -1113,7 +1115,7 @@ sub IsAvailableForItemLevelRequest {
         $item->{withdrawn}        ||
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
-    my $on_shelf_holds = _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
+    my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item_object, patron => $patron } );
 
     if ( $on_shelf_holds == 1 ) {
         return 1;

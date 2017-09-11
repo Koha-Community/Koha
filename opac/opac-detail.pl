@@ -661,6 +661,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
 } else {
   my $patron = Koha::Patrons->find( $borrowernumber );
   for my $itm (@items) {
+    my $item = Koha::Items->find( $itm->{itemnumber} );
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
     $itm->{priority} = $priority{ $itm->{itemnumber} };
     $norequests = 0
@@ -671,7 +672,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         && !$itemtypes->{$itm->{'itype'}}->{notforloan}
         && $itm->{'itemnumber'};
 
-    $allow_onshelf_holds = C4::Reserves::OnShelfHoldsAllowed( $itm, ( $patron ? $patron->unblessed : {} ) )
+    $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
 
     # get collection code description, too
