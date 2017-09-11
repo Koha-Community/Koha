@@ -71,6 +71,18 @@ sub get_effective_issuing_rule {
     return $rule;
 }
 
+sub get_opacitemholds_policy {
+    my ( $class, $params ) = @_;
+
+    my $item   = $params->{item};
+    my $patron = $params->{patron};
+
+    return unless $item or $patron;
+
+    require C4::Reserves;
+    return C4::Reserves::OPACItemHoldsAllowed( $item->unblessed, $patron->unblessed );
+}
+
 =head3 type
 
 =cut

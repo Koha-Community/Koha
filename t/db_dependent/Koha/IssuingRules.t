@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Benchmark;
 
 use Koha::IssuingRules;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -239,6 +240,54 @@ subtest 'get_effective_issuing_rule' => sub {
            .' rule '.sprintf('%.2f', $best_case->iters/$best_case->cpu_a)
            .' times per second.');
     };
+};
+
+subtest 'get_opacitemholds_policy' => sub {
+    plan tests => 4;
+    my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems', value => { itemtype => $itemtype->itemtype, biblionumber => $biblio->biblionumber } } );
+    my $item = $builder->build_object(
+        {   class  => 'Koha::Items',
+            value  => {
+                homebranch    => $library->branchcode,
+                holdingbranch => $library->branchcode,
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblio->biblionumber,
+                biblioitemnumber => $biblioitem->biblioitemnumber,
+                itype         => $itype->itemtype,
+            }
+        }
+    );
+
+    Koha::IssuingRules->delete;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => '*',                 branchcode => '*', opacitemholds => "N"})->store;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => $itype->itemtype,    branchcode => '*', opacitemholds => "Y"})->store;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => $itemtype->itemtype, branchcode => '*', opacitemholds => "N"})->store;
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    my $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+    is ( $opacitemholds, 'Y', 'Patrons can place a hold on this itype');
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+    is ( $opacitemholds, '', 'Patrons cannot place a hold on this itemtype');
+
+    Koha::IssuingRules->delete;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => '*',                 branchcode => '*', opacitemholds => "N"})->store;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => $itype->itemtype,    branchcode => '*', opacitemholds => "N"})->store;
+    Koha::IssuingRule->new({categorycode => '*', itemtype => $itemtype->itemtype, branchcode => '*', opacitemholds => "Y"})->store;
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+    is ( $opacitemholds, '', 'Patrons cannot place a hold on this itype');
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+    is ( $opacitemholds, 'Y', 'Patrons can place a hold on this itemtype');
+
+    $patron->delete;
 };
 
 sub _row_match {
