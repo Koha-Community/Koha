@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 10;
 
 use Koha::Library;
 use Koha::Libraries;
@@ -88,8 +88,33 @@ is( Koha::Libraries->search->count, $nb_of_libraries + 1, 'Delete should have de
 $retrieved_category_2->delete;
 is( Koha::LibraryCategories->search->count, $nb_of_categories + 2, 'Delete should have deleted the library category' );
 
-t::lib::Mocks::mock_preference('MARCOrgCode', 'US-Default');
-is( $new_library_1->get_effective_marcorgcode, 'US-MyLib', 'If defined, use library\'s own marc org code');
-is( $new_library_2->get_effective_marcorgcode, 'US-Default', 'If not defined library\' marc org code, use the one from system preferences');
-
 $schema->storage->txn_rollback;
+
+subtest '->get_effective_marcorgcode' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $library_1 = $builder->build_object({ class => 'Koha::Libraries',
+                                             value => { marcorgcode => 'US-MyLib' } });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries',
+                                             value => { marcorgcode => undef } });
+
+    t::lib::Mocks::mock_preference('MARCOrgCode', 'US-Default');
+
+    is( $library_1->get_effective_marcorgcode, 'US-MyLib',
+       'If defined, use library\'s own marc org code');
+    is( $library_2->get_effective_marcorgcode, 'US-Default',
+       'If not defined library\' marc org code, use the one from system preferences');
+
+    t::lib::Mocks::mock_preference('MARCOrgCode', 'Blah');
+    is( $library_2->get_effective_marcorgcode, 'Blah',
+       'Fallback is always MARCOrgCode syspref');
+
+    $library_2->marcorgcode('ThisIsACode')->store();
+    is( $library_2->get_effective_marcorgcode, 'ThisIsACode',
+       'Pick library_2 code');
+
+    $schema->storage->txn_rollback;
+};
