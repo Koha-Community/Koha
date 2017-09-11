@@ -33,7 +33,11 @@ Koha::Library - Koha Library Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 get_categories
+
+TODO: Ask the author to add a proper description
 
 =cut
 
@@ -43,11 +47,23 @@ sub get_categories {
     return $self->{_result}->categorycodes( $params );
 }
 
+=head3 update_categories
+
+TODO: Ask the author to add a proper description
+
+=cut
+
 sub update_categories {
     my ( $self, $categories ) = @_;
     $self->_result->delete_related( 'branchrelations' );
     $self->add_to_categories( $categories );
 }
+
+=head3 add_to_categories
+
+TODO: Ask the author to add a proper description
+
+=cut
 
 sub add_to_categories {
     my ( $self, $categories ) = @_;
@@ -56,13 +72,24 @@ sub add_to_categories {
     }
 }
 
+=head3 get_effective_marcorgcode
+
+    my $marcorgcode = Koha::Libraries->find( $library_id )->get_effective_marcorgcode();
+
+Returns the effective MARC organization code of the library. It falls back to the value
+from the I<MARCOrgCode> syspref if undefined for the library.
+
+=cut
+
 sub get_effective_marcorgcode {
     my ( $self )  = @_;
 
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
