@@ -47,6 +47,7 @@ use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::IssuingRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
@@ -395,7 +396,8 @@ foreach my $biblionumber (@biblionumbers) {
             }
 
             # checking reserve
-            my $holds = Koha::Items->find( $itemnumber )->current_holds;
+            my $item_object = Koha::Items->find( $itemnumber );
+            my $holds = $item_object->current_holds;
             if ( my $first_hold = $holds->next ) {
                 my $p = Koha::Patrons->find( $first_hold->borrowernumber );
 
@@ -467,7 +469,7 @@ foreach my $biblionumber (@biblionumbers) {
                 my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber );
                 $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
-                $item->{item_level_holds} = OPACItemHoldsAllowed( $item, $patron_unblessed);
+                $item->{item_level_holds} = Koha::IssuingRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
                 if (
                        !$item->{cantreserve}

@@ -604,7 +604,7 @@ function checkMultiHold() {
                     Not on hold
                 [% END %]
 
-                [% IF itemloo.item_level_holds == "" %]
+                [% IF itemloo.item_level_holds == "N" %]
                     <br/>Item level hold not allowed from OPAC
                 [% ELSIF itemloo.item_level_holds == "F" %]
                     <br/>Item level hold forced from OPAC

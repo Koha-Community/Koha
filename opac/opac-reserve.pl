@@ -36,6 +36,7 @@ use C4::Debug;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils;
+use Koha::IssuingRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Checkouts;
@@ -446,6 +447,7 @@ foreach my $biblioNum (@biblionumbers) {
     my $numCopiesOPACAvailable = 0;
     foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
         my $itemNum = $itemInfo->{itemnumber};
+        my $item = Koha::Items->find( $itemNum );
         my $itemLoopIter = {};
 
         $itemLoopIter->{itemnumber} = $itemNum;
@@ -475,7 +477,6 @@ foreach my $biblioNum (@biblionumbers) {
         }
 
         # checking reserve
-        my $item = Koha::Items->find( $itemNum );
         my $holds = $item->current_holds;
 
         if ( my $first_hold = $holds->next ) {
@@ -539,10 +540,11 @@ foreach my $biblioNum (@biblionumbers) {
             CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';
 
         if ($policy_holdallowed) {
-            if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $patron_unblessed ) ) {
+            my $opac_hold_policy = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+            if ( $opac_hold_policy ne 'N' ) { # If Y or F
                 $itemLoopIter->{available} = 1;
                 $numCopiesOPACAvailable++;
-                $biblioLoopIter{force_hold} = 1 if $hold_allowed eq 'F';
+                $biblioLoopIter{force_hold} = 1 if $opac_hold_policy eq 'F';
             }
             $numCopiesAvailable++;
 

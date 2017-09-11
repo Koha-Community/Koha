@@ -274,7 +274,7 @@ subtest 'get_opacitemholds_policy' => sub {
     is ( $opacitemholds, 'Y', 'Patrons can place a hold on this itype');
     t::lib::Mocks::mock_preference('item-level_itypes', 0);
     $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
-    is ( $opacitemholds, '', 'Patrons cannot place a hold on this itemtype');
+    is ( $opacitemholds, 'N', 'Patrons cannot place a hold on this itemtype');
 
     Koha::IssuingRules->delete;
     Koha::IssuingRule->new({categorycode => '*', itemtype => '*',                 branchcode => '*', opacitemholds => "N"})->store;
@@ -282,7 +282,7 @@ subtest 'get_opacitemholds_policy' => sub {
     Koha::IssuingRule->new({categorycode => '*', itemtype => $itemtype->itemtype, branchcode => '*', opacitemholds => "Y"})->store;
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
     $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
-    is ( $opacitemholds, '', 'Patrons cannot place a hold on this itype');
+    is ( $opacitemholds, 'N', 'Patrons cannot place a hold on this itype');
     t::lib::Mocks::mock_preference('item-level_itypes', 0);
     $opacitemholds = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
     is ( $opacitemholds, 'Y', 'Patrons can place a hold on this itemtype');
