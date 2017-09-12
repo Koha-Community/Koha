@@ -276,7 +276,7 @@ sub getcredits {
 	  AND timestamp >=TIMESTAMP(?) AND timestamp < TIMESTAMP(?)"
       );  
 
-    $sth->execute( $date, $date2 );                                                                                                              
+    $sth->execute( $date, $date2 );
     my @results;          
     while ( my $data = $sth->fetchrow_hashref ) {
 		$data->{'date'} = $data->{'timestamp'};
