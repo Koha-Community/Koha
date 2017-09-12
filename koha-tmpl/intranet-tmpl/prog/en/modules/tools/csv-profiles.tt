@@ -118,7 +118,7 @@ function reloadPage(p) {
                 [% END %]
                 <li>
                     <label for="profile" class="required">Profile name: </label>
-                    <input type="text" name="profile" id="profile" value="[% csv_profile.profile %]" class="required">
+                    <input type="text" name="profile" id="profile" value="[% csv_profile.profile | html %]" class="required">
                     <span class="required">Required</span>
                 </li>
                 <li>
@@ -136,7 +136,7 @@ function reloadPage(p) {
                 </li>
                 <li>
                     <label for="description">Profile description: </label>
-                    <textarea cols="50" rows="2" name="description" id="description">[% csv_profile.description %]</textarea>
+                    <textarea cols="50" rows="2" name="description" id="description">[% csv_profile.description | html %]</textarea>
                 </li>
                 <li>
                     <label for="csv_separator">CSV separator: </label>
@@ -199,7 +199,7 @@ function reloadPage(p) {
 [% IF op == 'delete_confirm' %]
     <div class="dialog alert">
         [% IF csv_profile %]
-            <h3>Delete CSV Profile "[% csv_profile.profile %]?"</h3>
+            <h3>Delete CSV Profile "[% csv_profile.profile | html %]?"</h3>
             <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
                 <input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="export_format_id" value="[% csv_profile.export_format_id %]" />
