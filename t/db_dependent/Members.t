@@ -139,19 +139,6 @@ $checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
 is ($checkcardnum, "2", "Card number is too long");
 
 
-
-t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'OFF' );
-C4::Context->clear_syspref_cache();
-
-my $notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
-is ($notice_email, $EMAIL, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is off");
-
-t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
-C4::Context->clear_syspref_cache();
-
-$notice_email = GetNoticeEmailAddress($member->{'borrowernumber'});
-is ($notice_email, $EMAILPRO, "GetNoticeEmailAddress returns correct value when AutoEmailPrimaryAddress is emailpro");
-
 # Check_Userid tests
 %data = (
     cardnumber   => "123456789",

@@ -33,6 +33,7 @@ use C4::Letters;
 use C4::Members ();
 use C4::Output;
 
+use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
 
@@ -166,10 +167,10 @@ sub show_accept {
 sub notify_owner {
     my ($param) = @_;
 
-    my $toaddr = C4::Members::GetNoticeEmailAddress( $param->{owner} );
-    return if !$toaddr;
-
     my $patron = Koha::Patrons->find( $param->{owner} );
+    return unless $patron;
+
+    my $toaddr = $patron->notice_email_address or return;
 
     #prepare letter
     my $letter = C4::Letters::GetPreparedLetter(

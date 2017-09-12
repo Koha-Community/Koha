@@ -64,8 +64,6 @@ BEGIN {
         &GetPendingIssues
         &GetAllIssues
 
-        &GetNoticeEmailAddress
-
         &GetMemberAccountRecords
 
         &GetBorrowersToExpunge
@@ -876,36 +874,6 @@ sub get_cardnumber_length {
     }
     $min = $max if $min > $max;
     return ( $min, $max );
-}
-
-=head2 GetNoticeEmailAddress
-
-  $email = GetNoticeEmailAddress($borrowernumber);
-
-Return the email address of borrower used for notices, given the borrowernumber.
-Returns the empty string if no email address.
-
-=cut
-
-sub GetNoticeEmailAddress {
-    my $borrowernumber = shift;
-
-    my $which_address = C4::Context->preference("AutoEmailPrimaryAddress");
-    # if syspref is set to 'first valid' (value == OFF), look up email address
-    if ( $which_address eq 'OFF' ) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
-        return $patron->first_valid_email_address();
-    }
-    # specified email address field
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( qq{
-        SELECT $which_address AS primaryemail
-        FROM borrowers
-        WHERE borrowernumber=?
-    } );
-    $sth->execute($borrowernumber);
-    my $data = $sth->fetchrow_hashref;
-    return $data->{'primaryemail'} || '';
 }
 
 =head2 GetBorrowersToExpunge

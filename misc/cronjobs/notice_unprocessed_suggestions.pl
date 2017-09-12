@@ -46,8 +46,7 @@ for my $number_of_days (@days) {
 
         my $budget = C4::Budgets::GetBudget( $suggestion->{budgetid} );
         my $patron = Koha::Patrons->find( $budget->{budget_owner_id} );
-        my $email_address =
-          C4::Members::GetNoticeEmailAddress( $budget->{budget_owner_id} );
+        my $email_address = $patron->notice_email_address;
         my $library = $patron->library;
         my $admin_email_address = $library->branchemail
           || C4::Context->preference('KohaAdminEmailAddress');

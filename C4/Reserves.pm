@@ -1609,7 +1609,7 @@ sub _koha_notify_reserve {
     my $patron = Koha::Patrons->find( $borrowernumber );
 
     # Try to get the borrower's email address
-    my $to_address = C4::Members::GetNoticeEmailAddress($borrowernumber);
+    my $to_address = $patron->notice_email_address;
 
     my $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( {
             borrowernumber => $borrowernumber,

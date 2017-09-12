@@ -1312,7 +1312,7 @@ sub _send_message_by_email {
                                    status     => 'failed' } );
             return;
         }
-        $to_address = C4::Members::GetNoticeEmailAddress( $message->{'borrowernumber'} );
+        $to_address = $patron->notice_email_address;
         unless ($to_address) {  
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?

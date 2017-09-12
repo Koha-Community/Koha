@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
@@ -702,6 +702,20 @@ subtest 'holds and old_holds' => sub {
 
     $old_holds->delete;
     $holds->delete;
+    $patron->delete;
+};
+
+subtest 'notice_email_address' => sub {
+    plan tests => 2;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'OFF' );
+    is ($patron->notice_email_address, $patron->email, "Koha::Patron->notice_email_address returns correct value when AutoEmailPrimaryAddress is off");
+
+    t::lib::Mocks::mock_preference( 'AutoEmailPrimaryAddress', 'emailpro' );
+    is ($patron->notice_email_address, $patron->emailpro, "Koha::Patron->notice_email_address returns correct value when AutoEmailPrimaryAddress is emailpro");
+
     $patron->delete;
 };
 

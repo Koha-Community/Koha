@@ -43,6 +43,7 @@ use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Libraries;
 use Koha::Acquisition::Currencies;
+use Koha::Patrons;
 
 =head1 NAME
 
@@ -580,9 +581,9 @@ END_SQL
                 $verbose
                   and warn "borrower $borr has items triggering level $i.";
 
+                my $patron = Koha::Patrons->find( $borrowernumber );
                 @emails_to_use = ();
-                my $notice_email =
-                    C4::Members::GetNoticeEmailAddress($borrowernumber);
+                my $notice_email = $patron->notice_email_address;
                 unless ($nomail) {
                     if (@emails) {
                         foreach (@emails) {
