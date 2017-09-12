@@ -37,7 +37,6 @@ use C4::Charset;
 use C4::Linker;
 use C4::OAI::Sets;
 use C4::Debug;
-require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
 
 use Koha::Caches;
 use Koha::Authority::Types;
@@ -4307,6 +4306,7 @@ sub getHostRecord {
         die "getHostRecord():> Record '".$r->subfield('999','c')."' doesn't have controlfields 001 or/and 003. Those fields are mandatory.";
     }
 
+    require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
     my ($error, $recordXMLs, $resultSetSize) = C4::Search::SimpleSearch("Control-number='$cn' and cni='$cni'");
     if ($error) {
         require Koha::Exception::Search;
@@ -4383,9 +4383,11 @@ sub _getComponentParts {
 
     my ($error, $componentPartRecordXMLs, $resultSetSize);
     if ($parentsField001 && $parentsField003) {
+        require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
         ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001 and cni=$parentsField003");
     }
     elsif ($parentsField001) {
+        require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
         ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn=$parentsField001");
     }
     else {
