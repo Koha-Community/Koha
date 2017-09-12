@@ -14552,6 +14552,15 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 17.05.05)\n";
 }
 
+$DBversion = '17.05.05.001';
+if( CheckVersion( $DBversion ) ) {
+    print q{WARNING: Bug 18811 fixed an inconsistency in the visibility settings for authority frameworks. It is recommended that you run script misc/maintenance/auth_show_hidden_data.pl to check if you have data in hidden fields and adjust your frameworks accordingly to prevent data loss when editing such records.};
+    print "\n";
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18811 - Visibility settings inconsistent between framework and authority editor)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
