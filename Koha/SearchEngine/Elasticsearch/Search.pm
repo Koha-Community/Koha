@@ -148,8 +148,10 @@ sub search_compat {
         $branches, $query_type,       $scan
     ) = @_;
     my %options;
+    if ( !defined $offset or $offset < 0 ) {
+        $offset = 0;
+    }
     $options{offset} = $offset;
-    $offset = 0 if $offset < 0;
     $options{expanded_facet} = $expanded_facet;
     my $results = $self->search($query, undef, $results_per_page, %options);
 
