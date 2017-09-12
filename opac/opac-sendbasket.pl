@@ -59,7 +59,7 @@ if ( $email_add ) {
     });
     my $email = Koha::Email->new();
     my $patron = Koha::Patrons->find( $borrowernumber );
-    my $user_email = GetFirstValidEmailAddress($borrowernumber)
+    my $user_email = $patron->first_valid_email_address
     || C4::Context->preference('KohaAdminEmailAddress');
 
     my $email_replyto = $patron->firstname . " " . $patron->surname . " <$user_email>";

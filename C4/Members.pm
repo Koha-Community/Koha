@@ -64,7 +64,6 @@ BEGIN {
         &GetPendingIssues
         &GetAllIssues
 
-        &GetFirstValidEmailAddress
         &GetNoticeEmailAddress
 
         &GetMemberAccountRecords
@@ -879,24 +878,6 @@ sub get_cardnumber_length {
     return ( $min, $max );
 }
 
-=head2 GetFirstValidEmailAddress
-
-  $email = GetFirstValidEmailAddress($borrowernumber);
-
-Return the first valid email address for a borrower, given the borrowernumber.  For now, the order 
-is defined as email, emailpro, B_email.  Returns the empty string if the borrower has no email 
-addresses.
-
-=cut
-
-sub GetFirstValidEmailAddress {
-    my $borrowernumber = shift;
-
-    my $borrower = Koha::Patrons->find( $borrowernumber );
-
-    return $borrower->first_valid_email_address();
-}
-
 =head2 GetNoticeEmailAddress
 
   $email = GetNoticeEmailAddress($borrowernumber);
@@ -912,7 +893,8 @@ sub GetNoticeEmailAddress {
     my $which_address = C4::Context->preference("AutoEmailPrimaryAddress");
     # if syspref is set to 'first valid' (value == OFF), look up email address
     if ( $which_address eq 'OFF' ) {
-        return GetFirstValidEmailAddress($borrowernumber);
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        return $patron->first_valid_email_address();
     }
     # specified email address field
     my $dbh = C4::Context->dbh;

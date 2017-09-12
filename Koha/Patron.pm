@@ -621,6 +621,12 @@ sub old_holds {
 
 =head3 first_valid_email_address
 
+my $first_valid_email_address = $patron->first_valid_email_address
+
+Return the first valid email address for a patron.
+For now, the order  is defined as email, emailpro, B_email.
+Returns the empty string if the borrower has no email addresses.
+
 =cut
 
 sub first_valid_email_address {
