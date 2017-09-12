@@ -107,7 +107,7 @@
     <div class="dialog alert">
         [% IF biblios_use_this_framework %]
             <h3>This framework cannot be deleted</h3>
-            <p><strong><span class="ex">[% framework.frameworktext |text %] ([% framework.frameworkcode %])</span></strong></p>
+            <p><strong><span class="ex">[% framework.frameworktext |html %] ([% framework.frameworkcode %])</span></strong></p>
             <p>The framework is used [% biblios_use_this_framework %] times.</p>
             <form action="/cgi-bin/koha/admin/biblio_framework.pl" method="get">
                 <button type="submit"><i class="fa fa-fw fa-arrow-left"></i> Return to frameworks</button>
