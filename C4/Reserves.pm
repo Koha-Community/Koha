@@ -1148,22 +1148,6 @@ sub IsAvailableForItemLevelRequest {
     }
 }
 
-=head2 OnShelfHoldsAllowed
-
-  OnShelfHoldsAllowed($itemtype,$borrowercategory,$branchcode);
-
-Checks issuingrules, using the borrowers categorycode, the itemtype, and branchcode to see if onshelf
-holds are allowed, returns true if so.
-
-=cut
-
-sub OnShelfHoldsAllowed {
-    my ($item, $borrower) = @_;
-
-    my $itype = _get_itype($item);
-    return _OnShelfHoldsAllowed($itype,$borrower->{categorycode},$item->{holdingbranch});
-}
-
 sub _get_itype {
     my $item = shift;
 
@@ -1189,13 +1173,6 @@ sub _get_itype {
         }
     }
     return $itype;
-}
-
-sub _OnShelfHoldsAllowed {
-    my ($itype,$borrowercategory,$branchcode) = @_;
-
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $borrowercategory, itemtype => $itype, branchcode => $branchcode });
-    return $issuing_rule ? $issuing_rule->onshelfholds : undef;
 }
 
 =head2 AlterPriority

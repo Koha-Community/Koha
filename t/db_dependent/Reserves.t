@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 58;
+use Test::More tests => 56;
 use Test::MockModule;
 use Test::Warn;
 
@@ -539,30 +539,6 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Res
 $item = GetItem($itemnumber);
 
 ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a book on item level" );
-
-my $itype = C4::Reserves::_get_itype($item);
-my $categorycode = $borrower->{categorycode};
-my $holdingbranch = $item->{holdingbranch};
-my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
-    {
-        categorycode => $categorycode,
-        itemtype     => $itype,
-        branchcode   => $holdingbranch
-    }
-);
-
-$dbh->do(
-    "UPDATE issuingrules SET onshelfholds = 1 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
-    undef,
-    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
-);
-ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
-$dbh->do(
-    "UPDATE issuingrules SET onshelfholds = 0 WHERE categorycode = ? AND itemtype= ? and branchcode = ?",
-    undef,
-    $issuing_rule->categorycode, $issuing_rule->itemtype, $issuing_rule->branchcode
-);
-ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
 
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
 #   hold from A pos 1, today, no fut holds: MoveReserve should fill it
