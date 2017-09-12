@@ -109,7 +109,8 @@ my %data = (
 );
 Koha::Patron::Categories->find($category_1)->set({ enrolmentfee => 0})->store;
 my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $borrower = $patron->unblessed;
 my $biblionumber   = $bibnum;
 my $barcode        = $testbarcode;
 
@@ -520,22 +521,21 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblio_with_no_item->{bibl
 ####### EO Bug 13113 <<<
        ####
 
-$item = Koha::Items->find($itemnumber)->unblessed;
+$item = Koha::Items->find($itemnumber);
 
-ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a book on item level" );
+ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $patron), "Reserving a book on item level" );
 
 my $pickup_branch = $builder->build({ source => 'Branch' })->{ branchcode };
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
 t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
-my ($item_object) = Koha::Biblios->find($biblionumber)->items->as_list;
 my $limit = Koha::Item::Transfer::Limit->new(
     {
         toBranch   => $pickup_branch,
-        fromBranch => $item_object->holdingbranch,
-        itemtype   => $item_object->effective_itemtype,
+        fromBranch => $item->holdingbranch,
+        itemtype   => $item->effective_itemtype,
     }
 )->store();
-is( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower, $pickup_branch), 0, "Item level request not available due to transfer limit" );
+is( C4::Reserves::IsAvailableForItemLevelRequest($item, $patron, $pickup_branch), 0, "Item level request not available due to transfer limit" );
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '0' );
 
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
@@ -643,10 +643,10 @@ subtest '_koha_notify_reserve() tests' => sub {
         })->{borrowernumber};
 
     C4::Reserves::AddReserve(
-        $item->{homebranch}, $hold_borrower,
-        $item->{biblionumber} );
+        $item->homebranch, $hold_borrower,
+        $item->biblionumber );
 
-    ModReserveAffect($item->{itemnumber}, $hold_borrower, 0);
+    ModReserveAffect($item->itemnumber, $hold_borrower, 0);
     my $sms_message_address = $schema->resultset('MessageQueue')->search({
             letter_code     => 'HOLD',
             message_transport_type => 'sms',

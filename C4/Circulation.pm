@@ -2686,16 +2686,16 @@ sub CanBookBeRenewed {
             # can be filled with available items. We can get the union of the sets simply
             # by pushing all the elements onto an array and removing the duplicates.
             my @reservable;
-            my %borrowers;
-            ITEM: foreach my $i (@itemnumbers) {
-                my $item = Koha::Items->find($i)->unblessed;
-                next if IsItemOnHoldAndFound($i);
-                for my $b (@borrowernumbers) {
-                    my $borr = $borrowers{$b} //= Koha::Patrons->find( $b )->unblessed;
-                    next unless IsAvailableForItemLevelRequest($item, $borr);
-                    next unless CanItemBeReserved($b,$i);
+            my %patrons;
+            ITEM: foreach my $itemnumber (@itemnumbers) {
+                my $item = Koha::Items->find( $itemnumber );
+                next if IsItemOnHoldAndFound( $itemnumber );
+                for my $borrowernumber (@borrowernumbers) {
+                    my $patron = $patrons{$borrowernumber} //= Koha::Patrons->find( $borrowernumber );
+                    next unless IsAvailableForItemLevelRequest($item, $patron);
+                    next unless CanItemBeReserved($borrowernumber,$itemnumber);
 
-                    push @reservable, $i;
+                    push @reservable, $itemnumber;
                     if (@reservable >= @borrowernumbers) {
                         $resfound = 0;
                         last ITEM;

@@ -1163,46 +1163,42 @@ and canreservefromotherbranches.
 =cut
 
 sub IsAvailableForItemLevelRequest {
-    my $item = shift;
-    my $borrower = shift;
-    my $pickup_branchcode = shift;
+    my ( $item, $patron, $pickup_branchcode ) = @_;
 
     my $dbh = C4::Context->dbh;
     # must check the notforloan setting of the itemtype
     # FIXME - a lot of places in the code do this
     #         or something similar - need to be
     #         consolidated
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
-    my $item_object = Koha::Items->find( $item->{itemnumber } );
-    my $itemtype = $item_object->effective_itemtype;
+    my $itemtype = $item->effective_itemtype;
     my $notforloan_per_itemtype = Koha::ItemTypes->find($itemtype)->notforloan;
 
     return 0 if
         $notforloan_per_itemtype ||
-        $item->{itemlost}        ||
-        $item->{notforloan} > 0  ||
-        $item->{withdrawn}        ||
-        ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
+        $item->itemlost        ||
+        $item->notforloan > 0  ||
+        $item->withdrawn        ||
+        ($item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
-    my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item_object, patron => $patron } );
+    my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
 
     if ($pickup_branchcode) {
         my $destination = Koha::Libraries->find($pickup_branchcode);
         return 0 unless $destination;
         return 0 unless $destination->pickup_location;
-        return 0 unless $item_object->can_be_transferred( { to => $destination } );
+        return 0 unless $item->can_be_transferred( { to => $destination } );
     }
 
     if ( $on_shelf_holds == 1 ) {
         return 1;
     } elsif ( $on_shelf_holds == 2 ) {
         my @items =
-          Koha::Items->search( { biblionumber => $item->{biblionumber} } );
+          Koha::Items->search( { biblionumber => $item->biblionumber } );
 
         my $any_available = 0;
 
         foreach my $i (@items) {
-            my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $borrower );
+            my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $patron->unblessed );
             my $branchitemrule = C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
 
             $any_available = 1
@@ -1214,12 +1210,12 @@ sub IsAvailableForItemLevelRequest {
               || ( $i->damaged
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
               || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
-              || $branchitemrule->{holdallowed} == 1 && $borrower->{branchcode} ne $i->homebranch;
+              || $branchitemrule->{holdallowed} == 1 && $patron->branchcode ne $i->homebranch;
         }
 
         return $any_available ? 0 : 1;
     } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
-        return $item->{onloan} || IsItemOnHoldAndFound( $item->{itemnumber} );
+        return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
 }
 

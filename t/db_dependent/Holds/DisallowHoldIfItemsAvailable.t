@@ -36,32 +36,31 @@ my $itemtype = $builder->build({
 t::lib::Mocks::mock_userenv({ branchcode => $library1->{branchcode} });
 
 
-my $borrower1 = $builder->build({
-    source => 'Borrower',
+my $patron1 = $builder->build_object({
+    class => 'Koha::Patrons',
+    value => {
+        branchcode => $library1->{branchcode},
+        dateexpiry => '3000-01-01',
+    }
+});
+my $borrower1 = $patron1->unblessed;
+
+my $patron2 = $builder->build_object({
+    class => 'Koha::Patrons',
     value => {
         branchcode => $library1->{branchcode},
         dateexpiry => '3000-01-01',
     }
 });
 
-my $borrower2 = $builder->build({
-    source => 'Borrower',
-    value => {
-        branchcode => $library1->{branchcode},
-        dateexpiry => '3000-01-01',
-    }
-});
-
-my $borrower3 = $builder->build({
-    source => 'Borrower',
+my $patron3 = $builder->build_object({
+    class => 'Koha::Patrons',
     value => {
         branchcode => $library2->{branchcode},
         dateexpiry => '3000-01-01',
     }
 });
 
-my $borrowernumber1 = $borrower1->{borrowernumber};
-my $borrowernumber2 = $borrower2->{borrowernumber};
 my $library_A = $library1->{branchcode};
 my $library_B = $library2->{branchcode};
 
@@ -72,18 +71,15 @@ my $item1  = $builder->build_sample_item({
     itype=>$itemtype,
     homebranch => $library_A,
     holdingbranch => $library_A
-})->unblessed;
+});
 my $item2  = $builder->build_sample_item({
     biblionumber=>$biblionumber,
     itype=>$itemtype,
     homebranch => $library_A,
     holdingbranch => $library_A
-})->unblessed;
+});
 
 # Test hold_fulfillment_policy
-
-
-
 my $rule = Koha::IssuingRule->new(
     {
         categorycode => '*',
@@ -97,20 +93,20 @@ my $rule = Koha::IssuingRule->new(
 );
 $rule->store();
 
-my $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+my $is = IsAvailableForItemLevelRequest( $item1, $patron1);
 is( $is, 0, "Item cannot be held, 2 items available" );
 
-my $issue1 = AddIssue( $borrower2, $item1->{barcode} );
+my $issue1 = AddIssue( $patron2->unblessed, $item1->barcode );
 
-$is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+$is = IsAvailableForItemLevelRequest( $item1, $patron1);
 is( $is, 0, "Item cannot be held, 1 item available" );
 
-AddIssue( $borrower2, $item2->{barcode} );
+AddIssue( $patron2->unblessed, $item2->barcode );
 
-$is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+$is = IsAvailableForItemLevelRequest( $item1, $patron1);
 is( $is, 1, "Item can be held, no items available" );
 
-AddReturn( $item1->{barcode} );
+AddReturn( $item1->barcode );
 
 { # Remove the issue for the first patron, and modify the branch for item1
     subtest 'IsAvailableForItemLevelRequest behaviours depending on ReservesControlBranch + holdallowed' => sub {
@@ -125,9 +121,7 @@ AddReturn( $item1->{barcode} );
         subtest 'Item is available at a different library' => sub {
             plan tests => 7;
 
-            $item1 = Koha::Items->find( $item1->{itemnumber} );
             $item1->set({homebranch => $library_B, holdingbranch => $library_B })->store;
-            $item1 = $item1->unblessed;
             #Scenario is:
             #One shelf holds is 'If all unavailable'/2
             #Item 1 homebranch library B is available
@@ -139,21 +133,21 @@ AddReturn( $item1->{barcode} );
                 $sth_insert_rule->execute( $hold_allowed_from_home_library );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 1, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at different library, not holdable = none available => the hold is allowed at item level" );
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower2);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron2);
                 is( $is, 1, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at home library, holdable = one available => the hold is not allowed at item level" );
                 $sth_insert_branch_rule->execute( $library_B, $hold_allowed_from_any_libraries );
                 #Adding a rule for the item's home library affects the availability for a borrower from another library because ReservesControlBranch is set to ItemHomeLibrary
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at different library, holdable = one available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 1, "Hold allowed from home library + ReservesControlBranch=PatronLibrary, One item is available at different library, not holdable = none available => the hold is allowed at item level" );
                 #Adding a rule for the patron's home library affects the availability for an item from another library because ReservesControlBranch is set to PatronLibrary
                 $sth_insert_branch_rule->execute( $library_A, $hold_allowed_from_any_libraries );
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from home library + ReservesControlBranch=PatronLibrary, One item is available at different library, holdable = one available => the hold is not allowed at item level" );
             }
 
@@ -162,11 +156,11 @@ AddReturn( $item1->{barcode} );
                 $sth_insert_rule->execute( $hold_allowed_from_any_libraries );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from any library + ReservesControlBranch=ItemHomeLibrary, One item is available at the diff library, holdable = 1 available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from any library + ReservesControlBranch=PatronLibrary, One item is available at the diff library, holdable = 1 available => the hold is not allowed at item level" );
             }
         };
@@ -174,9 +168,7 @@ AddReturn( $item1->{barcode} );
         subtest 'Item is available at the same library' => sub {
             plan tests => 4;
 
-            $item1 = Koha::Items->find( $item1->{itemnumber} );
             $item1->set({homebranch => $library_A, holdingbranch => $library_A })->store;
-            $item1 = $item1->unblessed;
             #Scenario is:
             #One shelf holds is 'If all unavailable'/2
             #Item 1 homebranch library A is available
@@ -190,11 +182,11 @@ AddReturn( $item1->{barcode} );
                 $sth_insert_rule->execute( $hold_allowed_from_home_library );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at the same library, holdable = 1 available  => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from home library + ReservesControlBranch=PatronLibrary, One item is available at the same library, holdable = 1 available  => the hold is not allowed at item level" );
             }
 
@@ -203,11 +195,11 @@ AddReturn( $item1->{barcode} );
                 $sth_insert_rule->execute( $hold_allowed_from_any_libraries );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from any library + ReservesControlBranch=ItemHomeLibrary, One item is available at the same library, holdable = 1 available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
-                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                $is = IsAvailableForItemLevelRequest( $item1, $patron1);
                 is( $is, 0, "Hold allowed from any library + ReservesControlBranch=PatronLibrary, One item is available at the same library, holdable = 1 available  => the hold is not allowed at item level" );
             }
         };
@@ -241,7 +233,7 @@ $rule = Koha::IssuingRule->new(
 );
 $rule->store();
 
-$is = IsAvailableForItemLevelRequest( $item3->unblessed, $borrower1);
+$is = IsAvailableForItemLevelRequest( $item3, $patron1);
 is( $is, 1, "Item can be held, items in transit are not available" );
 
 # Cleanup

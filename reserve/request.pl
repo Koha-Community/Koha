@@ -497,7 +497,7 @@ foreach my $biblionumber (@biblionumbers) {
                 if (
                        !$item->{cantreserve}
                     && !$exceeded_maxreserves
-                    && IsAvailableForItemLevelRequest($item, $patron_unblessed)
+                    && IsAvailableForItemLevelRequest($item_object, $patron)
                     && $can_item_be_reserved->{status} eq 'OK'
                   )
                 {

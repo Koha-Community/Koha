@@ -537,7 +537,7 @@ foreach my $biblioNum (@biblionumbers) {
 
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         $policy_holdallowed &&=
-            IsAvailableForItemLevelRequest($itemInfo,$patron_unblessed) &&
+            IsAvailableForItemLevelRequest($item, $patron) &&
             CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK';
 
         if ($policy_holdallowed) {
