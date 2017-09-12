@@ -89,12 +89,12 @@ $(document).ready(function() {
             <li>
                 <span class="label">Category</span>
                 <input type="hidden" name="op" value="add" />
-                <input type="hidden" name="category" value="[% category %]" /> [% category %]
+                <input type="hidden" name="category" value="[% category | html %]" /> [% category | html %]
             </li>
         <li>
             <label for="authorised_value">Authorized value: </label>
             [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
-            <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" class="focus" />
+            <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value | html %]" maxlength="80" class="focus" />
         </li>
         <li>
             <label for="lib">Description: </label>
@@ -156,7 +156,7 @@ $(document).ready(function() {
         [% END %]
         </fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="[% id %]" />
-        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category %]">Cancel</a></fieldset>
+        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category | url %]">Cancel</a></fieldset>
     </form>
 [% END %]
 
@@ -164,7 +164,7 @@ $(document).ready(function() {
 [% IF op == 'list' %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]"><i class="fa fa-plus"> </i> New authorized value for [% category |html %]</a>
+    <a id="addauth" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category | url %]"><i class="fa fa-plus"> </i> New authorized value for [% category |html %]</a>
     <a id="addcat" class="btn btn-default btn-sm" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form"><i class="fa fa-plus"> </i> New category</a>
 </div>
 
@@ -271,7 +271,7 @@ $(document).ready(function() {
 [% ELSE %]
 <tr>
 [% END %]
-	<td>[% loo.authorised_value %]</td>
+	<td>[% loo.authorised_value | html %]</td>
     <td>[% loo.lib |html %]</td>
     <td>[% loo.lib_opac |html %]</td>
 	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
