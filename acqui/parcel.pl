@@ -225,50 +225,52 @@ unless( defined $invoice->{closedate} ) {
     for (my $i = 0 ; $i < $countpendings ; $i++) {
         my $order = $pendingorders->[$i];
 
-        if ( $bookseller->invoiceincgst ) {
-            $order->{ecost} = $order->{ecost_tax_included};
-        } else {
-            $order->{ecost} = $order->{ecost_tax_excluded};
+        if ( defined $order->{biblionumber} ){ # if this biblio has been deleted and the orderline hasn't been cancelled
+            if ( $bookseller->invoiceincgst ) {
+                $order->{ecost} = $order->{ecost_tax_included};
+            } else {
+                    $order->{ecost} = $order->{ecost_tax_excluded};
+            }
+            $order->{total} = $order->{ecost} * $order->{quantity};
+
+            my %line = %$order;
+
+            $line{invoice} = $invoice;
+            $line{booksellerid} = $booksellerid;
+
+            my $biblionumber = $line{'biblionumber'};
+            my $biblio = Koha::Biblios->find( $biblionumber );
+            my $countbiblio = CountBiblioInOrders($biblionumber);
+            my $ordernumber = $line{'ordernumber'};
+            my @subscriptions = GetSubscriptionsId ($biblionumber);
+            my $itemcount   = $biblio->items->count;
+            my $holds_count = $biblio->holds->count;
+            my @items = GetItemnumbersFromOrder( $ordernumber );
+            my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
+    
+            my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
+            $line{suggestionid}         = $suggestion->{suggestionid};
+            $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
+            $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
+    
+            # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+            $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
+            $line{items}                = ($itemcount) - (scalar @items);
+            $line{left_item}            = 1 if $line{items} >= 1;
+            $line{left_biblio}          = 1 if $countbiblio > 1;
+            $line{biblios}              = $countbiblio - 1;
+            $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+            $line{subscriptions}        = scalar @subscriptions;
+            $line{left_holds}           = ($holds_count >= 1) ? 1 : 0;
+            $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+            $line{holds}                = $holds_count;
+            $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
+    
+            my $budget_name = GetBudgetName( $line{budget_id} );
+            $line{budget_name} = $budget_name;
+    
+            push @loop_orders, \%line;
         }
-        $order->{total} = $order->{ecost} * $order->{quantity};
-
-        my %line = %$order;
-
-        $line{invoice} = $invoice;
-        $line{booksellerid} = $booksellerid;
-
-        my $biblionumber = $line{'biblionumber'};
-        my $biblio = Koha::Biblios->find( $biblionumber );
-        my $countbiblio = CountBiblioInOrders($biblionumber);
-        my $ordernumber = $line{'ordernumber'};
-        my @subscriptions = GetSubscriptionsId ($biblionumber);
-        my $itemcount   = $biblio->items->count;
-        my $holds_count = $biblio->holds->count;
-        my @items = GetItemnumbersFromOrder( $ordernumber );
-        my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
-
-        my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
-        $line{suggestionid}         = $suggestion->{suggestionid};
-        $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
-        $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
-
-        # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
-        $line{items}                = ($itemcount) - (scalar @items);
-        $line{left_item}            = 1 if $line{items} >= 1;
-        $line{left_biblio}          = 1 if $countbiblio > 1;
-        $line{biblios}              = $countbiblio - 1;
-        $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
-        $line{subscriptions}        = scalar @subscriptions;
-        $line{left_holds}           = ($holds_count >= 1) ? 1 : 0;
-        $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
-        $line{holds}                = $holds_count;
-        $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
-
-        my $budget_name = GetBudgetName( $line{budget_id} );
-        $line{budget_name} = $budget_name;
-
-        push @loop_orders, \%line;
     }
 
     $template->param(
