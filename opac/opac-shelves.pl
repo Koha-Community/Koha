@@ -29,6 +29,7 @@ use C4::Output;
 use C4::Tags qw( get_tags );
 use C4::XSLT;
 
+use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
@@ -272,6 +273,7 @@ if ( $op eq 'view' ) {
                 my $this_item    = GetBiblioData($biblionumber);
                 my $record = GetMarcBiblio({ biblionumber => $biblionumber });
                 my $framework = GetFrameworkCode( $biblionumber );
+                my $biblio = Koha::Biblios->find( $biblionumber );
                 $record_processor->options({
                     interface => 'opac',
                     frameworkcode => $framework
@@ -315,8 +317,11 @@ if ( $op eq 'view' ) {
                     });
                 }
 
-                $this_item->{allow_onshelf_holds} = C4::Reserves::OnShelfHoldsAllowed($this_item, $patron);
-
+                my $items = $biblio->items;
+                while ( my $item = $items->next ) {
+                    $this_item->{allow_onshelf_holds} = C4::Reserves::OnShelfHoldsAllowed($item->unblessed, $patron);
+                    last if $this_item->{allow_onshelf_holds};
+                }
 
                 if ( grep {$_ eq $biblionumber} @cart_list) {
                     $this_item->{incart} = 1;
