@@ -55,6 +55,7 @@ my $guarantee = $builder->build(
 );
 
 t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees', '5.00' );
+t::lib::Mocks::mock_preference( 'AllowFineOverride', '' );
 
 my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
