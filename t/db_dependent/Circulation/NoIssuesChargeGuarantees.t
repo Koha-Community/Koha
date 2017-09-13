@@ -20,6 +20,7 @@ use Modern::Perl;
 use Test::More tests => 2;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Accounts qw( manualinvoice );
 use C4::Circulation qw( CanBookBeIssued );
@@ -53,7 +54,8 @@ my $guarantee = $builder->build(
     }
 );
 
-C4::Context->set_preference( 'NoIssuesChargeGuarantees', '5.00' );
+t::lib::Mocks::mock_preference( 'NoIssuesChargeGuarantees', '5.00' );
+t::lib::Mocks::mock_preference( 'AllowFineOverride', '' );
 
 my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
