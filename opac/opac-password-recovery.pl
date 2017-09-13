@@ -107,6 +107,10 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
                 DeleteExpiredPasswordRecovery( $borrower->borrowernumber );
             }
         }
+        # Set the $email, if we don't have one.
+        if ( !$hasError && !$email ) {
+            $email = $firstNonEmptyEmail;
+        }
     }
     else {    # 0 matching borrower
         $hasError           = 1;
