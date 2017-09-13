@@ -1542,7 +1542,7 @@ sub GetMarcFromISBN {
     my $sth            = $dbh->prepare("
         SELECT bm.metadata
         FROM biblioitems bi
-            LEFT JOIN biblio_metadata bm ON bi.biblioitemnumber = bm.biblioitemnumber
+            LEFT JOIN biblio_metadata bm ON bi.biblionumber = bm.biblionumber
         WHERE
             bi.isbn = ? AND
             bm.format = 'marcxml'
