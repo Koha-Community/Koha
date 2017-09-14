@@ -84,9 +84,9 @@ my $item2  = $builder->build_sample_item({
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
+        categorycode => undef,
         itemtype     => $itemtype,
-        branchcode   => '*',
+        branchcode   => undef,
         rules        => {
             issuelength     => 7,
             lengthunit      => 8,

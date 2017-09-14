@@ -1,0 +1,35 @@
+{
+  "/circulation-rules/kinds": {
+    "get": {
+      "x-mojo-controller": "Koha::REST::V1::CirculationRules",
+      "operationId": "get_kinds",
+      "tags": ["cities"],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A map of rule kind information",
+          "schema": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "../definitions.json#/circ-rule-kind"
+            }
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  }
+}

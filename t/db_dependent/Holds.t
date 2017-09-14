@@ -246,9 +246,9 @@ my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
   = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_biblio->biblionumber);
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        branchcode   => '*',
-        itemtype     => '*',
+        categorycode => undef,
+        branchcode   => undef,
+        itemtype     => undef,
         rules        => {
             reservesallowed  => 25,
             holds_per_record => 99,
@@ -257,8 +257,8 @@ Koha::CirculationRules->set_rules(
 );
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        branchcode   => undef,
         itemtype     => 'CANNOT',
         rules        => {
             reservesallowed  => 0,
@@ -365,9 +365,9 @@ ok(
 $dbh->do('DELETE FROM circulation_rules');
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        branchcode   => '*',
-        itemtype     => '*',
+        categorycode => undef,
+        branchcode   => undef,
+        itemtype     => undef,
         rules        => {
             reservesallowed  => 25,
             holds_per_record => 99,
@@ -378,7 +378,6 @@ Koha::CirculationRules->set_rules(
     {
         branchcode => $branch_1,
         itemtype   => 'CANNOT',
-        categorycode => undef,
         rules => {
             holdallowed => 0,
             returnbranch => 'homebranch',
@@ -389,7 +388,6 @@ Koha::CirculationRules->set_rules(
     {
         branchcode => $branch_1,
         itemtype   => 'CAN',
-        categorycode => undef,
         rules => {
             holdallowed => 1,
             returnbranch => 'homebranch',
@@ -433,8 +431,8 @@ $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
 
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        branchcode   => undef,
         itemtype     => 'ONLY1',
         rules        => {
             reservesallowed  => 1,
@@ -469,9 +467,9 @@ subtest 'Test max_holds per library/patron category' => sub {
         $biblio->biblionumber );
     Koha::CirculationRules->set_rules(
         {
-            categorycode => '*',
-            branchcode   => '*',
-            itemtype     => 'TEST',
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => $testitemtype,
             rules        => {
                 reservesallowed  => 99,
                 holds_per_record => 99,
@@ -493,7 +491,6 @@ subtest 'Test max_holds per library/patron category' => sub {
         {
             categorycode => $category->{categorycode},
             branchcode   => undef,
-            itemtype     => undef,
             rule_name    => 'max_holds',
             rule_value   => 3,
         }
@@ -503,7 +500,6 @@ subtest 'Test max_holds per library/patron category' => sub {
         {
             branchcode   => $branch_1,
             categorycode => $category->{categorycode},
-            itemtype     => undef,
             rule_name    => 'max_holds',
             rule_value   => 5,
         }

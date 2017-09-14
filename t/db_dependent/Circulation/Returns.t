@@ -60,9 +60,9 @@ my $builder = t::lib::TestBuilder->new();
 Koha::CirculationRules->search->delete;
 Koha::CirculationRules->set_rule(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rule_name    => 'issuelength',
         rule_value   => 1,
     }
@@ -256,9 +256,9 @@ subtest 'Handle ids duplication' => sub {
     t::lib::Mocks::mock_preference( 'finesMode', 'production' );
     Koha::CirculationRules->set_rules(
         {
-            categorycode => '*',
-            itemtype     => '*',
-            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
             rules        => {
                 chargeperiod => 1,
                 fine         => 1,

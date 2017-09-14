@@ -384,7 +384,7 @@ sub CanItemBeReserved {
         $holds_per_day    = $rights->{holds_per_day};
     }
     else {
-        $ruleitemtype = '*';
+        $ruleitemtype = undef;
     }
 
     my $holds = Koha::Holds->search(
@@ -419,15 +419,15 @@ sub CanItemBeReserved {
       C4::Context->preference('item-level_itypes')
       ? " AND COALESCE( items.itype, biblioitems.itemtype ) = ?"
       : " AND biblioitems.itemtype = ?"
-      if ( $ruleitemtype ne "*" );
+      if defined $ruleitemtype;
 
     my $sthcount = $dbh->prepare($querycount);
 
-    if ( $ruleitemtype eq "*" ) {
-        $sthcount->execute( $borrowernumber, $branchcode );
+    if ( defined $ruleitemtype ) {
+        $sthcount->execute( $borrowernumber, $branchcode, $ruleitemtype );
     }
     else {
-        $sthcount->execute( $borrowernumber, $branchcode, $ruleitemtype );
+        $sthcount->execute( $borrowernumber, $branchcode );
     }
 
     my $reservecount = "0";

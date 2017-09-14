@@ -193,9 +193,9 @@ $requesters{$branch_3} = Koha::Patron->new({
 $dbh->do('DELETE FROM circulation_rules');
 Koha::CirculationRules->set_rules(
     {
-        branchcode   => '*',
-        categorycode => '*',
-        itemtype     => '*',
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => undef,
         rules        => {
             reservesallowed => 25,
             holds_per_record => 1,
@@ -207,7 +207,6 @@ Koha::CirculationRules->set_rules(
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $branch_1,
-        categorycode => undef,
         itemtype     => undef,
         rules        => {
             holdallowed  => 1,
@@ -220,7 +219,6 @@ Koha::CirculationRules->set_rules(
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $branch_2,
-        categorycode => undef,
         itemtype     => undef,
         rules        => {
             holdallowed  => 2,

@@ -90,7 +90,6 @@ $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
         itemtype     => undef,
-        categorycode => undef,
         branchcode   => undef,
         rules        => {
             holdallowed             => 2,

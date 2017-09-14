@@ -99,13 +99,14 @@ my $patron = pop(@patrons);
 
 Koha::CirculationRules->set_rules(
     {
-        branchcode   => '*',
-        categorycode => '*',
+        branchcode   => undef,
+        categorycode => undef,
         itemtype     => $item->itype,
         rules        => {
             issuelength     => '14',
             lengthunit      => 'days',
             reservesallowed => '99',
+            holds_per_record => '99',
         }
     }
 );

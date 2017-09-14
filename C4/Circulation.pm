@@ -425,7 +425,7 @@ sub TooMany {
                                     SELECT itemtype FROM circulation_rules
                                     WHERE branchcode = ?
                                     AND   (categorycode = ? OR categorycode = ?)
-                                    AND   itemtype <> '*'
+                                    AND   itemtype IS NOT NULL
                                     AND   rule_name = 'maxissueqty'
                                   ) ";
             } else {
@@ -434,7 +434,7 @@ sub TooMany {
                                     SELECT itemtype FROM circulation_rules
                                     WHERE branchcode = ?
                                     AND   (categorycode = ? OR categorycode = ?)
-                                    AND   itemtype <> '*'
+                                    AND   itemtype IS NOT NULL
                                     AND   rule_name = 'maxissueqty'
                                   ) ";
             }
@@ -1553,38 +1553,38 @@ sub GetLoanLength {
         },
         {
             categorycode => $categorycode,
-            itemtype     => '*',
+            itemtype     => undef,
             branchcode   => $branchcode,
         },
         {
-            categorycode => '*',
+            categorycode => undef,
             itemtype     => $itemtype,
             branchcode   => $branchcode,
         },
         {
-            categorycode => '*',
-            itemtype     => '*',
+            categorycode => undef,
+            itemtype     => undef,
             branchcode   => $branchcode,
         },
         {
             categorycode => $categorycode,
             itemtype     => $itemtype,
-            branchcode   => '*',
+            branchcode   => undef,
         },
         {
             categorycode => $categorycode,
-            itemtype     => '*',
-            branchcode   => '*',
+            itemtype     => undef,
+            branchcode   => undef,
         },
         {
-            categorycode => '*',
+            categorycode => undef,
             itemtype     => $itemtype,
-            branchcode   => '*',
+            branchcode   => undef,
         },
         {
-            categorycode => '*',
-            itemtype     => '*',
-            branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
         },
     );
 

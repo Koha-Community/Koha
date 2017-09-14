@@ -364,12 +364,14 @@ subtest 'build_object() tests' => sub {
 
     $builder = t::lib::TestBuilder->new();
 
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
     my $categorycode = $builder->build( { source => 'Category' } )->{categorycode};
     my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
     my $issuing_rule = $builder->build_object(
         {   class => 'Koha::CirculationRules',
             value => {
+                branchcode   => $branchcode,
                 categorycode => $categorycode,
                 itemtype     => $itemtype
             }

@@ -154,7 +154,6 @@ Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch1->{branchcode},
         categorycode => $samplecat->{categorycode},
-        itemtype     => undef,
         rules        => {
             patron_maxissueqty       => 5,
             patron_maxonsiteissueqty => 6,
@@ -162,16 +161,24 @@ Koha::CirculationRules->set_rules(
     }
 );
 
+
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch2->{branchcode},
         categorycode => undef,
-        itemtype     => undef,
         rules        => {
             patron_maxissueqty       => 3,
             patron_maxonsiteissueqty => 2,
-            holdallowed              => 1,
-            returnbranch             => 'holdingbranch',
+        }
+    }
+);
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => $samplebranch2->{branchcode},
+        itemtype     => undef,
+        rules        => {
+            holdallowed       => 1,
+            returnbranch      => 'holdingbranch',
         }
     }
 );
@@ -180,12 +187,19 @@ Koha::CirculationRules->set_rules(
     {
         branchcode   => undef,
         categorycode => undef,
-        itemtype     => undef,
         rules        => {
             patron_maxissueqty       => 4,
             patron_maxonsiteissueqty => 5,
-            holdallowed              => 3,
-            returnbranch             => 'homebranch',
+        }
+    }
+);
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => undef,
+        itemtype     => undef,
+        rules        => {
+            holdallowed       => 3,
+            returnbranch      => 'homebranch',
         }
     }
 );
@@ -193,7 +207,6 @@ Koha::CirculationRules->set_rules(
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch1->{branchcode},
-        categorycode => undef,
         itemtype     => $sampleitemtype1->{itemtype},
         rules        => {
             holdallowed       => 5,
@@ -204,7 +217,6 @@ Koha::CirculationRules->set_rules(
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch2->{branchcode},
-        categorycode => undef,
         itemtype     => $sampleitemtype1->{itemtype},
         rules        => {
             holdallowed       => 5,
@@ -215,7 +227,6 @@ Koha::CirculationRules->set_rules(
 Koha::CirculationRules->set_rules(
     {
         branchcode   => $samplebranch2->{branchcode},
-        categorycode => undef,
         itemtype     => $sampleitemtype2->{itemtype},
         rules        => {
             holdallowed       => 5,

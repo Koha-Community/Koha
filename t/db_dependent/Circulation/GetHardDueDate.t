@@ -8,7 +8,9 @@ use Koha::DateUtils;
 use Koha::CirculationRules;
 use Koha::Library;
 
-use Test::More tests => 8;
+use t::lib::TestBuilder;
+
+use Test::More tests => 10;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -103,6 +105,10 @@ $dbh->do(
     $samplecat->{category_type}
 );
 
+my $builder = t::lib::TestBuilder->new;
+my $sampleitemtype1 = $builder->build({ source => 'Itemtype' })->{itemtype};
+my $sampleitemtype2 = $builder->build({ source => 'Itemtype' })->{itemtype};
+
 #Begin Tests
 
 my $default = {
@@ -115,11 +121,8 @@ my $default = {
 my $sampleissuingrule1 = {
     branchcode   => $samplebranch1->{branchcode},
     categorycode => $samplecat->{categorycode},
-    itemtype     => 'BOOK',
+    itemtype     => $sampleitemtype1,
     rules        => {
-        reservecharge                    => 0,
-        restrictedtype                   => 0,
-        accountsent                      => 0,
         finedays                         => 0,
         lengthunit                       => 'days',
         renewalperiod                    => 5,
@@ -151,7 +154,7 @@ my $sampleissuingrule1 = {
 my $sampleissuingrule2 = {
     branchcode   => $samplebranch2->{branchcode},
     categorycode => $samplecat->{categorycode},
-    itemtype     => 'BOOK',
+    itemtype     => $sampleitemtype1,
     rules        => {
         renewalsallowed               => 0,
         renewalperiod                 => 2,
@@ -169,9 +172,6 @@ my $sampleissuingrule2 = {
         chargeperiod_charge_at        => 0,
         rentaldiscount                => 2.00,
         overduefinescap               => undef,
-        accountsent                   => undef,
-        reservecharge                 => undef,
-        restrictedtype                => undef,
         maxsuspensiondays             => 0,
         onshelfholds                  => 1,
         opacitemholds                 => 'Y',
@@ -183,7 +183,7 @@ my $sampleissuingrule2 = {
 my $sampleissuingrule3 = {
     branchcode   => $samplebranch1->{branchcode},
     categorycode => $samplecat->{categorycode},
-    itemtype     => 'DVD',
+    itemtype     => $sampleitemtype2,
     rules        => {
         renewalsallowed               => 0,
         renewalperiod                 => 3,
@@ -201,9 +201,6 @@ my $sampleissuingrule3 = {
         chargeperiod_charge_at        => 0,
         rentaldiscount                => 3.00,
         overduefinescap               => undef,
-        accountsent                   => undef,
-        reservecharge                 => undef,
-        restrictedtype                => undef,
         maxsuspensiondays             => 0,
         onshelfholds                  => 1,
         opacitemholds                 => 'F',
@@ -221,7 +218,7 @@ Koha::CirculationRules->set_rules( $sampleissuingrule3 );
 is_deeply(
     C4::Circulation::GetLoanLength(
         $samplecat->{categorycode},
-        'BOOK', $samplebranch1->{branchcode}
+        $sampleitemtype1, $samplebranch1->{branchcode}
     ),
     { issuelength => 5, lengthunit => 'days', renewalperiod => 5 },
     "GetLoanLength"
@@ -243,12 +240,12 @@ is_deeply(
     "With only one parameter, GetLoanLength returns hardcoded values"
 );    #NOTE : is that really what is expected?
 is_deeply(
-    C4::Circulation::GetLoanLength( $samplecat->{categorycode}, 'BOOK' ),
+    C4::Circulation::GetLoanLength( $samplecat->{categorycode}, $sampleitemtype1 ),
     $default,
     "With only two parameters, GetLoanLength returns hardcoded values"
 );    #NOTE : is that really what is expected?
 is_deeply(
-    C4::Circulation::GetLoanLength( $samplecat->{categorycode}, 'BOOK', $samplebranch1->{branchcode} ),
+    C4::Circulation::GetLoanLength( $samplecat->{categorycode}, $sampleitemtype1, $samplebranch1->{branchcode} ),
     {
         issuelength   => 5,
         renewalperiod => 5,
@@ -259,7 +256,7 @@ is_deeply(
 
 #Test GetHardDueDate
 my @hardduedate = C4::Circulation::GetHardDueDate( $samplecat->{categorycode},
-    'BOOK', $samplebranch1->{branchcode} );
+    $sampleitemtype1, $samplebranch1->{branchcode} );
 is_deeply(
     \@hardduedate,
     [

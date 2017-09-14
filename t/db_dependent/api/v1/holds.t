@@ -117,9 +117,9 @@ $dbh->do('DELETE FROM reserves');
 Koha::CirculationRules->search()->delete();
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        branchcode   => '*',
-        itemtype     => '*',
+        categorycode => undef,
+        branchcode   => undef,
+        itemtype     => undef,
         rules        => {
             reservesallowed => 1,
             holds_per_record => 99

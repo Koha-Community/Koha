@@ -8,19 +8,19 @@
 [% USE CirculationRules %]
 [% SET footerjs = 1 %]
 
-[% SET branchcode = humanbranch || '*' %]
+[% SET branchcode = humanbranch || undef %]
 
 [% SET categorycodes = [] %]
 [% FOREACH pc IN patron_categories %]
     [% categorycodes.push( pc.id ) %]
 [% END %]
-[% categorycodes.push('*') %]
+[% categorycodes.push(undef) %]
 
 [% SET itemtypes = [] %]
 [% FOREACH i IN itemtypeloop %]
     [% itemtypes.push( i.itemtype ) %]
 [% END %]
-[% itemtypes.push('*') %]
+[% itemtypes.push(undef) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
@@ -162,18 +162,22 @@
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count %]">
                                     <td>
-                                        [% IF c == '*' %]
+                                        [% IF c == undef %]
                                             <em>All</em>
                                         [% ELSE %]
                                             [% Categories.GetName(c) %]
                                         [% END %]
                                     </td>
                                     <td>
-                                        [% IF i == '*' %]
+                                        [% IF i == undef %]
                                             <em>All</em>
                                         [% ELSE %]
                                             [% ItemTypes.GetDescription(i) %]
                                         [% END %]
+                                    </td>
+                                    <td class="actions">
+                                      <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' %]&amp;categorycode=[% rule.categorycode || '*' %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                                     <td>
                                         [% IF rule.note %]
@@ -288,7 +292,7 @@
                                     <td>[% rentaldiscount %]</td>
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype | uri %]&amp;categorycode=[% rule.categorycode | uri %]&amp;branch=[% rule.current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | uri %]&amp;categorycode=[% rule.categorycode || '*' | uri %]&amp;branch=[% rule.current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                             </tr>
                         [% END %]
@@ -625,6 +629,7 @@
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH c IN categorycodes %]
+                    [% NEXT UNLESS c %]
                     [% SET patron_maxissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxissueqty' ) %]
                     [% SET patron_maxonsiteissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
                     [% SET max_holds = CirculationRules.Search( branchcode, c, undef, 'max_holds' ) %]
@@ -632,7 +637,7 @@
                     [% IF  ( patron_maxissueqty.defined && patron_maxissueqty != '' ) || ( patron_maxonsiteissueqty.defined && patron_maxonsiteissueqty != '' ) || ( max_holds.defined && max_holds != '' ) %]
                     <tr>
                         <td>
-                            [% IF c == '*'%]
+                            [% IF c == undef %]
                                 <em>Default</em>
                             [% ELSE %]
                                 [% Categories.GetName(c) | html %]

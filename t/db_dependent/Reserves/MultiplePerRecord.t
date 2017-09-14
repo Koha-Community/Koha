@@ -120,9 +120,9 @@ Koha::CirculationRules->delete();
 # Test GetMaxPatronHoldsForRecord and GetHoldRule
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             reservesallowed  => 1,
             holds_per_record => 1,
@@ -139,17 +139,17 @@ my $rule = C4::Reserves::GetHoldRule(
     $itemtype1->{itemtype},
     $library->{branchcode}
 );
-is( $rule->{categorycode},     '*', 'Got rule with universal categorycode' );
-is( $rule->{itemtype},         '*', 'Got rule with universal itemtype' );
-is( $rule->{branchcode},       '*', 'Got rule with universal branchcode' );
+is( $rule->{categorycode},     undef, 'Got rule with universal categorycode' );
+is( $rule->{itemtype},         undef, 'Got rule with universal itemtype' );
+is( $rule->{branchcode},       undef, 'Got rule with universal branchcode' );
 is( $rule->{reservesallowed},  1,   'Got reservesallowed of 1' );
 is( $rule->{holds_per_record}, 1,   'Got holds_per_record of 1' );
 
 Koha::CirculationRules->set_rules(
     {
         categorycode => $category->{categorycode},
-        itemtype     => '*',
-        branchcode   => '*',
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             reservesallowed  => 2,
             holds_per_record => 2,
@@ -165,8 +165,8 @@ $rule = C4::Reserves::GetHoldRule(
     $library->{branchcode}
 );
 is( $rule->{categorycode},     $category->{categorycode}, 'Got rule with specific categorycode' );
-is( $rule->{itemtype},         '*',                       'Got rule with universal itemtype' );
-is( $rule->{branchcode},       '*',                       'Got rule with universal branchcode' );
+is( $rule->{itemtype},         undef,                       'Got rule with universal itemtype' );
+is( $rule->{branchcode},       undef,                       'Got rule with universal branchcode' );
 is( $rule->{reservesallowed},  2,                         'Got reservesallowed of 2' );
 is( $rule->{holds_per_record}, 2,                         'Got holds_per_record of 2' );
 
@@ -174,7 +174,7 @@ Koha::CirculationRules->set_rules(
     {
         categorycode => $category->{categorycode},
         itemtype     => $itemtype1->{itemtype},
-        branchcode   => '*',
+        branchcode   => undef,
         rules        => {
             reservesallowed  => 3,
             holds_per_record => 3,
@@ -191,7 +191,7 @@ $rule = C4::Reserves::GetHoldRule(
 );
 is( $rule->{categorycode},     $category->{categorycode}, 'Got rule with specific categorycode' );
 is( $rule->{itemtype},         $itemtype1->{itemtype},    'Got rule with universal itemtype' );
-is( $rule->{branchcode},       '*',                       'Got rule with universal branchcode' );
+is( $rule->{branchcode},       undef,                       'Got rule with universal branchcode' );
 is( $rule->{reservesallowed},  3,                         'Got reservesallowed of 3' );
 is( $rule->{holds_per_record}, 3,                         'Got holds_per_record of 3' );
 
@@ -199,7 +199,7 @@ Koha::CirculationRules->set_rules(
     {
         categorycode => $category->{categorycode},
         itemtype     => $itemtype2->{itemtype},
-        branchcode   => '*',
+        branchcode   => undef,
         rules        => {
             reservesallowed  => 4,
             holds_per_record => 4,
@@ -216,7 +216,7 @@ $rule = C4::Reserves::GetHoldRule(
 );
 is( $rule->{categorycode},     $category->{categorycode}, 'Got rule with specific categorycode' );
 is( $rule->{itemtype},         $itemtype2->{itemtype},    'Got rule with universal itemtype' );
-is( $rule->{branchcode},       '*',                       'Got rule with universal branchcode' );
+is( $rule->{branchcode},       undef,                       'Got rule with universal branchcode' );
 is( $rule->{reservesallowed},  4,                         'Got reservesallowed of 4' );
 is( $rule->{holds_per_record}, 4,                         'Got holds_per_record of 4' );
 
@@ -273,9 +273,9 @@ $hold->delete();
 # Test multi-hold via AddReserve
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             reservesallowed  => 2,
             holds_per_record => 2,

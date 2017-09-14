@@ -319,9 +319,9 @@ is_deeply(
 # Add a default rule: renewal is allowed
 Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             renewalsallowed => 3,
         }

@@ -107,7 +107,7 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
         {
             branchcode   => $branch->{branchcode},
             categorycode => $category->{categorycode},
-            itemtype     => '*',
+            itemtype     => undef,
             rules        => {
                 maxissueqty       => 0,
                 maxonsiteissueqty => 0,
@@ -219,7 +219,7 @@ subtest '1 Issuingrule exist 1 1: issue is allowed' => sub {
         {
             branchcode   => $branch->{branchcode},
             categorycode => $category->{categorycode},
-            itemtype     => '*',
+            itemtype     => undef,
             rules        => {
                 maxissueqty       => 1,
                 maxonsiteissueqty => 1,
@@ -259,7 +259,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
         {
             branchcode   => $branch->{branchcode},
             categorycode => $category->{categorycode},
-            itemtype     => '*',
+            itemtype     => undef,
             rules        => {
                 maxissueqty       => 1,
                 maxonsiteissueqty => 1,
@@ -315,7 +315,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
         {
             branchcode   => $branch->{branchcode},
             categorycode => $category->{categorycode},
-            itemtype     => '*',
+            itemtype     => undef,
             rules        => {
                 maxissueqty       => 1,
                 maxonsiteissueqty => 1,

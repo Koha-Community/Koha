@@ -75,7 +75,6 @@ my $itemnumber =
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
-        categorycode => undef,
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
@@ -107,7 +106,6 @@ Koha::Holds->find( $reserve_id )->cancel;
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
-        categorycode => undef,
         branchcode   => undef,
         itemtype     => undef,
         rules        => {
@@ -139,7 +137,6 @@ Koha::Holds->find( $reserve_id )->cancel;
 $dbh->do("DELETE FROM circulation_rules");
 Koha::CirculationRules->set_rules(
     {
-        categorycode => undef,
         branchcode   => undef,
         itemtype     => undef,
         rules        => {

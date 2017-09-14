@@ -17,9 +17,9 @@ $dbh->do(q|DELETE FROM circulation_rules|);
 
 my $issuingrule = Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             fine                   => 1,
             finedays               => 0,
@@ -44,11 +44,11 @@ $period_end = dt_from_string('2000-01-10');
 is( $fine, 1, '9 days overdue, charge period 7 days, charge at end of interval gives fine of $1' );
 
 # Test charging fine at the *beginning* of each charge period
-my $issuingrule = Koha::CirculationRules->set_rules(
+$issuingrule = Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
         rules        => {
             chargeperiod_charge_at => 1,
         }
