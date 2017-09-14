@@ -65,10 +65,10 @@ my ($template, $loggedinuser, $cookie);
 
 if($ok){
     # get biblio information....
-    my $biblionumber = $subs->{'biblionumber'};
+    my $biblionumber = $subs->{'bibnum'};
     my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblionumber);
-	my @itemresults = GetItemsInfo( $subs->{biblionumber} );
-	my $branch = $itemresults[0]->{'holdingbranch'};
+    my @itemresults = GetItemsInfo( $subs->{bibnum} );
+    my $branch = scalar @itemresults ? $itemresults[0]->{'holdingbranch'} : $subs->{branchcode};
     my $branchname = Koha::Libraries->find($branch)->branchname;
 
 	if (C4::Context->preference('RoutingListAddReserves')){
