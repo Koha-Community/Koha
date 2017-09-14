@@ -4,7 +4,7 @@
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
             [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                 [% IF ( AllowOnShelfHolds OR ItemsIssued ) %]
-                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber | html %]">Place hold</a></li>
+                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber %]">Place hold</a></li>
                 [% END %]
             [% END %]
         [% END %]
@@ -14,21 +14,21 @@
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF Koha.Preference('ArticleRequests') %]
-            <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblionumber | html %]">Request article</a></li>
+            <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber %]">Request article</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
-            <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber | html %]">Save to your lists</a></li>
+            <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblio.biblionumber %]">Save to your lists</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
         [% IF ( incart ) %]
-            <li><a class="incart cart[% biblionumber | html %] addrecord" href="#">In your cart</a> <a class="cartRemove cartR[% biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a class="incart cart[% biblio.biblionumber %] addrecord" href="#">In your cart</a> <a class="cartRemove cartR[% biblio.biblionumber %]" href="#">(remove)</a></li>
         [% ELSE %]
-            <li><a class="addtocart cart[% biblionumber | html %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a class="addtocart cart[% biblio.biblionumber %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblio.biblionumber %]" href="#">(remove)</a></li>
         [% END %]
     [% END %]
 
@@ -51,7 +51,7 @@
                                     <li><a role="menuitem" href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
                                 [% ELSE %]
                                 <li>
-                                    <a role="menuitem" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblionumber | html %]&amp;format=[% option %]">
+                                    <a role="menuitem" href="/cgi-bin/koha/opac-export.pl?op=export&amp;bib=[% biblio.biblionumber %]&amp;format=[% option %]">
                                         [% SWITCH option %]
                                             [% CASE 'bibtex' %]BIBTEX
                                             [% CASE 'endnote' %]EndNote
@@ -107,7 +107,7 @@
                 <label class="label_dc" for="input-srw">SRW-DC</label>
                 <br>
         <input type="hidden" name="op" value="export">
-        <input type="hidden" name="bib" value="[% biblionumber | html %]">
+        <input type="hidden" name="bib" value="[% biblio.biblionumber %]">
         </fieldset>
     </div>
     <div class="modal-footer">
