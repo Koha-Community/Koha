@@ -55,7 +55,7 @@ use C4::Koha;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
-
+use Koha::Biblios;
 
 my $query = CGI->new();
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -70,6 +70,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = int($biblionumber);
+
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
@@ -185,7 +187,7 @@ $template->param(
     AllowOnShelfHolds   => $allow_onshelf_holds,
     norequests   => $norequests,
     ISBD         => $res,
-    biblionumber => $biblionumber,
+    biblio       => $biblio,
 );
 
 #Search for title in links

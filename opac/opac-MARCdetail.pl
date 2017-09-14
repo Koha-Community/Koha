@@ -349,7 +349,7 @@ $template->param(
     item_loop           => \@item_loop,
     item_header_loop    => \@item_header_loop,
     item_subfield_codes => \@item_subfield_codes,
-    biblionumber        => $biblionumber,
+    biblio              => $biblio,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

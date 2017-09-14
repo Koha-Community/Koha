@@ -57,7 +57,7 @@
 
                     <div id="bookcover">
                     [% IF ( OPACLocalCoverImages ) %]
-                        <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
+                        <div title="[% biblionumber |url %]" class="[% biblio.biblionumber %]" id="local-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
                         [% IF ( OPACURLOpenInNewWindow ) %]
@@ -105,15 +105,15 @@
                     [% END %]
                     </div><!-- / #bookcover -->
 
-                    <abbr class="unapi-id" title="koha:biblionumber:[% biblionumber | html %]"><!-- unAPI --></abbr>
+                    <abbr class="unapi-id" title="koha:biblionumber:[% biblio.biblionumber %]"><!-- unAPI --></abbr>
                     [% IF ( ocoins ) # COinS / Openurl %]
                         <span class="Z3988" title="[% ocoins %]"></span>
                     [% END %]
 
                     <div id="views">
                         <span class="view current-view"><span id="Normalview">Normal view</span></span>
-                        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber | html %]">MARC view</a></span>
-                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber | html %]">ISBD view</a></span>[% END %]
+                        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber %]">MARC view</a></span>
+                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber %]">ISBD view</a></span>[% END %]
                     </div>
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc %]
@@ -409,16 +409,16 @@
                             [% END %]
                             [% IF ( TagsInputEnabled ) %]
                                 [% IF ( loggedinusername ) %]
-                                    <form id="tagform[% biblionumber | html %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
-                                        <label for="newtag[% biblionumber | html %]">New tag(s), separated by a comma:</label>
-                                        <input name="newtag[% biblionumber | html %]" id="newtag[% biblionumber | html %]" maxlength="100" type="text"/>
-                                        <input name="tagbutton" class="btn btn-small tagbutton" title="[% biblionumber | html %]" type="submit" value="Add" />
-                                        <a class="cancel_tag_add" id="cancel[% biblionumber | html %]" href="#">(done)</a>
+                                    <form id="tagform[% biblio.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
+                                        <label for="newtag[% biblio.biblionumber %]">New tag(s), separated by a comma:</label>
+                                        <input name="newtag[% biblio.biblionumber %]" id="newtag[% biblio.biblionumber %]" maxlength="100" type="text"/>
+                                        <input name="tagbutton" class="btn btn-small tagbutton" title="[% biblio.biblionumber %]" type="submit" value="Add" />
+                                        <a class="cancel_tag_add" id="cancel[% biblio.biblionumber %]" href="#">(done)</a>
                                     </form>
-                                    <span id="newtag[% biblionumber | html %]_status" class="tagstatus" style="display:none;">
+                                    <span id="newtag[% biblio.biblionumber %]_status" class="tagstatus" style="display:none;">
                                         Tag status here.
                                     </span>
-                                    <a class="tag_add" id="tag_add[% biblionumber | html %]" href="#">Add tag(s)</a>
+                                    <a class="tag_add" id="tag_add[% biblio.biblionumber %]" href="#">Add tag(s)</a>
                                 [% ELSE %]
                                     <span id="login4tags">
                                         [% IF Koha.Preference('casAuthentication') %]
@@ -498,7 +498,7 @@
 
                                 <!-- define some hidden vars for ratings -->
 
-                                <input  type="hidden" name='biblionumber'  value="[% biblionumber | html %]" />
+                                <input  type="hidden" name='biblionumber'  value="[% biblio.biblionumber %]" />
                                 <input  type="hidden" name='rating_value' id='rating_value' value="[% my_rating.rating_value %]" />
 
                                 [% UNLESS ( rating_readonly ) %]&nbsp;  <input name="rate_button" type="submit" value="Rate me" />[% END %]&nbsp;
@@ -652,7 +652,7 @@
 
                     <div id="holdings">
                         [% IF too_many_items %]
-                            <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]&amp;viewallitems=1">Click here to view them all.</a></p>
+                            <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber %]&amp;viewallitems=1">Click here to view them all.</a></p>
                         [% ELSIF ( itemloop.size ) %]
                             [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
                             [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
@@ -881,7 +881,7 @@
                                     </table>
                                 [% END # / IF subscription.latestserials %]
                             [% END # / FOREACH subscriptions %]
-                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblionumber | html %]">More details</a></p>
+                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber %]">More details</a></p>
                         </div> <!-- / #subscriptions -->
                     [% END # IF subscriptionsnumber %]
 
@@ -967,7 +967,7 @@
 
                                 [% IF ( loggedinusername ) %]
                                     [% UNLESS ( loggedincommenter ) %]
-                                       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblionumber | html %]'); return false;">
+                                       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber %]'); return false;">
                                             Post your comments on this item.
                                         </a></div>
                                     [% END %]
@@ -1040,7 +1040,7 @@
                                 <p>Click on an image to view it in the image viewer</p>
                                 [% FOREACH image IN localimages %]
                                     [% IF image %]
-                                        <a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | html %]&amp;imagenumber=[% image %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image %]" /></a>
+                                        <a class="localimage" href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblio.biblionumber %]&amp;imagenumber=[% image %]"><img alt="" src="/cgi-bin/koha/opac-image.pl?thumbnail=1&amp;imagenumber=[% image %]" /></a>
                                     [% END %]
                                 [% END %]
                             </div><!-- / #images -->
@@ -1665,7 +1665,7 @@
               $.post("/cgi-bin/koha/opac-ratings-ajax.pl", {
                 rating_old_value: $("#rating_value").attr("value"),
                 borrowernumber: "[% borrowernumber %]",
-                biblionumber: "[% biblionumber | html %]",
+                biblionumber: "[% biblio.biblionumber %]",
                 rating_value: value,
                 auth_error: value
               }, function (data) {

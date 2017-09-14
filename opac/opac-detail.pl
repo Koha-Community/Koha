@@ -78,6 +78,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
 $biblionumber = int($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 my @all_items = GetItemsInfo($biblionumber);
 my @hiddenitems;
@@ -136,7 +137,7 @@ if (C4::Context->preference('OpacSuppression')) {
     }
 }
 
-$template->param( biblionumber => $biblionumber );
+$template->param( biblio => $biblio );
 
 # get biblionumbers stored in the cart
 my @cart_list;
@@ -603,7 +604,6 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
 }
 my $has_hold;
 if ( $show_holds_count || $show_priority) {
-    my $biblio = Koha::Biblios->find( $biblionumber );
     my $holds = $biblio->holds;
     $template->param( holds_count  => $holds->count );
     while ( my $hold = $holds->next ) {
