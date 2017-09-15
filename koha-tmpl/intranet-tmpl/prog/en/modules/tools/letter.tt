@@ -580,7 +580,7 @@
                 page += '&is_html='+encodeURIComponent(is_html);
                 $("#preview_template .modal-body").load(page);
                 $('#preview_template').modal('show');
-                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?module="+module+"&code="+code+"&mtt="+mtt+"&lang="+lang);
+                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?code="+code+"&mtt="+mtt+"&lang="+lang);
             });
             $("#preview_template").on("hidden", function(){
                 $("#preview_template_label").html("");
@@ -605,7 +605,7 @@
                 page += '&is_html='+encodeURIComponent(is_html);
                 $("#preview_template .modal-body").load(page + " div");
                 $('#preview_template').modal('show');
-                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?module="+module+"&code="+code+"&branchcode="+branchcode+"&mtt="+mtt+"&lang="+lang);
+                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?code="+code+"&branchcode="+branchcode+"&mtt="+mtt+"&lang="+lang);
             });
             $("#convert_template").on("hidden", function(){
                 $("#convert_template_label").html("");
