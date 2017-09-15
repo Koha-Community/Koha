@@ -44,7 +44,8 @@ my $sub_length;
 
 # Permission needed if it is a modification : edit_subscription
 # Permission needed otherwise (nothing or dup) : create_subscription
-my $permission = ($op eq "modify") ? "edit_subscription" : "create_subscription";
+my $permission =
+  ( $op eq 'modify' || $op eq 'modsubscription' ) ? "edit_subscription" : "create_subscription";
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tt",
