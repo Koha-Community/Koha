@@ -18,6 +18,7 @@
 package Koha::Email;
 
 use Modern::Perl;
+use Email::Valid;
 
 use base qw(Class::Accessor);
 use C4::Context;
@@ -49,6 +50,14 @@ sub create_message_headers {
         From    => $params->{from},
         charset => $params->{charset}
     );
+
+    if (C4::Context->preference('SendAllEmailsTo') && Email::Valid->address(C4::Context->preference('SendAllEmailsTo'))) {
+        $mail{'To'} = C4::Context->preference('SendAllEmailsTo');
+    }
+    else {
+        $mail{'Cc'} = $params->{cc};
+    }
+
     if ( C4::Context->preference('ReplytoDefault') ) {
         $params->{replyto} ||= C4::Context->preference('ReplytoDefault');
     }

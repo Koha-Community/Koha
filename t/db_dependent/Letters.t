@@ -233,6 +233,7 @@ is( $letter14206_c->{message_transport_type}, 'print', 'Bug 14206 - correct mtt 
 
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
+t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
 
 my $sms_content = 'This is a SMS for an <<status>>';
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,'my title',?,'sms')|, undef, $library->{branchcode}, $sms_content );
@@ -497,7 +498,17 @@ $err2 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
 is($err2, 1, "Successfully sent serial notification");
 is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
+
+t::lib::Mocks::mock_preference( 'SendAllEmailsTo', 'robert.tables@mail.com' );
+
+my $err3;
+warning_is {
+$err3 = SendAlerts( 'issue', $serial->{serialid}, 'RLIST' ) }
+    "Fake sendmail",
+    "SendAlerts is using the mocked sendmail routine";
+is($mail{'To'}, 'robert.tables@mail.com', "mailto address overwritten by SendAllMailsTo preference");
 }
+t::lib::Mocks::mock_preference( 'SendAllEmailsTo', '' );
 
 subtest 'SendAlerts - claimissue' => sub {
     plan tests => 8;

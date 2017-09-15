@@ -1,4 +1,4 @@
-INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free'),` ) VALUES
 ('AccountAutoReconcile','0',NULL,'If enabled, patron balances will get reconciled automatically on each transaction.','YesNo'),
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
 ('AcqEnableFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo'),
@@ -531,6 +531,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SelfCheckoutByLogin','1',NULL,'Have patrons login into the web-based self checkout system with their username/password or their cardnumber','YesNo'),
 ('SelfCheckReceiptPrompt','1','NULL','If ON, print receipt dialog pops up when self checkout is finished','YesNo'),
 ('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),
+('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
 ('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
 ('SessionRestrictionByIP','1','Check for change in remote IP address for session security. Disable only when remote IP address changes frequently.','','YesNo'),

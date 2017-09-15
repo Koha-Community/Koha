@@ -480,18 +480,21 @@ sub SendAlerts {
 
         # ... then send mail
         my $library = Koha::Libraries->find( $userenv->{branch} );
-        my %mail = (
-            To => join( ',', @email),
-            Cc             => join( ',', @cc),
-            From           => $library->branchemail || C4::Context->preference('KohaAdminEmailAddress'),
-            Subject        => Encode::encode( "UTF-8", "" . $letter->{title} ),
-            Message => $letter->{'is_html'}
+        my $email = Koha::Email->new();
+        my %mail = $email->create_message_headers(
+            {
+                to      => join( ',', @email),
+                cc      => join( ',', @cc),
+                from    => $library->branchemail || C4::Context->preference('KohaAdminEmailAddress'),
+                subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
+                message => $letter->{'is_html'}
                             ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
                                           Encode::encode( "UTF-8", "" . $letter->{'title'} ))
                             : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
-            'Content-Type' => $letter->{'is_html'}
+                contenttype => $letter->{'is_html'}
                                 ? 'text/html; charset="utf-8"'
                                 : 'text/plain; charset="utf-8"',
+            }
         );
 
         if ($type eq 'claimacquisition' || $type eq 'claimissues' ) {
@@ -500,7 +503,7 @@ sub SendAlerts {
             $mail{'Sender'} = C4::Context->preference('ReturnpathDefault')
               if C4::Context->preference('ReturnpathDefault');
             $mail{'Bcc'} = $userenv->{emailaddress}
-              if C4::Context->preference("ClaimsBccCopy");
+              if C4::Context->preference("ClaimsBccCopy") and not C4::Context->preference("SendAllEmailsTo");
         }
 
         unless ( Mail::Sendmail::sendmail(%mail) ) {
@@ -1315,7 +1318,7 @@ sub _send_message_by_email {
 
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
     if ( my $bcc = C4::Context->preference('NoticeBcc') ) {
-       $sendmail_params{ Bcc } = $bcc;
+       $sendmail_params{ Bcc } = C4::Context->preference("SendAllEmailsTo") || $bcc;
     }
 
     _update_message_to_address($message->{'message_id'},$to_address) unless $message->{to_address}; #if initial message address was empty, coming here means that a to address was found and queue should be updated
