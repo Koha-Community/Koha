@@ -397,7 +397,7 @@ is( GetBudgetHierarchySpent( $budget_id111 ), 20, "total spent for budget111 is 
 my $budget_period_amount = 100;
 my $budget_amount = 50;
 
-my $budget = AddBudgetPeriod(
+$budget = AddBudgetPeriod(
     {
         budget_period_startdate   => '2017-08-22',
         budget_period_enddate     => '2018-08-22',
@@ -459,7 +459,7 @@ my $order = Koha::Acquisition::Order->new(
       discount           => 0,
       uncertainprice     => 0,
    }
-)->insert;
+)->store;
 
 ModReceiveOrder({
    bibionumber       => $biblio,
