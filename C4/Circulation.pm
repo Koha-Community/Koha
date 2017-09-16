@@ -505,7 +505,7 @@ sub TooMany {
 
     # Now count total loans against the limit for the branch
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
-    if (defined($branch_borrower_circ_rule->{maxissueqty})) {
+    if (defined($branch_borrower_circ_rule->{patron_maxissueqty})) {
         my @bind_params = ();
         my $branch_count_query = q|
             SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
@@ -525,8 +525,8 @@ sub TooMany {
             push @bind_params, $branch;
         }
         my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $branch_count_query, {}, @bind_params );
-        my $max_checkouts_allowed = $branch_borrower_circ_rule->{maxissueqty};
-        my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{maxonsiteissueqty};
+        my $max_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxissueqty};
+        my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxonsiteissueqty};
 
         if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
@@ -557,7 +557,7 @@ sub TooMany {
         }
     }
 
-    if ( not defined( $maxissueqty_rule ) and not defined($branch_borrower_circ_rule->{maxissueqty}) ) {
+    if ( not defined( $maxissueqty_rule ) and not defined($branch_borrower_circ_rule->{patron_maxissueqty}) ) {
         return { reason => 'NO_RULE_DEFINED', max_allowed => 0 };
     }
 
@@ -1588,11 +1588,11 @@ Retrieves circulation rule attributes that apply to the given
 branch and patron category, regardless of item type.  
 The return value is a hashref containing the following key:
 
-maxissueqty - maximum number of loans that a
+patron_maxissueqty - maximum number of loans that a
 patron of the given category can have at the given
 branch.  If the value is undef, no limit.
 
-maxonsiteissueqty - maximum of on-site checkouts that a
+patron_maxonsiteissueqty - maximum of on-site checkouts that a
 patron of the given category can have at the given
 branch.  If the value is undef, no limit.
 
@@ -1605,8 +1605,8 @@ default branch and category
 If no rule has been found in the database, it will default to
 the buillt in rule:
 
-maxissueqty - undef
-maxonsiteissueqty - undef
+patron_maxissueqty - undef
+patron_maxonsiteissueqty - undef
 
 C<$branchcode> and C<$categorycode> should contain the
 literal branch code and patron category code, respectively - no
@@ -1643,12 +1643,12 @@ sub GetBranchBorrowerCircRule {
 
     # Initialize default values
     my $rules = {
-        maxissueqty       => undef,
-        maxonsiteissueqty => undef,
+        patron_maxissueqty       => undef,
+        patron_maxonsiteissueqty => undef,
     };
 
     # Search for rules!
-    foreach my $rule_name (qw( maxissueqty maxonsiteissueqty )) {
+    foreach my $rule_name (qw( patron_maxissueqty patron_maxonsiteissueqty )) {
         foreach my $params (@params) {
             my $rule = Koha::CirculationRules->search(
                 {

@@ -410,12 +410,12 @@
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
                     <td>
-                        [% SET maxissueqty  = CirculationRules.Get( branchcode, undef, undef, 'maxissueqty' ) %]
-                        <input type="text" name="maxissueqty" size="3" value="[% maxissueqty | html %]"/>
+                        [% SET patron_maxissueqty = CirculationRules.Get( branchcode, undef, undef, 'patron_maxissueqty' ) %]
+                        <input type="text" name="patron_maxissueqty" size="3" value="[% patron_maxissueqty | html %]"/>
                     </td>
                     <td>
-                        [% SET maxonsiteissueqty  = CirculationRules.Get( branchcode, undef, undef, 'maxonsiteissueqty' ) %]
-                        <input type="text" name="maxonsiteissueqty" size="3" value="[% maxonsiteissueqty | html %]"/>
+                        [% SET patron_maxonsiteissueqty = CirculationRules.Get( branchcode, undef, undef, 'patron_maxonsiteissueqty' ) %]
+                        <input type="text" name="patron_maxonsiteissueqty" size="3" value="[% patron_maxonsiteissueqty | html %]"/>
                     </td>
                     <td>
                         [% SET rule_value = CirculationRules.Get( current_branch, '*', undef, 'max_holds' ) %]
@@ -533,11 +533,11 @@
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH c IN categorycodes %]
-                    [% SET maxissueqty = CirculationRules.Get( branchcode, c, undef, 'maxissueqty' ) %]
-                    [% SET maxonsiteissueqty = CirculationRules.Get( branchcode, c, undef, 'maxonsiteissueqty' ) %]
+                    [% SET patron_maxissueqty = CirculationRules.Get( branchcode, c, undef, 'patron_maxissueqty' ) %]
+                    [% SET patron_maxonsiteissueqty = CirculationRules.Get( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
                     [% SET max_holds = CirculationRules.Get( branchcode, c, undef, 'max_holds' ) %]
 
-                    [% IF maxissueqty || maxissueqty || max_holds %]
+                    [% IF patron_maxissueqty || patron_maxonsiteissueqty || max_holds %]
                     <tr>
                         <td>
                             [% IF c == '*'%]
@@ -547,15 +547,15 @@
                             [% END %]
                         </td>
                         <td>
-                            [% IF maxissueqty  %]
-                                [% maxissueqty | html %]
+                            [% IF patron_maxissueqty  %]
+                                [% patron_maxissueqty | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
                             [% END %]
                         </td>
                         <td>
-                            [% IF maxonsiteissueqty  %]
-                                [% maxonsiteissueqty | html %]
+                            [% IF patron_maxonsiteissueqty  %]
+                                [% patron_maxonsiteissueqty | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
                             [% END %]
@@ -583,8 +583,8 @@
                         [% END %]
                         </select>
                     </td>
-                    <td><input name="maxissueqty" size="3" type="text" /></td>
-                    <td><input name="maxonsiteissueqty" size="3" type="text" /></td>
+                    <td><input name="patron_maxissueqty" size="3" type="text" /></td>
+                    <td><input name="patron_maxonsiteissueqty" size="3" type="text" /></td>
                     <td><input name="max_holds" size="3" type="text" /></td>
                     <td class="actions"><button type="submit" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</td>
                 </tr>
