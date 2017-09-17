@@ -50,9 +50,11 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
 );
 
 my $active_currency = Koha::Acquisition::Currencies->get_active;
-$template->param( symbol => $active_currency->symbol,
-                  currency => $active_currency->currency
-               );
+if ( $active_currency ) {
+    $template->param( symbol => $active_currency->symbol,
+                      currency => $active_currency->currency
+                   );
+}
 
 my $op = $input->param('op') || 'list';
 

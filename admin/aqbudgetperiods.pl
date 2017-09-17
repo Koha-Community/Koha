@@ -91,9 +91,11 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
 
 # This is used in incbudgets-active-currency.inc
 my $active_currency = Koha::Acquisition::Currencies->get_active;
-$template->param( symbol => $active_currency->symbol,
-                  currency => $active_currency->currency
-               );
+if ( $active_currency ) {
+    $template->param( symbol => $active_currency->symbol,
+                      currency => $active_currency->currency
+                   );
+}
 
 # ADD OR MODIFY A BUDGET PERIOD - BUILD SCREEN
 if ( $op eq 'add_form' ) {

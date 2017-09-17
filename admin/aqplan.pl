@@ -58,9 +58,11 @@ my $budget_period_id = $input->param('budget_period_id');
 my $period = GetBudgetPeriod($budget_period_id);
 my $count  = GetPeriodsCount();
 my $active_currency = Koha::Acquisition::Currencies->get_active;
-$template->param( symbol => $active_currency->symbol,
-                  currency => $active_currency->currency,
-               );
+if ( $active_currency ) {
+    $template->param( symbol => $active_currency->symbol,
+                      currency => $active_currency->currency,
+                   );
+}
 $template->param( period_button_only => 1 ) if $count == 0;
 
 
