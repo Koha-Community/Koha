@@ -253,7 +253,10 @@ sub AUTOLOAD {
         $self = ref($self)->get( $self->{lazyLoad} ); #Lazy load me!
     }
 
-    if ($self->{logger}->can($method)) {
+    if (!exists $self->{logger}) {
+        # do not use log4perl; no print to stderr
+    }
+    elsif ($self->{logger}->can($method)) {
         return $self->{logger}->$method(@_);
     }
     warn "ERROR: Unsupported method $Koha::Logger::AUTOLOAD, params '@_'";
