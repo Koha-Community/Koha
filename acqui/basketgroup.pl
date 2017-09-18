@@ -183,7 +183,7 @@ sub printbasketgrouppdf{
             # Editor Number
             my $en;
             my $edition;
-            my $ord->{marcxml} = C4::Biblio::GetXmlBiblio( $ord->{biblionumber} );
+            $ord->{marcxml} = C4::Biblio::GetXmlBiblio( $ord->{biblionumber} );
             my $marcrecord=eval{MARC::Record::new_from_xml( $ord->{marcxml},'UTF-8' )};
             if ($marcrecord){
                 if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
