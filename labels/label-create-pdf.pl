@@ -46,10 +46,10 @@ my $layout_id   = $cgi->param('layout_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
 @label_ids   = $cgi->multi_param('label_id') if $cgi->param('label_id');
 @item_numbers  = $cgi->multi_param('item_number') if $cgi->param('item_number');
+my $from = $cgi->param('from') || undef;
+my $to = $cgi->param('to') || undef;
 
 my $items = undef;
-
-
 
 my $pdf_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
 print $cgi->header( -type       => 'application/pdf',
@@ -117,6 +117,11 @@ elsif (@item_numbers) {
     grep {
         push(@{$items}, {item_number => $_});
     } @item_numbers;
+}
+elsif ($from and $to) {
+    for (my $i = $from; $i <= $to; $i++) {
+        push @{$items}, {'item_number' => $i};
+    }
 }
 else {
     $items = $batch->get_attr('items');
@@ -198,6 +203,7 @@ foreach my $item (@{$items}) {
                                         text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
                                           );
         $pdf->Add($label->draw_guide_box) if $layout->get_attr('guidebox');
+        $label->{'barcode'} = $item->{'item_number'} if ($from and $to);
         my $label_text = $label->create_label();
         _print_text($label_text) if $label_text;
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);

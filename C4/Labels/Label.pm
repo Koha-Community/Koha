@@ -274,7 +274,7 @@ sub new {
         justify                 => $params{'justify'},
         format_string           => $params{'format_string'},
         text_wrap_cols          => $params{'text_wrap_cols'},
-        barcode                 => 0,
+        barcode                 => $params{'barcode'},
     };
     if ($self->{'guidebox'}) {
         $self->{'guidebox'} = _guide_box($self->{'llx'}, $self->{'lly'}, $self->{'width'}, $self->{'height'});
@@ -454,7 +454,7 @@ sub draw_guide_box {
 sub barcode {
     my $self = shift;
     my %params = @_;
-    $params{'barcode_data'} = _get_label_item($self->{'item_number'}, 1) if !$params{'barcode_data'};
+    $params{'barcode_data'} = ($self->{'barcode'} || _get_label_item($self->{'item_number'}, 1)) if !$params{'barcode_data'};
     $params{'barcode_type'} = $self->{'barcode_type'} if !$params{'barcode_type'};
     my $x_scale_factor = 1;
     my $num_of_bars = length($params{'barcode_data'});

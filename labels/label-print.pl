@@ -52,6 +52,9 @@ my @item_numbers;
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
 
+my $from = $cgi->param('from') || undef;
+my $to = $cgi->param('to') || undef;
+
 my $layouts = undef;
 my $templates = undef;
 my $output_formats = undef;
@@ -106,6 +109,19 @@ if ($op eq 'export') {
                         referer     => $referer,
                         );
     }
+    elsif ($from and $to) {
+        push (@batches, {create_script   => 'label-create-pdf.pl',
+                 from            => $from,
+                 to              => $to,
+                 template_id     => $template_id,
+                 layout_id       => $layout_id,
+                 start_label     => $start_label,
+                 });
+       $template->param(
+                        batches     => \@batches,
+                        referer     => $referer,
+                        );
+    }
 }
 elsif ($op eq 'none') {
     # setup select menus for selecting layout and template for this run...
@@ -128,6 +144,8 @@ elsif ($op eq 'none') {
                     label_count                 => $label_count,
                     item_count                  => $item_count,
                     referer                     => $referer,
+                    from                        => $from,
+                    to                          => $to
                     );
 }
 output_html_with_http_headers $cgi, $cookie, $template->output;

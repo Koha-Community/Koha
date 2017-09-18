@@ -7,6 +7,7 @@
             <li><a href="/cgi-bin/koha/labels/label-edit-layout.pl?op=new">Layout</a></li>
             <li><a href="/cgi-bin/koha/labels/label-edit-template.pl?op=new">Label template</a></li>
             <li><a href="/cgi-bin/koha/labels/label-edit-profile.pl?op=new">Printer profile</a></li>
+            <li><a href="/cgi-bin/koha/labels/label-edit-range.pl">Barcode range</a></li>
         </ul>
     </div>
     <div class="btn-group">
