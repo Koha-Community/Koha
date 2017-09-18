@@ -38,14 +38,11 @@ find({
 
         my $fh = IO::File->new($file, 'r');
         my $marker_found = 0;
-        my $line = 0;
-        while (<$fh>) {
-            $line++;
-            if (/^<<<<<</ or /^>>>>>>/) {
-                # could check for ^=====, but that's often used in text files
-                $marker_found = 1;
-                last;
-            }
+        while (my $line = <$fh>) {
+            # could check for ^=====, but that's often used in text files
+            $marker_found++ if $line =~ m|^<<<<<<|;
+            $marker_found++ if $line =~ m|^>>>>>>|;
+            last if $marker_found;
         }
         close $fh;
         push @failures, $file if $marker_found;
