@@ -42,10 +42,15 @@ use Test::More tests => 20;
 use MARC::Record;
 use MARC::Field;
 
-my $dbh = C4::Context->dbh;
-my $login = 'koha';
-my $password = 'koha';
-my $base_url= ( $ENV{KOHA_INTRANET_URL} || 'http://'.C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/";
+my $dbh      = C4::Context->dbh;
+my $login    = $ENV{KOHA_USER} || 'koha';
+my $password = $ENV{KOHA_PASS} || 'koha';
+my $base_url
+    = ( $ENV{KOHA_INTRANET_URL} || 'http://' . C4::Context->preference("staffClientBaseURL") )
+    . "/cgi-bin/koha/";
+my $selenium_addr = $ENV{SELENIUM_ADDR} || 'localhost';
+my $selenium_port = $ENV{SELENIUM_PORT} || 4444;
+
 
 
 my $number_of_biblios_to_insert = 3;
@@ -89,7 +94,11 @@ SKIP: {
 
     open my $fh, '>>', '/tmp/output.txt';
 
-    my $driver = Selenium::Remote::Driver->new;
+    my $driver = Selenium::Remote::Driver->new(
+        port               => $selenium_port,
+        remote_server_addr => $selenium_addr
+    );
+
     $start = gettimeofday;
     $prev_time = $start;
     $driver->get($base_url."mainpage.pl");
@@ -202,7 +211,7 @@ END {
 
 sub auth {
     my ( $driver, $login, $password) = @_;
-    fill_form( $driver, { userid => 'koha', password => 'koha' } );
+    fill_form( $driver, { userid => $login, password => $password } );
     my $login_button = $driver->find_element('//input[@id="submit"]');
     $login_button->submit();
 }
