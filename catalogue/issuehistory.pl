@@ -50,6 +50,7 @@ my $issues = GetBiblioIssues($biblionumber);
 my $biblio = Koha::Biblios->find( $biblionumber );
 
 $template->param(
+    biblionumber => $biblionumber, # required for left-side navigation
     biblio       => $biblio,
     total        => scalar @$issues,
     issues       => $issues,
