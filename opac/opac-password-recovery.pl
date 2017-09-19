@@ -138,6 +138,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     }
     else {    # if it doesn't work....
         $template->param(
+            hasError          => 1,
             password_recovery => 1,
             sendmailError     => 1
         );
