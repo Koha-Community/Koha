@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: koha\n"
-"POT-Creation-Date: 2017-08-17 03:52-0300\n"
+"POT-Creation-Date: 2017-09-17 01:36-0300\n"
 "PO-Revision-Date: 2013-06-19 01:21+0300\n"
 "Last-Translator: Harem Abdullah <harem.suli@gmail.com>\n"
 "Language-Team: kurdish translation team\n"
@@ -312,21 +312,6 @@ msgstr ""
 "%s %s %s به‌شداریت كردووه‌ له‌ خزمه‌تگوزاری ئاگاداركردنه‌وه‌ به‌ ئیمه‌یڵ له‌ "
 "بڵاوكراوه‌ نوێكان "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
@@ -504,7 +489,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ده‌سته‌واژه‌ی ناونیشان "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -1775,7 +1760,7 @@ msgstr "%s %s%s%sكۆهای ڕاسته‌وخۆی له‌سه‌رهێڵ%s پێ�
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -3840,7 +3825,7 @@ msgid "Availability:"
 msgstr ":هه‌بوون"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "ئه‌و زنجیرانه‌ی هه‌یه‌"
@@ -4238,7 +4223,7 @@ msgstr "خواستن%s, گه‌ڕاندنه‌وه‌%s یاخود نوێكرد�
 msgid "Check-in date:"
 msgstr "نوێكردنه‌وه‌ی ئایتمێك"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4260,7 +4245,7 @@ msgstr "أعير"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "خوازراوه‌"
@@ -4691,7 +4676,7 @@ msgstr "ووشه‌ی نهێنی ئێستا:"
 msgid "Current session"
 msgstr "خولی ئێستا"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "خولی ئێستا"
@@ -4701,7 +4686,7 @@ msgstr "خولی ئێستا"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, fuzzy, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "نۆره‌گرتنت دووپات بكه‌ره‌وه‌ بۆ :%s %s %s (%s) %s "
@@ -6127,7 +6112,7 @@ msgstr ""
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
@@ -6218,7 +6203,7 @@ msgstr "رقم طلب مادة"
 msgid "Item cannot be checked out."
 msgstr "ئه‌م ئایتمه‌ بۆ خواستن نیه‌"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr ""
@@ -6233,7 +6218,7 @@ msgstr "پێشه‌نگی ئه‌وانه‌ی نۆره‌یان بۆ ئه‌م 
 msgid "Item holds"
 msgstr "نۆرگرتن بۆ ئایتم"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "نۆرگرتن بۆ ئایتم"
@@ -6268,7 +6253,7 @@ msgstr "نوع المادة: "
 msgid "Item types"
 msgstr "أنواع المادة"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "كێشراوه‌ته‌وه‌ ("
@@ -7243,8 +7228,8 @@ msgstr "ئه‌وه‌ت بۆنادۆزرێته‌وه‌ كه‌ بۆی"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr " بۆ خواستن نیه‌(%s)"
@@ -7449,12 +7434,12 @@ msgstr "تشرینی یەکەم"
 msgid "October"
 msgstr "تشرینی یەکەم"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "لە نۆرەدایە"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "داوا كراوه‌("
@@ -11804,7 +11789,8 @@ msgstr "كۆها ئۆپاك %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-msgid "koha:biblionumber:[% biblionumber %]"
+#, fuzzy
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr "كۆها:ژماره‌ی تۆمار:[% biblionumber %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401

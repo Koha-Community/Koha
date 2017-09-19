@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-08-17 03:44-0300\n"
+"POT-Creation-Date: 2017-09-17 01:05-0300\n"
 "PO-Revision-Date: 2016-12-29 12:41+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,24 +317,6 @@ msgid ""
 msgstr ""
 "%s %s आप लॉग इन करें अगर आप नए मुद्दों पर ईमेल सूचना की सदस्यता के लिए चाहते हैं  %s %s"
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- इस में शामिल दो मापदंडों लेता है: एक आइटम संरचना और एक वैकल्पिक ऋण (मुद्दे) "
-"संरचना। मुद्दा संरचना पाठ्यक्रम भंडार पृष्ठों है, जो आइटम है कि item.datedue भरता लाने के "
-"लिए एक एपीआई का उपयोग नहीं करते द्वारा प्रयोग किया जाता . -%%] %s %s %s %s "
-
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
@@ -518,7 +500,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s और %s "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -1806,7 +1788,7 @@ msgstr "%s%s%sकोहा ऑनलाइन%s केटालॉग &rsaquo; �
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -3857,7 +3839,7 @@ msgid "Availability:"
 msgstr "उपलब्धता:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "उपलब्ध  %s"
@@ -4256,7 +4238,7 @@ msgstr "निर्गम करना%s, वापसी %s या एक आ�
 msgid "Check-in date:"
 msgstr "वापसी दिनांक:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4278,7 +4260,7 @@ msgstr "निर्गम पर"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "को निर्गम  %s %s %s(%s)%s"
@@ -4704,7 +4686,7 @@ msgstr "वर्तमान पासवर्ड:"
 msgid "Current session"
 msgstr "वर्तमान सेशन"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "स्थानीय प्रयोग में वर्तमान"
@@ -4714,7 +4696,7 @@ msgstr "स्थानीय प्रयोग में वर्तमान
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "स्थानीय प्रयोग में वर्तमान द्वारा %s %s %s(%s)%s"
@@ -6128,7 +6110,7 @@ msgstr "ऑनलाइन केटलॉग में: %s/cgi-bin/koha/opac-de
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6219,7 +6201,7 @@ msgstr "आइटम कॉल नंबर"
 msgid "Item cannot be checked out."
 msgstr "आइटम बाहर की जाँच नहीं की जा सकती."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "मद क्षतिग्रस्त"
@@ -6234,7 +6216,7 @@ msgstr "मद होल्ड कतार प्राथमिकता"
 msgid "Item holds"
 msgstr "मद होल्ड"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "मद खो दिया"
@@ -6269,7 +6251,7 @@ msgstr "आइटम प्रकार: "
 msgid "Item types"
 msgstr "मद प्रकार"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "आइटम वापस "
@@ -7242,8 +7224,8 @@ msgstr "नहीं तुम्हारे लिए क्या देख �
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "ऋण के लिए नहीं  %s"
@@ -7446,12 +7428,12 @@ msgstr "अक्टू"
 msgid "October"
 msgstr "अक्टूबर"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "पकड़ने पर"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "आदेश पर "
@@ -11802,7 +11784,8 @@ msgstr "कोहा ओपेक %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-msgid "koha:biblionumber:[% biblionumber %]"
+#, fuzzy
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr "koha:biblionumber:[% biblionumber %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
