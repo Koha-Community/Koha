@@ -71,7 +71,7 @@
                             <thead>
                                 <tr>
                                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
-                                    <th>Date</th>
+                                    <th class="title-string">Date</th>
                                     <th>Description</th>
                                     <th>Fine amount</th>
                                     <th>Amount outstanding</th>
@@ -102,7 +102,7 @@
                                                 [% END %]
                                             </td>
                                         [% END %]
-                                        <td>[% ACCOUNT_LINE.date | $KohaDates %]</td>
+                                        <td><span title="[% ACCOUNT_LINE.date %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
                                         <td>
                                             [% SWITCH ACCOUNT_LINE.accounttype %]
                                             [% CASE 'Pay' %]Payment, thanks
@@ -186,7 +186,11 @@
 <script type="text/javascript">
 $( document ).ready(function() {
 
-    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults ));
+    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+        "aoColumnDefs": [
+             { "sType": "title-string", "aTargets" : [ "title-string" ] }
+         ]
+    } ));
 
     $(".paypal").on("click", function() {
         window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
