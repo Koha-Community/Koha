@@ -608,15 +608,17 @@ sub AddAuthority {
 	if ($format eq "MARC21") {
         my $userenv = C4::Context->userenv;
         my $library;
+        my $marcorgcode = C4::Context->preference('MARCOrgCode');
         if ( $userenv && $userenv->{'branch'} ) {
             $library = Koha::Libraries->find( $userenv->{'branch'} );
+            $marcorgcode = $library->get_effective_marcorgcode;
         }
 		if (!$record->leader) {
 			$record->leader($leader);
 		}
 		if (!$record->field('003')) {
 			$record->insert_fields_ordered(
-                MARC::Field->new('003', $library ? $library->get_effective_marcorgcode : C4::Context->preference('MARCOrgCode'))
+                MARC::Field->new('003', $marcorgcode),
 			);
 		}
 		my $date=POSIX::strftime("%y%m%d",localtime);
@@ -635,8 +637,8 @@ sub AddAuthority {
 		if (!$record->field('040')) {
 		 $record->insert_fields_ordered(
         MARC::Field->new('040','','',
-            'a' => $library ? $library->get_effective_marcorgcode : C4::Context->preference('MARCOrgCode'),
-            'c' => $library ? $library->get_effective_marcorgcode : C4::Context->preference('MARCOrgCode')
+            'a' => $marcorgcode,
+            'c' => $marcorgcode,
 				) 
 			);
     }
