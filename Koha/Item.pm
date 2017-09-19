@@ -32,8 +32,6 @@ use Koha::Item::Transfers;
 use Koha::Patrons;
 use Koha::Libraries;
 
-use Koha::Exceptions::Library;
-
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -204,10 +202,10 @@ BranchTransferLimitsType to use either an itemnumber or ccode as an identifier
 
 Takes HASHref that can have the following parameters:
     MANDATORY PARAMETERS:
-    $to   : Koha::Library or branchcode string
+    $to   : Koha::Library
     OPTIONAL PARAMETERS:
-    $from : Koha::Library or branchcode string  # if not given, item holdingbranch
-                                                # will be used instead
+    $from : Koha::Library  # if not given, item holdingbranch
+                           # will be used instead
 
 Returns 1 if item can be transferred to $to_library, otherwise 0.
 
@@ -220,28 +218,10 @@ multiple items of the same biblio.
 sub can_be_transferred {
     my ($self, $params) = @_;
 
-    my $to = $params->{'to'};
-    my $from = $params->{'from'};
-    if (ref($to) ne 'Koha::Library') {
-        my $tobranchcode = defined $to ? $to : '';
-        $to = Koha::Libraries->find($tobranchcode);
-        unless ($to) {
-            Koha::Exceptions::Library::NotFound->throw(
-                error => "Library '$tobranchcode' not found.",
-            );
-        }
-    }
-    if (defined $from && ref($from) ne 'Koha::Library') {
-        my $frombranchcode = defined $from ? $from : '';
-        $from = Koha::Libraries->find($frombranchcode);
-        unless ($from) {
-            Koha::Exceptions::Library::NotFound->throw(
-                error => "Library '$frombranchcode' not found.",
-            );
-        }
-    }
+    my $to   = $params->{to};
+    my $from = $params->{from};
 
-    $to = $to->branchcode;
+    $to   = $to->branchcode;
     $from = defined $from ? $from->branchcode : $self->holdingbranch;
 
     return 1 if $from eq $to; # Transfer to current branch is allowed

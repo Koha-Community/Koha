@@ -37,8 +37,6 @@ use Koha::Item::Transfer::Limits;
 use Koha::Libraries;
 use Koha::Subscriptions;
 
-use Koha::Exceptions::Library;
-
 =head1 NAME
 
 Koha::Biblio - Koha Biblio Object class
@@ -119,10 +117,10 @@ iterating each item of a biblio with Koha::Item->can_be_transferred().
 
 Takes HASHref that can have the following parameters:
     MANDATORY PARAMETERS:
-    $to   : Koha::Library or branchcode string
+    $to   : Koha::Library
     OPTIONAL PARAMETERS:
-    $from : Koha::Library or branchcode string  # if given, only items from that
-                                                # holdingbranch are considered
+    $from : Koha::Library # if given, only items from that
+                          # holdingbranch are considered
 
 Returns 1 if at least one of the item of a biblio can be transferred
 to $to_library, otherwise 0.
@@ -132,26 +130,8 @@ to $to_library, otherwise 0.
 sub can_be_transferred {
     my ($self, $params) = @_;
 
-    my $to = $params->{'to'};
-    my $from = $params->{'from'};
-    if (ref($to) ne 'Koha::Library') {
-        my $tobranchcode = defined $to ? $to : '';
-        $to = Koha::Libraries->find($tobranchcode);
-        unless ($to) {
-            Koha::Exceptions::Library::NotFound->throw(
-                error => "Library '$tobranchcode' not found.",
-            );
-        }
-    }
-    if ($from && ref($from) ne 'Koha::Library') {
-        my $frombranchcode = defined $from ? $from : '';
-        $from = Koha::Libraries->find($frombranchcode);
-        unless ($from) {
-            Koha::Exceptions::Library::NotFound->throw(
-                error => "Library '$frombranchcode' not found.",
-            );
-        }
-    }
+    my $to   = $params->{to};
+    my $from = $params->{from};
 
     return 1 unless C4::Context->preference('UseBranchTransferLimits');
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
