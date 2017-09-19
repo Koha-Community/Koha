@@ -504,6 +504,7 @@ sub get_order_infos {
     foreach my $key (qw(transferred_from transferred_to)) {
         if ($line{$key}) {
             my $order = GetOrder($line{$key});
+            my $basket = GetBasket($order->{basketno});
             my $bookseller = Koha::Acquisition::Booksellers->find( $basket->{booksellerid} );
             $line{$key} = {
                 order => $order,
