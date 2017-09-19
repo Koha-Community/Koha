@@ -242,6 +242,12 @@ __PACKAGE__->table("borrower_modifications");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 date_renewed
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 gonenoaddress
 
   data_type: 'tinyint'
@@ -513,6 +519,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "date_renewed",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
   "lost",
@@ -590,8 +598,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-12-12 20:04:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IZNhBX5Bj+x4S8JCWG+7lA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-09-19 03:00:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k+pL864IIHY6NP9y9MMWAw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

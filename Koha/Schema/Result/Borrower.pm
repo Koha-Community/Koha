@@ -232,6 +232,12 @@ __PACKAGE__->table("borrowers");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 date_renewed
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 gonenoaddress
 
   data_type: 'tinyint'
@@ -551,6 +557,8 @@ __PACKAGE__->add_columns(
   "dateenrolled",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "date_renewed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
@@ -1378,8 +1386,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:24:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7llO928plwtX2Q+I9nQA8A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-09-19 03:00:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZZDjvikajGC+2s4vkp9stw
 
 __PACKAGE__->belongs_to(
     "guarantor",

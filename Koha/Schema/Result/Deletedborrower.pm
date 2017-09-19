@@ -230,6 +230,12 @@ __PACKAGE__->table("deletedborrowers");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 date_renewed
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 gonenoaddress
 
   data_type: 'tinyint'
@@ -537,6 +543,8 @@ __PACKAGE__->add_columns(
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "dateexpiry",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "date_renewed",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "gonenoaddress",
   { data_type => "tinyint", is_nullable => 1 },
   "lost",
@@ -633,8 +641,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:24:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SpP0xoSTFIweqTp1muUwvg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-09-19 03:00:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Q3cG0PLX/T3axMdO0MiSug
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
