@@ -70,11 +70,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 #parameters:
-my $booksellerid = scalar $input->param('booksellerid');
-my $basketno = scalar $input->param('basketno');
+my $booksellerid = $input->param('booksellerid');
+my $basketno = $input->param('basketno');
 my $basket;
-my $op = scalar $input->param('op');
-my $is_an_edit = scalar $input->param('is_an_edit');
+my $op = $input->param('op');
+my $is_an_edit = $input->param('is_an_edit');
 
 if ( $op eq 'add_form' ) {
     my @contractloop;
