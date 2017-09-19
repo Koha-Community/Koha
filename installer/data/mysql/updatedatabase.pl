@@ -14637,6 +14637,30 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 10132 - MARCOrgCode on branch level (branches.marcorgcode))\n";
 }
 
+$DBversion = '17.06.00.008';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists( 'borrowers', 'date_renewed' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrowers ADD COLUMN date_renewed DATE NULL DEFAULT NULL AFTER dateexpiry;
+        });
+    }
+
+    unless ( column_exists( 'deletedborrowers', 'date_renewed' ) ) {
+        $dbh->do(q{
+            ALTER TABLE deletedborrowers ADD COLUMN date_renewed DATE NULL DEFAULT NULL AFTER dateexpiry;
+        });
+    }
+
+    unless ( column_exists( 'borrower_modifications', 'date_renewed' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrower_modifications ADD COLUMN date_renewed DATE NULL DEFAULT NULL AFTER dateexpiry;
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 6758 - Capture membership renewal date for reporting purposes (borrowers.date_renewed))\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
