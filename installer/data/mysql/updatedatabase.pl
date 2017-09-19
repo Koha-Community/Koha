@@ -14627,6 +14627,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18811 - Visibility settings inconsistent between framework and authority editor)\n";
 }
 
+$DBversion = '17.06.00.007';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'branches', 'marcorgcode' ) ) {
+        $dbh->do( "ALTER TABLE branches ADD COLUMN marcorgcode VARCHAR(16) default NULL AFTER geolocation" );
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 10132 - MARCOrgCode on branch level (branches.marcorgcode))\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
