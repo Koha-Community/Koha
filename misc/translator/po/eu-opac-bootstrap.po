@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-08-17 03:40-0300\n"
+"POT-Creation-Date: 2017-09-17 00:53-0300\n"
 "PO-Revision-Date: 2016-12-23 16:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -312,25 +312,6 @@ msgid ""
 "issues %s %s "
 msgstr "%s %s %s Ale berrien e-mail bidezko notifikaziora harpidetu zara "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, fuzzy, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s [%%#- Inklusio honek bi parametro hartzen ditu: item-egitura bat eta "
-"maileguaren hautazko egitura bat (jaulkipena). Mailegu-egitura erabiltzen "
-"da  item.datadue betetzen duten itemak lortzeko API bat erabiltzen ez duten "
-"ikastaroen erreserbarako orrialdetan. -%%] %s %s %s %s %s %s"
-
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
@@ -518,7 +499,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Izenburuaren esaldia "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -1825,7 +1806,7 @@ msgstr "%s%s%s%sKoha Online%s Katalogoa &rsaquo; Etiketak %s "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -3898,7 +3879,7 @@ msgid "Availability:"
 msgstr "Erabilgarritasuna:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "Ale eskuragarriak"
@@ -4298,7 +4279,7 @@ msgstr "Mailegatu%s, Itzuli%s edo item bat berritu: "
 msgid "Check-in date:"
 msgstr "Itema berritu"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4320,7 +4301,7 @@ msgstr "(Mailegatua)"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Mailegatua ("
@@ -4752,7 +4733,7 @@ msgstr "Uneko pasahitza:"
 msgid "Current session"
 msgstr "Uneko saioa"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "Uneko saioa"
@@ -4762,7 +4743,7 @@ msgstr "Uneko saioa"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, fuzzy, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr " Baieztatu erreserbak: %s %s %s (%s) %s "
@@ -6192,7 +6173,7 @@ msgstr "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:358
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6283,7 +6264,7 @@ msgstr "Itemaren kokapen-kodea"
 msgid "Item cannot be checked out."
 msgstr "Ezin da mailegatua izan"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "Hondatutako itema"
@@ -6298,7 +6279,7 @@ msgstr "Alearen erreserba-errenkadaren lehentasuna"
 msgid "Item holds"
 msgstr "Erreserba egin"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "Erreserba egin"
@@ -6333,7 +6314,7 @@ msgstr "Item mota: "
 msgid "Item types"
 msgstr "Item-motak"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "Erretiratua ("
@@ -7307,8 +7288,8 @@ msgstr "Ez duzu aurkitu bilatzen ari zarena?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "Ez da mailegatzen (%s)"
@@ -7517,12 +7498,12 @@ msgstr "Urr."
 msgid "October"
 msgstr "Urria"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Zain"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "Antolatuta ("
@@ -11899,7 +11880,8 @@ msgstr "koha opac %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-msgid "koha:biblionumber:[% biblionumber %]"
+#, fuzzy
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr "koha:biblionumber:[% biblionumber %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401

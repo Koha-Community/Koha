@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-17 03:45-0300\n"
+"POT-Creation-Date: 2017-09-17 01:10-0300\n"
 "PO-Revision-Date: 2017-03-14 17:55+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -184,45 +184,10 @@ msgstr "# ուսանողներ"
 msgid "%% (If empty, discount rate from vendor will be used) "
 msgstr "%% (Եթե դատարկ է, մատակարարի կղմից կօգտագործվի զեղչի գործակից) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:428
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:404
 #, c-format
 msgid "%% matches any number of characters"
 msgstr "%% համընկնում է նիշերի ցանկացած քանակ"
-
-#. %1$s: - USE KohaDates -
-#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt +
-#. %3$s:  FOREACH o IN orders 
-#. %4$s:  o.orderdate 
-#. %5$s:  o.latesince 
-#. %6$s:  o.estimateddeliverydate | $KohaDates 
-#. %7$s:  o.supplier (o.supplierid) 
-#. %8$s:  o.title 
-#. %9$s:  IF o.author 
-#. %10$s:  o.author 
-#. %11$s:  END 
-#. %12$s:  IF o.publisher 
-#. %13$s:  o.publisher 
-#. %14$s:  END 
-#. %15$s:  o.unitpricesupplier 
-#. %16$s:  o.quantity_to_receive 
-#. %17$s:  o.subtotal 
-#. %18$s:  o.budget 
-#. %19$s:  o.basketname 
-#. %20$s:  o.basketno 
-#. %21$s:  o.claims_count 
-#. %22$s:  o.claimed_date +
-#. %23$s:  END +
-#. %24$s:  orders.size 
-#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, c-format
-msgid ""
-"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished by: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Total orders in "
-"late, %s "
-msgstr ""
-"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sՀեղինակ: %s.%s%sՀրատարակված: "
-"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Ընդհանուր "
-"ուշացած պատվերներ, %s "
 
 #. %1$s: - USE Branches -
 #. %2$s: - USE Koha -
@@ -251,6 +216,43 @@ msgid ""
 msgstr ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
 "\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
+
+#. %1$s: - USE KohaDates -
+#. %2$s: - INCLUDE csv_headers/acqui/lateorders.tt -
+#. %3$s: - INCLUDE empty_line.inc -
+#. %4$s: - FOREACH o IN orders -
+#. %5$s:  o.orderdate 
+#. %6$s:  o.latesince 
+#. %7$s:  o.estimateddeliverydate | $KohaDates 
+#. %8$s:  o.supplier (o.supplierid) 
+#. %9$s:  o.title 
+#. %10$s:  IF o.author 
+#. %11$s:  o.author 
+#. %12$s:  END 
+#. %13$s:  IF o.publisher 
+#. %14$s:  o.publisher 
+#. %15$s:  END 
+#. %16$s:  o.unitpricesupplier 
+#. %17$s:  o.quantity_to_receive 
+#. %18$s:  o.subtotal 
+#. %19$s:  o.budget 
+#. %20$s:  o.basketname 
+#. %21$s:  o.basketno 
+#. %22$s:  o.claims_count 
+#. %23$s:  o.claimed_date 
+#. %24$s: - INCLUDE empty_line.inc -
+#. %25$s: - END -
+#. %26$s:  orders.size 
+#: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
+#, fuzzy, c-format
+msgid ""
+"%s %s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sAuthor: %s.%s%sPublished "
+"by: %s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s %s ,,Total "
+"orders in late, %s "
+msgstr ""
+"%s %s %s \"%s (%s days)\",\"%s\",\"%s\",\"%s %sՀեղինակ: %s.%s%sՀրատարակված: "
+"%s.%s\",\"%s x %s = %s (%s)\",\"%s (%s)\",\"%s\",\"%s\" %s ,,Ընդհանուր "
+"ուշացած պատվերներ, %s "
 
 #. %1$s:  END 
 #. %2$s:  BLOCK form_field_select_text_block 
@@ -301,6 +303,20 @@ msgstr ""
 msgid "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 msgstr "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 
+#. %1$s: - USE ItemTypes -
+#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
+#. %3$s: - INCLUDE empty_line.inc -
+#. %4$s: - FOREACH row IN rows -
+#. %5$s: - FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END -
+#. %6$s: - INCLUDE empty_line.inc -
+#. %7$s: - END -
+#. %8$s: - INCLUDE empty_line.inc -
+#. %9$s: - FOREACH field IN total; field; sep IF !loop.last; END -
+#: intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s %s %s %s %s TOTAL%s %s "
+msgstr "%s %s %s %s Ոչ մեկը %s "
+
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  END 
@@ -330,6 +346,19 @@ msgstr ""
 "Իսպաներեն %sԵբրայերեն %sԱրաբերեն %sՀունարեն (ժամանակակից) %sՀունարեն (մինչ "
 "1453) %s%s %s %s "
 
+#. %1$s: - INCLUDE csv_headers/reports/orders_by_budget.tt -
+#. %2$s: - INCLUDE empty_line.inc -
+#. %3$s: - FOREACH row IN rows -
+#. %4$s: - FOREACH field IN row; field; sep IF !loop.last; END -
+#. %5$s: - INCLUDE empty_line.inc -
+#. %6$s: - END -
+#. %7$s: - INCLUDE empty_line.inc -
+#. %8$s: - FOREACH field IN totalrow; field; sep IF !loop.last; END -
+#: intranet-tmpl/prog/en/modules/reports/csv/orders_by_budget.tt:1
+#, fuzzy, c-format
+msgid "%s %s %s %s %s %s TOTAL%s %s "
+msgstr "%s %s %s %s Ոչ մեկը %s "
+
 #. %1$s:  SET default_messaging = category.default_messaging 
 #. %2$s:  IF default_messaging.size 
 #. %3$s:  FOREACH prefs IN default_messaging 
@@ -343,7 +372,7 @@ msgstr ""
 #. %11$s:  ELSIF ( prefs.Item_Checkout ) 
 #. %12$s:  ELSE 
 #. %13$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:396
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:400
 #, c-format
 msgid ""
 "%s %s %s %s %s %sItem due %sAdvance notice %sUpcoming events %sHold filled "
@@ -352,17 +381,6 @@ msgstr ""
 "%s %s %s %s %s %sնյութի վերադարձի ամսաթիվ %sՆախապես ծանուցում %sՍպասվող "
 "իրադարձություններ %sՊահումը լրացված է %sՆյութի հետ ընդունում %sՆյութի դուրս "
 "տրում %sԱնհայտ %s: "
-
-#. %1$s:  USE ItemTypes 
-#. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt 
-#. %3$s: - FOREACH row IN rows # Avoid line breaks in directives because of translatability 
-#. %4$s: - FOREACH field IN row; field IF !loop.last; ItemTypes.GetDescription(field) IF loop.last; sep IF !loop.last; END 
-#. %5$s:  END -
-#. %6$s: - FOREACH field IN total; field; sep IF !loop.last; END 
-#: intranet-tmpl/prog/en/modules/reports/csv/cash_register_stats.tt:1
-#, fuzzy, c-format
-msgid "%s %s %s %s %s TOTAL %s "
-msgstr "%s %s %s %s Ոչ մեկը %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
@@ -481,19 +499,9 @@ msgstr "%s %s %s %s (փակված է) %s "
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:411
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:415
 #, c-format
 msgid "%s %s %s %s None %s "
-msgstr "%s %s %s %s Ոչ մեկը %s "
-
-#. %1$s:  INCLUDE csv_headers/reports/orders_by_budget.tt 
-#. %2$s: - FOREACH row IN rows # Avoid line breaks in directives because of translatability 
-#. %3$s: - FOREACH field IN row; field; sep IF !loop.last; END 
-#. %4$s:  END -
-#. %5$s: - FOREACH field IN totalrow; field; sep IF !loop.last; END 
-#: intranet-tmpl/prog/en/modules/reports/csv/orders_by_budget.tt:1
-#, fuzzy, c-format
-msgid "%s %s %s %s TOTAL %s "
 msgstr "%s %s %s %s Ոչ մեկը %s "
 
 #. %1$s:  END 
@@ -1681,8 +1689,8 @@ msgstr "%s %s Տվյալը գրանցված է "
 #. %3$s:  CASE 'never' 
 #. %4$s:  CASE 'forever' 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:304
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:449
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:308
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:453
 #, c-format
 msgid "%s %s Default %s Never %s Forever %s "
 msgstr "%s %s Լռակյաց %s Երբեք %s Հավերժ %s "
@@ -1948,9 +1956,9 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF message.code == 'biblio_not_exists' 
-#. %3$s:  message.biblionumber 
+#. %3$s:  message.biblionumber |html 
 #. %4$s:  ELSIF message.code == 'authority_not_exists' 
-#. %5$s:  message.authid 
+#. %5$s:  message.authid |html 
 #. %6$s:  ELSIF message.code == 'item_issued' 
 #. %7$s:  message.biblionumber 
 #. %8$s:  ELSIF message.code == 'reserve_not_cancelled' 
@@ -2088,7 +2096,7 @@ msgstr "%s %s Օգտագործիր լռակյացը (Այո) %s Օգտագործ
 #. %4$s:  IF waiting_expires_on 
 #. %5$s:  waiting_expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:833
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:834
 #, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s Սպասում է %s %s մինչ %s %s "
@@ -2107,8 +2115,8 @@ msgstr "%s %s Հանված (%s),"
 #. %3$s:  CASE 'no' 
 #. %4$s:  CASE 'inherit' 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:290
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:438
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:294
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:442
 #, c-format
 msgid "%s %s Yes %s No %s Inherit %s "
 msgstr "%s %s Այո %s Ոչ %s Ժառանգել %s "
@@ -2130,7 +2138,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF searchfield 
-#. %3$s:  searchfield 
+#. %3$s:  searchfield |html 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:196
 #, c-format
 msgid "%s %s You searched for %s"
@@ -2151,7 +2159,7 @@ msgstr "%s %s մինչ %s "
 #. %4$s:  item.branches.size 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:266
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:426
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:430
 #, c-format
 msgid "%s %s branches limitations %s %s branch limitation %s "
 msgstr "%s %s մասնաճյուղերի սահմանափակում %s %s մասնաճյուղի սահմանափակում %s "
@@ -2256,8 +2264,8 @@ msgstr "%s %s Կորած նյութերը գտնված են %s Կորած նյո
 #. %3$s:  ELSE 
 #. %4$s:  category.enrolmentperioddate | $KohaDates 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:272
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:382
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:276
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:386
 #, c-format
 msgid "%s %s months %s until %s %s "
 msgstr "%s %s ամիսներ %s մինչ %s %s "
@@ -2420,7 +2428,7 @@ msgstr "%s %s; ISBN:"
 #. %6$s:  CASE 'S' 
 #. %7$s:  CASE 'X' 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:372
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:376
 #, c-format
 msgid "%s %sAdult %sChild %sProf. %sOrg. %sStaff %sStatistical %s "
 msgstr ""
@@ -2984,6 +2992,12 @@ msgstr "%s &rsaquo; Արդյունքներ%s"
 msgid "%s &rsaquo; Results%s "
 msgstr "%s &rsaquo; Արդյունքներ%s "
 
+#. %1$s:  p.metadata.name 
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:202
+#, c-format
+msgid "%s ( other format via plugin)"
+msgstr ""
+
 #. %1$s:  lateorder.orderdate | $KohaDates 
 #. %2$s:  lateorder.latesince 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:139
@@ -3023,7 +3037,7 @@ msgstr "%s (%s)%s %s callnumber: %s%s"
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title 
 #. %2$s:  issue.item.barcode 
 #. %3$s:  issue.date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:694
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Վերադարձ %s"
@@ -3159,7 +3173,7 @@ msgstr ""
 
 #. %1$s:  booksellerphone 
 #. %2$s:  booksellerfax 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:54
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:55
 #, c-format
 msgid "%s / Fax: %s"
 msgstr "%s / Ֆաքս: %s"
@@ -3347,7 +3361,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  patron.article_requests_current.count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:906
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:907
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:514
 #, c-format
 msgid "%s Article requests"
@@ -3375,7 +3389,7 @@ msgstr "%s Քարտի համար: "
 #. %3$s:  ELSE 
 #. %4$s:  categorycode |html 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:255
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:259
 #, c-format
 msgid ""
 "%s Category %s is in use. Deletion not possible! %s Confirm deletion of "
@@ -3400,7 +3414,7 @@ msgstr "%s Դուրս է տրված սրան %s %s "
 
 #. For the first occurrence,
 #. %1$s:  issuecount 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:886
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:887
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:500
 #, c-format
 msgid "%s Checkout(s)"
@@ -3583,19 +3597,6 @@ msgstr "%s էլ փոստ։ "
 msgid "%s Enabled "
 msgstr "%s Միացված է "
 
-#. %1$s:  IF CGI.param('pdferr') 
-#. %2$s:  IF CGI.param('errnocards') 
-#. %3$s:  END 
-#. %4$s:  IF CGI.param('errba') 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:4
-#, c-format
-msgid ""
-"%s Error while creating PDF file. %sNo cards created (empty batch or "
-"list?)%s %sBatch: [%% '"
-msgstr ""
-"%s Սխալ PDF ֆայլ ստեղծելիս։ %sՔարտեր չեն ստեղծվել (դատարկ փաթեթ կա՞մ "
-"ցուցակ)%s %sՓաթեթ: [%% '"
-
 #. %1$s:  IF ( error ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:219
 #, c-format
@@ -3707,7 +3708,7 @@ msgstr "%s Դրամագլուխներ սրա համար '%s' %s Բոլոր դր�
 
 #. For the first occurrence,
 #. %1$s:  holds_count 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:898
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:899
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:507
 #, c-format
 msgid "%s Hold(s)"
@@ -3806,7 +3807,7 @@ msgstr ""
 #. %5$s:  item_notforloan_lib 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:468
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:469
 #, c-format
 msgid "%s Item type not for loan. %s %s Item not for loan %s(%s)%s. %s "
 msgstr ""
@@ -4032,7 +4033,7 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:272
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:432
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:436
 #, c-format
 msgid "%s No limitation %s "
 msgstr "%s Սահմանափակումներ չկան %s "
@@ -4348,7 +4349,7 @@ msgstr "%s Պահումտը գտնված է սրա համարr %s ("
 #. %4$s:  d.comment 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:59
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:776
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:971
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:196
 #, c-format
@@ -4357,7 +4358,7 @@ msgstr "%s Ժամկետանցների գործողության կողմից ավ
 
 #. For the first occurrence,
 #. %1$s:  debarments.size 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:910
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:517
 #, c-format
 msgid "%s Restrictions"
@@ -4378,7 +4379,7 @@ msgid "%s Scan Index for: "
 msgstr "%s Ցուցչի սքան սրա համար։ "
 
 #. %1$s:  IF searchfield 
-#. %2$s:  searchfield 
+#. %2$s:  searchfield |html 
 #. %3$s:  END 
 #. %4$s:  IF cities.count 
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
@@ -4798,8 +4799,8 @@ msgid "%s Yes%s, "
 msgstr "%s Այո%s, "
 
 #. %1$s:  IF searchfield 
-#. %2$s:  searchfield 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:336
+#. %2$s:  searchfield |html 
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:340
 #, c-format
 msgid "%s You Searched for %s"
 msgstr "%s Դու փնտրել ես համար %s"
@@ -4821,7 +4822,7 @@ msgstr "%s Դու փնտրել ես համար %s"
 #. %1$s:  IF id 
 #. %2$s:  id 
 #. %3$s:  ELSIF searchfield 
-#. %4$s:  searchfield 
+#. %4$s:  searchfield |html 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:224
 #, c-format
@@ -5616,10 +5617,10 @@ msgstr "%s տարի"
 
 #. For the first occurrence,
 #. %1$s:  category.dateofbirthrequired 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:280
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:281
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:389
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:390
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:284
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:285
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:393
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:394
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:9
 #, c-format
 msgid "%s years"
@@ -6216,6 +6217,26 @@ msgstr "%s00s"
 msgid "%s: Warning: XSLT error on search result %s"
 msgstr "%s: Զգուշացում: XSLT սխալ փնտրման արդյունքում %s"
 
+#. %1$s: - BLOCK -
+#. %2$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/acqui/basketgroup.tt:1
+#, fuzzy, c-format
+msgid ""
+"%sAccount number,Basket name,Order number,Author,Title,Publisher,Publication "
+"year,Collection title,ISBN,Quantity,RRP tax included, RRP tax excluded,"
+"Discount,Estimated cost tax included,Estimated cost tax excluded,Note for "
+"vendor,Entry date,Bookseller name,Bookseller physical address,Bookseller "
+"postal address,Contract number,Contract name,Basket group delivery place,"
+"Basket group billing place,Basket delivery place,Basket billing place%s "
+msgstr ""
+"Հաշվի համար,Զամբյուղի անուն,Պատվերի համար,Հեղինակ,Վերնագիր,Հրատարակիչ,"
+"Հրատարակման տարի,Հավաքածուի վերնագիր,ISBN,Քանակ,RRP հարկը ներառված է,,RRP "
+"հարկը հանված է,Զեղչ,Գնահատված հարկի գինը ներառված է,Գնահատված հարկի գինը "
+"հանված է,Նշումներ մատակարարի համար,Մուտքի ամսաթիվ,Գրավաճառի անուն,Գրավաճառի "
+"ֆիզիկական հասցե,Գրավաճառի փոստային հասցե,Կոնտրակտի համար,Կոնտրակտի անուն,"
+"Զամբյուղի խմբի առաքման վայր,Զամբյուղի խմբի վճարի ներկայացման վայր,Զամբյուղի "
+"առաքման վայր,Զամբյուղի վճարի ներկայացման վայր "
+
 #. %1$s:  IF course.enabled == 'yes' 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -6332,6 +6353,19 @@ msgid ""
 msgstr ""
 "%sԴուրս տրումների սահմանափակում ըստ ընթերցողի դասի սրա համար %s%sԴուրս "
 "տրումների լռակյաց սահմանափակումը ըստ ընթերցողի դասի%s"
+
+#. %1$s: - BLOCK -
+#. %2$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/acqui/basket.tt:1
+#, fuzzy, c-format
+msgid ""
+"%sContract name,Order number,Entry date,ISBN,Author,Title,Publication year,"
+"Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,"
+"Billing place%s "
+msgstr ""
+"Կոնտրակտի անուն,Պատվերի համար,Մուտքի ամսաթիվ,ISBN,Հեղինակ,Վերնագիր,"
+"Հրատարակության տարի,Հրատարակիչ,Հավաքածուի անուն,Նշում մատակարարի համար,Քանակ,"
+"RRP,Առաքման վայր,Հաշիվը ուղարկելու վայր "
 
 #. %1$s:  IF (errcode==1) 
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:11
@@ -6567,6 +6601,33 @@ msgstr "%sՀավերժ%s %sԼռակյաց%s %sԵրբեք%s "
 msgid "%sFree delivery place%s%s%s"
 msgstr "%sԱզատ առաքման վայր%s%s%s"
 
+#. %1$s: - BLOCK -
+#. %2$s:  sep 
+#. %3$s:  sep 
+#. %4$s:  sep 
+#. %5$s:  sep 
+#. %6$s:  sep 
+#. %7$s:  sep 
+#. %8$s:  sep 
+#. %9$s:  sep 
+#. %10$s:  sep 
+#. %11$s:  sep 
+#. %12$s:  sep 
+#. %13$s:  sep 
+#. %14$s:  sep 
+#. %15$s:  sep 
+#. %16$s:  sep 
+#. %17$s:  sep 
+#. %18$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/reports/orders_by_budget.tt:1
+#, c-format
+msgid ""
+"%sFund%s\"Basket num\"%s\"Basket name\"%s\"Authorised by\"%s\"Biblio number"
+"\"%sTitle%sCurrency%s\"Vendor price\"%sRRP%s\"Budgeted cost\"%sQuantity%s"
+"\"Total RRP\"%s\"Total cost\"%s\"Entry date\"%s\"Date received\"%s\"Internal "
+"note\"%s\"Vendor note\"%s "
+msgstr ""
+
 #. %1$s:  IF ( flagloo.key == 'gonenoaddress' ) 
 #. %2$s:  END 
 #. %3$s:  IF ( flagloo.key == 'lost' ) 
@@ -6579,7 +6640,7 @@ msgstr "%sԳնացել է առանց հասցե:%s %sԿորած քարտ:%s "
 #. %1$s:  IF category.hidelostitems 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:284
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:288
 #, c-format
 msgid "%sHidden by default%sShown%s"
 msgstr "%sԹաքցված ըստ լռակյացի%sՑուցադրած%s"
@@ -6587,7 +6648,7 @@ msgstr "%sԹաքցված ըստ լռակյացի%sՑուցադրած%s"
 #. %1$s:  IF ( category.hidelostitems ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:393
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:397
 #, c-format
 msgid "%sHidden%sShown%s"
 msgstr "%sԹաքցրած%sՑուցադրած%s"
@@ -6719,7 +6780,7 @@ msgstr "%sՁևափոխել%sԱվելացնել%s Դրամագլուխ %s %s բյ
 #. %1$s:  UNLESS ( basketno ) 
 #. %2$s:  END 
 #. %3$s:  basketname|html 
-#. %4$s:  basketno 
+#. %4$s:  basketno |html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:320
 #, c-format
 msgid "%sNew %sBasket %s (%s) for "
@@ -6734,7 +6795,7 @@ msgid "%sNo%sYes%s"
 msgstr "%sՈչ%sԱյո%s"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:410
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:414
 #, c-format
 msgid "%sNone"
 msgstr "%sՈչ մեկը"
@@ -6745,6 +6806,17 @@ msgstr "%sՈչ մեկը"
 #, c-format
 msgid "%sNot checked out%s"
 msgstr "%sԴուրս տրված չէ%s"
+
+#. %1$s: - BLOCK -
+#. %2$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/acqui/lateorders.tt:1
+#, fuzzy, c-format
+msgid ""
+"%sORDER DATE,ESTIMATED DELIVERY DATE,VENDOR,INFORMATION,TOTAL COST,BASKET,"
+"CLAIMS COUNT,CLAIMED DATE%s "
+msgstr ""
+"ՊԱՏՎԵՐԻ ԱՄՍԱԹԻՎ,ԱՌԱՔՄԱՆ ԳՆԱՀԱՏՎԱԾ  ԱՄՍԱԹԻՎ,ՄԱՏԱԿԱՐԱՐ,ՏԵՂԵԿԱՏՎՈՒԹՅՈՒՆ,"
+"ԸՆԴՀԱՆՈՒՐ ԳԻՆ,ԶԱՄԲՅՈՒՂ,ՊԱՀԱՆՋՆԵՐԻ ՀԱՇՎԱՐԿ,ՊԱՀԱՆՋՆԵՐԻ ԱՄՍԱԹԻՎ "
 
 #. %1$s:  IF ( I ) 
 #. %2$s:  ELSE 
@@ -6880,6 +6952,19 @@ msgstr "%sՉկան ստացված պատվերներ։%s "
 msgid "%sThis record has no items.%s "
 msgstr "%sԱյս գրառումը չունի նյութեր։%s "
 
+#. %1$s: - BLOCK -
+#. %2$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/catalogue/itemsearch.tt:1
+#, fuzzy, c-format
+msgid ""
+"%sTitle, Publication date, Publisher, Collection, Barcode, Call number, Home "
+"library, Current location, Shelving location, Inventory number, Status, "
+"Checkouts%s "
+msgstr ""
+"Վերնագիր, Հրատարակման տարի, Հրատարակիչ, Հավաքածու, Շտրիխ կոդ, Դասիչ, Տնային "
+"գրադարան, Ընթացիկ տեղաբաշխում, Դարակի վրա տեղաբաշխում, Հիմնապաշարի համար, "
+"Վիճակ, Դուրս տրումներ "
+
 #. %1$s:  ELSIF ( FEEDBAC.backend ) 
 #. %2$s:  FEEDBAC.backend 
 #. %3$s:  ELSIF ( FEEDBAC.headerrow ) 
@@ -6921,8 +7006,8 @@ msgstr "%sԱյո%s&nbsp;%s"
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:231
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:232
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:283
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:392
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:287
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:396
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:218
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:219
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:214
@@ -7065,6 +7150,24 @@ msgstr "%sh - Նեղ տերմին"
 #, c-format
 msgid "%si - Reference instruction phrase in subfield $i"
 msgstr "%si - Տեղեկատու հրահանգի արտահայտություն այս ենթադաշտում $i"
+
+#. %1$s: - BLOCK -
+#. %2$s:  sep 
+#. %3$s:  sep 
+#. %4$s:  sep 
+#. %5$s:  sep 
+#. %6$s:  sep 
+#. %7$s:  sep 
+#. %8$s:  sep 
+#. %9$s:  sep 
+#. %10$s:  sep 
+#. %11$s: - END -
+#: intranet-tmpl/prog/en/includes/csv_headers/reports/cash_register_stats.tt:1
+#, c-format
+msgid ""
+"%smfirstname%scard number%sfirstname%sbranchname%sdate%saccounttype%samount"
+"%stitle%sbarcode%sitype%s "
+msgstr ""
 
 #. %1$s:  PROCESS selectoptionopen value='n' 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:257
@@ -7415,7 +7518,7 @@ msgstr ""
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( basketno ) 
-#. %3$s:  basketname 
+#. %3$s:  basketname |html 
 #. %4$s:  ELSE 
 #. %5$s:  booksellername 
 #. %6$s:  END 
@@ -7706,7 +7809,7 @@ msgstr ""
 #. %1$s:  UNLESS ( basketno ) 
 #. %2$s:  END 
 #. %3$s:  basketname|html 
-#. %4$s:  basketno 
+#. %4$s:  basketno |html 
 #. %5$s:  name|html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:170
 #, c-format
@@ -8546,7 +8649,7 @@ msgstr "&rsaquo; Հարցման բեռնավորիչ"
 
 #. %1$s:  name 
 #. %2$s:  IF ( invoice ) 
-#. %3$s:  invoice 
+#. %3$s:  invoice |html 
 #. %4$s:  END 
 #. %5$s:  ordernumber 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:128
@@ -8976,112 +9079,12 @@ msgstr ""
 msgid "&rsaquo;Data deleted %s %s Item types administration %s"
 msgstr "&rsaquo;Տվյալները ջնջված են %s %s Նյութի տեսակների կառավարում %s"
 
-#. %1$s:  END 
-#. %2$s:  IF CGI.param('errlo') 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:10
-#, c-format
-msgid "' %%]%s %sLayout: [%% '"
-msgstr "' %%]%s %sՈւրվագիծ: [%% '"
-
-#. %1$s:  END 
-#. %2$s:  IF CGI.param('errpl') 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:8
-#, c-format
-msgid "' %%]%s %sPatron list: [%% '"
-msgstr "' %%]%s %sՀաճախորդի ցուցակ: [%% '"
-
-#. %1$s:  END 
-#. %2$s:  IF CGI.param('errpt') 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:9
-#, c-format
-msgid "' %%]%s %sPatron number: [%% '"
-msgstr "' %%]%s %sՀաճախորդի համար: [%% '"
-
-#. %1$s:  END 
-#. %2$s:  IF CGI.param('errtpl') 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:11
-#, c-format
-msgid "' %%]%s %sTemplate: [%% '"
-msgstr "' %%]%s %sԿաղապար: [%% '"
-
-#. %1$s:  END 
-#. %2$s:  END 
-#. %3$s:  IF ( error == 101 ) 
-#. %4$s:  IF ( card_element ) 
-#. %5$s:  card_element 
-#. %6$s:  element_id 
-#. %7$s:  ELSE 
-#. %8$s:  END 
-#. %9$s:  ELSIF ( error == 102 ) 
-#. %10$s:  IF ( card_element ) 
-#. %11$s:  card_element 
-#. %12$s:  element_id 
-#. %13$s:  ELSIF ( image_ids ) 
-#. %14$s:  image_ids 
-#. %15$s:  ELSE 
-#. %16$s:  END 
-#. %17$s:  ELSIF ( error == 201 ) 
-#. %18$s:  IF ( element_id ) 
-#. %19$s:  card_element 
-#. %20$s:  element_id 
-#. %21$s:  END 
-#. %22$s:  ELSIF ( error == 202 ) 
-#. %23$s:  ELSIF ( error == 203 ) 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:12
-#, c-format
-msgid ""
-"' %%]%s Please have your system administrator check the error log for "
-"details. %s %s The database returned an error while %ssaving %s %s"
-"%sattempting a save operation%s. Please have your system administrator check "
-"the error log for details. %s The database returned an error while "
-"%sdeleting %s %s%s%s%sattempting a delete operation%s. Please have your "
-"system administrator check the error log for details. %s An unsupported "
-"operation was attempted%s on %s %s%s. Please have your system administrator "
-"check the error log for details. %s An error has occurred. Please ask your "
-"system administrator to check the error log for more details. %s A non-"
-"existent or invalid library code was supplied. Please "
-msgstr ""
-"' %%]%s Թող համակարգի կառավարիչը մանրամասների համար ստուգի սխալների լոգը։ %s "
-"%s Շտեմարանը վերադարձրեց սխալ, մինչ %ssaving %s %s%sփորձում է հիշել։%s Թող "
-"համակարգի կառավարիչը մանրամասների համար ստուգի սխալների լոգը։ %s Շտեմարանը "
-"վերադարձրեց սխալ, մինչ %sdeleting %s %s%s%s%sփորձում է ջնջել։%s. Թող "
-"համակարգի կառավարիչը մանրամասների համար ստուգի սխալների լոգը։ %s Չաջակցվող "
-"գործողության փորձ է կատարվել%s այստեղ %s %s%s։ Թող համակարգի կառավարիչը "
-"մանրամասների համար ստուգի սխալների լոգը։ %s Հանդիպել է սխալ։ Թող համակարգի "
-"կառավարիչը ավելի մանրամասների համար ստուգի սխալների լոգը։ %s Տրամադրվել է "
-"գոյություն չունեցող կամ սխալ գրադարանի կոդ։ Խնդրվում է "
-
 #. %1$s:  ELSIF op == 'list' 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:55
 #, c-format
 msgid "' %%]' %sCurrencies %s "
 msgstr "' %%]' %sՏարադրամներ %s "
-
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:8
-#, c-format
-msgid "' _ CGI.param('errba') _ '"
-msgstr "' _ CGI.param('errba') _ '"
-
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:11
-#, c-format
-msgid "' _ CGI.param('errlo') _ '"
-msgstr "' _ CGI.param('errlo') _ '"
-
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:9
-#, c-format
-msgid "' _ CGI.param('errpl') _ '"
-msgstr "' _ CGI.param('errpl') _ '"
-
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:10
-#, c-format
-msgid "' _ CGI.param('errpt') _ '"
-msgstr "' _ CGI.param('errpt') _ '"
-
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:12
-#, c-format
-msgid "' _ CGI.param('errtpl') _ '"
-msgstr "' _ CGI.param('errtpl') _ '"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:55
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:155
@@ -9114,6 +9117,11 @@ msgstr "' ~%%] %s %s [%%~ action_block = action_block _ ' "
 #, c-format
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr "' ~%%] [%%~ action_block = action_block _ '"
+
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:521
+#, c-format
+msgid "') |html %%]"
+msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  rescardnumber 
@@ -9175,7 +9183,7 @@ msgstr "(%s) Դեպի "
 #. %6$s:  w.item.itemcallnumber 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:826
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:827
 #, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %s  %s %s %s [%s] %s Պահումը դրված է %s. "
@@ -9467,8 +9475,8 @@ msgstr ""
 msgid "(ignore means that the subfield does not display in the record editor) "
 msgstr "(անտեսել նշանակում է որ ենթադաշտը չի արտածվում գրառման խմբագրիչում) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:436
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:442
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:412
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:418
 #, c-format
 msgid "(inclusive)"
 msgstr "(ներառյալ)"
@@ -9834,7 +9842,7 @@ msgstr "-- խնդրում եմ ընտրել --"
 msgid ". Deletion is not possible."
 msgstr ". Ջնջելը հնարավոր չէ։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:265
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:269
 #, c-format
 msgid ". Deletion not possible "
 msgstr ". Հնարավոր չէ ջնջել "
@@ -9898,12 +9906,12 @@ msgstr "...և: "
 msgid "...to "
 msgstr "...դեպի "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:888
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:889
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 Դուրս տրումներ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:900
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:509
 #, c-format
 msgid "0 Holds"
@@ -9941,11 +9949,6 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:136
 msgid "0000-00-00"
 msgstr "0000-00-00"
-
-#. META http-equiv=Refresh
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:41
-msgid "0; url=[% scriptname %]?booksellerid=[% booksellerid %]"
-msgstr "0; url=[% scriptname %]?booksellerid=[% booksellerid %]"
 
 #. META http-equiv=Refresh
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:300
@@ -10101,6 +10104,13 @@ msgstr "Լռակյաց տառ '%s' կոդով արդեն գոյություն ո
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 msgid "A new version of this site is available. Load it?"
 msgstr "Այս կայքի նոր տարբերակը հասանելի է։ Բեռնավորե՞լ։"
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:35
+#, c-format
+msgid ""
+"A non-existent or invalid library code was supplied. Please verify that you "
+"have a library set. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:102
 #, c-format
@@ -10265,24 +10275,6 @@ msgstr "Հաշիվը ժամկետանց է"
 #, c-format
 msgid "Account management fee"
 msgstr "Հաշվի կառավարման վճար"
-
-#: intranet-tmpl/prog/en/includes/csv_headers/acqui/basketgroup.tt:1
-#, c-format
-msgid ""
-"Account number,Basket name,Order number,Author,Title,Publisher,Publication "
-"year,Collection title,ISBN,Quantity,RRP tax included, RRP tax excluded,"
-"Discount,Estimated cost tax included,Estimated cost tax excluded,Note for "
-"vendor,Entry date,Bookseller name,Bookseller physical address,Bookseller "
-"postal address,Contract number,Contract name,Basket group delivery place,"
-"Basket group billing place,Basket delivery place,Basket billing place "
-msgstr ""
-"Հաշվի համար,Զամբյուղի անուն,Պատվերի համար,Հեղինակ,Վերնագիր,Հրատարակիչ,"
-"Հրատարակման տարի,Հավաքածուի վերնագիր,ISBN,Քանակ,RRP հարկը ներառված է,,RRP "
-"հարկը հանված է,Զեղչ,Գնահատված հարկի գինը ներառված է,Գնահատված հարկի գինը "
-"հանված է,Նշումներ մատակարարի համար,Մուտքի ամսաթիվ,Գրավաճառի անուն,Գրավաճառի "
-"ֆիզիկական հասցե,Գրավաճառի փոստային հասցե,Կոնտրակտի համար,Կոնտրակտի անուն,"
-"Զամբյուղի խմբի առաքման վայր,Զամբյուղի խմբի վճարի ներկայացման վայր,Զամբյուղի "
-"առաքման վայր,Զամբյուղի վճարի ներկայացման վայր "
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:205
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:334
@@ -10450,7 +10442,7 @@ msgstr "Գործողություն"
 msgid "Action if matching record found:"
 msgstr "Գործողություն, եթե համընկնող գրառումը գտնված է։"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:250
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:236
 #, c-format
 msgid "Action if matching record found: "
 msgstr "Գործողություն, եթե համընկնող գրառումը գտնված է։ "
@@ -10461,7 +10453,7 @@ msgstr "Գործողություն, եթե համընկնող գրառումը �
 msgid "Action if no match found:"
 msgstr "Գործողություն, եթե համընկնում գտնված չէ։"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:253
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:239
 #, c-format
 msgid "Action if no match is found: "
 msgstr "Գործողություն, եթե համընկնում չի գտնվել։ "
@@ -10485,7 +10477,7 @@ msgstr "Գործողություն, եթե համընկնում չի գտնվե�
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:330
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:324
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:362
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:366
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:230
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:293
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:157
@@ -10711,7 +10703,7 @@ msgstr "Ավելացրու նոր դաշտ"
 msgid "Add a new group"
 msgstr "Ավելացրու նոր խումբ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:876
 #, c-format
 msgid "Add a new message"
 msgstr "Ավելացրու նոր հաղորդագրություն"
@@ -11038,7 +11030,7 @@ msgstr "Ավելացրու Հասցեատերեր։"
 msgid "Add record matching rule"
 msgstr "Ավելացրու գրառման համընկելիության օրենքը"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:439
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:440
 #, c-format
 msgid "Add record using fast cataloging"
 msgstr "Ավելացրու գրառում օգտագործելով արագ քարտարգրումը"
@@ -11339,7 +11331,7 @@ msgstr "Հասցեի տող 2 "
 msgid "Address line 3: "
 msgstr "Հասցեի տող 3 "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:761
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:95
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:102
 #, c-format
@@ -11347,7 +11339,7 @@ msgid "Address:"
 msgstr "Հասցե:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:484
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:46
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:47
 #, c-format
 msgid "Address: "
 msgstr "Հասցե: "
@@ -11421,7 +11413,7 @@ msgstr "Անչափահաս"
 msgid "Adrien Saurat"
 msgstr "Adrien Saurat"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:145
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:149
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:187
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:642
 #, c-format
@@ -11465,7 +11457,7 @@ msgid "Advanced search"
 msgstr "Խորացված փնտրում"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:329
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:459
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:435
 #, c-format
 msgid "After"
 msgstr "Հետո"
@@ -11495,13 +11487,13 @@ msgstr "Տարիք"
 msgid "Age in days"
 msgstr "Տարիքը օրերով"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:348
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:352
 #, c-format
 msgid "Age required"
 msgstr "Տարիքը պահանջվում է"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:102
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:280
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:106
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:284
 #, c-format
 msgid "Age required: "
 msgstr "Տարիքը պահանջվում է: "
@@ -11518,7 +11510,7 @@ msgstr "Տարիքի սահմանափակում"
 
 #. For the first occurrence,
 #. %1$s:  AGE_RESTRICTION 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:507
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:508
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:146
 #, c-format
 msgid "Age restriction %s."
@@ -11662,8 +11654,8 @@ msgid "All available funds%s for %s%s"
 msgstr "Բոլոր հասանելի բյուջեները%s համար %s%s"
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:154
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:156
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:165
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:160
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:169
 #, c-format
 msgid "All branches"
 msgstr "Բոլոր մասնաճյուղերը"
@@ -12109,10 +12101,44 @@ msgstr ""
 "Լիազորված արժեք կցված ընթերցողներին, որը կարելի է օգտագործել վիճակագրական "
 "նպատակներով։"
 
+#. %1$s:  batch_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:51
+#, fuzzy, c-format
+msgid "An error has occurred and batch %s was not deleted. "
+msgstr "Պատահել է սխալ։ Հնարավոր չէ ստեղծել ինվոյս։"
+
+#. %1$s:  batch_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:53
+#, fuzzy, c-format
+msgid "An error has occurred and batch %s was not fully de-duplicated. "
+msgstr "Պատահել է սխալ։ Հնարավոր չէ ստեղծել ինվոյս։"
+
+#. %1$s:  batch_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:45
+#, fuzzy, c-format
+msgid "An error has occurred and no items have been added to batch %s. "
+msgstr "Պատահել է սխալ։ Հնարավոր չէ ստեղծել ինվոյս։"
+
+#. %1$s:  batch_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:49
+#, fuzzy, c-format
+msgid "An error has occurred and the item(s) was not removed from batch %s. "
+msgstr "Պատահել է սխալ։ Հնարավոր չէ ստեղծել ինվոյս։"
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:37
+#, fuzzy, c-format
+msgid "An error has occurred while attempting to upload the image file. "
+msgstr "Հանդիպել է սխալ այս ցուցակը ստեղծելիս։"
+
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:17
 #, c-format
 msgid "An error has occurred!"
 msgstr "Կա սխալ!"
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:33
+#, fuzzy, c-format
+msgid "An error has occurred. "
+msgstr "Կա սխալ։ %s "
 
 #. %1$s:  IF ( error_delitem ) 
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:46
@@ -12173,6 +12199,12 @@ msgstr ""
 "Սխալ է հանդիպել և %s այս գործողությունը %s %s չի վաարտվել։ Ասեք համակարգի "
 "կառավարչին մանրամասների համար ստուգելու սխալի գրանցման ֆայլը։ "
 
+#. %1$s:  IMAGE_NAME 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:43
+#, fuzzy, c-format
+msgid "An image with the name '%s' already exists."
+msgstr "Այս անունով ձևանմուշ արդեն կա։"
+
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:24
 #, c-format
 msgid "An internal link in the client is broken and the page does not exist"
@@ -12182,6 +12214,18 @@ msgstr "Հաճախորդի մոտ ներքին կապը կոտրված է, և է
 #, c-format
 msgid "An unknown error has occurred."
 msgstr "Չճանաչված սխալ է հանդիպել;"
+
+#. %1$s:  card_element 
+#. %2$s:  element_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:30
+#, c-format
+msgid "An unsupported operation was attempted on %s %s. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:31
+#, c-format
+msgid "An unsupported operation was attempted. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:30
 #, c-format
@@ -12523,7 +12567,7 @@ msgstr "Վստա՞հ ես որ ուզում ես փակել այս բաժանո�
 msgid "Are you sure you want to delete %s %s?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s %s"
 
-#. %1$s:  library.branchname 
+#. %1$s:  library.branchname |html 
 #. %2$s:  library.branchcode 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:207
 #, c-format
@@ -12567,7 +12611,7 @@ msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s կցված նյո
 msgid "Are you sure you want to delete the %s selected search history entries?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s ընտրված փնտրման պատմության մուտքերը։"
 
-#. %1$s:  category.codedescription 
+#. %1$s:  category.codedescription |html 
 #. %2$s:  category.categorycode 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:385
 #, c-format
@@ -13086,7 +13130,7 @@ msgstr "Կցիր նյութ"
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "Կցիր այս զամբյուղը նույն անունով զամբյուղի նոր խմբի"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:726
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
 #, c-format
 msgid "Attention:"
 msgstr "Ուշադրություն։"
@@ -13275,7 +13319,7 @@ msgstr "Հեղինակ:"
 msgid "Author: "
 msgstr "Հեղինակ: "
 
-#. %1$s:  author 
+#. %1$s:  author |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:257
 #, c-format
 msgid "Author: %s"
@@ -13527,7 +13571,7 @@ msgstr "Ավտոմատ պատվիրում։ "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:187
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:408
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:645
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:646
 #, c-format
 msgid "Automatic renewal"
 msgstr "Հեղինակավորների աղյուսակներ"
@@ -13656,7 +13700,7 @@ msgstr "Հետ դեպի ցուցակ"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:86
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:82
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:121
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:952
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:721
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:739
@@ -13726,12 +13770,12 @@ msgstr "Շտրիխկոդի ֆայլ։ "
 msgid "Barcode list (one barcode per line): "
 msgstr "Շտրիխ կոդի ցուցակ (մեկ շտրիխ կոդ մեկ տողում): "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:423
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:424
 #, c-format
 msgid "Barcode not found"
 msgstr "Շտրիխկոդը գտնված չէ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1016
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1017
 #, c-format
 msgid "Barcode submitted"
 msgstr "Շտրիխկոդը գրանցված է"
@@ -13834,7 +13878,7 @@ msgstr "Հիմնական սահմանափակումներ"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:998
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:97
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:244
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:351
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:159
@@ -14156,6 +14200,11 @@ msgstr "Փաթեթով գրառման ջնջում"
 msgid "Batch record modification"
 msgstr "Փաթեթով գրառման ձևափոխում"
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:2
+#, fuzzy, c-format
+msgid "Batch: "
+msgstr "Փաթեթ %s"
+
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:181
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:167
 #, c-format
@@ -14182,7 +14231,7 @@ msgstr ""
 "ընթերցողի գրառումներին։ Գնա "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:327
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:460
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:436
 #, c-format
 msgid "Before"
 msgstr "Մինչ"
@@ -14436,13 +14485,13 @@ msgstr ""
 "Բիրմինգհամում (Մեծ Բրիտանիա) տեղակայված նախագծող Mark James պատասխանատուe "
 "famfamfam Silk iconset."
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:177
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:179
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:181
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:183
 #, c-format
 msgid "Block "
 msgstr "Արգելափակված "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:168
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:172
 #, c-format
 msgid "Block expired patrons:"
 msgstr "Արգելափակիր ժամկետը լրացած օգտատերերին։"
@@ -14548,13 +14597,13 @@ msgid "Branches limitation"
 msgstr "Մասնաճյուղերի սահմանափակում"
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:152
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:154
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:158
 #, c-format
 msgid "Branches limitation: "
 msgstr "Մասնաճյուղերի սահմանափակում։ "
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:264
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:357
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:361
 #, c-format
 msgid "Branches limitations"
 msgstr "Մասնաճյուղերի սահմանափակումներ"
@@ -14774,7 +14823,7 @@ msgstr "Ներկառուցված ցանցից անջատված տացքի միջ
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:262
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:405
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
 #, c-format
 msgid "By"
 msgstr "Կողմից"
@@ -14899,7 +14948,7 @@ msgid "CD software"
 msgstr "CD ծրագրաշար"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:59
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:471
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:447
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:234
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:313
 #, c-format
@@ -14992,7 +15041,7 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Դասիչներ (0-9 մինչև Ա-Ֆ)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:725
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:743
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:534
@@ -15018,7 +15067,7 @@ msgstr "Դասիչի հմր"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:87
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:106
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:951
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:952
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:239
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:90
@@ -15262,8 +15311,8 @@ msgstr "Չի կարող հիշել այս գրառումը, քանի որ հետ
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:201
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:186
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:138
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:247
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:323
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:251
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:327
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:199
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:378
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
@@ -15399,7 +15448,7 @@ msgid "Cancel article request"
 msgstr "Չեղյալ արա հոդվածի պատվերը"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:412
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:413
 #, c-format
 msgid "Cancel checkout and place a hold for %s"
 msgstr "Չեղյալ արա տրումը և այնպահիր %s համար"
@@ -15446,7 +15495,7 @@ msgid "Cancel import"
 msgstr "Չեղյալ արա ներմուծումը"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:964
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:576
 msgid "Cancel marked holds"
 msgstr "Չեղյալ անել նշված պահումները"
@@ -15583,7 +15632,7 @@ msgstr "Չի կարող դուրս տալ"
 
 #. For the first occurrence,
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:718
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:719
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:67
 #, c-format
 msgid "Cannot check out! %s "
@@ -16031,18 +16080,18 @@ msgstr "Դասի կոդ :"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:70
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:75
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:269
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:273
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:335
 #, c-format
 msgid "Category code: "
 msgstr "Դասի կոդ։ "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:345
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:349
 #, c-format
 msgid "Category name"
 msgstr "Դասի անվանում"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:142
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:146
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:354
 #, c-format
 msgid "Category type: "
@@ -16237,7 +16286,7 @@ msgstr "Նիշերի կոդավորում։ "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:350
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:726
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:744
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:535
@@ -16293,12 +16342,12 @@ msgstr "Ընտրիր բոլորը"
 msgid "Check expiration"
 msgstr "Ստուգման ժամկետի լրանալ"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:259
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:245
 #, c-format
 msgid "Check for embedded item record data?"
 msgstr "Ստուգե՞լ ներդրված նյութի գրառման արժեքը։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:193
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:698
 #, fuzzy, c-format
 msgid "Check for previous checkouts: "
@@ -16362,7 +16411,7 @@ msgstr "Ավելի մանրամասների համար դիտիր սխալներ
 #: intranet-tmpl/prog/en/includes/patron-search.inc:151
 #: intranet-tmpl/prog/en/includes/checkin-search.inc:27
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:609
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:610
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:611
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:21
@@ -16373,7 +16422,7 @@ msgstr "Դուրս տրում"
 
 #. %1$s:  book.barcode 
 #. %2$s:  book.title 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:456
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:457
 #, c-format
 msgid "Check out %s: %s"
 msgstr "Տացք %s: %s"
@@ -16394,12 +16443,12 @@ msgstr "Դուրս տրման հաղորդագրություն"
 msgid "Check out to this patron"
 msgstr "Նյութը սպասարկի այս ընթերցողին"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:359
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:363
 #, c-format
 msgid "Check previous checkout?"
 msgstr "Ստուգե՞լ նախորդ դուրս տրումները"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:289
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:293
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:445
 #, c-format
 msgid "Check previous checkouts: "
@@ -16553,7 +16602,7 @@ msgid "Checked out %s times"
 msgstr "Դուրս է տրվել %s անգամ"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:22
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:929
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:724
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:742
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:46
@@ -16564,7 +16613,7 @@ msgid "Checked out from"
 msgstr "Դուրս է տրված այստեղից"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:928
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:723
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:741
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:532
@@ -16578,7 +16627,7 @@ msgstr "Դուրս է տրված"
 msgid "Checked out today"
 msgstr "Դուրս է տրված այսօր"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:694
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "Checked out: "
 msgstr "Դուրս տրված։"
@@ -16621,8 +16670,8 @@ msgstr "Դուրս է տրվում "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:596
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:715
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:597
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:716
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:84
 #, c-format
 msgid "Checking out to %s"
@@ -16660,7 +16709,7 @@ msgstr "Դուրս տրում"
 msgid "Checkout count"
 msgstr "Դուրս տրման հաշվիչ"
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:447
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:423
 #, c-format
 msgid "Checkout count:"
 msgstr "Դուրս տրման հաշվիչ։"
@@ -16701,7 +16750,7 @@ msgstr "Դուրս տալ"
 msgid "Checkout or renew"
 msgstr "Դուրս տրված կամ թարմացված"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:612
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:613
 #, c-format
 msgid "Checkout settings"
 msgstr "Դուրս տրման կարգաբերումներ"
@@ -16723,7 +16772,7 @@ msgid "Checkouts"
 msgstr "Դուրս տրումներ"
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:8
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:805
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:806
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:70
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:77
 #, c-format
@@ -16732,7 +16781,7 @@ msgstr ""
 "Դուրս տրումները ԱՐԳԵԼԱՓԱԿՎԱԾ ԵՆ քանի որ տուգանքի բալանսը գերազանցում է "
 "սահմանը։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:535
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:536
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:264
 #, c-format
 msgid "Checkouts are BLOCKED because patron has overdue items."
@@ -16764,7 +16813,7 @@ msgstr ""
 "կառուցվածքը խորհուրդ է տրվում որ աշխատեցնես այս գործիքը քո սահմանման մեջ "
 "սխալների առկայության ստուգման համար։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:146
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:150
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:641
 #, c-format
 msgid "Child"
@@ -16908,7 +16957,7 @@ msgstr "Ընտրիր գրառումը"
 msgid "Choose time"
 msgstr "Ընտրիր ժամը"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:188
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:192
 #, c-format
 msgid ""
 "Choose whether patrons of this category be blocked from public catalog "
@@ -16918,7 +16967,7 @@ msgstr ""
 "այնպիսի գործողություններ կատարելուց ինչպիսիք են՝ պահումների թարմացում և "
 "տեղադրում երբ նրանց քարտերի ժամկետն անցել է։ "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:209
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:213
 #, c-format
 msgid ""
 "Choose whether patrons of this category by default are reminded if they try "
@@ -17361,7 +17410,7 @@ msgstr "Մաքրված ներմուծման փաթեթ #%s"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:385
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:118
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:633
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:702
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:683
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1095
@@ -17448,7 +17497,7 @@ msgid "Clear on loan"
 msgstr "Մաքրի տրման պահին"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:591
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:592
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:691
 msgid "Clear screen"
 msgstr "Մաքրիր պաստառը"
@@ -17842,7 +17891,7 @@ msgstr "Փակված է:"
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:249
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:216
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:152
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:344
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:348
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:226
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:291
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:164
@@ -18383,7 +18432,7 @@ msgstr "Ուշացած պատվերների համար կապվե՞լ"
 msgid "Contact details"
 msgstr "Կոնտակտի մանրամասներ"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:45
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:46
 #, c-format
 msgid "Contact information"
 msgstr "Կապի տեղեկություն"
@@ -18403,7 +18452,7 @@ msgstr "Կոնտակտի նշում։ "
 msgid "Contact when ordering?"
 msgstr "Ուշացած պատվերների համար կապվե՞լ"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:59
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:60
 #, c-format
 msgid "Contact: "
 msgstr "Կոնտակտ։ "
@@ -18456,7 +18505,7 @@ msgstr "Բովանդակություններ"
 msgid "Contents of "
 msgstr "Սրա Բովանդակություն "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:406
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:407
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:44
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:170
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:156
@@ -18507,17 +18556,6 @@ msgstr ""
 #, c-format
 msgid "Contract id "
 msgstr "Կոնտրակտի id "
-
-#: intranet-tmpl/prog/en/includes/csv_headers/acqui/basket.tt:1
-#, c-format
-msgid ""
-"Contract name,Order number,Entry date,ISBN,Author,Title,Publication year,"
-"Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,"
-"Billing place "
-msgstr ""
-"Կոնտրակտի անուն,Պատվերի համար,Մուտքի ամսաթիվ,ISBN,Հեղինակ,Վերնագիր,"
-"Հրատարակության տարի,Հրատարակիչ,Հավաքածուի անուն,Նշում մատակարարի համար,Քանակ,"
-"RRP,Առաքման վայր,Հաշիվը ուղարկելու վայր "
 
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:329
@@ -18593,7 +18631,7 @@ msgstr "Ստուգիչ համար։"
 msgid "Control number: "
 msgstr "Ստուգիչ համար։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:234
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:238
 #, c-format
 msgid ""
 "Controls how long a patrons checkout history is kept for new patrons of this "
@@ -18606,11 +18644,6 @@ msgstr ""
 "դարձնում դուրս տրումները, և \"Ընդմիշտը\" պահում է օգտատիրոջ դուրս տրումների "
 "պատմությունը անորոշ։ Երբ կարգաբերված է \"Լռակյաց\" պահված պատմության ծավալը "
 "վերահսկվում է cronjob-ի կողմից "
-
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:210
-#, c-format
-msgid "Convert file to MARC using the following plugin: "
-msgstr "Ձևափոխիր ֆայլը ՄԵԸՔ-ի օգտագործելով հետևյալ պլագինը։ "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:292
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:442
@@ -18965,7 +18998,7 @@ msgstr "Ստեղծիր SQL հաշվետվություններ"
 msgid "Create a new CSV profile"
 msgstr "Ստեղծիր նոր ձևանմուշ"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:468
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:472
 #, c-format
 msgid "Create a new category"
 msgstr "Ստեղծիր նոր դաս"
@@ -19180,7 +19213,7 @@ msgstr "Կրեդիտի տեսակ։ "
 msgid "Credits"
 msgstr "Կրեդիտներ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #, c-format
 msgid "Credits:"
 msgstr "Կրեդիտներ։"
@@ -19899,9 +19932,9 @@ msgstr "դեկտեմբեր"
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:33
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:38
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:50
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:221
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:225
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:229
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:233
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:560
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:716
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:225
@@ -19954,20 +19987,20 @@ msgstr "Լռակյաց կառուցվածք"
 msgid "Default lost item fee refund on return policy"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:241
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:245
 #, c-format
 msgid "Default messaging preferences for this patron category"
 msgstr ""
 "Լռակյաց հաղորդագրությունների առաքման նախապատվություններ ընթերցողական այս "
 "դասի համար"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:361
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:365
 #, c-format
 msgid "Default privacy"
 msgstr "Լռակյաց գաղտնիք"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:215
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:303
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:219
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:307
 #, c-format
 msgid "Default privacy: "
 msgstr "Լռակյաց գաղտնիք։ "
@@ -20269,7 +20302,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:434
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:436
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:439
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:461
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:465
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:273
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:304
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:169
@@ -20288,7 +20321,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:218
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:207
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:195
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:870
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:194
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:196
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
@@ -20627,7 +20660,7 @@ msgid "Delete this basket"
 msgstr "Ջնջիր այս զամբյուղը"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:322
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:326
 msgid "Delete this category"
 msgstr "Ջնջիր այս դասը"
 
@@ -20678,7 +20711,7 @@ msgstr "Ջնջել օգտվողին"
 msgid "Delete vendor"
 msgstr "Ջնջել մատակարարին"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:711
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:569
 #, c-format
@@ -20932,7 +20965,7 @@ msgstr "Նկարագրություն։"
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:270
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:274
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:350
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:144
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:71
@@ -21271,7 +21304,7 @@ msgstr ""
 "Մի ստեղծիր կրկնվող գրառում։ Ավելացրու պատվեր քարտարանում առկա գրառումից։"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:202
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:243
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:229
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:272
 #, c-format
 msgid "Do not look for matching records"
@@ -21292,8 +21325,7 @@ msgstr "Մի հեռացրու որևէ այցելուի (թեստային կատ
 msgid "Do not use plugin"
 msgstr "Մի օգտագործի"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:212
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:229
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:215
 #, c-format
 msgid "Do not use."
 msgstr "Մի օգտագործի"
@@ -21350,19 +21382,19 @@ msgstr ""
 msgid "Don't allow"
 msgstr "Մի թույլատրի"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:183
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:185
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:187
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:189
 #, c-format
 msgid "Don't block "
 msgstr "Մի արգելափակիր "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:379
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:389
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:380
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:390
 #, c-format
 msgid "Don't check out and print slip (P)"
 msgstr "Մի սպասարկիր և տպիր կտրոն (P)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:662
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:663
 #, c-format
 msgid "Don't decrease checkout length based on holds"
 msgstr ""
@@ -21542,7 +21574,7 @@ msgstr "Վերադարձ %s"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:357
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:923
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:924
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:719
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:737
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:734
@@ -21553,7 +21585,7 @@ msgstr "Վերադարձ %s"
 msgid "Due date"
 msgstr "Վերադարձի ամսաթիվ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:922
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:923
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "Վերադարձի ամսաթիվ (չֆորմատավորված, թաքնված)"
@@ -21812,7 +21844,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:171
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:432
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:439
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:460
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:464
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:272
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:303
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
@@ -21864,13 +21896,13 @@ msgstr "Խմբագրել"
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:17
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:17
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:52
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:121
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:122
 #, c-format
 msgid "Edit "
 msgstr "Խմբագրել "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:742
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:755
 #, c-format
 msgid "Edit Details"
 msgstr "Խմբագի մանրամասները"
@@ -21952,7 +21984,7 @@ msgstr "Խմբագրել հեղինակավորը"
 msgid "Edit basket"
 msgstr "Խմբագրի զամբյուղը"
 
-#. %1$s:  basketname 
+#. %1$s:  basketname |html 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:35
 #, c-format
 msgid "Edit basket %s"
@@ -22127,7 +22159,7 @@ msgstr "Խմբագրել ցուցակը"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:168
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:476
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:452
 #, c-format
 msgid "Edit search"
 msgstr "Խմբագրիր փնտրումը"
@@ -22388,24 +22420,24 @@ msgstr "Բարելավված բովանդակություն"
 msgid "Enhanced content settings"
 msgstr "Բարելավված բովանդակության կարգաբերումներ"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:350
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:354
 #, c-format
 msgid "Enrollment fee"
 msgstr "Ներգրավման վճար"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:110
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:282
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:114
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:286
 #, c-format
 msgid "Enrollment fee: "
 msgstr "Ներգրավման վճար։ "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:347
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:351
 #, c-format
 msgid "Enrollment period"
 msgstr "Ներգրավման ժամանակահատված"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:86
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:271
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:275
 #, c-format
 msgid "Enrollment period: "
 msgstr "Ներգրավման ժամանակահատված։ "
@@ -22493,13 +22525,13 @@ msgstr "Մուտք արա ըստ itemnumber-ի"
 msgid "Enter cover biblionumber: "
 msgstr "Մուտք արա Բիբլիո համարը։ "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:599
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:600
 #, fuzzy, c-format
 msgid "Enter item barcode or keyword:"
 msgstr "Մուտք արա նյութի շտրիխ կոդը։"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:44
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:601
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:602
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:693
 #, c-format
 msgid "Enter item barcode:"
@@ -22694,8 +22726,13 @@ msgstr "Սխալ նյութը հիշելուց"
 msgid "Error saving items"
 msgstr "Սխալ նյութերը հիշելուց"
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:12
+#, fuzzy, c-format
+msgid "Error while creating PDF file. "
+msgstr "Նյութերը բեռնաթափելու սխալ"
+
 #: intranet-tmpl/prog/en/modules/auth.tt:21
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:577
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:578
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:175
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:177
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:414
@@ -22853,8 +22890,8 @@ msgstr "Իմաստ"
 msgid "Every"
 msgstr "Ամեն ոք"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:81
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:84
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:82
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:85
 #, c-format
 msgid "Everyone"
 msgstr "Ամենոք"
@@ -22974,7 +23011,7 @@ msgid "Experimental features"
 msgstr "Փորձարարական հնարավորություններ"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:38
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:716
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:960
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:567
@@ -23004,8 +23041,8 @@ msgid "Expiration date: %s"
 msgstr "Ժամկետը լրանալու ամսաթիվ։ %s"
 
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:88
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:740
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
 #, c-format
 msgid "Expiration:"
 msgstr "Ժամկետի լրացում"
@@ -23456,7 +23493,7 @@ msgid "Feedback:"
 msgstr "Հետադարձ կապ։"
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:5
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:804
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:74
 #, c-format
 msgid "Fees &amp; Charges:"
@@ -23747,7 +23784,7 @@ msgstr "Filmographies"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:246
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:88
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:509
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:537
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
@@ -23822,7 +23859,7 @@ msgstr "Զտիչներ"
 msgid "Filters :"
 msgstr "Զտիչներ ։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1002
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1003
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:301
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:178
 #, fuzzy, c-format
@@ -23830,7 +23867,7 @@ msgid "Find another patron?"
 msgstr "Ավելացրու մեկ այլ պայման"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:931
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:536
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:132
@@ -23962,8 +23999,8 @@ msgstr "Սահող"
 msgid "Florian Bischof"
 msgstr "Florian Bischof"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:171
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:173
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:175
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:177
 #, c-format
 msgid "Follow system preference BlockExpiredPatronOpacActions "
 msgstr ""
@@ -24049,9 +24086,9 @@ msgstr "Ստիպողաբար"
 msgid "Force checkout if a limitation exists"
 msgstr "Եթե առկա է սահմանափակում պարտադրի դուրս տրում"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:223
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:227
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:231
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:235
 #, c-format
 msgid "Forever"
 msgstr "Զտիր վճարված տրանզակցիաները"
@@ -24119,7 +24156,7 @@ msgid "Formatting"
 msgstr "Չափանշում"
 
 #. %1$s:  total_rows 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:483
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:459
 #, c-format
 msgid "Found %s results."
 msgstr "Գտնված են %s արդյունքներ։"
@@ -24346,7 +24383,7 @@ msgstr "authid-ից: "
 msgid "From biblio number: "
 msgstr "Բիբլիո համարից։ "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:433
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:409
 #, c-format
 msgid "From call number:"
 msgstr "Դասիչից։"
@@ -24524,31 +24561,6 @@ msgstr "հիմնադրամի փնտրում"
 #, c-format
 msgid "Fund total"
 msgstr "Բյուջեի մեծություն"
-
-#. %1$s:  sep 
-#. %2$s:  sep 
-#. %3$s:  sep 
-#. %4$s:  sep 
-#. %5$s:  sep 
-#. %6$s:  sep 
-#. %7$s:  sep 
-#. %8$s:  sep 
-#. %9$s:  sep 
-#. %10$s:  sep 
-#. %11$s:  sep 
-#. %12$s:  sep 
-#. %13$s:  sep 
-#. %14$s:  sep 
-#. %15$s:  sep 
-#. %16$s:  sep 
-#: intranet-tmpl/prog/en/includes/csv_headers/reports/orders_by_budget.tt:1
-#, c-format
-msgid ""
-"Fund%s\"Basket num\"%s\"Basket name\"%s\"Authorised by\"%s\"Biblio number"
-"\"%sTitle%sCurrency%s\"Vendor price\"%sRRP%s\"Budgeted cost\"%sQuantity%s"
-"\"Total RRP\"%s\"Total cost\"%s\"Entry date\"%s\"Date received\"%s\"Internal "
-"note\"%s\"Vendor note\" "
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:437
@@ -25055,8 +25067,8 @@ msgstr "Բարև,"
 msgid "Hi, you are looking at the result of launching the EXAMPLE plugin."
 msgstr "Դու դիտում ես EXAMPLE պլագինի բեռնավորման արդյունքները։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:130
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:133
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:134
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:137
 #, c-format
 msgid "Hidden by default"
 msgstr "Թաքցված է որպես լռակյաց"
@@ -25210,7 +25222,7 @@ msgstr "Պահման ամսաթիվ"
 msgid "Hold at"
 msgstr "Պահիր այստեղ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:949
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:950
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:562
 #, c-format
 msgid "Hold date"
@@ -25226,13 +25238,13 @@ msgstr "Պահման մանրամասներ"
 msgid "Hold expires on date:"
 msgstr "Պահման ժամկետը լրանում է այս ամսաթվին։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:353
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:357
 #, c-format
 msgid "Hold fee"
 msgstr "Պահման գումար"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:138
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:285
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:142
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:289
 #, c-format
 msgid "Hold fee: "
 msgstr "Պահման գումար: "
@@ -25460,7 +25472,7 @@ msgstr "Հրելու ենթակա պահումներ%s տեղադրված սրա
 msgid "Holds waiting over %s days: %s "
 msgstr "Քո գրադարանի համար վերցման ենթակա պահումներ: %s %s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:822
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:823
 #, c-format
 msgid "Holds waiting:"
 msgstr "Սպասող պահումներ։"
@@ -25925,7 +25937,7 @@ msgstr ""
 msgid "How many issues do you want to receive ?"
 msgstr "Քանի՞ նյութ ես ցանկանում ստանալ։"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:271
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:257
 #, c-format
 msgid "How to process items: "
 msgstr "Ինչպե՞ս ուղարկել նյութերը։ "
@@ -26060,7 +26072,7 @@ msgstr "ISBN կամ ISSN կամ այլ ստանդարտ համար:"
 msgid "ISBN, author or title :"
 msgstr "ISBN, հեղինակ կամ վերնագիր :"
 
-#. %1$s:  isbneanissn 
+#. %1$s:  isbneanissn |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:251
 #, c-format
 msgid "ISBN/EAN/ISSN: %s"
@@ -26127,7 +26139,7 @@ msgstr "ISO 6937"
 msgid "ISO 8859-1"
 msgstr "ISO 8859-1"
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:464
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:440
 #, c-format
 msgid "ISO Format (YYYY-MM-DD)"
 msgstr "ISO ձևաչափ (ՏՏՏՏ-ԱԱ-ՕՕ)"
@@ -26466,6 +26478,11 @@ msgstr "Պատկեր 2"
 #, c-format
 msgid "Image ID"
 msgstr "Պատկերի ID"
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:39
+#, c-format
+msgid "Image exceeds 500KB. Please resize and import again. "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:129
 #, c-format
@@ -26899,9 +26916,9 @@ msgstr "Տեղեկատվություն "
 msgid "Inherit from settings"
 msgstr "Ընդհանուր կարգաբերումներ"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:198
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:202
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:206
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:210
 #, fuzzy, c-format
 msgid "Inherit from system preferences"
 msgstr "Փնտրիր համակարգային նախապատվությունները"
@@ -27191,7 +27208,7 @@ msgstr "Վճարման հաշվի համար։"
 msgid "Invoice no.: "
 msgstr "Վճարման հաշվի համար։ "
 
-#. %1$s:  invoicenumber 
+#. %1$s:  invoicenumber |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:213
 #, c-format
 msgid "Invoice no.: %s"
@@ -27441,7 +27458,7 @@ msgstr "Նյութի դասիչը գտնվում է միջև։ "
 msgid "Item callnumber:"
 msgstr "Նյութի դասիչ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:553
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:554
 #, c-format
 msgid "Item checked out"
 msgstr "Նյութը սպասարկված է"
@@ -27480,7 +27497,7 @@ msgstr "Նյութը լողում է"
 msgid "Item has been lost (transaction recorded anyway)"
 msgstr "Նյութը կորել է (տրանզակցիան գրանցված է)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:479
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:480
 #, c-format
 msgid "Item has been withdrawn"
 msgstr "Նյութը հանված է"
@@ -27552,7 +27569,7 @@ msgstr "Նյութը արդեն հասցեատեր գրադարանում է"
 msgid "Item is normally not for loan %s(%s)%s."
 msgstr "Նյութը որպես կանոն տացքի համար չէ %s(%s)%s։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:483
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:484
 #, c-format
 msgid "Item is restricted"
 msgstr "Նյութը արգելափակված է"
@@ -27736,7 +27753,7 @@ msgstr "Նյութերի ցուցիչները այս պահին հնարավոր
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:683
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:78
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:101
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:925
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:722
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:740
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
@@ -28068,7 +28085,7 @@ msgstr "Jo Ransom"
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:122
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:255
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:264
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:278
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:264
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:370
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:381
 #, c-format
@@ -28482,7 +28499,7 @@ msgstr ""
 #. %1$s:  UNLESS ( basketno ) 
 #. %2$s:  END 
 #. %3$s:  basketname|html 
-#. %4$s:  basketno 
+#. %4$s:  basketno |html 
 #. %5$s:  name|html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:7
 #, c-format
@@ -31210,7 +31227,7 @@ msgstr "Վերջին անգամ փոփոխված է։"
 msgid "Last changed:"
 msgstr "Վերջին փոփոխվածը։"
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:457
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:433
 #, c-format
 msgid "Last checkout date:"
 msgstr "Վերջին դուրս տրման ամսաթիվ։"
@@ -31322,6 +31339,11 @@ msgstr "Դասավորության ID"
 #, c-format
 msgid "Layout name: "
 msgstr "Պլանավորման անուն։ "
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:5
+#, fuzzy, c-format
+msgid "Layout: "
+msgstr "Դասավորություն"
 
 #: intranet-tmpl/prog/en/includes/labels-toolbar.inc:15
 #: intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:17
@@ -31981,7 +32003,7 @@ msgstr "Տեղային օգտագործում"
 msgid "Local use preferences"
 msgstr "Տեղային օգտագործման նախապատվություններ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:428
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:429
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:598
 #, c-format
 msgid "Local use recorded"
@@ -32008,7 +32030,7 @@ msgstr "Տեղային։ "
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:266
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:90
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:143
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:926
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:65
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
@@ -32094,7 +32116,7 @@ msgstr "Գրանցում"
 msgid "Logs"
 msgstr "Լոգեր"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:240
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:226
 #, c-format
 msgid "Look for existing records in catalog?"
 msgstr "Նայե՞լ քարտարանում գոյություն ունեցող գրառումները։"
@@ -32141,18 +32163,18 @@ msgid "Lost item fee refund on return policy for %s"
 msgstr "Լռակյաց տրման, պահման և վերադարձի քաղաքականություն%s համար %s%s"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:33
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:352
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:356
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:40
 #, c-format
 msgid "Lost items"
 msgstr "Կորած նյութեր"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:284
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:288
 #, c-format
 msgid "Lost items in staff client"
 msgstr "Կորած նյութեր անձնակազմի հաճախորդում"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:126
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:130
 #, c-format
 msgid "Lost items in staff client: "
 msgstr "Կորած նյութեր անձնակազմի հաճախորդում։ "
@@ -32182,7 +32204,7 @@ msgstr "Կորած կարգավիճակ։"
 msgid "Lost status: "
 msgstr "Կորած կարգավիճակ։ "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:764
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:765
 #, c-format
 msgid "Lost: "
 msgstr "Կորած։ "
@@ -33318,12 +33340,12 @@ msgstr "Հաղորդումը ուղարկվեց"
 msgid "Message subject:"
 msgstr "Հաղորդման թեմա։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:854
 #, c-format
 msgid "Messages:"
 msgstr "Հաղորդումներ։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:355
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:359
 #, c-format
 msgid "Messaging"
 msgstr "Հաղորդումների առաքում"
@@ -33681,7 +33703,7 @@ msgstr "Ձևափոխիր գրառման համընկեցման օրենքը"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:158
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:177
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:227
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:213
 #, c-format
 msgid "Modify record using the following template: "
 msgstr "Ձևափոխիր գրառումը օգտագործելով հետևյալ ձևանմուշը։ "
@@ -34212,9 +34234,9 @@ msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgid "Nelsonville Public Library, Ohio, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:222
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:226
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:230
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:234
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:53
 #, c-format
 msgid "Never"
@@ -34364,7 +34386,7 @@ msgstr "Նոր քարտ"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:168
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:64
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:333
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:337
 #, c-format
 msgid "New category"
 msgstr "Նոր դաս"
@@ -34772,8 +34794,8 @@ msgstr "Nicole C. Engard (3.0+ Փաստաթղթերի կառավարիչ)"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:265
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:273
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:276
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:117
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:120
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:121
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:124
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:352
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:375
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:650
@@ -34785,7 +34807,7 @@ msgstr "Nicole C. Engard (3.0+ Փաստաթղթերի կառավարիչ)"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:263
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:267
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:253
 #, c-format
 msgid "No"
 msgstr "Ոչ"
@@ -34907,9 +34929,9 @@ msgstr "Չկան սահմանված ակտիվ արտարժույթներ։ Գն
 msgid "No address stored."
 msgstr "Չկա հիշված հասցե։"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:205
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:209
 #, fuzzy, c-format
 msgid "No and try to override system preferences"
 msgstr "Համընդհանուր համակարգային նախապատվություններ"
@@ -34926,7 +34948,14 @@ msgstr "Չկան բազմաստիճան գրառումներ։"
 msgid "No automatic renewal after"
 msgstr "Հեղինակավորների աղյուսակներ"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:468
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:13
+#, fuzzy, c-format
+msgid "No cards created (empty batch or list?) "
+msgstr ""
+"%s Սխալ PDF ֆայլ ստեղծելիս։ %sՔարտեր չեն ստեղծվել (դատարկ փաթեթ կա՞մ "
+"ցուցակ)%s %sՓաթեթ: [%% '"
+
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:472
 #, c-format
 msgid "No categories have been defined. "
 msgstr "Չկան սահմանված դասեր։ "
@@ -35113,6 +35142,13 @@ msgstr "Չկա նյութ այս շտրիխ կոդով ։ %s"
 msgid "No items"
 msgstr "Չկան նյութեր"
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:47
+#, c-format
+msgid ""
+"No items added because the library is not set. Please set your library "
+"before adding items to a batch. "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:290
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:655
 #, c-format
@@ -35134,7 +35170,7 @@ msgstr "Գտնված նյութեր չկան"
 
 #. %1$s:  END 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:460
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:461
 #, c-format
 msgid "No items were found by searching. %s %s "
 msgstr "Փնտրման արդյունքում չկան գտնված նյութեր։ %s %s "
@@ -35203,7 +35239,7 @@ msgstr "Համընկնող հաշվետվություններ գտնված չե�
 msgid "No missing issues found."
 msgstr "Կորած համարներ չկան։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:499
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:500
 #, c-format
 msgid "No more renewals possible"
 msgstr "Անհնար է իրականացնել նոր թարմացումներ"
@@ -35245,7 +35281,7 @@ msgstr ""
 "Ցանցից անջատված շտեմարանում չկան օգտատերերի տոմսի համարներ (համենայնդեպս "
 "կատարվում է)։ %s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:558
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:559
 #, c-format
 msgid "No patron matched "
 msgstr "Համընկնող ընթերցող չկա "
@@ -35405,7 +35441,7 @@ msgstr ""
 "Նորվեգիայի օգտատերերի ազգային շտեմարանում արդյունքներ չեն գտնվել։ "
 "Հաղորդագրություն \"%s\""
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:485
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:461
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:143
 #, c-format
 msgid "No results found."
@@ -35506,7 +35542,7 @@ msgstr "Ոչ, մի ջնջիր"
 msgid "No, don't cancel (N)"
 msgstr "Ոչ, չեղյալ մի արա"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:403
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:404
 #, c-format
 msgid "No, don't check out (N)"
 msgstr "Ոչ, մի սպասարկիր (N)"
@@ -35522,7 +35558,7 @@ msgstr "Ոչ, մի փակիր (N)"
 msgid "No, don't delete (N)"
 msgstr "Ոչ, մի հեռացրու (N)"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:401
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:402
 #, c-format
 msgid "No, don't renew (N)"
 msgstr "Ոչ, մի թարմացրու (N)"
@@ -35972,7 +36008,7 @@ msgstr "Նշումներ/դիտողություններ"
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:103
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:230
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:359
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:845
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:846
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:48
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:376
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:190
@@ -35988,7 +36024,7 @@ msgstr "Նշումներ։"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:590
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:194
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:71
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:312
@@ -36417,7 +36453,7 @@ msgstr "Անջատված"
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:262
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:279
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:318
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:322
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:34
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:48
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:60
@@ -36551,15 +36587,6 @@ msgstr "ԿԱՄ"
 msgid "OR:"
 msgstr "ԿԱՄ։"
 
-#: intranet-tmpl/prog/en/includes/csv_headers/acqui/lateorders.tt:1
-#, c-format
-msgid ""
-"ORDER DATE,ESTIMATED DELIVERY DATE,VENDOR,INFORMATION,TOTAL COST,BASKET,"
-"CLAIMS COUNT,CLAIMED DATE "
-msgstr ""
-"ՊԱՏՎԵՐԻ ԱՄՍԱԹԻՎ,ԱՌԱՔՄԱՆ ԳՆԱՀԱՏՎԱԾ  ԱՄՍԱԹԻՎ,ՄԱՏԱԿԱՐԱՐ,ՏԵՂԵԿԱՏՎՈՒԹՅՈՒՆ,"
-"ԸՆԴՀԱՆՈՒՐ ԳԻՆ,ԶԱՄԲՅՈՒՂ,ՊԱՀԱՆՋՆԵՐԻ ՀԱՇՎԱՐԿ,ՊԱՀԱՆՋՆԵՐԻ ԱՄՍԱԹԻՎ "
-
 #: intranet-tmpl/prog/en/modules/about.tt:41
 #, c-format
 msgid "OS version ('uname -a'): "
@@ -36673,7 +36700,7 @@ msgstr "Olli-Antti Kivilahti"
 msgid "Olwen Williams (Database design and data extraction for Koha 1.0)"
 msgstr "Olwen Williams (Database design and data extraction for Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:461
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:437
 #, c-format
 msgid "On"
 msgstr "On"
@@ -36708,7 +36735,7 @@ msgstr "Վերնագրի վրա "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:676
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:677
 #, c-format
 msgid "On-site checkout"
 msgstr "Տեղային դուրս տրում"
@@ -36718,7 +36745,7 @@ msgstr "Տեղային դուրս տրում"
 msgid "On-site checkouts"
 msgstr "Տեղային դուրս տրումներ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:671
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr "Միայն տեղային դուրս տրումներ։ Վերադարձի ավտոմատ ամսաթիվ։ "
@@ -36821,7 +36848,7 @@ msgstr "Միայն նյութ "
 msgid "Only items currently available:"
 msgstr "Միայն նյութեր, որոնք հիմա մատչելի են"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:721
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:722
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr "Միայն տեղային տրումներն են թույլատրված"
@@ -36961,7 +36988,7 @@ msgstr "Կամ մեկ առ մեկ սկանավորի նյութերը"
 msgid "Or use a patron list"
 msgstr "Կամ օգտագործիր ընթերցողի ցուցակը"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:97
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:460
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:643
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:77
@@ -37132,7 +37159,7 @@ msgstr "Պատվերներ %s"
 msgid "Orders for fund '%s'"
 msgstr "Պատվերներ %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:78
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:79
 #, fuzzy, c-format
 msgid "Orders from:"
 msgstr "Պատվերներ այստեղից։ "
@@ -37143,17 +37170,17 @@ msgstr "Պատվերներ այստեղից։ "
 msgid "Orders search"
 msgstr "Պատվերի փնտրում"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:75
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:76
 #, c-format
 msgid "Orders with uncertain prices"
 msgstr "Պատվերների ոչ հստակ գներով"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:44
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:45
 #, c-format
 msgid "Orders with uncertain prices for vendor "
 msgstr "Պատվերների ոչ հստակ գներով մատակարարի համար "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:148
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:152
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:644
 #, c-format
 msgid "Organization"
@@ -37297,7 +37324,7 @@ msgstr "Ելքի ձևաչափ։"
 msgid "Output to a file named: "
 msgstr "Արտահանիր դեպի ֆայլ որի անունն է։ "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:469
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:445
 #, c-format
 msgid "Output:"
 msgstr "Ելք։"
@@ -37308,7 +37335,7 @@ msgstr "Ելք։"
 msgid "Outstanding"
 msgstr "Հռչակավոր"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:351
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:355
 #, c-format
 msgid "Overdue"
 msgstr "Ժամկետանց"
@@ -37319,7 +37346,7 @@ msgstr "Ժամկետանց"
 msgid "Overdue fines cap (amount)"
 msgstr "Ժամկետանցերի տուգանքներ Cap (գումար)"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:114
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #, c-format
 msgid "Overdue notice required: "
 msgstr "Պահանջվում է ժամկետանցի ծանուցում։ "
@@ -37353,7 +37380,7 @@ msgstr "Ժամկետանցեր"
 msgid "Overdues with fines"
 msgstr "Ժամկետանցեր տուգանքներով"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:795
 #, c-format
 msgid "Overdues: Patron has ITEMS OVERDUE."
 msgstr ""
@@ -37382,7 +37409,7 @@ msgstr "Շրջանցիր սահմանափակումը և թարմացրու"
 msgid "Override renewal limit:"
 msgstr "Շրջանցի թարմացման սահմանափակումը։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #, c-format
 msgid "Override restriction temporarily"
 msgstr "Ժամկետանցի արգելանքը ժամանակավոր է"
@@ -37600,7 +37627,7 @@ msgstr "Պատենտային փաստաթուղթ"
 
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:83
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:126
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:934
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:49
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:306
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:87
@@ -37693,7 +37720,7 @@ msgstr "Մուտք արա ընթերցողի քարտի համարը։"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:24
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:25
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:26
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:336
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:340
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:42
 #, c-format
 msgid "Patron categories"
@@ -37778,13 +37805,13 @@ msgstr "Հաճախորդը ունի %s ժամկետանց նյութ(եր)։ %s 
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:814
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr "Հաճախորդը ունի կրեդիտ%s ընդ. %s%s "
 
 #. %1$s:  USERBLOCKEDWITHENDDATE | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:527
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:528
 #, c-format
 msgid "Patron has a restriction until %s."
 msgstr "Հաճախորդը արգելափակվել է մինչև %s"
@@ -37799,7 +37826,7 @@ msgid ""
 msgstr ""
 "Հաճախորդը այս գրառումից արդեն ընտրել է մեկ այլ նյութ։ %s Սպասարկե՞լ։ %s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:531
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:532
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:624
 #, c-format
 msgid "Patron has an indefinite restriction."
@@ -37821,7 +37848,7 @@ msgstr "Հաճախորդը ունի ժամեկտանց նյութեր և արգ�
 msgid "Patron has nothing checked out."
 msgstr "Հաճախորդը չունի սպասարկում։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:994
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:605
 #, c-format
 msgid "Patron has nothing on hold."
@@ -37849,7 +37876,7 @@ msgid "Patron has outstanding fines: %s"
 msgstr "Հաճախորդը ունի նշանակալի տուգանքներ։ %s"
 
 #. %1$s:  IF CAN_user_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:732
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:733
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "Ձևափոխումներ առաջարկող ընթերցողներ"
@@ -37905,7 +37932,7 @@ msgstr "Հաճախորդը այս պահին արգելափակված չէ"
 msgid "Patron is not notified."
 msgstr "Հաճախորդը չի գտնվել"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:495
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:496
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron is restricted"
@@ -37921,6 +37948,7 @@ msgstr "Հաճախորդը արգելափակված է։"
 msgid "Patron library"
 msgstr "Ինչ որ Գրադարան"
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:3
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:244
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:161
 #, c-format
@@ -38008,6 +38036,11 @@ msgstr "Ընթերցողի հիշեցում։ "
 msgid "Patron notification: %s %s Email%s %s Phone%s %s SMS%s %s, %s.%s %s "
 msgstr "%s %s Էլ. փոստ %s Տպած %s SMS %s Feed %s Հեռախոս %s %s %s "
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:4
+#, fuzzy, c-format
+msgid "Patron number: "
+msgstr "Մուտք արա ընթերցողի քարտի համարը։"
+
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:640
 #, c-format
 msgid "Patron records were last synced on: "
@@ -38073,18 +38106,18 @@ msgstr "Հաճախորդի հաշիվը թարմացվել է մինչև %s"
 #. %2$s:  userdebarreddate | $KohaDates 
 #. %3$s:  END 
 #. %4$s:  IF ( debarredcomment ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:770
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:190
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr "Հաճախորդի հաշիվը արգելափակված է %s մինչև %s %s %s մեկնաբանությունով։ "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:761
 #, c-format
 msgid "Patron's address in doubt"
 msgstr "Հաճախորդի հասցեն կասկածելի է"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:487
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:488
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:302
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:363
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:508
@@ -38118,12 +38151,12 @@ msgstr "Հաճախորդի քարտը հայտարարվել է կորած"
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
 #, c-format
 msgid "Patron's card has expired. %sPatron's card expired on %s%s "
 msgstr "Հաճախորդի տոմսը ժամկետանց է։ %sՀաճախորդի քարտի ժամկետը լրացել է %s%s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:511
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:512
 #, c-format
 msgid "Patron's card is expired"
 msgstr "Հաճախորդի քարտը ժամկետանց է"
@@ -38138,8 +38171,8 @@ msgstr "Հաճախորդի քարտը ժամկետանց է (%s)"
 msgid "Patron's card is expired."
 msgstr "Հաճախորդի քարտը ժամկետանց է։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:491
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:764
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:492
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:765
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:17
 #, c-format
 msgid "Patron's card is lost"
@@ -38151,7 +38184,7 @@ msgid "Patron's card is lost."
 msgstr "Հաճախորդի քարտը կորած է։"
 
 #. %1$s:  expiry | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:740
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr "Հաճախորդի քարտի ժամկետը շուտով կլրանա։ Ժամկետը լրանում է %s "
@@ -38164,7 +38197,7 @@ msgstr ""
 
 #. %1$s:  chargesamount_guarantees 
 #. %2$s:  IF ( charges_guarantees_is_blocker ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:803
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:804
 #, c-format
 msgid "Patron's guarantees collectively owe %s. %s "
 msgstr ""
@@ -38447,7 +38480,7 @@ msgstr "Անավարտ վճարման առաջարկներ"
 msgid "Pending holds"
 msgstr "Սպասող պատվերներ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:732
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:733
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "Հիշեցման առաքում"
@@ -38659,7 +38692,7 @@ msgstr "Հեռախոս։"
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:186
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:471
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:490
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:54
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:55
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:9
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:62
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:199
@@ -38689,7 +38722,7 @@ msgstr "Վերցնել"
 msgid "Pick up location"
 msgstr "Վերցնել"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:566
 #, c-format
 msgid "Pickup at"
@@ -39201,6 +39234,13 @@ msgstr "Լրացրեք առնվազն մեկ ձևանմուշ։"
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
 msgid "Please fix this field."
 msgstr "Շտկիր այս դաշտը։"
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:1
+#, fuzzy, c-format
+msgid "Please have your system administrator check the error log for details."
+msgstr ""
+"Սխալ է հանդիպել և %s Ասեք համակարգի կառավարչին մանրամասների համար ստուգելու "
+"սխալի գրանցման ֆայլը։ "
 
 #: intranet-tmpl/prog/en/modules/auth.tt:28
 #, c-format
@@ -39747,11 +39787,11 @@ msgstr "Նախորդ սեսիաներ"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:26
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:108
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:537
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:100
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:101
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:62
 #, c-format
 msgid "Price"
@@ -40027,7 +40067,7 @@ msgstr "Տպիչ։ "
 msgid "Printers"
 msgstr "Տպիչներ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:955
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:956
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:614
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:708
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:568
@@ -40137,7 +40177,7 @@ msgstr "Հեղինակավոր գրառումների իրականացում"
 msgid "Processing..."
 msgstr "Կատարվում է..."
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:149
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:153
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:645
 #, c-format
 msgid "Professional"
@@ -40326,7 +40366,7 @@ msgstr "Հրատարակման տարի ։"
 msgid "Publication year: "
 msgstr "Հրատարակման տարի։ "
 
-#. %1$s:  publicationyear 
+#. %1$s:  publicationyear |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:263
 #, c-format
 msgid "Publication year: %s"
@@ -40419,7 +40459,7 @@ msgstr "Հրատարակչի համար։"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:338
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:703
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:45
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:114
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:115
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:341
 #, c-format
 msgid "Publisher:"
@@ -40431,7 +40471,7 @@ msgstr "Հրատարակիչ ։"
 msgid "Publisher: "
 msgstr "Հրատարակիչ։ "
 
-#. %1$s:  publisher 
+#. %1$s:  publisher |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:260
 #, c-format
 msgid "Publisher: %s"
@@ -40510,7 +40550,7 @@ msgid "Quality assurance team:"
 msgstr "Որակի գնահատման թիմ։"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1003
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:101
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:249
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:357
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:61
@@ -40737,7 +40777,7 @@ msgstr "Ստացման ամսաթիվ"
 
 #. %1$s:  name 
 #. %2$s:  IF ( invoice ) 
-#. %3$s:  invoice 
+#. %3$s:  invoice |html 
 #. %4$s:  END 
 #. %5$s:  ordernumber 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:136
@@ -40830,7 +40870,7 @@ msgstr "Ստացված պահանջներ ուշացված պատվերների 
 msgid "Receives orders"
 msgstr "Չստացված պատվերներ"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:283
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:287
 #, c-format
 msgid "Receives overdue notices: "
 msgstr "Ստանում է ժամկետանց նշումներ: "
@@ -40862,7 +40902,7 @@ msgstr ""
 "Գրառման համընկեցումը տապալվեց -- չի կարողանում գտնել ընտրված համընկեցման "
 "օրենքը։"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:241
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:227
 #, c-format
 msgid "Record matching rule:"
 msgstr "Գրառման համընկեցման օրենք։"
@@ -41053,7 +41093,7 @@ msgstr "Կապի տեղեկատվություն"
 msgid "Relationship: "
 msgstr "Փոխադարձ կապ։ "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:893
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:894
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:502
 #, c-format
 msgid "Relatives' checkouts"
@@ -41100,7 +41140,7 @@ msgstr "Մնացյալ համակարգային պարամետրերի թույ�
 msgid "Remember for next check in:"
 msgstr "Հիշիր հաջորդ հետ ընդունման համար։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:626
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:627
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:700
 #, c-format
 msgid "Remember for session:"
@@ -41301,8 +41341,8 @@ msgstr "Հեռացնե՞լ"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:143
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:145
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:115
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:742
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:755
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:152
 #, c-format
@@ -41768,7 +41808,7 @@ msgstr "Require.js JS համակարգի մոդուլ է"
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:123
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:77
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:83
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:152
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:156
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:150
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:156
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:341
@@ -41964,17 +42004,17 @@ msgstr "Արգելված"
 msgid "Restricted [until] flag"
 msgstr "Արգելված [մինչև] դրոշակ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:770
 #, c-format
 msgid "Restricted:"
 msgstr "Արգելված։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:546
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:547
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr "Արգելանքը վերագրված է ժամանակավոր"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:540
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:541
 #, c-format
 msgid "Restriction overridden temporarily."
 msgstr "Արքելանքը վերագրված է ժամանակավորապես"
@@ -42045,7 +42085,7 @@ msgid "Resume"
 msgstr "Արդյունք"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:987
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:988
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:600
 msgid "Resume all suspended holds"
 msgstr "Կատարի բոլոր կասեցված պահումները"
@@ -42582,7 +42622,7 @@ msgstr "Շաբաթ օրերը"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:435
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:138
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:246
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:250
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:89
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:94
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:140
@@ -42617,7 +42657,7 @@ msgstr "Շաբաթ օրերը"
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:580
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:146
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:147
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:315
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:114
@@ -42907,7 +42947,7 @@ msgstr "Նախադպրոցական"
 msgid "Score: "
 msgstr "Միավոր։ "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:470
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:446
 #, c-format
 msgid "Screen"
 msgstr "Պաստառ"
@@ -43548,7 +43588,7 @@ msgstr "Տես կամայական բաժանորդագրություն հավե�
 msgid "See basket information"
 msgstr "Տես զամբյուղի տեղեկատվությունը"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:794
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:795
 #, fuzzy, c-format
 msgid "See highlighted items below"
 msgstr ". Տես գունափոխված նյութերը "
@@ -43594,7 +43634,7 @@ msgstr "Տեսնված"
 msgid "Select"
 msgstr "Ընտրել"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:165
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:169
 #, c-format
 msgid "Select "
 msgstr "Ընտրել "
@@ -43651,7 +43691,7 @@ msgstr "Ընտրիր բյուջեն"
 msgid "Select a built-in sound: "
 msgstr "Ընտրիր ներկառուցված ձայնը"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:144
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:148
 #, c-format
 msgid "Select a category type"
 msgstr "Ընտրիր դասի տեսակը"
@@ -44323,7 +44363,7 @@ msgstr "Բեր բոլոր դրամագլուխները զրոյի"
 msgid "Set back to"
 msgstr "Դիր հետվերադարձը"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:748
 #, c-format
 msgid "Set due date to expiry:"
 msgstr "Դիր վերադարձի ամսաթիվը երբ ավարտվում է։"
@@ -44346,6 +44386,8 @@ msgstr "Դիր գույքագրամն ամսաթիվը։"
 
 #: intranet-tmpl/prog/en/includes/header.inc:74
 #: intranet-tmpl/prog/en/includes/header.inc:79
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:35
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:47
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:16
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:51
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:27
@@ -44806,8 +44848,8 @@ msgstr "Ցույց է տալիս _START_ to _END_ of _TOTAL_"
 msgid "Showing only available items"
 msgstr "Ցույց է տալիս միայն մատչելի նյութերը"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:129
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:132
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:133
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:136
 #, c-format
 msgid "Shown"
 msgstr "Ցուցադրված"
@@ -45170,7 +45212,7 @@ msgstr "Մասնագիտացված"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:977
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:978
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:590
 #, c-format
 msgid "Specify date on which to resume %s: "
@@ -45178,7 +45220,7 @@ msgstr "Սահմանիր ամսաթիվը երբ վերսկսում ես %s: "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:620
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:621
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:698
 #, c-format
 msgid "Specify due date %s: "
@@ -45246,7 +45288,7 @@ msgstr "Srikanth Dhondi"
 msgid "Stacey Walker"
 msgstr "Stacey Walker"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:147
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:151
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:643
 #, c-format
 msgid "Staff"
@@ -45328,7 +45370,7 @@ msgid "Stage MARC records into the reservoir."
 msgstr "Ռեզերվուարի մեջ փուլավորիր MARC գրառումներ"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:276
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:262
 msgid "Stage for import"
 msgstr "Փուլավորիր ներմուծման համար"
 
@@ -45534,7 +45576,7 @@ msgstr "Վիճակագրություն 2 կատարված է: "
 msgid "Statistic 2: "
 msgstr "Վիճակագրություն 2: "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:150
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:154
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:646
 #, c-format
 msgid "Statistical"
@@ -46539,7 +46581,7 @@ msgid "Suspend"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:972
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:973
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:585
 msgid "Suspend all holds"
 msgstr "Կասեցրու բոլոր պահումները"
@@ -46550,7 +46592,7 @@ msgstr "Կասեցրու բոլոր պահումները"
 msgid "Suspend hold on"
 msgstr "Կասեցրու բոլոր պահումները"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:957
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:958
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:570
 #, c-format
 msgid "Suspend?"
@@ -46998,6 +47040,11 @@ msgstr "Նմուշի անուն"
 msgid "Template name:"
 msgstr "Նմուշի անուն։"
 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:6
+#, fuzzy, c-format
+msgid "Template: "
+msgstr "Ձևանմուշներ"
+
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:46
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:46
 #, c-format
@@ -47308,7 +47355,7 @@ msgid ""
 "will have barcodes generated upon save to database"
 msgstr ""
 
-#. %1$s:  Barcode 
+#. %1$s:  Barcode |html 
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:26
 #, c-format
 msgid "The barcode %s was not found."
@@ -47320,7 +47367,7 @@ msgstr "Շտրիխ կոդը %s չի գտնվել։"
 msgid "The barcode was not found %s."
 msgstr "Շտրիխ կոդը չի գտնվել %s։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:436
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:437
 #, fuzzy, c-format
 msgid "The barcode was not found: "
 msgstr "Շտրիխ կոդը չի գտնվել %s։"
@@ -47368,6 +47415,45 @@ msgstr ""
 msgid "The corresponding subfield MUST be in with -1 (ignore) tab"
 msgstr "Համապատասխանող ենթադաշտը պետք է լինի ըստ -1 (անտեսիր) տաբի"
 
+#. %1$s:  image_limit 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:41
+#, c-format
+msgid ""
+"The database image quota currently only allows a maximum of %s images to be "
+"stored at any one time. Please delete one or more images to free up quota "
+"space. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:28
+#, c-format
+msgid "The database returned an error while attempting a delete operation. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:24
+#, c-format
+msgid "The database returned an error while attempting a save operation. "
+msgstr ""
+
+#. %1$s:  card_element 
+#. %2$s:  element_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:26
+#, c-format
+msgid "The database returned an error while deleting %s %s. "
+msgstr ""
+
+#. %1$s:  image_ids 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:27
+#, c-format
+msgid "The database returned an error while deleting %s. "
+msgstr ""
+
+#. %1$s:  card_element 
+#. %2$s:  element_id 
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:23
+#, c-format
+msgid "The database returned an error while saving %s %s. "
+msgstr ""
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:4
 msgid "The destination should be filled."
@@ -47381,7 +47467,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  INVALID_DATE 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:432
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:433
 #, c-format
 msgid "The due date &quot;%s&quot; is invalid"
 msgstr "Վերադարձի ամսաթիվը &quot;%s&quot; սխալ է"
@@ -47512,7 +47598,7 @@ msgid "The following ids exist in both "
 msgstr "Գտնվել են հետևյալ շտրիխ կոդերը։ "
 
 #. %1$s:  FOREACH book IN options 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:445
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:446
 #, c-format
 msgid "The following items were found by searching: %s "
 msgstr "Հետևյալ նյութերը գտնվել են փնտրելով։ %s "
@@ -48291,7 +48377,7 @@ msgid "This authority type cannot be deleted"
 msgstr "Այս ձևանմուշը հնարավոր չէ ջնջել"
 
 #. %1$s:  patrons_in_category 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:265
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:269
 #, c-format
 msgid "This category is used %s times"
 msgstr "Այս դասը օգտագործվել է %s անգամ։"
@@ -48379,13 +48465,13 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:519
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:520
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
 #, c-format
 msgid "This item belongs to %s and cannot be checked out from this location."
 msgstr "Այս նյութը պատկանում է %s և չի կարող սպասարկվել այս վայրից։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:503
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:504
 #, c-format
 msgid "This item can not be renewed, it's an on-site checkout"
 msgstr "Այս նյութը հնարավոր չէ թարմացնել, այն ցանցից անջատ տացքի համար է։"
@@ -48519,7 +48605,7 @@ msgid "This item must be checked in at following library: "
 msgstr "Այս նյութը պետք է հետ ընդունվի հետևյալ գրադարանում։ "
 
 #. %1$s:  Branches.GetName( branch_to_return ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:523
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:524
 #, fuzzy, c-format
 msgid "This item must be returned to %s."
 msgstr "Այս նյութը պետք է տեղափոխվի դեպի %s"
@@ -48575,7 +48661,7 @@ msgstr ""
 "Այս հաճախորդը չի կարող ստանալ այս նյութը համաձայն գրադարանի տացքի "
 "քաղաքականության։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1002
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1003
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:301
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:178
 #, fuzzy, c-format
@@ -48597,7 +48683,7 @@ msgstr "Ընթերցողը չունի կցված նյութեր։"
 msgid "This patron has not submitted any purchase suggestions"
 msgstr "Այս օգտատերը չի գրանցել որևէ պատվերի առաջարկ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:577
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:578
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:175
 #, c-format
 msgid ""
@@ -48963,8 +49049,8 @@ msgstr "TinyMCE WYSIWYG խմբագրիչ v3.5.8 "
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:76
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:91
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:924
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:950
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:925
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:951
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:720
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:738
@@ -49074,17 +49160,6 @@ msgstr "Վերնագիրը դատարկ չի կարող լինել"
 msgid "Title phrase"
 msgstr "Արտահայտություն վերնագրից"
 
-#: intranet-tmpl/prog/en/includes/csv_headers/catalogue/itemsearch.tt:1
-#, c-format
-msgid ""
-"Title, Publication date, Publisher, Collection, Barcode, Call number, Home "
-"library, Current location, Shelving location, Inventory number, Status, "
-"Checkouts "
-msgstr ""
-"Վերնագիր, Հրատարակման տարի, Հրատարակիչ, Հավաքածու, Շտրիխ կոդ, Դասիչ, Տնային "
-"գրադարան, Ընթացիկ տեղաբաշխում, Դարակի վրա տեղաբաշխում, Հիմնապաշարի համար, "
-"Վիճակ, Դուրս տրումներ "
-
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:9
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:13
 #: intranet-tmpl/prog/en/includes/serials-search.inc:17
@@ -49123,7 +49198,7 @@ msgstr "Վերնագիր։"
 msgid "Title: "
 msgstr "Վերնագիր։ "
 
-#. %1$s:  title 
+#. %1$s:  title |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:254
 #, c-format
 msgid "Title: %s"
@@ -49198,7 +49273,7 @@ msgstr "To authid: "
 msgid "To biblio number: "
 msgstr "Դեպի Բիբլիո համար։ "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:440
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:416
 #, c-format
 msgid "To call number:"
 msgstr "Դեպի դասիչ։"
@@ -49378,7 +49453,7 @@ msgstr "Չափից շատ դուրս տրումներ։"
 #. %1$s:  current_loan_count 
 #. %2$s:  max_loans_allowed 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:232
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:515
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:516
 #, c-format
 msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr "Չափից շատ դուրս տրումներ, %s դուրս տրում, միայն %s թույլատրված։"
@@ -49895,11 +49970,6 @@ msgstr "Քո գրադարան կատարված փոխանցումներ : %s"
 msgid "Transfers to receive"
 msgstr "Ստացվելիք փոխանցումներ"
 
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:207
-#, c-format
-msgid "Transform file to MARC:"
-msgstr "Ձևափոխիր ֆայլը MARC-ի:"
-
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:147
 #, c-format
 msgid "Translate into other languages"
@@ -50004,7 +50074,7 @@ msgstr "Tumer Garip"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:36
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:128
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:163
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:346
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:350
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:734
 #: intranet-tmpl/prog/en/modules/members/files.tt:46
@@ -50149,7 +50219,7 @@ msgstr "Չլիազորված օգտվող "
 msgid "Unavailable (lost or missing)"
 msgstr "Անհասանելի (կորած կամ բացակա)"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:100
 #, c-format
 msgid "Uncertain"
 msgstr "Անվստահ"
@@ -50384,7 +50454,7 @@ msgstr "Չտեղադրված"
 msgid "Unset lowest priority"
 msgstr "Հետ կարգաբերի նվազագուն առաջնայնությունը"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:95
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:99
 #, c-format
 msgid "Until date: "
 msgstr "Մինչ Ամսաթիվը։ "
@@ -50668,13 +50738,13 @@ msgstr "Տրանզակցիաների բեռնավորում, խնդրում են
 msgid "Uploads limited to csv. Incorrect filetype: %s"
 msgstr "Բեռնավորումը սահմանափակվում է csv։ Սխալ ֆայլի տեսակ։ %s"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:349
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:353
 #, c-format
 msgid "Upper age limit"
 msgstr "Տարիքի վերին սահման"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:106
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:281
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:110
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:285
 #, c-format
 msgid "Upperage limit: "
 msgstr "Տարիքիվերին սահման։ "
@@ -50697,7 +50767,7 @@ msgid "Use Existing"
 msgstr "Օգտագործիր եղածը"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:155
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:224
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:210
 #, c-format
 msgid "Use MARC Modification Template:"
 msgstr "Օգտագործիր ՄԵԸՔ ձևափոխման ձևանմուշը։"
@@ -51251,7 +51321,7 @@ msgstr ""
 msgid "View all libraries"
 msgstr "Դիտիր բոլոր գրադարանները"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:735
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "Չկան սպասող հաճախորդների ձևափոխումներ։"
@@ -51316,7 +51386,7 @@ msgstr "Դիտիր ցանցից անջատված սպասող տացքի գոր�
 msgid "View record"
 msgstr "Դիտիր գրառումը"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:785
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:786
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:204
 #, c-format
 msgid "View restrictions"
@@ -51387,7 +51457,7 @@ msgstr "Հատորի համար"
 msgid "Volume:"
 msgstr "Հատոր։"
 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:4
+#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:11
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:195
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:177
 #, c-format
@@ -51983,8 +52053,8 @@ msgstr "Տարին մեկ անգամ տոն։ %s"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:266
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:274
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:277
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:118
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:121
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:122
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:125
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:353
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:361
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:376
@@ -52003,7 +52073,7 @@ msgstr "Տարին մեկ անգամ տոն։ %s"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:878
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:965
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:967
-#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:263
+#: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:249
 #, c-format
 msgid "Yes"
 msgstr "Այո"
@@ -52019,9 +52089,9 @@ msgstr "Այո"
 msgid "Yes "
 msgstr "Այո "
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:196
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:200
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:204
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:208
 #, fuzzy, c-format
 msgid "Yes and try to override system preferences"
 msgstr "Փնտրիր համակարգային նախապատվությունները"
@@ -52383,7 +52453,7 @@ msgstr ""
 "Դու կարող ես նաև օգտագործել Ձևանմուշի Գործիքը։ Տես օգնության էջը "
 "մանրամասների համար։"
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:427
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:403
 #, c-format
 msgid "You can use the following wildcard characters: %% _"
 msgstr "Դու կարող ես օգտագործել հետևյալ խմբային նիշերը %% _"
@@ -52477,7 +52547,7 @@ msgstr ""
 "Դու ունես %s սխալ(ներ) քո MARC կարգաբերման մեջ։ Խնդրվում է մինչ Կոհայի "
 "օգտագործումը շտկել դրանք։"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1020
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1021
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -52577,7 +52647,7 @@ msgstr ""
 "Դու կարգաբերել ես UseQueryParser սակայն առկա է խնդիր QueryParser սկսելուց։ "
 "%s  'queryparser_config' մուտքը բացակա է քո կարգաբերման աղյուսակում։ "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:748
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -53091,13 +53161,6 @@ msgstr "[% IF ( date2 ) %][% date2 %][% ELSE %]tomorrow[% END %]"
 msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 
-#. INPUT type=text name=enrolmentperiod
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:92
-msgid ""
-"[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]"
-msgstr ""
-"[% IF category.enrolmentperiod %][% category.enrolmentperiod %][% END %]"
-
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:196
 msgid ""
@@ -53146,40 +53209,6 @@ msgstr ""
 "[%% IF ( CAN_user_editcatalogue_edit_catalogue || "
 "CAN_user_editcatalogue_edit_items || CAN_user_serials_create_subscription ) "
 "%%] "
-
-#. %1$s:  IF locations.size 
-#. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:387
-#, fuzzy, c-format
-msgid ""
-"[%% INCLUDE form_field_select name=\"homebranch\" options = branches "
-"empty_option = \"All libraries\" %%] [%% INCLUDE form_field_select name="
-"\"holdingbranch\" options = branches empty_option = \"All libraries\" %%] %s "
-"[%% INCLUDE form_field_select name=\"location\" options = locations "
-"empty_option = \"All locations\" %%] %s "
-msgstr ""
-"[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
-"empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
-"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] [%% "
-"INCLUDE form_field_select name=\"notforloan\" options = notforloans "
-"empty_option = \"All statuses\" %%] "
-
-#. %1$s:  IF notforloans.size 
-#. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:406
-#, fuzzy, c-format
-msgid ""
-"[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
-"empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
-"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] %s "
-"[%% INCLUDE form_field_select name=\"notforloan\" options = notforloans "
-"empty_option = \"All statuses\" %%] %s "
-msgstr ""
-"[%% INCLUDE form_field_select name=\"itype\" options = itemtypes "
-"empty_option = \"All item types\" %%] [%% INCLUDE form_field_select name="
-"\"ccode\" options = ccodes empty_option = \"All collection codes\" %%] [%% "
-"INCLUDE form_field_select name=\"notforloan\" options = notforloans "
-"empty_option = \"All statuses\" %%] "
 
 #: intranet-tmpl/prog/en/includes/country-list.inc:1
 #, c-format
@@ -53285,7 +53314,7 @@ msgstr ""
 msgid "]%s (%s%s, %s long overdue%s) date due: %s %s "
 msgstr "]%s (%s%s, %s երկար ժամկետանց%s) վերադարձի ամսաթիվ: %s %s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:429
+#: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:405
 #, c-format
 msgid "_ matches only a single character"
 msgstr "_ համընկնում է միայն մեկ նիշ"
@@ -53493,7 +53522,7 @@ msgstr "զամբյուղ"
 msgid "basketgroup"
 msgstr "basketgroup"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:234
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:238
 #, c-format
 msgid "batch_anonymise.pl"
 msgstr "batch_anonymise.pl"
@@ -53550,7 +53579,7 @@ msgid "borrowers"
 msgstr "Պատվիրող"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:51
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:113
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:162
 #, c-format
 msgid "by"
@@ -54232,7 +54261,7 @@ msgstr "homebranch սահմանված"
 msgid "if"
 msgstr "եթե"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:165
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:169
 #, c-format
 msgid ""
 "if this category type must to be displayed all the time. Otherwise select "
@@ -54662,27 +54691,11 @@ msgstr "համընկնումներ"
 msgid "maximize.ogg"
 msgstr "maximize.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:82
-#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:85
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:83
+#: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:86
 #, c-format
 msgid "me"
 msgstr "իմ"
-
-#. %1$s:  sep 
-#. %2$s:  sep 
-#. %3$s:  sep 
-#. %4$s:  sep 
-#. %5$s:  sep 
-#. %6$s:  sep 
-#. %7$s:  sep 
-#. %8$s:  sep 
-#. %9$s:  sep 
-#: intranet-tmpl/prog/en/includes/csv_headers/reports/cash_register_stats.tt:1
-#, c-format
-msgid ""
-"mfirstname%scard number%sfirstname%sbranchname%sdate%saccounttype%samount"
-"%stitle%sbarcode%sitype "
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:61
 #, c-format
@@ -54694,9 +54707,12 @@ msgstr "minimize.ogg"
 msgid "modified"
 msgstr "ձևափոխված"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:92
-#, c-format
-msgid "months "
+#. For the first occurrence,
+#. %1$s:  ELSE 
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:93
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:95
+#, fuzzy, c-format
+msgid "months %s "
 msgstr "ամիսներ "
 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:30
@@ -54841,8 +54857,8 @@ msgstr "opening.ogg"
 msgid "or"
 msgstr "կամ"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:754
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:742
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:755
 #, c-format
 msgid "or "
 msgstr "կամ "
@@ -55290,54 +55306,6 @@ msgstr "ցուցիչ %s ենթադաշտ %s %s տաբում %s"
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#. %1$s:  ELSIF ( error == 301 ) 
-#. %2$s:  ELSIF ( error == 302 ) 
-#. %3$s:  ELSIF ( error == 303 ) 
-#. %4$s:  image_limit 
-#. %5$s:  ELSIF ( error == 304 ) 
-#. %6$s:  IMAGE_NAME 
-#. %7$s:  ELSIF ( error == 401 ) 
-#. %8$s:  batch_id 
-#. %9$s:  ELSIF ( error == 402 ) 
-#. %10$s:  ELSIF ( error == 403 ) 
-#. %11$s:  batch_id 
-#. %12$s:  ELSIF ( error == 404 ) 
-#. %13$s:  batch_id 
-#. %14$s:  ELSIF ( error == 405 ) 
-#. %15$s:  batch_id 
-#. %16$s:  END 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:25
-#, fuzzy, c-format
-msgid ""
-"that you have a library selected. %s An error has occurred while attempting "
-"to upload the image file. Please ask your system administrator to check the "
-"error log for more details. %s Image exceeds 500KB. Please resize and import "
-"again. %s The database image quota currently only allows a maximum of %s "
-"images to be stored at any one time. Please delete one or more images to "
-"free up quota space. %s An image with the name '%s' already exists. %s An "
-"error has occurred and the item(s) was not added to batch %s. Please have "
-"your system administrator check the error log for details. %s The item(s) "
-"was not added because the library is not set. Please set your library before "
-"adding items to a batch. %s An error has occurred and the item(s) was not "
-"removed from batch %s. Please have your system administrator check the error "
-"log for details. %s An error has occurred and batch %s was not deleted. "
-"Please have your system administrator check the error log for details. %s An "
-"error has occurred and batch %s not fully de-duplicated. %s "
-msgstr ""
-"որ դու ունես ընտրված գրադարան։ %s Հանդիպել է սխալ պատկերի ֆայլը "
-"բեռնավորելիս։ Մանրամասների համար դիմիր համակարգի կառավարիչին որ ստուգի "
-"սխալների ֆայլը։ %s Պատկերը գերազանցում է 500KB։ Վերաձևավորի և կրկին "
-"ներմուծիր։ %s Շտեմարանի պատկերի քվոտան այս պահին թույլ է տալիս ամենաշատը %s "
-"պատկերներ հիշել։Ջնջիր մեկ կամ ավել պատկերներ քվոտայով տրված տարածքը ազատելու "
-"համար։ %s հանդիպել է սխալ և նյութերը չեն ավելացվել փաթեթին %s։ Տեղեկացրու "
-"համակարգի կառավարիչին ստուգելու սխալների գրանցամատյանը։ %s Նյութերը չեն "
-"ավելացվել քանի որ գրադարանը կարգաբերված չէ։ Մինչ նյութերը փաթեթին ավելացնելը "
-"կարգաբերի գրադարանը։ %s Հանդիպել է սխալ և նյութը չի հեռացվել փաթեթից %s։ "
-"Տեղեկացրու համակարգի կառավարիչին ստուգելու սխալների գրանցամատյանը։ %s "
-"Հանդիպել է սխալ և փաթեթը %s չի ջնջվել։ Տեղեկացրու համակարգի կառավարիչին "
-"ստուգելու սխալների գրանցամատյանը։ %s Հանդիպել է սխալ և փաթեթը %s ամբողջովին "
-"չի պատճենվել։ %s %s "
-
 #: intranet-tmpl/prog/en/modules/about.tt:864
 #, c-format
 msgid ""
@@ -55455,7 +55423,7 @@ msgstr "եթե"
 msgid "unrecognized command"
 msgstr "չճանաչված հրաման"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:975
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:976
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:588
 #, c-format
 msgid "until"
@@ -55506,11 +55474,6 @@ msgstr "արժեքը բացակայում է"
 msgid "variable missing"
 msgstr "փոփոխականը բացակայում է"
 
-#: intranet-tmpl/prog/en/includes/patroncards-errors.inc:25
-#, c-format
-msgid "verify"
-msgstr "ստուգել"
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:92
 msgid "veuillez d'abord creer le nombre de champs necessaires "
@@ -55526,7 +55489,7 @@ msgstr "դիտում"
 msgid "warning.ogg"
 msgstr "warning.ogg"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:234
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:238
 #, c-format
 msgid "which should be set up by your system administrator."
 msgstr "որը պետք է կարգաբերվի քո համակարգային ադմինիստրատորի կողմից։"
@@ -55598,8 +55561,8 @@ msgstr "գրաված է և ուղեկցվում է Jörn Zaefferer կողմից,
 msgid "xml"
 msgstr "xml"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:103
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:107
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:111
 #, c-format
 msgid "years "
 msgstr "տարիներ "
