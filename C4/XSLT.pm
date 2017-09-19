@@ -340,12 +340,12 @@ sub buildKohaItemsNamespace {
         } else {
             $status = "available";
         }
-        my $homebranch = $item->{homebranch}? xml_escape($branches{$item->{homebranch}}):'';
-        my $holdingbranch = $item->{holdingbranch}? xml_escape($branches{$item->{holdingbranch}}):'';
-        $location = $item->{location}? xml_escape($shelflocations->{$item->{location}}||$item->{location}):'';
-        $ccode = $item->{ccode}? xml_escape($ccodes->{$item->{ccode}}||$item->{ccode}):'';
-        my $itemcallnumber = xml_escape($item->{itemcallnumber});
-        my $stocknumber = $item->{stocknumber}? xml_escape($item->{stocknumber}):'';
+        my $homebranch = $item->{homebranch}? C4::Koha::xml_escape($branches{$item->{homebranch}}):'';
+        my $holdingbranch = $item->{holdingbranch}? C4::Koha::xml_escape($branches{$item->{holdingbranch}}):'';
+        $location = $item->{location}? C4::Koha::xml_escape($shelflocations->{$item->{location}}||$item->{location}):'';
+        $ccode = $item->{ccode}? C4::Koha::xml_escape($ccodes->{$item->{ccode}}||$item->{ccode}):'';
+        my $itemcallnumber = C4::Koha::xml_escape($item->{itemcallnumber});
+        my $stocknumber = $item->{stocknumber}? C4::Koha::xml_escape($item->{stocknumber}):'';
         $xml .=
             "<item>"
           . "<homebranch>$homebranch</homebranch>"
@@ -399,12 +399,12 @@ sub _prepareComponentPartRecords {
             push @componentPartRecordXML, '  <componentPart>';
 
 
-            push @componentPartRecordXML, '    <title>'.xml_escape($cb->{'title'}).'</title>'                               if $cb->{'title'};
-            push @componentPartRecordXML, '    <unititle>'.xml_escape($cb->{'unititle'}).'</unititle>'                      if $cb->{'unititle'};
-            push @componentPartRecordXML, '    <biblionumber>'.xml_escape($cb->{'biblionumber'}).'</biblionumber>'          if $cb->{'biblionumber'};
-            push @componentPartRecordXML, '    <author>'.xml_escape($cb->{'author'}).'</author>'                            if $cb->{'author'};
-            push @componentPartRecordXML, '    <publishercode>'.xml_escape($cb->{'publishercode'}).'</publishercode>'       if $cb->{'publishercode'};
-            push @componentPartRecordXML, '    <publicationyear>'.xml_escape($cb->{'publicationyear'}).'</publicationyear>' if $cb->{'publicationyear'};
+            push @componentPartRecordXML, '    <title>'.C4::Koha::xml_escape($cb->{'title'}).'</title>'                               if $cb->{'title'};
+            push @componentPartRecordXML, '    <unititle>'.C4::Koha::xml_escape($cb->{'unititle'}).'</unititle>'                      if $cb->{'unititle'};
+            push @componentPartRecordXML, '    <biblionumber>'.C4::Koha::xml_escape($cb->{'biblionumber'}).'</biblionumber>'          if $cb->{'biblionumber'};
+            push @componentPartRecordXML, '    <author>'.C4::Koha::xml_escape($cb->{'author'}).'</author>'                            if $cb->{'author'};
+            push @componentPartRecordXML, '    <publishercode>'.C4::Koha::xml_escape($cb->{'publishercode'}).'</publishercode>'       if $cb->{'publishercode'};
+            push @componentPartRecordXML, '    <publicationyear>'.C4::Koha::xml_escape($cb->{'publicationyear'}).'</publicationyear>' if $cb->{'publicationyear'};
 
             push @componentPartRecordXML, '  </componentPart>';
         }

@@ -346,7 +346,7 @@ sub getRecords {
     # Initialize variables for the faceted results objects
     my $facets_counter = {};
     my $facets_info    = {};
-    my $facets         = getFacets();
+    my $facets         = C4::Koha::getFacets();
 
     my @facets_loop;    # stores the ref to array of hashes for template facets loop
 
@@ -703,7 +703,7 @@ sub _get_facets_from_records {
     my $rs = shift;
 
     my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets') // 20;
-    my $facets_config  = getFacets();
+    my $facets_config  = C4::Koha::getFacets();
     my $facets         = {};
     my $size           = $rs->size();
     my $jmax           = $size > $facets_maxrecs
@@ -795,7 +795,7 @@ sub _get_facets_from_zebra {
     # save current elementSetName
     my $elementSetName = $rs->option( 'elementSetName' );
 
-    my $facets_loop = getFacets();
+    my $facets_loop = C4::Koha::getFacets();
     my $facets_data  = {};
     # loop through defined facets and fill the facets hashref
     foreach my $facet ( @$facets_loop ) {
@@ -1982,12 +1982,12 @@ sub searchResults {
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one
-        $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
+        $oldbiblio->{imageurl} = C4::Koha::getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
-		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
-		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
-		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
-		$oldbiblio->{normalized_isbn} = GetNormalizedISBN(undef,$marcrecord,$marcflavour);
+		$oldbiblio->{normalized_upc}  = C4::Koha::GetNormalizedUPC(       $marcrecord,$marcflavour);
+		$oldbiblio->{normalized_ean}  = C4::Koha::GetNormalizedEAN(       $marcrecord,$marcflavour);
+		$oldbiblio->{normalized_oclc} = C4::Koha::GetNormalizedOCLCNumber($marcrecord,$marcflavour);
+		$oldbiblio->{normalized_isbn} = C4::Koha::GetNormalizedISBN(undef,$marcrecord,$marcflavour);
 		$oldbiblio->{content_identifier_exists} = 1 if ($oldbiblio->{normalized_isbn} or $oldbiblio->{normalized_oclc} or $oldbiblio->{normalized_ean} or $oldbiblio->{normalized_upc});
 
 		# edition information, if any
@@ -2150,7 +2150,7 @@ sub searchResults {
                 $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
                 $onloan_items->{$key}->{description}    = $item->{description};
                 $onloan_items->{$key}->{imageurl} =
-                  getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+                  C4::Koha::getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
 
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
@@ -2243,7 +2243,7 @@ sub searchResults {
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 					$other_items->{$key}->{description} = $item->{description};
-					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+					$other_items->{$key}->{imageurl} = C4::Koha::getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -2254,7 +2254,7 @@ sub searchResults {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+					$available_items->{$prefix}->{imageurl} = C4::Koha::getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level
