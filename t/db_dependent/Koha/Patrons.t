@@ -307,7 +307,7 @@ subtest 'renew_account' => sub {
         $expiry_date = $retrieved_patron->renew_account;
         is( $expiry_date, $a_year_later, "today + 12 months must be $a_year_later" );
         $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
-        ok( $retrieved_patron->date_renewed, "Date renewed is set when calling renew_account" );
+        is( $retrieved_patron->date_renewed, output_pref({ dt => $dt, dateformat => 'iso', dateonly => 1 }), "Date renewed is set when calling renew_account" );
         $retrieved_expiry_date = $retrieved_patron->dateexpiry;
         is( dt_from_string($retrieved_expiry_date), $a_year_later, "today + 12 months must be $a_year_later" );
         $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'RENEW', object => $retrieved_patron->borrowernumber } )->count;
