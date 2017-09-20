@@ -1667,7 +1667,14 @@ sub get_hostitemnumbers_of {
 
     foreach my $hostfield ( $marcrecord->field($tag) ) {
         my $hostbiblionumber = $hostfield->subfield($biblio_s);
+        next unless $hostbiblionumber; # have tag, don't have $biblio_s subfield
         my $linkeditemnumber = $hostfield->subfield($item_s);
+
+        if ( ! $linkeditemnumber ) {
+            warn "ERROR biblionumber $biblionumber has 773^0, but doesn't have 9";
+            next;
+        }
+
         my @itemnumbers;
         if (my $itemnumbers = get_itemnumbers_of($hostbiblionumber)->{$hostbiblionumber})
         {
