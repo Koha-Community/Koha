@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-17 04:18-0300\n"
+"POT-Creation-Date: 2017-09-17 02:45-0300\n"
 "PO-Revision-Date: 2016-04-09 04:53+0000\n"
 "Last-Translator: Sujan <sujan.lib@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -493,7 +493,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr ""
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -933,7 +933,7 @@ msgstr ""
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF (errPassTooShort) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:63
 #, c-format
 msgid "%s The passwords do not match. %s Your chosen password is too short. "
 msgstr ""
@@ -1722,7 +1722,7 @@ msgstr "%s %s %s %s (%s) "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -3541,7 +3541,7 @@ msgid "Barcode:"
 msgstr ""
 
 #. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:71
 #, c-format
 msgid ""
 "Be sure you used the link from the email, or contact library staff for "
@@ -3949,7 +3949,7 @@ msgstr ""
 msgid "Click here if you're not %s %s"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:122
 #, c-format
 msgid "Click here to login."
 msgstr ""
@@ -4112,7 +4112,7 @@ msgstr ""
 msgid "Confirm holds for:%s %s (%s)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:101
 #, c-format
 msgid "Confirm new password:"
 msgstr ""
@@ -4683,7 +4683,7 @@ msgstr ""
 msgid "Email address:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
 #, fuzzy, c-format
 msgid "Email:"
 msgstr "%s ইমেইল:"
@@ -5088,7 +5088,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:63
 #, c-format
 msgid "Get new password recovery link"
 msgstr ""
@@ -5533,7 +5533,7 @@ msgid ""
 "yourself started."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:63
 #, c-format
 msgid "If you did not receive this email, you can request a new one: "
 msgstr ""
@@ -6220,7 +6220,7 @@ msgid "Login page"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:324
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:70
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:289
@@ -6471,7 +6471,7 @@ msgstr ""
 msgid "New list"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:54
 #, c-format
 msgid "New password:"
@@ -7232,7 +7232,7 @@ msgstr ""
 msgid "Please click here to log in."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:111
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
 #, c-format
 msgid ""
 "Please click the link in this email to finish the process of resetting your "
@@ -7275,7 +7275,7 @@ msgid ""
 "service provider, or you do not see your provider in this list."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:71
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:74
 #, c-format
 msgid "Please contact the library if you need further assistance."
 msgstr ""
@@ -7364,13 +7364,13 @@ msgid "Please try again later."
 msgstr ""
 
 #. %1$s:  ELSIF (errNoBorrowerFound) 
-#. %2$s:  ELSIF (errAlreadyStartRecovery) 
+#. %2$s:  ELSIF (errMultipleAccountsForEmail) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:54
 #, c-format
 msgid ""
 "Please try again later. %s No account was found with the provided "
-"information. %s The process of password recovery has already been started "
-"for this account (\""
+"information. %s Account identification with this email address only is "
+"ambiguous. "
 msgstr ""
 
 #. %1$s:  ELSE 
@@ -7383,6 +7383,14 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:879
 #, c-format
 msgid "Please type the following characters into the preceding box: "
+msgstr ""
+
+#. %1$s:  ELSIF (errAlreadyStartRecovery) 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
+#, c-format
+msgid ""
+"Please use the field 'Login' as well. %s The process of password recovery "
+"has already been started for this account (\""
 msgstr ""
 
 #. OPTGROUP
@@ -7404,7 +7412,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
 #, c-format
-msgid "Post or edit your comments on this item. "
+msgid "Post your comments on this item. "
 msgstr ""
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
@@ -7975,7 +7983,7 @@ msgstr ""
 msgid "Return to the last advanced search"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:117
 #, c-format
 msgid "Return to the main page"
 msgstr ""
@@ -8831,8 +8839,8 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:94
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:914
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
@@ -9334,20 +9342,20 @@ msgid "The operation %s is not supported."
 msgstr ""
 
 #. %1$s:  username 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:118
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:121
 #, fuzzy, c-format
 msgid "The password has been changed for user \"%s\"."
 msgstr " item(s) added to your cart"
 
 #. %1$s:  minPassLength 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
 #, c-format
 msgid "The password must contain at least %s characters."
 msgstr ""
 
 #. %1$s:  minPassLength 
 #. %2$s:  ELSIF (errLinkNotValid) 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
 #, c-format
 msgid ""
 "The password must contain at least %s characters. %s The link you clicked is "
@@ -9494,7 +9502,7 @@ msgstr ""
 msgid "This item is on hold for another patron."
 msgstr " item(s) added to your cart"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:115
 #, c-format
 msgid "This link is valid for 2 days starting now. "
 msgstr ""
@@ -9652,9 +9660,9 @@ msgstr ""
 msgid "To report this error, you can email the Koha Administrator."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
 #, c-format
-msgid "To reset your password, enter your login and email address. "
+msgid "To reset your password, enter your login and your email address. "
 msgstr ""
 
 #. SCRIPT
@@ -10123,7 +10131,7 @@ msgstr ""
 msgid "You can't change your password."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
 #, c-format
 msgid "You can't reset your password."
 msgstr ""
@@ -10298,7 +10306,7 @@ msgstr ""
 msgid "You must select at least one item. "
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:62
 #, c-format
 msgid "You should have received an email with a link to reset your password. "
 msgstr ""
@@ -10322,7 +10330,7 @@ msgid ""
 "two weeks."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "You will receive an email shortly. "
 msgstr ""
@@ -11021,7 +11029,7 @@ msgstr ""
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:106
-msgid "koha:biblionumber:[% biblionumber %]"
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401

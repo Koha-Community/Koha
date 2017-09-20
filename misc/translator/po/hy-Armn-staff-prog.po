@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-17 04:30-0300\n"
+"POT-Creation-Date: 2017-09-17 03:18-0300\n"
 "PO-Revision-Date: 2016-03-22 12:17+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1697,9 +1697,9 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF message.code == 'biblio_not_exists' 
-#. %3$s:  message.biblionumber 
+#. %3$s:  message.biblionumber |html 
 #. %4$s:  ELSIF message.code == 'authority_not_exists' 
-#. %5$s:  message.authid 
+#. %5$s:  message.authid |html 
 #. %6$s:  ELSIF message.code == 'item_issued' 
 #. %7$s:  message.biblionumber 
 #. %8$s:  ELSIF message.code == 'reserve_not_cancelled' 
@@ -1819,7 +1819,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF searchfield 
-#. %3$s:  searchfield 
+#. %3$s:  searchfield |html 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:196
 #, fuzzy, c-format
 msgid "%s %s You searched for %s"
@@ -1835,23 +1835,6 @@ msgid ""
 msgstr ""
 "%s %s [%% FOREACH branch IN branches; IF branch.selected; selectall = 0; "
 "END; END %%] "
-
-#. %1$s:  END 
-#. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/about.tt:149
-#, fuzzy, c-format
-msgid ""
-"%s %s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords "
-"|| warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
-"warnNoActiveCurrency || QueryParserError || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
-"warnNoTemplateCaching %%] "
-msgstr ""
-"%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
-"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
-"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
-"AutoSelfCheckPatronHasTooManyPerm %%] "
 
 #. %1$s:  INCLUDE csv_headers/reports/orders_by_budget.tt 
 #. %2$s: - FOREACH row IN rows 
@@ -4033,7 +4016,7 @@ msgid "%s Scan Index for: "
 msgstr "Ցուցիչի սկան սրա համար։ "
 
 #. %1$s:  IF searchfield 
-#. %2$s:  searchfield 
+#. %2$s:  searchfield |html 
 #. %3$s:  END 
 #. %4$s:  IF cities.count 
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:144
@@ -4443,7 +4426,7 @@ msgid "%s Yes%s, "
 msgstr "%s Այո%s, "
 
 #. %1$s:  IF searchfield 
-#. %2$s:  searchfield 
+#. %2$s:  searchfield |html 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:298
 #, c-format
 msgid "%s You Searched for %s"
@@ -4466,7 +4449,7 @@ msgstr "%s Դու փնտրել ես համար %s"
 #. %1$s:  IF id 
 #. %2$s:  id 
 #. %3$s:  ELSIF searchfield 
-#. %4$s:  searchfield 
+#. %4$s:  searchfield |html 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:224
 #, c-format
@@ -4499,6 +4482,22 @@ msgstr "%s Զիպ/Փոստային ինդեքս:"
 #, c-format
 msgid "%s ZIP/Postal code: "
 msgstr "%s Զիպ/Փոստային ինդեքս: "
+
+#. %1$s:  END 
+#: intranet-tmpl/prog/en/modules/about.tt:151
+#, fuzzy, c-format
+msgid ""
+"%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
+"warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || "
+"warnNoActiveCurrency || QueryParserError || "
+"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || "
+"warnNoTemplateCaching %%] "
+msgstr ""
+"%s [%% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || "
+"warnPrefAnonymousPatron || warnNoActiveCurrency || QueryParserError || "
+"AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || "
+"AutoSelfCheckPatronHasTooManyPerm %%] "
 
 #. %1$s:  BLOCK showreference 
 #. %2$s:  SET authidurl = '/cgi-bin/koha/authorities/detail.pl?authid=' 
@@ -6756,7 +6755,7 @@ msgstr "%sx%s = %s "
 msgid "%s✓%s"
 msgstr "%s✓%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:841
+#: intranet-tmpl/prog/en/modules/about.tt:842
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
@@ -6765,7 +6764,7 @@ msgstr ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; "
 "(Բուլղարերեն) Ռադոսլավ Կոլեվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:875
+#: intranet-tmpl/prog/en/modules/about.tt:876
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
@@ -6774,7 +6773,7 @@ msgstr ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Ռուսերեն) Վիկտոր "
 "Տատարչուկ և Սերգեյ Դուբիկ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:882
+#: intranet-tmpl/prog/en/modules/about.tt:883
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
@@ -6783,64 +6782,64 @@ msgstr ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ուկրաիներեն) Վիկտոր Տատարչուկ և Սերգեյ Դուբիկ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:856
+#: intranet-tmpl/prog/en/modules/about.tt:857
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr "&#1506;&#1489;&#1512;&#1497;&#1514; (Եբրայերեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:881
+#: intranet-tmpl/prog/en/modules/about.tt:882
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr "&#1575;&#1585;&#1583;&#1608;(Ուրդու) Աթա ուռ Ռեհման"
 
-#: intranet-tmpl/prog/en/modules/about.tt:870
+#: intranet-tmpl/prog/en/modules/about.tt:871
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr "&#1601;&#1575;&#1585;&#1587;&#1609; (Պարսկերեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:844
+#: intranet-tmpl/prog/en/modules/about.tt:845
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr "&#20013;&#25991; (Չիներեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:857
+#: intranet-tmpl/prog/en/modules/about.tt:858
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Հինդի)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:843
+#: intranet-tmpl/prog/en/modules/about.tt:844
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Բենգալերեն) Պարտասարահի Մուկոպադհյայ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:863
+#: intranet-tmpl/prog/en/modules/about.tt:864
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr "&#26085;&#26412;&#35486; (Ճապոներեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:871
+#: intranet-tmpl/prog/en/modules/about.tt:872
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:865
+#: intranet-tmpl/prog/en/modules/about.tt:866
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:869
+#: intranet-tmpl/prog/en/modules/about.tt:870
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Մալայալամ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:879
+#: intranet-tmpl/prog/en/modules/about.tt:880
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; Թաի)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:839
+#: intranet-tmpl/prog/en/modules/about.tt:840
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
@@ -6849,12 +6848,12 @@ msgstr ""
 "&#4768;&#4635;&#4653;&#4763; (Ամհարիկ) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:864
+#: intranet-tmpl/prog/en/modules/about.tt:865
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr "&#54620;&#44397;&#50612; (Կորեյերեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:855
+#: intranet-tmpl/prog/en/modules/about.tt:856
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -6863,7 +6862,7 @@ msgstr ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Հունարեն, ժամանակակից "
 "[1453- ]) Georgia Katsarou, Panoraia Gaitanou and Kiriaki Roditi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:846
+#: intranet-tmpl/prog/en/modules/about.tt:847
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr "&#x010D;e&#353;tina (Չեխերեն)"
@@ -7036,7 +7035,7 @@ msgstr ""
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( basketno ) 
-#. %3$s:  basketname 
+#. %3$s:  basketname |html 
 #. %4$s:  ELSE 
 #. %5$s:  booksellername 
 #. %6$s:  END 
@@ -7327,7 +7326,7 @@ msgstr ""
 #. %1$s:  UNLESS ( basketno ) 
 #. %2$s:  END 
 #. %3$s:  basketname|html 
-#. %4$s:  basketno 
+#. %4$s:  basketno |html 
 #. %5$s:  name|html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:169
 #, c-format
@@ -8166,7 +8165,7 @@ msgstr "&rsaquo; Հարցման բեռնավորիչ"
 
 #. %1$s:  name 
 #. %2$s:  IF ( invoice ) 
-#. %3$s:  invoice 
+#. %3$s:  invoice |html 
 #. %4$s:  END 
 #. %5$s:  ordernumber 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:126
@@ -8718,6 +8717,11 @@ msgstr "' ~%%] %s %s [%%~ action_block = action_block _ '"
 msgid "' ~%%] [%%~ action_block = action_block _ '"
 msgstr "' ~%%] [%%~ action_block = action_block _ '"
 
+#: intranet-tmpl/prog/en/modules/tools/holidays.tt:527
+#, c-format
+msgid "') |html %%]"
+msgstr ""
+
 #. For the first occurrence,
 #. %1$s:  rescardnumber 
 #. %2$s:  resbranchname 
@@ -8791,22 +8795,22 @@ msgstr "(%s), %s  %s %s %s [%s] %s Պահումը դրված է %s. "
 msgid "(%s). %s Check in and check out? %s "
 msgstr "(%s). %s Հետ ընդունե՞լ և դուրս տա՞լ %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:368
+#: intranet-tmpl/prog/en/modules/about.tt:369
 #, c-format
 msgid "(3.18)"
 msgstr "(3.18)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:367
+#: intranet-tmpl/prog/en/modules/about.tt:368
 #, c-format
 msgid "(3.20)"
 msgstr "(3.20)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:367
 #, fuzzy, c-format
 msgid "(3.22)"
 msgstr "(3.20)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:613
 #, fuzzy, c-format
 msgid "(3.6, 3.18 Release Maintainer)"
 msgstr "(3.6 Release Maintainer)"
@@ -8851,7 +8855,7 @@ msgstr "(Ctrl-Alt-T)"
 msgid "(Current: %s - %s)"
 msgstr "(Ընթացիկ: %s - %s)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:349
+#: intranet-tmpl/prog/en/modules/about.tt:350
 #, c-format
 msgid "(Database) Documentation manager:"
 msgstr "(Շտեմարան) Փաստաթղթերի կառավարիչ։"
@@ -8894,7 +8898,7 @@ msgstr ""
 "(Ներառյալ, լռակյացն է %s օրեր առաջ %s%s օրեր առջևից%sայսօր%s, ըստ կարիքի "
 "տեղադրի ամսաթվի այլ տիրույթներ։ )"
 
-#: intranet-tmpl/prog/en/modules/about.tt:861
+#: intranet-tmpl/prog/en/modules/about.tt:862
 #, c-format
 msgid "(Indonesian)"
 msgstr "(Ինդոնեզերեն)"
@@ -9219,30 +9223,30 @@ msgstr ""
 ", %s %s Վերին անգամ թարմացված %s, %s %s Ենթակա է վերադարձի %s %s Չի "
 "սպասարկված %s %s &nbsp;"
 
-#: intranet-tmpl/prog/en/modules/about.tt:340
+#: intranet-tmpl/prog/en/modules/about.tt:341
 #, c-format
 msgid ", Auckland, New Zealand (OPAC 'star-ratings' sponsorship)"
 msgstr ", Աուկլանդ, Նոր Զելանդիա (ՀՕԱՔ 'star-ratings' sponsorship)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:337
+#: intranet-tmpl/prog/en/modules/about.tt:338
 #, c-format
 msgid ", Cyprus"
 msgstr ", Կիպրոս"
 
-#: intranet-tmpl/prog/en/modules/about.tt:334
+#: intranet-tmpl/prog/en/modules/about.tt:335
 #, c-format
 msgid ", France (Koha 3.0 enhancements to patrons and holds modules)"
 msgstr ""
 ", Ֆրանսիա (Koha 3.0 բարելավումներ ընթերցողական և պահումների մոդուլներում)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:332
+#: intranet-tmpl/prog/en/modules/about.tt:333
 #, c-format
 msgid ", France (Suggestions, Stats wizards and improved LDAP sponsorship)"
 msgstr ""
 ", Ֆրանսիա (Առաջարկներ, Վիճակագրության Վարպետ և կատարելագործված LDAP "
 "հովանավորություն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:333
+#: intranet-tmpl/prog/en/modules/about.tt:334
 #, c-format
 msgid ""
 ", France (biblio frameworks, MARC authorities, OPAC basket, Serials "
@@ -9251,27 +9255,27 @@ msgstr ""
 ", Ֆրանսիա (մատենագիտ շրջանակներ, MARC հեղինակավորներ, ՀՕԱՔ զամբյուղ, "
 "պարբերականների հովանավորություն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:330
+#: intranet-tmpl/prog/en/modules/about.tt:331
 #, c-format
 msgid ", New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)"
 msgstr ", Նոր Զելանդիա և Ռոսալիա Բլեյ, գրադարանների տնօրեն, (Koha 1.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:336
+#: intranet-tmpl/prog/en/modules/about.tt:337
 #, c-format
 msgid ", OH, USA (Koha 3.0 beta testing)"
 msgstr ", OH, USA (Koha 3.0 beta testing)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:331
+#: intranet-tmpl/prog/en/modules/about.tt:332
 #, c-format
 msgid ", Ohio, USA (MARC sponsorship, documentation, template maintenance)"
 msgstr ", Օհայո, ԱՄՆ (MARC հովանավորում, փաստաթղթեր, նմուշների կառավարում)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:335
+#: intranet-tmpl/prog/en/modules/about.tt:336
 #, c-format
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ", PA, ԱՄՆ (Koha 3.0 Zebra Integration sponsorship)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:852
+#: intranet-tmpl/prog/en/modules/about.tt:853
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ", Pascale Nalon (ENSMP), և ավելին "
@@ -9363,7 +9367,7 @@ msgid "- You may only place a hold on one item at a time"
 msgstr "- Դու կարող ես դնել պահում միանգամից միայն մեկ նյութի վրա"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:208
+#: intranet-tmpl/prog/en/modules/tools/export.tt:212
 #, c-format
 msgid "-- All --"
 msgstr "-- Բոլորը --"
@@ -9544,7 +9548,7 @@ msgstr "1/2"
 msgid "127.0.0.1"
 msgstr "127.0.0.1"
 
-#: intranet-tmpl/prog/en/modules/about.tt:343
+#: intranet-tmpl/prog/en/modules/about.tt:344
 #, c-format
 msgid "16.05"
 msgstr ""
@@ -9694,7 +9698,7 @@ msgstr "Այս անունով ձևանմուշ արդեն կա։"
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr "Կիրառվել է փոխհատուցում սպասարկվող օգտատիրոջ հաշվին։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:628
+#: intranet-tmpl/prog/en/modules/about.tt:629
 #, c-format
 msgid "A. Sassmannshausen"
 msgstr "A. Sassmannshausen"
@@ -9735,12 +9739,12 @@ msgstr "ԵՎ"
 msgid "AUSMARC"
 msgstr "AUSMARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:674
+#: intranet-tmpl/prog/en/modules/about.tt:675
 #, c-format
 msgid "Aaron Wells"
 msgstr "Aaron Wells"
 
-#: intranet-tmpl/prog/en/modules/about.tt:617
+#: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
 msgid "Abby Robertson"
 msgstr "Abby Robertson"
@@ -10170,7 +10174,7 @@ msgstr "Ընթացիկ արժեք:"
 msgid "Actual cost: "
 msgstr "Ընթացիկ արժեք: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:651
+#: intranet-tmpl/prog/en/modules/about.tt:652
 #, c-format
 msgid "Adam Thick"
 msgstr "Adam Thick"
@@ -10813,7 +10817,7 @@ msgstr "Լրացուցիչ պարամետրեր"
 msgid "Additional subfields (XML)"
 msgstr "Լրացուցիչ ենթադաշտեր (XML)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:713
+#: intranet-tmpl/prog/en/modules/about.tt:714
 #, c-format
 msgid "Additional thanks to..."
 msgstr "Հավելյալ շնորհակալություններ..."
@@ -10938,7 +10942,7 @@ msgstr "Հասցե: "
 msgid "Administration"
 msgstr "Ադմինիստրացիա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:171
+#: intranet-tmpl/prog/en/modules/about.tt:172
 #, c-format
 msgid "Administration &gt; Currencies and exchange rates"
 msgstr "Կառավարում &gt; Տարադրամներ և փոխանակման կուրսեր"
@@ -10953,7 +10957,7 @@ msgstr "Ադմինիստրատիվ աղյուսակներ"
 msgid "Adolescent"
 msgstr "Անչափահաս"
 
-#: intranet-tmpl/prog/en/modules/about.tt:629
+#: intranet-tmpl/prog/en/modules/about.tt:630
 #, c-format
 msgid "Adrien Saurat"
 msgstr "Adrien Saurat"
@@ -11058,32 +11062,32 @@ msgstr "Տարիքի սահմանափակում %s."
 msgid "Age restriction %s. %s Check out anyway? %s "
 msgstr "Տարիքի սահմանափակում %s. %s Համենայն դեպս դուրս տա՞լ %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:411
+#: intranet-tmpl/prog/en/modules/about.tt:412
 #, c-format
 msgid "Al Banks"
 msgstr "Al Banks"
 
-#: intranet-tmpl/prog/en/modules/about.tt:582
+#: intranet-tmpl/prog/en/modules/about.tt:583
 #, c-format
 msgid "Alan Millar"
 msgstr "Alan Millar"
 
-#: intranet-tmpl/prog/en/modules/about.tt:340
+#: intranet-tmpl/prog/en/modules/about.tt:341
 #, c-format
 msgid "Albany Senior High School"
 msgstr "Albany Senior High School"
 
-#: intranet-tmpl/prog/en/modules/about.tt:597
+#: intranet-tmpl/prog/en/modules/about.tt:598
 #, c-format
 msgid "Albert Oller"
 msgstr "Albert Oller"
 
-#: intranet-tmpl/prog/en/modules/about.tt:396
+#: intranet-tmpl/prog/en/modules/about.tt:397
 #, c-format
 msgid "Aleisha Amohia"
 msgstr "Aleisha Amohia"
 
-#: intranet-tmpl/prog/en/modules/about.tt:666
+#: intranet-tmpl/prog/en/modules/about.tt:667
 #, c-format
 msgid "Aleksa Vujicic"
 msgstr "Aleksa Vujicic"
@@ -11104,17 +11108,17 @@ msgstr "Զգուշացրու բաժանորդներին "
 msgid "Alerts "
 msgstr "Զգուշացումներ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:404
+#: intranet-tmpl/prog/en/modules/about.tt:405
 #, c-format
 msgid "Alex Arnaud"
 msgstr "Alex Arnaud"
 
-#: intranet-tmpl/prog/en/modules/about.tt:534
+#: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
 msgid "Alexandra Horsman"
 msgstr "Alexandra Horsman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:600
+#: intranet-tmpl/prog/en/modules/about.tt:601
 #, c-format
 msgid "Aliki Pavlidou"
 msgstr ""
@@ -11238,7 +11242,7 @@ msgstr ""
 msgid "All funds"
 msgstr "Բոլոր բյուջեները"
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "All images come from "
 msgstr "Բոլոր պատկերները գալիս են "
@@ -11318,7 +11322,7 @@ msgstr "Բոլոր ցուցիչները"
 msgid "All vendors"
 msgstr "Բոլոր մատակարարները"
 
-#: intranet-tmpl/prog/en/modules/about.tt:614
+#: intranet-tmpl/prog/en/modules/about.tt:615
 #, c-format
 msgid "Allen Reinmeyer"
 msgstr "Allen Reinmeyer"
@@ -11543,13 +11547,13 @@ msgstr ""
 msgid "Always show checkouts immediately"
 msgstr "Միշտ ցույց տուր սպասարկումները անմիջապես"
 
-#: intranet-tmpl/prog/en/modules/about.tt:562
+#: intranet-tmpl/prog/en/modules/about.tt:563
 #, c-format
 msgid "Ambrose Li (translation tool)"
 msgstr "Ambrose Li (թարգմանչական գործիք)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:378
-#: intranet-tmpl/prog/en/modules/about.tt:509
+#: intranet-tmpl/prog/en/modules/about.tt:379
+#: intranet-tmpl/prog/en/modules/about.tt:510
 #, c-format
 msgid "Amit Gupta"
 msgstr "Amit Gupta"
@@ -11696,32 +11700,32 @@ msgstr "Անալիտիկս"
 msgid "Analyze items"
 msgstr "Վերլուծիր նյութերը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:659
+#: intranet-tmpl/prog/en/modules/about.tt:660
 #, c-format
 msgid "Andrei V. Toutoukine"
 msgstr "Andrei V. Toutoukine"
 
-#: intranet-tmpl/prog/en/modules/about.tt:403
+#: intranet-tmpl/prog/en/modules/about.tt:404
 #, c-format
 msgid "Andrew Arensburger (the small and great C4::Context module)"
 msgstr "Andrew Arensburger (փոքր և մեծ C4::Բովանդակության մոդուլ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:444
+#: intranet-tmpl/prog/en/modules/about.tt:445
 #, c-format
 msgid "Andrew Chilton"
 msgstr "Andrew Chilton"
 
-#: intranet-tmpl/prog/en/modules/about.tt:477
+#: intranet-tmpl/prog/en/modules/about.tt:478
 #, c-format
 msgid "Andrew Elwell"
 msgstr "Andrew Elwell"
 
-#: intranet-tmpl/prog/en/modules/about.tt:533
+#: intranet-tmpl/prog/en/modules/about.tt:534
 #, c-format
 msgid "Andrew Hooper"
 msgstr "Andrew Hooper"
 
-#: intranet-tmpl/prog/en/modules/about.tt:584
+#: intranet-tmpl/prog/en/modules/about.tt:585
 #, c-format
 msgid "Andrew Moore"
 msgstr "Andrew Moore"
@@ -11736,7 +11740,7 @@ msgstr "Տրումների պատմությունը դարձրու անանու�
 msgid "Another pattern with this name already exists."
 msgstr "Այս անունով մեկ այլ ձևանմուշ արդեն գոյություն ունի։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:486
+#: intranet-tmpl/prog/en/modules/about.tt:487
 #, c-format
 msgid "Antoine Farnault"
 msgstr "Antoine Farnault"
@@ -11856,7 +11860,7 @@ msgstr "ինչ որ բառ"
 msgid "Any: "
 msgstr "Որևէ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "Apache License v2.0"
 msgstr "Apache License v2.0"
@@ -12005,7 +12009,7 @@ msgstr "Վստա՞հ ես որ ուզում ես փակել այս բաժանո�
 msgid "Are you sure you want to delete %s %s?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s %s"
 
-#. %1$s:  library.branchname 
+#. %1$s:  library.branchname |html 
 #. %2$s:  library.branchcode 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:207
 #, c-format
@@ -12052,7 +12056,7 @@ msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s %s"
 msgid "Are you sure you want to delete the %s attached items?"
 msgstr "Վստա՞հ ես որ ուզում ես ջնջել %s կցված նյութերը։"
 
-#. %1$s:  category.codedescription 
+#. %1$s:  category.codedescription |html 
 #. %2$s:  category.categorycode 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:385
 #, fuzzy, c-format
@@ -12469,12 +12473,12 @@ msgstr "Տիրույթ"
 msgid "Area:"
 msgstr "Տիրույթ:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:840
+#: intranet-tmpl/prog/en/modules/about.tt:841
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr "Հայերեն Տիգրան Զարգարյան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:558
+#: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
 msgid "Arnaud Laurin"
 msgstr "Arnaud Laurin"
@@ -12487,7 +12491,7 @@ msgstr "Arnaud Laurin"
 msgid "Arrived"
 msgstr "Ժամանած"
 
-#: intranet-tmpl/prog/en/modules/about.tt:487
+#: intranet-tmpl/prog/en/modules/about.tt:488
 #, c-format
 msgid "Arslan Farooq"
 msgstr ""
@@ -12521,7 +12525,7 @@ msgstr "Ձուլման համար հարկ է ընտրել երկու գրառո
 msgid "At library: %s"
 msgstr "Գրադարանում: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:331
+#: intranet-tmpl/prog/en/modules/about.tt:332
 #, c-format
 msgid "Athens County Public Libraries"
 msgstr "Athens County Public Libraries"
@@ -12559,7 +12563,7 @@ msgstr "Կցիր այս զամբյուղը նույն անունով զամբյ�
 msgid "Attention:"
 msgstr "Ուշադրություն։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:552
+#: intranet-tmpl/prog/en/modules/about.tt:553
 #, c-format
 msgid "Attila Kinali"
 msgstr "Attila Kinali"
@@ -12737,7 +12741,7 @@ msgstr "Հեղինակ:"
 msgid "Author: "
 msgstr "Հեղինակ: "
 
-#. %1$s:  author 
+#. %1$s:  author |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:256
 #, c-format
 msgid "Author: %s"
@@ -12869,7 +12873,7 @@ msgstr "Հեղինակավորի տեսակ"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:90
-#: intranet-tmpl/prog/en/modules/tools/export.tt:206
+#: intranet-tmpl/prog/en/modules/tools/export.tt:210
 #, c-format
 msgid "Authority type: "
 msgstr "Հեղինակավորի տեսակ։ "
@@ -13051,9 +13055,9 @@ msgstr "Տրման միջին ժամկետ"
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
-#: intranet-tmpl/prog/en/modules/about.tt:823
-#: intranet-tmpl/prog/en/modules/about.tt:832
+#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:824
+#: intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "BSD License"
 msgstr "BSD արտոնագիր"
@@ -13235,17 +13239,17 @@ msgstr "Շտրիխկոդ: %s "
 msgid "Barcodes not found"
 msgstr "Շտրիխկոդեր չեն գտնված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:435
+#: intranet-tmpl/prog/en/modules/about.tt:436
 #, c-format
 msgid "Barry Cannon"
 msgstr "Barry Cannon"
 
-#: intranet-tmpl/prog/en/modules/about.tt:545
+#: intranet-tmpl/prog/en/modules/about.tt:546
 #, c-format
 msgid "Bart Jorgensen"
 msgstr "Bart Jorgensen"
 
-#: intranet-tmpl/prog/en/modules/about.tt:445
+#: intranet-tmpl/prog/en/modules/about.tt:446
 #, c-format
 msgid "Barton Chittenden"
 msgstr "Barton Chittenden"
@@ -13656,22 +13660,22 @@ msgstr "Սկսվում է սրանով"
 msgid "Behavior"
 msgstr "Վարքագիծ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:416
+#: intranet-tmpl/prog/en/modules/about.tt:417
 #, c-format
 msgid "Benedykt P. Barszcz (Polish for 2.0)"
 msgstr "Benedykt P. Barszcz (Polish for 2.0)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:619
+#: intranet-tmpl/prog/en/modules/about.tt:620
 #, c-format
 msgid "Benjamin Rokseth"
 msgstr "Benjamin Rokseth"
 
-#: intranet-tmpl/prog/en/modules/about.tt:352
+#: intranet-tmpl/prog/en/modules/about.tt:353
 #, c-format
 msgid "Bernardo González Kriegel"
 msgstr "Bernardo González Kriegel"
 
-#: intranet-tmpl/prog/en/modules/about.tt:506
+#: intranet-tmpl/prog/en/modules/about.tt:507
 #, fuzzy, c-format
 msgid ""
 "Bernardo González Kriegel (3.14 - 3.22 Translation Manager; 3.10 Release "
@@ -13680,7 +13684,7 @@ msgstr ""
 "Bernardo González Kriegel (3.14 - 3.20 թարգմանության կառավարիչ; 3.10 "
 "թողարկման ուղեկցող)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:689
+#: intranet-tmpl/prog/en/modules/about.tt:690
 #, c-format
 msgid "BibLibre, France"
 msgstr "BibLibre, France"
@@ -13803,7 +13807,7 @@ msgstr "Biblios in reservoir"
 msgid "Biblios: "
 msgstr "Մատեն։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:690
+#: intranet-tmpl/prog/en/modules/about.tt:691
 #, c-format
 msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
@@ -13864,7 +13868,7 @@ msgstr "Հաշիվը ներկայացնելու վայր։"
 msgid "Biography"
 msgstr "Կենսագրություն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:339
+#: intranet-tmpl/prog/en/modules/about.tt:340
 #, c-format
 msgid ""
 "Birmingham (UK) based developer Mark James for the famfamfam Silk iconset."
@@ -13909,8 +13913,8 @@ msgstr "Գրքի բյուջե։"
 msgid "Bookseller invoice no: "
 msgstr "Գրավաճառի ստացականի հմ. "
 
-#: intranet-tmpl/prog/en/modules/about.tt:732
 #: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "Bootstrap"
 msgstr "Սկզբնական բեռնավորում"
@@ -13989,57 +13993,57 @@ msgstr "Մասնաճյուղերի սահմանափակում։ "
 msgid "Branches limitations"
 msgstr "Մասնաճյուղերի սահմանափակումներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:518
+#: intranet-tmpl/prog/en/modules/about.tt:519
 #, c-format
 msgid "Brandon Haveman"
 msgstr "Brandon Haveman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:499
+#: intranet-tmpl/prog/en/modules/about.tt:500
 #, fuzzy, c-format
 msgid "Brendan A. Gallagher (3.14 - 3.22 QA Team Member)"
 msgstr "Brendan A. Gallagher (3.14 - 3.20 QA Team Member)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:346
+#: intranet-tmpl/prog/en/modules/about.tt:347
 #, c-format
 msgid "Brendan Gallagher"
 msgstr "Brendan Gallagher"
 
-#: intranet-tmpl/prog/en/modules/about.tt:494
+#: intranet-tmpl/prog/en/modules/about.tt:495
 #, c-format
 msgid "Brendon Ford"
 msgstr "Brendon Ford"
 
-#: intranet-tmpl/prog/en/modules/about.tt:678
+#: intranet-tmpl/prog/en/modules/about.tt:679
 #, c-format
 msgid "Brett Wilkins"
 msgstr "Brett Wilkins"
 
-#: intranet-tmpl/prog/en/modules/about.tt:478
+#: intranet-tmpl/prog/en/modules/about.tt:479
 #, c-format
 msgid "Brian Engard"
 msgstr "Brian Engard"
 
-#: intranet-tmpl/prog/en/modules/about.tt:517
+#: intranet-tmpl/prog/en/modules/about.tt:518
 #, c-format
 msgid "Brian Harrington"
 msgstr "Brian Harrington"
 
-#: intranet-tmpl/prog/en/modules/about.tt:594
+#: intranet-tmpl/prog/en/modules/about.tt:595
 #, c-format
 msgid "Brian Norris"
 msgstr "Brian Norris"
 
-#: intranet-tmpl/prog/en/modules/about.tt:507
+#: intranet-tmpl/prog/en/modules/about.tt:508
 #, c-format
 msgid "Briana Greally"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:624
+#: intranet-tmpl/prog/en/modules/about.tt:625
 #, c-format
 msgid "Brice Sanchez"
 msgstr "Brice Sanchez"
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "Bridge Material Type Icons Project"
 msgstr "Bridge Material Type Icons Project"
@@ -14049,7 +14053,7 @@ msgstr "Bridge Material Type Icons Project"
 msgid "Brief display"
 msgstr "Համառոտ արտածում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:573
+#: intranet-tmpl/prog/en/modules/about.tt:574
 #, c-format
 msgid "Brig C. McCoy"
 msgstr "Brig C. McCoy"
@@ -14060,7 +14064,7 @@ msgstr "Brig C. McCoy"
 msgid "Broader Term"
 msgstr "%sg - Լայն տերմին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:719
 #, c-format
 msgid "Brooke Johnson"
 msgstr "Brooke Johnson"
@@ -14084,7 +14088,7 @@ msgstr "Թերթիր համակարգային մուտքերը"
 msgid "Browse the system logs"
 msgstr "Թերթիր համակարգային մուտքերը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:658
+#: intranet-tmpl/prog/en/modules/about.tt:659
 #, c-format
 msgid "Bruno Toumi"
 msgstr "Bruno Toumi"
@@ -14163,7 +14167,7 @@ msgstr "Բյուջեներ"
 msgid "Budgets administration"
 msgstr "Բյուջեների կառավարում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:374
+#: intranet-tmpl/prog/en/modules/about.tt:375
 #, c-format
 msgid "Bug wranglers:"
 msgstr "Bug wranglers:"
@@ -14221,7 +14225,7 @@ msgstr "Կողմից "
 msgid "By: "
 msgstr "Կողմից։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:691
+#: intranet-tmpl/prog/en/modules/about.tt:692
 #, c-format
 msgid "ByWater Solutions, USA"
 msgstr "ByWater Solutions, USA"
@@ -14231,7 +14235,7 @@ msgstr "ByWater Solutions, USA"
 msgid "Bytes"
 msgstr "Բայթեր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:694
+#: intranet-tmpl/prog/en/modules/about.tt:695
 #, c-format
 msgid "C &amp; P Bibliography Services, USA"
 msgstr "C &amp; P Bibliography Services, USA"
@@ -14350,7 +14354,7 @@ msgstr "CSV - %s"
 msgid "CSV profile ID"
 msgstr "CSV պրոֆայլ։ "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:175
+#: intranet-tmpl/prog/en/modules/tools/export.tt:179
 #, c-format
 msgid "CSV profile: "
 msgstr "CSV պրոֆայլ։ "
@@ -14525,7 +14529,7 @@ msgstr "Callnumber"
 msgid "Callnumber: %s "
 msgstr "Դասիչներ : %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:692
+#: intranet-tmpl/prog/en/modules/about.tt:693
 #, c-format
 msgid "Calyx, Australia"
 msgstr "Calyx, Australia"
@@ -15365,7 +15369,7 @@ msgstr "Քարտարանի աղյուսակներ"
 msgid "Cataloguing tables"
 msgstr "Քարտագրման աղյուսակներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:693
+#: intranet-tmpl/prog/en/modules/about.tt:694
 #, c-format
 msgid "Catalyst IT, New Zealand"
 msgstr "Catalyst IT, New Zealand"
@@ -15621,7 +15625,7 @@ msgstr "Գանձման տեսակ"
 msgid "Charge when?"
 msgstr "Ե՞րբ գանձել։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:485
+#: intranet-tmpl/prog/en/modules/about.tt:486
 #, c-format
 msgid "Charles Farmer"
 msgstr "Charles Farmer"
@@ -16118,7 +16122,7 @@ msgstr ""
 msgid "Child"
 msgstr "Երեխա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:391
+#: intranet-tmpl/prog/en/modules/about.tt:392
 #, c-format
 msgid "Chloe Alabaster"
 msgstr ""
@@ -16169,8 +16173,8 @@ msgstr "Ընտրիր տպելու համար տեքստային դաշտերի �
 msgid "Choose a field name"
 msgstr "Ընտրիր ֆայլը "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:259
-#: intranet-tmpl/prog/en/modules/tools/export.tt:285
+#: intranet-tmpl/prog/en/modules/tools/export.tt:263
+#: intranet-tmpl/prog/en/modules/tools/export.tt:289
 #, c-format
 msgid "Choose a file "
 msgstr "Ընտրիր ֆայլը "
@@ -16285,12 +16289,12 @@ msgstr "Ընտրիր քո գրադարանը։"
 msgid "Choose: "
 msgstr "Ընտրիր։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:438
+#: intranet-tmpl/prog/en/modules/about.tt:439
 #, c-format
 msgid "Chris Catalfo (new plugin MARC editor)"
 msgstr "Chris Catalfo (new plugin MARC editor)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:451
+#: intranet-tmpl/prog/en/modules/about.tt:452
 #, fuzzy, c-format
 msgid ""
 "Chris Cormack (1.x, 3.4 and 3.6 Release Manager; 3.8, 3.10, 3.18 and 3.20 "
@@ -16299,32 +16303,32 @@ msgstr ""
 "Chris Cormack (1.x, 3.4, և 3.6 թողարկման կառավարիչ; 3.8 և 3.10 և 3.18 "
 "թողարկման ուղեկցող; 3.2 թարգմանության կառավարիչ; 3.14 որակի խմբի անդամ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:593
+#: intranet-tmpl/prog/en/modules/about.tt:594
 #, c-format
 msgid "Chris Nighswonger (3.2 - 3.6 Release Maintainer)"
 msgstr "Chris Nighswonger (3.2 - 3.6 թողարկման ուղեկցող)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:454
+#: intranet-tmpl/prog/en/modules/about.tt:455
 #, c-format
 msgid "Christophe Croullebois"
 msgstr "Christophe Croullebois"
 
-#: intranet-tmpl/prog/en/modules/about.tt:426
+#: intranet-tmpl/prog/en/modules/about.tt:427
 #, c-format
 msgid "Christopher Brannon (3.20 QA Team Member)"
 msgstr "Christopher Brannon (3.20 որակի խմբի անդամ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:512
+#: intranet-tmpl/prog/en/modules/about.tt:513
 #, c-format
 msgid "Christopher Hall (3.8 Release Maintainer)"
 msgstr "Christopher Hall (3.8 Release Maintainer)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:537
+#: intranet-tmpl/prog/en/modules/about.tt:538
 #, c-format
 msgid "Christopher Hyde"
 msgstr "Christopher Hyde"
 
-#: intranet-tmpl/prog/en/modules/about.tt:395
+#: intranet-tmpl/prog/en/modules/about.tt:396
 #, c-format
 msgid "Cindy Murdock Ames"
 msgstr "Cindy Murdock Ames"
@@ -16370,7 +16374,7 @@ msgstr "Տացքի նշումներ"
 msgid "Circulation"
 msgstr "Տացք"
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid ""
 "Circulation (\"fair-trade\") symbol by Edward Boatman ; Patrons "
@@ -16585,12 +16589,12 @@ msgstr "Պահանջներ"
 msgid "Claims count"
 msgstr "Պահանջների հաշվիչ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:503
+#: intranet-tmpl/prog/en/modules/about.tt:504
 #, fuzzy, c-format
 msgid "Claire Gravely"
 msgstr "Claire Hernandez"
 
-#: intranet-tmpl/prog/en/modules/about.tt:524
+#: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Claire Hernandez"
 msgstr "Claire Hernandez"
@@ -16644,12 +16648,12 @@ msgstr "Դասակարգում:"
 msgid "Classification: %s "
 msgstr "Դասակարգում: %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:495
+#: intranet-tmpl/prog/en/modules/about.tt:496
 #, c-format
 msgid "Claudia Forsman"
 msgstr "Claudia Forsman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:493
+#: intranet-tmpl/prog/en/modules/about.tt:494
 #, c-format
 msgid "Clay Fouts"
 msgstr "Clay Fouts"
@@ -17176,13 +17180,13 @@ msgstr "Կոդ"
 msgid "Code:"
 msgstr "Կոդ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:813
 #: intranet-tmpl/prog/en/modules/about.tt:814
+#: intranet-tmpl/prog/en/modules/about.tt:815
 #, c-format
 msgid "CodeMirror editing library"
 msgstr "CodeMirror խմբագրիչ գրադարան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:433
+#: intranet-tmpl/prog/en/modules/about.tt:434
 #, c-format
 msgid "Colin Campbell (3.4 QA Manager)"
 msgstr "Colin Campbell (3.4 QA Manager)"
@@ -17635,12 +17639,12 @@ msgstr "Միացումը ձախողվեց %s"
 msgid "Connection timeout to %s"
 msgstr "Միացման ժամկետը լրացավ %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:464
+#: intranet-tmpl/prog/en/modules/about.tt:465
 #, c-format
 msgid "Connor Dewar"
 msgstr "Connor Dewar"
 
-#: intranet-tmpl/prog/en/modules/about.tt:492
+#: intranet-tmpl/prog/en/modules/about.tt:493
 #, c-format
 msgid "Connor Fraser"
 msgstr "Connor Fraser"
@@ -17861,7 +17865,7 @@ msgstr "Կոնտրակտ։ "
 msgid "Contracts"
 msgstr "Կոնտրակտներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:687
+#: intranet-tmpl/prog/en/modules/about.tt:688
 #, c-format
 msgid "Contributing companies and institutions"
 msgstr "Աջակցող կազմակերպություններ և ինստիտուտներ"
@@ -17972,12 +17976,12 @@ msgstr "Պատճենիր բոլոր գրադարաններին"
 msgid "Copyright"
 msgstr "Հեղինակային իրավունք"
 
-#: intranet-tmpl/prog/en/modules/about.tt:778
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #, c-format
 msgid "Copyright &copy; 2003-2010 phpMyAdmin devel team"
 msgstr "Հեղինակային իրավունք &copy; 2003-2010 phpMyAdmin devel team "
 
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Copyright &copy; 2008 "
 msgstr "Հեղինակային իրավունք &copy; 2008 "
@@ -18013,7 +18017,7 @@ msgstr "Հեղինակային իրավունք։ "
 msgid "Copyrightdate"
 msgstr "Հեղինակային իրավունքի ամսաթիվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:496
+#: intranet-tmpl/prog/en/modules/about.tt:497
 #, c-format
 msgid "Corey Fuimaono"
 msgstr "Corey Fuimaono"
@@ -18024,7 +18028,7 @@ msgstr "Corey Fuimaono"
 msgid "Corporate"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:539
+#: intranet-tmpl/prog/en/modules/about.tt:540
 #, c-format
 msgid "Cory Jaeger"
 msgstr "Cory Jaeger"
@@ -18084,7 +18088,7 @@ msgstr ""
 msgid "Could not find a system preference named "
 msgstr "Չի կարող գտնել համակարգային նախապատվությունը անվանված "
 
-#: intranet-tmpl/prog/en/modules/about.tt:907
+#: intranet-tmpl/prog/en/modules/about.tt:908
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -18232,7 +18236,7 @@ msgstr "Դասընթացի ռեզերվներ"
 msgid "Courses"
 msgstr "Դասընթացներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:335
+#: intranet-tmpl/prog/en/modules/about.tt:336
 #, c-format
 msgid "Crawford County Federated Library System"
 msgstr "Քրաուֆորդ համայնքի ֆեդերացված գրադարանային համակարգ"
@@ -18443,12 +18447,12 @@ msgstr "Ստեղծված է։"
 msgid "Creation date"
 msgstr "Ստեղծման ամսաթիվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "Creative Commons Attribution 2.5 License"
 msgstr "Ստեղծագործական Համայնքներ վերագրում 2.5 արտոնագիր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "Creative Commons Attribution-ShareAlike 2.5 License"
 msgstr "Ստեղծագործական Համայնքներ վերագրում-նմանների մաս 2.5 արտոնագիր"
@@ -18670,12 +18674,12 @@ msgstr "Ուսումնական պլան"
 msgid "Custom search fields"
 msgstr "Հաճախորդի փնտրման դաշտեր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:417
+#: intranet-tmpl/prog/en/modules/about.tt:418
 #, c-format
 msgid "D Ruth Bavousett (3.12 Translation Manager)"
 msgstr "D Ruth Bavousett (3.12 Թարգմանության կառավարիչ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:847
+#: intranet-tmpl/prog/en/modules/about.tt:848
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr "D&aelig;nsk (Դանիերեն)"
@@ -18690,7 +18694,7 @@ msgstr "DANMARC"
 msgid "DOIT"
 msgstr "DOIT"
 
-#: intranet-tmpl/prog/en/modules/about.tt:823
+#: intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "DSpace project"
 msgstr ""
@@ -18717,47 +18721,47 @@ msgstr "Վնասված վիճակ"
 msgid "Damaged status:"
 msgstr "Վթարված վիճակ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:630
+#: intranet-tmpl/prog/en/modules/about.tt:631
 #, c-format
 msgid "Dan Scott"
 msgstr "Dan Scott"
 
-#: intranet-tmpl/prog/en/modules/about.tt:412
+#: intranet-tmpl/prog/en/modules/about.tt:413
 #, c-format
 msgid "Daniel Banzli"
 msgstr "Daniel Banzli"
 
-#: intranet-tmpl/prog/en/modules/about.tt:414
+#: intranet-tmpl/prog/en/modules/about.tt:415
 #, c-format
 msgid "Daniel Barker"
 msgstr "Daniel Barker"
 
-#: intranet-tmpl/prog/en/modules/about.tt:508
+#: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
 msgid "Daniel Grobani"
 msgstr "Daniel Grobani"
 
-#: intranet-tmpl/prog/en/modules/about.tt:532
+#: intranet-tmpl/prog/en/modules/about.tt:533
 #, c-format
 msgid "Daniel Holth"
 msgstr "Daniel Holth"
 
-#: intranet-tmpl/prog/en/modules/about.tt:504
+#: intranet-tmpl/prog/en/modules/about.tt:505
 #, c-format
 msgid "Daniel Kahn Gillmor"
 msgstr "Daniel Kahn Gillmor"
 
-#: intranet-tmpl/prog/en/modules/about.tt:647
+#: intranet-tmpl/prog/en/modules/about.tt:648
 #, c-format
 msgid "Daniel Sweeney"
 msgstr "Daniel Sweeney"
 
-#: intranet-tmpl/prog/en/modules/about.tt:425
+#: intranet-tmpl/prog/en/modules/about.tt:426
 #, c-format
 msgid "Danny Bouman"
 msgstr "Danny Bouman"
 
-#: intranet-tmpl/prog/en/modules/about.tt:662
+#: intranet-tmpl/prog/en/modules/about.tt:663
 #, c-format
 msgid "Darrell Ulm"
 msgstr "Darrell Ulm"
@@ -18845,7 +18849,7 @@ msgstr "Շտեմարան։ "
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:164
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:446
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:517
-#: intranet-tmpl/prog/en/modules/about.tt:893
+#: intranet-tmpl/prog/en/modules/about.tt:894
 #, c-format
 msgid "Date"
 msgstr "Ամսաթիվ"
@@ -19070,22 +19074,22 @@ msgstr "Ծննդյան ամսաթվերը հարկ է մուտք անել այս
 msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
 msgstr "Ծննդյան ամսաթվերը հարկ է մուտք անել այս ձևաչափով 'ՏՏՏՏ-ԱԱ-ՕՕ'"
 
-#: intranet-tmpl/prog/en/modules/about.tt:422
+#: intranet-tmpl/prog/en/modules/about.tt:423
 #, c-format
 msgid "David Birmingham"
 msgstr "David Birmingham"
 
-#: intranet-tmpl/prog/en/modules/about.tt:449
+#: intranet-tmpl/prog/en/modules/about.tt:450
 #, c-format
 msgid "David Cook"
 msgstr "David Cook"
 
-#: intranet-tmpl/prog/en/modules/about.tt:505
+#: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
 msgid "David Goldfein"
 msgstr "David Goldfein"
 
-#: intranet-tmpl/prog/en/modules/about.tt:645
+#: intranet-tmpl/prog/en/modules/about.tt:646
 #, c-format
 msgid "David Strainchamps"
 msgstr "David Strainchamps"
@@ -19129,7 +19133,7 @@ msgstr "Օրեր"
 msgid "Days in advance"
 msgstr "Օրերը նախապես"
 
-#: intranet-tmpl/prog/en/modules/about.tt:437
+#: intranet-tmpl/prog/en/modules/about.tt:438
 #, c-format
 msgid "DeAndre Carroll"
 msgstr "DeAndre Carroll"
@@ -20094,7 +20098,7 @@ msgstr "Բաժնմ."
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:470
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:497
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:519
-#: intranet-tmpl/prog/en/modules/about.tt:894
+#: intranet-tmpl/prog/en/modules/about.tt:895
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:48
 #, c-format
 msgid "Description"
@@ -20213,7 +20217,7 @@ msgstr "Նշանակաման վայրի գրառում"
 msgid "Details"
 msgstr "Մանրամասներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:854
+#: intranet-tmpl/prog/en/modules/about.tt:855
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -20316,7 +20320,7 @@ msgstr "Բնօրինակ մատենի և ներմուծվածի մեջ տարբ�
 msgid "Digests only "
 msgstr "Միայն դայջեստներ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:401
+#: intranet-tmpl/prog/en/modules/about.tt:402
 #, c-format
 msgid "Dimitris Antonakis"
 msgstr ""
@@ -20546,7 +20550,7 @@ msgstr ""
 msgid "Do you want to confirm this order?"
 msgstr "Ուզու՞մ ես հաստատել այս պատվերը։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:601
+#: intranet-tmpl/prog/en/modules/about.tt:602
 #, c-format
 msgid "Dobrica Pavlinusic"
 msgstr "Dobrica Pavlinusic"
@@ -20596,7 +20600,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:62
 #: intranet-tmpl/prog/en/modules/tools/export.tt:157
-#: intranet-tmpl/prog/en/modules/tools/export.tt:229
+#: intranet-tmpl/prog/en/modules/tools/export.tt:233
 #, c-format
 msgid "Don't export fields:"
 msgstr "Մի արտահանիր դաշտերը։"
@@ -20625,17 +20629,17 @@ msgstr "Չի ներառում հարկ"
 msgid "Done"
 msgstr "Կատարված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:544
+#: intranet-tmpl/prog/en/modules/about.tt:545
 #, c-format
 msgid "Donovan Jones"
 msgstr "Donovan Jones"
 
-#: intranet-tmpl/prog/en/modules/about.tt:574
+#: intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
 msgid "Dorian Meid (German translation)"
 msgstr "Dorian Meid (գերմաներեն թարգմանություն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:460
+#: intranet-tmpl/prog/en/modules/about.tt:461
 #, c-format
 msgid "Doug Dearden"
 msgstr "Doug Dearden"
@@ -20684,12 +20688,12 @@ msgid "Download cart"
 msgstr "Բեռնաթափիր զամբյուղ"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:300
+#: intranet-tmpl/prog/en/modules/tools/export.tt:304
 msgid "Download configuration"
 msgstr "Բեռնաթափի կարգաբերումը"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/export.tt:274
+#: intranet-tmpl/prog/en/modules/tools/export.tt:278
 msgid "Download database"
 msgstr "Բեռնաթափիր շտեմարանը"
 
@@ -20791,7 +20795,7 @@ msgstr "Վերադարձի ամսաթիվը թաքնված է չֆորմատավ
 msgid "Due on %s"
 msgstr "Վերադարձ %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:660
+#: intranet-tmpl/prog/en/modules/about.tt:661
 #, c-format
 msgid "Duncan Tyler"
 msgstr "Duncan Tyler"
@@ -20870,7 +20874,7 @@ msgstr "Պատճենիր հայտնաբերված արժեքները։ Ուղղ�
 msgid "Duplicate warning"
 msgstr "Պատճենիր զգուշացումը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:595
+#: intranet-tmpl/prog/en/modules/about.tt:596
 #, c-format
 msgid "Duy Tinh Nguyen"
 msgstr ""
@@ -20924,7 +20928,7 @@ msgstr "HTML Հաղորդում։"
 msgid "EDIFACT messages"
 msgstr "HTML Հաղորդում։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:332
+#: intranet-tmpl/prog/en/modules/about.tt:333
 #, c-format
 msgid "EMN (Ecole des Mines de Nantes)"
 msgstr "EMN (Ecole des Mines de Nantes)"
@@ -20975,12 +20979,12 @@ msgstr ""
 msgid "Earliest hold date"
 msgstr "Պահման ամենաշուտ ամսաթիվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:474
+#: intranet-tmpl/prog/en/modules/about.tt:475
 #, c-format
 msgid "Ecole des Mines de Saint Etienne, Philippe Jaillon (OAI-PMH support)"
 msgstr "Ecole des Mines de Saint Etienne, Philippe Jaillon (OAI-PMH support)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:646
+#: intranet-tmpl/prog/en/modules/about.tt:647
 #, c-format
 msgid "Ed Summers (Some code and Perl packages like MARC::Record)"
 msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
@@ -21151,7 +21155,7 @@ msgstr "Խմբագրել հեղինակավորը"
 msgid "Edit basket"
 msgstr "Խմբագրի զամբյուղը"
 
-#. %1$s:  basketname 
+#. %1$s:  basketname |html 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:34
 #, c-format
 msgid "Edit basket %s"
@@ -21415,22 +21419,22 @@ msgstr "Հրատարակումներ"
 msgid "Editor"
 msgstr "Խմբագիր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:410
+#: intranet-tmpl/prog/en/modules/about.tt:411
 #, c-format
 msgid "Edmund Balnaves"
 msgstr "Edmund Balnaves"
 
-#: intranet-tmpl/prog/en/modules/about.tt:392
+#: intranet-tmpl/prog/en/modules/about.tt:393
 #, c-format
 msgid "Edward Allen"
 msgstr "Edward Allen"
 
-#: intranet-tmpl/prog/en/modules/about.tt:623
+#: intranet-tmpl/prog/en/modules/about.tt:624
 #, c-format
 msgid "Eivin Giske Skaaren"
 msgstr "Eivin Giske Skaaren"
 
-#: intranet-tmpl/prog/en/modules/about.tt:459
+#: intranet-tmpl/prog/en/modules/about.tt:460
 #, c-format
 msgid "Elliott Davis (3.12 QA Team Member)"
 msgstr "Elliott Davis (3.12 QA թիմի անդամ)"
@@ -21478,7 +21482,7 @@ msgstr "էլ փոստ։"
 msgid "Email: "
 msgstr "էլ փոստ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:520
+#: intranet-tmpl/prog/en/modules/about.tt:521
 #, c-format
 msgid "Emma Heath"
 msgstr "Emma Heath"
@@ -21577,7 +21581,7 @@ msgstr "Ամսաթվերի տիրույթի վերջ "
 msgid "End of interval"
 msgstr "Հատվածի տիրույթի վերջը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:850
+#: intranet-tmpl/prog/en/modules/about.tt:851
 #, c-format
 msgid "English"
 msgstr "Անգլերեն"
@@ -21834,7 +21838,7 @@ msgstr "Հաշվում"
 msgid "Envoyer"
 msgstr "Envoyer"
 
-#: intranet-tmpl/prog/en/modules/about.tt:598
+#: intranet-tmpl/prog/en/modules/about.tt:599
 #, c-format
 msgid "Eric Olsen"
 msgstr "Eric Olsen"
@@ -21973,12 +21977,12 @@ msgstr ""
 msgid "Errors occurred:"
 msgstr "Հանդիպել են սխալներ:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:481
+#: intranet-tmpl/prog/en/modules/about.tt:482
 #, c-format
 msgid "Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 msgstr "Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:876
+#: intranet-tmpl/prog/en/modules/about.tt:877
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -22041,7 +22045,7 @@ msgstr "Ամենոք"
 msgid "Everything went OK, update done."
 msgstr "Ամեն ինչ ընթացավ հաջող և գրառումը թարմացված է։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:443
+#: intranet-tmpl/prog/en/modules/about.tt:444
 #, c-format
 msgid "Evonne Cheung"
 msgstr "Evonne Cheung"
@@ -22285,7 +22289,7 @@ msgid "Export as PDF"
 msgstr "Արտահանիր որպես CSV"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:61
-#: intranet-tmpl/prog/en/modules/tools/export.tt:250
+#: intranet-tmpl/prog/en/modules/tools/export.tt:254
 #, c-format
 msgid "Export authority records"
 msgstr "Արտահանիր հեղինակավոր գրառումները"
@@ -22296,7 +22300,7 @@ msgid "Export bibliographic and holdings data"
 msgstr "Արտահանիր մատենագիտական և պահումների տվյալները"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:60
-#: intranet-tmpl/prog/en/modules/tools/export.tt:189
+#: intranet-tmpl/prog/en/modules/tools/export.tt:193
 #, c-format
 msgid "Export bibliographic records"
 msgstr "Արտահանիր մատենագիտական գրառումները"
@@ -22472,7 +22476,7 @@ msgstr "FEIDE:"
 msgid "FINMARC"
 msgstr "FINMARC"
 
-#: intranet-tmpl/prog/en/modules/about.tt:654
+#: intranet-tmpl/prog/en/modules/about.tt:655
 #, c-format
 msgid "Fabio Tiana"
 msgstr "Fabio Tiana"
@@ -22562,12 +22566,12 @@ msgstr "Ձախողվեց թարմացնել դաշտը։"
 msgid "Fall"
 msgstr "Աշուն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid "FamFamFam Site"
 msgstr "FamFamFam Site"
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "Famfamfam iconset"
 msgstr "Famfamfam iconset"
@@ -22640,7 +22644,7 @@ msgstr "Տուգանքներ &amp; Ծախսեր"
 msgid "Female "
 msgstr "Կին "
 
-#: intranet-tmpl/prog/en/modules/about.tt:434
+#: intranet-tmpl/prog/en/modules/about.tt:435
 #, c-format
 msgid "Fernando Canizo"
 msgstr "Fernando Canizo"
@@ -22761,7 +22765,7 @@ msgstr ""
 msgid "Fields to display in report:"
 msgstr "Հաշվետվությունում արտածման ենթակա դաշտերը։"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:221
+#: intranet-tmpl/prog/en/modules/tools/export.tt:225
 #, fuzzy, c-format
 msgid ""
 "File containing a list of authids with one authid per line. This list works "
@@ -22797,7 +22801,7 @@ msgid "File could not be read."
 msgstr "Ֆայլը հնարավոր չէ կարդալ։"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:167
-#: intranet-tmpl/prog/en/modules/tools/export.tt:237
+#: intranet-tmpl/prog/en/modules/tools/export.tt:241
 #, c-format
 msgid "File format: "
 msgstr "Ֆայլի ֆորմատ։ "
@@ -22814,8 +22818,8 @@ msgstr "Ֆայլը ջնջված է։"
 msgid "File name"
 msgstr "Ֆայլի անուն"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:183
-#: intranet-tmpl/prog/en/modules/tools/export.tt:244
+#: intranet-tmpl/prog/en/modules/tools/export.tt:187
+#: intranet-tmpl/prog/en/modules/tools/export.tt:248
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
 #, c-format
 msgid "File name:"
@@ -22828,7 +22832,7 @@ msgstr "Ֆայլի տեսակ"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:93
-#: intranet-tmpl/prog/en/modules/tools/export.tt:222
+#: intranet-tmpl/prog/en/modules/tools/export.tt:226
 #, c-format
 msgid "File:"
 msgstr "Ֆայլ:"
@@ -22849,8 +22853,8 @@ msgstr "Ֆայլ: "
 msgid "File: %s"
 msgstr "Ֆայլ: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:816
 #: intranet-tmpl/prog/en/modules/about.tt:817
+#: intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid "FileSaver library"
 msgstr "FileSaver գրադարան"
@@ -23070,7 +23074,7 @@ msgstr "Ավարտ"
 msgid "Finish receiving"
 msgstr "Ավարտի ստացում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:652
+#: intranet-tmpl/prog/en/modules/about.tt:653
 #, c-format
 msgid "Finlay Thompson"
 msgstr "Finlay Thompson"
@@ -23125,7 +23129,7 @@ msgstr "Պիտակավորված"
 msgid "Float"
 msgstr "Սահող"
 
-#: intranet-tmpl/prog/en/modules/about.tt:423
+#: intranet-tmpl/prog/en/modules/about.tt:424
 #, c-format
 msgid "Florian Bischof"
 msgstr "Florian Bischof"
@@ -23147,8 +23151,8 @@ msgstr "Հետևյալ պահանջվող դաշտերը բացակա են։"
 msgid "Following required subfields are missing:"
 msgstr "Հետևյալ պահանջվող ենթադաշտերը բացակա են։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:810
 #: intranet-tmpl/prog/en/modules/about.tt:811
+#: intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "Font Awesome"
 msgstr "Font Awesome"
@@ -23325,37 +23329,37 @@ msgstr ""
 msgid "Framework:"
 msgstr "Կառուցվածք։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:852
+#: intranet-tmpl/prog/en/modules/about.tt:853
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr "Fran&ccedil;ais (Ֆրանսերեն) "
 
-#: intranet-tmpl/prog/en/modules/about.tt:585
+#: intranet-tmpl/prog/en/modules/about.tt:586
 #, c-format
 msgid "Francesca Moore"
 msgstr "Francesca Moore"
 
-#: intranet-tmpl/prog/en/modules/about.tt:393
+#: intranet-tmpl/prog/en/modules/about.tt:394
 #, c-format
 msgid "Francisco M. Marzoa Alonso"
 msgstr "Francisco M. Marzoa Alonso"
 
-#: intranet-tmpl/prog/en/modules/about.tt:442
+#: intranet-tmpl/prog/en/modules/about.tt:443
 #, fuzzy, c-format
 msgid "Francois Charbonnier"
 msgstr "Francois Marier"
 
-#: intranet-tmpl/prog/en/modules/about.tt:567
+#: intranet-tmpl/prog/en/modules/about.tt:568
 #, c-format
 msgid "Francois Marier"
 msgstr "Francois Marier"
 
-#: intranet-tmpl/prog/en/modules/about.tt:605
+#: intranet-tmpl/prog/en/modules/about.tt:606
 #, c-format
 msgid "Fred Pierre"
 msgstr "Fred Pierre"
 
-#: intranet-tmpl/prog/en/modules/about.tt:471
+#: intranet-tmpl/prog/en/modules/about.tt:472
 #, c-format
 msgid "Frederic Durand"
 msgstr "Frederic Durand"
@@ -23417,12 +23421,12 @@ msgstr "Ուրբաթ"
 msgid "Fridays"
 msgstr "Ուրբաթներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:639
+#: intranet-tmpl/prog/en/modules/about.tt:640
 #, c-format
 msgid "Fridolin Somers (3.14 Release Maintainer)"
 msgstr "Fridolin Somers (3.14 Release Maintainer)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:521
+#: intranet-tmpl/prog/en/modules/about.tt:522
 #, c-format
 msgid "Friedrich zur Hellen"
 msgstr "Friedrich zur Hellen"
@@ -23497,7 +23501,7 @@ msgstr "Ցանկացած գրադարանից"
 msgid "From any library:"
 msgstr "Ցանկացած գրադարանից։"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:198
+#: intranet-tmpl/prog/en/modules/tools/export.tt:202
 #, c-format
 msgid "From authid: "
 msgstr "authid-ից: "
@@ -23563,22 +23567,22 @@ msgstr "Այստեղից: "
 msgid "Front "
 msgstr "Առաջամաս "
 
-#: intranet-tmpl/prog/en/modules/about.tt:569
+#: intranet-tmpl/prog/en/modules/about.tt:570
 #, c-format
 msgid "Frère Sébastien Marie"
 msgstr "Frère Sébastien Marie"
 
-#: intranet-tmpl/prog/en/modules/about.tt:367
+#: intranet-tmpl/prog/en/modules/about.tt:368
 #, fuzzy, c-format
 msgid "Frédéric Demians"
 msgstr "Frédérick Capovilla"
 
-#: intranet-tmpl/prog/en/modules/about.tt:463
+#: intranet-tmpl/prog/en/modules/about.tt:464
 #, c-format
 msgid "Frédéric Demians (3.4 - 3.10 Translation Manager)"
 msgstr "Frédéric Demians (3.4 - 3.10 թարգմանության կառավարիչ)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:436
+#: intranet-tmpl/prog/en/modules/about.tt:437
 #, c-format
 msgid "Frédérick Capovilla"
 msgstr "Frédérick Capovilla"
@@ -23746,14 +23750,14 @@ msgstr "Բյուջե: %s"
 msgid "Funds"
 msgstr "Բյուջեներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Fyneworks.com"
 msgstr "Fyneworks.com"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid "GPL License"
 msgstr "GPL Արտոնագիր"
@@ -23777,22 +23781,22 @@ msgstr "GST %%"
 msgid "GST:"
 msgstr "ԱԾՀ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:424
+#: intranet-tmpl/prog/en/modules/about.tt:425
 #, c-format
 msgid "Gaetan Boisson"
 msgstr "Gaetan Boisson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:853
+#: intranet-tmpl/prog/en/modules/about.tt:854
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr "Galego (Galician) Ignacio Javier"
 
-#: intranet-tmpl/prog/en/modules/about.tt:372
+#: intranet-tmpl/prog/en/modules/about.tt:373
 #, fuzzy, c-format
 msgid "Galen Charlton"
 msgstr "Գլեն Ստյուարտ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:441
+#: intranet-tmpl/prog/en/modules/about.tt:442
 #, c-format
 msgid ""
 "Galen Charlton (3.2, 3.14, and 3.16 Release Manager; 3.16 Release "
@@ -23813,12 +23817,12 @@ msgstr "Սյունակների  միջի ճեղք։"
 msgid "Gap between rows:"
 msgstr "Տողերի միջի ճեղք։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:448
+#: intranet-tmpl/prog/en/modules/about.tt:449
 #, c-format
 msgid "Garry Collum"
 msgstr "Garry Collum"
 
-#: intranet-tmpl/prog/en/modules/about.tt:336
+#: intranet-tmpl/prog/en/modules/about.tt:337
 #, c-format
 msgid "Geauga County Public Library"
 msgstr "Geauga County Public Library"
@@ -23872,7 +23876,7 @@ msgstr "Գեներացրու բացառություն ամսաթվերի այս 
 msgid "Generate next"
 msgstr "Գեներացրու հաջորդը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:606
+#: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
 msgid "Genevieve Plantin"
 msgstr "Genevieve Plantin"
@@ -23909,7 +23913,7 @@ msgstr "Ընթացիկ ենթադաշտի մասին ստացիր օգնությ
 msgid "Get it!"
 msgstr "Ստացիր դա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:642
+#: intranet-tmpl/prog/en/modules/about.tt:643
 #, c-format
 msgid "Glen Stewart"
 msgstr "Գլեն Ստյուարտ"
@@ -23919,7 +23923,7 @@ msgstr "Գլեն Ստյուարտ"
 msgid "Global system preferences"
 msgstr "Համընդհանուր համակարգային նախապատվություններ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "Glyphicons Free"
 msgstr "Glyphicons Free"
@@ -24024,7 +24028,7 @@ msgstr "Բաժանմունք"
 msgid "Grace period:"
 msgstr "Սահունության ժամանակահատված։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:415
+#: intranet-tmpl/prog/en/modules/about.tt:416
 #, c-format
 msgid "Greg Barniskis"
 msgstr "Greg Barniskis"
@@ -24107,17 +24111,17 @@ msgstr "Ուղեցույցով հաշվետվություններ"
 msgid "Guided reports wizard"
 msgstr "Ուղեցույցով հաշվետվությունների վարպետ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:476
+#: intranet-tmpl/prog/en/modules/about.tt:477
 #, c-format
 msgid "Gus Ellerm"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:563
+#: intranet-tmpl/prog/en/modules/about.tt:564
 #, c-format
 msgid "Gynn Lomax"
 msgstr "Գինն Լոմաքս"
 
-#: intranet-tmpl/prog/en/modules/about.tt:599
+#: intranet-tmpl/prog/en/modules/about.tt:600
 #, c-format
 msgid "H. Passini"
 msgstr "H. Passini"
@@ -24197,7 +24201,7 @@ msgstr "Օգնություն"
 msgid "Help input"
 msgstr "Օգնության մուտք"
 
-#: intranet-tmpl/prog/en/modules/about.tt:557
+#: intranet-tmpl/prog/en/modules/about.tt:558
 #, c-format
 msgid "Henri-Damien Laurent (3.0 Release Maintainer)"
 msgstr "Henri-Damien Laurent (3.0 թողարկման ուղեկցող)"
@@ -24352,7 +24356,7 @@ msgstr "Աշխատակազմի Պատմության նշում"
 msgid "History start date:"
 msgstr "Պատմության սկսվելու ժամանակը."
 
-#: intranet-tmpl/prog/en/modules/about.tt:695
+#: intranet-tmpl/prog/en/modules/about.tt:696
 #, c-format
 msgid "Hochschule für Gesundheit (hsg), Germany"
 msgstr "Hochschule für Gesundheit (hsg), Germany"
@@ -24619,7 +24623,7 @@ msgstr "Սպասող պահումներ։"
 msgid "Holds:"
 msgstr "Պահումներ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:577
+#: intranet-tmpl/prog/en/modules/about.tt:578
 #, c-format
 msgid "Holger Meißner"
 msgstr "Holger Meißner"
@@ -25001,7 +25005,7 @@ msgstr "Տնային գրադարան։ %s%s%s%s%s"
 msgid "Horizontal: "
 msgstr "Հորիզոնական։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:330
+#: intranet-tmpl/prog/en/modules/about.tt:331
 #, c-format
 msgid "Horowhenua Library Trust"
 msgstr "Horowhenua Library Trust"
@@ -25046,7 +25050,7 @@ msgstr "Քանի՞ նյութ ես ցանկանում ստանալ։"
 msgid "How to process items: "
 msgstr "Ինչպե՞ս ուղարկել նյութերը։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:845
+#: intranet-tmpl/prog/en/modules/about.tt:846
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr "Hrvatski (Խորվաթերեն)"
@@ -25062,12 +25066,12 @@ msgstr "Htmlarea"
 msgid "Huge text"
 msgstr "Մեծ տեքստ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:458
+#: intranet-tmpl/prog/en/modules/about.tt:459
 #, c-format
 msgid "Hugh Davenport"
 msgstr "Hugh Davenport"
 
-#: intranet-tmpl/prog/en/modules/about.tt:407
+#: intranet-tmpl/prog/en/modules/about.tt:408
 #, c-format
 msgid "Héctor Eduardo Castro Avalos"
 msgstr "Héctor Eduardo Castro Avalos"
@@ -25175,7 +25179,7 @@ msgstr "ISBN կամ ISSN կամ այլ ստանդարտ համար:"
 msgid "ISBN, author or title :"
 msgstr "ISBN, հեղինակ կամ վերնագիր :"
 
-#. %1$s:  isbneanissn 
+#. %1$s:  isbneanissn |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:250
 #, c-format
 msgid "ISBN/EAN/ISSN: %s"
@@ -25316,7 +25320,7 @@ msgstr "ՆՅՈՒԹ"
 msgid "ITEMS"
 msgstr "ՆՅՈՒԹԵՐ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:669
+#: intranet-tmpl/prog/en/modules/about.tt:670
 #, c-format
 msgid "Ian Walls (3.6 - 3.10 QA Manager)"
 msgstr "Ian Walls (3.6 - 3.10 QA կառավարիչ)"
@@ -25968,17 +25972,17 @@ msgstr "Ցուցիչներ"
 msgid "Individual libraries:"
 msgstr "Անհատական գրադարաններ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:376
-#: intranet-tmpl/prog/en/modules/about.tt:510
+#: intranet-tmpl/prog/en/modules/about.tt:377
+#: intranet-tmpl/prog/en/modules/about.tt:511
 #, c-format
 msgid "Indranil Das Gupta"
 msgstr "Indranil Das Gupta"
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:169
-#: intranet-tmpl/prog/en/modules/about.tt:221
-#: intranet-tmpl/prog/en/modules/about.tt:226
-#: intranet-tmpl/prog/en/modules/about.tt:239
-#: intranet-tmpl/prog/en/modules/about.tt:244
+#: intranet-tmpl/prog/en/modules/about.tt:222
+#: intranet-tmpl/prog/en/modules/about.tt:227
+#: intranet-tmpl/prog/en/modules/about.tt:240
+#: intranet-tmpl/prog/en/modules/about.tt:245
 #, c-format
 msgid "Info"
 msgstr "Info"
@@ -26277,7 +26281,7 @@ msgstr "Վճարման հաշվի համար։"
 msgid "Invoice no.: "
 msgstr "Վճարման հաշվի համար։ "
 
-#. %1$s:  invoicenumber 
+#. %1$s:  invoicenumber |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:212
 #, c-format
 msgid "Invoice no.: %s"
@@ -26345,7 +26349,7 @@ msgstr "Վճարահաշիվներ"
 msgid "Invoices enabled: "
 msgstr "Վճարման հաշվի համար։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:716
 #, c-format
 msgid "Irma Birchall"
 msgstr "Irma Birchall"
@@ -26377,7 +26381,7 @@ msgstr "կառավարվում է քո կողմից և կարող է տեսան�
 msgid "Is this a duplicate of "
 msgstr "Սա սրա պատճենն է "
 
-#: intranet-tmpl/prog/en/modules/about.tt:428
+#: intranet-tmpl/prog/en/modules/about.tt:429
 #, c-format
 msgid "Isaac Brodsky"
 msgstr "Isaac Brodsky"
@@ -26454,7 +26458,7 @@ msgstr "սկսվում է "
 msgid "It is a duplicate. Edit existing record"
 msgstr "սա կրկնօրինակ է։ Խմբագրի առկա գրառումը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:862
+#: intranet-tmpl/prog/en/modules/about.tt:863
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -27028,17 +27032,17 @@ msgstr "Նյութի տեսակ"
 msgid "Itype"
 msgstr "Itype"
 
-#: intranet-tmpl/prog/en/modules/about.tt:429
+#: intranet-tmpl/prog/en/modules/about.tt:430
 #, c-format
 msgid "Ivan Brown"
 msgstr "Ivan Brown"
 
-#: intranet-tmpl/prog/en/modules/about.tt:388
+#: intranet-tmpl/prog/en/modules/about.tt:389
 #, c-format
 msgid "Jacek Ablewicz"
 msgstr "Jacek Ablewicz"
 
-#: intranet-tmpl/prog/en/modules/about.tt:681
+#: intranet-tmpl/prog/en/modules/about.tt:682
 #, c-format
 msgid "James Winter"
 msgstr "James Winter"
@@ -27048,12 +27052,12 @@ msgstr "James Winter"
 msgid "Jan"
 msgstr "Հուն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:670
+#: intranet-tmpl/prog/en/modules/about.tt:671
 #, c-format
 msgid "Jane Wagner"
 msgstr "Jane Wagner"
 
-#: intranet-tmpl/prog/en/modules/about.tt:581
+#: intranet-tmpl/prog/en/modules/about.tt:582
 #, c-format
 msgid "Janet McGowan"
 msgstr "Janet McGowan"
@@ -27066,59 +27070,59 @@ msgstr "Janet McGowan"
 msgid "January"
 msgstr "Հունվար"
 
-#: intranet-tmpl/prog/en/modules/about.tt:546
+#: intranet-tmpl/prog/en/modules/about.tt:547
 #, c-format
 msgid "Janusz Kaczmarek"
 msgstr "Janusz Kaczmarek"
 
-#: intranet-tmpl/prog/en/modules/about.tt:432
+#: intranet-tmpl/prog/en/modules/about.tt:433
 #, c-format
 msgid "Jared Camins-Esakov (3.12 Release Manager; 3.6 Release Maintainer)"
 msgstr "Jared Camins-Esakov (3.12 Release Manager; 3.6 Release Maintainer)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:482
+#: intranet-tmpl/prog/en/modules/about.tt:483
 #, c-format
 msgid "Jason Etheridge"
 msgstr "Jason Etheridge"
 
-#: intranet-tmpl/prog/en/modules/about.tt:832
+#: intranet-tmpl/prog/en/modules/about.tt:833
 #, fuzzy, c-format
 msgid "JavaScript library by Vladimir Agafonkinis licensed under the "
 msgstr "plugin by John Resig is licensed under the "
 
-#: intranet-tmpl/prog/en/modules/about.tt:801
 #: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:803
 #, c-format
 msgid "Javascript Diff Algorithm"
 msgstr "Javascript Diff Algorithm"
 
-#: intranet-tmpl/prog/en/modules/about.tt:684
+#: intranet-tmpl/prog/en/modules/about.tt:685
 #, c-format
 msgid "Jen Zajac"
 msgstr "Jen Zajac"
 
-#: intranet-tmpl/prog/en/modules/about.tt:452
+#: intranet-tmpl/prog/en/modules/about.tt:453
 #, c-format
 msgid "Jeremy Crabtree"
 msgstr "Jeremy Crabtree"
 
-#: intranet-tmpl/prog/en/modules/about.tt:440
+#: intranet-tmpl/prog/en/modules/about.tt:441
 #, c-format
 msgid "Jerome Charaoui"
 msgstr "Jerome Charaoui"
 
-#: intranet-tmpl/prog/en/modules/about.tt:568
+#: intranet-tmpl/prog/en/modules/about.tt:569
 #, c-format
 msgid "Jesse Maseto"
 msgstr "Jesse Maseto"
 
-#: intranet-tmpl/prog/en/modules/about.tt:361
-#: intranet-tmpl/prog/en/modules/about.tt:672
+#: intranet-tmpl/prog/en/modules/about.tt:362
+#: intranet-tmpl/prog/en/modules/about.tt:673
 #, c-format
 msgid "Jesse Weaver"
 msgstr "Jesse Weaver"
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:720
 #, c-format
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
@@ -27138,82 +27142,82 @@ msgstr "Աշխատանոը ընթացքում է։ "
 msgid "Jobs already entered"
 msgstr "Աշխատանքները արդեն մուտք են արված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:406
+#: intranet-tmpl/prog/en/modules/about.tt:407
 #, c-format
 msgid "Joe Atzberger"
 msgstr "Joe Atzberger"
 
-#: intranet-tmpl/prog/en/modules/about.tt:420
+#: intranet-tmpl/prog/en/modules/about.tt:421
 #, c-format
 msgid "John Beppu"
 msgstr "John Beppu"
 
-#: intranet-tmpl/prog/en/modules/about.tt:450
+#: intranet-tmpl/prog/en/modules/about.tt:451
 #, c-format
 msgid "John Copeland"
 msgstr "John Copeland"
 
-#: intranet-tmpl/prog/en/modules/about.tt:633
+#: intranet-tmpl/prog/en/modules/about.tt:634
 #, c-format
 msgid "John Seymour"
 msgstr "John Seymour"
 
-#: intranet-tmpl/prog/en/modules/about.tt:390
+#: intranet-tmpl/prog/en/modules/about.tt:391
 #, c-format
 msgid "Jon Aker"
 msgstr "Jon Aker"
 
-#: intranet-tmpl/prog/en/modules/about.tt:356
+#: intranet-tmpl/prog/en/modules/about.tt:357
 #, c-format
 msgid "Jonathan Druart"
 msgstr "Jonathan Druart"
 
-#: intranet-tmpl/prog/en/modules/about.tt:467
+#: intranet-tmpl/prog/en/modules/about.tt:468
 #, fuzzy, c-format
 msgid "Jonathan Druart (3.8 - 3.22 QA Team Member)"
 msgstr "Jonathan Druart (3.8 - 3.20 QA Team Member)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:583
+#: intranet-tmpl/prog/en/modules/about.tt:584
 #, c-format
 msgid "Jono Mingard"
 msgstr "Jono Mingard"
 
-#: intranet-tmpl/prog/en/modules/about.tt:556
+#: intranet-tmpl/prog/en/modules/about.tt:557
 #, c-format
 msgid "Joonas Kylmälä"
 msgstr "Joonas Kylmälä"
 
-#: intranet-tmpl/prog/en/modules/about.tt:550
+#: intranet-tmpl/prog/en/modules/about.tt:551
 #, c-format
 msgid "Jorgia Kelsey"
 msgstr "Jorgia Kelsey"
 
-#: intranet-tmpl/prog/en/modules/about.tt:586
+#: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
 msgid "Josef Moravec"
 msgstr "Josef Moravec"
 
-#: intranet-tmpl/prog/en/modules/about.tt:394
+#: intranet-tmpl/prog/en/modules/about.tt:395
 #, c-format
 msgid "Joseph Alway"
 msgstr "Joseph Alway"
 
-#: intranet-tmpl/prog/en/modules/about.tt:489
+#: intranet-tmpl/prog/en/modules/about.tt:490
 #, c-format
 msgid "Joshua Ferraro (3.0 Release Manager and Translation Manager)"
 msgstr "Joshua Ferraro (3.0 Release Manager and Translation Manager)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:592
+#: intranet-tmpl/prog/en/modules/about.tt:593
 #, c-format
 msgid "Joy Nelson"
 msgstr "Joy Nelson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:634
+#: intranet-tmpl/prog/en/modules/about.tt:635
 #, c-format
 msgid "Juan Romay Sieira"
 msgstr "Juan Romay Sieira"
 
-#: intranet-tmpl/prog/en/modules/about.tt:632
+#: intranet-tmpl/prog/en/modules/about.tt:633
 #, c-format
 msgid "Juhani Seppälä"
 msgstr "Juhani Seppälä"
@@ -27223,17 +27227,17 @@ msgstr "Juhani Seppälä"
 msgid "Jul"
 msgstr "Հուլ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:490
+#: intranet-tmpl/prog/en/modules/about.tt:491
 #, c-format
 msgid "Julian Fiol"
 msgstr "Julian Fiol"
 
-#: intranet-tmpl/prog/en/modules/about.tt:366
+#: intranet-tmpl/prog/en/modules/about.tt:367
 #, fuzzy, c-format
 msgid "Julian Maurice"
 msgstr "Julian Fiol"
 
-#: intranet-tmpl/prog/en/modules/about.tt:571
+#: intranet-tmpl/prog/en/modules/about.tt:572
 #, c-format
 msgid "Julian Maurice (3.18 QA Team Member)"
 msgstr "Julian Maurice (3.18 QA թիմի անդամ)"
@@ -27259,7 +27263,7 @@ msgstr "Հուն"
 msgid "June"
 msgstr "Հունիս"
 
-#: intranet-tmpl/prog/en/modules/about.tt:665
+#: intranet-tmpl/prog/en/modules/about.tt:666
 #, c-format
 msgid "Justin Vos"
 msgstr "Justin Vos"
@@ -27269,47 +27273,47 @@ msgstr "Justin Vos"
 msgid "Juvenile"
 msgstr "Պատանեկան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:697
+#: intranet-tmpl/prog/en/modules/about.tt:698
 #, c-format
 msgid "KEEP SOLUTIONS, Portugal"
 msgstr "KEEP SOLUTIONS, Portugal"
 
-#: intranet-tmpl/prog/en/modules/about.tt:609
+#: intranet-tmpl/prog/en/modules/about.tt:610
 #, c-format
 msgid "Karam Qubsi"
 msgstr "Karam Qubsi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:531
+#: intranet-tmpl/prog/en/modules/about.tt:532
 #, fuzzy, c-format
 msgid "Karl Holten"
 msgstr "Daniel Holth"
 
-#: intranet-tmpl/prog/en/modules/about.tt:578
+#: intranet-tmpl/prog/en/modules/about.tt:579
 #, c-format
 msgid "Karl Menzies"
 msgstr "Karl Menzies"
 
-#: intranet-tmpl/prog/en/modules/about.tt:522
+#: intranet-tmpl/prog/en/modules/about.tt:523
 #, c-format
 msgid "Kate Henderson"
 msgstr "Kate Henderson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:661
+#: intranet-tmpl/prog/en/modules/about.tt:662
 #, c-format
 msgid "Kathryn Tyree"
 msgstr "Kathryn Tyree"
 
-#: intranet-tmpl/prog/en/modules/about.tt:696
+#: intranet-tmpl/prog/en/modules/about.tt:697
 #, c-format
 msgid "Katipo Communications, New Zealand"
 msgstr "Katipo Communications, Նոր Զելանդիա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:348
+#: intranet-tmpl/prog/en/modules/about.tt:349
 #, c-format
 msgid "Katrin Fischer"
 msgstr "Katrin Fischer"
 
-#: intranet-tmpl/prog/en/modules/about.tt:491
+#: intranet-tmpl/prog/en/modules/about.tt:492
 #, fuzzy, c-format
 msgid "Katrin Fischer (3.12 - 3.22 QA Manager)"
 msgstr "Katrin Fischer (3.12 - 3.20 QA Manager)"
@@ -27327,7 +27331,7 @@ msgstr "Պահիր ընթացիկը (%s - %s)"
 msgid "Keep issue number"
 msgstr "Պահիր նյութի համարը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:685
+#: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
 msgid "Kenza Zaki"
 msgstr "Kenza Zaki"
@@ -27381,13 +27385,13 @@ msgstr "Բանալի բառ MARC քարտեզավորման համար"
 msgid "Keywords:"
 msgstr "Վճռորոշ բառեր։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:461
+#: intranet-tmpl/prog/en/modules/about.tt:462
 #, c-format
 msgid "Kip DeGraaf"
 msgstr "Kip DeGraaf"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:17
-#: intranet-tmpl/prog/en/modules/about.tt:726
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:4
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:5
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:5
@@ -27395,7 +27399,7 @@ msgstr "Kip DeGraaf"
 msgid "Koha"
 msgstr "Կոհա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:343
+#: intranet-tmpl/prog/en/modules/about.tt:344
 #, fuzzy, c-format
 msgid "Koha "
 msgstr "Կոհա"
@@ -27540,7 +27544,7 @@ msgstr ""
 #. %1$s:  UNLESS ( basketno ) 
 #. %2$s:  END 
 #. %3$s:  basketname|html 
-#. %4$s:  basketno 
+#. %4$s:  basketno |html 
 #. %5$s:  name|html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:6
 #, c-format
@@ -29818,7 +29822,7 @@ msgstr "Կոհա &rsaquo; Z39.50 փնտրման արդյունքներ"
 msgid "Koha &rsaquo; Z39.50/SRU search results"
 msgstr "Կոհա &rsaquo; Z39.50/SRU փնտրման արդյունքներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:446
+#: intranet-tmpl/prog/en/modules/about.tt:447
 #, c-format
 msgid "Koha SAB CINECA"
 msgstr "Koha SAB CINECA"
@@ -29844,7 +29848,7 @@ msgstr ""
 msgid "Koha database schema"
 msgstr "Կոհա շտեմարանի սխեմա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:386
+#: intranet-tmpl/prog/en/modules/about.tt:387
 #, c-format
 msgid "Koha development team"
 msgstr "Կոհա Մշակողների կազմ"
@@ -29866,7 +29870,7 @@ msgstr "Կոհայի դաշտ։"
 msgid "Koha full call number"
 msgstr "Կոհա լրիվ դասիչ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:888
+#: intranet-tmpl/prog/en/modules/about.tt:889
 #, c-format
 msgid "Koha history timeline"
 msgstr "Կոհայի պատմության ժամանակացույց"
@@ -29876,7 +29880,7 @@ msgstr "Կոհայի պատմության ժամանակացույց"
 msgid "Koha internal"
 msgstr "Կոհա ներքին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:729
 #, c-format
 msgid ""
 "Koha is free software; you can redistribute it and/or modify it under the "
@@ -29963,7 +29967,7 @@ msgid "Koha to MARC mapping %s"
 msgstr "Կոհայից դեպի ՄԵԸՔ արտացոլում %s"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/about.tt:343
+#: intranet-tmpl/prog/en/modules/about.tt:344
 msgid ""
 "Koha version numbering has jumped from 3.22 to 16.05 (yy.mm) as from May 2016"
 msgstr ""
@@ -29973,33 +29977,33 @@ msgstr ""
 msgid "Koha version: "
 msgstr "Կոհա տարբերակ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:698
+#: intranet-tmpl/prog/en/modules/about.tt:699
 #, c-format
 msgid "KohaAloha, New Zealand"
 msgstr "KohaAloha, Նոր Զելանդիա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:852
+#: intranet-tmpl/prog/en/modules/about.tt:853
 #, c-format
 msgid "Kohala"
 msgstr "Kohala"
 
-#: intranet-tmpl/prog/en/modules/about.tt:547
+#: intranet-tmpl/prog/en/modules/about.tt:548
 #, c-format
 msgid "Koustubha Kale"
 msgstr "Koustubha Kale"
 
-#: intranet-tmpl/prog/en/modules/about.tt:529
+#: intranet-tmpl/prog/en/modules/about.tt:530
 #, c-format
 msgid "Kristina D.C. Hoeppner"
 msgstr "Kristina D.C. Hoeppner"
 
-#: intranet-tmpl/prog/en/modules/about.tt:346
-#: intranet-tmpl/prog/en/modules/about.tt:357
+#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:358
 #, c-format
 msgid "Kyle Hall"
 msgstr "Kyle Hall"
 
-#: intranet-tmpl/prog/en/modules/about.tt:513
+#: intranet-tmpl/prog/en/modules/about.tt:514
 #, fuzzy, c-format
 msgid "Kyle Hall (3.8 Release Maintainer; 3.14 - 3.22 QA Team Member)"
 msgstr "Kyle Hall (3.8 Release Maintainer; 3.14 - 3.20 QA Team Member)"
@@ -30049,7 +30053,7 @@ msgstr "LCCN: %s "
 msgid "LEAVE UNCHANGED"
 msgstr "ԹՈՂ ԱՆՓՈՓՈԽ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:808
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
@@ -30176,7 +30180,7 @@ msgstr "Լեզու։ "
 msgid "Languages"
 msgstr "Լեզուներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:867
+#: intranet-tmpl/prog/en/modules/about.tt:868
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr "Lao Anousak Anthony Souphavanh"
@@ -30191,17 +30195,17 @@ msgstr "Լայն տպում"
 msgid "Large text"
 msgstr "Լայն տեքստ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:649
+#: intranet-tmpl/prog/en/modules/about.tt:650
 #, c-format
 msgid "Lari Taskula"
 msgstr "Lari Taskula"
 
-#: intranet-tmpl/prog/en/modules/about.tt:408
+#: intranet-tmpl/prog/en/modules/about.tt:409
 #, c-format
 msgid "Larry Baerveldt"
 msgstr "Larry Baerveldt"
 
-#: intranet-tmpl/prog/en/modules/about.tt:682
+#: intranet-tmpl/prog/en/modules/about.tt:683
 #, c-format
 msgid "Lars Wirzenius"
 msgstr "Lars Wirzenius"
@@ -30312,7 +30316,7 @@ msgstr "Ուշ"
 msgid "Late orders"
 msgstr "Ուշ պատվերներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:866
+#: intranet-tmpl/prog/en/modules/about.tt:867
 #, c-format
 msgid "Latina (Latin)"
 msgstr "Latina (Լատիներեն)"
@@ -30350,8 +30354,8 @@ msgstr "Պլանավորման անուն։ "
 msgid "Layouts"
 msgstr "Դասավորություններ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:831
 #: intranet-tmpl/prog/en/modules/about.tt:832
+#: intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "Leaflet"
 msgstr ""
@@ -30434,7 +30438,7 @@ msgstr "Մակարդակ"
 msgid "Lib"
 msgstr "Lib"
 
-#: intranet-tmpl/prog/en/modules/about.tt:699
+#: intranet-tmpl/prog/en/modules/about.tt:700
 #, c-format
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
@@ -30665,7 +30669,7 @@ msgstr "Գրադարան։ %s"
 msgid "Library: %s &rArr; %s"
 msgstr "Գրադարան: %s &rArr; %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:700
+#: intranet-tmpl/prog/en/modules/about.tt:701
 #, c-format
 msgid "Libriotech, Norway"
 msgstr "Libriotech, Նորվեգիա"
@@ -30871,8 +30875,8 @@ msgstr "Ցուցակներ"
 msgid "Lists that include this title: "
 msgstr "Ցուցակներ որոնք ներառում են վերնագիր: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:368
-#: intranet-tmpl/prog/en/modules/about.tt:612
+#: intranet-tmpl/prog/en/modules/about.tt:369
+#: intranet-tmpl/prog/en/modules/about.tt:613
 #, c-format
 msgid "Liz Rea"
 msgstr "Liz Rea"
@@ -31212,7 +31216,7 @@ msgstr "Ներքին ձախ Y կոորդինատ։ "
 msgid "Lucida Console"
 msgstr "Lucida Console"
 
-#: intranet-tmpl/prog/en/modules/about.tt:868
+#: intranet-tmpl/prog/en/modules/about.tt:869
 #, c-format
 msgid "M&#257;ori"
 msgstr "M&#257;ori"
@@ -31425,24 +31429,24 @@ msgstr "MARC21/USMARC"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
-#: intranet-tmpl/prog/en/modules/about.tt:802
-#: intranet-tmpl/prog/en/modules/about.tt:805
-#: intranet-tmpl/prog/en/modules/about.tt:811
-#: intranet-tmpl/prog/en/modules/about.tt:829
+#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:803
+#: intranet-tmpl/prog/en/modules/about.tt:806
+#: intranet-tmpl/prog/en/modules/about.tt:812
+#: intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "MIT License"
 msgstr "MIT Արտոնագրեր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
-#: intranet-tmpl/prog/en/modules/about.tt:814
-#: intranet-tmpl/prog/en/modules/about.tt:817
-#: intranet-tmpl/prog/en/modules/about.tt:820
+#: intranet-tmpl/prog/en/modules/about.tt:732
+#: intranet-tmpl/prog/en/modules/about.tt:815
+#: intranet-tmpl/prog/en/modules/about.tt:818
+#: intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "MIT license"
 msgstr "MIT Արտոնագիր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:611
+#: intranet-tmpl/prog/en/modules/about.tt:612
 #, c-format
 msgid "MJ Ray (2.0 Release Maintainer)"
 msgstr "MJ Ray (2.0 թողարկման կառավարիչ)"
@@ -31463,13 +31467,13 @@ msgstr "Մակրոսներ"
 msgid "Macros..."
 msgstr "Մակրոներ..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:377
-#: intranet-tmpl/prog/en/modules/about.tt:480
+#: intranet-tmpl/prog/en/modules/about.tt:378
+#: intranet-tmpl/prog/en/modules/about.tt:481
 #, c-format
 msgid "Magnus Enger"
 msgstr "Magnus Enger"
 
-#: intranet-tmpl/prog/en/modules/about.tt:858
+#: intranet-tmpl/prog/en/modules/about.tt:859
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr "Magyar (Հունգարերեն)Agnes Imecs"
@@ -31876,18 +31880,18 @@ msgstr "Քարտեզավորումները հիշվել են"
 msgid "Mar"
 msgstr "Mar"
 
-#: intranet-tmpl/prog/en/modules/about.tt:409
+#: intranet-tmpl/prog/en/modules/about.tt:410
 #, c-format
 msgid "Marc Balmer"
 msgstr "Marc Balmer"
 
-#: intranet-tmpl/prog/en/modules/about.tt:439
+#: intranet-tmpl/prog/en/modules/about.tt:440
 #, c-format
 msgid "Marc Chantreux"
 msgstr "Marc Chantreux"
 
-#: intranet-tmpl/prog/en/modules/about.tt:381
-#: intranet-tmpl/prog/en/modules/about.tt:664
+#: intranet-tmpl/prog/en/modules/about.tt:382
+#: intranet-tmpl/prog/en/modules/about.tt:665
 #, fuzzy, c-format
 msgid "Marc Véron"
 msgstr "Marc Veron"
@@ -31902,12 +31906,12 @@ msgstr "ՄԵԸՔ դաշտ"
 msgid "Marc field: "
 msgstr "ՄԵԸՔ դաշտ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:360
+#: intranet-tmpl/prog/en/modules/about.tt:361
 #, c-format
 msgid "Marcel de Rooy"
 msgstr "Marcel de Rooy"
 
-#: intranet-tmpl/prog/en/modules/about.tt:620
+#: intranet-tmpl/prog/en/modules/about.tt:621
 #, fuzzy, c-format
 msgid "Marcel de Rooy (3.8 - 3.22 QA Team Member)"
 msgstr "Marcel de Rooy (3.8 - 3.20 QA Team Member)"
@@ -31920,17 +31924,17 @@ msgstr "Marcel de Rooy (3.8 - 3.20 QA Team Member)"
 msgid "March"
 msgstr "Մարտ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:497
+#: intranet-tmpl/prog/en/modules/about.tt:498
 #, c-format
 msgid "Marco Gaiarin"
 msgstr "Marco Gaiarin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:502
+#: intranet-tmpl/prog/en/modules/about.tt:503
 #, c-format
 msgid "Mark Gavillet"
 msgstr "Mark Gavillet"
 
-#: intranet-tmpl/prog/en/modules/about.tt:656
+#: intranet-tmpl/prog/en/modules/about.tt:657
 #, c-format
 msgid "Mark Tompsett"
 msgstr "Mark Tompsett"
@@ -31955,27 +31959,27 @@ msgstr "Նշանը ընտրված է որպես։ "
 msgid "Mark the original budget as inactive"
 msgstr "Նշիր բնօրինակ բյուջեն որպես ոչակտիվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:604
+#: intranet-tmpl/prog/en/modules/about.tt:605
 #, c-format
 msgid "Martin Persson"
 msgstr "Martin Persson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:359
+#: intranet-tmpl/prog/en/modules/about.tt:360
 #, c-format
 msgid "Martin Renvoize"
 msgstr "Martin Renvoize"
 
-#: intranet-tmpl/prog/en/modules/about.tt:616
+#: intranet-tmpl/prog/en/modules/about.tt:617
 #, fuzzy, c-format
 msgid "Martin Renvoize (3.16 - 3.22 QA Team Member)"
 msgstr "Martin Renvoize (3.16 - 3.20 QA Team Member)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:641
+#: intranet-tmpl/prog/en/modules/about.tt:642
 #, c-format
 msgid "Martin Stenberg"
 msgstr "Martin Stenberg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:542
+#: intranet-tmpl/prog/en/modules/about.tt:543
 #, c-format
 msgid "Mason James (3.10 - 3.14 QA Team Member, 3.16 Release Maintainer)"
 msgstr "Mason James (3.10 - 3.14 QA Team Member, 3.16 Release Maintainer)"
@@ -32122,7 +32126,7 @@ msgstr "Նյութերը որոշված են"
 msgid "Materials specified:"
 msgstr "Նյութերը որոշված են։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:622
+#: intranet-tmpl/prog/en/modules/about.tt:623
 #, c-format
 msgid "Mathieu Saby"
 msgstr "Mathieu Saby"
@@ -32132,12 +32136,12 @@ msgstr "Mathieu Saby"
 msgid "Matrix"
 msgstr "Մատրիցա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:536
+#: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
 msgid "Matthew Hunt"
 msgstr "Matthew Hunt"
 
-#: intranet-tmpl/prog/en/modules/about.tt:579
+#: intranet-tmpl/prog/en/modules/about.tt:580
 #, c-format
 msgid "Matthias Meusburger"
 msgstr "Matthias Meusburger"
@@ -32153,12 +32157,12 @@ msgstr "Մեծագույն երկարություն։"
 msgid "Max. suspension duration (day)"
 msgstr "Կասեցման մեծագույն տևողություն (օր)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:418
+#: intranet-tmpl/prog/en/modules/about.tt:419
 #, c-format
 msgid "Maxime Beaulieu"
 msgstr "Maxime Beaulieu"
 
-#: intranet-tmpl/prog/en/modules/about.tt:602
+#: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "Maxime Pelletier"
 msgstr "Maxime Pelletier"
@@ -32176,7 +32180,7 @@ msgstr "Կոհա ամենամեծ տարբերակ"
 msgid "May"
 msgstr "Մայիս"
 
-#: intranet-tmpl/prog/en/modules/about.tt:389
+#: intranet-tmpl/prog/en/modules/about.tt:390
 #, c-format
 msgid "Md. Aftabuddin"
 msgstr "Md. Aftabuddin"
@@ -32191,12 +32195,12 @@ msgstr "Իմաստ"
 msgid "Medium"
 msgstr "Միջին չափսի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:575
+#: intranet-tmpl/prog/en/modules/about.tt:576
 #, c-format
 msgid "Meenakshi. R"
 msgstr "Meenakshi. R"
 
-#: intranet-tmpl/prog/en/modules/about.tt:576
+#: intranet-tmpl/prog/en/modules/about.tt:577
 #, c-format
 msgid "Melia Meggs"
 msgstr "Melia Meggs"
@@ -32255,7 +32259,7 @@ msgstr "Գրառումների ձուլում"
 msgid "Merging with authority: "
 msgstr "Ձուլում հեղինակավորի հետ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:566
+#: intranet-tmpl/prog/en/modules/about.tt:567
 #, c-format
 msgid "Merllisia Manueli"
 msgstr "Merllisia Manueli"
@@ -32292,12 +32296,12 @@ msgstr "Հաղորդումներ։"
 msgid "Messaging"
 msgstr "Հաղորդումների առաքում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:511
+#: intranet-tmpl/prog/en/modules/about.tt:512
 #, c-format
 msgid "Michael Hafen"
 msgstr "Michael Hafen"
 
-#: intranet-tmpl/prog/en/modules/about.tt:523
+#: intranet-tmpl/prog/en/modules/about.tt:524
 #, c-format
 msgid "Michaes Herman"
 msgstr "Michaes Herman"
@@ -32307,17 +32311,17 @@ msgstr "Michaes Herman"
 msgid "Microsecond"
 msgstr "Միկրովայրկյան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:516
+#: intranet-tmpl/prog/en/modules/about.tt:517
 #, c-format
 msgid "Mike Hansen"
 msgstr "Mike Hansen"
 
-#: intranet-tmpl/prog/en/modules/about.tt:543
+#: intranet-tmpl/prog/en/modules/about.tt:544
 #, c-format
 msgid "Mike Johnson"
 msgstr "Mike Johnson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:589
+#: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
 msgid "Mike Mylonas"
 msgstr "Mike Mylonas"
@@ -32332,7 +32336,7 @@ msgstr "Միլիվայրկյան"
 msgid "Mine"
 msgstr "Իմը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:333
+#: intranet-tmpl/prog/en/modules/about.tt:334
 #, c-format
 msgid ""
 "Mines Paristech (previously Ecole Nationale Supérieure des Mines de Paris)"
@@ -32364,8 +32368,8 @@ msgstr "Րոպե"
 msgid "Minutes"
 msgstr "Րոպեներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:380
-#: intranet-tmpl/prog/en/modules/about.tt:655
+#: intranet-tmpl/prog/en/modules/about.tt:381
+#: intranet-tmpl/prog/en/modules/about.tt:656
 #, c-format
 msgid "Mirko Tietgen"
 msgstr "Mirko Tietgen"
@@ -32744,7 +32748,7 @@ msgstr "Ամիս/օր"
 msgid "Month: "
 msgstr "Ամիս։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:527
+#: intranet-tmpl/prog/en/modules/about.tt:528
 #, c-format
 msgid "Morag Hills"
 msgstr "Morag Hills"
@@ -32952,12 +32956,12 @@ msgstr ""
 msgid "NT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:591
+#: intranet-tmpl/prog/en/modules/about.tt:592
 #, c-format
 msgid "Nadia Nicolaides"
 msgstr "Nadia Nicolaides"
 
-#: intranet-tmpl/prog/en/modules/about.tt:399
+#: intranet-tmpl/prog/en/modules/about.tt:400
 #, c-format
 msgid "Nahuel Angelinetti"
 msgstr "Nahuel Angelinetti"
@@ -33096,37 +33100,37 @@ msgstr "Անվանված։ "
 msgid "Narrower Term"
 msgstr "%sh - Նեղ տերմին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:419
+#: intranet-tmpl/prog/en/modules/about.tt:420
 #, c-format
 msgid "Natalie Bennison"
 msgstr "Natalie Bennison"
 
-#: intranet-tmpl/prog/en/modules/about.tt:590
+#: intranet-tmpl/prog/en/modules/about.tt:591
 #, c-format
 msgid "Natasha ?? [Catalyst Academy]"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:456
+#: intranet-tmpl/prog/en/modules/about.tt:457
 #, c-format
 msgid "Nate Curulla"
 msgstr "Nate Curulla"
 
-#: intranet-tmpl/prog/en/modules/about.tt:337
+#: intranet-tmpl/prog/en/modules/about.tt:338
 #, c-format
 msgid "Near East University"
 msgstr "Մերձավոր Արևելքի համալսարան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:849
+#: intranet-tmpl/prog/en/modules/about.tt:850
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:848
+#: intranet-tmpl/prog/en/modules/about.tt:849
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 
-#: intranet-tmpl/prog/en/modules/about.tt:701
+#: intranet-tmpl/prog/en/modules/about.tt:702
 #, c-format
 msgid "Nelsonville Public Library, Ohio, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
@@ -33629,32 +33633,32 @@ msgstr "Հաջորդ համարի հրատարակման ամսաթիվը:"
 msgid "Next page"
 msgstr "Հաջորդ էջը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:721
 #, c-format
 msgid "Nicholas Rosasco (Documentation Compiler)"
 msgstr "Nicholas Rosasco, (փաստաթղթերի ձևավորող)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:447
+#: intranet-tmpl/prog/en/modules/about.tt:448
 #, c-format
 msgid "Nick Clemens"
 msgstr "Nick Clemens"
 
-#: intranet-tmpl/prog/en/modules/about.tt:559
+#: intranet-tmpl/prog/en/modules/about.tt:560
 #, c-format
 msgid "Nicolas Legrand"
 msgstr "Nicolas Legrand"
 
-#: intranet-tmpl/prog/en/modules/about.tt:588
+#: intranet-tmpl/prog/en/modules/about.tt:589
 #, c-format
 msgid "Nicolas Morin"
 msgstr "Nicolas Morin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:350
+#: intranet-tmpl/prog/en/modules/about.tt:351
 #, c-format
 msgid "Nicole C. Engard"
 msgstr "Nicole C. Engard"
 
-#: intranet-tmpl/prog/en/modules/about.tt:479
+#: intranet-tmpl/prog/en/modules/about.tt:480
 #, c-format
 msgid "Nicole C. Engard (3.0+ Documentation Manager)"
 msgstr "Nicole C. Engard (3.0+ Փաստաթղթերի կառավարիչ)"
@@ -33774,7 +33778,7 @@ msgstr ""
 msgid "No active currency is defined"
 msgstr "Չկան սահմանված ակտիվ արտարժույթներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:171
+#: intranet-tmpl/prog/en/modules/about.tt:172
 #, c-format
 msgid "No active currency is defined. Please go to "
 msgstr "Չկան սահմանված ակտիվ արտարժույթներ։ Գնա "
@@ -34289,7 +34293,7 @@ msgstr "Ժամանակավոր ուղեցույցը գտնված չէ։"
 msgid "No transfers to receive"
 msgstr "Ստացման ենթակա փոխանցումներ չկան"
 
-#: intranet-tmpl/prog/en/modules/about.tt:323
+#: intranet-tmpl/prog/en/modules/about.tt:324
 #, c-format
 msgid "No warnings."
 msgstr "Զգուշացումներ չկան։"
@@ -34502,12 +34506,12 @@ msgstr "Սովորական տեքստ"
 msgid "Normalization rule: "
 msgstr "Նորմալացման օրենք։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:859
+#: intranet-tmpl/prog/en/modules/about.tt:860
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 
-#: intranet-tmpl/prog/en/modules/about.tt:860
+#: intranet-tmpl/prog/en/modules/about.tt:861
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
@@ -34625,8 +34629,8 @@ msgstr "Նշում"
 msgid "Note : The items are exported by this tool unless specified."
 msgstr "Նշում ։ Նյութերը արտահանվում են այս գործիքով, քանի դեռ չի սահմանվել"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:257
-#: intranet-tmpl/prog/en/modules/tools/export.tt:283
+#: intranet-tmpl/prog/en/modules/tools/export.tt:261
+#: intranet-tmpl/prog/en/modules/tools/export.tt:287
 #, c-format
 msgid "Note : This export file will be very large, and is generated nightly."
 msgstr ""
@@ -35129,7 +35133,7 @@ msgstr "Համարակալման նմուշ։"
 msgid "Numbering patterns"
 msgstr "Համարակալման ձևանմուշներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:400
+#: intranet-tmpl/prog/en/modules/about.tt:401
 #, c-format
 msgid "Nuño López Ansótegui"
 msgstr "Nuño López Ansótegui"
@@ -35152,7 +35156,7 @@ msgstr "OAI բազմություններ"
 msgid "OAI sets configuration"
 msgstr "OAI ձևավորման կարգաբերում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:822
+#: intranet-tmpl/prog/en/modules/about.tt:823
 #, c-format
 msgid "OAI xslt stylesheet"
 msgstr ""
@@ -35297,7 +35301,7 @@ msgstr "ՀՕԱՔ դիտում։"
 msgid "OPAC/Staff login"
 msgstr "ՀՕԱՔ/Աշխատակազմ գրանցում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:338
+#: intranet-tmpl/prog/en/modules/about.tt:339
 #, c-format
 msgid ""
 "OPUS International Consultants, Wellington, New Zealand (Corporate Serials "
@@ -35429,17 +35433,17 @@ msgstr "Հին արժեք"
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr "Հին արժեք: %s %s. %s Հասանելի է տացքի համար։ %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:455
+#: intranet-tmpl/prog/en/modules/about.tt:456
 #, c-format
 msgid "Olivier Crouzet"
 msgstr "Olivier Crouzet"
 
-#: intranet-tmpl/prog/en/modules/about.tt:551
+#: intranet-tmpl/prog/en/modules/about.tt:552
 #, c-format
 msgid "Olli-Antti Kivilahti"
 msgstr "Olli-Antti Kivilahti"
 
-#: intranet-tmpl/prog/en/modules/about.tt:679
+#: intranet-tmpl/prog/en/modules/about.tt:680
 #, c-format
 msgid "Olwen Williams (Database design and data extraction for Koha 1.0)"
 msgstr "Olwen Williams (Database design and data extraction for Koha 1.0)"
@@ -35662,12 +35666,12 @@ msgstr "Բացել։"
 msgid "Open."
 msgstr "Բացել"
 
-#: intranet-tmpl/prog/en/modules/about.tt:784
+#: intranet-tmpl/prog/en/modules/about.tt:785
 #, c-format
 msgid "OpenJS Keyboard Shortcuts Library"
 msgstr "OpenJS Keyboard Shortcuts Library"
 
-#: intranet-tmpl/prog/en/modules/about.tt:786
+#: intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS keyboard shortcuts library"
@@ -35689,7 +35693,7 @@ msgstr "Ոչ պարտադիր մոդուլը բացակայում է"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:587
 #: intranet-tmpl/prog/en/modules/tools/export.tt:147
-#: intranet-tmpl/prog/en/modules/tools/export.tt:226
+#: intranet-tmpl/prog/en/modules/tools/export.tt:230
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:137
 #, c-format
 msgid "Options"
@@ -36031,7 +36035,7 @@ msgstr "Այլոք ..."
 msgid "Output"
 msgstr "Ելք"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:235
+#: intranet-tmpl/prog/en/modules/tools/export.tt:239
 #, c-format
 msgid "Output format"
 msgstr "Ելքի ձևաչափ"
@@ -36145,7 +36149,7 @@ msgstr "Ժամկետանցի արգելանքը ժամանակավոր է"
 msgid "Overwrite the existing one with this"
 msgstr "Վերագրել գոյություն ունեցողը սրանով"
 
-#: intranet-tmpl/prog/en/modules/about.tt:561
+#: intranet-tmpl/prog/en/modules/about.tt:562
 #, c-format
 msgid "Owen Leonard (3.0+ Interface Design)"
 msgstr "Owen Leonard (3.0+ միջերեսի նախագծում)"
@@ -36184,22 +36188,22 @@ msgstr "PM"
 msgid "PSGI: "
 msgstr "PSGI: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:704
+#: intranet-tmpl/prog/en/modules/about.tt:705
 #, c-format
 msgid "PTFS Europe Ltd, United Kingdom"
 msgstr "PTFS Europe Ltd, United Kingdom"
 
-#: intranet-tmpl/prog/en/modules/about.tt:703
+#: intranet-tmpl/prog/en/modules/about.tt:704
 #, c-format
 msgid "PTFS, Maryland, USA"
 msgstr "PTFS, Մերիլանդ, ԱՄՆ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:421
+#: intranet-tmpl/prog/en/modules/about.tt:422
 #, c-format
 msgid "Pablo Bianchi"
 msgstr "Pablo Bianchi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:371
+#: intranet-tmpl/prog/en/modules/about.tt:372
 #, c-format
 msgid "Packaging manager:"
 msgstr "Փաթեթավորման կառավարիչ։"
@@ -36260,7 +36264,7 @@ msgstr "Աղբարկղ թղթի համար։"
 msgid "Partially received"
 msgstr "Մասնակի ստացված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:548
+#: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "Pasi Kallinen"
 msgstr "Pasi Kallinen"
@@ -36328,7 +36332,7 @@ msgstr "Գաղտնաբառերը չեն համընկնում։"
 msgid "Passwords will be displayed as text"
 msgstr "Գաղտնաբառերը կարտածվեն որպես տեքստ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:484
+#: intranet-tmpl/prog/en/modules/about.tt:485
 #, c-format
 msgid "Pat Eyler (Kaitiaki from 2002 to 2004)"
 msgstr "Pat Eyler (Kaitiaki from 2002 to 2004)"
@@ -37006,12 +37010,12 @@ msgstr "Ամենաշատ սպասարկում ունեցող ընթերցողն�
 msgid "Pattern name:"
 msgstr "Ձևանմուշի անուն:"
 
-#: intranet-tmpl/prog/en/modules/about.tt:358
+#: intranet-tmpl/prog/en/modules/about.tt:359
 #, c-format
 msgid "Paul Poulain"
 msgstr "Paul Poulain"
 
-#: intranet-tmpl/prog/en/modules/about.tt:608
+#: intranet-tmpl/prog/en/modules/about.tt:609
 #, fuzzy, c-format
 msgid ""
 "Paul Poulain (2.0, 2.2, 3.8, 3.10 Release Manager; 2.2 Release Maintainer; "
@@ -37020,7 +37024,7 @@ msgstr ""
 "Paul Poulain (2.0, 2.2, 3.8, 3.10 Release Manager; 2.2 Release Maintainer; "
 "3.12 - 3.20 QA Team Member)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:638
+#: intranet-tmpl/prog/en/modules/about.tt:639
 #, c-format
 msgid "Pawel Skuza (Polish for 1.2)"
 msgstr "Pawel Skuza (Polish for 1.2)"
@@ -37102,7 +37106,7 @@ msgstr "Վճարման տեսակ"
 msgid "Payments"
 msgstr "Վճարումներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:653
+#: intranet-tmpl/prog/en/modules/about.tt:654
 #, c-format
 msgid "Peggy Thrasher"
 msgstr "Peggy Thrasher"
@@ -37276,17 +37280,17 @@ msgstr "Մշտապես ջնջիր այս հաճախորդներին"
 msgid "Permissions: "
 msgstr "Թույլտվություններ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:549
+#: intranet-tmpl/prog/en/modules/about.tt:550
 #, c-format
 msgid "Peter Crellan Kelly"
 msgstr "Peter Crellan Kelly"
 
-#: intranet-tmpl/prog/en/modules/about.tt:564
+#: intranet-tmpl/prog/en/modules/about.tt:565
 #, c-format
 msgid "Peter Lorimer"
 msgstr "Peter Lorimer"
 
-#: intranet-tmpl/prog/en/modules/about.tt:405
+#: intranet-tmpl/prog/en/modules/about.tt:406
 #, c-format
 msgid "Petter Goksoyr Asen"
 msgstr "Petter Goksoyr Asen"
@@ -37299,7 +37303,7 @@ msgstr "Petter Goksoyr Asen"
 msgid "Ph: %s%s %s "
 msgstr "Ph: %s%s %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:541
+#: intranet-tmpl/prog/en/modules/about.tt:542
 #, c-format
 msgid "Philippe Jaillon"
 msgstr "Philippe Jaillon"
@@ -37393,17 +37397,17 @@ msgstr "Վերցնելու գրադարան"
 msgid "Pickup library is different. "
 msgstr "Վերցնելու գրադարանը տարբեր է"
 
-#: intranet-tmpl/prog/en/modules/about.tt:498
+#: intranet-tmpl/prog/en/modules/about.tt:499
 #, c-format
 msgid "Pierrick Le Gall"
 msgstr "Pierrick Le Gall"
 
-#: intranet-tmpl/prog/en/modules/about.tt:555
+#: intranet-tmpl/prog/en/modules/about.tt:556
 #, c-format
 msgid "Piotr Kowalski"
 msgstr "Piotr Kowalski"
 
-#: intranet-tmpl/prog/en/modules/about.tt:676
+#: intranet-tmpl/prog/en/modules/about.tt:677
 #, c-format
 msgid "Piotr Wejman"
 msgstr "Piotr Wejman"
@@ -38180,12 +38184,12 @@ msgstr "Պլագինները արգելափակված են։"
 msgid "Policy for %s: %s"
 msgstr "Քաղաքականություն %s: %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:872
+#: intranet-tmpl/prog/en/modules/about.tt:873
 #, c-format
 msgid "Polski (Polish)"
 msgstr "Polski (Լեհերեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:607
+#: intranet-tmpl/prog/en/modules/about.tt:608
 #, c-format
 msgid "Polytechnic University"
 msgstr "Պոլիտեխնիկ համալսարան"
@@ -38222,7 +38226,7 @@ msgstr "Բնակեցման արձանագրության ամսաթվի ստու�
 msgid "Port: "
 msgstr "Պորտ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:873
+#: intranet-tmpl/prog/en/modules/about.tt:874
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr "Portugu&ecirc;s (Պորտուգալերեն)"
@@ -38284,7 +38288,7 @@ msgstr "Կանխատեսելի ձևանմուշ"
 msgid "Preference"
 msgstr "Նախապատվություն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:157
+#: intranet-tmpl/prog/en/modules/about.tt:158
 #, c-format
 msgid "Preferences and parameters"
 msgstr "Նախապատվություններ և պարամետրեր"
@@ -38825,7 +38829,7 @@ msgstr "Ծրագրավորված տեքստեր"
 msgid "Properties"
 msgstr "Սեփականություն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:702
+#: intranet-tmpl/prog/en/modules/about.tt:703
 #, c-format
 msgid "Prosentient Systems, Australia"
 msgstr "Prosentient Systems, Australia"
@@ -38934,7 +38938,7 @@ msgstr "Հրատարակման տարի ։"
 msgid "Publication year: "
 msgstr "Հրատարակման տարի։ "
 
-#. %1$s:  publicationyear 
+#. %1$s:  publicationyear |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:262
 #, c-format
 msgid "Publication year: %s"
@@ -39053,7 +39057,7 @@ msgstr "Հրատարակիչ ։"
 msgid "Publisher: "
 msgstr "Հրատարակիչ։ "
 
-#. %1$s:  publisher 
+#. %1$s:  publisher |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:259
 #, c-format
 msgid "Publisher: %s"
@@ -39102,12 +39106,12 @@ msgstr ""
 msgid "Qualifier: "
 msgstr "Բաժանարար: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:347
+#: intranet-tmpl/prog/en/modules/about.tt:348
 #, c-format
 msgid "Quality assurance manager:"
 msgstr "Որակի գնահատման կառավարիչ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:353
+#: intranet-tmpl/prog/en/modules/about.tt:354
 #, c-format
 msgid "Quality assurance team:"
 msgstr "Որակի գնահատման թիմ։"
@@ -39234,17 +39238,17 @@ msgstr "RRP հարկ ներառած"
 msgid "RT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:473
+#: intranet-tmpl/prog/en/modules/about.tt:474
 #, c-format
 msgid "Rachel Dustin"
 msgstr "Rachel Dustin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:717
 #, c-format
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki սկսած 2004 առ այսօր)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:554
+#: intranet-tmpl/prog/en/modules/about.tt:555
 #, c-format
 msgid "Rafal Kopaczka"
 msgstr "Rafal Kopaczka"
@@ -39317,7 +39321,7 @@ msgstr "Ստացման ամսաթիվ"
 
 #. %1$s:  name 
 #. %2$s:  IF ( invoice ) 
-#. %3$s:  invoice 
+#. %3$s:  invoice |html 
 #. %4$s:  END 
 #. %5$s:  ordernumber 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:134
@@ -39499,7 +39503,7 @@ msgstr "Գրառում։"
 msgid "Red cells signify no transfer allowed."
 msgstr "Կարմիր վանդակները բնութագրում են որ տեղափոխությունները արգելված են։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:667
+#: intranet-tmpl/prog/en/modules/about.tt:668
 #, c-format
 msgid "Reed Wade"
 msgstr "Reed Wade"
@@ -39548,7 +39552,7 @@ msgstr "Գրանցման ամսաթիվ։ "
 msgid "Registration date: %s"
 msgstr "Գրանցման ամսաթիվ։ %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "Regula Sebastiao"
 msgstr "Regula Sebastiao"
@@ -39613,12 +39617,12 @@ msgstr "Փոխադարձ կապ։ "
 msgid "Relatives' checkouts"
 msgstr "Տրումներ հարազատներին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:364
+#: intranet-tmpl/prog/en/modules/about.tt:365
 #, c-format
 msgid "Release maintainers:"
 msgstr "Թողարկման ուղեկցողներ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:345
+#: intranet-tmpl/prog/en/modules/about.tt:346
 #, c-format
 msgid "Release manager:"
 msgstr "Թողարկման կառավարիչ։"
@@ -39660,7 +39664,7 @@ msgstr "Հիշիր հաջորդ հետ ընդունման համար։"
 msgid "Remember for session:"
 msgstr "Հիշիր սեսիայի համար։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:572
+#: intranet-tmpl/prog/en/modules/about.tt:573
 #, c-format
 msgid "Remi Mayrand-Provencher"
 msgstr "Remi Mayrand-Provencher"
@@ -40207,8 +40211,8 @@ msgstr ""
 msgid "Requested"
 msgstr "Պահանջված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:819
 #: intranet-tmpl/prog/en/modules/about.tt:820
+#: intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "Require.js JS module system"
 msgstr "Require.js JS համակարգի մոդուլ է"
@@ -40727,62 +40731,62 @@ msgstr "Գրախոսող"
 msgid "Reviews"
 msgstr "Դիտարկումներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:570
+#: intranet-tmpl/prog/en/modules/about.tt:571
 #, c-format
 msgid "Ricardo Dias Marques"
 msgstr "Ricardo Dias Marques"
 
-#: intranet-tmpl/prog/en/modules/about.tt:398
+#: intranet-tmpl/prog/en/modules/about.tt:399
 #, c-format
 msgid "Richard Anderson"
 msgstr "Richard Anderson"
 
-#: intranet-tmpl/prog/en/modules/about.tt:675
+#: intranet-tmpl/prog/en/modules/about.tt:676
 #, c-format
 msgid "Rick Welykochy"
 msgstr "Rick Welykochy"
 
-#: intranet-tmpl/prog/en/modules/about.tt:705
+#: intranet-tmpl/prog/en/modules/about.tt:706
 #, c-format
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "Rijksmuseum, Ամստերդամ, Հոլանդիա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:565
+#: intranet-tmpl/prog/en/modules/about.tt:566
 #, c-format
 msgid "Robert Lyon (Corporate Serials)"
 msgstr "Robert Lyon (Corporate Serials)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:680
+#: intranet-tmpl/prog/en/modules/about.tt:681
 #, c-format
 msgid "Robert Williams"
 msgstr "Robert Williams"
 
-#: intranet-tmpl/prog/en/modules/about.tt:631
+#: intranet-tmpl/prog/en/modules/about.tt:632
 #, fuzzy, c-format
 msgid "Robin Sheat (3.2 - 3.22 Packaging Manager)"
 msgstr "Robin Sheat (3.2+ Packaging Manager)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:519
+#: intranet-tmpl/prog/en/modules/about.tt:520
 #, c-format
 msgid "Rochelle Healy"
 msgstr "Rochelle Healy"
 
-#: intranet-tmpl/prog/en/modules/about.tt:466
+#: intranet-tmpl/prog/en/modules/about.tt:467
 #, c-format
 msgid "Rocio Dressler"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:626
+#: intranet-tmpl/prog/en/modules/about.tt:627
 #, c-format
 msgid "Rodrigo Santellan"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:430
+#: intranet-tmpl/prog/en/modules/about.tt:431
 #, c-format
 msgid "Roger Buck"
 msgstr "Roger Buck"
 
-#: intranet-tmpl/prog/en/modules/about.tt:538
+#: intranet-tmpl/prog/en/modules/about.tt:539
 #, c-format
 msgid "Rolando Isidoro"
 msgstr "Rolando Isidoro"
@@ -40797,22 +40801,22 @@ msgstr "Պտույտ։"
 msgid "Rollover:"
 msgstr "Պտույտ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:874
+#: intranet-tmpl/prog/en/modules/about.tt:875
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr "Rom&acirc;n&#259; (Ռումիներեն)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:397
+#: intranet-tmpl/prog/en/modules/about.tt:398
 #, c-format
 msgid "Roman Amor"
 msgstr "Roman Amor"
 
-#: intranet-tmpl/prog/en/modules/about.tt:610
+#: intranet-tmpl/prog/en/modules/about.tt:611
 #, c-format
 msgid "Romina Racca"
 msgstr "Romina Racca"
 
-#: intranet-tmpl/prog/en/modules/about.tt:677
+#: intranet-tmpl/prog/en/modules/about.tt:678
 #, c-format
 msgid "Ron Wickersham"
 msgstr "Ron Wickersham"
@@ -40930,12 +40934,12 @@ msgstr "Աշխատեցրու այս հաշվետվությունը"
 msgid "Run tool"
 msgstr "Աշխատեցնելու գործիք"
 
-#: intranet-tmpl/prog/en/modules/about.tt:501
+#: intranet-tmpl/prog/en/modules/about.tt:502
 #, c-format
 msgid "Russel Garlick"
 msgstr "Russel Garlick"
 
-#: intranet-tmpl/prog/en/modules/about.tt:526
+#: intranet-tmpl/prog/en/modules/about.tt:527
 #, c-format
 msgid "Ryan Higgins"
 msgstr "Ryan Higgins"
@@ -40946,12 +40950,12 @@ msgstr "Ryan Higgins"
 msgid "SAN"
 msgstr "ԵՎ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:334
+#: intranet-tmpl/prog/en/modules/about.tt:335
 #, c-format
 msgid "SAN-Ouest Provence"
 msgstr "SAN-Ouest Provence"
 
-#: intranet-tmpl/prog/en/modules/about.tt:706
+#: intranet-tmpl/prog/en/modules/about.tt:707
 #, c-format
 msgid "SAN-Ouest Provence, France"
 msgstr "SAN-Ouest Provence, France"
@@ -40966,7 +40970,7 @@ msgstr "EAN: "
 msgid "SBN"
 msgstr "SBN"
 
-#: intranet-tmpl/prog/en/modules/about.tt:811
+#: intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "SIL OFL 1.1"
 msgstr "SIL OFL 1.1"
@@ -41042,22 +41046,22 @@ msgstr "Sa"
 msgid "Salutation"
 msgstr "Ողջույնի ձև"
 
-#: intranet-tmpl/prog/en/modules/about.tt:621
+#: intranet-tmpl/prog/en/modules/about.tt:622
 #, c-format
 msgid "Salvador Zaragoza Rubio"
 msgstr "Salvador Zaragoza Rubio"
 
-#: intranet-tmpl/prog/en/modules/about.tt:625
+#: intranet-tmpl/prog/en/modules/about.tt:626
 #, c-format
 msgid "Sam Sanders"
 msgstr "Sam Sanders"
 
-#: intranet-tmpl/prog/en/modules/about.tt:650
+#: intranet-tmpl/prog/en/modules/about.tt:651
 #, c-format
 msgid "Samanta Tello"
 msgstr "Samanta Tello"
 
-#: intranet-tmpl/prog/en/modules/about.tt:453
+#: intranet-tmpl/prog/en/modules/about.tt:454
 #, c-format
 msgid "Samuel Crosby"
 msgstr "Samuel Crosby"
@@ -41333,7 +41337,7 @@ msgstr "Հիշված արդյունքներ"
 msgid "Saving..."
 msgstr "Հիշում է..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:637
+#: intranet-tmpl/prog/en/modules/about.tt:638
 #, c-format
 msgid "Savitra Sirohi"
 msgstr "Savitra Sirohi"
@@ -41434,7 +41438,7 @@ msgstr "Միավոր։ "
 msgid "Screen"
 msgstr "Պաստառ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:514
+#: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "Sean Hamlin"
 msgstr "Sean Hamlin"
@@ -41983,7 +41987,7 @@ msgstr "Փնտրում"
 msgid "Season"
 msgstr "Սեզոն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:472
+#: intranet-tmpl/prog/en/modules/about.tt:473
 #, c-format
 msgid "Sebastiaan Durand"
 msgstr "Sebastiaan Durand"
@@ -42328,7 +42332,7 @@ msgid "Select planning type:"
 msgstr "Ընտրիր պլանավորման տեսակը։"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:76
-#: intranet-tmpl/prog/en/modules/tools/export.tt:196
+#: intranet-tmpl/prog/en/modules/tools/export.tt:200
 #, c-format
 msgid "Select records to export "
 msgstr "Ընտրիր արտահանման համար գրառումներ "
@@ -42419,8 +42423,8 @@ msgstr "Ընտրիր առանց նյութերի"
 msgid "Select your MARC flavor"
 msgstr "Ընտրիր քո ՄԵԸՔ համը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:825
 #: intranet-tmpl/prog/en/modules/about.tt:826
+#: intranet-tmpl/prog/en/modules/about.tt:827
 #, fuzzy, c-format
 msgid "Select2"
 msgstr "Ընտրել"
@@ -42562,12 +42566,12 @@ msgstr "Բաժանարար։ "
 msgid "September"
 msgstr "Սեպտեմբեր"
 
-#: intranet-tmpl/prog/en/modules/about.tt:615
+#: intranet-tmpl/prog/en/modules/about.tt:616
 #, c-format
 msgid "Serge Renaux"
 msgstr "Serge Renaux"
 
-#: intranet-tmpl/prog/en/modules/about.tt:468
+#: intranet-tmpl/prog/en/modules/about.tt:469
 #, c-format
 msgid "Serhij Dubyk"
 msgstr "Serhij Dubyk"
@@ -42880,12 +42884,12 @@ msgstr ""
 msgid "Share your usage statistics"
 msgstr "Հաճախորդի վիճակագրություն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:603
+#: intranet-tmpl/prog/en/modules/about.tt:604
 #, c-format
 msgid "Shari Perkins"
 msgstr "Shari Perkins"
 
-#: intranet-tmpl/prog/en/modules/about.tt:587
+#: intranet-tmpl/prog/en/modules/about.tt:588
 #, c-format
 msgid "Sharon Moreland"
 msgstr "Sharon Moreland"
@@ -42896,7 +42900,7 @@ msgstr "Sharon Moreland"
 msgid "Sharp (#)"
 msgstr "Sharp (#)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:483
+#: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
 msgid "Shaun Evans"
 msgstr "Shaun Evans"
@@ -43258,17 +43262,17 @@ msgstr "Ցուցադրված"
 msgid "Shows on transit slips"
 msgstr "Ցույց է տալիս տեղափոխման մեջ գտնվող ժապավենները"
 
-#: intranet-tmpl/prog/en/modules/about.tt:636
+#: intranet-tmpl/prog/en/modules/about.tt:637
 #, c-format
 msgid "Silvia Simonetti"
 msgstr "Silvia Simonetti"
 
-#: intranet-tmpl/prog/en/modules/about.tt:596
+#: intranet-tmpl/prog/en/modules/about.tt:597
 #, c-format
 msgid "Simith D'Oliveira"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:644
+#: intranet-tmpl/prog/en/modules/about.tt:645
 #, c-format
 msgid "Simon Story"
 msgstr "Simon Story"
@@ -43367,7 +43371,7 @@ msgid ""
 "lead to data loss. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:168
+#: intranet-tmpl/prog/en/modules/about.tt:169
 #, c-format
 msgid ""
 "Some patrons have requested a privacy on returning item but the "
@@ -43392,12 +43396,12 @@ msgstr ""
 msgid "Something went wrong. Unable to create a new numbering pattern."
 msgstr "Ինչ որ բան սխալ է։ Չի կարող ստեղծել համարակալման նոր ձևանմուշ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:560
+#: intranet-tmpl/prog/en/modules/about.tt:561
 #, c-format
 msgid "Sonia Lemaire"
 msgstr "Sonia Lemaire"
 
-#: intranet-tmpl/prog/en/modules/about.tt:580
+#: intranet-tmpl/prog/en/modules/about.tt:581
 #, c-format
 msgid "Sophie Meynieux"
 msgstr "Sophie Meynieux"
@@ -43577,7 +43581,7 @@ msgstr "Դասակարգման աղբյուր / դասավորման սխեմա"
 msgid "Source records"
 msgstr "Սկզբնական գրառումներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:640
+#: intranet-tmpl/prog/en/modules/about.tt:641
 #, c-format
 msgid "Southeastern University"
 msgstr "Southeastern համալսարան"
@@ -43593,7 +43597,7 @@ msgstr "Բացատ ()"
 msgid "Special relationship: "
 msgstr "Հատուկ կապ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:328
+#: intranet-tmpl/prog/en/modules/about.tt:329
 #, c-format
 msgid "Special thanks to the following organizations"
 msgstr "Հատուկ երախտագիտություն հետևյալ կազմակերպություններին"
@@ -43661,17 +43665,17 @@ msgstr "Բաժանիր դասիչները։ "
 msgid "Spring"
 msgstr "Գարուն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:540
+#: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Srdjan Jankovic"
 msgstr "Srdjan Jankovic"
 
-#: intranet-tmpl/prog/en/modules/about.tt:465
+#: intranet-tmpl/prog/en/modules/about.tt:466
 #, c-format
 msgid "Srikanth Dhondi"
 msgstr "Srikanth Dhondi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:668
+#: intranet-tmpl/prog/en/modules/about.tt:669
 #, c-format
 msgid "Stacey Walker"
 msgstr "Stacey Walker"
@@ -43789,7 +43793,7 @@ msgstr "Փուլավորված MARC գրառման կառավարում"
 msgid "Staged:"
 msgstr "Փուլավորված։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:427
+#: intranet-tmpl/prog/en/modules/about.tt:428
 #, c-format
 msgid "Stan Brinkerhoff"
 msgstr "Stan Brinkerhoff"
@@ -44075,12 +44079,12 @@ msgstr "Վիճակներ նկարագրելու համար կորած նյութ
 msgid "Statuses to describe why an item is not for loan"
 msgstr "Վիճակներ, որպեսզի նկարագրվի թե ինչու այս նյութերը սպասարկման համար չեն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:673
+#: intranet-tmpl/prog/en/modules/about.tt:674
 #, c-format
 msgid "Stefan Weil"
 msgstr "Stefan Weil"
 
-#: intranet-tmpl/prog/en/modules/about.tt:413
+#: intranet-tmpl/prog/en/modules/about.tt:414
 #, c-format
 msgid "Stefano Bargioni"
 msgstr "Ստեֆանո Բարգիոնի"
@@ -44166,28 +44170,28 @@ msgstr "Քայլ 5 ։ Հաստատիր սահմանումը"
 msgid "Step 6 of 6: Choose how you want the report ordered"
 msgstr "Քայլ 6 ընդամենը 6 : Ընտրիր ինչպես ես ուզում հաշվետվությունը դասավորել"
 
-#: intranet-tmpl/prog/en/modules/about.tt:530
+#: intranet-tmpl/prog/en/modules/about.tt:531
 #, c-format
 msgid "Stephanie Hogan"
 msgstr "Stephanie Hogan"
 
-#: intranet-tmpl/prog/en/modules/about.tt:475
+#: intranet-tmpl/prog/en/modules/about.tt:476
 #, c-format
 msgid "Stephen Edwards"
 msgstr "Stephen Edwards"
 
-#: intranet-tmpl/prog/en/modules/about.tt:717
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "Stephen Hedges (early Documentation Manager)"
 msgstr "Stephen Hedges (early Documentation Manager)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:657
+#: intranet-tmpl/prog/en/modules/about.tt:658
 #, c-format
 msgid "Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)"
 msgstr ""
 "Steve Tonnesen (վաղ MARC աշխատանք, Virtual Bookshelves concept, KohaCD)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:431
+#: intranet-tmpl/prog/en/modules/about.tt:432
 #, c-format
 msgid "Steven Callender"
 msgstr "Steven Callender"
@@ -44236,7 +44240,7 @@ msgstr "Փողոցի տեսակ"
 msgid "Student count"
 msgstr "Ուսանողի հաշվարկ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:462
+#: intranet-tmpl/prog/en/modules/about.tt:463
 #, c-format
 msgid "Stéphane Delaune"
 msgstr "Stéphane Delaune"
@@ -44962,7 +44966,7 @@ msgstr ""
 msgid "Suspension in days (day)"
 msgstr "կասեցում օրերով (օր)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:877
+#: intranet-tmpl/prog/en/modules/about.tt:878
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr "Svenska (Շվեդերեն)"
@@ -44977,8 +44981,8 @@ msgstr "Անցիր խորացված խմբագրիչին"
 msgid "Switch to basic editor"
 msgstr "Անցիր հիմնական խմբագրիչին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:253
-#: intranet-tmpl/prog/en/modules/about.tt:267
+#: intranet-tmpl/prog/en/modules/about.tt:254
+#: intranet-tmpl/prog/en/modules/about.tt:268
 #, fuzzy, c-format
 msgid "Switching to dom indexing"
 msgstr "Անցիր խորացված խմբագրիչին"
@@ -45033,7 +45037,7 @@ msgstr "Համակարգի տեղեկատվություն"
 msgid "System permissions"
 msgstr "Համակարգի թույլտվությունները"
 
-#: intranet-tmpl/prog/en/modules/about.tt:159
+#: intranet-tmpl/prog/en/modules/about.tt:160
 #, c-format
 msgid ""
 "System preference 'AutoCreateAuthorities' set, but needs "
@@ -45042,7 +45046,7 @@ msgstr ""
 "'AutoCreateAuthorities' Համակարգային նախապատվությունը կարգաբերված է, բայց "
 "հարկ է կարգաբերել նաև 'BiblioAddsAuthorities'"
 
-#: intranet-tmpl/prog/en/modules/about.tt:162
+#: intranet-tmpl/prog/en/modules/about.tt:163
 #, c-format
 msgid ""
 "System preference 'EasyAnalyticalRecords' set, but UseControlNumber "
@@ -45054,7 +45058,7 @@ msgstr ""
 "օգտագործի' կամ 'Ցույց տուր վերլուծականը' կապը աշխատակազմի հաճախորդում և ՀՕԱՔ-"
 "ը կջարդվի։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:165
+#: intranet-tmpl/prog/en/modules/about.tt:166
 #, c-format
 msgid ""
 "System preference 'OPACPrivacy' set, but AnonymousPatron preference is set "
@@ -45066,7 +45070,7 @@ msgstr ""
 "հնարավորությունը ճիշտ աշխատի ապա դրան տուր ընթերցողի ճիշտ համար։"
 
 #. %1$s:  warnStatisticsFieldsError 
-#: intranet-tmpl/prog/en/modules/about.tt:174
+#: intranet-tmpl/prog/en/modules/about.tt:175
 #, c-format
 msgid ""
 "System preference 'StatisticsFields' contains field names not belonging to "
@@ -45087,12 +45091,12 @@ msgstr "Համակարգային նախապատվության փնտրում"
 msgid "System preferences"
 msgstr "Համակարգային նախապատվություններ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:528
+#: intranet-tmpl/prog/en/modules/about.tt:529
 #, c-format
 msgid "Sèbastien Hinderer"
 msgstr "Sèbastien Hinderer"
 
-#: intranet-tmpl/prog/en/modules/about.tt:880
+#: intranet-tmpl/prog/en/modules/about.tt:881
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -45174,7 +45178,7 @@ msgstr ""
 "Տաբ:%s | $%s %s %s%s%s%s, կրկնվող%s%s, Պարտադիր%s%s, Տես %s%s%s, %s%s%s, %s%s"
 "%s, %s%s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:829
+#: intranet-tmpl/prog/en/modules/about.tt:830
 #, c-format
 msgid "TableDnD plug-in for jQuery"
 msgstr ""
@@ -45305,7 +45309,7 @@ msgstr "Հաստատման սպասող թեգեր"
 msgid "Tags:"
 msgstr "Ցուցիչներ։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:708
+#: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid "Tamil, France"
 msgstr "Թամիլ, Ֆրանսիա"
@@ -45460,7 +45464,7 @@ msgstr "Տեստային կանխատեսելի ձևանմուշ"
 msgid "Testing..."
 msgstr "Թեստավորում..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:878
+#: intranet-tmpl/prog/en/modules/about.tt:879
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr "Tetun (Tetum) Karen Myers"
@@ -45536,29 +45540,29 @@ msgstr "Th"
 msgid "That budget does not exist! Please select a budget to continue."
 msgstr "Այդ բյուջեն գոյություն չունի։ Շարունակելու համար ընտրիր բյուջե։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:613
+#: intranet-tmpl/prog/en/modules/about.tt:614
 #, c-format
 msgid "Thatcher Rea"
 msgstr "Thatcher Rea"
 
-#: intranet-tmpl/prog/en/modules/about.tt:331
-#: intranet-tmpl/prog/en/modules/about.tt:335
+#: intranet-tmpl/prog/en/modules/about.tt:332
 #: intranet-tmpl/prog/en/modules/about.tt:336
 #: intranet-tmpl/prog/en/modules/about.tt:337
-#: intranet-tmpl/prog/en/modules/about.tt:782
-#: intranet-tmpl/prog/en/modules/about.tt:786
-#: intranet-tmpl/prog/en/modules/about.tt:790
-#: intranet-tmpl/prog/en/modules/about.tt:794
-#: intranet-tmpl/prog/en/modules/about.tt:798
-#: intranet-tmpl/prog/en/modules/about.tt:802
-#: intranet-tmpl/prog/en/modules/about.tt:805
-#: intranet-tmpl/prog/en/modules/about.tt:808
-#: intranet-tmpl/prog/en/modules/about.tt:814
-#: intranet-tmpl/prog/en/modules/about.tt:817
-#: intranet-tmpl/prog/en/modules/about.tt:820
-#: intranet-tmpl/prog/en/modules/about.tt:826
-#: intranet-tmpl/prog/en/modules/about.tt:829
-#: intranet-tmpl/prog/en/modules/about.tt:832
+#: intranet-tmpl/prog/en/modules/about.tt:338
+#: intranet-tmpl/prog/en/modules/about.tt:783
+#: intranet-tmpl/prog/en/modules/about.tt:787
+#: intranet-tmpl/prog/en/modules/about.tt:791
+#: intranet-tmpl/prog/en/modules/about.tt:795
+#: intranet-tmpl/prog/en/modules/about.tt:799
+#: intranet-tmpl/prog/en/modules/about.tt:803
+#: intranet-tmpl/prog/en/modules/about.tt:806
+#: intranet-tmpl/prog/en/modules/about.tt:809
+#: intranet-tmpl/prog/en/modules/about.tt:815
+#: intranet-tmpl/prog/en/modules/about.tt:818
+#: intranet-tmpl/prog/en/modules/about.tt:821
+#: intranet-tmpl/prog/en/modules/about.tt:827
+#: intranet-tmpl/prog/en/modules/about.tt:830
+#: intranet-tmpl/prog/en/modules/about.tt:833
 #, c-format
 msgid "The "
 msgstr "Այս "
@@ -45569,7 +45573,7 @@ msgstr "Այս "
 msgid "The %s latest issues related to this subscription:"
 msgstr "Այս բաժանորդագրության հետ կապված ամենավերջին %s համարները։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:285
+#: intranet-tmpl/prog/en/modules/about.tt:286
 #, c-format
 msgid ""
 "The &lt;use_zebra_facets&gt; entry is missing in your configuration file. "
@@ -45578,7 +45582,7 @@ msgstr ""
 "&lt;use_zebra_facets&gt; մուտքը բացակայում է քո կարգաբերման ֆայլում։ "
 "Վերադարձ դեպի օրինական ֆասետի հաշվարկին։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:232
+#: intranet-tmpl/prog/en/modules/about.tt:233
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is missing in your configuration "
@@ -45588,7 +45592,7 @@ msgstr ""
 "&lt;zebra_auth_index_mode&gt; քո կարգաբերման ֆայլում մուտքը բացակայում է։ "
 "Այն պետք է կարգաբերվի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:273
+#: intranet-tmpl/prog/en/modules/about.tt:274
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'dom', but your system "
@@ -45597,7 +45601,7 @@ msgstr ""
 "&lt;zebra_auth_index_mode&gt; քո կարգաբերման ֆայլում մուտքը բացակայում է։ "
 "Այն պետք է կարգաբերվի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:264
+#: intranet-tmpl/prog/en/modules/about.tt:265
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_auth_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
@@ -45607,7 +45611,7 @@ msgstr ""
 ". GRS-1 աջակցումը հնացած է և հետագա թողարկումներուից կհեռացվի։ Օգտագործիր "
 "փոխարենը DOM կարգաբերելով &lt;zebra_auth_index_mode&gt; սրանով "
 
-#: intranet-tmpl/prog/en/modules/about.tt:214
+#: intranet-tmpl/prog/en/modules/about.tt:215
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is missing in your configuration "
@@ -45617,7 +45621,7 @@ msgstr ""
 "&lt;zebra_bib_index_mode&gt; քո կարգաբերման ֆայլում մուտքը բացակայում է։ Այն "
 "պետք է կարգաբերվի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:259
+#: intranet-tmpl/prog/en/modules/about.tt:260
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'dom', but your system "
@@ -45626,7 +45630,7 @@ msgstr ""
 "&lt;zebra_bib_index_mode&gt; քո կարգաբերման ֆայլում մուտքը բացակայում է։ Այն "
 "պետք է կարգաբերվի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:250
+#: intranet-tmpl/prog/en/modules/about.tt:251
 #, fuzzy, c-format
 msgid ""
 "The &lt;zebra_bib_index_mode&gt; entry is set to 'grs1'. GRS-1 support is "
@@ -45656,22 +45660,22 @@ msgstr ""
 "հնարավորությունը կարող ես օգտագործել ամենուր,, սակայն NULL կօգտագործվի դուրս "
 "տրումների պատմությունը թարմացնելու համար։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid "The Bridge Material Type Icon Set"
 msgstr "Կամրջող նյութի տեսակի պատկերիկի կարգաբերում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "The Bridge Material Type Icon Set is licensed under a "
 msgstr "Կամրջող նյութի տեսակի պատկերիկի կարգաբերումը արտոնագրված է "
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "The Noun Project"
 msgstr "Իրատեսական նախագիծ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "The Noun Project icons"
 msgstr "Իրատեսական նախագծի պատկերիկներ"
@@ -45698,7 +45702,7 @@ msgstr "Քո պահանջած հեղինակավոր գրառումը գոյու
 msgid "The authorized value category ("
 msgstr "Լիազորված արժեքի դաս։ ("
 
-#. %1$s:  Barcode 
+#. %1$s:  Barcode |html 
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:26
 #, c-format
 msgid "The barcode %s was not found."
@@ -45937,7 +45941,7 @@ msgstr "Այս կառուցվածքը օգտագործվել է %s անգամ։"
 msgid "The import id number "
 msgstr "Ներմուծման id համար "
 
-#: intranet-tmpl/prog/en/modules/about.tt:823
+#: intranet-tmpl/prog/en/modules/about.tt:824
 #, c-format
 msgid "The included OAI.xslt file by the "
 msgstr ""
@@ -46123,7 +46127,7 @@ msgstr ""
 "Հաճախորդը պահումների համար ունի այս չափով չվճարված գումարներ, "
 "վարձակալություններ %s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:189
+#: intranet-tmpl/prog/en/modules/about.tt:190
 #, c-format
 msgid ""
 "The patron used for the self checkout module at the OPAC does not have the "
@@ -46132,7 +46136,7 @@ msgstr ""
 "ՀՕԱՔ-ում դուրս տրումների մոդուլում օգտագործված ընթերցողը չունի circulate => "
 "self_checkout իրավասություն։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:194
+#: intranet-tmpl/prog/en/modules/about.tt:195
 #, c-format
 msgid ""
 "The patron used for the self checkout module at the OPAC has too many "
@@ -47174,12 +47178,12 @@ msgstr ""
 "հնարավորության օգնությամբ դու ամեն տարի կարող ես կրկնել այս օրենքը։ Օրինակ՝ "
 "ընտրելով օգոստոսի 1-ը այն ամեն տարվա համար օգոստոսի 1-ը կդարձնի տոնական։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:470
+#: intranet-tmpl/prog/en/modules/about.tt:471
 #, c-format
 msgid "Thomas Dukleth (MARC Frameworks Maintenance)"
 msgstr "Thomas Dukleth (MARC Frameworks Maintenance)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:683
+#: intranet-tmpl/prog/en/modules/about.tt:684
 #, c-format
 msgid "Thomas Wright"
 msgstr "Thomas Wright"
@@ -47225,7 +47229,7 @@ msgstr "Հինգշաբթիներ"
 msgid "Till reconciliation"
 msgstr "Մինչ հաշտեցում"
 
-#: intranet-tmpl/prog/en/modules/about.tt:515
+#: intranet-tmpl/prog/en/modules/about.tt:516
 #, c-format
 msgid "Tim Hannah"
 msgstr "Tim Hannah"
@@ -47269,12 +47273,12 @@ msgstr "Ընդմիջում (0 չի կարգաբերված): "
 msgid "Timestamp"
 msgstr "Ժամանակի կնիք"
 
-#: intranet-tmpl/prog/en/modules/about.tt:807
+#: intranet-tmpl/prog/en/modules/about.tt:808
 #, c-format
 msgid "TinyMCE WYSIWYG editor"
 msgstr "TinyMCE WYSIWYG խմբագրիչ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:808
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "TinyMCE WYSIWYG editor v3.5.8 "
 msgstr "TinyMCE WYSIWYG խմբագրիչ v3.5.8 "
@@ -47452,7 +47456,7 @@ msgstr "Վերնագիր։"
 msgid "Title: "
 msgstr "Վերնագիր։ "
 
-#. %1$s:  title 
+#. %1$s:  title |html 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:253
 #, c-format
 msgid "Title: %s"
@@ -47516,7 +47520,7 @@ msgstr "Դեպի ֆայլ։"
 msgid "To a file: "
 msgstr "Դեպի ֆայլ։ "
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:202
+#: intranet-tmpl/prog/en/modules/tools/export.tt:206
 #, c-format
 msgid "To authid: "
 msgstr "To authid: "
@@ -47675,17 +47679,17 @@ msgstr "Փոխարկիր նվազագույն առաջնայնությունը"
 msgid "Toggle set to lowest priority"
 msgstr "Փոխարկիր բազմությունը դեպի նվազագույն առաջնայնության"
 
-#: intranet-tmpl/prog/en/modules/about.tt:535
+#: intranet-tmpl/prog/en/modules/about.tt:536
 #, c-format
 msgid "Tom Houlker"
 msgstr "Tom Houlker"
 
-#: intranet-tmpl/prog/en/modules/about.tt:355
+#: intranet-tmpl/prog/en/modules/about.tt:356
 #, c-format
 msgid "Tomás Cohen Arazi"
 msgstr "Tomás Cohen Arazi"
 
-#: intranet-tmpl/prog/en/modules/about.tt:402
+#: intranet-tmpl/prog/en/modules/about.tt:403
 #, fuzzy, c-format
 msgid ""
 "Tomás Cohen Arazi (3.18 - 3.22 Release Manager; 3.12 Release Maintainer)"
@@ -48205,12 +48209,12 @@ msgid "Translate item type [% itemtype.itemtype %]"
 msgstr "Թարգմանիր նյութի տեսակը [% itemtype %]"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:218
-#: intranet-tmpl/prog/en/modules/about.tt:836
+#: intranet-tmpl/prog/en/modules/about.tt:837
 #, c-format
 msgid "Translation"
 msgstr "Թարգմանություն"
 
-#: intranet-tmpl/prog/en/modules/about.tt:351
+#: intranet-tmpl/prog/en/modules/about.tt:352
 #, c-format
 msgid "Translation manager:"
 msgstr "Թարգմանության կառավարիչ։"
@@ -48285,7 +48289,7 @@ msgstr "Երեքշաբթի"
 msgid "Tuesdays"
 msgstr "Երեքշաբթի"
 
-#: intranet-tmpl/prog/en/modules/about.tt:500
+#: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Tumer Garip"
 msgstr "Tumer Garip"
@@ -48378,7 +48382,7 @@ msgstr "URL: %s "
 msgid "UTF-8 (Default)"
 msgstr "UTF-8 (լռակյաց)"
 
-#: intranet-tmpl/prog/en/modules/about.tt:553
+#: intranet-tmpl/prog/en/modules/about.tt:554
 #, c-format
 msgid "Ulrich Kleiber"
 msgstr "Ulrich Kleiber"
@@ -48482,8 +48486,8 @@ msgstr "Չսահմանված"
 msgid "Undo import into catalog"
 msgstr "Գրառումների ներմուծումը հետ կատարել"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:267
-#: intranet-tmpl/prog/en/modules/tools/export.tt:293
+#: intranet-tmpl/prog/en/modules/tools/export.tt:271
+#: intranet-tmpl/prog/en/modules/tools/export.tt:297
 #, c-format
 msgid "Unfortunately, no backups are available."
 msgstr "Դժբախտաբար չկան մատչելի պատճեններ։"
@@ -48595,12 +48599,12 @@ msgstr "Միավորներ։"
 msgid "Units: "
 msgstr "Միավորներ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:710
 #, c-format
 msgid "Universidad Nacional de Córdoba, Argentina"
 msgstr "Universidad Nacional de Córdoba, Argentina"
 
-#: intranet-tmpl/prog/en/modules/about.tt:663
+#: intranet-tmpl/prog/en/modules/about.tt:664
 #, c-format
 msgid "Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)"
 msgstr "Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)"
@@ -48999,7 +49003,7 @@ msgid "Use a file"
 msgstr "Օգտագործիր ֆայլը"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:138
-#: intranet-tmpl/prog/en/modules/tools/export.tt:217
+#: intranet-tmpl/prog/en/modules/tools/export.tt:221
 #, c-format
 msgid "Use a file "
 msgstr "Օգտագործիր ֆայլը "
@@ -49601,12 +49605,12 @@ msgstr "Դիտիր կողային պիտակը"
 msgid "View, manage, configure and run plugins."
 msgstr "Դիտիր, կառավարիր, ձևափոխիր և աշխատեցրու պլագինները։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:627
+#: intranet-tmpl/prog/en/modules/about.tt:628
 #, c-format
 msgid "Viktor Sarge"
 msgstr "Viktor Sarge"
 
-#: intranet-tmpl/prog/en/modules/about.tt:457
+#: intranet-tmpl/prog/en/modules/about.tt:458
 #, c-format
 msgid "Vincent Danjean"
 msgstr "Vincent Danjean"
@@ -49616,7 +49620,7 @@ msgstr "Vincent Danjean"
 msgid "Visibility: "
 msgstr "Տեսանելիություն։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:488
+#: intranet-tmpl/prog/en/modules/about.tt:489
 #, c-format
 msgid "Vitor Fernandes"
 msgstr "Vitor Fernandes"
@@ -49675,34 +49679,34 @@ msgstr "Սպասում "
 msgid "Waiting Date"
 msgstr "Սպասման ամսաթիվ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:671
+#: intranet-tmpl/prog/en/modules/about.tt:672
 #, c-format
 msgid "Ward van Wanrooij"
 msgstr "Ward van Wanrooij"
 
 #: intranet-tmpl/prog/en/modules/about.tt:58
-#: intranet-tmpl/prog/en/modules/about.tt:159
-#: intranet-tmpl/prog/en/modules/about.tt:162
-#: intranet-tmpl/prog/en/modules/about.tt:165
-#: intranet-tmpl/prog/en/modules/about.tt:168
-#: intranet-tmpl/prog/en/modules/about.tt:171
-#: intranet-tmpl/prog/en/modules/about.tt:174
-#: intranet-tmpl/prog/en/modules/about.tt:177
-#: intranet-tmpl/prog/en/modules/about.tt:189
-#: intranet-tmpl/prog/en/modules/about.tt:194
-#: intranet-tmpl/prog/en/modules/about.tt:199
-#: intranet-tmpl/prog/en/modules/about.tt:213
-#: intranet-tmpl/prog/en/modules/about.tt:231
-#: intranet-tmpl/prog/en/modules/about.tt:249
-#: intranet-tmpl/prog/en/modules/about.tt:258
-#: intranet-tmpl/prog/en/modules/about.tt:263
-#: intranet-tmpl/prog/en/modules/about.tt:272
-#: intranet-tmpl/prog/en/modules/about.tt:277
-#: intranet-tmpl/prog/en/modules/about.tt:284
-#: intranet-tmpl/prog/en/modules/about.tt:291
-#: intranet-tmpl/prog/en/modules/about.tt:298
-#: intranet-tmpl/prog/en/modules/about.tt:305
-#: intranet-tmpl/prog/en/modules/about.tt:312
+#: intranet-tmpl/prog/en/modules/about.tt:160
+#: intranet-tmpl/prog/en/modules/about.tt:163
+#: intranet-tmpl/prog/en/modules/about.tt:166
+#: intranet-tmpl/prog/en/modules/about.tt:169
+#: intranet-tmpl/prog/en/modules/about.tt:172
+#: intranet-tmpl/prog/en/modules/about.tt:175
+#: intranet-tmpl/prog/en/modules/about.tt:178
+#: intranet-tmpl/prog/en/modules/about.tt:190
+#: intranet-tmpl/prog/en/modules/about.tt:195
+#: intranet-tmpl/prog/en/modules/about.tt:200
+#: intranet-tmpl/prog/en/modules/about.tt:214
+#: intranet-tmpl/prog/en/modules/about.tt:232
+#: intranet-tmpl/prog/en/modules/about.tt:250
+#: intranet-tmpl/prog/en/modules/about.tt:259
+#: intranet-tmpl/prog/en/modules/about.tt:264
+#: intranet-tmpl/prog/en/modules/about.tt:273
+#: intranet-tmpl/prog/en/modules/about.tt:278
+#: intranet-tmpl/prog/en/modules/about.tt:285
+#: intranet-tmpl/prog/en/modules/about.tt:292
+#: intranet-tmpl/prog/en/modules/about.tt:299
+#: intranet-tmpl/prog/en/modules/about.tt:306
+#: intranet-tmpl/prog/en/modules/about.tt:313
 #, c-format
 msgid "Warning"
 msgstr "Զգուշացում"
@@ -49882,12 +49886,12 @@ msgstr "Զգուշացում։ Շտրիխ կոդեը չեն գտնվել"
 msgid "Warnings"
 msgstr "Զգուշացումներ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:155
+#: intranet-tmpl/prog/en/modules/about.tt:156
 #, c-format
 msgid "Warnings regarding the system configuration"
 msgstr "Զգուշացումներ որ վերաբերվում են համակարգային կարգաբերումներին։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:618
+#: intranet-tmpl/prog/en/modules/about.tt:619
 #, c-format
 msgid "Waylon Robertson"
 msgstr "Waylon Robertson"
@@ -50041,7 +50045,7 @@ msgstr ""
 msgid "Why close an empty basket?"
 msgstr "Ինչու՞ փակել դատարկ զամբյուղը"
 
-#: intranet-tmpl/prog/en/modules/about.tt:643
+#: intranet-tmpl/prog/en/modules/about.tt:644
 #, c-format
 msgid "Will Stokes"
 msgstr "Will Stokes"
@@ -50103,7 +50107,7 @@ msgstr "Դուրս գրվածի կարգավիճակ"
 msgid "Wk"
 msgstr "Wk"
 
-#: intranet-tmpl/prog/en/modules/about.tt:525
+#: intranet-tmpl/prog/en/modules/about.tt:526
 #, c-format
 msgid "Wolfgang Heymans"
 msgstr "Wolfgang Heymans"
@@ -50161,7 +50165,7 @@ msgstr "Սխալ ամսաթիվ։ Սկսելու ամսաթիվը չի կարո�
 msgid "X "
 msgstr "X "
 
-#: intranet-tmpl/prog/en/modules/about.tt:209
+#: intranet-tmpl/prog/en/modules/about.tt:210
 #, c-format
 msgid "XML configuration file"
 msgstr "XML կարգաբերման ֆայլ"
@@ -50171,12 +50175,12 @@ msgstr "XML կարգաբերման ֆայլ"
 msgid "XSLT File(s) for transforming results: "
 msgstr "XSLT ֆայլեր արդյունքների տեղափոխման համար: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:710
+#: intranet-tmpl/prog/en/modules/about.tt:711
 #, c-format
 msgid "Xercode, Spain"
 msgstr "Խերկոդե, Իսպանիա"
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:735
 #, c-format
 msgid "YUI"
 msgstr "YUI"
@@ -50379,7 +50383,7 @@ msgstr "Այո։ Դիտիր առկա նյութերը"
 msgid "YesNo"
 msgstr "ԱյոՈչ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:469
+#: intranet-tmpl/prog/en/modules/about.tt:470
 #, c-format
 msgid "Yohann Dufour"
 msgstr "Yohann Dufour"
@@ -50411,7 +50415,7 @@ msgstr ""
 "տրվում քանի որ երբ օգտագործում ես այս հաշվեհամարը Կոհայի որոշ մասեր չեն "
 "աշխատի սպասվածի պես։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:299
+#: intranet-tmpl/prog/en/modules/about.tt:300
 #, c-format
 msgid ""
 "You are missing the &lt;log4perl_conf&gt; entry in your koha-conf.xml file. "
@@ -50420,7 +50424,7 @@ msgstr ""
 "Քո մոտ բացակայում է &lt;log4perl_conf&gt; մուտքը քո koha-conf.xml ֆայլում։ "
 "Ավելացրու այն, շեշտադրելով log4perl.conf ֆայլին քո Koha-յում։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:199
+#: intranet-tmpl/prog/en/modules/about.tt:200
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;template_cache_dir&gt; entry in your koha-conf.xml "
@@ -50429,7 +50433,7 @@ msgstr ""
 "Քո մոտ բացակայում է &lt;log4perl_conf&gt; մուտքը քո koha-conf.xml ֆայլում։ "
 "Ավելացրու այն, շեշտադրելով log4perl.conf ֆայլին քո Koha-յում։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:306
+#: intranet-tmpl/prog/en/modules/about.tt:307
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -50439,7 +50443,7 @@ msgstr ""
 "մուտքի կետ քո koha-conf.xml ֆայլում։ Ավելացրու այն, նշելով քո Կոհա նմուշի "
 "ձևափոխված ֆայլի բեռնավորված թղթապանակի վրա։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:313
+#: intranet-tmpl/prog/en/modules/about.tt:314
 #, fuzzy, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
@@ -50751,7 +50755,7 @@ msgstr ""
 msgid "You have not selected any patrons to add to a list!"
 msgstr "Դու չես ընտրել որևէ ընթերցող որպեսզի ավելացնես ցուցակին։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:292
+#: intranet-tmpl/prog/en/modules/about.tt:293
 #, fuzzy, c-format
 msgid ""
 "You have set &lt;use_zebra_facets&gt; but the &lt;zebra_bib_index_mode&gt; "
@@ -50761,7 +50765,7 @@ msgstr ""
 "չի կարգաբերված որպես "
 
 #. %1$s:  config_entry.file 
-#: intranet-tmpl/prog/en/modules/about.tt:278
+#: intranet-tmpl/prog/en/modules/about.tt:279
 #, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but the 'queryparser_config' entry is missing in "
@@ -50775,7 +50779,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  QueryParserError.file 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/about.tt:177
+#: intranet-tmpl/prog/en/modules/about.tt:178
 #, fuzzy, c-format
 msgid ""
 "You have set UseQueryParser but there was a problem inititializing "
@@ -50847,6 +50851,12 @@ msgstr "Դու պետք է ընտրես բաժանորդագրության եր�
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:13
 msgid "You must choose or create a biblio"
 msgstr "Դու պետք է ընտրես կամ ստեղծես բիբլիո"
+
+#. OPTION
+#: intranet-tmpl/prog/en/modules/tools/export.tt:174
+#, fuzzy
+msgid "You must create a CSV profile for MARC exports to use this option."
+msgstr "Այս հնարավորությունները օգտագործելու համար դու պետք է լինես առցանց։"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:105
 #, fuzzy, c-format
@@ -51059,14 +51069,14 @@ msgstr "Քո զամբյուղը դատարկ է։"
 msgid "Your catalog search history is empty."
 msgstr "Քո քարտարանի փնտրման պատմությունը դատարկ է։"
 
-#: intranet-tmpl/prog/en/modules/about.tt:227
-#: intranet-tmpl/prog/en/modules/about.tt:245
+#: intranet-tmpl/prog/en/modules/about.tt:228
+#: intranet-tmpl/prog/en/modules/about.tt:246
 #, fuzzy, c-format
 msgid "Your configuration file seems to be set up for 'dom'."
 msgstr "Քո կարգաբերման ֆայլը կարծես թե ձևավորված է որպես "
 
-#: intranet-tmpl/prog/en/modules/about.tt:222
-#: intranet-tmpl/prog/en/modules/about.tt:240
+#: intranet-tmpl/prog/en/modules/about.tt:223
+#: intranet-tmpl/prog/en/modules/about.tt:241
 #, fuzzy, c-format
 msgid "Your configuration file still seems to be set up for 'grs1'."
 msgstr "Քո կարգաբերման ֆայլը դեռ ձևավորված է որպես "
@@ -51242,7 +51252,7 @@ msgstr "Զիպ/փոստային կոդ"
 msgid "ZIP/Postal code: "
 msgstr "Զիպ/փոստային կոդ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:635
+#: intranet-tmpl/prog/en/modules/about.tt:636
 #, c-format
 msgid "Zach Sim"
 msgstr "Zach Sim"
@@ -51257,8 +51267,8 @@ msgstr "Կարծես թե Զեբրա կայանը հասանելի չէ։ Այն
 msgid "Zebra version: "
 msgstr "Զեբրա տարբերակ։ "
 
-#: intranet-tmpl/prog/en/modules/about.tt:379
-#: intranet-tmpl/prog/en/modules/about.tt:648
+#: intranet-tmpl/prog/en/modules/about.tt:380
+#: intranet-tmpl/prog/en/modules/about.tt:649
 #, c-format
 msgid "Zeno Tajoli"
 msgstr "Zeno Tajoli"
@@ -51677,7 +51687,7 @@ msgstr "և"
 #: intranet-tmpl/prog/en/modules/about.tt:138
 #: intranet-tmpl/prog/en/modules/about.tt:143
 #: intranet-tmpl/prog/en/modules/about.tt:148
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "and "
 msgstr "և "
@@ -51692,7 +51702,7 @@ msgstr "և վերադարձված է"
 msgid "and is issued every "
 msgstr "և տրվում է յուրաքանչյուրին "
 
-#: intranet-tmpl/prog/en/modules/about.tt:171
+#: intranet-tmpl/prog/en/modules/about.tt:172
 #, c-format
 msgid "and mark one currency as active."
 msgstr "և նշիր մեկ արտարժույթը որպես ակտիվ։"
@@ -51702,8 +51712,8 @@ msgstr "և նշիր մեկ արտարժույթը որպես ակտիվ։"
 msgid "and search for the \"data problems\" section"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
-#: intranet-tmpl/prog/en/modules/about.tt:811
+#: intranet-tmpl/prog/en/modules/about.tt:772
+#: intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "and the "
 msgstr "և սա "
@@ -51741,7 +51751,7 @@ msgstr "ցանկացած ոք որ հեռացնի իր աջակցությամբ 
 msgid "approved"
 msgstr "հաստատված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "are licensed under the "
 msgstr "արտոնագրված են "
@@ -51934,47 +51944,47 @@ msgstr ""
 msgid "by %s: "
 msgstr "by %s: "
 
-#: intranet-tmpl/prog/en/modules/about.tt:794
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #, c-format
 msgid "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 msgstr "by Allan Jardine is licensed under the BSD 3 and GPL v2 license."
 
-#: intranet-tmpl/prog/en/modules/about.tt:786
+#: intranet-tmpl/prog/en/modules/about.tt:787
 #, c-format
 msgid "by Binny V A is licensed under the BSD license."
 msgstr "by Binny V A is licensed under the BSD license."
 
-#: intranet-tmpl/prog/en/modules/about.tt:811
+#: intranet-tmpl/prog/en/modules/about.tt:812
 #, c-format
 msgid "by Dave Gandy is licensed under the "
 msgstr "Դեյվ գանդիի կողմից արտոնագրված է որպես "
 
-#: intranet-tmpl/prog/en/modules/about.tt:829
+#: intranet-tmpl/prog/en/modules/about.tt:830
 #, fuzzy, c-format
 msgid "by Denis Howlett is licensed under the "
 msgstr "Դեյվ գանդիի կողմից արտոնագրված է որպես "
 
-#: intranet-tmpl/prog/en/modules/about.tt:817
+#: intranet-tmpl/prog/en/modules/about.tt:818
 #, c-format
 msgid "by Eli Grey is licensed under an "
 msgstr "արտոնագրված է Էլի Գրեյի կողմից "
 
-#: intranet-tmpl/prog/en/modules/about.tt:814
+#: intranet-tmpl/prog/en/modules/about.tt:815
 #, c-format
 msgid "by Marijn Haverbeke is licensed under an "
 msgstr "արտոնագրված է Մարջին Հավերբեքի կողմից "
 
-#: intranet-tmpl/prog/en/modules/about.tt:808
+#: intranet-tmpl/prog/en/modules/about.tt:809
 #, c-format
 msgid "by Moxiecode (Ephox) is licensed under the "
 msgstr "արտոնագրված է Moxiecode (Ephox) կողմից "
 
-#: intranet-tmpl/prog/en/modules/about.tt:820
+#: intranet-tmpl/prog/en/modules/about.tt:821
 #, c-format
 msgid "by The Dojo Foundation is licensed under an "
 msgstr "արտոնագրված է Դոջո հիմնադրամի կողմից "
 
-#: intranet-tmpl/prog/en/modules/about.tt:798
+#: intranet-tmpl/prog/en/modules/about.tt:799
 #, c-format
 msgid "by Zhixin Wen is licensed under the MIT license."
 msgstr "by Zhixin Wen is licensed under the MIT license."
@@ -51999,7 +52009,7 @@ msgstr "գրադարանների կողմից"
 msgid "by months"
 msgstr "ըստ ամիսների"
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgstr "Bridge Consortium of Carleton քոլեջի և St. Olaf College."
@@ -52057,12 +52067,12 @@ msgstr "Սեղմիր դուրս գալու համար"
 msgid "closed"
 msgstr "փակված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "code and "
 msgstr "կոդ և "
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "collection"
 msgstr "հավաքածու"
@@ -52102,7 +52112,7 @@ msgstr "պարունակող "
 msgid "contains"
 msgstr "պարունակում է"
 
-#: intranet-tmpl/prog/en/modules/about.tt:794
+#: intranet-tmpl/prog/en/modules/about.tt:795
 #, c-format
 msgid "controls for column visiblity in DataTables"
 msgstr "վերահսկում է սյունակների տեսանելիությունը DataTables"
@@ -52123,7 +52133,8 @@ msgstr "ստեղծիր մեկ կամ ավել թույլատրված արժեք�
 msgid "critical.ogg"
 msgstr "critical.ogg"
 
-#: intranet-tmpl/prog/en/modules/tools/export.tt:171
+#: intranet-tmpl/prog/en/modules/tools/export.tt:172
+#: intranet-tmpl/prog/en/modules/tools/export.tt:174
 #, c-format
 msgid "csv"
 msgstr "csv"
@@ -52351,7 +52362,7 @@ msgstr "էլ. փոստ"
 msgid "ending.ogg"
 msgstr "ending.ogg"
 
-#: intranet-tmpl/prog/en/modules/about.tt:842
+#: intranet-tmpl/prog/en/modules/about.tt:843
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -52400,7 +52411,7 @@ msgstr "ձախողվեց թարմացնել"
 msgid "failed to run"
 msgstr "ձախողվեց կատարել"
 
-#: intranet-tmpl/prog/en/modules/about.tt:339
+#: intranet-tmpl/prog/en/modules/about.tt:340
 #, c-format
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
@@ -52658,12 +52669,12 @@ msgstr "հավասար է"
 msgid "is exactly"
 msgstr "ճշգրտորեն է"
 
-#: intranet-tmpl/prog/en/modules/about.tt:823
+#: intranet-tmpl/prog/en/modules/about.tt:824
 #, fuzzy, c-format
 msgid "is licensed under a "
 msgstr "արտոնագրված է "
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "is licensed under the "
 msgstr "արտոնագրված է "
@@ -52686,7 +52697,7 @@ msgstr "հիմա կանխարգելված է մինչև %s։"
 msgid "is on hold for "
 msgstr "պահված է համար "
 
-#: intranet-tmpl/prog/en/modules/about.tt:782
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "is released under MIT license by Ludo van den Boom."
 msgstr "թողարկված է MIT արտոնագրի ներքո Ludo van den Boom կողմից։"
@@ -52779,43 +52790,43 @@ msgstr "items.permanent_location քարտեզավորված է"
 msgid "itemtype NOT mapped"
 msgstr "itemtype ՉԻ քարտեզված"
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "jQuery"
 msgstr "jQuery"
 
-#: intranet-tmpl/prog/en/modules/about.tt:793
+#: intranet-tmpl/prog/en/modules/about.tt:794
 #, c-format
 msgid "jQuery Colvis plugin"
 msgstr "jQuery Colvis plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:770
+#: intranet-tmpl/prog/en/modules/about.tt:771
 #, c-format
 msgid "jQuery Star Rating Plugin"
 msgstr "j- Query Star Rating Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:771
+#: intranet-tmpl/prog/en/modules/about.tt:772
 #, c-format
 msgid "jQuery Star Rating Plugin v3.14 by "
 msgstr "j- Query Star Rating Plugin v3.14 by "
 
-#: intranet-tmpl/prog/en/modules/about.tt:804
 #: intranet-tmpl/prog/en/modules/about.tt:805
+#: intranet-tmpl/prog/en/modules/about.tt:806
 #, c-format
 msgid "jQuery Validation Plugin"
 msgstr "jQuery Validation Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "jQuery and jQueryUI"
 msgstr "jQuery and jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:775
+#: intranet-tmpl/prog/en/modules/about.tt:776
 #, c-format
 msgid "jQuery insertAtCaret Plugin"
 msgstr "jQuery insertAtCaret Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:776
+#: intranet-tmpl/prog/en/modules/about.tt:777
 #, c-format
 msgid ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
@@ -52824,38 +52835,38 @@ msgstr ""
 "jQuery insertAtCaret Plugin v1.0 by the phpMyAdmin devel team is licensed "
 "under the "
 
-#: intranet-tmpl/prog/en/modules/about.tt:798
+#: intranet-tmpl/prog/en/modules/about.tt:799
 #, c-format
 msgid "jQuery multiple select plugin"
 msgstr "jQuery բազմակի ընտրման պլագին"
 
-#: intranet-tmpl/prog/en/modules/about.tt:780
+#: intranet-tmpl/prog/en/modules/about.tt:781
 #, c-format
 msgid "jQuery treetable Plugin"
 msgstr "jQuery treetable Plugin"
 
-#: intranet-tmpl/prog/en/modules/about.tt:782
+#: intranet-tmpl/prog/en/modules/about.tt:783
 #, c-format
 msgid "jQuery treetable Plugin 3.1.0"
 msgstr "jQuery treetable Plugin 3.1.0"
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "jQueryUI"
 msgstr "jQueryUI"
 
-#: intranet-tmpl/prog/en/modules/about.tt:789
 #: intranet-tmpl/prog/en/modules/about.tt:790
+#: intranet-tmpl/prog/en/modules/about.tt:791
 #, c-format
 msgid "jquery.dataTables.grouping.js"
 msgstr "jquery.dataTables.grouping.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:797
+#: intranet-tmpl/prog/en/modules/about.tt:798
 #, c-format
 msgid "jquery.multiple.select.js"
 msgstr "jquery.multiple.select.js"
 
-#: intranet-tmpl/prog/en/modules/about.tt:828
+#: intranet-tmpl/prog/en/modules/about.tt:829
 #, fuzzy, c-format
 msgid "jquery.tablednd.js"
 msgstr "jquery.dataTables.grouping.js"
@@ -52868,8 +52879,8 @@ msgid "koha-conf.xml"
 msgstr "koha-conf.xml"
 
 #. INPUT type=text name=filename
-#: intranet-tmpl/prog/en/modules/tools/export.tt:183
-#: intranet-tmpl/prog/en/modules/tools/export.tt:244
+#: intranet-tmpl/prog/en/modules/tools/export.tt:187
+#: intranet-tmpl/prog/en/modules/tools/export.tt:248
 msgid "koha.mrc"
 msgstr "koha.mrc"
 
@@ -52905,7 +52916,7 @@ msgstr "վերջինը: %s"
 msgid "let blank for the entire field"
 msgstr "թող դատարկ ողջ դաշտի համար"
 
-#: intranet-tmpl/prog/en/modules/about.tt:826
+#: intranet-tmpl/prog/en/modules/about.tt:827
 #, fuzzy, c-format
 msgid "library is licensed under "
 msgstr "արտոնագրված է "
@@ -52915,7 +52926,7 @@ msgstr "արտոնագրված է "
 msgid "library not defined"
 msgstr "գրադարանը սահմանված չէ"
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "licensed under "
 msgstr "արտոնագրված է "
@@ -52956,7 +52967,7 @@ msgid "manage circulation rules"
 msgstr "կառավարիր տացքի օրենքները"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:169
-#: intranet-tmpl/prog/en/modules/tools/export.tt:239
+#: intranet-tmpl/prog/en/modules/tools/export.tt:243
 #, c-format
 msgid "marc"
 msgstr "marc"
@@ -53197,12 +53208,12 @@ msgstr "խնդրվում է մուտք անել ամսաթիվը!"
 msgid "please note your reason here..."
 msgstr "խնդրվում է այստեղ նշել պատճառը..."
 
-#: intranet-tmpl/prog/en/modules/about.tt:802
+#: intranet-tmpl/prog/en/modules/about.tt:803
 #, c-format
 msgid "plugin by John Resig is licensed under the "
 msgstr "plugin by John Resig is licensed under the "
 
-#: intranet-tmpl/prog/en/modules/about.tt:790
+#: intranet-tmpl/prog/en/modules/about.tt:791
 #, c-format
 msgid "plugin by Jovan Popovic is licensed under the BSD and GPL v2 license."
 msgstr "պլագինը Jovan Popovic կողմից է և տրամադրված է BSD և GPL v2 արտոնագրով։"
@@ -53278,7 +53289,7 @@ msgstr "մերժված"
 msgid "related wiki page"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:343
+#: intranet-tmpl/prog/en/modules/about.tt:344
 #, fuzzy, c-format
 msgid "release team"
 msgstr "Koha 3.22 թողարկման թիմ"
@@ -53373,7 +53384,7 @@ msgid "selector"
 msgstr "ընտրիչ"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:158
-#: intranet-tmpl/prog/en/modules/tools/export.tt:230
+#: intranet-tmpl/prog/en/modules/tools/export.tt:234
 #, c-format
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "բաժանիր բացատով. (օր՝ 100a 200 606) "
@@ -53430,7 +53441,7 @@ msgstr "%s Սպասում է հարվածի "
 msgid "since last transfer"
 msgstr "սկսած վերջին տեղափոխությունից"
 
-#: intranet-tmpl/prog/en/modules/about.tt:707
+#: intranet-tmpl/prog/en/modules/about.tt:708
 #, c-format
 msgid "software.coop, United Kingdom"
 msgstr "software.coop, United Kingdom"
@@ -53522,7 +53533,7 @@ msgstr "առաջարկություն"
 msgid "suggestion #%s"
 msgstr "առաջարկ #%s"
 
-#: intranet-tmpl/prog/en/modules/about.tt:851
+#: intranet-tmpl/prog/en/modules/about.tt:852
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr "սուոմի, սուոմեցի, կիելի (Ֆիներեն) Պասի Կորկալո"
@@ -53621,7 +53632,7 @@ msgstr ""
 "ստուգելու սխալների գրանցամատյանը։ %s Հանդիպել է սխալ և փաթեթը %s ամբողջովին "
 "չի պատճենվել։ %s %s "
 
-#: intranet-tmpl/prog/en/modules/about.tt:826
+#: intranet-tmpl/prog/en/modules/about.tt:827
 #, c-format
 msgid ""
 "the Apache License, Version 2.0 (the \"Apache License\") or the GNU General "
@@ -53856,13 +53867,13 @@ msgstr "այս պատճառով։"
 msgid "with value "
 msgstr "արժեքով "
 
-#: intranet-tmpl/prog/en/modules/about.tt:805
+#: intranet-tmpl/prog/en/modules/about.tt:806
 #, c-format
 msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr "գրաված է և ուղեկցվում է Jörn Zaefferer կողմից, արտոնագիր "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:170
-#: intranet-tmpl/prog/en/modules/tools/export.tt:240
+#: intranet-tmpl/prog/en/modules/tools/export.tt:244
 #, c-format
 msgid "xml"
 msgstr "xml"
@@ -53924,7 +53935,7 @@ msgstr "| "
 msgid "×"
 msgstr "×"
 
-#: intranet-tmpl/prog/en/modules/about.tt:838
+#: intranet-tmpl/prog/en/modules/about.tt:839
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "
