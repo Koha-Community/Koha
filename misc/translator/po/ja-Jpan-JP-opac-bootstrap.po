@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-17 03:03-0300\n"
+"POT-Creation-Date: 2017-09-16 23:13-0300\n"
 "PO-Revision-Date: 2013-02-18 04:51+0200\n"
 "Last-Translator: munro <munro@dsty.ac.jp>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -359,21 +359,6 @@ msgid ""
 "issues %s %s "
 msgstr "%s %s %s あなたはニュース問題についてのメール通知を購読しています "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
@@ -568,7 +553,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; タイトル フレーズ "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -1993,7 +1978,7 @@ msgstr "%s%s%s%sKoha オンライン%s カタログ &rsaquo; タグ %s "
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -4223,7 +4208,7 @@ msgid "Availability:"
 msgstr "館内にある"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "館内にある"
@@ -4624,7 +4609,7 @@ msgstr ""
 msgid "Check-in date:"
 msgstr "続けて借りる"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:156
 #, fuzzy, c-format
 msgid "Checked out"
@@ -4646,7 +4631,7 @@ msgstr "（貸し出す）"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "（貸し出す）"
@@ -5098,7 +5083,7 @@ msgstr "現在のパスワード："
 msgid "Current session"
 msgstr "現在のパスワード："
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "現在のパスワード："
@@ -5108,7 +5093,7 @@ msgstr "現在のパスワード："
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr ""
@@ -6558,7 +6543,7 @@ msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
@@ -6649,7 +6634,7 @@ msgstr "ロープの書籍コード"
 msgid "Item cannot be checked out."
 msgstr "いかなる館所蔵を貸し出していない"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr ""
@@ -6664,7 +6649,7 @@ msgstr ""
 msgid "Item holds"
 msgstr "予約する"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "予約する"
@@ -6699,7 +6684,7 @@ msgstr "館所蔵の型式 "
 msgid "Item types"
 msgstr "館所蔵の型式"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr ""
@@ -7708,8 +7693,8 @@ msgstr "探し出せない"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr "%s %s 禁帯出 %s"
@@ -7930,12 +7915,12 @@ msgstr ""
 msgid "October"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, fuzzy, c-format
 msgid "On hold"
 msgstr "(取り置き中)"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "ソートの方式："
@@ -12284,7 +12269,7 @@ msgstr ""
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
 #, fuzzy
-msgid "koha:biblionumber:[% biblionumber %]"
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr "検索 <!-- TMPL_VAR name=\"marc_value\" -->"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401

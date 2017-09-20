@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-08-17 03:05-0300\n"
+"POT-Creation-Date: 2017-09-16 23:20-0300\n"
 "PO-Revision-Date: 2015-10-08 08:45+0000\n"
 "Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -332,24 +332,6 @@ msgid ""
 msgstr ""
 "%s %s 새 간행물 발간 알림을 이메일로 구독하려면 로그인하시기 바랍니다. %s %s "
 
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- 이것은 두 변수를 포함한다: 아이템 구조와 선택적 대출(이슈) 구조. "
-"이슈 구조는 교과목 예약 페이지에서 사용된다. 이 페이지는 item.datedue 데이터"
-"를 기입하는 아이템을 가져오는데 API를 사용하지 않는다. -%%] %s %s %s %s "
-
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:184
@@ -543,7 +525,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber 
+#. %2$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -1852,7 +1834,7 @@ msgstr "%s%s%sKoha 온라인%s 도서목록 &rsaquo; 구독하는 간행물"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber 
+#. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -3931,7 +3913,7 @@ msgid "Availability:"
 msgstr "사용 가능성:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "사용가능함 %s"
@@ -4332,7 +4314,7 @@ msgid "Check-in date:"
 msgstr "반납일:"
 
 # 그냥 '대출'로 통일해서 번역하는게 나을 것 같습니다.
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:156
 #, c-format
 msgid "Checked out"
@@ -4354,7 +4336,7 @@ msgstr "대출됨"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "다음 사용자가 대출중입니다: %s %s %s(%s)%s"
@@ -4808,7 +4790,7 @@ msgstr "현재 비밀번호:"
 msgid "Current session"
 msgstr "현재 세션"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "현재 이용중인 지역"
@@ -4818,7 +4800,7 @@ msgstr "현재 이용중인 지역"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "%s %s %s(%s)%s 님이 현재 이용중인 지역"
@@ -6290,7 +6272,7 @@ msgstr "온라인 도서목록에서: %s/cgi-bin/koha/opac-detail.pl?biblionumbe
 #. %1$s:  Branches.GetName( item.transfertfrom ) 
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6381,7 +6363,7 @@ msgstr "자료 청구기호"
 msgid "Item cannot be checked out."
 msgstr "대출 불가능한 자료입니다."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "파손자료"
@@ -6396,7 +6378,7 @@ msgstr "우선 예약 대기중인 자료"
 msgid "Item holds"
 msgstr "자료 예약"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "자료 분실"
@@ -6431,7 +6413,7 @@ msgstr "자료 유형:"
 msgid "Item types"
 msgstr "자료 유형"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "등록 취소된 자료"
@@ -7425,8 +7407,8 @@ msgstr "원하는 자료를 찾지 못하셨나요?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "대출불가 %s"
@@ -7646,12 +7628,12 @@ msgstr "10월"
 msgid "October"
 msgstr "10월"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "예약중"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "주문중"
@@ -12074,7 +12056,7 @@ msgstr "Koha OPAC %s"
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
 #, fuzzy
-msgid "koha:biblionumber:[% biblionumber %]"
+msgid "koha:biblionumber:[% biblionumber | html %]"
 msgstr "koha:biblionumber:[% biblionumber %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
