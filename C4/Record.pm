@@ -37,7 +37,6 @@ use Text::CSV::Encoded; #marc2csv
 use Koha::SimpleMARC qw(read_field);
 use Koha::XSLT_Handler;
 use Koha::CsvProfiles;
-use Koha::AuthorisedValues;
 use Carp;
 
 use vars qw(@ISA @EXPORT);
@@ -586,22 +585,18 @@ sub marcrecord2csv {
                 # If it is a subfield
                 my @loop_values;
                 if ( $tag->{subfieldtag} ) {
-                    my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, tagsubfield => $tag->{subfieldtag}, });
-                    $av = $av->count ? $av->unblessed : [];
-                    my $av_description_mapping = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
                     # For each field
                     foreach my $field (@fields) {
                         my @subfields = $field->subfield( $tag->{subfieldtag} );
                         foreach my $subfield (@subfields) {
-                            push @loop_values, (defined $av_description_mapping->{$subfield}) ? $av_description_mapping->{$subfield} : $subfield;
+                            my $authvalues = GetKohaAuthorisedValuesFromField( $tag->{fieldtag}, $tag->{subfieldtag}, $frameworkcode, undef);
+                            push @loop_values, (defined $authvalues->{$subfield}) ? $authvalues->{$subfield} : $subfield;
                         }
                     }
 
                 # Or a field
                 } else {
-                    my $av = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $frameworkcode, tagfield => $tag->{fieldtag}, });
-                    $av = $av->count ? $av->unblessed : [];
-                    my $authvalues = { map { ( $_->{authorised_value} => $_->{lib} ) } @$av };
+                    my $authvalues = GetKohaAuthorisedValuesFromField( $tag->{fieldtag}, undef, $frameworkcode, undef);
 
                     foreach my $field ( @fields ) {
                         my $value;
