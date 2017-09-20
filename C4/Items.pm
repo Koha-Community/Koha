@@ -248,8 +248,10 @@ sub AddItemFromMarc {
     my $dbh = C4::Context->dbh;
 
     # parse item hash from MARC
-    my $frameworkcode = GetFrameworkCode( $biblionumber );
-	my ($itemtag,$itemsubfield)=GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+    my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
+    my ($itemtag,$itemsubfield)=C4::Biblio::GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+
+
 	
 	my $localitemmarc=MARC::Record->new;
 	$localitemmarc->append_fields($source_item_marc->field($itemtag));
@@ -284,7 +286,8 @@ sub AddItem {
     my $biblionumber = shift;
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $frameworkcode = @_ ? shift : GetFrameworkCode($biblionumber);
+    my $frameworkcode = @_ ? shift : C4::Biblio::GetFrameworkCode($biblionumber);
+
     my $unlinked_item_subfields;
     if (@_) {
         $unlinked_item_subfields = shift;
@@ -377,7 +380,8 @@ sub AddItemBatchFromMarc {
     $record = $record->clone();
     # loop through the item tags and start creating items
     my @bad_item_fields = ();
-    my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
+    my ($itemtag, $itemsubfield) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",'');
+
     my $item_sequence_num = 0;
     ITEMFIELD: foreach my $item_field ($record->field($itemtag)) {
         $item_sequence_num++;
@@ -512,8 +516,8 @@ sub ModItemFromMarc {
     my $itemnumber = shift;
 
     my $dbh           = C4::Context->dbh;
-    my $frameworkcode = GetFrameworkCode($biblionumber);
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
@@ -565,7 +569,8 @@ sub ModItem {
     }
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
+    my $frameworkcode = @_ ? shift : C4::Biblio::GetFrameworkCode( $biblionumber );
+
     
     my $unlinked_item_subfields;  
     if (@_) {
@@ -688,7 +693,7 @@ sub DelItem {
     my $deleted = _koha_delete_item( $itemnumber );
 
     # get the MARC record
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = C4::Biblio::GetMarcBiblio($biblionumber);
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
     #search item field code
@@ -1645,7 +1650,8 @@ references on array of itemnumbers.
 
 sub get_hostitemnumbers_of {
 	my ($biblionumber) = @_;
-	my $marcrecord = GetMarcBiblio($biblionumber);
+    my $marcrecord = C4::Biblio::GetMarcBiblio($biblionumber);
+
         my (@returnhostitemnumbers,$tag, $biblio_s, $item_s);
 	
 	my $marcflavor = C4::Context->preference('marcflavour');
@@ -1820,8 +1826,9 @@ sub Item2Marc {
             defined($itemrecord->{$_}) && $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  
         } keys %{ $itemrecord } 
     };
-    my $itemmarc = TransformKohaToMarc($mungeditem);
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",GetFrameworkCode($biblionumber)||'');
+
+    my $itemmarc = C4::Biblio::TransformKohaToMarc($mungeditem);
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",C4::Biblio::GetFrameworkCode($biblionumber)||'');
 
     my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($mungeditem->{'items.more_subfields_xml'});
     if (defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1) {
@@ -2413,7 +2420,7 @@ sub _marc_from_item_hash {
 
     my $item_marc = MARC::Record->new();
     foreach my $item_field ( keys %{$mungeditem} ) {
-        my ( $tag, $subfield ) = GetMarcFromKohaField( $item_field, $frameworkcode );
+        my ( $tag, $subfield ) = C4::Biblio::GetMarcFromKohaField( $item_field, $frameworkcode );
         next unless defined $tag and defined $subfield;    # skip if not mapped to MARC field
         my @values = split(/\s?\|\s?/, $mungeditem->{$item_field}, -1);
         foreach my $value (@values){
@@ -2648,7 +2655,8 @@ sub _SearchItems_build_where_fragment {
                     # items.more_subfields_xml, depending on the MARC field.
                     my $xpath;
                     my $sqlfield;
-                    my ($itemfield) = GetMarcFromKohaField('items.itemnumber');
+                    my ($itemfield) = C4::Biblio::GetMarcFromKohaField('items.itemnumber');
+
                     if ($marcfield eq $itemfield) {
                         $sqlfield = 'more_subfields_xml';
                         $xpath = '//record/datafield/subfield[@code="' . $marcsubfield . '"]';
@@ -2850,8 +2858,8 @@ sub PrepareItemrecordDisplay {
     my ( $bibnum, $itemnum, $defaultvalues, $frameworkcode ) = @_;
 
     my $dbh = C4::Context->dbh;
-    $frameworkcode = &GetFrameworkCode($bibnum) if $bibnum;
-    my ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    $frameworkcode = C4::Biblio::GetFrameworkCode($bibnum) if $bibnum;
+    my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
 
     # return nothing if we don't have found an existing framework.
