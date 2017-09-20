@@ -179,4 +179,47 @@ sub getAuthorityAuthorizedHeading {
     return;
 }
 
+=head2 set_marc_field
+
+    set_marc_field($record, $marcField, $value);
+
+Set the value of $marcField to $value in $record. If the field exists, it will
+be updated. If not, it will be created.
+
+=head3 Parameters
+
+=over 4
+
+=item C<$record>
+
+MARC::Record object
+
+=item C<$marcField>
+
+the MARC field to modify, a string in the form of 'XXX$y'
+
+=item C<$value>
+
+the value
+
+=back
+
+=cut
+
+sub set_marc_field {
+    my ($record, $marcField, $value) = @_;
+
+    if ($marcField) {
+        my ($fieldTag, $subfieldCode) = split /\$/, $marcField;
+        my $field = $record->field($fieldTag);
+        if ($field) {
+            $field->update($subfieldCode => $value);
+        } else {
+            $field = MARC::Field->new($fieldTag, ' ', ' ',
+                $subfieldCode => $value);
+            $record->append_fields($field);
+        }
+    }
+}
+
 1;

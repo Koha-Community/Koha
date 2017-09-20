@@ -107,6 +107,7 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::Libraries;
+use Koha::Util::MARC;
 
 use vars qw($debug $cgi_debug);
 
@@ -3324,15 +3325,26 @@ sub ModBiblioMarc {
     };
     $record->as_usmarc; # Bug 20126/10455 This triggers field length calculation
 
-    # FIXME To replace with ->find_or_create?
-    if ( my $m_rs = Koha::Biblio::Metadatas->find($metadata) ) {
-        $m_rs->metadata( $record->as_xml_record($encoding) );
-        $m_rs->store;
-    } else {
-        my $m_rs = Koha::Biblio::Metadata->new($metadata);
-        $m_rs->metadata( $record->as_xml_record($encoding) );
-        $m_rs->store;
+    my $m_rs = Koha::Biblio::Metadatas->find($metadata);
+    unless ($m_rs) {
+        $m_rs = Koha::Biblio::Metadata->new($metadata);
     }
+
+    my $userenv = C4::Context->userenv;
+    if ($userenv) {
+        my $borrowernumber = $userenv->{number};
+        my $borrowername = join ' ', @$userenv{qw(firstname surname)};
+        unless ($m_rs->in_storage) {
+            Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForCreatorId'), $borrowernumber);
+            Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForCreatorName'), $borrowername);
+        }
+        Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForModifierId'), $borrowernumber);
+        Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForModifierName'), $borrowername);
+    }
+
+    $m_rs->metadata( $record->as_xml_record($encoding) );
+    $m_rs->store;
+
     ModZebra( $biblionumber, "specialUpdate", "biblioserver", $record );
     return $biblionumber;
 }

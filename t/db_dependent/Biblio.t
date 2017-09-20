@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::MockModule;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
@@ -464,6 +464,35 @@ subtest 'DelBiblio' => sub {
 
     $deleted = C4::Biblio::DelBiblio( $biblionumber );
     is( $deleted, undef, 'DelBiblo should return undef is the record did not exist');
+};
+
+subtest 'MarcFieldForCreatorAndModifier' => sub {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference('MarcFieldForCreatorId', '998$a');
+    t::lib::Mocks::mock_preference('MarcFieldForCreatorName', '998$b');
+    t::lib::Mocks::mock_preference('MarcFieldForModifierId', '998$c');
+    t::lib::Mocks::mock_preference('MarcFieldForModifierName', '998$d');
+    my $c4_context = Test::MockModule->new('C4::Context');
+    $c4_context->mock('userenv', sub { return { number => 123, firstname => 'John', surname => 'Doe'}; });
+
+    my $record = MARC::Record->new();
+    my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
+
+    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    is($record->subfield('998', 'a'), 123, '998$a = 123');
+    is($record->subfield('998', 'b'), 'John Doe', '998$b = John Doe');
+    is($record->subfield('998', 'c'), 123, '998$c = 123');
+    is($record->subfield('998', 'd'), 'John Doe', '998$d = John Doe');
+
+    $c4_context->mock('userenv', sub { return { number => 321, firstname => 'Jane', surname => 'Doe'}; });
+    C4::Biblio::ModBiblio($record, $biblionumber, '');
+
+    $record = GetMarcBiblio({biblionumber => $biblionumber});
+    is($record->subfield('998', 'a'), 123, '998$a = 123');
+    is($record->subfield('998', 'b'), 'John Doe', '998$b = John Doe');
+    is($record->subfield('998', 'c'), 321, '998$c = 321');
+    is($record->subfield('998', 'd'), 'Jane Doe', '998$d = Jane Doe');
 };
 
 # Cleanup
