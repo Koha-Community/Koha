@@ -218,7 +218,7 @@ $(document).ready(function() {
             <tbody>
               [% FOR biblio IN records %]
                 <tr>
-                  <td><input type="checkbox" name="record_id" value="[% biblio.biblionumber %]" data-items="[% biblio.itemnumbers.size %]" data-issues="[% biblio.issues_count %]" data-reserves="[% biblio.reserves.size %]" /></td>
+                  <td><input type="checkbox" name="record_id" value="[% biblio.biblionumber %]" /></td>
                   <td>[% biblio.biblionumber %]</td>
                   <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></td>
                   <td class="actions">
