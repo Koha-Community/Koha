@@ -1636,7 +1636,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'Set waiting flag' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     my $library_1 = $builder->build( { source => 'Branch' } );
     my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode} } } );
@@ -1674,12 +1674,17 @@ subtest 'Set waiting flag' => sub {
     my $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, 'T', 'Hold is in transit' );
 
+    my ( $status ) = CheckReserves($item->{itemnumber});
+    is( $status, 'Reserved', 'Hold is not waiting yet');
+
     set_userenv( $library_2 );
     $do_transfer = 0;
     AddReturn( $item->{barcode}, $library_2->{branchcode} );
     ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
     $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, 'W', 'Hold is waiting' );
+    ( $status ) = CheckReserves($item->{itemnumber});
+    is( $status, 'Waiting', 'Now the hold is waiting');
 };
 
 sub set_userenv {
