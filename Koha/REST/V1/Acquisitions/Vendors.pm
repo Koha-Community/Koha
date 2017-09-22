@@ -23,6 +23,20 @@ use Koha::Acquisition::Booksellers;
 
 use Try::Tiny;
 
+=head1 NAME
+
+Koha::REST::V1::Acquisitions::Vendors
+
+=head1 API
+
+=head2 Methods
+
+=head3 list_vendors
+
+Controller function that handles listing Koha::Acquisition::Bookseller objects
+
+=cut
+
 sub list_vendors {
     my $c = shift->openapi->valid_input or return;
 
@@ -54,6 +68,12 @@ sub list_vendors {
     };
 }
 
+=head3 get_vendor
+
+Controller function that handles retrieving a single Koha::Acquisition::Bookseller
+
+=cut
+
 sub get_vendor {
     my $c = shift->openapi->valid_input or return;
 
@@ -66,6 +86,12 @@ sub get_vendor {
     return $c->render( status  => 200,
                        openapi => _to_api($vendor->TO_JSON) );
 }
+
+=head3 add_vendor
+
+Controller function that handles adding a new Koha::Acquisition::Bookseller object
+
+=cut
 
 sub add_vendor {
     my $c = shift->openapi->valid_input or return;
@@ -88,6 +114,12 @@ sub add_vendor {
         }
     };
 }
+
+=head3 update_vendor
+
+Controller function that handles updating a Koha::Acquisition::Bookseller object
+
+=cut
 
 sub update_vendor {
     my $c = shift->openapi->valid_input or return;
@@ -118,6 +150,12 @@ sub update_vendor {
 
 }
 
+=head3 delete_vendor
+
+Controller function that handles deleting a Koha::Acquisition::Bookseller object
+
+=cut
+
 sub delete_vendor {
     my $c = shift->openapi->valid_input or return;
 
@@ -146,6 +184,13 @@ sub delete_vendor {
 
 }
 
+=head3 _to_api
+
+Helper function that maps a Koha::Acquisition::Bookseller object into
+the attribute names the exposed REST api spec.
+
+=cut
+
 sub _to_api {
 
     my $vendor = shift;
@@ -173,6 +218,13 @@ sub _to_api {
 
     return $vendor;
 }
+
+=head3 _to_model
+
+Helper function that maps REST api objects into Koha::Acquisition::Bookseller
+attribute names.
+
+=cut
 
 sub _to_model {
     my $vendor_param = shift;
