@@ -52,6 +52,8 @@ Adds a Link header to the response message $c carries, following RFC5988, includ
 the following relation types: 'prev', 'next', 'first' and 'last'.
 It also adds X-Total-Count, containing the total results count.
 
+If page size is omitted, it defaults to the value of the RESTdefaultPageSize syspref.
+
 =cut
 
     $app->helper(
