@@ -42,8 +42,8 @@ sub register {
     $c->add_pagination_headers({
         total  => $patrons->count,
         params => {
-            page     => ...
-            per_page => ...
+            _page     => ...
+            _per_page => ...
             ...
         }
     });
@@ -59,8 +59,8 @@ It also adds X-Total-Count, containing the total results count.
             my ( $c, $args ) = @_;
 
             my $total    = $args->{total};
-            my $req_page = $args->{params}->{page};
-            my $per_page = $args->{params}->{per_page};
+            my $req_page = $args->{params}->{_page};
+            my $per_page = $args->{params}->{_per_page};
 
             my $pages = int $total / $per_page;
             $pages++
@@ -124,8 +124,8 @@ sub _build_link {
 
     my $params = $args->{params};
 
-    $params->{page}     = $args->{page};
-    $params->{per_page} = $args->{per_page};
+    $params->{_page}     = $args->{page};
+    $params->{_per_page} = $args->{per_page};
 
     my $link = '<'
         . $c->req->url->clone->query(

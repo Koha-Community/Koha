@@ -32,19 +32,19 @@ get '/empty' => sub {
 
 get '/pagination_headers' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { page => 2, per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, params => { _page => 2, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
 get '/pagination_headers_first_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { page => 1, per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, params => { _page => 1, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
 get '/pagination_headers_last_page' => sub {
     my $c = shift;
-    $c->add_pagination_headers({ total => 10, params => { page => 4, per_page => 3, firstname => 'Jonathan' } });
+    $c->add_pagination_headers({ total => 10, params => { _page => 4, _per_page => 3, firstname => 'Jonathan' } });
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
@@ -67,44 +67,44 @@ subtest 'add_pagination_headers() tests' => sub {
     $t->get_ok('/pagination_headers')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="prev",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="prev",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_page=1.*>; rel="prev",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="next",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="next",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_page=3.*>; rel="next",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="next",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="first",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="first",/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_page=1.*>; rel="first",/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
-      ->header_like( 'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="last"/ )
+      ->header_like( 'Link' => qr/<http:\/\/.*\?.*_page=4.*>; rel="last"/ )
       ->header_like( 'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
 
     $t->get_ok('/pagination_headers_first_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*>; rel="prev",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="next",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=2.*>; rel="next",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="next",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=2.*>; rel="next",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="next",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="first",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="first",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=1.*>; rel="first",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="last"/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=4.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
 
     $t->get_ok('/pagination_headers_last_page')
       ->status_is( 200 )
       ->header_is( 'X-Total-Count' => 10, 'X-Total-Count contains the passed value' )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="prev",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=3.*>; rel="prev",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="prev",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=3.*>; rel="prev",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="prev",/ )
       ->header_unlike( 'Link' => qr/<http:\/\/.*\?.*>; rel="next",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="first",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=1.*>; rel="first",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="first",/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=1.*>; rel="first",/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="first",/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*per_page=3.*>; rel="last"/ )
-      ->header_like(   'Link' => qr/<http:\/\/.*\?.*page=4.*>; rel="last"/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="last"/ )
+      ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=4.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
 };
