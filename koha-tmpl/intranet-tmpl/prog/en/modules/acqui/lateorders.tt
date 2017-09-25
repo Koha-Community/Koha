@@ -56,6 +56,7 @@
             [% ELSE %]
                 <th></th>
             [% END %]
+            <th>Order line</th>
             <th class="title-string">Order date</th>
             <th class="title-string">Estimated delivery date</th>
             <th>Vendor</th>
@@ -67,6 +68,9 @@
             <th>Fund</th>
             <th>Claims count</th>
             <th class="title-string">Claimed date</th>
+            <th>Internal note</th>
+            <th>Vendor note</th>
+            <th>ISBN</th>
         </tr>
       </thead>
       <tbody>
@@ -74,6 +78,9 @@
         <tr>
             <td>
                 <input type="checkbox" value="[% lateorder.ordernumber | html %]" data-booksellerid="[% lateorder.supplierid | html %]" name="ordernumber">
+            </td>
+            <td>
+                [% lateorder.ordernumber | $raw %]
             </td>
             <td>
                 <span title="[% lateorder.orderdate | html %]">[% lateorder.orderdate | $KohaDates %] ([% lateorder.latesince | html %] days)</span>
@@ -131,14 +138,17 @@
                     <span title="0000-00-00"></span>
                 [% END %]
             </td>
+            <td><input name="internalnote" id="internalnote" type="text" value="[% lateorder.internalnote | html %]"></td>
+            <td><input name="vendornote" id="vendornote" type="text" value="[% lateorder.vendornote | html %]"></td>
+            <td>[% lateorder.isbn | $raw %]</td>
         </tr>
       [% END %]
       </tbody>
       <tfoot>
         <tr>
-            <th colspan="5">Total</th>
+            <th colspan="6">Total</th>
             <th>[% total | html %]</th>
-            <th colspan="6">&nbsp;</th>
+            <th colspan="9">&nbsp;</th>
         </tr>
       </tfoot>
     </table>
@@ -149,6 +159,7 @@
         [% UNLESS lateorder.budget_lock %]
             <input type="submit"  value="Claim order" />
         [% END %]
+        <input type="button" value="Save notes" id="savenotes"/>
     </p>
 </form>
 [% ELSE %]<p>There are no late orders.</p>
@@ -251,6 +262,38 @@
                 // And redirecting to the CSV page
                 location.href = url;
                 return false;
+            });
+            // Update all notes
+            $("#savenotes").click(function(){
+                $("#savenotes").after("<span id=\"loading\" style=\"margin:4px;\"><img src=\"[% interface | html %]/[% theme | html %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</span>");
+                var all_nodes = $(late_orderst.fnGetNodes());
+                var req = new XMLHttpRequest();
+                var url = '/cgi-bin/koha/acqui/lateorders.pl';
+                var data = new FormData();
+                data.append("op","save");
+                for (var i = 0; i < all_nodes.length; i++) {
+                    var order = $(all_nodes[i]).find("input[name='ordernumber']");
+                    var internalnote = $(all_nodes[i]).find("input[name='internalnote']")[0].value;
+                    var vendornote = $(all_nodes[i]).find("input[name='vendornote']")[0].value;
+                    var internalnote_key = order[0].value + "_i";
+                    var vendornote_key = order[0].value + "_v";
+                    data.append(internalnote_key, internalnote);
+                    data.append(vendornote_key, vendornote);
+                }
+
+                req.open("POST",url);
+                req.send(data);
+                req.onreadystatechange = function () {
+                    $("#loading").remove();
+                    if (req.readyState == '4' ){
+                        if ( req.status == 200 ){
+                            alert(_("Notes successfully saved"));
+                        }
+                        else {
+                            alert(_("Error while saving the notes. Please try again"));
+                        }
+                    }
+                }
             });
         });
     </script>

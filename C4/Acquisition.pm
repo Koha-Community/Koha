@@ -2165,7 +2165,7 @@ sub GetLateOrders {
     my @query_params = ();
     my $select = "
     SELECT aqbasket.basketno,
-        aqorders.ordernumber,
+        aqorders.ordernumber      AS ordernumber,
         DATE(aqbasket.closedate)  AS orderdate,
         aqbasket.basketname       AS basketname,
         aqbasket.basketgroupid    AS basketgroupid,
@@ -2174,6 +2174,8 @@ sub GetLateOrders {
         aqorders.ecost            AS unitpricelib,
         aqorders.claims_count     AS claims_count,
         aqorders.claimed_date     AS claimed_date,
+        aqorders.order_internalnote AS internalnote,
+        aqorders.order_vendornote   AS vendornote,
         aqbudgets.budget_name     AS budget,
         borrowers.branchcode      AS branch,
         aqbooksellers.name        AS supplier,
@@ -2181,6 +2183,7 @@ sub GetLateOrders {
         biblio.author, biblio.title,
         biblioitems.publishercode AS publisher,
         biblioitems.publicationyear,
+        biblioitems.isbn          AS isbn,
         ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS estimateddeliverydate,
     ";
     my $from = "

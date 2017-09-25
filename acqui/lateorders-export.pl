@@ -53,6 +53,9 @@ for my $ordernumber ( @ordernumbers ) {
             basketno => $order->{basketno},
             claims_count => $order->{claims_count},
             claimed_date => $order->{claimed_date},
+            internalnote => $order->{internalnote},
+            vendornote   => $order->{vendornote},
+            isbn => $order->{isbn},
         }
     ;
 }

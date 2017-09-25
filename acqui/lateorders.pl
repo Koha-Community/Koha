@@ -53,6 +53,7 @@ use C4::Context;
 use C4::Acquisition;
 use C4::Letters;
 use Koha::DateUtils;
+use Koha::Acquisition::Orders;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
@@ -119,6 +120,28 @@ if ($op and $op eq "send_alert"){
         $template->{VARS}->{'error_claim'} = "no_order_selected";
     } else {
         $template->{VARS}->{'info_claim'} = 1;
+    }
+}
+
+if ($op && $op eq "save"){
+    my $listorders;
+    my @orders = $input->param;
+
+    foreach my $order (@orders){
+        if ( $order ne "op"){
+            my @split = split (/_/,$order);
+            $listorders->{$split[0]}->{$split[1]} = $input->param($order);
+        }
+    }
+
+    my $orders_rs = Koha::Acquisition::Orders->search({ ordernumber => [ keys %$listorders ] });
+    while ( my $order = $orders_rs->next ) {
+        my $internalnote = $listorders->{$order->ordernumber}->{i};
+        my $vendornote   = $listorders->{$order->ordernumber}->{v};
+
+        $order->order_internalnote($internalnote) if defined $internalnote;
+        $order->order_vendornote($vendornote)     if defined $vendornote;
+        $order->store;
     }
 }
 
