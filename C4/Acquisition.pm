@@ -2288,6 +2288,22 @@ sub GetHistory {
     my $total_qtyreceived = 0;
     my $total_price       = 0;
 
+    #get variation of isbn
+    my @isbn_params;
+    my @isbns;
+    if ($isbn){
+        if ( C4::Context->preference("SearchWithISBNVariations") ){
+            @isbns = C4::Koha::GetVariationsOfISBN( $isbn );
+            foreach my $isb (@isbns){
+                push @isbn_params, '?';
+            }
+        }
+        unless (@isbns){
+            push @isbns, $isbn;
+            push @isbn_params, '?';
+        }
+    }
+
     my $dbh   = C4::Context->dbh;
     my $query ="
         SELECT
@@ -2355,10 +2371,13 @@ sub GetHistory {
         push @query_params, "%$author%";
     }
 
-    if ( $isbn ) {
-        $query .= " AND biblioitems.isbn LIKE ? ";
-        push @query_params, "%$isbn%";
+    if ( @isbns ) {
+        $query .= " AND ( biblioitems.isbn LIKE " . join (" OR biblioitems.isbn LIKE ", @isbn_params ) . ")";
+        foreach my $isb (@isbns){
+            push @query_params, "%$isb%";
+        }
     }
+
     if ( $ean ) {
         $query .= " AND biblioitems.ean = ? ";
         push @query_params, "$ean";
