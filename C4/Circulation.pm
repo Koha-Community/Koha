@@ -2146,11 +2146,13 @@ sub AddReturn {
 
     my $floatingType = Koha::FloatingMatrix::CheckFloating($item, $branch, $returnbranch);
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
-    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'} && (not($floatingType) || $floatingType eq 'POSSIBLE')){
-        if  ( not($floatingType && $floatingType eq 'POSSIBLE') and
-            (C4::Context->preference("AutomaticItemReturn"    ) or
-            (C4::Context->preference("UseBranchTransferLimits") and
-             ! IsBranchTransferAllowed($branch, $returnbranch, $item->{C4::Context->preference("BranchTransferLimitsType")} )))
+    if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'} and (not $floatingType || $floatingType eq 'POSSIBLE')){
+        if  ( not ($floatingType && $floatingType eq 'POSSIBLE') and
+            (
+                C4::Context->preference("AutomaticItemReturn") or
+                (C4::Context->preference("UseBranchTransferLimits") and
+                 ! IsBranchTransferAllowed($branch, $returnbranch, $item->{C4::Context->preference("BranchTransferLimitsType")} ))
+            )
            )
         {
             $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s)", $item->{'itemnumber'},$branch, $returnbranch;
@@ -2164,7 +2166,7 @@ sub AddReturn {
     #This elsif-clause copypastes the upper if-clause. This is horrible and I cry, but cannot refactor this mess now :( due to Koha upstream master stuff looming.
     elsif (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'})
         and !$resfound and ($branch ne $returnbranch)
-        and not($messages->{'WrongTransfer'})
+        and not $messages->{'WrongTransfer'}
         && $floatingType){ #So if we would otherwise transfer, but we have a floating rule overriding it.
                            #We can infer that the transfer was averted because of a floating rule.
         #Make sure we dont log the same floating denial multiple times
