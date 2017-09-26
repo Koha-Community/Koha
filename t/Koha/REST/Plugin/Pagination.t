@@ -24,6 +24,7 @@ app->log->level('error');
 
 plugin 'Koha::REST::Plugin::Pagination';
 
+# For add_pagination_headers()
 
 get '/empty' => sub {
     my $c = shift;
@@ -48,9 +49,18 @@ get '/pagination_headers_last_page' => sub {
     $c->render( json => { ok => 1 }, status => 200 );
 };
 
+# For dbic_merge_pagination
+
+get '/dbic_merge_pagination' => sub {
+    my $c = shift;
+    my $filter = { firstname => 'Kyle', surname => 'Hall' };
+    $filter = $c->dbic_merge_pagination({ filter => $filter, params => { _page => 1, _per_page => 3 } });
+    $c->render( json => $filter, status => 200 );
+};
+
 # The tests
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 
 subtest 'add_pagination_headers() tests' => sub {
@@ -107,4 +117,15 @@ subtest 'add_pagination_headers() tests' => sub {
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_per_page=3.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*_page=4.*>; rel="last"/ )
       ->header_like(   'Link' => qr/<http:\/\/.*\?.*firstname=Jonathan.*>; rel="last"/ );
+};
+
+subtest 'dbic_merge_pagination() tests' => sub {
+
+    plan tests => 3;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok('/dbic_merge_pagination')
+      ->status_is(200)
+      ->json_is({ firstname => 'Kyle', surname => 'Hall', page => 1, rows => 3 });
 };
