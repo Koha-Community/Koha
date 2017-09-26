@@ -1463,7 +1463,7 @@ sub AddIssue {
                 else {
                     foreach my $key ( keys %$rules ) {
                         if ( $item->{notforloan} eq $key ) {
-                            ModItem( { notforloan => $rules->{$key} }, undef, $item->{'itemnumber'} );
+                            ModItem( { notforloan => $rules->{$key} }, undef, $item->{'itemnumber'} ) if $rules->{$key} ne 'ONLYMESSAGE';
                             last;
                         }
                         if ($item->{sub_location} eq $key) {
@@ -1930,7 +1930,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->{notforloan} eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->{notforloan}, to => $rules->{$key} };
-                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber );
+                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber ) if $rules->{$key} ne 'ONLYMESSAGE';
                     last;
                 }
                 if ($item->{sub_location} eq $key) {

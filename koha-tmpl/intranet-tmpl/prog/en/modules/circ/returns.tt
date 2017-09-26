@@ -588,18 +588,22 @@ $(document).ready(function () {
         [% FOREACH errmsgloo IN errmsgloop %]
             [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
                 <p class="problem">
-                    Not for loan status updated.
-                    <br />Old value:
-                    [% IF errmsgloo.NotForLoanStatusUpdated.from %]
-                        [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %].
+                    [% IF errmsgloo.NotForLoanStatusUpdated.to == 'ONLYMESSAGE' %]
+                        [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %]
                     [% ELSE %]
-                        Available for loan.
-                    [% END %]
-                    <br />New value:
-                    [% IF errmsgloo.NotForLoanStatusUpdated.to %]
-                        [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %].
-                    [% ELSE %]
-                        Available for loan.
+                        Not for loan status updated.
+                        <br />Old value:
+                        [% IF errmsgloo.NotForLoanStatusUpdated.from %]
+                            [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) %].
+                        [% ELSE %]
+                            Available for loan.
+                        [% END %]
+                        <br />New value:
+                        [% IF errmsgloo.NotForLoanStatusUpdated.to %]
+                            [% AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) %].
+                        [% ELSE %]
+                            Available for loan.
+                        [% END %]
                     [% END %]
                 </p>
             [% END %]

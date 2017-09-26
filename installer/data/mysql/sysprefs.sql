@@ -555,7 +555,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UNIMARCAuthorsFacetsSeparator',', ',NULL,'UNIMARC authors facets separator','short'),
 ('UNIMARCField100Language','fre',NULL,'UNIMARC field 100 default language','short'),
 ('UniqueItemFields','barcode','','Space-separated list of fields that should be unique (used in acquisition module for item creation). Fields must be valid SQL column names of items table','Free'),
-('UpdateNotForLoanStatusOnCheckin', '', 'NULL', 'This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value. E.g. ''-1: 0'' will cause an item that was set to ''Ordered'' to now be available for loan. Each pair of values should be on a separate line.', 'Free'),
+('UpdateNotForLoanStatusOnCheckin', '', 'NULL', 'This is a list of value pairs. When an item is checked in, if the not for loan value on the left matches the items not for loan value it will be updated to the right-hand value. E.g. ''-1: 0'' will cause an item that was set to ''Ordered'' to now be available for loan. Can be used for showing only the not for loan message E.g. ''-1: ONLYMESSAGE''. Each pair of values should be on a separate line.', 'Free'),
 ('UpdateTotalIssuesOnCirc','0',NULL,'Whether to update the totalissues field in the biblio on each circ.','YesNo'),
 ('UploadPurgeTemporaryFilesDays','',NULL,'If not empty, number of days used when automatically deleting temporary uploads','integer'),
 ('uppercasesurnames','0',NULL,'If ON, surnames are converted to upper case in patron entry form','YesNo'),
