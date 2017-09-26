@@ -65,6 +65,28 @@ Generates the DBIC query from the query parameters.
             return ( $filtered_params, $reserved_params );
         }
     );
+
+=head3 dbic_merge_sorting
+
+    $attributes = $c->dbic_merge_sorting({ attributes => $attributes, params => $params });
+
+Generates the DBIC order_by attributes based on I<$params>, and merges into I<$attributes>.
+
+=cut
+
+    $app->helper(
+        'dbic_merge_sorting' => sub {
+            my ( $c, $args ) = @_;
+            my $attributes = $args->{attributes};
+
+            my @order_by =
+              map { _build_order_atom($_) }
+              split( /\|/, $args->{params}->{_order_by} );
+
+            $attributes->{order_by} = \@order_by;
+            return $attributes;
+        }
+    );
 }
 
 =head2 Internal methods
@@ -79,6 +101,38 @@ sub _reserved_words {
 
     my @reserved_words = qw( _match _order_by _page _per_page );
     return \@reserved_words;
+}
+
+=head3 _build_order_atom
+
+    my $order_atom = _build_order_atom( $string );
+
+Parses I<$string> and outputs data valid for using in SQL::Abstract order_by attribute
+according to the following rules:
+
+     string -> I<string>
+    +string -> I<{ -asc => string }>
+    -string -> I<{ -desc => string }>
+
+=cut
+
+sub _build_order_atom {
+    my $string = shift;
+
+    if ( $string =~ m/^\+/ ) {
+        # asc order operator present
+        $string =~ s/^\+//;
+        return { -asc => $string };
+    }
+    elsif ( $string =~ m/^\-/ ) {
+        # desc order operator present
+        $string =~ s/^\-//;
+        return { -desc => $string };
+    }
+    else {
+        # no order operator present
+        return $string;
+    }
 }
 
 1;
