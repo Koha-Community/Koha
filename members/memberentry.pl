@@ -370,7 +370,7 @@ if ($op eq 'save' || $op eq 'insert'){
   #push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
   #push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
 
-  if (defined $password && $password ne '****') {
+  if (defined $password && $password ne '****' && $password ne '') {
     my ($success, $errorcode, $errormessage) = ValidateMemberPassword($categorycode, $password, $password2);
     if ($errorcode) {
         push (@errors, $errorcode);
