@@ -281,61 +281,58 @@ elsif ( $op eq 'add_validate' ) {
         my $maxlength = $maxlength[$i] ? $maxlength[$i] : 9999;
         
         if (defined($liblibrarian) && $liblibrarian ne "") {
-            my $is_demo = C4::Context->config('demo') || '';
-            if ( $is_demo ne '1' ) {
-                if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
-                    $sth_update->execute(
+            if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
+                $sth_update->execute(
+                    $tagfield,
+                    $tagsubfield,
+                    $liblibrarian,
+                    $libopac,
+                    $repeatable,
+                    $mandatory,
+                    $kohafield,
+                    $tab,
+                    $seealso,
+                    $authorised_value,
+                    $authtypecode,
+                    $value_builder,
+                    $hidden,
+                    $isurl,
+                    $frameworkcode,
+                    $link,
+                    $defaultvalue,
+                    $maxlength,
+                    (
                         $tagfield,
                         $tagsubfield,
-                        $liblibrarian,
-                        $libopac,
-                        $repeatable,
-                        $mandatory,
-                        $kohafield,
-                        $tab,
-                        $seealso,
-                        $authorised_value,
-                        $authtypecode,
-                        $value_builder,
-                        $hidden,
-                        $isurl,
                         $frameworkcode,
-                        $link,
-                        $defaultvalue,
-                        $maxlength,
-                        (
-                            $tagfield,
-                            $tagsubfield,
-                            $frameworkcode,
-                        ),
-                    );
-                } else {
-                    if( $frameworkcode ne q{} ) {
-                        # BZ 19096: Overwrite kohafield from Default when adding a new record
-                         my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
-                        $kohafield = $rec->kohafield if $rec;
-                    }
-                    $sth_insert->execute(
-                        $tagfield,
-                        $tagsubfield,
-                        $liblibrarian,
-                        $libopac,
-                        $repeatable,
-                        $mandatory,
-                        $kohafield,
-                        $tab,
-                        $seealso,
-                        $authorised_value,
-                        $authtypecode,
-                        $value_builder,
-                        $hidden,
-                        $isurl,
-                        $frameworkcode,
-                        $link,
-                        $defaultvalue,
-                        $maxlength,
-                    );
+                    )
+                );
+            } else {
+                if( $frameworkcode ne q{} ) {
+                    # BZ 19096: Overwrite kohafield from Default when adding a new record
+                     my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
+                    $kohafield = $rec->kohafield if $rec;
                 }
+                $sth_insert->execute(
+                    $tagfield,
+                    $tagsubfield,
+                    $liblibrarian,
+                    $libopac,
+                    $repeatable,
+                    $mandatory,
+                    $kohafield,
+                    $tab,
+                    $seealso,
+                    $authorised_value,
+                    $authtypecode,
+                    $value_builder,
+                    $hidden,
+                    $isurl,
+                    $frameworkcode,
+                    $link,
+                    $defaultvalue,
+                    $maxlength,
+                );
             }
         }
     }
@@ -378,15 +375,12 @@ elsif ( $op eq 'delete_confirm' ) {
 }
 elsif ( $op eq 'delete_confirmed' ) {
     my $dbh = C4::Context->dbh;
-    my $is_demo = C4::Context->config('demo') || '';
-    if ( $is_demo ne '1' ) {
-        my $sth =
-          $dbh->prepare(
+    my $sth =
+      $dbh->prepare(
 "delete from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?"
-          );
-        $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
-        $sth->finish;
-    }
+      );
+    $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
+    $sth->finish;
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");

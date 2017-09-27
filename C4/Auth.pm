@@ -1887,15 +1887,6 @@ sub checkpw_internal {
             return 1, $cardnumber, $userid;
         }
     }
-    if ( $userid && $userid eq 'demo'
-        && "$password" eq 'demo'
-        && C4::Context->config('demo') )
-    {
-
-        # DEMO => the demo user is allowed to do everything (if demo set to 1 in koha.conf
-        # some features won't be effective : modify systempref, modify MARC structure,
-        return 2;
-    }
     return 0;
 }
 
@@ -2050,11 +2041,6 @@ sub haspermission {
     if ( $userid eq C4::Context->config('user') ) {
 
         # Super User Account from /etc/koha.conf
-        $flags->{'superlibrarian'} = 1;
-    }
-    elsif ( $userid eq 'demo' && C4::Context->config('demo') ) {
-
-        # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }
 

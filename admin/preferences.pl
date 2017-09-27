@@ -314,16 +314,14 @@ $tab ||= 'acquisitions'; # Ideally this should be "local-use" but preferences.pl
 my $highlighted;
 
 if ( $op eq 'save' ) {
-    unless ( C4::Context->config( 'demo' ) ) {
-        foreach my $param ( $input->param() ) {
-            my ( $pref ) = ( $param =~ /pref_(.*)/ );
+    foreach my $param ( $input->param() ) {
+        my ( $pref ) = ( $param =~ /pref_(.*)/ );
 
-            next if ( !defined( $pref ) );
+        next if ( !defined( $pref ) );
 
-            my $value = join( ',', $input->param( $param ) );
+        my $value = join( ',', $input->param( $param ) );
 
-            C4::Context->set_preference( $pref, $value );
-        }
+        C4::Context->set_preference( $pref, $value );
     }
 
     print $input->redirect( '/cgi-bin/koha/admin/preferences.pl?tab=' . $tab );

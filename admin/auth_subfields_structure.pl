@@ -224,7 +224,6 @@ if ($op eq 'add_form') {
 		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
 		if ($liblibrarian) {
-			unless (C4::Context->config('demo') or C4::Context->config('demo') eq 1) {
 				if (auth_subfield_structure_exists($authtypecode, $tagfield, $tagsubfield)) {
 					$sth_update->execute(
 						$authtypecode,
@@ -269,7 +268,6 @@ if ($op eq 'add_form') {
                         $defaultvalue,
 					);
 				}
-			}
 		}
 	}
     print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
@@ -293,10 +291,8 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	unless (C4::Context->config('demo') or C4::Context->config('demo') eq 1) {
-		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
-		$sth->execute($tagfield,$tagsubfield,$authtypecode);
-	}
+    my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
+    $sth->execute($tagfield,$tagsubfield,$authtypecode);
     print $input->redirect("/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=$tagfield&amp;authtypecode=$authtypecode");
     exit;
 													# END $OP eq DELETE_CONFIRMED
