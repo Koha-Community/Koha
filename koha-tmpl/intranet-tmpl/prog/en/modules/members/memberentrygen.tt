@@ -47,9 +47,11 @@ $(document).ready(function() {
         if( $("#entryform:visible").length ) {
             toggle_to = "#quick_add_form label";
             toggle_from = "#entryform label";
+            reset_autofill_for_quick_form('add');
         } else {
             toggle_to="#entryform label";
             toggle_from = "#quick_add_form label";
+            reset_autofill_for_quick_form('remove');
         }
         $(toggle_from).each(function() {
             var input_label = $(this).attr('for');
@@ -59,7 +61,7 @@ $(document).ready(function() {
             }
             $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
         });
-
+        
         $(".toggler").toggle();
     });
 
@@ -1275,6 +1277,10 @@ $(document).ready(function() {
     <script>
         $(document).ready(function () {
 
+            var dates = ["dateofbirth", "to", "from"];
+            $.each(dates, function( index, value ) {
+              $("input#"+value).datepicker("destroy");
+            });
             $("#entryform,#saverecord").hide();
             [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
             var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
@@ -1290,6 +1296,7 @@ $(document).ready(function() {
                 if ( skipped_fields.indexOf( input_label ) != -1 ) { input_label=""; }
                 if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
                    $(this).parent().clone().appendTo("#quick_add_list");
+                   
                    [% UNLESS mandatorypassword %]
                          if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
                    [% END %]
@@ -1301,6 +1308,7 @@ $(document).ready(function() {
                     $("#quick_add_list #guarantordelete").prop('id','qagd');
                 }
             $("#qagd").click(function() { $("#guarantordelete").click(); });
+            reset_autofill_for_quick_form('add'); /*Disabling inputs on entryform*/
             $("#quick_add_form").show();
         });
     </script>

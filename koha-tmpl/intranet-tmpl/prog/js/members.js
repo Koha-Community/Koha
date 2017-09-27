@@ -278,6 +278,50 @@ function write_age() {
     hint.html(age_string);
 }
 
+function quick_form_date_reset(id) {
+    $("input#"+id).attr('id', id).datepicker({
+       onSelect: function () {
+           $('#'+id).val(this.value);
+       }
+    });
+}
+
+function reset_autofill_for_quick_form(disable) {
+    var formname = 'entryform';
+    var idvalue;
+    var othernames = ["othernames", "anonothernames"];
+    var dates = ["dateofbirth", "to", "from"];
+    if ( disable == 'add') {
+        $('#'+formname+' :input').each(function(index){
+           idvalue = $(this).attr('id');
+           if(idvalue) {
+                $("#"+formname).find("#"+idvalue).attr("id", idvalue+"disabled");
+                if(jQuery.inArray( idvalue, othernames ) > -1) {
+                    (idvalue == 'anonothernames') ? $("#"+idvalue).focus(updateAnonOthername) : $("#"+idvalue).focus(updateOthername);
+                    $("#"+idvalue).on('change', function() {
+                        checkUniqueOthernames(null, '#'+idvalue);
+                    });
+                }
+                if(jQuery.inArray( idvalue, dates ) > -1) {
+                    quick_form_date_reset(idvalue);
+                } 
+           }
+           
+        });
+    } else {
+        $('#'+formname+' :input').each(function(index){
+           idvalue = $(this).attr('id');
+           if(idvalue) {
+            idvalue = idvalue.replace("disabled", "");
+            $("#"+formname).find("#"+idvalue+"disabled").attr("id", idvalue);
+            if(jQuery.inArray( idvalue, dates ) > -1) {
+                quick_form_date_reset(idvalue);
+            }
+           }
+        });
+    }
+}
+
 function updateOthername() {
     var othernames = $("#othernames");
     var firstname = $("#firstname");
