@@ -202,9 +202,11 @@ sub _url_with_get_params {
     my $query = shift;
     my $type = shift;
 
-    my $uri_base_part = ($type eq 'opac') ?
-                        C4::Context->preference('OPACBaseURL') . get_script_name() :
-                        C4::Context->preference('staffClientBaseURL');
+    my $uri_base_part =
+      ( $type eq 'opac' )
+      ? C4::Context->preference('OPACBaseURL')
+      : C4::Context->preference('staffClientBaseURL');
+    $uri_base_part .= get_script_name();
 
     my $uri_params_part = '';
     foreach my $param ( $query->url_param() ) {
