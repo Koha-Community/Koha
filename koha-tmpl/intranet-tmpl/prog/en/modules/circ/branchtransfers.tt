@@ -162,7 +162,7 @@
             <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
             <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
         [% END %]
-    </form></div>
+    </form>
 </div>
 
     [% IF ( trsfitemloop ) %]
@@ -199,10 +199,10 @@
 [% END %]
 </div>
 [% IF Koha.Preference('CircSidebar') %]
+</div>
 <div class="yui-b noprint">
 [% INCLUDE 'circ-nav.inc' %]
 </div>
 [% END %]
-</div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
