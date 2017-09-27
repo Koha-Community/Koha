@@ -57,7 +57,6 @@ Options:
                             values are dom (default) and grs1.
   --biblio-idx idx_mode     Set the indexing mode for bibliographic records.
                             Valid values are dom (default) and grs1.
-  --use-memcached           Set the instance to make use of memcache.
   --memcached-servers str   Set a comma-separated list of host:port memcached servers.
   --memcached-prefix str    Set the desired prefix for the instance memcached namespace.
   --enable-sru              Enable the Z39.50/SRU server (default: disabled).
@@ -404,7 +403,7 @@ ADMINUSER="1"
 PASSWDFILE="/etc/koha/passwd"
 
 # memcached variables
-USE_MEMCACHED="no"
+USE_MEMCACHED="yes"
 MEMCACHED_SERVERS=""
 MEMCACHED_PREFIX=""
 # hardcoded memcached defaults
@@ -444,7 +443,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,use-memcached,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,upload-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,upload-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -473,8 +472,6 @@ while true ; do
             op=populate ; shift ;;
         -u|--use-db)
             op=use ; shift ;;
-        --use-memcached)
-            USE_MEMCACHED="yes" ; shift ;;
         --memcached-servers)
             CLO_MEMCACHED_SERVERS="$2" ; shift 2 ;;
         --memcached-prefix)
@@ -586,25 +583,7 @@ NO_DB
     die;
 fi
 
-if [ "$USE_MEMCACHED" = "yes" ]; then
-    set_memcached $name
-elif [ "$CLO_MEMCACHED_SERVERS" != "" ] || \
-     [ "$CLO_MEMCACHED_PREFIX" != "" ]; then
-
-    MSG=`cat <<EOF
-
-Error: you provided memcached configuration switches but memcached is not enabled.
-Please set USE_MEMCACHED="yes" on /etc/koha/koha-sites.conf or use the
---use-memcached option switch to enable it.
-
-EOF`
-
-    usage ; die $MSG
-else
-    # Unset memcached-related variables
-    MEMCACHED_SERVERS=""
-    MEMCACHED_PREFIX=""
-fi
+set_memcached $name
 
 # Set template cache dir
 if [ "$CLO_TEMPLATE_CACHE_DIR" != "" ]; then

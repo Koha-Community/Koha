@@ -29,7 +29,6 @@
       <arg><option>--zebralang</option> en|es|fr|gr|nb|ru|uk</arg>
       <arg><option>--auth-idx</option> dom|grs1</arg>
       <arg><option>--biblio-idx</option> dom|grs1</arg>
-      <arg><option>--use-memcached</option></arg>
       <arg><option>--memcached-servers</option> server:port</arg>
       <arg><option>--memcached-prefix</option> namespace_prefix</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
@@ -147,13 +146,6 @@
       <term><option>--biblio-idx</option></term>
       <listitem>
         <para>Specified the desired indexing mode for bibliographic records. Valid options are <option>dom</option> (default) and <option>grs1</option>.</para>
-      </listitem>
-    </varlistentry>
-
-    <varlistentry>
-      <term><option>--use-memcached</option></term>
-      <listitem>
-        <para>Make the Koha instance use memcached. <option>Disabled by default</option>.</para>
       </listitem>
     </varlistentry>
 
@@ -283,13 +275,6 @@
         <listitem>
           <para>An SQL file (compressed with gzip) that can be fed  to  mysql(1) to  initialize the database after it has been created.  Might be created using koha-dump-defaults(8).</para>
           <para>If the SQL file contains users, the user with borrowernumber = 1 will have a new, random password set. This password will be reported in the output of the script. If another user than borrowernumber 1 should have its password set, the borrowernumber of this user can be set with the --adminuser command line option.</para>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term><option>USE_MEMCACHED</option></term>
-        <listitem>
-          <para>Valid values are <option>yes</option> and <option>no</option>. If not present koha-create will default to <option>no</option>. Also, this will be overriden by the <option>--use-memcached</option> switch.</para>
         </listitem>
       </varlistentry>
 
