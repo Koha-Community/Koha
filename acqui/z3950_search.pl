@@ -34,6 +34,7 @@ use Koha::BiblioFrameworks;
 
 my $input           = new CGI;
 my $biblionumber    = $input->param('biblionumber')||0;
+my $frameworkcode   = $input->param('frameworkcode') || q{};
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $isbn            = $input->param('isbn');
@@ -63,6 +64,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 $template->param(
+        frameworkcode => $frameworkcode,
         frameworks   => $frameworks,
         booksellerid => $booksellerid,
         basketno     => $basketno,
