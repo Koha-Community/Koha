@@ -206,6 +206,7 @@ elsif ( $action eq 'update' ) {
         });
 
     my %borrower = ParseCgiForBorrower($cgi);
+    $borrower{borrowernumber} = $borrowernumber;
 
     my %borrower_changes = DelEmptyFields(%borrower);
     my @empty_mandatory_fields =
@@ -369,7 +370,17 @@ sub CheckForInvalidFields {
         unless ( Email::Valid->address($borrower->{'email'}) ) {
             push(@invalidFields, "email");
         } elsif ( C4::Context->preference("PatronSelfRegistrationEmailMustBeUnique") ) {
-            my $patrons_with_same_email = Koha::Patrons->search( { email => $borrower->{email} })->count;
+            my $patrons_with_same_email = Koha::Patrons->search(
+                {
+                    email => $borrower->{email},
+                    (
+                        exists $borrower->{borrowernumber}
+                        ? ( borrowernumber =>
+                              { '!=' => $borrower->{borrowernumber} } )
+                        : ()
+                    )
+                }
+            )->count;
             if ( $patrons_with_same_email ) {
                 push @invalidFields, "duplicate_email";
             }
