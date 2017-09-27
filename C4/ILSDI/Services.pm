@@ -243,6 +243,15 @@ sub GetRecords {
             my $holding_library = Koha::Libraries->find( $item->{holdingbranch} );
             $item->{'homebranchname'}    = $home_library    ? $home_library->branchname    : '';
             $item->{'holdingbranchname'} = $holding_library ? $holding_library->branchname : '';
+
+            my ($transferDate, $transferFrom, $transferTo) = GetTransfers($item->{itemnumber});
+            if ($transferDate) {
+                $item->{transfer} = {
+                    datesent => $transferDate,
+                    frombranch => $transferFrom,
+                    tobranch => $transferTo,
+                };
+            }
         }
 
         # Hashref building...

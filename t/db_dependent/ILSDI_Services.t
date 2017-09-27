@@ -19,10 +19,13 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
+
+use C4::Items qw( ModItemTransfer );
+use C4::Circulation qw( GetTransfers );
 
 use Koha::AuthUtils;
 
@@ -241,7 +244,6 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     # Cleanup
     $schema->storage->txn_rollback;
 };
-
 
 subtest 'LookupPatron test' => sub {
 
@@ -540,4 +542,58 @@ subtest 'Holds test for branch transfer limits' => sub {
     is( $reply->{code}, undef, "Record hold, Item con be transferred" );
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest 'GetRecords' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'ILS-DI', 1 );
+
+    my $branch1 = $builder->build({
+        source => 'Branch',
+    });
+    my $branch2 = $builder->build({
+        source => 'Branch',
+    });
+
+    my $biblio = $builder->build({
+        source => 'Biblio',
+    });
+    my $biblioitem = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio->{biblionumber},
+        },
+    });
+    my $item = $builder->build({
+        source => 'Item',
+        value => {
+            biblionumber => $biblio->{biblionumber},
+            biblioitemnumber => $biblioitem->{biblioitemnumber},
+            homebranch => $branch1->{branchcode},
+            holdingbranch => $branch1->{branchcode},
+        },
+    });
+
+    ModItemTransfer($item->{itemnumber}, $branch1->{branchcode}, $branch2->{branchcode});
+
+    my $cgi = new CGI;
+    $cgi->param(service => 'GetRecords');
+    $cgi->param(id => $biblio->{biblionumber});
+
+    my $reply = C4::ILSDI::Services::GetRecords($cgi);
+
+    my ($datesent, $frombranch, $tobranch) = GetTransfers($item->{itemnumber});
+    my $expected = {
+        datesent => $datesent,
+        frombranch => $frombranch,
+        tobranch => $tobranch,
+    };
+    is_deeply($reply->{record}->[0]->{items}->{item}->[0]->{transfer}, $expected,
+        'GetRecords returns transfer informations');
+
+    $schema->storage->txn_rollback;
+};
