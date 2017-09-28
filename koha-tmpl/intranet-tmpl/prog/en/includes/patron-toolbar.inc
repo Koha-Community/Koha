@@ -10,7 +10,7 @@
                 [% FOREACH category IN categories %]<li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=[% category.categorycode %]">[% category.description %]</a></li>[% END %]
             </ul>
     </div>
-    [% IF Koha.Preference('PatronQuickAddFields') || Koha.Preference('BorrowerMandatoryField') %]
+    [% IF Koha.Preference('PatronQuickAddFields')%]
     <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Quick add new patron <span class="caret"></span></button>
             <ul class="dropdown-menu">
