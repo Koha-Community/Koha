@@ -31,8 +31,28 @@ subtest "OverduesBlockCirc tests" => sub {
 
     plan tests => 6;
 
-    my $odue_patron = $builder->build({ source => 'Borrower' });
-    my $good_patron = $builder->build({ source => 'Borrower' });
+    my $odue_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                debarred      => undef,
+                dateexpiry    => "3000-01-01",
+                lost          => 0,
+                gonenoaddress => 0,
+            }
+        }
+    );
+    my $good_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                debarred      => undef,
+                dateexpiry    => "3000-01-01",
+                lost          => 0,
+                gonenoaddress => 0,
+            }
+        }
+    );
     my $odue = $builder->build({ source => 'Issue', value => {
             borrowernumber => $odue_patron->{borrowernumber},
             date_due => '2017-01-01',
