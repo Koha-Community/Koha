@@ -291,11 +291,12 @@ function reset_autofill_for_quick_form(disable) {
     var idvalue;
     var othernames = ["othernames", "anonothernames"];
     var dates = ["dateofbirth", "to", "from"];
+    var disable_fields = ["othernames", "anonothernames", "dateofbirth", "to", "from"];
     if ( disable == 'add') {
         $('#'+formname+' :input').each(function(index){
            idvalue = $(this).attr('id');
            if(idvalue) {
-                $("#"+formname).find("#"+idvalue).attr("id", idvalue+"disabled");
+                if(jQuery.inArray( idvalue, disable_fields ) > -1) {$("#"+formname).find("#"+idvalue).attr("id", idvalue+"disabled");}
                 if(jQuery.inArray( idvalue, othernames ) > -1) {
                     (idvalue == 'anonothernames') ? $("#"+idvalue).focus(updateAnonOthername) : $("#"+idvalue).focus(updateOthername);
                     $("#"+idvalue).on('change', function() {
@@ -313,7 +314,7 @@ function reset_autofill_for_quick_form(disable) {
            idvalue = $(this).attr('id');
            if(idvalue) {
             idvalue = idvalue.replace("disabled", "");
-            $("#"+formname).find("#"+idvalue+"disabled").attr("id", idvalue);
+            if(jQuery.inArray( idvalue, disable_fields ) > -1) {$("#"+formname).find("#"+idvalue+"disabled").attr("id", idvalue);}
             if(jQuery.inArray( idvalue, dates ) > -1) {
                 quick_form_date_reset(idvalue);
             }
@@ -324,8 +325,8 @@ function reset_autofill_for_quick_form(disable) {
 
 function updateOthername() {
     var othernames = $("#othernames");
-    var firstname = $("#firstname");
-    var surname = $("#surname");
+    var firstname = ($("#entryform").find("#firstname").val() != '') ? $("#entryform").find("#firstname") : $("#quick_add_form").find("#firstname");
+    var surname = ($("#entryform").find("#surname").val() != '') ? $("#entryform").find("#surname") : $("#quick_add_form").find("#surname");
 
     if (othernames.val().length > 0) {
         return;
