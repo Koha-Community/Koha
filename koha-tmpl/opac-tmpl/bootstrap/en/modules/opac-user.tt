@@ -237,7 +237,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    [% IF (Koha.Preference('enableOpacCatalogBrowsing') == 0) && (Koha.Preference('linkToExternalSite') == 1) %]
+                                                    [% IF !Koha.Preference('enableOpacCatalogBrowsing') && Koha.Preference('linkToExternalSite') %]
                                                         <a class="title" href="[% Koha.Preference('externalSiteURL') %]?id=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>
                                                     [% ELSE %]
                                                         <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber %]">[% ISSUE.title |html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield %][% END %]</a>TES
@@ -614,12 +614,17 @@ Using this account is not recommended because some parts of Koha will not functi
                                             <tr>
                                         [% END %]
                                             <td class="title">
-                                                <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">
-                                                    [% RESERVE.biblio.title %]
-                                                    [% FOREACH s IN RESERVE.biblio.subtitles %]
-                                                        [% s %]
-                                                    [% END %]
-                                                    [% RESERVE.item.enumchron %]
+                                                [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron %][% END %]
+                                                [% IF !Koha.Preference('enableOpacCatalogBrowsing') && Koha.Preference('linkToExternalSite') %]
+                                                    <a class="title" href="[% Koha.Preference('externalSiteURL') %]?biblionumber=[% RESERVE.biblionumber %]">
+                                                [% ELSE %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% RESERVE.biblionumber %]">
+                                                [% END %]
+                                                [% RESERVE.biblio.title %]
+                                                [% FOREACH s IN RESERVE.biblio.subtitles %]
+                                                    [% s %]
+                                                [% END %]
+                                                [% RESERVE.item.enumchron %]
                                                 </a>
                                                 [% RESERVE.biblio.author %]
                                             </td>
