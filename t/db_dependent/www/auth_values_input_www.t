@@ -28,6 +28,8 @@ use POSIX;
 use URI::Escape;
 use Encode;
 
+use Koha::AuthorisedValueCategories;
+
 my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
 
 my $koha_conf = $ENV{KOHA_CONF};
@@ -135,6 +137,8 @@ if ($id_to_del) {
     ok($id_to_del ne undef, "error, link to delete not working");
 }
 
+Koha::AuthorisedValueCategories->find($category)->delete; # Clean up
+
 #---------------------------------------- Test with only latin utf-8 (could be taken as Latin-1/ISO 8859-1)
 
 $category = 'tòmas';
@@ -194,4 +198,4 @@ if ($id_to_del2) {
     ok($id_to_del2 ne undef, "error, link to delete not working");
 }
 
-1;
+Koha::AuthorisedValueCategories->find($category)->delete; # Clean up
