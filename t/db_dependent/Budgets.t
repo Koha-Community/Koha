@@ -464,7 +464,7 @@ my $order = Koha::Acquisition::Order->new(
 
 ModReceiveOrder({
    bibionumber       => $biblio,
-   order             => $order,
+   order             => $order->unblessed,
    budget_id         => $fund,
    quantityreceived  => 2,
    invoice           => $test_invoice,
