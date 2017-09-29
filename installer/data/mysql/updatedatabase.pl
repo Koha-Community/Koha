@@ -14661,6 +14661,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 6758 - Capture membership renewal date for reporting purposes (borrowers.date_renewed))\n";
 }
 
+$DBversion = '17.06.00.009';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        ALTER TABLE borrowers MODIFY COLUMN login_attempts int(4) AFTER lang;
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers MODIFY COLUMN login_attempts int(4) AFTER lang;
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19344 -  Reorder lang and login_attempts in the [deleted]borrowers tables)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
