@@ -83,12 +83,12 @@ $agent->click_ok( '', "Create new AV category " );
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 for my $link ( $agent->links() ) {
-    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
+    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=| . uri_escape_utf8($category) ) {
         $add_form_link_exists = 1;
     }
 }
 is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=$category", 'Open to create a new AV for this category' );
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=" . uri_escape_utf8($category), 'Open to create a new AV for this category' );
 
 $agent->form_name('Aform');
 $agent->field('authorised_value', 'επιμεq');
@@ -100,10 +100,12 @@ $agent->click_ok( '', "Create a new value for the category" );
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 $delete_form_link_exists = 0;
+my $add_form_re = q|authorised_values.pl\?op=add_form&category=|  . uri_escape_utf8($category);
+my $delete_re   = q|authorised_values.pl\?op=delete&searchfield=| . uri_escape_utf8($category);
 for my $link ( $agent->links() ) {
-    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
+    if ( $link->url =~ qr|$add_form_re| ) {
         $add_form_link_exists = 1;
-    }elsif( $link->url =~ m|authorised_values.pl\?op=delete&searchfield=$category| ) {
+    } elsif ( $link->url =~ qr|$delete_re| ) {
         $delete_form_link_exists = 1;
     }
 }
@@ -111,7 +113,7 @@ is( $add_form_link_exists, 1, 'Add a new category button should be displayed');
 is( $delete_form_link_exists, 1, '');
 
 $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl", 'Return to Authorized values page' );
-$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=学協会μμ&offset=0", 'Search the values inserted' );
+$agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?searchfield=" . uri_escape_utf8($category) . "&offset=0", 'Search the values inserted' );
 my $text = $agent->text() ;
 #Tests on UTF-8
 ok ( ( length(Encode::encode('UTF-8', $text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
@@ -119,15 +121,16 @@ ok ($text =~  m/学協会μμ/, 'UTF-8 (Asia) chars are correctly present. Good'
 ok ($text =~  m/επιμεq/, 'UTF-8 (Greek) chars are correctly present. Good');
 my @links = $agent->links;
 my $id_to_del ='';
+$delete_re = q|op=delete\&searchfield=| . uri_escape_utf8($category) . '\&id=(\d+)';
 foreach my $dato (@links){
     my $link = $dato->url;
-    if ($link =~  m/op=delete\&searchfield=学協会μμ\&id=(\d+)/){
+    if ($link =~ qr|$delete_re| ) {
         $id_to_del = $1;
         last;
     }
 }
 if ($id_to_del) {
-    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete&searchfield=学協会μμ&id=$id_to_del", 'UTF_8 auth. value deleted' );
+    $agent->get_ok( "$intranet/cgi-bin/koha/admin/authorised_values.pl?op=delete&searchfield=" . uri_escape_utf8($category) . "&id=$id_to_del", 'UTF_8 auth. value deleted' );
 }else{
     ok($id_to_del ne undef, "error, link to delete not working");
 }
@@ -156,10 +159,12 @@ $expected_base = q|authorised_values.pl|;
 $agent->base_like(qr|$expected_base|, "check base");
 $add_form_link_exists = 0;
 $delete_form_link_exists = 0;
+$add_form_re = q|authorised_values.pl\?op=add_form&category=|  . uri_escape_utf8($category);
+$delete_re   = q|authorised_values.pl\?op=delete&searchfield=| . uri_escape_utf8($category);
 for my $link ( $agent->links() ) {
-    if ( $link->url =~ m|authorised_values.pl\?op=add_form&category=$category| ) {
+    if ( $link->url =~ qr|$add_form_re| ) {
         $add_form_link_exists = 1;
-    }elsif( $link->url =~ m|authorised_values.pl\?op=delete&searchfield=$category| ) {
+    }elsif( $link->url =~ qr|$delete_re| ) {
         $delete_form_link_exists = 1;
     }
 }
@@ -175,9 +180,10 @@ ok ($text2 =~  m/tòmas/, 'UTF-8 not Latin-1 first test is OK. Good');
 ok ($text2=~  m/ràmen/, 'UTF-8 not Latin-1 second test is OK. Good');
 my @links2 = $agent->links;
 my $id_to_del2 ='';
+$delete_re   = q|op=delete\&searchfield=| . uri_escape_utf8($category) . q|\&id=(\d+)|;
 foreach my $dato (@links2){
     my $link = $dato->url;
-    if ($link =~  m/op=delete\&searchfield=tòmas\&id=(\d+)/){
+    if ($link =~  qr|$delete_re| ){
         $id_to_del2 = $1;
         last;
     }
