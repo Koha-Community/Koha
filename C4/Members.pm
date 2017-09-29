@@ -75,6 +75,7 @@ BEGIN {
         &GetBorrowersToExpunge
 
         &IssueSlip
+        &FineSlip
         &CheckInSlip
 
         GetOverduesForPatron
@@ -1268,6 +1269,70 @@ sub IssueSlip {
             'borrowers'   => $borrowernumber,
         },
         repeat => \%repeat,
+    );
+}
+
+sub GetBorrowerFines {
+    my ($borrowernumber) = @_;
+    my $dbh       = C4::Context->dbh;
+    my $query = qq{
+        SELECT * FROM accountlines
+        LEFT JOIN borrowers ON borrowers.borrowernumber = accountlines.borrowernumber
+        LEFT JOIN items ON accountlines.itemnumber = items.itemnumber
+        WHERE accountlines.borrowernumber = ?
+        ORDER BY accountlines.timestamp
+    };
+    my $sth = $dbh->prepare( $query );
+    $sth->execute( $borrowernumber );
+    my $data = $sth->fetchall_arrayref({});
+    return $data;
+}
+
+sub FineSlip {
+    my ($borrowernumber, $branch) = @_;
+
+    #my $now       = POSIX::strftime("%Y-%m-%d", localtime);
+
+    my $fineslist = GetBorrowerFines($borrowernumber); #Gets all the fines
+    my @unpaidFinesList; #Collect Fines which haven't been paid yet here
+
+    my $total = 0.0;
+
+    foreach my $it (@$fineslist){
+        next if ($it->{amountoutstanding} =~ /^0.0+$/); #Skip fines which have been paid already or are payments in itself.
+        
+        my $dt = dt_from_string( $it->{'date'} );
+        $it->{'date_due'} = output_pref({ dt => $dt, dateonly => 1 });
+        $it->{'amount'} = sprintf('%.2f', $it->{'amount'});
+        $it->{'amountoutstanding'} = sprintf('%.2f', $it->{'amountoutstanding'});
+        $total = $total + $it->{'amountoutstanding'};
+        $it->{'barcode'} = '-' if (!defined($it->{'barcode'}));
+        push @unpaidFinesList, $it;
+    }
+    @unpaidFinesList = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @unpaidFinesList;
+
+    my %repeat = (
+        'fines' => [ map {
+            'fines' => $_,
+            'borrowers' => $_,
+            'items' => $_
+                     }, @unpaidFinesList ],
+        );
+
+    return C4::Letters::GetPreparedLetter (
+        module => 'circulation',
+        letter_code => 'FINESLIP',
+        branchcode => $branch,
+        tables => {
+            'branches'    => $branch,
+            'borrowers'   => $borrowernumber,
+        },
+        substitute => {
+            'total.amount' => sprintf('%.2f', $total),
+            'total.fines' => scalar(@unpaidFinesList)
+        },
+        repeat => \%repeat,
+        message_transport_type => 'print',
     );
 }
 
