@@ -192,10 +192,7 @@ the attribute names the exposed REST api spec.
 =cut
 
 sub _to_api {
-
     my $vendor = shift;
-
-    #my $vendor = $vendor_param->TO_JSON;
 
     # Delete unused fields
     delete $vendor->{booksellerfax};
@@ -205,16 +202,11 @@ sub _to_api {
     delete $vendor->{othersupplier};
 
     # Rename changed fields
-    $vendor->{list_currency} = $vendor->{listprice};
-    delete $vendor->{listprice};
-    $vendor->{invoice_currency} = $vendor->{invoiceprice};
-    delete $vendor->{invoiceprice};
-    $vendor->{gst} = $vendor->{gstreg};
-    delete $vendor->{gstreg};
-    $vendor->{list_includes_gst} = $vendor->{listincgst};
-    delete $vendor->{listincgst};
-    $vendor->{invoice_includes_gst} = $vendor->{invoiceincgst};
-    delete $vendor->{invoiceincgst};
+    $vendor->{list_currency}        = delete $vendor->{listprice};
+    $vendor->{invoice_currency}     = delete $vendor->{invoiceprice};
+    $vendor->{gst}                  = delete $vendor->{gstreg};
+    $vendor->{list_includes_gst}    = delete $vendor->{listincgst};
+    $vendor->{invoice_includes_gst} = delete $vendor->{invoiceincgst};
 
     return $vendor;
 }
@@ -227,21 +219,14 @@ attribute names.
 =cut
 
 sub _to_model {
-    my $vendor_param = shift;
-
-    my $vendor = $vendor_param;
+    my $vendor = shift;
 
     # Rename back
-    $vendor->{listprice} = $vendor->{list_currency};
-    delete $vendor->{list_currency};
-    $vendor->{invoiceprice} = $vendor->{invoice_currency};
-    delete $vendor->{invoice_currency};
-    $vendor->{gstreg} = $vendor->{gst};
-    delete $vendor->{gst};
-    $vendor->{listincgst} = $vendor->{list_includes_gst};
-    delete $vendor->{list_includes_gst};
-    $vendor->{invoiceincgst} = $vendor->{invoice_includes_gst};
-    delete $vendor->{invoice_includes_gst};
+    $vendor->{listprice}     = delete $vendor->{list_currency};
+    $vendor->{invoiceprice}  = delete $vendor->{invoice_currency};
+    $vendor->{gstreg}        = delete $vendor->{gst};
+    $vendor->{listincgst}    = delete $vendor->{list_includes_gst};
+    $vendor->{invoiceincgst} = delete $vendor->{invoice_includes_gst};
 
     return $vendor;
 }
