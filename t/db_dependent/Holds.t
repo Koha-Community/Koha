@@ -212,19 +212,19 @@ is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
 
 $holds = $biblio->holds;
 $hold = $holds->next;
-AlterPriority( 'top', $hold->reserve_id );
+AlterPriority( 'top', $hold->reserve_id, undef, 2, 1, 6 );
 $hold = Koha::Holds->find( $reserveid );
 is( $hold->priority, '1', "Test AlterPriority(), move to top" );
 
-AlterPriority( 'down', $hold->reserve_id );
+AlterPriority( 'down', $hold->reserve_id, undef, 2, 1, 6 );
 $hold = Koha::Holds->find( $reserveid );
 is( $hold->priority, '2', "Test AlterPriority(), move down" );
 
-AlterPriority( 'up', $hold->reserve_id );
+AlterPriority( 'up', $hold->reserve_id, 1, 3, 1, 6 );
 $hold = Koha::Holds->find( $reserveid );
 is( $hold->priority, '1', "Test AlterPriority(), move up" );
 
-AlterPriority( 'bottom', $hold->reserve_id );
+AlterPriority( 'bottom', $hold->reserve_id, undef, 2, 1, 6 );
 $hold = Koha::Holds->find( $reserveid );
 is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 

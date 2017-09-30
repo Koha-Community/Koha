@@ -1225,7 +1225,7 @@ sub _get_itype {
 
 =head2 AlterPriority
 
-  AlterPriority( $where, $reserve_id );
+  AlterPriority( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority );
 
 This function changes a reserve's priority up, down, to the top, or to the bottom.
 Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was placed
@@ -1233,7 +1233,7 @@ Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was
 =cut
 
 sub AlterPriority {
-    my ( $where, $reserve_id ) = @_;
+    my ( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority ) = @_;
 
     my $hold = Koha::Holds->find( $reserve_id );
     return unless $hold;
@@ -1243,21 +1243,18 @@ sub AlterPriority {
         return;
     }
 
-    if ( $where eq 'up' || $where eq 'down' ) {
-
-      my $priority = $hold->priority;
-      $priority = $where eq 'up' ? $priority - 1 : $priority + 1;
-      _FixPriority({ reserve_id => $reserve_id, rank => $priority })
-
+    if ( $where eq 'up' ) {
+      return unless $prev_priority;
+      _FixPriority({ reserve_id => $reserve_id, rank => $prev_priority })
+    } elsif ( $where eq 'down' ) {
+      return unless $next_priority;
+      _FixPriority({ reserve_id => $reserve_id, rank => $next_priority })
     } elsif ( $where eq 'top' ) {
-
-      _FixPriority({ reserve_id => $reserve_id, rank => '1' })
-
+      _FixPriority({ reserve_id => $reserve_id, rank => $first_priority })
     } elsif ( $where eq 'bottom' ) {
-
-      _FixPriority({ reserve_id => $reserve_id, rank => '999999' });
-
+      _FixPriority({ reserve_id => $reserve_id, rank => $last_priority });
     }
+
     # FIXME Should return the new priority
 }
 

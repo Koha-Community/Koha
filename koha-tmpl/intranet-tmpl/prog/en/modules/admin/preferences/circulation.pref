@@ -529,6 +529,20 @@ Circulation:
             - Hide patrons phone number, email address, street address and city in     the circulation page
     Holds Policy:
         -
+            - In the staff client, split the holds queue into separate tables by
+            - pref: HoldsSplitQueue
+              choices:
+                  nothing: nothing
+                  branch: "pickup library"
+                  itemtype: "hold itemtype"
+                  branch_itemtype: "pickup library & itemtype"
+        -
+            - If the holds queue is split, show librarians
+            - pref: HoldsSplitQueueNumbering
+              choices:
+                  actual: "the actual priority, which may be out of order"
+                  virtual: "'virtual' priorities, where each group is numbered separately"
+        -
             - pref: AllowHoldItemTypeSelection
               choices:
                   yes: Allow
