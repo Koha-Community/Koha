@@ -166,6 +166,14 @@
                                         </table>
                                     </div>
                                   [%  END %]
+                                  [% IF borrowers.$borrowernumber.gonenoaddress > 0 %]
+                                    <div class="dialog message" style="margin-top:.8em">
+                                        <h4>Patron's address in doubt</h4>
+                                        <p>The <strong>Gone no address</strong> flag is set for this patron. If this modification request resolves the issue, please unset the flag.</p>
+                                        <input type="checkbox" id="unset_gna_[% pm.borrowernumber %]" name="unset_gna_[% pm.borrowernumber %]" value="unset_gna_[% pm.borrowernumber %]"/>
+                                        <label for="unset_gna_[% pm.borrowernumber %]">Unset Gone no address for this patron</label>
+                                    </div>
+                                  [% END %]
                                 </div>
                             [% END %]
                         </div>
