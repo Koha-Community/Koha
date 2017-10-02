@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 <script type="text/javascript">
     $(document).ready(function() {
         $(".clickable").click(function() {
@@ -32,7 +33,7 @@
                     <td><a href="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumber=[% biblionumber %]">[% borrower.surname %], [% borrower.firstname %]</a></td>
             [% END %]
                 <td>[% borrower.cardnumber %]</td>
-                <td>[% borrower.dateofbirth %]</td>
+                <td>[% borrower.dateofbirth | $KohaDates %]</td>
                 <td>[% Categories.GetName( borrower.categorycode ) %]</td>
                 <td>[% Branches.GetName( borrower.branchcode ) %]</td>
                 <td>[% borrower.address %]</td>
