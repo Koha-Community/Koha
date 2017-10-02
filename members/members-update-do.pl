@@ -49,6 +49,15 @@ foreach my $param (@params) {
 
         if ( $action eq 'approve' ) {
             my $m = Koha::Patron::Modifications->find( { borrowernumber => $borrowernumber } );
+
+            if ($query->param("unset_gna_$borrowernumber")) {
+                # Unset gone no address
+                ModMember(
+                    borrowernumber => $borrowernumber,
+                    gonenoaddress  => undef
+                );
+            }
+
             $m->approve() if $m;
         }
         elsif ( $action eq 'deny' ) {
