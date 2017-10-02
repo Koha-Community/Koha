@@ -242,7 +242,7 @@
         [% PROCESS options_for_libraries prefix => "branch:" libraries => Branches.all( selected => selected_branchcode, unfiltered => 1 ) %]
         </select></p>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
-        [% IF ( searchdomainloop ) %]
+        [% IF searchdomainloop.count %]
     <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
         <p><label for="categoryloop">Groups of libraries: </label><select name="multibranchlimit" id="categoryloop">
         <option value=""> -- none -- </option>
