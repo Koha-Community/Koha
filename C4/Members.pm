@@ -1614,7 +1614,7 @@ Returns correct minPasswordLength
 sub minPasswordLength {
     my $categorycode = shift;
     my $categoryinfo = Koha::Patron::Categories->find($categorycode);
-    my $passwordpolicy = $categoryinfo->passwordpolicy;
+    my $passwordpolicy = $categoryinfo->passwordpolicy if $categoryinfo;
     my $minpasslen;
     if ($passwordpolicy eq "complex") {
         $minpasslen = C4::Context->preference("minComplexPasswordLength");
