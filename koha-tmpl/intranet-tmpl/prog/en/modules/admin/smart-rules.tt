@@ -39,7 +39,7 @@ $(document).ready(function() {
         var selected_library = library_dropdown.options[library_dropdown.selectedIndex].value;
         if (selected_library === "*") {
             var to_library = $("#tobranch option:selected").text();
-            var MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to " + to_library + " library? This will override the existing rules in " + to_library + " library.");
+            var MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to %s library? This will override the existing rules in this library.").format(to_library);
             return confirmClone(MSG_CONFIRM_CLONE);
         }
     });
