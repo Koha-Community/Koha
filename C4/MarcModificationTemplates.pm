@@ -23,6 +23,7 @@ use DateTime;
 
 use C4::Context;
 use Koha::SimpleMARC;
+use Koha::MoreUtils;
 
 use vars qw(@ISA @EXPORT);
 
@@ -567,9 +568,21 @@ sub ModifyRecordWithTemplate {
                     subfield => $conditional_subfield,
                     is_regex => $conditional_regex,
                 });
+                my $all_fields = [
+                    1 .. scalar @{
+                        field_exists(
+                            {
+                                record   => $record,
+                                field    => $conditional_field,
+                                subfield => $conditional_subfield
+                            }
+                        )
+                    }
+                ];
+                $field_numbers = [Koha::MoreUtils::singleton ( @$field_numbers, @$all_fields ) ];
                 $do = $conditional eq 'if'
-                    ? not @$field_numbers
-                    : @$field_numbers;
+                    ? @$field_numbers
+                    : not @$field_numbers;
             }
         }
 
