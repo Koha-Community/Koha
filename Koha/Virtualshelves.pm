@@ -135,7 +135,6 @@ sub get_shelves_containing_record {
                         'me.owner' => $borrowernumber,
                         -or        => {
                             'virtualshelfshares.borrowernumber' => $borrowernumber,
-                            "me.allow_add"                      => 1,
                         },
                     }
                 },
