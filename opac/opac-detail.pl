@@ -460,9 +460,9 @@ if ($session->param('busc')) {
 }
 }
 
-
-$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
-$template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") );
+$template->param(
+    OPACShowCheckoutName => C4::Context->preference("OPACShowCheckoutName"),
+);
 
 # adding items linked via host biblios
 
@@ -652,13 +652,13 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
     };
 }
 
+my $allow_onshelf_holds;
 if ( not $viewallitems and @items > $max_items_to_display ) {
     $template->param(
         too_many_items => 1,
         items_count => scalar( @items ),
     );
 } else {
-  my $allow_onshelf_holds;
   my $patron = Koha::Patrons->find( $borrowernumber );
   for my $itm (@items) {
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
@@ -717,8 +717,11 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         push @itemloop, $itm;
     }
   }
-  $template->param( 'AllowOnShelfHolds' => $allow_onshelf_holds );
 }
+
+my $itemsWaitingOrInTransit = Koha::Biblios->find($biblionumber)->hasItemswaitingOrInTransit || 0;
+my $itemsIssued = CountItemsIssued( $biblionumber );
+$template->param( 'ReservableItems' => $itemsWaitingOrInTransit || $itemsIssued || $allow_onshelf_holds );
 
 # Display only one tab if one items list is empty
 if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {

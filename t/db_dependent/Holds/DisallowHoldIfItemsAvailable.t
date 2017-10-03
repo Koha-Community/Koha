@@ -7,7 +7,7 @@ use C4::Items;
 use C4::Circulation;
 use Koha::IssuingRule;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -212,6 +212,53 @@ AddReturn( $item1->{barcode} );
         };
     };
 }
+
+my $biblio = $builder->build({
+    source => 'Biblio',
+});
+
+my $item3 = $builder->build({
+    source => 'Item',
+    value => {
+        biblionumber => $biblio->{biblionumber},
+        itemlost     => 0,
+        notforloan   => 0,
+        withdrawn    => 0,
+        damaged      => 0,
+        onloan       => 0
+    }
+});
+
+my $hold = $builder->build({
+    source => 'Reserve',
+    value =>{
+        itemnumber => $item3->{itemnumber},
+        found => 'T'
+    }
+});
+
+$dbh->do("DELETE FROM issuingrules");
+$rule = Koha::IssuingRule->new(
+    {
+        categorycode => '*',
+        itemtype     => '*',
+        branchcode   => '*',
+        maxissueqty  => 99,
+        issuelength  => 7,
+        lengthunit   => 8,
+        reservesallowed => 99,
+        onshelfholds => 0,
+    }
+);
+$rule->store();
+
+$is = IsAvailableForItemLevelRequest( $item3, $borrower1);
+is( $is, 1, "Item can be held, items in transit are not available" );
+
+Koha::Holds->find($hold->{reserve_id})->found('F')->store;
+
+$is = IsAvailableForItemLevelRequest( $item3, $borrower1);
+is( $is, 0, "Item is neither waiting nor in transit." );
 
 # Cleanup
 $schema->storage->txn_rollback;
