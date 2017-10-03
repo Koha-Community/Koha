@@ -60,7 +60,7 @@ my $itemtype = $builder->build(
         value  => { notforloan => undef, rentalcharge => 0 }
     }
 )->{itemtype};
-my $patron_category = $builder->build({ source => 'Category', value => { enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 
 my $CircControl = C4::Context->preference('CircControl');
 my $HomeOrHoldingBranch = C4::Context->preference('HomeOrHoldingBranch');
@@ -1105,7 +1105,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber,
     );
 
-    my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode} } } );
+    my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode} } } );
 
     my $issue = AddIssue( $patron, $barcode );
     UpdateFine(
@@ -1130,13 +1130,13 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 }
 
 subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
-    plan tests => 26;
+    plan tests => 23;
 
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
     my $otherbranch   = $builder->build( { source => 'Branch' } );
-    my $patron_1      = $builder->build( { source => 'Borrower' } );
-    my $patron_2      = $builder->build( { source => 'Borrower' } );
+    my $patron_1      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_2      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -1165,39 +1165,36 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     ## Can be issued from homebranch
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$error), 0, 'There should not be any errors (impossible)' );
-    is( keys(%$alerts), 0, 'There should not be any alerts' );
-    is( exists $question->{ISSUED_TO_ANOTHER}, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
     ## Can be issued from holdingbranch
     set_userenv($holdingbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$error), 0, 'There should not be any errors (impossible)' );
-    is( keys(%$alerts), 0, 'There should not be any alerts' );
-    is( exists $question->{ISSUED_TO_ANOTHER}, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
     ## Can be issued from another branch
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$error), 0, 'There should not be any errors (impossible)' );
-    is( keys(%$alerts), 0, 'There should not be any alerts' );
-    is( exists $question->{ISSUED_TO_ANOTHER}, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
 
     # AllowReturnToBranch == holdingbranch
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
     ## Cannot be issued from homebranch
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0 );
-    is( exists $error->{RETURN_IMPOSSIBLE}, 1 );
+    is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
     is( $error->{branch_to_return},         $holdingbranch->{branchcode} );
     ## Can be issued from holdinbranch
     set_userenv($holdingbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$error) + keys(%$alerts),        0 );
-    is( exists $question->{ISSUED_TO_ANOTHER}, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
     ## Cannot be issued from another branch
     set_userenv($otherbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0 );
-    is( exists $error->{RETURN_IMPOSSIBLE}, 1 );
+    is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
     is( $error->{branch_to_return},         $holdingbranch->{branchcode} );
 
     # AllowReturnToBranch == homebranch
@@ -1205,19 +1202,19 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     ## Can be issued from holdinbranch
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$error) + keys(%$alerts),        0 );
-    is( exists $question->{ISSUED_TO_ANOTHER}, 1 );
+    is( keys(%$error) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $question->{ISSUED_TO_ANOTHER}, 1, 'ISSUED_TO_ANOTHER must be set' );
     ## Cannot be issued from holdinbranch
     set_userenv($holdingbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0 );
-    is( exists $error->{RETURN_IMPOSSIBLE}, 1 );
+    is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
     is( $error->{branch_to_return},         $homebranch->{branchcode} );
     ## Cannot be issued from holdinbranch
     set_userenv($otherbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0 );
-    is( exists $error->{RETURN_IMPOSSIBLE}, 1 );
+    is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
+    is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
     is( $error->{branch_to_return},         $homebranch->{branchcode} );
 
     # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
@@ -1229,8 +1226,8 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
     my $otherbranch   = $builder->build( { source => 'Branch' } );
-    my $patron_1      = $builder->build( { source => 'Borrower' } );
-    my $patron_2      = $builder->build( { source => 'Borrower' } );
+    my $patron_1      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $patron_2      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -1300,7 +1297,7 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower', value => { gonenoaddress => undef, lost => undef, debarred => undef, borrowernotes => "" } } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
     my $item_1 = $builder->build(
@@ -1339,24 +1336,24 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'confirmation' );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$alerts),  0, 'No key for error and alert ' . keys(%$error) . ' ' . keys(%$alerts) );
+    is( keys(%$error) + keys(%$alerts),  0, 'No key for error and alert' . str($error, $question, $alerts) );
     is( $question->{USERBLOCKEDOVERDUE}, 1, 'OverduesBlockCirc=confirmation, USERBLOCKEDOVERDUE should be set for question' );
 
     t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'block' );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . str($error, $question, $alerts) );
     is( $error->{USERBLOCKEDOVERDUE},      1, 'OverduesBlockCirc=block, USERBLOCKEDOVERDUE should be set for error' );
 
     # Patron cannot issue item_1, they are debarred
     my $tomorrow = DateTime->today( time_zone => C4::Context->tz() )->add( days => 1 );
     Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber}, expiration => $tomorrow } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . str($error, $question, $alerts) );
     is( $error->{USERBLOCKEDWITHENDDATE}, output_pref( { dt => $tomorrow, dateformat => 'sql', dateonly => 1 } ), 'USERBLOCKEDWITHENDDATE should be tomorrow' );
 
     Koha::Patron::Debarments::AddDebarment( { borrowernumber => $patron->{borrowernumber} } );
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . keys(%$question) . ' ' . keys(%$alerts) );
+    is( keys(%$question) + keys(%$alerts),  0, 'No key for question and alert ' . str($error, $question, $alerts) );
     is( $error->{USERBLOCKEDNOENDDATE},    '9999-12-31', 'USERBLOCKEDNOENDDATE should be 9999-12-31 for unlimited debarments' );
 };
 
@@ -1364,7 +1361,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
     plan tests => 1;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron_category = $builder->build_object(
+    my $patron_category_x = $builder->build_object(
         {
             class => 'Koha::Patron::Categories',
             value => { category_type => 'X' }
@@ -1374,7 +1371,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
         {
             class => 'Koha::Patrons',
             value => {
-                categorycode  => $patron_category->categorycode,
+                categorycode  => $patron_category_x->categorycode,
                 gonenoaddress => undef,
                 lost          => undef,
                 debarred      => undef,
@@ -1516,7 +1513,7 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
     plan tests => 5;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $biblionumber = $biblioitem->{biblionumber};
@@ -1550,30 +1547,30 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$alerts),  0, 'No error or alert should be raised' );
-    is( $question->{BIBLIO_ALREADY_ISSUED}, 1, 'BIBLIO_ALREADY_ISSUED question flag should be set if AllowMultipleIssuesOnABiblio=0 and issue already exists' );
+    is( keys(%$error) + keys(%$alerts),  0, 'No error or alert should be raised' . str($error, $question, $alerts) );
+    is( $question->{BIBLIO_ALREADY_ISSUED}, 1, 'BIBLIO_ALREADY_ISSUED question flag should be set if AllowMultipleIssuesOnABiblio=0 and issue already exists' . str($error, $question, $alerts) );
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if AllowMultipleIssuesOnABiblio=1' );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if AllowMultipleIssuesOnABiblio=1' . str($error, $question, $alerts) );
 
     # Add a subscription
     Koha::Subscription->new({ biblionumber => $biblionumber })->store;
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 0);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' . str($error, $question, $alerts) );
 
     t::lib::Mocks::mock_preference('AllowMultipleIssuesOnABiblio', 1);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_2->{barcode} );
-    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' );
+    is( keys(%$error) + keys(%$question) + keys(%$alerts),  0, 'No BIBLIO_ALREADY_ISSUED flag should be set if it is a subscription' . str($error, $question, $alerts) );
 };
 
 subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     # Add 2 items
     my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
@@ -1704,7 +1701,7 @@ subtest 'AddReturn | is_overdue' => sub {
     t::lib::Mocks::mock_preference('MaxFine', '100');
 
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -1777,9 +1774,9 @@ subtest 'Set waiting flag' => sub {
     plan tests => 4;
 
     my $library_1 = $builder->build( { source => 'Branch' } );
-    my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode} } } );
+    my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} } } );
     my $library_2 = $builder->build( { source => 'Branch' } );
-    my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode} } } );
+    my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} } } );
 
     my $biblio = $builder->build( { source => 'Biblio' } );
     my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
@@ -1828,4 +1825,13 @@ subtest 'Set waiting flag' => sub {
 sub set_userenv {
     my ( $library ) = @_;
     C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, $library->{branchname}, '', '', '');
+}
+
+sub str {
+    my ( $error, $question, $alert ) = @_;
+    my $s;
+    $s  = %$error    ? ' (error: '    . join( ' ', keys %$error    ) . ')' : '';
+    $s .= %$question ? ' (question: ' . join( ' ', keys %$question ) . ')' : '';
+    $s .= %$alert    ? ' (alert: '    . join( ' ', keys %$alert    ) . ')' : '';
+    return $s;
 }
