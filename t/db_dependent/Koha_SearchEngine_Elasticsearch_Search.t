@@ -17,8 +17,23 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Module::Load::Conditional qw[can_load check_install requires];
+use Test::More;
 use t::lib::Mocks;
+
+if ( ! can_load(
+    modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => undef, } )
+) {
+    my $missing_module;
+    if ( $Module::Load::Conditional::ERROR =~ /Can\'t locate (.*?) / ) {
+        $missing_module = $1;
+    }
+    my $es_dep_msg = "Required module $missing_module is not installed";
+    plan( skip_all => $es_dep_msg );
+}
+else {
+    plan tests => 12;
+}
 
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
