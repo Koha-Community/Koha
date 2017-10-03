@@ -64,49 +64,58 @@ $session_nopermission->param('ip', '127.0.0.1');
 $session_nopermission->param('lasttime', time());
 $session_nopermission->flush;
 
-my $borrower = Koha::Patron->new;
-$borrower->categorycode( $categorycode );
-$borrower->branchcode( $branchcode );
-$borrower->surname("Test Surname");
-$borrower->flags(80); #borrowers and reserveforothers flags
-$borrower->userid($nopermission->{ userid }."z");
-$borrower->store;
-my $borrowernumber = $borrower->borrowernumber;
+my $patron_1 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $categorycode,
+            branchcode   => $branchcode,
+            surname      => 'Test Surname',
+            flags        => 80, #borrowers and reserveforothers flags
+        }
+    }
+);
 
-my $borrower2 = Koha::Patron->new;
-$borrower2->categorycode( $categorycode );
-$borrower2->branchcode( $branchcode );
-$borrower2->surname("Test Surname 2");
-$borrower2->userid($nopermission->{ userid }."x");
-$borrower2->flags(16); # borrowers flag
-$borrower2->store;
-my $borrowernumber2 = $borrower2->borrowernumber;
+my $patron_2 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $categorycode,
+            branchcode   => $branchcode,
+            surname      => 'Test Surname 2',
+            flags        => 16, # borrowers flag
+        }
+    }
+);
 
-my $borrower3 = Koha::Patron->new;
-$borrower3->categorycode( $categorycode );
-$borrower3->branchcode( $branchcode );
-$borrower3->surname("Test Surname 2");
-$borrower3->userid($nopermission->{ userid }."y");
-$borrower3->flags(64); # reserveforothers flag
-$borrower3->store;
-my $borrowernumber3 = $borrower3->borrowernumber;
+my $patron_3 = $builder->build_object(
+    {
+        class => 'Koha::Patrons',
+        value => {
+            categorycode => $categorycode,
+            branchcode   => $branchcode,
+            surname      => 'Test Surname 3',
+            flags        => 64, # reserveforothers flag
+        }
+    }
+);
 
 # Get sessions
 my $session = C4::Auth::get_session('');
-$session->param('number', $borrower->borrowernumber);
-$session->param('id', $borrower->userid);
+$session->param('number', $patron_1->borrowernumber);
+$session->param('id', $patron_1->userid);
 $session->param('ip', '127.0.0.1');
 $session->param('lasttime', time());
 $session->flush;
 my $session2 = C4::Auth::get_session('');
-$session2->param('number', $borrower2->borrowernumber);
-$session2->param('id', $borrower2->userid);
+$session2->param('number', $patron_2->borrowernumber);
+$session2->param('id', $patron_2->userid);
 $session2->param('ip', '127.0.0.1');
 $session2->param('lasttime', time());
 $session2->flush;
 my $session3 = C4::Auth::get_session('');
-$session3->param('number', $borrower3->borrowernumber);
-$session3->param('id', $borrower3->userid);
+$session3->param('number', $patron_3->borrowernumber);
+$session3->param('id', $patron_3->userid);
 $session3->param('ip', '127.0.0.1');
 $session3->param('lasttime', time());
 $session3->flush;
@@ -125,18 +134,18 @@ $dbh->do('DELETE FROM issuingrules');
         VALUES (?, ?, ?, ?)
     }, {}, '*', '*', '*', 1);
 
-my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
+my $reserve_id = C4::Reserves::AddReserve($branchcode, $patron_1->borrowernumber,
     $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
 
 # Add another reserve to be able to change first reserve's rank
-my $reserve_id2 = C4::Reserves::AddReserve($branchcode, $borrowernumber2,
+my $reserve_id2 = C4::Reserves::AddReserve($branchcode, $patron_2->borrowernumber,
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber);
 
 my $suspend_until = DateTime->now->add(days => 10)->ymd;
 my $expirationdate = DateTime->now->add(days => 10)->ymd;
 
 my $post_data = {
-    borrowernumber => int($borrowernumber),
+    borrowernumber => int($patron_1->borrowernumber),
     biblionumber => int($biblionumber),
     itemnumber => int($itemnumber),
     branchcode => $branchcode,
@@ -163,11 +172,11 @@ subtest "Test endpoints without authentication" => sub {
 subtest "Test endpoints without permission" => sub {
     plan tests => 10;
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=$borrowernumber");
+    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=" . $patron_1->borrowernumber);
     $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
     $t->request_ok($tx) # no permission
       ->status_is(403);
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=$borrowernumber");
+    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=" . $patron_1->borrowernumber);
     $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
     $t->request_ok($tx) # reserveforothers permission
       ->status_is(403);
@@ -260,13 +269,13 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(404)
       ->json_has('/error');
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=".$borrower->borrowernumber);
+    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=" . $patron_1->borrowernumber);
     $tx->req->cookies({name => 'CGISESSID', value => $session2->id}); # get with borrowers flag
     $t->request_ok($tx)
       ->status_is(200)
       ->json_is([]);
 
-    my $inexisting_borrowernumber = $borrowernumber2*2;
+    my $inexisting_borrowernumber = $patron_2->borrowernumber * 2;
     $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=$inexisting_borrowernumber");
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
@@ -285,7 +294,7 @@ subtest "Test endpoints with permission" => sub {
       ->json_has('/reserve_id');
     $reserve_id = $t->tx->res->json->{reserve_id};
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=$borrowernumber");
+    $tx = $t->ua->build_tx(GET => "/api/v1/holds?borrowernumber=" . $patron_1->borrowernumber);
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)
       ->status_is(200)
