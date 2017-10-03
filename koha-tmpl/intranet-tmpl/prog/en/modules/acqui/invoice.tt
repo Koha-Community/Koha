@@ -23,6 +23,9 @@
     }
 
     $(document).ready(function() {
+        $("#delete").click(function(){
+            return confirmDelete(_("Are you sure you want to delete this invoice?"));
+        });
         $("#orderst").dataTable($.extend(true, {}, dataTablesDefaults, {
             bInfo: false,
             bPaginate: false,
@@ -123,7 +126,7 @@
         <fieldset class="action">
             <input type="submit" value="Save" />
             [% UNLESS orders_loop.size %]
-            <a href="invoice.pl?op=delete&invoiceid=[% invoiceid %]">Delete</a>
+            <a href="invoice.pl?op=delete&invoiceid=[% invoiceid %]" id="delete">Delete</a>
             [% END %]
         </fieldset>
       </form>
