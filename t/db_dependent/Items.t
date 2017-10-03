@@ -26,7 +26,7 @@ use Koha::Library;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use Test::Warn;
 
@@ -714,6 +714,21 @@ subtest '_mod_item_dates' => sub {
     is( $item->{dateaccessioned}, undef, 'dateaccessioned wrong format' );
     is( $item->{yetanotherdatetime}, '2016-01-20 13:58:00',
         'yetanotherdatetime is ok' );
+};
+
+subtest 'get_hostitemnumbers_of' => sub {
+    plan tests => 1;
+
+    my $bib = MARC::Record->new();
+    $bib->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+        MARC::Field->new('773', ' ', ' ', b => 'b without 0 or 9'),
+    );
+    my ($biblionumber, $bibitemnum) = AddBiblio($bib, '');
+
+    my @itemnumbers = C4::Items::get_hostitemnumbers_of( $biblionumber );
+    is( @itemnumbers, 0, );
 };
 
 # Helper method to set up a Biblio.
