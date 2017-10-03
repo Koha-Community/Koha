@@ -424,6 +424,7 @@ subtest 'Get shelves containing biblios' => sub {
         {   shelfname    => "my x second shelf", # 'x' to make it sorted after 'third'
             owner        => $patron2->{borrowernumber},
             category     => 1,
+            allow_add    => 1,
         }
     )->store;
     my $shelf3 = Koha::Virtualshelf->new(
