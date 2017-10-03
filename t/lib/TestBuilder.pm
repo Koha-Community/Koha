@@ -460,6 +460,10 @@ sub _gen_default_values {
     return {
         Borrower => {
             login_attempts => 0,
+            gonenoaddress  => undef,
+            lost           => undef,
+            debarred       => undef,
+            borrowernotes  => '',
         },
         Item => {
             more_subfields_xml => undef,
