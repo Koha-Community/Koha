@@ -318,6 +318,24 @@ sub subscriptions {
     return $self->{_subscriptions};
 }
 
+=head3 hasItemswaitingOrInTransit
+
+=cut
+
+sub hasItemswaitingOrInTransit {
+    my ( $self ) = @_;
+
+    if ( Koha::Holds->search({ biblionumber => $self->id,
+                               found => ['W', 'T'] })->count ) {
+        return 1;
+    }
+
+    foreach my $item ( $self->items ) {
+        return 1 if $item->get_transfer;
+    }
+
+    return 0;
+}
 
 =head3 type
 

@@ -1078,6 +1078,7 @@ item-level hold request.  An item is available if
 * it is not lost AND
 * it is not damaged AND
 * it is not withdrawn AND
+* a waiting or in transit reserve is placed on
 * does not have a not for loan value > 0
 
 Need to check the issuingrules onshelfholds column,
@@ -1142,7 +1143,16 @@ sub IsAvailableForItemLevelRequest {
         return $any_available ? 0 : 1;
     }
 
-    return $item->{onloan} || GetReserveStatus($item->{itemnumber}) eq "Waiting";
+    if ($item->{onloan}) {
+        return 1;
+    }
+
+    if ( Koha::Holds->search({itemnumber => $item->{itemnumber},
+                              found => ['W', 'T']})->count ) {
+        return 1;
+    }
+
+    return 0;
 }
 
 =head2 OnShelfHoldsAllowed
