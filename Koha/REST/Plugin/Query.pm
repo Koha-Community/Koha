@@ -79,11 +79,12 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
             my ( $c, $args ) = @_;
             my $attributes = $args->{attributes};
 
-            my @order_by =
-              map { _build_order_atom($_) }
-              split( /\|/, $args->{params}->{_order_by} );
+            if ( defined $args->{params}->{_order_by} ) {
+                my @order_by = map { _build_order_atom($_) }
+                                split( /\|/, $args->{params}->{_order_by} );
+                $attributes->{order_by} = \@order_by;
+            }
 
-            $attributes->{order_by} = \@order_by;
             return $attributes;
         }
     );
