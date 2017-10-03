@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use Module::Load::Conditional qw[can_load check_install requires];
 use Test::More;
 use Test::Strict;
 use File::Spec;
@@ -19,6 +20,24 @@ my @dirs = ( 'acqui', 'admin', 'authorities', 'basket',
     'sms', 'suggestion', 'svc', 'tags', 'tools', 'virtualshelves' );
 
 $Test::Strict::TEST_STRICT = 0;
-$Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl', 'misc/plack/koha.psgi' ];
+
+my $general_skips = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl', 'misc/plack/koha.psgi' ];
+my $elastic_search_files = [ 'misc/search_tools/rebuild_elastic_search.pl' ];
+my @skips;
+push @skips,@$general_skips;
+if ( ! can_load(
+    modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => undef, } )
+) {
+    my $missing_module;
+    if ( $Module::Load::Conditional::ERROR =~ /Can\'t locate (.*?) / ) {
+        $missing_module = $1;
+    }
+    my $es_dep_msg = "Required module $missing_module is not installed";
+    diag $es_dep_msg;
+    my $skip_what_msg = "Skipping: " . join ',', @$elastic_search_files;
+    diag $skip_what_msg;
+    push @skips, @$elastic_search_files;
+}
+push @$Test::Strict::TEST_SKIP, @skips;
 
 all_perl_files_ok(@dirs);
