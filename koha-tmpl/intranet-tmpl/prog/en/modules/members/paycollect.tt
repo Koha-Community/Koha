@@ -101,6 +101,7 @@ function moneyFormat(textObj) {
 
 [% IF ( pay_individual ) %]
     <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
@@ -155,6 +156,7 @@ function moneyFormat(textObj) {
     </form>
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
     <fieldset class="rows">
     <legend>Write off an individual fine</legend>
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
@@ -195,6 +197,7 @@ function moneyFormat(textObj) {
 [% ELSE %]
 
     <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
