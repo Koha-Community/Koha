@@ -268,8 +268,6 @@ if ( $guarantorid ) {
     }
 }
 
-push @errors, 'ERROR_child_no_guarantor' if ( $category_type eq 'C' && !$guarantorid );
-
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
 $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
@@ -401,6 +399,8 @@ if ($op eq 'save' || $op eq 'insert'){
         }
     }
   }
+  #Check guarantorid for child patron
+  push @errors, 'ERROR_child_no_guarantor' if ( $category_type eq 'C' && !$guarantorid );
 }
 
 if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
