@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 45;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -372,6 +372,58 @@ ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan
 AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
+
+my $itemnumber2;
+($biblionumber, $biblioitemnumber, $itemnumber2) = C4::Items::AddItem(
+    {
+        barcode        => 'barcode_4',
+        itemcallnumber => 'callnumber4',
+        homebranch     => $branchcode_1,
+        holdingbranch  => $branchcode_1,
+        location => 'FIC',
+        itype          => $itemtype
+    },
+    $biblionumber
+);
+
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', q{} );
+AddReturn( 'barcode_4', $branchcode_1 );
+my $item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'FIC', 'UpdateItemLocationOnCheckin does not modify value when not enabled' );
+
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', 'FIC: GEN' );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
+ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin does not update location value from 'GEN' with setting "FIC: GEN"} );
+
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', '_ALL_: CART' );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'CART', q{UpdateItemLocationOnCheckin updates location value from 'GEN' with setting "_ALL_: CART"} );
+ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin does not update permanent_location value from 'GEN' with setting "_ALL_: CART"} );
+AddIssue( $borrower_1, 'barcode_4', $daysago10,0, $today, '' );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'GEN', q{Location updates from 'CART' to permanent location on issue} );
+
+t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', "GEN: _BLANK_\n_BLANK_: PROC\nPROC: _PERM_" );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq '', q{UpdateItemLocationOnCheckin updates location value from 'GEN' to '' with setting "GEN: _BLANK_"} );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items->find( $itemnumber2 );
+ok( $item2->location eq 'PROC' , q{UpdateItemLocationOnCheckin updates location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
+ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
+AddReturn( 'barcode_4', $branchcode_1 );
+$item2 = Koha::Items( $itemnumber2 );
+ok( $item2->location eq '' , q{UpdateItemLocationOnCheckin updates location value from 'PROC' to '' with setting "PROC: _PERM_" } );
+ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location from '' with setting "PROC: _PERM_" } );
+
+
+
 
 # Bug 14640 - Cancel the hold on checking out if asked
 my $reserve_id = AddReserve($branchcode_1, $borrower_id1, $biblionumber,

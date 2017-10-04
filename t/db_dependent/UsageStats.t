@@ -397,7 +397,6 @@ sub mocking_systempreferences_to_a_set_value {
         CircControl
         HomeOrHoldingBranch
         HomeOrHoldingBranchReturn
-        InProcessingToShelvingCart
         IssueLostItem
         IssuingInProcess
         ManInvInNoissuesCharge
@@ -406,7 +405,6 @@ sub mocking_systempreferences_to_a_set_value {
         RenewalSendNotice
         RentalsInNoissuesCharge
         ReturnBeforeExpiry
-        ReturnToShelvingCart
         TransfersMaxDaysWarning
         UseBranchTransferLimits
         useDaysMode

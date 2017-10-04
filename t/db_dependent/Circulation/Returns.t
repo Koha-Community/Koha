@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 4;
 use Test::MockModule;
 use Test::Warn;
 
@@ -67,50 +67,6 @@ my $rule = Koha::IssuingRule->new(
     }
 );
 $rule->store();
-
-my $manager = $builder->build({source => 'Borrower'});
-$manager_id = $manager->{borrowernumber};
-
-subtest "InProcessingToShelvingCart tests" => sub {
-
-    plan tests => 2;
-
-    $branch = $builder->build({ source => 'Branch' })->{ branchcode };
-    my $permanent_location = 'TEST';
-    my $location           = 'PROC';
-
-    # Create a biblio record with biblio-level itemtype
-    my $record = MARC::Record->new();
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
-    my $built_item = $builder->build({
-        source => 'Item',
-        value  => {
-            biblionumber  => $biblionumber,
-            homebranch    => $branch,
-            holdingbranch => $branch,
-            location      => $location,
-            permanent_location => $permanent_location
-        }
-    });
-    my $barcode = $built_item->{ barcode };
-    my $itemnumber = $built_item->{ itemnumber };
-    my $item;
-
-    t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 1 );
-    AddReturn( $barcode, $branch );
-    $item = Koha::Items->find( $itemnumber );
-    is( $item->location, 'CART',
-        "InProcessingToShelvingCart functions as intended" );
-
-    ModItem( {location => $location}, undef, $itemnumber );
-
-    t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 0 );
-    AddReturn( $barcode, $branch );
-    $item = Koha::Items->find( $itemnumber );
-    is( $item->location, $permanent_location,
-        "InProcessingToShelvingCart functions as intended" );
-};
-
 
 subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
@@ -382,3 +338,5 @@ subtest 'BlockReturnOfLostItems' => sub {
     ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 1, "Without BlockReturnOfLostItems, a checkin of a lost item should not be blocked");
 };
+
+$schema->storage->txn_rollback;
