@@ -176,8 +176,6 @@
                                     [% IF CAN_user_coursereserves_delete_reserves %]
                                         [% IF cr.item.onloan %]
                                             <a class="btn btn-default btn-xs disabled checkedout delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is checked out">
-                                        [% ELSIF cr.item.itemlost %]
-                                            <a class="btn btn-default btn-xs disabled itemlost delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is lost">
                                         [% ELSE %]
                                             <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id %]">
                                         [% END %]
@@ -224,9 +222,6 @@
                 e.preventDefault();
                 if( $(this).hasClass("checkedout") ){
                     alert(_("This item cannot be removed. It is checked out"));
-                }
-                if( $(this).hasClass("itemlost") ) {
-                    alert(_("This item cannot be removed. It is lost"));
                 }
             });
         });
