@@ -128,6 +128,7 @@ sub BuildReport {
         z3950NormalizeAuthor
         SpineLabelAutoPrint
         SpineLabelShowPrintOnBibDetails
+        BlockReturnOfLostItems
         BlockReturnOfWithdrawnItems
         CalculateFinesOnReturn
         AgeRestrictionOverride

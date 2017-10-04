@@ -82,6 +82,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BiblioDefaultView','normal','normal|marc|isbd','Choose the default detail view in the catalog; choose between normal, marc or isbd','Choice'),
 ('BibtexExportAdditionalFields',  '', NULL ,  'Define additional BibTex tags to export from MARC records in YAML format as an associative array with either a marc tag/subfield combination as the value, or a list of tag/subfield combinations.',  'textarea'),
 ('BlockExpiredPatronOpacActions','1',NULL,'Set whether an expired patron can perform opac actions such as placing holds or renew books, can be overridden on a per patron-type basis','YesNo'),
+('BlockReturnOfLostItems','0','0','If enabled, items that are marked as lost cannot be returned.','YesNo'),
 ('BlockReturnOfWithdrawnItems','1','0','If enabled, items that are marked as withdrawn cannot be returned.','YesNo'),
 ('BorrowerMandatoryField','surname|cardnumber',NULL,'Choose the mandatory fields for a patron\'s account','free'),
 ('borrowerRelationship','father|mother','','Define valid relationships between a guarantor & a guarantee (separated by | or ,)','free'),

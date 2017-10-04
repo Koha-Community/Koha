@@ -505,6 +505,7 @@ foreach my $code ( keys %$messages ) {
     }
     elsif ( $code eq 'WasLost' ) {
         $err{waslost} = 1;
+        $exit_required_p = 1 if C4::Context->preference("BlockReturnOfLostItems");
     }
     elsif ( $code eq 'LostItemFeeRefunded' ) {
         $template->param( LostItemFeeRefunded => 1 );
@@ -643,7 +644,6 @@ $template->param(
     forgivemanualholdsexpire => $forgivemanualholdsexpire,
     overduecharges => $overduecharges,
     AudioAlerts        => C4::Context->preference("AudioAlerts"),
-    BlockReturnOfWithdrawnItems => C4::Context->preference("BlockReturnOfWithdrawnItems"),
 );
 
 $itemnumber = GetItemnumberFromBarcode( $barcode );

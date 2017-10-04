@@ -380,6 +380,7 @@ sub mocking_systempreferences_to_a_set_value {
         z3950NormalizeAuthor
         SpineLabelAutoPrint
         SpineLabelShowPrintOnBibDetails
+        BlockReturnOfLostItems
         BlockReturnOfWithdrawnItems
         CalculateFinesOnReturn
         AgeRestrictionOverride
