@@ -30,6 +30,7 @@ use C4::Accounts;
 use C4::Koha;
 use Koha::Patron::Images;
 use Koha::Account;
+use Koha::Token;
 
 use Koha::Patron::Categories;
 
@@ -110,6 +111,12 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             total_due => $total_due
         );
     } else {
+        die "Wrong CSRF token"
+            unless Koha::Token->new->check_csrf( {
+                session_id => $input->cookie('CGISESSID'),
+                token  => scalar $input->param('csrf_token'),
+            });
+
         if ($individual) {
             if ( $total_paid == $total_due ) {
                 makepayment( $accountlines_id, $borrowernumber, $accountno, $total_paid, $user,
@@ -154,6 +161,8 @@ $template->param(
     total         => $total_due,
     RoutingSerials => C4::Context->preference('RoutingSerials'),
     ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
+
+    csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
