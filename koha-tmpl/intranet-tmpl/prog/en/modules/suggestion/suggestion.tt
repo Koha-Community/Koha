@@ -172,6 +172,24 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
             $("#quantity,#price,#currency").on("change",function(){
                 calcNewsuggTotal();
             });
+
+            [% IF other_reason %]
+                $(".select-reason").hide();
+                $(".select-reason").find("option[value='other']").attr("selected","selected");
+                $("#other_reason").show();
+            [% ELSE %]
+                $("#other_reason").hide();
+            [% END %]
+            $(".select-reason").change(function(){
+                if($(this).val() == "other"){
+                    $(this).hide();
+                    $("#other_reason").show();
+                }
+            });
+            $("a[href*=back]").click(function(){
+                $(".select-reason").show().find("option[value='']").attr("selected","selected");
+                $("#other_reason").hide();
+            });
         });
         // ]]>
     </script>
@@ -456,6 +474,29 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
                             [% END %]
                         [% END %]
                     </select>
+                </li>
+                <li>
+                    <label for="reason">Reason</label>
+                    <select class="select-reason" id="reason" name="reason">
+                        <option value=""> -- Choose a reason -- </option>
+                        [% FOREACH reasonsloo IN suggestion.reasonsloop %]
+                            [% IF (reasonsloo.lib == suggestion.reason) %]
+                                <option value="[% reasonsloo.lib %]" selected="selected">[% reasonsloo.lib %]</option>
+                            [% ELSE %]
+                                <option value="[% reasonsloo.lib %]">[% reasonsloo.lib %]</option>
+                            [% END %]
+                        [% END %]
+                        <option value="other">Others...</option>
+                    </select>
+
+                    <span id="other_reason" name="other_reason">
+                        [% IF other_reason %]
+                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." value="[% suggestion.reason%]"/>
+                        [% ELSE %]
+                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
+                        [% END %]
+                        <a href="#back">Cancel</a>
+                    </span>
                 </li>
             [% END %]
         <li><table>

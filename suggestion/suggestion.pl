@@ -92,6 +92,7 @@ my $returnsuggested = $input->param('returnsuggested');
 my $managedby       = $input->param('managedby');
 my $displayby       = $input->param('displayby') || '';
 my $tabcode         = $input->param('tabcode');
+my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
@@ -133,6 +134,12 @@ if ( $op =~ /save/i ) {
         $suggestion_only->{manageddate} = dt_from_string;
         $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
     }
+
+    my $otherreason = $input->param('other_reason');
+    if ($suggestion_only->{reason} eq 'other' && $otherreason) {
+        $suggestion_only->{reason} = $otherreason;
+    }
+
     if ( $suggestion_only->{'suggestionid'} > 0 ) {
         &ModSuggestion($suggestion_only);
     } else {
@@ -169,6 +176,15 @@ elsif ($op=~/add/) {
 elsif ($op=~/edit/) {
     #Edit suggestion  
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
+    $suggestion_ref->{reasonsloop} = $reasonsloop;
+    my $other_reason = 1;
+    foreach my $reason ( @{ $reasonsloop } ) {
+        if ($suggestion_ref->{reason} eq $reason->{lib}) {
+            $other_reason = 0;
+        }
+    }
+    $other_reason = 0 unless $suggestion_ref->{reason};
+    $template->param(other_reason => $other_reason);
     Init($suggestion_ref);
     $op ='save';
 }  
@@ -243,7 +259,6 @@ if ($op=~/else/) {
     push @criteria_dv, '' if $criteria_has_empty;
 
     my @allsuggestions;
-    my $reasonsloop = GetAuthorisedValues("SUGGEST");
     foreach my $criteriumvalue ( @criteria_dv ) {
         # By default, display suggestions from current working branch
         unless ( exists $$suggestion_ref{'branchcode'} ) {
