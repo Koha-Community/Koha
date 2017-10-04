@@ -222,20 +222,6 @@ Circulation:
                   no: "Don't allow"
             - staff to manually override and check out items to patrons who have more than noissuescharge in fines.
         -
-            - pref: InProcessingToShelvingCart
-              choices:
-                  yes: Move
-                  no: "Don't move"
-            - items that have the location PROC to the location CART when they are checked in.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-        -
-            - pref: ReturnToShelvingCart
-              choices:
-                  yes: Move
-                  no: "Don't move"
-            - all items to the location CART when they are checked in.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-        -
             - pref: AutomaticItemReturn
               choices:
                   yes: Do
@@ -537,6 +523,21 @@ Circulation:
                   no: "Don't"
             - calculate and update overdue charges when an item is returned.
             - "<br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
+        -
+            - pref: UpdateItemLocationOnCheckin
+              type: textarea
+              class: code
+            - This is is a list of value pairs, the first value is followed immediately by colon space then the second value i.e.:<br/>
+            - "PROC: FIC"
+            - <br/> When an item is checked in, if the location value on the left matches the items location value
+            - "it will be updated to the right-hand value.<br/> E.g. ''PROC: FIC'' will cause an item that was set to ''Book Cart'' to now be in the ''Fiction'' shelving location."
+            - <br/>Note that PROC and CART are special values, for these locations only can location and permanent_location differ.  In all other cases an update will affect both.
+            - <br/>Items in the CART location will be returned to their permanent location on checkout
+            - <br/>You can use the special term _BLANK_ on either side of a pair to update/remove items with no location assigned
+            - <br>You can use the special term _ALL_ on the left side to affect all items
+            - and the special term _PERM_ on the right side to return items to their permanent location
+            - <br>**Use of an _ALL_ rule will override/ignore any other values**
+            - <br>Each pair of values should be on a separate line.
         -
             - pref: UpdateNotForLoanStatusOnCheckin
               type: textarea

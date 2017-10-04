@@ -63,18 +63,6 @@ $data->{itemnumber}     = $itemnumber;
 $data->{borrowernumber} = $borrowernumber;
 $data->{branchcode}     = $branchcode;
 
-if ( C4::Context->preference("InProcessingToShelvingCart") ) {
-    my $item = Koha::Items->find($itemnumber);
-    if ( $item->location eq 'PROC' ) {
-        ModItem( { location => 'CART' }, $item->biblionumber, $item->itemnumber );
-    }
-}
-
-if ( C4::Context->preference("ReturnToShelvingCart") ) {
-    my $item = Koha::Items->find($itemnumber);
-    ModItem( { location => 'CART' }, $item->biblionumber, $item->itemnumber );
-}
-
 my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
 $data->{patronnote} = $checkout ? $checkout->note : q||;
 

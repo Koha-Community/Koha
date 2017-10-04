@@ -1428,8 +1428,8 @@ sub AddIssue {
                 )->store;
             }
 
-            if ( C4::Context->preference('ReturnToShelvingCart') ) {
-                # ReturnToShelvingCart is on, anything issued should be taken off the cart.
+            if ( $item_object->location eq 'CART' && $item_object->permanent_location ne 'CART'  ) {
+            ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
                 CartToShelf( $item_object->itemnumber );
             }
 
@@ -1876,17 +1876,6 @@ sub AddReturn {
     }
 
     my $item_unblessed = $item->unblessed;
-    if ( $item->location eq 'PROC' ) {
-        if ( C4::Context->preference("InProcessingToShelvingCart") ) {
-            $item_unblessed->{location} = 'CART';
-        }
-        else {
-            $item_unblessed->{location} = $item->permanent_location;
-        }
-
-        ModItem( $item_unblessed, $item->biblionumber, $item->itemnumber, { log_action => 0 } );
-    }
-
         # full item data, but no borrowernumber or checkout info (no issue)
     my $hbr = GetBranchItemRule($item->homebranch, $itemtype)->{'returnbranch'} || "homebranch";
         # get the proper branch to which to return the item
@@ -1895,6 +1884,37 @@ sub AddReturn {
 
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
+
+    my $yaml_loc = C4::Context->preference('UpdateItemLocationOnCheckin');
+    if ($yaml_loc) {
+        $yaml_loc = "$yaml_loc\n\n";  # YAML is strict on ending \n. Surplus does not hurt
+        my $rules;
+        eval { $rules = YAML::Load($yaml_loc); };
+        if ($@) {
+            warn "Unable to parse UpdateItemLocationOnCheckin syspref : $@";
+        }
+        else {
+            if (defined $rules->{_ALL_}) {
+                if ($rules->{_ALL_} eq '_PERM_') { $rules->{_ALL_} = $item->{permanent_location}; }
+                if ($rules->{_ALL_} eq '_BLANK_') { $rules->{_ALL_} = ''; }
+                if ( $item->{location} ne $rules->{_ALL_}) {
+                    $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $rules->{_ALL_} };
+                    ModItem( { location => $rules->{_ALL_} }, undef, $itemnumber );
+                }
+            }
+            else {
+                foreach my $key ( keys %$rules ) {
+                    if ( $rules->{$key} eq '_PERM_' ) { $rules->{$key} = $item->{permanent_location}; }
+                    if ( $rules->{$key} eq '_BLANK_') { $rules->{$key} = '' ;}
+                    if ( ($item->{location} eq $key && $item->{location} ne $rules->{$key}) || ($key eq '_BLANK_' && $item->{location} eq '' && $rules->{$key} ne '') ) {
+                        $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $rules->{$key} };
+                        ModItem( { location => $rules->{$key} }, undef, $itemnumber );
+                        last;
+                    }
+                }
+            }
+        }
+    }
 
     my $yaml = C4::Context->preference('UpdateNotForLoanStatusOnCheckin');
     if ($yaml) {
@@ -1987,15 +2007,12 @@ sub AddReturn {
             );
             $sth->execute( $item->itemnumber );
             # if we have a reservation with valid transfer, we can set it's status to 'W'
-            ShelfToCart( $item->itemnumber ) if ( C4::Context->preference("ReturnToShelvingCart") );
             C4::Reserves::ModReserveStatus($item->itemnumber, 'W');
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->itemnumber;
         }
         $validTransfert = 1;
-    } else {
-        ShelfToCart( $item->itemnumber ) if ( C4::Context->preference("ReturnToShelvingCart") );
     }
 
     # fix up the accounts.....

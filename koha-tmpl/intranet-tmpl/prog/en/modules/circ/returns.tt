@@ -577,6 +577,35 @@
                     [% END %]
                 </p>
             [% END %]
+            [% IF ( errmsgloo.ItemLocationUpdated ) %]
+                 <p class="problem">
+                     Item shelving location updated.
+                    <br />Old value:
+                    [% IF errmsgloo.ItemLocationUpdated.from %]
+                        [% IF errmsgloo.ItemLocationUpdated.from == '' %]
+                            empty
+                        [% ELSIF AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.from ) == '' %]
+                            [% errmsgloo.ItemLocationUpdated.from | html %] (No description available)
+                        [% ELSE %]
+                            [% AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.from ) | html %]
+                        [% END %]
+                    [% ELSE %]
+                        "Blank"
+                    [% END %]
+                    <br />New value:
+                    [% IF errmsgloo.ItemLocationUpdated.to %]
+                        [% IF errmsgloo.ItemLocationUpdated.to == '' %]
+                            empty
+                        [% ELSIF AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.to ) == '' %]
+                            [% errmsgloo.ItemLocationUpdated.to | html %] (Not an authorized value)
+                        [% ELSE %]
+                            [% AuthorisedValues.GetByCode( 'LOC', errmsgloo.ItemLocationUpdated.to ) | html %]
+                        [% END %]
+                    [% ELSE %]
+                        "Blank"
+                    [% END %]
+                 </p>
+            [% END %]
             [% IF ( errmsgloo.badbarcode ) %]
                 <p class="problem">No item with barcode: [% errmsgloo.msg | html %]</p>
             [% END %]
@@ -595,7 +624,6 @@
                 [% ELSE %]
                     <p class="problem">Item was lost, now found.</p>
                 [% END %]
-
                 [% IF LostItemFeeRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
                     <p class="problem">A refund has been applied to the borrowing patron's account.</p>
                 [% ELSIF Koha.Preference('BlockReturnOfLostItems') %]

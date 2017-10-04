@@ -144,7 +144,6 @@ sub BuildReport {
         AutoRemoveOverduesRestrictions
         CircControl
         HomeOrHoldingBranch
-        InProcessingToShelvingCart
         IssueLostItem
         IssuingInProcess
         ManInvInNoissuesCharge
@@ -153,7 +152,6 @@ sub BuildReport {
         RenewalSendNotice
         RentalsInNoissuesCharge
         ReturnBeforeExpiry
-        ReturnToShelvingCart
         TransfersMaxDaysWarning
         UseBranchTransferLimits
         useDaysMode

@@ -1029,7 +1029,8 @@ sub ModReserveStatus {
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $newstatus, $itemnumber );
 
-    if ( C4::Context->preference("ReturnToShelvingCart") && $newstatus ) {
+    my $item = GetItem($itemnumber);
+    if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) && $newstatus ) {
       CartToShelf( $itemnumber );
     }
 }
@@ -1081,9 +1082,9 @@ sub ModReserveAffect {
       if ( !$transferToDo && !$already_on_shelf );
 
     _FixPriority( { biblionumber => $biblionumber } );
-
-    if ( C4::Context->preference("ReturnToShelvingCart") ) {
-        CartToShelf($itemnumber);
+    my $item = GetItem($itemnumber);
+    if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) ) {
+      CartToShelf( $itemnumber );
     }
 
     return;

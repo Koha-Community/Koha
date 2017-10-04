@@ -533,6 +533,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'ForeverDebarred' ) {
         $err{foreverdebarred}        = $messages->{'ForeverDebarred'};
     }
+    elsif ( $code eq 'ItemLocationUpdated' ) {
+        $err{ItemLocationUpdated} = $messages->{ItemLocationUpdated};
+    }
     elsif ( $code eq 'NotForLoanStatusUpdated' ) {
         $err{NotForLoanStatusUpdated} = $messages->{NotForLoanStatusUpdated};
     }

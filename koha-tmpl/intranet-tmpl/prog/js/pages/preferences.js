@@ -162,4 +162,23 @@ $( document ).ready( function () {
     if ( search_jumped ) {
         document.location.hash = "jumped";
     }
+
+    $("#pref_UpdateItemLocationOnCheckin").change(function(){
+        var the_text = $(this).val();
+        var alert_text = '';
+        if ( the_text.indexOf('_ALL_:') != -1 ) alert_text = MSG_ALL_VALUE_WARN + '\n';
+        var split_text  =the_text.split("\n");
+        var alert_issues = '';
+        var issue_count = 0;
+        var reg_check = /.*:\s.*/;
+        for (var i=0; i < split_text.length; i++){
+            if ( !split_text[i].match(reg_check) && split_text[i].length ) {
+                alert_issues+=split_text[i]+"\n";
+                issue_count++;
+            }
+        }
+        if (issue_count) alert_text += "\n"+ MSG_UPD_LOC_FORMAT_WARN  +"\n"+alert_issues;
+        if ( alert_text.length )  alert(alert_text);
+    });
+
 } );

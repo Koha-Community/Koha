@@ -47,7 +47,6 @@ BEGIN {
         DelItemCheck
         MoveItemFromBiblio
         CartToShelf
-        ShelfToCart
         GetAnalyticsCount
         SearchItemsByField
         SearchItems
@@ -139,25 +138,6 @@ sub CartToShelf {
     if ( $item->location eq 'CART' ) {
         ModItem({ location => $item->permanent_location}, undef, $itemnumber);
     }
-}
-
-=head2 ShelfToCart
-
-  ShelfToCart($itemnumber);
-
-Set the current shelving location of the item
-to shelving cart ('CART').
-
-=cut
-
-sub ShelfToCart {
-    my ( $itemnumber ) = @_;
-
-    unless ( $itemnumber ) {
-        croak "FAILED ShelfToCart() - no itemnumber supplied";
-    }
-
-    ModItem({ location => 'CART'}, undef, $itemnumber);
 }
 
 =head2 AddItemFromMarc
@@ -566,9 +546,10 @@ sub ModItemTransfer {
     my ( $itemnumber, $frombranch, $tobranch ) = @_;
 
     my $dbh = C4::Context->dbh;
+    my $item = GetItem( $itemnumber );
 
     # Remove the 'shelving cart' location status if it is being used.
-    CartToShelf( $itemnumber ) if ( C4::Context->preference("ReturnToShelvingCart") );
+    CartToShelf( $itemnumber ) if ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART' );
 
     $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ? AND datearrived IS NULL", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
 
