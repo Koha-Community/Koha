@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 144;
+use Test::More tests => 145;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -472,7 +472,7 @@ ModReceiveOrder({
 } );
 
 is ( GetBudgetSpent( $fund ), 6, "total shipping cost is 6");
-is ( GetBudgetOrdered( $fund ), '20.000000', "total ordered price is 20");
+is ( GetBudgetOrdered( $fund ), '26', "total ordered price is 20");
 
 
 # CloneBudgetPeriod
@@ -797,6 +797,120 @@ $authCat = GetBudgetAuthCats($budgetPeriodId);
 is( scalar @{$authCat}, 0, "GetBudgetAuthCats returns only non-empty sorting categories (all empty)" );
 
 # /Test GetBudgetAuthCats
+
+subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
+    plan tests => 10;
+
+    my $budget = $builder->build({
+        source => 'Aqbudget',
+        value  => {
+            budget_amount => 1000,
+        }
+    });
+    my $invoice = $builder->build({
+        source => 'Aqinvoice',
+        value  => {
+            closedate => undef,
+        }
+    });
+
+    my $spent = GetBudgetSpent( $budget->{budget_id} );
+    my $ordered = GetBudgetOrdered( $budget->{budget_id} );
+
+    is( $spent, 0, "New budget, no orders/invoices, should be nothing spent");
+    is( $ordered, 0, "New budget, no orders/invoices, should be nothing ordered");
+
+    my $inv_adj_1 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 0,
+            budget_id     => $budget->{budget_id},
+        }
+    });
+
+    $spent = GetBudgetSpent( $budget->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    is( $spent, 0, "After adding invoice adjustment on open invoice, should be nothing spent");
+    is( $ordered, 0, "After adding invoice adjustment on open invoice not encumbered, should be nothing ordered");
+
+    my $inv_adj_2 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 1,
+            budget_id     => $budget->{budget_id},
+        }
+    });
+
+    $spent = GetBudgetSpent( $budget->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    is( $spent, 0, "After adding invoice adjustment on open invoice, should be nothing spent");
+    is( $ordered, 3, "After adding invoice adjustment on open invoice encumbered, should be 3 ordered");
+
+    my $invoice_2 = $builder->build({
+        source => 'Aqinvoice',
+        value  => {
+            closedate => '2017-07-01',
+        }
+    });
+    my $inv_adj_3 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice_2->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 0,
+            budget_id     => $budget->{budget_id},
+        }
+    });
+    my $inv_adj_4 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice_2->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 1,
+            budget_id     => $budget->{budget_id},
+        }
+    });
+
+    $spent = GetBudgetSpent( $budget->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    is( $spent, 6, "After adding invoice adjustment on closed invoice, should be 6 spent, encumber has no affect once closed");
+    is( $ordered, 3, "After adding invoice adjustment on closed invoice, should still be 3 ordered");
+
+    my $budget_2 = $builder->build({
+        source => 'Aqbudget',
+        value  => {
+            budget_amount => 1000,
+        }
+    });
+    my $inv_adj_5 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 1,
+            budget_id     => $budget_2->{budget_id},
+        }
+    });
+    my $inv_adj_6 = $builder->build({
+        source => 'InvoiceAdjustment',
+        value  => {
+            invoiceid     => $invoice_2->{invoiceid},
+            adjustment    => 3,
+            encumber_open => 1,
+            budget_id     => $budget_2->{budget_id},
+        }
+    });
+
+    $spent = GetBudgetSpent( $budget->{budget_id} );
+    $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    is( $spent, 6, "After adding invoice adjustment on a different budget should be 6 spent/budget unaffected");
+    is( $ordered, 3, "After adding invoice adjustment on a different budget, should still be 3 ordered/budget unaffected");
+
+};
 
 sub _get_dependencies {
     my ($budget_hierarchy) = @_;
