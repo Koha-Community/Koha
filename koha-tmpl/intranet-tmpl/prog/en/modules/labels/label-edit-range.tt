@@ -11,9 +11,9 @@
             str += "from=" + parseInt(document.getElementById("from-input").value) + "&";
             str += "to=" + parseInt(document.getElementById("to-input").value);
             return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?" + str, 400, 800);
-            return;
         }
-        function print() {
+
+        function validate() {
             var error = false;
             if (parseInt(document.getElementById("from-input").value) == 0) {
                 document.getElementById("from-error").innerHTML = "  *Cannot be smaller than 1";
@@ -80,7 +80,7 @@
                             </div>
                         </form>
                         <div id="batch-manage" class="btn-toolbar">
-                            <a class="btn btn-default btn-sm" id="print" href="javascript:print()">
+                            <a class="btn btn-default btn-sm" id="print" onClick="validate()">
                                 <!-- This display a plus. Is there a more appropriate symbol to use?
                                 <i class="fa fa-plus"></i>
                                 -->
