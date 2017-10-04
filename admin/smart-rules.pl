@@ -224,12 +224,15 @@ elsif ($op eq "set-branch-defaults") {
     my $holdallowed   = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
     my $returnbranch  = $input->param('returnbranch');
+    my $max_holds = $input->param('max_holds');
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
     $maxonsiteissueqty =~ s/\s//g;
     $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
     $holdallowed =~ s/\s//g;
     $holdallowed = undef if $holdallowed !~ /^\d+/;
+    $max_holds =~ s/\s//g;
+    $max_holds = undef if $max_holds !~ /^\d+/;
 
     if ($branch eq "*") {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total
@@ -265,6 +268,15 @@ elsif ($op eq "set-branch-defaults") {
             $sth_insert->execute($branch, $maxissueqty, $maxonsiteissueqty, $holdallowed, $hold_fulfillment_policy, $returnbranch);
         }
     }
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => $branch,
+            categorycode => '*',
+            itemtype     => undef,
+            rule_name    => 'max_holds',
+            rule_value   => $max_holds,
+        }
+    );
 }
 elsif ($op eq "add-branch-cat") {
     my $categorycode  = $input->param('categorycode');
@@ -337,7 +349,7 @@ elsif ($op eq "add-branch-cat") {
 
             Koha::CirculationRules->set_rule(
                 {
-                    branchcode   => undef,
+                    branchcode   => '*',
                     categorycode => $categorycode,
                     itemtype     => undef,
                     rule_name    => 'max_holds',

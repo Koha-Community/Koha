@@ -136,7 +136,6 @@ sub set_rule {
 
 sub set_rules {
     my ( $self, $params ) = @_;
-    warn Data::Dumper::Dumper( $params );
 
     my $branchcode   = $params->{branchcode};
     my $categorycode = $params->{categorycode};
@@ -163,6 +162,10 @@ sub set_rules {
 sub _type {
     return 'CirculationRule';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::CirculationRule';
