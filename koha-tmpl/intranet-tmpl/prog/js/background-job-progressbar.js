@@ -69,7 +69,7 @@ function submitBackgroundJob(f) {
                 backgroundJobProgressTimer = setInterval("updateJobProgress()", 500);
             },
             error: function(xml, textStatus) {
-                alert('Failed to submit form: ' + textStatus);
+                humanMsg.displayMsg( '<p>' + _('Failed to submit form: ') + textStatus + '</p></br>'+xml.responseText, { className: 'humanError' } );
             }
 
         });

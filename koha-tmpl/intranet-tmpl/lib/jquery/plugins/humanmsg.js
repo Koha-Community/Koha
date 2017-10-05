@@ -75,7 +75,6 @@ var humanMsg = {
 	bindEvents: function() {
 	// Remove message if mouse is moved or key is pressed
 		jQuery(document)
-			.mousemove(humanMsg.removeMsg)
 			.click(humanMsg.removeMsg)
 			.keypress(humanMsg.removeMsg)
 	},

@@ -8,6 +8,8 @@
     #fileuploadstatus,#fileuploadfailed,#fileuploadcancel,#jobpanel,#jobstatus,#jobfailed { display : none; }
 </style>
 
+[% Asset.css("css/humanmsg.css") %]
+
 </head>
 <body id="tools_stage-marc-import" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -213,6 +215,7 @@
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% Asset.js("js/file-upload.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
         var xhr;
         $(document).ready(function(){
