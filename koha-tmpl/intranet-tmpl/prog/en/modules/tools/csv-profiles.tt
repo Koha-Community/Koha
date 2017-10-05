@@ -91,6 +91,7 @@
     [% IF used_for_code == 'export_records' %] Export records
     [% ELSIF used_for_code == 'late_issues' %] Late serial issues claims
     [% ELSIF used_for_code == 'export_basket' %] Basket export in acquisition
+    [% ELSIF used_for_code == 'export_lost_items' %] Export lost items in report
     [% ELSE %] Unknown usage
     [% END %]
 [% END %]
@@ -131,7 +132,7 @@
                 <li class="sql_specific">
                     <label for="used_for_sql">Usage: </label>
                     <select id="used_for_sql" name="used_for_sql">
-                        [% FOREACH used_for IN [ 'late_issues' 'export_basket' ] %]
+                        [% FOREACH used_for IN [ 'late_issues' 'export_basket' 'export_lost_items' ] %]
                         [% IF csv_profile.used_for == used_for %]
                             <option value="[% used_for %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% ELSE %]

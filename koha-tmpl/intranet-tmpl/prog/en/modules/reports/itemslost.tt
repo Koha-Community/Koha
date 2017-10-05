@@ -39,7 +39,17 @@
                 <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
                 <span class="itemselection_actions">
                   | Actions:
-                  <a class="itemselection_action_export"><i class="fa fa-trash"></i> Export selected items</a>
+                  [% IF csv_profiles.count %]
+                      <a class="itemselection_action_export"><i class="fa fa-download"></i> Export selected items</a>
+                      Using the following CSV profile:
+                      <select name="csv_profile_id" id="csv_profile_id">
+                          [% FOREACH csv_profile IN csv_profiles %]
+                              <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</<option>
+                          [% END %]
+                      </select>
+                  [% ELSE %]
+                      <span class="itemselection_action_export" title="You should create a CSV profile for export_lost_items"><i class="fa fa-download"></i> Export selected items</a>
+                  [% END %]
                 </span>
         </div>
 
@@ -180,7 +190,8 @@
                     itemnumbers.push($(this).val());
                 });
                 if (itemnumbers.length > 0) {
-                    var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
+                    var csv_profile_id = $("#csv_profile_id  option:selected").val();
+                    var url = '/cgi-bin/koha/reports/itemslost.pl?op=export&csv_profile_id='+csv_profile_id;
                     url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
                     $('a.itemselection_action_export').attr('href', url);
                 } else {
@@ -201,6 +212,9 @@
             itemSelectionBuildActionLinks();
 
             $("input[name='itemnumber'][type='checkbox']").change(function() {
+                itemSelectionBuildActionLinks();
+            });
+            $("#csv_profile_id").change(function() {
                 itemSelectionBuildActionLinks();
             });
 
