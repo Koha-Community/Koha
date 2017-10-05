@@ -82,10 +82,8 @@ my $get_response = sub {
     $response = XMLin($stdout);
 };
 $get_response->();
-my $now = DateTime->now . 'Z';
 my $expected = {
     request => 'http://localhost',
-    responseDate => $now,
     xmlns => 'http://www.openarchives.org/OAI/2.0/',
     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
     'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd',
@@ -104,14 +102,13 @@ my $expected = {
         ],
     },
 };
+delete $response->{responseDate};
 is_deeply($response, $expected, "ListMetadataFormats");
 
 %param = ( verb => 'ListIdentifiers' );
 $get_response->();
-$now = DateTime->now . 'Z';
 $expected = {
     request => 'http://localhost',
-    responseDate => $now,
     xmlns => 'http://www.openarchives.org/OAI/2.0/',
     'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
     'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd',
@@ -120,6 +117,7 @@ $expected = {
         content => "Required argument 'metadataPrefix' was undefined",
     },
 };
+delete $response->{responseDate};
 is_deeply($response, $expected, "ListIdentifiers without metadaPrefix argument");
 
 $dbh->rollback;
