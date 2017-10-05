@@ -49,6 +49,7 @@
                     <th>Item type</th>
                     <th>Current location</th>
                     <th>Location</th>
+                    <th>Not for loan status</th>
                     <th>Notes</th>
                 </tr>
             </thead>
@@ -59,7 +60,7 @@
                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.biblio.title |html %]</a>
                         </td>
                         <td>[% item.biblio.author %]</td>
-                        <td>[% AuthorisedValues.GetByCode( 'LOST', item.itemlost ) %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
                         <td>
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.barcode %]</a>
                         </td>
@@ -71,6 +72,7 @@
                         <td>[% item.effective_itemtype %]</td>
                         <td>[% Branches.GetName(item.holdingbranch) %]</td>
                         <td>[% item.location %]</td>
+                        <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
                         <td>[% item.itemnotes %]</td>
                     </tr>
                 [% END %]
@@ -95,15 +97,34 @@
                 [% END %]
             </select></li>
 
-    <li><label for="loststatusfilter">Lost status: </label><select name="loststatusfilter" id="loststatusfilter">
-                <option value="">All</option>
-                [% FOREACH loststatusloo IN loststatusloop %]
-                [% IF ( loststatusloo.selected ) %]<option value="[% loststatusloo.authorised_value %]" selected="selected">[% loststatusloo.lib %]</option>
-		[% ELSE %]
-		<option value="[% loststatusloo.authorised_value %]">[% loststatusloo.lib %]</option>
-		[% END %]
+    <li>
+        <label for="loststatusfilter">Lost status: </label>
+        <select name="loststatusfilter" id="loststatusfilter">
+            <option value="">All</option>
+            [% FOREACH l IN AuthorisedValues.GetDescriptionsByKohaField( kohafield => 'items.itemlost') %]
+                [% IF l.authorised_value == lostfilter %]
+                    <option value="[% l.authorised_value %]" selected="selected">[% l.lib %]</option>
+                [% ELSE %]
+                    <option value="[% l.authorised_value %]">[% l.lib %]</option>
                 [% END %]
-            </select></li>
+            [% END %]
+        </select>
+    </li>
+
+    <li>
+        <label for="notforloanfilter">Not for loan: </label>
+        <select name="notforloanfilter" id="notforloanfilter">
+            <option value="">All</option>
+            [% FOREACH n IN AuthorisedValues.GetDescriptionsByKohaField( kohafield => 'items.notforloan') %]
+                [% IF n.authorised_value == notforloanfilter %]
+                    <option value="[% n.authorised_value %]" selected="selected">[% n.lib %]</option>
+                [% ELSE %]
+                    <option value="[% n.authorised_value %]">[% n.lib %]</option>
+                [% END %]
+            [% END %]
+        </select>
+    </li>
+
 </ol></fieldset>
 <fieldset class="action">    <input type="submit" value="Submit" />
     <input type="hidden" name="get_items" value="1" /></fieldset>

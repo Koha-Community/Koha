@@ -68,6 +68,28 @@ sub GetCategories {
     ];
 }
 
+sub GetDescriptionsByKohaField {
+    my ( $self, $params ) = @_;
+    return Koha::AuthorisedValues->get_descriptions_by_koha_field(
+        { kohafield => $params->{kohafield} } );
+}
+
+sub GetDescriptionByKohaField {
+    my ( $self, $params ) = @_;
+    my $av = Koha::AuthorisedValues->get_description_by_koha_field(
+        {
+            kohafield        => $params->{kohafield},
+            authorised_value => $params->{authorised_value},
+        }
+    );
+    return %$av
+            ? $params->{opac}
+                ? $av->{opac_description}
+                : $av->{lib}
+            : ''; # Maybe we should return $params->{authorised_value}?
+
+}
+
 1;
 
 =head1 NAME
@@ -92,6 +114,14 @@ the following TT code: [% AuthorisedValues.GetByCode( 'CATEGORY', 'AUTHORISED_VA
 =head2 GetAuthValueDropbox
 
 The parameters are identical to those used by the subroutine C4::Koha::GetAuthValueDropbox
+
+=head2 GetDescriptionsByKohaField
+
+The parameters are identical to those used by the subroutine Koha::AuthorisedValues->get_descriptions_by_koha_field
+
+=head2 GetDescriptionByKohaField
+
+The parameters are identical to those used by the subroutine Koha::AuthorisedValues->get_description_by_koha_field
 
 =head1 AUTHOR
 

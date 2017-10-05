@@ -32,6 +32,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
+
+use Koha::AuthorisedValues;
 use Koha::DateUtils;
 
 my $query = new CGI;
@@ -54,6 +56,7 @@ if ($get_items) {
     my $barcodefilter    = $params->{'barcodefilter'}    || undef;
     my $itemtypesfilter  = $params->{'itemtypesfilter'}  || undef;
     my $loststatusfilter = $params->{'loststatusfilter'} || undef;
+    my $notforloanfilter = $params->{'notforloanfilter'} || undef;
 
     my $params = {
         ( $branchfilter ? ( homebranch => $branchfilter ) : () ),
@@ -61,6 +64,11 @@ if ($get_items) {
             $loststatusfilter
             ? ( itemlost => $loststatusfilter )
             : ( itemlost => { '!=' => 0 } )
+        ),
+        (
+            $notforloanfilter
+            ? ( notforloan => $notforloanfilter )
+            : ()
         ),
         ( $barcodefilter ? ( barcode => { like => "%$barcodefilter%" } ) : () ),
     };
@@ -88,12 +96,8 @@ if ($get_items) {
 # getting all itemtypes
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
-# get lost statuses
-my $lost_status_loop = C4::Koha::GetAuthorisedValues( 'LOST' );
-
 $template->param(
-                  itemtypes => $itemtypes,
-                  loststatusloop => $lost_status_loop,
+    itemtypes => $itemtypes,
 );
 
 # writing the template
