@@ -327,8 +327,6 @@ $(document).ready(function(){
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
     <fieldset class="action">
-    <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
-    <br/>
     [% IF ( record_type != 'auth' ) %]
     Add new bibliographic records into this framework:
     <select name="framework" id="frameworks">
@@ -338,6 +336,8 @@ $(document).ready(function(){
       [% END %]
     </select>
     [% END %]
+    <br/>
+    <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
     </fieldset>
   </form>
   <div id="jobpanel"><div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
