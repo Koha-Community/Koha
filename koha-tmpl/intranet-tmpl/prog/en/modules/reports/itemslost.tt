@@ -39,10 +39,11 @@
                 <tr>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Lost code</th>
+                    <th>Lost status</th>
+                    <th class="title-string">Lost on</th>
                     <th>Barcode</th>
                     <th>Call number</th>
-                    <th>Date last seen</th>
+                    <th class="title-string">Date last seen</th>
                     <th>Price</th>
                     <th>Rep.price</th>
                     <th>Library</th>
@@ -61,11 +62,12 @@
                         </td>
                         <td>[% item.biblio.author %]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
+                        <td><span title="[% item.itemlost_on %]"</span>[% item.itemlost_on | $KohaDates %]</span></td>
                         <td>
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.barcode %]</a>
                         </td>
                         <td>[% item.itemcallnumber %]</td>
-                        <td>[% item.datelastseen | $KohaDates %]</td>
+                        <td><span title="[% item.datelastseen %]">[% item.datelastseen | $KohaDates %]</span></td>
                         <td>[% item.price %]</td>
                         <td>[% item.replacementprice %]</td>
                         <td>[% Branches.GetName(item.homebranch) %]</td>
