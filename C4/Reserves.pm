@@ -879,21 +879,25 @@ sub CancelExpiredReserves {
 
     my $today = dt_from_string();
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
+    my $expireWaiting = C4::Context->preference('ExpireReservesMaxPickUpDelay');
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( "
-        SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() )
-        AND expirationdate IS NOT NULL
-    " );
-    $sth->execute();
 
-    while ( my $res = $sth->fetchrow_hashref() ) {
-        my $calendar = Koha::Calendar->new( branchcode => $res->{'branchcode'} );
-        my $cancel_params = { reserve_id => $res->{'reserve_id'} };
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 
+    my $params = { expirationdate => { '<', $dtf->format_date($today) } };
+
+    $params->{found} = undef unless $expireWaiting;
+
+    # FIXME To move to Koha::Holds->search_expired (?)
+    my $holds = Koha::Holds->search( $params );
+
+    while ( my $hold = $holds->next ) {
+        my $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
         next if !$cancel_on_holidays && $calendar->is_holiday( $today );
 
-        if ( $res->{found} eq 'W' ) {
+        my $cancel_params = { reserve_id => $hold->reserve_id };
+        if ( $hold->found eq 'W' ) {
             $cancel_params->{charge_cancel_fee} = 1;
         }
 
