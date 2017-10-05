@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 58;
+use Test::More tests => 59;
 use Test::MockModule;
 use Test::Warn;
 
@@ -690,6 +690,67 @@ subtest '_koha_notify_reserve() tests' => sub {
         })->next()->to_address();
     is($email_message_address, undef ,"We should not populate the hold message with the email address, sending will do so");
 
+};
+
+subtest 'CancelExpiredReserves tests' => sub {
+    plan tests => 2;
+
+    $dbh->do('DELETE FROM reserves');
+
+    my $category = $builder->build({ source => 'Category' });
+    my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrowernumber = AddMember(
+        firstname =>  'my firstname',
+        surname => 'my surname',
+        categorycode => $category->{categorycode},
+        branchcode => $branchcode,
+    );
+
+    my $resdate = dt_from_string->add( days => -20 );
+    my $expdate = dt_from_string->add( days => -2 );
+    my $notexpdate = dt_from_string->add( days => 2 );
+
+    my $hold1 = Koha::Hold->new({
+        branchcode => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber => $bibnum,
+        priority => 1,
+        reservedate => $resdate,
+        expirationdate => $notexpdate,
+        found => undef
+    })->store;
+
+    my $hold2 = Koha::Hold->new({
+        branchcode => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber => $bibnum,
+        priority => 2,
+        reservedate => $resdate,
+        expirationdate => $expdate,
+        found => undef
+    })->store;
+
+    my $hold3 = Koha::Hold->new({
+        branchcode => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber => $bibnum,
+        itemnumber => $itemnumber,
+        priority => 0,
+        reservedate => $resdate,
+        expirationdate => $expdate,
+        found => 'W'
+    })->store;
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelay', 0 );
+    CancelExpiredReserves();
+    my $count1 = Koha::Holds->search->count;
+    is( $count1, 2, 'Only the non-waiting expired holds should be cancelled');
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelay', 1 );
+    CancelExpiredReserves();
+    my $count2 = Koha::Holds->search->count;
+    is( $count2, 1, 'Also the waiting expired hold should be cancelled now');
 };
 
 sub count_hold_print_messages {
