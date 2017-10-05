@@ -1,7 +1,7 @@
 [% USE ColumnsSettings %]
 
 <script type="text/javascript">
-function KohaTable(selector, dt_parameters, columns_settings) {
+function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     var id = 0;
     var hidden_ids = [];
     var included_ids = [];
@@ -25,11 +25,30 @@ function KohaTable(selector, dt_parameters, columns_settings) {
             text: _("Column visibility"),
         }
     ];
-    var table = $(selector).dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
+
+    var table = $('#' + id_selector + ' table');
+    if ( add_filters ) {
+        // Duplicate the table header row for columnFilter
+        thead_row = table.find('thead tr');
+        clone = thead_row.clone().addClass('filters_row');
+        clone.find("th.NoSort").html('');
+        thead_row.before(clone);
+    }
+
+    table.dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
 
     $(hidden_ids).each(function(index, value) {
         table.fnSetColumnVis( value, false );
     });
+
+    if ( add_filters ) {
+        // show a link to activate filtering
+        link = $('<a>')
+            .attr('href', '#')
+            .attr('id', id_selector + '_activate_filters');
+        $("." + id_selector + "_table_controls").prepend(link);
+        deactivate_filters(id_selector);
+    }
 
     return table;
 }
