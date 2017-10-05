@@ -770,7 +770,7 @@ sub FindDuplicateAuthority {
         }
     }
     my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
-    my ($error, $results, $total_hits) = $searcher->simple_search_compat( $query, 0, 1 );
+    my ($error, $results, $total_hits) = $searcher->simple_search_compat( $query, 0, 1, [ 'authorityserver' ] );
     # there is at least 1 result => return the 1st one
     if (!defined $error && @{$results} ) {
         my $marcrecord = C4::Search::new_record_from_zebra(
