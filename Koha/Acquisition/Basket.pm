@@ -58,7 +58,9 @@ sub effective_create_items {
     return $self->create_items || C4::Context->preference('AcqCreateItem');
 }
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 

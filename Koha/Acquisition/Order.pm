@@ -31,7 +31,7 @@ Koha::Acquisition::Order Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 new
 
@@ -98,6 +98,14 @@ sub add_item {
     my $rs = $schema->resultset('AqordersItem');
     $rs->create({ ordernumber => $self->ordernumber, itemnumber => $itemnumber });
 }
+
+=head3 basket
+
+    my $basket = Koha::Acquisition::Orders->find( $id )->basket;
+
+Returns the basket associated to the order.
+
+=cut
 
 sub basket {
     my ( $self )  = @_;
