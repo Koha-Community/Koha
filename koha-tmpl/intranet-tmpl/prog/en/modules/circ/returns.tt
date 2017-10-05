@@ -715,7 +715,7 @@
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]
-            var returns_table = KohaTable("#checkedintable", {
+            var returns_table = KohaTable("checkedintable", {
                     "bFilter":false,
                     "bPaginate":false,
                     "bInfo":false,

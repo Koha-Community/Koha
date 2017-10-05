@@ -1,5 +1,5 @@
 function activate_filters(id) {
-    var table = $("#" + id + " table");
+    var table = $("#" + id );
     if (table.length == 1) {
         filters_row = table.find('thead tr.filters_row');
 
@@ -32,7 +32,7 @@ function activate_filters(id) {
 }
 
 function deactivate_filters(id) {
-    filters_row = $("#" + id + " table").find('thead tr.filters_row');
+    filters_row = $("#" + id ).find('thead tr.filters_row');
 
     filters_row.find('input[type="text"]')
         .val('')            // Empty filter text boxes

@@ -26,7 +26,7 @@ function check_uncheck() {
 $(document).ready(function() {
 
     var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) %];
-    late_orderst = KohaTable("#late_orders", {
+    late_orderst = KohaTable("late_orders", {
         "aoColumnDefs": [
             { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

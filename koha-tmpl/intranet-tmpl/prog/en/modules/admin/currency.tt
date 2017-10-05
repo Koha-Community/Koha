@@ -235,7 +235,7 @@
 
         $(document).ready(function() {
             columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
-            var issuest = KohaTable("#currencies-table", {
+            var issuest = KohaTable("currencies-table", {
                 dom: 'B<"clearfix">t',
                 "columnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },

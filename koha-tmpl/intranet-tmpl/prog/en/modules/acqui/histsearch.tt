@@ -216,7 +216,7 @@
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) %];
-            KohaTable("#histsearcht", {
+            KohaTable("histsearcht", {
                 "aoColumnDefs": [
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }

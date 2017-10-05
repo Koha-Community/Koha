@@ -2,12 +2,14 @@
 
 <script type="text/javascript">
 function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
-    var id = 0;
+    var counter = 0;
     var hidden_ids = [];
     var included_ids = [];
+    var selector = '#' + id_selector;
+
     $(columns_settings).each( function() {
         var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( 'th' );
-        var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : id;
+        var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : counter;
         if ( used_id == -1 ) return;
 
         if ( this['is_hidden'] == "1" ) {
@@ -16,7 +18,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         if ( this['cannot_be_toggled'] == "0" ) {
             included_ids.push( used_id );
         }
-        id++;
+        counter++;
     });
     dt_parameters[ "buttons" ] = [
         {
@@ -26,7 +28,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         }
     ];
 
-    var table = $('#' + id_selector + ' table');
+    var table = $(selector);
     if ( add_filters ) {
         // Duplicate the table header row for columnFilter
         thead_row = table.find('thead tr');
@@ -46,7 +48,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         link = $('<a>')
             .attr('href', '#')
             .attr('id', id_selector + '_activate_filters');
-        $("." + id_selector + "_table_controls").prepend(link);
+        $("." + id_selector  + "_table_controls").prepend(link);
         deactivate_filters(id_selector);
     }
 

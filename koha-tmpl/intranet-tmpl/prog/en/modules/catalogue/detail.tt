@@ -310,7 +310,7 @@
 [% items_table_block_iter = 0 %]
 [% BLOCK items_table %]
     [% items_table_block_iter = items_table_block_iter + 1 %]
-    <div class="[% tab %]_table_controls">
+    <div class="[% tab %]_table_table_controls">
         [% IF (StaffDetailItemSelection) %]
             | <a href="#" class="SelectAll" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a> |
             <a href="#" class="ClearAll" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
@@ -325,7 +325,7 @@
             </span>
         [% END %]
     </div>
-    <table class="items_table">
+    <table class="items_table" id="[% tab %]_table">
         <thead>
             <tr>
                 [% IF (StaffDetailItemSelection) %]<th class="NoSort"></th>[% END %]
@@ -1039,7 +1039,7 @@
         browser.show();
 
         $(document).ready(function() {
-            var ids = ['holdings', 'otherholdings'];
+            var ids = ['holdings_table', 'otherholdings_table'];
 
             for (var i in ids) {
                 var id = ids[i];

@@ -155,7 +155,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
           var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
-          var holdst = KohaTable("#holdst", {
+          var holdst = KohaTable("holdst", {
             "aoColumnDefs": [
                 { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] },

@@ -131,7 +131,7 @@
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') %];
-            var table_account_fines = KohaTable("#table_account_fines", {
+            var table_account_fines = KohaTable("table_account_fines", {
                 "sPaginationType": "four_button",
                 'aaSorting': [[0, 'desc']],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',

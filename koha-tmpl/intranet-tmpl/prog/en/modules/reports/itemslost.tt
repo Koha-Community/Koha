@@ -141,20 +141,22 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
     [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/table_filters.js"></script>
     <script type='text/javascript'>
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
-            var lostitems_table = KohaTable("#lostitems-table", {
+            var lostitems_table = KohaTable("lostitems-table", {
                 "dom": 'B<"clearfix">t',
                 "aaSorting": [],
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
+                'bAutoWidth': false,
                 "bPaginate": false,
-            }, columns_settings);
-
+            }, columns_settings, 'with_filters');
         });
     </script>
 [% END %]

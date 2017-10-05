@@ -215,7 +215,7 @@
             $('#holdst thead input').on('change keyup keydown', filterColumn);
 
             var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
-            var holdst = KohaTable("#holdst", {
+            var holdst = KohaTable("holdst", {
                 "aaSorting": [[ 3, "asc" ]],
                 "aoColumns": [
                     { "sType": "anti-the" },null,null,null,null,null,null,null,null,{ "sType": "title-string" },null
