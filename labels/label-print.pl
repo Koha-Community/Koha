@@ -22,6 +22,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use Data::Dumper;
 
+use C4::Context;
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Creators::Lib qw(get_all_templates get_all_layouts get_output_formats);
@@ -110,6 +111,18 @@ if ($op eq 'export') {
                         );
     }
     elsif ($from and $to) {
+        my $dbh = C4::Context->dbh;
+
+        my $sth = $dbh->prepare('SELECT COUNT(*) AS has_barcode FROM creator_layouts WHERE printing_type LIKE("%BAR%") AND layout_id = ?;');
+        $sth->execute($layout_id);
+        if ($sth->fetchrow_hashref->{'has_barcode'} == 0) {
+            $sth = $dbh->prepare('SELECT COUNT(*) AS existing_count FROM items WHERE CAST(barcode AS unsigned) BETWEEN ? AND ?;');
+            $sth->execute($from, $to);
+            if ($sth->fetchrow_hashref->{'existing_count'} < ($to - $from + 1)) {
+                $template->param( warn_empty_range => 1 )
+            }
+        }
+
         push (@batches, {create_script   => 'label-create-pdf.pl',
                  from            => $from,
                  to              => $to,
