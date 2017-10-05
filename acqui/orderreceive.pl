@@ -74,6 +74,7 @@ use C4::Suggestions;
 use C4::Koha;
 
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -111,7 +112,7 @@ unless ( $results and @$results) {
 
 # prepare the form for receiving
 my $order = $results->[0];
-my $basket = Koha::Acquisition::Order->fetch({ordernumber => $ordernumber})->basket;
+my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
 
 # Check if ACQ framework exists
 my $acq_fw = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );

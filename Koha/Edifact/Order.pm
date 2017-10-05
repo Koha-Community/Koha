@@ -28,6 +28,8 @@ use Business::ISBN;
 use Koha::Database;
 use C4::Budgets qw( GetBudget );
 
+use Koha::Acquisition::Orders;
+
 Readonly::Scalar my $seg_terminator      => q{'};
 Readonly::Scalar my $separator           => q{+};
 Readonly::Scalar my $component_separator => q{:};
@@ -338,7 +340,7 @@ sub name_and_address {
 sub order_line {
     my ( $self, $linenumber, $orderline ) = @_;
 
-    my $basket = Koha::Acquisition::Order->find( $orderline->ordernumber )->basket;
+    my $basket = Koha::Acquisition::Orders->find( $orderline->ordernumber )->basket;
 
     my $schema = $self->{schema};
     if ( !$orderline->biblionumber )
