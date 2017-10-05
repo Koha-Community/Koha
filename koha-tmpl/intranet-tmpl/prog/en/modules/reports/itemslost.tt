@@ -34,9 +34,19 @@
 </div>
 
     [% IF items.count %]
+        <div class="lostitems-table_table_controls">
+                | <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
+                <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                <span class="itemselection_actions">
+                  | Actions:
+                  <a class="itemselection_action_export"><i class="fa fa-trash"></i> Export selected items</a>
+                </span>
+        </div>
+
         <table id="lostitems-table">
             <thead>
                 <tr>
+                    <th class="NoSort"></th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>Lost status</th>
@@ -57,6 +67,9 @@
             <tbody>
                 [% FOREACH item IN items %]
                     <tr>
+                        <td style="text-align:center;vertical-align:middle">
+                            <input type="checkbox" value="[% item.itemnumber %]" name="itemnumber" />
+                        </td>
                         <td>
                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.biblio.title |html %]</a>
                         </td>
@@ -146,6 +159,7 @@
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
     [% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/table_filters.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
     <script type='text/javascript'>
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
@@ -153,12 +167,54 @@
                 "dom": 'B<"clearfix">t',
                 "aaSorting": [],
                 "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
                 'bAutoWidth': false,
                 "bPaginate": false,
             }, columns_settings, 'with_filters');
+
+            function itemSelectionBuildExportLink() {
+                var itemnumbers = new Array();
+                $("input[name='itemnumber'][type='checkbox']:checked").each(function() {
+                    itemnumbers.push($(this).val());
+                });
+                if (itemnumbers.length > 0) {
+                    var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
+                    url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                    $('a.itemselection_action_export').attr('href', url);
+                } else {
+                    return false;
+                }
+                return true;
+            }
+
+            function itemSelectionBuildActionLinks() {
+                var export_link_ok = itemSelectionBuildExportLink();
+                if (export_link_ok) {
+                    $('.itemselection_actions').show();
+                } else {
+                    $('.itemselection_actions').hide();
+                }
+            }
+
+            itemSelectionBuildActionLinks();
+
+            $("input[name='itemnumber'][type='checkbox']").change(function() {
+                itemSelectionBuildActionLinks();
+            });
+
+            $(".SelectAll").on("click",function(e){
+                e.preventDefault();
+                $("#lostitems-table").checkCheckboxes();
+                itemSelectionBuildActionLinks();
+            });
+
+            $(".ClearAll").on("click",function(e){
+                e.preventDefault();
+                $("#lostitems-table").unCheckCheckboxes();
+                itemSelectionBuildActionLinks();
+            });
         });
     </script>
 [% END %]
