@@ -244,6 +244,8 @@ if ($op eq ""){
             for (my $i = 0; $i < $count; $i++) {
                 $budget_hash->{$budget_codes[$i]}->{quantity} += 1;
                 $budget_hash->{$budget_codes[$i]}->{price} = $itemprices[$i];
+                $budget_hash->{$budget_codes[$i]}->{itemnumbers} //= [];
+                push( $budget_hash->{$budget_codes[$i]}->{itemnumbers}, $itemnumbers[$i] );
             }
 
             # Create orderlines from MarcItemFieldsToOrder
@@ -295,7 +297,7 @@ if ($op eq ""){
                     };
 
                     my $order = Koha::Acquisition::Order->new( \%orderinfo )->insert;
-                    $order->add_item( $_ ) for @itemnumbers;
+                    $order->add_item( $_ ) for @{ $budget_hash->{$budget_id}->{itemnumbers} };
                 }
             }
         } else {
