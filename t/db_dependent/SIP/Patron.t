@@ -35,10 +35,7 @@ subtest "OverduesBlockCirc tests" => sub {
         {
             source => 'Borrower',
             value  => {
-                debarred      => undef,
                 dateexpiry    => "3000-01-01",
-                lost          => 0,
-                gonenoaddress => 0,
             }
         }
     );
@@ -46,10 +43,7 @@ subtest "OverduesBlockCirc tests" => sub {
         {
             source => 'Borrower',
             value  => {
-                debarred      => undef,
                 dateexpiry    => "3000-01-01",
-                lost          => 0,
-                gonenoaddress => 0,
             }
         }
     );
