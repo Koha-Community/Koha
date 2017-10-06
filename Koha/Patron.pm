@@ -593,6 +593,20 @@ sub holds {
     return Koha::Holds->_new_from_dbic($holds_rs);
 }
 
+=head3 old_holds
+
+my $old_holds = $patron->old_holds
+
+Returnn all the historical holds for this patron
+
+=cut
+
+sub old_holds {
+    my ($self) = @_;
+    my $old_holds_rs = $self->_result->old_reserves->search( {}, { order_by => 'reservedate' } );
+    return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
+}
+
 =head3 first_valid_email_address
 
 =cut
