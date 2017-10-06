@@ -1821,7 +1821,7 @@ subtest 'Set waiting flag' => sub {
     is( $status, 'Waiting', 'Now the hold is waiting');
 };
 
-subtest 'AddReturn | is_overdue' => sub {
+subtest 'CanBookBeIssued | is_overdue' => sub {
     plan tests => 3;
 
     # Set a simple circ policy
@@ -1850,7 +1850,7 @@ subtest 'AddReturn | is_overdue' => sub {
     my $five_days_go = output_pref({ dt => dt_from_string->add( days => 5 ), dateonly => 1});
     my $ten_days_go  = output_pref({ dt => dt_from_string->add( days => 10), dateonly => 1 });
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
