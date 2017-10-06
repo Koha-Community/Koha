@@ -1,0 +1,135 @@
+[% USE KohaDates %]
+[% USE Koha %]
+[% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE ColumnsSettings %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Holds history for [% INCLUDE 'patron-title.inc' %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
+<script type="text/javascript" id="js">
+//<![CDATA[
+
+ $(document).ready(function() {
+    var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
+    var table = KohaTable("#table_holdshistory", {
+        "sPaginationType": "four_button",
+        "aaSorting": [[4, 'desc']],
+        "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+        "aoColumnDefs": [
+            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        ]
+    }, columns_settings);
+ });
+//]]>
+</script>
+</head>
+<body id="pat_holdshistory" class="pat">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Holds history for [% INCLUDE 'patron-title.inc' %]</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+[% INCLUDE 'members-toolbar.inc' %]
+<h1>Holds history</h1>
+
+[% UNLESS Koha.Preference('intranetreadinghistory') %]
+    <div class="dialog alert">Staff members are not allowed to access patron's holds history</div>
+[% ELSIF is_anonymous %]
+    <div class="dialog alert">This is the anonymous patron, so no holds history is displayed.</div>
+[% ELSIF ( !holds ) %]
+    <div class="dialog message">This patron has no holds history.</div>
+[% ELSE %]
+
+<div id="holdshistory" style="overflow:hidden">
+  <table id="table_holdshistory">
+      <thead>
+        <th class="anti-the">Title</th>
+        <th>Author</th>
+        <th>Barcode</th>
+        <th>Library</th>
+        <th class="title-string">Reserve date</th>
+        <th class="title-string">Notification date</th>
+        <th class="title-string">Reminder date</th>
+        <th class="title-string">Expiration date</th>
+        <th class="title-string">Waiting date</th>
+        <th class="title-string">Cancellation date</th>
+        <th>Item type</th>
+        <th>Status</th>
+      </thead>
+      <tbody>
+      [% FOREACH hold IN holds %]
+          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber %]">[% hold.biblio.title |html %]</a></td>
+          <td>[% hold.biblio.author %]</td>
+          <td>[% hold.item.barcode %]</td>
+          <td>[% Branches.GetName( hold.branchcode ) %]</td>
+          <td><span title="[% hold.reservedate %]">[% hold.reservedate | $KohaDates %]</span></td>
+          <td>
+              [% IF hold.notificationdate %]
+                  <span title="[% hold.notificationdate %]">[% hold.notificationdate | $KohaDates %]</span>
+              [% ELSE %]
+                  <span title="0000-00-00"></span>
+              [% END %]
+          </td>
+          <td>
+              [% IF hold.reminderdate %]
+                  <span title="[% hold.reminderdate %]">[% hold.reminderdate | $KohaDates %]</span>
+              [% ELSE %]
+                  <span title="0000-00-00"></span>
+              [% END %]
+          </td>
+          <td>
+              [% IF hold.expirationdate %]
+                  <span title="[% hold.expirationdate %]">[% hold.expirationdate | $KohaDates %]</span>
+              [% ELSE %]
+                  <span title="0000-00-00"></span>
+              [% END %]
+          </td>
+          <td>
+              [% IF hold.waitingdate %]
+                  <span title="[% hold.waitingdate %]">[% hold.waitingdate | $KohaDates %]</span>
+              [% ELSE %]
+                  <span title="0000-00-00"></span>
+              [% END %]
+          </td>
+          <td>
+              [% IF hold.cancellationdate %]
+                  <span title="[% hold.cancellationdate %]">[% hold.cancellationdate | $KohaDates %]</span>
+              [% ELSE %]
+                  <span title="0000-00-00"></span>
+              [% END %]
+          </td>
+          <td>[% hold.itemtype %]</td>
+          <td>
+          [% IF hold.found == 'W' %]
+              Waiting
+          [% ELSIF hold.found == 'T' %]
+              In transit
+          [% ELSIF hold.cancellationdate %]
+              Cancelled
+          [% ELSE %]
+              In queue
+          [% END %]
+          </td>
+        </tr>
+      [% END %]
+      </tbody>
+  </table>
+</div>
+
+[% END %]
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

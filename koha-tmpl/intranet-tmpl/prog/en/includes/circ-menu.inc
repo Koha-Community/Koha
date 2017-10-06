@@ -88,6 +88,11 @@
             [% IF ( readingrecordview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrowernumber %]">Circulation history</a></li>
         [% END %]
     [% END %]
+    [% IF ( CAN_user_borrowers ) %]
+        [% IF ( intranetreadinghistory ) %]
+            [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdsshistory.pl?borrowernumber=[% borrowernumber %]">Holds history</a></li>
+        [% END %]
+    [% END %]
     [% IF ( CAN_user_parameters ) %]
         [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% borrowernumber %]&amp;src=circ">Modification log</a></li>
     [% END %]
