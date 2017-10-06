@@ -50,10 +50,11 @@ C4::Context->_new_userenv('xxx');
 C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'Midway Public Library', '', '', '' );
 is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my @patrons;
 for my $i ( 1 .. 20 ) {
     my $patron = Koha::Patron->new(
-        { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => $category->{categorycode}, branchcode => $library->{branchcode} } )
+        { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => $category->{categorycode}, branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode}, } )
       ->store();
     push( @patrons, $patron );
 }
@@ -170,7 +171,7 @@ is( $data->{exceeded}, 1, "Should exceed threshold with one withdrawn item" );
 
 C4::Context->set_preference('CircControl', 'PatronLibrary');
 
-my ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode );
+my ( $un, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode );
 ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
 
 ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_hr, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
