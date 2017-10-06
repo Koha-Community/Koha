@@ -17,6 +17,8 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new();
 
 t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 0);
+# Waiting reservers could be canceled only if ExpireReservesMaxPickUpDelay is set to "allow", see bug 19260
+t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
 
 my $today = dt_from_string();
 my $reserve_reservedate = $today->clone;
