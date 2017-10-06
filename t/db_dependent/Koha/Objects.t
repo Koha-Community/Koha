@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
+use Test::Exception;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -237,4 +238,67 @@ subtest '->is_paged and ->pager tests' => sub {
        'Koha::Objects->pager returns a valid DBIx::Class object' );
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest '_build_query_params_from_api' => sub {
+
+    plan tests => 5;
+
+    my $filtered_params = {
+        title  => "Ender",
+        author => "Orson"
+    };
+
+    subtest '_match => contains' => sub {
+        plan tests => 2;
+        my $reserved_params = { _match => 'contains' };
+        my $params = Koha::Objects::_build_query_params_from_api( $filtered_params, $reserved_params );
+
+        is_deeply( $params->{author}, { like => '%Orson%' } );
+        is_deeply( $params->{title}, { like => '%Ender%' } );
+    };
+
+    subtest '_match => starts_with' => sub {
+        plan tests => 2;
+        my $reserved_params = { _match => 'starts_with' };
+        my $params = Koha::Objects::_build_query_params_from_api( $filtered_params, $reserved_params );
+
+        is_deeply( $params->{author}, { like => 'Orson%' } );
+        is_deeply( $params->{title}, { like => 'Ender%' } );
+    };
+
+    subtest '_match => ends_with' => sub {
+        plan tests => 2;
+        my $reserved_params = { _match => 'ends_with' };
+        my $params = Koha::Objects::_build_query_params_from_api( $filtered_params, $reserved_params );
+
+        is_deeply( $params->{author}, { like => '%Orson' } );
+        is_deeply( $params->{title}, { like => '%Ender' } );
+    };
+
+    subtest '_match => exact' => sub {
+        plan tests => 2;
+        my $reserved_params = { _match => 'exact' };
+        my $params = Koha::Objects::_build_query_params_from_api( $filtered_params, $reserved_params );
+
+        is( $params->{author}, 'Orson' );
+        is( $params->{title},  'Ender' );
+    };
+
+    subtest '_match => blah' => sub {
+        plan tests => 2;
+
+        my $reserved_params = { _match => 'blah' };
+        throws_ok {
+            Koha::Objects::_build_query_params_from_api( $filtered_params,
+                $reserved_params );
+        }
+        'Koha::Exceptions::WrongParameter',
+          'Exception thrown on invalid _match parameter';
+
+        is( $@,
+            'Invalid value for _match param (blah)',
+            'Exception carries the right message'
+        );
+    };
+};
