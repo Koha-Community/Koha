@@ -24,9 +24,12 @@ use Koha::CirculationRules;
 use Try::Tiny;
 
 sub get_kinds {
-    my ( $c, $args, $cb ) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    return $c->$cb( Koha::CirculationRules->rule_kinds, 200 );
+    return $c->render(
+        status => 200,
+        openapi => Koha::CirculationRules->rule_kinds,
+    );
 }
 
 1;
