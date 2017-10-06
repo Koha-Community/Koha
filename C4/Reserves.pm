@@ -796,17 +796,12 @@ Cancels all reserves with an expiration date from before today.
 =cut
 
 sub CancelExpiredReserves {
-
     my $today = dt_from_string();
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
     my $expireWaiting = C4::Context->preference('ExpireReservesMaxPickUpDelay');
 
-    my $dbh = C4::Context->dbh;
-
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-
     my $params = { expirationdate => { '<', $dtf->format_date($today) } };
-
     $params->{found} = undef unless $expireWaiting;
 
     # FIXME To move to Koha::Holds->search_expired (?)
@@ -822,7 +817,6 @@ sub CancelExpiredReserves {
             $cancel_params->{charge_cancel_fee} = 1;
         }
         $hold->cancel( $cancel_params );
-
     }
 }
 
