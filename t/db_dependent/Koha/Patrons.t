@@ -615,8 +615,8 @@ subtest 'search_upcoming_membership_expires' => sub {
     Koha::Patrons->search({ borrowernumber => { in => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}, $patron_3->{borrowernumber} ] } })->delete;
 };
 
-subtest 'holds' => sub {
-    plan tests => 3;
+subtest 'holds and old_holds' => sub {
+    plan tests => 6;
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
@@ -673,6 +673,18 @@ subtest 'holds' => sub {
     $holds = $patron->holds;
     is( $holds->count, 2, 'There should be 2 holds placed by this patron' );
 
+    my $old_holds = $patron->old_holds;
+    is( ref($old_holds), 'Koha::Old::Holds',
+        'Koha::Patron->old_holds should return a Koha::Old::Holds objects' );
+    is( $old_holds->count, 0, 'There should not be any old holds yet');
+
+    my $hold = $holds->next;
+    $hold->cancel;
+
+    $old_holds = $patron->old_holds;
+    is( $old_holds->count, 1, 'There should  be 1 old (cancelled) hold');
+
+    $old_holds->delete;
     $holds->delete;
     $patron->delete;
 };
