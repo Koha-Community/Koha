@@ -5,6 +5,7 @@ use C4::Context;
 use C4::Members qw/GetMemberIssuesAndFines/;
 use C4::Utils::DataTables;
 use Koha::DateUtils;
+use C4::Members::Attributes qw(SearchIdMatchingAttribute );
 
 sub search {
     my ( $params ) = @_;
