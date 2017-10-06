@@ -788,7 +788,7 @@ sub _sort_field {
     my $query = $self->_truncate_terms($query);
 
 Given a string query this function appends '*' wildcard  to all terms except
-operands.
+operands and double quoted strings.
 
 =cut
 
@@ -796,11 +796,25 @@ sub _truncate_terms {
     my ( $self, $query ) = @_;
     my @stops = qw/and or not/;
     my @new_terms;
-    my @split_query = split /[\(\s\)]/, $query;
-    foreach my $term (@split_query) {
-        next if ( $term eq '' || $term eq ' ' );
-        $term .= "*" unless ( ( grep { lc($term) =~ /^$_$/ } @stops ) || ( $term =~ /\*$/ ) );
-        push @new_terms, $term;
+    my @quote_split = split /(["])([^"]+)\1/, $query; 
+    #Above splits the string based on matching pairs of double quotes
+    #In practice we get ('','"','donald duck',' ','"','the mouse',' and pete') 
+    #given the string '"donald duck" "the mouse" and pete'
+    #so we ignore empties, quote the ones after a '"' and split the rest on spaces
+    for (my $i=0; $i < @quote_split; $i++ ) {
+        next if ( $quote_split[$i] eq '' || $quote_split[$i] eq ' ' );
+        if ( $quote_split[$i] eq '"' ){
+            $i++;
+            $quote_split[$i] = '"'.$quote_split[$i].'"';
+            push @new_terms, $quote_split[$i]
+        } else {
+            my @space_split = split /[\(\s\)]/, $quote_split[$i];
+            foreach my $term (@space_split) {
+                next if ( $term eq '' || $term eq ' ' );
+                $term .= "*" unless ( ( grep { lc($term) =~ /^$_$/ } @stops ) || ( $term =~ /\*$/ ) );
+                push @new_terms, $term;
+            }
+        }
     }
     $query = join ' ', @new_terms;
     return $query;
