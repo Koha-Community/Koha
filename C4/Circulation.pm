@@ -893,7 +893,7 @@ sub CanBookBeIssued {
       and $issue->borrowernumber == $borrower->{'borrowernumber'} ? 1 : 0 );
     my $toomany = TooMany( $borrower, $item->{biblionumber}, $item, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
-    if ( $toomany && !$needsconfirmation{RENEW_ISSUE} ) {
+    if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
             $needsconfirmation{PATRON_CANT} = 1;
         }
