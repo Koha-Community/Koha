@@ -90,7 +90,7 @@
     [% END %]
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( intranetreadinghistory ) %]
-            [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdsshistory.pl?borrowernumber=[% borrowernumber %]">Holds history</a></li>
+            [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% borrowernumber %]">Holds history</a></li>
         [% END %]
     [% END %]
     [% IF ( CAN_user_parameters ) %]
