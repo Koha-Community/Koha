@@ -1,5 +1,5 @@
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
-('BK', 'Books',5,0,'bridge/book.gif',''),
+('BK', 'Books',0,0,'bridge/book.gif',''),
 ('MX', 'Mixed Materials',5,0,'bridge/kit.gif',''),
 ('CF', 'Computer Files',5,0,'bridge/computer_file.gif',''),
 ('MP', 'Maps',5,0,'bridge/map.gif',''),
