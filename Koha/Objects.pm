@@ -173,7 +173,7 @@ sub search_related {
 
 =head3 search_for_api
 
-    my @objects = Koha::Objects->earch_for_api( $c );
+    my $objects = Koha::Objects->search_for_api( $c );
 
 Searches for objects given a controller object I<$c>.
 
