@@ -42,6 +42,7 @@ $record->append_fields(
     MARC::Field->new('200', '', '', 'f' => 'Keith Lye'),
 );
 
+my ($bibnum, $title, $bibitemnum) = AddBiblio($record, '');
 my $isbd = GetISBDView($bibnum);
 is($isbd, '<h2>Title : Mountains by Keith Lye</h2>', 'ISBD is correct');
 
