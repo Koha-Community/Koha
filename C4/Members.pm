@@ -1292,6 +1292,8 @@ sub FineSlip {
     my ($borrowernumber, $branch) = @_;
 
     #my $now       = POSIX::strftime("%Y-%m-%d", localtime);
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return unless $patron;
 
     my $fineslist = GetBorrowerFines($borrowernumber); #Gets all the fines
     my @unpaidFinesList; #Collect Fines which haven't been paid yet here
@@ -1323,6 +1325,7 @@ sub FineSlip {
         module => 'circulation',
         letter_code => 'FINESLIP',
         branchcode => $branch,
+        lang => $patron->lang,
         tables => {
             'branches'    => $branch,
             'borrowers'   => $borrowernumber,
@@ -1379,6 +1382,10 @@ message_transport_type defaults to 'print'.
 
 sub CheckInSlip {
     my ($borrowernumber, $branch, $mtt) = @_;
+
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return unless $patron;
+
     my $issues = GetTodaysReturnsForBorrower($borrowernumber, $branch);
     my %repeat = (
             'checkedin' => [ map {
@@ -1392,6 +1399,7 @@ sub CheckInSlip {
         module => 'circulation',
         letter_code => 'CHECKINSLIP',
         branchcode => $branch,
+        lang => $patron->lang,
         tables => {
             'branches'    => $branch,
             'borrowers'   => $borrowernumber,
