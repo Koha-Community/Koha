@@ -21,7 +21,7 @@ subtest 'CancelExpiredReserves tests incl. holidays' => sub {
     my $builder = t::lib::TestBuilder->new();
 
     t::lib::Mocks::mock_preference('ExpireReservesOnHolidays', 0);
-    # Waiting reservers could be canceled only if ExpireReservesMaxPickUpDelay is set to "allow", see bug 19260
+    # Waiting holds could be cancelled only if ExpireReservesMaxPickUpDelay is set to "allow", see bug 19260
     t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelay', 1);
 
 
