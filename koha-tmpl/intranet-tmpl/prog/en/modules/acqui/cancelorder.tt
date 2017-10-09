@@ -9,10 +9,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    [% UNLESS success_cancelorder %]
-        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id %]">[% basket.bookseller.name | html %]</a> &rsaquo;
-        <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketname | html %] ([% basket.basketno %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
-    [% END %]
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id %]">[% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketname | html %] ([% basket.basketno %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
     Cancel order
 </div>
 
@@ -38,6 +36,7 @@
           <input type="hidden" name="action" value="confirmcancel" />
           <input type="hidden" value="[% ordernumber %]" name="ordernumber" />
           <input type="hidden" value="[% biblionumber %]" name="biblionumber" />
+          <input type="hidden" value="[% basket.basketno %]" name="basketno" />
           <input type="hidden" value="[% referrer %]" name="referrer" />
           [% IF (del_biblio) %]
             <input type="hidden" value="1" name="del_biblio" />
