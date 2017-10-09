@@ -4,21 +4,19 @@ use MARC::Record;
 
 use t::lib::Mocks;
 use Koha::Database;
-use Koha::Caches;
-use Koha::MarcSubfieldStructures;
+use Koha::Cache;
 use C4::Biblio;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+my $dbh = C4::Context->dbh;
 
 # Create/overwrite some Koha to MARC mappings in default framework
-my $mapping1 = Koha::MarcSubfieldStructures->find('','300','a') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'a' });
-$mapping1->kohafield( "mytable.nicepages" );
-$mapping1->store;
-my $mapping2 = Koha::MarcSubfieldStructures->find('','300','b') // Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'b' });
-$mapping2->kohafield( "mytable2.goodillustrations" );
-$mapping2->store;
-Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+$dbh->do(q|DELETE FROM marc_subfield_structure WHERE frameworkcode='' and tagfield=300 and tagsubfield='a'|);
+$dbh->do(q|INSERT INTO marc_subfield_structure(frameworkcode, tagfield, tagsubfield, kohafield) VALUES ('', 300, 'a', 'mytable.nicepages')|);
+$dbh->do(q|DELETE FROM marc_subfield_structure WHERE frameworkcode='' and tagfield=300 and tagsubfield='b'|);
+$dbh->do(q|INSERT INTO marc_subfield_structure(frameworkcode, tagfield, tagsubfield, kohafield) VALUES ('', 300, 'b', 'mytable2.goodillustrations')|);
+Koha::Cache->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
 my $record = C4::Biblio::TransformKohaToMarc({
     "mytable2.goodillustrations"   => "Other physical details", # 300$b
@@ -38,5 +36,5 @@ is_deeply( \@subfields, [
 'TransformKohaToMarc should return sorted subfields (regression test for bug 12343)' );
 
 # Cleanup
-Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+Koha::Cache->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 $schema->storage->txn_rollback;
