@@ -31,8 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'GetByCode' => sub {
     plan tests => 4;
-    my $avc =
-      $builder->build( { source => 'AuthorisedValueCategory' } );
+    my $avc = { category_name => 'AV_TEST' };
     my $av_1 = $builder->build(
         {
             source => 'AuthorisedValue',
