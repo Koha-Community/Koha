@@ -372,7 +372,7 @@ if (@$barcodes) {
         }
     }
 
-    unless( $onsite_checkout and C4::Context->preference("OnSiteCheckoutsForce") ) {
+    if ( $error->{UNKNOWN_BARCODE} or not $onsite_checkout or not C4::Context->preference("OnSiteCheckoutsForce") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {
             $template_params->{$impossible} = $$error{$impossible};
@@ -380,7 +380,8 @@ if (@$barcodes) {
             $blocker = 1;
         }
     }
-    if( !$blocker || $force_allow_issue ){
+
+    if( $item and ( !$blocker or $force_allow_issue ) ){
         my $confirm_required = 0;
         unless($issueconfirmed){
             #  Get the item title for more information
