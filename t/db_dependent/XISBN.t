@@ -25,7 +25,7 @@ $dbh->{AutoCommit} = 0;
 my $search_module = new Test::MockModule('C4::Search');
 
 $search_module->mock('SimpleSearch', \&Mock_SimpleSearch );
-
+my $errors;
 my $context = C4::Context->new;
 
 my ( $biblionumber_tag, $biblionumber_subfield ) =
@@ -73,10 +73,10 @@ t::lib::Mocks::mock_preference( 'ThingISBN', 0 );
 t::lib::Mocks::mock_preference( 'XISBN', 1 );
 
 my $results_xisbn;
-eval { $results_xisbn = C4::XISBN::get_xisbns($isbn1); };
+eval { ($results_xisbn, $errors) = C4::XISBN::get_xisbns($isbn1); };
 SKIP: {
-    skip "Problem retrieving XISBN", 1
-        unless $@ eq '';
+    skip "Problem retrieving XISBN (" . $errors->{xisbn} . ")", 1
+        if $errors->{xisbn};
     is( $results_xisbn->[0]->{biblionumber},
         $biblionumber3,
         "Gets correct biblionumber from a book with a similar isbn using XISBN." );
