@@ -88,7 +88,7 @@ sub _get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn ) = @_;
-    my ($response,$thing_response,$xisbn_response,$syndetics_response);
+    my ($response,$thing_response,$xisbn_response,$syndetics_response,$errors);
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
@@ -114,6 +114,8 @@ sub get_xisbns {
         unless ($reached_limit) {
             $xisbn_response = _get_url($url,'xisbn');
         }
+        $errors->{xisbn} = $xisbn_response->{ stat }
+            if $xisbn_response->{ stat } ne 'ok';
     }
 
     $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] },  @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] } ];
@@ -129,7 +131,12 @@ sub get_xisbns {
         my $xbiblio= _get_biblio_from_xisbn($response_data->{content});
         push @xisbns, $xbiblio if $xbiblio;
     }
-    return \@xisbns;
+    if ( wantarray ) {
+        return (\@xisbns, $errors);
+    }
+    else {
+        return \@xisbns;
+    }
 }
 
 sub _get_url {
