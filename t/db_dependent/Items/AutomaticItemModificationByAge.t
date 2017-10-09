@@ -10,6 +10,7 @@ use DateTime::Duration;
 use C4::Biblio;
 use C4::Context;
 use C4::Items;
+use Koha::Cache;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
@@ -37,7 +38,7 @@ $dbh->do(qq|
 |, undef, $new_tagfield, $frameworkcode);
 
 # Clear cache
-my $cache = Koha::Caches->get_instance();
+my $cache = Koha::Cache->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
@@ -299,7 +300,7 @@ $modified_item = C4::Items::GetItem( $itemnumber );
 is( $modified_item->{new_status}, 'another_new_updated_value', q|ToggleNewStatus: conditions on biblioitems|);
 
 # Clear cache
-$cache = Koha::Caches->get_instance();
+$cache = Koha::Cache->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 $cache->clear_from_cache("default_value_for_mod_marc-$frameworkcode");
