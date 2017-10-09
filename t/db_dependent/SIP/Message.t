@@ -58,7 +58,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 18;
+    plan tests => 17;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
