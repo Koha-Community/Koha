@@ -129,7 +129,7 @@ if (not defined $format) {
         my $biblionumber = $1;
 
         my $content;
-        eval {
+
             my $marcxml = GetXmlBiblio($biblionumber);
             unless (defined $marcxml) {
                 # no bib, so 404
@@ -147,9 +147,9 @@ if (not defined $format) {
                 xml => $marcxml,
                 file => $xslt_file,
             });
-        };
-        if ($@) {
-            print $cgi->header( -status => '500 internal error ' . $@ );
+
+        if( !defined $content || $xslt_engine->err ) {
+            print $cgi->header( -status => '500 internal error' );
             exit 0;
         }
 
