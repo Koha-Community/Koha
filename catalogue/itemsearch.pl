@@ -61,9 +61,15 @@ if (defined $format and $format eq 'json') {
             my @words = split /\s+/, $sSearch;
             foreach my $word (@words) {
                 push @f, $columns[$i];
-                push @q, "%$word%";
-                push @op, 'like';
                 push @c, 'and';
+
+                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch location notforloan ) ) {
+                    push @q, "$word";
+                    push @op, '=';
+                } else {
+                    push @q, "%$word%";
+                    push @op, 'like';
+                }
             }
         }
     }
