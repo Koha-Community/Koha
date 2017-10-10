@@ -64,9 +64,8 @@ __PACKAGE__->table("biblioitems");
 
 =head2 ean
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 13
 
 =head2 publicationyear
 
@@ -226,7 +225,7 @@ __PACKAGE__->add_columns(
   "issn",
   { data_type => "mediumtext", is_nullable => 1 },
   "ean",
-  { data_type => "varchar", is_nullable => 1, size => 13 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "publicationyear",
   { data_type => "text", is_nullable => 1 },
   "publishercode",
@@ -327,8 +326,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cAlg2aIZ7hxeq+Hgl1AJcA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-10 14:22:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yNRDfNQ7yEvqsJV94x8b9A
 
 __PACKAGE__->belongs_to( biblio => "Koha::Schema::Result::Biblio", "biblionumber" );
 
