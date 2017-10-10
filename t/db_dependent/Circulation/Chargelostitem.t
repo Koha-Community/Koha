@@ -2,39 +2,43 @@
 
 use Modern::Perl;
 
+use Test::More tests => 4;
 use Test::MockModule;
+use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Branch;
-use C4::Category;
 use C4::Circulation;
 use MARC::Record;
-use Test::More tests => 7;
 
 BEGIN {
     use_ok('C4::Accounts');
 }
 
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
+my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+
 $dbh->do(q|DELETE FROM accountlines|);
 
-my $branchcode;
-my $branch_created;
-my @branches = keys %{ GetBranches() };
-if (@branches) {
-    $branchcode = $branches[0];
-} else {
-    $branchcode = 'B';
-    ModBranch({ add => 1, branchcode => $branchcode, branchname => 'Branch' });
-    $branch_created = 1;
-}
+t::lib::Mocks::mock_preference('ProcessingFeeNote', 'Test Note');
+
+my $library = $builder->build({
+    source => 'Branch',
+});
+my $branchcode = $library->{branchcode};
+
+my $itemtype = $builder->build({
+    source => 'Itemtype'
+});
 
 my %item_branch_infos = (
     homebranch => $branchcode,
     holdingbranch => $branchcode,
+    itype => $itemtype->{itemtype},
 );
 
 my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
@@ -44,20 +48,12 @@ my $itemnumber2 = AddItem({ barcode => '0102', %item_branch_infos }, $biblionumb
 my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $itemnumber3 = AddItem({ barcode => '0203', %item_branch_infos }, $biblionumber2);
 
-my $categorycode;
-my $category_created;
-my @categories = C4::Category->all;
-if (@categories) {
-    $categorycode = $categories[0]->{categorycode}
-} else {
-    $categorycode = 'C';
-    $dbh->do(
-        "INSERT INTO categories(categorycode) VALUES(?)", undef, $categorycode);
-    $category_created = 1;
-}
+my $categorycode = $builder->build({
+    source => 'Category'
+})->{categorycode};
 
 my $borrowernumber = AddMember(categorycode => $categorycode, branchcode => $branchcode);
-my $borrower = GetMember(borrowernumber => $borrowernumber);
+my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed();
 
 # Need to mock userenv for AddIssue
 my $module = new Test::MockModule('C4::Context');
@@ -66,19 +62,11 @@ AddIssue($borrower, '0101');
 AddIssue($borrower, '0203');
 
 # Begin tests...
-my $processfee = 10;
-my $issues;
-$issues = C4::Circulation::GetIssues({biblionumber => $biblionumber1});
-my $issue=$issues->[0];
-$issue->{'processfee'} = $processfee;
-C4::Accounts::chargelostitem($issue, 'test');
+my $issue = Koha::Checkouts->search( { borrowernumber => $borrowernumber } )->next()->unblessed();
+C4::Accounts::chargelostitem( $borrowernumber, $issue->{itemnumber}, '1.00');
 
-my @accountline = C4::Accounts::getcharges($borrowernumber);
+my $accountline = Koha::Account::Lines->search( { borrowernumber => $borrowernumber, accounttype => 'PF' } )->next();
 
-is( scalar(@accountline), 1, 'accountline should have 1 row' );
-is( int($accountline[0]->{amount}), $processfee, "The accountline amount should be precessfee value " );
-is( $accountline[0]->{accounttype}, 'PF', "The accountline accounttype should be PF " );
-is( $accountline[0]->{borrowernumber}, $borrowernumber, "The accountline borrowernumber should be the example borrowernumber" );
-my $itemnumber = C4::Items::GetItemnumberFromBarcode('0101');
-is( $accountline[0]->{itemnumber}, $itemnumber, "The accountline itemnumber should the linked with barcode '0101'" );
-is( $accountline[0]->{description}, 'test ' . $issue->{itemnumber}, "The accountline description should be 'test'" );
+is( int($accountline->amount), $itemtype->{processfee}, "The accountline amount should be precessfee value " );
+is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should the linked with barcode '0101'" );
+is( $accountline->note, C4::Context->preference("ProcessingFeeNote"), "The accountline description should be 'test'" );
