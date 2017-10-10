@@ -37,9 +37,21 @@ __PACKAGE__->table("itemtypes");
 
 =head2 rentalcharge
 
-  data_type: 'double precision'
+  data_type: 'decimal'
   is_nullable: 1
-  size: [16,4]
+  size: [28,6]
+
+=head2 defaultreplacecost
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
+=head2 processfee
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
 
 =head2 notforloan
 
@@ -96,7 +108,11 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "mediumtext", is_nullable => 1 },
   "rentalcharge",
-  { data_type => "double precision", is_nullable => 1, size => [16, 4] },
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "defaultreplacecost",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "processfee",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "notforloan",
   { data_type => "smallint", is_nullable => 1 },
   "imageurl",
@@ -195,8 +211,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-29 10:32:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1GiikODklVISOurHX37qjA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-10 14:27:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vERtWCf17tayLdzgnXpQcA
 
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;
