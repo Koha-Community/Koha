@@ -109,7 +109,8 @@ Returns the basket associated to the order.
 
 sub basket {
     my ( $self )  = @_;
-    return Koha::Acquisition::Baskets->find( $self->basketno );
+    my $basket_rs = $self->_result->basketno;
+    return Koha::Acquisition::Basket->_new_from_dbic( $basket_rs );
 }
 
 =head2 Internal methods

@@ -43,7 +43,7 @@
                 [% IF ( basketno ) %]
                     <li>
                         <input type="hidden" name="basketno" value="[% basketno %]" />
-                        <input type="hidden" name="rs_an_edit" value="1" />
+                        <input type="hidden" name="is_an_edit" value="1" />
                     </li>
                 [% END %]
                 <li>
@@ -113,13 +113,13 @@
                     <label for="create_items">Create items when:</label>
                     <select name="create_items" id="create_items">
                         [% SWITCH Koha.Preference('AcqCreateItem') %]
-                            [% CASE 'receiving' %]<option value="">use default (receiving an order).</option>
-                            [% CASE 'cataloguing' %]<option value="">use default (cataloging the record).</option>
-                            [% CASE %]<option value="">use default (placing an order).</option>
+                            [% CASE 'receiving' %]<option value="">use default (receiving an order)</option>
+                            [% CASE 'cataloguing' %]<option value="">use default (cataloging the record)</option>
+                            [% CASE %]<option value="">use default (placing an order)</option>
                         [% END %]
-                        <option value="ordering">placing an order.</option>
-                        <option value="receiving">receiving an order.</option>
-                        <option value="cataloguing">cataloging the record.</option>
+                        <option value="ordering">placing an order</option>
+                        <option value="receiving">receiving an order</option>
+                        <option value="cataloguing">cataloging the record</option>
                     </select>
                 </li>
                 [% END %]

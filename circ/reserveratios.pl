@@ -31,6 +31,7 @@ use C4::Debug;
 use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 use C4::Acquisition qw/GetOrdersByBiblionumber/;
 use Koha::DateUtils;
+use Koha::Acquisition::Baskets;
 
 my $input = new CGI;
 my $startdate       = $input->param('from');
@@ -53,6 +54,16 @@ my $booksellerid = $input->param('booksellerid') // '';
 my $basketno = $input->param('basketno') // '';
 if ($booksellerid && $basketno) {
      $template->param( booksellerid => $booksellerid, basketno => $basketno );
+}
+
+my $effective_create_items;
+if ( $basketno ){
+    my $basket = Koha::Acquisition::Baskets->find( $basketno );
+    if ($basket){
+        $effective_create_items = $basket->effective_create_items;
+    } else {
+        $effective_create_items = C4::Context->preference('AcqCreateItem');
+    }
 }
 
 $startdate = eval { dt_from_string( $startdate ) } if $startdate;
@@ -84,12 +95,12 @@ $sqldatewhere .= " AND reservedate <= ?";
 push @query_params, output_pref({ dt => $enddate, dateformat => 'iso' });
 
 my $include_aqorders_qty =
-  C4::Context->preference('AcqCreateItem') eq 'receiving'
+  $effective_create_items eq 'receiving'
   ? '+ COALESCE(aqorders.quantity, 0) - COALESCE(aqorders.quantityreceived, 0)'
   : q{};
 
 my $include_aqorders_qty_join =
-  C4::Context->preference('AcqCreateItem') eq 'receiving'
+  $effective_create_items eq 'receiving'
   ? 'LEFT JOIN aqorders ON reserves.biblionumber=aqorders.biblionumber'
   : q{};
 

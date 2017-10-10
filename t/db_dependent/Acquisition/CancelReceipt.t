@@ -49,6 +49,7 @@ my $bookseller = Koha::Acquisition::Bookseller->new(
         active => 1
     }
 )->store;
+t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
 
 my $basketno1 = C4::Acquisition::NewBasket(
     $bookseller->id
@@ -66,7 +67,6 @@ my $budget = C4::Budgets::GetBudget( $budgetid );
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $itemnumber = AddItem( { itype => $itemtype }, $biblionumber );
 
-t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
 my $order = Koha::Acquisition::Order->new(
     {
         basketno => $basketno1,

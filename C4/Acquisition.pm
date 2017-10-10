@@ -1590,7 +1590,7 @@ sub CancelReceipt {
     my $parent_ordernumber = $order->{'parent_ordernumber'};
 
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
-    my $basket = Koha::Acquisition::Order->find( $order->{ordernumber} )->basket;
+    my $basket = Koha::Acquisition::Orders->find({ordernumber => $ordernumber})->basket;
 
     if($parent_ordernumber == $ordernumber || not $parent_ordernumber) {
         # The order line has no parent, just mark it as not received
@@ -1604,7 +1604,7 @@ sub CancelReceipt {
         };
         $sth = $dbh->prepare($query);
         $sth->execute(0, undef, undef, $ordernumber);
-        _cancel_items_receipt( $ordernumber );
+        _cancel_items_receipt( $basket->effective_create_items, $ordernumber );
     } else {
         # The order line has a parent, increase parent quantity and delete
         # the order line.
