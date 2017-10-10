@@ -91,6 +91,16 @@ $(document).ready(function() {
         }
     });
 
+    $('#duplicate').on('click', function() {
+        $("input[name='op']").val('modify');
+        $("input[name='borrowernumber']").val('[% check_member %]');
+        $('#entryform').submit();
+    });
+
+    $('#not-duplicate').on('click', function() {
+        $("input[name='nodouble']").val('1');
+        $('#entryform').submit();
+    });
 });
 
         var MSG_SEPARATOR = _("Separator must be / in field %s");
@@ -151,18 +161,10 @@ $(document).ready(function() {
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
                 <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');return false;" >View existing record</a></p>
-                <form action="/cgi-bin/koha/members/memberentry.pl" method="get">
-                    <input type="hidden" name="op" value="modify" />
-                    <input type="hidden" name="borrowernumber" value="[% check_member %]" />
-                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-                    <button type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
-                    Edit existing record</button>
-                </form>
+                <button id="duplicate" type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
+                Edit existing record</button>
 
-                <form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off">
-				<input type="hidden" name="nodouble" value="1" />
-                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-                <button type="submit" class="new"><i class="fa fa-plus"></i> Not a duplicate.
+                <button type="submit" id="not-duplicate" class="new"><i class="fa fa-plus"></i> Not a duplicate.
                 Save as new record</button>
 			</div>
 	[% END %]
@@ -241,8 +243,10 @@ $(document).ready(function() {
 [% END %]
 </div>
 
-[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler" >
-<input type="hidden" name="nodouble"  value="[% nodouble %]" /> [% END %]
+<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler" >
+[% UNLESS ( check_member ) %]
+    <input type="hidden" name="nodouble"  value="[% nodouble %]" />
+[% END %]
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
 <input type="hidden" name="category_type" value="[% category_type %]" />
