@@ -56,7 +56,7 @@ if ($booksellerid && $basketno) {
      $template->param( booksellerid => $booksellerid, basketno => $basketno );
 }
 
-my $effective_create_items;
+my $effective_create_items = q{};
 if ( $basketno ){
     my $basket = Koha::Acquisition::Baskets->find( $basketno );
     if ($basket){
