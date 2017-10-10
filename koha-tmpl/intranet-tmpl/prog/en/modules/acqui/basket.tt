@@ -38,7 +38,7 @@
     }
 
     $(document).ready(function() {
-        $('#toolbar').fixFloat();
+        if ( $('#toolbar').length ) {$('#toolbar').fixFloat();}
         $("#show_all_details").click(function(){
             updateColumnsVisibility($(this).is(":checked"));
         });
