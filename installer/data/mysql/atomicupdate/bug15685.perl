@@ -4,7 +4,7 @@ if( CheckVersion( $DBversion ) ) {
     unless( column_exists('aqbasket','create_items') ){
         $dbh->do(q{
             ALTER TABLE aqbasket
-                ADD COLUMN create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL
+                ADD COLUMN create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL AFTER is_standing
         });
     }
 

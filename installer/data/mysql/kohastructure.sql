@@ -2992,9 +2992,9 @@ CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
   `deliveryplace` varchar(10) default NULL, -- basket delivery place
   `billingplace` varchar(10) default NULL, -- basket billing place
-  create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL, -- when items should be created for orders in this basket
   branch varchar(10) default NULL, -- basket branch
   is_standing TINYINT(1) NOT NULL DEFAULT 0, -- orders in this basket are standing
+  create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL, -- when items should be created for orders in this basket
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   KEY `basketgroupid` (`basketgroupid`),
