@@ -299,22 +299,15 @@ sub manualinvoice {
 }
 
 sub getcharges {
-    my ( $borrowerno, $accountno ) = @_;
-    my $dbh = C4::Context->dbh;
+    my ( $borrowerno, $timestamp, $accountno ) = @_;
+    my $dbh        = C4::Context->dbh;
+    my $timestamp2 = $timestamp - 1;
+    my $query      = "";
+    my $sth = $dbh->prepare(
+            "SELECT * FROM accountlines WHERE borrowernumber=? AND accountno = ?"
+          );
+    $sth->execute( $borrowerno, $accountno );
 
-    my @params;
-
-    my $query = "SELECT * FROM accountlines WHERE borrowernumber = ?";
-    push( @params, $borrowerno );
-
-    if ( $accountno ) {
-        $query .= " AND accountno = ?";
-        push( @params, $accountno );
-    }
-
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( @params );
-	
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results,$data;
