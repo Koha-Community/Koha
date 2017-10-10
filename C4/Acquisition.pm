@@ -1590,7 +1590,7 @@ sub CancelReceipt {
     my $parent_ordernumber = $order->{'parent_ordernumber'};
 
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
-    my $basket = Koha::Acquisition::Orders->find({ordernumber => $ordernumber})->basket;
+    my $order_obj = Koha::Acquisition::Orders->find( $ordernumber ); # FIXME rewrite all this subroutine using this object
 
     if($parent_ordernumber == $ordernumber || not $parent_ordernumber) {
         # The order line has no parent, just mark it as not received
@@ -1604,7 +1604,7 @@ sub CancelReceipt {
         };
         $sth = $dbh->prepare($query);
         $sth->execute(0, undef, undef, $ordernumber);
-        _cancel_items_receipt( $basket->effective_create_items, $ordernumber );
+        _cancel_items_receipt( $order_obj );
     } else {
         # The order line has a parent, increase parent quantity and delete
         # the order line.
@@ -1651,7 +1651,7 @@ sub CancelReceipt {
             WHERE ordernumber = ?
         |, undef, $parent_ordernumber);
 
-        _cancel_items_receipt( $basket->effective_create_items, $ordernumber, $parent_ordernumber );
+        _cancel_items_receipt( $order_obj, $parent_ordernumber );
         # Delete order line
         $query = qq{
             DELETE FROM aqorders
@@ -1662,7 +1662,7 @@ sub CancelReceipt {
 
     }
 
-    if( $basket->effective_create_items eq 'ordering' ) {
+    if( $order_obj->basket->effective_create_items eq 'ordering' ) {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
         if ( @affects ) {
             for my $in ( @itemnumbers ) {
@@ -1685,11 +1685,11 @@ sub CancelReceipt {
 }
 
 sub _cancel_items_receipt {
-    my ( $effective_create_items, $ordernumber, $parent_ordernumber ) = @_;
-    $parent_ordernumber ||= $ordernumber;
+    my ( $order, $parent_ordernumber ) = @_;
+    $parent_ordernumber ||= $order->ordernumber;
 
-    my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
-    if ( $effective_create_items eq 'receiving' ) {
+    my @itemnumbers = GetItemnumbersFromOrder($order->ordernumber); # FIXME Must be $order->items
+    if ( $order->basket->effective_create_items eq 'receiving' ) {
         # Remove items that were created at receipt
         my $query = qq{
             DELETE FROM items, aqorders_items
