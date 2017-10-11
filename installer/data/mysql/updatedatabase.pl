@@ -14722,6 +14722,21 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19043 - Z39.50 target for Columbia University is no longer publicly available.)\n";
 }
 
+$DBversion = '17.06.00.013';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET value = CONCAT('http://', value) WHERE variable = 'staffClientBaseURL' AND value <> '' AND value NOT LIKE 'http%'" );
+
+    my ( $staffClientBaseURL_used_in_notices ) = $dbh->selectrow_array(q|
+        SELECT COUNT(*) FROM letter where content like "%staffClientBaseURL%"
+    |);
+    if ( $staffClientBaseURL_used_in_notices ) {
+        warn "\tYou may need to update one or more notice templates if they contain 'staffClientBaseURL'\n";
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 16401 - fix potentialy bad set staffClientBaseURL preference)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
