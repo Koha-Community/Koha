@@ -42,7 +42,7 @@ sub force_borrower_messaging_defaults {
     my ($doit, $truncate, $since, $actives) = @_;
 
     $since = '0000-00-00' if (!$since);
-    print $since;
+    print "Since: $since\n";
 
     my $dbh = C4::Context->dbh;
     $dbh->{AutoCommit} = 0;
