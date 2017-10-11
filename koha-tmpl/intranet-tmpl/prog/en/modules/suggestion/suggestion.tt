@@ -491,7 +491,7 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
 
                     <span id="other_reason" name="other_reason">
                         [% IF other_reason %]
-                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." value="[% suggestion.reason%]"/>
+                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." value="[% suggestion.reason | html %]"/>
                         [% ELSE %]
                             <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
                         [% END %]
