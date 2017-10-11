@@ -58,9 +58,10 @@ is(C4::Auth_with_cas::_url_with_get_params($cgi, 'opac'),
     "$opac_base_url/cgi-bin/koha/opac-user.pl?bar=baz",
    "_url_with_get_params should return URL without deleted parameters (Bug 12398)");
 
+$ENV{SCRIPT_NAME} = '/cgi-bin/koha/circ/circulation-home.pl';
 # intranet url test
 is(C4::Auth_with_cas::_url_with_get_params($cgi, 'intranet'),
-    "$staff_base_url?bar=baz",
+    "$staff_base_url/cgi-bin/koha/circ/circulation-home.pl?bar=baz",
    "Intranet URL should be returned when using intranet login (Bug 13507)");
 
 
