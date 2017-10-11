@@ -14737,6 +14737,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 16401 - fix potentialy bad set staffClientBaseURL preference)\n";
 }
 
+$DBversion = '17.06.00.014';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists('aqbasket','create_items') ){
+        $dbh->do(q{
+            ALTER TABLE aqbasket
+                ADD COLUMN create_items ENUM('ordering', 'receiving', 'cataloguing') default NULL AFTER is_standing
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15685 - Allow creation of items (AcqCreateItem) to be customizable per-basket)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
