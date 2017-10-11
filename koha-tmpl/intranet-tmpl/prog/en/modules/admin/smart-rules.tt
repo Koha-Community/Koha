@@ -37,9 +37,14 @@ $(document).ready(function() {
     $("#clone_rules").on("click",function(){
         var library_dropdown = document.getElementById("branch");
         var selected_library = library_dropdown.options[library_dropdown.selectedIndex].value;
+        var selected_library_text = $("#branch option:selected").text();
+        var to_library = $("#tobranch option:selected").text();
+        var MSG_CONFIRM_CLONE;
         if (selected_library === "*") {
-            var to_library = $("#tobranch option:selected").text();
-            var MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to %s library? This will override the existing rules in this library.").format(to_library);
+            MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to %s library? This will override the existing rules in this library.").format(to_library);
+            return confirmClone(MSG_CONFIRM_CLONE);
+        } else {
+            MSG_CONFIRM_CLONE = _("Are you sure you want to clone this circulation and fine rule from %s to %s library? This will override the existing rules in this library.").format(selected_library_text, to_library);
             return confirmClone(MSG_CONFIRM_CLONE);
         }
     });
