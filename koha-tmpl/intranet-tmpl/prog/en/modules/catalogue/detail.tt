@@ -1035,7 +1035,8 @@
     <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/table_filters_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
-        var browser = KOHA.browser('[% searchid %]', parseInt(biblionumber, 10));
+        var browser;
+        browser = KOHA.browser('[% searchid %]', parseInt(biblionumber, 10));
         browser.show();
 
         $(document).ready(function() {

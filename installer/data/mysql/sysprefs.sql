@@ -92,6 +92,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BorrowersTitles','Mr|Mrs|Miss|Ms',NULL,'Define appropriate Titles for patrons','free'),
 ('BorrowerUnwantedField','',NULL,'Name the fields you don\'t need to store for a patron\'s account','free'),
 ('BranchTransferLimitsType','ccode','itemtype|ccode','When using branch transfer limits, choose whether to limit by itemtype or collection code.','Choice'),
+('BrowseResultSelection','0',NULL,'Enable/Disable browsing search results fromt the bibliographic record detail page in staff client','YesNo'),
 ('CalculateFinesOnReturn','1','','Switch to control if overdue fines are calculated on return or not','YesNo'),
 ('CalendarFirstDayOfWeek','0','0|1|2|3|4|5|6','Select the first day of week to use in the calendar.','Choice'),
 ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library place a hold on an item from another library','YesNo'),

@@ -102,7 +102,7 @@ KOHA.browser = function (searchid, biblionumber) {
                     } else {
                         nextbutton = '<a href="#" id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</a>';
                     }
-                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="browse-button">' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
+                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="browse-button searchwithcontext">' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
                     $('a#browse-previous').click(function (ev) {
                         ev.preventDefault();
                         browseRecords(-1);

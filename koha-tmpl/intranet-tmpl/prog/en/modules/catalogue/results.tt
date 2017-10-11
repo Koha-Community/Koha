@@ -135,6 +135,9 @@
                     <div id="placeholdc" class="btn-group"><a class="btn btn-default btn-xs placehold" href="#"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
                 [% END %]
                 [% END %]
+                [% IF Koha.Preference('BrowseResultSelection') %]
+                    <div id="browse_selection" class="btn-group"><a class="btn btn-default btn-xs browse_selection" href="#"><i class="fa fa-sticky-note-o"></i> Browse selected records</a></div>
+                [% END %]
 
                 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %] <div class="btn-group"><a class="btn btn-default btn-xs" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>[% END %]
 
@@ -621,6 +624,7 @@
     [% INCLUDE 'browser-strings.inc' %]
     <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
@@ -652,15 +656,13 @@
 
             $("#cartsubmit").click(function(e){
                 e.preventDefault();
-                var checkboxes = $("#searchresults").find(":checkbox");
-                addMultiple(checkboxes);
+                addMultiple();
             });
 
             $(".addtolist").on("click",function(e){
                 e.preventDefault();
                 var shelfnumber = $(this).data("shelfnumber");
-                var checkboxes = $("#searchresults").find(":checkbox");
-                var vshelf = vShelfAdd(checkboxes);
+                var vshelf = vShelfAdd();
                 if( vshelf ){
                     if( $(this).hasClass("morelists") ){
                         openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf);
@@ -674,6 +676,11 @@
 
             $("#z3950submit").click(function(){
                 PopupZ3950();
+                return false;
+            });
+
+            $("#searchheader").on("click", ".browse_selection", function(){
+                browse_selection();
                 return false;
             });
 
@@ -767,6 +774,29 @@
                 delSingleRecord(biblionumber);
             });
 
+            [% UNLESS Koha.Preference('BrowseResultSelection') %]
+                resetSearchContext();
+            [% END %]
+            $(".selection").change(function(){
+                if ( $(this).is(':checked') == true ) {
+                  addBibToContext( $(this).val() );
+                } else {
+                  delBibToContext( $(this).val() );
+                }
+            });
+            $("#bookbag_form").ready(function(){
+                $("#bookbag_form").unCheckCheckboxes();
+                var bibnums = getContextBiblioNumbers();
+                if (bibnums) {
+                    for (var i=0; i < bibnums.length; i++) {
+                        var id = ('#bib' + bibnums[i]);
+                        if ($(id)) {
+                            $(id).attr('checked', true);
+                        }
+                    }
+                }
+            });
+
         });
 
 
@@ -789,10 +819,18 @@
         [% END %]
 
         function selectAll () {
-            $(".selection").prop("checked", true);
+            $("#bookbag_form").checkCheckboxes();
+            $("#bookbag_form").find("input[type='checkbox'][name='biblionumber']").each(function(){
+                $(this).change();
+            } );
+            return false;
         }
         function clearAll () {
-            $(".selection").prop("checked", false);
+            $("#bookbag_form").unCheckCheckboxes();
+            $("#bookbag_form").find("input[type='checkbox'][name='biblionumber']").each(function(){
+                $(this).change();
+            } );
+            return false;
         }
         function placeHold () {
             var checkedItems = $(".selection:checked");
@@ -823,6 +861,18 @@
             $.removeCookie("holdfor", { path: '/' });
             $(".holdforlink").remove();
             $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> "+_("Place hold")+"</a>");
+        }
+
+        function browse_selection () {
+            var bibnums = getContextBiblioNumbers();
+            if ( bibnums && bibnums.length > 0 ) {
+                var browser = KOHA.browser('', parseInt('[% biblionumber %]', 10));
+                browser.create(1, '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]', bibnums, bibnums.length);
+                window.location = '/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + bibnums[0] + '&searchid='+browser.searchid;
+            } else {
+                alert(MSG_NO_ITEM_SELECTED);
+            }
+            return false;
         }
 
         function addToList () {

@@ -21,6 +21,7 @@
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min_[% KOHA_VERSION %].js"></script>
 <!-- koha core js -->
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/commons_[% KOHA_VERSION %].js"></script>
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
