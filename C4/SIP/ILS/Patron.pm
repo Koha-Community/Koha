@@ -452,12 +452,8 @@ sub charge_denied {
 
 sub update_lastseen {
     my $self = shift;
-    my $p;
-    if (C4::Context->preference('TrackLastPatronActivity')
-        && $p = Koha::Patrons->find({ borrowernumber => $self->{borrowernumber} })) {
-        $p->track_login;
-    }
-    return;
+    my $kohaobj = Koha::Patrons->find( $self->{borrowernumber} );
+    $kohaobj->track_login if $kohaobj; # track_login checks the pref
 }
 
 sub _get_address {
