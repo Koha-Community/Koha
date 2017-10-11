@@ -91,7 +91,7 @@ force-borrower-messaging-defaults
 
 =head1 SYNOPSIS
 
-  force-borrower-messaging-defaults 
+  force-borrower-messaging-defaults
   force-borrower-messaging-defaults --help
   force-borrower-messaging-defaults --doit
   force-borrower-messaging-defaults --doit --truncate
@@ -130,4 +130,3 @@ Will only update active borrowers (borrowers who didn't pass their expiration da
 =back
 
 =cut
-
