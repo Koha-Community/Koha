@@ -39,7 +39,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $truncate, $since, $not_expired) = @_;
+    my ($doit, $truncate, $since, $not_expired, $no_overwrite) = @_;
 
     $since = '0000-00-00' if (!$since);
     print "Since: $since\n";
@@ -54,9 +54,12 @@ sub force_borrower_messaging_defaults {
         $dbh->do(q|SET FOREIGN_KEY_CHECKS = 1|);
     }
 
-    my $sql = "SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?";
+    my $sql = "SELECT borrowernumber, categorycode FROM borrowers bo WHERE dateenrolled >= ?";
     if ($not_expired) {
         $sql .= " AND dateexpiry >= NOW()"
+    }
+    if( $no_overwrite ) {
+        $sql .= " AND (SELECT COUNT(*) FROM borrower_message_preferences mp WHERE mp.borrowernumber=bo.borrowernumber) = 0"
     }
     my $sth = $dbh->prepare($sql);
     $sth->execute($since);
@@ -72,18 +75,19 @@ sub force_borrower_messaging_defaults {
 }
 
 
-my ($doit, $truncate, $since, $help, $not_expired);
+my ( $doit, $truncate, $since, $help, $not_expired, $no_overwrite );
 my $result = GetOptions(
     'doit'        => \$doit,
     'truncate'    => \$truncate,
     'since:s'     => \$since,
     'not-expired' => \$not_expired,
+    'no_overwrite'  => \$no_overwrite,
     'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $truncate, $since, $not_expired );
+force_borrower_messaging_defaults( $doit, $truncate, $since, $not_expired, $no_overwrite );
 
 =head1 NAME
 
@@ -105,8 +109,9 @@ preferences default values as defined for their borrower category. So you would
 have to modify each borrower one by one if you would like to send them 'Hold
 Filled' notice for example.
 
-This script create transport preferences for all existing borrowers and set
-them to default values defined for the category they belong to.
+This script creates/overwrites messaging preferences for all borrowers and sets
+them to default values defined for the category they belong to (unless you
+use the options -not-expired or -no_overwrite to update a subset).
 
 =over 8
 
@@ -126,6 +131,11 @@ affects borrower_message_preferences table.
 =item B<--not-expired>
 
 Will only update active borrowers (borrowers who didn't pass their expiration date).
+
+=item B<--no_overwrite>
+
+Will only update patrons without messaging preferences and skip patrons that
+already set their preferences.
 
 =back
 
