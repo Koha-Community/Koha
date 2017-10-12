@@ -79,6 +79,7 @@ $(document).ready(function() {
     $('#duplicate').on('click', function() {
         $("input[name='op']").val('modify');
         $("input[name='borrowernumber']").val('[% check_member %]');
+        $("input[name='check_member']").val('');
         $('#entryform').submit();
     });
 
