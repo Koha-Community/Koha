@@ -108,12 +108,14 @@
           </td>
           <td>[% hold.itemtype %]</td>
           <td>
-          [% IF hold.found == 'W' %]
+          [% IF hold.found == 'F' %]
+              Fulfilled
+          [% ELSIF hold.cancellationdate %]
+              Cancelled
+          [% ELSIF hold.found == 'W' %]
               Waiting
           [% ELSIF hold.found == 'T' %]
               In transit
-          [% ELSIF hold.cancellationdate %]
-              Cancelled
           [% ELSE %]
               In queue
           [% END %]
