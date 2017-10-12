@@ -778,7 +778,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $offset->type, 'Fine', 'Account offset type is Fine' );
     is( $offset->amount, '15.000000', 'Account offset amount is 15.00' );
 
-    ModItem({ itype => 'BK' }, $biblionumber, $itemnumber, 1);
+    t::lib::Mocks::mock_preference('WhenLostForgiveFine','0');
+    t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','0');
+
     LostItem( $itemnumber, 1 );
 
     my $item = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber);
@@ -789,12 +791,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         undef, $renewing_borrower->{borrowernumber}
     );
 
-    ok( $total_due == 12, 'Borrower only charged replacement fee with both WhenLostForgiveFine and WhenLostChargeReplacementFee enabled' );
+    is( $total_due, '15.000000', 'Borrower only charged replacement fee with both WhenLostForgiveFine and WhenLostChargeReplacementFee enabled' );
 
     C4::Context->dbh->do("DELETE FROM accountlines");
-
-    t::lib::Mocks::mock_preference('WhenLostForgiveFine','0');
-    t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','0');
 
     C4::Overdues::UpdateFine(
         {
