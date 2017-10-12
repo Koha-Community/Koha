@@ -1,4 +1,6 @@
-CREATE TABLE `account_offset_types` (
+DROP TABLE IF EXISTS `accountoffsets`;
+
+CREATE TABLE IF NOT EXISTS `account_offset_types` (
   `type` varchar(16) NOT NULL, -- The type of offset this is
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -16,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `account_offsets` (
   CONSTRAINT `account_offsets_ibfk_t` FOREIGN KEY (`type`) REFERENCES `account_offset_types` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO account_offset_types ( type ) VALUES
+INSERT IGNORE INTO account_offset_types ( type ) VALUES
 ('Writeoff'),
 ('Payment'),
 ('Lost Item'),
