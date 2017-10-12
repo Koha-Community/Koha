@@ -50,11 +50,13 @@ my $branch = $builder->build({
     source => 'Branch',
 });
 
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my $patron = $builder->build({
     source => 'Borrower',
     value => {
         branchcode => $branch->{branchcode},
         debarred => undef,
+        categorycode => $patron_category->{categorycode},
     },
 });
 
