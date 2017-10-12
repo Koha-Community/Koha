@@ -39,20 +39,13 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $truncate, $since, $not_expired, $no_overwrite) = @_;
+    my ($doit, $since, $not_expired, $no_overwrite) = @_;
 
     $since = '0000-00-00' if (!$since);
     print "Since: $since\n";
 
     my $dbh = C4::Context->dbh;
     $dbh->{AutoCommit} = 0;
-
-    if ( $doit && $truncate ) {
-        $dbh->do(q|SET FOREIGN_KEY_CHECKS = 0|);
-        $dbh->do(q|TRUNCATE borrower_message_transport_preferences|);
-        $dbh->do(q|TRUNCATE borrower_message_preferences|);
-        $dbh->do(q|SET FOREIGN_KEY_CHECKS = 1|);
-    }
 
     my $sql =
 q|SELECT DISTINCT bo.borrowernumber, bo.categorycode FROM borrowers bo
@@ -78,10 +71,9 @@ WHERE bo.dateenrolled >= ?|;
 }
 
 
-my ( $doit, $truncate, $since, $help, $not_expired, $no_overwrite );
+my ( $doit, $since, $help, $not_expired, $no_overwrite );
 my $result = GetOptions(
     'doit'        => \$doit,
-    'truncate'    => \$truncate,
     'since:s'     => \$since,
     'not-expired' => \$not_expired,
     'no-overwrite'  => \$no_overwrite,
@@ -90,7 +82,7 @@ my $result = GetOptions(
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $truncate, $since, $not_expired, $no_overwrite );
+force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite );
 
 =head1 NAME
 
@@ -101,7 +93,6 @@ borrowers-force-messaging-defaults.pl
   borrowers-force-messaging-defaults.pl
   borrowers-force-messaging-defaults.pl --help
   borrowers-force-messaging-defaults.pl --doit
-  borrowers-force-messaging-defaults.pl --doit --truncate
   borrowers-force-messaging-defaults.pl --doit --not-expired
 
 =head1 DESCRIPTION
@@ -125,11 +116,6 @@ Prints this help
 =item B<--doit>
 
 Actually update the borrowers.
-
-=item B<--truncate>
-
-Truncate all borrowers transport preferences before (re-)creating them. It
-affects borrower_message_preferences table.
 
 =item B<--not-expired>
 
