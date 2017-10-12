@@ -39,7 +39,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $since, $not_expired, $no_overwrite) = @_;
+    my ($doit, $since, $not_expired, $no_overwrite, $category ) = @_;
 
     $since = '0000-00-00' if (!$since);
     print "Since: $since\n";
@@ -57,8 +57,9 @@ WHERE bo.dateenrolled >= ?|;
     if( $no_overwrite ) {
         $sql .= " AND mp.borrowernumber IS NULL";
     }
+    $sql .= " AND categorycode = ?" if $category;
     my $sth = $dbh->prepare($sql);
-    $sth->execute($since);
+    $sth->execute($since, $category || () );
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
@@ -71,18 +72,19 @@ WHERE bo.dateenrolled >= ?|;
 }
 
 
-my ( $doit, $since, $help, $not_expired, $no_overwrite );
+my ( $doit, $since, $help, $not_expired, $no_overwrite, $category );
 my $result = GetOptions(
     'doit'        => \$doit,
     'since:s'     => \$since,
     'not-expired' => \$not_expired,
     'no-overwrite'  => \$no_overwrite,
+    'category:s'  => \$category,
     'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite );
+force_borrower_messaging_defaults( $doit, $since, $not_expired, $no_overwrite, $category );
 
 =head1 NAME
 
@@ -94,6 +96,7 @@ borrowers-force-messaging-defaults.pl
   borrowers-force-messaging-defaults.pl --help
   borrowers-force-messaging-defaults.pl --doit
   borrowers-force-messaging-defaults.pl --doit --not-expired
+  borrowers-force-messaging-defaults.pl --doit --category PT
 
 =head1 DESCRIPTION
 
@@ -125,6 +128,10 @@ Will only update active borrowers (borrowers who didn't pass their expiration da
 
 Will only update patrons without messaging preferences and skip patrons that
 already set their preferences.
+
+=item B<--category>
+
+Will only update patrons in the category specified.
 
 =back
 
