@@ -582,6 +582,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UsageStatsLibraryType', '', 'public|school|academic|research|private|societyAssociation|corporate|government|religiousOrg|subscription', 'The library type to be shown on the Hea Koha community website', 'Choice'),
 ('UsageStatsLibraryUrl', '', NULL, 'The library URL to be shown on Hea Koha community website', 'Free'),
 ('UsageStatsPublicID', '', NULL, 'Public ID for Hea website', 'Free'),
+('UseACQFrameworkForBiblioRecords','0','','Use the ACQ framework for the catalog details','YesNo'),
 ('UseAuthoritiesForTracings','1','0','Use authority record numbers for subject tracings instead of heading strings.','YesNo'),
 ('UseBranchTransferLimits','0','','If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.','YesNo'),
 ('UseControlNumber','0','','If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','YesNo'),

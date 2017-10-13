@@ -115,95 +115,121 @@
             <input type="hidden" id="currency_rate_[% c.currency %]"  name="[% c.currency %]" value="[% c.rate %]" />
         [% END %]
 
-        <ol><li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Title</span>
-                <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
-            [% ELSE %]
-            <label for="entertitle" class="required">Title: </label>
-                <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" />
-                <span class="required">Required</span>
-            [% END %]
-        </li>
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Author: </span>
-                <input type="hidden" name="author" id="author" value="[% author %]" />[% author %]
-            [% ELSE %]
-            <label for="author">Author: </label>
-                <input type="text" size="50" name="author" id="author" value="[% author %]" />
-            [% END %]
-        </li>
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Publisher: </span>
-                <input type="hidden" name="publishercode" id="publishercode" value="[% publishercode %]" />[% publishercode %]
-            [% ELSE %]
-            <label for="publishercode"> Publisher: </label>
-                <input type="text" size="50" name="publishercode" id="publishercode" value="[% publishercode %]" />
-            [% END %]
-        </li>
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Edition: </span>
-                <input type="hidden" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />[% editionstatement %]
-
-            [% ELSE %]
-            <label for="editionstatement">Edition: </label>
-                <input type="text" size="20" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />
-            [% END %]
-        </li>
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Publication year: </span>
-                <input type="hidden" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />[% publicationyear %]
-            [% ELSE %]
-            <label for="publicationyear">Publication year: </label>
-                <input type="text" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />
-            [% END %]
-        </li>
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">ISBN: </span>
-                <input type="hidden" name="isbn" id="ISBN" value="[% isbn %]" />[% isbn %]
-            [% ELSE %]
-            <label for="ISBN">ISBN: </label>
-                <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn %]" />
-            [% END %]
-        </li>
-        [% IF (UNIMARC) %]
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">EAN: </span>
-                <input type="hidden" name="ean" id="EAN" value="[% ean %]" />[% ean %]
-            [% ELSE %]
-            <label for="EAN">EAN: </label>
-                <input type="text" size="20" name="ean" id="EAN" value="[% ean %]" />
-            [% END %]
-        </li>
-        [% END %]
-        <li>
-            [% IF ( biblionumber ) %]
-            <span class="label">Series: </span>
-                <input type="hidden" name="series" id="series" value="[% seriestitle %]" />[% seriestitle %]
-            [% ELSE %]
-            <label for="series">Series: </label>
-                <input type="text" size="50" name="series" id="series" value="[% seriestitle %]" />
-            [% END %]
-        </li>
-            [% UNLESS ( biblionumber ) %]
-            [% IF ( itemtypeloop ) %]
-            <li>
-                <span class="label">Item type:</span>
-                <select name="itemtype" style="width:12em;">
-                [% FOREACH itemtype IN itemtypeloop %]
-                    <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+        [% IF NOT Koha.Preference('UseACQFrameworkForBiblioRecords') OR NoACQframework %]
+            <ol><li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Title</span>
+                    <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
+                [% ELSE %]
+                <label for="entertitle" class="required">Title: </label>
+                    <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" />
+                    <span class="required">Required</span>
                 [% END %]
-                </select>
+            </li>
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Author: </span>
+                    <input type="hidden" name="author" id="author" value="[% author %]" />[% author %]
+                [% ELSE %]
+                <label for="author">Author: </label>
+                    <input type="text" size="50" name="author" id="author" value="[% author %]" />
+                [% END %]
+            </li>
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Publisher: </span>
+                    <input type="hidden" name="publishercode" id="publishercode" value="[% publishercode %]" />[% publishercode %]
+                [% ELSE %]
+                <label for="publishercode"> Publisher: </label>
+                    <input type="text" size="50" name="publishercode" id="publishercode" value="[% publishercode %]" />
+                [% END %]
+            </li>
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Edition: </span>
+                    <input type="hidden" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />[% editionstatement %]
+
+                [% ELSE %]
+                <label for="editionstatement">Edition: </label>
+                    <input type="text" size="20" name="editionstatement" id="editionstatement" value="[% editionstatement %]" />
+                [% END %]
+            </li>
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Publication year: </span>
+                    <input type="hidden" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />[% publicationyear %]
+                [% ELSE %]
+                <label for="publicationyear">Publication year: </label>
+                    <input type="text" size="10" name="publicationyear" id="publicationyear" value="[% publicationyear %]" />
+                [% END %]
+            </li>
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">ISBN: </span>
+                    <input type="hidden" name="isbn" id="ISBN" value="[% isbn %]" />[% isbn %]
+                [% ELSE %]
+                <label for="ISBN">ISBN: </label>
+                    <input type="text" size="50" name="isbn" id="ISBN" value="[% isbn %]" />
+                [% END %]
+            </li>
+            [% IF (UNIMARC) %]
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">EAN: </span>
+                    <input type="hidden" name="ean" id="EAN" value="[% ean %]" />[% ean %]
+                [% ELSE %]
+                <label for="EAN">EAN: </label>
+                    <input type="text" size="20" name="ean" id="EAN" value="[% ean %]" />
+                [% END %]
             </li>
             [% END %]
+            <li>
+                [% IF ( biblionumber ) %]
+                <span class="label">Series: </span>
+                    <input type="hidden" name="series" id="series" value="[% seriestitle %]" />[% seriestitle %]
+                [% ELSE %]
+                <label for="series">Series: </label>
+                    <input type="text" size="50" name="series" id="series" value="[% seriestitle %]" />
+                [% END %]
+            </li>
+                [% UNLESS ( biblionumber ) %]
+                [% IF ( itemtypeloop ) %]
+                <li>
+                    <span class="label">Item type:</span>
+                    <select name="itemtype" style="width:12em;">
+                    [% FOREACH itemtype IN itemtypeloop %]
+                        <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+                    [% END %]
+                    </select>
+                </li>
+                [% END %]
+                [% END %]
+            </ol>
+        [% ELSE %]
+            <input type="hidden" name="use_ACQ_framework" value="1" />
+            [% IF biblionumber %]
+                <ol>
+                    [% FOREACH field IN catalog_details %]
+                        <li>
+                            <div class="subfield_line">
+                                <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
+                                [% field.value %]
+                            </div>
+                        </li>
+                    [% END %]
+                </ol>
+            [% ELSE %]
+                <ol>
+                    [% FOREACH field IN catalog_details %]
+                        <li>
+                            <div class="subfield_line">
+                                [% PROCESS display_subfield field=field %]
+                            </div>
+                        </li>
+                    [% END %]
+                </ol>
             [% END %]
-        </ol>
+        [% END %]
     </fieldset>
 
     [% IF ( suggestionid ) %]
@@ -679,3 +705,34 @@
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
+
+[% BLOCK display_subfield %]
+    [% IF field.mandatory %]
+        <label class="required">[% field.lib %] ([% field.tag %][% field.subfield %])</label>
+    [% ELSE %]
+        <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
+    [% END %]
+    [% IF field.authorised_value %]
+        [% SWITCH field.authorised_value %]
+        [% CASE 'branches' %]
+            <select name="bib_field_value">
+                <option value=""></option>
+                [% PROCESS options_for_libraries libraries => Branches.all( selected => "FIXME" ) %]
+            </select>
+        [% CASE 'itemtypes' %]
+            <select name="bib_field_value">
+                <option value=""></option>
+                [% PROCESS options_for_itemtypes itemtypes => ItemTypes.Get(), selected_itemtype => "FIXME" %]
+            </select>
+        [% CASE 'cn_source' %]
+        [% CASE %]
+            [% PROCESS 'av-build-dropbox.inc' name="bib_field_value", category=field.authorised_value, default="FIXME" %]
+        [% END %]
+    [% ELSE %]
+        <input type="text" name="bib_field_value" value="[% field.value %]" />
+    [% END %]
+    <input type="hidden" name="bib_kohafield" value="[% field.kohafield %]" />
+    <input type="hidden" name="bib_tag" value="[% field.tag %]" />
+    <input type="hidden" name="bib_subfield" value="[% field.subfield %]" />
+    [% IF field.mandatory %] <span class="required">Required</span>[% END %]
+[% END %]

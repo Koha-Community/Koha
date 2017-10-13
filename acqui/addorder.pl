@@ -138,6 +138,7 @@ use C4::Barcodes;
 # not just blindly call C4 functions and print a redirect.  
 
 my $input = new CGI;
+my $use_ACQ_framework = $input->param('use_ACQ_framework');
 
 # Check if order total amount exceed allowed budget
 my $confirm_budget_exceeding = $input->param('confirm_budget_exceeding');
@@ -239,21 +240,31 @@ my $basket   = Koha::Acquisition::Baskets->find($basketno);
 if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
     unless ( $$orderinfo{biblionumber} ) {
-        #if it doesn't create it
-        my $record = TransformKohaToMarc(
-            {
-                "biblio.title"                => "$$orderinfo{title}",
-                "biblio.author"               => $$orderinfo{author}          ? $$orderinfo{author}        : "",
-                "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
-                "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
-                "biblioitems.ean"             => $$orderinfo{ean}             ? $$orderinfo{ean}           : "",
-                "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
-                "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
-                "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
-                "biblioitems.itemtype"        => $$orderinfo{itemtype} ? $$orderinfo{itemtype} : "",
-                "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
-            });
 
+        my $record;
+        if ( $use_ACQ_framework ) {
+            my @tags         = $input->multi_param('bib_tag');
+            my @subfields    = $input->multi_param('bib_subfield');
+            my @field_values = $input->multi_param('bib_field_value');
+            my $xml = TransformHtmlToXml( \@tags, \@subfields, \@field_values );
+            $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+        } else {
+            #if it doesn't create it
+            $record = TransformKohaToMarc(
+                {
+                    "biblio.title"                => "$$orderinfo{title}",
+                    "biblio.author"               => $$orderinfo{author}          ? $$orderinfo{author}        : "",
+                    "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
+                    "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
+                    "biblioitems.ean"             => $$orderinfo{ean}             ? $$orderinfo{ean}           : "",
+                    "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
+                    "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
+                    "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
+                    "biblioitems.itemtype"        => $$orderinfo{itemtype} ? $$orderinfo{itemtype} : "",
+                    "biblioitems.editionstatement"=> $$orderinfo{editionstatement} ? $$orderinfo{editionstatement} : "",
+                });
+
+        }
         C4::Acquisition::FillWithDefaultValues( $record );
 
         # create the record in catalogue, with framework ''
@@ -308,8 +319,8 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
             unless ($itemhash{$itemid[$i]}){
             $countdistinct++;
             }
-            push @{$itemhash{$itemid[$i]}->{'tags'}},$tags[$i];
-            push @{$itemhash{$itemid[$i]}->{'subfields'}},$subfields[$i];
+        push @{$itemhash{$itemid[$i]}->{'tags'}},$tags[$i];
+        push @{$itemhash{$itemid[$i]}->{'subfields'}},$subfields[$i];
             push @{$itemhash{$itemid[$i]}->{'field_values'}},$field_values[$i];
             push @{$itemhash{$itemid[$i]}->{'ind_tag'}},$ind_tag[$i];
             push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];

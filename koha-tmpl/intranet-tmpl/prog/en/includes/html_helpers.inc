@@ -17,3 +17,15 @@
         [% END %]
     [% END %]
 [% END %]
+
+[% BLOCK options_for_item_types %]
+    [% FOREACH itemtype IN itemtypes %]
+        [% IF itemtype.itemtype == selected_itemtype %]
+            <option value="[% itemtype.itemtype %]" selected="selected">
+        [% ELSE %]
+            <option value="[% itemtype.itemtype %]">
+        [% END %]
+            [% itemtype.translated_description %]
+        </option>
+    [% END %]
+[% END %]

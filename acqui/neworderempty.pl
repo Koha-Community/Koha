@@ -88,8 +88,12 @@ use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
+use Koha::BiblioFrameworks;
+use Koha::DateUtils qw( dt_from_string );
+use Koha::MarcSubfieldStructures;
 use Koha::ItemTypes;
 use Koha::Patrons;
+use Koha::RecordProcessor;
 
 our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -173,20 +177,84 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 
 
 
-my ( @order_user_ids, @order_users );
-if ( $ordernumber eq '' ) {    # create order
+my ( @order_user_ids, @order_users, @catalog_details );
+our $tagslib = GetMarcStructure(1, 'ACQ', { unsafe => 1 } );
+my ( $itemnumber_tag, $itemnumber_subtag ) = GetMarcFromKohaField( 'items.itemnumber', 'ACQ' );
+if ( not $ordernumber ) {    # create order
     $new = 'yes';
 
-    # 	$ordernumber=newordernum;
-    if ( $biblionumber && !$suggestionid ) {
+    if ( $biblionumber ) {
         $data = GetBiblioData($biblionumber);
     }
-
-# get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
-# otherwise, retrieve suggestion information.
-    if ($suggestionid) {
-        $data = ($biblionumber) ? GetBiblioData($biblionumber) : GetSuggestion($suggestionid);
+    # get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
+    # otherwise, retrieve suggestion information.
+    elsif ($suggestionid) {
+        $data = GetSuggestion($suggestionid);
         $budget_id ||= $data->{'budgetid'} // 0;
+    }
+
+    if ( not $biblionumber and Koha::BiblioFrameworks->find('ACQ') ) {
+        #my $acq_mss = Koha::MarcSubfieldStructures->search({ frameworkcode => 'ACQ', tagfield => { '!=' => $itemnumber_tag } });
+        foreach my $tag ( sort keys %{$tagslib} ) {
+            next if $tag eq '';
+            next if $tag eq $itemnumber_tag;    # skip items fields
+            foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+                my $mss = $tagslib->{$tag}{$subfield};
+                next if IsMarcStructureInternal($mss);
+                next if $mss->{tab} == -1;
+                my $value = $mss->{defaultvalue};
+
+                if ($suggestionid and $mss->{kohafield}) {
+                    # Reading suggestion info if ordering from a suggestion
+                    if ( $mss->{kohafield} eq 'biblio.title' ) {
+                        $value = $data->{title};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblio.author' ) {
+                        $value = $data->{author};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblioitems.publishercode' ) {
+                        $value = $data->{publishercode};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblioitems.editionstatement' ) {
+                        $value = $data->{editionstatement};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblioitems.publicationyear' ) {
+                        $value = $data->{publicationyear};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblioitems.isbn' ) {
+                        $value = $data->{isbn};
+                    }
+                    elsif ( $mss->{kohafield} eq 'biblio.seriestitle' ) {
+                        $value = $data->{seriestitle};
+                    }
+                }
+
+                if ( $value eq '' ) {
+
+                    # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+                    my $today_dt = dt_from_string;
+                    my $year     = $today_dt->strftime('%Y');
+                    my $month    = $today_dt->strftime('%m');
+                    my $day      = $today_dt->strftime('%d');
+                    $value =~ s/<<YYYY>>/$year/g;
+                    $value =~ s/<<MM>>/$month/g;
+                    $value =~ s/<<DD>>/$day/g;
+
+                    # And <<USER>> with surname (?)
+                    my $username =
+                      (   C4::Context->userenv
+                        ? C4::Context->userenv->{'surname'}
+                        : "superlibrarian" );
+                    $value =~ s/<<USER>>/$username/g;
+                }
+                push @catalog_details, {
+                    tag      => $tag,
+                    subfield => $subfield,
+                    %$mss,    # Do we need plugins support (?)
+                    value => $value,
+                };
+            }
+        }
     }
 }
 else {    #modify order
@@ -204,6 +272,37 @@ else {    #modify order
         push @order_users, $order_patron if $order_patron;
     }
 }
+
+# We can have:
+# - no ordernumber but a biblionumber: from a subscription, from an existing record
+# - no ordernumber, no biblionumber: from a suggestion, from a new order
+if ( not $ordernumber or $biblionumber ) {
+    if ( C4::Context->preference('UseACQFrameworkForBiblioRecords') ) {
+        my $record = $biblionumber ? GetMarcBiblio({ biblionumber => $biblionumber }) : undef;
+        foreach my $tag ( sort keys %{$tagslib} ) {
+            next if $tag eq '';
+            next if $tag eq $itemnumber_tag; # skip items fields
+            my @fields = $biblionumber ? $record->field($tag) : ();
+            foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+                my $mss = $tagslib->{$tag}{$subfield};
+                next if IsMarcStructureInternal($mss);
+                next if $mss->{tab} == -1;
+                # We only need to display the values
+                my $value = join '; ', map { $_->subfield( $subfield ) } @fields;
+                if ( $value ) {
+                    push @catalog_details, {
+                        tag => $tag,
+                        subfield => $subfield,
+                        %$mss,
+                        value => $value,
+                    };
+                }
+            }
+        }
+    }
+}
+
+$template->param( catalog_details => \@catalog_details, );
 
 my $suggestion;
 $suggestion = GetSuggestionInfo($suggestionid) if $suggestionid;
@@ -254,6 +353,7 @@ if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
         UniqueItemFields => C4::Context->preference('UniqueItemFields'),
     );
 }
+
 # Get the item types list, but only if item_level_itype is YES. Otherwise, it will be in the item, no need to display it in the biblio
 my @itemtypes;
 @itemtypes = Koha::ItemTypes->search unless C4::Context->preference('item-level_itypes');
