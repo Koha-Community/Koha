@@ -53,6 +53,8 @@ Options:
                             normarc and unimarc.
   --zebralang lang          Choose the primary language for Zebra indexing. Valid
                             values are cs, en (default), es, fr, gr, nb, ru and uk.
+  --elasticsearch-server s  Enforce the use of the specified Elasticsearch server(s)
+                            (default: localhost:9200).
   --memcached-servers str   Set a comma-separated list of host:port memcached servers.
   --memcached-prefix str    Set the desired prefix for the instance memcached namespace.
   --enable-sru              Enable the Z39.50/SRU server in Zebra search engine
@@ -104,6 +106,7 @@ generate_config_file() {
         -e "s/__DB_HOST__/$mysqlhost/g" \
         -e "s/__DB_USER__/$mysqluser/g" \
         -e "s/__DB_PASS__/$mysqlpwd/g" \
+        -e "s/__ELASTICSEARCH_SERVER__/${ELASTICSEARCH_SERVER}/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
         -e "s#__TEMPLATE_CACHE_DIR__#$TEMPLATE_CACHE_DIR#g" \
@@ -341,6 +344,8 @@ PASSWDFILE="/etc/koha/passwd"
 USE_MEMCACHED="yes"
 MEMCACHED_SERVERS=""
 MEMCACHED_PREFIX=""
+# elasticsearch config
+ELASTICSEARCH_SERVER="localhost:9200"
 # hardcoded memcached defaults
 DEFAULT_MEMCACHED_SERVERS="127.0.0.1:11211"
 DEFAULT_MEMCACHED_PREFIX="koha_"
@@ -374,7 +379,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,elasticsearch-server:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -387,6 +392,7 @@ CLO_DEFAULTSQL=""
 CLO_ADMINUSER=""
 CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
+CLO_ELASTICSEARCH_SERVER=""
 CLO_UPLOAD_PATH=""
 CLO_TMP_PATH=""
 CLO_LETSENCRYPT=""
@@ -407,6 +413,8 @@ while true ; do
             CLO_MEMCACHED_SERVERS="$2" ; shift 2 ;;
         --memcached-prefix)
             CLO_MEMCACHED_PREFIX="$2" ; shift 2;;
+        --elasticsearch-server)
+            CLO_ELASTICSEARCH_SERVER="$2" ; shift 2 ;;
         -m|--marcflavor)
             CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
         -l|--zebralang)
@@ -481,6 +489,10 @@ fi
 
 if [ "$CLO_TIMEZONE" != "" ]; then
     TIMEZONE=$CLO_TIMEZONE
+fi
+
+if [ "${CLO_ELASTICSEARCH_SERVER}" != "" ]; then
+    ELASTICSEARCH_SERVER="${CLO_ELASTICSEARCH_SERVER}"
 fi
 
 if [ "$ENABLE_SRU" != "no" ]; then
