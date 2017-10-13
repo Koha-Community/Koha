@@ -29,6 +29,7 @@
       <arg><option>--zebralang</option> en|es|fr|gr|nb|ru|uk</arg>
       <arg><option>--memcached-servers</option> server:port</arg>
       <arg><option>--memcached-prefix</option> namespace_prefix</arg>
+      <arg><option>--elasticsearch-server</option> server:port</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
       <arg><option>--configfile</option> /path/to/config</arg>
       <arg><option>--passwdfile</option> /path/to/passwd</arg>
@@ -146,6 +147,13 @@
       <term><option>--memcached-prefix</option></term>
       <listitem>
         <para>Specifiy a <option>namespace prefix</option> for memcached. You usually leave this option alone to avoid namespace collisions. It defaults to <option>koha_</option>.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--elasticsearch-server</option></term>
+      <listitem>
+        <para>Specifiy a <option>server:port</option> Elasticsearch server configuration. It defaults to <option>localhost:9200</option>.</para>
       </listitem>
     </varlistentry>
 
