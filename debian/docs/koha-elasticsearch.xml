@@ -1,0 +1,100 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-elasticsearch</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-elasticsearch">
+
+  <refmeta>
+    <refentrytitle>koha-elasticsearch</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-elasticsearch</refname>
+    <refpurpose>Manage Elasticsearch-related tasks for Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsect1><title>Description</title>
+  <para>Provides Elasticsearch-related tasks for Koha instances. An action needs to
+        be passed.</para>
+  </refsect1>
+
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-elasticsearch --rebuild</command>
+      <arg>-b|--biblios</arg>
+      <arg>-a|--authorities</arg>
+      <arg>-v|--verbose</arg>
+      <arg>-c n|--commit n</arg>
+      <arg>-v|--verbose</arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Actions</title>
+  <variablelist>
+    <varlistentry>
+      <term><option>--rebuild</option></term>
+      <listitem>
+        <para>Makes <refname>koha-elasticsearch</refname> rebuild Elasticsearch indexes based on the parameters.
+              By default it rebuilds both authority and bibliographic records. This behaviour can be controlled
+              with the <option>-a</option> and <option>-b</option> parameters.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Options</title>
+  <variablelist>
+    <varlistentry>
+      <term><option>-a</option></term>
+      <listitem>
+        <para>In conjunction with <option>--rebuild</option>, it triggers authority record reindexing.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-b</option></term>
+      <listitem>
+        <para>In conjunction with <option>--rebuild</option> it triggers bibliographic record reindexing.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-c, --commit</option></term>
+      <listitem>
+        <para>Specifies how many records will be batched up before they are added to Elasticsearch (default: 5000).
+              Higher values lead to better performance, but take more RAM.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-v, --verbose</option></term>
+      <listitem>
+        <para>Be verbose. Useful for debugging indexing problems.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-h, --help</option></term>
+      <listitem>
+        <para>Display usage information.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-rebuild-zebra(8)</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
