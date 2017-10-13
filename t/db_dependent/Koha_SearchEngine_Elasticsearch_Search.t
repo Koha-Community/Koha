@@ -81,7 +81,7 @@ subtest 'json2marc' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 15;
+    plan tests => 16;
 
     t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
     my $query = $builder->build_query();
@@ -170,6 +170,13 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         '(barcode:123456*)',
         "query of specific field is truncated"
+    );
+
+    ( undef, $query ) = $builder->build_query_compat( undef, ['title:"donald duck"'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:"donald duck")',
+        "query of specific field is not truncated when surrouned by quotes"
     );
 };
 
