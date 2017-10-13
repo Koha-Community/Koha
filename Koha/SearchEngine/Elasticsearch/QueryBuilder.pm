@@ -794,30 +794,22 @@ operands and double quoted strings.
 
 sub _truncate_terms {
     my ( $self, $query ) = @_;
-    my @stops = qw/and or not/;
-    my @new_terms;
-    my @quote_split = split /(["])([^"]+)\1/, $query; 
-    #Above splits the string based on matching pairs of double quotes
-    #In practice we get ('','"','donald duck',' ','"','the mouse',' and pete') 
-    #given the string '"donald duck" "the mouse" and pete'
-    #so we ignore empties, quote the ones after a '"' and split the rest on spaces
-    for (my $i=0; $i < @quote_split; $i++ ) {
-        next if ( $quote_split[$i] eq '' || $quote_split[$i] eq ' ' );
-        if ( $quote_split[$i] eq '"' ){
-            $i++;
-            $quote_split[$i] = '"'.$quote_split[$i].'"';
-            push @new_terms, $quote_split[$i]
-        } else {
-            my @space_split = split /[\(\s\)]/, $quote_split[$i];
-            foreach my $term (@space_split) {
-                next if ( $term eq '' || $term eq ' ' );
-                $term .= "*" unless ( ( grep { lc($term) =~ /^$_$/ } @stops ) || ( $term =~ /\*$/ ) );
-                push @new_terms, $term;
-            }
-        }
-    }
-    $query = join ' ', @new_terms;
-    return $query;
+
+    # '"donald duck" "the mouse" and peter" get split into
+    # ['', '"donald duck"', '', ' ', '', '"the mouse"', '', ' ', 'and', ' ', 'pete']
+    my @tokens = split /("[^"]+"|\s+)/, $query;
+
+    # Filter out empty tokens
+    my @words = grep { $_ !~ /^\s*$/ } @tokens;
+
+    # Append '*' to words if needed, ie. if it's not surrounded by quotes, not
+    # terminated by '*' and not a keyword
+    my @terms = map {
+        my $w = $_;
+        (/^"/ or /\*$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
+    } @words;
+
+    return join ' ', @terms;
 }
 
 1;
