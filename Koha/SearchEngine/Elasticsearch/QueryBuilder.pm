@@ -795,9 +795,9 @@ operands and double quoted strings.
 sub _truncate_terms {
     my ( $self, $query ) = @_;
 
-    # '"donald duck" "the mouse" and peter" get split into
-    # ['', '"donald duck"', '', ' ', '', '"the mouse"', '', ' ', 'and', ' ', 'pete']
-    my @tokens = split /("[^"]+"|\s+)/, $query;
+    # '"donald duck" title:"the mouse" and peter" get split into
+    # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
+    my @tokens = split /((?:\w+:)?"[^"]+"|\s+)/, $query;
 
     # Filter out empty tokens
     my @words = grep { $_ !~ /^\s*$/ } @tokens;
@@ -806,7 +806,7 @@ sub _truncate_terms {
     # terminated by '*' and not a keyword
     my @terms = map {
         my $w = $_;
-        (/^"/ or /\*$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
+        (/"$/ or /\*$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
     } @words;
 
     return join ' ', @terms;
