@@ -1,0 +1,180 @@
+#!/bin/sh
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Manage Elasticsearch-related tasks for Koha instances
+
+Usage: $scriptname [actions] [options] instancename1 instancename2...
+
+Actions:
+    --rebuild         Trigger a rebuild process
+
+Options:
+    --authorities|-a  Only run process for authorities.
+    --biblios|-b      Only run process for biblios.
+    -c|--commit n     Specify how many records will be batched up before
+                      they're added to Elasticsearch (default: 5000).
+    --verbose|-v      Be verbose.
+    --help|-h         Print this help.
+
+EOF
+}
+
+toggle_biblios_only()
+{
+    biblios_only="yes"
+    biblios="yes"
+    if [ "${authorities_only}" != "yes" ]; then
+        authorities="no"
+    fi
+}
+
+toggle_authorities_only()
+{
+    authorities_only="yes"
+    authorities="yes"
+    if [ "${biblios_only}" != "yes" ]; then
+        biblios="no"
+    fi
+}
+
+set_action()
+{
+    if [ "${op}" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+run_rebuild_elasticsearch()
+{
+    # read instance name and eliminate instance name from params
+    local name=$1; shift
+
+    if [ "$DEV_INSTALL" = "" ]; then
+        KOHA_BINDIR=${KOHA_HOME}/bin
+    else
+        KOHA_BINDIR=${KOHA_HOME}/misc
+    fi
+
+    if [ "${clo_commit_size}" > 0 ]; then
+        commit_size=${clo_commit_size}
+    fi
+    rebuild_opts="--commit ${commit_size}"
+
+    if [ "${biblios}" = "yes" ]; then
+        rebuild_opts="${rebuild_opts} -b"
+    fi
+
+    if [ "${authorities}" = "yes" ]; then
+        rebuild_opts="${rebuild_opts} -a"
+    fi
+
+    if [ "${verbose}" = "yes" ]; then
+        rebuild_opts="${rebuild_opts} -v"
+    fi
+
+    if koha-shell \
+          -c "${KOHA_BINDIR}/search_tools/rebuild_elastic_search.pl ${rebuild_opts}" \
+          ${name}; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Default parameters
+biblios="yes"
+authorities="yes"
+biblios_only="no"
+authorities_only="no"
+commit_size=5000
+verbose="no"
+op=""
+
+# Read parameters
+while [ -n "$*" ]; do
+    case "$1" in
+        -h|--help)
+            usage ; exit 0
+            ;;
+        -b|--biblios)
+            toggle_biblios_only
+            ;;
+        -a|--authorities)
+            toggle_authorities_only
+            ;;
+        -c|--commit)
+            clo_commit_size="$2" ; shift
+            ;;
+        --rebuild)
+            set_action "rebuild"
+            ;;
+        -v|--verbose)
+            verbose="yes"
+            ;;
+        *)
+            break
+            ;;
+    esac
+
+    shift
+done
+
+# Optionally use alternative paths for a dev install
+adjust_paths_dev_install $1
+
+# Parse command line.
+if [ $# -lt 1 ]; then
+    usage
+    die "Missing instance name."
+fi
+
+# Loop over instance names
+for name in "$@"
+do
+    if is_instance $name; then
+        if [ "${op}" = "rebuild" ]; then
+            if ! run_rebuild_elasticsearch $name; then
+                warn "Something went wrong rebuilding indexes for ${name}"
+            fi
+        else
+            # TODO: Add other actions, status? etc
+            usage
+            die "Error: no action passed"
+        fi
+    else
+        warn "Unknown instance ${name}"
+    fi
+done
+
+exit 0
