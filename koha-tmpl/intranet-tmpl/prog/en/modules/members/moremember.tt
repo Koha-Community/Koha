@@ -8,7 +8,7 @@
 [% IF ( unknowuser ) %]
     Patron does not exist
 [% ELSE %]
-    Patron details for [% INCLUDE 'patron-title.inc' %]
+    Patron details for [% INCLUDE 'patron-title.inc' no_html = 1 %]
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
