@@ -472,6 +472,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),
 ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo'),
 ('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
+('SelfCheckoutByLogin','1',NULL,'Have patrons login into the web-based self checkout system with their username/password or their cardnumber','YesNo'),
 ('SelfCheckReceiptPrompt','1','NULL','If ON, print receipt dialog pops up when self checkout is finished','YesNo'),
 ('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
