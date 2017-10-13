@@ -2908,7 +2908,7 @@ sub populate_order_with_prices {
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
 
-            # ecost tax included = rrp tax excluded * ( 1 - tax rate ) * ( 1 - discount )
+            # ecost tax included = rrp tax excluded * ( 1 + tax rate ) * ( 1 - discount )
             $order->{ecost_tax_included} =
                 $order->{rrp_tax_excluded} *
                 ( 1 + $order->{tax_rate_on_ordering} ) *
