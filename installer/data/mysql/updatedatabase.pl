@@ -14750,6 +14750,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15685 - Allow creation of items (AcqCreateItem) to be customizable per-basket)\n";
 }
 
+$DBversion = '17.06.00.015';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES
+        ('SelfCheckoutByLogin','0',NULL,'Have patrons login into the web-based self checkout system with their username/password or their cardnumber','YesNo')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19186 - Insert system preference SelfCheckoutByLogin if missing)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
