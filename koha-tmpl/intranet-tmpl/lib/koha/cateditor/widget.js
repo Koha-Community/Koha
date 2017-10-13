@@ -61,10 +61,11 @@ define( [ 'resources' ], function( Resources ) {
             // Fixed field utils
             bindFixed: function( sel, start, end ) {
                 var $node = $( this.node ).find( sel );
-                $node.val( this.getFixed( start, end ) );
+                var val = this.getFixed( start, end );
+                $node.val( val );
 
                 var widget = this;
-                var $collapsed = $( '<span class="fixed-collapsed" title="' + $node.attr('title') + '">' + $node.val() + '</span>' ).insertAfter( $node );
+                var $collapsed = $( '<span class="fixed-collapsed" title="' + $node.attr('title') + '">' + val + '</span>' ).insertAfter( $node );
 
                 function show() {
                     $collapsed.hide();
@@ -75,7 +76,8 @@ define( [ 'resources' ], function( Resources ) {
 
                 function hide() {
                     $node.hide();
-                    $collapsed.text( Widget.PadStringRight( $node.val(), end - start ) ).show();
+                    var val = $node.val();
+                    $collapsed.text( Widget.PadStringRight( val === null ? '' : val, end - start ) ).show();
                 }
 
                 $node.on( 'change keyup', function() {
@@ -92,6 +94,9 @@ define( [ 'resources' ], function( Resources ) {
             },
 
             setFixed: function( start, end, value, source ) {
+                if ( null === value ) {
+                    value = '';
+                }
                 this.setText( this.text.substring( 0, start ) + Widget.PadStringRight( value.toString().substr( 0, end - start ), end - start ) + this.text.substring( end ), source );
             },
 
@@ -118,6 +123,7 @@ define( [ 'resources' ], function( Resources ) {
 
                     $matSelect.change( function() {
                         widget.loadXMLMaterial( materialInfo[ $matSelect.val() ] );
+                        widget.nodeChanged();
                     } ).change();
                 } );
             },
@@ -169,11 +175,12 @@ define( [ 'resources' ], function( Resources ) {
 
                 $inputs.each( function( i ) {
                     $(this).on( 'keydown.marc-tab', function( e ) {
-                        // Cheap hack to disable backspace and special keys
-                        if ( ( this.nodeName.toLowerCase() == 'select' && e.which == 9 ) || e.ctrlKey ) {
-                            e.preventDefault();
-                            return;
-                        } else if ( e.which != 9 ) { // Tab
+                        // Handle tab/shift-tab
+                        if ( e.which != 9 ) { // 9 = Tab
+                            // Cheap hack to disable backspace and special keys
+                            if ( e.ctrlKey ) {
+                                e.preventDefault();
+                            }
                             return;
                         }
 
@@ -182,7 +189,12 @@ define( [ 'resources' ], function( Resources ) {
 
                         if ( e.shiftKey ) {
                             if ( i > 0 ) {
-                                $inputs.eq(i - 1).trigger( 'focus' );
+                                var $input = $inputs.eq( i - 1 );
+                                if ( $input.is( ':visible' ) ) {
+                                    $input.focus();
+                                } else {
+                                    $input.next('span').click();
+                                }
                             } else {
                                 editor.cm.setCursor( span.from );
                                 // FIXME: ugly hack
@@ -191,7 +203,12 @@ define( [ 'resources' ], function( Resources ) {
                             }
                         } else {
                             if ( i < $inputs.length - 1 ) {
-                                $inputs.eq(i + 1).trigger( 'focus' );
+                                var $input = $inputs.eq( i + 1 );
+                                if ( $input.is( ':visible' ) ) {
+                                    $input.focus();
+                                } else {
+                                    $input.next('span').click();
+                                }
                             } else {
                                 editor.cm.setCursor( span.to );
                                 editor.focus();
