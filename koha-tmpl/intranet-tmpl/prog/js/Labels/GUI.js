@@ -13,6 +13,33 @@ Labels.GUI.deleteActive = function () {
     var object = Labels.GUI.getActive();
     object.remove();
 }
+
+Labels.GUI.copyActive = function () {
+    var cloned = $(".activeTarget:first");
+    var message = $(".alert-errors");
+    if(cloned.length == 0) {
+        alert(message.find(".item-missing").text());
+    }
+    var regionid = cloned.attr("id").replace("region","");
+    var NextItemId = $('#NewIdValue').val();
+    var firstUnusedItem = $( "#regionsDispenser" ).find(".staged").text();
+    if(NextItemId.length == 0) {
+        alert(message.find(".number-missing").text());
+    } else if (NextItemId > firstUnusedItem) {
+        alert(message.find(".greater-than").text());
+    } else {
+        $(".activeTarget:first").removeClass("activeTarget");
+        var sheet = Labels.Sheets.getSheet(Labels.GUI.activeSheetId);
+        var region = Labels.Regions.getRegion(regionid);
+        Labels.Regions.dispenseRegion(sheet, sheet.htmlElem, parseInt(NextItemId), cloned.offset(), region);
+        var newDiv = $( "#sheet"+Labels.GUI.activeSheetId ).children().last();
+        newDiv.offset({top: cloned.offset().top+10, left: cloned.offset().left+10});
+        newDiv.css("width", $(cloned).css("width"));
+        newDiv.css("height", $(cloned).css("height"));
+        $(cloned).find('.element').clone().appendTo(newDiv);
+    }
+}
+
 Labels.GUI.getActive = function () {
     var activeElem = $(".activeTarget");
     return Labels.getObjectFromHtmlElem(activeElem);
@@ -44,6 +71,7 @@ Labels.GUI.mmToPx = function (mm) {
     var dpmm = sheet.dpi / 25.4; //Calculate dpi to dpmm
     return (parseFloat(mm) * dpmm).toFixed(1);
 }
+Labels.GUI.NextItemId = null;
 Labels.GUI.init = function (sheet) {
     Labels.GUI.RegionDispenser.clear();
 
@@ -56,6 +84,7 @@ Labels.GUI.init = function (sheet) {
         Labels.GUI.RegionDispenser.markUsed(item.index);
     }
     Labels.GUI.RegionDispenser.createNewItemHandle(itemIndex+1); //Create a new Item handle for the next Item.
+    Labels.GUI.NextItemId = itemIndex+1;
 
     if(!Labels.GUI.tooltip) {
         new Labels.GUI.Tooltip("#sheetEditor",{});
@@ -92,7 +121,7 @@ Labels.GUI.SheetList = function (params) {
         if (Permissions.labels.sheets_mod) {
             $("<button/>",{
                 id: "editSheet"
-            }).html("Edit").appendTo(this.containerElem)
+            }).addClass("btn btn-primary").html("Edit").appendTo(this.containerElem)
             .click(function (event) {
                 var sheet = Labels.Sheets.getSheet( Labels.GUI.activeSheetId );
                 Labels.GUI.SheetEditor.display(sheet);
@@ -101,7 +130,7 @@ Labels.GUI.SheetList = function (params) {
         if (Permissions.labels.sheets_del) {
             $("<button/>",{
                 id: "deleteSheet"
-            }).html("Delete").appendTo(this.containerElem)
+            }).addClass("btn btn-danger").html("Delete").appendTo(this.containerElem)
             .click(function (event) {
                 Labels.Sheets.getSheet( Labels.GUI.activeSheetId ).destroy();
                 Labels.GUI.SheetList.getSheetListNode( Labels.GUI.activeSheetId ).remove();
@@ -110,7 +139,7 @@ Labels.GUI.SheetList = function (params) {
         if (Permissions.labels.sheets_new) {
             $("<button/>",{
                 id: "newSheet"
-            }).html("New").appendTo(this.containerElem)
+            }).addClass("btn btn-success").html("New").appendTo(this.containerElem)
             .click(function (event) {
                 var sheet = new Labels.Sheet($("#sheetContainer"), {});
                 Labels.GUI.SheetList.createListElement(Labels.GUI.sheetlist, sheet);
@@ -192,7 +221,7 @@ Labels.GUI.Controls.display = function (htmlElem) {
 }
 Labels.GUI.Controls.displaySheetControls = function (sheet) {
     $("#selectionControls, #sheetEditorConfig").show(500);
-    $("#selectionControls input, #selectionControls select, #sheetEditorConfig input").parent().hide();
+    $("#selectionControls input, #selectionControls select, #sheetEditorConfig input, #sc_copy").parent().hide();
 
     $("#sc_boundingBox").parent().show();
     if (sheet.boundingBox == true) {
@@ -223,7 +252,8 @@ Labels.GUI.Controls.displayRegionControls = function (region) {
     $("#selectionControls, #sheetEditorConfig").show(500);
     $("#selectionControls input, #selectionControls select, #sheetEditorConfig input").parent().hide();
 
-    $("#sc_boundingBox").parent().show();
+    $("#sc_boundingBox, #sc_copy").parent().show();
+    $("#sc_copy").show();
     if (region.boundingBox == true) {
         $("#sc_boundingBox").prop("checked", true);
     }
@@ -236,7 +266,7 @@ Labels.GUI.Controls.displayRegionControls = function (region) {
 }
 Labels.GUI.Controls.displayElementControls = function (element) {
     $("#selectionControls, #sheetEditorConfig").show(500);
-    $("#selectionControls input, #selectionControls select, #sheetEditorConfig input").parent().hide();
+    $("#selectionControls input, #selectionControls select, #sheetEditorConfig input, #sc_copy").parent().hide();
 
     $("#sc_dataSource").parent().show();
     if (element.dataSource) {
@@ -340,7 +370,7 @@ Labels.GUI.Controls.DataSource = function (container, params) {
     this.template = function () {
         var html =
         '<div class="dsfd-doc" id="'+Labels.GUI.Controls.DataSources.getId(this.funcName)+'">'+
-        '    <h5>+ '+(this.title || this.funcName)+'</h5><button class="addButton">+</button>'+
+        '    <h5><i class="fa fa-info-circle" aria-hidden="true"></i> '+(this.title || this.funcName)+'</h5><button class="addButton btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i></button>'+
         '    <span class="comment">'+(this.doc || '')+'</span>'+
         '</div>';
         return html;
@@ -348,13 +378,12 @@ Labels.GUI.Controls.DataSource = function (container, params) {
     this.bindEvents = function () {
         this.htmlElem.children("h5").click(function (event) {
             var commentElem = $(this).parent().children(".comment");
-            var html = $(this).html().toString();
             if (commentElem.is(":visible") == true) {
-                html = html.replace(/\-/, "+");
+                $(this).css("color", "");
                 commentElem.hide();
             }
             else {
-                html = html.replace(/\+/, "-");
+                $(this).css("color", "#0275d8");
                 commentElem.show();
             }
             $(this).html(html);

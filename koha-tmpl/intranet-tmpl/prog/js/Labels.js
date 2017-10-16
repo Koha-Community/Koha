@@ -17,7 +17,6 @@ Labels.getObjectFromHtmlElem = function (htmlElem) {
         return Labels.Elements.getElement(htmlElem);
     }
 }
-
 //Package Labels.Sheets
 Labels.Sheets = {};
 Labels.Sheets.sheets = {};
@@ -307,8 +306,11 @@ Labels.Item = function(sheet, params) {
     this.sheet = sheet;
     sheet.addItem(this);
 
-    this.createRegion = function (offset) {
+    this.createRegion = function (offset, copyregion) {
         var region = new Labels.Region(this, {});
+        if (copyregion) {
+            region.elements = copyregion.elements;
+        }
         if (offset) {
             Labels.GUI.reorientOffsetToParent(this.sheet.htmlElem, region.htmlElem, offset);
             region.refreshSpacings();
@@ -471,14 +473,14 @@ Labels.Regions.createHtmlElement = function (region, item) {
 
     return regionElem;
 }
-Labels.Regions.dispenseRegion = function (sheet, sheetElem, itemnumber, offset) {
+Labels.Regions.dispenseRegion = function (sheet, sheetElem, itemnumber, offset, copyregion) {
     var item = sheet.getItem(itemnumber);
     if (! item) {
         item = sheet.createItem(itemnumber);
         Labels.GUI.RegionDispenser.createNewItemHandle(parseInt(itemnumber,10)+1);
     }
     Labels.GUI.RegionDispenser.markUsed(itemnumber);
-    item.createRegion(offset);
+    item.createRegion(offset, copyregion);
 }
 Labels.Regions.getRegion = function (htmlElemOrId) {
     var region;

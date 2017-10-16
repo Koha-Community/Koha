@@ -4,7 +4,7 @@
   background: #ccc;
 }
 .button {
-    width: 30px;
+    min-width: 30px;
     height: 30px;
     background: #999;
     margin: 2px;
@@ -25,6 +25,7 @@
 .region .itemnumber {
     font-weight: bold;
     background-color: rgb(153, 0, 0);
+    color: #ffffff;
 }
 .element {
     width: 30px;
@@ -47,7 +48,7 @@
 }
 .sheet {
     position: absolute;
-    left: 180px;
+    left: 250px;
     top: 0;
     width: 200px;
     height: 125px;
@@ -57,12 +58,12 @@
     z-index: 10000;
 }
 .controlGroup {
-    margin: 5px;
+    margin: 10px;
 }
 #sheetEditor {
     position: relative;
     display: none;
-    width: 170px;
+    width: 220px;
 }
 #sheetEditor input[type="number"] {
     width: 70px;
@@ -100,17 +101,13 @@
     position: absolute;
     top:20px;
 }
-#regionsDispenser {
-  float:left;
-}
-#sheetControls {
-  float:left;
-}
+#generalControls .button, 
+#elementControls .button, 
 #regionsDispenser .button {
     float:left;
 }
-#generalControls .button {
-    float:left
+#regionsDispenser, #regionControls {
+    clear:both;
 }
 #sheetEditorConfig {
   clear:left;
@@ -127,11 +124,15 @@
     padding: 0px;
 }
 #selectionControls ul li {
-    padding: 0px;
+    padding: 5px 0;
     list-style: none;
 }
+#sheetListContainer {
+    margin-top: 10px;
+}
 #sheetListContainer button {
-    padding: 0px;
+    margin-right: 3px;
+    margin-bottom: 15px;
 }
 .sheetListNode .title {
     font-weight: bold;
@@ -154,7 +155,27 @@
 #dataSourceFunctionDocs .addButton {
   width: 20px;
   height: 20px;
-  margin: 0px;
+  margin: 0px 0px 0px 10px;
   padding: 0px;
   font-size: 10px;
+}
+#sc_copy {
+    margin: 5px 0;
+}
+#sc_copy input {
+    width: 35px;
+}
+
+.btn{
+    font-size: 12px;
+    padding: 3px 10px;
+}
+
+.dsfd-doc {
+    cursor:default;
+    margin: 6px 0;
+}
+
+.dsfd-doc h5:hover .fa-info-circle {
+    color: #0275d8;
 }

@@ -71,16 +71,16 @@
                           <div id="sheetControls" class="controlGroup">
                             <div id="generalControls">
                               <h4>General</h4>
-                              <div id="regionDeleter" class="button">Delete</div>
-                              <div id="saveSheet" class="button">Save</div>
-                              <div id="closeEditor" class="button">Return</div>
+                              <div id="regionDeleter" class="btn btn-danger">Delete</div>
+                              <div id="saveSheet" class="btn btn-success">Save</div>
+                              <div id="closeEditor" class="btn btn-default">Return</div>
                             </div>
                             <div id="regionControls">
 
                             </div>
                             <div id="elementControls">
                               <h4>Elements</h4>
-                              <div id="elementDispenser" class="button elementDispenser">Add</div>
+                              <div id="elementDispenser" class="btn btn-primary elementDispenser">Add</div>
                             </div>
                           </div>
                           <div id="regionsDispenser" class="controlGroup">
@@ -97,6 +97,12 @@
                               </li>
                               <li>
                                 <input type="checkbox" id="sc_boundingBox"/><label for="boundingBox">Draw bounding box</label>
+                              </li>
+                              <li>
+                                <div id="sc_copy">
+                                  <label>Copy as item</label> <input id="NewIdValue" type="text"/>
+                                  <button id="copyItem" type="button" class="btn btn-primary">Add</button>
+                                </div>
                               </li>
                               <li>
                                 <input type="color" id="sc_colour"/><label for="sc_colour">Colour</label>
@@ -142,7 +148,12 @@
                 <div id="sheetListContainer"></div>
             </div>[%# yui-b %]
         </div>
-
+        </div>
+        <div class="alert-errors hidden">
+          <div class="item-missing">Select copied item first!</div>
+          <div class="number-missing">Missing copy item number!</div>
+          <div class="greater-than">You are trying to add item which is greater than first unused item!</div>
+        </div>
         [% INCLUDE 'labels/translations.inc' %]
         [%# This should be given from a global js-context! %]
         <script>
