@@ -87,15 +87,15 @@ force_borrower_messaging_defaults( $doit, $truncate, $since, $not_expired );
 
 =head1 NAME
 
-force-borrower-messaging-defaults
+borrowers-force-messaging-defaults.pl
 
 =head1 SYNOPSIS
 
-  force-borrower-messaging-defaults
-  force-borrower-messaging-defaults --help
-  force-borrower-messaging-defaults --doit
-  force-borrower-messaging-defaults --doit --truncate
-  force-borrower-messaging-defaults --doit --not-expired
+  borrowers-force-messaging-defaults.pl
+  borrowers-force-messaging-defaults.pl --help
+  borrowers-force-messaging-defaults.pl --doit
+  borrowers-force-messaging-defaults.pl --doit --truncate
+  borrowers-force-messaging-defaults.pl --doit --not-expired
 
 =head1 DESCRIPTION
 
