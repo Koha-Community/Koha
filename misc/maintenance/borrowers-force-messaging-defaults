@@ -39,7 +39,7 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $truncate, $since, $actives) = @_;
+    my ($doit, $truncate, $since, $not_expired) = @_;
 
     $since = '0000-00-00' if (!$since);
     print "Since: $since\n";
@@ -55,7 +55,7 @@ sub force_borrower_messaging_defaults {
     }
 
     my $sql = "SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?";
-    if ($actives) {
+    if ($not_expired) {
         $sql .= " AND dateexpiry > NOW()"
     }
     my $sth = $dbh->prepare($sql);
@@ -72,18 +72,18 @@ sub force_borrower_messaging_defaults {
 }
 
 
-my ($doit, $truncate, $since, $help, $actives);
+my ($doit, $truncate, $since, $help, $not_expired);
 my $result = GetOptions(
     'doit'        => \$doit,
     'truncate'    => \$truncate,
     'since:s'     => \$since,
-    'actives'     => \$actives,
+    'not-expired' => \$not_expired,
     'help|h'      => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $truncate, $since, $actives );
+force_borrower_messaging_defaults( $doit, $truncate, $since, $not_expired );
 
 =head1 NAME
 
@@ -95,7 +95,7 @@ force-borrower-messaging-defaults
   force-borrower-messaging-defaults --help
   force-borrower-messaging-defaults --doit
   force-borrower-messaging-defaults --doit --truncate
-  force-borrower-messaging-defaults --doit --actives
+  force-borrower-messaging-defaults --doit --not-expired
 
 =head1 DESCRIPTION
 
@@ -123,7 +123,7 @@ Actually update the borrowers.
 Truncate all borrowers transport preferences before (re-)creating them. It
 affects borrower_message_preferences table.
 
-=item B<--actives>
+=item B<--not-expired>
 
 Will only update active borrowers (borrowers who didn't pass their expiration date).
 
