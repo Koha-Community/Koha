@@ -36,6 +36,7 @@
                      <th>Type</th>
                      <th>Comment</th>
                      <th>Expiration</th>
+                     <th>Created</th>
                      [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                          <th>&nbsp;</th>
                      [% END %]
@@ -64,6 +65,7 @@
 			    [% END %]
 			</td>
                         <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
+                        <td>[% d.created | $KohaDates %]</td>
                         [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                             <td>
                                 <a class="remove_restriction btn btn-default btn-xs" href="/cgi-bin/koha/members/mod_debarment.pl?borrowernumber=[% borrowernumber %]&amp;borrower_debarment_id=[% d.borrower_debarment_id %]&amp;action=del">

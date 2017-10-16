@@ -1040,6 +1040,7 @@ $(document).ready(function() {
                                  <th>Type</th>
                                  <th>Comment</th>
                                  <th>Expiration</th>
+                                 <th>Created</th>
                                  [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                                    <th>Remove?</th>
                                  [% END %]
@@ -1058,6 +1059,7 @@ $(document).ready(function() {
                                     [% END %]
                                     </td>
                                     <td>[% IF d.expiration %] [% d.expiration | $KohaDates %] [% ELSE %] <i>Indefinite</i> [% END %]</td>
+                                    <td>[% d.created | $KohaDates %]</td>
                                     [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
                                       <td>
                                         <input type="checkbox" id="debarment_[% d.borrower_debarment_id %]" name="remove_debarment" value="[% d.borrower_debarment_id %]" />
