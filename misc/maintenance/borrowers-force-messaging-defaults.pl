@@ -60,6 +60,7 @@ WHERE bo.dateenrolled >= ?|;
     $sql .= " AND categorycode = ?" if $category;
     my $sth = $dbh->prepare($sql);
     $sth->execute($since, $category || () );
+    my $cnt = 0;
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
@@ -67,8 +68,10 @@ WHERE bo.dateenrolled >= ?|;
             borrowernumber => $borrowernumber,
             categorycode   => $categorycode,
         } );
+        $cnt++;
     }
     $dbh->commit();
+    print "Total borrowers updated: $cnt\n" if $doit;
 }
 
 
