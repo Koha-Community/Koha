@@ -181,7 +181,7 @@ $(document).ready(function() {
         $('#issues-table').show();
         $('#issues-table-actions').show();
 
-        issuesTable = KohaTable("#issues-table", {
+        issuesTable = KohaTable("issues-table", {
             "oLanguage": {
                 "sEmptyTable" : MSG_DT_LOADING_RECORDS,
                 "sProcessing": MSG_DT_LOADING_RECORDS,
