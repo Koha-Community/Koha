@@ -56,7 +56,7 @@ sub force_borrower_messaging_defaults {
 
     my $sql = "SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?";
     if ($not_expired) {
-        $sql .= " AND dateexpiry > NOW()"
+        $sql .= " AND dateexpiry >= NOW()"
     }
     my $sth = $dbh->prepare($sql);
     $sth->execute($since);
