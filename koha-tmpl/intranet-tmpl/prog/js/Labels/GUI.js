@@ -25,7 +25,7 @@ Labels.GUI.copyActive = function () {
     var firstUnusedItem = $( "#regionsDispenser" ).find(".staged").text();
     if(NextItemId.length == 0) {
         alert(message.find(".number-missing").text());
-    } else if (NextItemId > firstUnusedItem) {
+    } else if (parseInt(NextItemId) > parseInt(firstUnusedItem)) {
         alert(message.find(".greater-than").text());
     } else {
         $(".activeTarget:first").removeClass("activeTarget");
