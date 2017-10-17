@@ -188,8 +188,8 @@ sub _buildColumnValues {
     my @columns = $self->schema->source($source)->columns;
     my %unique_constraints = $self->schema->source($source)->unique_constraints();
 
-    my $build_value = 3;
-    # we try max three times if there are unique constraints
+    my $build_value = 5;
+    # we try max $build_value times if there are unique constraints
     BUILD_VALUE: while ( $build_value ) {
         # generate random values for all columns
         for my $col_name( @columns ) {
@@ -442,7 +442,8 @@ sub _gen_text {
         $regex = '[A-Za-z]';
     }
     my $random = String::Random->new( max => $size );
-    return $random->randregex($regex);
+    my $text = $random->randregex($regex);
+    return $text;
 }
 
 sub _gen_set_enum {
