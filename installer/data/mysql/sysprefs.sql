@@ -255,6 +255,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MARCAuthorityControlField008','|| aca||aabn           | a|a     d',NULL,'Define the contents of MARC21 authority control field 008 position 06-39','Textarea'),
 ('MarcFieldsToOrder','',NULL,'Set the mapping values for a new order line created from a MARC record in a staged file. In a YAML format.','textarea'),
 ('MarcItemFieldsToOrder','',NULL,'Set the mapping values for new item records created from a MARC record in a staged file. In a YAML format.','textarea'),
+('MarkLostItemsAsReturned','1','','Mark items as returned when flagged as lost','YesNo'),
 ('MARCOrgCode','OSt','','Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html','free'),
 ('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
 ('MaxItemsToDisplayForBatchDel','1000',NULL,'Display up to a given number of items in a single item deletionbatch.','Integer'),
