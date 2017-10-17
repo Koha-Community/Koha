@@ -61,8 +61,8 @@ our $sample_data = {
         surname    => 'test_patron_surname',
         cardnumber => '4242424242',
         userid     => 'test_username',
-        password   => 'password',
-        password2  => 'password'
+        password   => '1BetterPassword',
+        password2  => '1BetterPassword'
     },
     itemtype => {
         itemtype     => 'IT4TEST',
