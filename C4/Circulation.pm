@@ -3283,19 +3283,19 @@ sub _get_discount_from_rule {
             categorycode => $categorycode,
         },
         {
-            branchcode   => '*',
+            branchcode   => undef,
             categorycode => $categorycode,
             itemtype     => $itemtype,
         },
         {
             branchcode   => $branchcode,
             categorycode => $categorycode,
-            itemtype     => '*',
+            itemtype     => undef,
         },
         {
-            branchcode   => '*',
+            branchcode   => undef,
             categorycode => $categorycode,
-            itemtype     => '*',
+            itemtype     => undef,
         },
     );
 
