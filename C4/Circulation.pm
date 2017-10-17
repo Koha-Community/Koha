@@ -3624,6 +3624,8 @@ sub ReturnLostItem{
 sub LostItem{
     my ($itemnumber, $mark_returned) = @_;
 
+    $mark_returned //= C4::Context->preference('MarkLostItemsAsReturned');
+
     my $dbh = C4::Context->dbh();
     my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
                            FROM issues 

@@ -44,7 +44,7 @@ use Koha::Patrons;
 my  $lost;  #  key=lost value,  value=num days.
 my ($charge, $verbose, $confirm, $quiet);
 my $endrange = 366;
-my $mark_returned = 0;
+my $mark_returned;
 my $borrower_category = [];
 my $skip_borrower_category = [];
 my $help=0;
@@ -142,6 +142,7 @@ Specifies the end of the range of overdue days to deal with (defaults to 366).  
 =item B<--mark-returned>
 
 When an item is marked lost, remove it from the borrowers issued items.
+If not provided, the value of the system preference 'MarkLostItemsAsReturned' will be used.
 
 =item B<--category>
 

@@ -700,7 +700,7 @@ if ($op eq "additem") {
 
    my $newitemlost = $itemtosave->subfield( $lost_tag, $lost_subfield );
     if (($olditemlost eq '0' or $olditemlost eq '' ) and $newitemlost ge '1'){
-  LostItem($itemnumber,'MARK RETURNED');
+        LostItem($itemnumber);
     }
     $nextop="additem";
 } elsif ($op eq "delinkitem"){

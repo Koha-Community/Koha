@@ -81,6 +81,6 @@ elsif (defined $itemnotes) { # i.e., itemnotes parameter passed from form
 
 ModItem($item_changes, $biblionumber, $itemnumber);
 
-LostItem($itemnumber, 'MARK RETURNED') if $itemlost;
+LostItem($itemnumber) if $itemlost;
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
