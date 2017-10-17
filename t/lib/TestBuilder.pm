@@ -4,6 +4,7 @@ use Modern::Perl;
 
 use Koha::Database;
 
+use Bytes::Random::Secure;
 use Carp;
 use Module::Load;
 use String::Random;
@@ -432,18 +433,20 @@ sub _gen_datetime {
 sub _gen_text {
     my ($self, $params) = @_;
     # From perldoc String::Random
-    # max: specify the maximum number of characters to return for * and other
-    # regular expression patters that don't return a fixed number of characters
-    my $regex = '[A-Za-z][A-Za-z0-9_]*';
-    my $size = $params->{info}{size};
-    if ( defined $size and $size > 1 ) {
-        $size--;
-    } elsif ( defined $size and $size == 1 ) {
-        $regex = '[A-Za-z]';
-    }
-    my $random = String::Random->new( max => $size );
-    my $text = $random->randregex($regex);
-    return $text;
+    my $size = $params->{info}{size} // 10;
+    $size -= alt_rand(0.5 * $size);
+    my $regex = $size > 1
+        ? '[A-Za-z][A-Za-z0-9_]{'.($size-1).'}'
+        : '[A-Za-z]';
+    my $random = String::Random->new( max => $size, rand_gen => \&alt_rand );
+    return $random->randregex($regex);
+}
+
+sub alt_rand { #Alternative randomizer
+    my ($max) = @_;
+    my $random = Bytes::Random::Secure->new( NonBlocking => 1 );
+    my $r = $random->irand / 2**32;
+    return int( $r * $max );
 }
 
 sub _gen_set_enum {
