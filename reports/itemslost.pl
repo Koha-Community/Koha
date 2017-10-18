@@ -28,6 +28,7 @@ This script displays lost items.
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use Text::CSV_XS;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
