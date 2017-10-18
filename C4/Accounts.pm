@@ -145,6 +145,8 @@ sub chargelostitem{
         $replacementprice = $defaultreplacecost;
     }
     # first make sure the borrower hasn't already been charged for this item
+    # FIXME this should be more exact
+    #       there is no reason a user can't lose an item, find and return it, and lost it again
     my $existing_charges = Koha::Account::Lines->search(
         {
             borrowernumber => $borrowernumber,
@@ -155,49 +157,6 @@ sub chargelostitem{
 
     # OK, they haven't
     unless ($existing_charges) {
-        my $manager_id = 0;
-        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-        # This item is on issue ... add replacement cost to the borrower's record and mark it returned
-        #  Note that we add this to the account even if there's no replacement price, allowing some other
-        #  process (or person) to update it, since we don't handle any defaults for replacement prices.
-        my $accountno = getnextacctno($borrowernumber);
-
-        my $accountline = Koha::Account::Line->new(
-            {
-                borrowernumber    => $borrowernumber,
-                accountno         => $accountno,
-                date              => \'NOW()',
-                amount            => $amount,
-                description       => $description,
-                accounttype       => 'L',
-                amountoutstanding => $amount,
-                itemnumber        => $itemnumber,
-                manager_id        => $manager_id,
-            }
-        )->store();
-
-        my $account_offset = Koha::Account::Offset->new(
-            {
-                debit_id => $accountline->id,
-                type     => 'Lost Item',
-                amount   => $amount,
-            }
-        )->store();
-
-        if ( C4::Context->preference("FinesLog") ) {
-            logaction("FINES", 'CREATE', $borrowernumber, Dumper({
-                action            => 'create_fee',
-                borrowernumber    => $borrowernumber,
-                accountno         => $accountno,
-                amount            => $amount,
-                amountoutstanding => $amount,
-                description       => $description,
-                accounttype       => 'L',
-                itemnumber        => $itemnumber,
-                manager_id        => $manager_id,
-            }));
-        }
-
         #add processing fee
         if ($processfee && $processfee > 0){
             manualinvoice($borrowernumber, $itemnumber, $description, 'PF', $processfee, $processingfeenote, 1);
