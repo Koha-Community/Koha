@@ -97,7 +97,7 @@ subtest 'default_exception_handling() tests' => sub {
         $t->get_ok('/default_exception_handling/unknown')
           ->status_is(500)
           ->json_is('/error' => 'Something went wrong, check the logs.');
-        like($appender->buffer, qr/ERROR - Unknown::Exception::OhNo => {"what":"test unknown exception"}/,
+        like($appender->buffer, qr/ERROR - Unknown::Exception::OhNo => \{"what":"test unknown exception"\}/,
              'Found test unknown exception in log');
         $appender->{appender}->{buffer} = undef;
     };
