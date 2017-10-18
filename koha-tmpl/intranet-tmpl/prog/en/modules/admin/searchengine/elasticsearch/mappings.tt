@@ -29,7 +29,12 @@
     $(document).ready(function() {
         $("#tabs").tabs();
         $('.delete').click(function() {
-            $(this).parents('tr').remove();
+            if( $(this).hasClass('mandatory') && $(".mandatory[data-field_name="+$(this).attr('data-field_name')+"]").length < 2 ){
+                alert("This field is mandatory and must have at least one mapping");
+                return;
+            } else {
+                $(this).parents('tr').remove();
+            }
         });
 
         $("table.mappings").tableDnD( {
@@ -87,6 +92,8 @@ a.add, a.delete {
           [% tx("(search field {field_name} with mapping {marc_field}.)", { field_name = m.values.field_name, marc_field = m.values.marc_field }) | html %]
         [% CASE 'invalid_field_weight' %]
           [% tx("Invalid field weight '{weight}', must be a positive decimal number.", { weight = m.weight }) | html %]
+        [% CASE 'missing_mandatory_fields' %]
+          [% t("You attempted to delete all mappings for a required index, you must leave at least one mapping") | $raw %]
         [% CASE 'error_on_update_es_mappings' %]
           [% tx("An error occurred when updating Elasticsearch index mappings: {message}.", { message = m.message }) | html %]
         [% CASE 'reindex_required' %]
@@ -176,57 +183,66 @@ a.add, a.delete {
                 </thead>
                 <tbody>
                   [% FOREACH search_field IN all_search_fields %]
+                      [% IF search_field.mandatory %]
+                          [% SET is_readonly = "readonly" %]
+                      [% ELSE %]
+                          [% SET is_readonly = "" %]
+                      [% END %]
                     <tr>
                       <td>
-                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" />
+                        <input type="text" name="search_field_name" value="[% search_field.name | html %]" [% is_readonly %]/>
                       </td>
                       <td>
-                        <input type="text" name="search_field_label" value="[% search_field.label | html %]" />
-                      </td>
+                        <input type="text" name="search_field_label" value="[% search_field.label | html %]" [% is_readonly %]/>
                       <td>
-                        <select name="search_field_type">
-                          <option value=""></option>
-                          [% IF search_field.type == "string" %]
-                            <option value="string" selected="selected">String</option>
-                          [% ELSE %]
-                            <option value="string">String</option>
-                          [% END %]
-                          [% IF search_field.type == "date" %]
-                            <option value="date" selected="selected">Date</option>
-                          [% ELSE %]
-                            <option value="date">Date</option>
-                          [% END %]
-                          [% IF search_field.type == "year" %]
-                            <option value="year" selected="selected">Year</option>
-                          [% ELSE %]
-                            <option value="year">Year</option>
-                          [% END %]
-                          [% IF search_field.type == "number" %]
-                            <option value="number" selected="selected">Number</option>
-                          [% ELSE %]
-                            <option value="number">Number</option>
-                          [% END %]
-                          [% IF search_field.type == "boolean" %]
-                            <option value="boolean" selected="selected">Boolean</option>
-                          [% ELSE %]
-                            <option value="boolean">Boolean</option>
-                          [% END %]
-                          [% IF search_field.type == "sum" %]
-                            <option value="sum" selected="selected">Sum</option>
-                          [% ELSE %]
-                            <option value="sum">Sum</option>
-                          [% END %]
-                          [% IF search_field.type == "isbn" %]
-                            <option value="isbn" selected="selected">ISBN</option>
-                          [% ELSE %]
-                            <option value="isbn">ISBN</option>
-                          [% END %]
-                          [% IF search_field.type == "stdno" %]
-                            <option value="stdno" selected="selected">Std. Number</option>
-                          [% ELSE %]
-                            <option value="stdno">Std. Number</option>
-                          [% END %]
-                        </select>
+                        [% IF is_readonly %]
+                            <input type="hidden" name="search_field_type" value="[% search_field.type | html %]" />
+                            <select name="search_field_type" disabled>
+                        [% ELSE %]
+                            <select name="search_field_type">
+                              <option value=""></option>
+                              [% IF search_field.type == "string" %]
+                                <option value="string" selected="selected">String</option>
+                              [% ELSE %]
+                                <option value="string">String</option>
+                              [% END %]
+                              [% IF search_field.type == "date" %]
+                                <option value="date" selected="selected">Date</option>
+                              [% ELSE %]
+                                <option value="date">Date</option>
+                              [% END %]
+                              [% IF search_field.type == "year" %]
+                                <option value="year" selected="selected">Year</option>
+                              [% ELSE %]
+                                <option value="year">Year</option>
+                              [% END %]
+                              [% IF search_field.type == "number" %]
+                                <option value="number" selected="selected">Number</option>
+                              [% ELSE %]
+                                <option value="number">Number</option>
+                              [% END %]
+                              [% IF search_field.type == "boolean" %]
+                                <option value="boolean" selected="selected">Boolean</option>
+                              [% ELSE %]
+                                <option value="boolean">Boolean</option>
+                              [% END %]
+                              [% IF search_field.type == "sum" %]
+                                <option value="sum" selected="selected">Sum</option>
+                              [% ELSE %]
+                                <option value="sum">Sum</option>
+                              [% END %]
+                              [% IF search_field.type == "isbn" %]
+                                <option value="isbn" selected="selected">ISBN</option>
+                              [% ELSE %]
+                                <option value="isbn">ISBN</option>
+                              [% END %]
+                              [% IF search_field.type == "stdno" %]
+                                <option value="stdno" selected="selected">Std. Number</option>
+                              [% ELSE %]
+                                <option value="stdno">Std. Number</option>
+                              [% END %]
+                            </select>
+                        [% END %]
                       </td>
                       <td>
                         <select name="search_field_staff_client">
@@ -278,74 +294,103 @@ a.add, a.delete {
                       </thead>
                       <tbody>
                         [% FOREACH mapping IN index.mappings %]
-                          <tr>
-                            <td>
-                              <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
-                              <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
-                              [% mapping.search_field_label | html %]
-                            </td>
-                            <td>
-                              <select name="mapping_sort">
-                                [% IF mapping.sort == 'undef' %]
-                                  <option value="undef" selected="selected">Undef</option>
-                                [% ELSE %]
-                                  <option value="undef">Undef</option>
-                                [% END %]
-                                [% IF mapping.sort == 0 %]
-                                  <option value="0" selected="selected">0</option>
-                                [% ELSE %]
-                                  <option value="0">0</option>
-                                [% END %]
-                                [% IF  mapping.sort == 1 %]
-                                  <option value="1" selected="selected">1</option>
-                                [% ELSE %]
-                                  <option value="1">1</option>
-                                [% END %]
-                              </select>
-                            </td>
-                            <td>
-                              [% IF mapping.is_facetable %]
-                                <select name="mapping_facet">
-                                  [% IF mapping.facet %]
-                                    <option value="0">No</option>
-                                    <option value="1" selected="selected">Yes</option>
+                            [% IF mapping.search_field_mandatory && mapping.search_field_label != loop.next.search_field_label && mapping.search_field_label != loop.prev.search_field_label %]
+                              <tr>
+                                <td>
+                                  <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
+                                  <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
+                                  [% mapping.search_field_label | html %]
+                                </td>
+                                <td>
+                                  <input type="hidden" name="mapping_sort" value="[% mapping.sort | html %]" readonly />[% IF mapping.sort == 'undef' %]Undef[% ELSE %][% mapping.sort | html %][% END %]
+                                </td>
+                                <td>
+                                  <input type="hidden" name="mapping_facet" value="[% mapping.facet | html %]" readonly />[% IF mapping.facet == 1 %]Yes[% ELSE %]No[% END %]
+                                </td>
+                                <td>
+                                  <input type="hidden" name="mapping_suggestible" value="[% mapping.suggestible | html %]" readonly />[% IF mapping.suggestible == 1 %]Yes[% ELSE %]No[% END %]
+                                </td>
+                                <td>
+                                  <input type="hidden" name="mapping_search" value="[% mapping.search | html %]" readonly />[% IF mapping.search == 1 %]Yes[% ELSE %]No[% END %]
+                                </td>
+                                <td>
+                                    <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
+                                </td>
+                              </tr>
+                            [% ELSE %]
+                              <tr>
+                                <td>
+                                  <input type="hidden" name="mapping_index_name" value="[% index.index_name | html %]" />
+                                  <input type="hidden" name="mapping_search_field_name" value="[% mapping.search_field_name | html %]">
+                                  [% mapping.search_field_label | html %]
+                                </td>
+                                <td>
+                                  <select name="mapping_sort">
+                                    [% IF mapping.sort == 'undef' %]
+                                      <option value="undef" selected="selected">Undef</option>
+                                    [% ELSE %]
+                                      <option value="undef">Undef</option>
+                                    [% END %]
+                                    [% IF mapping.sort == 0 %]
+                                      <option value="0" selected="selected">0</option>
+                                    [% ELSE %]
+                                      <option value="0">0</option>
+                                    [% END %]
+                                    [% IF  mapping.sort == 1 %]
+                                      <option value="1" selected="selected">1</option>
+                                    [% ELSE %]
+                                      <option value="1">1</option>
+                                    [% END %]
+                                  </select>
+                                </td>
+                                <td>
+                                  [% IF mapping.is_facetable %]
+                                    <select name="mapping_facet">
+                                      [% IF mapping.facet %]
+                                        <option value="0">No</option>
+                                        <option value="1" selected="selected">Yes</option>
+                                      [% ELSE %]
+                                        <option value="0" selected="selected">No</option>
+                                        <option value="1">Yes</option>
+                                      [% END %]
+                                    </select>
                                   [% ELSE %]
-                                    <option value="0" selected="selected">No</option>
-                                    <option value="1">Yes</option>
+                                    <input type="hidden" name="mapping_facet" value="0" />
+                                    No
                                   [% END %]
-                                </select>
-                              [% ELSE %]
-                                <input type="hidden" name="mapping_facet" value="0" />
-                                No
-                              [% END %]
-                            </td>
-                            <td>
-                              <select name="mapping_suggestible">
-                                [% IF mapping.suggestible %]
-                                  <option value="0">No</option>
-                                  <option value="1" selected="selected">Yes</option>
+                                </td>
+                                <td>
+                                  <select name="mapping_suggestible">
+                                    [% IF mapping.suggestible %]
+                                      <option value="0">No</option>
+                                      <option value="1" selected="selected">Yes</option>
+                                    [% ELSE %]
+                                      <option value="0" selected="selected">No</option>
+                                      <option value="1">Yes</option>
+                                    [% END %]
+                                  </select>
+                                </td>
+                                <td>
+                                  <select name="mapping_search">
+                                    [% IF mapping.search %]
+                                      <option value="0">No</option>
+                                      <option value="1" selected="selected">Yes</option>
+                                    [% ELSE %]
+                                      <option value="0" selected="selected">No</option>
+                                      <option value="1">Yes</option>
+                                    [% END %]
+                                  </select>
+                                </td>
+                                <td>
+                                    <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
+                                </td>
+                                [% IF mapping.search_field_mandatory %]
+                                    <td><a class="btn btn-default btn-xs delete mandatory" data-field_name="[% mapping.search_field_name %]" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                 [% ELSE %]
-                                  <option value="0" selected="selected">No</option>
-                                  <option value="1">Yes</option>
+                                    <td><a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
                                 [% END %]
-                              </select>
-                            </td>
-                            <td>
-                              <select name="mapping_search">
-                                [% IF mapping.search %]
-                                  <option value="0">No</option>
-                                  <option value="1" selected="selected">Yes</option>
-                                [% ELSE %]
-                                  <option value="0" selected="selected">No</option>
-                                  <option value="1">Yes</option>
-                                [% END %]
-                              </select>
-                            </td>
-                            <td>
-                                <input name="mapping_marc_field" type="text" value="[% mapping.marc_field | html %]" />
-                            </td>
-                            <td><a class="btn btn-default btn-xs delete" style="cursor: pointer;"><i class="fa fa-trash"></i> Delete</a></td>
-                          </tr>
+                              </tr>
+                            [% END %]
                         [% END %]
                       </tbody>
                       <tfoot>

@@ -132,6 +132,9 @@ if ( $op eq 'edit' ) {
         my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
         my @facetable_field_names = map { $_->name } @facetable_fields;
 
+        my $mandatory_before = Koha::SearchFields->search({mandatory=>1})->count;
+        my $mandatory_after  = 0;
+        my %seen_fields;
         for my $i ( 0 .. scalar(@index_name) - 1 ) {
             my $index_name          = $index_name[$i];
             my $search_field_name   = $search_field_name[$i];
@@ -143,6 +146,8 @@ if ( $op eq 'edit' ) {
             my $mapping_search      = $mapping_search[$i];
 
             my $search_field = Koha::SearchFields->find({ name => $search_field_name }, { key => 'name' });
+            $mandatory_after++ if $search_field->mandatory && !defined $seen_fields{$search_field_name};
+            $seen_fields{$search_field_name} = 1;
             # TODO Check mapping format
             my $marc_field = Koha::SearchMarcMaps->find_or_create({
                 index_name => $index_name,
@@ -156,8 +161,9 @@ if ( $op eq 'edit' ) {
                 search => $mapping_search
             });
         }
+        push @messages, { type => 'error', code => 'missing_mandatory_fields' } if $mandatory_after < $mandatory_before;
     };
-    if ($@) {
+    if ($@ || @messages) {
         push @messages, { type => 'error', code => 'error_on_update', message => $@, };
         $schema->storage->txn_rollback;
     } else {
@@ -236,6 +242,7 @@ for my $index_name (@index_names) {
             search_field_name  => $name,
             search_field_label => $s->label,
             search_field_type  => $s->type,
+            search_field_mandatory  => $s->mandatory,
             marc_field         => $s->get_column('marc_field'),
             sort               => $s->get_column('sort') // 'undef', # To avoid warnings "Use of uninitialized value in lc"
             suggestible        => $s->get_column('suggestible'),
