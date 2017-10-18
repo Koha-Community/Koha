@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 66;
+use Test::More; #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 use Data::Dumper;
 use XML::Simple;
@@ -66,8 +66,11 @@ if ( not defined $intranet ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 }
 # test KOHA_OPAC_URL is set
-if ( not defined $opac ) {
+elsif ( not defined $opac ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_OPAC_URL to do tests\n";
+}
+else {
+    plan tests => 66;
 }
 
 $intranet =~ s#/$##;

@@ -21,11 +21,16 @@ use utf8;
 use XML::Simple;
 use Encode;
 
-use Test::More tests => 4;
+use Test::More; #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 
 my $koha_conf = $ENV{KOHA_CONF};
 my $xml       = XMLin($koha_conf);
+
+my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
+my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
+my $intranet = $ENV{KOHA_INTRANET_URL};
+
 
 eval{
     use C4::Context;
@@ -33,13 +38,11 @@ eval{
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
 }
-
-my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
-my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
-my $intranet = $ENV{KOHA_INTRANET_URL};
-
-if (not defined $intranet) {
+elsif (not defined $intranet) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
+}
+else {
+    plan tests => 4;
 }
 
 
