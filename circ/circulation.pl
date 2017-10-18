@@ -653,7 +653,7 @@ $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
-    debarments                => GetDebarments({ borrowernumber => $borrowernumber }),
+    debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
