@@ -438,7 +438,8 @@ sub _gen_text {
     my $regex = $size > 1
         ? '[A-Za-z][A-Za-z0-9_]{'.($size-1).'}'
         : '[A-Za-z]';
-    my $random = String::Random->new( max => $size, rand_gen => \&alt_rand );
+    my $random = String::Random->new( rand_gen => \&alt_rand );
+    # rand_gen is only supported from 0.27 onward
     return $random->randregex($regex);
 }
 
