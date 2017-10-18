@@ -1376,6 +1376,7 @@ CREATE TABLE `search_field` (
   `facet_order` TINYINT(4) DEFAULT NULL COMMENT 'the order place of the field in facet list if faceted',
   `staff_client` tinyint(1) NOT NULL DEFAULT 1,
   `opac` tinyint(1) NOT NULL DEFAULT 1,
+  `mandatory` tinyint(1) NULL DEFAULT NULL COMMENT 'if marked this field is not editable or removable',
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
