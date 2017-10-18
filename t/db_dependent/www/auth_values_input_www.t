@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 33;
+use Test::More; #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -35,19 +35,21 @@ my $testdir = File::Spec->rel2abs( dirname(__FILE__) );
 my $koha_conf = $ENV{KOHA_CONF};
 my $xml       = XMLin($koha_conf);
 
+my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
+my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
+my $intranet = $ENV{KOHA_INTRANET_URL};
+
 eval{
     use C4::Context;
 };
 if ($@) {
     plan skip_all => "Tests skip. You must have a working Context\n";
 }
-
-my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
-my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
-my $intranet = $ENV{KOHA_INTRANET_URL};
-
-if (not defined $intranet) {
+elsif (not defined $intranet) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
+}
+else {
+    plan tests => 33;
 }
 
 my $dbh = C4::Context->dbh;
