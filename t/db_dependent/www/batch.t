@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use utf8;
-use Test::More tests => 26;
+use Test::More; #See plan tests => \d+ below
 use Test::WWW::Mechanize;
 use XML::Simple;
 use JSON;
@@ -46,10 +46,16 @@ my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
 
-BAIL_OUT("You must set the environment variable KOHA_INTRANET_URL to ".
+if (not defined $intranet) {
+    plan skip_all =>
+         "You must set the environment variable KOHA_INTRANET_URL to ".
          "point this test to your staff client. If you do not have ".
          "KOHA_CONF set, you must also set KOHA_USER and KOHA_PASS for ".
-         "your username and password") unless $intranet;
+         "your username and password";
+}
+else {
+    plan tests => 26;
+}
 
 $intranet =~ s#/$##;
 
