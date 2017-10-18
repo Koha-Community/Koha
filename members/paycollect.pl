@@ -86,8 +86,6 @@ if ( $individual || $writeoff ) {
     my $itemnumber  = $input->param('itemnumber');
     my $description  = $input->param('description');
     my $title        = $input->param('title');
-    my $notify_id    = $input->param('notify_id');
-    my $notify_level = $input->param('notify_level');
     $total_due = $amountoutstanding;
     $template->param(
         accounttype       => $accounttype,
@@ -97,8 +95,6 @@ if ( $individual || $writeoff ) {
         title             => $title,
         itemnumber        => $itemnumber,
         individual_description => $description,
-        notify_id         => $notify_id,
-        notify_level      => $notify_level,
         payment_note    => $payment_note,
     );
 } elsif ($select_lines) {

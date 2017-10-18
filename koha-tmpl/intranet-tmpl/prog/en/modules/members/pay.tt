@@ -112,8 +112,6 @@ function enableCheckboxActions(){
     <input type="hidden" name="accountlines_id[% line.accountlines_id %]" value="[% line.accountlines_id %]" />
     <input type="hidden" name="amountoutstanding[% line.accountlines_id %]" value="[% line.amountoutstanding %]" />
     <input type="hidden" name="borrowernumber[% line.accountlines_id %]" value="[% line.borrowernumber %]" />
-    <input type="hidden" name="notify_id[% line.accountlines_id %]" value="[% line.notify_id %]" />
-    <input type="hidden" name="notify_level[% line.accountlines_id %]" value="[% line.notify_level %]" />
     <input type="hidden" name="totals[% line.accountlines_id %]" value="[% line.totals %]" />
     </td>
     <td>
@@ -145,8 +143,6 @@ function enableCheckboxActions(){
     </td>
     <td><input type="text" name="payment_note_[% line.accountlines_id %]" /></td>
     <td>[% line.accounttype %]</td>
-    <td>[% line.notify_id %]</td>
-    <td>[% line.notify_level %]</td>
     <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
     <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
 </tr>

@@ -68,7 +68,6 @@ BEGIN {
         &GetNoticeEmailAddress
 
         &GetMemberAccountRecords
-        &GetBorNotifyAcctRecord
 
         &GetBorrowersToExpunge
 
@@ -812,51 +811,6 @@ sub GetMemberAccountBalance {
     }
 
     return ( $total, $total - $other_charges, $other_charges);
-}
-
-=head2 GetBorNotifyAcctRecord
-
-  ($total, $acctlines, $count) = &GetBorNotifyAcctRecord($params,$notifyid);
-
-Looks up accounting data for the patron with the given borrowernumber per file number.
-
-C<&GetBorNotifyAcctRecord> returns a three-element array. C<$acctlines> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields of the C<accountlines> table in the Koha database.
-C<$count> is the number of elements in C<$acctlines>. C<$total> is the
-total amount outstanding for all of the account lines.
-
-=cut
-
-sub GetBorNotifyAcctRecord {
-    my ( $borrowernumber, $notifyid ) = @_;
-    my $dbh = C4::Context->dbh;
-    my @acctlines;
-    my $numlines = 0;
-    my $sth = $dbh->prepare(
-            "SELECT * 
-                FROM accountlines 
-                WHERE borrowernumber=? 
-                    AND notify_id=? 
-                    AND amountoutstanding != '0' 
-                ORDER BY notify_id,accounttype
-                ");
-
-    $sth->execute( $borrowernumber, $notifyid );
-    my $total = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{itemnumber} ) {
-            my $item = Koha::Items->find( $data->{itemnumber} );
-            my $biblio = $item->biblio;
-            $data->{biblionumber} = $biblio->biblionumber;
-            $data->{title}        = $biblio->title;
-        }
-        $acctlines[$numlines] = $data;
-        $numlines++;
-        $total += int(100 * $data->{'amountoutstanding'});
-    }
-    $total /= 100;
-    return ( $total, \@acctlines, $numlines );
 }
 
 sub checkcardnumber {

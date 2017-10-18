@@ -50,8 +50,6 @@ BEGIN {
       &CalcFine
       &Getoverdues
       &checkoverdues
-      &NumberNotifyId
-      &AmountNotify
       &UpdateFine
       &GetFine
       &get_chargeable_units
@@ -701,58 +699,6 @@ sub GetFine {
     return 0;
 }
 
-=head2 NumberNotifyId
-
-    (@notify) = &NumberNotifyId($borrowernumber);
-
-Returns amount for all file per borrowers
-C<@notify> array contains all file per borrowers
-
-C<$notify_id> contains the file number for the borrower number nad item number
-
-=cut
-
-sub NumberNotifyId{
-    my ($borrowernumber)=@_;
-    my $dbh = C4::Context->dbh;
-    my $query=qq|    SELECT distinct(notify_id)
-            FROM accountlines
-            WHERE borrowernumber=?|;
-    my @notify;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
-    while ( my ($numberofnotify) = $sth->fetchrow ) {
-        push( @notify, $numberofnotify );
-    }
-    return (@notify);
-}
-
-=head2 AmountNotify
-
-    ($totalnotify) = &AmountNotify($notifyid);
-
-Returns amount for all file per borrowers
-C<$notifyid> is the file number
-
-C<$totalnotify> contains amount of a file
-
-C<$notify_id> contains the file number for the borrower number and item number
-
-=cut
-
-sub AmountNotify{
-    my ($notifyid,$borrowernumber)=@_;
-    my $dbh = C4::Context->dbh;
-    my $query=qq|    SELECT sum(amountoutstanding)
-            FROM accountlines
-            WHERE notify_id=? AND borrowernumber = ?|;
-    my $sth=$dbh->prepare($query);
-	$sth->execute($notifyid,$borrowernumber);
-	my $totalnotify=$sth->fetchrow;
-    $sth->finish;
-    return ($totalnotify);
-}
-
 =head2 GetItems
 
     ($items) = &GetItems($itemnumber);
@@ -840,8 +786,6 @@ sub GetOverduesForBranch {
                 items.location,
                 items.itemnumber,
             itemtypes.description,
-         accountlines.notify_id,
-         accountlines.notify_level,
          accountlines.amountoutstanding
     FROM  accountlines
     LEFT JOIN issues      ON    issues.itemnumber     = accountlines.itemnumber

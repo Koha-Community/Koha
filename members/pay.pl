@@ -134,21 +134,6 @@ sub add_accounts_to_template {
 
     my ( $total, undef, undef ) = GetMemberAccountRecords($borrowernumber);
     my $accounts = [];
-    my @notify   = NumberNotifyId($borrowernumber);
-
-    my $notify_groups = [];
-    for my $notify_id (@notify) {
-        my ( $acct_total, $accountlines, undef ) =
-          GetBorNotifyAcctRecord( $borrowernumber, $notify_id );
-        if ( @{$accountlines} ) {
-            my $totalnotify = AmountNotify( $notify_id, $borrowernumber );
-            push @{$accounts},
-              { accountlines => $accountlines,
-                notify       => $notify_id,
-                total        => $totalnotify,
-              };
-        }
-    }
     borrower_add_additional_fields($borrower);
 
     $template->param(%$borrower);
@@ -196,8 +181,6 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'description', "description$line_no", 0 );
     $redirect .= get_for_redirect( 'title', "title$line_no", 0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
-    $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
-    $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );
     $redirect .= q{&} . 'payment_note' . q{=} . uri_escape_utf8( scalar $input->param("payment_note_$line_no") );
     $redirect .= '&remote_user=';

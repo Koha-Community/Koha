@@ -266,24 +266,13 @@ should be the empty string.
 #
 
 sub manualinvoice {
-    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note, $skip_notify ) = @_;
+    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note ) = @_;
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
-    my $notifyid = 0;
     my $insert;
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
-    $skip_notify //= 0;
-
-    if (   ( $type eq 'L' )
-        or ( $type eq 'F' )
-        or ( $type eq 'A' )
-        or ( $type eq 'N' )
-        or ( $type eq 'M' ) )
-    {
-        $notifyid = 1 unless $skip_notify;
-    }
 
     my $accountline = Koha::Account::Line->new(
         {
@@ -295,7 +284,6 @@ sub manualinvoice {
             accounttype       => $type,
             amountoutstanding => $amountleft,
             itemnumber        => $itemnum || undef,
-            notify_id         => $notifyid,
             note              => $note,
             manager_id        => $manager_id,
         }
@@ -318,7 +306,6 @@ sub manualinvoice {
             description       => $desc,
             accounttype       => $type,
             amountoutstanding => $amountleft,
-            notify_id         => $notifyid,
             note              => $note,
             itemnumber        => $itemnum,
             manager_id        => $manager_id,
