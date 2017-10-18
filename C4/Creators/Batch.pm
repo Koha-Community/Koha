@@ -68,7 +68,7 @@ sub add_item {
     my $query = "INSERT INTO creator_batches (batch_id, description, $number_type, branch_code, creator) VALUES (?,?,?,?,?);";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
-    $sth->execute($self->{'batch_id'}, $number, $self->{'branch_code'}, $1);
+    $sth->execute($self->{'batch_id'}, $self->{'description'}, $number, $self->{'branch_code'}, $1);
     if ($sth->err) {
        warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
         return -1;

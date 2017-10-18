@@ -60,7 +60,7 @@
                             <form name="add_by_number" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
                                 <div>
                                     <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
-                                    <ol><li>
+                                    <ol><li id="description">
                                         <input type="hidden" name="op" value="add" />
                                         <input type="hidden" name="batch_id" value="[% batch_id | html %]" />
                                         <label for="description">Batch description: </label>
@@ -280,6 +280,11 @@
         }
 
          $(document).ready(function() {
+            [% IF table_loop %]
+                $("#description").show();
+            [% ELSE %]
+                $("#description").hide();
+            [% END %]
             $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "autoWidth": false,
                 "aoColumnDefs": [
