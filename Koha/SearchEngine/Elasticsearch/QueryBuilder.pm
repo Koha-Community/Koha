@@ -204,6 +204,7 @@ sub build_query_compat {
     my @sort_params  = $self->_convert_sort_fields(@$sort_by);
     my @index_params = $self->_convert_index_fields(@$indexes);
     my $limits       = $self->_fix_limit_special_cases($orig_limits);
+    if ( $params->{suppress} ) { push @$limits, "suppress:0"; }
 
     # Merge the indexes in with the search terms and the operands so that
     # each search thing is a handy unit.
