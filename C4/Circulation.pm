@@ -2209,6 +2209,11 @@ routine in C<C4::Accounts>.
 sub MarkIssueReturned {
     my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
 
+
+    # Retrieve the issue
+    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
+    my $issue_id = $issue->issue_id;
+
     my $anonymouspatron;
     if ( $privacy == 2 ) {
         # The default of 0 will not work due to foreign key constraints
@@ -2222,11 +2227,6 @@ sub MarkIssueReturned {
     my $database = Koha::Database->new();
     my $schema   = $database->schema;
     my $dbh   = C4::Context->dbh;
-
-    my $issue_id = $dbh->selectrow_array(
-        q|SELECT issue_id FROM issues WHERE itemnumber = ?|,
-        undef, $itemnumber
-    );
 
     my $query = 'UPDATE issues SET returndate=';
     my @bind;
@@ -2248,8 +2248,6 @@ sub MarkIssueReturned {
     $schema->txn_do(sub {
 
         $dbh->do( $query, undef, @bind );
-
-        my $issue = Koha::Checkouts->find( $issue_id ); # FIXME should be fetched earlier
 
         # Create the old_issues entry
         my $old_checkout_data = $issue->unblessed;
