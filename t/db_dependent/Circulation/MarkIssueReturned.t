@@ -36,20 +36,41 @@ my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_preference('AnonymousPatron', '');
 
-my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
+my $library = $builder->build({ source => 'Branch' });
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 
+C4::Context->_new_userenv('xxx');
+C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, $library->{branchname}, '', '', '');
+
 my %item_branch_infos = (
-    homebranch => $branchcode,
-    holdingbranch => $branchcode,
+    homebranch => $library->{branchcode},
+    holdingbranch => $library->{branchcode},
 );
 
-my $borrowernumber = AddMember( categorycode => $categorycode, branchcode => $branchcode );
+my $borrowernumber = AddMember( categorycode => $categorycode, branchcode => $library->{branchcode} );
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+    my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode} } } );
 
-eval { C4::Circulation::MarkIssueReturned( $borrowernumber, 'itemnumber', 'dropbox_branch', 'returndate', 2 ) };
+my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+my $item = $builder->build(
+    {
+        source => 'Item',
+        value  => {
+            homebranch    => $library->{branchcode},
+            holdingbranch => $library->{branchcode},
+            notforloan    => 0,
+            itemlost      => 0,
+            withdrawn     => 0,
+            biblionumber  => $biblioitem->{biblionumber},
+        }
+    }
+);
+C4::Circulation::AddIssue( $patron, $item->{barcode} );
+
+eval { C4::Circulation::MarkIssueReturned( $borrowernumber, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
 like ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, );
 
-my $anonymous_borrowernumber = AddMember( categorycode => $categorycode, branchcode => $branchcode );
+my $anonymous_borrowernumber = AddMember( categorycode => $categorycode, branchcode => $library->{branchcode} );
 t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_borrowernumber);
 # The next call will raise an error, because data are not correctly set
 $dbh->{PrintError} = 0;
