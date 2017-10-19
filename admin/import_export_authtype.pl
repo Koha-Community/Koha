@@ -76,6 +76,9 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
 } elsif ($input->request_method() eq 'POST') {
     my $ok = -1;
     my $fieldname = 'file_import_' . $authtypecode;
+    if ($authtypecode eq 'default'){
+        $fieldname = 'file_import_';
+    }
     my $filename = $input->param($fieldname);
     # upload the input file
     if ($filename && $filename =~ /\.(csv|ods|xml)$/i) {
@@ -84,11 +87,19 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
         if ($uploadFd && !$input->cgi_error) {
             my $tmpfilename = $input->tmpFileName(scalar $input->param($fieldname));
             $filename = $tmpfilename . '.' . $extension; # rename the tmp file with the extension
-            $ok = ImportFramework($filename, $authtypecode, 1, 'authority') if (rename($tmpfilename, $filename));
+            if ($authtypecode eq 'default') {
+                $ok = ImportFramework($filename, '', 1, 'authority') if (rename($tmpfilename, $filename));
+            } else {
+                $ok = ImportFramework($filename, $authtypecode, 1, 'authority') if (rename($tmpfilename, $filename));
+            }
         }
     }
     if ($ok >= 0) { # If everything went ok go to the authority type marc structure
-        print $input->redirect( -location => '/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=' . $authtypecode);
+        if ($authtypecode eq 'default'){
+            print $input->redirect( -location => '/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=');
+        } else {
+            print $input->redirect( -location => '/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=' . $authtypecode);
+        }
     } else {
         # If something failed go to the list of authority types and show message
         print $input->redirect( -location => '/cgi-bin/koha/admin/authtypes.pl?error_import_export=' . $authtypecode);
