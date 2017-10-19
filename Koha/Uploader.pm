@@ -153,7 +153,7 @@ sub err {
     my $err;
     foreach my $f ( keys %{ $self->{files} } ) {
         my $e = $self->{files}->{$f}->{errcode};
-        $err->{ $f } = $e if $e;
+        $err->{ $f }->{code} = $e if $e;
     }
     return $err;
 }

@@ -59,7 +59,7 @@ function CancelUpload() {
     $("#fileuploadfailed").show();
     $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
 }
-function cbUpload( status, fileid ) {
+function cbUpload( status, fileid, errors ) {
     if( status=='done' ) {
         $("#uploadedfileid").val( fileid );
         $('#fileToUpload').prop('disabled',true);
@@ -72,12 +72,14 @@ function cbUpload( status, fileid ) {
         }
         $("#processfile").show();
     } else {
+        var errMsgs = [ _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+        var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
         $('#fileuploadbutton').show();
         $("#fileuploadcancel").hide();
         $("#fileuploadstatus").hide();
         $("#fileuploadfailed").show();
         $("#fileuploadfailed").text( _("Upload status: ") +
-            ( status=='failed'? _("Failed"):
+            ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
             ( status=='denied'? _("Denied"): status ))
         );
     }
