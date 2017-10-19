@@ -164,6 +164,7 @@ canned reports and writing custom SQL reports.</p>
                     <th class="title-string">Last edit</th>
                     <th class="title-string">Last run</th>
                     <th>Public</th>
+                    <th>JSON URL</th>
                     [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
                     <th>Saved results</th>
                     [% IF has_obsolete_reports %]<th>Update</th>[% END %]
@@ -194,11 +195,20 @@ canned reports and writing custom SQL reports.</p>
                         <td><span title="[% savedreport.date_created %]">[% savedreport.date_created | $KohaDates %]</span></td>
                         <td><span title="[% savedreport.last_modified %]">[% savedreport.last_modified | $KohaDates with_hours => 1 %]</span></td>
                         <td><span title="[% savedreport.last_run %]">[% savedreport.last_run | $KohaDates with_hours => 1 %]</span></td>
+                        <td>
                         [% IF (savedreport.public) %]
-                        <td>Yes</td>
+                            Yes
                         [% ELSE %]
-                        <td>No</td>
+                            No
                         [% END %]
+                        </td>
+                        <td>
+                        [% IF (savedreport.public) %]
+                            <a href="[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]">[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]">[% staffClientBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                        [% END %]
+                        </td>
                         [% IF (usecache) %] <td>[% savedreport.cache_expiry %]</td> [% END %]
                         <td>
                             [% FOR result IN savedreport.results %]
