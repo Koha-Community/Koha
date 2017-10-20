@@ -14772,6 +14772,54 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18298 - Allow enforcing password complexity (system preference RequireStrongPassword))\n";
 }
 
+$DBversion = '17.06.00.017';
+if( CheckVersion( $DBversion ) ) {
+    unless (TableExists('account_offsets')) {
+        $dbh->do(q{
+            DROP TABLE IF EXISTS `accountoffsets`;
+        });
+
+        $dbh->do(q{
+            CREATE TABLE IF NOT EXISTS `account_offset_types` (
+              `type` varchar(16) NOT NULL, -- The type of offset this is
+              PRIMARY KEY (`type`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        });
+
+        $dbh->do(q{
+            CREATE TABLE IF NOT EXISTS `account_offsets` (
+              `id` int(11) NOT NULL auto_increment, -- unique identifier for each offset
+              `credit_id` int(11) NULL DEFAULT NULL, -- The id of the accountline the increased the patron's balance
+              `debit_id` int(11) NULL DEFAULT NULL, -- The id of the accountline that decreased the patron's balance
+              `type` varchar(16) NOT NULL, -- The type of offset this is
+              `amount` decimal(26,6) NOT NULL, -- The amount of the change
+              `created_on` timestamp NOT NULL default CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              CONSTRAINT `account_offsets_ibfk_p` FOREIGN KEY (`credit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `account_offsets_ibfk_f` FOREIGN KEY (`debit_id`) REFERENCES `accountlines` (`accountlines_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `account_offsets_ibfk_t` FOREIGN KEY (`type`) REFERENCES `account_offset_types` (`type`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        });
+
+        $dbh->do(q{
+            INSERT IGNORE INTO account_offset_types ( type ) VALUES
+            ('Writeoff'),
+            ('Payment'),
+            ('Lost Item'),
+            ('Manual Debit'),
+            ('Reverse Payment'),
+            ('Forgiven'),
+            ('Dropbox'),
+            ('Rental Fee'),
+            ('Fine Update'),
+            ('Fine');
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14826 - Resurrect account offsets table (Add new tables account_offsets and account_offset_types))\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
