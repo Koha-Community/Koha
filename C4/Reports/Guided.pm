@@ -1001,8 +1001,8 @@ sub convert_sql {
     my ( $sql ) = @_;
     my $updated_sql = $sql;
     if ( $sql =~ m|biblioitems| and $sql =~ m|marcxml| ) {
-        $updated_sql =~ s|biblioitems|biblio_metadata|;
-        $updated_sql =~ s|marcxml|metadata|;
+        $updated_sql =~ s|biblioitems|biblio_metadata|g;
+        $updated_sql =~ s|marcxml|metadata|g;
     }
     return $updated_sql;
 }
