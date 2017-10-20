@@ -78,7 +78,7 @@ $hold->store();
 
 my $b1_cal = C4::Calendar->new( branchcode => $branches[1]->{branchcode} );
 $b1_cal->insert_single_holiday( day => 02, month => 01, year => 2017, title => "Morty Day", description => "Rick" ); #Add a holiday
-my $today = DateTime->now(time_zone => C4::Context->tz );
+my $today = dt_from_string;
 is( $hold->age(), $today->delta_days( dt_from_string( '2017-01-01' ) )->in_units( 'days')  , "Age of hold is days from reservedate to now if calendar ignored");
 is( $hold->age(1), $today->delta_days( dt_from_string( '2017-01-01' ) )->in_units( 'days' ) - 1 , "Age of hold is days from reservedate to now minus 1 if calendar used");
 

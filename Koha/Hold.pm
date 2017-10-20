@@ -58,7 +58,7 @@ my $age = $hold->age( $use_calendar );
 sub age {
     my ( $self, $use_calendar ) = @_;
 
-    my $today = DateTime->now(time_zone => C4::Context->tz );
+    my $today = dt_from_string;
     my $age;
 
     if ( $use_calendar ) {
