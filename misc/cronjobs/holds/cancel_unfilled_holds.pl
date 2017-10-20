@@ -90,12 +90,12 @@ my $verbose      = 0;
 my $confirm      = 0;
 
 GetOptions(
-    'help|?'    => \$help,
-    'days=s'    => \$days,
-    'library=s' => \@branchcodes,
-    'holidays'  => \$use_calendar,
-    'v'         => \$verbose,
-    'confirm'   => \$confirm,
+    'h|help|?'   => \$help,
+    'days=s'     => \$days,
+    'library=s'  => \@branchcodes,
+    'holidays'   => \$use_calendar,
+    'v|verbosev' => \$verbose,
+    'confirm'    => \$confirm,
 ) or pod2usage(1);
 pod2usage(1) if $help;
 
