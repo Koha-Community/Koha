@@ -14820,6 +14820,32 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 14826 - Resurrect account offsets table (Add new tables account_offsets and account_offset_types))\n";
 }
 
+$DBversion = '17.06.00.018';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES ('useDefaultReplacementCost',0,'default replacement cost defined in item type','YesNo');
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES ('ProcessingFeeNote','','Set the text to be recorded in the column note, table accountlines when the processing fee (defined in item type) is applied','textarea');
+    });
+    $dbh->do(q{
+        ALTER TABLE `itemtypes` MODIFY COLUMN `rentalcharge` DECIMAL(28,6) NULL DEFAULT NULL;
+    });
+    unless ( column_exists( 'itemtypes', 'defaultreplacecost' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `itemtypes` ADD `defaultreplacecost` DECIMAL(28,6) NULL DEFAULT NULL AFTER `rentalcharge`;
+        });
+    }
+    unless ( column_exists( 'itemtypes', 'processfee' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `itemtypes` ADD `processfee` DECIMAL(28,6) NULL DEFAULT NULL AFTER `defaultreplacecost`;
+        });
+
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 12768 - Insert system preferences useDefaultReplacementCost and ProcessingFeeNote + Add new columns defaultreplacecost and processfee to the itemtypes table)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
