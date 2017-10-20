@@ -2249,6 +2249,9 @@ sub MarkIssueReturned {
 
         $dbh->do( $query, undef, @bind );
 
+        # We just updated the returndate, so we need to refetch $issue
+        $issue->discard_changes;
+
         # Create the old_issues entry
         my $old_checkout_data = $issue->unblessed;
 
