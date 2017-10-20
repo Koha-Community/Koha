@@ -112,12 +112,7 @@ warn "Running in test mode, no actions will be taken" unless ($confirm);
 
 $verbose and warn "Looking for unfilled holds placed $days or more days ago\n";
 
-unless ( scalar @branchcodes > 0 ) {
-    my $branches = Koha::Libraries->search->get_column('branchcode');
-    while ( my $branch = $branches->next ) {
-        push @branchcodes, $branch->branchcode;
-    }
-}
+@branchcodes = Koha::Libraries->search->get_column('branchcode') if !@branchcodes;
 $verbose and warn "Running for branch(es): " . join( "|", @branchcodes ) . "\n";
 
 foreach my $branch (@branchcodes) {
@@ -144,7 +139,7 @@ foreach my $branch (@branchcodes) {
               . $hold->borrowernumber
               . " on biblio: "
               . $hold->biblionumber . "\n";
-            CancelReserve( { reserve_id => $hold->reserve_id } ) if $confirm;
+            $hold->cancel if $confirm;
         }
 
     }
