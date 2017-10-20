@@ -44,7 +44,7 @@ sub build_query_compat {
     #
     # add OPAC suppression - requires at least one item indexed with Suppress
     if ($params->{suppress}) {
-        if ( $query_type eq 'pqf' ) {
+        if ( defined $query_type and $query_type eq 'pqf' ) {
             #$query = "($query) && -(suppress:1)"; #QP syntax
             $query = '@not '.$query.' @attr 14=1 @attr 1=9011 1'; #PQF syntax
         } else {
