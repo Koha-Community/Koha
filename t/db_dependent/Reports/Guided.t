@@ -289,7 +289,7 @@ subtest 'Ensure last_run is populated' => sub {
 };
 
 subtest 'convert_sql' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $sql = q|
     SELECT biblionumber, ExtractValue(marcxml,
@@ -341,6 +341,17 @@ count(h.reservedate) AS 'holds'
     GROUP BY b.biblionumber
     HAVING count(h.reservedate) >= 42|;
     is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Query with 2 joins should have been correctly converted");
+
+    $sql = q|
+    SELECT t1.marcxml AS first, t2.marcxml AS second,
+    FROM biblioitems t1
+    LEFT JOIN biblioitems t2 USING ( biblionumber )|;
+
+    $expected_converted_sql = q|
+    SELECT t1.metadata AS first, t2.metadata AS second,
+    FROM biblio_metadata t1
+    LEFT JOIN biblio_metadata t2 USING ( biblionumber )|;
+    is( C4::Reports::Guided::convert_sql( $sql ), $expected_converted_sql, "Query with multiple instances of marcxml and biblioitems should have them all replaced");
 };
 
 $schema->storage->txn_rollback;
