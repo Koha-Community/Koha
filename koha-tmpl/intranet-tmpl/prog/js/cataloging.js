@@ -319,6 +319,7 @@ function CloneSubfield(index, advancedMARCEditor){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
         selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+        linkid = id_input;
     }
 
     // textarea
