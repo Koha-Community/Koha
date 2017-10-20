@@ -326,7 +326,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MaxTotalSuggestions','',NULL,'Number of total suggestions used for time limit with NumberOfSuggestionDays','Free'),
 ('MembershipExpiryDaysNotice','',NULL,'Send an account expiration notice that a patron\'s card is about to expire after','Integer'),
 ('MergeReportFields','',NULL,'Displayed fields for deleted MARC records after merge','Free'),
-('minPasswordLength','3',NULL,'Specify the minimum length of a patron/staff password','free'),
+('minPasswordLength','8',NULL,'Specify the minimum length of a patron/staff password','free'),
 ('NewItemsDefaultLocation','','','If set, all new items will have a location of the given Location Code ( Authorized Value type LOC )',''),
 ('NewsAuthorDisplay','none','none|opac|staff|both','Display the author name for news items.','Choice'),
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
