@@ -2172,6 +2172,9 @@ sub MarkIssueReturned {
         # Update the returndate
         $dbh->do( $query, undef, @bind );
 
+        # We just updated the returndate, so we need to refetch $issue
+        $issue->discard_changes;
+
         # Create the old_issues entry
         my $old_checkout = Koha::OldIssue->new($issue->unblessed)->store;
 
