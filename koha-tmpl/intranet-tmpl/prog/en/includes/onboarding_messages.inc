@@ -26,6 +26,12 @@
             <div class="alert alert-success">Circulation rule created!</div>
         [% CASE 'error_on_insert_circ_rule' %]
             <div class="alert alert-danger">Circulation rule not created!</div>
+        [% CASE 'ERROR_password_too_short' %]
+            <div class="alert alert-danger">The patron has not been created the entered password was too short</div>
+        [% CASE 'ERROR_password_too_weak' %]
+            <div class="alert alert-danger">The patron has not been created the entered password was too weak, must contain at least one uppercase, and lower case letter and one number</div>
+        [% CASE 'ERROR_password_has_whitespaces' %]
+            <div class="alert alert-danger">The patron has not been created the entered password contained whitespaces</div>
         [% CASE %][% message %]
     [% END %]
 [% END %]
