@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-17 00:35-0300\n"
+"POT-Creation-Date: 2017-10-15 09:17-0300\n"
 "PO-Revision-Date: 2017-04-18 08:19+0000\n"
 "Last-Translator: Josef <josef.moravec@knihovna-uo.cz>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
@@ -28,27 +28,6 @@ msgstr ""
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
 msgstr "\" %s Omezení přidána procesem prodlužování %s %s %s %s "
 
-#. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:306
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:308
-msgid "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-msgstr "$[% SUBFIELD.code %] [% SUBFIELD.value %]"
-
-#. %1$s:  IF holds_count.defined 
-#. %2$s:  ITEM_RESULT.holds_count 
-#. %3$s:  END 
-#. %4$s:  IF ITEM_RESULT.priority 
-#. %5$s:  IF holds_count.defined 
-#. %6$s:  ITEM_RESULT.priority 
-#. %7$s:  ELSE 
-#. %8$s:  ITEM_RESULT.priority 
-#. %9$s:  END 
-#. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1311
-#, c-format
-msgid "%s %s %s %s %s (priority %s) %s %s %s %s "
-msgstr "%s %s %s %s %s (priorita %s) %s %s %s %s "
-
 #. %1$s:  END 
 #. %2$s:  END 
 #. %3$s:  IF ( itemsloo.title ) 
@@ -58,7 +37,7 @@ msgstr "%s %s %s %s %s (priorita %s) %s %s %s %s "
 #. %7$s:  FOREACH subtitl IN itemsloo.subtitle 
 #. %8$s:  subtitl.subfield|html 
 #. %9$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:371
 #, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
 msgstr "%s %s %s %s %s Bez názvu %s %s %s %s "
@@ -92,41 +71,13 @@ msgstr "%s %s %s %s %s Bez názvu %s %s , %s %s"
 #. %13$s:  END 
 #. %14$s:  ELSE 
 #. %15$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:412
 #, c-format
 msgid ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
 msgstr ""
 "%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s Tento záznam neobsahuje žádné "
 "jednotky. %s "
-
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 
-#. %4$s:  IF acquisition_details.total_quantity == 1 
-#. %5$s:  ELSE 
-#. %6$s:  acquisition_details.total_quantity 
-#. %7$s:  END 
-#. %8$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
-#, c-format
-msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s "
-msgstr "%s %s %s %s Je objednána 1 jednotka. %s Objednáno jednotek: %s. %s %s "
-
-#. %1$s:  ELSIF ( itemloop.size ) 
-#. %2$s:  INCLUDE items_table items=itemloop tab="holdings" 
-#. %3$s:  IF Koha.Preference('OPACAcquisitionDetails') and Koha.Preference('AcqCreateItem') != 'ordering' and acquisition_details.total_quantity > 0 
-#. %4$s:  IF acquisition_details.total_quantity == 1 
-#. %5$s:  ELSE 
-#. %6$s:  acquisition_details.total_quantity 
-#. %7$s:  END 
-#. %8$s:  END 
-#. %9$s:  IF holds_count.defined || priority 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:654
-#, c-format
-msgid "%s %s %s %s 1 item is on order. %s %s items are on order. %s %s %s "
-msgstr ""
-"%s %s %s %s Je objednána 1 jednotka. %s Objednáno jednotek: %s. %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -200,16 +151,6 @@ msgstr "%s %s %s Koha on-line %s "
 msgid "%s %s %s Koha online %s catalog %s &rsaquo; %s %s "
 msgstr "%s %s %s Koha on-line %s katalog %s &rsaquo; %s %s "
 
-#. %1$s:  IF (otheritemloop.size) 
-#. %2$s:  INCLUDE items_table items=otheritemloop tab="otherholdings" 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  INCLUDE shelfbrowser tab='otherholdings' 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:701
-#, c-format
-msgid "%s %s %s No other items. %s %s "
-msgstr "%s %s %s Žádné další jednotky. %s %s "
-
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
 #. %3$s:  IF ( WINDOW_CLOSE ) 
@@ -251,16 +192,6 @@ msgid "%s %s End date: "
 msgstr "%s %s Konec omezení: "
 
 #. %1$s:  END 
-#. %2$s:  UNLESS mandatory.defined('password') 
-#. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:856
-#, c-format
-msgid ""
-"%s %s If you do not enter a password a system generated password will be "
-"created. %s "
-msgstr "%s %s Pokud nezadáte heslo, systém nějaké vytvoří sám. %s "
-
-#. %1$s:  END 
 #. %2$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
 #, c-format
@@ -274,6 +205,25 @@ msgstr "%s %s Na cestě do "
 #, c-format
 msgid "%s %s No results found. %s "
 msgstr "%s %s Žádné výsledky. %s "
+
+#. %1$s:  IF Branches.all.size == 1 
+#. %2$s:  IF branchcode 
+#. %3$s:  Branches.GetName( branchcode ) 
+#. %4$s:  ELSE 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  IF branchcode 
+#. %8$s:  Branches.GetName( branchcode ) 
+#. %9$s:  ELSE 
+#. %10$s:  END 
+#. %11$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
+#, c-format
+msgid ""
+"%s %s RSS feed for %s library news. %s RSS feed for library news. %s %s %s "
+"RSS feed for %s and system-wide library news. %s RSS feed for system-wide "
+"library news. %s %s "
+msgstr ""
 
 #. %1$s: - SWITCH index -
 #. %2$s: - CASE 'su-na' -
@@ -402,7 +352,7 @@ msgstr "%s %s štítek byl úspěšně přidán%sštítky byly úspěšně přid
 #. %11$s:  type | html 
 #. %12$s:  END 
 #. %13$s:  END 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:35
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:34
 #, c-format
 msgid ""
 "%s %s(Earlier heading) %s(Later heading) %s(Acronym) %s(Musical composition) "
@@ -412,18 +362,6 @@ msgstr ""
 "%s %s(Dřívější záhlaví) %s(Pozdější záhlaví) %s(Akronym) %s(Hudební skladba) "
 "%s(Širší záhlaví) %s(Užší záhlaví) %s(Bezprostředně nadřízená organizace) %s"
 "%s(%s)%s %s "
-
-#. %1$s:  collectiontitle 
-#. %2$s:  IF ( collectionissn ) 
-#. %3$s:  collectionissn 
-#. %4$s:  END 
-#. %5$s:  IF ( collectionvolume ) 
-#. %6$s:  collectionvolume 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:244
-#, c-format
-msgid "%s %s, ISSN %s %s %s; %s %s "
-msgstr "%s %s, ISSN %s %s %s; %s %s "
 
 #. %1$s:  SWITCH option 
 #. %2$s:  CASE 'bibtex' 
@@ -496,7 +434,7 @@ msgstr ""
 #. %4$s:  END 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:683
 #, c-format
 msgid "%s %sShared%sPrivate%s %s Public %s "
 msgstr "%s %sSdílený%sSoukromý%s %s Veřejný %s "
@@ -533,24 +471,6 @@ msgstr "%s (související hledání: %s %s %s ). %s "
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Účet zablokován %s %s "
-
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:601
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
-#, c-format
-msgid "%s Address 2:"
-msgstr "%s Adresa 2:"
-
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:395
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:754
-#, c-format
-msgid "%s Address:"
-msgstr "%s Adresa:"
 
 #. %1$s:  IF (sendmailError) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:51
@@ -629,21 +549,6 @@ msgstr ""
 "Poškozeno (%s),%s %s Objednáno (%s),%s %s Rezervováno (%s),%s %s Na cestě "
 "(%s),%s "
 
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:423
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
-#, c-format
-msgid "%s City:"
-msgstr "%s Město:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:699
-#, c-format
-msgid "%s Contact note:"
-msgstr "%s Poznámka ke kontaktním údajům:"
-
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
@@ -656,58 +561,11 @@ msgstr ""
 "%s Nelze vytvořit nový seznam. Prosím zkontrolujte, zda je název unikátní. "
 "%s Bohužel nemůžete vkládat položky do tohoto seznamu. %s "
 
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:657
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
-#, c-format
-msgid "%s Country:"
-msgstr "%s Země:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:284
-#, c-format
-msgid "%s Date of birth:"
-msgstr "%s Datum narození:"
-
 #. %1$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:98
 #, c-format
 msgid "%s Did you mean: "
 msgstr "%s Měli jste na mysli: "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:685
-#, c-format
-msgid "%s Email:"
-msgstr "%s Email:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:561
-#, c-format
-msgid "%s Fax:"
-msgstr "%s Fax:"
-
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:740
-#, c-format
-msgid "%s First name:"
-msgstr "%s Jméno:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:173
-#, c-format
-msgid "%s Home library:"
-msgstr "%s Domovská knihovna:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
-#, c-format
-msgid "%s Initials:"
-msgstr "%s Iniciály:"
 
 #. %1$s:  SEARCH_RESULT.num_critics 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:430
@@ -726,12 +584,6 @@ msgstr "%s Jednotka čeká na vyzvednutí "
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "Počet aktuálních vypůjček: %s"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:133
-#, c-format
-msgid "%s Library card number: "
-msgstr "%s Číslo čtenářského průkazu: "
 
 #. %1$s:  END 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:120
@@ -801,18 +653,6 @@ msgstr "%s Nelze prodloužit %s Není povoleno "
 msgid "%s On hold %s No renewals left %s "
 msgstr "%s Rezervováno %s Již jste vyčerpali maximální počet prodloužení %s "
 
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:319
-#, c-format
-msgid "%s Other names:"
-msgstr "%s Další jména:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:519
-#, c-format
-msgid "%s Other phone:"
-msgstr "%s Další telefon:"
-
 #. %1$s:  IF ( PassMismatch ) 
 #. %2$s:  END 
 #. %3$s:  IF ( ShortPass ) 
@@ -847,32 +687,6 @@ msgstr ""
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s Čekající %s Ve zpracování %s Dokončeno %s Zrušeno %s "
 
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:838
-#, c-format
-msgid "%s Phone:"
-msgstr "%s Telefon:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:82
-#, c-format
-msgid "%s Please correct this and resubmit. "
-msgstr "%s Prosím, zkuste to opravit a znovu odeslat. "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:533
-#, c-format
-msgid "%s Primary email:"
-msgstr "%s Hlavní e-mail:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
-#, c-format
-msgid "%s Primary phone:"
-msgstr "%s Hlavní telefon:"
-
 #. %1$s:  SEARCH_RESULT.num_critics_pro 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:433
 #, c-format
@@ -899,12 +713,6 @@ msgstr ""
 msgid "%s Quotations"
 msgstr "%s Citace"
 
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:234
-#, c-format
-msgid "%s Salutation:"
-msgstr "%s Oslovení:"
-
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
 #, c-format
@@ -923,46 +731,11 @@ msgstr "%s Hledat"
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Hledat %s '%s'%s%s&nbsp;s omezením:&nbsp;'%s'%s"
 
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:547
-#, c-format
-msgid "%s Secondary email:"
-msgstr "%s Další e-mail:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#, c-format
-msgid "%s Secondary phone:"
-msgstr "%s Další telefon:"
-
 #. %1$s:  LibraryName 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:34
 #, c-format
 msgid "%s Self checkout system"
 msgstr "%s - Systém samoobslužných výpůjček"
-
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:629
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
-#, c-format
-msgid "%s State:"
-msgstr "%s Stát:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
-#, c-format
-msgid "%s Street number:"
-msgstr "%s Číslo popisné:"
-
-#. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:256
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:726
-#, c-format
-msgid "%s Surname:"
-msgstr "%s Příjmení:"
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
 #. %2$s:  ELSE 
@@ -1036,25 +809,6 @@ msgstr "%s Záznam s tímto ppn nebyl ve službě IdRef nalezen. %s %s "
 msgid "%s This record has no items. %s "
 msgstr "%s Tento záznam nemá žádné jednotky. %s "
 
-#. %1$s:  IF holds_count.defined 
-#. %2$s:  holds_count 
-#. %3$s:  END 
-#. %4$s:  IF priority 
-#. %5$s:  IF holds_count.defined 
-#. %6$s:  priority 
-#. %7$s:  ELSE 
-#. %8$s:  priority 
-#. %9$s:  END 
-#. %10$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:665
-#, c-format
-msgid ""
-"%s Total holds: %s %s %s %s (priority %s) %s Overall queue priority: %s %s "
-"%s "
-msgstr ""
-"%s Počet rezervací: %s %s %s %s (přednost %s) %s Celková přednost ve frontě: "
-"%s %s %s "
-
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:107
@@ -1126,130 +880,6 @@ msgid "%s You have never borrowed anything from this library. %s "
 msgstr "%s Z této knihovny jste si nikdy nic nevypůjčili. %s "
 
 #. For the first occurrence,
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:451
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:643
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
-#, c-format
-msgid "%s ZIP/Postal code:"
-msgstr "%s PSČ:"
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:178
-#, c-format
-msgid ""
-"%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
-"%%] "
-msgstr ""
-"%s [%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('language')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('language').size > 0 and expanded_options ) ) "
-"%%] "
-
-#. %1$s:  END # / IF Babeltheque 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1056
-#, c-format
-msgid ""
-"%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
-"normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
-msgstr ""
-"%s [%% INCLUDE \"openlibrary-readapi.inc\" bib = { normalized_isbn => "
-"normalized_isbn, lccn => lccn, normalized_oclc => normalized_oclc } %%] "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:570
-#, c-format
-msgid ""
-"%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
-"defined('B_zipcode') && hidden.defined('B_country') && hidden."
-"defined('B_phone') && hidden.defined('B_email') && hidden."
-"defined('contactnote') %%] "
-msgstr ""
-"%s [%% UNLESS hidden.defined('B_address') && hidden.defined('B_address2') && "
-"hidden.defined('B_city') && hidden.defined('B_state') && hidden."
-"defined('B_zipcode') && hidden.defined('B_country') && hidden."
-"defined('B_phone') && hidden.defined('B_email') && hidden."
-"defined('contactnote') %%] "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
-#, c-format
-msgid ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
-"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
-"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
-"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
-"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
-"%%] "
-msgstr ""
-"%s [%% UNLESS hidden.defined('altcontactsurname') && hidden."
-"defined('altcontactfirstname') && hidden.defined('altcontactaddress1') && "
-"hidden.defined('altcontactaddress2') && hidden.defined('altcontactaddress3') "
-"&& hidden.defined('altcontactstate') && hidden.defined('altcontactzipcode') "
-"&& hidden.defined('altcontactcountry') && hidden.defined('altcontactphone') "
-"%%] "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:475
-#, c-format
-msgid ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
-msgstr ""
-"%s [%% UNLESS hidden.defined('phone') && hidden.defined('phonepro') && "
-"hidden.defined('mobile') && hidden.defined('email') && hidden."
-"defined('emailpro') && hidden.defined('fax') %%] "
-
-#. %1$s:  END # /UNLESS fields hidden 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:364
-#, c-format
-msgid ""
-"%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && hidden."
-"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
-"%%] "
-msgstr ""
-"%s [%% UNLESS hidden.defined('streetnumber') && hidden.defined('address') && "
-"hidden.defined('address2') && hidden.defined('city') && hidden."
-"defined('state') && hidden.defined('zipcode') && hidden.defined('country') "
-"%%] "
-
-#. %1$s:  END # / defined 'branchcode' 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:211
-#, c-format
-msgid ""
-"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
-"defined('firstname') && hidden.defined('dateofbirth') && hidden."
-"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
-"%%] "
-msgstr ""
-"%s [%% UNLESS hidden.defined('title') && hidden.defined('surname') && hidden."
-"defined('firstname') && hidden.defined('dateofbirth') && hidden."
-"defined('initials') && hidden.defined('othernames') && hidden.defined('sex') "
-"%%] "
-
-#. %1$s:  BLOCK showreference 
-#. %2$s:  SET authidurl = '/cgi-bin/koha/opac-authoritiesdetail.pl?authid=' 
-#. %3$s:  SET searchurl = '/cgi-bin/koha/opac-authorities-home.pl?op=do_search&type=opac&operator=contains&marclist=mainentry&and_or=and&orderby=HeadingAsc&value=' 
-#. %4$s:  IF marcflavour == 'UNIMARC' 
-#. %5$s:  SWITCH type 
-#. %6$s:  CASE 'broader' 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:1
-#, c-format
-msgid ""
-"%s [%%# Parameters: heading: the heading itself linkType: currently "
-"'seefrom' or 'seealso', controls the label for the entry type: authid: if it "
-"is a linked authority, its authid %%] %s %s %s %s %s "
-msgstr ""
-"%s [%%# Parametry: heading: vlastní záhlaví linkType: 'seefrom' (viz), nebo "
-"'seealso' (viz též), určuje popisek při zobrazení odkazu, type: authid: "
-"pokud se jedná o připojenou autoritu, zde je její id %%] %s %s %s %s %s "
-
-#. For the first occurrence,
 #. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:16
@@ -1266,7 +896,7 @@ msgstr "%s záznamů"
 #. For the first occurrence,
 #. %1$s:  IF ( review.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:49
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:384
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:333
 #, c-format
 msgid "%s by "
@@ -1281,21 +911,6 @@ msgstr "%s od "
 msgid "%s by %s %s %s "
 msgstr "%s od %s %s %s "
 
-# má se slovo copy překládat?
-#
-# V tomto případě ne, jelikož  zde se jedná o html entitu - znak pro copyright
-#. %1$s:  IF ( XISBN.author ) 
-#. %2$s:  XISBN.author |html 
-#. %3$s:  END 
-#. %4$s:  IF ( XISBN.copyrightdate ) 
-#. %5$s:  XISBN.copyrightdate 
-#. %6$s:  END 
-#. %7$s:  IF ( XISBN.publishercode ) 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:988
-#, c-format
-msgid "%s by %s%s %s &copy;%s%s %s "
-msgstr "%s od autora %s%s %s &copy;%s%s %s "
-
 #. For the first occurrence,
 #. %1$s:  ind.label 
 #: opac-tmpl/bootstrap/en/includes/search/resort_form.inc:19
@@ -1303,6 +918,20 @@ msgstr "%s od autora %s%s %s &copy;%s%s %s "
 #, c-format
 msgid "%s desc"
 msgstr "%s sestupně"
+
+#. %1$s:  LoginBranchname 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:549
+#, fuzzy, c-format
+msgid "%s holdings"
+msgstr "Exempláře"
+
+#. For the first occurrence,
+#. %1$s:  acquisition_details.total_quantity 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:661
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:688
+#, c-format
+msgid "%s items are on order."
+msgstr ""
 
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
@@ -1314,12 +943,6 @@ msgstr "%s sestupně"
 #, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s od %s %s do %s %s %s "
-
-#. %1$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
-#, c-format
-msgid "%s system-wide library news. "
-msgstr "%s novinky ze všech oddělení. "
 
 #. %1$s:  ELSE 
 #. %2$s:  heading 
@@ -1372,7 +995,7 @@ msgstr ""
 #. %5$s:  END 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:682
 #, c-format
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %s %s %s%s0%s"
@@ -1389,18 +1012,6 @@ msgid ""
 msgstr ""
 "%s%s - Obnovení zapomenutého hesla%sKoha online%s katalog - obnovení "
 "zapomenutého hesla"
-
-#. %1$s:  IF SeparateHoldings 
-#. %2$s:  LoginBranchname 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#. %5$s:  UNLESS too_many_items 
-#. %6$s:  itemloop.size || 0 
-#. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:550
-#, c-format
-msgid "%s%s holdings%sHoldings%s %s ( %s )%s"
-msgstr "%s%s jednotky%sJednotky%s %s ( %s )%s"
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count ==1 ) 
@@ -2186,41 +1797,6 @@ msgstr ""
 "nepřišlo)%s %sChybějící (vyprodáno)%s %sChybějící(Poškozeno)%s %sChybějící "
 "(ztraceno)%s %sNedostupné%s %sOdstraněno%s %sReklamováno%s %sZastaveno%s "
 
-#. %1$s:  IF (latestserial.status1 ) 
-#. %2$s:  END 
-#. %3$s:  IF (latestserial.status2 ) 
-#. %4$s:  END 
-#. %5$s:  IF (latestserial.status3 ) 
-#. %6$s:  END 
-#. %7$s:  IF (latestserial.status4 ) 
-#. %8$s:  END 
-#. %9$s:  IF (latestserial.status41 ) 
-#. %10$s:  END 
-#. %11$s:  IF (latestserial.status42 ) 
-#. %12$s:  END 
-#. %13$s:  IF (latestserial.status43 ) 
-#. %14$s:  END 
-#. %15$s:  IF (latestserial.status44 ) 
-#. %16$s:  END 
-#. %17$s:  IF (latestserial.status5 ) 
-#. %18$s:  END 
-#. %19$s:  IF (latestserial.status6 ) 
-#. %20$s:  END 
-#. %21$s:  IF (latestserial.status7 ) 
-#. %22$s:  END 
-#. %23$s:  IF (latestserial.status8 ) 
-#. %24$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
-#, c-format
-msgid ""
-"%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
-"%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot issued"
-"%s %sDelete%s %sClaimed%s %sStopped%s "
-msgstr ""
-"%sOčekáváno%s %sDodáno%s %sOpožděno%s %sChybějící%s %sChybějící (nikdy "
-"nepřišlo)%s %sChybějící (vyprodáno)%s %sChybějící(Poškozeno)%s %sChybějící "
-"(ztraceno)%s %sNedostupné%s %sOdepsáno%s %sReklamováno%s %sZastaveno%s "
-
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
 #. %3$s:  ELSIF ( messaging_preference.Upcoming_Events ) 
@@ -2323,7 +1899,7 @@ msgid "%sa list:%s"
 msgstr "%sseznam:%s"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 #, c-format
 msgid "&laquo; Previous"
 msgstr "&laquo; Předchozí"
@@ -2967,7 +2543,7 @@ msgstr "(zbývá %s z %s prodloužení)"
 msgid "(%s total)"
 msgstr "(%s celkem)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
@@ -3078,7 +2654,7 @@ msgstr "(Nepodporováno - použijte on-line katalog)"
 msgid "(Use SRU instead)"
 msgstr "(Nepodporováno - použijte SRU)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:454
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:464
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:415
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:172
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:524
@@ -3116,6 +2692,14 @@ msgstr "(pouze %s)"
 msgid "(overdue)"
 msgstr "(po termínu)"
 
+#. For the first occurrence,
+#. %1$s:  priority 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:671
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1314
+#, fuzzy, c-format
+msgid "(priority %s)"
+msgstr "Priorita"
+
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:48
@@ -3133,8 +2717,8 @@ msgstr "(související vyhledávání: %s%s%s)"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:31
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:486
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:540
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:542
 #, c-format
@@ -3152,7 +2736,7 @@ msgid ", you cannot place holds."
 msgstr ", není možné rezervovat."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "- You must enter a list name"
 msgstr "- Musíte zadat název seznamu"
 
@@ -3206,6 +2790,12 @@ msgstr "0.00"
 #, c-format
 msgid "000 "
 msgstr "000 "
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:659
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:686
+#, c-format
+msgid "1 item is on order."
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
 #, c-format
@@ -3282,20 +2872,6 @@ msgstr ""
 "knihovnou všechny závazky. Jakmile žádost odešlete, nebudete si již moci "
 "vypůjčit další dokumenty."
 
-#. %1$s:  HTML5MediaParent 
-#. %2$s:  HTML5MediaSet.child  
-#. %3$s:  HTML5MediaSet.srcblock 
-#. %4$s:  HTML5MediaSet.typeblock 
-#. %5$s:  HTML5MediaParent 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1008
-#, c-format
-msgid ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
-"browser.] "
-msgstr ""
-"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tagy nejsou podporovány "
-"vaším prohlížečem.] "
-
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:32
 #, c-format
 msgid "A confirmation email will be sent shortly to the email address "
@@ -3358,7 +2934,7 @@ msgstr "Datum přírustků: Od nejstarších po nejnovější"
 
 #. INPUT type=submit name=tagsel_button
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:273
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:453
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:463
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:414
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:171
@@ -3378,7 +2954,7 @@ msgstr "Vložit %s položky do %s"
 msgid "Add another field"
 msgstr "Vložit další pole"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:449
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:459
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:519
 #, c-format
 msgid "Add tag"
@@ -3405,7 +2981,7 @@ msgstr "Vložit do seznamu"
 msgid "Add to a new list:"
 msgstr "Vložit do nového seznamu:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:486
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:542
 #, c-format
 msgid "Add to cart"
@@ -3444,10 +3020,30 @@ msgstr "Další autoři:"
 msgid "Additional content types for books/printed materials"
 msgstr "Doplňující typy obsahu pro knihy/tiskoviny"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:906
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:850
 #, c-format
 msgid "Additional information"
 msgstr "Další informace"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:563
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:716
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:718
+#, fuzzy, c-format
+msgid "Address 2:"
+msgstr "%s Adresa 2:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:552
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:703
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:705
+#, fuzzy, c-format
+msgid "Address:"
+msgstr "%s Adresa:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
 #, c-format
@@ -3516,7 +3112,7 @@ msgstr ""
 "Poznamenejte si, že všechny vypůjčené položky musí být vráceny dříve, než "
 "vyprší platnost vašeho průkazu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:544
 #, c-format
 msgid "Alternate address"
 msgstr "Alternativní adresa"
@@ -3526,7 +3122,7 @@ msgstr "Alternativní adresa"
 msgid "Alternate address information: "
 msgstr "Alternativní adresa: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:718
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:671
 #, c-format
 msgid "Alternate contact"
 msgstr "Alternativní kontakt"
@@ -3655,7 +3251,7 @@ msgid "Are you sure you want to delete selected search history entries?"
 msgstr "Opravdu chcete vymazat vybrané položky z vaší historie vyhledávání?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Are you sure you want to delete this list?"
 msgstr "Určitě chcete zrušit tento seznam?"
 
@@ -3680,17 +3276,17 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "Opravdu chcete odstranit vybrané položky?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "Opravdu chcete ze seznamu odstranit tyto dokumenty?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Are you sure you want to remove this item from the list?"
 msgstr "Určitě chcete odebrat tyto položky ze seznamu?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Are you sure you want to remove this share?"
 msgstr "Opravdu chcete zrušit toto sdílení?"
 
@@ -3703,6 +3299,11 @@ msgstr "Určitě chcete obnovit všechny zrušené rezervace?"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:847
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Určitě chcete zrušit všechny rezervace?"
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:850
+#, c-format
+msgid "Arrived"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:735
 #, c-format
@@ -3783,8 +3384,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:218
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:569
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:581
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:252
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:741
@@ -3912,7 +3513,7 @@ msgstr "Ocenění:"
 msgid "BE CAREFUL"
 msgstr "BUĎTE OPATRNÍ"
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:13
 #, c-format
 msgid "BT"
 msgstr "ŠT"
@@ -3923,13 +3524,13 @@ msgstr "ŠT"
 msgid "Back to lists"
 msgstr "Zpět na seznamy"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 #, c-format
 msgid "Back to results"
 msgstr "Zpět na výsledky"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1088
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 msgid "Back to the results search list"
 msgstr "Zpět do seznamu výsledků vyhledávání"
 
@@ -3939,7 +3540,7 @@ msgstr "Zpět do seznamu výsledků vyhledávání"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
 #, c-format
 msgid "Barcode"
 msgstr "Čárový kód"
@@ -4013,7 +3614,7 @@ msgid "Brief history"
 msgstr "Stručná historie"
 
 #. ABBR
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:14
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:13
 msgid "Broader Term"
 msgstr "Širší termín"
 
@@ -4027,14 +3628,14 @@ msgstr "Procházet podle hierarchie"
 msgid "Browse our catalog"
 msgstr "Procházet katalog"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1076
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1075
 #, c-format
 msgid "Browse results"
 msgstr "Procházet výsledky"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1275
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1277
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1274
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1276
 #, c-format
 msgid "Browse shelf"
 msgstr "Prohlédnout regál"
@@ -4097,11 +3698,11 @@ msgstr "Signatura:"
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:127
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:228
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:230
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:581
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1184
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1183
 #, c-format
 msgid "Call number"
 msgstr "Signatura"
@@ -4126,19 +3727,19 @@ msgstr "Signatura:"
 #. For the first occurrence,
 #. %1$s:  subscription.callnumber 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:820
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:832
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:833
 #, c-format
 msgid "Call number: %s"
 msgstr "Signatura: %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:115
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:345
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:41
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:274
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:627
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:629
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:91
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
@@ -4197,20 +3798,20 @@ msgid "Cannot be put on hold"
 msgstr "Není možné rezervovat"
 
 #. %1$s:  maxlength_cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:147
 #, c-format
 msgid "Card number can be up to %s characters."
 msgstr "Číslo průkazu musí být dlouhé %s znaků."
 
 #. %1$s:  minlength_cardnumber 
 #. %2$s:  maxlength_cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
 #, c-format
 msgid "Card number must be between %s and %s characters."
 msgstr "Délka čísla průkazu musí být mezi %s a %s znaky."
 
 #. %1$s:  minlength_cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:139
 #, c-format
 msgid "Card number must be exactly %s characters."
 msgstr "Číslo průkazu musí být alespoň %s znaků dlouhé."
@@ -4241,8 +3842,8 @@ msgstr "Katalog"
 msgid "Catalogs"
 msgstr "Katalogy"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:587
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:186
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:81
 #, c-format
 msgid "Category:"
@@ -4345,6 +3946,21 @@ msgstr "Výpůjčky: "
 msgid "Citation"
 msgstr "Citace"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:401
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:578
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:731
+#, fuzzy, c-format
+msgid "City:"
+msgstr "%s Město:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:859
+#, c-format
+msgid "Claimed"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:189
 #, c-format
 msgid "Classification"
@@ -4365,7 +3981,7 @@ msgstr "Vymazat"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:277
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:36
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:49
@@ -4380,7 +3996,7 @@ msgstr "Odebrat označení"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:280
 #, c-format
 msgid "Clear date"
 msgstr "Vymazat datum"
@@ -4408,7 +4024,7 @@ msgstr "Klikněte zde pro přihlášení."
 msgid "Click here to view them all."
 msgstr "Pro zobrazení všech klikněte sem."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1020
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Klikněte na obrázek pro jeho zobrazení v prohlížeči obrázků"
@@ -4424,7 +4040,7 @@ msgid "Click to expand this role"
 msgstr "Klikněte pro úplné zobrazení role"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "Click to forward the list to"
 msgstr "Klikněte pro přesun k položkám"
 
@@ -4441,7 +4057,7 @@ msgid "Click to open in new window"
 msgstr "Otevřít v novém okně"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "Click to rewind the list to"
 msgstr "Klikněte pro přesun k položkám"
 
@@ -4451,7 +4067,7 @@ msgstr "Klikněte pro přesun k položkám"
 msgid "Click to view in Google Books"
 msgstr "Otevřít v Google Books"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
 #, c-format
 msgid "Close"
 msgstr "Zavřít"
@@ -4483,7 +4099,7 @@ msgstr "Vyberte položky, které vás zajímají"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:127
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1183
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #, c-format
 msgid "Collection"
@@ -4509,16 +4125,16 @@ msgstr "Sbírka: %s "
 
 #. For the first occurrence,
 #. %1$s:  review.firstname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:925
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:927
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:931
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:926
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:932
 #, c-format
 msgid "Comment by %s"
 msgstr "Komentáře uživatele %s"
 
 #. %1$s:  review.firstname 
 #. %2$s:  review.surname|truncate(2,'.') 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:930
 #, c-format
 msgid "Comment by %s %s"
 msgstr "Komentáře uživatele %s %s"
@@ -4526,7 +4142,7 @@ msgstr "Komentáře uživatele %s %s"
 #. %1$s:  review.title 
 #. %2$s:  review.firstname 
 #. %3$s:  review.surname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:923
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:924
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Komentáře uživatele %s %s %s"
@@ -4537,16 +4153,16 @@ msgstr "Komentáře uživatele %s %s %s"
 msgid "Comment:"
 msgstr "Poznámka:"
 
-#. %1$s:  reviews.size || 0 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:596
-#, c-format
-msgid "Comments ( %s )"
-msgstr "Komentáře ( %s )"
-
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:45
 #, c-format
 msgid "Comments on "
 msgstr "Komentáře k "
+
+#. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:596
+#, fuzzy, c-format
+msgid "Comments%s"
+msgstr "Komentáře ( %s )"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:407
@@ -4566,13 +4182,13 @@ msgstr "Potvrdit rezervaci pro: %s %s (%s)"
 msgid "Confirm new password:"
 msgstr "Potvrďte nové heslo:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:870
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:880
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:814
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:824
 #, c-format
 msgid "Confirm password"
 msgstr "Potvrdit heslo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:483
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:457
 #, c-format
 msgid "Contact information"
 msgstr "Kontaktní informace"
@@ -4582,6 +4198,12 @@ msgstr "Kontaktní informace"
 #, c-format
 msgid "Contact information: "
 msgstr "Kontaktní informace: "
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:654
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:656
+#, fuzzy, c-format
+msgid "Contact note:"
+msgstr "%s Poznámka ke kontaktním údajům:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
@@ -4593,7 +4215,7 @@ msgstr "Obsah"
 msgid "Content Cafe"
 msgstr "Content Cafe"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:662
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:672
 #, c-format
 msgid "Contents"
 msgstr "Počet položek"
@@ -4605,7 +4227,7 @@ msgstr "Obsah seznamu "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:302
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1186
 #, c-format
 msgid "Copy number"
 msgstr "Číslo kopie"
@@ -4652,6 +4274,16 @@ msgstr ""
 msgid "Count"
 msgstr "Počet"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:440
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:442
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:617
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:768
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:770
+#, fuzzy, c-format
+msgid "Country:"
+msgstr "%s Země:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:32
 #, c-format
 msgid "Course #"
@@ -4664,7 +4296,7 @@ msgstr "Číslo kurzu:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:282
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:20
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:18
 #, c-format
 msgid "Course reserves"
@@ -4686,7 +4318,7 @@ msgstr "Kurzy"
 msgid "Cover image"
 msgstr "Obálka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:547
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:557
 #, c-format
 msgid "Create a new list"
 msgstr "Vytvořit nový seznam"
@@ -4721,7 +4353,7 @@ msgstr "Kredit"
 msgid "Credits (%s)"
 msgstr "Kredit (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1176
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1175
 #, c-format
 msgid "Current location"
 msgstr "Aktuální umístění"
@@ -4766,7 +4398,7 @@ msgstr "DVD nebo jiný videodisk"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:146
@@ -4786,7 +4418,7 @@ msgid "Date added:"
 msgstr "Datum vložení:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1189
 #, c-format
 msgid "Date due"
 msgstr "Půjčeno do"
@@ -4797,6 +4429,12 @@ msgstr "Půjčeno do"
 #, c-format
 msgid "Date due:"
 msgstr "Termín návratu:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:271
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:273
+#, fuzzy, c-format
+msgid "Date of birth:"
+msgstr "%s Datum narození:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:172
 #, c-format
@@ -4868,8 +4506,9 @@ msgstr ""
 "hodnoty: "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:696
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:706
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:277
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:858
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:138
@@ -4882,7 +4521,7 @@ msgstr "Odstranit"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:191
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:512
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:522
 msgid "Delete list"
 msgstr "Odstranit seznam"
 
@@ -4892,7 +4531,7 @@ msgid "Delete selected"
 msgstr "Odstranit označené"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:538
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:548
 msgid "Delete this list"
 msgstr "Odstranit tento seznam"
 
@@ -4901,7 +4540,7 @@ msgstr "Odstranit tento seznam"
 msgid "Delete your search history"
 msgstr "Vymazat historii hledání"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 #, c-format
 msgid "Delicious"
 msgstr "Delicious"
@@ -4942,16 +4581,10 @@ msgstr "Podrobnosti"
 msgid "Details for %s"
 msgstr "Podrobnosti pro %s"
 
-#. %1$s:  title |html 
-#. %2$s:  FOREACH subtitl IN subtitle 
-#. %3$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
-#. %4$s:  END 
-#. %5$s:  subtitl.subfield |html 
-#. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:49
-#, c-format
-msgid "Details for: %s%s%s,%s %s%s"
-msgstr "Podrobný záznam titulu %s%s%s, %s %s%s"
+#, fuzzy, c-format
+msgid "Details for: "
+msgstr "Podrobnosti pro %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:182
 #, c-format
@@ -5027,7 +4660,7 @@ msgid "Don't have a password yet?"
 msgstr "Nemáte ještě nastavené heslo?"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #, c-format
 msgid "Don't have an account? "
@@ -5100,15 +4733,15 @@ msgid "ERROR: No record id specified. "
 msgstr "CHYBA: Nebylo zadáno číslo katalogizačního záznamu. "
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:687
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:912
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:697
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:913
 #, c-format
 msgid "Edit"
 msgstr "Upravit"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:183
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:505
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:515
 msgid "Edit list"
 msgstr "Upravit seznam"
 
@@ -5117,7 +4750,7 @@ msgstr "Upravit seznam"
 msgid "Edit list "
 msgstr "Upravit seznam "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
 #, c-format
 msgid "Editing "
 msgstr "Upravit "
@@ -5134,7 +4767,7 @@ msgstr "Vydání"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
 #, c-format
 msgid "Email"
 msgstr "Email"
@@ -5147,6 +4780,8 @@ msgid "Email address:"
 msgstr "Emailová adresa:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:643
 #, c-format
 msgid "Email:"
 msgstr "Email:"
@@ -5339,12 +4974,17 @@ msgstr "Výtah"
 msgid "Excerpt provided by Syndetics"
 msgstr "Výtahy dostupné v systému Syndetics"
 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
+#, c-format
+msgid "Expected"
+msgstr ""
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
 msgid "Expecting a specific item selection."
 msgstr "Nebyla vybrána žádná konkrétní jednotka."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:159
 #, c-format
 msgid "Expiration date:"
 msgstr "Platnost registrace do:"
@@ -5380,10 +5020,16 @@ msgstr "Exportuji do Dublin Core..."
 msgid "Extends the due date for a patron's existing loan."
 msgstr "Posune termín vrácení pro existující výpůjčky."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 #, c-format
 msgid "Facebook"
 msgstr "Facebook"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:528
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:530
+#, fuzzy, c-format
+msgid "Fax:"
+msgstr "%s Fax:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5395,7 +5041,7 @@ msgstr "Únor"
 msgid "February"
 msgstr "Únor"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:316
 #, c-format
 msgid "Female:"
 msgstr "Žena:"
@@ -5463,6 +5109,14 @@ msgstr "Dokončit"
 msgid "First"
 msgstr "První"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:258
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:690
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:692
+#, fuzzy, c-format
+msgid "First name:"
+msgstr "%s Jméno:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:174
 #, c-format
 msgid ""
@@ -5502,7 +5156,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:332
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
 #, c-format
 msgid "Forgot your password?"
 msgstr "Zapomněli jste heslo?"
@@ -5514,7 +5168,7 @@ msgid "Forgotten password recovery"
 msgstr "Obnoveni zapomenutého hesla"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Formulář nebyl odeslán kvůli následujícím problémům"
 
@@ -5676,7 +5330,7 @@ msgstr "OK"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "Go to detail"
 msgstr "Podrobnosti"
 
@@ -5815,11 +5469,12 @@ msgid "Holding libraries"
 msgstr "Knihovna"
 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:138
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:549
 #, c-format
 msgid "Holdings"
 msgstr "Exempláře"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:402
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:412
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
 #, c-format
 msgid "Holdings:"
@@ -5896,9 +5551,15 @@ msgstr "Domovské knihovny"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:126
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1179
 #, c-format
 msgid "Home library"
+msgstr "Domovská knihovna"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:169
+#, fuzzy, c-format
+msgid "Home library:"
 msgstr "Domovská knihovna"
 
 #. A
@@ -6000,7 +5661,7 @@ msgstr "ISSN:"
 msgid "IdRef"
 msgstr "IdRef"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:218
 #, c-format
 msgid "Identity"
 msgstr "Totožnost"
@@ -6043,6 +5704,12 @@ msgid ""
 msgstr ""
 "Pokud nekliknete na tlačítko 'Dokončit', Vaše přihlášení automaticky vyprší "
 "po %s vteřinách nečinnosti."
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:803
+#, fuzzy, c-format
+msgid ""
+"If you do not enter a password a system generated password will be created."
+msgstr "%s %s Pokud nezadáte heslo, systém nějaké vytvoří sám. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
@@ -6172,7 +5839,7 @@ msgstr "Na cestě z %s do %s od %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:29
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:111
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:474
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:484
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:540
 #, c-format
 msgid "In your cart"
@@ -6192,6 +5859,12 @@ msgstr "Indexy"
 #, c-format
 msgid "Information"
 msgstr "Informace"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:291
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:293
+#, fuzzy, c-format
+msgid "Initials:"
+msgstr "%s Iniciály:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:35
 #, c-format
@@ -6213,7 +5886,7 @@ msgstr "Neplatné číslo poličky"
 msgid "Issue"
 msgstr "Číslo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:838
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
 #, c-format
 msgid "Issue #"
 msgstr "Číslo #"
@@ -6260,12 +5933,12 @@ msgstr "Jednotku nelze vypůjčit."
 msgid "Item damaged"
 msgstr "Poškozeno"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1195
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Vaše pořadí ve frontě rezervací"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1193
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1192
 #, c-format
 msgid "Item holds"
 msgstr "Rezervace jednotky"
@@ -6281,7 +5954,7 @@ msgstr "Ztraceno"
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:159
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:420
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1174
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1173
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #, c-format
 msgid "Item type"
@@ -6426,7 +6099,7 @@ msgstr "Jazyk"
 msgid "Language: "
 msgstr "Jazyk: "
 
-#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
+#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:4
 #, c-format
 msgid "Languages"
 msgstr "Jazyky"
@@ -6450,6 +6123,11 @@ msgstr "Poslední"
 #, c-format
 msgid "Last location"
 msgstr "Poslední umístění"
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:851
+#, c-format
+msgid "Late"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
 #, c-format
@@ -6498,10 +6176,16 @@ msgstr "Knihovny"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:633
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:124
 #, c-format
 msgid "Library"
 msgstr "Knihovna"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:131
+#, fuzzy, c-format
+msgid "Library card number:"
+msgstr "%s Číslo čtenářského průkazu: "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:174
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:176
@@ -6545,13 +6229,13 @@ msgstr "Omezit na: "
 msgid "Link"
 msgstr "Odkaz"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1290
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1292
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1289
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1291
 #, c-format
 msgid "Link to resource "
 msgstr "Odkaz na zdroj "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 #, c-format
 msgid "LinkedIn"
 msgstr "LinkedIn"
@@ -6572,7 +6256,7 @@ msgstr "Seznam byl vytvořen."
 msgid "List deleted."
 msgstr "Seznam byl odstraněn."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:661
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:671
 #, c-format
 msgid "List name"
 msgstr "Název seznamu"
@@ -6583,7 +6267,7 @@ msgstr "Název seznamu"
 msgid "List name:"
 msgstr "Název seznamu:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:558
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
 #, c-format
 msgid "List name: "
 msgstr "Název seznamu: "
@@ -6601,7 +6285,7 @@ msgstr "Seznam(y), v kterých se záznam vyskytuje: "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:39
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:49
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:626
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:636
 #, c-format
 msgid "Lists"
 msgstr "Seznamy"
@@ -6616,7 +6300,7 @@ msgstr "Seznamy:"
 msgid "Loading"
 msgstr "Načítá se..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:751
 #, c-format
 msgid "Loading "
 msgstr "Načítá se... "
@@ -6668,16 +6352,16 @@ msgstr "Umístění"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:344
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:728
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:96
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:301
 #, c-format
 msgid "Log in"
 msgstr "Přihlaste se"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:470
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:425
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:427
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:530
@@ -6702,13 +6386,13 @@ msgstr "Abyste viděli své štítky, musíte být přihlášeni."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:102
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:310
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:956
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:957
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:295
 #, c-format
 msgid "Log in to your account"
 msgstr "Přihlaste se do svého účtu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:72
 #, c-format
 msgid "Log in to your account:"
@@ -6746,7 +6430,7 @@ msgstr "Přihlašovací stránka"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:85
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:73
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:296
 #, c-format
@@ -6807,7 +6491,7 @@ msgstr "MARC: %s"
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:373
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:356
 #, c-format
 msgid "Main address"
 msgstr "Hlavní adresa"
@@ -6825,7 +6509,7 @@ msgstr "Máte tip na knihu, kterou nemáme? "
 msgid "Make payment"
 msgstr "Provést platbu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:323
 #, c-format
 msgid "Male:"
 msgstr "Muž:"
@@ -6878,8 +6562,33 @@ msgstr "Zpráva odeslána"
 msgid "Messages for you"
 msgstr "Zprávy pro Vás"
 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
+#, c-format
+msgid "Missing"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:855
+#, c-format
+msgid "Missing (damaged)"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:856
+#, fuzzy, c-format
+msgid "Missing (lost)"
+msgstr "Připojení přerušeno"
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:853
+#, c-format
+msgid "Missing (never received)"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:854
+#, c-format
+msgid "Missing (sold out)"
+msgstr ""
+
 #. %1$s:  subscription.missinglist 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:827
 #, c-format
 msgid "Missing issues: %s "
 msgstr "Chybějící čísla: %s "
@@ -6904,13 +6613,13 @@ msgstr "Po"
 msgid "Monday"
 msgstr "Pondělí"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1032
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1034
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
 msgstr "Více recenzí na iDreamBooks.com"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:23
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:867
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:868
 #, c-format
 msgid "More details"
 msgstr "Více podrobností"
@@ -6945,7 +6654,7 @@ msgstr "Nejoblíbenější tituly"
 msgid "Musical recording"
 msgstr "Hudební nahrávka"
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:15
 #, c-format
 msgid "NT"
 msgstr "UT"
@@ -6956,7 +6665,7 @@ msgid "Name"
 msgstr "Jméno"
 
 #. ABBR
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:16
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:15
 msgid "Narrower Term"
 msgstr "Užší termín"
 
@@ -6995,8 +6704,8 @@ msgstr "Nový komentář k %s %s, %s%s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:71
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:497
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:650
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:507
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
 #, c-format
 msgid "New list"
 msgstr "Nový seznam"
@@ -7019,7 +6728,7 @@ msgid "New search"
 msgstr "Nové hledání"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:271
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:451
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:461
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:412
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:521
 #, c-format
@@ -7045,7 +6754,7 @@ msgstr "Novinky z %s%s%sknihovny%s"
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1093
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1092
 #, c-format
 msgid "Next"
 msgstr "Další"
@@ -7057,7 +6766,7 @@ msgid "Next &gt;&gt;"
 msgstr "Další &gt;&gt;"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:15
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
 #, c-format
 msgid "Next &raquo;"
 msgstr "Další &raquo;"
@@ -7104,8 +6813,9 @@ msgstr "Nebyla provedena žádná změna."
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:145
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:313
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:329
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:338
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:357
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:185
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:193
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:202
@@ -7113,7 +6823,7 @@ msgstr "Nebyla provedena žádná změna."
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:449
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:458
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:980
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:234
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:246
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:254
@@ -7173,6 +6883,11 @@ msgstr "Nebyly nalezeny žádné odpovídající záznamy"
 msgid "No operation parameter has been passed."
 msgstr "Žádný parametr operace neprošel."
 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:705
+#, fuzzy, c-format
+msgid "No other items."
+msgstr "%s %s %s Žádné další jednotky. %s %s "
+
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:691
 #, c-format
 msgid "No physical items for this record"
@@ -7183,7 +6898,7 @@ msgstr "K tomuto záznamu neexistují žádné jednotky"
 msgid "No private lists"
 msgstr "Žádné soukromé seznamy"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:721
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:731
 #, c-format
 msgid "No private lists."
 msgstr "Žádné soukromé seznamy."
@@ -7193,7 +6908,7 @@ msgstr "Žádné soukromé seznamy."
 msgid "No public lists"
 msgstr "Žádné veřejné seznamy."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:719
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:729
 #, c-format
 msgid "No public lists."
 msgstr "Žádné veřejné seznamy."
@@ -7253,7 +6968,7 @@ msgstr "Nehudební záznam"
 msgid "None"
 msgstr "Žádné"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:330
 #, c-format
 msgid "None specified: "
 msgstr "Není specifikováno: "
@@ -7291,6 +7006,11 @@ msgstr "Nelze vypůjčit %s"
 msgid "Not for loan (%s)"
 msgstr "Nelze vypůjčit (%s)"
 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:857
+#, c-format
+msgid "Not issued"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
 #, c-format
 msgid "Not on hold"
@@ -7302,7 +7022,7 @@ msgid "Not what you expected? Check for "
 msgstr "Není to co jste očekávali? Zkuste se podívat na "
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:176
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
 #, c-format
 msgid "Note"
 msgstr "Poznámka"
@@ -7374,7 +7094,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:151
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:747
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1189
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
 #, c-format
@@ -7413,7 +7133,7 @@ msgid ""
 msgstr ""
 "Nebyla vybrána žádná jednotka. Vyberte jednotky, které chcete prodloužit"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:124
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:130
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:60
 #, c-format
 msgid "Notice:"
@@ -7425,8 +7145,8 @@ msgid "Nov"
 msgstr "Listopad"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:601
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1039
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1041
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
 #, c-format
 msgid "Novelist Select"
 msgstr "NoveList Select"
@@ -7535,7 +7255,7 @@ msgstr ""
 msgid "Only items currently available for loan or reference"
 msgstr "Pouze jednotky které jsou dostupné k vypůjčení nebo nahlédnutí"
 
-#: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:9
+#: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:3
 #, c-format
 msgid "Open Library: "
 msgstr "Open Library: "
@@ -7555,7 +7275,7 @@ msgstr "Seřadit podle názvu"
 msgid "Order by: "
 msgstr "Řadit podle: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:963
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:964
 #, c-format
 msgid "Other editions of this work"
 msgstr "Jiná vydání tohoto díla"
@@ -7565,11 +7285,23 @@ msgstr "Jiná vydání tohoto díla"
 msgid "Other forms:"
 msgstr "Další tvary:"
 
-#. %1$s:  otheritemloop.size || 0 
+#. %1$s:  ' ( ' _ (otheritemloop.size || 0) _ ' )' 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:553
-#, c-format
-msgid "Other holdings ( %s )"
+#, fuzzy, c-format
+msgid "Other holdings %s"
 msgstr "Další jednotky ( %s )"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:306
+#, fuzzy, c-format
+msgid "Other names:"
+msgstr "%s Další jména:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:489
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:491
+#, fuzzy, c-format
+msgid "Other phone:"
+msgstr "%s Další telefon:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
 #, c-format
@@ -7588,6 +7320,12 @@ msgstr "OutputRewritablePage "
 #, c-format
 msgid "OverDrive search for '%s'"
 msgstr "Vyhledávání '%s' v databázi OverDrive"
+
+#. %1$s:  priority 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:673
+#, fuzzy, c-format
+msgid "Overall queue priority: %s"
+msgstr "Vaše pořadí ve frontě rezervací"
 
 #. %1$s:  overdues_count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
@@ -7628,9 +7366,9 @@ msgid "Parameters"
 msgstr "Parametry"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:161
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:852
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:866
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:877
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:796
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:821
 #, c-format
 msgid "Password"
 msgstr "Heslo"
@@ -7651,7 +7389,7 @@ msgid "Password updated"
 msgstr "Heslo bylo změněno"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:329
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:79
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:298
@@ -7670,7 +7408,7 @@ msgid "Patent document"
 msgstr "Patentové dokumenty"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:935
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:936
 #, c-format
 msgid "Patron comment on %s"
 msgstr "Uživatelské komentáře k %s"
@@ -7703,6 +7441,14 @@ msgstr "Oprávnění: "
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:39
 #, c-format
 msgid "Phone"
+msgstr "Telefon"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:628
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:630
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:781
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:783
+#, fuzzy, c-format
+msgid "Phone:"
 msgstr "Telefon"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:228
@@ -7754,9 +7500,9 @@ msgstr "Požadavek na článek z %s"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:7
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:437
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:440
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:447
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:46
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:506
@@ -7865,7 +7611,7 @@ msgstr "Kontaktujte knihovnu, aby vám sdělila podrobnosti."
 msgid "Please contact a librarian to verify your payment."
 msgstr "Prosím kontaktujte knihovnu, aby ověřila vaši platbu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
 #, c-format
 msgid ""
 "Please contact a library staff member if you are unsure of your mobile "
@@ -7884,12 +7630,13 @@ msgstr "Pro více informací prosím kontaktujte knihovnu."
 msgid "Please contact the library to verify your payment."
 msgstr "Pro ověření platby prosím kontaktujte knihovníka."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:72
-#, c-format
-msgid "Please correct the errors and resubmit. "
-msgstr "Opravte prosím chyby a odešlete znovu. "
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:84
+#, fuzzy, c-format
+msgid "Please correct and resubmit."
+msgstr "%s Prosím, zkuste to opravit a znovu odeslat. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid "Please enter numbers only. "
 msgstr "Prosím zadávejte pouze číslice. "
@@ -7999,7 +7746,7 @@ msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr ""
 "Zadejte prosím pouze čistý text a zkuste to znovu. %sNeznámá chyba. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:898
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:842
 #, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr ""
@@ -8033,7 +7780,7 @@ msgid "Popularity (most to least)"
 msgstr "Oblíbenost (od nejvyšší po nejnižší)"
 
 # nebo jednotce?
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:951
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:952
 #, c-format
 msgid "Post your comments on this item. "
 msgstr "Napište nebo upravte Váš komentář. "
@@ -8072,7 +7819,7 @@ msgstr "Náhled"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1084
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1083
 #, c-format
 msgid "Previous"
 msgstr "Předchozí"
@@ -8087,6 +7834,18 @@ msgstr "Předchozí záznamy"
 #, c-format
 msgid "Primary"
 msgstr "Děti 6-8 let"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:502
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:504
+#, fuzzy, c-format
+msgid "Primary email:"
+msgstr "%s Hlavní e-mail:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:463
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:465
+#, fuzzy, c-format
+msgid "Primary phone:"
+msgstr "%s Hlavní telefon:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:13
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:29
@@ -8114,8 +7873,8 @@ msgstr "Priorita:"
 msgid "Privacy"
 msgstr "Soukromí"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:590
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:592
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:600
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:602
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:83
 #, c-format
 msgid "Private"
@@ -8141,8 +7900,8 @@ msgstr "Zpracovává se..."
 msgid "Programmed texts"
 msgstr "Učební texty"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:595
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:597
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:607
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:85
 #, c-format
 msgid "Public"
@@ -8151,8 +7910,8 @@ msgstr "Veřejný"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:42
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:637
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:649
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:41
 #, c-format
@@ -8187,7 +7946,7 @@ msgid "Publication/Copyright date: Oldest to newest"
 msgstr "Datum vydání: od nejstaršího po nejnovější"
 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:56
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:393
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:342
 #, c-format
 msgid "Publication:"
@@ -8238,7 +7997,7 @@ msgstr "Vydavatel:"
 msgid "Purchase suggestions"
 msgstr "Návrhy na nákup"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:73
 #, c-format
 msgid "Quote of the Day"
 msgstr "Citát dne"
@@ -8249,20 +8008,13 @@ msgstr "Citát dne"
 msgid "RIS (Zotero, EndNote, others)"
 msgstr "RIS (Zotero, EndNote a další)"
 
-#. %1$s:  IF ( branchcode ) 
-#. %2$s:  Branches.GetName( branchcode ) 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:54
-#, c-format
-msgid "RSS feed for %s%s "
-msgstr "RSS kanál pro %s%s "
-
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
 #, c-format
 msgid "RSS feed for public list %s"
 msgstr "RSS kanál pro veřejný seznam %s"
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
 msgid "RT"
 msgstr "ST"
@@ -8274,7 +8026,7 @@ msgstr "Ohodnoť"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 msgid "Rating based on reviews of "
 msgstr "Hodnocení podle recenzí na "
@@ -8336,7 +8088,7 @@ msgid "Register a new account"
 msgstr "Vytvořit nový účet"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #, c-format
 msgid "Register here."
@@ -8363,7 +8115,7 @@ msgid "Regular print"
 msgstr "Běžný tisk"
 
 #. ABBR
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:20
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 msgid "Related Term"
 msgstr "Související termín"
 
@@ -8410,17 +8162,17 @@ msgid "Remove field"
 msgstr "Odstranit pole"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 msgid "Remove from list"
 msgstr "Odstranit ze seznamu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:469
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:479
 #, c-format
 msgid "Remove from this list"
 msgstr "Odstranit ze seznamu"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:541
 msgid "Remove selected items"
 msgstr "Odebrat vybrané položky"
 
@@ -8434,7 +8186,7 @@ msgstr "Odstranit vybraná hledání"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:202
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:708
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:718
 msgid "Remove share"
 msgstr "Zrušit sdílení"
 
@@ -8496,49 +8248,49 @@ msgstr "Vyžádat text článku"
 msgid "Request specific item type:"
 msgstr "Je požadován konkrétní druh dokumentu:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:142
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:146
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:150
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:154
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:275
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:251
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:264
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:297
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:310
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:324
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:386
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:400
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:414
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:428
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:442
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:456
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:470
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:496
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:510
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:524
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:538
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:552
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:566
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:592
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:368
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:394
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:407
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:420
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:433
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:446
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:469
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:482
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:495
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:508
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:534
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:569
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:608
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:621
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:634
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:648
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:662
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:676
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:690
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:704
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:731
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:745
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:759
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:773
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:683
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:696
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:722
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:735
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:774
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:787
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:801
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:815
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:829
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:843
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:868
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:872
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:812
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:816
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:63
 #, c-format
 msgid "Required"
@@ -8667,12 +8419,12 @@ msgstr ""
 "žádosti o rezervaci, informace o výpůjčkách a zprávy."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "Review date: "
 msgstr "Datum recenze: "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "Review result: "
 msgstr "Hodnocení recenze: "
 
@@ -8697,12 +8449,12 @@ msgstr "Recenze od Syndetics"
 msgid "SMS"
 msgstr "SMS"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:132
 #, c-format
 msgid "SMS number:"
 msgstr "SMS číslo:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:139
 #, c-format
 msgid "SMS provider:"
 msgstr "Poskytovatel SMS:"
@@ -8717,6 +8469,12 @@ msgstr "SRW-DC"
 msgid "Sa"
 msgstr "So"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:224
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:226
+#, fuzzy, c-format
+msgid "Salutation:"
+msgstr "%s Oslovení:"
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sat"
@@ -8728,7 +8486,7 @@ msgid "Saturday"
 msgstr "Sobota"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:90
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:615
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:625
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:67
@@ -8747,7 +8505,7 @@ msgstr "Uložit záznam "
 msgid "Save to Lists"
 msgstr "Uložit do seznamů"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:475
 #, c-format
 msgid "Save to another list"
 msgstr "Uložit do dalšího seznamu"
@@ -8826,7 +8584,7 @@ msgstr "Hledat tento titul v:"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:187
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:387
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:336
 msgid "Search for works by this author"
 msgstr "Hledat díla tohoto autora"
@@ -8883,6 +8641,18 @@ msgstr "Prohledávám databázi Open Library..."
 msgid "Searching OverDrive..."
 msgstr "Prohledávám databázi OverDrive..."
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:515
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:517
+#, fuzzy, c-format
+msgid "Secondary email:"
+msgstr "%s Další e-mail:"
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:478
+#, fuzzy, c-format
+msgid "Secondary phone:"
+msgstr "%s Další telefon:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:33
 #, c-format
 msgid "Section"
@@ -8897,7 +8667,7 @@ msgstr "Část:"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:355
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:456
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
@@ -8914,12 +8684,12 @@ msgid "See also:"
 msgstr "Viz též:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "See biblio"
 msgstr "Viz biblio"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1090
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -8928,7 +8698,7 @@ msgstr ""
 "%]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1082
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -8949,7 +8719,7 @@ msgstr "Vyberte konkrétní kopii:"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:277
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:48
@@ -8987,7 +8757,7 @@ msgid "Select the term(s) to search"
 msgstr "Vyberte vyhledávaný výraz"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:262
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:39
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:325
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
@@ -9096,8 +8866,8 @@ msgstr "Připojení přerušeno"
 msgid "Settings updated"
 msgstr "Nastavení aktualizováno"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:710
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1128
 #, c-format
 msgid "Share"
 msgstr "Sdílet"
@@ -9113,7 +8883,7 @@ msgid "Share a list with another patron"
 msgstr "Sdílet seznam s jiným čtenářem"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1133
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
 msgid "Share by email"
 msgstr "Sdílet e-mailem"
 
@@ -9123,17 +8893,17 @@ msgid "Share list"
 msgstr "Sdílet seznam"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1132
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
 msgid "Share on Delicious"
 msgstr "Sdílet na Delicious"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1129
 msgid "Share on Facebook"
 msgstr "Sdílet na Facebooku"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1131
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1130
 msgid "Share on LinkedIn"
 msgstr "Sdílet na LinkedIn"
 
@@ -9187,7 +8957,7 @@ msgid "Show more options"
 msgstr "Zobrazit více možností"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1074
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1073
 msgid ""
 "Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])"
 msgstr ""
@@ -9236,7 +9006,7 @@ msgstr "Zobrazeny pouze dostupné jednotky."
 msgid "Sign in with your Email"
 msgstr "Přihlásit se pomocí e-mailu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:94
 #, c-format
 msgid "Sign in with your email"
@@ -9252,7 +9022,7 @@ msgstr "Podobné jednotky"
 msgid "Simple DC-RDF"
 msgstr "Jednoduchý DC-RDF"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:124
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:130
 #, c-format
 msgid ""
 "Some charges for text messages may be incurred when using this service. "
@@ -9407,7 +9177,7 @@ msgstr "Řadit podle:"
 msgid "Sort by: "
 msgstr "Řadit podle: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:571
 #, c-format
 msgid "Sort this list by: "
 msgstr "Seřadit seznam podle: "
@@ -9433,6 +9203,16 @@ msgstr "Standardní číslo"
 msgid "Standard number (ISBN, ISSN or other):"
 msgstr "Standardní číslo (ISBN, ISSN nebo jiné):"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:589
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:591
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:742
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:744
+#, fuzzy, c-format
+msgid "State:"
+msgstr "%s Stát:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
 #, c-format
 msgid "Statistics"
@@ -9443,8 +9223,8 @@ msgstr "Statistiky"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:179
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:748
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1188
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:841
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1187
 #, c-format
 msgid "Status"
 msgstr "Stav"
@@ -9471,6 +9251,17 @@ msgstr "Třetí krok: Klikněte na tlačítko 'Dokončit'"
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "Druhý krok: Oskenujte čárový kód každé jednotky, jeden po druhém"
+
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:860
+#, c-format
+msgid "Stopped"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:362
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:364
+#, fuzzy, c-format
+msgid "Street number:"
+msgstr "%s Číslo popisné:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -9521,7 +9312,7 @@ msgstr "Předmětová hesla: %s "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:90
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:933
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:877
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:188
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:307
 #, c-format
@@ -9534,13 +9325,13 @@ msgid "Submit and close this window"
 msgstr "Potvrdit a zavřít toto okno"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
 msgid "Submit changes"
 msgstr "Potvrdit změny"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:927
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:871
 msgid "Submit update request"
 msgstr "Odeslat žádost o opravu údajů"
 
@@ -9587,12 +9378,14 @@ msgstr "Přihlásit se k odběru výsledků tohoto vyhledávání"
 msgid "Subscription"
 msgstr "Předplatné"
 
+#. For the first occurrence,
 #. %1$s:  subscription.histstartdate | $KohaDates 
 #. %2$s:  IF ( subscription.histenddate ) 
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:824
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "Předplatné od %s do%s %s %s současnosti%s"
@@ -9659,6 +9452,14 @@ msgstr "Ne"
 msgid "Sunday"
 msgstr "Neděle"
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:245
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:679
+#, fuzzy, c-format
+msgid "Surname:"
+msgstr "%s Příjmení:"
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:337
 #, c-format
 msgid "Surveys"
@@ -9689,7 +9490,7 @@ msgid "Suspend your hold on "
 msgstr "Přerušit rezervaci na "
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:8
+#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:4
 msgid "Switch languages"
 msgstr "Přepínat jazyky"
 
@@ -9730,7 +9531,7 @@ msgstr "Oblak štítků"
 msgid "Tag status here."
 msgstr "Stav vkládaného štítku."
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:456
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:466
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:417
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:526
@@ -9760,7 +9561,7 @@ msgstr "Přidané štítky:  "
 msgid "Tags from this library:"
 msgstr "Štítky z této knihovny:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:422
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:432
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:450
 #, c-format
 msgid "Tags:"
@@ -9810,7 +9611,7 @@ msgid "Thank you!"
 msgstr "Děkujeme!"
 
 #. %1$s:  subscription.opacdisplaycount 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:836
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "%s nejnovější čísla pro toto předplatné:"
@@ -10010,7 +9811,7 @@ msgstr ""
 msgid "The item is already in your cart"
 msgstr "Tuto jednotku už v košíku máte"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:601
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:611
 #, c-format
 msgid ""
 "The library has disabled the ability for patrons to create new public lists. "
@@ -10113,7 +9914,7 @@ msgstr "Uživatel číslo "
 msgid "There are %s subscription(s) associated with this title."
 msgstr "Počet odběrů spojených s tímto titulem: %s."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:947
 #, c-format
 msgid "There are no comments for this item."
 msgstr "Zatím nikdo nekomentoval."
@@ -10129,7 +9930,7 @@ msgstr "Neexistují žádné čekající návrhy na nákup."
 msgid "There is a charge of %s for placing this hold "
 msgstr "Za rezervaci je účtován poplatek %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:151
 #, c-format
 msgid "There is no minimum or maximum character length."
 msgstr "Není stanoven minimální ani maximální počet znaků."
@@ -10247,7 +10048,7 @@ msgid "This list does not exist."
 msgstr "Tento seznam neexistuje."
 
 #. %1$s:  IF Koha.Preference( 'opacuserlogin' ) == 1 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:518
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:528
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
@@ -10262,8 +10063,8 @@ msgstr "Tato zpráva může mít následující důvod(y):"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:571
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:574
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1149
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1144
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1148
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -10333,8 +10134,8 @@ msgstr "Časový limit při čekání na potvrzení tisku"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:222
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:224
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:564
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:566
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:574
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:576
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
@@ -10437,6 +10238,12 @@ msgstr "Témata"
 msgid "Total due"
 msgstr "Celkový dluh"
 
+#. %1$s:  holds_count 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:667
+#, c-format
+msgid "Total holds: %s"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
 #, c-format
 msgid "Treaties "
@@ -10457,13 +10264,13 @@ msgstr "Út"
 msgid "Tuesday"
 msgstr "Úterý"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1135
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1134
 #, c-format
 msgid "Tweet"
 msgstr "Tweet"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:74
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:673
 #, c-format
 msgid "Type"
 msgstr "Typ"
@@ -10484,12 +10291,12 @@ msgstr "Vložte hledaný výraz"
 msgid "Type:"
 msgstr "Typ:"
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:17
 #, c-format
 msgid "UF"
 msgstr "Viz"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1186
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1185
 #, fuzzy, c-format
 msgid "URL"
 msgstr "Odkaz(y)"
@@ -10519,7 +10326,7 @@ msgid "Unable to connect to PayPal."
 msgstr "Nepodařilo se připojit ke službě PayPal."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:948
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:892
 msgid "Unable to update your setting!"
 msgstr "Nepodařilo se aktualizovat vaše nastavení!"
 
@@ -10564,7 +10371,7 @@ msgstr "Unifikovaný název: %s "
 msgid "Uniform titles:"
 msgstr "Unifikovaný název:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:141
 #, c-format
 msgid "Unknown"
 msgstr "Neznámý"
@@ -10591,7 +10398,7 @@ msgstr ""
 "Použijte horní menu pro navigaci mezi jednotlivými částmi systému Koha."
 
 #. ABBR
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:18
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:17
 msgid "Used For"
 msgstr "Používáno pro"
 
@@ -10639,7 +10446,7 @@ msgstr ""
 msgid "VHS tape / Videocassette"
 msgstr "Videokazeta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid "Verification:"
 msgstr "Ověření:"
@@ -10663,9 +10470,9 @@ msgstr "Zobrazit vše"
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:76
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:356
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:359
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:366
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:369
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:371
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:321
@@ -10684,7 +10491,7 @@ msgid "View your search history"
 msgstr "Zobrazit Vaši historii hledání"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1185
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1184
 #, c-format
 msgid "Vol info"
 msgstr "Část"
@@ -10785,7 +10592,7 @@ msgstr "Vybrané návrhy: "
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:764
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:325
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 msgid "With selected titles: "
@@ -10808,8 +10615,8 @@ msgstr "Chcete vytisknout lístek?"
 msgid "Written on %s by %s"
 msgstr "Dne %s zapsala knihovna %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:574
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:576
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:584
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:253
 #, c-format
 msgid "Year"
@@ -10857,7 +10664,7 @@ msgstr ""
 "Pokoušíte se přihlásit z jiné IP adresy. Zadejte přihlašovací údaje ještě "
 "jednou prosím."
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:161
 #, c-format
 msgid "You are not allowed to call this page directly"
 msgstr "Nemáte oprávnění k přímému přístupu k této stránce."
@@ -11163,7 +10970,7 @@ msgid "You will receive an email shortly. "
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -11255,12 +11062,12 @@ msgstr "Vaše historie ledání v katalogu je prázdná."
 msgid "Your checkout history"
 msgstr "Historie výpůjček"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:903
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:904
 #, c-format
 msgid "Your comment"
 msgstr "Váš komentář"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:905
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:906
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr "Váš komentář (náhled, čeká na schválení)"
@@ -11331,8 +11138,8 @@ msgstr "Váš seznam : %s "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:57
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:631
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:643
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:17
 #, c-format
 msgid "Your lists"
@@ -11367,7 +11174,7 @@ msgstr "Vaše heslo bylo změněno "
 #. For the first occurrence,
 #. %1$s:  minpasslen 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:856
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:800
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Heslo musí být alespoň %s znaků dlouhé."
@@ -11434,7 +11241,7 @@ msgid "Your search returned %s results."
 msgstr "Váš dotaz vrátil %s výsledků."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:948
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:892
 msgid "Your setting has been updated!"
 msgstr "Vaše nastavení bylo aktualizováno!"
 
@@ -11462,6 +11269,16 @@ msgstr ""
 msgid "Your userid was not found in the database. Please try again."
 msgstr "Vaše uživatelské číslo nebylo nalezeno. Zkuste to znovu."
 
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:427
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:429
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:602
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:604
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:755
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:757
+#, fuzzy, c-format
+msgid "ZIP/Postal code:"
+msgstr "%s PSČ:"
+
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 msgid "[ New list ]"
@@ -11486,82 +11303,13 @@ msgstr "[% LibraryName |html %] Hledat v RSS"
 msgid "[% limit or"
 msgstr "[% limit or"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:113
-#, c-format
-msgid ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
-"%%] "
+#. %1$s:  HTML5MediaParent 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1013
+#, fuzzy, c-format
+msgid "[%s tag not supported by your browser.]"
 msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('itemtype')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('itemtype').size > 0 and expanded_options ) ) "
-"%%] "
-
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:164
-#, c-format
-msgid ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
-"%%] "
-msgstr ""
-"[%% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('pubdate')."
-"size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and "
-"OpacAdvSearchMoreOptions.grep('pubdate').size > 0 and expanded_options ) ) "
-"%%] "
-
-#: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:1
-#, c-format
-msgid ""
-"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
-"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
-"OpacLangSelectorMode == 'top') ) %%] "
-msgstr ""
-"[%% IF ( ( opaclanguagesdisplay ) && ( ! one_language_enabled ) && "
-"( languages_loop ) && ( OpacLangSelectorMode == 'both' || "
-"OpacLangSelectorMode == 'top') ) %%] "
-
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:107
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
-"type=seeals.type authid=seeals.authid %%] "
-msgstr ""
-"[%% PROCESS showreference heading=seeals.heading linkType='seealso' "
-"type=seeals.type authid=seeals.authid %%] "
-
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:95
-#, c-format
-msgid ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
-"type=seefro.type %%] "
-msgstr ""
-"[%% PROCESS showreference heading=seefro.heading linkType='seefrom' "
-"type=seefro.type %%] "
-
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:118
-#, c-format
-msgid ""
-"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
-"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
-"defined('branchcode') && hidden.defined('categorycode') %%] "
-msgstr ""
-"[%% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha."
-"Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden."
-"defined('branchcode') && hidden.defined('categorycode') %%] "
-
-#: opac-tmpl/bootstrap/en/includes/openlibrary-readapi.inc:1
-#, c-format
-msgid ""
-"[%%# Input params: bib - search result biblio record %%] [%% IF "
-"OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
-"normalized_oclc ) %%] "
-msgstr ""
-"[%%# Input params: bib - search result biblio record %%] [%% IF "
-"OpenLibrarySearch && ( bib.normalized_isbn || bib.lccn || bib."
-"normalized_oclc ) %%] "
+"<%s controls preload=none> <%s src=\"%s\"%s /> [%s tagy nejsou podporovány "
+"vaším prohlížečem.] "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
@@ -11585,7 +11333,6 @@ msgstr "identifikátor určující místo, kam se má jednotka doručit k vyzved
 msgid "an identifier used to look up the patron in Koha"
 msgstr "identifikátor používaný k vyhledání uživatele v systému Koha"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:29
 #, c-format
 msgid "and"
@@ -11612,7 +11359,7 @@ msgid "ask for a discharge"
 msgstr "Požádat o ukončení"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "average rating: "
 msgstr "průměrné hodnocení: "
 
@@ -11648,12 +11395,13 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:62
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "by"
 msgstr "podle"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:121
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:595
 #, c-format
 msgid "by "
@@ -11737,14 +11485,14 @@ msgstr "pro více informací o možnostech a nastavení této funkce."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:571
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:574
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1151
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1145
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1150
 #, c-format
 msgid "here"
 msgstr "zde"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "iDreamBooks.com rating"
 msgstr "Hodnocení podle iDreamBooks.com"
 
@@ -11985,7 +11733,7 @@ msgid "purchase suggestion"
 msgstr "Pošlete nám návrh na její nákup."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "hodnocení podle recenzí na iDreamBooks.com"
 
@@ -12035,7 +11783,7 @@ msgstr "return_type"
 msgid "schema"
 msgstr "schéma"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:521
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:531
 #, c-format
 msgid "search"
 msgstr "hledání"
@@ -12045,7 +11793,7 @@ msgstr "hledání"
 msgid "secondary email address"
 msgstr "vedlejší e-mailová adresa"
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:105
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:101
 #, c-format
 msgid "see also:"
 msgstr "podívejte se také na:"
@@ -12210,13 +11958,13 @@ msgstr ""
 msgid "there was a problem processing your payment"
 msgstr "došlo k chybě při zpracování vaší platby"
 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:653
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:728
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:738
 #, c-format
 msgid "to create new lists."
 msgstr "pro vytvoření nových seznamů."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:956
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:957
 #, c-format
 msgid "to post a comment."
 msgstr "pro publikování komentáře."
@@ -12236,7 +11984,7 @@ msgstr "do "
 msgid "up to "
 msgstr "až do "
 
-#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:93
+#: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:92
 #, c-format
 msgid "used for/see from:"
 msgstr "použito pro/viz zde:"
@@ -12268,7 +12016,7 @@ msgid "view plain"
 msgstr "jednoduchý náhled"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "votes"
 msgstr "hlasů"
 
@@ -12325,11 +12073,11 @@ msgid "will be sent shortly to %s."
 msgstr "košík bude brzy odeslán na: %s."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "with biblionumber"
 msgstr "s číslem záznamu (biblionumber)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:127
+#: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:133
 #, c-format
 msgid "would be entered as "
 msgstr "by mělo být zapsáno jako "
@@ -12386,7 +12134,7 @@ msgid "your purchase suggestions"
 msgstr "Návrhy na nákup"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1360
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1359
 msgid "your rating: "
 msgstr "vaše hodnocení: "
 
