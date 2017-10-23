@@ -34,6 +34,8 @@ my $builder = t::lib::TestBuilder->new();
 
 $ENV{ DEBUG } = 0;
 
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+
 subtest 'Tests for CanBookBeIssued related to dateexpiry' => sub {
     plan tests => 4;
     can_book_be_issued();
@@ -47,7 +49,10 @@ sub can_book_be_issued {
     my $item    = $builder->build( { source => 'Item' } );
     my $patron  = $builder->build(
         {   source => 'Borrower',
-            value  => { dateexpiry => '9999-12-31' }
+            value  => {
+                dateexpiry => '9999-12-31',
+                categorycode => $patron_category->{categorycode},
+            }
         }
     );
     $patron->{flags} = C4::Members::patronflags( $patron );
@@ -60,7 +65,10 @@ sub can_book_be_issued {
     $item = $builder->build( { source => 'Item' } );
     $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { dateexpiry => '0000-00-00' }
+            value  => {
+                dateexpiry => '0000-00-00',
+                categorycode => $patron_category->{categorycode},
+            }
         }
     );
     $patron->{flags} = C4::Members::patronflags( $patron );
@@ -71,7 +79,10 @@ sub can_book_be_issued {
     $item = $builder->build( { source => 'Item' } );
     $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { dateexpiry => output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } ) },
+            value  => {
+                dateexpiry => output_pref( { dt => $tomorrow, dateonly => 1, dateformat => 'sql' } ),
+                categorycode => $patron_category->{categorycode},
+            },
         }
     );
     $patron->{flags} = C4::Members::patronflags( $patron );
@@ -85,7 +96,12 @@ sub calc_date_due {
 
     # this triggers the compare between expiry and due date
 
-    my $patron = $builder->build( { source => 'Borrower' } );
+    my $patron = $builder->build({
+        source => 'Borrower',
+        value  => {
+            categorycode => $patron_category->{categorycode},
+        }
+    });
     my $item   = $builder->build( { source => 'Item' } );
     my $branch = $builder->build( { source => 'Branch' } );
     my $today  = dt_from_string();
