@@ -22,7 +22,12 @@ INSERT INTO `creator_templates` VALUES (1,1,'Avery 5160 | 1 x 2-5/8','3 Spalten,
 UNLOCK TABLES;
 
 LOCK TABLES `printers_profile` WRITE;
-INSERT INTO `printers_profile` VALUES (1,'Laserdrucker Bibliothek',1,'Bypass',-2,9,3,0,'POINT','Labels'),(11,'Laserdrucker Bibliothek',1,'Fach 1',0,0,0,0,'POINT','Labels'),(16,'Testdrucker 01',23,'Testfach',0,0,0,0,'POINT','Patroncards');
+INSERT INTO `printers_profile` ( profile_id, printer_name, template_id, paper_bin, offset_horz, offset_vert, creep_horz, creep_vert, units, creator ) VALUES
+( 1,'Laserdrucker Bibliothek',  1,'Bypass', -2,9,3,0,'POINT','Labels'),
+(13,'Laserdrucker Bibliothek',  7,'Fach 1',  0,0,0,0,'POINT','Labels'),
+(14,'Laserdrucker Bibliothek', 12,'Fach 2',  0,0,0,0,'POINT','Labels'),
+(16,'Testdrucker 01',          23,'Testfach',0,0,0,0,'POINT','Patroncards'),
+(22,'Laserdrucker Bibliothek',  0,'Fach 3',  0,0,0,0,'POINT','Labels');
 UNLOCK TABLES;
 
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

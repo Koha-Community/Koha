@@ -22,7 +22,7 @@ INSERT INTO `creator_templates` VALUES (1,1,'Avery 5160 | 1 x 2-5/8','3 columns,
 UNLOCK TABLES;
 
 LOCK TABLES `printers_profile` WRITE;
-INSERT INTO `printers_profile` ( profile_id, printer_name, template_id, paper_bin, offset_horz, offset_vert, creek_horz, creep_vert, units, creator ) VALUES
+INSERT INTO `printers_profile` ( profile_id, printer_name, template_id, paper_bin, offset_horz, offset_vert, creep_horz, creep_vert, units, creator ) VALUES
 ( 1,'Library Laser',   1,'Bypass', -2,9,3,0,'POINT','Labels'),
 (13,'Library Laser',   7,'Tray 1',  0,0,0,0,'POINT','Labels'),
 (14,'Library Laser',  12,'Tray 2',  0,0,0,0,'POINT','Labels'),
