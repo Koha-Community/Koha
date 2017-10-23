@@ -14,7 +14,7 @@ is( t::lib::Dates::compare( $dt_2, $dt_1 ), 1,  '2018 is after 2017' );
 is( t::lib::Dates::compare( $date_1, $date_2 ), -1, '2017 is before 2018 (strings comparison)' );
 is( t::lib::Dates::compare( $date_2, $date_1 ), 1,  '2018 is after 2017 (strings comparison)' );
 
-my $dt_3 = $dt_1->clone->subtract( seconds => 59 );
+my $dt_3 = $dt_1->clone->subtract( seconds => 5 );
 is( t::lib::Dates::compare( $dt_1, $dt_3 ),
     0, 'If there is less than 1min, the dates are considered identicals' );
 is( t::lib::Dates::compare( $dt_3, $dt_1 ),
