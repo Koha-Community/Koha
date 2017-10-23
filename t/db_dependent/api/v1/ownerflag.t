@@ -120,12 +120,7 @@ sub create_user_and_session {
             lost         => 0,
         }
     });
-    my $session = C4::Auth::get_session('');
-    $session->param('number', $patron->{ borrowernumber });
-    $session->param('id', $patron->{ userid });
-    $session->param('ip', '127.0.0.1');
-    $session->param('lasttime', time());
-    $session->flush;
+    my $session = t::lib::Mocks::mock_session({borrower => $patron});
 
     return ($patron, $session);
 }

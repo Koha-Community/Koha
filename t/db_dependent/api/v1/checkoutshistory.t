@@ -58,12 +58,7 @@ Koha::Auth::PermissionManager->grantPermission(
     'circulate', 'circulate_remaining_permissions'
 );
 
-my $session = C4::Auth::get_session('');
-$session->param('number', $loggedinuser->{ borrowernumber });
-$session->param('id', $loggedinuser->{ userid });
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
+my $session = t::lib::Mocks::mock_session({borrower => $loggedinuser});
 
 my $nopermission = $builder->build({
     source => 'Borrower',
@@ -75,12 +70,7 @@ my $nopermission = $builder->build({
     }
 });
 
-my $session_nopermission = C4::Auth::get_session('');
-$session_nopermission->param('number', $nopermission->{ borrowernumber });
-$session_nopermission->param('id', $nopermission->{ userid });
-$session_nopermission->param('ip', '127.0.0.1');
-$session_nopermission->param('lasttime', time());
-$session_nopermission->flush;
+my $session_nopermission = t::lib::Mocks::mock_session({borrower => $nopermission});
 
 my $borrower = $builder->build({ source => 'Borrower' });
 my $borrowernumber = $borrower->{borrowernumber};

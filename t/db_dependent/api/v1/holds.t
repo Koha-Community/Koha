@@ -72,12 +72,7 @@ my $nopermission = $builder->build({
 });
 my $nopermission_patron = Koha::Patrons->find($nopermission->{borrowernumber});
 
-my $session_nopermission = C4::Auth::get_session('');
-$session_nopermission->param('number', $nopermission->{ borrowernumber });
-$session_nopermission->param('id', $nopermission->{ userid });
-$session_nopermission->param('ip', '127.0.0.1');
-$session_nopermission->param('lasttime', time());
-$session_nopermission->flush;
+my $session_nopermission = t::lib::Mocks::mock_session({borrower => $nopermission_patron});
 
 my $borrower = Koha::Patrons->find($builder->build({
     source => 'Borrower',
@@ -131,24 +126,9 @@ my $borrower3 = Koha::Patrons->find($builder->build({
 my $borrowernumber3 = $borrower3->borrowernumber;
 
 # Get sessions
-my $session = C4::Auth::get_session('');
-$session->param('number', $borrower->borrowernumber);
-$session->param('id', $borrower->userid);
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
-my $session2 = C4::Auth::get_session('');
-$session2->param('number', $borrower2->borrowernumber);
-$session2->param('id', $borrower2->userid);
-$session2->param('ip', '127.0.0.1');
-$session2->param('lasttime', time());
-$session2->flush;
-my $session3 = C4::Auth::get_session('');
-$session3->param('number', $borrower3->borrowernumber);
-$session3->param('id', $borrower3->userid);
-$session3->param('ip', '127.0.0.1');
-$session3->param('lasttime', time());
-$session3->flush;
+my $session =  t::lib::Mocks::mock_session({borrower => $borrower});
+my $session2 = t::lib::Mocks::mock_session({borrower => $borrower2});
+my $session3 = t::lib::Mocks::mock_session({borrower => $borrower3});
 
 my $biblionumber = create_biblio('RESTful Web APIs');
 my $itemnumber = create_item($biblionumber, 'TEST000001');

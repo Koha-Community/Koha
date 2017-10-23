@@ -162,12 +162,7 @@ sub create_user_and_session {
         }
     });
 
-    my $borrowersession = C4::Auth::get_session('');
-    $borrowersession->param('number', $borrower->{ borrowernumber });
-    $borrowersession->param('id', $borrower->{ userid });
-    $borrowersession->param('ip', '127.0.0.1');
-    $borrowersession->param('lasttime', time());
-    $borrowersession->flush;
+    my $borrowersession = t::lib::Mocks::mock_session({borrower => $borrower});
 
     return ($borrower->{borrowernumber}, $borrowersession->id);
 }

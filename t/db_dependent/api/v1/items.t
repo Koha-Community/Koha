@@ -110,12 +110,7 @@ sub create_session {
 
     my @sessions;
     foreach $borrower (@borrowers) {
-        my $session = C4::Auth::get_session('');
-        $session->param('number', $borrower->{borrowernumber});
-        $session->param('id', $borrower->{userid});
-        $session->param('ip', '127.0.0.1');
-        $session->param('lasttime', time());
-        $session->flush;
+        my $session = t::lib::Mocks::mock_session({borrower => $borrower});
         push @sessions, $session;
     }
 

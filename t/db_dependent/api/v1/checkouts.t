@@ -61,12 +61,7 @@ Koha::Auth::PermissionManager->grantPermission(
     'circulate', 'circulate_remaining_permissions'
 );
 
-my $session = C4::Auth::get_session('');
-$session->param('number', $loggedinuser->{ borrowernumber });
-$session->param('id', $loggedinuser->{ userid });
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
+my $session = t::lib::Mocks::mock_session({borrower => $loggedinuser});
 
 my $patron = $builder->build({ source => 'Borrower',
     value => {
@@ -78,12 +73,7 @@ my $patron = $builder->build({ source => 'Borrower',
     }
 });
 my $borrowernumber = $patron->{borrowernumber};
-my $patron_session = C4::Auth::get_session('');
-$patron_session->param('number', $borrowernumber);
-$patron_session->param('id', $patron->{ userid });
-$patron_session->param('ip', '127.0.0.1');
-$patron_session->param('lasttime', time());
-$patron_session->flush;
+my $patron_session = t::lib::Mocks::mock_session({borrower => $patron});
 
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 my $module = new Test::MockModule('C4::Context');

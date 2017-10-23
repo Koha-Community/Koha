@@ -292,12 +292,7 @@ sub create_user_and_session {
         }
     });
 
-    my $session = C4::Auth::get_session('');
-    $session->param('number', $borrower->{ borrowernumber });
-    $session->param('id', $borrower->{ userid });
-    $session->param('ip', '127.0.0.1');
-    $session->param('lasttime', time());
-    $session->flush;
+    my $session = t::lib::Mocks::mock_session({borrower => $borrower});
     my $patron = Koha::Patrons->find($borrower->{borrowernumber});
 
     return ($patron, $session);

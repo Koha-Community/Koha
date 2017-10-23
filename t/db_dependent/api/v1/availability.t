@@ -392,12 +392,7 @@ sub create_user_and_session {
     );
 
     # Create a session for the authorized user
-    my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->{borrowernumber} );
-    $session->param( 'id',       $user->{userid} );
-    $session->param( 'ip',       '127.0.0.1' );
-    $session->param( 'lasttime', time() );
-    $session->flush;
+    my $session = t::lib::Mocks::mock_session({borrower => $user});
 
     if ( $args->{authorized} ) {
         $dbh->do( "
