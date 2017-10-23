@@ -27,13 +27,19 @@ use Koha::AuthorisedValues;
 use Koha::Illrequests;
 use Koha::Libraries;
 
-my $cgi = CGI->new;
+our $cgi = CGI->new;
 my $illRequests = Koha::Illrequests->new;
 
 # Grab all passed data
 # 'our' since Plack changes the scoping
 # of 'my'
 our $params = $cgi->Vars();
+
+# Leave immediately if ILLModule is disabled
+unless ( C4::Context->preference('ILLModule') ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 
 my $op = $params->{method} || 'illlist';
 
