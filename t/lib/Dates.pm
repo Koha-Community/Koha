@@ -4,6 +4,13 @@ use Modern::Perl;
 use Test::More;
 use Koha::DateUtils;
 use DateTime;
+
+=head1 NAME
+
+t::lib::Dates.pm - test helper module for working with dates
+
+=head1 METHODS
+
 =head2 compare
 
   compare( $got_dt, $expected_dt, $test_description );
