@@ -14806,6 +14806,7 @@ if( CheckVersion( $DBversion ) ) {
             ('Writeoff'),
             ('Payment'),
             ('Lost Item'),
+            ('Processing Fee'),
             ('Manual Debit'),
             ('Reverse Payment'),
             ('Forgiven'),
@@ -14845,6 +14846,17 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 12768 - Insert system preferences useDefaultReplacementCost and ProcessingFeeNote + Add new columns defaultreplacecost and processfee to the itemtypes table)\n";
 }
+
+$DBversion = '17.06.00.019';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Processing Fee' );
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 12768 - Add 'Processing Fee' to the account_offset_types table if missing)";
+}
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
