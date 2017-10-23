@@ -34,10 +34,12 @@ UNLOCK TABLES;
 
 LOCK TABLES `printers_profile` WRITE;
 /*!40000 ALTER TABLE `printers_profile` DISABLE KEYS */;
-INSERT INTO `printers_profile` VALUES
-(1,'Imprimante laser',1,'Bypass',-2,9,3,0,'POINT','Labels'),
-(11,'Imprimante laser',1,'Tray 1',0,0,0,0,'POINT','Labels'),
-(16,'Imprimante de test 01',23,'Test Bin',0,0,0,0,'POINT','Patroncards');
+INSERT INTO `printers_profile` ( profile_id, printer_name, template_id, paper_bin, offset_horz, offset_vert, creep_horz, creep_vert, units, creator ) VALUES
+( 1,'Imprimante laser',      1,'Bypass', -2,9,3,0,'POINT','Labels'),
+(13,'Imprimante laser',      7,'Tray 1',  0,0,0,0,'POINT','Labels'),
+(14,'Imprimante laser',     12,'Tray 2',  0,0,0,0,'POINT','Labels'),
+(16,'Imprimante de test 01',23,'Test Bin',0,0,0,0,'POINT','Patroncards'),
+(22,'Imprimante laser',      0,'Tray 3',  0,0,0,0,'POINT','Labels');
 /*!40000 ALTER TABLE `printers_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
