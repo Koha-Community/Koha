@@ -1,5 +1,5 @@
-# RELEASE NOTES FOR KOHA 17.05.04
-20 sept. 2017
+# RELEASE NOTES FOR KOHA 17.05.05
+23 oct. 2017
 
 Koha is the first free and open source software library automation
 package (ILS). Development is sponsored by libraries of varying types
@@ -8,108 +8,200 @@ website for the Koha project is:
 
 - [Koha Community](http://koha-community.org)
 
-Koha 17.05.04 can be downloaded from:
+Koha 17.05.05 can be downloaded from:
 
-- [Download](http://download.koha-community.org/koha-17.05.04.tar.gz)
+- [Download](http://download.koha-community.org/koha-17.05.05.tar.gz)
 
 Installation instructions can be found at:
 
 - [Koha Wiki](http://wiki.koha-community.org/wiki/Installation_Documentation)
 - OR in the INSTALL files that come in the tarball
 
-Koha 17.05.04 is a bugfix/maintenance release.
+Koha 17.05.05 is a bugfix/maintenance release.
 
-It includes 36 bugfixes.
+It includes 6 enhancements, 70 bugfixes.
 
+
+
+
+## Enhancements
+
+### Acquisitions
+
+- [[19257]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19257) Warn when reopening a basket
+
+### Circulation
+
+- [[18292]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18292) Tests do not need to return 1;
+
+### Hold requests
+
+- [[14353]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14353) Show 'damaged' and other status on the 'place holds' page in staff
+
+### OPAC
+
+- [[17834]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17834) Change library news text for single-branch libraries
+
+### Patrons
+
+- [[19258]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19258) Warn when paying or writing off a fine or charge
+
+### Tools
+
+- [[18871]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18871) It is unclear how to view a patron list
 
 ## Security bugs fixed
 
-- [[19086]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19086) Multiple cross-site scripting vulnerabilities
-- [[19103]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19103) Stored XSS in itemtypes.pl - patron-attr-types.pl - matching-rules.pl
-- [[19108]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19108) Stored XSS in multiple scripts
-- [[19125]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19125) XSS - members.pl
-- [[19127]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19127) Stored XSS in csv-profiles.pl
-- [[19128]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19128) XSS - patron-attr-types.tt, authorised_values.tt and categories.tt 
+- [[18956]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18956) Possibleprivacy breach with OPAC password recovery
+- [[19117]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19117) paycollect.pl is vulnerable for CSRF attacks
+- [[19333]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19333) XSS vulnerability in opac-shelves 
 
 ## Critical bugs fixed
 
 ### Acquisitions
 
-- [[18900]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18900) wrong number format in receiving order
-- [[18906]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18906) Superlibrarian and budget_manage_all users should always see all funds
-- [[19194]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19194) Internal server error when receiving an order with no itemtype
-- [[19332]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19332) Basket grouping PDF and CSV exports empty
+- [[18351]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18351) No warning when deleting budgets that have funds attached
+- [[19120]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19120) Order cancelled status is reset on basket open
+- [[19372]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19372) Selecting MARC framework doesn't work when adding to basket from an external source
 
-### Authentication
+### Cataloging
 
-- [[18046]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18046) Problem with redirect on logout with CAS
+- [[19350]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19350) Holds without link in 773 trigger SQL::Abstract::puke
 
-### Circulation
+### Hold requests
 
-- [[19053]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19053) Auto renewal flag is not kept if a confirmation is needed
-- [[19205]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19205) Pay selected fine generates 500 error
-- [[19208]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19208) Pay select option doesn't pay the selected fine
+- [[19116]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19116) Holds not set to waiting when "Confirm" is used
+- [[19260]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19260) Reservations / holds marked as problems being seen as expired ones and deleted wrongly.
 
-### Command-line Utilities
+### Lists
 
-- [[18927]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18927) koha-rebuild-zebra is failing with "error retrieving biblio"
-
-### I18N/L10N
-
-- [[18331]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18331) Translated CSV exports need to be fixed once and for all
-
-### Installation and upgrade (command-line installer)
-
-- [[19067]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19067) clubs/ is not correctly mapped in Makefile.PL
+- [[19343]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19343) Private lists displayed in search results list
 
 ### OPAC
 
-- [[19235]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19235) password visible in OPAC self registration
+- [[19122]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19122) IncludeSeeFromInSearches is broken
+- [[19366]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19366) PatronSelfRegistrationEmailMustBeUnique pref makes it impossible to submit updates via OPAC
 
 ### Patrons
 
-- [[19214]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19214) Patron clubs: Template process failed: undef error - Cannot use "->find" in list context
+- [[19418]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19418) Patron search is broken
 
-### Reports
+### Searching - Elasticsearch
 
-- [[18898]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18898) Some permissions for Reports can be bypassed
+- [[18318]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18318) Wrong unicode tokenization
 
-### SIP2
+### Serials
 
-- [[15438]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15438) Checking out an on-hold item sends holder's borrowernumber in AF (screen message) field.
-- [[18996]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18996) SIP sets ok flag to true for refused checkin for data corruption
-
-### Searching
-
-- [[16976]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16976) Authorities searches with double quotes gives ZOOM error 20003
-- [[18624]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18624) Software error when searching authorities in Elasticsearch - incorrect parameter "any" should be "all"
-
-### Tools
-
-- [[19023]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19023) inventory tool performance
-- [[19049]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19049) Fix regression on stage-marc-import with to_marc plugin
-- [[19073]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19073) Can't change library with patron batch modification tool
-- [[19163]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19163) Critical typo in stage-marc-import process
+- [[19323]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19323) subscription edit permission issue
 
 
 ## Other bugs fixed
 
+### Acquisitions
+
+- [[18941]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18941) C4::Budgets GetBudgetByCode should return active budgets over inactive budgets
+- [[19024]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19024) Order cancelled status is reset on basket close
+- [[19118]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19118) Due to wrong variable name passed vendor name is  not coming in browser title bar
+
 ### Architecture, internals, and plumbing
 
-- [[18921]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18921) Resolve a few warnings in C4/XSLT.pm
+- [[13012]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13012) suggestion.suggesteddate should be set to NOW if not defined
+- [[17699]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17699) DateTime durations are not correctly subtracted
+- [[19055]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19055) GetReservesToBranch is not used
+- [[19130]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19130) K::A::Booksellers->search broken for attribute 'name'
+
+### Circulation
+
+- [[19007]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19007) Allow paypal payments via debit or credit card again
+- [[19027]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19027) Circulation rules: Better wording for standard rules for all libraries
+- [[19076]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19076) Renewal via Checkout screen is logged as both a renewal and a checkout
+
+### Course reserves
+
+- [[19228]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19228) Confirm delete doesn't show when deleting an item from course
+- [[19229]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19229) Clicking Cancel when editing course doesn't take you back to the course
+
+### Documentation
+
+- [[18817]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18817) Update links in the help files for the new 17.11 manual
+
+### Hold requests
+
+- [[18469]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18469) Suspend all holds when specifying a date to resume hold does not keep date
 
 ### I18N/L10N
 
-- [[17827]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17827) Untranslatable "by" in MARC21slim2intranetResults.xsl
-- [[18649]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18649) Translatability: Get rid of tt directive in translation for admin/categories.tt and onboardingstep2.tt
-- [[18652]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18652) Translatability: Get rid of tt directive in translation for uncertainprice.tt
-- [[18654]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18654) Translatability: Get rid of tt directives starting with [%% in translation for itemsearch.tt
-- [[18660]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18660) Translatability: Get rid of template directives [%% in translation for patroncards-errors.inc
-- [[18778]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18778) Translatability: Get rid of  tt directive in translation for item-status.inc
+- [[18537]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18537) Update Ukrainian installer sample files for 17.05
+- [[18687]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18687) Translatability: abbr tag should not contain lang attribute
+- [[18754]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18754) Translatability: Get rid of exposed tt directives in opac-detail.tt
+- [[18776]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18776) Translatability: Get rid of exposed tt directives in opac-advsearch.tt
+- [[18777]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18777) Translatability: Get rid of exposed tt directives in opac-memberentry.tt
+- [[18779]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18779) Translatability: Get rid of exposed tt directives in authorities-search-results.inc (OPAC)
+- [[18780]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18780) Translatability: Get rid of exposed tt directive in masthead-langmenu.inc
+- [[18781]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18781) Translatability: Get rid of exposed tt directives in openlibrary-readapi.inc
+
+### Installation and upgrade (command-line installer)
+
+- [[9409]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9409) koha-create --request-db should be able to accept a dbhost option
+
+### Lists
+
+- [[15924]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15924) Coce not enabled on lists
+
+### Notices
+
+- [[19134]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19134) C4::SMS does not handle drivers with more than two names well
+
+### OPAC
+
+- [[5471]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=5471) Quotes in tags cause moderation approval/rejection to fail
+- [[9857]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9857) Did you mean? from authorities uses incorrect punctuation
+- [[18692]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18692) When SMS is enabled the OPAC messaging table is misaligned
+- [[18946]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18946) Change language from external web fails
+
+### Patrons
+
+- [[18621]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18621) After duplicate message system picks category expiry date rather than manual defined
+- [[18636]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18636) Can not save new patron on fresh install (Conflict between autoMemberNum and BorrowerMandatoryField)
+- [[19129]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19129) Clean up templates for organisation patrons in staff
 
 ### Reports
 
-- [[18919]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18919) "Transaction Branch" select field broken in Cash register statistics
+- [[18985]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18985) SQL reports 'Last edit' and 'Last run' columns sort alphabetically, not chronologically
+
+### SIP2
+
+- [[18812]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18812) SIP Patron status does not respect OverduesBlockCirc
+
+### Searching
+
+- [[16485]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16485) Collection column in Item search is always empty
+
+### Test Suite
+
+- [[18802]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18802) Circulation.t fails if finesMode != "Do not calculate"
+- [[18897]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18897) Elastic related tests do not skip when ES modules are not installed
+- [[19003]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19003) Add a TestBuilder default for borrowers.login_attempts
+- [[19004]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19004) Koha/Patrons.t fails when item-level_itypes is not set
+- [[19009]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19009) Circulation.t is still failing randomly
+- [[19013]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19013) sample_data.sql inserts patrons with guarantorid that do not exist
+- [[19042]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19042) Silence warnings t/db_dependent/Letters.t
+- [[19047]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19047) Fix AddBiblio call in Reserves.t
+- [[19070]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19070) Fix Circulation/Branch.t
+- [[19071]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19071) Fix Circulation/issue.t and Members/IssueSlip.t
+- [[19126]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19126) Fix Members.t with IndependentBranches set
+- [[19227]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19227) 00-merge-conflict-markers.t launches too many tests
+- [[19335]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19335) 00-merge-markers.t fails
+- [[19385]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19385) t/Calendar.t is failing randomly
+- [[19391]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19391) auth_values_input_www.t  is failing because of bug 19128
+- [[19437]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19437) Rearrange CancelExpiredReserves tests
+- [[19440]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19440) XISBN tests should skip if XISBN returns overlimit error
+
+### Tools
+
+- [[14316]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14316) Clarify meaning of record number in Batch record deletion tool
+- [[19081]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19081) Plack preventing uninstalled plugins from being removed on the plugins list
+- [[19088]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19088) plugins-upload.pl causes uninitialized value noise
 
 
 
@@ -144,7 +236,7 @@ interface are available in this release for the following languages:
 - English (USA)
 - Arabic (99%)
 - Armenian (99%)
-- Chinese (China) (84%)
+- Chinese (China) (83%)
 - Chinese (Taiwan) (99%)
 - Czech (94%)
 - Danish (69%)
@@ -154,16 +246,15 @@ interface are available in this release for the following languages:
 - French (Canada) (94%)
 - German (100%)
 - German (Switzerland) (99%)
-- Greek (78%)
+- Greek (79%)
 - Hindi (96%)
 - Italian (99%)
-- Korean (51%)
-- Norwegian Bokmål (57%)
-- Occitan (77%)
+- Norwegian Bokmål (58%)
+- Occitan (76%)
 - Persian (58%)
-- Polish (99%)
+- Polish (100%)
 - Portuguese (100%)
-- Portuguese (Brazil) (85%)
+- Portuguese (Brazil) (84%)
 - Slovak (90%)
 - Spanish (99%)
 - Swedish (96%)
@@ -187,106 +278,127 @@ The most up-to-date translations can be found at:
 
 ## Release Team
 
-The release team for Koha 17.05.04 is
+The release team for Koha 17.05.05 is
 
-- Release Manager: [](mailto:)
-- QA Manager: [Katrin Fischer](mailto:Katrin.Fischer@bsz-bw.de)
+- Release Manager: [Jonathan Druart](mailto:jonathan.druart@bugs.koha-community.org)
+- RM Assistants :
+  - [Alex Sassmannshausen](mailto:alex.sassmannshausen@ptfs-europe.com)
+  - [Martin Renvoize](mailto:martin.renvoize@ptfs-europe.com)
 - QA Team:
+  - [Brendan Gallagher](mailto:brendan@bywatersolutions.com)
   - [Kyle Hall](mailto:kyle@bywatersolutions.com)
-  - [Jonathan Druart](mailto:jonathan.druart@biblibre.com)
-  - [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
   - [Marcel de Rooy](mailto:m.de.rooy@rijksmuseum.nl)
+  - [Martin Renvoize](mailto:martin.renvoize@ptfs-europe.com)
+  - [Alex Sassmannshausen](mailto:alex.sassmannshausen@ptfs-europe.com)
   - [Nick Clemens](mailto:nick@bywatersolutions.com)
-  - [Jesse Weaver](mailto:jweaver@bywatersolutions.com)
+  - [Julian Maurice](mailto:julian.maurice@biblibre.com)
+  - [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
 - Bug Wranglers:
-  - [Amit Gupta](mailto:amitddng135@gmail.com)
-  - [Magnus Enger](mailto:magnus@enger.priv.no)
-  - [Mirko Tietgen](mailto:mirko@abunchofthings.net)
-  - [Indranil Das Gupta](mailto:indradg@l2c2.co.in)
-  - [Zeno Tajoli](mailto:z.tajoli@cineca.it)
   - [Marc Véron](mailto:veron@veron.ch)
+  - [Claire Gravely](mailto:claire_gravely@hotmail.com)
+  - [Josef Moravec](mailto:josef.moravec@gmail.com)
+  - [Amit Gupta](mailto:amitddng135@gmail.com)
 - Packaging Manager: [Mirko Tietgen](mailto:mirko@abunchofthings.net)
-- Documentation Manager: [Nicole C. Engard](mailto:nengard@gmail.com)
+- Documentation Team:
+  - [Katrin Fischer](mailto:Katrin.Fischer@bsz-bw.de)
+  - [Chris Cormack](mailto:chrisc@catalyst.net.nz)
 - Translation Manager: [Bernardo Gonzalez Kriegel](mailto:bgkriegel@gmail.com)
-- Wiki curators: 
-  - [Brook](mailto:)
+- Wiki curators:
   - [Thomas Dukleth](mailto:kohadevel@agogme.com)
 - Release Maintainers:
-  - 16.05 -- [Frédéric Demians](mailto:f.demians@tamil.fr)
-  - 3.22 -- [Julian Maurice](mailto:julian.maurice@biblibre.com)
-  - 3.20 -- [Chris Cormack](mailto:chrisc@catalyst.net.nz)
+  - 17.05 -- [Fridolin Somers](mailto:fridolin.somers@biblibre.com)
+  - 16.11 -- [Katrin Fischer](mailto:Katrin.Fischer@bsz-bw.de)
+  - 16.05 -- [Mason James](mtj@kohaaloha.com)
 
 ## Credits
 
 We thank the following libraries who are known to have sponsored
-new features in Koha 17.05.04:
+new features in Koha 17.05.05:
 
 - Catalyst IT
 
-We thank the following individuals who contributed patches to Koha 17.05.04.
+We thank the following individuals who contributed patches to Koha 17.05.05.
 
-- Aleisha Amohia (2)
-- Colin Campbell (1)
-- Nick Clemens (3)
-- Tomás Cohen Arazi (5)
-- David Cook (1)
-- Chris Cormack (3)
-- Marcel de Rooy (11)
-- Jonathan Druart (12)
+- Aleisha Amohia (10)
+- Alex Arnaud (1)
+- Alex Buckley (1)
+- Colin Campbell (2)
+- Nick Clemens (10)
+- Tomás Cohen Arazi (7)
+- Marcel de Rooy (14)
+- Jonathan Druart (33)
 - Serhij Dubyk {Сергій Дубик} (1)
-- Katrin Fischer (5)
-- Amit Gupta (12)
-- Lee Jamison (1)
-- Kyle M Hall (4)
-- Josef Moravec (1)
+- Magnus Enger (1)
+- Katrin Fischer (6)
+- Amit Gupta (1)
+- Lee Jamison (2)
+- Olli-Antti Kivilahti (1)
+- Owen Leonard (2)
+- Kyle M Hall (3)
+- Josef Moravec (6)
+- Joy Nelson (1)
 - Dobrica Pavlinusic (1)
-- Alex Sassmannshausen (1)
-- Fridolin Somers (4)
-- Mark Tompsett (1)
-- Marc Véron (6)
-- Baptiste Wojtkowski (1)
+- Karam Qubsi (1)
+- Fridolin Somers (6)
+- Lari Taskula (1)
+- Mark Tompsett (10)
+- Marc Véron (11)
 
 We thank the following libraries, companies, and other institutions who contributed
-patches to Koha 17.05.04
+patches to Koha 17.05.05
 
-- BibLibre (5)
-- BigBallOfWax (2)
-- BSZ BW (5)
-- bugs.koha-community.org (12)
-- ByWater-Solutions (7)
+- ACPL (2)
+- BibLibre (7)
+- BSZ BW (6)
+- bugs.koha-community.org (33)
+- ByWater-Solutions (14)
 - Catalyst (1)
-- informaticsglobal.com (12)
-- Marc Véron AG (6)
-- marywood.edu (1)
-- Prosentient Systems (1)
+- informaticsglobal.com (1)
+- jns.fi (2)
+- Libriotech (1)
+- Marc Véron AG (11)
+- marywood.edu (2)
 - PTFS-Europe (2)
-- Rijksmuseum (11)
+- Rijksmuseum (14)
 - rot13.org (1)
-- Theke Solutions (5)
-- unidentified (5)
+- Theke Solutions (7)
+- unidentified (28)
 
 We also especially thank the following individuals who tested patches
 for Koha.
 
-- Alex Buckley (3)
-- Amit Gupta (4)
-- Colin Campbell (4)
-- Fridolin Somers (74)
-- Jonathan Druart (81)
+- Aleisha Amohia (4)
+- Alex Buckley (9)
+- anafe (1)
+- Chris Kirby (1)
+- Christopher Brannon (1)
+- Claire Gravely (2)
+- Dilan Johnpullé (1)
+- Felix Hemme (1)
+- Frédéric Demians (1)
+- Fridolin Somers (116)
+- George Williams (1)
+- Hugo Agud (1)
+- iflora (1)
+- Jonathan Druart (134)
 - Josef Moravec (5)
-- Julian Maurice (2)
-- Katrin Fischer (31)
+- Julian Maurice (10)
+- Katrin Fischer (13)
+- Laurence Rault (1)
 - Lee Jamison (8)
-- Liz Rea (1)
-- Marc Véron (1)
-- Mark Tompsett (2)
-- Nick Clemens (4)
-- Owen Leonard (4)
-- Tomas Cohen Arazi (9)
-- Kyle M Hall (9)
-- Andreas Hedström Mace (2)
-- Marcel de Rooy (45)
-- Serhij Dubyk {Сергій Дубик} (1)
+- Magnus Enger (1)
+- Marc Veron (1)
+- Marc Véron (4)
+- maricris (1)
+- Marijana Glavica (2)
+- Mark Tompsett (24)
+- Nick Clemens (6)
+- Owen Leonard (17)
+- Tomas Cohen Arazi (16)
+- Michael Andrew Cabus (2)
+- Kyle M Hall (30)
+- Caroline Cyr La Rose (1)
+- Marcel de Rooy (38)
 
 We regret any omissions.  If a contributor has been inadvertently missed,
 please send a patch against these release notes to 
@@ -301,6 +413,7 @@ version of Koha can be retrieved by checking out the master branch of:
 
 The branch for this version of Koha and future bugfixes in this release
 line is 17.05.x.
+The last Koha release was 17.05.04, which was released on sept. 20, 2017.
 
 ## Bugs and feature requests
 
@@ -312,4 +425,4 @@ tracker at:
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-Autogenerated release notes updated last on 20 sept. 2017 13:51:27.
+Autogenerated release notes updated last on 23 oct. 2017 12:36:12.
