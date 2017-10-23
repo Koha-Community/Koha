@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -62,6 +62,7 @@ AddIssue($borrower, '0101');
 AddIssue($borrower, '0203');
 
 # Begin tests...
+Koha::Account::Offsets->delete();
 my $issue = Koha::Checkouts->search( { borrowernumber => $borrowernumber } )->next()->unblessed();
 C4::Accounts::chargelostitem( $borrowernumber, $issue->{itemnumber}, '1.00');
 
@@ -70,3 +71,9 @@ my $accountline = Koha::Account::Lines->search( { borrowernumber => $borrowernum
 is( int($accountline->amount), $itemtype->{processfee}, "The accountline amount should be precessfee value " );
 is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should the linked with barcode '0101'" );
 is( $accountline->note, C4::Context->preference("ProcessingFeeNote"), "The accountline description should be 'test'" );
+
+my $lost_ao = Koha::Account::Offsets->single( { type => 'Lost Item' } );
+ok( $lost_ao, 'Account offset of type "Lost Item" created' );
+
+my $processing_fee_ao = Koha::Account::Offsets->single( { type => 'Processing Fee' } );
+ok( $processing_fee_ao, 'Account offset of type "Processing Fee" created' );
