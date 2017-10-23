@@ -301,15 +301,10 @@ sub manualinvoice {
         }
     )->store();
 
-    my $offset_type =
-        $type eq 'L'  ? 'Lost Item'
-      : $type eq 'PF' ? 'Processing Fee'
-      :                 'Manual Debit';
-
     my $account_offset = Koha::Account::Offset->new(
         {
             debit_id => $accountline->id,
-            type     => $offset_type,
+            type     => 'Manual Debit',
             amount   => $amount,
         }
     )->store();
