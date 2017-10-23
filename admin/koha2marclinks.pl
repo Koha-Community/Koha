@@ -48,12 +48,17 @@ my $cache = Koha::Caches->get_instance();
 # Update data before showing the form
 my $no_upd;
 
-if( $input->param('add_field') ) {
+if( $input->param('add_field') && $input->request_method eq 'POST' ) {
     # add a mapping to all frameworks
     my ($kohafield, $tag, $sub) = split /,/, $input->param('add_field'), 3;
-    Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub })->update({ kohafield => $kohafield });
+    my $rs = Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub });
+    if( $rs->count ) {
+        $rs->update({ kohafield => $kohafield });
+    } else {
+        $template->param( error_add => 1, error_info => "$tag, $sub" );
+    }
 
-} elsif( $input->param('remove_field') ) {
+} elsif( $input->param('remove_field') && $input->request_method eq 'POST' ) {
     # remove a mapping from all frameworks
     my ($tag, $sub) = split /,/, $input->param('remove_field'), 2;
     Koha::MarcSubfieldStructures->search({ tagfield => $tag, tagsubfield => $sub })->update({ kohafield => undef });

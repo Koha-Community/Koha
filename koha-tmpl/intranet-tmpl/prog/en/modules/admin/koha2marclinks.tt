@@ -13,6 +13,8 @@ function AddFld(kohafield) {
     if( temp.length == 2 ) {
         $('#add_field').val( kohafield+','+fieldstr );
         $('#koha2marc').submit();
+    } else {
+        alert( "Invalid input. Enter something like: 245,a" );
     }
 }
 
@@ -41,6 +43,10 @@ function RemFld(tagfield, subfield ) {
 <h1>Koha to MARC mapping</h1>
 <br/>
 <form action="/cgi-bin/koha/admin/koha2marclinks.pl" method="post" id="koha2marc">
+
+[% IF error_add %]
+    <div class="dialog alert">Failed to add mapping for [% error_info %]</div>
+[% END %]
 
 <table id="kohafields">
 <thead><tr>
