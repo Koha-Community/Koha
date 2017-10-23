@@ -159,11 +159,82 @@ sub chargelostitem{
     unless ($existing_charges) {
         #add processing fee
         if ($processfee && $processfee > 0){
-            manualinvoice($borrowernumber, $itemnumber, $description, 'PF', $processfee, $processingfeenote, 1);
+            my $accountline = Koha::Account::Line->new(
+                {
+                    borrowernumber    => $borrowernumber,
+                    accountno         => getnextacctno($borrowernumber),
+                    date              => \'NOW()',
+                    amount            => $processfee,
+                    description       => $description,
+                    accounttype       => 'PF',
+                    amountoutstanding => $processfee,
+                    itemnumber        => $itemnumber,
+                    note              => $processingfeenote,
+                    manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                }
+            )->store();
+
+            my $account_offset = Koha::Account::Offset->new(
+                {
+                    debit_id => $accountline->id,
+                    type     => 'Processing Fee',
+                    amount   => $accountline->amount,
+                }
+            )->store();
+
+            if ( C4::Context->preference("FinesLog") ) {
+                logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+                    action            => 'create_fee',
+                    borrowernumber    => $accountline->borrowernumber,,
+                    accountno         => $accountline->accountno,
+                    amount            => $accountline->amount,
+                    description       => $accountline->description,
+                    accounttype       => $accountline->accounttype,
+                    amountoutstanding => $accountline->amountoutstanding,
+                    note              => $accountline->note,
+                    itemnumber        => $accountline->itemnumber,
+                    manager_id        => $accountline->manager_id,
+                }));
+            }
         }
         #add replace cost
         if ($replacementprice > 0){
-            manualinvoice($borrowernumber, $itemnumber, $description, 'L', $replacementprice, undef, 1);
+            my $accountline = Koha::Account::Line->new(
+                {
+                    borrowernumber    => $borrowernumber,
+                    accountno         => getnextacctno($borrowernumber),
+                    date              => \'NOW()',
+                    amount            => $replacementprice,
+                    description       => $description,
+                    accounttype       => 'L',
+                    amountoutstanding => $replacementprice,
+                    itemnumber        => $itemnumber,
+                    manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                }
+            )->store();
+
+            my $account_offset = Koha::Account::Offset->new(
+                {
+                    debit_id => $accountline->id,
+                    type     => 'Lost Item',
+                    amount   => $accountline->amount,
+                }
+            )->store();
+
+            if ( C4::Context->preference("FinesLog") ) {
+                logaction("FINES", 'CREATE',$borrowernumber,Dumper({
+                    action            => 'create_fee',
+                    borrowernumber    => $accountline->borrowernumber,,
+                    accountno         => $accountline->accountno,
+                    amount            => $accountline->amount,
+                    description       => $accountline->description,
+                    accounttype       => $accountline->accounttype,
+                    amountoutstanding => $accountline->amountoutstanding,
+                    note              => $accountline->note,
+                    itemnumber        => $accountline->itemnumber,
+                    manager_id        => $accountline->manager_id,
+                }));
+            }
         }
     }
 }
