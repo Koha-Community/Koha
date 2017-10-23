@@ -154,7 +154,7 @@ sub schema {
     my $params = shift;
 
     unless ( $params->{new} ) {
-        return $database->{schema} if defined $database->{schema};
+        return $database->{schema} if defined $database->{schema} && $database->{schema}->storage->connected();
     }
 
     $database->{schema} = &_new_schema();
