@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Test::More tests => 1;
+use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
 
@@ -30,8 +31,6 @@ use Koha::Illrequests;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 my $remote_address = '127.0.0.1';
@@ -39,13 +38,19 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 15;
+
+    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+    # Mock ->capabilities
+    $illreqmodule->mock( 'capabilities', sub { return 'capable'; } );
+    # Mock ->metadata
+    $illreqmodule->mock( 'metadata', sub { return 'metawhat?'; } );
 
     $schema->storage->txn_begin;
 
     Koha::Illrequests->search->delete;
-    my ( $borrowernumber, $session_id ) =
-      create_user_and_session( { authorized => 1 } );
+    # ill => 22 (userflags.sql)
+    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 22 });
 
     ## Authorized user tests
     # No requests, so empty array should be returned
@@ -54,40 +59,56 @@ subtest 'list() tests' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)->json_is( [] );
 
-#    my $city_country = 'France';
-#    my $city         = $builder->build(
-#        { source => 'City', value => { city_country => $city_country } } );
-#
-#    # One city created, should get returned
-#    $tx = $t->ua->build_tx( GET => '/api/v1/cities' );
-#    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-#    $t->request_ok($tx)->status_is(200)->json_is( [$city] );
-#
-#    my $another_city = $builder->build(
-#        { source => 'City', value => { city_country => $city_country } } );
-#    my $city_with_another_country = $builder->build( { source => 'City' } );
-#
-#    # Two cities created, they should both be returned
-#    $tx = $t->ua->build_tx( GET => '/api/v1/cities' );
-#    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-#    $t->request_ok($tx)->status_is(200)
-#      ->json_is( [ $city, $another_city, $city_with_another_country ] );
-#
-#    # Filtering works, two cities sharing city_country
-#    $tx =
-#      $t->ua->build_tx( GET => "/api/v1/cities?city_country=" . $city_country );
-#    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-#    my $result =
-#      $t->request_ok($tx)->status_is(200)->json_is( [ $city, $another_city ] );
-#
-#    $tx = $t->ua->build_tx(
-#        GET => "/api/v1/cities?city_name=" . $city->{city_name} );
-#    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-#    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-#    $t->request_ok($tx)->status_is(200)->json_is( [$city] );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # Create an ILL request
+    my $illrequest = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+
+    # One illrequest created, should get returned
+    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)->json_is( [ $illrequest->TO_JSON ] );
+
+    # One illrequest created, returned with augmented data
+    $tx = $t->ua->build_tx( GET =>
+          '/api/v1/illrequests?embed=patron,branch,capabilities,metadata' );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)->json_is(
+        [
+            $illrequest->TO_JSON(
+                { patron => 1, branch => 1, capabilities => 1, metadata => 1 }
+            )
+        ]
+    );
+
+    # Create another ILL request
+    my $illrequest2 = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+
+    # Two illrequest created, should get returned
+    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)
+      ->json_is( [ $illrequest->TO_JSON, $illrequest2->TO_JSON ] );
 
     # Warn on unsupported query parameter
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?request_blah=blah' );
@@ -102,9 +123,10 @@ subtest 'list() tests' => sub {
 
 sub create_user_and_session {
 
-    my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? $args->{authorized} : 0;
-    my $dbh   = C4::Context->dbh;
+    my $args = shift;
+    my $dbh  = C4::Context->dbh;
+
+    my $flags = ( $args->{authorized} ) ? 2**$args->{authorized} : 0;
 
     my $user = $builder->build(
         {
@@ -122,13 +144,6 @@ sub create_user_and_session {
     $session->param( 'ip',       '127.0.0.1' );
     $session->param( 'lasttime', time() );
     $session->flush;
-
-    if ( $args->{authorized} ) {
-        $dbh->do( "
-            INSERT INTO user_permissions (borrowernumber,module_bit,code)
-            VALUES (?,3,'parameters_remaining_permissions')", undef,
-            $user->{borrowernumber} );
-    }
 
     return ( $user->{borrowernumber}, $session->id );
 }

@@ -1,8 +1,8 @@
 {
     "/illrequests": {
         "get": {
-            "x-mojo-controller": "Koha::REST::V1::Illrequests",
-            "operationId": "list",
+            "x-mojo-to": "Illrequests#list",
+            "operationId": "listIllrequests",
             "tags": ["illrequests"],
             "parameters": [{
                 "name": "embed",
@@ -16,7 +16,8 @@
                     "enum": [
                         "patron",
                         "branch",
-                        "capabilities"
+                        "capabilities",
+                        "metadata"
                     ]
                 }
             }, {
@@ -85,12 +86,42 @@
             ],
             "responses": {
                 "200": {
-                    "description": "OK"
+                    "description": "A list of ILL requests"
+                },
+                "401": {
+                  "description": "Authentication required",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "403": {
+                  "description": "Access forbidden",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "404": {
+                  "description": "ILL requests not found",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "500": {
+                  "description": "Internal server error",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "503": {
+                  "description": "Under maintenance",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
                 }
             },
             "x-koha-authorization": {
                 "permissions": {
-                    "borrowers": "1"
+                    "ill": "1"
                 }
             }
         }

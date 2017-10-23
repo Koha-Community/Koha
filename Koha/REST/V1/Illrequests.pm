@@ -20,13 +20,13 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Illrequests;
-use Koha::Library;
+use Koha::Libraries;
 
 sub list {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
+    my $args = $c->req->params->to_hash // {};
     my $filter;
-    $args //= {};
     my $output = [];
 
     # Create a hash where all keys are embedded values
@@ -44,42 +44,16 @@ sub list {
 
     my $requests = Koha::Illrequests->search($filter);
 
-    while (my $request = $requests->next) {
-        my $unblessed = $request->unblessed;
-        # Add the request's id_prefix
-        $unblessed->{id_prefix} = $request->id_prefix;
-        # Augment the request response with patron details
-        # if appropriate
-        if (defined $embed{patron}) {
-            my $patron = $request->patron;
-            $unblessed->{patron} = {
-                firstname  => $patron->firstname,
-                surname    => $patron->surname,
-                cardnumber => $patron->cardnumber
-            };
-        }
-        # Augment the request response with metadata details
-        # if appropriate
-        if (defined $embed{metadata}) {
-            $unblessed->{metadata} = $request->metadata;
-        }
-        # Augment the request response with status details
-        # if appropriate
-        if (defined $embed{capabilities}) {
-            $unblessed->{capabilities} = $request->capabilities;
-        }
-        # Augment the request response with branch details
-        # if appropriate
-        if (defined $embed{branch}) {
-            $unblessed->{branch} = Koha::Libraries->find(
-                $request->branchcode
-            )->unblessed;
-        }
-        push @{$output}, $unblessed
+    if ( scalar (keys %embed) )
+    {
+        # Need to embed stuff
+        my @results = map { $_->TO_JSON(\%embed) } $requests->as_list;
+        return $c->render( status => 200, openapi => \@results );
     }
-
-    return $c->$cb( $output, 200 );
-
+    else
+    {
+        return $c->render( status => 200, openapi => $requests );
+    }
 }
 
 1;
