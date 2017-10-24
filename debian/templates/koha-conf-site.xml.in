@@ -327,5 +327,26 @@ __END_SRU_PUBLICSERVER__
      <index_name>koha___KOHASITE__</index_name>
  </elasticsearch>
 
+ <interlibrary_loans>
+     <!-- Path to where Illbackends are located on the system
+          - This setting should normally not be touched -->
+     <backend_directory>/usr/share/koha/lib/Koha/Illbackends</backend_directory>
+     <!-- How should we treat staff comments?
+          - hide: don't show in OPAC
+          - show: show in OPAC -->
+     <staff_request_comments>hide</staff_request_comments>
+     <!-- How should we treat the reply_date field?
+          - hide: don't show this field in the UI
+          - any other string: show, with this label -->
+     <reply_date>hide</reply_date>
+     <!-- Where should digital ILLs be sent?
+          - borrower: send it straight to the borrower email
+          - branch: send the ILL to the branch email -->
+     <digital_recipient>branch</digital_recipient>
+     <!-- What patron category should we use for p2p ILL requests?
+          - By default this is set to 'ILLLIBS' -->
+     <partner_code>ILLLIBS</partner_code>
+ </interlibrary_loans>
+
 </config>
 </yazgfs>
