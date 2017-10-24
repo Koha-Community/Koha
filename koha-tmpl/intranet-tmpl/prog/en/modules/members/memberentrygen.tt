@@ -35,16 +35,31 @@ $(document).ready(function() {
 	[% END %]
 });
 
+function update_cardnumber_warning(size){
+    var max_len = [% maxlength_cardnumber %];
+    if ( size >= max_len ) {
+        $("#cn_max").show();
+    } else {
+        $("#cn_max").hide();
+    }
+}
+
 $(document).ready(function() {
     $("#cn_max").hide();
-    var max_len = [% maxlength_cardnumber %];
-    $("#cardnumber").change(function(){
-        if ( $("#cardnumber").val().length >= max_len ) {
-            $("#cn_max").show();
-        } else {
-            $("#cn_max").hide();
-        }
+    var content;
+    $("#cardnumber").on("keydown", function(e){
+        content = $(this).val();
     });
+    $("#cardnumber").on("keyup", function(e){
+        // .val() will return the value of the input after the key has been released
+        var l = $(this).val().length;
+        if ( l == content.length + 1 ) { l--; }
+        update_cardnumber_warning(l);
+    });
+    $("#cardnumber").bind("paste", function(e){
+        var pastedData = e.originalEvent.clipboardData.getData('text');
+        update_cardnumber_warning(pastedData.length - 1);
+    } );
     var toggle_quick_add = $(".toggle_quick_add");
     $(toggle_quick_add).click(function(e){
         toggle_quick_add.toggle();
