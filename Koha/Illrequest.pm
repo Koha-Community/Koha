@@ -100,17 +100,9 @@ the API.
 The interface's request method returned saying that the desired item is not
 available for request.
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
-
-=head3 type
-
-=cut
-
-sub _type {
-    return 'Illrequest';
-}
 
 sub illrequestattributes {
     my ( $self ) = @_;
@@ -924,6 +916,60 @@ sub _censor {
     $params->{display_reply_date} = ( $censorship->{censor_reply_date} ) ? 0 : 1;
 
     return $params;
+}
+
+=head3 TO_JSON
+
+    $json = $illrequest->TO_JSON
+
+Overloaded I<TO_JSON> method that takes care of inserting calculated values
+into the unblessed representation of the object.
+
+=cut
+
+sub TO_JSON {
+    my ( $self, $embed ) = @_;
+
+    my $object = $self->SUPER::TO_JSON();
+    $object->{id_prefix} = $self->id_prefix;
+
+    if ( scalar (keys %$embed) ) {
+        # Augment the request response with patron details if appropriate
+        if ( $embed->{patron} ) {
+            my $patron = $self->patron;
+            $object->{patron} = {
+                firstname  => $patron->firstname,
+                surname    => $patron->surname,
+                cardnumber => $patron->cardnumber
+            };
+        }
+        # Augment the request response with metadata details if appropriate
+        if ( $embed->{metadata} ) {
+            $object->{metadata} = $self->metadata;
+        }
+        # Augment the request response with status details if appropriate
+        if ( $embed->{capabilities} ) {
+            $object->{capabilities} = $self->capabilities;
+        }
+        # Augment the request response with library details if appropriate
+        if ( $embed->{branch} ) {
+            $object->{branch} = Koha::Libraries->find(
+                $self->branchcode
+            )->TO_JSON;
+        }
+    }
+
+    return $object;
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
+
+sub _type {
+    return 'Illrequest';
 }
 
 =head1 AUTHOR

@@ -26,9 +26,10 @@ use Koha::Patrons;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockObject;
+use Test::MockModule;
 use Test::Exception;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -41,6 +42,7 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
+    Koha::Illrequests->search->delete;
     my $illrq = $builder->build({ source => 'Illrequest' });
     my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
 
@@ -789,4 +791,58 @@ subtest 'Checking Limits' => sub {
     $schema->storage->txn_rollback;
 };
 
-1;
+subtest 'TO_JSON() tests' => sub {
+
+    plan tests => 10;
+
+    my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
+
+    # Mock ->capabilities
+    $illreqmodule->mock( 'capabilities', sub { return 'capable'; } );
+
+    # Mock ->metadata
+    $illreqmodule->mock( 'metadata', sub { return 'metawhat?'; } );
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $illreq  = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+    my $illreq_json = $illreq->TO_JSON;
+    is( $illreq_json->{patron},
+        undef, '%embed not passed, no \'patron\' attribute' );
+    is( $illreq_json->{metadata},
+        undef, '%embed not passed, no \'metadata\' attribute' );
+    is( $illreq_json->{capabilities},
+        undef, '%embed not passed, no \'capabilities\' attribute' );
+    is( $illreq_json->{branch},
+        undef, '%embed not passed, no \'branch\' attribute' );
+
+    $illreq_json = $illreq->TO_JSON(
+        { patron => 1, metadata => 1, capabilities => 1, branch => 1 } );
+    is( $illreq_json->{patron}->{firstname},
+        $patron->firstname,
+        '%embed passed, \'patron\' attribute correct (firstname)' );
+    is( $illreq_json->{patron}->{surname},
+        $patron->surname,
+        '%embed passed, \'patron\' attribute correct (surname)' );
+    is( $illreq_json->{patron}->{cardnumber},
+        $patron->cardnumber,
+        '%embed passed, \'patron\' attribute correct (cardnumber)' );
+    is( $illreq_json->{metadata},
+        'metawhat?', '%embed passed, \'metadata\' attribute correct' );
+    is( $illreq_json->{capabilities},
+        'capable', '%embed passed, \'capabilities\' attribute correct' );
+    is( $illreq_json->{branch}->{branchcode},
+        $library->branchcode, '%embed not passed, no \'branch\' attribute' );
+
+    $schema->storage->txn_rollback;
+};
