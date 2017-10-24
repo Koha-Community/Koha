@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-09-17 03:14-0300\n"
-"PO-Revision-Date: 2017-04-25 14:59+0000\n"
+"POT-Creation-Date: 2017-10-15 11:39-0300\n"
+"PO-Revision-Date: 2017-10-14 07:16+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1493132379.000000\n"
+"X-POOTLE-MTIME: 1507965377.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -309,24 +309,6 @@ msgid ""
 "issues %s %s "
 msgstr ""
 "%s %s आप लॉग इन करें अगर आप नए मुद्दों पर ईमेल सूचना की सदस्यता के लिए चाहते हैं  %s %s"
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- इस में शामिल दो मापदंडों लेता है: एक आइटम संरचना और एक वैकल्पिक ऋण (मुद्दे) "
-"संरचना। मुद्दा संरचना पाठ्यक्रम भंडार पृष्ठों है, जो आइटम है कि item.datedue भरता लाने के "
-"लिए एक एपीआई का उपयोग नहीं करते द्वारा प्रयोग किया जाता . -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -977,7 +959,7 @@ msgstr "%s पासवर्ड मैच नही कर रहा है. %s
 #. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
 #. %17$s:  END 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:43
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s The system does not recognize this barcode. %s You have checked out too "
 "many items and can't check out any more. %s This item is checked out to "
@@ -989,6 +971,14 @@ msgid ""
 "been declared lost. %s Your contact information seems to be incomplete. %s "
 "Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
+"%s सिस्टम इस बारकोड को पहचान नहीं करता है %s आपने बहुत सी चीजों को चेक कर दिया है और "
+"किसी भी अधिक जांच नहीं की जा सकती %s यह आइटम किसी और को चेक आउट कर दिया गया है  "
+"%s आप इस आइटम को फिर से नवीनीकृत नहीं कर सकते। %s यह आइटम ऋण के लिए नहीं है %s आप "
+"लाइब्रेरी %s पर हैं और चेक नहीं कर सकते। %s इस आइटम को संग्रह से वापस ले लिया गया है।  "
+"%s यह आइटम प्रतिबंधित है।  %s यह आइटम दूसरे संरक्षक के लिए होल्ड पर है %s यह आइटम किसी "
+"अन्य शाखा से संबंधित है %s आपका खाता समाप्त हो गया है। %s आपका खाता निलंबित कर दिया "
+"गया है % s इस कार्ड को खो दिया घोषित किया गया है। %s आपकी संपर्क जानकारी अधूरी "
+"लगती है %s नियत दिनांक वैध नहीं है। %s कृपया पुस्तकालय कर्मचारियों के सदस्य देखें. "
 
 #. %1$s:  IF error 
 #. %2$s:  ELSE 
@@ -1076,7 +1066,7 @@ msgstr "%s हाँ %s नही %s "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:290
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
-msgstr ""
+msgstr "%s हां (आइटम अतिदेय या खो गए) %s हाँ (किराया शुल्क) %s नहीं  %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -3797,7 +3787,7 @@ msgid "Availability:"
 msgstr "उपलब्धता:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "उपलब्ध  %s"
@@ -4158,7 +4148,7 @@ msgstr "निर्गम करना%s, वापसी %s या एक आ�
 msgid "Check-in date:"
 msgstr "वापसी दिनांक:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4180,7 +4170,7 @@ msgstr "निर्गम पर"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "को निर्गम  %s %s %s(%s)%s"
@@ -4601,7 +4591,7 @@ msgstr "वर्तमान पासवर्ड:"
 msgid "Current session"
 msgstr "वर्तमान सेशन"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "स्थानीय प्रयोग में वर्तमान"
@@ -4611,7 +4601,7 @@ msgstr "स्थानीय प्रयोग में वर्तमान
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "स्थानीय प्रयोग में वर्तमान द्वारा %s %s %s(%s)%s"
@@ -6013,7 +6003,7 @@ msgstr "ऑनलाइन केटलॉग में: %s/cgi-bin/koha/opac-de
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6076,7 +6066,7 @@ msgstr "मुद्दे सारांश"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:102
 #, c-format
 msgid "It is too soon after the checkout date for this item to be renewed."
-msgstr ""
+msgstr "इस मद के नवीनीकरण के लिए चेकआउट की तारीख के बाद यह बहुत जल्द है."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -6093,7 +6083,7 @@ msgstr "आइटम कॉल नंबर"
 msgid "Item cannot be checked out."
 msgstr "आइटम बाहर की जाँच नहीं की जा सकती."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "मद क्षतिग्रस्त"
@@ -6108,7 +6098,7 @@ msgstr "मद होल्ड कतार प्राथमिकता"
 msgid "Item holds"
 msgstr "मद होल्ड"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "मद खो दिया"
@@ -6142,7 +6132,7 @@ msgstr "आइटम प्रकार: "
 msgid "Item types"
 msgstr "मद प्रकार"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "आइटम वापस "
@@ -7110,8 +7100,8 @@ msgstr "नहीं तुम्हारे लिए क्या देख �
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "ऋण के लिए नहीं  %s"
@@ -7312,12 +7302,12 @@ msgstr "अक्टू"
 msgid "October"
 msgstr "अक्टूबर"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "पकड़ने पर"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "आदेश पर "
@@ -7757,14 +7747,14 @@ msgstr "कृपया फिर कोशिश करें."
 #. %1$s:  ELSIF (errNoBorrowerFound) 
 #. %2$s:  ELSIF (errMultipleAccountsForEmail) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please try again later. %s No account was found with the provided "
 "information. %s Account identification with this email address only is "
 "ambiguous. "
 msgstr ""
-"बाद में पुन: प्रयास करें. %s कोई खाता नहीं उपलब्ध कराई गई जानकारी के साथ मिला था. %s "
-"पासवर्ड वसूली की प्रक्रिया पहले से ही इस खाते के लिए शुरू कर दिया गया है (\""
+"बाद में पुन: प्रयास करें. %s प्रदान की गई जानकारी के साथ कोई खाता नहीं मिला। इस ईमेल "
+"पते के साथ %s खाता पहचान केवल अस्पष्ट है. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -7780,13 +7770,13 @@ msgstr "पूर्ववर्ती बॉक्स में कृपया
 
 #. %1$s:  ELSIF (errAlreadyStartRecovery) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please use the field 'Login' as well. %s The process of password recovery "
 "has already been started for this account (\""
 msgstr ""
-"बाद में पुन: प्रयास करें. %s कोई खाता नहीं उपलब्ध कराई गई जानकारी के साथ मिला था. %s "
-"पासवर्ड वसूली की प्रक्रिया पहले से ही इस खाते के लिए शुरू कर दिया गया है (\""
+"कृपया क्षेत्र 'लॉगिन' के रूप में अच्छी तरह से उपयोग करें %s इस खाते के लिए पासवर्ड वसूली की "
+"प्रक्रिया पहले ही शुरू हो चुकी है (\""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -7806,9 +7796,9 @@ msgid "Popularity (most to least)"
 msgstr "लोकप्रियता (सबसे कम से कम करने के लिए)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
-#, fuzzy, c-format
+#, c-format
 msgid "Post your comments on this item. "
-msgstr "इस मद पर पोस्ट या संपादित अपनी टिप्पणियां. "
+msgstr "इस मद पर अपनी टिप्पणी पोस्ट करें. "
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -9936,9 +9926,9 @@ msgid "This item is already checked out to you."
 msgstr "इस मद में पहले से ही आप के लिए निर्गम की है।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
-#, fuzzy, c-format
+#, c-format
 msgid "This item is on hold for another patron."
-msgstr "एक और संरक्षक के साथ एक सूची साझा करें"
+msgstr "यह आइटम दूसरे संरक्षक के लिए होल्ड पर है."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:115
 #, c-format
@@ -10101,9 +10091,9 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "इस त्रुटि की रिपोर्ट करने के लिए, कोहा प्रशासक को ईमेल कर सकते हैं. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login and your email address. "
-msgstr "अपना पासवर्ड रीसेट करने के लिए, अपनी प्रवेश और ईमेल पते दर्ज करें."
+msgstr "अपना पासवर्ड रीसेट करने के लिए, अपनी लॉगिन और ईमेल पते दर्ज करें."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10178,9 +10168,9 @@ msgid "UF"
 msgstr "UF"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1181
-#, fuzzy, c-format
+#, c-format
 msgid "URL"
-msgstr "यूआरएल (ओं)"
+msgstr "यूआरएल "
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:203
 #, c-format
@@ -10708,7 +10698,7 @@ msgstr "तुम कुछ भी नहीं है बाहर की ज�
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:100
 #, c-format
 msgid "You have renewed this item the maximum number of times allowed."
-msgstr ""
+msgstr "आपने इस मद की अधिकतम संख्या को नवीनीकृत कर दिया है."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
@@ -10794,7 +10784,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "You will receive an email shortly. "
-msgstr ""
+msgstr "आपको शीघ्र ही एक ईमेल प्राप्त होगा."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1355
@@ -10822,10 +10812,10 @@ msgstr ""
 "पुस्तकालय से संपर्क करें।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your account has expired. Please contact the library for more information."
-msgstr ". अधिक जानकारी के लिए पुस्तकालय से संपर्क करें."
+msgstr "आपका खाता समाप्त हो गया है। कृपया अधिक जानकारी के लिए पुस्तकालय से संपर्क करें."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -10981,9 +10971,9 @@ msgid "Your lists:"
 msgstr "आपकी सूचियाँ:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Your loan renewal failed because of the following reason(s): "
-msgstr "फार्म नहीं निम्नलिखित समस्या (नों के कारण) प्रस्तुत"
+msgstr "आपके ऋण नवीनीकरण निम्नलिखित कारण (कारणों) के कारण विफल रहे:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11537,9 +11527,8 @@ msgstr "koha opac %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:106
-#, fuzzy
 msgid "koha:biblionumber:[% biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblionumber %]"
+msgstr "कोहा:बिब्लियोसंख्या:[% biblionumber | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format

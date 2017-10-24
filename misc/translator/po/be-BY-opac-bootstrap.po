@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: staff\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 02:43-0300\n"
+"POT-Creation-Date: 2017-10-15 11:07-0300\n"
 "PO-Revision-Date: 2014-03-17 10:29+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: none\n"
@@ -313,21 +313,6 @@ msgid ""
 "issues %s %s "
 msgstr ""
 "%s %s %s Вы подписались на уведомления по электронной почте о новых выпусках "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -3984,7 +3969,7 @@ msgid "Availability:"
 msgstr "Доступность:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "Доступные выпуски"
@@ -4347,7 +4332,7 @@ msgstr "Выдайте%s, поверните%s или продлите экзе�
 msgid "Check-in date:"
 msgstr "Вернуть экземпляр"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4369,7 +4354,7 @@ msgstr "Выдано"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Выдано ("
@@ -4798,7 +4783,7 @@ msgstr "Текущий пароль:"
 msgid "Current session"
 msgstr "Текущий сеанс"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "Текущий сеанс"
@@ -4808,7 +4793,7 @@ msgstr "Текущий сеанс"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, fuzzy, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Подтвердите резервирования для: %s %s %s (%s) %s "
@@ -6247,7 +6232,7 @@ msgstr ""
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
@@ -6328,7 +6313,7 @@ msgstr "Шифр хранения экземпляра"
 msgid "Item cannot be checked out."
 msgstr "Экземпляр не выдается."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr ""
@@ -6343,7 +6328,7 @@ msgstr "Приоритет в очереди резервирований на �
 msgid "Item holds"
 msgstr "Резервирование экземпляров"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "Резервирование экземпляров"
@@ -6377,7 +6362,7 @@ msgstr "Тип единицы: "
 msgid "Item types"
 msgstr "Типы единиц"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "Изъято ("
@@ -7351,8 +7336,8 @@ msgstr "Вы не нашли того, что искали?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr "Не для ссуды (%s)"
@@ -7560,12 +7545,12 @@ msgstr "Октябрь"
 msgid "October"
 msgstr "Октябрь"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Зарезервировано"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "Заказано ("

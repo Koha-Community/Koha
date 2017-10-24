@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.14 staff\n"
-"POT-Creation-Date: 2017-09-17 03:00-0300\n"
-"PO-Revision-Date: 2017-08-17 15:02+0000\n"
+"POT-Creation-Date: 2017-10-15 11:26-0300\n"
+"PO-Revision-Date: 2017-09-20 16:26+0000\n"
 "Last-Translator: Héctor <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
 "org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1502982133.000000\n"
+"X-POOTLE-MTIME: 1505924767.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -315,25 +315,6 @@ msgid ""
 msgstr ""
 "%s %s Debes registrarte si quieres suscribirte a notificaciones por email "
 "para nuevas entregas %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- Esta inclusión toma dos parámetros: una estructura de ítem y una "
-"estructura opcional de préstamo (emisión). La estructura de préstamo se "
-"utiliza por las páginas de reservas para cursos, que no utilizan una API "
-"para obtener los ítems que llenan item.datedue. -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -3864,7 +3845,7 @@ msgid "Availability:"
 msgstr "Disponibilidad:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "Disponible %s"
@@ -4226,7 +4207,7 @@ msgstr "Prestar%s, devolver%s o renovar un ejemplar: "
 msgid "Check-in date:"
 msgstr "Fecha de devolución:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4248,7 +4229,7 @@ msgstr "Prestado el"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Prestado a %s %s %s(%s)%s"
@@ -4670,7 +4651,7 @@ msgstr "Contraseña actual:"
 msgid "Current session"
 msgstr "Sesión actual"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "Actualmente en uso local"
@@ -4680,7 +4661,7 @@ msgstr "Actualmente en uso local"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Actualmente en uso local por %s %s %s(%s)%s"
@@ -6098,7 +6079,7 @@ msgstr ""
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6180,7 +6161,7 @@ msgstr "Signatura topográfica del ítem"
 msgid "Item cannot be checked out."
 msgstr "El ejemplar no puede ser prestado."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "Ítem dañado"
@@ -6195,7 +6176,7 @@ msgstr "Prioridad de la cola de reserva de ejemplar"
 msgid "Item holds"
 msgstr "Reserva de ejemplares"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "Ítem perdido"
@@ -6229,7 +6210,7 @@ msgstr "Tipo de ítem: "
 msgid "Item types"
 msgstr "Tipos de ítem"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "Ítem retirado"
@@ -7199,8 +7180,8 @@ msgstr "¿No encontró lo que usted está buscando?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "No para préstamo %s"
@@ -7404,12 +7385,12 @@ msgstr "Oct"
 msgid "October"
 msgstr "Octubre"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Reservado"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "Pedido"
@@ -7852,15 +7833,15 @@ msgstr "Por favor intente de nuevo más tarde."
 #. %1$s:  ELSIF (errNoBorrowerFound) 
 #. %2$s:  ELSIF (errMultipleAccountsForEmail) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please try again later. %s No account was found with the provided "
 "information. %s Account identification with this email address only is "
 "ambiguous. "
 msgstr ""
 "Por favor, inténtelo de nuevo más tarde. %s No se encontró una cuenta con la "
-"información proporcionada. %s El proceso de recuperación de la contraseña se "
-"ya ha iniciado para esta cuenta (\""
+"información proporcionada. %s La identificación de la cuenta solamente con "
+"esta dirección de correo es ambigua. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -7876,14 +7857,13 @@ msgstr "Por favor ingrese los siguientes caracteres en el cuadro precedente: "
 
 #. %1$s:  ELSIF (errAlreadyStartRecovery) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please use the field 'Login' as well. %s The process of password recovery "
 "has already been started for this account (\""
 msgstr ""
-"Por favor, inténtelo de nuevo más tarde. %s No se encontró una cuenta con la "
-"información proporcionada. %s El proceso de recuperación de la contraseña se "
-"ya ha iniciado para esta cuenta (\""
+"Por favor, utilice el campo 'Iniciar sesión' también. %s El proceso de "
+"recuperación de contraseñas ya se ha iniciado para esta cuenta (\""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -7903,9 +7883,9 @@ msgid "Popularity (most to least)"
 msgstr "Popularidad (mayor a menor)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
-#, fuzzy, c-format
+#, c-format
 msgid "Post your comments on this item. "
-msgstr "Agregue o edite sus comentarios sobre este ítem. "
+msgstr "Agregue sus comentarios en este ítem. "
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -10239,11 +10219,11 @@ msgstr ""
 "Administrador de Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login and your email address. "
 msgstr ""
-"Para restablecer su contraseña, ingrese su identificador de acceso y su "
-"dirección de correo electrónico. "
+"Para restablecer su contraseña, ingrese su nombre de usuario y su dirección "
+"de correo electrónico. "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -11710,9 +11690,8 @@ msgstr "koha opac %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:106
-#, fuzzy
 msgid "koha:biblionumber:[% biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblionumber %]"
+msgstr "koha:biblionumber:[% biblionumber | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format

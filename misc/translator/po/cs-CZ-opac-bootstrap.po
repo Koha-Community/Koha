@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-17 02:48-0300\n"
+"POT-Creation-Date: 2017-10-15 11:13-0300\n"
 "PO-Revision-Date: 2017-01-25 08:08+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
@@ -316,25 +316,6 @@ msgid ""
 msgstr ""
 "%s %s Pro nastavení odběru upozornění na nová čísla periodik musíte být "
 "přihlášeni %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- Tento vkládaný soubor může mít dva parametry: strukturu jednotky "
-"volitelně také strukturu výpůjčky. Struktura výpůjčky se používá pro stránky "
-"s rezervacemi kurzů, které nepoužívají API ke zpracování termínů vrácení "
-"jednotlivých výpůjček (item.datedue). -%%] %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -3840,7 +3821,7 @@ msgid "Availability:"
 msgstr "Dostupnost:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "Dostupné %s"
@@ -4201,7 +4182,7 @@ msgstr "Výpůjčka%s, vrácení%s nebo prodloužení: "
 msgid "Check-in date:"
 msgstr "Datum vrácení:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4223,7 +4204,7 @@ msgstr "Vypůjčeno dne"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Vypůjčeno čtenáři %s %s  %s(%s)%s"
@@ -4642,7 +4623,7 @@ msgstr "Současné heslo:"
 msgid "Current session"
 msgstr "Aktuální termíny"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "Vypůjčeno do studovny"
@@ -4652,7 +4633,7 @@ msgstr "Vypůjčeno do studovny"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Půjčeno ve studovně čtenáři %s %s %s (%s) %s"
@@ -6057,7 +6038,7 @@ msgstr "V on-line katalogu: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6137,7 +6118,7 @@ msgstr "Signatura jednotky"
 msgid "Item cannot be checked out."
 msgstr "Jednotku nelze vypůjčit."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "Poškozeno"
@@ -6152,7 +6133,7 @@ msgstr "Vaše pořadí ve frontě rezervací"
 msgid "Item holds"
 msgstr "Rezervace jednotky"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "Ztraceno"
@@ -6186,7 +6167,7 @@ msgstr "Typ jednotky: "
 msgid "Item types"
 msgstr "Typy jednotek"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "Odepsáno"
@@ -7155,8 +7136,8 @@ msgstr "Nenašli jste co jste hledali?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "Nelze vypůjčit %s"
@@ -7359,12 +7340,12 @@ msgstr "Říjen"
 msgid "October"
 msgstr "Říjen"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Rezervováno"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "Objednáno"

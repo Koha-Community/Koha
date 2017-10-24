@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-09-17 04:22-0300\n"
+"POT-Creation-Date: 2017-10-15 12:50-0300\n"
 "PO-Revision-Date: 2014-10-08 03:44+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,25 +306,6 @@ msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
 msgstr "%s %s Bạn phải đăng nhập để đăng ký nhận thông báo ÂPĐK %s %s "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, fuzzy, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s %s %s "
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -3823,7 +3804,7 @@ msgid "Availability:"
 msgstr "Sẵn sàng:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "Ấn phẩm sẵn sàng"
@@ -4182,7 +4163,7 @@ msgstr "Ghi mượn %s, ghi trả %s hoặc gia hạn tài liệu: "
 msgid "Check-in date:"
 msgstr "Ngày ghi trả:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4204,7 +4185,7 @@ msgstr "Được ghi mượn"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Được ghi mượn (%s)"
@@ -4632,7 +4613,7 @@ msgstr "Mật khẩu cũ:"
 msgid "Current session"
 msgstr "Phiên truy cập hiện tại"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "Phiên truy cập hiện tại"
@@ -4642,7 +4623,7 @@ msgstr "Phiên truy cập hiện tại"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, fuzzy, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Xác nhận đặt mượn: %s %s %s (%s) %s "
@@ -6047,7 +6028,7 @@ msgstr "Truy cập trực tuyến: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6127,7 +6108,7 @@ msgstr "Ký hiệu phân loại"
 msgid "Item cannot be checked out."
 msgstr "Tài liệu không thể ghi mượn."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr ""
@@ -6142,7 +6123,7 @@ msgstr "Thứ tự đặt mượn"
 msgid "Item holds"
 msgstr "Đặt mượn"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "Đặt mượn"
@@ -6176,7 +6157,7 @@ msgstr "Kiểu tài liệu: "
 msgid "Item types"
 msgstr "Kiểu tài liệu"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "Loại khỏi lưu thông ("
@@ -7147,8 +7128,8 @@ msgstr "Không tìm thấy tài liệu bạn cần?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr "Không cho mượn (%s)"
@@ -7351,12 +7332,12 @@ msgstr "Oct"
 msgid "October"
 msgstr "Tháng 10"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Đặt mượn"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "Đang đặt hàng ("

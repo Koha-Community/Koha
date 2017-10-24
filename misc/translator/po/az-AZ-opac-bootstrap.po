@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 02:41-0300\n"
+"POT-Creation-Date: 2017-10-15 11:06-0300\n"
 "PO-Revision-Date: 2011-06-21 08:16+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Koha Translation Team\n"
@@ -299,21 +299,6 @@ msgid ""
 "%s %s You must log in if you want to subscribe to email notification on new "
 "issues %s %s "
 msgstr "Yeni saylar haqqında e-poçta bildirimləri almaq üçün yazılın "
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -3472,7 +3457,7 @@ msgid "Availability:"
 msgstr "İşlədiləbilmə:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, fuzzy, c-format
 msgid "Available %s"
 msgstr "Əlverişli sayılar"
@@ -3836,7 +3821,7 @@ msgstr ""
 msgid "Check-in date:"
 msgstr "Materiyalı yenilə (vaxtını uzat)"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, fuzzy, c-format
 msgid "Checked out"
@@ -3858,7 +3843,7 @@ msgstr "Ödünç verildi"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "Ödəmə alındı"
@@ -4281,7 +4266,7 @@ msgstr "Hal-hazırki parol:"
 msgid "Current session"
 msgstr "Geçerli Terimler"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, fuzzy, c-format
 msgid "Currently in local use"
 msgstr "Hal-hazırki parol:"
@@ -4291,7 +4276,7 @@ msgstr "Hal-hazırki parol:"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr ""
@@ -5688,7 +5673,7 @@ msgstr "10; url=/cgi-bin/koha/mainpage.pl"
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
@@ -5768,7 +5753,7 @@ msgstr "Materyal yer numarası"
 msgid "Item cannot be checked out."
 msgstr "Materyala ödümə verilə bilmir."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr ""
@@ -5783,7 +5768,7 @@ msgstr ""
 msgid "Item holds"
 msgstr "Ayır"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, fuzzy, c-format
 msgid "Item lost"
 msgstr "Ayır"
@@ -5817,7 +5802,7 @@ msgstr "Materyal türü: "
 msgid "Item types"
 msgstr "Materyal türleri"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, fuzzy, c-format
 msgid "Item withdrawn"
 msgstr "İşlətmədən götürülüb (%s),"
@@ -6795,8 +6780,8 @@ msgstr "Axtardığıvızı tapa bilmədiniz?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, fuzzy, c-format
 msgid "Not for loan %s"
 msgstr "Ödəmə verilmir (%s)"
@@ -6994,12 +6979,12 @@ msgstr "Nesne"
 msgid "October"
 msgstr "Ekim"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Beklemede"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, fuzzy, c-format
 msgid "On order"
 msgstr "Sifarişdə (%s),"

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-17 04:18-0300\n"
-"PO-Revision-Date: 2017-09-14 11:17+0000\n"
+"POT-Creation-Date: 2017-10-15 12:45-0300\n"
+"PO-Revision-Date: 2017-10-20 12:52+0000\n"
 "Last-Translator: Onur <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1505387822.000000\n"
+"X-POOTLE-MTIME: 1508503954.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -24,7 +24,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:44
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Kısıtlama gecikenler işlemi tarafından eklendi %s %s %s %s"
+msgstr "\" %s Gecikenler işlemi tarafından kısıtlama eklendi %s %s %s %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:305
@@ -180,7 +180,7 @@ msgstr "%s %s %s Materyal beklemede "
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:9
 #, c-format
 msgid "%s %s %s Koha online %s "
-msgstr "%s %s %s Koha çevrimiçi%s  "
+msgstr "%s %s %s Koha çevrimiçi %s  "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -262,7 +262,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
 #, c-format
 msgid "%s %s Item in transit to "
-msgstr "%s %s gelen materyal "
+msgstr "%s %s gelmekte olan materyal "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -313,25 +313,6 @@ msgid ""
 msgstr ""
 "%s %s Yeni sayılar hakkındaki e-posta bildirimine abone olmak istiyorsanız "
 "sistemde oturum açmalısınız %s %s"
-
-#. %1$s:  USE AuthorisedValues 
-#. %2$s:  SET itemavailable = 1 
-#. %3$s:  IF ( item.itemlost ) 
-#. %4$s:  SET itemavailable = 0 
-#. %5$s:  av_lib_include = AuthorisedValues.GetByCode( 'LOST', item.itemlost, 1 ) 
-#. %6$s:  IF ( av_lib_include ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:1
-#, c-format
-msgid ""
-"%s %s [%%#- This include takes two parameters: an item structure and an "
-"optional loan (issue) structure. The issue structure is used by course "
-"reserves pages, which do not use an API to fetch items that populates item."
-"datedue. -%%] %s %s %s %s "
-msgstr ""
-"%s %s [%%#- Bu içerik iki parametre kullanır: materyal yapısı ve opsiyonel "
-"ödünç verme (issue) yapısı. Issue yapısı, item.datedue. -%%] %s %s %s %s "
-"dolduran materyalleri getirmek için bir API kullanmayan ayrılmış ders "
-"materyalleri sayfaları tarafından kullanılır."
 
 #. %1$s:  END # / IF GROUP_RESULT.BiblioDefaultViewmarc 
 #. %2$s:  IF ( GROUP_RESULT.author ) 
@@ -490,8 +471,8 @@ msgid ""
 "%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
 "%sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s(%s)%s "
 msgstr ""
-"%s %sÖdeme,teşekkürler %sÖdeme,teşekkürler (SIP2 üzerinden nakit) %sÖdeme,"
-"teşekkürler (SIP2 üzerinden VISA) %sÖdeme,teşekkürler (SIP2 üzerinden kredi "
+"%s %sÖdeme, teşekkürler %sÖdeme, teşekkürler (SIP2 üzerinden nakit) %sÖdeme, "
+"teşekkürler (SIP2 üzerinden VISA) %sÖdeme, teşekkürler (SIP2 üzerinden kredi "
 "kartı) %sYeni Kart %sPara cezası %sHesap işletim ücreti %sMuhtelif %sKayıp "
 "Materyal %sSilinecek ceza %sTahakkuk ücreti %sÇok uzun süre bekleyen Ayırtma "
 "%sKiralama bedeli %sBağışlanmış %sKayıp materyal yerine koyma bedeli %sÖdeme "
@@ -666,8 +647,8 @@ msgid ""
 "%s Could not create new list. Please check if the name is unique. %s Sorry, "
 "you cannot add items to this list. %s "
 msgstr ""
-"%s Yeni Liste oluşturulamıyor. Daha önce kullanılıp kullanılmadığından emin "
-"olun. %s Üzgünüz, bu listeye yeni materyaller ekleyemezsiniz.  %s "
+"%s Yeni liste oluşturulamadı. Lütfen adın benzersiz olup olmadığını kontrol "
+"edin. %s Üzgünüz, bu listeye yeni materyaller ekleyemezsiniz. %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -1002,9 +983,9 @@ msgid ""
 "Due date is not valid. %s Please see a member of the library staff. "
 msgstr ""
 "%s Sistem bu barkodu tanımıyor. %s Çok fazla materyal ödünç aldınız ve daha "
-"fazla ödünç alamıyorsunuz. %s Bu materyal bir başkasına ödünç verilmiş. %s "
-"Bu materyalin süresini yeniden uzatamazsınız. %s Bu materyal ödünç verilmez. "
-"%s Kütüphaneye borcunuz var %s ve ödünç alamazsınız. %s Bu materyal "
+"fazla ödünç alamazsınız. %s Bu materyal bir başkasına ödünç verilmiş. %s Bu "
+"materyalin süresini yeniden uzatamazsınız. %s Bu materyal ödünç verilmez. %s "
+"Kütüphaneye borcunuz var %s ve ödünç alamazsınız. %s Bu materyal "
 "koleksiyondan düşülmüş. %s Bu materyal kısıtlanmış. %s Bu materyal başka bir "
 "kullanıcı tarafından ayırtılmış. %s Bu materyal başka bir birime ait. %s "
 "Hesabınızın süresi dolmuş. %s Hesabınız askıya alınmış. %s Bu kart kayıp "
@@ -1057,7 +1038,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:436
 #, c-format
 msgid "%s Video extracts"
-msgstr "%s Video özleri"
+msgstr "%s Video kesitleri"
 
 #. %1$s:  IF ( itemLoo.waitingdate ) 
 #. %2$s:  ELSE 
@@ -1098,7 +1079,7 @@ msgstr "%s Evet %s Hayır %s  "
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
-"%s Evet (Materyal gecikti veya kayıp) %s Evet (Kiralama ücretleri) %s Hayır "
+"%s Evet (Materyal gecikmiş veya kayıp) %s Evet (Kiralama ücretleri) %s Hayır "
 "%s"
 
 #. %1$s:  ELSE 
@@ -2730,7 +2711,7 @@ msgid ""
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;HoldTitle&gt; &lt;"
 "title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
@@ -2741,8 +2722,8 @@ msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
 "&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
-"&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;LookupPatron&gt; &lt;"
+"id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:691
 #, c-format
@@ -3853,7 +3834,7 @@ msgid "Availability:"
 msgstr "Kullanılabilirlik:"
 
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:82
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:80
 #, c-format
 msgid "Available %s"
 msgstr "Kullanılabilir %s"
@@ -4214,7 +4195,7 @@ msgstr "Ödünç ver%s, iade al%s ya da materyalin süresini uzat: "
 msgid "Check-in date:"
 msgstr "İade tarihi:"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:33
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:155
 #, c-format
 msgid "Checked out"
@@ -4236,7 +4217,7 @@ msgstr "Ödünç verildiği tarih"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:31
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:29
 #, c-format
 msgid "Checked out to %s %s %s(%s)%s"
 msgstr "%s %s %s(%s)%s tarafından ödünç alındı"
@@ -4657,7 +4638,7 @@ msgstr "Geçerli Parola:"
 msgid "Current session"
 msgstr "Geçerli oturum"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:27
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
 #, c-format
 msgid "Currently in local use"
 msgstr "Şu anda yerel kullanımda"
@@ -4667,7 +4648,7 @@ msgstr "Şu anda yerel kullanımda"
 #. %3$s:  IF ( item.cardnumber ) 
 #. %4$s:  item.cardnumber 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:25
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:23
 #, c-format
 msgid "Currently in local use by %s %s %s(%s)%s"
 msgstr "Şu anda %s %s %s(%s)%s tarafından yerel kullanımda"
@@ -5379,8 +5360,9 @@ msgid ""
 "published in and before 1987 or \"2008-\" for everything published in 2008 "
 "and after."
 msgstr ""
-"Örneğin: 1999-2001. 1987 ve öncesinde yayınlanan her şey için \"-1987\" veya "
-"2008 ve sonrası yayınlanan her şey için \"2008-\" kullanabilirsiniz."
+"Örneğin: 1999-2001. 1987 yılında ve 1987 öncesi yayınlanan her şey için "
+"\"-1987\"yi de kullanabilirsiniz; ya da 2008 yılında ve 2008 sonrası "
+"yayınlanan her şey için \"2008-\"i kullanabilirsiniz."
 
 #. %1$s:  IF OpacPasswordChange 
 #. %2$s:  END 
@@ -6078,7 +6060,7 @@ msgstr ""
 #. %1$s:  item.transfertfrom 
 #. %2$s:  item.transfertto 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:40
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:38
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:369
 #, c-format
 msgid "In transit from %s to %s since %s"
@@ -6141,8 +6123,7 @@ msgstr "Sayıların özet bilgisi"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:102
 #, c-format
 msgid "It is too soon after the checkout date for this item to be renewed."
-msgstr ""
-"Ödünç alınma tarihi çok yakın olduğu için bu materyalin süresi uzatılamaz."
+msgstr "Bu materyalin süresinin uzatılması için ödünç alınma tarihi çok yeni."
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:85
 #, c-format
@@ -6159,7 +6140,7 @@ msgstr "Materyal yer numarası"
 msgid "Item cannot be checked out."
 msgstr "Materyal ödünç verilemiyor."
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:72
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #, c-format
 msgid "Item damaged"
 msgstr "Materyal hasarlı"
@@ -6174,7 +6155,7 @@ msgstr "Materyal ayırma sırası önceliği"
 msgid "Item holds"
 msgstr "Ayırmalar"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:17
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:15
 #, c-format
 msgid "Item lost"
 msgstr "Materyal kayıp"
@@ -6208,7 +6189,7 @@ msgstr "Materyal türü: "
 msgid "Item types"
 msgstr "Materyal türleri"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:51
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:49
 #, c-format
 msgid "Item withdrawn"
 msgstr "Materyal sistemden düşülmüş"
@@ -7178,8 +7159,8 @@ msgstr "Aradığınızı bulamadınız mı?"
 
 #. For the first occurrence,
 #. %1$s:  IF ( item.restrictedopac ) 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:59
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:63
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:57
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:61
 #, c-format
 msgid "Not for loan %s"
 msgstr "Ödünç verilmez %s"
@@ -7383,12 +7364,12 @@ msgstr "Ekim"
 msgid "October"
 msgstr "Ekim"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:46
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:44
 #, c-format
 msgid "On hold"
 msgstr "Ayrılmış"
 
-#: opac-tmpl/bootstrap/en/includes/item-status.inc:78
+#: opac-tmpl/bootstrap/en/includes/item-status.inc:76
 #, c-format
 msgid "On order"
 msgstr "Siparişte"
@@ -7832,14 +7813,14 @@ msgstr "Lütfen daha sonra tekrar deneyin."
 #. %1$s:  ELSIF (errNoBorrowerFound) 
 #. %2$s:  ELSIF (errMultipleAccountsForEmail) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:54
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please try again later. %s No account was found with the provided "
 "information. %s Account identification with this email address only is "
 "ambiguous. "
 msgstr ""
 "Lütfen daha sonra tekrar deneyin. %s Verilen bilgilere göre bir hesap "
-"bulunamadı. %s Parola kurtarma işlemi bu hesap için zaten başlatılmış (\""
+"bulunamadı. %s Hesap kimliği bu e-posta adresi ile belirsizdir."
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -7855,13 +7836,13 @@ msgstr "Yukarıda gösterilen kutunun içine aşağıdaki karakterleri yazınız
 
 #. %1$s:  ELSIF (errAlreadyStartRecovery) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please use the field 'Login' as well. %s The process of password recovery "
 "has already been started for this account (\""
 msgstr ""
-"Lütfen daha sonra tekrar deneyin. %s Verilen bilgilere göre bir hesap "
-"bulunamadı. %s Parola kurtarma işlemi bu hesap için zaten başlatılmış (\""
+"Lütfen 'Oturum aç' alanını da kullanın. %s Parola kurtarma işlemi bu hesap "
+"için zaten başlatılmış (\""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -7881,10 +7862,9 @@ msgid "Popularity (most to least)"
 msgstr "Popülerlik (Çoktan Aza)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:946
-#, fuzzy, c-format
+#, c-format
 msgid "Post your comments on this item. "
-msgstr ""
-"Bu materyal hakkında yorum yapın veya mevcut yorumlarınızı düzenleyin. "
+msgstr "Bu materyal hakkındaki yorumlarınızı gönderin."
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -8294,7 +8274,7 @@ msgstr "Süresini uzat"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:752
 msgid "Renew all"
-msgstr "Hepsini yenile"
+msgstr "Tümünün süresini uzat"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:118
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:126
@@ -9747,11 +9727,11 @@ msgid ""
 "%s %s%s months%s "
 msgstr ""
 "Güncel abonelik %s tarihinde başladı ve yayınlanır %s günde 2 kez %s %s her "
-"gün %s %s haftada 3 kez %s %s her hafta %s %s her 2 haftada %s %s her 3 "
-"haftada %s %s her ay %s %s her 2 ayda %s %s 3 ayda %s %s 6 ayda %s %s her "
-"yıl %s %s her 2 yıl %s %s düzensiz %s %s Pazartesi  %s %s Salı %s %s "
-"Çarşamba %s %s Perşembe %s %s Cuma %s %s Cumartesi %s %s Pazar  %s için %s%s "
-"sayılar%s %s%s haftalar%s %s%s aylar%s "
+"gün %s %s haftada 3 kez %s %s her hafta %s %s her 2 haftada bir %s %s her 3 "
+"haftada bir %s %s her ay %s %s her 2 ayda bir %s %s 3 ayda bir %s %s 6 ayda "
+"bir %s %s her yıl %s %s her 2 yıl %s %s düzensiz %s %s Pazartesi  %s %s Salı "
+"%s %s Çarşamba %s %s Perşembe %s %s Cuma %s %s Cumartesi %s %s Pazar  %s "
+"için %s%s sayılar%s %s%s haftalar%s %s%s aylar%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:31
 #, c-format
@@ -10198,10 +10178,10 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "Bu hatayı bildirmek için, Koha Yöneticisine e-posta gönderebilirsiniz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login and your email address. "
 msgstr ""
-"Parolanızı sıfırlamak için, oturum adınızı ve e-posta adresinizi girin."
+"Şifrenizi sıfırlamak için, giriş bilgilerinizi ve e-posta adresinizi girin."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10908,7 +10888,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "You will receive an email shortly. "
-msgstr "Kısa bir süre içinde bir e-posta alacaksınız."
+msgstr "Kısa süre içinde bir e-posta alacaksınız."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1355
@@ -10941,8 +10921,8 @@ msgstr ""
 msgid ""
 "Your account has expired. Please contact the library for more information."
 msgstr ""
-"Hesabınızın süresi sona erdi. Lütfen daha fazla bilgi için kütüphaneye "
-"başvurun."
+"Hesabınızın süresi dolmuştur. Lütfen daha fazla bilgi almak için kütüphaneye "
+"başvurunuz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:117
 #, c-format
@@ -11104,7 +11084,7 @@ msgstr "Listeleriniz:"
 #, c-format
 msgid "Your loan renewal failed because of the following reason(s): "
 msgstr ""
-"Aşağıdaki sorunlar nedeniyle ödünç alma süresini uzatma işleminiz başarısız "
+"Aşağıdaki sorun(lar) nedeniyle ödünç süresini uzatma işleminiz başarısız "
 "oldu:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
@@ -11190,7 +11170,7 @@ msgstr "Arama geçmişiniz"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:80
 #, c-format
 msgid "Your search returned %s results."
-msgstr "Aramanızda %s sonuç bulundu."
+msgstr "Aramanızda %s sonuç bulunmuştur."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:929
@@ -11200,7 +11180,7 @@ msgstr "Ayarlarınız güncellendi!"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:25
 #, c-format
 msgid "Your summary"
-msgstr "Özetiniz"
+msgstr "Hesabınız"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:124
 #, c-format
@@ -11417,7 +11397,7 @@ msgstr "yazar"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
 #, c-format
 msgid "by "
-msgstr "yazar"
+msgstr "yazar "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:461
 #, c-format
@@ -11659,9 +11639,8 @@ msgstr "koha %s kataloğu"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:106
-#, fuzzy
 msgid "koha:biblionumber:[% biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblionumber %]"
+msgstr "koha:biblionumber:[% biblionumber | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -12114,17 +12093,17 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:17
 #, c-format
 msgid "your fines"
-msgstr "cezalarınız"
+msgstr "Cezalarınız"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:96
 #, c-format
 msgid "your lists"
-msgstr "listeleriniz"
+msgstr "Listeleriniz"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:86
 #, c-format
 msgid "your messaging"
-msgstr "mesajlaşmalarınız"
+msgstr "Mesajlaşma"
 
 #. %1$s:  payment 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:61
@@ -12135,7 +12114,7 @@ msgstr "%s ödemeniz hesabınıza uygulandı"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #, c-format
 msgid "your personal details"
-msgstr "kişisel bilgileriniz"
+msgstr "Kişisel bilgileriniz"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:66
 #, c-format
@@ -12145,7 +12124,7 @@ msgstr "gizliliğiniz"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:76
 #, c-format
 msgid "your purchase suggestions"
-msgstr "satın alma teklifleriniz"
+msgstr "Satın alma teklifleriniz"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1355
@@ -12161,7 +12140,7 @@ msgstr "derecelendirmeniz : %s,"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:59
 #, c-format
 msgid "your reading history"
-msgstr "okuma geçmişiniz"
+msgstr "Okuma geçmişiniz"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:50
 #, c-format
@@ -12171,7 +12150,7 @@ msgstr "arama geçmişiniz"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:10
 #, c-format
 msgid "your summary"
-msgstr "özetiniz"
+msgstr "Özetiniz"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:32
 #, c-format
