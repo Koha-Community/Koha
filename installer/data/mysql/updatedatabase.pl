@@ -14857,6 +14857,23 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 12768 - Add 'Processing Fee' to the account_offset_types table if missing)";
 }
 
+$DBversion = '17.06.00.020';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences
+        SET
+            variable='OpacLocationOnDetail',
+            options='holding|home|both|column',
+            explanation='In the OPAC detail, display the shelving location on its own column or under a library columns.'
+        WHERE
+            variable='OpacLocationBranchToDisplayShelving'
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19028: Add 'shelving location' to holdings table in detail page (Rename syspref OpacLocationBranchToDisplayShelving with OpacLocationOnDetail))\n";
+}
+
+
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
