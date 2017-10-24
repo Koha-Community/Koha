@@ -133,7 +133,18 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub add_accounts_to_template {
 
     my ( $total, undef, undef ) = GetMemberAccountRecords($borrowernumber);
-    my $accounts = [];
+    my $accounts = Koha::Account::Lines->search({ borrowernumber => $borrowernumber, }, { order_by => ['accounttype'] });
+    my @accounts;
+    while ( my $account = $accounts->next ) {
+        $account = $account->unblessed;
+        if ( $account->{itemnumber} ) {
+            my $item = Koha::Items->find( $account->{itemnumber} );
+            my $biblio = $item->biblio;
+            $account->{biblionumber} = $biblio->biblionumber;
+            $account->{title}        = $biblio->title;
+        }
+        push @accounts, $account;
+    }
     borrower_add_additional_fields($borrower);
 
     $template->param(%$borrower);
@@ -141,7 +152,7 @@ sub add_accounts_to_template {
     my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
     $template->param( picture => 1 ) if $patron_image;
     $template->param(
-        accounts => $accounts,
+        accounts => \@accounts,
         borrower => $borrower,
         categoryname => $borrower->{'description'},
         total    => $total,

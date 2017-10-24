@@ -79,21 +79,18 @@ function enableCheckboxActions(){
     <th>Description</th>
     <th>Payment note</th>
     <th>Account type</th>
-    <th>Notify id</th>
-    <th>Level</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
 </tr>
 </thead>
 <tfoot>
 <tr>
-    <td class="total" colspan="8">Total due:</td>
+    <td class="total" colspan="6">Total due:</td>
     <td style="text-align: right;">[% total | $Price %]</td>
 </tr>
 </tfoot>
 <tbody>
-[% FOREACH account_grp IN accounts %]
-    [% FOREACH line IN account_grp.accountlines %]
+[% FOREACH line IN accounts %]
 <tr>
     <td>
     [% IF ( line.amountoutstanding > 0 ) %]
@@ -112,7 +109,6 @@ function enableCheckboxActions(){
     <input type="hidden" name="accountlines_id[% line.accountlines_id %]" value="[% line.accountlines_id %]" />
     <input type="hidden" name="amountoutstanding[% line.accountlines_id %]" value="[% line.amountoutstanding %]" />
     <input type="hidden" name="borrowernumber[% line.accountlines_id %]" value="[% line.borrowernumber %]" />
-    <input type="hidden" name="totals[% line.accountlines_id %]" value="[% line.totals %]" />
     </td>
     <td>
         [% SWITCH line.accounttype %]
@@ -153,7 +149,6 @@ function enableCheckboxActions(){
     <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
     <td style="text-align: right;">[% account_grp.total | $Price %]</td>
 </tr>
-[% END %]
 [% END %]
 </tbody>
 </table>
