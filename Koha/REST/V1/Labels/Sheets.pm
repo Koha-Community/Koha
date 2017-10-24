@@ -3,6 +3,8 @@ package Koha::REST::V1::Labels::Sheets;
 use Modern::Perl;
 use Try::Tiny;
 use Scalar::Util qw(blessed);
+use IO::File;
+use JSON qw( from_json );
 
 use Mojo::Base 'Mojolicious::Controller';
 
@@ -114,6 +116,41 @@ sub get {
     } catch {
         if (blessed($_) && $_->isa('Koha::Exception::UnknownObject')) {
             return $c->render(status => 404, json => { error => $_->error });
+        }
+        if (blessed($_) && $_->isa('Koha::Exception::DB')) {
+            return $c->render(status => 500, json => { error => $_->error });
+        }
+        Koha::Exceptions::rethrow_exception($_);
+    };
+}
+
+sub import_file {
+    my $c = shift->openapi->valid_input or return;
+
+    try {
+        my $filename;
+        my $path = '/tmp/';
+        for my $file ($c->req->upload('file')) {
+            $filename = $file->filename;
+            $file->move_to($path.$filename);
+        }
+        my $fh = IO::File->new("$path$filename", "r");
+        my $content;
+        if (defined $fh) {
+            $content = <$fh>;
+            $fh->close;
+            my $ok = eval {from_json($content)};
+            if ($ok) {
+               return $c->render( status => 201, openapi => $content);
+            } else {
+                return $c->render( status  => 404,
+                           openapi => { error => "Wrong file content!" } );
+            }
+        }
+
+    } catch {
+        if (blessed($_) && $_->isa('Koha::Exception::BadParameter')) {
+            return $c->render(status => 400, json => { error => $_->error });
         }
         if (blessed($_) && $_->isa('Koha::Exception::DB')) {
             return $c->render(status => 500, json => { error => $_->error });

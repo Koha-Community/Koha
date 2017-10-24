@@ -41,11 +41,11 @@
                                       <br /> <span class="hint">One barcode per line.</span>
                                       <br /> <span class="hint">Add an empty row for stickers that need to be skipped.</span>
                                       <br />
-                                      <br /> <input type="submit" id="printLabels" value="Print us!">
+                                      <br /> <button type="submit" id="printLabels" class="btn btn-default"><i class="fa fa-print" aria-hidden="true"></i> Print us!</button>
                                       <br />
                                       <br /> <span class="hint">If you have trouble printing the .pdf, make sure you are printing the .pdf as is, without any scaling. You should adjust margins only if non-scaling printing doesn't work.</span>
                                       [% IF barcodesTextArea %]
-                                      <input value="Empty label list" id="flushPrintLabels" type="submit">
+                                      <button id="flushPrintLabels" class="btn btn-default"><i class="fa fa-trash-o" aria-hidden="true"></i> Empty list</button>
                                       <br /> <span class="hint">If you have added Items to the label printing list, you can clear the list with this button.</span>
                                       [% END %]
 
@@ -151,8 +151,34 @@
         </div>
         <div class="alert-errors hidden">
           <div class="item-missing">Select copied item first!</div>
-          <div class="number-missing">Missing copy item number!</div>
-          <div class="greater-than">You are trying to add item which is greater than first unused item!</div>
+          <div class="number-missing">Missing copy number!</div>
+          <div class="greater-than">Too big copy number!</div>
+        </div>
+        <div id="importModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-body">
+                <h3>Import sheet</h3>
+                <br/>
+                <form id="uploadForm" action="#" method="post">
+                  <div class="form-group">
+                    <label for="importName">Sheet name</label>
+                    <input type="text" class="form-control" id="importName">
+                  </div>
+                  <div class="form-group">
+                    <label for="importFile">File input</label>
+                    <input type="file" class="form-control-file" id="importFile" aria-describedby="fileHelp">
+                    <small id="fileHelp" class="form-text text-muted">Add exported json file here.</small>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" form="uploadForm" id="importNew" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-upload" aria-hidden="true"></i> Import</button>
+                <button type="button" id="dismissModal" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
         [% INCLUDE 'labels/translations.inc' %]
         [%# This should be given from a global js-context! %]

@@ -243,6 +243,68 @@
       }
     }
   },
+  "/labels/sheets/import": {
+    "post": {
+      "x-mojo-to": "Labels::Sheets#import_file",
+      "operationId": "importSheet",
+      "tags": ["labels"],
+      "summary": "Upload file for import",
+      "parameters": [
+        {
+          "name": "file",
+          "in": "formData",
+          "description": "File to upload",
+          "type": "file"
+        }
+      ],
+      "consumes": [
+        "multipart/form-data"
+      ],
+      "responses": {
+        "201": {
+          "description": "The file uploaded",
+          "schema": { "type": "string" }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Check the file!",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+        "labels": "sheets_new"
+        }
+      }
+    }
+  },
   "/labels/sheets/{sheet_identifier}/{sheet_version}": {
     "delete": {
       "x-mojo-to": "Labels::Sheets#delete",
@@ -323,7 +385,7 @@
         "200": {
           "description": "The sheet",
           "schema": {
-            "type" : "object"
+            "type" : "string"
           }
         },
         "400": {

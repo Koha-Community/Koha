@@ -145,6 +145,18 @@ Labels.GUI.SheetList = function (params) {
                 Labels.GUI.SheetList.createListElement(Labels.GUI.sheetlist, sheet);
             });
         }
+        if (Permissions.labels.sheets_new) {
+            $("<button/>",{
+                id: "importSheet",
+                "data-toggle":"modal",
+                "data-target":"#importModal"
+            }).addClass("btn btn-default").html('<i class="fa fa-upload" aria-hidden="true"></i> Import').appendTo(this.containerElem);
+        }
+        if (Permissions.labels.sheets_new) {
+            $("<a>",{
+                id: "exportSheet"
+            }).addClass("btn btn-default hidden").html('<i class="fa fa-download" aria-hidden="true"></i> Export').appendTo(this.containerElem);
+        }
     }
     this.setSheetListName = function (sheetId, newVal) {
         var sheetListNodeJqHtml = Labels.GUI.SheetList.getSheetListNode(sheetId);
@@ -177,12 +189,32 @@ Labels.GUI.SheetList.createListElement = function (sheetList, sheet) {
 
     $("#sheetList"+sheet.id).change(function(event) {
         Labels.GUI.activeSheetId = sheet.id;
+        Labels.GUI.SheetList.exportSheet(sheet);
     });
 
     return htmlElem;
 }
 Labels.GUI.SheetList.getSheetListNode = function (sheetListId) {
     return $("#sheetListNode"+sheetListId);
+}
+
+Labels.GUI.SheetList.exportSheet = function (sheet) {
+    var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(sheet));
+    $('#exportSheet').attr('href', 'data:' + data).attr('download','sheet'+sheet.id+'.json').removeClass('hidden');
+}
+
+Labels.GUI.SheetList.importSheet = function (sheetname, file) {
+    var sheet = Labels.Sheets.importFile(file);
+    sheet.name = sheetname;
+    sheet.version = parseFloat(0.1);
+    var lastSheet = $( "#sheetListContainer" ).children(".sheetListNode").last();
+    var nextId = lastSheet.attr("id").replace("sheetListNode","");
+    sheet.id = parseInt(nextId)+1;
+
+    var response = Labels.Sheets.importToREST(sheet);
+
+    Labels.Sheets.jsonToSheet(response);
+    Labels.GUI.SheetList.createListElement(Labels.GUI.sheetlist, response);
 }
 
 //Package Labels.GUI.Controls

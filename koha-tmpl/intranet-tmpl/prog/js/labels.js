@@ -4,13 +4,19 @@ Labels.init();
 
 $("#regionDeleter").click(function() {Labels.GUI.deleteActive()});
 $("#copyItem").click(function() {Labels.GUI.copyActive()});
-$("#closeEditor").click(function() {Labels.GUI.SheetEditor.hide()})
+$("#closeEditor").click(function() {Labels.GUI.SheetEditor.hide()});
 $("#elementDispenser").draggable({
     helper: "clone"
 });
 $("#saveSheet").click(function() {
     var sheet = Labels.Sheets.getActiveSheet();
     sheet.save();
+});
+$("#importNew").click(function() {
+    var name = $("#importName").val();
+    var file = $('#importFile').prop('files')[0];
+    Labels.GUI.SheetList.importSheet(name, file);
+
 });
 $("#printLabels").click(function(event) {
     event.preventDefault();

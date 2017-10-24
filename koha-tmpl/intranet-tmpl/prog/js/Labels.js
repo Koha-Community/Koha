@@ -35,6 +35,22 @@ Labels.Sheets.getSheetsFromREST = function (callback) {
         }
     });
 }
+Labels.Sheets.getSheetFromREST = function (sheetId, version) {
+    var url = "/api/v1/labels/sheets/"+sheetId;
+    if (version) url += "/"+version;
+    $.ajax({
+        url: url,
+        type: "GET",
+        success: function (data, textStatus, jqXHR) {
+            Labels.Sheets.jsonToSheet(data);
+            if (callback) callback(data, textStatus, jqXHR);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(JSON.stringify(jqXHR.responseJSON));
+            if (callback) callback(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
 Labels.Sheets.deleteToREST = function (sheetId, version) {
     var url = "/api/v1/labels/sheets/"+sheetId;
     if (version) url += "/"+version;
@@ -85,6 +101,47 @@ Labels.Sheets.saveUpdatedToREST = function (sheet, callback) {
         }
     });
 }
+Labels.Sheets.importFile = function (file) {
+    var formData = new FormData($("#uploadForm")[0]);
+    formData.append('file', file);
+    var response;
+    $.ajax({
+        url: "/api/v1/labels/sheets/import",
+        type: "POST",
+        cache: false,
+        contentType: false,
+        processData: false,
+        async: false,
+        data: formData,
+        success: function (data, textStatus, jqXHR) {
+            response = JSON.parse(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(JSON.stringify(jqXHR.responseJSON));
+        }
+    });
+
+    return response;
+}
+Labels.Sheets.importToREST = function (sheet) {
+    var response;
+    $.ajax({
+        url: "/api/v1/labels/sheets",
+        type: "POST",
+        accepts: "application/json",
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        async: false,
+        data: {sheet: JSON.stringify(sheet)},
+        success: function (data, textStatus, jqXHR) {
+            response = JSON.parse(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(JSON.stringify(jqXHR.responseJSON));
+        }
+    });
+
+    return response;
+}
 Labels.Sheets.jsonToSheets = function (jsonSheets) {
     for (var si=0 ; si < jsonSheets.length ; si++) {
         var sheetJson = jsonSheets[si];
@@ -92,7 +149,6 @@ Labels.Sheets.jsonToSheets = function (jsonSheets) {
             sheetJson = JSON.parse(sheetJson);
         }
         var sheet = new Labels.Sheet($("#sheetContainer"), sheetJson);
-
         for (var ii=0 ; ii < sheetJson.items.length ; ii++) {
             var itemJson = sheetJson.items[ii]
             var item = new Labels.Item(sheet, itemJson);
@@ -105,6 +161,26 @@ Labels.Sheets.jsonToSheets = function (jsonSheets) {
                     var elementJson = regionJson.elements[ei];
                     var element = new Labels.Element(region, elementJson);
                 }
+            }
+        }
+    }
+}
+Labels.Sheets.jsonToSheet = function (sheetJson) {
+    if (typeof sheetJson == "string") {
+        sheetJson = JSON.parse(sheetJson);
+    }
+    var sheet = new Labels.Sheet($("#sheetContainer"), sheetJson);
+    for (var ii=0 ; ii < sheetJson.items.length ; ii++) {
+        var itemJson = sheetJson.items[ii]
+        var item = new Labels.Item(sheet, itemJson);
+
+        for (var ri=0 ; ri < itemJson.regions.length ; ri++) {
+            var regionJson = itemJson.regions[ri];
+            var region = new Labels.Region(item, regionJson);
+
+            for (var ei=0 ; ei < regionJson.elements.length ; ei++) {
+                var elementJson = regionJson.elements[ei];
+                var element = new Labels.Element(region, elementJson);
             }
         }
     }
