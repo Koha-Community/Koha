@@ -40,8 +40,7 @@ unless ($auth_status eq 'ok') {
     exit 0;
 }
 
-my $framework_name = $input->param('frameworkcode') || 'default';
-my $frameworkcode = ($framework_name eq 'default') ? q{} : $framework_name;
+my $frameworkcode = $input->param('frameworkcode') || 'default';
 my $action = $input->param('action') || 'export';
 
 ## Exporting
@@ -59,19 +58,19 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
 
         # Correctly set the encoding to output plain text in UTF-8
         binmode(STDOUT,':encoding(UTF-8)');
-        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $framework_name . '.csv');
+        print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $frameworkcode . '.csv');
         print $strXml;
     } else {
         # ODS file
         my $strODS = '';
         createODS($strXml, 'en', \$strODS);
-        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $framework_name . '.ods');
+        print $input->header(-type => 'application/vnd.oasis.opendocument.spreadsheet', -attachment => 'export_' . $frameworkcode . '.ods');
         print $strODS;
     }
 ## Importing
 } elsif ($input->request_method() eq 'POST') {
     my $ok = -1;
-    my $fieldname = 'file_import_' . $framework_name;
+    my $fieldname = 'file_import_' . $frameworkcode;
     my $filename = $input->param($fieldname);
     # upload the input file
     if ($filename && $filename =~ /\.(csv|ods)$/i) {
