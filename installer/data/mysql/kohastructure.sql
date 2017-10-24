@@ -568,7 +568,7 @@ CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records t
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
   `borrowernumber` int(11) NOT NULL default 0, -- primary key, Koha assigned ID number for patrons/borrowers
-  `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
+  `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
   `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
@@ -1379,7 +1379,7 @@ CREATE TABLE pending_offline_operations (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `action` varchar(10) NOT NULL,
   barcode varchar(20) DEFAULT NULL,
-  cardnumber varchar(16) DEFAULT NULL,
+  cardnumber varchar(32) DEFAULT NULL,
   amount decimal(28,6) DEFAULT NULL,
   PRIMARY KEY (operationid)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1608,7 +1608,7 @@ CREATE TABLE `sms_providers` (
 DROP TABLE IF EXISTS `borrowers`;
 CREATE TABLE `borrowers` ( -- this table includes information about your patrons/borrowers/members
   `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
-  `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
+  `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
   `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
@@ -2497,7 +2497,7 @@ CREATE TABLE `tmp_holdsqueue` (
   `firstname` text,
   `phone` text,
   `borrowernumber` int(11) NOT NULL,
-  `cardnumber` varchar(16) default NULL,
+  `cardnumber` varchar(32) default NULL,
   `reservedate` date default NULL,
   `title` mediumtext,
   `itemcallnumber` varchar(255) default NULL,
@@ -3405,7 +3405,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `verification_token` varchar(255) NOT NULL DEFAULT '',
   `borrowernumber` int(11) NOT NULL DEFAULT '0',
-  `cardnumber` varchar(16) DEFAULT NULL,
+  `cardnumber` varchar(32) DEFAULT NULL,
   `surname` mediumtext,
   `firstname` text,
   `title` mediumtext,
