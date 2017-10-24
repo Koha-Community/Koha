@@ -44,6 +44,7 @@ BEGIN {
 };
 
 my $dbh = C4::Context->dbh;
+my $frameworkcode = q||;
 
 # Start transaction
 $dbh->{AutoCommit} = 0;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use DateTime::Duration;
 
 use C4::Context;
