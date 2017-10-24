@@ -77,7 +77,6 @@ sub flush {
     for my $k ( keys %$singleton_caches ) {
         my $cache = $singleton_caches->{$k};
         $cache->flush_all();
-        delete $singleton_caches->{$k};
     }
 }
 
