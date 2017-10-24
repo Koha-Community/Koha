@@ -25,14 +25,14 @@ use t::lib::TestBuilder;
 
 use C4::Circulation;
 use C4::Context;
+use C4::Members;
+use Koha::Checkouts;
 use Koha::Database;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
-
-t::lib::Mocks::mock_preference('AnonymousPatron', '');
 
 my $library = $builder->build({ source => 'Branch' });
 
@@ -56,18 +56,31 @@ my $item = $builder->build(
         }
     }
 );
-my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
 
-eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
-like ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, 'Fatal error on anonymization' );
+subtest 'anonymous patron' => sub {
+    plan tests => 2;
+    # The next call will raise an error, because data are not correctly set
+    t::lib::Mocks::mock_preference('AnonymousPatron', '');
+    my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
+    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
+    like ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, 'AnonymousPatron is not set - Fatal error on anonymization' );
+    Koha::Checkouts->find( $issue->issue_id )->delete;
 
+    my $anonymous_borrowernumber = C4::Members::AddMember( categorycode => $patron_category->{categorycode}, branchcode => $library->{branchcode} );
+    t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_borrowernumber);
+    $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
+    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
+    is ( $@, q||, 'AnonymousPatron is set correctly - no error expected');
+};
+
+my ( $issue_id, $issue );
 # The next call will return undef for invalid item number
-my $issue_id;
 eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, 'invalid_itemnumber', 'dropbox_branch', 'returndate', 0 ) };
 is( $@, '', 'No die triggered by invalid itemnumber' );
 is( $issue_id, undef, 'No issue_id returned' );
 
 # In the next call we return the item and try it another time
+$issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
 eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, undef, 0 ) };
 is( $issue_id, $issue->issue_id, "Item has been returned (issue $issue_id)" );
 eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, undef, 0 ) };
