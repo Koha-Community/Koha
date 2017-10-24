@@ -212,7 +212,7 @@ function confirm_deletion() {
                         [% ELSE %]
                               <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]#edititem">Edit</a></li>
                               <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]&amp;searchid=[% searchid %]#additema">Duplicate</a></li>
-                              <li><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber %]" target="_blank" >Print Label</a></li>
+                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber %]" target="_blank" >Print Label</a></li>
                           [% IF ( item_loo.countanalytics ) %]
                               <li><a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a></li>
                           [% ELSE %]
