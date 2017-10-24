@@ -47,7 +47,14 @@ use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
     *CGI::new = sub {
         my $q = $old_new->( @_ );
         $CGI::PARAM_UTF8 = 1;
-        Koha::Caches->flush_L1_caches();
+
+        my $syspref_cache = Koha::Caches->get_instance('syspref');
+        if ($syspref_cache->{'memcached_cache'}) { #When using a shared caching medium, cache invalidations can be communicated between workers.
+            Koha::Caches->flush_L1_caches();
+        }
+        else { #Without a shared cache medium, workers cannot invalidate cached values in each others memory, if for. ex. a syspref is changed.
+            Koha::Caches->flush(); #Then we must flush all caches periodically.
+        }
         Koha::Cache::Memory::Lite->flush();
         return $q;
     };
