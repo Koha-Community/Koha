@@ -654,7 +654,7 @@
                         [% IF too_many_items %]
                             <p>This record has many physical items ([% items_count %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]&amp;viewallitems=1">Click here to view them all.</a></p>
                         [% ELSIF ( itemloop.size ) %]
-                            [% INCLUDE items_table items=itemloop tab="holdings" %]
+                            [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
                             [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
                               [% IF acquisition_details.total_quantity == 1 %]
                                 <span>1 item is on order.</span>
@@ -701,7 +701,7 @@
                     [% IF (SeparateHoldings) %]
                         <div id="otherholdings">
                             [% IF (otheritemloop.size) %]
-                                [% INCLUDE items_table items=otheritemloop tab="otherholdings" %]
+                                [% INCLUDE items_table items=otheritemloop tab="otherholdings" table_id="otherholdingst" %]
                             [% ELSE %]
                                 <span>No other items.</span>
                             [% END %]
@@ -1177,7 +1177,7 @@
 [%# End of template %]
 
 [% BLOCK items_table %]
-    <table class="holdingst table table-bordered table-striped">
+    <table class="table table-bordered table-striped" id="[% table_id %]">
         <thead>
             <tr>
         [% IF ( item_level_itypes ) %]
@@ -1437,7 +1437,17 @@
         });
 
         var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) %];
-        KohaTable(".holdingst", {
+
+        KohaTable("#holdingst", {
+            dom: 'B<"clearfix">t',
+            "columnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+            "bKohaColumnsUseNames": true
+        }, columns_settings);
+
+        KohaTable("#otherholdingst", {
             dom: 'B<"clearfix">t',
             "columnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
