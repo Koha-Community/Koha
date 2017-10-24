@@ -37,8 +37,6 @@
             <th>Title</th>
             <th>Patron</th>
             <th>Location</th>
-            <th>Overdue status</th>
-            <th>Notified by</th>
         </tr>
             [% FOREACH overduesloo IN overduesloop %]
                 <tr>
@@ -59,41 +57,6 @@
                     </td>
                     <td>[% Branches.GetName( overduesloo.homebranch ) %] [% overduesloo.itemcallnumber %]
                     </td>
-                    <td align="center">
-                    <b>
-                        [% IF ( overduesloo.overdue1 ) %]
-                            First overdue
-                        [% END %]
-                        [% IF ( overduesloo.overdue2 ) %]
-                            Second overdue
-                        [% END %]
-                        [% IF ( overduesloo.overdue3 ) %]
-                            Third overdue
-                        [% END %]
-                    </b>
-                    </td>
-                    <td align="center">
-                    [% IF ( overduesloo.overdue1 ) %]
-                        [% IF ( overduesloo.borroweremail ) %]
-                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=mail&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]">Mail</a>
-                        [% ELSE %]
-                            Mail
-                        [% END %]
-                            &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=phone&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]">Phone</a>
-                            &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=letter&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]">Notice</a>
-                    [% END %]
-
-                    [% IF ( overduesloo.overdue2 ) %]
-                        <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=letter&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]">Notice</a>
-                    [% END %]
-
-                    [% IF ( overduesloo.overdue3 ) %]
-                    <a href="branchoverdues.pl?action=add&amp;borrowernumber=[% overduesloo.borrowernumber %]&amp;itemnumber=[% overduesloo.itemnumber %]&amp;method=lost&amp;location=[% overduesloo.location %]&amp;overduelevel=[% overduesloo.overdueLevel %]">Considered lost</a>
-                    [% END %]
-
-                    </td>
                 </tr>
             [% END %]
         </table>
@@ -109,7 +72,6 @@
                 <th>Title</th>
                 <th>Borrower</th>
                 <th>Location</th>
-                <th>Overdue status</th>
                 <th>Cancel</th>
             </tr>
                 [% FOREACH todayoverduesloo IN todayoverduesloop %]
@@ -136,20 +98,6 @@
                         </td>
                         <td><p>[% Branches.GetName( todayoverduesloo.homebranch ) %] [% todayoverduesloo.itemcallnumber %]</p>
                         </td>
-                        <td align="center">
-                            <b>
-                                [% IF ( todayoverduesloo.overdue1 ) %]
-                                    First overdue
-                                [% END %]
-                                [% IF ( todayoverduesloo.overdue2 ) %]
-                                    Second overdue
-                                [% END %]
-                                [% IF ( todayoverduesloo.overdue3 ) %]
-                                    Considered lost
-                                [% END %]
-                            </b>
-                        </td>
-
                         <td>
                         <a href="branchoverdues.pl?action=remove&amp;borrowernumber=[% todayoverduesloo.borrowernumber %]&amp;itemnumber=[% todayoverduesloo.itemnumber %]&amp;method=phone&amp;location=[% todayoverduesloo.location %]">Cancel notification</a>
                         </td>
