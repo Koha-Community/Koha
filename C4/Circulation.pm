@@ -2747,6 +2747,11 @@ sub CanBookBeRenewed {
     }
 
     if ( $itemissue->{auto_renew} ) {
+
+        if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
+            return ( 0, 'auto_account_expired' );
+        }
+
         if ( defined $issuing_rule->no_auto_renewal_after
                 and $issuing_rule->no_auto_renewal_after ne "" ) {
             # Get issue_date and add no_auto_renewal_after
