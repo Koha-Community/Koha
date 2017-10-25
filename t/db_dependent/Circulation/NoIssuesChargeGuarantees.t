@@ -40,9 +40,13 @@ my $item = $builder->build(
     }
 );
 
+my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my $patron = $builder->build(
     {
         source => 'Borrower',
+        value => {
+            patron_category => $patron_category->{categorycode},
+        }
     }
 );
 my $guarantee = $builder->build(
@@ -50,6 +54,7 @@ my $guarantee = $builder->build(
         source => 'Borrower',
         value  => {
             guarantorid => $patron->{borrowernumber},
+            patron_category => $patron_category->{categorycode},
         }
     }
 );
