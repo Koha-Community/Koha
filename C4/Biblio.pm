@@ -1053,7 +1053,7 @@ in tab 0-9. (used field)
 
   my $results = GetUsedMarcStructure($frameworkcode);
 
-C<$results> is a ref to an array which each case containts a ref
+C<$results> is a ref to an array which each case contains a ref
 to a hash which each keys is the columns from marc_subfield_structure
 
 C<$frameworkcode> is the framework code. 
@@ -2423,7 +2423,7 @@ sub _default_ind_to_space {
 =head2 TransformHtmlToMarc
 
     L<$record> = TransformHtmlToMarc(L<$cgi>)
-    L<$cgi> is the CGI object which containts the values for subfields
+    L<$cgi> is the CGI object which contains the values for subfields
     {
         'tag_010_indicator1_531951' ,
         'tag_010_indicator2_531951' ,

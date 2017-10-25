@@ -2496,7 +2496,7 @@ sub GetOpenIssue {
 this function get all issues from a biblionumber.
 
 Return:
-C<$issues> is a reference to array which each value is ref-to-hash. This ref-to-hash containts all column from
+C<$issues> is a reference to array which each value is ref-to-hash. This ref-to-hash contains all column from
 tables issues and the firstname,surname & cardnumber from borrowers.
 
 =cut

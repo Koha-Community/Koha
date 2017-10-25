@@ -182,7 +182,7 @@ sub get_opac_news {
 =head2 GetNewsToDisplay
 
     $news = &GetNewsToDisplay($lang,$branch);
-    C<$news> is a ref to an array which containts
+    C<$news> is a ref to an array which contains
     all news with expirationdate > today or expirationdate is null
     that is applicable for a given branch.
 

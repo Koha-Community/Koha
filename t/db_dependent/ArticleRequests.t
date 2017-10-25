@@ -93,9 +93,9 @@ is( $article_request->status, Koha::ArticleRequest::Status::Canceled, '$ar->comp
 $article_request->status(Koha::ArticleRequest::Status::Pending);
 $article_request->store();
 
-is( $article_request->biblio->id,   $biblio->id, '$ar->biblio() gets corrosponding Koha::Biblio object' );
-is( $article_request->item->id,     $item->id,   '$ar->item() gets corrosponding Koha::Item object' );
-is( $article_request->borrower->id, $patron->id, '$ar->borrower() gets corrosponding Koha::Patron object' );
+is( $article_request->biblio->id,   $biblio->id, '$ar->biblio() gets corresponding Koha::Biblio object' );
+is( $article_request->item->id,     $item->id,   '$ar->item() gets corresponding Koha::Item object' );
+is( $article_request->borrower->id, $patron->id, '$ar->borrower() gets corresponding Koha::Patron object' );
 
 my $ar = $patron->article_requests();
 is( ref($ar),      'Koha::ArticleRequests', '$patron->article_requests returns Koha::ArticleRequests object' );

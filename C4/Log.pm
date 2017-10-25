@@ -230,7 +230,7 @@ sub displaylog {
 $logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
 
 Return:
-C<$logs> is a ref to a hash which containts all columns from action_logs
+C<$logs> is a ref to a hash which contains all columns from action_logs
 
 =cut
 

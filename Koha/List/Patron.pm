@@ -19,7 +19,7 @@ package Koha::List::Patron;
 
 =head1 NAME
 
-Koha::List::Patron - Managment of lists of patrons
+Koha::List::Patron - Management of lists of patrons
 
 =head1 FUNCTIONS
 

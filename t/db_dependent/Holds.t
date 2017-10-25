@@ -362,18 +362,18 @@ $dbh->do(q{
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'notReservable',
-    "CanItemBeReserved should returns 'notReservable'");
+    "CanItemBeReserved should return 'notReservable'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber),
     'cannotReserveFromOtherBranches',
-    "CanItemBeReserved should returns 'cannotReserveFromOtherBranches'");
+    "CanItemBeReserved should return 'cannotReserveFromOtherBranches'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
-    "CanItemBeReserved should returns 'OK'");
+    "CanItemBeReserved should return 'OK'");
 
 # Bug 12632
 t::lib::Mocks::mock_preference( 'item-level_itypes',     1 );

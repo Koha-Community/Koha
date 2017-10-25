@@ -2437,7 +2437,7 @@ sub GetHistory {
 
   $results = GetRecentAcqui($days);
 
-C<$results> is a ref to a table which containts hashref
+C<$results> is a ref to a table which contains hashref
 
 =cut
 
