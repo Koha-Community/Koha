@@ -459,11 +459,11 @@ my $order = Koha::Acquisition::Order->new(
       discount           => 0,
       uncertainprice     => 0,
    }
-)->store;
+)->insert;
 
 ModReceiveOrder({
    bibionumber       => $biblio,
-   order             => $order->unblessed,
+   order             => $order,
    budget_id         => $fund,
    quantityreceived  => 2,
    invoice           => $test_invoice,
