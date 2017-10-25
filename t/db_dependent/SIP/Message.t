@@ -35,7 +35,6 @@ use Koha::DateUtils;
 use Koha::Items;
 use Koha::Checkouts;
 use Koha::Old::Checkouts;
-use Koha::Patrons;
 
 use C4::SIP::ILS;
 use C4::SIP::ILS::Patron;
@@ -45,9 +44,33 @@ use C4::SIP::Sip::MsgType;
 
 use constant PATRON_PW => 'do_not_ever_use_this_one';
 
+our $fixed_length = { #length of fixed fields including response code
+    ( PATRON_STATUS_RESP ) => 37,
+    ( PATRON_INFO_RESP )   => 61,
+    ( CHECKIN_RESP )       => 24,
+};
+
+our $schema = Koha::Database->new->schema;
+our $builder = t::lib::TestBuilder->new();
+
+# COMMON: Some common stuff for all/most subtests
+our ( $response, $findpatron, $branchcode );
+$branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+# mock write_msg (imported from Sip.pm into Message.pm)
+my $mockMsg = Test::MockModule->new( 'C4::SIP::Sip::MsgType' );
+$mockMsg->mock( 'write_msg', sub { $response = $_[1]; } ); # save response
+# mock ils object
+our $mockILS = Test::MockObject->new;
+$mockILS->mock( 'check_inst_id', sub {} );
+$mockILS->mock( 'institution_id', sub { $branchcode; } );
+$mockILS->mock( 'find_patron', sub { $findpatron; } );
+$branch = $builder->build({
+    source => 'Branch',
+});
+$branchcode = $branch->{branchcode};
+
 # START testing
 subtest 'Testing Patron Status Request V2' => sub {
-    my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
     plan tests => 13;
     $C4::SIP::Sip::protocol_version = 2;
@@ -56,7 +79,6 @@ subtest 'Testing Patron Status Request V2' => sub {
 };
 
 subtest 'Testing Patron Info Request V2' => sub {
-    my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
     plan tests => 17;
     $C4::SIP::Sip::protocol_version = 2;
@@ -65,7 +87,6 @@ subtest 'Testing Patron Info Request V2' => sub {
 };
 
 subtest 'Checkin V2' => sub {
-    my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
     plan tests => 21;
     $C4::SIP::Sip::protocol_version = 2;
@@ -78,11 +99,6 @@ subtest 'Checkin V2' => sub {
 # END of main code
 
 sub test_request_patron_status_v2 {
-    my $builder = t::lib::TestBuilder->new();
-    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my ( $response, $findpatron );
-    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
-
     my $patron1 = $builder->build({
         source => 'Borrower',
         value  => {
@@ -99,7 +115,7 @@ sub test_request_patron_status_v2 {
         FID_PATRON_PWD. PATRON_PW. '|';
     my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
 
-    my $server = { ils => $mocks->{ils} };
+    my $server = { ils => $mockILS };
     undef $response;
     $msg->handle_patron_status( $server );
 
@@ -138,7 +154,7 @@ sub test_request_patron_status_v2 {
 
     # Finally, we send a wrong card number and check AE, BL
     # This is done by removing the new patron first
-    Koha::Patrons->search({ cardnumber => $card1 })->delete;
+    $schema->resultset('Borrower')->search({ cardnumber => $card1 })->delete;
     undef $findpatron;
     $siprequest = PATRON_STATUS_REQ. 'engYYYYMMDDZZZZHHMMSS'.
         FID_INST_ID. $branchcode. '|'.
@@ -154,11 +170,6 @@ sub test_request_patron_status_v2 {
 }
 
 sub test_request_patron_info_v2 {
-    my $builder = t::lib::TestBuilder->new();
-    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my ( $response, $findpatron );
-    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
-
     my $patron2 = $builder->build({
         source => 'Borrower',
         value  => {
@@ -174,7 +185,7 @@ sub test_request_patron_info_v2 {
         FID_PATRON_PWD. PATRON_PW. '|';
     my $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
 
-    my $server = { ils => $mocks->{ils} };
+    my $server = { ils => $mockILS };
     undef $response;
     $msg->handle_patron_info( $server );
     isnt( $response, undef, 'At least we got a response.' );
@@ -212,7 +223,7 @@ sub test_request_patron_info_v2 {
     check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'Y', 'code CQ should be Y if empty AD allowed' );
 
     # Finally, we send a wrong card number
-    Koha::Patrons->search({ cardnumber => $card })->delete;
+    $schema->resultset('Borrower')->search({ cardnumber => $card })->delete;
     undef $findpatron;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
     undef $response;
@@ -224,11 +235,6 @@ sub test_request_patron_info_v2 {
 }
 
 sub test_checkin_v2 {
-    my $builder = t::lib::TestBuilder->new();
-    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my ( $response, $findpatron );
-    my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
-
     # create some data
     my $patron1 = $builder->build({
         source => 'Borrower',
@@ -244,7 +250,6 @@ sub test_checkin_v2 {
         value => { damaged => 0, withdrawn => 0, itemlost => 0, restricted => 0, homebranch => $branchcode, holdingbranch => $branchcode },
     });
 
-    my $mockILS = $mocks->{ils};
     my $server = { ils => $mockILS, account => {} };
     $mockILS->mock( 'institution', sub { $branchcode; } );
     $mockILS->mock( 'supports', sub { return; } );
@@ -332,28 +337,12 @@ sub test_checkin_v2 {
 
 # Helper routines
 
-sub create_mocks {
-    my ( $response, $findpatron, $branchcode ) = @_; # referenced variables !
-
-    # mock write_msg (imported from Sip.pm into Message.pm)
-    my $mockMsg = Test::MockModule->new( 'C4::SIP::Sip::MsgType' );
-    $mockMsg->mock( 'write_msg', sub { $$response = $_[1]; } ); # save response
-
-    # mock ils object
-    my $mockILS = Test::MockObject->new;
-    $mockILS->mock( 'check_inst_id', sub {} );
-    $mockILS->mock( 'institution_id', sub { $$branchcode; } );
-    $mockILS->mock( 'find_patron', sub { $$findpatron; } );
-
-    return { ils => $mockILS, message => $mockMsg };
-}
-
 sub check_field {
     my ( $code, $resp, $fld, $expr, $msg, $mode ) = @_;
     # mode: contains || equals || regex (by default: equals)
 
     # strip fixed part; prefix to simplify next regex
-    $resp = '|'. substr( $resp, fixed_length( $code ) );
+    $resp = '|'. substr( $resp, $fixed_length->{$code} );
     my $fldval;
     if( $resp =~ /\|$fld([^\|]*)\|/ ) {
         $fldval = $1;
@@ -377,12 +366,4 @@ sub check_field {
 sub siprequestdate {
     my ( $dt ) = @_;
     return $dt->ymd('').(' 'x4).$dt->hms('');
-}
-
-sub fixed_length { #length of fixed fields including response code
-    return {
-      ( PATRON_STATUS_RESP )  => 37,
-      ( PATRON_INFO_RESP )    => 61,
-      ( CHECKIN_RESP )        => 24,
-    }->{$_[0]};
 }
