@@ -31,7 +31,6 @@ use C4::Koha;
 use C4::Branch;
 use Koha::Patron::Images;
 use Koha::Patrons;
-use Koha::Account;
 use Koha::Token;
 
 use Koha::Patron::Categories;
