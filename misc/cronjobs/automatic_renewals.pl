@@ -85,6 +85,7 @@ while ( my $auto_renew = $auto_renews->next ) {
         or $error eq 'on_reserve'
         or $error eq 'restriction'
         or $error eq 'overdue'
+        or $error eq 'auto_account_expired'
         or $error eq 'auto_too_late'
         or $error eq 'auto_too_much_oweing'
         or $error eq 'auto_too_soon' ) {
