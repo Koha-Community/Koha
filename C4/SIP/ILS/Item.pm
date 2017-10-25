@@ -107,7 +107,7 @@ sub new {
 	bless $self, $type;
 
     syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
-        $item_id, $self->{title}//'' );
+	   $item_id, $self->{title});
 
     return $self;
 }
