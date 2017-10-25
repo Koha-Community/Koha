@@ -77,11 +77,11 @@
                                  <label for="units">Units:</label>
                                  <select id="units" name="units">
                                  [% FOREACH unit IN units %]
-									[% IF ( unit.selected ) %]
-									<option value="[% unit.type %]" selected="selected">
-									[% ELSE %]
-									<option value="[% unit.type %]">
-									[% END %]
+                                     [% IF ( unit.selected ) %]
+                                     <option value="[% unit.type %]" selected="selected">
+                                     [% ELSE %]
+                                     <option value="[% unit.type %]">
+                                     [% END %]
 
                                      [% SWITCH unit.type %]
                                      [%   CASE 'POINT' %]
