@@ -523,10 +523,18 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
         }
 	}
-	print scalar ($destination eq "circ") ? 
-		$input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber") :
-		$input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber") ;
-	exit;		# You can only send 1 redirect!  After that, content or other headers don't matter.
+
+    if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
+        # If we want to redirect to circulation.pl and need to check if the logged in user has the necessary permission
+        $destination = 'not_circ';
+    }
+    print scalar( $destination eq "circ" )
+      ? $input->redirect(
+        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber")
+      : $input->redirect(
+        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber"
+      );
+    exit; # You can only send 1 redirect!  After that, content or other headers don't matter.
 }
 
 if ($delete){
