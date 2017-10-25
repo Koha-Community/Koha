@@ -34,7 +34,7 @@ use Koha::AuthUtils qw(hash_password);
 use Koha::DateUtils;
 use Koha::Items;
 use Koha::Checkouts;
-use Koha::OldIssues;
+use Koha::Old::Checkouts;
 use Koha::Patrons;
 
 use C4::SIP::ILS;
@@ -309,7 +309,7 @@ sub test_checkin_v2 {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
 
     # Data corrupted: add same issue_id to old_issues
-    Koha::OldIssue->new({ issue_id => $issue->issue_id })->store;
+    Koha::Old::Checkout->new({ issue_id => $issue->issue_id })->store;
     undef $response;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
     warnings_like { $msg->handle_checkin( $server ); }
@@ -320,7 +320,7 @@ sub test_checkin_v2 {
     check_field( $respcode, $response, FID_SCREEN_MSG, 'Checkin failed: data problem', 'Check screen msg' );
 
     # Finally checkin without problems (remove duplicate id)
-    Koha::OldIssues->search({ issue_id => $issue->issue_id })->delete;
+    Koha::Old::Checkouts->search({ issue_id => $issue->issue_id })->delete;
     undef $response;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
     $msg->handle_checkin( $server );
