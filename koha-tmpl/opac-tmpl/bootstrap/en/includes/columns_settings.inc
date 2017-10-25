@@ -6,7 +6,8 @@ function KohaTable(selector, dt_parameters, columns_settings) {
     var hidden_ids = [];
     var included_ids = [];
     $(columns_settings).each( function() {
-        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( 'th' );
+        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector+' th' );
+
         var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : id;
         if ( used_id == -1 ) return;
 
