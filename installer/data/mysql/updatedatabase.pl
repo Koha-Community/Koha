@@ -14854,7 +14854,7 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 12768 - Add 'Processing Fee' to the account_offset_types table if missing)";
+    print "Upgrade to $DBversion done (Bug 12768 - Add 'Processing Fee' to the account_offset_types table if missing)\n";
 }
 
 $DBversion = '17.06.00.020';
