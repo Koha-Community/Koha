@@ -23,10 +23,11 @@ use C4::Circulation;
 use Koha::Database;
 use Koha::DateUtils;
 use DateTime::Duration;
+use Koha::Item::Transfers;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 use Test::Deep;
 
 BEGIN {
@@ -191,6 +192,22 @@ cmp_deeply(
     C4::Circulation::TransferSlip($branchcode_1, undef, 1, $branchcode_2),
     "Barcode and itemnumber for same item both generate same TransferSlip"
     );
+
+$dbh->do("DELETE FROM branchtransfers");
+ModItemTransfer(
+    $item_id1,
+    $branchcode_1,
+    $branchcode_2
+);
+my $transfer = Koha::Item::Transfers->search()->next();
+ModItemTransfer(
+    $item_id1,
+    $branchcode_1,
+    $branchcode_2
+);
+$transfer->{_result}->discard_changes;
+ok( $transfer->datearrived, 'Date arrived is set when new transfer is initiated' );
+is( $transfer->comments, "Canceled, new transfer from $branchcode_1 to $branchcode_2 created" );
 
 $schema->storage->txn_rollback;
 
