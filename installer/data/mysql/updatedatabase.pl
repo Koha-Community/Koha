@@ -14873,7 +14873,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19028: Add 'shelving location' to holdings table in detail page (Rename syspref OpacLocationBranchToDisplayShelving with OpacLocationOnDetail))\n";
 }
 
+$DBversion = '17.06.00.021';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type` ) VALUES ('SCOMainUserBlock','','70|10','Add a block of HTML that will display on the self checkout screen','Textarea')
+    });
 
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17381 - Add system preference SCOMainUserBlock)\n";
+}
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
