@@ -23,7 +23,6 @@ use t::lib::TestBuilder;
 use DateTime;
 use Koha::Caches;
 use Koha::DateUtils;
-use POSIX qw(tzset);
 
 use_ok('Koha::Calendar');
 
@@ -71,15 +70,13 @@ subtest 'crossing_DST' => sub {
 
     plan tests => 2;
 
-    $ENV{TZ} = 'America/New_York';
-    tzset;
-    my $tz = DateTime::TimeZone->new( name => 'local' );
+    my $tz = DateTime::TimeZone->new( name => 'America/New_York' );
     my $start_date = dt_from_string( "2016-03-09 02:29:00",undef,$tz );
-    my $end_date = dt_from_string("2017-01-01");
+    my $end_date = dt_from_string( "2017-01-01 00:00:00", undef, $tz );
     my $days_between = $calendar->days_between($start_date,$end_date);
-    is($days_between->{days}, 298, "Days calculated correctly");
+    is( $days_between->delta_days, 298, "Days calculated correctly" );
     my $hours_between = $calendar->hours_between($start_date,$end_date);
-    is($hours_between->{minutes}, 428671, "Hours (in minutes) calculated correctly");
+    is( $hours_between->delta_minutes, 298 * 24 * 60 - 149, "Hours (in minutes) calculated correctly" );
 
 };
 
