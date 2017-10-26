@@ -207,7 +207,7 @@ ModItemTransfer(
 );
 $transfer->{_result}->discard_changes;
 ok( $transfer->datearrived, 'Date arrived is set when new transfer is initiated' );
-is( $transfer->comments, "Canceled, new transfer from $branchcode_1 to $branchcode_2 created" );
+is( $transfer->comments, "Canceled, new transfer from $branchcode_1 to $branchcode_2 created", 'Transfer comment is set as expected when new transfer is initiated' );
 
 $schema->storage->txn_rollback;
 
