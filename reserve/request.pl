@@ -478,7 +478,7 @@ foreach my $biblionumber (@biblionumbers) {
 
                     push( @available_itemtypes, $item->{itype} );
                 }
-                elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+                elsif ( $can_item_be_reserved eq 'tooManyReserves' && C4::Context->preference('AllowHoldPolicyOverride') ) {
                     # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                     $item->{override} = 1;
                     $num_override++;
