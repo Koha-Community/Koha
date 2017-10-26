@@ -29,6 +29,7 @@ use C4::Output;
 use C4::Templates;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
 use C4::Installer;
+use C4::Installer::PerlModules;
 
 use Koha;
 

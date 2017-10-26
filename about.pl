@@ -37,7 +37,7 @@ use YAML qw/LoadFile/;
 use C4::Output;
 use C4::Auth;
 use C4::Context;
-use C4::Installer;
+use C4::Installer::PerlModules;
 
 use Koha;
 use Koha::DateUtils qw(dt_from_string output_pref);

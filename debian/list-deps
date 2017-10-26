@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Write dependency list from Koha PerlDependencies.pm, in Debian format.
+# Write dependency list from Koha cpanfile, in Debian format.
 #
 # Copyright 2010  Catalyst IT, Ltd
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use C4::Installer::PerlDependencies;
+use C4::Installer::PerlModules;
 
 # These are packages that may not be in the apt archive in a way that
 # apt-file can find, e.g. in the Koha repo rather than the regular
@@ -39,61 +39,65 @@ my %ignore = (
     'CHI::Driver::Memcached' => 1,
 );
 
-my $deps = $C4::Installer::PerlDependencies::PERL_DEPS;
-
 my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl/[0-9.]+|(lib|share)/.*-linux-gnu.*/perl5/[0-9.]+)";
 
-foreach my $module ( keys %$deps ) {
-    next if $ignore{$module};
-    my $ver     = $deps->{$module}->{'min_ver'};
-    my $subpath = $module;
-    $subpath =~ s,::,/,g;
-    my $output = qx(apt-file -l -x search "$prefix/$subpath.pm\$");
-    my @temp   = split( /\n/, $output );
-    my @lines  = ();
+my $modules = C4::Installer::PerlModules->new();
+my $prereqs = $modules->prereqs;
+foreach my $phase ($prereqs->phases) {
+    foreach my $type ($prereqs->types_in($phase)) {
+        my $reqs = $prereqs->requirements_for($phase, $type);
+        foreach my $module ( $reqs->required_modules ) {
+            next if $ignore{$module};
+            my $subpath = $module;
+            $subpath =~ s,::,/,g;
+            my $output = qx(apt-file -l -x search "$prefix/$subpath.pm\$");
+            my @temp   = split( /\n/, $output );
+            my @lines  = ();
 
-    # Remove packages that are required/essential and always installed on
-    # a Debian system. Debian packages should not have unversioned
-    # dependencies on such packages.
-    foreach my $line (@temp) {
-        if ( $line ne "perl-base" ) {
-            @lines = ( @lines, $line );
-        }
-    }
-    if ( exists $overrides{$module} ) {
-        print "$overrides{$module}\n";
-    }
-    elsif ( scalar(@lines) == 1 && $lines[0] ne "" ) {
-        my $pkg = $lines[0];
-        print "$pkg\n";
-    }
-    elsif ( scalar(@lines) > 1 ) {
-        foreach my $pkg (@lines) {
-            print " | " if ( $pkg ne $lines[0] );
-            print "$pkg";
-            print " | $pkg" . "-5.22" if ( $pkg eq "perl-modules" );
-            print " | $pkg" . "-5.24" if ( $pkg eq "perl-modules" );
-        }
-        print "\n";
-    }
-    elsif ( scalar(@temp) != 0 ) {
+            # Remove packages that are required/essential and always installed on
+            # a Debian system. Debian packages should not have unversioned
+            # dependencies on such packages.
+            foreach my $line (@temp) {
+                if ( $line ne "perl-base" ) {
+                    @lines = ( @lines, $line );
+                }
+            }
+            if ( exists $overrides{$module} ) {
+                print "$overrides{$module}\n";
+            }
+            elsif ( scalar(@lines) == 1 && $lines[0] ne "" ) {
+                my $pkg = $lines[0];
+                print "$pkg\n";
+            }
+            elsif ( scalar(@lines) > 1 ) {
+                foreach my $pkg (@lines) {
+                    print " | " if ( $pkg ne $lines[0] );
+                    print "$pkg";
+                    print " | $pkg" . "-5.22" if ( $pkg eq "perl-modules" );
+                    print " | $pkg" . "-5.24" if ( $pkg eq "perl-modules" );
+                }
+                print "\n";
+            }
+            elsif ( scalar(@temp) != 0 ) {
 
-        # I'm an Essential and I'm OK,
-        # I install all night, and work all day.
-        # I chomp up strings. I eat my bugs.
-        # I go to the base install.
-        # On Fridays I go drinking,
-        # and have buttered commits for git.
-        # (Beer O'Clock is more than two hours
-        # away. I don't even drink beer. There
-        # is no reason to be suspicious of this
-        # commit.)
-        # RM note: suspicious?  me?  always!
-    }
-    elsif ( ! $deps->{$module}->{'required'} ) {
-        # Ignore because we don't have it and we don't care.
-    }
-    else {
-        print "EEEK: unknown package for $module\n";
+                # I'm an Essential and I'm OK,
+                # I install all night, and work all day.
+                # I chomp up strings. I eat my bugs.
+                # I go to the base install.
+                # On Fridays I go drinking,
+                # and have buttered commits for git.
+                # (Beer O'Clock is more than two hours
+                # away. I don't even drink beer. There
+                # is no reason to be suspicious of this
+                # commit.)
+                # RM note: suspicious?  me?  always!
+            }
+            elsif ( $type ne 'requires' ) {
+                # Ignore because we don't have it and we don't care.
+            }
+            else {
+                print "EEEK: unknown package for $module\n";
+            }
+        }
     }
 }

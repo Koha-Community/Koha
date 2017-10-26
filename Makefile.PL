@@ -29,7 +29,7 @@ use FindBin; # we need to enforce which C4::Installer::PerlModule is used in cas
 
 use lib $FindBin::Bin;
 
-use C4::Installer;
+use C4::Installer::PerlModules;
 
 my $koha_pm = C4::Installer::PerlModules->new;
 
@@ -314,6 +314,7 @@ my $target_map = {
   './circ'                      => 'INTRANET_CGI_DIR',
   './clubs'                     => 'INTRANET_CGI_DIR',
   './course_reserves'           => 'INTRANET_CGI_DIR',
+  './cpanfile'                  => 'PERL_MODULE_DIR',
   './docs/history.txt'          => { target => 'DOC_DIR', trimdir => -1 },
   './docs/contributors.yaml'    => { target => 'DOC_DIR', trimdir => -1 },
   './docs/teams.yaml'           => { target => 'DOC_DIR', trimdir => -1 },

@@ -22,7 +22,6 @@ use Modern::Perl;
 use Encode qw( encode is_utf8 );
 use DBIx::RunSQL;
 use C4::Context;
-use C4::Installer::PerlModules;
 use DBI;
 use Koha;
 
