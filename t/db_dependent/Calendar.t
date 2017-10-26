@@ -68,13 +68,15 @@ is($forwarded_dt->ymd, $today->ymd, 'negative day should return start dt');
 
 subtest 'crossing_DST' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     my $tz = DateTime::TimeZone->new( name => 'America/New_York' );
     my $start_date = dt_from_string( "2016-03-09 02:29:00",undef,$tz );
     my $end_date = dt_from_string( "2017-01-01 00:00:00", undef, $tz );
     my $days_between = $calendar->days_between($start_date,$end_date);
     is( $days_between->delta_days, 298, "Days calculated correctly" );
+    $days_between = $calendar->days_between($end_date,$start_date);
+    is( $days_between->delta_days, 298, "Swapping returns the same" );
     my $hours_between = $calendar->hours_between($start_date,$end_date);
     is( $hours_between->delta_minutes, 298 * 24 * 60 - 149, "Hours (in minutes) calculated correctly" );
 

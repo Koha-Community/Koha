@@ -317,32 +317,26 @@ sub days_between {
     my $start_dt = shift;
     my $end_dt   = shift;
 
-    if ( $start_dt->compare($end_dt) > 0 ) {
-        # swap dates
-        my $int_dt = $end_dt;
-        $end_dt = $start_dt;
-        $start_dt = $int_dt;
+    # Change time zone for date math and swap if needed
+    $start_dt = $start_dt->clone->set_time_zone('floating');
+    $end_dt = $end_dt->clone->set_time_zone('floating');
+    if( $start_dt->compare($end_dt) > 0 ) {
+        ( $start_dt, $end_dt ) = ( $end_dt, $start_dt );
     }
-
 
     # start and end should not be closed days
     my $days = $start_dt->delta_days($end_dt)->delta_days;
-    for (my $dt = $start_dt->clone()->set_time_zone('floating');
-        $dt <= $end_dt;
-        $dt->add(days => 1)
-    ) {
-        if ($self->is_holiday($dt)) {
-            $days--;
-        }
+    while( $start_dt->compare($end_dt) < 1 ) {
+        $days-- if $self->is_holiday($start_dt);
+        $start_dt->add( days => 1 );
     }
     return DateTime::Duration->new( days => $days );
-
 }
 
 sub hours_between {
     my ($self, $start_date, $end_date) = @_;
-    my $start_dt = $start_date->clone();
-    my $end_dt = $end_date->clone();
+    my $start_dt = $start_date->clone()->set_time_zone('floating');
+    my $end_dt = $end_date->clone()->set_time_zone('floating');
     my $duration = $end_dt->delta_ms($start_dt);
     $start_dt->truncate( to => 'day' );
     $end_dt->truncate( to => 'day' );
@@ -351,7 +345,7 @@ sub hours_between {
     # take into account open/close times then it would be a duration
     # of library open hours
     my $skipped_days = 0;
-    for (my $dt = $start_dt->clone()->set_time_zone('floating');
+    for (my $dt = $start_dt->clone();
         $dt <= $end_dt;
         $dt->add(days => 1)
     ) {
