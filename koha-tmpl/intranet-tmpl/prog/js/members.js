@@ -327,12 +327,14 @@ function updateOthername() {
     var othernames = $("#othernames");
     var firstname = ($("#entryform").find("#firstname").val() != '') ? $("#entryform").find("#firstname") : $("#quick_add_form").find("#firstname");
     var surname = ($("#entryform").find("#surname").val() != '') ? $("#entryform").find("#surname") : $("#quick_add_form").find("#surname");
+    
+    if (othernames.length != 0) {
+        if (othernames.val().length > 0) {
+            return;
+        }
 
-    if (othernames.val().length > 0) {
-        return;
+        $("#othernames").val(  surname.val() + ", " + firstname.val()  );
     }
-
-    $("#othernames").val(  surname.val() + ", " + firstname.val()  );
 }
 
 function updateAnonOthername() {
