@@ -168,8 +168,11 @@
                             </form>
                             [% ELSE %]
 							<div class="dialog message">
-                            <h4>There are no [% label_element_title %] currently available.</h4>
-                            <p>Use the toolbar above to create a new [% label_element %].</p></div>
+                            <h4>There are no
+                            [% PROCESS translate_label_element element=label_element_title %]
+                            currently available.</h4>
+                            <p>Use the toolbar above to create a new
+                            [% PROCESS translate_label_element element=label_element %].</p></div>
                             [% END %]
                         </div>
                         [% IF ( error ) %]
