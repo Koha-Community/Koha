@@ -36,6 +36,7 @@ use Koha::DateUtils;
 use Koha::SMS::Providers;
 
 use Koha::Email;
+use Koha::Notice::Messages;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 use Koha::Patrons;
 
@@ -1063,6 +1064,11 @@ sub SendQueuedMessages {
     };
     my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
     MESSAGE: foreach my $message ( @$unsent_messages ) {
+        my $message_object = Koha::Notice::Messages->find( $message->{message_id} );
+        $message_object->status('processing');
+        # If this fails the database is unwritable and we won't manage to send a message that continues to be marked 'pending'
+        return unless $message_object->store();
+
         # warn Data::Dumper->Dump( [ $message ], [ 'message' ] );
         warn sprintf( 'sending %s message to patron: %s',
                       $message->{'message_transport_type'},
