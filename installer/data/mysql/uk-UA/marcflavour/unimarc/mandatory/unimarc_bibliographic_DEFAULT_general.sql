@@ -2213,4 +2213,12 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '886', 'a', 1, 0, 'Мітка поля вихідного формату', '',       -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL),
  ('', '', '886', 'b', 1, 0, 'Індикатори та підполя вихідного формату', '', -1, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL);
 
+-- Create the ACQ framework based on the default framework, fields 995 only
+INSERT IGNORE INTO biblio_framework VALUES( 'ACQ', 'Acquisition framework' );
+INSERT INTO marc_tag_structure(tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
+SELECT tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, 'ACQ' FROM marc_tag_structure WHERE tagfield='995' AND frameworkcode='';
+
+INSERT INTO marc_subfield_structure(tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, frameworkcode, seealso, link, defaultvalue, maxlength)
+SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, 'ACQ', seealso, link, defaultvalue, maxlength FROM marc_subfield_structure WHERE tagfield='995' AND frameworkcode='';
+
 SET FOREIGN_KEY_CHECKS=1;
