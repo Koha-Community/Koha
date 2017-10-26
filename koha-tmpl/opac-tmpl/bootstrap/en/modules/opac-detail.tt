@@ -844,18 +844,23 @@
                                 [% END %]
                                 [% IF ( subscription.latestserials ) %]
                                     <p class="subscription_latestissues"> The [% subscription.opacdisplaycount %] latest issues for this subscription:</p>
-                                    <table class="table table-bordered table-striped">
+                                    <table class="table table-bordered table-striped" id="subscriptionst">
+                                        <thead>
                                         <tr>
-                                            <th>Issue #</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Note</th>
+                                            <th id="serial_serialseq" data-colname="serial_serialseq" class="serialseq">Issue #</th>
+                                            <th id="serial_publisheddate" data-colname="serial_publisheddate" class="publisheddate">Publication date</th>
+                                            <th id="serial_planneddate" data-colname="serial_planneddate" class="planneddate">Received date</th>
+                                            <th id="serial_status" data-colname="serial_status" class="serial_status">Status</th>
+                                            <th id="serial_notes" data-colname="serial_notes" class="serial_notes">Note</th>
                                         </tr>
+                                        </thead>
+                                        <tbody>
                                         [% FOREACH latestserial IN subscription.latestserials %]
                                             <tr>
-                                                <td>[% latestserial.serialseq %]</td>
-                                                <td>[% latestserial.planneddate %]</td>
-                                                <td>
+                                                <td class="serialseq">[% latestserial.serialseq %]</td>
+                                                <td class="publisheddate">[% latestserial.publisheddate %]</td>
+                                                <td class="planneddate">[% latestserial.planneddate %]</td>
+                                                <td class="serial_status">
                                                     [% IF (latestserial.status1 ) %]<span>Expected</span>[% END %]
                                                     [% IF (latestserial.status2 ) %]<span>Arrived</span>[% END %]
                                                     [% IF (latestserial.status3 ) %]<span>Late</span>[% END %]
@@ -869,9 +874,10 @@
                                                     [% IF (latestserial.status7 ) %]<span>Claimed</span>[% END %]
                                                     [% IF (latestserial.status8 ) %]<span>Stopped</span>[% END %]
                                                 </td>
-                                                <td>[% latestserial.notes %]</td>
+                                                <td class="serial_notes">[% latestserial.notes %]</td>
                                             </tr>
                                         [% END # / FOREACH latestserials %]
+                                        </tbody>
                                     </table>
                                 [% END # / IF subscription.latestserials %]
                             [% END # / FOREACH subscriptions %]
@@ -1462,6 +1468,17 @@
                 ],
             "bKohaColumnsUseNames": true
         }, columns_settings);
+
+        var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) %];
+
+        KohaTable("#subscriptionst", {
+            dom: 'B<"clearfix">t',
+            "columnDefs": [
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+            "bKohaColumnsUseNames": true
+        }, serial_column_settings);
 
 [% IF ( TagsInputEnabled && loggedinusername ) %]
         $(".tag_add").click(function(){
