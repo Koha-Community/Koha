@@ -485,6 +485,8 @@ foreach my $biblionumber (@biblionumbers) {
                     # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                     $item->{override} = 1;
                     $num_override++;
+
+                    push( @available_itemtypes, $item->{itype} );
                 }
 
                 # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
