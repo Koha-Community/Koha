@@ -172,7 +172,7 @@ sub putNewVersionToDB {
     my ($sheet) = @_;
 
     if (idInUseInDB($sheet->getId())) {
-        $sheet = _putToDB($sheet);
+        $sheet = _updateToDB($sheet);
     }
     else {
         my @cal = caller(0);
@@ -213,6 +213,22 @@ sub _putToDB {
     eval {
         $sth->execute( $sheet->getId(), $sheet->getName(), $sheet->getAuthor()->{borrowernumber},
                        $sheet->getVersion(), $sheet->getTimestamp()->iso8601(), $sheet->toJSON() );
+    };
+    if ($@ || $sth->err) {
+        my @cal = caller(0);
+        Koha::Exception::DB->throw(error => $cal[3].'():>'.($@ || $sth->errstr));
+    }
+    return $sheet;
+}
+sub _updateToDB {
+    my ($sheet) = @_;
+    $sheet->setTimestamp(DateTime->now(time_zone => C4::Context->tz()));
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare("UPDATE label_sheets SET name = ?, author = ?, version = ?, timestamp = ?, sheet = ? WHERE id = ?");
+    eval {
+        $sth->execute( $sheet->getName(), $sheet->getAuthor()->{borrowernumber},
+                       $sheet->getVersion(), $sheet->getTimestamp()->iso8601(), $sheet->toJSON(), $sheet->getId() );
     };
     if ($@ || $sth->err) {
         my @cal = caller(0);

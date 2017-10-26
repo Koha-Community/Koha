@@ -78,13 +78,12 @@
                             <div id="regionControls">
 
                             </div>
-                            <div id="elementControls">
+                            <div id="regionsDispenser" class="controlGroup">
+                            </div>
+                            <div id="elementControls" class="controlGroup">
                               <h4>Elements</h4>
                               <div id="elementDispenser" class="button btn elementDispenser">Add</div>
                             </div>
-                          </div>
-                          <div id="regionsDispenser" class="controlGroup">
-
                           </div>
                           <div id="sheetEditorConfig" class="controlGroup">
                               <input type="number" id="sc_dpi"/><label for="sc_dpi">Dots per inch</label>
@@ -162,6 +161,8 @@
                 <h3>Import sheet</h3>
                 <br/>
                 <form id="uploadForm" action="#" method="post">
+                  <input type="text" class="form-control hidden" id="importUsername" value="[% USER_INFO.userid %]">
+                  <input type="text" class="form-control hidden" id="importUserId" value="[% USER_INFO.borrowernumber %]">
                   <div class="form-group">
                     <label for="importName">Sheet name</label>
                     <input type="text" class="form-control" id="importName">

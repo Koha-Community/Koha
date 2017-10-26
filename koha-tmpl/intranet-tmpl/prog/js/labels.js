@@ -14,8 +14,10 @@ $("#saveSheet").click(function() {
 });
 $("#importNew").click(function() {
     var name = $("#importName").val();
+    var username = $("#importUsername").val();
+    var userid = $("#importUserId").val();
     var file = $('#importFile').prop('files')[0];
-    Labels.GUI.SheetList.importSheet(name, file);
+    Labels.GUI.SheetList.importSheet(name, username, userid, file);
 
 });
 $("#printLabels").click(function(event) {

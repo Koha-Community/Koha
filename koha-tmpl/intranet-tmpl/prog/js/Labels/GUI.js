@@ -203,13 +203,13 @@ Labels.GUI.SheetList.exportSheet = function (sheet) {
     $('#exportSheet').attr('href', 'data:' + data).attr('download','sheet'+sheet.id+'.json').removeClass('hidden');
 }
 
-Labels.GUI.SheetList.importSheet = function (sheetname, file) {
+Labels.GUI.SheetList.importSheet = function (sheetname, username, userid, file) {
     var sheet = Labels.Sheets.importFile(file);
     sheet.name = sheetname;
     sheet.version = parseFloat(0.1);
-    var lastSheet = $( "#sheetListContainer" ).children(".sheetListNode").last();
-    var nextId = lastSheet.attr("id").replace("sheetListNode","");
-    sheet.id = parseInt(nextId)+1;
+    sheet.author.userid = username;
+    sheet.author.borrowernumber = parseInt(userid);
+    sheet.id = Labels.Sheets.getNewId().toString();
 
     var response = Labels.Sheets.importToREST(sheet);
 
