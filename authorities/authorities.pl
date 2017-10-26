@@ -320,7 +320,7 @@ sub CreateKey {
 
 =item GetMandatoryFieldZ3950
 
-    This function return an hashref which contains all mandatory field
+    This function returns a hashref which contains all mandatory field
     to search with z3950 server.
 
 =cut
