@@ -174,7 +174,7 @@ if ( $query->param('reserve_id') ) {
     my ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
 
     my $patron = Koha::Patrons->find( $nextreservinfo );
-    my $name   = $patron->surname . ", " . $patron->title . " " . $patron->firstname;
+    my $name   = $patron ? $patron->surname . ", " . $patron->title . " " . $patron->firstname : '';
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $biblio->title,
