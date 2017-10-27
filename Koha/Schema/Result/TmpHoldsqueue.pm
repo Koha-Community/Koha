@@ -63,7 +63,7 @@ __PACKAGE__->table("tmp_holdsqueue");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 16
+  size: 32
 
 =head2 reservedate
 
@@ -123,7 +123,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_nullable => 0 },
   "cardnumber",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "reservedate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "title",
@@ -141,8 +141,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZD6xOAdXuMjglFtNa+DMEQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-27 13:24:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2uCsPkQk5ul3ntBdbKFx8Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

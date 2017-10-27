@@ -47,7 +47,7 @@ __PACKAGE__->table("borrower_modifications");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 16
+  size: 32
 
 =head2 surname
 
@@ -430,7 +430,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "cardnumber",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
+  { data_type => "varchar", is_nullable => 1, size => 32 },
   "surname",
   { data_type => "mediumtext", is_nullable => 1 },
   "firstname",
@@ -598,8 +598,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-09-19 03:00:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:k+pL864IIHY6NP9y9MMWAw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-27 13:24:06
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PUS/k4r20connTfZWAWmxg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
