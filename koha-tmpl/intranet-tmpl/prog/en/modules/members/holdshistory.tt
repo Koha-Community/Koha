@@ -56,8 +56,6 @@
         <th>Barcode</th>
         <th>Library</th>
         <th class="title-string">Hold date</th>
-        <th class="title-string">Notification date</th>
-        <th class="title-string">Reminder date</th>
         <th class="title-string">Expiration date</th>
         <th class="title-string">Waiting date</th>
         <th class="title-string">Cancellation date</th>
@@ -71,20 +69,6 @@
           <td>[% hold.item.barcode %]</td>
           <td>[% Branches.GetName( hold.branchcode ) %]</td>
           <td><span title="[% hold.reservedate %]">[% hold.reservedate | $KohaDates %]</span></td>
-          <td>
-              [% IF hold.notificationdate %]
-                  <span title="[% hold.notificationdate %]">[% hold.notificationdate | $KohaDates %]</span>
-              [% ELSE %]
-                  <span title="0000-00-00"></span>
-              [% END %]
-          </td>
-          <td>
-              [% IF hold.reminderdate %]
-                  <span title="[% hold.reminderdate %]">[% hold.reminderdate | $KohaDates %]</span>
-              [% ELSE %]
-                  <span title="0000-00-00"></span>
-              [% END %]
-          </td>
           <td>
               [% IF hold.expirationdate %]
                   <span title="[% hold.expirationdate %]">[% hold.expirationdate | $KohaDates %]</span>
