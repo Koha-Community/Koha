@@ -158,7 +158,7 @@ if ( $patron->is_debarred ) {
     $template->param(
         userdebarred => 1,
         flagged => 1,
-        debarments => GetDebarments({ borrowernumber => $borrowernumber }),
+        debarments => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     );
     my $debar = $data->{'debarred'};
     if ( $debar ne "9999-12-31" ) {
