@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Cwd qw/abs_path/;
 use File::Basename;
 use File::Spec;
 use Test::More;
@@ -34,7 +35,7 @@ sub get_where {
     else {
         $location .= '/..';
     }
-    return $location;
+    return abs_path($location);
 }
 
 my $langModule;
