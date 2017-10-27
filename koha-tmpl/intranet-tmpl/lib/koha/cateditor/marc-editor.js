@@ -171,7 +171,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             if ( !field ) return;
             if ( authInfo[field.tag] == undefined ) return;
             authtype = authInfo[field.tag].authtypecode;
-            index = 'rancor';//+field.line+'|'+field.tag;
+            index = 'rancor';
             var mainmainstring = '';
             if( field.getSubfields( authInfo[field.tag].subfield ).length != 0 ){
                 mainmainstring += field.getSubfields( authInfo[field.tag].subfield )[0].text;
