@@ -4,9 +4,11 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use Koha::Database;
+use Koha::Patrons;
+use Koha::DateUtils;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 use C4::SIP::ILS::Patron;
@@ -112,6 +114,28 @@ subtest "Test build_patron_attribute_string" => sub {
     $server->{account}->{patron_attribute}->[1]->{field} = 'YZ';
     $attribute_string = $ils_patron->build_patron_attributes_string( $server );
     is( $attribute_string, "XYTest Attribute|YZAnother Test Attribute|", 'Attribute field generated correctly with multiple params' );
+};
+
+subtest "update_lastseen tests" => sub {
+    plan tests => 2;
+
+    my $seen_patron = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                lastseen    => "2001-01-01",
+            }
+        }
+    );
+    my $sip_patron = C4::SIP::ILS::Patron->new( $seen_patron->{cardnumber} );
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '' );
+    $sip_patron->update_lastseen();
+    $seen_patron = Koha::Patrons->find({ cardnumber => $seen_patron->{cardnumber} });
+    is( output_pref({str => $seen_patron->lastseen(), dateonly => 1}), output_pref({str => '2001-01-01', dateonly => 1}),'Last seen not updated if not tracking patrons');
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
+    $sip_patron->update_lastseen();
+    $seen_patron = Koha::Patrons->find({ cardnumber => $seen_patron->cardnumber() });
+    is( output_pref({str => $seen_patron->lastseen(), dateonly => 1}), output_pref({dt => dt_from_string(), dateonly => 1}),'Last seen updated to today if tracking patrons');
 };
 
 $schema->storage->txn_rollback;
