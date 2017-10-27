@@ -597,7 +597,7 @@ sub holds {
 
 my $old_holds = $patron->old_holds
 
-Returnn all the historical holds for this patron
+Return all the historical holds for this patron
 
 =cut
 
