@@ -423,7 +423,7 @@ function AdjustRemark() {
         [% CASE 'DBIx::Class::Exception' %]
             [% m.msg %]
         [% CASE %]
-            [% m.code %]
+            [% m.code %] [% m.msg %]
         [% END %]
     </div>
 [% END %]
