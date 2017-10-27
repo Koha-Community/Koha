@@ -3,8 +3,7 @@ package Koha::MoreUtils;
 use Modern::Perl;
 
 # From  List::MoreUtils v4.0
-sub singleton (@)
-{
+sub singleton {
     my %seen = ();
     my $k;
     my $seen_undef;
