@@ -68,7 +68,7 @@ sub fetch_bib {
     my $biblionumber = shift;
     my $record = GetMarcBiblio({
         biblionumber => $biblionumber,
-        embed_items  => $query->url_param('items') });
+        embed_items  => scalar $query->param('items') });
     if  (defined $record) {
         print $query->header(-type => 'text/xml',-charset => 'utf-8',);
         print $record->as_xml_record();
@@ -117,7 +117,7 @@ sub update_bib {
         ModBiblio( $record, $biblionumber, '' );
         my $new_record = GetMarcBiblio({
             biblionumber => $biblionumber,
-            embed_items  => $query->url_param('items') });
+            embed_items  => scalar $query->url_param('items') });
 
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;

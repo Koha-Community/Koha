@@ -86,7 +86,7 @@ sub add_bib {
 
         $new_record = GetMarcBiblio({
             biblionumber => $biblionumber,
-            embed_items  => $query->url_param('items') });
+            embed_items  => scalar $query->url_param('items') });
         $result->{'status'} = "ok";
         $result->{'biblionumber'} = $biblionumber;
         my $xml = $new_record->as_xml_record();
