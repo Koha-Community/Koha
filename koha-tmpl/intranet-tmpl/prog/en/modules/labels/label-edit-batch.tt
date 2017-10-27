@@ -98,10 +98,10 @@
                         alert(_("Please select at least one label to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
+                    return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter('Export labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 400, 800);
+                    return GB_showCenter(_("Export labels"), "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 400, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
