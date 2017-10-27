@@ -7,7 +7,6 @@
 [% IF ( circulation ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Circulation" href="/cgi-bin/koha/admin/preferences.pl?tab=circulation">Circulation</a></li>
 [% IF ( enhanced_content ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Enhanced content settings" href="/cgi-bin/koha/admin/preferences.pl?tab=enhanced_content">Enhanced content</a></li>
 [% IF ( i18n_l10n ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Internationalization and localization" href="/cgi-bin/koha/admin/preferences.pl?tab=i18n_l10n">I18N/L10N</a></li>
-[% IF ( labs ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Experimental features" href="/cgi-bin/koha/admin/preferences.pl?tab=labs">Labs</a></li>
 [% IF ( local_use ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/systempreferences.pl">Local use</a></li>
 [% IF ( logs ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Transaction logs" href="/cgi-bin/koha/admin/preferences.pl?tab=logs">Logs</a></li>
 [% IF ( opac ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Online Public Access Catalog" href="/cgi-bin/koha/admin/preferences.pl?tab=opac">OPAC</a></li>
