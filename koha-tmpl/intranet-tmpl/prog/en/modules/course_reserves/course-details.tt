@@ -23,9 +23,10 @@
         });
 
         $("#delete_course").click(function(){
+            [% SET count = course_reserves.size %]
             [% IF count == 1 %]
                 return confirmDelete(_("Are you sure you want to delete this course? There is [% count %] attached item.") );
-            [% ELSIF count != 1 && count > 0 %]
+            [% ELSIF count > 1 %]
                 return confirmDelete(_("Are you sure you want to delete this course? There are [% count %] attached items.") );
             [% ELSE %]
                 return confirmDelete(_("Are you sure you want to delete this course?"));
