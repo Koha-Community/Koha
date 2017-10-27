@@ -14926,6 +14926,28 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 2093 - Add system preference OPACUserSummary)\n";
 }
 
+$DBversion = '17.06.00.025';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        ALTER TABLE borrowers MODIFY cardnumber varchar(32);
+    });
+    $dbh->do(q{
+        ALTER TABLE borrower_modifications MODIFY cardnumber varchar(32);
+    });
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers MODIFY cardnumber varchar(32);
+    });
+    $dbh->do(q{
+        ALTER TABLE pending_offline_operations MODIFY cardnumber varchar(32);
+    });
+    $dbh->do(q{
+        ALTER TABLE tmp_holdsqueue MODIFY cardnumber varchar(32);
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 13178 - Increase cardnumber fields to VARCHAR(32))\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
