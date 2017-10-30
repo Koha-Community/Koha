@@ -24,8 +24,6 @@ sub compare {
     my ( $got, $expected, $description ) = @_;
     my $dt_got      = dt_from_string($got);
     my $dt_expected = dt_from_string($expected);
-    $dt_got->set_time_zone('floating');
-    $dt_expected->set_time_zone('floating');
     my $diff = $dt_got->epoch - $dt_expected->epoch;
     if ( abs($diff) < 6 ) { return 0 }
     return $diff > 0 ? 1 : -1;

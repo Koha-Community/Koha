@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use t::lib::Dates;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -20,7 +20,10 @@ is( t::lib::Dates::compare( $dt_1, $dt_3 ),
 is( t::lib::Dates::compare( $dt_3, $dt_1 ),
     0, 'If there is less than 1min, the dates are considered identicals' );
 
-$dt_1->set_time_zone('+0000');
-$dt_3 = $dt_1->clone->set_time_zone('+0400');
+$dt_1 = DateTime->new(year => 2001, month => 1, day => 1, hour => 0, minute => 0, second => 0, time_zone => '+0000');
+$dt_3 = DateTime->new(year => 2001, month => 1, day => 1, hour => 4, minute => 0, second => 0, time_zone => '+0400');
+is( t::lib::Dates::compare( $dt_1, $dt_3 ), 0, 'Different timezone but same date/time' );
 
-is( t::lib::Dates::compare( $dt_1, $dt_3 ), -1, "Compare different timezones" );
+$dt_1 = DateTime->new(year => 2001, month => 1, day => 1, hour => 0, minute => 0, second => 0, time_zone => '+0000');
+$dt_3 = DateTime->new(year => 2001, month => 1, day => 1, hour => 0, minute => 0, second => 0, time_zone => '+0400');
+is( t::lib::Dates::compare( $dt_1, $dt_3 ), 1, 'Different timezone and different date/time' );
