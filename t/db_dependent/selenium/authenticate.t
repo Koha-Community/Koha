@@ -32,10 +32,13 @@ use MARC::Record;
 use MARC::Field;
 
 my $dbh = C4::Context->dbh;
-my $login = 'koha';
-my $password = 'koha';
-my $base_url= 'http://'.C4::Context->preference("staffClientBaseURL")."/cgi-bin/koha/";
-my $opac_url= C4::Context->preference("OPACBaseURL");
+my $login = $ENV{KOHA_USER} || 'koha';
+my $password = $ENV{KOHA_PASS} || 'koha';
+my $staff_client_base_url =
+    $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseUrl") || q{};
+my $base_url= $staff_client_base_url . "/cgi-bin/koha/";
+my $opac_url = $ENV{KOHA_OPAC_URL} || C4::Context->preference("OPACBaseURL") || q{};
+
 
 our $sample_data = {
     category => {
@@ -48,8 +51,8 @@ our $sample_data = {
         surname    => 'test_patron_surname',
         cardnumber => '4242424242',
         userid     => 'test_username',
-        password   => 'password',
-        password2  => 'password'
+        password   => 'Password123',
+        password2  => 'Password123'
     },
 };
 
@@ -117,7 +120,7 @@ END {
 
 sub auth {
     my ( $driver, $login, $password) = @_;
-    fill_form( $driver, { userid => 'koha', password => 'koha' } );
+    fill_form( $driver, { userid => $login, password => $password } );
     my $login_button = $driver->find_element('//input[@id="submit"]');
     $login_button->submit();
 }
