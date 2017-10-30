@@ -126,6 +126,11 @@ generate_config_file() {
 }
 
 getmysqlhost() {
+    if [ ! -f /etc/mysql/debian.cnf ]
+    then
+        echo localhost
+        return
+    fi
     awk '
         BEGIN { FS="=" }
         $1 ~/\[/ { inclient=0 }
