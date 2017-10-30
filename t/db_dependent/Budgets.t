@@ -417,7 +417,7 @@ my $fund = AddBudget(
     }
 );
 
-my $vendor = Koha::Acquisition::Bookseller->new(
+my $vendorid = C4::Bookseller::AddBookseller(
     {
         name         => "test vendor",
         address1     => "test address",
@@ -425,9 +425,7 @@ my $vendor = Koha::Acquisition::Bookseller->new(
         active       => 1,
         deliverytime => 5,
     }
-)->store;
-
-my $vendorid = $vendor->id;
+);
 
 my $basketnumber = C4::Acquisition::NewBasket( $vendorid, 1 );
 my ( $biblio, $biblioitem ) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
