@@ -903,6 +903,8 @@ sub CheckReserves {
 
         my $priority = 10000000;
         foreach my $res (@reserves) {
+            my $issuing_rules = CheckIssuingRules($itemnumber, $res->{'borrowernumber'});
+            return if ($issuing_rules->reservesallowed == 0);
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 return ( "Waiting", $res, \@reserves ); # Found it
             } else {
@@ -2558,6 +2560,40 @@ sub GetHoldRule {
     return $sth->fetchrow_hashref();
 }
 
+=head2 CheckIssuingRules
+
+    my $issuing_rule = CheckIssuingRules( $itemnumber, $borrowernumber );
+
+    Returns issuing rules for an item
+
+=cut
+
+sub CheckIssuingRules {
+    my ($itemnumber, $borrowernumber) = @_;
+
+    my $patron = Koha::Patrons->find($borrowernumber);
+    my $item = Koha::Items->find($itemnumber);
+
+    return unless ( $patron && $item );
+
+    my $branch = GetReservesControlBranch( {homebranch => $item->homebranch}, {branchcode => $patron->branchcode} );
+
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {   categorycode => $patron->categorycode,
+            itemtype     => $item->itype,
+            branchcode   => $branch,
+            ccode        => $item->ccode,
+            permanent_location => $item->permanent_location,
+            sub_location => $item->sub_location,
+            genre        => $item->genre,
+            circulation_level => $item->circulation_level,
+            reserve_level => $item->reserve_level,
+        }
+    );
+
+    return $issuing_rule;
+
+}
 =head1 AUTHOR
 
 Koha Development Team <http://koha-community.org/>
