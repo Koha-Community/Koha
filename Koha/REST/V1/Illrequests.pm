@@ -22,6 +22,18 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Illrequests;
 use Koha::Libraries;
 
+=head1 NAME
+
+Koha::REST::V1::Illrequests
+
+=head2 Operations
+
+=head3 list
+
+Return a list of ILL requests, after applying filters.
+
+=cut
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 

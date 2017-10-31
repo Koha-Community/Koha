@@ -18,8 +18,6 @@ package Koha::Illrequest;
 # Koha; if not, write to the Free Software Foundation, Inc., 51 Franklin
 # Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# use Modern::Perl;
-
 use Clone 'clone';
 use File::Basename qw/basename/;
 use Koha::Database;
@@ -29,6 +27,7 @@ use Koha::Illrequestattributes;
 use Koha::Patron;
 use Mail::Sendmail;
 use Try::Tiny;
+use Modern::Perl;
 
 use base qw(Koha::Object);
 
@@ -59,6 +58,8 @@ TODO:
 
 All methods should return a hashref in the following format:
 
+=over
+
 =item * error
 
 This should be set to 1 if an error was encountered.
@@ -75,7 +76,7 @@ The message is a free text field that can be passed on to the end user.
 
 The value returned by the method.
 
-=over
+=back
 
 =head2 Interface Status Messages
 
@@ -100,7 +101,11 @@ the API.
 The interface's request method returned saying that the desired item is not
 available for request.
 
+=back
+
 =head2 Class methods
+
+=head3 illrequestattributes
 
 =cut
 
@@ -111,6 +116,10 @@ sub illrequestattributes {
     );
 }
 
+=head3 patron
+
+=cut
+
 sub patron {
     my ( $self ) = @_;
     return Koha::Patron->_new_from_dbic(
@@ -118,14 +127,20 @@ sub patron {
     );
 }
 
+=head3 load_backend
+
+Require "Base.pm" from the relevant ILL backend.
+
+=cut
+
 sub load_backend {
     my ( $self, $backend_id ) = @_;
 
     my @raw = qw/Koha Illbackends/; # Base Path
 
     my $backend_name = $backend_id || $self->backend;
-    $location = join "/", @raw, $backend_name, "Base.pm"; # File to load
-    $backend_class = join "::", @raw, $backend_name, "Base"; # Package name
+    my $location = join "/", @raw, $backend_name, "Base.pm"; # File to load
+    my $backend_class = join "::", @raw, $backend_name, "Base"; # Package name
     require $location;
     $self->{_my_backend} = $backend_class->new({ config => $self->_config });
     return $self;
@@ -342,7 +357,7 @@ sub _status_graph_union {
     my $status_graph = clone($core_status_graph);
 
     foreach my $backend_status_key ( keys %{$backend_status_graph} ) {
-        $backend_status = $backend_status_graph->{$backend_status_key};
+        my $backend_status = $backend_status_graph->{$backend_status_key};
         # Add to new status graph
         $status_graph->{$backend_status_key} = $backend_status;
         # Update all core methods' next_actions.
@@ -445,14 +460,26 @@ sub custom_capability {
     return 0;
 }
 
+=head3 available_backends
+
+Return a list of available backends.
+
+=cut
+
 sub available_backends {
     my ( $self ) = @_;
     my $backend_dir = $self->_config->backend_dir;
     my @backends = ();
-    @backends = <$backend_dir/*> if ( $backend_dir );
+    @backends = glob "$backend_dir/*" if ( $backend_dir );
     @backends = map { basename($_) } @backends;
     return \@backends;
 }
+
+=head3 available_actions
+
+Return a list of available actions.
+
+=cut
 
 sub available_actions {
     my ( $self ) = @_;
@@ -461,6 +488,12 @@ sub available_actions {
         @{$current_action->{next_actions}};
     return \@available_actions;
 }
+
+=head3 mark_completed
+
+Mark a request as completed (status = COMP).
+
+=cut
 
 sub mark_completed {
     my ( $self ) = @_;
@@ -475,18 +508,33 @@ sub mark_completed {
     };
 }
 
+=head2 backend_confirm
+
+Confirm a request. The backend handles setting of mandatory fields in the commit stage:
+
+=over
+
+=item * orderid
+
+=item * accessurl, cost (if available).
+
+=back
+
+=cut
+
 sub backend_confirm {
     my ( $self, $params ) = @_;
 
-    # The backend handles setting of mandatory fields in the commit stage:
-    # - orderid
-    # - accessurl, cost (if available).
     my $response = $self->_backend->confirm({
             request    => $self,
             other      => $params,
         });
     return $self->expandTemplate($response);
 }
+
+=head3 backend_update_status
+
+=cut
 
 sub backend_update_status {
     my ( $self, $params ) = @_;
@@ -739,7 +787,7 @@ sub _limit_counter {
     } else {                    # assume 'active'
         # XXX: This status list is ugly. There should be a method in config
         # to return these.
-        $where = { status => { -not_in => [ 'QUEUED', 'COMP' ] } };
+        my $where = { status => { -not_in => [ 'QUEUED', 'COMP' ] } };
         $resultset = Koha::Illrequests->search({ %{$target}, %{$where} });
     }
 

@@ -32,8 +32,6 @@ Koha::Illrequestattributes - Koha Illrequestattributes Object class
 
 =head2 Class Methods
 
-=cut
-
 =head3 type
 
 =cut
@@ -41,6 +39,10 @@ Koha::Illrequestattributes - Koha Illrequestattributes Object class
 sub _type {
     return 'Illrequestattribute';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Illrequestattribute';

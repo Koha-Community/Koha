@@ -33,15 +33,17 @@ Koha::Illrequests - Koha Illrequests Object class
 
 =head2 Class Methods
 
-=cut
-
-=head3 type
+=head3 _type
 
 =cut
 
 sub _type {
     return 'Illrequest';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Illrequest';

@@ -348,7 +348,6 @@
                     filterNames.forEach(function(thisFilter) {
                         var filterName = toColumnName(thisFilter) + ':name';
                         var regex = '^'+filters[thisFilter]+'$';
-                        console.log(regex);
                         myTable.columns(filterName).search(regex, true, false);
                     });
                     myTable.draw();
@@ -586,13 +585,9 @@
                                 </div>
                                 <div class="borrowernumber">
                                     <span class="label borrowernumber">Borrower:</span>
-                                    [% borrowerlink = "/cgi-bin/koha/members/moremember.pl"
-                                    _ "?borrowernumber=" _ request.patron.borrowernumber %]
+                                    [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
                                     <a href="[% borrowerlink %]" title="View borrower details">
-                                    [% request.patron.firstname _ " "
-                                    _ request.patron.surname _ " ["
-                                    _ request.patron.cardnumber
-                                    _ "]" %]
+                                    [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" %]
                                     </a>
                                 </div>
 
