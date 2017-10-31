@@ -75,7 +75,7 @@ if ($do_it) {
         $whereTType = q{ AND accounttype IN ('Pay','C') };
     } else { #Single transac type
         if ($transaction_type eq 'FORW') {
-            $whereTType = q{ AND accounttype = 'FOR' OR accounttype = 'W' };
+            $whereTType = q{ AND accounttype IN ('FOR','W') };
         } else {
             $whereTType = q{ AND accounttype = ? };
             push @extra_params, $transaction_type;
