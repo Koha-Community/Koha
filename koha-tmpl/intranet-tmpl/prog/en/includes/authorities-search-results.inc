@@ -8,15 +8,20 @@
     [% SET searchurl = '/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&marclist=any&operator=contains&orderby=HeadingAsc&value=' %]
 
     [% IF marcflavour == 'UNIMARC' %]
+        [% IF authid %]
+            [% link = BLOCK %]<a href="[% authidurl _ authid %]">[% heading | html %]</a>[% END %]
+        [% ELSE %]
+            [% link = BLOCK %][% heading | html %][% END %]
+        [% END %]
         [% SWITCH type %]
         [% CASE 'broader' %]
-            <span class="BT"><abbr title="Broader Term">BT</abbr>: [% heading | html %]</span>
+            <span class="BT"><abbr title="Broader Term">BT</abbr>: [% link %]</span>
         [% CASE 'narrower' %]
-            <span class="NT"><abbr title="Narrower Term">NT</abbr>: [% heading | html %]</span>
+            <span class="NT"><abbr title="Narrower Term">NT</abbr>: [% link %]</span>
         [% CASE 'seefrom' %]
-            <span class="UF"><abbr title="Used For">UF</abbr>: [% heading | html %]</span>
+            <span class="UF"><abbr title="Used For">UF</abbr>: [% link %]</span>
         [% CASE 'seealso' %]
-            <span class="RT"><abbr title="Related Term">RT</abbr>: [% heading | html %]</span>
+            <span class="RT"><abbr title="Related Term">RT</abbr>: [% link %]</span>
         [% END %]
     [% ELSE %]
         <span class="heading">
@@ -72,7 +77,7 @@
           [% IF summary.seefrom %]
             <div class="authres_seefrom">
             [% FOREACH see IN summary.seefrom %]
-              [% PROCESS showreference heading=see.heading linkType="" type=see.type search='' %]
+              [% PROCESS showreference heading=see.heading linkType="" type=see.type authid=see.authid %]
               [% IF ! loop.last %] ; [% END %]
             [% END %]
             </div>
@@ -80,7 +85,7 @@
             [% IF summary.seealso %]
               <div class="authres_seealso">
               [% FOREACH see IN summary.seealso %]
-                 [% PROCESS showreference heading=see.heading linkType="" type=see.type search='' %]
+                 [% PROCESS showreference heading=see.heading linkType="" type=see.type authid=see.authid %]
                  [% IF ! loop.last %] ; [% END %]
               [% END %]
               </div>
