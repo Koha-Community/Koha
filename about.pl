@@ -27,6 +27,8 @@ use List::MoreUtils qw/ any /;
 use LWP::Simple;
 use XML::Simple;
 use Config;
+use Search::Elasticsearch;
+use Try::Tiny;
 
 use C4::Output;
 use C4::Auth;
@@ -40,7 +42,10 @@ use Koha::Patrons;
 use Koha::Caches;
 use Koha::Config::SysPrefs;
 use Koha::Illrequest::Config;
+use Koha::SearchEngine::Elasticsearch;
+
 use C4::Members::Statistics;
+
 
 #use Smart::Comments '####';
 
@@ -290,6 +295,67 @@ if ( C4::Context->preference('ILLModule') ) {
     }
 
     $template->param( warnILLConfiguration => $warnILLConfiguration );
+}
+
+if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
+    # Check ES configuration health and runtime status
+
+    my $es_status;
+    my $es_config_error;
+    my $es_running = 1;
+
+    my $es_conf;
+    try {
+        $es_conf = Koha::SearchEngine::Elasticsearch::_read_configuration();
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Config::MissingEntry' ) {
+            $template->param( elasticsearch_fatal_config_error => $_->message );
+            $es_config_error = 1;
+        }
+        warn p($_);
+    };
+    if ( !$es_config_error ) {
+
+        my $biblios_index_name     = $es_conf->{index_name} . "_" . $Koha::SearchEngine::BIBLIOS_INDEX;
+        my $authorities_index_name = $es_conf->{index_name} . "_" . $Koha::SearchEngine::AUTHORITIES_INDEX;
+
+        my @indexes = ($biblios_index_name, $authorities_index_name);
+        # TODO: When new indexes get added, we could have other ways to
+        #       fetch the list of available indexes (e.g. plugins, etc)
+        $es_status->{nodes} = $es_conf->{nodes};
+        my $es = Search::Elasticsearch->new({ nodes => $es_conf->{nodes} });
+
+        foreach my $index ( @indexes ) {
+            my $count;
+            try {
+                $count = $es->indices->stats( index => $index )
+                      ->{_all}{primaries}{docs}{count};
+            }
+            catch {
+                if ( ref($_) eq 'Search::Elasticsearch::Error::Missing' ) {
+                    push @{ $es_status->{errors} }, "Index not found ($index)";
+                    $count = -1;
+                }
+                elsif ( ref($_) eq 'Search::Elasticsearch::Error::NoNodes' ) {
+                    $es_running = 0;
+                }
+                else {
+                    # TODO: when time comes, we will cover more use cases
+                    die $_;
+                }
+            };
+
+            push @{ $es_status->{indexes} },
+              {
+                index_name => $index,
+                count      => $count
+              };
+        }
+        $es_status->{running} = $es_running;
+
+        $template->param( elasticsearch_status => $es_status );
+    }
 }
 
 # Sco Patron should not contain any other perms than circulate => self_checkout

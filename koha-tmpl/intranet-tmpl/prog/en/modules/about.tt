@@ -1,4 +1,5 @@
 [% USE HtmlTags %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; About Koha</title>
@@ -44,6 +45,31 @@
             <tr><th scope="row">Apache version: </th><td>[% apacheVersion |html %]</td></tr>
           [% IF (is_psgi) %]
             <tr><th scope="row">PSGI: </th><td>[% psgi_server |html %]</td></tr>
+          [% END %]
+          [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+            <tr>
+                <th scope="row">Elasticsearch: </th>
+            [% IF elasticsearch_fatal_config_error %]
+                <td><span class="status_warn">[% elasticsearch_fatal_config_error %]</span></td>
+            [% ELSE %]
+                <td>
+                    Nodes:
+                    <span>[% elasticsearch_status.nodes.join(' / ') %]</span>
+                    |
+                    Status:
+                [% IF elasticsearch_status.running %]
+                    <span class="status_ok">running</span>
+                    |
+                    Indices:
+                  [% FOREACH index IN elasticsearch_status.indexes %]
+                      [% index.index_name %] (count: <emph>[% index.count %]</emph>)
+                  [% END %]
+                [% ELSE %]
+                    <span class="status_warn">not running</span>
+                [% END %]
+                </td>
+            [% END %]
+            </tr>
           [% END %]
             <tr><th scope="row">Memcached: </th>
                 <td>
