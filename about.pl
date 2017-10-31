@@ -420,7 +420,7 @@ if ( open( my $file, "<:encoding(UTF-8)", "$docdir" . "/history.txt" ) ) {
     shift @lines; #remove header row
 
     foreach (@lines) {
-        my ( $date, $desc, $tag ) = split(/\t/);
+        my ( $epoch, $date, $desc, $tag ) = split(/\t/);
         if(!$desc && $date=~ /(?<=\d{4})\s+/) {
             ($date, $desc)= ($`, $');
         }
