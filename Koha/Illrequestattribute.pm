@@ -30,11 +30,11 @@ Koha::Illrequestattribute - Koha Illrequestattribute Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Internal methods
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 

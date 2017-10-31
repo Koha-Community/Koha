@@ -18,6 +18,9 @@ package Koha::Illrequest::Config;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+
+use File::Basename;
+
 use C4::Context;
 
 =head1 NAME
@@ -98,6 +101,21 @@ sub backend_dir {
     my ( $self, $new ) = @_;
     $self->{configuration}->{backend_directory} = $new if $new;
     return $self->{configuration}->{backend_directory};
+}
+
+=head3 available_backends
+
+Return a list of available backends.
+
+=cut
+
+sub available_backends {
+    my ( $self ) = @_;
+    my $backend_dir = $self->backend_dir;
+    my @backends = ();
+    @backends = glob "$backend_dir/*" if ( $backend_dir );
+    @backends = map { basename($_) } @backends;
+    return \@backends;
 }
 
 =head3 partner_code

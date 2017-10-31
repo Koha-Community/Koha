@@ -48,6 +48,9 @@
         [% ELSE %]
             <div class="span12">
         [% END %]
+          [% IF !backends_available %]
+            <div class="alert">ILL module configuration problem. Contact your administrator.</div>
+          [% ELSE %]
             <div id="illrequests" class="maincontent">
                 [% IF method == 'create' %]
                     <h2>New Interlibrary loan request</h2>
@@ -193,6 +196,7 @@
                         </form>
                     [% END %]
                 </div> <!-- / .maincontent -->
+          [% END %]
             </div> <!-- / .span10/12 -->
         </div> <!-- / .row-fluid -->
     </div> <!-- / .container-fluid -->

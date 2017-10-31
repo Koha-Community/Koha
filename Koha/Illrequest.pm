@@ -18,16 +18,18 @@ package Koha::Illrequest;
 # Koha; if not, write to the Free Software Foundation, Inc., 51 Franklin
 # Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+use Modern::Perl;
+
 use Clone 'clone';
 use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Email;
+use Koha::Exceptions::Ill;
 use Koha::Illrequest;
 use Koha::Illrequestattributes;
 use Koha::Patron;
 use Mail::Sendmail;
 use Try::Tiny;
-use Modern::Perl;
 
 use base qw(Koha::Object);
 
@@ -139,12 +141,19 @@ sub load_backend {
     my @raw = qw/Koha Illbackends/; # Base Path
 
     my $backend_name = $backend_id || $self->backend;
-    my $location = join "/", @raw, $backend_name, "Base.pm"; # File to load
+
+    unless ( defined $backend_name && $backend_name ne '' ) {
+        Koha::Exceptions::Ill::InvalidBackendId->throw(
+            "An invalid backend ID was requested ('')");
+    }
+
+    my $location = join "/", @raw, $backend_name, "Base.pm";    # File to load
     my $backend_class = join "::", @raw, $backend_name, "Base"; # Package name
     require $location;
     $self->{_my_backend} = $backend_class->new({ config => $self->_config });
     return $self;
 }
+
 
 =head3 _backend
 
@@ -468,10 +477,7 @@ Return a list of available backends.
 
 sub available_backends {
     my ( $self ) = @_;
-    my $backend_dir = $self->_config->backend_dir;
-    my @backends = ();
-    @backends = glob "$backend_dir/*" if ( $backend_dir );
-    @backends = map { basename($_) } @backends;
+    my @backends = $self->_config->available_backends;
     return \@backends;
 }
 

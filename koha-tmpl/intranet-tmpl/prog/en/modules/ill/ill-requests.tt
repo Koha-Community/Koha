@@ -4,8 +4,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css">
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
@@ -370,12 +369,11 @@
 
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
     [% IF query_type == 'create' %]
-        <a href=[% parent %]>ILL requests</a> &rsaquo; New request
+         &rsaquo; New request
     [% ELSIF query_type == 'status' %]
-        <a href=[% parent %]>ILL requests</a> &rsaquo; Status
-    [% ELSE %]
-        ILL requests
+         &rsaquo; Status
     [% END %]
 </div>
 
@@ -383,6 +381,9 @@
     <div id="bd">
         <div id="yui-main">
             <div id="interlibraryloans" class="yui-b">
+        [% IF !backends_available %]
+            <div class="dialog message">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a></div>
+        [% ELSE %]
                 [% INCLUDE 'ill-toolbar.inc' %]
 
                 [% IF whole.error %]
@@ -680,6 +681,7 @@
                 [% INCLUDE $whole.template %]
 
                 [% END %]
+        [% END %]
             </div>
         </div>
     </div>

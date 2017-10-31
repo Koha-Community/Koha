@@ -24,6 +24,7 @@ use C4::Auth;
 use C4::Koha;
 use C4::Output;
 
+use Koha::Illrequest::Config;
 use Koha::Illrequests;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -47,6 +48,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     type            => "opac",
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
 });
+
+# Are we able to actually work?
+my $backends = Koha::Illrequest::Config->new->available_backends;
+my $backends_available = ( scalar @{$backends} > 0 );
+$template->param( backends_available => $backends_available );
 
 my $op = $params->{'method'} || 'list';
 
@@ -116,8 +122,6 @@ if ( $op eq 'list' ) {
             print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
         }
     }
-
-
 }
 
 $template->param(

@@ -357,7 +357,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 16;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -371,13 +371,26 @@ subtest 'Backend core methods' => sub {
     $config->set_always('getLimitRules',
                         { default => { count => 0, method => 'active' } });
 
-    my $illrq = $builder->build({source => 'Illrequest'});
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
-    $illrq_obj->_config($config);
-    $illrq_obj->_backend($backend);
+    my $illrq = $builder->build_object({
+        class => 'Koha::Illrequests',
+        value => { backend => undef }
+    });
+    $illrq->_config($config);
+
+    # Test error conditions (no backend)
+    throws_ok { $illrq->load_backend; }
+        'Koha::Exceptions::Ill::InvalidBackendId',
+        'Exception raised correctly';
+
+    throws_ok { $illrq->load_backend(''); }
+        'Koha::Exceptions::Ill::InvalidBackendId',
+        'Exception raised correctly';
+
+    # Now load the mocked backend
+    $illrq->_backend($backend);
 
     # expandTemplate:
-    is_deeply($illrq_obj->expandTemplate({ test => 1, method => "bar" }),
+    is_deeply($illrq->expandTemplate({ test => 1, method => "bar" }),
               {
                   test => 1,
                   method => "bar",
@@ -394,7 +407,7 @@ subtest 'Backend core methods' => sub {
                          { stage => 'commit', method => 'create' });
     # Test Copyright Clearance
     t::lib::Mocks::mock_preference("ILLModuleCopyrightClearance", "Test Copyright Clearance.");
-    is_deeply($illrq_obj->backend_create({test => 1}),
+    is_deeply($illrq->backend_create({test => 1}),
               {
                   error   => 0,
                   status  => '',
@@ -408,7 +421,7 @@ subtest 'Backend core methods' => sub {
               "Backend create: copyright clearance.");
     t::lib::Mocks::mock_preference("ILLModuleCopyrightClearance", "");
     # Test non-commit
-    is_deeply($illrq_obj->backend_create({test => 1}),
+    is_deeply($illrq->backend_create({test => 1}),
               {
                   stage => 'bar', method => 'create',
                   template => "/tmp/Mock/intra-includes/create.inc",
@@ -416,28 +429,28 @@ subtest 'Backend core methods' => sub {
               },
               "Backend create: arbitrary stage.");
     # Test commit
-    is_deeply($illrq_obj->backend_create({test => 1}),
+    is_deeply($illrq->backend_create({test => 1}),
               {
                   stage => 'commit', method => 'create', permitted => 0,
                   template => "/tmp/Mock/intra-includes/create.inc",
                   opac_template => "/tmp/Mock/opac-includes/create.inc",
               },
               "Backend create: arbitrary stage, not permitted.");
-    is($illrq_obj->status, "QUEUED", "Backend create: queued if restricted.");
+    is($illrq->status, "QUEUED", "Backend create: queued if restricted.");
     $config->set_always('getLimitRules', {});
-    $illrq_obj->status('NEW');
-    is_deeply($illrq_obj->backend_create({test => 1}),
+    $illrq->status('NEW');
+    is_deeply($illrq->backend_create({test => 1}),
               {
                   stage => 'commit', method => 'create', permitted => 1,
                   template => "/tmp/Mock/intra-includes/create.inc",
                   opac_template => "/tmp/Mock/opac-includes/create.inc",
               },
               "Backend create: arbitrary stage, permitted.");
-    is($illrq_obj->status, "NEW", "Backend create: not-queued.");
+    is($illrq->status, "NEW", "Backend create: not-queued.");
 
     # backend_renew
     $backend->set_series('renew', { stage => 'bar', method => 'renew' });
-    is_deeply($illrq_obj->backend_renew({test => 1}),
+    is_deeply($illrq->backend_renew({test => 1}),
               {
                   stage => 'bar', method => 'renew',
                   template => "/tmp/Mock/intra-includes/renew.inc",
@@ -447,7 +460,7 @@ subtest 'Backend core methods' => sub {
 
     # backend_cancel
     $backend->set_series('cancel', { stage => 'bar', method => 'cancel' });
-    is_deeply($illrq_obj->backend_cancel({test => 1}),
+    is_deeply($illrq->backend_cancel({test => 1}),
               {
                   stage => 'bar', method => 'cancel',
                   template => "/tmp/Mock/intra-includes/cancel.inc",
@@ -457,7 +470,7 @@ subtest 'Backend core methods' => sub {
 
     # backend_update_status
     $backend->set_series('update_status', { stage => 'bar', method => 'update_status' });
-    is_deeply($illrq_obj->backend_update_status({test => 1}),
+    is_deeply($illrq->backend_update_status({test => 1}),
               {
                   stage => 'bar', method => 'update_status',
                   template => "/tmp/Mock/intra-includes/update_status.inc",
@@ -467,7 +480,7 @@ subtest 'Backend core methods' => sub {
 
     # backend_confirm
     $backend->set_series('confirm', { stage => 'bar', method => 'confirm' });
-    is_deeply($illrq_obj->backend_confirm({test => 1}),
+    is_deeply($illrq->backend_confirm({test => 1}),
               {
                   stage => 'bar', method => 'confirm',
                   template => "/tmp/Mock/intra-includes/confirm.inc",
@@ -489,7 +502,7 @@ subtest 'Backend core methods' => sub {
         source => 'Borrower',
         value => { categorycode => "ILLTSTLIB" },
     });
-    my $gen_conf = $illrq_obj->generic_confirm({
+    my $gen_conf = $illrq->generic_confirm({
         current_branchcode => $illbrn->{branchcode}
     });
     isnt(index($gen_conf->{value}->{draft}->{body}, $backend->metadata->{Test}), -1,
@@ -502,13 +515,13 @@ subtest 'Backend core methods' => sub {
        "Generic confirm: partner 2 is correct."
     );
 
-    dies_ok { $illrq_obj->generic_confirm({
+    dies_ok { $illrq->generic_confirm({
         current_branchcode => $illbrn->{branchcode},
         stage => 'draft'
     }) }
         "Generic confirm: missing to dies OK.";
 
-    dies_ok { $illrq_obj->generic_confirm({
+    dies_ok { $illrq->generic_confirm({
         current_branchcode => $illbrn->{branchcode},
         partners => $partner1->{email},
         stage => 'draft'
