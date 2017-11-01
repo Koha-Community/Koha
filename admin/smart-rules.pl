@@ -557,12 +557,12 @@ my $sth2 = $dbh->prepare("
     LEFT JOIN localization ON issuingrules.itemtype = localization.code
         AND localization.entity = 'itemtypes'
         AND localization.lang = ?
-    LEFT JOIN authorised_values a1 ON issuingrules.ccode = a1.authorised_value
-    LEFT JOIN authorised_values a2 ON issuingrules.permanent_location = a2.authorised_value
-    LEFT JOIN authorised_values a3 ON issuingrules.sub_location = a3.authorised_value
-    LEFT JOIN authorised_values a4 ON issuingrules.genre = a4.authorised_value
-    LEFT JOIN authorised_values a5 ON issuingrules.circulation_level = a5.authorised_value
-    LEFT JOIN authorised_values a6 ON issuingrules.reserve_level = a6.authorised_value
+    LEFT JOIN authorised_values a1 ON issuingrules.ccode = a1.authorised_value AND a1.category = 'CCODE'
+    LEFT JOIN authorised_values a2 ON issuingrules.permanent_location = a2.authorised_value AND a2.category = 'LOC'
+    LEFT JOIN authorised_values a3 ON issuingrules.sub_location = a3.authorised_value AND a3.category = 'SUBLOC'
+    LEFT JOIN authorised_values a4 ON issuingrules.genre = a4.authorised_value AND a4.category = 'GENRE'
+    LEFT JOIN authorised_values a5 ON issuingrules.circulation_level = a5.authorised_value AND a5.category = 'CIRCULATION_LEVEL'
+    LEFT JOIN authorised_values a6 ON issuingrules.reserve_level = a6.authorised_value AND a6.category = 'RESERVE_LEVEL'
     WHERE issuingrules.branchcode = ?
 ");
 $sth2->execute($language, $branch);
