@@ -798,7 +798,7 @@ sub _truncate_terms {
 
     # '"donald duck" title:"the mouse" and peter" get split into
     # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
-    my @tokens = split /((?:\w+:)?"[^"]+"|\s+)/, $query;
+    my @tokens = split /((?:[\w-]+:)?"[^"]+"|\s+)/, $query;
 
     # Filter out empty tokens
     my @words = grep { $_ !~ /^\s*$/ } @tokens;
