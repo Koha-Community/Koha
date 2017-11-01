@@ -677,7 +677,9 @@ sub get_matches {
                 if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
                     foreach my $matched ( @{$searchresults} ) {
                         my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", $marcframework_used );
-                        my $id = $matched->field($biblionumber_tag)->subfield($biblionumber_subfield);
+                        my $id = ( $biblionumber_tag > 10 ) ?
+                            $matched->field($biblionumber_tag)->subfield($biblionumber_subfield) :
+                            $matched->field($biblionumber_tag)->data();
                         $matches->{$id}->{score} += $matchpoint->{score};
                         $matches->{$id}->{record} = $matched;
                     }
