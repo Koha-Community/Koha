@@ -611,7 +611,8 @@ sub backend_create {
                 backend => $self->_backend->name
             }
         };
-    } elsif ( $params->{stage} eq 'copyrightclearance' ) {
+    } elsif (     defined $params->{stage}
+               && $params->{stage} eq 'copyrightclearance' ) {
         $params->{stage} = 'init';
     }
 
@@ -690,9 +691,13 @@ sub getLimits {
     my ( $self, $params ) = @_;
     my $limits = $self->_config->getLimitRules($params->{type});
 
-    return $limits->{$params->{value}}
-        || $limits->{default}
-        || { count => -1, method => 'active' };
+    if (     defined $params->{value}
+          && defined $limits->{$params->{value}} ) {
+            return $limits->{$params->{value}};
+    }
+    else {
+        return $limits->{default} || { count => -1, method => 'active' };
+    }
 }
 
 =head3 getPrefix
@@ -884,8 +889,10 @@ EOF
     } elsif ( 'draft' eq $params->{stage} ) {
         # Create the to header
         my $to = $params->{partners};
-        $to =~ s/^\x00//;       # Strip leading NULLs
-        $to =~ s/\x00/; /;      # Replace others with '; '
+        if ( defined $to ) {
+            $to =~ s/^\x00//;       # Strip leading NULLs
+            $to =~ s/\x00/; /;      # Replace others with '; '
+        }
         die "No target email addresses found. Either select at least one partner or check your ILL partner library records." if ( !$to );
         # Create the from, replyto and sender headers
         my $from = $branch->branchemail;

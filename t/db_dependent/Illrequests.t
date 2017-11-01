@@ -220,20 +220,20 @@ subtest 'Backend testing (mocks)' => sub {
     # the Dummy plugin installed.  load_backend & available_backends don't
     # currently have tests as a result.
 
+    t::lib::Mocks->mock_config('interlibrary_loans', { backend_dir => 'a_dir' }  );
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
     $backend->set_always('name', 'Mock');
 
     my $patron = $builder->build({ source => 'Borrower' });
-    my $illrq = $builder->build({
-        source => 'Illrequest',
+    my $illrq = $builder->build_object({
+        class => 'Koha::Illrequests',
         value => { borrowernumber => $patron->{borrowernumber} }
     });
-    my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
 
-    $illrq_obj->_backend($backend);
+    $illrq->_backend($backend);
 
-    isa_ok($illrq_obj->_backend, 'Koha::Illbackends::Mock',
+    isa_ok($illrq->_backend, 'Koha::Illbackends::Mock',
            "OK accessing mocked backend.");
 
     # _backend_capability tests:
@@ -245,15 +245,15 @@ subtest 'Backend testing (mocks)' => sub {
     # functionality, such as unmediated in the BLDSS backend (also see
     # bugzilla 18837).
     $backend->set_always('capabilities', undef);
-    is($illrq_obj->_backend_capability('Test'), 0,
+    is($illrq->_backend_capability('Test'), 0,
        "0 returned on Mock not implementing capabilities.");
 
     $backend->set_always('capabilities', 0);
-    is($illrq_obj->_backend_capability('Test'), 0,
+    is($illrq->_backend_capability('Test'), 0,
        "0 returned on Mock not implementing Test capability.");
 
     $backend->set_always('capabilities', sub { return 'bar'; } );
-    is($illrq_obj->_backend_capability('Test'), 'bar',
+    is($illrq->_backend_capability('Test'), 'bar',
        "'bar' returned on Mock implementing Test capability.");
 
     # metadata test: we need to be sure that we return the arbitrary values
@@ -270,10 +270,10 @@ subtest 'Backend testing (mocks)' => sub {
     );
 
     is_deeply(
-        $illrq_obj->metadata,
+        $illrq->metadata,
         {
-            ID => $illrq_obj->illrequest_id,
-            Title => $illrq_obj->patron->borrowernumber
+            ID => $illrq->illrequest_id,
+            Title => $illrq->patron->borrowernumber
         },
         "Test metadata."
     );
@@ -282,7 +282,7 @@ subtest 'Backend testing (mocks)' => sub {
 
     # No backend graph extension
     $backend->set_always('status_graph', {});
-    is_deeply($illrq_obj->capabilities('COMP'),
+    is_deeply($illrq->capabilities('COMP'),
               {
                   prev_actions   => [ 'REQ' ],
                   id             => 'COMP',
@@ -293,10 +293,10 @@ subtest 'Backend testing (mocks)' => sub {
                   ui_method_icon => 'fa-check',
               },
               "Dummy status graph for COMP.");
-    is($illrq_obj->capabilities('UNKNOWN'), undef,
+    is($illrq->capabilities('UNKNOWN'), undef,
        "Dummy status graph for UNKNOWN.");
-    is_deeply($illrq_obj->capabilities(),
-              $illrq_obj->_core_status_graph,
+    is_deeply($illrq->capabilities(),
+              $illrq->_core_status_graph,
               "Dummy full status graph.");
     # Simple backend graph extension
     $backend->set_always('status_graph',
@@ -307,18 +307,18 @@ subtest 'Backend testing (mocks)' => sub {
                                  next_actions   => [ 'REQ' ],
                              },
                          });
-    is_deeply($illrq_obj->capabilities('QER'),
+    is_deeply($illrq->capabilities('QER'),
               {
                   prev_actions   => [ 'REQ' ],
                   id             => 'QER',
                   next_actions   => [ 'REQ' ],
               },
               "Simple status graph for QER.");
-    is($illrq_obj->capabilities('UNKNOWN'), undef,
+    is($illrq->capabilities('UNKNOWN'), undef,
        "Simple status graph for UNKNOWN.");
-    is_deeply($illrq_obj->capabilities(),
-              $illrq_obj->_status_graph_union(
-                  $illrq_obj->_core_status_graph,
+    is_deeply($illrq->capabilities(),
+              $illrq->_status_graph_union(
+                  $illrq->_core_status_graph,
                   {
                       QER => {
                           prev_actions   => [ 'REQ' ],
@@ -333,7 +333,7 @@ subtest 'Backend testing (mocks)' => sub {
 
     # No backend graph extension
     $backend->set_always('status_graph', {});
-    is($illrq_obj->custom_capability('unknown', {}), 0,
+    is($illrq->custom_capability('unknown', {}), 0,
        "Unknown candidate.");
 
     # Simple backend graph extension
@@ -348,7 +348,7 @@ subtest 'Backend testing (mocks)' => sub {
                          });
     $backend->mock('identity',
                    sub { my ( $self, $params ) = @_; return $params->{other}; });
-    is($illrq_obj->custom_capability('identity', { test => 1 })->{test}, 1,
+    is($illrq->custom_capability('identity', { test => 1, method => 'blah' })->{test}, 1,
        "Resolve identity custom_capability");
 
     $schema->storage->txn_rollback;
