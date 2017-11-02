@@ -33,9 +33,12 @@ BEGIN {
     }
 }
 
-use_ok('C4::Matcher');
-
 use Test::DBIx::Class;
+
+my $db = Test::MockModule->new('Koha::Database');
+$db->mock( _new_schema => sub { return Schema(); } );
+
+use_ok('C4::Matcher');
 
 fixtures_ok [
     MarcMatcher => [
@@ -44,9 +47,6 @@ fixtures_ok [
         [ 2,            'ISSN', 'ISSN',        'blue',        0 ]
     ],
 ], 'add fixtures';
-
-my $db = Test::MockModule->new('Koha::Database');
-$db->mock( _new_schema => sub { return Schema(); } );
 
 my @matchers = C4::Matcher::GetMatcherList();
 
