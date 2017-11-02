@@ -474,7 +474,7 @@ sub TooMany {
         my $max_checkouts_allowed = $issuing_rule->maxissueqty;
         my $max_onsite_checkouts_allowed = $issuing_rule->maxonsiteissueqty;
 
-        if ( $onsite_checkout ) {
+        if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
                 return {
                     reason => 'TOO_MANY_ONSITE_CHECKOUTS',
@@ -528,7 +528,7 @@ sub TooMany {
         my $max_checkouts_allowed = $branch_borrower_circ_rule->{maxissueqty};
         my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{maxonsiteissueqty};
 
-        if ( $onsite_checkout ) {
+        if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
                 return {
                     reason => 'TOO_MANY_ONSITE_CHECKOUTS',
