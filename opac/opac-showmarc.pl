@@ -68,8 +68,7 @@ if ($view eq 'card' || $view eq 'html') {
     my $htdocs = C4::Context->config('opachtdocs');
     my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $xsl, 'opac', $input);
     $xsl = "$htdocs/$theme/$lang/xslt/$xsl";
-    print $input->header(-charset => 'UTF-8'),
-          Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
+    output_html_with_http_headers $input, undef, Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
 }
 else { #view eq marc
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
