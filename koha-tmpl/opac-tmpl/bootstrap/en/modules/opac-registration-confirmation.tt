@@ -66,7 +66,7 @@
                                 [% UNLESS ( loggedinusername ) %]
                                     [% UNLESS ( casAuthentication ) %]
                                         <div id="login">
-                                            <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+                                            <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth" autocomplete="off">
                                                 <input type="hidden" name="koha_login_context" value="opac" />
                                                 <fieldset class="brief">
                                                     <legend>Log in to your account:</legend>

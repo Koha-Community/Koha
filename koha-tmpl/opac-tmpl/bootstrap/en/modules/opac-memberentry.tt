@@ -127,7 +127,7 @@
                     <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code %]">[% extended_unique_id_failed_description _ ': ' %]</a> Value is already in use ([% extended_unique_id_failed_value %])</div>
                 [% END %]
 
-                <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
+                <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
 
                 [%# Following on one line for translatability %]
                 [% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden.defined('branchcode') && hidden.defined('categorycode') %]
