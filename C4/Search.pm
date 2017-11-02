@@ -680,6 +680,7 @@ sub _get_facets_data_from_record {
                 next if $field->indicator(1) eq 'z';
 
                 my $data = $field->as_string( $subfield_letters, $facet->{ sep } );
+                $data =~ s/\s*(?<![A-Z])[.\-,;]*\s*$//;
 
                 unless ( grep { $_ eq $data } @used_datas ) {
                     push @used_datas, $data;
@@ -778,8 +779,9 @@ sub _get_facet_from_result_set {
     my $facets = {};
     foreach my $term ( @terms ) {
         my $facet_value = $term->textContent;
+        $facet_value =~ s/\s*(?<![A-Z])[.\-,;]*\s*$//;
         $facet_value =~ s/\Q$internal_sep\E/$sep/ if defined $sep;
-        $facets->{ $facet_value } = $term->getAttribute( 'occur' );
+        $facets->{ $facet_value } =  ( defined $facets->{$facet_value} ) ? $facets->{ $facet_value } + $term->getAttribute( 'occur' ) : $term->getAttribute( 'occur' );
     }
 
     return $facets;
