@@ -115,7 +115,7 @@
                     </fieldset>
                 [% END %]
 
-                <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form">
+                <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">
 
                 [%# Following on one line for translatability %]
                 [% UNLESS ( hidden.defined('cardnumber') || ( !borrower && Koha.Preference('autoMemberNum') ) ) && hidden.defined('dateexpiry') && hidden.defined('branchcode') && hidden.defined('categorycode') %]
