@@ -20,7 +20,7 @@
    <channel>
      <title><![CDATA[[% LibraryName |html %] Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %]]]></title>
      <link>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2</link>
-     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;sort_by=[% sort_by |html %]&amp;format=rss2"/>
+     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %]&amp;sort_by=[% sort_by | url %]&amp;format=rss2"/>
      <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc |html %]'[% END %] at [% LibraryName |html %]]]></description>
      <opensearch:totalResults>[% total %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset %]</opensearch:startIndex>
@@ -30,7 +30,7 @@
        <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
      [% END %]
 	 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi |html %][% SEARCH_RESULT.limit_cgi |html %]&amp;sort_by=[% SEARCH_RESULT.sort_by |html %]&amp;format=opensearchdescription"/>
+     <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi |url %][% SEARCH_RESULT.limit_cgi |url %]&amp;sort_by=[% SEARCH_RESULT.sort_by |url %]&amp;format=opensearchdescription"/>
      <opensearch:Query role="request" searchTerms="[% SEARCH_RESULT.query_desc |url %][% SEARCH_RESULT.limit_desc |url %]" startPage="[% SEARCH_RESULT.page %]" />
      <item>
        <title>[% SEARCH_RESULT.title |html %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield |html %][% END %]</title>
@@ -44,7 +44,7 @@
 [% END %][% END %][% END %]
 
 [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id %]" /></a>[% END %][% END %]
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author |html %]. [% END %]
 	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place |html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode |html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear |html %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate |html %][% END %][% END %]
@@ -69,7 +69,7 @@
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
    <id>[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=atom</id>
    <title>[% LibraryName |html %] Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc |html %]'[% END %]</title>
-    <link href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"/>
+    <link href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |url %][% limit_cgi |url %]&amp;format=rss2"/>
    <updated>[% timestamp %]</updated>
    <author>
      <name>[% LibraryName |html %]</name>
