@@ -52,7 +52,7 @@
                     [% IF ( OpacPasswordChange ) %]
                         [% IF ( Ask_data ) %]
 
-                            <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post">
+                            <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
                                 <fieldset>
                                     [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minPasswordLength%] characters long.</div>[% END %]
                                     <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
@@ -71,7 +71,7 @@
                             <h1>Password updated</h1>
                             Your password has been changed
                         </div>
-                        <form action="/cgi-bin/koha/opac-user.pl" method="post">
+                        <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                             <p><input type="submit" class="btn" value="Return to your record" /></p>
                         </form>
