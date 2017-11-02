@@ -215,9 +215,10 @@ sub get_elasticsearch_mappings {
                     search_analyzer => 'simple',
                 };
             }
-            # Sort may be true, false, or undef. Here we care if it's
-            # anything other than undef.
-            if (defined $sort) {
+            # Sort is a bit special as it can be true, false, undef.
+            # We care about "true" or "undef",
+            # "undef" means to do the default thing, which is make it sortable.
+            if ($sort || !defined $sort) {
                 $mappings->{data}{properties}{ $name . '__sort' } = {
                     search_analyzer => "analyser_phrase",
                     analyzer  => "analyser_phrase",
@@ -353,14 +354,8 @@ sub get_fixer_rules {
             if ($type eq 'sum' ) {
                 push @rules, "sum('$name')";
             }
-            # Sort is a bit special as it can be true, false, undef. For
-            # fixer rules, we care about "true", or "undef" if there is
-            # special handling of this field from other one. "undef" means
-            # to do the default thing, which is make it sortable.
             if ($self->sort_fields()->{$name}) {
-                if ($sort || !defined $sort) {
-                    push @rules, "marc_map('$marc_field','${name}__sort.\$append', $options)";
-                }
+                push @rules, "marc_map('$marc_field','${name}__sort.\$append', $options)";
             }
         }
     );
