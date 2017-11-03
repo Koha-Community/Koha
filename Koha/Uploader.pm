@@ -143,7 +143,7 @@ sub result {
 
 =head2 err
 
-    Returns hash with errors in format { file => err, ... }
+    Returns hashref with errors in format { file => { code => err }, ... }
     Undefined if there are no errors.
 
 =cut
