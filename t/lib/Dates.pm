@@ -1,7 +1,6 @@
 package t::lib::Dates;
 
 use Modern::Perl;
-use Test::More;
 use Koha::DateUtils;
 use DateTime;
 
@@ -13,19 +12,19 @@ t::lib::Dates.pm - test helper module for working with dates
 
 =head2 compare
 
-  compare( $got_dt, $expected_dt, $test_description );
+  compare( $got_dt, $expected_dt );
 
 Will execute a test and compare the 2 dates given in parameters
-The date will be compared truncated to minutes
+The dates will be considered as identical if there are less than 5sec between them.
 
 =cut
 
 sub compare {
-    my ( $got, $expected, $description ) = @_;
+    my ( $got, $expected ) = @_;
     my $dt_got      = dt_from_string($got);
     my $dt_expected = dt_from_string($expected);
     my $diff = $dt_got->epoch - $dt_expected->epoch;
-    if ( abs($diff) < 6 ) { return 0 }
+    if ( abs($diff) <= 5 ) { return 0 }
     return $diff > 0 ? 1 : -1;
 }
 
