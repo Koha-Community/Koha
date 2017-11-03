@@ -122,9 +122,9 @@ if ($authid) {
             $indicator2 = defined $thes_mapping{$thes_008_11} ? $thes_mapping{$thes_008_11} : $thes_008_11;
             if ($indicator2 eq '7') {
                 if ($thes_008_11 eq 'r') {
-                    push @subfield_loop, { marc_subfield => '2', marc_values => ('aat') };
+                    push @subfield_loop, { marc_subfield => '2', marc_values => [ 'aat' ] };
                 } elsif ($thes_008_11 eq 's') {
-                    push @subfield_loop, { marc_subfield => '2', marc_values => ('sears') };
+                    push @subfield_loop, { marc_subfield => '2', marc_values => [ 'sears' ] };
                 }
             }
         }
