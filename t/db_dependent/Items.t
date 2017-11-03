@@ -32,7 +32,7 @@ use t::lib::TestBuilder;
 use Koha::MarcSubfieldStructures;
 use Koha::Caches;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Test::Warn;
 
