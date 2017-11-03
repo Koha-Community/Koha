@@ -52,7 +52,6 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::Biblios;
 use Koha::RecordProcessor;
 use Koha::AuthorisedValues;
-use Koha::Biblios;
 use Koha::ItemTypes;
 use Koha::Acquisition::Orders;
 use Koha::Virtualshelves;
