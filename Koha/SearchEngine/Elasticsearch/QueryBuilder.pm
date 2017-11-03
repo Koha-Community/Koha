@@ -111,13 +111,13 @@ sub build_query {
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
     $res->{aggregations} = {
-        author   => { terms => { field => "author__facet" } },
-        subject  => { terms => { field => "subject__facet" } },
-        itype    => { terms => { field => "itype__facet" } },
+        author => { terms => { field => "author__facet" } },
+        subject => { terms => { field => "subject__facet" } },
+        itype => { terms => { field => "itype__facet" } },
         location => { terms => { field => "location__facet" } },
         'su-geo' => { terms => { field => "su-geo__facet" } },
-        se       => { terms => { field => "se__facet" } },
-        ccode    => { terms => { field => "ccode__facet" } },
+        'title-series' => { terms => { field => "title-series__facet" } },
+        ccode => { terms => { field => "ccode__facet" } },
     };
 
     my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
@@ -411,12 +411,12 @@ appropriate search object.
 =cut
 
 our $koha_to_index_name = {
-    mainmainentry   => 'Heading-Main',
-    mainentry       => 'Heading',
-    match           => 'Match',
-    'match-heading' => 'Match-heading',
-    'see-from'      => 'Match-heading-see-from',
-    thesaurus       => 'Subject-heading-thesaurus',
+    mainmainentry   => 'heading-main',
+    mainentry       => 'heading',
+    match           => 'match',
+    'match-heading' => 'match-heading',
+    'see-from'      => 'match-heading-see-from',
+    thesaurus       => 'subject-heading-thesaurus',
     any             => '',
     all             => ''
 };
@@ -429,6 +429,9 @@ sub build_authorities_query_compat {
     # This turns the old-style many-options argument form into a more
     # extensible hash form that is understood by L<build_authorities_query>.
     my @searches;
+
+    # Convert to lower case
+    $marclist = [map(lc, @{$marclist})];
 
     # Make sure everything exists
     foreach my $m (@$marclist) {
@@ -447,8 +450,8 @@ sub build_authorities_query_compat {
 
     my %sort;
     my $sort_field =
-        ( $orderby =~ /^Heading/ ) ? 'Heading'
-      : ( $orderby =~ /^Auth/ )    ? 'Local-number'
+        ( $orderby =~ /^heading/ ) ? 'heading'
+      : ( $orderby =~ /^auth/ )    ? 'local-number'
       :                              undef;
     if ($sort_field) {
         my $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
@@ -479,13 +482,13 @@ sub _convert_sort_fields {
 
     # Turn the sorting into something we care about.
     my %sort_field_convert = (
-        acqdate     => 'acqdate',
+        acqdate     => 'date-of-acquisition',
         author      => 'author',
-        call_number => 'callnum',
+        call_number => 'local-classification',
         popularity  => 'issues',
         relevance   => undef,       # default
         title       => 'title',
-        pubdate     => 'pubdate',
+        pubdate     => 'date-of-publication',
     );
     my %sort_order_convert =
       ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
@@ -515,23 +518,89 @@ types.
 =cut
 
 our %index_field_convert = (
-    'kw'      => '_all',
-    'ti'      => 'title',
-    'au'      => 'author',
-    'su'      => 'subject',
-    'nb'      => 'isbn',
-    'se'      => 'title-series',
-    'callnum' => 'callnum',
-    'itype'   => 'itype',
-    'ln'      => 'ln',
-    'branch'  => 'homebranch',
-    'fic'     => 'lf',
-    'mus'     => 'rtype',
-    'aud'     => 'ta',
-    'hi'      => 'Host-Item-Number',
-    'at'      => 'authtype',
-    'he'      => 'Heading'
+    'kw' => '_all',
+    'ab' => 'abstract',
+    'au' => 'author',
+    'lcn' => 'local-classification',
+    'callnum' => 'local-classification',
+    'record-type' => 'rtype',
+    'mc-rtype' => 'rtype',
+    'mus' => 'rtype',
+    'lc-card' => 'lc-card-number',
+    'sn' => 'local-number',
+    'yr' => 'date-of-publication',
+    'pubdate' => 'date-of-publication',
+    'acqdate' => 'date-of-acquisition',
+    'date/time-last-modified' => 'date-time-last-modified',
+    'dtlm' => 'date/time-last-modified',
+    'diss' => 'dissertation-information',
+    'nb' => 'isbn',
+    'ns' => 'issn',
+    'music-number' => 'identifier-publisher-for-music',
+    'number-music-publisher' => 'identifier-publisher-for-music',
+    'music' => 'identifier-publisher-for-music',
+    'ident' => 'identifier-standard',
+    'cpn' => 'corporate-name',
+    'cfn' => 'conference-name',
+    'pn' => 'personal-name',
+    'pb' => 'publisher',
+    'pv' => 'provider',
+    'nt' => 'note',
+    'notes' => 'note',
+    'rcn' => 'record-control-number',
+    'su' => 'subject',
+    'su-to' => 'subject',
+    #'su-geo' => 'subject',
+    'su-ut' => 'subject',
+    'ti' => 'title',
+    'se' => 'title-series',
+    'ut' => 'title-uniform',
+    'an' => 'authority-number',
+    'koha-auth-number' => 'authority-number',
+    'at' => 'authtype',
+    'he' => 'heading',
+    'rank' => 'relevance',
+    'phr' => 'st-phrase',
+    'wrdl' => 'st-word-list',
+    'rt' => 'right-truncation',
+    'rtrn' => 'right-truncation',
+    'ltrn' => 'left-truncation',
+    'rltrn' => 'left-and-right',
+    'mc-itemtype' => 'itemtype',
+    'mc-ccode' => 'ccode',
+    'branch' => 'homebranch',
+    'mc-loc' => 'location',
+    'stocknumber' => 'number-local-acquisition',
+    'inv' => 'number-local-acquisition',
+    'bc' => 'barcode',
+    'mc-itype' => 'itype',
+    'aub' => 'author-personal-bibliography',
+    'auo' => 'author-in-order',
+    'ff8-22' => 'ta',
+    'aud' => 'ta',
+    'audience' => 'ta',
+    'frequency-code' => 'ff8-18',
+    'illustration-code' => 'ff8-18-21',
+    'regularity-code' => 'ff8-19',
+    'type-of-serial' => 'ff8-21',
+    'format' => 'ff8-23',
+    'conference-code' => 'ff8-29',
+    'festschrift-indicator' => 'ff8-30',
+    'index-indicator' => 'ff8-31',
+    'fiction' => 'lf',
+    'fic' => 'lf',
+    'literature-code' => 'lf',
+    'biography' => 'bio',
+    'ff8-34' => 'bio',
+    'biography-code' => 'bio',
+    'l-format' => 'ff7-01-02',
+    'lex' => 'lexile-number',
+    'hi' => 'host-item-number',
+    'itu' => 'index-term-uncontrolled',
+    'itg' => 'index-term-genre',
 );
+my $field_name_pattern = '[\w\-]+';
+my $multi_field_pattern = "(?:\\.$field_name_pattern)*";
 
 sub _convert_index_fields {
     my ( $self, @indexes ) = @_;
@@ -544,14 +613,15 @@ sub _convert_index_fields {
     # when joining things, to indicate we make it an 'OR' join.
     # (Sorry, this got a bit ugly after special cases were found.)
     grep { $_->{field} } map {
-        my ( $f, $t ) = split /,/;
+        # Lower case all field names
+        my ( $f, $t ) = map(lc, split /,/);
         my $mc = '';
         if ($f =~ /^mc-/) {
             $mc = 'mc-';
             $f =~ s/^mc-//;
         }
         my $r = {
-            field => $index_field_convert{$f},
+            field => exists $index_field_convert{$f} ? $index_field_convert{$f} : $f,
             type  => $index_type_convert{ $t // '__default' }
         };
         $r->{field} = ($mc . $r->{field}) if $mc && $r->{field};
@@ -606,9 +676,21 @@ will have to wait for a real query parser.
 
 sub _convert_index_strings_freeform {
     my ( $self, $search ) = @_;
-    while ( my ( $zeb, $es ) = each %index_field_convert ) {
-        $search =~ s/\b$zeb(?:,[\w\-]*)?:/$es:/g;
-    }
+    # @TODO: Currenty will alter also fields contained within quotes:
+    # `searching for "stuff cn:123"` for example will become
+    # `searching for "stuff local-number:123"
+    #
+    # Fixing this is tricky, one possibility:
+    # https://stackoverflow.com/questions/19193876/perl-regex-to-match-a-string-that-is-not-enclosed-in-quotes
+    # Still not perfect, and will not handle escaped quotes within quotes and assumes balanced quotes.
+    #
+    # Another, not so elegant, solution could be to replace all quoted content with placeholders, and put
+    # them back when processing is done.
+
+    # Lower case field names
+    $search =~ s/($field_name_pattern)(?:,[\w-]*)?($multi_field_pattern):/\L$1\E$2:/og;
+    # Resolve possible field aliases
+    $search =~ s/($field_name_pattern)($multi_field_pattern):/(exists $index_field_convert{$1} ? $index_field_convert{$1} : $1)."$2:"/oge;
     return $search;
 }
 
@@ -805,6 +887,7 @@ operands and double quoted strings.
 
 =cut
 
+my $tokenize_split_re = qr/((?:${field_name_pattern}${multi_field_pattern}:)?"[^"]+"|\s+)/;
 sub _truncate_terms {
     my ( $self, $query ) = @_;
 

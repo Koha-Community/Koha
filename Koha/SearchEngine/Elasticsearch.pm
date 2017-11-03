@@ -860,7 +860,9 @@ sub _foreach_mapping {
 
     while ( my $search_field = $search_fields->next ) {
         $sub->(
-            $search_field->name,
+            # Force lower case on indexed field names for case insensitive
+            # field name searches
+            lc($search_field->name),
             $search_field->type,
             $search_field->get_column('facet'),
             $search_field->get_column('suggestible'),
