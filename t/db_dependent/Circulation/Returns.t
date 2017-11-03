@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
@@ -332,3 +332,32 @@ subtest 'Handle ids duplication' => sub {
     is( Koha::Checkouts->find( $issue_id )->issue_id, $issue_id, 'The issues entry should not have been removed' );
 };
 
+subtest 'BlockReturnOfLostItems' => sub {
+    plan tests => 3;
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item = $builder->build_object(
+        {
+            class  => 'Koha::Items',
+            value  => {
+                biblionumber => $biblio->biblionumber,
+                notforloan => 0,
+                itemlost   => 0,
+                withdrawn  => 0,
+        }
+    }
+    );
+    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+
+    # Mark the item as lost
+    ModItem({itemlost => 1}, $biblio->biblionumber, $item->itemnumber);
+
+    t::lib::Mocks::mock_preference('BlockReturnOfLostItems', 1);
+    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
+    is( $doreturn, 0, "With BlockReturnOfLostItems, a checkin of a lost item should be blocked");
+    is( $messages->{WasLost}, 1, "... and the WasLost flag should be set");
+
+    t::lib::Mocks::mock_preference('BlockReturnOfLostItems', 0);
+    ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
+    is( $doreturn, 1, "Without BlockReturnOfLostItems, a checkin of a lost item should not be blocked");
+};
