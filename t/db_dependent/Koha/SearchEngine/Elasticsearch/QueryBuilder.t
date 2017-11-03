@@ -288,29 +288,29 @@ subtest 'build_query tests' => sub {
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number:"123456"'] );
     is(
         $query->{query}{query_string}{query},
-        '(Local-number:"123456")',
-        "query of specific field including hyphen and quoted is not truncated"
+        '(local-number:"123456")',
+        "query of specific field including hyphen and quoted is not truncated, field name is converted to lower case"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number:123456'] );
     is(
         $query->{query}{query_string}{query},
-        '(Local-number:123456*)',
-        "query of specific field including hyphen and not quoted is truncated"
+        '(local-number:123456*)',
+        "query of specific field including hyphen and not quoted is truncated, field name is converted to lower case"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number.raw:123456'] );
     is(
         $query->{query}{query_string}{query},
-        '(Local-number.raw:123456*)',
-        "query of specific field including period and not quoted is truncated"
+        '(local-number.raw:123456*)',
+        "query of specific field including period and not quoted is truncated, field name is converted to lower case"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['Local-number.raw:"123456"'] );
     is(
         $query->{query}{query_string}{query},
-        '(Local-number.raw:"123456")',
-        "query of specific field including period and quoted is not truncated"
+        '(local-number.raw:"123456")',
+        "query of specific field including period and quoted is not truncated, field name is converted to lower case"
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['J.R.R'] );
