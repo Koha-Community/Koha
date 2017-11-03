@@ -34,7 +34,7 @@ function StartUpload() {
     xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
 }
 
-function cbUpload( status, fileid ) {
+function cbUpload( status, fileid, errors ) {
     if( status=='done' ) {
         $("form#processfile #uploadedfileid").val( fileid );
         $("form#enqueuefile #uploadedfileid").val( fileid );
@@ -42,10 +42,12 @@ function cbUpload( status, fileid ) {
         $("#processfile").show();
         $("#enqueuefile").show();
     } else {
+        var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+        var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
         $("#fileuploadstatus").hide();
         $("#fileuploadfailed").show();
         $("#fileuploadfailed").text( _("Upload status: ") +
-            ( status=='failed'? _("Failed"):
+            ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
             ( status=='denied'? _("Denied"): status ))
         );
     }

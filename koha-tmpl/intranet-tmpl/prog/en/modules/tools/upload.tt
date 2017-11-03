@@ -265,7 +265,7 @@ function ShowAlerts(err) {
     var str = '';
     for( var file in err ) {
         str= str + '<p>' + file + ': ' +
-            errMESSAGES[ err[file] ] + '</p>';
+            errMESSAGES[ err[file].code ] + '</p>';
     }
     if( str ) {
         $('#myalerts').html(str);

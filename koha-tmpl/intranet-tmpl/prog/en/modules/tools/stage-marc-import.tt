@@ -72,7 +72,7 @@ function cbUpload( status, fileid, errors ) {
         }
         $("#processfile").show();
     } else {
-        var errMsgs = [ _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+        var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
         var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
         $('#fileuploadbutton').show();
         $("#fileuploadcancel").hide();
