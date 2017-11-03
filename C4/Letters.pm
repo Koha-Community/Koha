@@ -1023,11 +1023,12 @@ ENDSQL
 
 =head2 SendQueuedMessages ([$hashref]) 
 
-  my $sent = SendQueuedMessages( { verbose => 1 } );
+    my $sent = SendQueuedMessages({ verbose => 1, limit => 50 });
 
-sends all of the 'pending' items in the message queue.
+Sends all of the 'pending' items in the message queue, unless the optional
+limit parameter is passed too. The verbose parameter is also optional.
 
-returns number of messages sent.
+Returns number of messages sent.
 
 =cut
 
