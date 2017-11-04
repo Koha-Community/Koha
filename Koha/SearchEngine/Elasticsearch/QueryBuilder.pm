@@ -603,7 +603,7 @@ will have to wait for a real query parser.
 sub _convert_index_strings_freeform {
     my ( $self, $search ) = @_;
     while ( my ( $zeb, $es ) = each %index_field_convert ) {
-        $search =~ s/\b$zeb(?:,[\w-]*)?:/$es:/g;
+        $search =~ s/\b$zeb(?:,[\w\-]*)?:/$es:/g;
     }
     return $search;
 }
@@ -798,7 +798,7 @@ sub _truncate_terms {
 
     # '"donald duck" title:"the mouse" and peter" get split into
     # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
-    my @tokens = split /((?:[\w-]+:)?"[^"]+"|\s+)/, $query;
+    my @tokens = split /((?:[\w\-.]+:)?"[^"]+"|\s+)/, $query;
 
     # Filter out empty tokens
     my @words = grep { $_ !~ /^\s*$/ } @tokens;
