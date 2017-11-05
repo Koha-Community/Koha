@@ -329,7 +329,7 @@ sub get_fixer_rules {
             # selects a range
             # The split makes everything into nested arrays, but that's not
             # really a big deal, ES doesn't mind.
-            $options = '-split => 1' unless $marc_field =~ m|_/| || $type eq 'sum';
+            $options = '' unless $marc_field =~ m|_/| || $type eq 'sum';
             push @rules, "marc_map('$marc_field','${name}.\$append', $options)";
             if ($facet) {
                 push @rules, "marc_map('$marc_field','${name}__facet.\$append', $options)";
