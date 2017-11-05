@@ -60,7 +60,7 @@ SKIP: {
 
 subtest '_convert_marc_to_json() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -113,12 +113,23 @@ subtest '_convert_marc_to_json() tests' => sub {
         MARC::Field->new( '110', '', '', 'a' => 'Corp Author' ),
         MARC::Field->new( '245', '', '', 'a' => 'Title' ),
     );
-    my @records = ( $marc_record );
+    my $marc_record_2 = MARC::Record->new();
+    $marc_record_2->append_fields(
+        MARC::Field->new( '001', '1234567' ),
+        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
+        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
+        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
+    );
+    my @records = ( $marc_record, $marc_record_2 );
 
-    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' });
-    my $conv = $importer->_convert_marc_to_json( \@records )->next();
-    is( $conv->{author}[0][0], "Author", "First mapped author should be 100a");
-    is( $conv->{author}[1][0], "Corp Author", "Second mapped author should be 110a");
+    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' })->_convert_marc_to_json( \@records );
+    my $conv = $importer->next();
+    is( $conv->{author}[0], "Author", "First mapped author should be 100a");
+    is( $conv->{author}[1], "Corp Author", "Second mapped author should be 110a");
+
+    $conv = $importer->next();
+    is( $conv->{author}[0], "Author", "First mapped author should be 100a");
+    is( scalar @{$conv->{author}} , 1, "We should map field only if exists, shouldn't add extra nulls");
 
     $schema->storage->txn_rollback;
 };
