@@ -19,7 +19,7 @@ package Koha::Illrequest::Config;
 
 use Modern::Perl;
 
-use File::Basename;
+use File::Basename qw/basename/;
 
 use C4::Context;
 

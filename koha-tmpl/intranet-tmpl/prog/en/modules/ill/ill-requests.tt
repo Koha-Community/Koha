@@ -1,5 +1,6 @@
 [% USE Branches %]
 [% USE Koha %]
+[% USE KohaDates %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
@@ -113,7 +114,7 @@
                     null :
                     row[thisCol];
             });
-        }
+        };
 
         // Strip the expand prefix if it exists, we do this for display
         var stripPrefix = function(value) {
@@ -125,7 +126,7 @@
         };
 
         // Our 'render' function for borrowerlink
-        var createBorrowerLink = function(data, type, row) {
+        var createPatronLink = function(data, type, row) {
             return '<a title="View borrower details" ' +
                 'href="/cgi-bin/koha/members/moremember.pl?' +
                 'borrowernumber='+row.borrowernumber+'">' +
@@ -157,7 +158,7 @@
                 'method=illview&amp;illrequest_id=' +
                 row.illrequest_id +
                 '">Manage request</a>' +
-                '</div>'
+                '</div>';
         };
 
         // Columns that require special treatment
@@ -167,8 +168,8 @@
                 func: createActionLink
             },
             borrowername: {
-                name: 'Borrower',
-                func: createBorrowerLink
+                name: 'Patron',
+                func: createPatronLink
             },
             illrequest_id: {
                 name: 'Request number',
@@ -179,10 +180,10 @@
                 func: createStatus
             },
             biblio_id: {
-                name: 'Biblio number'
+                name: 'Biblio ID'
             },
             branchcode: {
-                name: 'Branch code'
+                name: 'Library'
             }
         };
 
@@ -192,7 +193,7 @@
                 .replace(/^filter/, '')
                 .replace(/([A-Z])/g, "_$1")
                 .replace(/^_/,'').toLowerCase();
-        };
+        }
 
         // Toggle request attributes in Illview
         $('#toggle_requestattributes').click(function() {
@@ -238,7 +239,7 @@
                     extra.forEach(function(thisExtra) {
                         allCols[thisExtra] = 1;
                     });
-                };
+                }
                 // Different requests will have different columns,
                 // make sure they all have the same
                 $.each(dataCopy, function(k, row) {
@@ -272,7 +273,7 @@
                     ) {
                         colObj.render = specialCols[thisCol].func;
                     } else {
-                        colObj.data = thisCol
+                        colObj.data = thisCol;
                     }
                     colData.push(colObj);
                 });
@@ -492,15 +493,15 @@
                             <legend>Request details</legend>
                             <ol>
                                 <li class="borrowernumber">
-                                    <label for="borrowernumber">Borrower number:</label>
+                                    <label for="borrowernumber">Patron ID:</label>
                                     <input name="borrowernumber" id="borrowernumber" type="text" value="[% request.borrowernumber %]">
                                 </li>
                                 <li class="biblio_id">
-                                    <label for="biblio_id" class="biblio_id">Biblio number:</label>
+                                    <label for="biblio_id" class="biblio_id">Biblio ID:</label>
                                     <input name="biblio_id" id="biblio_id" type="text" value="[% request.biblio_id %]">
                                 </li>
                                 <li class="branchcode">
-                                    <label for="branchcode" class="branchcode">Branch:</label>
+                                    <label for="branchcode" class="branchcode">Library:</label>
                                     <select name="branchcode" id="branch">
                                         [% FOREACH branch IN branches %]
                                             [% IF ( branch.branchcode == request.branchcode ) %]
@@ -522,7 +523,7 @@
                                 </li>
                                 <li class="updated">
                                     <label class="updated">Last updated:</label>
-                                    [% request.updated %]
+                                    [% request.updated | $KohaDates with_hours => 1 %]
                                 </li>
                                 <li class="medium">
                                     <label class="medium">Request type:</label>
@@ -530,7 +531,7 @@
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
-                                    [% request.cost %]
+                                    [% request.cost || 'N/A' %]
                                 </li>
                                 <li class="req_id">
                                     <label class="req_id">Request number:</label>
@@ -597,7 +598,7 @@
                                     [% request.orderid || "N/A" %]
                                 </div>
                                 <div class="borrowernumber">
-                                    <span class="label borrowernumber">Borrower:</span>
+                                    <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
                                     <a href="[% borrowerlink %]" title="View borrower details">
                                     [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" %]
@@ -605,11 +606,11 @@
                                 </div>
 
                                 <div class="biblio_id">
-                                    <span class="label biblio_id">Biblio number:</span>
+                                    <span class="label biblio_id">Biblio ID:</span>
                                     [% request.biblio_id || "N/A" %]
                                 </div>
                                 <div class="branchcode">
-                                    <span class="label branchcode">Branch:</span>
+                                    <span class="label branchcode">Library:</span>
                                     [% Branches.GetName(request.branchcode) %]
                                 </div>
                                 <div class="status">
@@ -618,7 +619,7 @@
                                 </div>
                                 <div class="updated">
                                     <span class="label updated">Last updated:</span>
-                                    [% request.updated %]
+                                    [% request.updated | $KohaDates with_hours => 1 %]
                                 </div>
                                 <div class="medium">
                                     <span class="label medium">Request type:</span>
