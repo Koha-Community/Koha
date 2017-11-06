@@ -83,9 +83,9 @@ if ( $op eq 'new' ) {
     my $delete = $rec ? $rec->delete : undef;
     #TODO Improve error handling
     my $msg = $delete
-        ? JSON::to_json({ $fn => 6 })
+        ? JSON::to_json({ $fn => { code => 6 }})
         : $id
-        ? JSON::to_json({ $fn || $id, 7 })
+        ? JSON::to_json({ $fn || $id, { code => 7 }})
         : '';
     $template->param(
         mode             => 'deleted',
@@ -100,7 +100,7 @@ if ( $op eq 'new' ) {
     if ( !$rec || !$fh ) {
         $template->param(
             mode             => 'new',
-            msg              => JSON::to_json( { $id => 5 } ),
+            msg              => JSON::to_json({ $id => { code => 5 }}),
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
