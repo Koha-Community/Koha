@@ -81,7 +81,19 @@ if ($frombranch && $tobranch) {
 
     if (!$error) {
 	# We insert the new rules from our temporary table
-	$query = "INSERT INTO issuingrules SELECT * FROM tmpissuingrules WHERE branchcode=?";
+	$query = "INSERT INTO issuingrules (categorycode, itemtype, ccode, permanent_location, sub_location, genre, circulation_level, reserve_level, 
+    restrictedtype, rentaldiscount, reservecharge, fine, finedays, maxsuspensiondays, firstremind, chargeperiod, 
+    chargeperiod_charge_at, accountsent, chargename, maxissueqty, maxonsiteissueqty, issuelength, lengthunit, 
+    hardduedate, hardduedatecompare, renewalsallowed, renewalperiod, norenewalbefore, auto_renew, no_auto_renewal_after, 
+    no_auto_renewal_after_hard_limit, reservesallowed, holds_per_record, hold_max_pickup_delay, hold_expiration_charge, 
+    branchcode, overduefinescap, cap_fine_to_replacement_price, onshelfholds, opacitemholds, article_requests) 
+    SELECT categorycode, itemtype, ccode, permanent_location, sub_location, genre, circulation_level, reserve_level, 
+    restrictedtype, rentaldiscount, reservecharge, fine, finedays, maxsuspensiondays, firstremind, chargeperiod, 
+    chargeperiod_charge_at, accountsent, chargename, maxissueqty, maxonsiteissueqty, issuelength, lengthunit, 
+    hardduedate, hardduedatecompare, renewalsallowed, renewalperiod, norenewalbefore, auto_renew, no_auto_renewal_after, 
+    no_auto_renewal_after_hard_limit, reservesallowed, holds_per_record, hold_max_pickup_delay, hold_expiration_charge, 
+    branchcode, overduefinescap, cap_fine_to_replacement_price, onshelfholds, opacitemholds, article_requests
+    FROM tmpissuingrules WHERE branchcode=?";
 	$sth = $dbh->prepare($query);
 	$res = $sth->execute($tobranch);
 	$error = 1 unless ($res);
