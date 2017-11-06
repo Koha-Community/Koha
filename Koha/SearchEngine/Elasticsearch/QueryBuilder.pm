@@ -435,6 +435,7 @@ sub build_authorities_query_compat {
             unless exists $koha_to_index_name->{$m};
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
+        next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
         push @searches,
           {
             where    => $koha_to_index_name->{$marclist->[$i]},
