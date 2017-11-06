@@ -149,6 +149,10 @@ sub get_template_and_user {
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
         }
+
+        my $minPasswordLength = C4::Context->preference('minPasswordLength');
+        $minPasswordLength = 3 if not $minPasswordLength or $minPasswordLength < 3;
+        $template->param(minPasswordLength => $minPasswordLength,);
     }
     return ( $template, $borrowernumber, $cookie );
 }
