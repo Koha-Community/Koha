@@ -32,6 +32,7 @@ use 5.010;
 
 use C4::Context;
 use C4::Overdues;
+use C4::Items;
 use Getopt::Long;
 use Carp;
 use File::Spec;
@@ -122,8 +123,9 @@ for my $overdue ( @{$overdues} ) {
     }
     ++$counted;
 
+    my $item = C4::Items::GetItem($overdue->{itemnumber});
     my ( $amount, $type, $unitcounttotal ) =
-      CalcFine( $overdue, $borrower->{categorycode},
+      CalcFine( $item, $borrower->{categorycode},
         $branchcode, $datedue, $today );
     $type ||= q{};
 
