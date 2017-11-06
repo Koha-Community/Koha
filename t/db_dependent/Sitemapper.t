@@ -31,6 +31,10 @@ BEGIN {
     use_ok('Koha::Sitemapper::Writer');
 }
 
+my $now_value = DateTime->now();
+my $mocked_datetime = Test::MockModule->new('DateTime');
+$mocked_datetime->mock('now', sub { return $now_value; } );
+
 sub slurp {
     my $file = shift;
     open my $fh, '<', $file or die;
