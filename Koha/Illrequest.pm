@@ -25,7 +25,6 @@ use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Email;
 use Koha::Exceptions::Ill;
-use Koha::Illrequest;
 use Koha::Illrequestattributes;
 use Koha::Patron;
 use Mail::Sendmail;

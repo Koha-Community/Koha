@@ -103,6 +103,8 @@ subtest 'Working with related objects' => sub {
 
     $schema->storage->txn_begin;
 
+    Koha::Illrequests->search->delete;
+
     my $patron = $builder->build({ source => 'Borrower' });
     my $illrq = $builder->build({
         source => 'Illrequest',

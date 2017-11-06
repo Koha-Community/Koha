@@ -34,6 +34,8 @@ subtest 'Basic object tests' => sub {
 
     $schema->storage->txn_begin;
 
+    Koha::Illrequestattributes->search->delete;
+
     my $builder = t::lib::TestBuilder->new;
 
     my $illrqattr = $builder->build({ source => 'Illrequestattribute' });
