@@ -1,5 +1,17 @@
 function _(s) { return s; } // dummy function for gettext
 
+// http://stackoverflow.com/questions/1038746/equivalent-of-string-format-in-jquery/5341855#5341855
+String.prototype.format = function() { return formatstr(this, arguments); };
+function formatstr(str, col) {
+    col = typeof col === 'object' ? col : Array.prototype.slice.call(arguments, 1);
+    var idx = 0;
+    return str.replace(/%%|%s|%(\d+)\$s/g, function (m, n) {
+        if (m == "%%") { return "%"; }
+        if (m == "%s") { return col[idx++]; }
+        return col[n];
+    });
+}
+
 jQuery.validator.addMethod( "category_code_check", function(value,element){
     var patt = /^[A-Za-z0-9]{0,10}$/g;
     if (patt.test(element.value)) {
@@ -114,6 +126,12 @@ $(document).ready(function() {
                 required: true
             },
             password: {
+                required: true,
+                password_strong: true,
+                password_no_spaces: true
+            },
+            password2: {
+                required: true,
                 password_match: true
             }
         },

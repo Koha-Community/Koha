@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo; Create Koha administrator patron</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
@@ -112,3 +113,5 @@
         </div> <!-- / .row -->
 
 [% INCLUDE 'intranet-bottom.inc' %]
+[% PROCESS 'password_check.inc' %]
+[% PROCESS 'add_password_check' new_password => 'password' %]
