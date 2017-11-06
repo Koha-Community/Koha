@@ -38,8 +38,20 @@ use t::lib::TestObjects::FinesFactory;
 
 #### THIS TEST REQUIRES A CPU SIMULATOR SERVER
 #### and proper KOHA_CONF configurations
-#### /usr/bin/perl ./misc/cpu_server_simulator.pl daemon -m production -l http://*:3000
 #### KOHA_CONF -> pos -> CPU -> url http://127.0.0.1:3000/maksu.html
+like(
+   C4::Context->config('pos')->{'CPU'}->{'url'},
+    qr/^.*\/maksu.html$/,
+    'Payment test server configured'
+);
+my $intradir = C4::Context->config('intranetdir');
+my $url = C4::Context->config('pos')->{'CPU'}->{'url'};
+my ($port) = $url =~ m/:(\d+)\//;
+eval {
+    unless (`pgrep -f misc/cpu_server_simulator.pl`) {
+        system("/usr/bin/perl $intradir/misc/cpu_server_simulator.pl daemon -l http://*:$port &");
+    }
+};
 
 ##Setting up the test context
 my $testContext = {};
@@ -50,7 +62,7 @@ my $borrowers = $borrowerFactory->createTestGroup([
             {firstname  => 'Testthree',
              surname    => 'Testfour',
              cardnumber => 'superuberadmin',
-             branchcode => 'CPL',
+             branchcode => 'MPL',
              userid     => 'god',
              address    => 'testi',
              city       => 'joensuu',
@@ -120,6 +132,11 @@ done_testing;
 
 sub tearDown {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
+    eval {
+        if (`pgrep -f misc/cpu_server_simulator.pl`) {
+            system("pkill -f misc/cpu_server_simulator.pl");
+        }
+    };
 }
 
 

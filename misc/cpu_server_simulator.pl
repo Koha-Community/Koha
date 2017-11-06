@@ -22,6 +22,8 @@ use Mojolicious::Lite;
 use JSON;
 use Data::Dumper;
 
+use Koha::PaymentsTransactions;
+
 use C4::Context;
 
 my $mode = 'online_payments';
@@ -236,7 +238,7 @@ sub CalculatePaymentHash {
         if exists $invoice->{NotificationAddress};
 
     $data =~ s/^&//g; # Remove first &
-    $data .= "&" . C4::Context->config($mode)->{'CPU'}->{'secretKey'};
+    $data .= "&" . _get_secretKey($invoice->{'Id'});
     $data = Encode::encode_utf8($data);
     return Digest::SHA::sha256_hex($data);
 }
@@ -253,7 +255,7 @@ sub CalculateResponseHash {
     $data .= "&" if exists $resp->{Reference};
     $data .= $resp->{Reference} if defined $resp->{Reference};
     $data .= "&" . $resp->{PaymentAddress} if defined $resp->{PaymentAddress};
-    $data .= "&" . C4::Context->config($mode)->{'CPU'}->{'secretKey'};
+    $data .= "&" . _get_secretKey($resp->{'Id'});
 
     $data =~ s/^&//g;
 
@@ -285,9 +287,31 @@ sub _calc_pos_hash {
         $data .= $value . "&";
     }
 
-    $data .= C4::Context->config('pos')->{'CPU'}->{'secretKey'};
+    $data .= _get_secretKey($payment->{'Id'});
     $data = Encode::encode_utf8($data);
     return Digest::SHA::sha256_hex($data);
 };
+
+sub _get_secretKey {
+    my ($transaction_id) = @_;
+
+    if ($mode eq 'online_payments') {
+        return C4::Context->config($mode)->{'CPU'}->{'secretKey'};
+    }
+
+    my $conf = C4::Context->config($mode)->{'CPU'};
+
+    # else, since POS is allowing per-branch server configuration, we need to
+    # get the appropriate secretKey for that branch (branch is stored in
+    # payments_transactions table)
+    my $transaction = Koha::PaymentsTransactions->find($transaction_id);
+    return $conf->{'secretKey'} unless defined $transaction;
+
+    if (exists $conf->{'branchcode'}->{$transaction->user_branch}) {
+        $conf = $conf->{'branchcode'}->{$transaction->user_branch};
+    }
+
+    return $conf->{'secretKey'};
+}
 
 app->start;

@@ -209,21 +209,22 @@ sub send_payment {
         return { error => "Error: Transaction ".$payment->{Id}." is not a POS payment", status => 0 }
             if $transaction->is_self_payment != 0;
 
+        my $server_config = $class->_get_server_config();
         my $ua = LWP::UserAgent->new;
 
-        if (C4::Context->config('pos')->{'CPU'}->{'ssl_cert'}) {
+        if ($server_config->{'ssl_cert'}) {
             $ua->ssl_opts(
                 SSL_use_cert    => 1,
-                SSL_cert_file   => C4::Context->config('pos')->{'CPU'}->{'ssl_cert'},
-                SSL_key_file    => C4::Context->config('pos')->{'CPU'}->{'ssl_key'},
-                SSL_ca_file     => C4::Context->config('pos')->{'CPU'}->{'ssl_ca_file'},
+                SSL_cert_file   => $server_config->{'ssl_cert'},
+                SSL_key_file    => $server_config->{'ssl_key'},
+                SSL_ca_file     => $server_config->{'ssl_ca_file'},
                 verify_hostname => 1,
             );
         }
 
         $ua->timeout(500);
 
-        my $req = HTTP::Request->new(POST => C4::Context->config('pos')->{'CPU'}->{'url'});
+        my $req = HTTP::Request->new(POST => $server_config->{'url'});
         $req->header('content-type' => 'application/json');
 
         $req->content($content);
@@ -359,7 +360,7 @@ sub _calculate_payment_hash {
         $data .= $value . "&";
     }
 
-    $data .= C4::Context->config('pos')->{'CPU'}->{'secretKey'};
+    $data .= $class->_get_server_config()->{'secretKey'};
     $data = Encode::encode_utf8($data);
     return Digest::SHA::sha256_hex($data);
 };
@@ -385,7 +386,7 @@ sub _calculate_response_hash {
     $data .= "&" if exists $resp->{Reference};
     $data .= $resp->{Reference} if defined $resp->{Reference};
     $data .= "&" . $resp->{PaymentAddress} if defined $resp->{PaymentAddress};
-    $data .= "&" . C4::Context->config('pos')->{'CPU'}->{'secretKey'};
+    $data .= "&" . $class->_get_server_config()->{'secretKey'};
 
     $data =~ s/^&//g;
 
@@ -438,7 +439,7 @@ sub _get_payment {
 
     my $payment;
     $payment->{ApiVersion}  = "2.0";
-    $payment->{Source}      = C4::Context->config('pos')->{'CPU'}->{'source'};
+    $payment->{Source}      = $class->_get_server_config()->{'source'};
     $payment->{Id}          = $transaction->transaction_id;
     $payment->{Mode}        = C4::Context->config('pos')->{'CPU'}->{'mode'};
     $payment->{Description} = $borrower->surname . ", "
@@ -557,5 +558,19 @@ sub _validate_cpu_hash {
 
     return $invoice;
 };
+
+sub _get_server_config {
+    my ($self) = @_;
+
+    my $branchcode = $self->{'branch'};
+    $branchcode ||= C4::Context::mybranch();
+    my $config = C4::Context->config('pos')->{'CPU'};
+
+    if (exists $config->{'branchcode'}->{$branchcode}) {
+        $config = $config->{'branchcode'}->{$branchcode};
+    }
+
+    return $config;
+}
 
 1;

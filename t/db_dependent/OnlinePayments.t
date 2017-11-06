@@ -54,6 +54,14 @@ unless (C4::Context->config('online_payments')) {
     ok(0, 'Please configure $KOHA_CONF first.'
        .' See etc/koha-conf.xml for online_payments');
 }
+my $intradir = C4::Context->config('intranetdir');
+my $url = C4::Context->config('online_payments')->{'CPU'}->{'url'};
+my ($port) = $url =~ m/:(\d+)\//;
+eval {
+    unless (`pgrep -f misc/cpu_server_simulator.pl`) {
+        system("/usr/bin/perl $intradir/misc/cpu_server_simulator.pl daemon -l http://*:$port &");
+    }
+};
 
 my $borrowerFactory = t::lib::TestObjects::PatronFactory->new();
 my $borrowers = $borrowerFactory->createTestGroup([
@@ -140,6 +148,11 @@ done_testing;
 
 sub tearDown {
     t::lib::TestObjects::ObjectFactory->tearDownTestContext($testContext);
+    eval {
+        if (`pgrep -f misc/cpu_server_simulator.pl`) {
+            system("pkill -f misc/cpu_server_simulator.pl");
+        }
+    };
 }
 
 

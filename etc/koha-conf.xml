@@ -169,20 +169,39 @@ __PAZPAR2_TOGGLE_XML_POST__
  </testservers>
  <pos>
     <CPU>
+        <!-- Default payment server configuration -->
         <!-- Delivered by CPU: -->
         <source></source>                           <!-- Source id -->
         <secretKey></secretKey>                     <!-- Secret key for generating SHA-256 hash -->
         <url></url>                                 <!-- Address to the cash register server -->
+        <!-- SSL certificates -->
+        <ssl_cert></ssl_cert>                       <!-- SSL certificate path -->
+        <ssl_key></ssl_key>                         <!-- SSL key path -->
+        <ssl_ca_file></ssl_ca_file>                 <!-- CA certificate path -->
+
+        <!-- Per branch payment server configuration -->
+        <branchcode>
+            <!--
+                Example:
+
+                <CPL>
+                    <source></source>
+                    <secretKey></secretKey>
+                    <url></url>
+                    <ssl_cert></ssl_cert>
+                    <ssl_key></ssl_key>
+                    <ssl_ca_file></ssl_ca_file>
+                </CPL>
+                <MPL>
+                    ...
+                </MPL>
+            -->
+        </branchcode>
 
         <!-- Koha settings -->
         <mode></mode>                               <!-- Use 2 for synchronized mode -->
         <notificationAddress></notificationAddress> <!-- https://server/api/v1/payments/pos/cpu/{invoicenumber}/report -->
         <!-- Replace "server" with your server address, but keep {invoicenumber} as it is (it will be converted later into real id) -->
-
-        <!-- SSL certificates -->
-        <ssl_cert></ssl_cert>                       <!-- SSL certificate path -->
-        <ssl_key></ssl_key>                         <!-- SSL key path -->
-        <ssl_ca_file></ssl_ca_file>                 <!-- CA certificate path -->
   </CPU>
  </pos>
  <online_payments>
