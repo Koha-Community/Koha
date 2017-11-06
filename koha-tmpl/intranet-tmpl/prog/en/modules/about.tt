@@ -227,9 +227,21 @@
                     </td></tr>
                 [% END %]
                 [% IF warnILLConfiguration %]
+                  [% IF no_ill_backends %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
-                    [% IF no_ill_backends %]The ILL module is enabled, but there are no backends available.[%END %]
+                    The ILL module is enabled, but there are no backends available.
                     </td></tr>
+                  [% END %]
+                  [% IF ill_partner_code_not_defined %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    The ILL module is enabled, but no 'partner_code' defined in koha-conf.xml. Falling back to the hardcoded 'ILLLIBS'.
+                    </td></tr>
+                  [%END %]
+                  [% IF ill_partner_code_doesnt_exist %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist %]) is not defined on the system.
+                    </td></tr>
+                  [% END %]
                 [% END %]
             </table>
         [% END %]
