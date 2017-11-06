@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Warn;
 
 use MARC::Record;
@@ -893,6 +893,46 @@ subtest 'loops' => sub {
         is( $letter->{content}, $expected_letter, );
     };
 };
+
+subtest 'add_tt_filters' => sub {
+    plan tests => 1;
+    my $code   = "TEST";
+    my $module = "TEST";
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { surname => "with_punctuation_" }
+        }
+    );
+    my $biblio = $builder->build_object(
+        { class => 'Koha::Biblios', value => { title => "with_punctuation_" } }
+    );
+    my $biblioitem = $builder->build_object(
+        {
+            class => 'Koha::Biblioitems',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                isbn         => "with_punctuation_"
+            }
+        }
+    );
+
+    my $template = q|patron=[% borrower.surname %];biblio=[% biblio.title %];biblioitems=[% biblioitem.isbn %]|;
+    reset_template( { template => $template, code => $code, module => $module } );
+    my $letter = GetPreparedLetter(
+        module      => $module,
+        letter_code => $code,
+        tables      => {
+            borrowers   => $patron->borrowernumber,
+            biblio      => $biblio->biblionumber,
+            biblioitems => $biblioitem->biblioitemnumber
+        }
+    );
+    my $expected_letter = q|patron=with_punctuation_;biblio=with_punctuation;biblioitems=with_punctuation|;
+    is( $letter->{content}, $expected_letter, "Pre-processing should call TT plugin to remove punctuation if table is biblio or biblioitems");
+};
+
 
 sub reset_template {
     my ( $params ) = @_;

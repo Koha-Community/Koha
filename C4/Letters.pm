@@ -1518,7 +1518,8 @@ sub _process_tt {
 
     my $tt_params = { %{ _get_tt_params( $tables ) }, %{ _get_tt_params( $loops, 'is_a_loop' ) }, %$substitute };
 
-    $content = qq|[% USE KohaDates %]$content|;
+    $content = add_tt_filters( $content );
+    $content = qq|[% USE KohaDates %][% USE Remove_MARC_punctuation %]$content|;
 
     my $output;
     $template->process( \$content, $tt_params, \$output ) || croak "ERROR PROCESSING TEMPLATE: " . $template->error();
@@ -1544,6 +1545,12 @@ sub _get_tt_params {
             singular => 'biblio',
             plural   => 'biblios',
             pk       => 'biblionumber',
+        },
+        biblioitems => {
+            module   => 'Koha::Biblioitems',
+            singular => 'biblioitem',
+            plural   => 'biblioitems',
+            pk       => 'biblioitemnumber',
         },
         borrowers => {
             module   => 'Koha::Patrons',
@@ -1692,6 +1699,23 @@ sub _get_tt_params {
     $params->{today} = output_pref({ dt => dt_from_string, dateformat => 'iso' });
 
     return $params;
+}
+
+=head3 add_tt_filters
+
+$content = add_tt_filters( $content );
+
+Add TT filters to some specific fields if needed.
+
+For now we only add the Remove_MARC_punctuation TT filter to biblio and biblioitem fields
+
+=cut
+
+sub add_tt_filters {
+    my ( $content ) = @_;
+    $content =~ s|\[%\s*biblio\.(.*?)\s*%\]|[% biblio.$1 \| \$Remove_MARC_punctuation %]|gxms;
+    $content =~ s|\[%\s*biblioitem\.(.*?)\s*%\]|[% biblioitem.$1 \| \$Remove_MARC_punctuation %]|gxms;
+    return $content;
 }
 
 =head2 get_item_content
