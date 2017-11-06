@@ -233,6 +233,9 @@ sub checkin {
         delete $item->{due_date};
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
     } else {
+        # Checkin failed: Wrongbranch or withdrawn?
+        # Bug 10748 with pref BlockReturnOfLostItems adds another case to come
+        # here: returning a lost item when the pref is set.
         $circ->screen_msg("Checkin failed");
         syslog( "LOG_WARNING", "Checkin failed: probably for Wrongbranch or withdrawn" );
     }
