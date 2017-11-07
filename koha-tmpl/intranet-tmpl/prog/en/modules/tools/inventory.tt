@@ -347,11 +347,14 @@
                 if( $("#uploadbarcodes").val() ) {
                     $("#setdate").prop('disabled',false);
                     $("#compareinv2barcd").prop('disabled',false);
+                    $("#compareinv2barcd").attr('checked',true); // default
                     $("#dont_checkin").prop('disabled',false);
                     if( $("#compareinv2barcd").attr('checked') ) {
                         $("fieldset#optionalfilters").show();
+                        $("#ignoreissued").attr('checked',true); // default
                     } else {
                         $("fieldset#optionalfilters").hide();
+                        $("#ignoreissued").attr('checked',false);
                     }
                 } else {
                     $("#setdate").prop('disabled',true);
@@ -365,7 +368,9 @@
             $("#compareinv2barcd").click(function() {
                 if( $("#compareinv2barcd").attr('checked') ) {
                     $("fieldset#optionalfilters").show();
+                    $("#ignoreissued").attr('checked',true); // default
                 } else {
+                    $("#ignoreissued").attr('checked',false);
                     $("fieldset#optionalfilters").hide();
                 }
             });
