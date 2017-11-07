@@ -84,7 +84,6 @@ Parameters:
 =head3 id (Required)
 
 list of either biblionumbers or itemnumbers
-
 =head3 id_type (Required)
 
 defines the type of record identifier being used in the request, 
@@ -299,16 +298,32 @@ Parameters:
   - id_type (Optional)
 	the type of the identifier, possible values:
 	- cardnumber
-	- firstname
 	- userid
+        - email
 	- borrowernumber
+	- firstname
+        - surname
 
 =cut
 
 sub LookupPatron {
     my ($cgi) = @_;
 
-    my $patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
+    my $patrons;
+
+    if(!$cgi->param('id')) {
+	return { message => 'PatronNotFound' };
+    }
+
+    if($cgi->param('id_type')) {
+	$patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
+    } else {
+	foreach my $id_type ('cardnumber', 'userid', 'email', 'borrowernumber',
+				     'surname', 'firstname') {
+	    $patrons = Koha::Patrons->search( { $id_type => $cgi->param('id') } );
+	    last if($patrons->count);
+	}
+    }
     unless ( $patrons->count ) {
         return { message => 'PatronNotFound' };
     }

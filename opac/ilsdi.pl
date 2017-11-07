@@ -47,7 +47,7 @@ my @services = (
     #	Level 1: Basic Discovery Interfaces
     #	'HarvestBibliographicRecords',       # OAI-PMH
     #	'HarvestExpandedRecords',            # OAI-PMH
-    'GetAvailability',    # FIXME Add bibbliographic level
+    'GetAvailability',    # FIXME Add bibliographic level
 
     #	'GoToBibliographicRequestPage'       # I don't understant this one
     #	Level 2: Elementary OPAC supplement
