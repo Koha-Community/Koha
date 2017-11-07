@@ -421,6 +421,18 @@
 
                 [% ELSIF query_type == 'generic_confirm' %]
                     <h1>Place request with partner libraries</h1>
+                  [% IF error %]
+                      <div class="alert">
+                    [% IF error == 'no_target_email' %]
+                          No target email addresses found. Either select at least
+                          one partner or check your ILL partner library records.
+                    [% ELSIF error == 'no_library_email' %]
+                          Your library has no usable email address. Please set it.
+                    [% ELSIF error == 'unkown_error' %]
+                          Unknown error processing your request. Contact your administrator.
+                    [% END %]
+                      </div>
+                  [% END %]
                     <!-- Start of GENERIC_EMAIL case -->
                     [% IF whole.value.partners %]
                        [% ill_url = here_link _ "?method=illview&illrequest_id=" _ request.illrequest_id %]

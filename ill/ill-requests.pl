@@ -27,6 +27,8 @@ use Koha::AuthorisedValues;
 use Koha::Illrequests;
 use Koha::Libraries;
 
+use Try::Tiny;
+
 our $cgi = CGI->new;
 my $illRequests = Koha::Illrequests->new;
 
@@ -182,17 +184,38 @@ if ( $backends_available ) {
         handle_commit_maybe($backend_result, $request);
 
     } elsif ( $op eq 'generic_confirm' ) {
-        my $request = Koha::Illrequests->find($params->{illrequest_id});
-        $params->{current_branchcode} = C4::Context->mybranch;
-        my $backend_result = $request->generic_confirm($params);
-        $template->param(
-            whole => $backend_result,
-            request => $request,
-        );
+        try {
+            my $request = Koha::Illrequests->find($params->{illrequest_id});
+            $params->{current_branchcode} = C4::Context->mybranch;
+            my $backend_result = $request->generic_confirm($params);
+            $template->param(
+                whole => $backend_result,
+                request => $request,
+            );
+            $template->param( error => $params->{error} )
+                if $params->{error};
 
-        # handle special commit rules & update type
-        handle_commit_maybe($backend_result, $request);
-
+            # handle special commit rules & update type
+            handle_commit_maybe($backend_result, $request);
+        }
+        catch {
+            my $error;
+            if ( $_->isa( 'Koha::Exceptions::Ill::NoTargetEmail' ) ) {
+                $error = 'no_target_email';
+            }
+            elsif ( $_->isa( 'Koha::Exceptions::Ill::NoLibraryEmail' ) ) {
+                $error = 'no_library_email';
+            }
+            else {
+                $error = 'unknown_error';
+            }
+            print $cgi->redirect(
+                "/cgi-bin/koha/ill/ill-requests.pl?" .
+                "method=generic_confirm&illrequest_id=" .
+                $params->{illrequest_id} .
+                "&error=$error" );
+            exit;
+        };
     } elsif ( $op eq 'illlist') {
         # Display all current ILLs
         my $requests = $illRequests->search();

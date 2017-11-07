@@ -892,12 +892,16 @@ EOF
             $to =~ s/^\x00//;       # Strip leading NULLs
             $to =~ s/\x00/; /;      # Replace others with '; '
         }
-        die "No target email addresses found. Either select at least one partner or check your ILL partner library records." if ( !$to );
+        Koha::Exceptions::Ill::NoTargetEmail->throw(
+            "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
+          if ( !$to );
         # Create the from, replyto and sender headers
         my $from = $branch->branchemail;
         my $replyto = $branch->branchreplyto || $from;
-        die "Your branch has no email address. Please set it."
-            if ( !$from );
+        Koha::Exceptions::Ill::NoLibraryEmail->throw(
+            "Your library has no usable email address. Please set it.")
+          if ( !$from );
+
         # Create the email
         my $message = Koha::Email->new;
         my %mail = $message->create_message_headers(

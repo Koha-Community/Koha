@@ -25,6 +25,14 @@ use Exception::Class (
     'Koha::Exceptions::Ill::InvalidBackendId' => {
         isa => 'Koha::Exceptions::Ill',
         description => "Invalid backend name required",
+    },
+    'Koha::Exceptions::Ill::NoTargetEmail' => {
+        isa => 'Koha::Exceptions::Ill',
+        description => "ILL partner library has no email address configured",
+    },
+    'Koha::Exceptions::Ill::NoLibraryEmail' => {
+        isa => 'Koha::Exceptions::Ill',
+        description => "Invalid backend name required",
     }
 );
 
@@ -41,6 +49,14 @@ Generic Ill exception
 =head2 Koha::Exceptions::Ill::InvalidBackend
 
 Exception to be used when the required ILL backend is invalid.
+
+=head2 Koha::Exceptions::Ill::NoTargetEmail
+
+Exception to be used when the ILL partner has no email address set.
+
+=head2 Koha::Exceptions::Ill::NoLibraryEmail
+
+Exception to be used when the current library has no email address set.
 
 =cut
 
