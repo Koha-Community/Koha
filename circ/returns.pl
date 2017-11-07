@@ -84,6 +84,14 @@ if ( $query->param('print_slip') ) {
     );
 }
 
+if ( $query->param('transfer_slip') ) {
+    $template->param(
+        transfer_slip  => 1,
+        borrowernumber => scalar $query->param('borrowernumber'),
+        biblionumber   => scalar $query->param('biblionumber'),
+    );
+}
+
 #####################
 #Global vars
 my $printers = GetPrinters();
