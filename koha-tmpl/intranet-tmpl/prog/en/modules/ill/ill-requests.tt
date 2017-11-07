@@ -143,9 +143,37 @@
         var createStatus = function(data, type, row, meta) {
             var origData = meta.settings.oInit.originalData;
             if (origData.length > 0) {
-                return meta.settings.oInit.originalData[0].capabilities[
+                var status_name = meta.settings.oInit.originalData[0].capabilities[
                     row.status
                 ].name;
+                switch( status_name ) {
+                    case "New request":
+                        return _("New request");
+                        break;
+                    case "Requested":
+                        return _("Requested");
+                        break;
+                    case "Requested from partners":
+                        return _("Requested from partners");
+                        break;
+                    case "Request reverted":
+                        return _("Request reverted");
+                        break;
+                    case "Queued request":
+                        return _("Queued request");
+                        break;
+                    case "Cancellation requested":
+                        return _("Cancellation requested");
+                        break;
+                    case "Completed":
+                        return _("Completed");
+                        break;
+                    case "Delete request":
+                        return _("Delete request");
+                        break;
+                    default:
+                        return status_name;
+                }
             } else {
                 return '';
             }
@@ -157,8 +185,7 @@
                 'href="/cgi-bin/koha/ill/ill-requests.pl?' +
                 'method=illview&amp;illrequest_id=' +
                 row.illrequest_id +
-                '">Manage request</a>' +
-                '</div>';
+                '">' + _("Manage request") + '</a>';
         };
 
         // Columns that require special treatment
@@ -168,22 +195,22 @@
                 func: createActionLink
             },
             borrowername: {
-                name: 'Patron',
+                name: _("Patron"),
                 func: createPatronLink
             },
             illrequest_id: {
-                name: 'Request number',
+                name: _("Request number"),
                 func: createRequestId
             },
             status: {
-                name: 'Status',
+                name: _("Status"),
                 func: createStatus
             },
             biblio_id: {
-                name: 'Biblio ID'
+                name: _("Biblio ID")
             },
             branchcode: {
-                name: 'Library'
+                name: _("Library")
             }
         };
 
