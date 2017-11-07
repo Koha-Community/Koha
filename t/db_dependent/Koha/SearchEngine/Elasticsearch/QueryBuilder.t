@@ -17,11 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
-use Koha::SearchEngine::Elasticsearch::QueryBuilder;
+use Koha::SearchEngine::Elasticsearch::QueryBuilder
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
@@ -52,4 +52,28 @@ subtest 'build_authorities_query_compat() tests' => sub {
     }
     'Koha::Exceptions::WrongParameter',
         'Exception thrown on invalid value in the marclist param';
+};
+
+subtest 'build query from form subtests' => sub {
+    plan tests => 5;
+
+    my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new({ 'index' => 'authorities' }),
+    #when searching for authorities from a record the form returns marclist with blanks for unentered terms
+    my @marclist = ('mainmainentry','mainentry','match', 'all');
+    my @values   = ( undef,         'Hamilton',  undef,   undef);
+    my @operator = ( 'contains', 'contains', 'contains', 'contains');
+
+    my $query = $builder->build_authorities_query_compat( \@marclist, undef,
+                    undef, \@operator , \@values, 'AUTH_TYPE', 'asc' );
+    is($query->{query}->{bool}->{should}[0]->{match}->{'Heading'}, "Hamilton","Expected search is populated");
+    is( scalar @{ $query->{query}->{bool}->{should} }, 1,"Only defined search is populated");
+
+    @values[2] = 'Jefferson';
+    $query = $builder->build_authorities_query_compat( \@marclist, undef,
+                    undef, \@operator , \@values, 'AUTH_TYPE', 'asc' );
+    is($query->{query}->{bool}->{should}[0]->{match}->{'Heading'}, "Hamilton","First index searched as expected");
+    is($query->{query}->{bool}->{should}[1]->{match}->{'Match'}, "Jefferson","Second index searched when populated");
+    is( scalar @{ $query->{query}->{bool}->{should} }, 2,"Only defined searches are populated");
+
+
 };
