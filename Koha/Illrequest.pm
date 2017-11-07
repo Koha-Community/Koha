@@ -21,14 +21,16 @@ package Koha::Illrequest;
 use Modern::Perl;
 
 use Clone 'clone';
-use File::Basename qw/basename/;
+use File::Basename qw( basename );
+use Encode qw( encode );
+use Mail::Sendmail;
+use Try::Tiny;
+
 use Koha::Database;
 use Koha::Email;
 use Koha::Exceptions::Ill;
 use Koha::Illrequestattributes;
 use Koha::Patron;
-use Mail::Sendmail;
-use Try::Tiny;
 
 use base qw(Koha::Object);
 
