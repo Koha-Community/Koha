@@ -196,7 +196,8 @@
         }
 
         // Toggle request attributes in Illview
-        $('#toggle_requestattributes').click(function() {
+        $('#toggle_requestattributes').on('click', function(e) {
+            e.preventDefault();
             $('#requestattributes').toggleClass('content_hidden');
         });
 
