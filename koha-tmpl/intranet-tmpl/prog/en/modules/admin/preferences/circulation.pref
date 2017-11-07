@@ -702,6 +702,19 @@ Circulation:
             - "Patron categories not affected by OPACHoldsIfAvailableAtPickup"
             - pref: OPACHoldsIfAvailableAtPickupExceptions
             - "(list of patron categories separated with a pipe '|')"
+    Interlibrary Loans:
+        -
+            - pref: ILLModule
+              default: 0
+              choices:
+                  yes: Enable
+                  no: Disable
+            - the interlibrary loans module (master switch).
+        -
+            - "Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
+            - pref: ILLModuleCopyrightClearance
+              type: textarea
+              class: long
     Fines Policy:
         -
             - Calculate fines based on days overdue
