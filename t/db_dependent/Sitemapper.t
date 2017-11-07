@@ -31,9 +31,9 @@ BEGIN {
     use_ok('Koha::Sitemapper::Writer');
 }
 
-my $now_value = DateTime->now();
+my $now_value       = DateTime->now();
 my $mocked_datetime = Test::MockModule->new('DateTime');
-$mocked_datetime->mock('now', sub { return $now_value; } );
+$mocked_datetime->mock( 'now', sub { return $now_value; } );
 
 sub slurp {
     my $file = shift;
@@ -47,12 +47,9 @@ sub slurp {
 use Test::DBIx::Class;
 
 sub fixtures {
-    my ( $data ) = @_;
+    my ($data) = @_;
     fixtures_ok [
-        Biblio => [
-            [ qw/ biblionumber datecreated timestamp  / ],
-            @{$data},
-        ],
+        Biblio => [ [qw/ biblionumber datecreated timestamp  /], @{$data}, ],
     ], 'add fixtures';
     return;
 }
@@ -60,18 +57,19 @@ sub fixtures {
 # Make the code in the module use our mocked Koha::Schema/Koha::Database
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock(
+
     # Schema() gives us the DB connection set up by Test::DBIx::Class
     _new_schema => sub { return Schema(); }
 );
 
 my $dir = File::Spec->tmpdir();
 
-
 my $data = [
-    [ qw/ 1         2013-11-15 2013-11-15/ ],
-    [ qw/ 2         2015-08-31 2015-08-31/ ],
+    [qw/ 1         2013-11-15 2013-11-15/],
+    [qw/ 2         2015-08-31 2015-08-31/],
 ];
 fixtures($data);
+
 # Create a sitemap for a catalog containg 2 biblios, with option 'long url'
 my $sitemapper = Koha::Sitemapper->new(
     verbose => 0,
@@ -82,9 +80,9 @@ my $sitemapper = Koha::Sitemapper->new(
 $sitemapper->run();
 
 my $file = "$dir/sitemapindex.xml";
-ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml created');
-my $file_content = slurp($file);
-my $now = DateTime->now->ymd;
+ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml created' );
+my $file_content     = slurp($file);
+my $now              = DateTime->now->ymd;
 my $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -99,8 +97,8 @@ chop $expected_content;
 is( $file_content, $expected_content, 'Its content is valid' );
 
 $file = "$dir/sitemap0001.xml";
-ok( -e $file, 'File sitemap0001.xml created');
-$file_content = slurp($file);
+ok( -e $file, 'File sitemap0001.xml created' );
+$file_content     = slurp($file);
 $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -117,7 +115,6 @@ $expected_content = <<"EOS";
 EOS
 is( $file_content, $expected_content, 'Its content is valid' );
 
-
 # Create a sitemap for a catalog containg 2 biblios, with option 'short url'.
 # Test that 2 files are created.
 $sitemapper = Koha::Sitemapper->new(
@@ -129,8 +126,8 @@ $sitemapper = Koha::Sitemapper->new(
 $sitemapper->run();
 
 $file = "$dir/sitemap0001.xml";
-ok( -e $file, 'File sitemap0001.xml with short URLs created');
-$file_content = slurp($file);
+ok( -e $file, 'File sitemap0001.xml with short URLs created' );
+$file_content     = slurp($file);
 $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -147,13 +144,12 @@ $expected_content = <<"EOS";
 EOS
 is( $file_content, $expected_content, 'Its content is valid' );
 
-
 # Create a sitemap for a catalog containing 75000 biblios, with option 'short
 # url'. Test that 3 files are created: index file + 2 urls file with
 # respectively 50000 et 25000 urls.
 $data = [];
-for my $count (3..75_000) {
-    push @{$data}, [ $count, '2015-08-31', '2015-08-31'];
+for my $count ( 3 .. 75_000 ) {
+    push @{$data}, [ $count, '2015-08-31', '2015-08-31' ];
 }
 fixtures($data);
 $sitemapper = Koha::Sitemapper->new(
@@ -165,8 +161,9 @@ $sitemapper = Koha::Sitemapper->new(
 $sitemapper->run();
 
 $file = "$dir/sitemapindex.xml";
-ok( -e "$dir/sitemapindex.xml", 'File sitemapindex.xml for 75000 bibs created');
-$file_content = slurp($file);
+ok( -e "$dir/sitemapindex.xml",
+    'File sitemapindex.xml for 75000 bibs created' );
+$file_content     = slurp($file);
 $expected_content = <<"EOS";
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -185,26 +182,26 @@ chop $expected_content;
 is( $file_content, $expected_content, 'Its content is valid' );
 
 $file = "$dir/sitemap0001.xml";
-ok( -e $file, 'File sitemap0001.xml created');
+ok( -e $file, 'File sitemap0001.xml created' );
 
 open my $fh, '<', $file or croak;
 my $count = 0;
 while (<$fh>) {
-    if ($_ =~ /<loc>/xsm) { $count++; }
+    if ( $_ =~ /<loc>/xsm ) { $count++; }
 }
 close $fh;
-is( $count, 50_000, 'It contains 50000 URLs');
+is( $count, 50_000, 'It contains 50000 URLs' );
 
 $file = "$dir/sitemap0002.xml";
-ok( -e $file, 'File sitemap0002.xml created');
+ok( -e $file, 'File sitemap0002.xml created' );
 
 open $fh, '<', $file or croak;
 $count = 0;
 while (<$fh>) {
-    if ($_ =~ /<loc>/xsm) { $count++; }
+    if ( $_ =~ /<loc>/xsm ) { $count++; }
 }
 close $fh;
-is( $count, 25_000, 'It contains 25000 URLs');
+is( $count, 25_000, 'It contains 25000 URLs' );
 
 # Cleanup
 for my $file (qw/sitemapindex.xml sitemap0001.xml sitemap0002.xml/) {
