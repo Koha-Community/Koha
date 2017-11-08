@@ -14948,19 +14948,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 13178 - Increase cardnumber fields to VARCHAR(32))\n";
 }
 
-$dbversion = '17.06.00.026';
-if( checkversion( $dbversion ) ) {
+$DBversion = '17.06.00.026';
+if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
-        insert ignore into systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) values
-        ('blockreturnoflostitems','0','0','if enabled, items that are marked as lost cannot be returned.','yesno');
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('BlockReturnOfLostItems','0','0','If enabled, items that are marked as lost cannot be returned.','YesNo');
     });
 
-    setversion( $dbversion );
-    print "upgrade to $dbversion done (bug 10748 - add system preference blockreturnoflostitems)\n";
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 10748 - Add system preference BlockReturnOfLostItems)\n";
 }
 
-$dbversion = '17.06.00.027';
-if( checkversion( $dbversion ) ) {
+$DBversion = '17.06.00.027';
+if( CheckVersion( $DBversion ) ) {
     if ( !column_exists( 'statistics', 'location' ) ) {
         $dbh->do('ALTER TABLE statistics ADD COLUMN location VARCHAR(80) default NULL AFTER itemtype');
     }
