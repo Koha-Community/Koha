@@ -1,268 +1,14 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-var MSG_BUDGET_PARENT_ALLOCATION = "- " + _("Fund amount exceeds parent allocation") + "\n";
-var MSG_BUDGET_PERIOD_ALLOCATION = "- " + _("Fund amount exceeds period allocation") + "\n";
-var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") + "\n";
-//]]>
-</script>
-
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-[% IF op == 'add_form' %]
-<script type="text/javascript">
-//<![CDATA[
-
-    function userPopup() {
-        window.open("/cgi-bin/koha/admin/add_user_search.pl?selection_type=add",
-            'PatronPopup',
-            'width=740,height=450,location=yes,toolbar=no,'
-            + 'scrollbars=yes,resize=yes'
-        );
-    }
-
-    function ownerPopup() {
-        window.open("/cgi-bin/koha/admin/add_user_search.pl?selection_type=select",
-            'PatronPopup',
-            'width=740,height=450,location=yes,toolbar=no,'
-            + 'scrollbars=yes,resize=yes'
-        );
-    }
-
-    function select_user(borrowernumber, borrower) {
-        ownerRemove();
-        var borrowername = borrower.firstname + ' ' + borrower.surname
-        if (borrowernumber) {
-            var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
-                + '?borrowernumber=' + borrowernumber + '">'
-                + borrowername + '</a>';
-            $('#budget_owner_name').html(ownerlink);
-            $('#budget_owner_id').val(borrowernumber);
-        }
-    }
-
-    function ownerRemove() {
-        $('#budget_owner_name').empty();
-        $('#budget_owner_id').val('');
-    }
-
-    function add_user(borrowernumber, borrowername) {
-        var ids = $("#budget_users_id").val().split(':');
-        if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
-            var li = '<li id="user_' + borrowernumber + '">'
-                + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
-                + borrowernumber + '">' + borrowername + '</a> '
-                + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> Remove</a> '
-                + '</li>';
-            $("#budget_users").prepend(li);
-            ids.push(borrowernumber);
-            $("#budget_users_id").val(ids.join(':'));
-        } else {
-            return -1;
-        }
-        return 0;
-    }
-
-    function del_user(borrowernumber) {
-        var ids = $("#budget_users_id").val().split(':');
-        if (borrowernumber) {
-            var idx = ids.indexOf(borrowernumber+'');
-            if (idx != -1) {
-                ids.splice(idx, 1);
-                $("#budget_users_id").val(ids.join(':'));
-                $("li#user_" + borrowernumber).remove();
-            }
-        }
-    }
-
-    function Check(f) {
-        var ok=1;
-        var _alertString="";
-        var alertString2;
-
-        if (!(isNotNull(f.budget_code,1))) {
-            _alertString += _("- Budget code cannot be blank") + "\n";
-        }
-
-        if (!(isNotNull(f.budget_name,1))) {
-            _alertString += _("- Budget name cannot be blank") + "\n";
-        }
-
-        if (!(isNotNull(f.budget_amount,1))) {
-            _alertString += _("- Budget amount cannot be blank") + "\n";
-        }
-
-        var budgetId;
-        if   (typeof(f.budget_id ) != "undefined")  {
-            budgetId = f.budget_id.value
-        }
-
-        var newBudgetParent;
-
-//  hack to test if selected parent_id in scrolling-list...
-//  if value == 'undef' its got a selected_parent :/
-        if(f.budget_parent_id){
-            var chkAdd   =  f.budget_parent_id.value ;
-            if  (     typeof(chkAdd ) != "undefined") {
-                newBudgetParent  =  f.budget_parent_id.value
-            } else {
-                newBudgetParent  =  f.budget_parent_id.item(0).value
-            }
-
-            if   (budgetId  > 0)  {  ; //its a mod ...
-                // if parent == curent-budget, fail...
-                if ( newBudgetParent  ==  budgetId     ) {
-                        _alertString += _("- Budget parent is current budget") + "\n";
-                }
-
-                else if (newBudgetParent) {
-                    var result = checkBudgetParent(  budgetId , newBudgetParent   );
-                    if (result) {
-                        _alertString += result;
-                    }
-                }
-            }
-        }
-
-         // else do lookup
-        var budgetTotal = Math.abs(f.budget_amount.value);
-        var result =   budgetExceedsParent  (budgetTotal, budgetId, newBudgetParent, f.budget_period_id.value)
-        if (result) {
-            _alertString += result;
-        }
-
-        if (_alertString.length==0) {
-            document.Aform.submit();
-        } else {
-            alertString2 = _("Form not submitted because of the following problem(s)");
-            alertString2 += "\n------------------------------------------------------------------------------------\n\n";
-            alertString2 += _alertString;
-            alert(alertString2);
-        }
-    }
-    $(document).ready(function(){
-        $("#remove_owner").on("click",function(e){
-            e.preventDefault();
-            ownerRemove();
-        });
-        $("#edit_owner").on("click",function(e){
-            e.preventDefault();
-            ownerPopup();
-        });
-        $("body").on("click",".del_user",function(e){
-            e.preventDefault();
-            var borrowernumber = $(this).data("borrowernumber");
-            del_user(borrowernumber);
-        });
-        $("#add_user_button").on("click",function(e){
-            e.preventDefault();
-            userPopup();
-        });
-        $("#edit_fund").on("submit",function(e){
-            e.preventDefault();
-            Check(this);
-        });
-    });
-//]]>
-</script>
-[% ELSIF op == 'list' %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-    [% INCLUDE 'datatables.inc' %]
-    <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-    //
-    $(document).ready(function() {
-
-
-        var oTable = $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "fnDrawCallback": function ( oSettings ) {
-                if ( oSettings.aiDisplay.length == 0 )
-                {
-                    return;
-                }
-
-                var nTrs = $('#budgeth tbody tr');
-                var iColspan = nTrs[0].getElementsByTagName('td').length;
-                var sLastGroup = "";
-                for ( var i=0 ; i<nTrs.length ; i++ )
-                {
-                    var iDisplayIndex = oSettings._iDisplayStart + i;
-                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
-                    if ( sGroup != sLastGroup )
-                    {
-                        var nGroup = document.createElement( 'tr' );
-                        var nCell = document.createElement( 'td' );
-                        nCell.colSpan = iColspan;
-                        nCell.className = "group";
-                        nCell.innerHTML = sGroup;
-                        nGroup.appendChild( nCell );
-                        nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
-                        sLastGroup = sGroup;
-                    }
-                }
-            },
-            "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-                footer_column_sum( api, [ 4, 6, 8, 10 ], 2 );
-            },
-            "aoColumnDefs": [
-                { "bVisible": false, "aTargets": [ 0, 1 ] },
-                { "bSortable": false, "aTargets": ["_all"] }
-            ],
-            'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
-            'bSort': true,
-            'aaSortingFixed': [[ 1, 'asc' ]],
-            'bPaginate': false,
-            "bAutoWidth": false
-        }));
-
-        $(oTable).treetable({
-            expandable: true
-        });
-        $(oTable).treetable('expandAll');
-        $("#expand_all").click(function(e){
-            e.preventDefault();
-            $(oTable).treetable('expandAll');
-        });
-        $("#collapse_all").click(function(e){
-            e.preventDefault();
-            $(oTable).treetable('collapseAll');
-        });
-
-        [% UNLESS budget_period_id %]
-          $("#hide_inactive").click(function(e){
-            e.preventDefault();
-            oTable.fnFilter( 1, 0 ); // Show only active=1
-          });
-          $("#show_inactive").click(function(e){
-            e.preventDefault();
-            oTable.fnFilter( '', 0 );
-          });
-          $("#hide_inactive").click();
-        [% END %]
-        oTable.fnAddFilters("filter", 750);
-
-        $("#filterbutton").click(function() {
-            $("#fundfilters").slideToggle(0);
-        });
-
-        $(".deletefund-disabled").tooltip().on("click", function(e){
-            e.preventDefault();
-            alert(_("This fund has children. It cannot be deleted."));
-        });
-    });
-//]]>
-</script>
-[% END %]
-
 </head>
+
 <body id="admin_aqbudgets" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'budgets-admin-search.inc' %]
@@ -693,4 +439,258 @@ var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") 
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript">
+        var MSG_BUDGET_PARENT_ALLOCATION = "- " + _("Fund amount exceeds parent allocation") + "\n";
+        var MSG_BUDGET_PERIOD_ALLOCATION = "- " + _("Fund amount exceeds period allocation") + "\n";
+        var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") + "\n";
+    </script>
+
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    [% IF op == 'add_form' %]
+        <script type="text/javascript">
+        //<![CDATA[
+
+            function userPopup() {
+                window.open("/cgi-bin/koha/admin/add_user_search.pl?selection_type=add",
+                    'PatronPopup',
+                    'width=740,height=450,location=yes,toolbar=no,'
+                    + 'scrollbars=yes,resize=yes'
+                );
+            }
+
+            function ownerPopup() {
+                window.open("/cgi-bin/koha/admin/add_user_search.pl?selection_type=select",
+                    'PatronPopup',
+                    'width=740,height=450,location=yes,toolbar=no,'
+                    + 'scrollbars=yes,resize=yes'
+                );
+            }
+
+            function select_user(borrowernumber, borrower) {
+                ownerRemove();
+                var borrowername = borrower.firstname + ' ' + borrower.surname
+                if (borrowernumber) {
+                    var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
+                        + '?borrowernumber=' + borrowernumber + '">'
+                        + borrowername + '</a>';
+                    $('#budget_owner_name').html(ownerlink);
+                    $('#budget_owner_id').val(borrowernumber);
+                }
+            }
+
+            function ownerRemove() {
+                $('#budget_owner_name').empty();
+                $('#budget_owner_id').val('');
+            }
+
+            function add_user(borrowernumber, borrowername) {
+                var ids = $("#budget_users_id").val().split(':');
+                if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
+                    var li = '<li id="user_' + borrowernumber + '">'
+                        + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
+                        + borrowernumber + '">' + borrowername + '</a> '
+                        + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> Remove</a> '
+                        + '</li>';
+                    $("#budget_users").prepend(li);
+                    ids.push(borrowernumber);
+                    $("#budget_users_id").val(ids.join(':'));
+                } else {
+                    return -1;
+                }
+                return 0;
+            }
+
+            function del_user(borrowernumber) {
+                var ids = $("#budget_users_id").val().split(':');
+                if (borrowernumber) {
+                    var idx = ids.indexOf(borrowernumber+'');
+                    if (idx != -1) {
+                        ids.splice(idx, 1);
+                        $("#budget_users_id").val(ids.join(':'));
+                        $("li#user_" + borrowernumber).remove();
+                    }
+                }
+            }
+
+            function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+
+                if (!(isNotNull(f.budget_code,1))) {
+                    _alertString += _("- Budget code cannot be blank") + "\n";
+                }
+
+                if (!(isNotNull(f.budget_name,1))) {
+                    _alertString += _("- Budget name cannot be blank") + "\n";
+                }
+
+                if (!(isNotNull(f.budget_amount,1))) {
+                    _alertString += _("- Budget amount cannot be blank") + "\n";
+                }
+
+                var budgetId;
+                if   (typeof(f.budget_id ) != "undefined")  {
+                    budgetId = f.budget_id.value
+                }
+
+                var newBudgetParent;
+
+        //  hack to test if selected parent_id in scrolling-list...
+        //  if value == 'undef' its got a selected_parent :/
+                if(f.budget_parent_id){
+                    var chkAdd   =  f.budget_parent_id.value ;
+                    if  (     typeof(chkAdd ) != "undefined") {
+                        newBudgetParent  =  f.budget_parent_id.value
+                    } else {
+                        newBudgetParent  =  f.budget_parent_id.item(0).value
+                    }
+
+                    if   (budgetId  > 0)  {  ; //its a mod ...
+                        // if parent == curent-budget, fail...
+                        if ( newBudgetParent  ==  budgetId     ) {
+                                _alertString += _("- Budget parent is current budget") + "\n";
+                        }
+
+                        else if (newBudgetParent) {
+                            var result = checkBudgetParent(  budgetId , newBudgetParent   );
+                            if (result) {
+                                _alertString += result;
+                            }
+                        }
+                    }
+                }
+
+                 // else do lookup
+                var budgetTotal = Math.abs(f.budget_amount.value);
+                var result =   budgetExceedsParent  (budgetTotal, budgetId, newBudgetParent, f.budget_period_id.value)
+                if (result) {
+                    _alertString += result;
+                }
+
+                if (_alertString.length==0) {
+                    document.Aform.submit();
+                } else {
+                    alertString2 = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+                }
+            }
+            $(document).ready(function(){
+                $("#remove_owner").on("click",function(e){
+                    e.preventDefault();
+                    ownerRemove();
+                });
+                $("#edit_owner").on("click",function(e){
+                    e.preventDefault();
+                    ownerPopup();
+                });
+                $("body").on("click",".del_user",function(e){
+                    e.preventDefault();
+                    var borrowernumber = $(this).data("borrowernumber");
+                    del_user(borrowernumber);
+                });
+                $("#add_user_button").on("click",function(e){
+                    e.preventDefault();
+                    userPopup();
+                });
+                $("#edit_fund").on("submit",function(e){
+                    e.preventDefault();
+                    Check(this);
+                });
+            });
+        //]]>
+        </script>
+    [% ELSIF op == 'list' %]
+        [% INCLUDE 'datatables.inc' %]
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+
+        <script type="text/javascript">
+        //<![CDATA[
+            //
+            $(document).ready(function() {
+                var oTable = $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "fnDrawCallback": function ( oSettings ) {
+                        if ( oSettings.aiDisplay.length == 0 )
+                        {
+                            return;
+                        }
+
+                        var nTrs = $('#budgeth tbody tr');
+                        var iColspan = nTrs[0].getElementsByTagName('td').length;
+                        var sLastGroup = "";
+                        for ( var i=0 ; i<nTrs.length ; i++ )
+                        {
+                            var iDisplayIndex = oSettings._iDisplayStart + i;
+                            var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
+                            if ( sGroup != sLastGroup )
+                            {
+                                var nGroup = document.createElement( 'tr' );
+                                var nCell = document.createElement( 'td' );
+                                nCell.colSpan = iColspan;
+                                nCell.className = "group";
+                                nCell.innerHTML = sGroup;
+                                nGroup.appendChild( nCell );
+                                nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                                sLastGroup = sGroup;
+                            }
+                        }
+                    },
+                    "footerCallback": function ( row, data, start, end, display ) {
+                        var api = this.api(), data;
+                        footer_column_sum( api, [ 4, 6, 8, 10 ], 2 );
+                    },
+                    "aoColumnDefs": [
+                        { "bVisible": false, "aTargets": [ 0, 1 ] },
+                        { "bSortable": false, "aTargets": ["_all"] }
+                    ],
+                    'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
+                    'bSort': true,
+                    'aaSortingFixed': [[ 1, 'asc' ]],
+                    'bPaginate': false,
+                    "bAutoWidth": false
+                }));
+
+                $(oTable).treetable({
+                    expandable: true
+                });
+                $(oTable).treetable('expandAll');
+                $("#expand_all").click(function(e){
+                    e.preventDefault();
+                    $(oTable).treetable('expandAll');
+                });
+                $("#collapse_all").click(function(e){
+                    e.preventDefault();
+                    $(oTable).treetable('collapseAll');
+                });
+
+                [% UNLESS budget_period_id %]
+                  $("#hide_inactive").click(function(e){
+                    e.preventDefault();
+                    oTable.fnFilter( 1, 0 ); // Show only active=1
+                  });
+                  $("#show_inactive").click(function(e){
+                    e.preventDefault();
+                    oTable.fnFilter( '', 0 );
+                  });
+                  $("#hide_inactive").click();
+                [% END %]
+                oTable.fnAddFilters("filter", 750);
+
+                $("#filterbutton").click(function() {
+                    $("#fundfilters").slideToggle(0);
+                });
+
+                $(".deletefund-disabled").tooltip().on("click", function(e){
+                    e.preventDefault();
+                    alert(_("This fund has children. It cannot be deleted."));
+                });
+            });
+        //]]>
+        </script>
+    [% END %]
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

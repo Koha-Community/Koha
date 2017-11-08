@@ -1,64 +1,11 @@
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description %] by [% authcat %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-    function Check(f) {
-            var ok=1;
-            var _alertString="";
-            var alertString2;
-            var arr = document.getElementsByName('est_total')
-
-            for ( var i=0, len=arr.length; i<len; ++i ){
-                    var tot = arr[i].innerHTML;
-
-                    if (tot == 'NaN') {
-                        _alertString += "\n- " + _("One or more cell values is non-numeric");
-                    }
-            }
-
-            if (_alertString.length==0) {
-
-                var op  = document.createElement('input');
-                op.setAttribute("type","hidden");
-                op.setAttribute("name","op");
-                op.setAttribute("value","save");   //ohh the pain...
-
-                document.Aform.appendChild(op);
-                document.Aform.submit()
-
-            } else {
-                    alertString2  = _("Form not submitted because of the following problem(s)");
-                    alertString2 += "\n------------------------------------------------------------------------------------\n";
-                    alertString2 += _alertString;
-                    alert(alertString2);
-            }
-    }
-    $(document).ready(function() {
-        $("#selections input").on("change",function(e){
-            var num = $(this).attr("id");
-            if(num == 'showall'){
-                showAllColumns();
-                e.stopPropagation();
-            } else if(num == 'hideall'){
-                hideAllColumns();
-                e.stopPropagation();
-            } else {
-                if($(this).prop("checked")){
-                    showColumn(num);
-                } else {
-                    hideColumn(num);
-                }
-            }
-        });
-    });
-//]]>
-</script>
 <style type="text/css">td.locked { background-image: url('[% interface %]/[% theme %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; }</style>
 </head>
+
 <body id="admin_aqplan" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'budgets-admin-search.inc' %]
@@ -321,4 +268,61 @@
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                var arr = document.getElementsByName('est_total')
+
+                for ( var i=0, len=arr.length; i<len; ++i ){
+                        var tot = arr[i].innerHTML;
+
+                        if (tot == 'NaN') {
+                            _alertString += "\n- " + _("One or more cell values is non-numeric");
+                        }
+                }
+
+                if (_alertString.length==0) {
+
+                    var op  = document.createElement('input');
+                    op.setAttribute("type","hidden");
+                    op.setAttribute("name","op");
+                    op.setAttribute("value","save");   //ohh the pain...
+
+                    document.Aform.appendChild(op);
+                    document.Aform.submit()
+
+                } else {
+                        alertString2  = _("Form not submitted because of the following problem(s)");
+                        alertString2 += "\n------------------------------------------------------------------------------------\n";
+                        alertString2 += _alertString;
+                        alert(alertString2);
+                }
+        }
+        $(document).ready(function() {
+            $("#selections input").on("change",function(e){
+                var num = $(this).attr("id");
+                if(num == 'showall'){
+                    showAllColumns();
+                    e.stopPropagation();
+                } else if(num == 'hideall'){
+                    hideAllColumns();
+                    e.stopPropagation();
+                } else {
+                    if($(this).prop("checked")){
+                        showColumn(num);
+                    } else {
+                        hideColumn(num);
+                    }
+                }
+            });
+        });
+    //]]>
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

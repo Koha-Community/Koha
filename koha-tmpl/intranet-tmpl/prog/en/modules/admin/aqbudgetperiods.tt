@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% USE Price %]
-
+[% SET footerjs = 1 %]
 [%- BLOCK action_menu %]
     <div class="dropdown">
         <a class="btn btn-default btn-xs dropdown-toggle" id="budgetmenu_[% block_budget.budget_period_id %]" role="button" data-toggle="dropdown" href="#">
@@ -33,152 +33,11 @@
 [% END -%]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-[% INCLUDE 'datatables.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% IF close_form %]
     <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
 [% END %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-<script type="text/javascript">
-// #################################################################################
-// Javascript
-// #################################################################################
-    function CheckDuplicateForm(f){
-            var ok=1;
-            var _alertString="";
-            var alertString="";
-            if(!(isNotNull(f.budget_period_startdate,1))){
-              _alertString += "\n- " + _("Start date missing");
-            }
-            if (!(isNotNull(f.budget_period_enddate,1))){
-              _alertString += "\n- " + _("End date missing");
-            }
-            if( f.budget_period_startdate > f.budget_period_enddate ) {
-              _alertString += "\n- " + _("Start date must be before end date");
-            }
-            if (!(isNotNull(f.budget_period_description,1))){
-              _alertString += "\n- " + _("Budget description missing");
-            }
-
-            if(_alertString.length==0){
-              f.submit();
-            } else {
-              alertString += _("Form not submitted because of the following problem(s)");
-              alertString += "\n-----------------------------------------\n";
-              alertString += _alertString;
-              alert(alertString);
-            }
-    }
-    function Check(f) {
-            var ok=1;
-            var _alertString="";
-            var alertString2;
-
-            if (!(isNotNull(f.budget_period_startdate,1))) {
-                    _alertString += "\n- " + _("Start date missing");
-            }
-
-            if (!(isNotNull(f.budget_period_enddate,1))) {
-                    _alertString += "\n- " + _("End date missing");
-            }
-
-            if ( f.budget_period_startdate >   f.budget_period_enddate )  {
-                    _alertString += "\n- " + _("Start date must be before end date");
-            }
-
-            if (!(isNotNull(f.budget_period_description,1))) {
-                    _alertString += "\n- " + _("Description missing");
-            }
-
-            if (!(isNum(f.budget_period_total))) {
-                    _alertString += "\n- " + _("Amount must be a valid number, or empty");
-            }
-
-/*
-			checkBudgetTotal(f) {
-			}
-*/
-
-            if (_alertString.length==0) {
-                    f.submit();
-            } else {
-                    alertString2  = _("Form not submitted because of the following problem(s)");
-                    alertString2 += "\n------------------------------------------------------------------------------------\n";
-                    alertString2 += _alertString;
-                    alert(alertString2);
-            }
-    }
-
-    $(document).ready(function() {
-        var tabs = $('#budgetsTabs').tabs();
-        [% IF ( tab ) %]
-            tabs.tabs("option", "active", [% tab %]);
-        [% END %]
-        $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "sPaginationType": "four_button",
-            'bAutoWidth': false
-        } ) );
-
-        [% IF close_form %]
-          $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
-            sDom: "t"
-          }));
-          $("#move_form").submit(function(){
-            var budget_from = "[% budget_period_description %]";
-            var budget_to = $("#to_budget_period_id").find("option:selected").html();
-            var alert_message = _("You have chosen to move all unreceived orders from '%s' to '%s'.").format(budget_from, budget_to);
-            alert_message += "\n" + _("This action cannot be reversed. Do you wish to continue?");
-            return confirm ( alert_message );
-          });
-        [% END %]
-        [% IF closed %]
-          var oTable = $("#closed_report").dataTable($.extend(true, {}, dataTablesDefaults, {
-            // The following is a c/p from aqbudgets.tt and is a candidate for refactoring.
-            "fnDrawCallback": function ( oSettings ) {
-                if ( oSettings.aiDisplay.length == 0 )
-                {
-                    return;
-                }
-
-                var nTrs = $('#closed_report tbody tr');
-                var iColspan = nTrs[1].getElementsByTagName('td').length;
-                var sLastGroup = "";
-                for ( var i=0 ; i<nTrs.length ; i++ )
-                {
-                    var iDisplayIndex = oSettings._iDisplayStart + i;
-                    var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
-                    if ( sGroup != sLastGroup )
-                    {
-                        var nGroup = document.createElement( 'tr' );
-                        var nCell = document.createElement( 'td' );
-                        nCell.colSpan = iColspan;
-                        nCell.className = "group";
-                        nCell.innerHTML = sGroup;
-                        nGroup.appendChild( nCell );
-                        nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
-                        sLastGroup = sGroup;
-                    }
-                }
-            },
-            "aoColumnDefs": [
-                { "bVisible": false, "aTargets": [ 0, 1 ] },
-                { "bSortable": false, "aTargets": ["_all"] }
-            ],
-            'bSort': true,
-            'aaSortingFixed': [[ 1, 'asc' ]],
-            "bAutoWidth": false,
-            "sPaginationType": "full_numbers"
-          }));
-        [% END %]
-    });
-</script>
 
 <title>
     Koha &rsaquo; Administration &rsaquo; Budgets
@@ -625,7 +484,6 @@
   </div>
 [% END %]
 
-
 </div>
 </div>
 <div class="yui-b">
@@ -633,4 +491,144 @@
 </div>
 </div>
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% IF close_form %]
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+    [% END %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript">
+    // #################################################################################
+    // Javascript
+    // #################################################################################
+        function CheckDuplicateForm(f){
+            var ok=1;
+            var _alertString="";
+            var alertString="";
+            if(!(isNotNull(f.budget_period_startdate,1))){
+              _alertString += "\n- " + _("Start date missing");
+            }
+            if (!(isNotNull(f.budget_period_enddate,1))){
+              _alertString += "\n- " + _("End date missing");
+            }
+            if( f.budget_period_startdate > f.budget_period_enddate ) {
+              _alertString += "\n- " + _("Start date must be before end date");
+            }
+            if (!(isNotNull(f.budget_period_description,1))){
+              _alertString += "\n- " + _("Budget description missing");
+            }
+
+            if(_alertString.length==0){
+              f.submit();
+            } else {
+              alertString += _("Form not submitted because of the following problem(s)");
+              alertString += "\n-----------------------------------------\n";
+              alertString += _alertString;
+              alert(alertString);
+            }
+        }
+        function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+
+            if (!(isNotNull(f.budget_period_startdate,1))) {
+                    _alertString += "\n- " + _("Start date missing");
+            }
+
+            if (!(isNotNull(f.budget_period_enddate,1))) {
+                    _alertString += "\n- " + _("End date missing");
+            }
+
+            if ( f.budget_period_startdate >   f.budget_period_enddate )  {
+                    _alertString += "\n- " + _("Start date must be before end date");
+            }
+
+            if (!(isNotNull(f.budget_period_description,1))) {
+                    _alertString += "\n- " + _("Description missing");
+            }
+
+            if (!(isNum(f.budget_period_total))) {
+                    _alertString += "\n- " + _("Amount must be a valid number, or empty");
+            }
+
+            if (_alertString.length==0) {
+                    f.submit();
+            } else {
+                    alertString2  = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+            }
+        }
+
+        $(document).ready(function() {
+            var tabs = $('#budgetsTabs').tabs();
+            [% IF ( tab ) %]
+                tabs.tabs("option", "active", [% tab %]);
+            [% END %]
+            $("#activeperiodst,#inactiveperiodst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "four_button",
+                'bAutoWidth': false
+            } ) );
+
+            [% IF close_form %]
+              $("#budgeth").dataTable($.extend(true, {}, dataTablesDefaults, {
+                sDom: "t"
+              }));
+              $("#move_form").submit(function(){
+                var budget_from = "[% budget_period_description %]";
+                var budget_to = $("#to_budget_period_id").find("option:selected").html();
+                var alert_message = _("You have chosen to move all unreceived orders from '%s' to '%s'.").format(budget_from, budget_to);
+                alert_message += "\n" + _("This action cannot be reversed. Do you wish to continue?");
+                return confirm ( alert_message );
+              });
+            [% END %]
+            [% IF closed %]
+              var oTable = $("#closed_report").dataTable($.extend(true, {}, dataTablesDefaults, {
+                // The following is a c/p from aqbudgets.tt and is a candidate for refactoring.
+                "fnDrawCallback": function ( oSettings ) {
+                    if ( oSettings.aiDisplay.length == 0 )
+                    {
+                        return;
+                    }
+
+                    var nTrs = $('#closed_report tbody tr');
+                    var iColspan = nTrs[1].getElementsByTagName('td').length;
+                    var sLastGroup = "";
+                    for ( var i=0 ; i<nTrs.length ; i++ )
+                    {
+                        var iDisplayIndex = oSettings._iDisplayStart + i;
+                        var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
+                        if ( sGroup != sLastGroup )
+                        {
+                            var nGroup = document.createElement( 'tr' );
+                            var nCell = document.createElement( 'td' );
+                            nCell.colSpan = iColspan;
+                            nCell.className = "group";
+                            nCell.innerHTML = sGroup;
+                            nGroup.appendChild( nCell );
+                            nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                            sLastGroup = sGroup;
+                        }
+                    }
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [ 0, 1 ] },
+                    { "bSortable": false, "aTargets": ["_all"] }
+                ],
+                'bSort': true,
+                'aaSortingFixed': [[ 1, 'asc' ]],
+                "bAutoWidth": false,
+                "sPaginationType": "full_numbers"
+              }));
+            [% END %]
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

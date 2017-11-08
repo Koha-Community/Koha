@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Contracts &rsaquo;
 [% IF ( add_form ) %]
@@ -10,48 +11,8 @@
 [% IF ( delete_confirm ) %]Confirm deletion of contract '[% contractnumber %]'[% END %]
 [% IF ( delete_confirmed ) %]Contract deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-// to check if the data are correctly entered.
-function Check(ff) {
-    var ok=0;
-    var _alertString=_("Form not submitted because of the following problem(s)");
-    _alertString +="\n-------------------------------------------------------------------\n\n";
-    if (!(isNotNull(ff.contractname,0))){
-        ok=1;
-        _alertString += _("- Name missing") + "\n";
-    }
-    var startDate = Date_from_syspref($("#from").val());
-    var endDate   = Date_from_syspref($("#to").val());
-    if (!parseInt(startDate.getTime())) {
-        ok=1;
-        _alertString += _("- Start date missing or invalid.") + "\n";
-    }
-    if (!parseInt(endDate.getTime())) {
-        ok=1;
-        _alertString += _("- End date missing or invalid.") + "\n";
-    }
-    
-    if (startDate > endDate) {
-        ok=1;
-        _alertString += _("Wrong date! start date cannot be after end date.") + "\n";
-    }
-    if (endDate < (new Date)) {
-        ok=1;
-        _alertString += _("End date before today, Invalid end date!") + "\n";
-    }
-    if (ok) { // if there is a problem
-        alert(_alertString);
-    return false;
-}
-// if all is good
-    ff.submit();
-}
-//]]>
-</script>
 </head>
+
 <body id="acq_aqcontract" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'contracts-admin-search.inc' %]
@@ -213,4 +174,47 @@ function Check(ff) {
 [% INCLUDE 'vendor-menu.inc' %]
 </div>
 </div>
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    // to check if the data are correctly entered.
+    function Check(ff) {
+        var ok=0;
+        var _alertString=_("Form not submitted because of the following problem(s)");
+        _alertString +="\n-------------------------------------------------------------------\n\n";
+        if (!(isNotNull(ff.contractname,0))){
+            ok=1;
+            _alertString += _("- Name missing") + "\n";
+        }
+        var startDate = Date_from_syspref($("#from").val());
+        var endDate   = Date_from_syspref($("#to").val());
+        if (!parseInt(startDate.getTime())) {
+            ok=1;
+            _alertString += _("- Start date missing or invalid.") + "\n";
+        }
+        if (!parseInt(endDate.getTime())) {
+            ok=1;
+            _alertString += _("- End date missing or invalid.") + "\n";
+        }
+
+        if (startDate > endDate) {
+            ok=1;
+            _alertString += _("Wrong date! start date cannot be after end date.") + "\n";
+        }
+        if (endDate < (new Date)) {
+            ok=1;
+            _alertString += _("End date before today, Invalid end date!") + "\n";
+        }
+        if (ok) { // if there is a problem
+            alert(_alertString);
+        return false;
+    }
+    // if all is good
+        ff.submit();
+    }
+    //]]>
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
