@@ -242,9 +242,9 @@ unless( defined $invoice->{closedate} ) {
         my $biblio = Koha::Biblios->find( $biblionumber );
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $line{'ordernumber'};
-        my $cnt_subscriptions = $biblio->subscriptions->count;
-        my $itemcount   = $biblio->items->count;
-        my $holds_count = $biblio->holds->count;
+        my $cnt_subscriptions = $biblio ? $biblio->subscriptions->count: 0;
+        my $itemcount   = $biblio ? $biblio->items->count : 0;
+        my $holds_count = $biblio ? $biblio->holds->count : 0;
         my @items = GetItemnumbersFromOrder( $ordernumber );
         my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
 
