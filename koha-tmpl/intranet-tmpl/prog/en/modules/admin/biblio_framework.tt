@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; MARC frameworks
 [% IF op == 'add_form' %]
@@ -8,18 +9,8 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-    /* Set some variable needed in biblio_framework.js */
-    var MSG_IMPORT_ERROR = _("Error importing the framework");
-    var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file.");
-    var MSG_OVERWRITE_WARNING = _("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup");
-    var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
-    var template_path = "[% interface %]/[% theme %]";
-</script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/biblio_framework.js"></script>
-
 </head>
+
 <body id="admin_biblio_framework" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -287,4 +278,18 @@
 [% INCLUDE 'admin-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        /* Set some variable needed in biblio_framework.js */
+        var MSG_IMPORT_ERROR = _("Error importing the framework");
+        var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file.");
+        var MSG_OVERWRITE_WARNING = _("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup");
+        var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
+        var template_path = "[% interface %]/[% theme %]";
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/biblio_framework.js"></script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,4 +1,5 @@
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Authority MARC framework [% IF ( add_form ) %][% IF ( use_heading_flags_p ) %]
     [% IF ( heading_modify_tag_p ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Modify tag[% END %]
@@ -7,20 +8,8 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
- $(document).ready(function() {
-    $("#table_authtagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    }));
- });
-//]]>
-</script>
 </head>
+
 <body id="admin_auth_tag_structure" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -242,4 +231,19 @@
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#table_authtagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,19 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Keyword to MARC mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-        $('#selectframework').find("input:submit").hide();
-        $('#framework').change(function() {
-                $('#selectframework').submit();
-        });
-});
-//]]>
-</script>
-
-
 </head>
 
 <body id="admin_fieldmapping" class="admin">
@@ -85,4 +73,15 @@ $(document).ready(function() {
 		[% INCLUDE 'admin-menu.inc' %]
 	</div>
 
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#selectframework').find("input:submit").hide();
+            $('#framework').change(function() {
+                    $('#selectframework').submit();
+            });
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

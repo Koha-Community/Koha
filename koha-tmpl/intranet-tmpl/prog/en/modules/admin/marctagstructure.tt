@@ -1,4 +1,5 @@
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
 [% IF ( add_form ) %]MARC frameworks &rsaquo; [% action %] [% searchfield %][% END %]
@@ -7,29 +8,8 @@
 [% IF ( else ) %]MARC frameworks[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-
-$(document).ready(function() {
-    $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    }));
-    $("#select_display").on("change",function(){
-        var checked = $(this).prop("checked") ? 1: 0;
-        $.cookie('marctagstructure_selectdisplay', checked);
-        this.form.submit();
-    });
-});
-
-//]]>
-</script>
 </head>
+
 <body id="admin_marctagstructure" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -259,4 +239,25 @@ $(document).ready(function() {
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+            $("#select_display").on("change",function(){
+                var checked = $(this).prop("checked") ? 1: 0;
+                $.cookie('marctagstructure_selectdisplay', checked);
+                this.form.submit();
+            });
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

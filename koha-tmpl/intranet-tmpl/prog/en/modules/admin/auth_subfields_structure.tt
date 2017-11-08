@@ -1,14 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Authority MARC subfield structure</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-     $(document).ready(function() {
-        $('#subfieldtabs').tabs();
-     });
-//]]>
-</script>
 </head>
+
 <body id="admin_auth_subfields_structure" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -338,4 +333,13 @@
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+     $(document).ready(function() {
+        $('#subfieldtabs').tabs();
+     });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
