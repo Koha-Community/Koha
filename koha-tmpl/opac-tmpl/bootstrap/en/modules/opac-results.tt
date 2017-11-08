@@ -913,7 +913,8 @@ $(document).ready(function(){
                 return;
             }
 
-            if ( data.total > 0 ) {
+            // data.total can be either 42 or "60+"
+            if ( typeof(data.total) === 'string' && data.total.charAt(0) > 0 || typeof(data.total) === 'number' && data.total > 0 ) {
                 $recordedbooks_results.html( _( "Found %s results in RecordedBooks collection" ).format('<a href="/cgi-bin/koha/opac-recordedbooks-search.pl?q=' + escape( querystring ) + '">' + data.total + '</a>') );
             } else {
                 $recordedbooks_results.remove();
