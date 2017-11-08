@@ -64,8 +64,7 @@ sub new {
     my $self  = {};
 
     $self->{configuration} = _load_configuration(
-        C4::Context->config("interlibrary_loans"),
-        C4::Context->preference("UnmediatedILL")
+        C4::Context->config("interlibrary_loans")
       );
 
     bless $self, $class;
@@ -230,7 +229,7 @@ file to ensure we have only valid input there.
 =cut
 
 sub _load_configuration {
-    my ( $xml_config, $unmediated ) = @_;
+    my ( $xml_config ) = @_;
     my $xml_backend_dir = $xml_config->{backend_directory};
 
     # Default data structure to be returned
@@ -308,9 +307,6 @@ sub _load_configuration {
 
     # ILL Partners
     $configuration->{partner_code} = $xml_config->{partner_code} || 'ILLLIBS';
-
-    die "No DEFAULT_FORMATS has been defined in koha-conf.xml, but UNMEDIATEDILL is active."
-        if ( $unmediated && !$configuration->{default_formats}->{default} );
 
     return $configuration;
 }

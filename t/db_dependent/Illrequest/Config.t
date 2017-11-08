@@ -43,7 +43,6 @@ subtest 'Basics' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference("UnmediatedILL", 0);
     t::lib::Mocks::mock_config("interlibrary_loans", {});
 
     my $config = Koha::Illrequest::Config->new;
@@ -415,7 +414,6 @@ subtest 'Final tests' => sub {
 
     $schema->storage->txn_begin;
 
-    t::lib::Mocks::mock_preference("UnmediatedILL", 0);
     t::lib::Mocks::mock_config("interlibrary_loans", {});
 
     my $config = Koha::Illrequest::Config->new;
