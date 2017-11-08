@@ -8,7 +8,7 @@ use Test::MockModule;
 
 use Module::Load::Conditional qw( can_load );
 
-plan tests => 3;
+plan tests => 5;
 
 SKIP: {
     skip "cannot find WebService::ILS::RecordedBooks::Partner", 5
