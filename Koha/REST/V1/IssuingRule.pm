@@ -30,6 +30,7 @@ use Koha::Patrons;
 
 use Koha::Exceptions;
 use Koha::Exceptions::Category;
+use Koha::Exceptions::Item;
 use Koha::Exceptions::ItemType;
 use Koha::Exceptions::Library;
 use Koha::Exceptions::Patron;
