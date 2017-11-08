@@ -837,11 +837,11 @@ subtest 'TO_JSON() tests' => sub {
         undef, '%embed not passed, no \'metadata\' attribute' );
     is( $illreq_json->{capabilities},
         undef, '%embed not passed, no \'capabilities\' attribute' );
-    is( $illreq_json->{branch},
-        undef, '%embed not passed, no \'branch\' attribute' );
+    is( $illreq_json->{library},
+        undef, '%embed not passed, no \'library\' attribute' );
 
     $illreq_json = $illreq->TO_JSON(
-        { patron => 1, metadata => 1, capabilities => 1, branch => 1 } );
+        { patron => 1, metadata => 1, capabilities => 1, library => 1 } );
     is( $illreq_json->{patron}->{firstname},
         $patron->firstname,
         '%embed passed, \'patron\' attribute correct (firstname)' );
@@ -855,8 +855,8 @@ subtest 'TO_JSON() tests' => sub {
         'metawhat?', '%embed passed, \'metadata\' attribute correct' );
     is( $illreq_json->{capabilities},
         'capable', '%embed passed, \'capabilities\' attribute correct' );
-    is( $illreq_json->{branch}->{branchcode},
-        $library->branchcode, '%embed not passed, no \'branch\' attribute' );
+    is( $illreq_json->{library}->{branchcode},
+        $library->branchcode, '%embed not passed, no \'library\' attribute' );
 
     $schema->storage->txn_rollback;
 };

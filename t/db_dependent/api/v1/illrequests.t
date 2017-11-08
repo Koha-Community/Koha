@@ -81,13 +81,13 @@ subtest 'list() tests' => sub {
 
     # One illrequest created, returned with augmented data
     $tx = $t->ua->build_tx( GET =>
-          '/api/v1/illrequests?embed=patron,branch,capabilities,metadata' );
+          '/api/v1/illrequests?embed=patron,library,capabilities,metadata' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)->json_is(
         [
             $illrequest->TO_JSON(
-                { patron => 1, branch => 1, capabilities => 1, metadata => 1 }
+                { patron => 1, library => 1, capabilities => 1, metadata => 1 }
             )
         ]
     );

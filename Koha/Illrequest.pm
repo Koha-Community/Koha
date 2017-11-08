@@ -1018,8 +1018,8 @@ sub TO_JSON {
             $object->{capabilities} = $self->capabilities;
         }
         # Augment the request response with library details if appropriate
-        if ( $embed->{branch} ) {
-            $object->{branch} = Koha::Libraries->find(
+        if ( $embed->{library} ) {
+            $object->{library} = Koha::Libraries->find(
                 $self->branchcode
             )->TO_JSON;
         }
