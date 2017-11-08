@@ -75,6 +75,12 @@ __PACKAGE__->table("statistics");
   is_nullable: 1
   size: 10
 
+=head2 location
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
 =head2 borrowernumber
 
   data_type: 'integer'
@@ -116,6 +122,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
+  "location",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "borrowernumber",
   { data_type => "integer", is_nullable => 1 },
   "associatedborrower",
@@ -125,8 +133,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:THELVmdFFi1RCI4DfqwGIw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-08 13:32:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9xOR9IMMUNysXOlsHnRfHA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
