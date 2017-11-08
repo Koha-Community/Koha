@@ -242,8 +242,8 @@ unless( defined $invoice->{closedate} ) {
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $line{'ordernumber'};
         my @subscriptions = GetSubscriptionsId ($biblionumber);
-        my $itemcount   = $biblio->items->count;
-        my $holds_count = $biblio->holds->count;
+        my $itemcount   = $biblio ? $biblio->items->count : 0;
+        my $holds_count = $biblio ? $biblio->holds->count : 0;
         my @items = GetItemnumbersFromOrder( $ordernumber );
         my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
 
