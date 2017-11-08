@@ -24,6 +24,8 @@ sub fetch {
     return unless $bookseller;
 
     my $self = $class->new( $bookseller );
+    $self->{'basketcount'} = $self->basket_count;
+    $self->{'subscriptioncount'} = $self->subscription_count;
     $self->contacts; # TODO: This should be generated on demand.
     return $self;
 }
