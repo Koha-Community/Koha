@@ -15,7 +15,7 @@
 
 [% BLOCK norms_text %]
 [%    SWITCH norm %]
-[%        CASE 'none'           %]None
+[%        CASE 'none'           %]Select
 [%        CASE 'remove_spaces'  %]Remove spaces
 [%        CASE 'upper_case'     %]Uppercase
 [%        CASE 'lower_case'     %]Lowercase
@@ -31,11 +31,7 @@
 [% BLOCK norms_options %]
 [%# PARAMS: selected_norm %]
 [%    FOREACH norm IN valid_norms %]
-[%        IF ( norm == selected_norm ) %]
-        <option value="[% norm %]" selected="selected">[% PROCESS norms_text norm=norm %]</option>
-[%        ELSE %]
         <option value="[% norm %]">[% PROCESS norms_text norm=norm %]</option>
-[%        END %]
 [%    END %]
 [% END %]
 
@@ -45,7 +41,7 @@
 [%#       Fallback to 'none' %]
 [%        selected_norm = 'none' %]
 [%    END %]
-    <select id="[% id %]" name="[% name %]">
+    <select id="[% id %]" name="[% name %]" onchange="AddNormalizationValue(this);">
 [%    PROCESS norms_options selected_norm=selected_norm %]
     </select>
 [% END %]
@@ -195,6 +191,13 @@ function CheckRuleForm(f) {
     }
 }
 
+function AddNormalizationValue(select) {
+  var input = $(select).prev();
+  if (select.value != 'none') {
+    input.val( input.val() +" "+ select.value );
+  }
+}
+
 //]]>
 </script>
 <style type="text/css">
@@ -332,8 +335,13 @@ function CheckRuleForm(f) {
               [% FOREACH norm IN component.norms %]
               <li id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]">
                 <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
+                <input type="text" id="mp_[% norm.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm" 
+                       name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                       value="[% norm.norm |html %]"
+                       size="20" maxlength="50" />
+                or
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
-                [% PROCESS norms_select selected_norm=norm.norm id="mp_${norm.mp_num}_c_${component.comp_num}_n__${norm.norm_num}_norm" name="mp_${matchpoint.mp_num}_c_${component.comp_num}_n_${norm.norm_num}_norm" %]
+                [% PROCESS norms_select selected_norm=norm.norm id="mp_${norm.mp_num}_c_${component.comp_num}_n__${norm.norm_num}_add" name="mp_${matchpoint.mp_num}_c_${component.comp_num}_n_${norm.norm_num}_add" %]
               </li>
               [% END %]
         </ol>
@@ -381,7 +389,8 @@ function CheckRuleForm(f) {
           </li>
             <li id="mp_1_c_1_n_1">
               <label for="mp_1_c_1_n_1_norm">Normalization rule: </label>
-                [% PROCESS norms_select selected_norm="none" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" %]
+              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxlength="50" />
+                [% PROCESS norms_select selected_norm="none" id="mp_1_c_1_n_1_add" name="mp_1_c_1_n_1_add" %]
             </li>
         </ol>
     </fieldset>
@@ -438,8 +447,13 @@ function CheckRuleForm(f) {
           [% FOREACH norm IN src_component.norms %]
             <li id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]">
               <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                    value="[% norm.norm |html %]"
+                    size="20" maxlength="50" />
+                or
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
-                [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm" name="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_norm" %]
+                [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_add" name="mc_${matchcheck.mc_num}_src_c_${src_component.comp_num}_n_${norm.norm_num}_add" %]
             </li>
           [% END %]
         </ol>
@@ -480,8 +494,13 @@ function CheckRuleForm(f) {
           [% FOREACH norm IN tgt_component.norms %]
             <li id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]">
               <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                    value="[% norm.norm |html %]"
+                    size="20" maxlength="50" />
+              or
                 [%# Note: Following directive in one line, otherwise we have translatabiltiy problems %]
-                [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm" name="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_norm" %]
+                [% PROCESS norms_select selected_norm=norm.norm id="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_add" name="mc_${matchcheck.mc_num}_tgt_c_${tgt_component.comp_num}_n_${norm.norm_num}_add" %]
             </li>
           [% END %]
         </ol>
@@ -517,7 +536,9 @@ function CheckRuleForm(f) {
           </li>
             <li id="mc_1_src_c_1_n_1">
               <label for="mc_1_src_c_1_n_1_norm">Normalization rule: </label>
-i                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" %]
+              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxlength="50" />
+              or
+                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n_1_add" name="mc_1_src_c_1_n_1_add" %]
             </li>
         </ol>
       </fieldset>
@@ -543,7 +564,9 @@ i                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n
           </li>
             <li id="mc_1_tgt_c_1_n_1">
               <label for="mc_1_tgt_c_1_n_1_norm">Normalization rule: </label>
-                [% PROCESS norms_select selected_norm="none" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" %]
+              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+              or
+                [% PROCESS norms_select selected_norm="none" id="mc_1_tgt_c_1_n_1_add" name="mc_1_tgt_c_1_n_1_add" %]
             </li>
         </ol>
       </fieldset>
@@ -654,7 +677,9 @@ i                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n
           </li>
             <li id="mp_num_c_1_n_1">
               <label for="mp_num_c_1_n_1_norm">Normalization rule: </label>
-                [% PROCESS norms_select selected_norm="none" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" %]
+              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxlength="50" />
+              or
+                [% PROCESS norms_select selected_norm="none" id="mp_num_c_1_n_1_add" name="mp_num_c_1_n_1_add" %]
             </li>
         </ol>
       </fieldset>
@@ -687,7 +712,9 @@ i                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n
         </li>
           <li id="mc_num_src_c_1_n_1">
             <label for="mc_num_src_c_1_n_1_norm">Normalization rule: </label>
-               [% PROCESS norms_select selected_norm="none" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" %]
+            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxlength="50" />
+            or
+               [% PROCESS norms_select selected_norm="none" id="mc_num_src_c_1_n_1_add" name="mc_num_src_c_1_n_1_add" %]
           </li>
       </ol>
     </fieldset>
@@ -712,7 +739,9 @@ i                [% PROCESS norms_select selected_norm="none" id="mc_1_src_c_1_n
         </li>
           <li id="mc_num_tgt_c_1_n_1">
             <label for="mc_num_tgt_c_1_n_1_norm">Normalization rule: </label>
-               [% PROCESS norms_select selected_norm="none" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" %]
+            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+            or
+               [% PROCESS norms_select selected_norm="none" id="mc_num_tgt_c_1_n_1_add" name="mc_num_tgt_c_1_n_1_add" %]
           </li>
       </ol>
     </fieldset>
