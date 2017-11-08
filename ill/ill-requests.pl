@@ -217,12 +217,6 @@ if ( $backends_available ) {
             exit;
         };
     } elsif ( $op eq 'illlist') {
-        # Display all current ILLs
-        my $requests = $illRequests->search();
-
-        $template->param(
-            requests => $requests
-        );
 
         # If we receive a pre-filter, make it available to the template
         my $possible_filters = ['borrowernumber'];
@@ -255,8 +249,7 @@ $template->param(
     backends   => $backends,
     media      => [ "Book", "Article", "Journal" ],
     query_type => $op,
-    branches   => Koha::Libraries->search,
-    here_link  => "/cgi-bin/koha/ill/ill-requests.pl"
+    branches   => Koha::Libraries->search
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

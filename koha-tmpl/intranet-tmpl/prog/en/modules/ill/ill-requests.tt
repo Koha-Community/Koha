@@ -2,6 +2,21 @@
 [% USE Koha %]
 [% USE KohaDates %]
 
+[% columns = [ 'metadata_Author', 'metadata_Title', 'borrowername', 'biblio_id', 'library', 'status', 'updated', 'illrequest_id', 'action' ] %]
+
+[% BLOCK translate_column %]
+[%-  SWITCH column -%]
+[%-  CASE 'metadata_Author' -%]Author
+[%-  CASE 'metadata_Title'  -%]Title
+[%-  CASE 'borrowername'    -%]Patron
+[%-  CASE 'biblio_id'       -%]Biblio ID
+[%-  CASE 'library'         -%]Library
+[%-  CASE 'status'          -%]Status
+[%-  CASE 'updated'         -%]Updated on
+[%-  CASE 'illrequest_id'   -%]Request number
+[%-  END -%]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -18,8 +33,8 @@
         var ignore = [
             'accessurl',
             'backend',
+            'branchcode',
             'completed',
-            'branch',
             'capabilities',
             'cost',
             'medium',
@@ -45,7 +60,7 @@
             'metadata_Title',
             'borrowername',
             'biblio_id',
-            'branchcode',
+            'library',
             'status',
             'updated',
             'illrequest_id',
@@ -98,23 +113,6 @@
         core.map(function(thisCore) {
             allCols[thisCore] = 1;
         });
-        var unionColumns = function(row) {
-            Object.keys(row).forEach(function(col) {
-                if (ignore.indexOf(col) == -1) {
-                    allCols[col] = 1;
-                }
-            });
-        };
-
-        // Some rows may not have fields that other rows have,
-        // so make sure all rows have the same fields
-        var fillMissing = function(row) {
-            Object.keys(allCols).forEach(function(thisCol) {
-                row[thisCol] = (!row.hasOwnProperty(thisCol)) ?
-                    null :
-                    row[thisCol];
-            });
-        };
 
         // Strip the expand prefix if it exists, we do this for display
         var stripPrefix = function(value) {
@@ -134,6 +132,11 @@
                 '</a>';
         };
 
+        // Our 'render' function for the library name
+        var createLibrary = function(data, type, row) {
+            return row.library.branchname;
+        };
+
         // Render function for request ID
         var createRequestId = function(data, type, row) {
             return row.id_prefix + row.illrequest_id;
@@ -149,28 +152,20 @@
                 switch( status_name ) {
                     case "New request":
                         return _("New request");
-                        break;
                     case "Requested":
                         return _("Requested");
-                        break;
                     case "Requested from partners":
                         return _("Requested from partners");
-                        break;
                     case "Request reverted":
                         return _("Request reverted");
-                        break;
                     case "Queued request":
                         return _("Queued request");
-                        break;
                     case "Cancellation requested":
                         return _("Cancellation requested");
-                        break;
                     case "Completed":
                         return _("Completed");
-                        break;
                     case "Delete request":
                         return _("Delete request");
-                        break;
                     default:
                         return status_name;
                 }
@@ -209,18 +204,11 @@
             biblio_id: {
                 name: _("Biblio ID")
             },
-            branchcode: {
-                name: _("Library")
+            library: {
+                name: _("Library"),
+                func: createLibrary
             }
         };
-
-        // Helper for handling prefilter column names
-        function toColumnName(myVal) {
-            return myVal
-                .replace(/^filter/, '')
-                .replace(/([A-Z])/g, "_$1")
-                .replace(/^_/,'').toLowerCase();
-        }
 
         // Toggle request attributes in Illview
         $('#toggle_requestattributes').on('click', function(e) {
@@ -248,7 +236,7 @@
         // Get our data from the API and process it prior to passing
         // it to datatables
         var ajax = $.ajax(
-            '/api/v1/illrequests?embed=metadata,patron,capabilities,branch'
+            '/api/v1/illrequests?embed=metadata,patron,capabilities,library'
             ).done(function() {
                 var data = JSON.parse(ajax.responseText);
                 // Make a copy, we'll be removing columns next and need
@@ -260,34 +248,19 @@
                 // of all column names
                 $.each(dataCopy, function(k, row) {
                     expandExpand(row);
-                    unionColumns(row);
                 });
+
                 // Append any extra columns we need to tag on
                 if (extra.length > 0) {
                     extra.forEach(function(thisExtra) {
                         allCols[thisExtra] = 1;
                     });
                 }
-                // Different requests will have different columns,
-                // make sure they all have the same
-                $.each(dataCopy, function(k, row) {
-                    fillMissing(row);
-                });
 
                 // Assemble an array of column definitions for passing
                 // to datatables
                 var colData = [];
                 Object.keys(allCols).forEach(function(thisCol) {
-                    // We may have defined a pretty name for this column
-                    var colName = (
-                        specialCols.hasOwnProperty(thisCol) &&
-                        specialCols[thisCol].hasOwnProperty('name')
-                    ) ?
-                        specialCols[thisCol].name :
-                        thisCol;
-                    // Create the table header for this column
-                    var str = '<th>' + stripPrefix(colName) + '</th>';
-                    $(str).appendTo('#illview-header');
                     // Create the base column object
                     var colObj = {
                         name: thisCol,
@@ -306,84 +279,25 @@
                     colData.push(colObj);
                 });
 
-                // Create the toggle links for all metadata fields
-                var links = [];
-                expanded.metadata.forEach(function(thisExpanded) {
-                    if (core.indexOf(thisExpanded) == -1) {
-                        links.push(
-                            '<a href="#" class="toggle-vis" data-column="' +
-                            thisExpanded + '">' + stripPrefix(thisExpanded) +
-                            '</a>'
-                        );
-                    }
-                });
-                $('#column-toggle').append(links.join(' | '));
-
                 // Initialise the datatable
-                var myTable = $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
-                    aoColumnDefs: [  // Last column shouldn't be sortable or searchable
+                $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
+                    'aoColumnDefs': [  // Last column shouldn't be sortable or searchable
                         {
-                            aTargets: [ 'action' ],
-                            bSortable: false,
-                            bSearchable: false
+                            'aTargets': [ 'action' ],
+                            'bSortable': false,
+                            'bSearchable': false
                         },
                     ],
-                    aaSorting: [[ 6, 'desc' ]], // Default sort, updated descending
-                    processing: true, // Display a message when manipulating
-                    language: {
-                        loadingRecords: "Please wait - loading requests...",
-                        zeroRecords: "No requests were found"
-                    },
-                    iDisplayLength: 10, // 10 results per page
-                    sPaginationType: "full_numbers", // Pagination display
-                    deferRender: true, // Improve performance on big datasets
-                    data: dataCopy,
-                    columns: colData,
-                    originalData: data // Enable render functions to access
+                    'aaSorting': [[ 6, 'desc' ]], // Default sort, updated descending
+                    'processing': true, // Display a message when manipulating
+                    'iDisplayLength': 10, // 10 results per page
+                    'sPaginationType': "full_numbers", // Pagination display
+                    'deferRender': true, // Improve performance on big datasets
+                    'data': dataCopy,
+                    'columns': colData,
+                    'originalData': data // Enable render functions to access
                                        // our original data
                 }));
-
-                // Reset columns to default
-                var resetColumns = function() {
-                    Object.keys(allCols).forEach(function(thisCol) {
-                        myTable.column(thisCol + ':name').visible(core.indexOf(thisCol) != -1);
-                    });
-                    myTable.columns.adjust().draw(false);
-                };
-
-                // Handle the click event on a toggle link
-                $('a.toggle-vis').on('click', function(e) {
-                    e.preventDefault();
-                    var column = myTable.column(
-                        $(this).data('column') + ':name'
-                    );
-                    column.visible(!column.visible());
-                });
-
-                // Reset column toggling
-                $('#reset-toggle').click(function() {
-                    resetColumns();
-                });
-
-                // Handle a prefilter request and do the prefiltering
-                var filters = $('#ill-requests').data();
-                if (typeof filters !== 'undefined') {
-                    var filterNames = Object.keys(filters).filter(
-                        function(thisData) {
-                            return thisData.match(/^filter/);
-                        }
-                    );
-                    filterNames.forEach(function(thisFilter) {
-                        var filterName = toColumnName(thisFilter) + ':name';
-                        var regex = '^'+filters[thisFilter]+'$';
-                        myTable.columns(filterName).search(regex, true, false);
-                    });
-                    myTable.draw();
-                }
-
-                // Initialise column hiding
-                resetColumns();
-
             }
         );
 
@@ -464,8 +378,8 @@
                   [% END %]
                     <!-- Start of GENERIC_EMAIL case -->
                     [% IF whole.value.partners %]
-                       [% ill_url = here_link _ "?method=illview&illrequest_id=" _ request.illrequest_id %]
-                        <form method="POST" action=[% here_link %]>
+                       [% ill_url = "/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=" _ request.illrequest_id %]
+                        <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                             <fieldset class="rows">
                                 <legend>Interlibrary loan request details</legend>
                                 <ol>
@@ -516,7 +430,7 @@
                 <!-- generic_confirm ends here -->
 
                 [% ELSIF query_type == 'edit_action' %]
-                    <form method="POST" action=[% here_link %]>
+                    <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
                         <fieldset class="rows">
                             <legend>Request details</legend>
                             <ol>
@@ -700,18 +614,13 @@
                     <div id="results">
                         <h3>Details for all requests</h3>
 
-                        <div id="column-toggle">
-                            Toggle additional columns:
-                        </div>
-                        <div id="reset-toggle"><a href="#">Reset toggled columns</a></div>
-
-                        <table
-                            [% FOREACH filter IN prefilters %]
-                            data-filter-[% filter.name %]="[% filter.value %]"
-                            [% END %]
-                            id="ill-requests">
+                        <table id="ill-requests">
                             <thead>
-                                <tr id="illview-header"></tr>
+                                <tr id="illview-header">
+                                [% FOR column IN columns %]
+                                    <th>[% PROCESS translate_column column=column %]</th>
+                                [% END %]
+                                </tr>
                             </thead>
                             <tbody id="illview-body">
                             </tbody>
