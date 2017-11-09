@@ -1,44 +1,11 @@
+[% SET footerjs = 1 %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Koha usage statistics</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" href="[% interface %]/lib/leaflet/leaflet.css" />
-<script src="[% interface %]/lib/leaflet/leaflet.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-    function positionMap() {
-        var tbh = $("#mapid");
-        var mapContainer = tbh.parent();
-        mapContainer.css('position', 'relative');
-        mapContainer.css('min-height', tbh.outerHeight(true));
-        tbh.css('position', 'absolute');
-        tbh.css('right', 0);
-
-        var offsetTop = mapContainer.offset().top;
-        var s = parseInt($(window).scrollTop(), 10);
-        tbh.css('top', '').css('bottom', '');
-        if (s > offsetTop) {
-            var mapContainerOffsetBottom = offsetTop + mapContainer.innerHeight();
-            if (s + tbh.outerHeight(true) > mapContainerOffsetBottom) {
-                tbh.css('bottom', 0);
-            } else {
-                tbh.css('top', s - offsetTop);
-            }
-        } else {
-            tbh.css('top', 0);
-        }
-    }
-
-    $(document).ready(function() {
-        $(window).scroll(positionMap);
-        positionMap();
-    });
-//]]>
-</script>
 </head>
 
 <body id="admin_usage_statistics" class="admin">
@@ -252,8 +219,46 @@
             <a class="cancel" href="/cgi-bin/koha/admin/usage_statistics.pl">Cancel</a>
         </fieldset>
     </form>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
 
-    <script>
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script src="[% interface %]/lib/leaflet/leaflet.js"></script>
+    <script type="text/javascript">
+        function positionMap() {
+            var tbh = $("#mapid");
+            var mapContainer = tbh.parent();
+            mapContainer.css('position', 'relative');
+            mapContainer.css('min-height', tbh.outerHeight(true));
+            tbh.css('position', 'absolute');
+            tbh.css('right', 0);
+
+            var offsetTop = mapContainer.offset().top;
+            var s = parseInt($(window).scrollTop(), 10);
+            tbh.css('top', '').css('bottom', '');
+            if (s > offsetTop) {
+                var mapContainerOffsetBottom = offsetTop + mapContainer.innerHeight();
+                if (s + tbh.outerHeight(true) > mapContainerOffsetBottom) {
+                    tbh.css('bottom', 0);
+                } else {
+                    tbh.css('top', s - offsetTop);
+                }
+            } else {
+                tbh.css('top', 0);
+            }
+        }
+
+        $(document).ready(function() {
+            $(window).scroll(positionMap);
+            positionMap();
+        });
+
         var map = L.map('mapid').setView([0,0], 1);
 
         L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -329,11 +334,5 @@
         });
 
     </script>
-
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

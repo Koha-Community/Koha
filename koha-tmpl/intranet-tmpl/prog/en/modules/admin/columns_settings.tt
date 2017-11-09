@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
 [% BLOCK pagelist %]
 <div class="pagelist">
@@ -87,22 +88,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Columns settings</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    $(document).ready( function() {
-        var accordion = $( "#modules" ).accordion({
-            collapsible: true,
-            autoHeight: false,
-            header: "h3",
-          [%- IF panel -%]
-            [%# we were asked to show a specific panel, usually on update %]
-            active: [%- panel -%]
-          [%- ELSE -%]
-            active: false
-          [%- END -%]
-        });
-    });
-</script>
 </head>
+
 <body id="admin_tables" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -176,4 +163,23 @@
       [% INCLUDE 'admin-menu.inc' %]
     </div>
   </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function() {
+            var accordion = $( "#modules" ).accordion({
+                collapsible: true,
+                autoHeight: false,
+                header: "h3",
+              [%- IF panel -%]
+                [%# we were asked to show a specific panel, usually on update %]
+                active: [%- panel -%]
+              [%- ELSE -%]
+                active: false
+              [%- END -%]
+            });
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

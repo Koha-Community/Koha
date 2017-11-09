@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
 <div class="pluginlist">
 [% FOREACH plugin IN plugins %]
@@ -21,53 +22,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Did you mean?</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script>
-    $(document).ready(function() {
-        $( ".pluginlist" ).sortable();
-        $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
-            .find( ".pluginname" )
-                    .addClass( "ui-widget-header ui-corner-all" )
-                    .end()
-            .find( ".plugindesc" );
-        $(".save-all").on("click",function(e){
-            e.preventDefault();
-            yesimeant();
-        });
-        $(".force_reload").on("click",function(e){
-            e.preventDefault();
-            window.location.reload(true);
-        });
-    });
-
-    function yesimeant() {
-        var OPACdidyoumean = serialize_plugins('opac');
-        var INTRAdidyoumean = serialize_plugins('intranet');
-
-        var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean) + "&pref_INTRAdidyoumean=" + encodeURIComponent(INTRAdidyoumean);
-
-        $.ajax({
-            data: data,
-            type: 'POST',
-            url: '/cgi-bin/koha/svc/config/systempreferences/',
-            success: function () { alert("Successfully saved configuration"); },
-        });
-        return false;
-    }
-
-    function serialize_plugins(interface) {
-        var serializedconfig = '[';
-        $('#didyoumean' + interface + ' .pluginlist .plugin').each(function(index) {
-            var name = $(this).find('.pluginlabel').text();
-            var enabled = $(this).find('input:checkbox:checked').length ?
-                          ', "enabled": 1' : '';
-            serializedconfig += '{ "name": "' + name + '"' + enabled + '}, ';
-            });
-            serializedconfig = serializedconfig.substring(0, serializedconfig.length - 2);
-            serializedconfig += ']';
-            return serializedconfig;
-    }
-</script>
 </head>
+
 <body id="admin_didyoumean" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -110,4 +66,54 @@
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $( ".pluginlist" ).sortable();
+            $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+                .find( ".pluginname" )
+                        .addClass( "ui-widget-header ui-corner-all" )
+                        .end()
+                .find( ".plugindesc" );
+            $(".save-all").on("click",function(e){
+                e.preventDefault();
+                yesimeant();
+            });
+            $(".force_reload").on("click",function(e){
+                e.preventDefault();
+                window.location.reload(true);
+            });
+        });
+
+        function yesimeant() {
+            var OPACdidyoumean = serialize_plugins('opac');
+            var INTRAdidyoumean = serialize_plugins('intranet');
+
+            var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean) + "&pref_INTRAdidyoumean=" + encodeURIComponent(INTRAdidyoumean);
+
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: '/cgi-bin/koha/svc/config/systempreferences/',
+                success: function () { alert("Successfully saved configuration"); },
+            });
+            return false;
+        }
+
+        function serialize_plugins(interface) {
+            var serializedconfig = '[';
+            $('#didyoumean' + interface + ' .pluginlist .plugin').each(function(index) {
+                var name = $(this).find('.pluginlabel').text();
+                var enabled = $(this).find('input:checkbox:checked').length ?
+                              ', "enabled": 1' : '';
+                serializedconfig += '{ "name": "' + name + '"' + enabled + '}, ';
+                });
+                serializedconfig = serializedconfig.substring(0, serializedconfig.length - 2);
+                serializedconfig += ']';
+                return serializedconfig;
+        }
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
