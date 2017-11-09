@@ -175,11 +175,11 @@ subtest 'update() tests' => sub {
     $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)->status_is(201);
-    is(C4::Labels::SheetManager::getSheetByName('Sheetilian')->getName(),
-       'Sheetilian', 'After updating Sheetilian to Simplex,'.
-       'did not find Sheetilian');
-    is(C4::Labels::SheetManager::getSheetByName('Simplex'),
-       undef, 'After update, found sheet Simplex');
+    is(C4::Labels::SheetManager::getSheetByName('Simplex')->getName(),
+       'Simplex', 'After updating Sheetilian to Simplex,'.
+       'After update, found sheet Simplex');
+    is(C4::Labels::SheetManager::getSheetByName('Sheetilian'),
+       undef, 'Did not find Sheetilian');
 
     $schema->storage->txn_rollback;
 };
