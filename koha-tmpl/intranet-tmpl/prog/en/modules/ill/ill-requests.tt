@@ -2,21 +2,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
 
-[% columns = [ 'metadata_Author', 'metadata_Title', 'borrowername', 'biblio_id', 'library', 'status', 'updated', 'illrequest_id', 'action' ] %]
-
-[% BLOCK translate_column %]
-[%-  SWITCH column -%]
-[%-  CASE 'metadata_Author' -%]Author
-[%-  CASE 'metadata_Title'  -%]Title
-[%-  CASE 'borrowername'    -%]Patron
-[%-  CASE 'biblio_id'       -%]Biblio ID
-[%-  CASE 'library'         -%]Library
-[%-  CASE 'status'          -%]Status
-[%-  CASE 'updated'         -%]Updated on
-[%-  CASE 'illrequest_id'   -%]Request number
-[%-  END -%]
-[% END %]
-
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -66,9 +51,6 @@
             'illrequest_id',
             'action'
         ];
-
-        // Extra fields that we need to tack on to the end
-        var extra = [ 'action' ];
 
         // Remove any fields we're ignoring
         var removeIgnore = function(dataObj) {
@@ -250,13 +232,6 @@
                     expandExpand(row);
                 });
 
-                // Append any extra columns we need to tag on
-                if (extra.length > 0) {
-                    extra.forEach(function(thisExtra) {
-                        allCols[thisExtra] = 1;
-                    });
-                }
-
                 // Assemble an array of column definitions for passing
                 // to datatables
                 var colData = [];
@@ -283,7 +258,7 @@
                 $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
                     'aoColumnDefs': [  // Last column shouldn't be sortable or searchable
                         {
-                            'aTargets': [ 'action' ],
+                            'aTargets': [ 'actions' ],
                             'bSortable': false,
                             'bSearchable': false
                         },
@@ -365,16 +340,20 @@
                 [% ELSIF query_type == 'generic_confirm' %]
                     <h1>Place request with partner libraries</h1>
                   [% IF error %]
-                      <div class="alert">
                     [% IF error == 'no_target_email' %]
-                          No target email addresses found. Either select at least
-                          one partner or check your ILL partner library records.
+                        <div class="alert">
+                            No target email addresses found. Either select at least
+                            one partner or check your ILL partner library records.
+                        </div>
                     [% ELSIF error == 'no_library_email' %]
-                          Your library has no usable email address. Please set it.
+                        <div class="alert">
+                            Your library has no usable email address. Please set it.
+                        </div>
                     [% ELSIF error == 'unkown_error' %]
-                          Unknown error processing your request. Contact your administrator.
+                        <div class="alert">
+                            Unknown error processing your request. Contact your administrator.
+                        </div>
                     [% END %]
-                      </div>
                   [% END %]
                     <!-- Start of GENERIC_EMAIL case -->
                     [% IF whole.value.partners %]
@@ -617,9 +596,15 @@
                         <table id="ill-requests">
                             <thead>
                                 <tr id="illview-header">
-                                [% FOR column IN columns %]
-                                    <th>[% PROCESS translate_column column=column %]</th>
-                                [% END %]
+                                    <th>Author</th>
+                                    <th>Title</th>
+                                    <th>Patron</th>
+                                    <th>Biblio ID</th>
+                                    <th>Library</th>
+                                    <th>Status</th>
+                                    <th>Updated on</th>
+                                    <th>Request number</th>
+                                    <th class="actions"></th>
                                 </tr>
                             </thead>
                             <tbody id="illview-body">
