@@ -503,6 +503,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 illrequests
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Illrequest>
+
+=cut
+
+__PACKAGE__->has_many(
+  "illrequests",
+  "Koha::Schema::Result::Illrequest",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 items_holdingbranches
 
 Type: has_many
@@ -604,8 +619,8 @@ Composing rels: L</branchrelations> -> categorycode
 __PACKAGE__->many_to_many("categorycodes", "branchrelations", "categorycode");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-06-03 21:53:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S44besPbFRnPJpyHRK+aSQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-09 11:42:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LmN2FlbKiZTRX+egCHuDjQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
