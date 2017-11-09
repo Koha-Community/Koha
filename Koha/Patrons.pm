@@ -168,8 +168,9 @@ sub anonymise_issue_history {
     # The anonymisation should not fail quietly if AnonymousPatron is not a valid entry
     # Set it to undef (NULL)
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
-    my $old_issues_to_anonymise = $self->search_related(
-        'old_issues',
+    my $nb_rows = 0;
+    while ( my $patron = $self->next ) {
+        my $old_issues_to_anonymise = $patron->old_checkouts->search(
         {
             (
                 $older_than_date
@@ -178,9 +179,11 @@ sub anonymise_issue_history {
                 : ()
             )
         }
-    );
-    my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
-    $old_issues_to_anonymise->update( { 'old_issues.borrowernumber' => $anonymous_patron } );
+        );
+        my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
+        $nb_rows += $old_issues_to_anonymise->update( { 'old_issues.borrowernumber' => $anonymous_patron } );
+    }
+    return $nb_rows;
 }
 
 =head3 type
