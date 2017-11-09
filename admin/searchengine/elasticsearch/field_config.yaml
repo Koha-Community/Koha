@@ -39,6 +39,9 @@ search:
         search_analyzer: analyser_phrase
       raw:
         type: keyword
+      lc_raw:
+        type: keyword
+        normalizer: my_normalizer
     copy_to: _all
 # Facets
 facet:

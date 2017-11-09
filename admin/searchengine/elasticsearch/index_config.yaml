@@ -25,6 +25,9 @@ index:
         type: custom
         filter:
           - icu_folding
+      my_normalizer:
+        type: custom
+        char_filter: icu_normalizer
     char_filter:
       # The punctuation filter is used to remove any punctuation chars in fields that don't use icu_tokenizer.
       punctuation:
