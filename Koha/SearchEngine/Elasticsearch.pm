@@ -142,6 +142,12 @@ sub get_elasticsearch_settings {
     my $settings = {
         index => {
             analysis => {
+                normalizer => {
+                    my_normalizer => {
+                        type => "custom",
+                        char_filter => ['icu_normalizer'],
+                    }
+                },
                 analyzer => {
                     analyser_phrase => {
                         tokenizer => 'icu_tokenizer',
@@ -273,6 +279,10 @@ sub _elasticsearch_mapping_for_default {
             },
             raw => {
                 type    => "keyword",
+            },
+            lc_raw => {
+                type   => "keyword",
+                normalizer => "my_normalizer",
             }
         },
     };
