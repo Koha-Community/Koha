@@ -525,6 +525,10 @@ my $locations = Koha::AuthorisedValues->search({
     category => 'LOC',
     branchcode => $branch eq '*' ? undef : $branch
 });
+my $sub_locations = Koha::AuthorisedValues->search({
+    category => 'SUBLOC',
+    branchcode => $branch eq '*' ? undef : $branch
+});
 my $genres = Koha::AuthorisedValues->search({
     category => 'GENRE',
     branchcode => $branch eq '*' ? undef : $branch
@@ -715,6 +719,7 @@ $template->param(
                         itemtypeloop => $itemtypes,
                         ccodeloop => $ccodes,
                         locloop => $locations,
+                        sublocloop => $sub_locations,
                         genreloop => $genres,
                         circlevelloop => $circlevels,
                         reservelevelloop => $reservelevels,
