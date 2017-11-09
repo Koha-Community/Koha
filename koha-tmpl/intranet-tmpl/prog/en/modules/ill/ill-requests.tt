@@ -481,12 +481,14 @@
 
                     <div class="dialog alert">
                         <h3>Are you sure you wish to delete this request?</h3>
-                        <p>
-                            <a class="btn btn-default btn-sm approve" href="?method=delete&amp;illrequest_id=[% request.id %]&amp;confirmed=1"><i class="fa fa-fw fa-check"></i>Yes</a>
-                            <a class="btn btn-default btn-sm deny" href="?method=illview&amp;illrequest_id=[% request.id %]"><i class="fa fa-fw fa-remove"></i>No</a>
-                        </p>
+                        <form action="/cgi-bin/koha/ill/ill-requests.pl" method="post">
+                            <input type="hidden" name="method" value="delete" />
+                            <input type="hidden" name="confirmed" value="1" />
+                            <input type="hidden" name="illrequest_id" value="[% request.id %]" />
+                            <button type="submit" class="btn btn-default btn-sm approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                        </form>
+                        <a class="btn btn-default btn-sm deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
                     </div>
-
 
                 [% ELSIF query_type == 'illview' %]
                     [% actions = request.available_actions %]
