@@ -419,19 +419,9 @@
                                     <input name="biblio_id" id="biblio_id" type="text" value="[% request.biblio_id %]">
                                 </li>
                                 <li class="branchcode">
-                                    <label for="branchcode" class="branchcode">Library:</label>
-                                    <select name="branchcode" id="branch">
-                                        [% FOREACH branch IN branches %]
-                                            [% IF ( branch.branchcode == request.branchcode ) %]
-                                                <option value="[% branch.branchcode %]" selected="selected">
-                                                    [% branch.branchname %]
-                                                </option>
-                                            [% ELSE %]
-                                                <option value="[% branch.branchcode %]">
-                                                    [% branch.branchname %]
-                                                </option>
-                                            [% END %]
-                                        [% END %]
+                                    <label for="library" class="branchcode">Library:</label>
+                                    <select name="branchcode" id="library">
+                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => request.branchcode ) %]
                                     </select>
                                 </li>
                                 <li class="status">

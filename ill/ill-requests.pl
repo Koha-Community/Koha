@@ -249,7 +249,7 @@ $template->param(
     backends   => $backends,
     media      => [ "Book", "Article", "Journal" ],
     query_type => $op,
-    branches   => Koha::Libraries->search
+    branches   => scalar Koha::Libraries->search,
 );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );
