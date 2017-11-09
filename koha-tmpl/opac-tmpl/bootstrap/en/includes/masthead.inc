@@ -68,8 +68,8 @@
                                             [% END %]
                                         [% ELSE %]
                                             <li role="presentation"><a href="#" tabindex="-1" class="menu-inactive" role="menuitem">No private lists</a></li>
-                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form" tabindex="-1" role="menuitem" class="listmenulink">New list</a></li>
                                         [% END %]
+                                            <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=add_form" tabindex="-1" role="menuitem" class="listmenulink">New list</a></li>
                                     [% ELSE %]
                                         [% IF Koha.Preference('casAuthentication') %]
                                             [%# CAS authentication is too complicated for modal window %]
