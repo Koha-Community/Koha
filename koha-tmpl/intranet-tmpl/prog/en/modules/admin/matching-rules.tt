@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Record matching rules
 [% IF ( matching_rule_form ) %]
@@ -46,153 +47,6 @@
     </select>
 [% END %]
 
-<script type="text/javascript">
-//<![CDATA[
-
-var maxMatchPoint = [% max_matchpoint %];
-var maxMatchCheck = [% max_matchcheck %];
-
-function InsertMatchpoint(loc, index) {
-    var original= $("#"+index);
-    var clone = original.clone();
-    clone.show();
-
-    // update IDs and form names
-    maxMatchPoint++;
-    clone.attr('id', 'mp_' + maxMatchPoint);
-    $("span.counter",clone).html(maxMatchPoint);
-    $("label",clone).each(function(){
-      var s = $(this).attr("for");
-        if (s.match(/mp_num/)) {
-            $(this).attr("for",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
-        }
-    });
-
-    $("div",clone).each(function(){
-      var s = $(this).attr("id");
-        if (s.match(/mp_num/)) {
-            $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
-        }
-    });
-    $("input",clone).each(function(){
-        var s = $(this).attr("id");
-        if(s.match(/mp_num/)){
-          $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
-        }
-
-        var s = $(this).attr("name");
-        if(s.match(/mp_num/)){
-          $(this).attr("name",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
-        }
-    });
-    $("#match_points").append(clone);
-}
-
-function InsertMatchcheck(loc, index) {
-    var original= $("#"+index);
-    var clone = original.clone();
-    clone.show();
-
-    // update IDs and form names
-    maxMatchCheck++;
-    clone.attr('id', 'mc_' + maxMatchCheck);
-    $("span.counter",clone).html(maxMatchCheck);
-    $("label",clone).each(function(){
-      var s = $(this).attr("for");
-        if (s.match(/mc_num/)) {
-            $(this).attr("for",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
-        }
-    });
-
-    $("div",clone).each(function(){
-      var s = $(this).attr("id");
-        if (s.match(/mc_num/)) {
-            $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
-        }
-    });
-    $("input",clone).each(function(){
-        var s = $(this).attr("id");
-        if(s.match(/mc_num/)){
-          $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
-        }
-
-        var s = $(this).attr("name");
-        if(s.match(/mc_num/)){
-          $(this).attr("name",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
-        }
-    });
-    $("#match_checks").append(clone);
-}
-
-function DeleteMatchpoint(loc) {
-    $(loc).parent().parent().parent().remove();
-    if($(".matchgroup",$("#match_points")).length == 0){
-      maxMatchPoint = 0;
-      $("#addMatchPoint").show();
-    }
-}
-
-function DeleteMatchcheck(loc) {
-    $(loc).parent().parent().parent().remove();
-    if($(".matchgroup",$("#match_checks")).length == 0){
-      maxMatchCheck = 0;
-      $("#addMatchCheck").show();
-    }
-}
-
-function DoCancel(f) {
-  f.op.value='';
-  document.Aform.submit();
-}
-
-function CheckMatchingRuleForm(f) {
-    var ok=1;
-    var _alertString="";
-    var alertString2;
-    if (f.code.value.length==0) {
-        _alertString += "\n- " + _("Matching rule code missing");
-    }
-    if (f.description.value.length==0) {
-        _alertString += "\n- " + _("Description missing");
-    }
-    if (f.threshold.value.length==0) {
-        _alertString += "\n- " + _("Threshold missing");
-    }
-    if (_alertString.length==0) {
-        document.Aform.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
-
-function CheckRuleForm(f) {
-    var ok=1;
-    var _alertString="";
-    var alertString2;
-    if (f.sort_rule.value.length==0) {
-        _alertString += "\n- " + _("Filing rule code missing");
-    }
-    if (f.description.value.length==0) {
-        _alertString += "\n- " + _("Description missing");
-    }
-    if (f.sort_routine.value.length==0) {
-        _alertString += "\n- " + _("Sort routine missing");
-    }
-    if (_alertString.length==0) {
-        document.Aform.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += _alertString;
-        alert(alertString2);
-    }
-}
-
-//]]>
-</script>
 <style type="text/css">
   fieldset.rows fieldset.rows { border-width : 0; }
   fieldset.rows fieldset.rows fieldset.rows { border-width : 1px; }
@@ -723,4 +577,151 @@ function CheckRuleForm(f) {
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        var maxMatchPoint = [% max_matchpoint %];
+        var maxMatchCheck = [% max_matchcheck %];
+
+        function InsertMatchpoint(loc, index) {
+            var original= $("#"+index);
+            var clone = original.clone();
+            clone.show();
+
+            // update IDs and form names
+            maxMatchPoint++;
+            clone.attr('id', 'mp_' + maxMatchPoint);
+            $("span.counter",clone).html(maxMatchPoint);
+            $("label",clone).each(function(){
+              var s = $(this).attr("for");
+                if (s.match(/mp_num/)) {
+                    $(this).attr("for",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+                }
+            });
+
+            $("div",clone).each(function(){
+              var s = $(this).attr("id");
+                if (s.match(/mp_num/)) {
+                    $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+                }
+            });
+            $("input",clone).each(function(){
+                var s = $(this).attr("id");
+                if(s.match(/mp_num/)){
+                  $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+                }
+
+                var s = $(this).attr("name");
+                if(s.match(/mp_num/)){
+                  $(this).attr("name",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+                }
+            });
+            $("#match_points").append(clone);
+        }
+
+        function InsertMatchcheck(loc, index) {
+            var original= $("#"+index);
+            var clone = original.clone();
+            clone.show();
+
+            // update IDs and form names
+            maxMatchCheck++;
+            clone.attr('id', 'mc_' + maxMatchCheck);
+            $("span.counter",clone).html(maxMatchCheck);
+            $("label",clone).each(function(){
+              var s = $(this).attr("for");
+                if (s.match(/mc_num/)) {
+                    $(this).attr("for",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+                }
+            });
+
+            $("div",clone).each(function(){
+              var s = $(this).attr("id");
+                if (s.match(/mc_num/)) {
+                    $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+                }
+            });
+            $("input",clone).each(function(){
+                var s = $(this).attr("id");
+                if(s.match(/mc_num/)){
+                  $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+                }
+
+                var s = $(this).attr("name");
+                if(s.match(/mc_num/)){
+                  $(this).attr("name",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+                }
+            });
+            $("#match_checks").append(clone);
+        }
+
+        function DeleteMatchpoint(loc) {
+            $(loc).parent().parent().parent().remove();
+            if($(".matchgroup",$("#match_points")).length == 0){
+              maxMatchPoint = 0;
+              $("#addMatchPoint").show();
+            }
+        }
+
+        function DeleteMatchcheck(loc) {
+            $(loc).parent().parent().parent().remove();
+            if($(".matchgroup",$("#match_checks")).length == 0){
+              maxMatchCheck = 0;
+              $("#addMatchCheck").show();
+            }
+        }
+
+        function DoCancel(f) {
+          f.op.value='';
+          document.Aform.submit();
+        }
+
+        function CheckMatchingRuleForm(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            if (f.code.value.length==0) {
+                _alertString += "\n- " + _("Matching rule code missing");
+            }
+            if (f.description.value.length==0) {
+                _alertString += "\n- " + _("Description missing");
+            }
+            if (f.threshold.value.length==0) {
+                _alertString += "\n- " + _("Threshold missing");
+            }
+            if (_alertString.length==0) {
+                document.Aform.submit();
+            } else {
+                alertString2  = _("Form not submitted because of the following problem(s)");
+                alertString2 += "\n------------------------------------------------------------------------------------\n";
+                alertString2 += _alertString;
+                alert(alertString2);
+            }
+        }
+
+        function CheckRuleForm(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            if (f.sort_rule.value.length==0) {
+                _alertString += "\n- " + _("Filing rule code missing");
+            }
+            if (f.description.value.length==0) {
+                _alertString += "\n- " + _("Description missing");
+            }
+            if (f.sort_routine.value.length==0) {
+                _alertString += "\n- " + _("Sort routine missing");
+            }
+            if (_alertString.length==0) {
+                document.Aform.submit();
+            } else {
+                alertString2  = _("Form not submitted because of the following problem(s)");
+                alertString2 += "\n------------------------------------------------------------------------------------\n";
+                alertString2 += _alertString;
+                alert(alertString2);
+            }
+        }
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

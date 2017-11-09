@@ -1,44 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( op_new ) %]OAI sets configuration &rsaquo; Add a new OAI set[% ELSE %]OAI sets configuration[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-function newDescField() {
-    $("#adddescription").before(
-        '<li><label>setDescription: </label>' +
-        '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
-        '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>' +
-        '</li>'
-    );
-}
-
-function delDescField(minusButton) {
-    var li = minusButton.parent('li');
-    $(li).remove();
-}
-
-function confirmDelete() {
-  return confirm(_("Are you sure you want to delete this OAI set?"));
-}
-
-$(document).ready(function() {
-    $(".delete_oai_set").on("click",function(){
-        return confirmDelete();
-    });
-
-    $("body").on("click", ".remove_description", function(e){
-        e.preventDefault();
-        delDescField($(this));
-    });
-
-    $(".add_description").on("click", function(e){
-        e.preventDefault();
-        newDescField();
-    });
-
-});
-//]]>
-</script>
 </head>
 
 <body id="admin_oai_sets" class="admin">
@@ -148,4 +111,44 @@ $(document).ready(function() {
     [% INCLUDE 'admin-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        function newDescField() {
+            $("#adddescription").before(
+                '<li><label>setDescription: </label>' +
+                '<textarea style="vertical-align:middle" rows="2" cols="30" name="description"></textarea>' +
+                '<a class="remove_description" href="#"><i class="fa fa-fw fa-trash"></i> Remove</a>' +
+                '</li>'
+            );
+        }
+
+        function delDescField(minusButton) {
+            var li = minusButton.parent('li');
+            $(li).remove();
+        }
+
+        function confirmDelete() {
+          return confirm(_("Are you sure you want to delete this OAI set?"));
+        }
+
+        $(document).ready(function() {
+            $(".delete_oai_set").on("click",function(){
+                return confirmDelete();
+            });
+
+            $("body").on("click", ".remove_description", function(e){
+                e.preventDefault();
+                delDescField($(this));
+            });
+
+            $(".add_description").on("click", function(e){
+                e.preventDefault();
+                newDescField();
+            });
+
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

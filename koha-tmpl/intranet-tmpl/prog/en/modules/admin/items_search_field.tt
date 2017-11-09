@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
   <title>Koha &rsaquo; Administration &rsaquo; Item search fields</title>
@@ -39,4 +40,8 @@
       </div>
     </div>
 
-    [% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

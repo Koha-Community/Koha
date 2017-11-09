@@ -1,42 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; OAI sets &rsaquo; OAI set mappings</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $("#mappingform").submit(function(){
-      hideDialogBox();
-    });
-    $("body").on("click","#ORbutton", function(e){
-        e.preventDefault();
-        newCondition();
-    });
-    $("body").on("click",".clear-field",function(e){
-        e.preventDefault();
-        clearRow(e.target);
-    });
-});
-
-function newCondition() {
-    var tr = $('#ORbutton').parents('tr');
-    var clone = $(tr).clone();
-    $("#ORbutton").parent('td').replaceWith('<td style="text-align:center">OR</td>');
-    $(tr).parent('tbody').append(clone);
-}
-function clearRow(link){
-    var tr = $(link).parent().parent();
-    var found = tr.find('#ORbutton');
-    if( found.length ){
-      tr.find('input[type="text"]').attr("value","");
-    } else {
-      tr.find('input[type="text"]').attr("value","").end().hide();
-    }
-}
-function hideDialogBox() {
-    $('div.dialog').remove();
-}
-//]]>
-</script>
 </head>
 
 <body id="admin_oai_set_mappings" class="admin">
@@ -126,4 +91,42 @@ function hideDialogBox() {
     [% INCLUDE 'admin-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#mappingform").submit(function(){
+              hideDialogBox();
+            });
+            $("body").on("click","#ORbutton", function(e){
+                e.preventDefault();
+                newCondition();
+            });
+            $("body").on("click",".clear-field",function(e){
+                e.preventDefault();
+                clearRow(e.target);
+            });
+        });
+
+        function newCondition() {
+            var tr = $('#ORbutton').parents('tr');
+            var clone = $(tr).clone();
+            $("#ORbutton").parent('td').replaceWith('<td style="text-align:center">OR</td>');
+            $(tr).parent('tbody').append(clone);
+        }
+        function clearRow(link){
+            var tr = $(link).parent().parent();
+            var found = tr.find('#ORbutton');
+            if( found.length ){
+              tr.find('input[type="text"]').attr("value","");
+            } else {
+              tr.find('input[type="text"]').attr("value","").end().hide();
+            }
+        }
+        function hideDialogBox() {
+            $('div.dialog').remove();
+        }
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
