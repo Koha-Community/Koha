@@ -367,9 +367,8 @@
                                         <input type="text" id="partner_filter">
                                     </li>
                                     <li>
-                                        <label for="partners">Select partner libraries:</label>
-                                        <select size="5" multiple="true" id="partners"
-                                                name="partners">
+                                        <label for="partners" class="required">Select partner libraries:</label>
+                                        <select size="5" multiple="true" id="partners" name="partners" required="required">
                                             [% FOREACH partner IN whole.value.partners %]
                                                 <option value=[% partner.email %]>
                                                     [% partner.branchcode _ " - " _ partner.surname %]
@@ -379,14 +378,12 @@
 
                                     </li>
                                     <li>
-                                        <label for="subject">Subject Line</label>
-                                        <input type="text" name="subject"
-                                               id="subject" type="text"
-                                               value="[% whole.value.draft.subject %]"/>
+                                        <label for="subject" class="required">Subject Line</label>
+                                        <input type="text" name="subject" id="subject" type="text" value="[% whole.value.draft.subject %]" required="required" />
                                     </li>
                                     <li>
-                                        <label for="body">Email text:</label>
-                                        <textarea name="body" id="body" rows="20" cols="80">[% whole.value.draft.body %]</textarea>
+                                        <label for="body" class="required">Email text:</label>
+                                        <textarea name="body" id="body" rows="20" cols="80" required="required">[% whole.value.draft.body %]</textarea>
                                     </li>
                                 </ol>
                                 <input type="hidden" value="generic_confirm" name="method">
