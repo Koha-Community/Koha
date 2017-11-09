@@ -1,4 +1,5 @@
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron attribute types
 [% IF ( attribute_type_form ) %]
@@ -13,25 +14,8 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    if ( $("#branches option:selected").length < 1 ) {
-        $("#branches option:first").attr("selected", "selected");
-    }
-
-    $("#opac_display").change( function() {
-        if ( this.checked ) {
-            $("#opac_editable").removeAttr('disabled').parent().removeAttr('aria-disabled');
-        } else {
-            $("#opac_editable").attr('disabled', true).parent().attr('aria-disabled', 'true');
-        }
-    } ).change();
-} );
-//]]>
-</script>
 </head>
+
 <body id="admin_patron-attr-types" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -313,4 +297,23 @@ $(document).ready(function() {
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if ( $("#branches option:selected").length < 1 ) {
+                $("#branches option:first").attr("selected", "selected");
+            }
+
+            $("#opac_display").change( function() {
+                if ( this.checked ) {
+                    $("#opac_editable").removeAttr('disabled').parent().removeAttr('aria-disabled');
+                } else {
+                    $("#opac_editable").attr('disabled', true).parent().attr('aria-disabled', 'true');
+                }
+            } ).change();
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

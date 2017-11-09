@@ -1,70 +1,15 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Transport cost matrix</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-function check_transport_cost(e) {
-    var val = e.value;
-    if (val && val != '' && !isNaN(parseFloat(val)) && val >= 0.0) {
-        return;
-    }
-    alert(_("Cost must be expressed as a decimal number >= 0"));
-}
-function disable_transport_cost_chg(e) {
-    var input_name = e.name;
-    var cost_id = input_name.replace(/disable_/,''); // Parse the code_id out of the input name
-    disable_transport_cost(cost_id, e.checked);
-}
-function disable_transport_cost(cost_id, disable) {
-    if (disable) {
-        $('#celldiv_'+cost_id).find('input[type=text]').prop('disabled', true).addClass('disabled-transfer');
-    } else {
-        $('#celldiv_'+cost_id).find('input:disabled').prop('disabled', false).removeClass('disabled-transfer');
-    }
-}
-function enable_cost_input(cost_id) {
-    var cell = $('#celldiv_'+cost_id);
-    var cost = $(cell).text();
-    var disabled = $(cell).hasClass('disabled-transfer');
-    $(cell).removeClass('disabled-transfer');
-
-    $('#celldiv_'+cost_id).html(
-        '<input type="text" name="cost_'+cost_id+'" class="cost_input" size="4" value="'+$.trim(cost)+'" />'+
-        '<br/>Disable <input name="disable_'+cost_id+'" value="1" class="disable_transport_cost" type="checkbox" '+(disabled ? 'checked' : '')+' />'
-    );
-    disable_transport_cost(cost_id, disabled);
-}
-
-function form_submit (f) {
-    $(f).find('input:disabled').prop('disabled', false);
-    return true;
-}
-$(document).ready(function(){
-    $(".enable_cost_input").on("click",function(){
-        var cost_id = $(this).data("cost-id");
-        enable_cost_input( cost_id );
-    });
-    $("body").on("blur",".cost_input",function(){
-        check_transport_cost(this);
-    });
-    $("body").on("change",".disable_transport_cost",function(){
-        disable_transport_cost_chg(this);
-    });
-    $("#cost_matrix_form").on("submit",function(){
-        return form_submit(this);
-    });
-})
-//]]>
-</script>
 <style type="text/css">
 .disabled-transfer {
     background-color: #FF8888;
 }
 </style>
-
 </head>
+
 <body id="admin_transport_cost_matrix" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -144,4 +89,61 @@ $(document).ready(function(){
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        function check_transport_cost(e) {
+            var val = e.value;
+            if (val && val != '' && !isNaN(parseFloat(val)) && val >= 0.0) {
+                return;
+            }
+            alert(_("Cost must be expressed as a decimal number >= 0"));
+        }
+        function disable_transport_cost_chg(e) {
+            var input_name = e.name;
+            var cost_id = input_name.replace(/disable_/,''); // Parse the code_id out of the input name
+            disable_transport_cost(cost_id, e.checked);
+        }
+        function disable_transport_cost(cost_id, disable) {
+            if (disable) {
+                $('#celldiv_'+cost_id).find('input[type=text]').prop('disabled', true).addClass('disabled-transfer');
+            } else {
+                $('#celldiv_'+cost_id).find('input:disabled').prop('disabled', false).removeClass('disabled-transfer');
+            }
+        }
+        function enable_cost_input(cost_id) {
+            var cell = $('#celldiv_'+cost_id);
+            var cost = $(cell).text();
+            var disabled = $(cell).hasClass('disabled-transfer');
+            $(cell).removeClass('disabled-transfer');
+
+            $('#celldiv_'+cost_id).html(
+                '<input type="text" name="cost_'+cost_id+'" class="cost_input" size="4" value="'+$.trim(cost)+'" />'+
+                '<br/>Disable <input name="disable_'+cost_id+'" value="1" class="disable_transport_cost" type="checkbox" '+(disabled ? 'checked' : '')+' />'
+            );
+            disable_transport_cost(cost_id, disabled);
+        }
+
+        function form_submit (f) {
+            $(f).find('input:disabled').prop('disabled', false);
+            return true;
+        }
+        $(document).ready(function(){
+            $(".enable_cost_input").on("click",function(){
+                var cost_id = $(this).data("cost-id");
+                enable_cost_input( cost_id );
+            });
+            $("body").on("blur",".cost_input",function(){
+                check_transport_cost(this);
+            });
+            $("body").on("change",".disable_transport_cost",function(){
+                disable_transport_cost_chg(this);
+            });
+            $("#cost_matrix_form").on("submit",function(){
+                return form_submit(this);
+            });
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

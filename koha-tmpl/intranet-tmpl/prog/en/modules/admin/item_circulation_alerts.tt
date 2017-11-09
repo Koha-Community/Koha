@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item circulation alerts</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -37,55 +38,8 @@ table.grid td.default {
   background: #f88;
 }
 </style>
-
-<script type="text/javascript">//<![CDATA[
-var $branch = "[% branch %]";
-$(function(){
-    $('#alerttabs').tabs();
-
-    var blocked            = _("Blocked!");
-    var saving             = _("Saving...");
-    var disabledForAll     = _("Disabled for all");
-    var disabledForCurrent = _("Disabled for %s").format($branch);
-
-    $('#branch_selector input:submit').hide();
-    $('#branch').change(function(){
-        $('#branch_selector').submit();
-    });
-
-    $('table.grid.active tbody td').click(function(ev){
-        var id = this.id;
-        var td = $(this);
-        if (td.hasClass('default') && $branch != '*') {
-            td.html(blocked);
-            window.setTimeout(
-              function(){ td.html(disabledForAll) },
-              3000
-            );
-        } else {
-            td.html(saving);
-            $.ajax({
-                url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
-                type     : 'POST',
-                dataType : 'json',
-                data     : { action: 'toggle', id: id, branch: $branch },
-                success  : function(response){
-                    if ($branch == '*' && response.classes.match(/default/)) {
-                        td.html(disabledForAll);
-                    } else if (response.classes.match(/disabled/)) {
-                        td.html(disabledForCurrent);
-                    } else {
-                        td.html(' ');
-                    }
-                    td.attr('class', response.classes);
-                }
-            });
-        }
-    });
-
-}); //]]>
-</script>
 </head>
+
 <body id="admin_item_circulation_alerts" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -202,4 +156,55 @@ $(function(){
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        var $branch = "[% branch %]";
+        $(function(){
+            $('#alerttabs').tabs();
+
+            var blocked            = _("Blocked!");
+            var saving             = _("Saving...");
+            var disabledForAll     = _("Disabled for all");
+            var disabledForCurrent = _("Disabled for %s").format($branch);
+
+            $('#branch_selector input:submit').hide();
+            $('#branch').change(function(){
+                $('#branch_selector').submit();
+            });
+
+            $('table.grid.active tbody td').click(function(ev){
+                var id = this.id;
+                var td = $(this);
+                if (td.hasClass('default') && $branch != '*') {
+                    td.html(blocked);
+                    window.setTimeout(
+                      function(){ td.html(disabledForAll) },
+                      3000
+                    );
+                } else {
+                    td.html(saving);
+                    $.ajax({
+                        url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
+                        type     : 'POST',
+                        dataType : 'json',
+                        data     : { action: 'toggle', id: id, branch: $branch },
+                        success  : function(response){
+                            if ($branch == '*' && response.classes.match(/default/)) {
+                                td.html(disabledForAll);
+                            } else if (response.classes.match(/disabled/)) {
+                                td.html(disabledForCurrent);
+                            } else {
+                                td.html(' ');
+                            }
+                            td.attr('class', response.classes);
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

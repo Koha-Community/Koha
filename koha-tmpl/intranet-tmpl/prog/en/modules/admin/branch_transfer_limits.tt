@@ -1,48 +1,12 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library checkin and transfer policy</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	$(document).ready(function(){
-        $("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes(); return false; });
-        $("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes(); return false; });
-        $('#transferlimit_tabs').tabs();
-
-		 $('#branchselect').change(function() {
-		    $('#selectlibrary').submit();
-		 });
-
-		var checkall = $(".checkall");
-		var uncheckall = $(".uncheckall");
-
-		$(checkall).click(function(){
-			var tid = $(this).attr("id");
-			tid = tid.replace("CheckAll","");
-			$("#"+tid).checkCheckboxes();
-			return false;
-		});
-
-		$(uncheckall).click(function(){
-			var tid = $(this).attr("id");
-			tid = tid.replace("UncheckAll","");
-			$("#"+tid).unCheckCheckboxes();
-			return false;
-		});
-        $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            'bPaginate': false
-        }));
-	});
-//]]>
-</script>
 <style type="text/css">td { text-align: center; } .sorted { min-width: 50%; }</style>
 </head>
+
 <body id="admin_branch_transfer_limits" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -119,4 +83,44 @@
   [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes(); return false; });
+            $("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes(); return false; });
+            $('#transferlimit_tabs').tabs();
+
+             $('#branchselect').change(function() {
+                $('#selectlibrary').submit();
+             });
+
+            var checkall = $(".checkall");
+            var uncheckall = $(".uncheckall");
+
+            $(checkall).click(function(){
+                var tid = $(this).attr("id");
+                tid = tid.replace("CheckAll","");
+                $("#"+tid).checkCheckboxes();
+                return false;
+            });
+
+            $(uncheckall).click(function(){
+                var tid = $(this).attr("id");
+                tid = tid.replace("UncheckAll","");
+                $("#"+tid).unCheckCheckboxes();
+                return false;
+            });
+            $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                'bPaginate': false
+            }));
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

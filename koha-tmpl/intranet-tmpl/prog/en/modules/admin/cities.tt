@@ -1,23 +1,10 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF op =='add_form' %]Cities &rsaquo; [% IF city.cityid %] Modify city[% ELSE %] New city[% END %][% ELSE %][% IF op == 'delete_confirm' %]Cities &rsaquo; Confirm deletion of city[% ELSE %] Cities[% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-            ],
-            "aaSorting": [[ 1, "asc" ]],
-            "iDisplayLength": 10,
-            "sPaginationType": "full_numbers"
-        }));
-    });
-//]]>
-</script>
 </head>
+
 <body id="admin_cities" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cities-admin-search.inc' %]
@@ -185,5 +172,21 @@
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
-[% INCLUDE 'intranet-bottom.inc' %]
 
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 1, "asc" ]],
+                "iDisplayLength": 10,
+                "sPaginationType": "full_numbers"
+            }));
+        });
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

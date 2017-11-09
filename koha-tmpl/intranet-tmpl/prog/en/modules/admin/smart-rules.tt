@@ -1,130 +1,10 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Circulation and fine rules</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-function clear_edit(){
-    var cancel = confirm(_("Are you sure you want to cancel your changes?"));
-    if ( !cancel ) return;
-    $('#default-circulation-rules td').removeClass('highlighted-row');
-    var edit_row = $("#edit_row");
-    $(edit_row).find("input").each(function(){
-        var type = $(this).attr("type");
-        if (type != "button" && type != "submit" ) {
-            $(this).val("");
-            $(this).prop('disabled', false);
-        }
-        if ( type == "checkbox" ) {
-            $(this).prop('checked', false);
-        }
-    });
-    $(edit_row).find("select").prop('disabled', false);
-    $(edit_row).find("select option:first").attr("selected", "selected");
-    $(edit_row).find("td:last input[name='clear']").remove();
-}
-
-var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this rule? This cannot be undone.");
-
-
-$(document).ready(function() {
-    $(".delete").on("click",function(){
-        return confirmDelete(MSG_CONFIRM_DELETE);
-    });
-
-    $("#clone_rules").on("click",function(){
-        var library_dropdown = document.getElementById("branch");
-        var selected_library = library_dropdown.options[library_dropdown.selectedIndex].value;
-        var selected_library_text = $("#branch option:selected").text();
-        var to_library = $("#tobranch option:selected").text();
-        var MSG_CONFIRM_CLONE;
-        if (selected_library === "*") {
-            MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to %s library? This will override the existing rules in this library.").format(to_library);
-            return confirmClone(MSG_CONFIRM_CLONE);
-        } else {
-            MSG_CONFIRM_CLONE = _("Are you sure you want to clone this circulation and fine rule from %s to %s library? This will override the existing rules in this library.").format(selected_library_text, to_library);
-            return confirmClone(MSG_CONFIRM_CLONE);
-        }
-    });
-
-        $('#cap_fine_to_replacement_price').on('change', function(){
-            $('#overduefinescap').prop('disabled', $(this).is(':checked') );
-        });
-        $('#selectlibrary').find("input:submit").hide();
-        $('#branch').change(function() {
-                $('#selectlibrary').submit();
-        });
-        $(".editrule").click(function(){
-            if ( $("#edit_row").find("input[type='text']").filter(function(){return this.value.length > 0 }).length > 0 ) {
-                var edit = confirm(_("Are you sure you want to edit another rule?"));
-                if (!edit) return false;
-            }
-            $('#default-circulation-rules td').removeClass('highlighted-row');
-            $(this).parent().parent().find("td").each(function (i) {
-                $(this).addClass('highlighted-row');
-                itm = $(this).text();
-                itm = itm.replace(/^\s*|\s*$/g,'');
-                var current_column = $("#edit_row td:eq("+i+")");
-                if ( i == 7 ) {
-                    // specific processing for the Hard due date column
-                    var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
-                    var input_value = '';
-                    if (typeof select_value === 'undefined'){
-                        select_value = '-1';
-                    }else {
-                        input_value = itm.split(' ')[1];
-                    }
-                    $(current_column).find("input[type='text']").val(input_value);
-                    $(current_column).find("select").val(select_value);
-                } else if ( i == 13 ) {
-                    // specific processing for cap_fine_to_replacement_price
-                    var cap_fine_to_replacement_price = $(this).find("input[type='checkbox']");
-                    $('#cap_fine_to_replacement_price').prop('checked', cap_fine_to_replacement_price.is(':checked') );
-                    $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
-                } else {
-                    $(current_column).find("input[type='text']").val(itm);
-                    // select the corresponding option
-                    $(current_column).find("select option").each(function(){
-                        opt = $(this).text().toLowerCase();
-                        opt = opt.replace(/^\s*|\s*$/g,'');
-                        if ( opt == itm.toLowerCase() ) {
-                            $(this).attr('selected', 'selected');
-                        }
-                    });
-                    if ( i == 0 || i == 1 ) {
-                        // Disable the 2 first columns, we cannot update them.
-                        var val = $(current_column).find("select option:selected").val();
-                        var name = "categorycode";
-                        if ( i == 1 ) {
-                            name="itemtype";
-                        }
-                        // Remove potential previous input added
-                        $(current_column).find("input").remove();
-                        $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                    } else if ( i == 3 || i == 4 ) {
-                        // If the value is not an integer for "Current checkouts allowed" or "Current on-site checkouts allowed"
-                        // The value is "Unlimited" (or an equivalent translated string)
-                        // an it should be set to an empty string
-                        if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
-                            $(current_column).find("input[type='text']").val("");
-                        }
-                    }
-                }
-            });
-            $("#default-circulation-rules tr:last td:eq(0) select").prop('disabled', true);
-            $("#default-circulation-rules tr:last td:eq(1) select").prop('disabled', true);
-            return false;
-        });
-        $(".clear_edit").on("click",function(e){
-            e.preventDefault();
-            clear_edit();
-        });
-});
-//]]>
-</script>
 </head>
+
 <body id="admin_smart-rules" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -834,4 +714,127 @@ $(document).ready(function() {
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+
+        function clear_edit(){
+            var cancel = confirm(_("Are you sure you want to cancel your changes?"));
+            if ( !cancel ) return;
+            $('#default-circulation-rules td').removeClass('highlighted-row');
+            var edit_row = $("#edit_row");
+            $(edit_row).find("input").each(function(){
+                var type = $(this).attr("type");
+                if (type != "button" && type != "submit" ) {
+                    $(this).val("");
+                    $(this).prop('disabled', false);
+                }
+                if ( type == "checkbox" ) {
+                    $(this).prop('checked', false);
+                }
+            });
+            $(edit_row).find("select").prop('disabled', false);
+            $(edit_row).find("select option:first").attr("selected", "selected");
+            $(edit_row).find("td:last input[name='clear']").remove();
+        }
+
+        var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this rule? This cannot be undone.");
+
+        $(document).ready(function() {
+            $(".delete").on("click",function(){
+                return confirmDelete(MSG_CONFIRM_DELETE);
+            });
+
+            $("#clone_rules").on("click",function(){
+                var library_dropdown = document.getElementById("branch");
+                var selected_library = library_dropdown.options[library_dropdown.selectedIndex].value;
+                var selected_library_text = $("#branch option:selected").text();
+                var to_library = $("#tobranch option:selected").text();
+                var MSG_CONFIRM_CLONE;
+                if (selected_library === "*") {
+                    MSG_CONFIRM_CLONE = _("Are you sure you want to clone this standard rule to %s library? This will override the existing rules in this library.").format(to_library);
+                    return confirmClone(MSG_CONFIRM_CLONE);
+                } else {
+                    MSG_CONFIRM_CLONE = _("Are you sure you want to clone this circulation and fine rule from %s to %s library? This will override the existing rules in this library.").format(selected_library_text, to_library);
+                    return confirmClone(MSG_CONFIRM_CLONE);
+                }
+            });
+
+            $('#cap_fine_to_replacement_price').on('change', function(){
+                $('#overduefinescap').prop('disabled', $(this).is(':checked') );
+            });
+            $('#selectlibrary').find("input:submit").hide();
+            $('#branch').change(function() {
+                    $('#selectlibrary').submit();
+            });
+            $(".editrule").click(function(){
+                if ( $("#edit_row").find("input[type='text']").filter(function(){return this.value.length > 0 }).length > 0 ) {
+                    var edit = confirm(_("Are you sure you want to edit another rule?"));
+                    if (!edit) return false;
+                }
+                $('#default-circulation-rules td').removeClass('highlighted-row');
+                $(this).parent().parent().find("td").each(function (i) {
+                    $(this).addClass('highlighted-row');
+                    itm = $(this).text();
+                    itm = itm.replace(/^\s*|\s*$/g,'');
+                    var current_column = $("#edit_row td:eq("+i+")");
+                    if ( i == 7 ) {
+                        // specific processing for the Hard due date column
+                        var select_value = $(this).find("input[type='hidden'][name='hardduedatecomparebackup']").val();
+                        var input_value = '';
+                        if (typeof select_value === 'undefined'){
+                            select_value = '-1';
+                        }else {
+                            input_value = itm.split(' ')[1];
+                        }
+                        $(current_column).find("input[type='text']").val(input_value);
+                        $(current_column).find("select").val(select_value);
+                    } else if ( i == 13 ) {
+                        // specific processing for cap_fine_to_replacement_price
+                        var cap_fine_to_replacement_price = $(this).find("input[type='checkbox']");
+                        $('#cap_fine_to_replacement_price').prop('checked', cap_fine_to_replacement_price.is(':checked') );
+                        $('#overduefinescap').prop('disabled', cap_fine_to_replacement_price.is(':checked') );
+                    } else {
+                        $(current_column).find("input[type='text']").val(itm);
+                        // select the corresponding option
+                        $(current_column).find("select option").each(function(){
+                            opt = $(this).text().toLowerCase();
+                            opt = opt.replace(/^\s*|\s*$/g,'');
+                            if ( opt == itm.toLowerCase() ) {
+                                $(this).attr('selected', 'selected');
+                            }
+                        });
+                        if ( i == 0 || i == 1 ) {
+                            // Disable the 2 first columns, we cannot update them.
+                            var val = $(current_column).find("select option:selected").val();
+                            var name = "categorycode";
+                            if ( i == 1 ) {
+                                name="itemtype";
+                            }
+                            // Remove potential previous input added
+                            $(current_column).find("input").remove();
+                            $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
+                        } else if ( i == 3 || i == 4 ) {
+                            // If the value is not an integer for "Current checkouts allowed" or "Current on-site checkouts allowed"
+                            // The value is "Unlimited" (or an equivalent translated string)
+                            // an it should be set to an empty string
+                            if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
+                                $(current_column).find("input[type='text']").val("");
+                            }
+                        }
+                    }
+                });
+                $("#default-circulation-rules tr:last td:eq(0) select").prop('disabled', true);
+                $("#default-circulation-rules tr:last td:eq(1) select").prop('disabled', true);
+                return false;
+            });
+            $(".clear_edit").on("click",function(e){
+                e.preventDefault();
+                clear_edit();
+            });
+        });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
