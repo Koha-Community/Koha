@@ -81,6 +81,7 @@
     [% IF Koha.Preference('SMSSendDriver') == 'Email' %]
         <li><a href="/cgi-bin/koha/admin/sms_providers.pl">SMS cellular providers</a></li>
     [% END %]
+    <li><a href="/cgi-bin/koha/admin/usage_statistics.pl">Share usage statistics</a></li>
 </ul>
 </div>
 </div>
