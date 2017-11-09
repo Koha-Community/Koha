@@ -33,17 +33,13 @@
                 "required": false,
                 "type": "string"
             }, {
-                "name": "biblio_id",
+                "name": "biblionumber",
                 "in": "query",
-                "description": "The biblio ID associated with a request",
+                "description": "Internal biblio identifier",
                 "required": false,
                 "type": "integer"
             }, {
-                "name": "borrower_id",
-                "in": "query",
-                "description": "The borrower ID associated with a request",
-                "required": false,
-                "type": "integer"
+                "$ref": "../parameters.json#/borrowernumberQueryParam"
             }, {
                 "name": "completed",
                 "in": "query",
@@ -75,9 +71,9 @@
                 "required": false,
                 "type": "string"
             }, {
-                "name": "branch_id",
+                "name": "branchcode",
                 "in": "query",
-                "description": "The ID of the pickup branch",
+                "description": "Library ID",
                 "required": false,
                 "type": "string"
             }],
