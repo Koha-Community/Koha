@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Libraries and groups
 [% IF op == 'editcategory' %]
@@ -12,48 +13,8 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#branchest").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            "iDisplayLength": 10,
-            "sPaginationType": "four_button"
-        }));
-
-        [% UNLESS library %]
-            $("#Aform").on("submit", function( event ) {
-                if ( $("#branchcode").val().match(/\s/) ) {
-                    event.preventDefault();
-                    alert(_("The library code entered contains whitespace characters. Please remove any whitespace characters from the library code"));
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-        [% END %]
-    });
-tinyMCE.init({
-    mode : "textareas",
-    theme : "advanced",
-    content_css : "[% interface %]/[% theme %]/css/tinymce.css",
-    plugins : "table,save,advhr,advlink,contextmenu",
-    theme_advanced_buttons1 : "save,|,bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,link,unlink,anchor,cleanup,help,code,advhr,",
-    theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap",
-    // theme_advanced_buttons3 : "",
-    theme_advanced_toolbar_location : "top",
-    theme_advanced_toolbar_align : "left",
-    theme_advanced_path_location : "bottom",
-    theme_advanced_resizing : true,
-    apply_source_formatting : true
-});
-//]]>
-</script>
 </head>
+
 <body id="admin_branches" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -407,4 +368,48 @@ tinyMCE.init({
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#branchest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "iDisplayLength": 10,
+                "sPaginationType": "four_button"
+            }));
+
+            [% UNLESS library %]
+                $("#Aform").on("submit", function( event ) {
+                    if ( $("#branchcode").val().match(/\s/) ) {
+                        event.preventDefault();
+                        alert(_("The library code entered contains whitespace characters. Please remove any whitespace characters from the library code"));
+                        return false;
+                    } else {
+                        return true;
+                    }
+                });
+            [% END %]
+        });
+        tinyMCE.init({
+            mode : "textareas",
+            theme : "advanced",
+            content_css : "[% interface %]/[% theme %]/css/tinymce.css",
+            plugins : "table,save,advhr,advlink,contextmenu",
+            theme_advanced_buttons1 : "save,|,bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,link,unlink,anchor,cleanup,help,code,advhr,",
+            theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap",
+            // theme_advanced_buttons3 : "",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
+            theme_advanced_path_location : "bottom",
+            theme_advanced_resizing : true,
+            apply_source_formatting : true
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

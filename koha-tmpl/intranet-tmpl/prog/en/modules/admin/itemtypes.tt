@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item types [% IF op == 'add_form' %]&rsaquo;
   [% IF ( itemtype ) %]
@@ -22,33 +23,6 @@ Data deleted
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'greybox.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-     $(document).ready(function() {
-        $('#icons').tabs();
-        $("#table_item_type").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            "aaSorting": [[ 2, "asc" ]],
-            "iDisplayLength": 10,
-            "sPaginationType": "four_button"
-        }));
-        $( "#itemtypeentry" ).validate({
-            rules: {
-                itemtype: { required: true },
-                description: { required: true },
-                rentalcharge: { number: true }
-            }
-        });
-        $("#itemtype").on("blur",function(){
-            toUC(this);
-        });
-     });
-//]]>
-</script>
 <style type="text/css">
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
   fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
@@ -56,6 +30,7 @@ Data deleted
   fieldset.rows .ui-tabs-nav { margin-left : 10px; }
 </style>
 </head>
+
 <body id="admin_itemtypes" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -418,4 +393,33 @@ Item types administration
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'greybox.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+         $(document).ready(function() {
+            $('#icons').tabs();
+            $("#table_item_type").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 2, "asc" ]],
+                "iDisplayLength": 10,
+                "sPaginationType": "four_button"
+            }));
+            $( "#itemtypeentry" ).validate({
+                rules: {
+                    itemtype: { required: true },
+                    description: { required: true },
+                    rentalcharge: { number: true }
+                }
+            });
+            $("#itemtype").on("blur",function(){
+                toUC(this);
+            });
+         });
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
