@@ -207,6 +207,34 @@ sub get_template_and_user {
         }
     }
 
+    # If the user logged in is the SCI user and they try to go out of the SCI module,
+    # log the user out removing the CGISESSID cookie
+    if ( $in->{type} eq 'opac' and $in->{template_name} !~ m|sci/| ) {
+        if ( $user && C4::Context->preference('AutoSelfCheckID') && $user eq C4::Context->preference('AutoSelfCheckID') ) {
+            $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac', $in->{query} );
+            my $cookie = $in->{query}->cookie(
+                -name     => 'CGISESSID',
+                -value    => '',
+                -expires  => '',
+                -HttpOnly => 1,
+            );
+
+            $template->param(
+                loginprompt => 1,
+                script_name => get_script_name(),
+            );
+            print $in->{query}->header(
+                {   type              => 'text/html',
+                    charset           => 'utf-8',
+                    cookie            => $cookie,
+                    'X-Frame-Options' => 'SAMEORIGIN'
+                }
+              ),
+            $template->output;
+            safe_exit;
+        }
+    }
+
     my $borrowernumber;
     if ($user) {
 
@@ -1267,6 +1295,7 @@ sub checkauth {
     );
 
     $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
+    $template->param( SCI_login => 1 ) if ( $query->param('sci_user_login') );
     $template->param( OpacPublic => C4::Context->preference("OpacPublic") );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 

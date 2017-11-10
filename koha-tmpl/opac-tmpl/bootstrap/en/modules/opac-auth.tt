@@ -31,6 +31,8 @@
                                 <p>Sorry, the system doesn't think you have permission to access this page. </p>
                                 [% IF SCO_login %]
                                     <p><a href="/cgi-bin/koha/sco/sco-main.pl?logout.x=1">Log out and try again with a different user.</a></p>
+                                [% ELSIF SCI_login %]
+                                    <p><a href="/cgi-bin/koha/sci/sci-main.pl?logout.x=1">Log out and try again with a different user.</a></p>
                                 [% END %]
                             </div>
                         [% END %]
@@ -158,6 +160,8 @@
 
                         [% IF SCO_login %]
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="auth" id="auth" method="post" autocomplete="off">
+                        [% ELSIF SCI_login %]
+                            <form action="/cgi-bin/koha/sci/sci-main.pl" name="auth" id="auth" method="post" autocomplete="off">
                         [% ELSE %]
                             <form action="[% script_name %]" name="auth" id="auth" method="post" autocomplete="off">
                         [% END %]
