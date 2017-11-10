@@ -251,6 +251,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-23 13:51:40
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+mlcId4odhAFp3HHgV/+tg
 
+__PACKAGE__->add_columns(
+    '+auto_renew'      => { is_boolean => 1 },
+    '+onsite_checkout' => { is_boolean => 1 }
+);
+
 __PACKAGE__->belongs_to(
     "borrower",
     "Koha::Schema::Result::Borrower",
