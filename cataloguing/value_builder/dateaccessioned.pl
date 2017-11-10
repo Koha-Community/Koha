@@ -42,13 +42,14 @@ function Focus$function_name(event) {
 }
 
 function Click$function_name(event) {
-    set_to_today(event.data.id);
+    set_to_today(event.data.id, 1);
     return false; // prevent page scroll
 }
 
-function set_to_today( id ) {
+function set_to_today( id, force ) {
+    // The force parameter is used in Click but not in Focus !
     if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
-    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' ) {
+    if (\$("#" + id).val() == '' || \$("#" + id).val() == '0000-00-00' || force ) {
         \$("#" + id).val("$date");
     }
 }
