@@ -222,10 +222,14 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                 $.each( taginfo.subfields, function( undef, subfield ) {
                     var subfieldcode = subfield[0], subfieldinfo = subfield[1];
 
-                    if ( subfieldinfo.mandatory != "1" && !allTags ) return;
+                    if ( subfieldinfo.mandatory != "1" && !subfieldinfo.defaultvalue && !allTags ) return;
 
                     $.each( fields, function( undef, field ) {
-                        if ( !field.hasSubfield(subfieldcode) ) field.addSubfieldGrouped( [ subfieldcode, subfieldinfo.defaultvalue || '' ] );
+                        if ( !field.hasSubfield(subfieldcode) ) {
+                            field.addSubfieldGrouped( [ subfieldcode, subfieldinfo.defaultvalue || '' ] );
+                        } else if ( subfieldinfo.defaultvalue && field.subfield( subfieldcode ) === '' ) {
+                            field.subfield( subfieldcode, subfieldinfo.defaultvalue );
+                        }
                     } );
                 } );
             } );

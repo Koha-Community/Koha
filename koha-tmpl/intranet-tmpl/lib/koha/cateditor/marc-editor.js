@@ -537,30 +537,38 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             this.cm.refresh();
         },
 
-        setFrameworkCode: function( code, callback ) {
+        setFrameworkCode: function( code, updateFields, callback ) {
             this.frameworkcode = code;
             $( 'a.change-framework i.selected' ).addClass( 'hidden' );
             $( 'a.change-framework i.unselected' ).removeClass( 'hidden' );
             $( 'a.change-framework[data-frameworkcode="' + code + '"] i.unselected' ).addClass( 'hidden' );
             $( 'a.change-framework[data-frameworkcode="' + code + '"] i.selected' ).removeClass( 'hidden ');
-            KohaBackend.InitFramework( code, callback );
+            var cm = this.cm;
+            KohaBackend.InitFramework( code, function ( error ) {
+                cm.setOption( 'mode', {
+                    name: 'marc',
+                    nonRepeatableTags: KohaBackend.GetTagsBy( code, 'repeatable', '0' ),
+                    nonRepeatableSubfields: KohaBackend.GetSubfieldsBy( code, 'repeatable', '0' )
+                });
+                if ( updateFields ) {
+                    var record = TextMARC.TextToRecord( cm.getValue() );
+                    KohaBackend.FillRecord( code, record );
+                    cm.setValue( TextMARC.RecordToText(record) );
+                }
+                callback( error );
+            } );
         },
 
         displayRecord: function( record ) {
             this.cm.setValue( TextMARC.RecordToText(record) );
             this.modified = false;
-            var cm = this.cm;
             this.setFrameworkCode(
                 typeof record.frameworkcode !== 'undefined' ? record.frameworkcode : '',
+                false,
                 function ( error ) {
                     if ( typeof error !== 'undefined' ) {
                         humanMsg.displayAlert( _(error), { className: 'humanError' } );
                     }
-                    cm.setOption( 'mode', {
-                        name: 'marc',
-                        nonRepeatableTags: KohaBackend.GetTagsBy( this.frameworkcode, 'repeatable', '0' ),
-                        nonRepeatableSubfields: KohaBackend.GetSubfieldsBy( this.frameworkcode, 'repeatable', '0' )
-                    });
                 }
             );
         },

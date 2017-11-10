@@ -1098,6 +1098,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             $("#loading").show();
             editor.setFrameworkCode(
                 $(this).data( 'frameworkcode' ),
+                true,
                 function ( error ) {
                     if ( typeof error !== 'undefined' ) {
                         humanMsg.displayAlert( _("Failed to change framework"), { className: 'humanError' } );
