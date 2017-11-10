@@ -12,37 +12,52 @@
       "$ref": "../x-primitives.json#/itemnumber"
     },
     "date_due": {
+      "type": "string",
       "description": "Due date"
     },
     "branchcode": {
-      "$ref": "../x-primitives.json#/branchcode"
+      "type": "string",
+      "description": "code of the library the item was checked out"
     },
     "issuingbranch": {
+      "type": "string",
       "description": "Code of the branch where issue was made"
     },
     "returndate": {
+      "type": ["string", "null"],
       "description": "Date the item was returned"
     },
     "lastreneweddate": {
+      "type": ["string", "null"],
       "description": "Date the item was last renewed"
     },
-    "return": {
-      "description": "?"
-    },
     "renewals": {
+      "type": ["integer", "null"],
       "description": "Number of renewals"
     },
     "auto_renew": {
+      "type": "boolean",
       "description": "Auto renewal"
     },
     "timestamp": {
+      "type": "string",
       "description": "Last update time"
     },
     "issuedate": {
+      "type": ["string", "null"],
       "description": "Date the item was issued"
     },
     "onsite_checkout": {
+      "type": "boolean",
       "description": "On site checkout"
+    },
+    "note": {
+      "type": ["string", "null"],
+      "description": "Issue note text"
+    },
+    "notedate": {
+      "type": ["string", "null"],
+      "description": "Datetime of the issue note"
     }
   }
 }
