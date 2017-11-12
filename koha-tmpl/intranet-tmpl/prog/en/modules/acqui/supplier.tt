@@ -169,7 +169,7 @@ function delete_contact(ev) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name |html %]</a> &rsaquo; Update: [% name %][% ELSE %]Add vendor[% END %] [% ELSE %][% name |html %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name |html %]</a> &rsaquo; Update: [% name |html %][% ELSE %]Add vendor[% END %] [% ELSE %][% name |html %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
