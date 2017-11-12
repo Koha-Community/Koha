@@ -60,7 +60,7 @@
             [% END %]
                 <span class="suppliername">
                     [% IF (supplier.name) %]
-                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">[% supplier.name %]</a>
+                        <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">[% supplier.name |html %]</a>
                     [% ELSE %]
                         <a name="[% supplier.booksellerid %]" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% supplier.booksellerid %]">NO NAME</a>
                     [% END %]
