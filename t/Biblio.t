@@ -21,6 +21,8 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
+plan tests => 47;
+
 use_ok('C4::Biblio');
 
 my $db = Test::MockModule->new('Koha::Database');
