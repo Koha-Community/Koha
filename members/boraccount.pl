@@ -115,7 +115,6 @@ $template->param(
     is_child            => ($data->{'category_type'} eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

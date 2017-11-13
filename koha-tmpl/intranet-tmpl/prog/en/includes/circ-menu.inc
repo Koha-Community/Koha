@@ -81,7 +81,7 @@
         [% IF ( finesview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">Fines</a></li>
     [% END %]
     [% IF ( CAN_user_circulate_circulate_remaining_permissions  )  %]
-        [% IF ( RoutingSerials ) %][% IF ( routinglistview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% borrowernumber %]">Routing lists</a></li>[% END %]
+        [% IF Koha.Preference("RoutingSerials") %][% IF ( routinglistview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/routing-lists.pl?borrowernumber=[% borrowernumber %]">Routing lists</a></li>[% END %]
     [% END %]
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( intranetreadinghistory ) %]

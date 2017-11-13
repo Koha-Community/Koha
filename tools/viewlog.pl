@@ -91,7 +91,6 @@ if ( $src eq 'circ' ) {
         menu           => 1,
         borrowernumber => $borrowernumber,
         categoryname   => $data->{'description'},
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 }
 

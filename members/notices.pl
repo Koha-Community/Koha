@@ -79,7 +79,6 @@ $template->param(
     borrowernumber     => $borrowernumber,
     sentnotices        => 1,
     categoryname       => $borrower->{'description'},
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

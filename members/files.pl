@@ -103,7 +103,6 @@ else {
 
     $template->param(
         categoryname    => $data->{'description'},
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {

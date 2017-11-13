@@ -50,7 +50,6 @@ foreach my $key ( keys %$borrower ) {
 $template->param(
     suggestionsview  => 1,
     categoryname => $borrower->{'description'},
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
