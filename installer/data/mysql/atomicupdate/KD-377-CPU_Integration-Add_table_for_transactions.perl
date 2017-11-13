@@ -1,14 +1,7 @@
-#! /usr/bin/perl
+$DBversion = 'XXX';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    # you can use $dbh here like:
 
-use strict;
-use warnings;
-use C4::Context;
-use Koha::AtomicUpdater;
-
-my $dbh = C4::Context->dbh;
-my $atomicUpdater = Koha::AtomicUpdater->new();
-
-unless($atomicUpdater->find('#377')) {
     $dbh->do("
             CREATE TABLE payments_transactions (
                 transaction_id int(11) NOT NULL auto_increment,
@@ -50,5 +43,7 @@ unless($atomicUpdater->find('#377')) {
     $dbh->do("INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES ('POSIntegration', '', '', 'Maps Koha account types into POS item numbers and defines the interfaces that will be used for each branch', 'textarea')");
     $dbh->do("INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES ('OnlinePaymentMinTotal', '0', '', 'Defines a minimum amount of money that Borrower can pay through online payments', 'Integer')");
 
-    print "Upgrade to done (KD#377 CPU integration: Add table for transactions)\n";
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
 }
