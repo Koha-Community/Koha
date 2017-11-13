@@ -35,41 +35,6 @@ Koha::Patron;;Category - Koha Patron;;Category Object class
 
 =cut
 
-=head3 effective_BlockExpiredPatronOpacActions
-
-my $BlockExpiredPatronOpacActions = $category->effective_BlockExpiredPatronOpacActions
-
-Return the effective BlockExpiredPatronOpacActions value.
-
-=cut
-
-sub effective_BlockExpiredPatronOpacActions {
-    my( $self) = @_;
-    return C4::Context->preference('BlockExpiredPatronOpacActions') if $self->BlockExpiredPatronOpacActions == -1;
-    return $self->BlockExpiredPatronOpacActions
-}
-
-=head3 store
-
-=cut
-
-sub store {
-    my ($self) = @_;
-
-    $self->dateofbirthrequired(undef)
-      if not defined $self->dateofbirthrequired
-      or $self->dateofbirthrequired eq '';
-
-    $self->upperagelimit(undef)
-      if not defined $self->upperagelimit
-      or $self->upperagelimit eq '';
-
-    $self->checkprevcheckout('inherit')
-      unless defined $self->checkprevcheckout;
-
-    return $self->SUPER::store;
-}
-
 =head3 default_messaging
 
 my $messaging = $category->default_messaging();
