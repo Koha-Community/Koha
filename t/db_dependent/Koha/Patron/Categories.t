@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 5;
 
 use Koha::Database;
 use Koha::Patron::Category;
