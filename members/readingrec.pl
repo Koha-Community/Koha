@@ -131,7 +131,6 @@ $template->param(
     categoryname      => $data->{description},
     is_child          => ( $data->{category_type} eq 'C' ),
     loop_reading      => $issues,
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

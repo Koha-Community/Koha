@@ -109,7 +109,6 @@ else {
 
     $template->param(
         categoryname    => $patron_category->description,
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {

@@ -132,7 +132,6 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_
         phone => $patron->phone,
         email => $patron->email,
         branchcode => $patron->branchcode,
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
     );
     if ($countissues >0) {
         $template->param(ItemsOnIssues => $countissues);

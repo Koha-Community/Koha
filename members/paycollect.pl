@@ -184,7 +184,6 @@ $template->param(
     borrower      => $borrower,
     categoryname  => $borrower->{description},
     total         => $total_due,
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
     ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
 
     csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
