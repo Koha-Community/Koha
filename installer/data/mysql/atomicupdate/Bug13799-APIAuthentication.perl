@@ -1,10 +1,6 @@
-use C4::Context;
-use Koha::AtomicUpdater;
-
-my $dbh = C4::Context->dbh();
-my $atomicUpdater = Koha::AtomicUpdater->new();
-
-unless ($atomicUpdater->find('Bug13799')) {
+$DBversion = 'XXX';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    # you can use $dbh here like:
 
     $dbh->do(q{
         CREATE TABLE api_keys (
@@ -26,5 +22,7 @@ unless ($atomicUpdater->find('Bug13799')) {
     my $pm = Koha::Auth::PermissionManager->new();
     $pm->addPermission({module => 'borrowers', code => 'manage_api_keys', description => "Manage Borrowers' REST API keys"});
 
-    print "Upgrade done (Bug 13799: Add API keys table)\n";
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 13799: Add API keys table)\n";
 }
