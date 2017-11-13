@@ -3,7 +3,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname %] [% borrower.surname %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname |html %] [% borrower.surname |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type= "text/javascript">
@@ -48,7 +48,7 @@ function enableCheckboxActions(){
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% borrower.firstname %] [% borrower.surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% borrower.firstname |html %] [% borrower.surname |html %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -160,7 +160,7 @@ function enableCheckboxActions(){
 </fieldset>
 </form>
 [% ELSE %]
-    <p>[% borrower.firstname %] [% borrower.surname %] has no outstanding fines.</p>
+    <p>[% borrower.firstname |html %] [% borrower.surname |html %] has no outstanding fines.</p>
 [% END %]
 </div></div>
 
