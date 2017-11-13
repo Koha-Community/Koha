@@ -238,11 +238,11 @@ function validate1(date) {
         [% IF ( phone ) %]<li><span class="label">Primary phone: </span><a href="tel:[% phone %]">[% phone | html %]</a></li>[% END %]
         [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span><a href="tel:[% phonepro %]">[% phonepro | html %]</a></li>[% END %]
         [% IF ( mobile ) %]<li><span class="label">Other phone: </span><a href="tel:[% mobile %]">[% mobile | html %]</a></li>[% END %]
-        [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax %]</li>[% END %]
+        [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax |html %]</li>[% END %]
         [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a title="[% email %]" href="mailto:[% email | url %]">[% email | html %]</a></li>[% END %]
         [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a title="[% emailpro %]" href="mailto:[% emailpro | url %]">[% emailpro | html %]</a></li>[% END %]
         [% UNLESS ( I ) %]
-            [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
+            [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials | html %]</li>[% END %]
             [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %] ([% age %] years)</li>[% END %]
             [% IF ( sex ) %]<li><span class="label">Gender:</span>
                 [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
@@ -422,9 +422,9 @@ function validate1(date) {
         [% END %]
     </li>
 
-    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% AuthorisedValues.GetByCode('Bsort1', sort1) %]</li>[% END %]
-    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% AuthorisedValues.GetByCode('Bsort2', sort2) %]</li>[% END %]
-    <li><span class="label">Username: </span>[% userid %]</li>
+    [% IF ( sort1 ) %]<li><span class="label">Sort field 1:</span>[% AuthorisedValues.GetByCode('Bsort1', sort1) |html %]</li>[% END %]
+    [% IF ( sort2 ) %]<li><span class="label">Sort field 2:</span>[% AuthorisedValues.GetByCode('Bsort2', sort2) |html %]</li>[% END %]
+    <li><span class="label">Username: </span>[% userid |html  %]</li>
     <li><span class="label">Password: </span>
     [% IF ( password ) %]
         *******
@@ -432,8 +432,8 @@ function validate1(date) {
         <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Undefined</a></span>
     [% END %] 
     </li>
-    [% IF ( borrowernotes ) %]<li><span class="label">Circulation note: </span>[% borrowernotes %]</li>[% END %]
-    [% IF ( opacnote ) %]<li><span class="label">OPAC note:</span>[% opacnote %]</li>[% END %]
+    [% IF ( borrowernotes ) %]<li><span class="label">Circulation note: </span>[% borrowernotes |html %]</li>[% END %]
+    [% IF ( opacnote ) %]<li><span class="label">OPAC note:</span>[% opacnote |html %]</li>[% END %]
     [% IF Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 %]
         [% IF ( sync == 1 ) %]
             <li><span class="label">Activate sync: </span>Yes</li>
@@ -475,9 +475,9 @@ function validate1(date) {
     [% END %]
 
     <div class="rows">  <ol>
-      [% IF ( B_phone ) %]<li><span class="label">Phone: </span><a href="tel:[% B_phone %]">[% B_phone %]</a></li>[% END %]
-      [% IF ( B_email ) %]<li class="email"><span class="label">Email: </span><a title="[% B_email %]" href="mailto:[% B_email %]">[% B_email %]</a></li>[% END %]
-      [% IF ( contactnote ) %]<li><span class="label">Contact note: </span> [% contactnote %]</li>[% END %]
+      [% IF ( B_phone ) %]<li><span class="label">Phone: </span><a href="tel:[% B_phone %]">[% B_phone |html  %]</a></li>[% END %]
+      [% IF ( B_email ) %]<li class="email"><span class="label">Email: </span><a title="[% B_email %]" href="mailto:[% B_email | url %]">[% B_email |html %]</a></li>[% END %]
+      [% IF ( contactnote ) %]<li><span class="label">Contact note: </span> [% contactnote |html %]</li>[% END %]
       </ol>
     </div>
 </div>
