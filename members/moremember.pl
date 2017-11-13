@@ -357,7 +357,6 @@ $template->param(
     quickslip       => $quickslip,
     housebound_role => scalar $patron->housebound_role,
     privacy_guarantor_checkouts => $data->{'privacy_guarantor_checkouts'},
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,

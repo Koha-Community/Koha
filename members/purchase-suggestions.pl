@@ -57,7 +57,6 @@ foreach my $key ( keys %$data ) {
 $template->param(
     suggestionsview  => 1,
     categoryname => $data->{'description'},
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {

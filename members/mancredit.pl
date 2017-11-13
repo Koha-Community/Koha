@@ -101,7 +101,6 @@ if ($add){
         borrowernumber => $borrowernumber,
         categoryname   => $patron->category->description,
         is_child       => ($patron->category->category_type eq 'C'), # FIXME is_child should be a Koha::Patron method
-        RoutingSerials => C4::Context->preference('RoutingSerials'),
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

@@ -123,7 +123,6 @@ for (@names) {
 
 $template->param(
     finesview => 1,
-    RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
 add_accounts_to_template();
