@@ -1,12 +1,6 @@
-use C4::Context;
-use Koha::AtomicUpdater;
-
-my $dbh = C4::Context->dbh();
-my $atomicUpdater = Koha::AtomicUpdater->new();
-
-unless ($atomicUpdater->find('Bug14540')) {
-    ##CREATE new TABLEs
-    ##CREATing instead of ALTERing existing tables because this way the changes are more easy to understand.
+$DBversion = 'XXX';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    # you can use $dbh here like:
     $dbh->do("CREATE TABLE permission_modules (
                 permission_module_id int(11) NOT NULL auto_increment,
                 module varchar(32) NOT NULL,
@@ -151,6 +145,7 @@ unless ($atomicUpdater->find('Bug14540')) {
     $dbh->do("DROP TABLE userflags");
     $dbh->do("ALTER TABLE borrowers DROP COLUMN flags");
     $dbh->do("DELETE FROM permission_modules WHERE module = 'borrow'");
-
-    print "Upgrade done (Bug 14540 - Move member-flags.pl to PermissionsManager to better manage permissions for testing.)\n";
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14540 - Move member-flags.pl to PermissionsManager to better manage permissions for testing.)\n";
 }
