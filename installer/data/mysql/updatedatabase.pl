@@ -165,8 +165,8 @@ if(CheckVersion($DBversion)) {
 
 $DBversion = "3.15.00.031";
 if ( CheckVersion($DBversion) ) {
-   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'writeoff', 'Write off fines and fees')");
-   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'remaining_permissions', 'Remaining permissions for managing fines and fees')");
+#PERMS PREUPDATED   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'writeoff', 'Write off fines and fees')");
+#PERMS PREUPDATED   $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ('10', 'remaining_permissions', 'Remaining permissions for managing fines and fees')");
    print "Upgrade to $DBversion done (Bug 9448 - Add separate permission for writing off fees)\n";
    SetVersion ($DBversion);
 }
@@ -1448,9 +1448,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.17.00.050";
 if ( CheckVersion($DBversion) ) {
-    require Koha::Auth::PermissionManager;
-    my $pm = Koha::Auth::PermissionManager->new();
-    $pm->addPermission({module => 'tools', code => 'records_batchdel', description => 'Perform batch deletion of records (bibliographic or authority)'});
+#PERMS PREINSTALLED    require Koha::Auth::PermissionManager;
+#PERMS PREINSTALLED    my $pm = Koha::Auth::PermissionManager->new();
+#PERMS PREINSTALLED    $pm->addPermission({module => 'tools', code => 'records_batchdel', description => 'Perform batch deletion of records (bibliographic or authority)'});
     #Refactored for Koha::Auth::PermissionManager
     #$dbh->do(q|
     #    INSERT INTO permissions (module_bit, code, description) VALUES
@@ -2935,9 +2935,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "3.21.00.027";
 if ( CheckVersion($DBversion) ) {
-    require Koha::Auth::PermissionManager;
-    my $pm = Koha::Auth::PermissionManager->new();
-    $pm->addPermission({module => 'circulate', code => 'self_checkout', description => 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'});
+#PERMS PREUPDATED    require Koha::Auth::PermissionManager;
+#PERMS PREUPDATED    my $pm = Koha::Auth::PermissionManager->new();
+#PERMS PREUPDATED    $pm->addPermission({module => 'circulate', code => 'self_checkout', description => 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'});
 
     ## KS3.16 compatibility
     #$dbh->do(q|
@@ -2948,7 +2948,7 @@ if ( CheckVersion($DBversion) ) {
     my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
     if ($AutoSelfCheckID) {
 
-        $pm->revokeAllPermissions($AutoSelfCheckID); #userid is automatically casted to the proper type by Koha::Object::cast() so we don't have to
+#PERMS PREUPDATED        $pm->revokeAllPermissions($AutoSelfCheckID); #userid is automatically casted to the proper type by Koha::Object::cast() so we don't have to
         ## KS3.16 compatibility
         #$dbh->do(q|
         #    UPDATE borrowers
@@ -2961,7 +2961,7 @@ if ( CheckVersion($DBversion) ) {
         #    WHERE borrowernumber=(SELECT borrowernumber FROM borrowers WHERE userid=?)
         #|, undef, $AutoSelfCheckID);
 
-        $pm->grantPermission($AutoSelfCheckID, 'circulate', 'self_checkout');
+#PERMS PREUPDATED        $pm->grantPermission($AutoSelfCheckID, 'circulate', 'self_checkout');
         ## KS3.16 comp
         #$dbh->do(q|
         #    INSERT INTO user_permissions(borrowernumber, module_bit, code)
@@ -4269,9 +4269,9 @@ if ( CheckVersion($DBversion) ) {
            });
 
 ## Add a permission for managing EDI
-    require Koha::Auth::PermissionManager;
-    my $pm = Koha::Auth::PermissionManager->new();
-    $pm->addPermission({module => 'tools', code => 'edi_manage', description => 'Manage EDIFACT transmissions'});
+#PERMS PREUPDATED    require Koha::Auth::PermissionManager;
+#PERMS PREUPDATED    my $pm = Koha::Auth::PermissionManager->new();
+#PERMS PREUPDATED    $pm->addPermission({module => 'tools', code => 'edi_manage', description => 'Manage EDIFACT transmissions'});
    ## KS3.16 comp
    #$dbh->do(q{
    #        INSERT INTO permissions (module_bit, code, description) values (11, 'edi_manage', 'Manage EDIFACT transmissions');
@@ -4441,10 +4441,10 @@ $DBversion = "3.23.00.052";
 if ( CheckVersion($DBversion) ) {
 ## Insert permission
 
-    require Koha::Auth::PermissionManager;
-    my $pm = Koha::Auth::PermissionManager->new();
-    $pm->addPermission({module => 'tools', code => 'upload_general_files', description => 'Upload any file'});
-    $pm->addPermission({module => 'tools', code => 'upload_manage', description => 'Manage uploaded files'});
+#PERMS PREUPDATED    require Koha::Auth::PermissionManager;
+#PERMS PREUPDATED    my $pm = Koha::Auth::PermissionManager->new();
+#PERMS PREUPDATED    $pm->addPermission({module => 'tools', code => 'upload_general_files', description => 'Upload any file'});
+#PERMS PREUPDATED    $pm->addPermission({module => 'tools', code => 'upload_manage', description => 'Manage uploaded files'});
 
     ## KS3.16 comp
     #$dbh->do(q{
@@ -4659,7 +4659,7 @@ if ( CheckVersion($DBversion) ) {
         ALTER TABLE letter MODIFY COLUMN branchcode varchar(10) NOT NULL DEFAULT ''
     });
     $dbh->do(q{
-        ALTER TABLE permissions MODIFY COLUMN code varchar(64) NOT NULL DEFAULT '';
+#PERMS PREUPDATED        ALTER TABLE permissions MODIFY COLUMN code varchar(64) NOT NULL DEFAULT '';
     });
     print "Upgrade to $DBversion done (Bug 16402: Fix DB structure to work on MySQL 5.7)\n";
     SetVersion($DBversion);
@@ -4986,9 +4986,9 @@ if ( CheckVersion($DBversion) ) {
 
 $DBversion = "16.06.00.022";
 if ( CheckVersion($DBversion) ) {
-    require Koha::Auth::PermissionManager;
-    my $pm = Koha::Auth::PermissionManager->new();
-    $pm->addPermission({module => 'reports', code => 'delete_reports', description => 'Delete SQL reports'});
+#PERMS PREUPDATED    require Koha::Auth::PermissionManager;
+#PERMS PREUPDATED    my $pm = Koha::Auth::PermissionManager->new();
+#PERMS PREUPDATED    $pm->addPermission({module => 'reports', code => 'delete_reports', description => 'Delete SQL reports'});
 
     ## KS3.16 comp
     #$dbh->do(q{
@@ -5730,11 +5730,11 @@ $DBversion = '16.06.00.048';
 if( CheckVersion( $DBversion ) ) {
     ## KS3.16 compat
     ## These have been added in Bug 14686 already??
-    $dbh->do(q|
-        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
-        (13, 'upload_general_files', 'Upload any file'),
-        (13, 'upload_manage', 'Manage uploaded files');
-    |);
+#PERMS PREUPDATED    $dbh->do(q|
+#PERMS PREUPDATED        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+#PERMS PREUPDATED        (13, 'upload_general_files', 'Upload any file'),
+#PERMS PREUPDATED        (13, 'upload_manage', 'Manage uploaded files');
+#PERMS PREUPDATED    |);
 
     ## KS3.16 compat
     ## No we dont
@@ -6318,17 +6318,19 @@ if( CheckVersion( $DBversion ) ) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     });
 
-    $dbh->do(q{
-        INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (21, 'clubs', 'Patron clubs', '0');
-    });
-
-    $dbh->do(q{
-        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
-           (21, 'edit_templates', 'Create and update club templates'),
-           (21, 'edit_clubs', 'Create and update clubs'),
-           (21, 'enroll', 'Enroll patrons in clubs')
-        ;
-    });
+#PERMS PREUPDATED
+#    $dbh->do(q{
+#        INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (21, 'clubs', 'Patron clubs', '0');
+#    });
+#
+#    $dbh->do(q{
+#        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+#           (21, 'edit_templates', 'Create and update club templates'),
+#           (21, 'edit_clubs', 'Create and update clubs'),
+#           (21, 'enroll', 'Enroll patrons in clubs')
+#        ;
+#    });
+#PERMS PREUPDATED
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 12461 - Add patron clubs feature)\n";
