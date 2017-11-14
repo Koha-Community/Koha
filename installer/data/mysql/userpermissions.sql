@@ -5,6 +5,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'circulate',       'overdues_report', 'Execute overdue items report'),
    ( 'circulate',       'force_checkout', 'Force checkout if a limitation exists'),
    ( 'circulate',       'manage_restrictions', 'Manage restrictions for accounts'),
+   ( 'circulate',       'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelf CheckID'),
    ( 'catalogue',       'staff_login', 'Allow staff login.'),
    ( 'parameters',      'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 'parameters',      'manage_circ_rules', 'manage circulation rules'),
