@@ -399,10 +399,10 @@ sub GetSSN {
     my $ssnkey = $sth->fetchrow;
     $ssnkey =~ s/\D//g;
 
-	my $host = C4::Context->config('ssnProvider')->{'host'};
-	my $port = C4::Context->config('ssnProvider')->{'port'};
-	my $user = C4::Context->config('ssnProvider')->{'user'};
-	my $password = C4::Context->config('ssnProvider')->{'password'};
+	my $host = C4::Context->config('ssnProvider')->{'directDB'}->{'host'};
+	my $port = C4::Context->config('ssnProvider')->{'directDB'}->{'port'};
+	my $user = C4::Context->config('ssnProvider')->{'directDB'}->{'user'};
+	my $password = C4::Context->config('ssnProvider')->{'directDB'}->{'password'};
 
 	my $dsn = "dbi:mysql:ssn:".$host.":".$port;
 
