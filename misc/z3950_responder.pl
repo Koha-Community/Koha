@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Carp;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
 use C4::Context;
@@ -102,8 +102,15 @@ my @yaz_options;
 
 sub add_yaz_option {
     my ( $opt_name, $opt_value ) = @_;
+    warn "name: $opt_name and value: $opt_value";
 
     push @yaz_options, "-$opt_name", "$opt_value";
+}
+
+sub pass_yaz_option {
+    my ( $opt_name ) = @_;
+
+    push @yaz_options, "-$opt_name";
 }
 
 GetOptions(
@@ -126,13 +133,13 @@ GetOptions(
     'C=s' => \&add_yaz_option,
     'm=s' => \&add_yaz_option,
     'w=s' => \&add_yaz_option,
-    'z' => \&add_yaz_option,
-    'K' => \&add_yaz_option,
-    'i' => \&add_yaz_option,
-    'D' => \&add_yaz_option,
-    'S' => \&add_yaz_option,
-    'T' => \&add_yaz_option,
-    '1' => \&add_yaz_option
+    'z' => \&pass_yaz_option,
+    'K' => \&pass_yaz_option,
+    'i' => \&pass_yaz_option,
+    'D' => \&pass_yaz_option,
+    'S' => \&pass_yaz_option,
+    'T' => \&pass_yaz_option,
+    '1' => \&pass_yaz_option
 ) || pod2usage(2);
 
 pod2usage(1) if $help;
