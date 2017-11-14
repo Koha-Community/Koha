@@ -1,45 +1,8 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50 search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-$(document).ready(function(){
-
-    $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false },
-        ],
-        "aaSorting": [[ 1, "asc" ]],
-        "bPaginate": false
-    }));
-        /* Inline edit/delete links */
-        $("td").click(function(event){
-            var $tgt = $(event.target);
-            var row = $(this).parent();
-            $(".linktools").hide();
-            $("tr").removeClass("selected");
-            row.addClass("selected");
-            if($tgt.is("a")||$tgt.is(":nth-child(4)")||$tgt.is(":nth-child(5)")){
-                //Don't show inline links for cells containing links of their own.
-            } else {
-                var position = $(this).offset();
-                var top = position.top+5;
-                var left = position.left+5;
-                $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
-            }
-        });
-
-});
-
-//]]>
-</script>
-[% INCLUDE 'z3950_search.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/z3950_search.js"></script>
 <style type="text/css">
 .linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
 .linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
@@ -47,18 +10,20 @@ $(document).ready(function(){
 tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; } #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 </style>
 
-    [% IF ( opsearch ) %]
-        <style type="text/css">
-        #custom-doc { width:53em;*width:51.72em;min-width:689px; margin:auto; text-align:left; }
-        </style>
-        </head>
-        <body id="cat_z3950_auth_search" class="cat">
-        <div id="custom-doc" class="yui-t7">
-    [% ELSE %]
-        </head>
-        <body id="cat_z3950_search" class="cat" style="padding:.5em;">
-        <div>
-    [% END %]
+[% IF ( opsearch ) %]
+    <style type="text/css">
+    #custom-doc { width:53em;*width:51.72em;min-width:689px; margin:auto; text-align:left; }
+    </style>
+    </head>
+    <body id="cat_z3950_auth_search" class="cat">
+    <div id="custom-doc" class="yui-t7">
+[% ELSE %]
+    </head>
+
+    <body id="cat_z3950_search" class="cat" style="padding:.5em;">
+    <div>
+[% END %]
+
     <div id="bd">
     [% IF ( opsearch ) %]
         <h2>Z39.50 Authority search points</h2>
@@ -198,5 +163,41 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending %] servers to search</h3>[% END %]
 
-</body>
-</html>
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "aoColumnDefs": [
+                    { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 1, "asc" ]],
+                "bPaginate": false
+            }));
+                /* Inline edit/delete links */
+                $("td").click(function(event){
+                    var $tgt = $(event.target);
+                    var row = $(this).parent();
+                    $(".linktools").hide();
+                    $("tr").removeClass("selected");
+                    row.addClass("selected");
+                    if($tgt.is("a")||$tgt.is(":nth-child(4)")||$tgt.is(":nth-child(5)")){
+                        //Don't show inline links for cells containing links of their own.
+                    } else {
+                        var position = $(this).offset();
+                        var top = position.top+5;
+                        var left = position.left+5;
+                        $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
+                    }
+                });
+
+        });
+    </script>
+    [% INCLUDE 'z3950_search.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/z3950_search.js"></script>
+[% END %]
+
+[% INCLUDE 'popup-bottom.inc' %]

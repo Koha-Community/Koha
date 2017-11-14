@@ -3,126 +3,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/merge-record.js"></script>
-[% INCLUDE 'merge-record-strings.inc' %]
 <style type="text/css">
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
 /* We use this style "against" the li ui-tabs-nav style automatically applied */
 #dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
-<script type="text/javascript">
-//<![CDATA[
-[% UNLESS (result) %]
-  [% IF (choosereference) %]
-    function changeFramework(fw) {
-        $("#frameworkcode").val(fw);
-    }
-    $(document).ready(function(){
-            $(".previewData").on("click", function(e){
-            e.preventDefault();
-            var ltitle = $(this).text();
-            var page = $(this).attr("href");
-            $("#dataPreviewLabel").text(ltitle);
-            $("#dataPreview .modal-body").load(page + " div");
-            $('#dataPreview').modal({show:true});
-        });
-        $("#dataPreview").on("hidden", function(){
-            $("#dataPreviewLabel").html("");
-            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-        });
-    });
-  [% ELSE %]
-    function check_mandatory () {
-        var missing = {
-            'fields': [],
-            'subfields': []
-        };
-        for (tag in tagslib) {
-            if (tag == '000' || tag == '001')
-                continue;
-            if (tagslib[tag].mandatory == 1) {
-                if ($("#resultul span.field:contains("+ tag +")").length == 0) {
-                    missing.fields.push(tag);
-                }
-            }
-            for (subfieldcode in tagslib[tag]) {
-                if (subfieldcode == 'lib' || subfieldcode == 'mandatory'
-                || subfieldcode == 'repeatable' || subfieldcode == 'tab'
-                || subfieldcode == '@') {
-                    continue;
-                }
-                if (tagslib[tag][subfieldcode].mandatory == 1 && tagslib[tag][subfieldcode].tab >= 0) {
-                    var fields = $("#resultul span.field:contains("+ tag +")");
-                    $(fields).each(function() {
-                        var subfields = $(this).parents('li').find("span.subfield:contains("+ subfieldcode +")");
-                        if (subfields.length == 0) {
-                            missing.subfields.push( {
-                                'tag': tag,
-                                'subfieldcode': subfieldcode
-                            } );
-                        }
-                    });
-                }
-            }
-        }
-        return missing;
-    }
-
-    // When submiting the form
-    function mergeformsubmit() {
-        var missing = check_mandatory();
-        var alert_msg = '';
-        var error = 0;
-        if (missing.fields.length > 0) {
-            alert_msg += _("Following required fields are missing:") + "\n";
-            for (var i in missing.fields) {
-                alert_msg += "\t- " + missing.fields[i] + "\n";
-                error ++;
-            }
-            alert_msg += "\n";
-        }
-        if (missing.subfields.length > 0) {
-            alert_msg += _("Following required subfields are missing:") + "\n";
-            for (var i in missing.subfields) {
-                var subfield = missing.subfields[i];
-                alert_msg += "\t- " + subfield.tag + "$" + subfield.subfieldcode + "\n";
-                error ++;
-            }
-        }
-
-        if (error != 0) {
-            alert(alert_msg);
-            return false;
-        } else {
-            $("#tabs").remove();
-        }
-    }
-
-$(document).ready(function(){
-    tagslib = [];
-    $.getJSON("/cgi-bin/koha/cataloguing/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
-      tagslib = json;
-      rebuild_target($("#tabs"), $("#resultul"));
-    });
-
-    // Creating tabs
-    $("#tabs").tabs();
-
-    // Check all checkboxes in first tab, and uncheck all others to avoid
-    // inconsistencies from a page refresh.
-    $('#tabs div#tabrecord[% ref_biblionumber %]').find('input[type="checkbox"]').prop('checked', true);
-    $('#tabs > div:not("#tabrecord[% ref_biblionumber %]")').find('input[type="checkbox"]').prop('checked', false);
-
-    //Set focus to cataloging search
-    $("input[name=q]:eq(0)").focus();
-});
-
-  [% END %]
-[% END %]
-//]]>
-</script>
 </head>
+
 <body id="cat_merge" class="cat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
@@ -295,5 +183,119 @@ $(document).ready(function(){
 </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/merge-record.js"></script>
+    [% INCLUDE 'merge-record-strings.inc' %]
+    <script type="text/javascript">
+        [% UNLESS (result) %]
+          [% IF (choosereference) %]
+            function changeFramework(fw) {
+                $("#frameworkcode").val(fw);
+            }
+            $(document).ready(function(){
+                    $(".previewData").on("click", function(e){
+                    e.preventDefault();
+                    var ltitle = $(this).text();
+                    var page = $(this).attr("href");
+                    $("#dataPreviewLabel").text(ltitle);
+                    $("#dataPreview .modal-body").load(page + " div");
+                    $('#dataPreview').modal({show:true});
+                });
+                $("#dataPreview").on("hidden", function(){
+                    $("#dataPreviewLabel").html("");
+                    $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                });
+            });
+          [% ELSE %]
+            function check_mandatory () {
+                var missing = {
+                    'fields': [],
+                    'subfields': []
+                };
+                for (tag in tagslib) {
+                    if (tag == '000' || tag == '001')
+                        continue;
+                    if (tagslib[tag].mandatory == 1) {
+                        if ($("#resultul span.field:contains("+ tag +")").length == 0) {
+                            missing.fields.push(tag);
+                        }
+                    }
+                    for (subfieldcode in tagslib[tag]) {
+                        if (subfieldcode == 'lib' || subfieldcode == 'mandatory'
+                        || subfieldcode == 'repeatable' || subfieldcode == 'tab'
+                        || subfieldcode == '@') {
+                            continue;
+                        }
+                        if (tagslib[tag][subfieldcode].mandatory == 1 && tagslib[tag][subfieldcode].tab >= 0) {
+                            var fields = $("#resultul span.field:contains("+ tag +")");
+                            $(fields).each(function() {
+                                var subfields = $(this).parents('li').find("span.subfield:contains("+ subfieldcode +")");
+                                if (subfields.length == 0) {
+                                    missing.subfields.push( {
+                                        'tag': tag,
+                                        'subfieldcode': subfieldcode
+                                    } );
+                                }
+                            });
+                        }
+                    }
+                }
+                return missing;
+            }
+
+            // When submiting the form
+            function mergeformsubmit() {
+                var missing = check_mandatory();
+                var alert_msg = '';
+                var error = 0;
+                if (missing.fields.length > 0) {
+                    alert_msg += _("Following required fields are missing:") + "\n";
+                    for (var i in missing.fields) {
+                        alert_msg += "\t- " + missing.fields[i] + "\n";
+                        error ++;
+                    }
+                    alert_msg += "\n";
+                }
+                if (missing.subfields.length > 0) {
+                    alert_msg += _("Following required subfields are missing:") + "\n";
+                    for (var i in missing.subfields) {
+                        var subfield = missing.subfields[i];
+                        alert_msg += "\t- " + subfield.tag + "$" + subfield.subfieldcode + "\n";
+                        error ++;
+                    }
+                }
+
+                if (error != 0) {
+                    alert(alert_msg);
+                    return false;
+                } else {
+                    $("#tabs").remove();
+                }
+            }
+
+        $(document).ready(function(){
+            tagslib = [];
+            $.getJSON("/cgi-bin/koha/cataloguing/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
+              tagslib = json;
+              rebuild_target($("#tabs"), $("#resultul"));
+            });
+
+            // Creating tabs
+            $("#tabs").tabs();
+
+            // Check all checkboxes in first tab, and uncheck all others to avoid
+            // inconsistencies from a page refresh.
+            $('#tabs div#tabrecord[% ref_biblionumber %]').find('input[type="checkbox"]').prop('checked', true);
+            $('#tabs > div:not("#tabrecord[% ref_biblionumber %]")').find('input[type="checkbox"]').prop('checked', false);
+
+            //Set focus to cataloging search
+            $("input[name=q]:eq(0)").focus();
+        });
+
+          [% END %]
+        [% END %]
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

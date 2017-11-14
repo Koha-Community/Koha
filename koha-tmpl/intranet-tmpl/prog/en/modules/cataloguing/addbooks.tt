@@ -1,85 +1,10 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    //<![CDATA[
-
-     $(document).ready(function() {
-        //Set focus to cataloging search
-        $("input[name=q]:eq(0)").focus();
-
-        $("#z3950search").click(function(){
-            PopupZ3950("");
-            return false;
-        });
-
-        $(".z3950searchFw").click(function(){
-            PopupZ3950($(this).prop('id'));
-            return false;
-        });
-        $(".merge-items").on("click",function(e){
-            e.preventDefault();
-            MergeItems();
-        });
-
-        $("#useadvanced").click(function(){
-            $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
-            return true;
-        });
-
-        $(".previewData").on("click", function(e){
-            e.preventDefault();
-            var ltitle = $(this).text();
-            var page = $(this).attr("href");
-            $("#dataPreviewLabel").text(ltitle);
-            $("#dataPreview .modal-body").load(page + " div");
-            $('#dataPreview').modal({show:true});
-        });
-        $("#dataPreview").on("hidden", function(){
-            $("#dataPreviewLabel").html("");
-            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-        });
-
-     });
-
-    /* this function open a popup to search on z3950 server.  */
-    function PopupZ3950(fw) {
-        var strQuery = GetZ3950Terms(fw);
-        if(strQuery){
-            window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-        }
-    }
-    /* provide Z3950 search points */
-    function GetZ3950Terms(fw){
-        var strQuery="&frameworkcode=" + fw;
-        [% FOREACH z3950_search_param IN z3950_search_params %]
-            strQuery += "&" + "[% z3950_search_param.name | uri %]" + "=" + "[% z3950_search_param.value | uri %]";
-        [% END %]
-        return strQuery;
-    }
-
-    /**
-     * This function checks if the adequate number of records are checked for merging
-     */
-    function MergeItems() {
-     var checkboxes = $("input:checkbox:checked");
-     if (checkboxes.length < 2) {
-         alert(_("At least two records must be selected for merging."));
-     } else {
-         var params = [];
-         $(checkboxes).each(function() {
-             params.push('biblionumber=' + $(this).val());
-         });
-         var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
-         location.href = url;
-     }
-     return false;
-    }
-
-    //]]>
-</script>
 </head>
+
 <body id="cat_addbooks" class="cat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
@@ -286,4 +211,83 @@
 
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+
+         $(document).ready(function() {
+            //Set focus to cataloging search
+            $("input[name=q]:eq(0)").focus();
+
+            $("#z3950search").click(function(){
+                PopupZ3950("");
+                return false;
+            });
+
+            $(".z3950searchFw").click(function(){
+                PopupZ3950($(this).prop('id'));
+                return false;
+            });
+            $(".merge-items").on("click",function(e){
+                e.preventDefault();
+                MergeItems();
+            });
+
+            $("#useadvanced").click(function(){
+                $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
+                return true;
+            });
+
+            $(".previewData").on("click", function(e){
+                e.preventDefault();
+                var ltitle = $(this).text();
+                var page = $(this).attr("href");
+                $("#dataPreviewLabel").text(ltitle);
+                $("#dataPreview .modal-body").load(page + " div");
+                $('#dataPreview').modal({show:true});
+            });
+            $("#dataPreview").on("hidden", function(){
+                $("#dataPreviewLabel").html("");
+                $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+
+         });
+
+        /* this function open a popup to search on z3950 server.  */
+        function PopupZ3950(fw) {
+            var strQuery = GetZ3950Terms(fw);
+            if(strQuery){
+                window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            }
+        }
+        /* provide Z3950 search points */
+        function GetZ3950Terms(fw){
+            var strQuery="&frameworkcode=" + fw;
+            [% FOREACH z3950_search_param IN z3950_search_params %]
+                strQuery += "&" + "[% z3950_search_param.name | uri %]" + "=" + "[% z3950_search_param.value | uri %]";
+            [% END %]
+            return strQuery;
+        }
+
+        /**
+         * This function checks if the adequate number of records are checked for merging
+         */
+        function MergeItems() {
+         var checkboxes = $("input:checkbox:checked");
+         if (checkboxes.length < 2) {
+             alert(_("At least two records must be selected for merging."));
+         } else {
+             var params = [];
+             $(checkboxes).each(function() {
+                 params.push('biblionumber=' + $(this).val());
+             });
+             var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
+             location.href = url;
+         }
+         return false;
+        }
+
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
