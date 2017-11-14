@@ -1,32 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; SRU search fields mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#form01").submit(function(event) {
-            if(window.opener) {
-                var newmap=allInputs();
-                window.opener.$('#show_sru_fields').val(newmap);
-                window.close();
-            } else {
-                // In this case not called as a popup. Just do nothing.
-                event.preventDefault();
-            }
-        });
-    });
-    function allInputs () {
-        var aInput= new Array();
-        $("form :input").each(function() {
-            if( this.id && $(this).val() ) {
-                aInput.push(this.id+'='+$(this).val());
-            }
-        });
-        return aInput.join(',');
-    }
-//]]>
-</script>
 </head>
 
 <body id="admin_sru_modmapping" class="admin">
@@ -95,4 +70,31 @@
         </form>
     </div>
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#form01").submit(function(event) {
+                if(window.opener) {
+                    var newmap=allInputs();
+                    window.opener.$('#show_sru_fields').val(newmap);
+                    window.close();
+                } else {
+                    // In this case not called as a popup. Just do nothing.
+                    event.preventDefault();
+                }
+            });
+        });
+        function allInputs () {
+            var aInput= new Array();
+            $("form :input").each(function() {
+                if( this.id && $(this).val() ) {
+                    aInput.push(this.id+'='+$(this).val());
+                }
+            });
+            return aInput.join(',');
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'popup-bottom.inc' %]

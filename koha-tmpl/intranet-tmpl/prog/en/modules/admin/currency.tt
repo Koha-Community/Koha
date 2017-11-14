@@ -1,6 +1,7 @@
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% USE HtmlTags %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange rates &rsaquo;
 [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
@@ -8,49 +9,11 @@
 [% IF op == 'list' %]Currencies[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-    function check_currency(val) {
-        if ( val == 1.0 ) {
-            $("#active").prop('disabled', false);
-            $("#hint").html("");
-        } else {
-            $("#active").prop('checked', false);
-            $("#active").prop('disabled', true);
-            $("#hint").html(_("The active currency must have a rate of 1.0"));
-        }
-    }
-
-    $(document).ready(function() {
-        columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
-        var issuest = KohaTable("#currencies-table", {
-            dom: 'B<"clearfix">t',
-            "columnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                ],
-        }, columns_settings );
-
-        // prevents users to check active with a currency != 1
-        $("#rate").keyup(function() {
-            check_currency( $(this).val() );
-        });
-        check_currency( $("#rate").val() );
-        $("#currency_code").on("blur",function(){
-            toUC(this);
-        });
-    });
-//]]>
-</script>
 </head>
+
 <body id="admin_currency" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'currencies-admin-search.inc' %]
-
-
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency %]'[% ELSE %]New currency[% END %][% END %]
 [% IF op == 'delete_confirm' %]Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]
@@ -252,4 +215,44 @@
 [% INCLUDE 'admin-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript">
+
+        function check_currency(val) {
+            if ( val == 1.0 ) {
+                $("#active").prop('disabled', false);
+                $("#hint").html("");
+            } else {
+                $("#active").prop('checked', false);
+                $("#active").prop('disabled', true);
+                $("#hint").html(_("The active currency must have a rate of 1.0"));
+            }
+        }
+
+        $(document).ready(function() {
+            columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) %]
+            var issuest = KohaTable("#currencies-table", {
+                dom: 'B<"clearfix">t',
+                "columnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    ],
+            }, columns_settings );
+
+            // prevents users to check active with a currency != 1
+            $("#rate").keyup(function() {
+                check_currency( $(this).val() );
+            });
+            check_currency( $("#rate").val() );
+            $("#currency_code").on("blur",function(){
+                toUC(this);
+            });
+        });
+
+    </script>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
