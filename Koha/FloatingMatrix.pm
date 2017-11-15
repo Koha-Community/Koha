@@ -235,27 +235,12 @@ Static method
 sub _CheckConditionalFloat {
     my ($item, $branchRule) = @_;
 
-    my $conditionRules = $branchRule->getConditionRules();
+    my $evalCondition = $branchRule->getConditionRulesParsed();
 
-    my $evalCondition = '';
-    if (my @conds = $conditionRules =~ /(\w+)\s+(ne|eq|gt|lt|<|>|==|!=)\s+(\w+)\s*(and|or|xor|&&|\|\|)?/ig) {
-        #Iterate the condition quads, with the fourth index being the logical join operator.
-        for (my $i=0 ; $i<scalar(@conds) ; $i+=4) {
-            my $column = $conds[$i];
-            my $operator = $conds[$i+1];
-            my $value = $conds[$i+2];
-            my $join = $conds[$i+3] || '';
-
-            $evalCondition .= join(' ',"\$item->{'$column'}",$operator,"'$value'",$join,'');
-        }
-    }
-    else {
-        warn "Koha::FloatingMatrix::_CheckConditionalFloat():> Bad condition rules '$conditionRules' couldn't be parsed\n";
-        return undef;
-    }
+    # $item must be in the current scope, as it is hard-coded into the eval'ld condition
     my $ok = eval("return 1 if($evalCondition);");
     if ($@) {
-        warn "Koha::FloatingMatrix::_CheckConditionalFloat():> Something bad hapened when trying to evaluate the dynamic conditional:\n$@\n";
+        warn "Koha::FloatingMatrix::_CheckConditionalFloat():> Something bad hapened when trying to evaluate the dynamic conditional: '$evalCondition'\n\n$@\n";
         return undef;
     }
     return $ok;

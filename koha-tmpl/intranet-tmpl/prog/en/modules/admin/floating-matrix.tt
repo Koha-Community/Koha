@@ -33,6 +33,7 @@
                             itype eq BK or itype eq CR - this will always float all Items with item type 'BK' or 'CR'<br/>
                             ccode eq FLOAT - this will float all Items with a collection code 'FLOAT'<br/>
                             itype ne CR and permanent_location eq CART  - this will float all Items not of item type CR and whose permanent location (set when the Item's location is set) is 'CART'<br/>
+                            itype =~ (CR|DV|BK) - Using a regular expression to match against the Item attribute. Floats item types CR or DV or BK. Refraing from using complex regexps as those can smash the system.<br/>
                             <i>These boolean statements are actually evaluable Perl boolean expressions and target the columns in the koha.items-table. See <a href="http://schema.koha-community.org/tables/items.html">here</a> for available data columns.</i>
                         </p>
                     </li>

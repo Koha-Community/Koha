@@ -44,7 +44,7 @@ use Koha::Exception::BadParameter;
                                     fromBranch => 'CPL',
                                     toBranch => 'FFL',
                                     floating => ['ALWAYS'|'POSSIBLE'|'CONDITIONAL'],
-                                    conditionRules => "items->{itype} eq 'BK' && $items->{permanent_location} eq 'CART'"
+                                    conditionRules => "items->{itype} eq 'BK' && $items->{permanent_location} =~ 'CART'"
                                 });
 
 BranchRule defines the floating rule for one transfer route.
@@ -59,9 +59,9 @@ We check if there is a floating rule for that fromBranch-toBranch -combination a
 sub new {
     my ($class, $params) = @_;
 
+    bless $params, $class;
     ValidateParams($params);
 
-    bless $params, $class;
     return $params;
 }
 
@@ -124,7 +124,7 @@ sub ValidateParams {
         $errorMsg = "'conditionRules' text is too long. Maximum length is '$maximumConditionRulesDatabaseLength' characters";
     }
     elsif ($params->{conditionRules}) {
-        ParseConditionRules(undef, $params->{conditionRules});
+        $params->setConditionRules($params->{conditionRules});
     }
 
     if ($errorMsg) {
@@ -138,27 +138,21 @@ sub ValidateParams {
 
 =head parseConditionRules, Static method
 
-    my $evalCondition = ParseConditionRules($item, $conditionRules);
-    my $evalCondition = ParseConditionRules(undef, $conditionRules);
+    my $evalCondition = ParseConditionRules($conditionRules);
+    my $evalCondition = ParseConditionRules($conditionRules);
 
 Parses the given Perl boolean expression into an eval()-able expression.
 If Item is given, uses the Item's columns to create a executable expression to check for
 conditional floating for this specific Item.
 
-@PARAM1 {Reference to HASH of koha.items-row} Item to check for conditional floating.
-@PARAM2 {String koha.floating_matrix.condition_rules} The boolean expression to turn
+@PARAM1 {String koha.floating_matrix.condition_rules} The boolean expression to turn
                     into a Perl code to check the floating condition.
 @THROWS Koha::Exception::BadParameter, if the conditionRules couldn't be parsed.
 =cut
 sub ParseConditionRules {
-    my ($item, $conditionRulesString) = @_;
+    my ($conditionRulesString) = @_;
     my $evalCondition = '';
-    if (my @conds = $conditionRulesString =~ /(\w+)\s+(ne|eq|gt|lt|<|>|==|!=)\s+(\w+)\s*(and|or|xor|&&|\|\|)?/ig) {
-
-        #If we haven't got no Item, simply stop here to aknowledge that the given condition logic is valid (atleast parseable)
-        return undef unless $item;
-
-        #If we have an Item, then prepare and return an eval-expression to test if the Item should float.
+    if (my @conds = $conditionRulesString =~ /(\w+)\s+(ne|eq|gt|lt|=~|<|>|==|!=)\s+(\S+)\s*(and|or|xor|&&|\|\|)?/ig) {
         #Iterate the condition quads, with the fourth index being the logical join operator.
         for (my $i=0 ; $i<scalar(@conds) ; $i+=4) {
             my $column = $conds[$i];
@@ -166,16 +160,20 @@ sub ParseConditionRules {
             my $value = $conds[$i+2];
             my $join = $conds[$i+3] || '';
 
-            $evalCondition .= join(' ',"\$item->{'$column'}",$operator,"'$value'",$join,'');
+            if ($operator eq '=~') {
+                $value = qr($value);
+                $evalCondition .= "\$item->{'$column'} $operator /$value/ $join ";
+            } else {
+                $evalCondition .= "\$item->{'$column'} $operator '$value' $join ";
+            }
         }
-
-        return $evalCondition;
     }
     else {
         Koha::Exception::BadParameter->throw(error =>
-                    "Koha::FloatingMatrix::parseConditionRules():> Bad condition rules '$conditionRulesString' couldn't be parsed\n".
-                    "See 'Help' for more info");
+                    "Koha::FloatingMatrix::BranchRule::ParseConditionRules():> Bad condition rules '$conditionRulesString' couldn't be parsed.\n"
+        );
     }
+    return $evalCondition;
 }
 
 =head replace
@@ -301,13 +299,11 @@ See parseConditionRules()
 sub setConditionRules {
     my ($self, $val) = @_;
     #Validate the conditinal rules.
-    ParseConditionRules(undef, $val);
+    $self->{conditionRulesParsed} = ParseConditionRules($val);
     $self->{conditionRules} = $val;
 }
-sub getConditionRules {
-    my ($self) = @_;
-    return $self->{conditionRules};
-}
+sub getConditionRules { return shift->{conditionRules}; }
+sub getConditionRulesParsed { return shift->{conditionRulesParsed}; }
 
 =head toString
 
