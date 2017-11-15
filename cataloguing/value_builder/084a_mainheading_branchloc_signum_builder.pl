@@ -103,17 +103,20 @@ if (splitted) {
 return 0;
 }
 
-\$("select[id^='tag_952_subfield_c']").change(function(){
-    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
-});
+// We don't want signums to change without explicit user action (clicking the ...)
+// So these are commented out:
 
-\$("div[id^='subfieldc']").find("select").change(function(){
-    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
-});
+//\$("select[id^='tag_952_subfield_c']").change(function(){
+//    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
+//});
 
-\$("select[id^='tag_952_subfield_a']").change(function(){
-    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
-});
+//\$("div[id^='subfieldc']").find("select").change(function(){
+//    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
+//});
+
+//\$("select[id^='tag_952_subfield_a']").change(function(){
+//    \$("a[id^='buttonDot_tag_952_subfield_o']").click();
+//});
 
 //]]>
 </script>
