@@ -125,7 +125,11 @@ sub _autocreate {
     my %borrower = ( $config->{matchpoint} => $match );
 
     while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
-        $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
+        if ( any { /(^psgi|^plack)/i } keys %ENV ) {
+            $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
+        } else {
+            $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
+        }
     }
 
     my $patron = Koha::Patron->new( \%borrower )->store;
