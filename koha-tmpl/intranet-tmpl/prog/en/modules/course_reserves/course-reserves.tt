@@ -1,19 +1,12 @@
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" id="js">
-$(document).ready(function() {
-    $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sPaginationType": "four_button"
-    }));
-});
-</script>
-
 </head>
+
 <body id="courses_course_reserves" class="course">
 
 [% INCLUDE 'header.inc' %]
@@ -106,5 +99,15 @@ $(document).ready(function() {
     </div>
 </div>
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" id="js">
+        $(document).ready(function() {
+            $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button"
+            }));
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

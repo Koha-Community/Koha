@@ -1,60 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; [% IF course_name %] Edit [% course_name %] [% ELSE %] New course [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-[% IF ( departments ) %]
-
-    <script type="text/javascript">
-    //<![CDATA[
-    $(document).ready(function(){
-        $( "#find_instructor" ).autocomplete({
-            source: "/cgi-bin/koha/circ/ysearch.pl",
-            minLength: 3,
-            select: function( event, ui ) {
-                AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.cardnumber );
-                return false;
-            }
-        })
-        .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            return $( "<li></li>" )
-            .data( "ui-autocomplete-item", item )
-            .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
-            .appendTo( ul );
-        };
-
-        if ( ! $('#instructors').html() ) {
-            $('#course_instructors').hide();
-        }
-
-        $("body").on("click",".removeInstructor",function(e){
-            e.preventDefault();
-            var divid = $(this).parent().attr("id");
-            var cardnumber = divid.replace("borrower_","");
-            RemoveInstructor(cardnumber);
-        });
-    });
-
-    function AddInstructor( name, cardnumber ) {
-        div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
-        $('#instructors').append( div );
-
-        $('#find_instructor').val('').focus();
-        $('#course_instructors').show();
-    }
-
-    function RemoveInstructor( cardnumber ) {
-        $( '#borrower_' + cardnumber ).remove();
-
-        if ( ! $('#instructors').html() ) {
-            $('#course_instructors').hide( 800 );
-        }
-    }
-
-    //]]>
-    </script>
-
-[% END %]
-
 </head>
 
 <body id="courses_course" class="course">
@@ -186,6 +133,56 @@
     </p>
 </div>
 
+[% END %]
+
+[% IF ( departments ) %]
+    [% MACRO jsinclude BLOCK %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $( "#find_instructor" ).autocomplete({
+                    source: "/cgi-bin/koha/circ/ysearch.pl",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.cardnumber );
+                        return false;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.surname + ", " + item.firstname + " (" + item.cardnumber + ") <small>" + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                    .appendTo( ul );
+                };
+
+                if ( ! $('#instructors').html() ) {
+                    $('#course_instructors').hide();
+                }
+
+                $("body").on("click",".removeInstructor",function(e){
+                    e.preventDefault();
+                    var divid = $(this).parent().attr("id");
+                    var cardnumber = divid.replace("borrower_","");
+                    RemoveInstructor(cardnumber);
+                });
+            });
+
+            function AddInstructor( name, cardnumber ) {
+                div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
+                $('#instructors').append( div );
+
+                $('#find_instructor').val('').focus();
+                $('#course_instructors').show();
+            }
+
+            function RemoveInstructor( cardnumber ) {
+                $( '#borrower_' + cardnumber ).remove();
+
+                if ( ! $('#instructors').html() ) {
+                    $('#course_instructors').hide( 800 );
+                }
+            }
+        </script>
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
