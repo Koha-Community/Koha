@@ -1,27 +1,11 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; Club enrollments</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            "aoColumnDefs": [
-                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-            ]
-        } ));
-    });
-//]]>
-</script>
-
 </head>
 
 <body id="club_enrollments" class="clubs">
@@ -64,4 +48,20 @@
         </div>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                "aoColumnDefs": [
+                        { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                ]
+            } ));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

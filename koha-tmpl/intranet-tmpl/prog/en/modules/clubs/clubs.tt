@@ -1,71 +1,12 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ]
-        } ));
-
-        cTable = $('#clubs-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ]
-        } ));
-    });
-
-    function ConfirmDeleteTemplate( id, name, a ) {
-        if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/club/template/delete',
-                data: { id: id },
-                success: function( data ) {
-                    if ( data.success ) {
-                        location.reload();
-                    } else {
-                        alert(_("Unable to delete template!"));
-                    }
-                },
-                dataType: 'json'
-            });
-        }
-    }
-
-    function ConfirmDeleteClub( id, name, a ) {
-        if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/club/delete',
-                data: { id: id },
-                success: function( data ) {
-                    if ( data.success ) {
-                        location.reload();
-                    } else {
-                        alert(_("Unable to delete club!"));
-                    }
-                },
-                dataType: 'json'
-            });
-        }
-    }
-//]]>
-</script>
-
 </head>
 
 <body id="clubs_clubs" class="clubs">
@@ -277,5 +218,65 @@
             [% INCLUDE 'tools-menu.inc' %]
         </div>
     </div> <!-- /#bd -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ]
+            } ));
+
+            cTable = $('#clubs-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ]
+            } ));
+        });
+
+        function ConfirmDeleteTemplate( id, name, a ) {
+            if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
+                $.ajax({
+                    type: "POST",
+                    url: '/cgi-bin/koha/svc/club/template/delete',
+                    data: { id: id },
+                    success: function( data ) {
+                        if ( data.success ) {
+                            location.reload();
+                        } else {
+                            alert(_("Unable to delete template!"));
+                        }
+                    },
+                    dataType: 'json'
+                });
+            }
+        }
+
+        function ConfirmDeleteClub( id, name, a ) {
+            if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
+                $.ajax({
+                    type: "POST",
+                    url: '/cgi-bin/koha/svc/club/delete',
+                    data: { id: id },
+                    success: function( data ) {
+                        if ( data.success ) {
+                            location.reload();
+                        } else {
+                            alert(_("Unable to delete club!"));
+                        }
+                    },
+                    dataType: 'json'
+                });
+            }
+        }
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

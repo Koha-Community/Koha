@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% SET AuthorisedValuesCategories = AuthorisedValues.GetCategories %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo;
     [% IF club %]
@@ -11,7 +12,6 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 </head>
 
 <body id="clubs_add_modify" class="clubs">
@@ -124,5 +124,9 @@
             </form>
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
