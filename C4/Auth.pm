@@ -26,6 +26,7 @@ use URI::Escape;
 use CGI::Session;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
+use YAML::Syck;
 
 require Exporter;
 use C4::Context;
@@ -414,6 +415,9 @@ sub get_template_and_user {
     my $https = $in->{query}->https();
     my $using_https = ( defined $https and $https ne 'OFF' ) ? 1 : 0;
 
+    my $finna_base_url = defined C4::Context->preference('FinnaBaseURL') ?
+        YAML::Syck::Load(C4::Context->preference('FinnaBaseURL')) : "";
+
     $template->param(
         "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
         EnhancedMessagingPreferences                                       => C4::Context->preference('EnhancedMessagingPreferences'),
@@ -435,6 +439,7 @@ sub get_template_and_user {
         noItemTypeImages   => C4::Context->preference("noItemTypeImages"),
         marcflavour        => C4::Context->preference("marcflavour"),
         OPACBaseURL        => C4::Context->preference('OPACBaseURL'),
+        FinnaBaseURL       => $finna_base_url,
     );
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(

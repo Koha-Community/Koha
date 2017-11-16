@@ -175,6 +175,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('FinesIncludeGracePeriod','1',NULL,'If enabled, fines calculations will include the grace period.','YesNo'),
 ('FinesLog','1',NULL,'If ON, log fines','YesNo'),
 ('finesMode','test','off|test|production','Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires accruefines cronjob.','Choice'),
+('FinnaBaseURL','',NULL,'YAML configuration for Finna base URL.','Textarea'),
 ('FRBRizeEditions','0','','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo'),
 ('gist','0','','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','Integer'),
 ('GoogleIndicTransliteration','0','','GoogleIndicTransliteration on the OPAC.','YesNo'),

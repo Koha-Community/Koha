@@ -222,6 +222,9 @@ function confirm_deletion() {
                             [% IF ( OPACBaseURL ) %]
                                 <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">OPAC view</a></li>
                             [% END %]
+                            [% IF ( FinnaBaseURL ) && ( FinnaBaseURL.Record ) %]
+                                <li class="view-in-opac"><a target="_blank" href="[% FinnaBaseURL.Record.replace('{biblionumber}', biblionumber) %]">Finna view</a></li>
+                            [% END %]
                           </ul>
                           </div>
                       </td>

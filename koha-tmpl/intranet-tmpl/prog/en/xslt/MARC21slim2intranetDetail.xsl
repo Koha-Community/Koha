@@ -22,6 +22,7 @@
         <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
         <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
         <xsl:variable name="OPACBaseURL" select="marc:sysprefs/marc:syspref[@name='OPACBaseURL']"/>
+        <xsl:variable name="FinnaBaseURLRecord" select="marc:sysprefs/marc:syspref[@name='FinnaBaseURL.Record']"/>
         <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
         <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
         <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
@@ -1161,6 +1162,17 @@
         <xsl:if test="$OPACBaseURL!=''">
         <span class="results_summary"><span class="label">OPAC view: </span>
             <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+        </span>
+        </xsl:if>
+        <xsl:if test="$FinnaBaseURLRecord!=''">
+        <span class="results_summary"><span class="label">Finna view: </span>
+            <a><xsl:attribute name="href">
+                <xsl:call-template name="replace-string">
+                    <xsl:with-param name="text" select="$FinnaBaseURLRecord"/>
+                    <xsl:with-param name="replace" select="'{biblionumber}'" />
+                    <xsl:with-param name="with" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
+                </xsl:call-template>
+            </xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
         </span>
         </xsl:if>
 

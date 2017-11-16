@@ -95,6 +95,12 @@ $(document).ready(function() {
                 <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Open in new window.</a>
             </li>
         [% END %]
+        [% IF ( FinnaBaseURL ) && ( FinnaBaseURL.Record ) %]
+            <li>
+                <span class="label">Finna view:</span>
+                <a href="[% FinnaBaseURL.Record.replace('{biblionumber}', biblionumber) %]" target="_blank">Open in new window.</a>
+            </li>
+        [% END %]
 [% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) %]</li>[% END %]
         [% IF ( serialsadditems ) %]
             <li><span class="label">Items:</span> Serial receipt creates an item record.</li>

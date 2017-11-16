@@ -35,6 +35,7 @@ use Koha::XSLT_Handler;
 use Koha::Libraries;
 
 use Encode;
+use YAML::XS;
 
 use vars qw(@ISA @EXPORT);
 
@@ -176,6 +177,15 @@ sub get_xslt_sysprefs {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);
         $sysxml .= "<syspref name=\"$syspref\">$sp</syspref>\n";
+    }
+
+    # Map FinnaBaseURL YAML to XSLT sysprefs
+    if (defined (my $sp = C4::Context->preference('FinnaBaseURL'))) {
+        my $finna_url_mapping = YAML::XS::Load($sp);
+        foreach my $key (keys %$finna_url_mapping) {
+            my $val = $finna_url_mapping->{$key};
+            $sysxml .= "<syspref name=\"FinnaBaseURL.$key\">$val</syspref>\n";
+        }
     }
 
     # singleBranchMode was a system preference, but no longer is

@@ -137,6 +137,11 @@ Your cart
                 In online catalog: [% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber %]
             </p>
             [% END %]
+            [% IF ( FinnaBaseURL ) && ( FinnaBaseURL.Record ) %]
+            <p>
+                In Finna: [% FinnaBaseURL.Record.replace('{biblionumber}', BIBLIO_RESULT.biblionumber) %]
+            </p>
+            [% END %]
             [% IF ( BIBLIO_RESULT.ITEM_RESULTS.size ) %]
             <p>Items:
             <ul>

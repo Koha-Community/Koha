@@ -25,6 +25,13 @@ OPAC:
               class: url
             - . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)
         -
+            - "Finna URL mapping"
+            - pref: FinnaBaseURL
+              class: code
+              type: textarea
+            - YAML configuration for different locations in Finna. Keywords currently in use<code>:</code> Record.<br /> Example
+            - "<pre>Record: https://koha.finna.fi/Record/koha.{biblionumber}</pre>"
+        -
             - Show
             - pref: LibraryName
               class: long

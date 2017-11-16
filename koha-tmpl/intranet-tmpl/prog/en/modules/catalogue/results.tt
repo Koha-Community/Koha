@@ -618,6 +618,11 @@ var holdForPatron = function () {
                                 | <a href="[% Koha.Preference('OPACBaseURL') %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]" target="_blank">OPAC view</a>
                               </span>
                           [% END %]
+                          [% IF ( FinnaBaseURL ) && ( FinnaBaseURL.Record ) %]
+                              <span class="view-in-opac">
+                                | <a href="[% FinnaBaseURL.Record.replace('{biblionumber}', SEARCH_RESULT.biblionumber) %]" target="_blank">Finna view</a>
+                              </span>
+                          [% END %]
 
                                 </p>
                                 </td>
