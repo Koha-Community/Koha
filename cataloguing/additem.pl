@@ -509,10 +509,6 @@ if ($op eq "additem") {
                         shelfname => 'labels printing',
                         category => 1,
                         owner => $loggedinuser,
-                        sortfield => undef,
-                        allow_add => 0,
-                        allow_delete_own => 1,
-                        allow_delete_other => 0,
                         } )->store; };
                 }
                 my $content = Koha::Virtualshelfcontent->new(
@@ -649,10 +645,6 @@ if ($op eq "additem") {
                                 shelfname => 'labels printing',
                                 category => 1,
                                 owner => $loggedinuser,
-                                sortfield => undef,
-                                allow_add => 0,
-                                allow_delete_own => 1,
-                                allow_delete_other => 0,
                                 } )->store; };
                         }
                         my $content = Koha::Virtualshelfcontent->new(
@@ -790,18 +782,15 @@ if ($op eq "additem") {
         ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
         if ($addToPrintLabelsList) {
             my $shelf = Koha::Virtualshelves->find( { owner => $loggedinuser, shelfname => 'labels printing'} );
+
             if (!$shelf) {
                 $shelf = eval { Koha::Virtualshelf->new( {
                     shelfname => 'labels printing',
                     category => 1,
-                    owner => $loggedinuser,
-                    sortfield => undef,
-                    allow_add => 0,
-                    allow_delete_own => 1,
-                    allow_delete_other => 0,
+                    owner => $loggedinuser
                     } )->store; };
             }
-	    my $content = Koha::Virtualshelfcontent->new(
+	       my $content = Koha::Virtualshelfcontent->new(
                     {
                         shelfnumber => $shelf->shelfnumber,
                         biblionumber => $biblionumber,
