@@ -1,24 +1,10 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Create manual invoice</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    var type_fees = {'L':'','F':'','A':'','N':'','M':''};
-    [% FOREACH invoice_types_loo IN invoice_types_loop %]
-        type_fees['[% invoice_types_loo.authorised_value %]'] = "[% invoice_types_loo.lib %]";
-    [% END %]
-$(document).ready(function(){
-        $('#maninvoice').preventDoubleFormSubmit();
-        $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
-    $("#invoice_type").on("change",function(){
-        this.form.desc.value = this.options[this.selectedIndex].value;
-        this.form.amount.value = type_fees[this.options[this.selectedIndex].value];
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="pat_maninvoice" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -82,4 +68,23 @@ $(document).ready(function(){
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript">
+        var type_fees = {'L':'','F':'','A':'','N':'','M':''};
+        [% FOREACH invoice_types_loo IN invoice_types_loop %]
+            type_fees['[% invoice_types_loo.authorised_value %]'] = "[% invoice_types_loo.lib %]";
+        [% END %]
+        $(document).ready(function(){
+            $('#maninvoice').preventDoubleFormSubmit();
+            $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
+            $("#invoice_type").on("change",function(){
+                this.form.desc.value = this.options[this.selectedIndex].value;
+                this.form.amount.value = type_fees[this.options[this.selectedIndex].value];
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,16 +1,10 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Create manual credit</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-        $('#mancredit').preventDoubleFormSubmit();
-        $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
-});
-//]]>
-</script>
 </head>
+
 <body id="pat_mancredit" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -61,4 +55,15 @@ $(document).ready(function(){
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#mancredit').preventDoubleFormSubmit();
+            $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

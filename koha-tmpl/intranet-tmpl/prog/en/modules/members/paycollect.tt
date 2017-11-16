@@ -1,68 +1,11 @@
 [% USE Koha %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type= "text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
-    $("#paid").on("change",function(){
-        moneyFormat( this );
-    });
-});
-
-function moneyFormat(textObj) {
-    var newValue = textObj.value;
-    var decAmount = "";
-    var dolAmount = "";
-    var decFlag   = false;
-    var aChar     = "";
-
-    for(i=0; i < newValue.length; i++) {
-        aChar = newValue.substring(i, i+1);
-        if (aChar >= "0" && aChar <= "9") {
-            if(decFlag) {
-                decAmount = "" + decAmount + aChar;
-            }
-            else {
-                dolAmount = "" + dolAmount + aChar;
-            }
-        }
-        if (aChar == ".") {
-            if (decFlag) {
-                dolAmount = "";
-                break;
-            }
-            decFlag = true;
-        }
-    }
-
-    if (dolAmount == "") {
-        dolAmount = "0";
-    }
-// Strip leading 0s
-    if (dolAmount.length > 1) {
-        while(dolAmount.length > 1 && dolAmount.substring(0,1) == "0") {
-            dolAmount = dolAmount.substring(1,dolAmount.length);
-        }
-    }
-    if (decAmount.length > 2) {
-        decAmount = decAmount.substring(0,2);
-    }
-// Pad right side
-    if (decAmount.length == 1) {
-       decAmount = decAmount + "0";
-    }
-    if (decAmount.length == 0) {
-       decAmount = decAmount + "00";
-    }
-
-    textObj.value = dolAmount + "." + decAmount;
-}
-//]]>
-</script>
 </head>
+
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -227,5 +170,66 @@ function moneyFormat(textObj) {
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
-[% INCLUDE 'intranet-bottom.inc' %]
 
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type= "text/javascript">
+        $(document).ready(function() {
+            $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
+            $("#paid").on("change",function(){
+                moneyFormat( this );
+            });
+        });
+
+        function moneyFormat(textObj) {
+            var newValue = textObj.value;
+            var decAmount = "";
+            var dolAmount = "";
+            var decFlag   = false;
+            var aChar     = "";
+
+            for(i=0; i < newValue.length; i++) {
+                aChar = newValue.substring(i, i+1);
+                if (aChar >= "0" && aChar <= "9") {
+                    if(decFlag) {
+                        decAmount = "" + decAmount + aChar;
+                    }
+                    else {
+                        dolAmount = "" + dolAmount + aChar;
+                    }
+                }
+                if (aChar == ".") {
+                    if (decFlag) {
+                        dolAmount = "";
+                        break;
+                    }
+                    decFlag = true;
+                }
+            }
+
+            if (dolAmount == "") {
+                dolAmount = "0";
+            }
+        // Strip leading 0s
+            if (dolAmount.length > 1) {
+                while(dolAmount.length > 1 && dolAmount.substring(0,1) == "0") {
+                    dolAmount = dolAmount.substring(1,dolAmount.length);
+                }
+            }
+            if (decAmount.length > 2) {
+                decAmount = decAmount.substring(0,2);
+            }
+        // Pad right side
+            if (decAmount.length == 1) {
+               decAmount = decAmount + "0";
+            }
+            if (decAmount.length == 0) {
+               decAmount = decAmount + "00";
+            }
+
+            textObj.value = dolAmount + "." + decAmount;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

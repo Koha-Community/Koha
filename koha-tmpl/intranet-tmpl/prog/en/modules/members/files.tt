@@ -1,22 +1,11 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Files for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".confirmdelete").on("click", function(){
-            $(this).parents('tr').addClass("warn");
-            if(confirm(_("Are you sure you want to delete this file?"))){
-                return true;
-            } else {
-                $(this).parents('tr').removeClass("warn");
-                return false;
-            }
-        });
-});
-</script>
 </head>
+
 <body id="pat_files" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -93,4 +82,22 @@
             [% INCLUDE 'circ-menu.inc' %]
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".confirmdelete").on("click", function(){
+                $(this).parents('tr').addClass("warn");
+                if(confirm(_("Are you sure you want to delete this file?"))){
+                    return true;
+                } else {
+                    $(this).parents('tr').removeClass("warn");
+                    return false;
+                }
+            });
+    });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

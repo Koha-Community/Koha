@@ -85,6 +85,30 @@ $(document).ready(function() {
         $("#itemSearchFallback").modal("show");
     });
 
+    // Debarments
+    $("div#reldebarments .remove_restriction").on("click",function(){
+        return confirm(_("Remove restriction?"));
+    });
+    var mrform = $("#manual_restriction_form");
+    var mrlink = $("#add_manual_restriction");
+    mrform.hide();
+    mrlink.on("click",function(e){
+        $(this).hide();
+        mrform.show();
+        e.preventDefault();
+    });
+    $("#cancel_manual_restriction").on("click",function(e){
+        mrlink.show();
+        mrform.hide();
+        e.preventDefault();
+    });
+    $(".clear-date").on("click",function(e){
+        e.preventDefault();
+        var fieldID = this.id.replace("clear-date-","");
+        $("#" + fieldID).val("");
+    });
+
+
 });
 
 function export_checkouts(format) {

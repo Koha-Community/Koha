@@ -1,152 +1,12 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-
-        $("#saverecord").css({ 'margin-left': 0 });
-        var original_offset = $("#toolbar").position().top;
-        var additional_height = $("#filters").height();
-        $('#toolbar').fixFloat({ 'originalOffset': original_offset });
-        $("#filteraction_on").on("click", function(){
-            $(window).off('scroll');
-            $("#toolbar").css({ top: original_offset + additional_height });
-            $('#toolbar').fixFloat({ 'originalOffset': original_offset + additional_height });
-        });
-        $("#filteraction_off").on("click", function(){
-            $(window).off('scroll');
-            $("#toolbar").css({ top: original_offset });
-            $('#toolbar').fixFloat({ 'originalOffset': original_offset });
-        })
-
-	[% IF categorycode %]
-		update_category_code( "[% categorycode %]" );
-	[% ELSE %]
-		if ( $("#categorycode_entry").length > 0 ){
-			var category_code = $("#categorycode_entry").find("option:selected").val();
-			update_category_code( category_code );
-		}
-	[% END %]
-});
-
-function update_cardnumber_warning(size){
-    var max_len = [% maxlength_cardnumber %];
-    if ( size >= max_len ) {
-        $("#cn_max").show();
-    } else {
-        $("#cn_max").hide();
-    }
-}
-
-$(document).ready(function() {
-    $("#cn_max").hide();
-    var content;
-    $("#cardnumber").on("keydown", function(e){
-        content = $(this).val();
-    });
-    $("#cardnumber").on("keyup", function(e){
-        // .val() will return the value of the input after the key has been released
-        var l = $(this).val().length;
-        if ( l == content.length + 1 ) { l--; }
-        update_cardnumber_warning(l);
-    });
-    $("#cardnumber").bind("paste", function(e){
-        var pastedData = e.originalEvent.clipboardData.getData('text');
-        update_cardnumber_warning(pastedData.length - 1);
-    } );
-    var toggle_quick_add = $(".toggle_quick_add");
-    $(toggle_quick_add).click(function(e){
-        toggle_quick_add.toggle();
-        e.preventDefault();
-        var toggle_to = '';
-        var toggle_from = '';
-        if( $("#entryform:visible").length ) {
-            toggle_to = "#quick_add_form label";
-            toggle_from = "#entryform label";
-        } else {
-            toggle_to="#entryform label";
-            toggle_from = "#quick_add_form label";
-        }
-        $(toggle_from).each(function() {
-            var input_label = $(this).attr('for');
-            if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' ) {
-                $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
-                return;
-            }
-            $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
-        });
-
-        $(".toggler").toggle();
-    });
-
-    $("#save_quick_add").click(function(){
-        $("#quick_add_form").validate();
-        if( $("#quick_add_form").valid()){
-            $('.toggle_quick_add').click();
-            $('#saverecord').click();
-        }
-        else {return false;}
-    });
-
-    $("#entryform").validate({
-        rules: {
-            password: {
-                required: true,
-                password_strong: true,
-                password_no_spaces: true
-            },
-            password2: {
-                required: true,
-                password_match: true
-            }
-        }
-    });
-
-    $("#saverecord").click(function(){
-        if( check_form_borrowers() ){
-            $("#entryform").submit();
-        }
-    });
-
-    $('#duplicate').on('click', function() {
-        $("input[name='op']").val('modify');
-        $("input[name='borrowernumber']").val('[% check_member %]');
-        $("input[name='check_member']").val('');
-        $('#entryform').submit();
-    });
-
-    $('#not-duplicate').on('click', function() {
-        $("input[name='nodouble']").val('1');
-        $('#entryform').submit();
-    });
-});
-
-        var MSG_SEPARATOR = _("Separator must be / in field %s");
-        var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
-        var MSG_INCORRECT_MONTH = _("Invalid month entered in field %s");
-        var MSG_INCORRECT_YEAR = _("Invalid year entered in field %s");
-        var MSG_DUPLICATE_PATRON = _("Warning: Duplicate patron");
-        var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
-        var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
-        var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
-        var MSG_MONTH = _("%s month")
-        var MSG_MONTHS = _("%s months")
-        var MSG_YEAR = _("%s year")
-        var MSG_YEARS = _("%s years")
-        var LABEL_CHANGE = _("Change");
-        var LABEL_SET_TO_PATRON = _("Set to patron");
-        var LABEL_AGE = _("Age");
-
-//]]>
-</script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/members_[% KOHA_VERSION %].js"></script>
 </head>
+
 <body id="pat_memberentrygen" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -1284,38 +1144,6 @@ $(document).ready(function() {
             </ol>
         </fieldset>
     </form>
-    <script>
-        $(document).ready(function () {
-
-            $("#entryform,#saverecord").hide();
-            [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
-            var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
-            var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
-            $("#entryform label").each(function () {
-                var input_label = $(this).attr('for');
-                if ( input_label == 'sex-female' ) {
-                    input_label='sex';
-                }
-                else if ( input_label == 'btitle' ) {
-                    input_label='title';
-                }
-                if ( skipped_fields.indexOf( input_label ) != -1 ) { input_label=""; }
-                if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
-                   $(this).parent().clone().appendTo("#quick_add_list");
-                   [% UNLESS mandatorypassword %]
-                         if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
-                   [% END %]
-                }
-            });
-                if( $("#memberentry_guarantor").length ) {
-                    $("#memberentry_guarantor").clone().appendTo("#quick_add_list").css("margin",0);
-                    $("#quick_add_form #memberentry_guarantor").append("<p>" + _("Note: Quick add guarantor form populates address fields in full form") + "</p>");
-                    $("#quick_add_list #guarantordelete").prop('id','qagd');
-                }
-            $("#qagd").click(function() { $("#guarantordelete").click(); });
-            $("#quick_add_form").show();
-        });
-    </script>
 [% END %]
 </div>
 </div>
@@ -1325,6 +1153,184 @@ $(document).ready(function() {
 </div>[% END %]
 [% END %]
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+                $("#saverecord").css({ 'margin-left': 0 });
+                var original_offset = $("#toolbar").position().top;
+                var additional_height = $("#filters").height();
+                $('#toolbar').fixFloat({ 'originalOffset': original_offset });
+                $("#filteraction_on").on("click", function(){
+                    $(window).off('scroll');
+                    $("#toolbar").css({ top: original_offset + additional_height });
+                    $('#toolbar').fixFloat({ 'originalOffset': original_offset + additional_height });
+                });
+                $("#filteraction_off").on("click", function(){
+                    $(window).off('scroll');
+                    $("#toolbar").css({ top: original_offset });
+                    $('#toolbar').fixFloat({ 'originalOffset': original_offset });
+                })
+
+            [% IF categorycode %]
+                update_category_code( "[% categorycode %]" );
+            [% ELSE %]
+                if ( $("#categorycode_entry").length > 0 ){
+                    var category_code = $("#categorycode_entry").find("option:selected").val();
+                    update_category_code( category_code );
+                }
+            [% END %]
+        });
+
+        function update_cardnumber_warning(size){
+            var max_len = [% maxlength_cardnumber %];
+            if ( size >= max_len ) {
+                $("#cn_max").show();
+            } else {
+                $("#cn_max").hide();
+            }
+        }
+
+        $(document).ready(function() {
+            $("#cn_max").hide();
+            var content;
+            $("#cardnumber").on("keydown", function(e){
+                content = $(this).val();
+            });
+            $("#cardnumber").on("keyup", function(e){
+                // .val() will return the value of the input after the key has been released
+                var l = $(this).val().length;
+                if ( l == content.length + 1 ) { l--; }
+                update_cardnumber_warning(l);
+            });
+            $("#cardnumber").bind("paste", function(e){
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                update_cardnumber_warning(pastedData.length - 1);
+            } );
+            var toggle_quick_add = $(".toggle_quick_add");
+            $(toggle_quick_add).click(function(e){
+                toggle_quick_add.toggle();
+                e.preventDefault();
+                var toggle_to = '';
+                var toggle_from = '';
+                if( $("#entryform:visible").length ) {
+                    toggle_to = "#quick_add_form label";
+                    toggle_from = "#entryform label";
+                } else {
+                    toggle_to="#entryform label";
+                    toggle_from = "#quick_add_form label";
+                }
+                $(toggle_from).each(function() {
+                    var input_label = $(this).attr('for');
+                    if ( input_label == 'sex-male' || input_label == 'sex-none' || input_label == 'sex-female' ) {
+                        $(toggle_to+"[for='"+input_label+"']").next().prop('checked', $(this).next().prop('checked') );
+                        return;
+                    }
+                    $(toggle_to+"[for='"+input_label+"']").next().val(  $(this).next().val() );
+                });
+
+                $(".toggler").toggle();
+            });
+
+            $("#save_quick_add").click(function(){
+                $("#quick_add_form").validate();
+                if( $("#quick_add_form").valid()){
+                    $('.toggle_quick_add').click();
+                    $('#saverecord').click();
+                }
+                else {return false;}
+            });
+
+            $("#entryform").validate({
+                rules: {
+                    password: {
+                        required: true,
+                        password_strong: true,
+                        password_no_spaces: true
+                    },
+                    password2: {
+                        required: true,
+                        password_match: true
+                    }
+                }
+            });
+
+            $("#saverecord").click(function(){
+                if( check_form_borrowers() ){
+                    $("#entryform").submit();
+                }
+            });
+
+            $('#duplicate').on('click', function() {
+                $("input[name='op']").val('modify');
+                $("input[name='borrowernumber']").val('[% check_member %]');
+                $("input[name='check_member']").val('');
+                $('#entryform').submit();
+            });
+
+            $('#not-duplicate').on('click', function() {
+                $("input[name='nodouble']").val('1');
+                $('#entryform').submit();
+            });
+        });
+
+        var MSG_SEPARATOR = _("Separator must be / in field %s");
+        var MSG_INCORRECT_DAY = _("Invalid day entered in field %s");
+        var MSG_INCORRECT_MONTH = _("Invalid month entered in field %s");
+        var MSG_INCORRECT_YEAR = _("Invalid year entered in field %s");
+        var MSG_DUPLICATE_PATRON = _("Warning: Duplicate patron");
+        var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
+        var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
+        var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
+        var MSG_MONTH = _("%s month")
+        var MSG_MONTHS = _("%s months")
+        var MSG_YEAR = _("%s year")
+        var MSG_YEARS = _("%s years")
+        var LABEL_CHANGE = _("Change");
+        var LABEL_SET_TO_PATRON = _("Set to patron");
+        var LABEL_AGE = _("Age");
+
+        [% IF quickadd && opadd  && !check_member %]
+            $(document).ready(function () {
+
+                $("#entryform,#saverecord").hide();
+                [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
+                var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field %]",[% END %]];
+                var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
+                $("#entryform label").each(function () {
+                    var input_label = $(this).attr('for');
+                    if ( input_label == 'sex-female' ) {
+                        input_label='sex';
+                    }
+                    else if ( input_label == 'btitle' ) {
+                        input_label='title';
+                    }
+                    if ( skipped_fields.indexOf( input_label ) != -1 ) { input_label=""; }
+                    if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
+                       $(this).parent().clone().appendTo("#quick_add_list");
+                       [% UNLESS mandatorypassword %]
+                             if( input_label == 'password' ) $("#entryform label[for='password2']").parent().clone().appendTo("#quick_add_list");
+                       [% END %]
+                    }
+                });
+                    if( $("#memberentry_guarantor").length ) {
+                        $("#memberentry_guarantor").clone().appendTo("#quick_add_list").css("margin",0);
+                        $("#quick_add_form #memberentry_guarantor").append("<p>" + _("Note: Quick add guarantor form populates address fields in full form") + "</p>");
+                        $("#quick_add_list #guarantordelete").prop('id','qagd');
+                    }
+                $("#qagd").click(function() { $("#guarantordelete").click(); });
+                $("#quick_add_form").show();
+            });
+        [% END %]
+
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/messaging-preference-form_[% KOHA_VERSION %].js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
 [% PROCESS 'password_check.inc' %]
 [% PROCESS 'add_password_check' new_password => 'password' %]

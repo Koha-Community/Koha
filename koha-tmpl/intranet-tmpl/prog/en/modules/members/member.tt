@@ -2,320 +2,13 @@
 [% USE ColumnsSettings %]
 [% USE Branches %]
 [% USE Categories %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $('#add_to_patron_list_submit').prop('disabled', true);
-    $('#new_patron_list').hide();
-
-    $('#add_to_patron_list').change(function() {
-        var value = $('#add_to_patron_list').val();
-        if ( value == 'new' ) {
-            $('#new_patron_list').val('')
-            $('#new_patron_list').show();
-            $('#new_patron_list').focus();
-        } else if ( value ) {
-            $('#new_patron_list').hide();
-            $('#add_to_patron_list_submit').prop('disabled', false);
-        } else {
-            $('#new_patron_list').hide();
-            $('#add_to_patron_list_submit').prop('disabled', true);
-        }
-    });
-
-    $('#new_patron_list').on('input', function() {
-        if ( $('#new_patron_list').val() ) {
-            $('#add_to_patron_list_submit').prop('disabled', false);
-        } else {
-            $('#add_to_patron_list_submit').prop('disabled', true);
-        }
-    });
-
-    $("#add_to_patron_list_submit").on('click', function(e){
-        if ( $('#add_to_patron_list').val() == 'new' ) {
-            if ( $('#new_patron_list').val() ) {
-                $("#add_to_patron_list option").each(function() {
-                    if ( $(this).text() == $('#new_patron_list').val() ) {
-                        alert( _("You already have a list with that name!") );
-                        return false;
-                    }
-                });
-            } else {
-                alert( _("You must give your new patron list a name!") );
-                return false;
-            }
-        }
-
-        if ( $("#memberresultst input:checkbox:checked").length == 0 ) {
-            alert( _("You have not selected any patrons to add to a list!") );
-            return false;
-        }
-
-        var borrowernumbers = [];
-        $("#memberresultst").find("input:checkbox:checked").each(function(){
-            borrowernumbers.push($(this).val());
-        });
-        var data = {
-            add_to_patron_list: $("#add_to_patron_list").val(),
-            new_patron_list: $("#new_patron_list").val(),
-            borrowernumbers: borrowernumbers
-        };
-        $.ajax({
-            data: data,
-            type: 'POST',
-            url: '/cgi-bin/koha/svc/members/add_to_list',
-            success: function(data) {
-                $("#patron_list_dialog").show();
-                $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
-                $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
-                $("#patron_list_dialog > a").html(data.patron_list.name);
-                if ( $('#add_to_patron_list').val() == 'new' ) {
-                    var new_patron_list_added = $("<option>", {
-                        value: data.patron_list.patron_list_id,
-                        text: data.patron_list.name
-                    });
-                    $("#add_to_patron_list optgroup").append(new_patron_list_added);
-                    $("#add_to_patron_list").val(data.patron_list.patron_list_id);
-                    $("#new_patron_list").val('');
-                    $('#add_to_patron_list').change();
-                }
-            },
-            error: function() {
-                alert("an error occurred");
-            }
-        });
-        return true;
-    });
-    $(".filterByLetter").on("click",function(e){
-        e.preventDefault();
-        filterByFirstLetterSurname($(this).text());
-    });
-    $("#select_all").on("click",function(e){
-        e.preventDefault();
-        $(".selection").prop("checked", true);
-    });
-    $("#clear_all").on("click",function(e){
-        e.preventDefault();
-        $(".selection").prop("checked", false);
-    });
-    $("#clear_search").on("click",function(e){
-        e.preventDefault();
-        clearFilters(true);
-    });
-    $("#searchform").on("submit", filter);
-});
-
-var dtMemberResults;
-var search = 1;
-$(document).ready(function() {
-    [% IF searchmember %]
-        $("#searchmember_filter").val("[% searchmember | html %]");
-    [% END %]
-    [% IF searchfieldstype %]
-        $("searchfieldstype_filter").val("[% searchfieldstype %]");
-    [% END %]
-    [% IF searchtype %]
-        $("#searchtype_filter").val("[% searchtype %]");
-    [% END %]
-    [% IF categorycode %]
-        $("#categorycode_filter").val("[% categorycode_filter %]");
-    [% END %]
-    [% IF branchcode %]
-        $("#branchcode_filter").val("[% branchcode_filter %]");
-    [% END %]
-
-    [% IF view != "show_results" %]
-        search = 0;
-    [% ELSE %]
-        $("#searchresults").show();
-    [% END %]
-
-    // Build the aLengthMenu
-    var aLengthMenu = [
-        [%PatronsPerPage %], 10, 20, 50, 100, -1
-    ];
-    jQuery.unique(aLengthMenu);
-    aLengthMenu.sort(function( a, b ){
-        // Put "All" at the end
-        if ( a == -1 ) {
-            return 1;
-        } else if ( b == -1 ) {
-            return -1;
-        }
-        return parseInt(a) < parseInt(b) ? -1 : 1;}
-    );
-    var aLengthMenuLabel = [];
-    $(aLengthMenu).each(function(){
-        if ( this == -1 ) {
-            // Label for -1 is "All"
-            aLengthMenuLabel.push("All");
-        } else {
-            aLengthMenuLabel.push(this);
-        }
-    });
-
-    // Apply DataTables on the results table
-    var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
-    [% UNLESS CAN_user_tools_manage_patron_lists %]
-        [%# Remove the first column if we do not display the checkbox %]
-        columns_settings.splice(0, 1);
-    [% END %]
-    dtMemberResults = KohaTable("#memberresultst", {
-        'bServerSide': true,
-        'sAjaxSource': "/cgi-bin/koha/svc/members/search",
-        'fnServerData': function(sSource, aoData, fnCallback) {
-            if ( ! search ) {
-                return;
-            }
-            aoData.push({
-                'name': 'searchmember',
-                'value': $("#searchmember_filter").val()
-            },{
-                'name': 'firstletter',
-                'value': $("#firstletter_filter").val()
-            },{
-                'name': 'searchfieldstype',
-                'value': $("#searchfieldstype_filter").val()
-            },{
-                'name': 'searchtype',
-                'value': $("#searchtype_filter").val()
-            },{
-                'name': 'categorycode',
-                'value': $("#categorycode_filter").val()
-            },{
-                'name': 'branchcode',
-                'value': $("#branchcode_filter").val()
-            },{
-                'name': 'name_sorton',
-                'value': 'borrowers.surname borrowers.firstname'
-            },{
-                'name': 'dateofbirth',
-                'value': 'borrowers.dateofbirth',
-            },{
-                'name': 'category_sorton',
-                'value': 'categories.description',
-            },{
-                'name': 'branch_sorton',
-                'value': 'branches.branchname'
-            },{
-                'name': 'template_path',
-                'value': 'members/tables/members_results.tt',
-            });
-            $.ajax({
-                'dataType': 'json',
-                'type': 'POST',
-                'url': sSource,
-                'data': aoData,
-                'success': function(json){
-                    // redirect if there is only 1 result.
-                    if ( json.aaData.length == 1 ) {
-                        var borrowernumber = json.aaData[0].borrowernumber;
-                        document.location.href="/cgi-bin/koha/members/moremember.pl?borrowernumber="+borrowernumber;
-                        return false;
-                    }
-                    fnCallback(json);
-                }
-            });
-        },
-        'aoColumns':[
-            [% IF CAN_user_tools_manage_patron_lists %]
-              { 'mDataProp': 'dt_borrowernumber', 'bSortable': false },
-            [% END %]
-            { 'mDataProp': 'dt_cardnumber' },
-            { 'mDataProp': 'dt_name' },
-            { 'mDataProp': 'dt_dateofbirth' },
-            { 'mDataProp': 'dt_category' },
-            { 'mDataProp': 'dt_branch' },
-            { 'mDataProp': 'dt_dateexpiry' },
-            { 'mDataProp': 'dt_od_checkouts', 'bSortable': false },
-            { 'mDataProp': 'dt_fines', 'bSortable': false },
-            { 'mDataProp': 'dt_borrowernotes' },
-            { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
-        ],
-        'fnRowCallback': function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-            /* Center text for 6th column */
-            $("td:eq(5)", nRow).css("text-align", "center");
-
-            return nRow;
-        },
-        'bFilter': false,
-        'bAutoWidth': false,
-        [% IF CAN_user_tools_manage_patron_lists %]
-            'aaSorting': [[2, 'asc']],
-        [% ELSE %]
-            'aaSorting': [[1, 'asc']],
-        [% END %]
-        "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
-        'sPaginationType': 'full_numbers',
-        "iDisplayLength": [% PatronsPerPage %],
-        "bProcessing": true,
-    }, columns_settings);
-    update_searched();
-});
-
-// Update the string "Results found ..."
-function update_searched(){
-    var searched = $("#searchfieldstype_filter").find("option:selected").text();
-    if ( $("#searchmember_filter").val() ) {
-        if ( $("#searchtype_filter").val() == 'start_with' ) {
-            searched += _(" starting with ");
-        } else {
-            searched += _(" containing ");
-        }
-        searched += "'" + $("#searchmember_filter").val() + "'";
-    }
-    if ( $("#firstletter_filter").val() ) {
-        searched += _(" begins with ") + "'" + $("#firstletter_filter").val() +"'";
-    }
-    if ( $("#categorycode_filter").val() ) {
-        searched += _(" with category ") + "'" + $("#categorycode_filter").find("option:selected").text() + "'";
-    }
-    if ( $("#branchcode_filter").val() ) {
-        searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
-    }
-    $("#searchpattern").text(searched);
-}
-
-// Redraw the table
-function filter() {
-    $("#firstletter_filter").val('');
-    update_searched();
-    search = 1;
-    $("#searchresults").show();
-    dtMemberResults.fnDraw();
-    return false;
-}
-
-// User has clicked on the Clear button
-function clearFilters(redraw) {
-    $("#searchform select").val('');
-    $("#firstletter_filter").val('');
-    $("#searchmember_filter").val('');
-    if(redraw) {
-        search = 1;
-        $("#searchresults").show();
-        dtMemberResults.fnDraw();
-    }
-}
-
-// User has clicked on a letter
-function filterByFirstLetterSurname(letter) {
-    clearFilters(false);
-    $("#firstletter_filter").val(letter);
-    update_searched();
-    search = 1;
-    $("#searchresults").show();
-    dtMemberResults.fnDraw();
-}
-//]]>
-</script>
 </head>
+
 <body id="pat_member" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -527,4 +220,316 @@ function filterByFirstLetterSurname(letter) {
     [% INCLUDE 'members-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#add_to_patron_list_submit').prop('disabled', true);
+            $('#new_patron_list').hide();
+
+            $('#add_to_patron_list').change(function() {
+                var value = $('#add_to_patron_list').val();
+                if ( value == 'new' ) {
+                    $('#new_patron_list').val('')
+                    $('#new_patron_list').show();
+                    $('#new_patron_list').focus();
+                } else if ( value ) {
+                    $('#new_patron_list').hide();
+                    $('#add_to_patron_list_submit').prop('disabled', false);
+                } else {
+                    $('#new_patron_list').hide();
+                    $('#add_to_patron_list_submit').prop('disabled', true);
+                }
+            });
+
+            $('#new_patron_list').on('input', function() {
+                if ( $('#new_patron_list').val() ) {
+                    $('#add_to_patron_list_submit').prop('disabled', false);
+                } else {
+                    $('#add_to_patron_list_submit').prop('disabled', true);
+                }
+            });
+
+            $("#add_to_patron_list_submit").on('click', function(e){
+                if ( $('#add_to_patron_list').val() == 'new' ) {
+                    if ( $('#new_patron_list').val() ) {
+                        $("#add_to_patron_list option").each(function() {
+                            if ( $(this).text() == $('#new_patron_list').val() ) {
+                                alert( _("You already have a list with that name!") );
+                                return false;
+                            }
+                        });
+                    } else {
+                        alert( _("You must give your new patron list a name!") );
+                        return false;
+                    }
+                }
+
+                if ( $("#memberresultst input:checkbox:checked").length == 0 ) {
+                    alert( _("You have not selected any patrons to add to a list!") );
+                    return false;
+                }
+
+                var borrowernumbers = [];
+                $("#memberresultst").find("input:checkbox:checked").each(function(){
+                    borrowernumbers.push($(this).val());
+                });
+                var data = {
+                    add_to_patron_list: $("#add_to_patron_list").val(),
+                    new_patron_list: $("#new_patron_list").val(),
+                    borrowernumbers: borrowernumbers
+                };
+                $.ajax({
+                    data: data,
+                    type: 'POST',
+                    url: '/cgi-bin/koha/svc/members/add_to_list',
+                    success: function(data) {
+                        $("#patron_list_dialog").show();
+                        $("#patron_list_dialog > span.patrons-length").html(data.patrons_added_to_list);
+                        $("#patron_list_dialog > a").attr("href", "/cgi-bin/koha/patron_lists/list.pl?patron_list_id=" + data.patron_list.patron_list_id);
+                        $("#patron_list_dialog > a").html(data.patron_list.name);
+                        if ( $('#add_to_patron_list').val() == 'new' ) {
+                            var new_patron_list_added = $("<option>", {
+                                value: data.patron_list.patron_list_id,
+                                text: data.patron_list.name
+                            });
+                            $("#add_to_patron_list optgroup").append(new_patron_list_added);
+                            $("#add_to_patron_list").val(data.patron_list.patron_list_id);
+                            $("#new_patron_list").val('');
+                            $('#add_to_patron_list').change();
+                        }
+                    },
+                    error: function() {
+                        alert("an error occurred");
+                    }
+                });
+                return true;
+            });
+            $(".filterByLetter").on("click",function(e){
+                e.preventDefault();
+                filterByFirstLetterSurname($(this).text());
+            });
+            $("#select_all").on("click",function(e){
+                e.preventDefault();
+                $(".selection").prop("checked", true);
+            });
+            $("#clear_all").on("click",function(e){
+                e.preventDefault();
+                $(".selection").prop("checked", false);
+            });
+            $("#clear_search").on("click",function(e){
+                e.preventDefault();
+                clearFilters(true);
+            });
+            $("#searchform").on("submit", filter);
+        });
+
+        var dtMemberResults;
+        var search = 1;
+        $(document).ready(function() {
+            [% IF searchmember %]
+                $("#searchmember_filter").val("[% searchmember | html %]");
+            [% END %]
+            [% IF searchfieldstype %]
+                $("searchfieldstype_filter").val("[% searchfieldstype %]");
+            [% END %]
+            [% IF searchtype %]
+                $("#searchtype_filter").val("[% searchtype %]");
+            [% END %]
+            [% IF categorycode %]
+                $("#categorycode_filter").val("[% categorycode_filter %]");
+            [% END %]
+            [% IF branchcode %]
+                $("#branchcode_filter").val("[% branchcode_filter %]");
+            [% END %]
+
+            [% IF view != "show_results" %]
+                search = 0;
+            [% ELSE %]
+                $("#searchresults").show();
+            [% END %]
+
+            // Build the aLengthMenu
+            var aLengthMenu = [
+                [%PatronsPerPage %], 10, 20, 50, 100, -1
+            ];
+            jQuery.unique(aLengthMenu);
+            aLengthMenu.sort(function( a, b ){
+                // Put "All" at the end
+                if ( a == -1 ) {
+                    return 1;
+                } else if ( b == -1 ) {
+                    return -1;
+                }
+                return parseInt(a) < parseInt(b) ? -1 : 1;}
+            );
+            var aLengthMenuLabel = [];
+            $(aLengthMenu).each(function(){
+                if ( this == -1 ) {
+                    // Label for -1 is "All"
+                    aLengthMenuLabel.push("All");
+                } else {
+                    aLengthMenuLabel.push(this);
+                }
+            });
+
+            // Apply DataTables on the results table
+            var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
+            [% UNLESS CAN_user_tools_manage_patron_lists %]
+                [%# Remove the first column if we do not display the checkbox %]
+                columns_settings.splice(0, 1);
+            [% END %]
+            dtMemberResults = KohaTable("#memberresultst", {
+                'bServerSide': true,
+                'sAjaxSource': "/cgi-bin/koha/svc/members/search",
+                'fnServerData': function(sSource, aoData, fnCallback) {
+                    if ( ! search ) {
+                        return;
+                    }
+                    aoData.push({
+                        'name': 'searchmember',
+                        'value': $("#searchmember_filter").val()
+                    },{
+                        'name': 'firstletter',
+                        'value': $("#firstletter_filter").val()
+                    },{
+                        'name': 'searchfieldstype',
+                        'value': $("#searchfieldstype_filter").val()
+                    },{
+                        'name': 'searchtype',
+                        'value': $("#searchtype_filter").val()
+                    },{
+                        'name': 'categorycode',
+                        'value': $("#categorycode_filter").val()
+                    },{
+                        'name': 'branchcode',
+                        'value': $("#branchcode_filter").val()
+                    },{
+                        'name': 'name_sorton',
+                        'value': 'borrowers.surname borrowers.firstname'
+                    },{
+                        'name': 'dateofbirth',
+                        'value': 'borrowers.dateofbirth',
+                    },{
+                        'name': 'category_sorton',
+                        'value': 'categories.description',
+                    },{
+                        'name': 'branch_sorton',
+                        'value': 'branches.branchname'
+                    },{
+                        'name': 'template_path',
+                        'value': 'members/tables/members_results.tt',
+                    });
+                    $.ajax({
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'url': sSource,
+                        'data': aoData,
+                        'success': function(json){
+                            // redirect if there is only 1 result.
+                            if ( json.aaData.length == 1 ) {
+                                var borrowernumber = json.aaData[0].borrowernumber;
+                                document.location.href="/cgi-bin/koha/members/moremember.pl?borrowernumber="+borrowernumber;
+                                return false;
+                            }
+                            fnCallback(json);
+                        }
+                    });
+                },
+                'aoColumns':[
+                    [% IF CAN_user_tools_manage_patron_lists %]
+                      { 'mDataProp': 'dt_borrowernumber', 'bSortable': false },
+                    [% END %]
+                    { 'mDataProp': 'dt_cardnumber' },
+                    { 'mDataProp': 'dt_name' },
+                    { 'mDataProp': 'dt_dateofbirth' },
+                    { 'mDataProp': 'dt_category' },
+                    { 'mDataProp': 'dt_branch' },
+                    { 'mDataProp': 'dt_dateexpiry' },
+                    { 'mDataProp': 'dt_od_checkouts', 'bSortable': false },
+                    { 'mDataProp': 'dt_fines', 'bSortable': false },
+                    { 'mDataProp': 'dt_borrowernotes' },
+                    { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
+                ],
+                'fnRowCallback': function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    /* Center text for 6th column */
+                    $("td:eq(5)", nRow).css("text-align", "center");
+
+                    return nRow;
+                },
+                'bFilter': false,
+                'bAutoWidth': false,
+                [% IF CAN_user_tools_manage_patron_lists %]
+                    'aaSorting': [[2, 'asc']],
+                [% ELSE %]
+                    'aaSorting': [[1, 'asc']],
+                [% END %]
+                "aLengthMenu": [aLengthMenu, aLengthMenuLabel],
+                'sPaginationType': 'full_numbers',
+                "iDisplayLength": [% PatronsPerPage %],
+                "bProcessing": true,
+            }, columns_settings);
+            update_searched();
+        });
+
+        // Update the string "Results found ..."
+        function update_searched(){
+            var searched = $("#searchfieldstype_filter").find("option:selected").text();
+            if ( $("#searchmember_filter").val() ) {
+                if ( $("#searchtype_filter").val() == 'start_with' ) {
+                    searched += _(" starting with ");
+                } else {
+                    searched += _(" containing ");
+                }
+                searched += "'" + $("#searchmember_filter").val() + "'";
+            }
+            if ( $("#firstletter_filter").val() ) {
+                searched += _(" begins with ") + "'" + $("#firstletter_filter").val() +"'";
+            }
+            if ( $("#categorycode_filter").val() ) {
+                searched += _(" with category ") + "'" + $("#categorycode_filter").find("option:selected").text() + "'";
+            }
+            if ( $("#branchcode_filter").val() ) {
+                searched += _(" in library ") + $("#branchcode_filter").find("option:selected").text();
+            }
+            $("#searchpattern").text(searched);
+        }
+
+        // Redraw the table
+        function filter() {
+            $("#firstletter_filter").val('');
+            update_searched();
+            search = 1;
+            $("#searchresults").show();
+            dtMemberResults.fnDraw();
+            return false;
+        }
+
+        // User has clicked on the Clear button
+        function clearFilters(redraw) {
+            $("#searchform select").val('');
+            $("#firstletter_filter").val('');
+            $("#searchmember_filter").val('');
+            if(redraw) {
+                search = 1;
+                $("#searchresults").show();
+                dtMemberResults.fnDraw();
+            }
+        }
+
+        // User has clicked on a letter
+        function filterByFirstLetterSurname(letter) {
+            clearFilters(false);
+            $("#firstletter_filter").val(letter);
+            update_searched();
+            search = 1;
+            $("#searchresults").show();
+            dtMemberResults.fnDraw();
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

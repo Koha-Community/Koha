@@ -3,30 +3,13 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ColumnsSettings %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Holds history for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript" id="js">
-//<![CDATA[
-
- $(document).ready(function() {
-    var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
-    var table = KohaTable("#table_holdshistory", {
-        "sPaginationType": "four_button",
-        "aaSorting": [[4, 'desc']],
-        "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-        "aoColumnDefs": [
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ]
-    }, columns_settings);
- });
-//]]>
-</script>
 </head>
+
 <body id="pat_holdshistory" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -118,4 +101,25 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" id="js">
+        $(document).ready(function() {
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
+            var table = KohaTable("#table_holdshistory", {
+                "sPaginationType": "four_button",
+                "aaSorting": [[4, 'desc']],
+                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "aoColumnDefs": [
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ]
+            }, columns_settings);
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

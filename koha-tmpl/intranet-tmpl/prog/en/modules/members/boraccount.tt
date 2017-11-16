@@ -2,42 +2,13 @@
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript">
-$(document).ready(function() {
-    var txtActivefilter = _("Filter paid transactions");
-    var txtInactivefilter = _("Show all transactions");
-    var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') %];
-    var table_account_fines = KohaTable("#table_account_fines", {
-        "sPaginationType": "four_button",
-        'aaSorting': [[0, 'desc']],
-        "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
-        "aoColumnDefs": [
-            { "sType": "title-string", "aTargets" : [ "title-string" ] },
-            { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
-        ]
-    }, columns_settings);
-    $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
-    $('#filter_transacs').click(function(e) {
-        e.preventDefault();
-        if ($(this).hasClass('filtered')) {
-            var filteredValue = '';
-            $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
-        } else { //Not filtered. Let's do it!
-            var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
-            $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
-        }
-        table_account_fines.fnFilter(filteredValue, 4, true, false);
-        $(this).toggleClass('filtered');
-    });
-});
-</script>
 </head>
+
 <body id="pat_borraccount" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -45,7 +16,6 @@ $(document).ready(function() {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Account for [% INCLUDE 'patron-title.inc' %]</div>
 
 <div id="doc3" class="yui-t2">
-   
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -121,7 +91,7 @@ $(document).ready(function() {
         [% IF ( reverse_col) %]
           [% IF ( account.payment ) %]
             <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
-          [% ELSE %]
+          [% ELSE %][% SET footerjs = 1 %]
             &nbsp;
           [% END %]
         [% END %]
@@ -150,4 +120,41 @@ $(document).ready(function() {
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript">
+        var dateformat = "[% Koha.Preference('dateformat') %]";
+        $(document).ready(function() {
+            var txtActivefilter = _("Filter paid transactions");
+            var txtInactivefilter = _("Show all transactions");
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') %];
+            var table_account_fines = KohaTable("#table_account_fines", {
+                "sPaginationType": "four_button",
+                'aaSorting': [[0, 'desc']],
+                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
+                "aoColumnDefs": [
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                    { "bSortable": false, "bSearchable": false, "aTargets": [-1] }
+                ]
+            }, columns_settings);
+            $("#filter_c").html('<p><a href="#" id="filter_transacs"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
+            $('#filter_transacs').click(function(e) {
+                e.preventDefault();
+                if ($(this).hasClass('filtered')) {
+                    var filteredValue = '';
+                    $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
+                } else { //Not filtered. Let's do it!
+                    var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
+                    $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+                }
+                table_account_fines.fnFilter(filteredValue, 4, true, false);
+                $(this).toggleClass('filtered');
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

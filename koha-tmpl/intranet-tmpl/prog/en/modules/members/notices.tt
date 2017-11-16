@@ -2,35 +2,17 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Sent notices for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-    $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aaSorting": [[ 3, "desc" ]],
-        "aoColumns": [ null,null,null,{ "sType": "title-string" } ],
-        "sPaginationType": "four_button"
-    }));
-
-        $("#noticestable").on("click", ".notice-title", function(e){
-            e.preventDefault();
-            var rowid = $(this).data("noticeid");
-            $("#notice"+rowid).toggle();
-            $("#resend_notice"+rowid).toggle();
-        });
-
-    });
-//]]>
-</script>
 <style type="text/css">
     .notice { display: none; }
     .notice-title { font-weight: bold; display: block; }
 </style>
 </head>
+
 <body id="pat_notices" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -105,4 +87,26 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aaSorting": [[ 3, "desc" ]],
+                "aoColumns": [ null,null,null,{ "sType": "title-string" } ],
+                "sPaginationType": "four_button"
+            }));
+
+            $("#noticestable").on("click", ".notice-title", function(e){
+                e.preventDefault();
+                var rowid = $(this).data("noticeid");
+                $("#notice"+rowid).toggle();
+                $("#resend_notice"+rowid).toggle();
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

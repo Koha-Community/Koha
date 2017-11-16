@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
 [% UNLESS blocking_error %]
@@ -10,131 +11,9 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-[% INCLUDE 'strings.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'timepicker.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
-<script type="text/JavaScript">
-//<![CDATA[
-/* Set some variable needed in circulation.js */
-var interface = "[% interface %]";
-var theme = "[% theme %]";
-var borrowernumber = "[% borrowernumber %]";
-var branchcode = "[% Branches.GetLoggedInBranchcode() %]";
-var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
-var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %]
-var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
-var script = "moremember";
-var relatives_borrowernumbers = new Array();
-[% FOREACH b IN relatives_borrowernumbers %]
-    relatives_borrowernumbers.push("[% b %]");
-[% END %]
-
-var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
-var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
-
-columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) %]
-
-$(document).ready(function() {
-    if ( $('#clubs-tab').length ) {
-        $('#clubs-tab-link').on('click', function() {
-            $('#clubs-tab').text(_("Loading..."));
-            $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
-        });
-    }
-
-    $('#finesholdsissues').tabs({
-        // Correct table sizing for tables hidden in tabs
-        // http://www.datatables.net/examples/api/tabs_and_scrolling.html
-        "show": function(event, ui) {
-            var oTable = $('div.dataTables_wrapper>table', ui.panel).dataTable();
-            if ( oTable.length > 0 ) {
-                oTable.fnAdjustColumnSizing();
-            }
-        },
-        "activate": function( event, ui ) {
-            $('#'+ui.newTab.context.id).click();
-        }
-    } );
-    $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
-        ],
-        "aoColumns": [
-            { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null,null
-        ],
-        "bPaginate": false
-    }));
-    [% IF ( picture ) %]
-    // new YAHOO.widget.Button("delpicture");   // FIXME: formatting mismatch between YUI and normal button
-	$('#delpicture').click(function(){
-		 return confirm(_("Are you sure you want to delete this patron image? This cannot be undone."));
-	});
-	$('#manage-patron-image').find("input[value*=Upload]").click(function(){
-        if($("#uploadfile").val() == ""){
-            alert(_("Please choose a file to upload"));
-            return false;
-        }
-        return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
-	});[% END %]
-
-    $("#suspend_until").datepicker({
-        onClose: function(dateText, inst) {
-            validate_date(dateText, inst);
-        },
-        minDate: 1, // require that hold suspended until date is after today
-    }).on("change", function(e, value) {
-        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-    });
-
-    $("#view_restrictions").on("click",function(){
-        $('#debarments-tab-link').click();
-    });
- });
-function uncheck_sibling(me){
-nodename=me.getAttribute("name");
-if (nodename =="barcodes[]"){
-    var Node=me.parentNode.previousSibling;
-    while (Node.nodeName!="TD"){Node=Node.previousSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i < Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-
-}else {
-    var Node=me.parentNode.nextSibling;
-    while (Node.nodeName!="TD"){Node=Node.nextSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-}
-}
-function validate1(date) {
-    var today = new Date();
-    if ( date < today ) {
-        return true;
-     } else {
-        return false;
-     }
-};
-//]]>
-</script>
-
 </head>
+
 <body id="pat_moremember" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -661,4 +540,130 @@ function validate1(date) {
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'strings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'timepicker.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/messaging-preference-form_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript">
+        /* Set some variable needed in circulation.js */
+        var interface = "[% interface %]";
+        var theme = "[% theme %]";
+        var borrowernumber = "[% borrowernumber %]";
+        var branchcode = "[% Branches.GetLoggedInBranchcode() %]";
+        var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
+        var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %]
+        var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
+        var script = "moremember";
+        var relatives_borrowernumbers = new Array();
+        [% FOREACH b IN relatives_borrowernumbers %]
+            relatives_borrowernumbers.push("[% b %]");
+        [% END %]
+
+        var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
+        var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
+
+        columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) %]
+
+        $(document).ready(function() {
+            if ( $('#clubs-tab').length ) {
+                $('#clubs-tab-link').on('click', function() {
+                    $('#clubs-tab').text(_("Loading..."));
+                    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
+                });
+            }
+
+            $('#finesholdsissues').tabs({
+                // Correct table sizing for tables hidden in tabs
+                // http://www.datatables.net/examples/api/tabs_and_scrolling.html
+                "show": function(event, ui) {
+                    var oTable = $('div.dataTables_wrapper>table', ui.panel).dataTable();
+                    if ( oTable.length > 0 ) {
+                        oTable.fnAdjustColumnSizing();
+                    }
+                },
+                "activate": function( event, ui ) {
+                    $('#'+ui.newTab.context.id).click();
+                }
+            } );
+            $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "aoColumnDefs": [
+                    { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false }
+                ],
+                "aoColumns": [
+                    { "sType": "title-string" },{ "sType": "anti-the" },null,null,null,null,null,null
+                ],
+                "bPaginate": false
+            }));
+            [% IF ( picture ) %]
+                $('#delpicture').click(function(){
+                     return confirm(_("Are you sure you want to delete this patron image? This cannot be undone."));
+                });
+                $('#manage-patron-image').find("input[value*=Upload]").click(function(){
+                    if($("#uploadfile").val() == ""){
+                        alert(_("Please choose a file to upload"));
+                        return false;
+                    }
+                    return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
+                });
+            [% END %]
+
+            $("#suspend_until").datepicker({
+                onClose: function(dateText, inst) {
+                    validate_date(dateText, inst);
+                },
+                minDate: 1, // require that hold suspended until date is after today
+            }).on("change", function(e, value) {
+                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+            });
+
+            $("#view_restrictions").on("click",function(){
+                $('#debarments-tab-link').click();
+            });
+         });
+        function uncheck_sibling(me){
+            nodename=me.getAttribute("name");
+            if (nodename =="barcodes[]"){
+                var Node=me.parentNode.previousSibling;
+                while (Node.nodeName!="TD"){Node=Node.previousSibling}
+                var Nodes=Node.childNodes;
+                for (var i=0;i < Nodes.length;i++){
+                    if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+                        Nodes[i].checked=false;
+                    }
+                }
+            } else {
+                var Node=me.parentNode.nextSibling;
+                while (Node.nodeName!="TD"){Node=Node.nextSibling}
+                var Nodes=Node.childNodes;
+                for (var i=0;i<Nodes.length;i++){
+                    if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+                      Nodes[i].checked=false;
+                    }
+               }
+            }
+        }
+
+        function validate1(date) {
+            var today = new Date();
+            if ( date < today ) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

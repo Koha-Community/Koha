@@ -1,113 +1,12 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% surname %], [% firstname %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/treeview/jquery.treeview_[% KOHA_VERSION %].css"/>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.treeview.pack_[% KOHA_VERSION %].js"></script>
-<!-- set up tree -->
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#permissionstree").treeview({animated: "fast", collapsed: true});
-
-        // Enforce Superlibrarian Privilege Mutual Exclusivity
-        if($('input[id="flag-0"]:checked').length){
-            if ($('input[name="flag"]:checked').length > 1){
-                alert(_("Inconsistency detected! The superlibrarian privilege is mutually exclusive of other privileges, as it includes them all. This patron's privileges will now be reset to include only superlibrarian."));
-            }
-
-            $('input[name="flag"]').each(function() {
-                if($(this).attr('id') != "flag-0"){
-                    $(this).prop('disabled', true);
-                    $(this).prop('checked', false);
-                }
-            });
-        }
-
-        $('input#flag-0').click(function() {
-            if($('input[id="flag-0"]:checked').length){
-                $('input[name="flag"]').each(function() {
-                    if($(this).attr('id') != "flag-0"){
-                        $(this).prop('disabled', true);
-                        $(this).prop('checked', false);
-                    }
-                });
-            }
-            else {
-                $('input[name="flag"]').each(function() {
-                    $(this).prop('disabled', false);
-                });
-            }
-        });
-
-        $(".flag").on("change",function(){
-            if( $(this).hasClass("parent") ){
-                toggleChildren(this);
-            } else {
-                toggleParent(this);
-            }
-        });
-
-    });
-
-    // manage checking/unchecking parent permissions
-    var originalChildStates = {}; /* keep track of subpermission checkbox values
-                                     so that user can recover from accidentally
-                                     toggling a parent/module permission */
-    function selectChildren(parentInput) {
-        var childListId = parentInput.id + '-children';
-        var list = document.getElementById(childListId);
-        var children = [];
-        if (list) {
-            var inputs = list.getElementsByTagName('input');
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].type == 'checkbox') {
-                    children.push(inputs[i]);
-                }
-            }
-            
-        } 
-        return children;
-    }
-
-    function toggleChildren(parentInput) {
-        var children = selectChildren(parentInput);
-        if (children.length == 0) {
-            return;
-        }
-        var checked = parentInput.checked;
-        if (checked && parentInput.parentNode.className == 'expandable') {
-            /* expand the tree */
-            $(".hitarea", parentInput.parentNode).click();
-        }
-        for (var i = 0; i < children.length; i++) {
-            if (checked) {
-                originalChildStates[children[i].id] = children[i].checked;
-                children[i].checked = checked;
-            } else {
-                if (children[i].id in originalChildStates) {
-                    children[i].checked = originalChildStates[children[i].id];
-                } else {
-                    children[i].checked = checked;
-                }
-            }
-        }
-    }
-
-    function toggleParent(childInput) {
-        originalChildStates[childInput.id] = childInput.checked;
-        if (childInput.checked) {
-            return;
-        }
-        var parentId = childInput.parentNode.parentNode.id.replace(/-children$/, '');;
-        var parentInput = document.getElementById(parentId);
-        if (parentInput) {  
-            parentInput.checked = false;
-        }
-    }
-
-</script>
 </head>
+
 <body id="pat_member-flags" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -175,4 +74,111 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.treeview.pack_[% KOHA_VERSION %].js"></script>
+    <!-- set up tree -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#permissionstree").treeview({animated: "fast", collapsed: true});
+
+            // Enforce Superlibrarian Privilege Mutual Exclusivity
+            if($('input[id="flag-0"]:checked').length){
+                if ($('input[name="flag"]:checked').length > 1){
+                    alert(_("Inconsistency detected! The superlibrarian privilege is mutually exclusive of other privileges, as it includes them all. This patron's privileges will now be reset to include only superlibrarian."));
+                }
+
+                $('input[name="flag"]').each(function() {
+                    if($(this).attr('id') != "flag-0"){
+                        $(this).prop('disabled', true);
+                        $(this).prop('checked', false);
+                    }
+                });
+            }
+
+            $('input#flag-0').click(function() {
+                if($('input[id="flag-0"]:checked').length){
+                    $('input[name="flag"]').each(function() {
+                        if($(this).attr('id') != "flag-0"){
+                            $(this).prop('disabled', true);
+                            $(this).prop('checked', false);
+                        }
+                    });
+                }
+                else {
+                    $('input[name="flag"]').each(function() {
+                        $(this).prop('disabled', false);
+                    });
+                }
+            });
+
+            $(".flag").on("change",function(){
+                if( $(this).hasClass("parent") ){
+                    toggleChildren(this);
+                } else {
+                    toggleParent(this);
+                }
+            });
+
+        });
+
+        // manage checking/unchecking parent permissions
+        var originalChildStates = {}; /* keep track of subpermission checkbox values
+                                         so that user can recover from accidentally
+                                         toggling a parent/module permission */
+        function selectChildren(parentInput) {
+            var childListId = parentInput.id + '-children';
+            var list = document.getElementById(childListId);
+            var children = [];
+            if (list) {
+                var inputs = list.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].type == 'checkbox') {
+                        children.push(inputs[i]);
+                    }
+                }
+            }
+            return children;
+        }
+
+        function toggleChildren(parentInput) {
+            var children = selectChildren(parentInput);
+            if (children.length == 0) {
+                return;
+            }
+            var checked = parentInput.checked;
+            if (checked && parentInput.parentNode.className == 'expandable') {
+                /* expand the tree */
+                $(".hitarea", parentInput.parentNode).click();
+            }
+            for (var i = 0; i < children.length; i++) {
+                if (checked) {
+                    originalChildStates[children[i].id] = children[i].checked;
+                    children[i].checked = checked;
+                } else {
+                    if (children[i].id in originalChildStates) {
+                        children[i].checked = originalChildStates[children[i].id];
+                    } else {
+                        children[i].checked = checked;
+                    }
+                }
+            }
+        }
+
+        function toggleParent(childInput) {
+            originalChildStates[childInput.id] = childInput.checked;
+            if (childInput.checked) {
+                return;
+            }
+            var parentId = childInput.parentNode.parentNode.id.replace(/-children$/, '');;
+            var parentInput = document.getElementById(parentId);
+            if (parentInput) {
+                parentInput.checked = false;
+            }
+        }
+
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

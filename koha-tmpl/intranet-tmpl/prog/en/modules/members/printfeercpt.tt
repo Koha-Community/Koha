@@ -1,12 +1,13 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Print Receipt for [% cardnumber %]</title>
+<title>Print receipt for [% cardnumber %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/printreceiptinvoice_[% KOHA_VERSION %].css" />
 [% INCLUDE 'blocking_errors.inc' %]
-[% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
+
 <body id="pat_printfeercpt" class="pat">
 
 <div id="receipt">
@@ -74,4 +75,9 @@
   </tfoot>
 </table>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

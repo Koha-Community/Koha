@@ -1,21 +1,11 @@
 [% USE Koha %]
 [% USE AuthorisedValues  %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Purchase suggestions for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#suggestions").dataTable($.extend(true, {}, dataTablesDefaults, {
-            'bPaginate': false,
-            'bFilter': false,
-            'bInfo': false,
-            'sDom': 't'
-        } ));
-    });
-</script>
 </head>
 
 <body id="pat_purchase_suggestions" class="pat">
@@ -108,4 +98,20 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#suggestions").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bPaginate': false,
+                'bFilter': false,
+                'bInfo': false,
+                'sDom': 't'
+            } ));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

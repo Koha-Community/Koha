@@ -1,6 +1,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% UNLESS blocking_error  %]Discharge for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -70,4 +71,9 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

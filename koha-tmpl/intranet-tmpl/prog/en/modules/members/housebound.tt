@@ -1,20 +1,12 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Housebound &rsaquo; Details for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("a.delete").click(function(){
-            return confirm(_("Are you sure you want to delete this delivery?"));
-        });
-    });
-//]]>
-</script>
 </head>
+
 <body id="housebound-home" class="housebound">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -430,4 +422,17 @@
     [% INCLUDE 'circ-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("a.delete").click(function(){
+                return confirm(_("Are you sure you want to delete this delivery?"));
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,175 +1,12 @@
 [% USE Koha %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patron search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-
-var search = 1;
-$(document).ready(function(){
-    $("#info").hide();
-    $("#error").hide();
-
-    [% IF view != "show_results" %]
-        $("#searchresults").hide();
-        search = 0;
-    [% END %]
-
-    // Apply DataTables on the results table
-    dtMemberResults = $("#memberresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        'bServerSide': true,
-        'sAjaxSource': "/cgi-bin/koha/svc/members/search",
-        'fnServerData': function(sSource, aoData, fnCallback) {
-            if ( ! search ) {
-                return;
-            }
-            aoData.push({
-                'name': 'searchmember',
-                'value': $("#searchmember_filter").val()
-            },{
-                'name': 'firstletter',
-                'value': $("#firstletter_filter").val()
-            },{
-                'name': 'categorycode',
-                'value': $("#categorycode_filter").val()
-            },{
-                'name': 'branchcode',
-                'value': $("#branchcode_filter").val()
-            },{
-                'name': 'name_sorton',
-                'value': 'borrowers.surname borrowers.firstname'
-            },{
-                'name': 'category_sorton',
-                'value': 'categories.description',
-            },{
-                'name': 'branch_sorton',
-                'value': 'branches.branchname'
-            },{
-                'name': 'template_path',
-                'value': '[% json_template %]',
-            },{
-                'name': 'selection_type',
-                'value': '[% selection_type %]',
-            }
-            [% IF patrons_with_acq_perm_only %]
-            ,{
-                'name': 'has_permission',
-                'value': 'acquisition.order_manage',
-            }
-            [% END %]
-            );
-            $.ajax({
-                'dataType': 'json',
-                'type': 'POST',
-                'url': sSource,
-                'data': aoData,
-                'success': function(json){
-                    fnCallback(json);
-                }
-            });
-        },
-        'aoColumns':[
-            [% FOR column IN columns %]
-                [% IF column == 'action' %]
-                    { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
-                [% ELSIF column == 'address' %]
-                    { 'mDataProp': 'dt_address', 'bSortable': false }
-                [% ELSE %]
-                    { 'mDataProp': 'dt_[% column %]' }
-                [% END %]
-                [% UNLESS loop.last %],[% END %]
-            [% END %]
-        ],
-        'bAutoWidth': false,
-        [% IF patrons_with_acq_perm_only %]
-            'bPaginate': false,
-        [% ELSE %]
-            'sPaginationType': 'full_numbers',
-            "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
-        [% END %]
-        'aaSorting': [[[% aaSorting || 0 %], 'asc']],
-        'bFilter': false,
-        'bProcessing': true,
-    }));
-
-    $("#searchform").on('submit', filter);
-    $(".filterByLetter").on("click",function(e){
-        e.preventDefault();
-        filterByFirstLetterSurname($(this).text());
-    });
-    $("body").on("click",".add_user",function(e){
-        e.preventDefault();
-        var borrowernumber = $(this).data("borrowernumber");
-        var firstname = $(this).data("firstname");
-        var surname = $(this).data("surname");
-        add_user( borrowernumber, firstname + " " + surname );
-    });
-
-    $("body").on("click",".select_user",function(e){
-        e.preventDefault();
-        var borrowernumber = $(this).data("borrowernumber");
-        var borrower_data = $("#borrower_data"+borrowernumber).val();
-        select_user( borrowernumber, JSON.parse(borrower_data) );
-    });
-
-});
-
-function filter() {
-    search = 1;
-    $("#firstletter_filter").val('');
-    $("#searchresults").show();
-    dtMemberResults.fnDraw();
-    return false;
-}
-
-// User has clicked on a letter
-function filterByFirstLetterSurname(letter) {
-    $("#firstletter_filter").val(letter);
-    search = 1;
-    $("#searchresults").show();
-    dtMemberResults.fnDraw();
-}
-
-
-    // modify parent window owner element
-    [% IF selection_type == 'add' %]
-        function add_user(borrowernumber, borrowername) {
-            var p = window.opener;
-            // In one place (serials/routing.tt), the page is reload on every add
-            // We have to wait for the page to be there
-            function wait_for_opener () {
-                if ( ! $(opener.document).find('body').size() ) {
-                    setTimeout(wait_for_opener, 500);
-                } else {
-                    [%# Note that add_user could sent data instead of borrowername too %]
-                    $("#info").hide();
-                    $("#error").hide();
-                    if ( p.add_user(borrowernumber, borrowername) < 0 ) {
-                        $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
-                        $("#error").show();
-                    } else {
-                        $("#info").html(_("Patron '%s' added.").format(borrowername));
-                        $("#info").show();
-                    }
-                }
-            }
-            wait_for_opener();
-        }
-    [% ELSIF selection_type == 'select' %]
-        function select_user(borrowernumber, data) {
-            var p = window.opener;
-            p.select_user(borrowernumber, data);
-            window.close();
-        }
-    [% END %]
-//]]>
-</script>
-
 </head>
+
 <body id="common_patron_search" class="common">
 <div id="patron_search" class="yui-t7">
   <div id="bd">
@@ -252,5 +89,169 @@ function filterByFirstLetterSurname(letter) {
 <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Close</a></div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+
+    <script type="text/javascript">
+        var search = 1;
+        $(document).ready(function(){
+            $("#info").hide();
+            $("#error").hide();
+
+            [% IF view != "show_results" %]
+                $("#searchresults").hide();
+                search = 0;
+            [% END %]
+
+            // Apply DataTables on the results table
+            dtMemberResults = $("#memberresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bServerSide': true,
+                'sAjaxSource': "/cgi-bin/koha/svc/members/search",
+                'fnServerData': function(sSource, aoData, fnCallback) {
+                    if ( ! search ) {
+                        return;
+                    }
+                    aoData.push({
+                        'name': 'searchmember',
+                        'value': $("#searchmember_filter").val()
+                    },{
+                        'name': 'firstletter',
+                        'value': $("#firstletter_filter").val()
+                    },{
+                        'name': 'categorycode',
+                        'value': $("#categorycode_filter").val()
+                    },{
+                        'name': 'branchcode',
+                        'value': $("#branchcode_filter").val()
+                    },{
+                        'name': 'name_sorton',
+                        'value': 'borrowers.surname borrowers.firstname'
+                    },{
+                        'name': 'category_sorton',
+                        'value': 'categories.description',
+                    },{
+                        'name': 'branch_sorton',
+                        'value': 'branches.branchname'
+                    },{
+                        'name': 'template_path',
+                        'value': '[% json_template %]',
+                    },{
+                        'name': 'selection_type',
+                        'value': '[% selection_type %]',
+                    }
+                    [% IF patrons_with_acq_perm_only %]
+                    ,{
+                        'name': 'has_permission',
+                        'value': 'acquisition.order_manage',
+                    }
+                    [% END %]
+                    );
+                    $.ajax({
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'url': sSource,
+                        'data': aoData,
+                        'success': function(json){
+                            fnCallback(json);
+                        }
+                    });
+                },
+                'aoColumns':[
+                    [% FOR column IN columns %]
+                        [% IF column == 'action' %]
+                            { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
+                        [% ELSIF column == 'address' %]
+                            { 'mDataProp': 'dt_address', 'bSortable': false }
+                        [% ELSE %]
+                            { 'mDataProp': 'dt_[% column %]' }
+                        [% END %]
+                        [% UNLESS loop.last %],[% END %]
+                    [% END %]
+                ],
+                'bAutoWidth': false,
+                [% IF patrons_with_acq_perm_only %]
+                    'bPaginate': false,
+                [% ELSE %]
+                    'sPaginationType': 'full_numbers',
+                    "iDisplayLength": [% Koha.Preference('PatronsPerPage') %],
+                [% END %]
+                'aaSorting': [[[% aaSorting || 0 %], 'asc']],
+                'bFilter': false,
+                'bProcessing': true,
+            }));
+
+            $("#searchform").on('submit', filter);
+            $(".filterByLetter").on("click",function(e){
+                e.preventDefault();
+                filterByFirstLetterSurname($(this).text());
+            });
+            $("body").on("click",".add_user",function(e){
+                e.preventDefault();
+                var borrowernumber = $(this).data("borrowernumber");
+                var firstname = $(this).data("firstname");
+                var surname = $(this).data("surname");
+                add_user( borrowernumber, firstname + " " + surname );
+            });
+
+            $("body").on("click",".select_user",function(e){
+                e.preventDefault();
+                var borrowernumber = $(this).data("borrowernumber");
+                var borrower_data = $("#borrower_data"+borrowernumber).val();
+                select_user( borrowernumber, JSON.parse(borrower_data) );
+            });
+
+        });
+
+        function filter() {
+            search = 1;
+            $("#firstletter_filter").val('');
+            $("#searchresults").show();
+            dtMemberResults.fnDraw();
+            return false;
+        }
+
+        // User has clicked on a letter
+        function filterByFirstLetterSurname(letter) {
+            $("#firstletter_filter").val(letter);
+            search = 1;
+            $("#searchresults").show();
+            dtMemberResults.fnDraw();
+        }
+
+        // modify parent window owner element
+        [% IF selection_type == 'add' %]
+            function add_user(borrowernumber, borrowername) {
+                var p = window.opener;
+                // In one place (serials/routing.tt), the page is reload on every add
+                // We have to wait for the page to be there
+                function wait_for_opener () {
+                    if ( ! $(opener.document).find('body').size() ) {
+                        setTimeout(wait_for_opener, 500);
+                    } else {
+                        [%# Note that add_user could sent data instead of borrowername too %]
+                        $("#info").hide();
+                        $("#error").hide();
+                        if ( p.add_user(borrowernumber, borrowername) < 0 ) {
+                            $("#error").html(_("Patron '%s' is already in the list.").format(borrowername));
+                            $("#error").show();
+                        } else {
+                            $("#info").html(_("Patron '%s' added.").format(borrowername));
+                            $("#info").show();
+                        }
+                    }
+                }
+                wait_for_opener();
+            }
+        [% ELSIF selection_type == 'select' %]
+            function select_user(borrowernumber, data) {
+                var p = window.opener;
+                p.select_user(borrowernumber, data);
+                window.close();
+            }
+        [% END %]
+    </script>
+[% END %]
+
 [% SET popup_window = 1 %]
 [% INCLUDE 'intranet-bottom.inc' %]

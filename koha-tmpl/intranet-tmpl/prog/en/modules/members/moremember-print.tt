@@ -2,11 +2,12 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Summary for [% firstname %] [% surname %] ([% cardnumber %])</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% INCLUDE 'slip-print.inc' #printThenClose %]
 </head>
+
 <body id="pat_moremember-print" class="pat">
     <div id="main">
         <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% cardnumber %]">Account summary: [% firstname %] [% surname %] ([% cardnumber %])</a></h3>
@@ -123,5 +124,9 @@
             </tfoot>
         </table>
     [% END %]
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

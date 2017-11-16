@@ -2,39 +2,13 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" id="js">
-//<![CDATA[
-
- $(document).ready(function() {
-    var table = $("#table_readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sPaginationType": "four_button",
-        "aaSorting": [],
-        "aoColumnDefs": [
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ]
-    }));
-    var tabs = $("#tabs").tabs({
-        activate: function(e, ui) {
-            var active = tabs.tabs("option", "active" );
-            if ( active == 1 ) {
-                table.fnFilter("standard_checkout", 0);
-            } else if ( active == 2 ) {
-                table.fnFilter("onsite_checkout", 0);
-            } else { // all
-                table.fnFilter('', 0);
-            }
-        }
-    });
- });
-//]]>
-</script>
 </head>
+
 <body id="pat_readingrec" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
@@ -142,4 +116,34 @@
 [% INCLUDE 'circ-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" id="js">
+        $(document).ready(function() {
+            var table = $("#table_readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "aaSorting": [],
+                "aoColumnDefs": [
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ]
+            }));
+            var tabs = $("#tabs").tabs({
+                activate: function(e, ui) {
+                    var active = tabs.tabs("option", "active" );
+                    if ( active == 1 ) {
+                        table.fnFilter("standard_checkout", 0);
+                    } else if ( active == 2 ) {
+                        table.fnFilter("onsite_checkout", 0);
+                    } else { // all
+                        table.fnFilter('', 0);
+                    }
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

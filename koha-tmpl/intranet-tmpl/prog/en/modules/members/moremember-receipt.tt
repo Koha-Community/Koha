@@ -1,13 +1,13 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print Receipt for [% cardnumber %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
- <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/print_[% KOHA_VERSION %].css" />
-
-[% INCLUDE 'slip-print.inc' #printThenClose %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/print_[% KOHA_VERSION %].css" />
 </head>
+
 <body id="pat_moremember-receipt" class="pat">
 
 <div id="receipt">
@@ -69,5 +69,8 @@ Date due: [% issueloo.date_due %]</p>
             [% END %]
 [% END %]
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

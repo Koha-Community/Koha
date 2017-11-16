@@ -1,55 +1,21 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Choose Adult category</title>
+<title>Koha &rsaquo; Choose adult category</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-	$(document).ready(function() {
-        $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
-            "aaSorting": [[ 2, "asc" ]],
-            "aoColumnDefs": [
-                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
-            ],
-            "bPaginate": false
-        }));
-	});
-</script>
-<style type="text/css"> 
-	   #custom-doc { width:29em;*width:28.3em;min-width:377px; margin:auto; text-align:left; } 
-</style> 
+<style type="text/css">
+    #custom-doc { width:29em;*width:28.3em;min-width:377px; margin:auto; text-align:left; }
+</style>
 </head>
+
 <body id="pat_update-child" class="pat">
 
 <div id="custom-doc" class="yui-t7">
 <div id="bd">
 
-[% IF ( CONFIRM ) %]
-<script type="text/javascript">
-function confirm_updatechild() {
-    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
-   
-    if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=[% borrowernumber %]&catcode=[% catcode %]&catcode_multi=[% CATCODE_MULTI %]';
-    }
-}
-
-confirm_updatechild([% borrowernumber %]);
-</script>
-[% END %]
-
-[% IF ( SUCCESS ) %]
-<script type="text/javascript">
-self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]';
-window.close();
-</script>
-[% END %]
-
-
-
 [% IF ( MULTI ) %]
 
-    <h3> Choose Adult category </h3>
+    <h3> Choose adult category </h3>
 
     [% IF patron_categories %]
         <form method="post" action="update-child.pl">
@@ -87,10 +53,41 @@ window.close();
         </form>
     [% END %]
 [% END %]
-
-
-
-
-
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "aaSorting": [[ 2, "asc" ]],
+                "aoColumnDefs": [
+                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+                ],
+                "bPaginate": false
+            }));
+        });
+    </script>
+    [% IF ( CONFIRM ) %]
+        <script type="text/javascript">
+            function confirm_updatechild() {
+                var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
+                if (is_confirmed) {
+                        window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=[% borrowernumber %]&catcode=[% catcode %]&catcode_multi=[% CATCODE_MULTI %]';
+                }
+            }
+
+            confirm_updatechild([% borrowernumber %]);
+        </script>
+    [% END %]
+    [% IF ( SUCCESS ) %]
+        <script type="text/javascript">
+            self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]';
+            window.close();
+        </script>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'popup-bottom.inc' %]
