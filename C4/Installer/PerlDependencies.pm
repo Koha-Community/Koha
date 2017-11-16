@@ -595,7 +595,7 @@ our $PERL_DEPS = {
     'Test::More' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '1.302075'
+        'min_ver'  => '1.302073'
     },
     'Test::Strict' => {
         'usage'    => 'Core',
