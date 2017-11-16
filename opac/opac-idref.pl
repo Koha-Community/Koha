@@ -42,6 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $ua = LWP::UserAgent->new;
 
+# See http://documentation.abes.fr/aideidrefdeveloppeur/index.html#MicroWebBiblio
 my $base = 'http://www.idref.fr/services/biblio/';
 my $unimarc3 = $cgi->param('unimarc3');
 
@@ -60,36 +61,26 @@ if ( not $response->is_success) {
 my $content = Encode::decode("utf8", $response->content);
 my $json = from_json( $content );
 my $r;
-my $role_name;
-my @unimarc3;
 my @results = ref $json->{sudoc}{result} eq "ARRAY"
             ? @{ $json->{sudoc}{result} }
             : ($json->{sudoc}{result});
 
-for my $role_node ( @results ) {
-    while ( my ( $k, $v ) = each %$role_node ) {
-        next unless $k eq "role";
-        my $role_name;
-        my $count = 0;
-        my $role_data = {};
-        my @nodes = ref $v eq "ARRAY"
-                    ? @$v
-                    : ($v);
-        for my $node ( @nodes ) {
-            while ( ( $k, $v ) = each %$node ) {
-                if ( $k eq 'roleName' ) {
-                    $role_name = $v;
-                    $role_data->{role_name} = $role_name;
-                }
-                elsif ( $k eq 'count' ) {
-                    $role_data->{count} = $v;
-                }
-                elsif ( $k eq 'doc' ) {
-                    push @{ $role_data->{docs} }, $v;
-                }
-            }
-        }
-        push @$r, $role_data;
+for my $result (@results) {
+    my $role_node = $result->{'role'};
+    my @roles =
+      ref $role_node eq "ARRAY"
+      ? @$role_node
+      : ($role_node);
+    for my $role (@roles) {
+        my @docs = ref $role->{doc} eq "ARRAY"
+            ? @{ $role->{doc} }
+            : $role->{doc};
+        push @$r,
+          {
+            role_name => $role->{roleName},
+            count     => $role->{count},
+            docs      => \@docs,
+          };
     }
 }
 
