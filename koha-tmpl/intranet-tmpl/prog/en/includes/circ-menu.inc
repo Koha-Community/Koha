@@ -1,10 +1,11 @@
 [% USE Koha %]
 [% IF ( borrowernumber ) %]
-<div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
+<div class="patroninfo"><p>&nbsp;</p> 
 <!--[if IE 6]>
 <style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
 }</style>
 <![endif]-->
+<!--
 <ul class="patronbriefinfo">
     [% IF ( patronimages ) %]
         [% IF ( picture ) %]
@@ -64,7 +65,7 @@
     [% END %][% END %]
     <li class="patroncategory">Category: [% categoryname %] ([% categorycode %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( branchcode ) %]</li>
-</ul></div>
+</ul>--></div>
 <div id="menu">
 <ul>
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
