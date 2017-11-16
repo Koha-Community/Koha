@@ -386,12 +386,11 @@ $(document).ready(function(){
 [% IF ( batch_list ) %]
   [% IF ( pages ) %]
 <div class="pages">
-Page 
     [% FOREACH page IN pages %]
       [% IF ( page.current_page ) %]
       <span class="current">[% page.page_number %]</span>
       [% ELSE %]
-      <a class="nav" href="[% page.script_name %]?offset=[% page.offset %]">[% page.page_number %]</a>
+      <a href="[% page.script_name %]?offset=[% page.offset %]">[% page.page_number %]</a>
       [% END %]
     [% END %]
 </div>
@@ -454,12 +453,11 @@ Page
 </table>
   [% IF ( pages ) %]
 <div class="pages">
-Page 
     [% FOREACH page IN pages %]
       [% IF ( page.current_page ) %]
       <span class="current">[% page.page_number %]</span>
       [% ELSE %]
-      <a class="nav" href="[% page.script_name %]?offset=[% page.offset %]">[% page.page_number %]</a>
+      <a href="[% page.script_name %]?offset=[% page.offset %]">[% page.page_number %]</a>
       [% END %]
     [% END %]
 </div>
