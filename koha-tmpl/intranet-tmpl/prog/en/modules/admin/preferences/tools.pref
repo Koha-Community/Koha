@@ -38,6 +38,46 @@ Tools:
             - pref: NumSavedReports
               class: integer
             - reports on the Saved Reports page.
+        -
+            -  "OKM statistics configuration and statistical type mappings<br/>
+            <p>Available statistical types:<br/>
+            <ul><li>'Books'</li>
+                <li>'SheetMusicAndScores'</li>
+                <li>'Recordings' (further divided to MusicalRecordings and OtherRecordings based on the MARC)</li>
+                <li>'Videos'</li>
+                <li>'CDROMs'</li>
+                <li>'DVDsAndBluRays'</li>
+                <li>'Other'</li>
+                <li>'Serials'</li>
+                <li>'Celia'</li>
+                <li>'Electronic'</li>
+                <li>'Online'</li>
+            </ul></p>"
+            -  "<p>Material is considered Juvenile material if it is in one of the shelving locations defined by the 'juvenileShelvingLocations'-parameter.</p>"
+            -  "<p>Execution of the OKM report generator can be blocked by the 'blockStatisticsGeneration'-flag, by setting it to 1. This is mainly useful to prevent people from running the statistics module before first configuring it.</p>"
+            - pref: OKM
+              type: textarea
+              class: code
+            - "Example YAML config"
+            - "<pre>---</pre>
+               <pre>blockStatisticsGeneration: 1</pre>
+               <pre>itemTypeToStatisticalCategory: </pre>
+               <pre>  BK: Books</pre>
+               <pre>  CF: Others</pre>
+               <pre>  CR: Serials</pre>
+               <pre>  MU: Recordings</pre>
+               <pre>patronCategories: </pre>
+               <pre>  - ADULTS</pre>
+               <pre>  - STAFF</pre>
+               <pre>notForLoanStatuses: </pre>
+               <pre>  - -1</pre>
+               <pre>  - 5</pre>
+               <pre>adultShelvingLocations: </pre>
+               <pre>  - ADULT</pre>
+               <pre>  - AIK</pre>
+               <pre>juvenileShelvingLocations: </pre> 
+               <pre>  - CHILD</pre>
+               <pre>  - AV</pre>"
     Payments:
         -
             - POS integration. Convert Koha's account types (from accountlines database table) into product codes recognized by your POS provider. Also define the interface being used in each branch.

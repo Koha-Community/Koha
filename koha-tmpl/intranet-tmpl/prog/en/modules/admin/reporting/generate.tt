@@ -1,0 +1,221 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha Reporting</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/reporting/reporting.css" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/reporting/bootstrap-select.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript">
+    reportingTranslations = {
+        'Loans by Item': _("Loans by Item"),
+        'Loans by Borrower type': _("Loans by Borrower type"),
+        'Loans by Biblioitem': _("Loans by Biblioitem"),
+        'Loans by Item (barcodes and titles)': _("Loans by Item (barcodes and titles)"),
+        'Loans by Item (Zero Loans)': _("Loans by Item (Zero Loans)"),
+        'Returns by Item': _("Returns by Item"),
+        'Borrowers': _("Borrowers"),
+        'Acquisitions by Item (barcodes and titles)': _("Acquisitions by Item (barcodes and titles)"),
+        'Acquisition (EUR)': _("Acquisition (EUR)"),
+        'Acquisitions (qty)': _("Acquisitions (qty)"),
+        'Items': _("Items"),
+        'Items Status': _("Items Status"),
+        'Deleted Items': _("Deleted Items"),
+        'Collection by biblioitem': _("Collection by biblioitem"),
+        'Optimal Collection': _("Optimal Collection"),
+        'Deleted Items': _("Deleted Items"),
+        'Reserves (qty)': _("Reserves (qty)"),
+        'Reserves by biblioitem': _("Reserves by biblioitem"),
+        'Fines Overdue': _("Fines Overdue"),
+        'Fines Paid': _("Fines Paid"),
+        'Fines Overdue (customerlist)': _("Fines Overdue (customerlist)"),
+        'Messages': _("Messages"),
+
+        'Acquired Year (from)': _("Acquired Year (from)"),
+        'Acquired Year (to)': _("Acquired Year (to)"),
+        'Active / Overdue': _("Active / Overdue"),
+        'Adult / Child': _("Adult / Child"),
+        'Age Group': _("Age Group"),
+        'Borrower Activity': _("Borrower Activity"),
+        'Borrower activity': _("Borrower activity"),
+        'Borrower Category': _("Borrower Category"),
+        'Branch': _("Branch"),
+        'Branch Group': _("Branch Group"),
+        'Class': _("Class"),
+        'Collection': _("Collection"),
+        'Day': _("Day"),
+        'Fiction / Non-fiction': _("Fiction / Non-fiction"),
+        'First Acquisition': _("First Acquisition"),
+        'Hour': _("Hour"),
+        'Is Yle': _("Is Yle"),
+        'Item status': _("Item status"),
+        'Item type': _("Item type"),
+        'Language': _("Language"),
+        'Loaned amount (from)': _("Loaned amount (from)"),
+        'Loaned amount (to)': _("Loaned amount (to)"),
+        'Loan type': _("Loan type"),
+        'Location': _("Location"),
+        'Message type': _("Message type"),
+        'Month': _("Month"),
+        'Optimal collection min': _("Optimal collection min"),
+        'Optimal collection max': _("Optimal collection max"),
+        'Postcode': _("Postcode"),
+        'Postcode (from)': _("Postcode (from)"),
+        'Postcode (to)': _("Postcode (to)"),
+        'Published Year (from)': _("Published Year (from)"),
+        'Published Year (to)': _("Published Year (to)"),
+        'Reserve status': _("Reserve status"),
+        'Transport type': _("Transport type"),
+
+        'Select All': _("Select All"),
+        'Remove All': _("Remove All"),
+        'Not set': _("Not set"),
+        'Nothing selected': _("Nothing selected"),
+        'No': _("No"),
+        'Yes': _("Yes"),
+        'Issue': _('Issue'),
+        'First Issue': _('First Issue'),
+        'Renew': _('Renew'),
+        'Loaned': _('Loaned'),
+        'New': _('New'),
+        'Deleted': _('Deleted'),
+
+        'Available': _('Available'),
+        'Damaged': _('Damaged'),
+        'Not for loan': _('Not for loan'),
+        'Lost': _('Lost'),
+
+        'Active': _('Active'),
+        'Overdue': _('Overdue'),
+
+        'email': _('email'),
+        'print': _('print'),
+        'sms': _('sms'),
+        'Class fictive': _('Class fictive'),
+    };
+</script>
+
+<script type="text/javascript" src="[% themelang %]/js/reporting/knockout.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/reporting/view/reporting.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/reporting/date.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/reporting/bootstrap-select.js"></script>
+
+</head>
+<body id="admin_reporting" class="admin">
+[% INCLUDE 'header.inc' %]
+<div id="doc" class="yui-t7 reporting-main-body">
+
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+               <div class="reporting-header-container">
+                  <h1>Reporting </h1>
+                  <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=okm" class="btn btn-default btn-settings">Settings</a>
+               </div>
+               <form id="reporting-main-form" type="post" action="request.pl">
+               <div class="reporting-chooser-container">
+                   <fieldset class="reporting-chooser report-selector">
+                       <legend>Reports to run</legend>
+                       <div class="report-selector-heading" >
+                           <div class="report-selector-report-type" data-bind="foreach: reportGroups">
+                                 <span data-bind="text: name"></span> <input type="radio"  name="report-type" data-bind="value: $data, checked: $parent.selectedReportGroup">
+                           </div>
+                       </div>
+                       <div class="report-selector-selector">
+                         <select id="report-selector-selector"  data-bind="options: selectedReportGroup().reports, optionsText: 'description', value: selectedReport"></select>
+                       </div>
+                   </fieldset>
+                   <fieldset class="reporting-chooser reporting-time-selector">
+                       <div class="reporting-time-selector-selector" data-bind="visible: selectedReport().dateFilter().useFrom()"  >
+                           <label for="from">from </label>
+                           <input type="text" id="from" name="from" data-bind="value: selectedReport().dateFilter().from">
+                       </div>
+                       <div class="reporting-time-selector-selector" data-bind="visible: selectedReport().dateFilter().useTo()"  >
+                           <label for="to">to</label>
+                           <input type="text" id="to" name="to" data-bind="value: selectedReport().dateFilter().to">
+                       </div>
+                       <div class="reporting-time-selector-precision" data-bind="visible: selectedReport().dateFilter().showPrecision">
+                               <span>month</span> <input type="radio" name="report-time-precision" value="month" data-bind="checked: selectedReport().dateFilter().precision">
+                               <span>day</span> <input type="radio" name="report-time-precision" value="day" data-bind="checked: selectedReport().dateFilter().precision">
+                               <span>hour</span> <input type="radio" name="report-time-precision" value="hour" data-bind="checked: selectedReport().dateFilter().precision">
+                       </div>
+                   </fieldset>
+               </div>
+               <div class="reporting-chooser-container">
+                   <fieldset data-bind="visible: selectedReport().filters().length > 0" >
+                       <legend>Filter</legend>
+                       <div class="reporting-chooser filter-selector" data-bind="visible: selectedReport().filters().length > 0, foreach: selectedReport().filters">
+                           <div class="filter-selector-filter" data-bind="css: { isselect: viewSelectClass() == 1 }, visible: selectorVisible() == 1">
+                               <!-- ko if: $data.type == 'text'-->
+                                   <p data-bind="text: description"></p>
+                                   <input type="text" data-bind="value: selectedValue1">
+                               <!-- /ko -->
+                               <!-- ko if: $data.type == 'textdouble'-->
+                                   <p data-bind="text: description"></p>
+                                   <input type="text" data-bind="value: selectedValue1">
+                                   <p data-bind="text: description2"></p>
+                                   <input type="text" data-bind="value: selectedValue2">
+                               <!-- /ko -->
+                               <!-- ko if: $data.type == 'select'-->
+                                   <p data-bind="text: description"></p>
+                                   <select style="display:none" class="selectpicker" data-bind="selectPicker: selectedOptions, optionsValue: $data, optionsText: 'description', selectPickerOptions: { optionsArray: options}"></select>
+                               <!-- /ko -->
+                               <!-- ko if: $data.type == 'multiselect'-->
+                                   <p data-bind="text: description"></p>
+                                   <select style="display:none" class="selectpicker" multiple data-bind="selectPicker: selectedOptions, optionsValue: $data,  optionsText: 'description', selectPickerOptions: { optionsArray: options}"></select>
+                               <!-- /ko -->
+                           </div>
+
+                           <!-- ko if: $parent.filterClear($index()) -->
+                               <div class="clear"></div>
+                           <!-- /ko -->
+                       </div>
+                   </fieldset>
+               </div>
+               <div class="reporting-chooser-container">
+                   <fieldset class="reporting-chooser grouping-selector" data-bind="visible: selectedReport().groupings().length > 0" >
+                       <legend>Group </legend>
+                       <div class="grouping-selector-groups" data-bind="foreach: selectedReport().groupings">
+                           <span class="grouping-selector-group-container">
+                               <span data-bind="text: description"></span>
+                               <input type="checkbox" data-bind="checked: selectedValue, click: $parent.groupByChecked">
+                               <select class="grouping-selector-options" data-bind="value: selectedOptions, visible: showOptions">
+                                   <option value="0">0</option>
+                                   <option value="1">1</option>
+                                   <option value="2">2</option>
+                                   <option value="3">3</option>
+                               </select>
+                           </span>
+                       </div>
+                   </fieldset>
+                   <fieldset class="reporting-chooser ordering-selector" data-bind="visible: orderLimitVisible" >
+                       <legend>Order and Limit</legend>
+                       <div class="ordering-selector-order" data-bind="visible: selectedReport().visibleOrderings().length > 0 ">
+                           <select data-bind="options: selectedReport().visibleOrderings, optionsText: 'name', value: selectedReport().selectedOrdering" ></select>
+                           <span>ASC</span> <input type="radio" name="report-order-direction" value="asc" data-bind="checked: selectedReport().selectedDirection">
+                           <span>DESC</span> <input type="radio" name="report-order-direction" value="desc" data-bind="checked: selectedReport().selectedDirection">
+                       </div>
+                       <div data-bind="visible: selectedReport().hasTopLimit">
+                           <p>Top limit</p>
+                           <input type="text" data-bind="value: selectedReport().limit">
+                       </div>
+                   </fieldset>
+               </div>
+               </form>
+               <div class="reporting-report-submit">
+                   <button type="button" data-bind="click: reportSubmitHtml" >Print to screen<i class="fa fa-refresh fa-spin" data-bind="visible: htmlSpinnerVisible"></i></button>
+                   <button type="button" data-bind="click: reportSubmitCsv" >Print to csv<i class="fa fa-refresh fa-spin" data-bind="visible: csvSpinnerVisible" ></i></button>
+                   <button type="button" data-bind="click: reportEmptySelections" >Empty selections</button>
+               </div>
+               <div class="reporting-report-rendered">
+                   <table style="width:100%" data-bind="html: selectedReport().renderedReport"></table>
+               </div>
+            </div>
+            <script type="text/javascript">
+                reportDataJson = '[% report_data %]';
+                ko.applyBindings(new ReportingView());
+            </script>
+        </div>
+    </div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

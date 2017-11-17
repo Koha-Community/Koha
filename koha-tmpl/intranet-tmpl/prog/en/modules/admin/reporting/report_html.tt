@@ -1,0 +1,21 @@
+<table style="width:100%">
+    [% FOREACH header_row IN header_rows %]
+        <tr>
+            [% FOREACH heading IN header_row %]
+                <th>[% heading %]</th>
+            [% END %]
+        </tr>
+    [% END %]
+
+    [% FOREACH row IN rows %]
+        [% SET rowlast = 0 %]
+        [% IF loop.last %]
+            [% SET rowlast = 1 %]
+        [% END %]
+        <tr>
+            [% FOREACH val IN row %]
+                <td class="[% IF loop.first %]first-col[% END %] [% IF loop.last %]last-col[% END %] [% IF rowlast == 1 %]last-row[% END %]" >[% val %]</td>
+            [% END %]
+        </tr>
+    [% END %]
+</table>
