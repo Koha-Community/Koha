@@ -29,7 +29,7 @@ use_ok('Koha::SearchEngine::Elasticsearch');
 
 subtest 'get_fixer_rules() tests' => sub {
 
-    plan tests => 45;
+    plan tests => 49;
 
     $schema->storage->txn_begin;
 
@@ -62,7 +62,7 @@ subtest 'get_fixer_rules() tests' => sub {
             type => 'string',
             facet => 1,
             suggestible => 1,
-            sort => '~',
+            sort => undef,
             marc_type => 'marc21',
             marc_field => '100a',
         },
@@ -71,12 +71,13 @@ subtest 'get_fixer_rules() tests' => sub {
             type => 'string',
             facet => 1,
             suggestible => 1,
-            sort => '~',
+            sort => 1,
             marc_type => 'marc21',
             marc_field => '110a',
         },
     );
 
+    $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
     my $result = $see->get_fixer_rules();
     is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
     is( $result->[1], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{__facet.$append', -split => 1)});
@@ -141,6 +142,16 @@ subtest 'get_fixer_rules() tests' => sub {
     is( $result->[2], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
     is( $result->[3], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
     is( $result->[4], q{move_field(_id,es_id)});
+
+    $mappings[0]->{sort}  = 0;
+    $mappings[1]->{sort}  = undef;
+
+    $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
+    $result = $see->get_fixer_rules();
+    is( $result->[0], q{marc_map('} . $mappings[0]->{marc_field} . q{','} . $mappings[0]->{name} . q{.$append', -split => 1)});
+    is( $result->[1], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{.$append', -split => 1)});
+    is( $result->[2], q{marc_map('} . $mappings[1]->{marc_field} . q{','} . $mappings[1]->{name} . q{__sort.$append', -split => 1)});
+    is( $result->[3], q{move_field(_id,es_id)});
 
     t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
 
