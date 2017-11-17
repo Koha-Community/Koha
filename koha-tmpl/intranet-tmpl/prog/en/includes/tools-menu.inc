@@ -1,20 +1,3 @@
-<script type="text/javascript">//<![CDATA[
-    $(document).ready(function() {
-        var path = location.pathname.substring(1);
-        if (path.indexOf("labels") >= 0 && path.indexOf("spine") < 0 ) {
-          $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').css('font-weight','bold');
-        } else if (path.indexOf("patroncards") >= 0 ) {
-          $('#navmenulist a[href$="/cgi-bin/koha/patroncards/home.pl"]').css('font-weight','bold');
-        } else if (path.indexOf("patron_lists") >= 0 ) {
-          $('#navmenulist a[href$="/cgi-bin/koha/patron_lists/lists.pl"]').css('font-weight','bold');
-        } else if ((path+location.search).indexOf("batchMod.pl?del=1") >= 0 ) {
-          $('#navmenulist a[href$="/cgi-bin/koha/tools/batchMod.pl?del=1"]').css('font-weight','bold');
-        } else {
-          $('#navmenulist a[href$="/' + path + '"]').css('font-weight','bold');
-        }
-    });
-//]]>
-</script>
 <div id="navmenu">
 <div id="navmenulist">
 <ul>

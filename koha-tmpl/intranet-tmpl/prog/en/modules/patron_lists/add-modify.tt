@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo;
     [% IF list.patron_list_id %]
@@ -62,5 +63,9 @@
             </fieldset>
         </form>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

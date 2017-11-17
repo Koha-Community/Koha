@@ -1,69 +1,10 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; [% list.name %] &rsaquo; Add patrons</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var MSG_REMOVE_PATRON = _("Remove");
-$(document).ready(function() {
-    $('#patrons_to_add_fieldset').hide();
-
-        $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "order": [[ 3, "asc" ]],
-            "aoColumns": [
-                null,null,null,null,null,null,null,{ "sType": "title-string" },null
-            ],
-            "aoColumnDefs": [
-                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-            ],
-            "sPaginationType": "four_button"
-        } ));
-
-    patron_autocomplete({
-        patron_container: $("#patrons_to_add"),
-        input_autocomplete: $("#find_patron"),
-        patron_input_name: 'patrons_to_add'
-    });
-
-    var checkBoxes = $("input[type='checkbox']","#patron-list-table");
-
-    $("#CheckAll").click(function(e){
-        e.preventDefault();
-        checkBoxes.each(function(){
-            $(this).prop("checked",1);
-        });
-    });
-    $("#CheckNone").click(function(e){
-        e.preventDefault();
-        checkBoxes.each(function(){
-            $(this).prop("checked",0);
-        });
-    });
-
-    $("#remove_patrons").submit(function(){
-        var checkedItems = $("input:checked");
-        if ($(checkedItems).size() == 0) {
-            alert(_("You must select one or more patrons to remove"));
-            return false;
-        }
-        $(checkedItems).parents('tr').addClass("warn");
-        if( confirm(_("Are you sure you want to remove the selected patrons?")) ) {
-            return true;
-        } else {
-            $(checkedItems).parents('tr').removeClass("warn");
-            return false;
-        }
-    });
-});
-
-//]]>
-</script>
-
 </head>
 
 <body id="patlist_list" class="pat patlist">
@@ -161,4 +102,65 @@ $(document).ready(function() {
             [% INCLUDE 'tools-menu.inc' %]
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+
+    <script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.js"></script>
+    <script type="text/javascript">
+        var MSG_REMOVE_PATRON = _("Remove");
+        $(document).ready(function() {
+            $('#patrons_to_add_fieldset').hide();
+
+                $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "order": [[ 3, "asc" ]],
+                    "aoColumns": [
+                        null,null,null,null,null,null,null,{ "sType": "title-string" },null
+                    ],
+                    "aoColumnDefs": [
+                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                    ],
+                    "sPaginationType": "four_button"
+                } ));
+
+            patron_autocomplete({
+                patron_container: $("#patrons_to_add"),
+                input_autocomplete: $("#find_patron"),
+                patron_input_name: 'patrons_to_add'
+            });
+
+            var checkBoxes = $("input[type='checkbox']","#patron-list-table");
+
+            $("#CheckAll").click(function(e){
+                e.preventDefault();
+                checkBoxes.each(function(){
+                    $(this).prop("checked",1);
+                });
+            });
+            $("#CheckNone").click(function(e){
+                e.preventDefault();
+                checkBoxes.each(function(){
+                    $(this).prop("checked",0);
+                });
+            });
+
+            $("#remove_patrons").submit(function(){
+                var checkedItems = $("input:checked");
+                if ($(checkedItems).size() == 0) {
+                    alert(_("You must select one or more patrons to remove"));
+                    return false;
+                }
+                $(checkedItems).parents('tr').addClass("warn");
+                if( confirm(_("Are you sure you want to remove the selected patrons?")) ) {
+                    return true;
+                } else {
+                    $(checkedItems).parents('tr').removeClass("warn");
+                    return false;
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

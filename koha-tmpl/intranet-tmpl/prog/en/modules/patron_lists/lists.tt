@@ -1,58 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'greybox.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        var patronExportModal = $("#patronExportModal");
-        var patronExportModalBody = $("#patronExportModal .modal-body")
-
-        $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "autoWidth": false,
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
-            ],
-            "sPaginationType": "four_button"
-        } ));
-        $(".delete_patron").on("click", function(){
-            $(".dropdown").removeClass("open");
-            var list = $(this).data("list-name");
-            return confirmDelete( _("Are you sure you want to delete the list %s?").format(list) );
-        });
-
-        $(".print_cards").on("click", function(e){
-            e.preventDefault();
-            var page = $(this).attr("href");
-            patronExportModalBody.load(page + " #exportingf");
-            patronExportModal.modal("show");
-        });
-
-        patronExportModal.on("hidden", function(){
-            patronExportModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-        });
-
-        patronExportModal.on("submit", "#exportingf", function(e){
-            e.preventDefault();
-            modal_body = patronExportModalBody;
-            modal_body.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-            target_url = $(this).attr("action");
-            params =  $( this ).serialize();
-            modal_body.load( target_url + "?" + params + " #custom-doc");
-        });
-
-        patronExportModal.on("click",".closebtn,.gb-close",function(e){
-            e.preventDefault();
-            patronExportModal.modal("hide");
-        });
-
-    });
-//]]>
-</script>
-
 </head>
 
 <body id="patlist_lists" class="pat patlist">
@@ -151,4 +102,56 @@
             [% INCLUDE 'tools-menu.inc' %]
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var patronExportModal = $("#patronExportModal");
+            var patronExportModalBody = $("#patronExportModal .modal-body")
+
+            $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "autoWidth": false,
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
+                ],
+                "sPaginationType": "four_button"
+            } ));
+            $(".delete_patron").on("click", function(){
+                $(".dropdown").removeClass("open");
+                var list = $(this).data("list-name");
+                return confirmDelete( _("Are you sure you want to delete the list %s?").format(list) );
+            });
+
+            $(".print_cards").on("click", function(e){
+                e.preventDefault();
+                var page = $(this).attr("href");
+                patronExportModalBody.load(page + " #exportingf");
+                patronExportModal.modal("show");
+            });
+
+            patronExportModal.on("hidden", function(){
+                patronExportModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+
+            patronExportModal.on("submit", "#exportingf", function(e){
+                e.preventDefault();
+                modal_body = patronExportModalBody;
+                modal_body.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                target_url = $(this).attr("action");
+                params =  $( this ).serialize();
+                modal_body.load( target_url + "?" + params + " #custom-doc");
+            });
+
+            patronExportModal.on("click",".closebtn,.gb-close",function(e){
+                e.preventDefault();
+                patronExportModal.modal("hide");
+            });
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
