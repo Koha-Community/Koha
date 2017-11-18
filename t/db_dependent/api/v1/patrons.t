@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 159;
+use Test::More tests => 162;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -82,6 +82,7 @@ my $librarian = $builder->build({
         flags        => 16,
         lost         => 0,
         password     => Koha::AuthUtils::hash_password("test"),
+        othernames   => 'librarian_othernames',
     }
 });
 
@@ -366,6 +367,14 @@ subtest 'Test OPACPatronDetails preference' => sub {
 $newpatron->{ cardnumber } = "234567";
 $newpatron->{ userid } = "updatedtestuser";
 $newpatron->{ surname } = "UpdatedTestUser";
+$newpatron->{ othernames } = $librarian->{othernames};
+
+$tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(409, 'Patron othernames conflict')
+  ->json_has($newpatron);
+delete $newpatron->{ othernames };
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});

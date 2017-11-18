@@ -731,6 +731,20 @@ sub validate {
         }
     }
 
+    # patron othernames unique?
+    if ($self->othernames) {
+        my $patron = Koha::Patrons->search( {
+            othernames => $self->othernames,
+        })->next;
+        if ($patron && (!$self->in_storage || $self->in_storage
+            && $self->borrowernumber ne $patron->borrowernumber)) {
+            Koha::Exceptions::Patron::DuplicateObject->throw(
+                error => "Patron othernames must be unique",
+                conflict => { othernames => $patron->othernames }
+            );
+        }
+    }
+
     my $branch = Koha::Libraries->find({branchcode => $self->branchcode });
     unless ($branch) {
         Koha::Exceptions::Library::BranchcodeNotFound->throw(
