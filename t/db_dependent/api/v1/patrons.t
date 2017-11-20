@@ -372,8 +372,8 @@ $newpatron->{ othernames } = $librarian->{othernames};
 $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
-  ->status_is(409, 'Patron othernames conflict')
-  ->json_has($newpatron);
+  ->status_is(409)
+  ->json_is('/error' => "Patron othernames must be unique");
 delete $newpatron->{ othernames };
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $newpatron->{ borrowernumber } => json => $newpatron);
