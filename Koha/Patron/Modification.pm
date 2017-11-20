@@ -293,7 +293,8 @@ sub validate {
     my $current_data = $patron->unblessed;
     foreach my $key ( keys %{$changes} ) {
         if ( defined $current_data->{$key} &&
-             $current_data->{$key} eq $changes->{$key} )
+             $current_data->{$key} eq $changes->{$key} ||
+             !defined $current_data->{$key} && $changes->{$key} eq '' )
         {
             unless ($key eq 'borrowernumber') {
                 $self->set({ $key => undef });

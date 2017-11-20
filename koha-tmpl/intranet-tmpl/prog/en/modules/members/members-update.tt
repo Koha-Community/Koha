@@ -126,7 +126,7 @@
 
 
                                             [% FOREACH key IN pm.keys %]
-                                                [% IF ( key != "timestamp" and key != "extended_attributes" ) %]
+                                                [% IF ( key != "timestamp" and key != "extended_attributes" and key != "verification_token" ) %]
                                                     [% IF ( ( pm.$key OR borrowers.$borrowernumber.$key ) && ( pm.$key != borrowers.$borrowernumber.$key ) ) %]
                                                         <tr>
                                                             <td>[% PROCESS display_names field = key %]</td>
