@@ -24,8 +24,10 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use Koha::AuthorisedValues;
+use Koha::Illcomment;
 use Koha::Illrequests;
 use Koha::Libraries;
+use Koha::Token;
 
 use Try::Tiny;
 
@@ -63,7 +65,10 @@ if ( $backends_available ) {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
 
         $template->param(
-            request => $request
+            request    => $request,
+            csrf_token => Koha::Token->new->generate_csrf({
+                session_id => scalar $cgi->cookie('CGISESSID'),
+            }),
         );
 
     } elsif ( $op eq 'create' ) {
@@ -235,6 +240,24 @@ if ( $backends_available ) {
                 prefilters => $active_filters
             );
         }
+
+    } elsif ( $op eq "save_comment" ) {
+        die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
+           session_id => scalar $cgi->cookie('CGISESSID'),
+           token      => scalar $cgi->param('csrf_token'),
+        });
+        my $comment = Koha::Illcomment->new({
+            illrequest_id  => scalar $params->{illrequest_id},
+            borrowernumber => $patronnumber,
+            comment        => scalar $params->{comment},
+        });
+        $comment->store();
+        # Redirect to view the whole request
+        print $cgi->redirect("/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=".
+            scalar $params->{illrequest_id}
+        );
+        exit;
+
     } else {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->custom_capability($op, $params);

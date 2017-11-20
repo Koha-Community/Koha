@@ -29,6 +29,7 @@ use Try::Tiny;
 use Koha::Database;
 use Koha::Email;
 use Koha::Exceptions::Ill;
+use Koha::Illcomments;
 use Koha::Illrequestattributes;
 use Koha::Patron;
 
@@ -116,6 +117,17 @@ sub illrequestattributes {
     my ( $self ) = @_;
     return Koha::Illrequestattributes->_new_from_dbic(
         scalar $self->_result->illrequestattributes
+    );
+}
+
+=head3 illcomments
+
+=cut
+
+sub illcomments {
+    my ( $self ) = @_;
+    return Koha::Illcomments->_new_from_dbic(
+        scalar $self->_result->illcomments
     );
 }
 
@@ -1023,6 +1035,10 @@ sub TO_JSON {
             $object->{library} = Koha::Libraries->find(
                 $self->branchcode
             )->TO_JSON;
+        }
+        # Augment the request response with the number of comments if appropriate
+        if ( $embed->{comments} ) {
+            $object->{comments} = $self->illcomments->count;
         }
     }
 

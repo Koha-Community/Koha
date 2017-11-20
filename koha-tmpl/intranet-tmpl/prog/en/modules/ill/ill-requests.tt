@@ -51,7 +51,8 @@
             'status',
             'updated',
             'illrequest_id',
-            'action'
+            'comments',
+            'action' // Action should always be last
         ];
 
         // Remove any fields we're ignoring
@@ -205,6 +206,18 @@
             }
         };
 
+        // Toggle request attributes in Illview
+        $('#toggle_requestattributes').on('click', function(e) {
+            e.preventDefault();
+            $('#requestattributes').toggleClass('content_hidden');
+        });
+
+        // Toggle new comment form in Illview
+        $('#toggle_addcomment').on('click', function(e) {
+            e.preventDefault();
+            $('#addcomment').toggleClass('content_hidden');
+        });
+
         // Filter partner list
         $('#partner_filter').keyup(function() {
             var needle = $('#partner_filter').val();
@@ -231,7 +244,7 @@
         // Get our data from the API and process it prior to passing
         // it to datatables
         var ajax = $.ajax(
-            '/api/v1/illrequests?embed=metadata,patron,capabilities,library'
+            '/api/v1/illrequests?embed=metadata,patron,capabilities,library,comments'
             ).done(function() {
                 var data = JSON.parse(ajax.responseText);
                 // Make a copy, we'll be removing columns next and need
@@ -604,6 +617,47 @@
                         </div>
                     </div>
 
+                    <div id="ill-view-panel" class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3>[% request.illcomments.count %] comments</h3>
+                        </div>
+                        <div class="panel-body">
+                            [% IF request.illcomments.count && request.illcomments.count > 0 %]
+                                [% FOREACH comment IN request.illcomments %]
+                                    <div class="rows comment_[% comment.patron.categorycode %]">
+                                    <h5>Comment by:
+                                    <a href="[% borrowerlink %]" title="View borrower details">
+                                    [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
+                                    [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
+                                    <p>[% comment.comment | html %]</p>
+                                    </div>
+                                [% END %]
+                            [% END %]
+                                <div class="rows">
+                                    <h3><a id="toggle_addcomment" href="#">Add comment</a></h3>
+                                    <div id="addcomment" class="content_hidden">
+                                        <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                            <input type="hidden" value="save_comment" name="method">
+                                            <input type="hidden" value="[% csrf_token %]" name="csrf_token">
+                                            <input type="hidden" value="[% request.illrequest_id %]" name="illrequest_id">
+                                            <fieldset class="rows">
+                                                <ol>
+                                                    <li>
+                                                        <label class="required" for="comment">Comment: </label>
+                                                        <textarea type="text" class="required" required="required" value="" cols="80" rows="10" id="comment" name="comment"></textarea>
+                                                        <span class="required">Required</span>
+                                                    </li>
+                                                </ol>
+                                            </fieldset>
+                                            <fieldset class="action">
+                                                <input type="submit" value="Submit">
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
                 [% ELSIF query_type == 'illlist' %]
                     <!-- illlist -->
                     <h1>View ILL requests</h1>
@@ -621,6 +675,7 @@
                                     <th>Status</th>
                                     <th>Updated on</th>
                                     <th>Request number</th>
+                                    <th>Comments</th>
                                     <th class="actions"></th>
                                 </tr>
                             </thead>
