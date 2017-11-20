@@ -103,16 +103,16 @@ subtest 'default_exception_handling() tests' => sub {
     };
 };
 
-subtest 'log_response() tests' => sub {
+subtest 'log_request() and log_response() tests' => sub {
     plan tests => 12;
 
     $t->app->routes->get('/response/log/json' => sub {
         $_[0]->render( status => 200, json => { wow => "it worked" } )
     });
-    $t->app->routes->get('/response/log/other' => sub {
+    $t->app->routes->post('/response/log/other' => sub {
         $_[0]->render( status => 200, data => '<b>ERROR!</b>' )
     });
-    $t->app->routes->get('/response/log/500' => sub {
+    $t->app->routes->put('/response/log/500' => sub {
         die;
     });
 
@@ -122,26 +122,31 @@ subtest 'log_response() tests' => sub {
       ->status_is(200)
       ->json_is('/wow' => 'it worked');
     is($appender->buffer,
-       "DEBUG - {\"json\":{\"wow\":\"it worked\"},\"status\":200}\n",
-       'Found response JSON'
+       "DEBUG - Request JSON body null\nDEBUG - Request params {}\n".
+       "DEBUG - Rendering response {\"json\":{\"wow\":\"it worked\"},\"status\":200}\n",
+       'Found request and response content'
     );
     $appender->{appender}->{buffer} = undef;
 
-    $t->get_ok('/response/log/other')
+    $t->post_ok('/response/log/other' => form => { param1 => "value" })
       ->status_is(200)
       ->content_is('<b>ERROR!</b>');
     is($appender->buffer,
-       "DEBUG - {\"data\":\"<b>ERROR!<\\/b>\",\"status\":200}\n",
-       'Found response JSON'
+       "DEBUG - Request JSON body null\nDEBUG - Request params {\"param1\":\"value\"}\n".
+       "DEBUG - Rendering response {\"data\":\"<b>ERROR!<\\/b>\",\"status\":200}\n",
+       'Found request and response content'
     );
     $appender->{appender}->{buffer} = undef;
 
-    $t->get_ok('/response/log/500')
+    $t->put_ok('/response/log/500' => json => { param2 => "value" })
       ->status_is(500)
       ->json_is('/error' => 'Something went wrong, check the logs.');
     like($appender->buffer,
-       qr/DEBUG - \{"json":\{"error":"Something went wrong, check the logs."\},"status":500\}\n/,
-       'Found response error content'
+qr{DEBUG - Request JSON body \{"param2":"value"\}\nDEBUG - Request params \{\}
+ERROR - Died at .* line \d+\.\n
+DEBUG - Rendering response \{"json":\{"error":"Something went wrong, check the logs\."\},"status":500\}
+}msi,
+       'Found request and response content'
     );
     $appender->{appender}->{buffer} = undef;
 

@@ -51,6 +51,7 @@ sub startup {
         $self->secrets([$secret_passphrase]);
     }
 
+    $self->app->hook(before_dispatch => \&log_request);
     $self->app->hook(before_render => \&default_exception_handling);
     $self->app->hook(before_render => \&log_response);
 
@@ -101,6 +102,24 @@ sub default_exception_handling {
     }
 }
 
+=head3 log_request
+
+=cut
+
+sub log_request {
+    my ($c) = @_;
+
+    eval {
+        $c->app->log->trace(sub { Data::Dumper::Dumper($c->req) });
+        $c->app->log->debug(
+            'Request JSON body ' . Mojo::JSON::encode_json($c->req->json)
+        );
+        $c->app->log->debug(
+            'Request params ' . Mojo::JSON::encode_json($c->req->params->to_hash)
+        );
+    };
+}
+
 =head3 log_response
 
 =cut
@@ -108,7 +127,12 @@ sub default_exception_handling {
 sub log_response {
     my ($c, $args) = @_;
 
-    eval { $c->app->log->debug(Mojo::JSON::encode_json($args)) };
+    eval {
+        $c->app->log->trace(sub { Data::Dumper::Dumper($c->res) });
+        $c->app->log->debug(
+            'Rendering response ' . Mojo::JSON::encode_json($args)
+        );
+    };
 }
 
 sub hateoas {
