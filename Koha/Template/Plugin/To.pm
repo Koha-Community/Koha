@@ -29,6 +29,8 @@ sub json {
     my $json = JSON->new->allow_nonref(1);
     $json = $json->encode($value);
     $json =~ s/^"|"$//g; # Remove quotes around the strings
+    $json =~ s/\\r/\\\\r/g; # Convert newlines to escaped newline characters
+    $json =~ s/\\n/\\\\n/g;
     return $json;
 }
 
