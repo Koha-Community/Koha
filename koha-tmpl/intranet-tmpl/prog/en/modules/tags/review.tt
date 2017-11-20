@@ -1,28 +1,9 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Home &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/tags-review.js"></script>
-<script type="text/javascript">
-    var MSG_AJAX_APPROVE_FAILED = _("AJAX failed to approve tag: %s");
-    var MSG_AJAX_REJECTION_FAILED = _("AJAX failed to reject tag: %s");
-    var MSG_AJAX_TAG_PERMITTED = _("%s is permitted!");
-    var MSG_AJAX_TAG_PROHIBITED = _("%s is prohibited!");
-    var MSG_AJAX_TAG_UNCLASSIFIED = _("%s is neither permitted nor prohibited!");
-    var MSG_AJAX_ERROR = _("AJAX error (%s alert)");
-    var LABEL_SELECT_ALL = _("Select all");
-    var LABEL_CLEAR_ALL = _("Clear all");
-    var LABEL_SELECT_ALL_PENDING = _("Select all pending");
-    var LABEL_APPROVE = _("Approve");
-    var LABEL_APPROVED = _("Approved");
-    var LABEL_REJECT = _("Reject");
-    var LABEL_REJECTED = _("Rejected");
-    var LABEL_TESTING = _("Testing...");
-</script>
 <style type="text/css">
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
 .rejected { color: #CC0033; }
@@ -31,6 +12,7 @@
 tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 </style>
 </head>
+
 <body id="tags_review" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -239,5 +221,28 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 </form>
 </div>
 </div>
-[% INCLUDE 'intranet-bottom.inc' %]
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/tags-review.js"></script>
+    <script type="text/javascript">
+        var MSG_AJAX_APPROVE_FAILED = _("AJAX failed to approve tag: %s");
+        var MSG_AJAX_REJECTION_FAILED = _("AJAX failed to reject tag: %s");
+        var MSG_AJAX_TAG_PERMITTED = _("%s is permitted!");
+        var MSG_AJAX_TAG_PROHIBITED = _("%s is prohibited!");
+        var MSG_AJAX_TAG_UNCLASSIFIED = _("%s is neither permitted nor prohibited!");
+        var MSG_AJAX_ERROR = _("AJAX error (%s alert)");
+        var LABEL_SELECT_ALL = _("Select all");
+        var LABEL_CLEAR_ALL = _("Clear all");
+        var LABEL_SELECT_ALL_PENDING = _("Select all pending");
+        var LABEL_APPROVE = _("Approve");
+        var LABEL_APPROVED = _("Approved");
+        var LABEL_REJECT = _("Reject");
+        var LABEL_REJECTED = _("Rejected");
+        var LABEL_TESTING = _("Testing...");
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

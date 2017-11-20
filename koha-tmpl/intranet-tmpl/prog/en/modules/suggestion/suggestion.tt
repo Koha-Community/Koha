@@ -2,6 +2,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
     [% IF ( op_save ) %]
@@ -17,185 +18,17 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-[% IF ( op == 'show' || op_else ) %]
-<script type="text/javascript">
-    // <![CDATA[
-    $(document).ready(function(){
-        $(".deletesuggestion").on("click",function(){
-            return confirm(_("Are you sure you want to delete this suggestion?"));
-        });
-    });
-    // ]]>
-</script>
+[% IF ( op_else ) %]
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% END %]
 [% IF ( op_else ) %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-// <![CDATA[
-/**
-*  displayOther.
-*  This function display the select or an textaera to write a reason.
-*/
-function displayOther(id,show,hide){
-	$("#"+hide+id).hide();
-	$("#"+show+id).show();
-}
-$(document).ready(function() {
-    $('#suggestiontabs').tabs({
-        // Correct table sizing for tables hidden in tabs
-        // http://www.datatables.net/examples/api/tabs_and_scrolling.html
-        "activate": function(event, ui) {
-            $( $.fn.dataTable.tables( true ) ).DataTable().columns.adjust();
-        }
-    });
-    $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
-        ],
-        "sPaginationType": "four_button"
-    }));
-[% FOREACH suggestion IN suggestions %]
-// functions for [% suggestion.suggestiontype %] interactions
-    $("#CheckAll[% suggestion.suggestiontype %]").click(function(e){
-		$("#[% suggestion.suggestiontype %]t").checkCheckboxes();
-        e.preventDefault();
-    });
-    $("#UncheckAll[% suggestion.suggestiontype %]").click(function(e){
-		$("#[% suggestion.suggestiontype %]t").unCheckCheckboxes();
-        e.preventDefault();
-	});
-	$("#other_reason[% suggestion.suggestiontype %]").hide();
-    $("#reason[% suggestion.suggestiontype %]").change(function(){
-	    if($(this).val() == "other"){
-			$(this).hide();
-			$("#other_reason[% suggestion.suggestiontype %]").show();
-    }
-    });
-	$("#[% suggestion.suggestiontype %]delete").change(function(){
-		if(this.checked){
-			$("form[name='f[% suggestion.suggestiontype %]'] input[name=op]").attr("value","delete");
-		} else {
-			$("form[name='f[% suggestion.suggestiontype %]'] input[name=op]").attr("value","change");
-		}
-	});
-
+    <style type="text/css">
+        h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
+        .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("[% interface %]/[% theme %]/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
+    </style>
 [% END %]
-    $("a[href*=back]").click(function(){
-    var sid = $(this).attr("href").replace(/#back/,"");
-	    $("#reason"+sid).show().find("option[value='']").attr("selected","selected");
-		$("#other_reason"+sid).hide();
-    });
-    $("h4.local_collapse a").click(function(){
-        $(this).parent().parent().find("ol").toggle();
-        return false;
-    });
-    // http://jqueryui.com/demos/datepicker/#date-range
-    var dates = $( "#suggesteddate_from, #suggesteddate_to" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "suggesteddate_from" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            dates.not( this ).datepicker( "option", option, date );
-        }
-    });
-    var datesMD = $( "#manageddate_from, #manageddate_to" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "manageddate_from" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            datesMD.not( this ).datepicker( "option", option, date );
-        }
-    });
-    var datesAD = $( "#accepteddate_from, #accepteddate_to" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "accepteddate_from" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            datesAD.not( this ).datepicker( "option", option, date );
-        }
-    });
-
-    $("form.update_suggestions").on("submit", function(e){
-        var form = this;
-        var action_delete_selected = $(this).find("input[value='delete']").is(":checked");
-        if ( action_delete_selected ) {
-            var suggestions_to_delete = $(this).find("input[name='edit_field']:checked");
-            if ( suggestions_to_delete.length == 0 ) {
-                alert(_("Please select at least one suggestion to delete"));
-                e.preventDefault();
-                return false;
-            } else if ( suggestions_to_delete.length == 1 ) {
-                if ( ! confirm(_("Are you sure you want to delete this suggestion?")) ) {
-                    e.preventDefault();
-                    return false;
-                }
-            } else if ( suggestions_to_delete.length > 1 ) {
-                if ( ! confirm(_("Are you sure you want to delete these suggestions?")) ) {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-        }
-        return true;
-    });
-});
-// ]]>
-</script>
-<style type="text/css">
-h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
-.overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("[% interface %]/[% theme %]/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
-</style>[% END %]
-[% IF ( op_save )  %]
-    <script type="text/javascript">
-        // <![CDATA[
-        $(document).ready(function(){
-            calcNewsuggTotal();
-            $("#quantity,#price,#currency").on("change",function(){
-                calcNewsuggTotal();
-            });
-
-            [% IF other_reason %]
-                $(".select-reason").hide();
-                $(".select-reason").find("option[value='other']").attr("selected","selected");
-                $("#other_reason").show();
-            [% ELSE %]
-                $("#other_reason").hide();
-            [% END %]
-            $(".select-reason").change(function(){
-                if($(this).val() == "other"){
-                    $(this).hide();
-                    $("#other_reason").show();
-                }
-            });
-            $("a[href*=back]").click(function(){
-                $(".select-reason").show().find("option[value='']").attr("selected","selected");
-                $("#other_reason").hide();
-            });
-        });
-        // ]]>
-    </script>
-[% END %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
 </head>
+
 <body id="acq_suggestion" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -912,5 +745,178 @@ h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief o
     [% END %]
 </div>
 [% END %]
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% IF ( op == 'show' || op_else ) %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".deletesuggestion").on("click",function(){
+                    return confirm(_("Are you sure you want to delete this suggestion?"));
+                });
+            });
+        </script>
+    [% END %]
+    [% IF ( op_else ) %]
+        [% INCLUDE 'datatables.inc' %]
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+        <script type="text/javascript">
+            /**
+            *  displayOther.
+            *  This function display the select or an textaera to write a reason.
+            */
+            function displayOther(id,show,hide){
+                $("#"+hide+id).hide();
+                $("#"+show+id).show();
+            }
+            $(document).ready(function() {
+                $('#suggestiontabs').tabs({
+                    // Correct table sizing for tables hidden in tabs
+                    // http://www.datatables.net/examples/api/tabs_and_scrolling.html
+                    "activate": function(event, ui) {
+                        $( $.fn.dataTable.tables( true ) ).DataTable().columns.adjust();
+                    }
+                });
+                $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "aoColumnDefs": [
+                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                    ],
+                    "sPaginationType": "four_button"
+                }));
+            [% FOREACH suggestion IN suggestions %]
+                // functions for [% suggestion.suggestiontype %] interactions
+                $("#CheckAll[% suggestion.suggestiontype %]").click(function(e){
+                    $("#[% suggestion.suggestiontype %]t").checkCheckboxes();
+                    e.preventDefault();
+                });
+                $("#UncheckAll[% suggestion.suggestiontype %]").click(function(e){
+                    $("#[% suggestion.suggestiontype %]t").unCheckCheckboxes();
+                    e.preventDefault();
+                });
+                $("#other_reason[% suggestion.suggestiontype %]").hide();
+                $("#reason[% suggestion.suggestiontype %]").change(function(){
+                    if($(this).val() == "other"){
+                        $(this).hide();
+                        $("#other_reason[% suggestion.suggestiontype %]").show();
+                }
+                });
+                $("#[% suggestion.suggestiontype %]delete").change(function(){
+                    if(this.checked){
+                        $("form[name='f[% suggestion.suggestiontype %]'] input[name=op]").attr("value","delete");
+                    } else {
+                        $("form[name='f[% suggestion.suggestiontype %]'] input[name=op]").attr("value","change");
+                    }
+                });
+
+            [% END %]
+                $("a[href*=back]").click(function(){
+                var sid = $(this).attr("href").replace(/#back/,"");
+                    $("#reason"+sid).show().find("option[value='']").attr("selected","selected");
+                    $("#other_reason"+sid).hide();
+                });
+                $("h4.local_collapse a").click(function(){
+                    $(this).parent().parent().find("ol").toggle();
+                    return false;
+                });
+                // http://jqueryui.com/demos/datepicker/#date-range
+                var dates = $( "#suggesteddate_from, #suggesteddate_to" ).datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "suggesteddate_from" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        dates.not( this ).datepicker( "option", option, date );
+                    }
+                });
+                var datesMD = $( "#manageddate_from, #manageddate_to" ).datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "manageddate_from" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        datesMD.not( this ).datepicker( "option", option, date );
+                    }
+                });
+                var datesAD = $( "#accepteddate_from, #accepteddate_to" ).datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "accepteddate_from" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        datesAD.not( this ).datepicker( "option", option, date );
+                    }
+                });
+
+                $("form.update_suggestions").on("submit", function(e){
+                    var form = this;
+                    var action_delete_selected = $(this).find("input[value='delete']").is(":checked");
+                    if ( action_delete_selected ) {
+                        var suggestions_to_delete = $(this).find("input[name='edit_field']:checked");
+                        if ( suggestions_to_delete.length == 0 ) {
+                            alert(_("Please select at least one suggestion to delete"));
+                            e.preventDefault();
+                            return false;
+                        } else if ( suggestions_to_delete.length == 1 ) {
+                            if ( ! confirm(_("Are you sure you want to delete this suggestion?")) ) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        } else if ( suggestions_to_delete.length > 1 ) {
+                            if ( ! confirm(_("Are you sure you want to delete these suggestions?")) ) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+            });
+        </script>
+    [% END %]
+    [% IF ( op_save )  %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                calcNewsuggTotal();
+                $("#quantity,#price,#currency").on("change",function(){
+                    calcNewsuggTotal();
+                });
+
+                [% IF other_reason %]
+                    $(".select-reason").hide();
+                    $(".select-reason").find("option[value='other']").attr("selected","selected");
+                    $("#other_reason").show();
+                [% ELSE %]
+                    $("#other_reason").hide();
+                [% END %]
+                $(".select-reason").change(function(){
+                    if($(this).val() == "other"){
+                        $(this).hide();
+                        $("#other_reason").show();
+                    }
+                });
+                $("a[href*=back]").click(function(){
+                    $(".select-reason").show().find("option[value='']").attr("selected","selected");
+                    $("#other_reason").hide();
+                });
+            });
+        </script>
+    [% END %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
 

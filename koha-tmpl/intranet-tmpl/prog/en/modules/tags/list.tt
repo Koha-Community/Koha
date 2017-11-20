@@ -1,32 +1,12 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $(".delete").click(function (event) {
-            $(this).parent().parent().parent().addClass("selected");
-            var answer = confirm(_("Are you sure you want to remove the tag from this title?"));
-                if (!answer){
-                    $("tr").removeClass("selected");
-                    event.preventDefault();
-                }
-        });
-        $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-            ],
-            "aaSorting": [[ 0, "asc" ]],
-            "sPaginationType": "four_button"
-        }));
-    });
-//]]>
-</script>
 <style type="text/css">
 tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
 </head>
+
 <body id="tags_list" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -94,4 +74,28 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
   </ul>
  </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".delete").click(function (event) {
+                $(this).parent().parent().parent().addClass("selected");
+                var answer = confirm(_("Are you sure you want to remove the tag from this title?"));
+                    if (!answer){
+                        $("tr").removeClass("selected");
+                        event.preventDefault();
+                    }
+            });
+            $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 0, "asc" ]],
+                "sPaginationType": "four_button"
+            }));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
