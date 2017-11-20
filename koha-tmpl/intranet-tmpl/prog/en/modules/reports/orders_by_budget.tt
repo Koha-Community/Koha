@@ -1,4 +1,5 @@
 [% USE Price %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Orders by fund</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -8,23 +9,6 @@
 [% INCLUDE 'cat-search.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-    $(document).ready( function () {
-        $('#funds').DataTable($.extend(true, {}, dataTablesDefaults,{"sPaginationType": "full_numbers"}));
-
-        showallbudgets = $('#budgetfilter').html();
-        $('#budgetfilter .b_inactive').remove();
-
-        $('#showbudgets').click(function(){
-            if ($(this).is(":checked")) {
-                $('#budgetfilter').html(showallbudgets);
-            } else {
-                $('#budgetfilter .b_inactive').remove();
-            }
-        });
-    } );
-</script>
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_orders ) %] &rsaquo; <a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a> &rsaquo; Results[% ELSE %] &rsaquo; Orders by fund[% END %]</div>
 
 <div id="doc3" class="yui-t2">
@@ -159,4 +143,26 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#funds').DataTable($.extend(true, {}, dataTablesDefaults,{"sPaginationType": "full_numbers"}));
+
+            showallbudgets = $('#budgetfilter').html();
+            $('#budgetfilter .b_inactive').remove();
+
+            $('#showbudgets').click(function(){
+                if ($(this).is(":checked")) {
+                    $('#budgetfilter').html(showallbudgets);
+                } else {
+                    $('#budgetfilter .b_inactive').remove();
+                }
+            });
+        } );
+    </script>
+
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

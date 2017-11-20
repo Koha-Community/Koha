@@ -1,12 +1,13 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Circulation statistics [% IF ( do_it ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <style type="text/css">
 	.sql {display:none;}
 </style>
 </head>
+
 <body id="rep_issues_stats" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -371,4 +372,9 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

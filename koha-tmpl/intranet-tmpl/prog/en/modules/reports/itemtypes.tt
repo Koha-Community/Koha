@@ -1,28 +1,19 @@
 [% USE Branches %]
 [% USE ItemTypes %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Catalog by item types</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( do_it ) %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-    $("#itemtypest").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "bPaginate": false
-    }));
-});
-//]]>
-</script>
 [% END %]
 </head>
+
 <body id="rep_itemtypes" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( do_it ) %] &rsaquo; <a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by Item Type</a> &rsaquo; Results[% ELSE %] &rsaquo; Catalog by item type[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( do_it ) %] &rsaquo; <a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by item type</a> &rsaquo; Results[% ELSE %] &rsaquo; Catalog by item type[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -84,4 +75,19 @@ $(document).ready(function(){
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% IF ( do_it ) %]
+        [% INCLUDE 'datatables.inc' %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#itemtypest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "sDom": 't',
+                    "bPaginate": false
+                }));
+            });
+        </script>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

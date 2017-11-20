@@ -2,36 +2,18 @@
 [% USE Branches %]
 [% USE ColumnsSettings %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type='text/javascript'>
-//<![CDATA[
-    $(document).ready(function() {
-        var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
-        var lostitems_table = KohaTable("#lostitems-table", {
-            "dom": 'B<"clearfix">t',
-            "aaSorting": [],
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "bPaginate": false,
-        }, columns_settings);
-
-    });
-//]]>
-</script>
-
 </head>
+
 <body id="rep_itemslost" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_items ) %] &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a> &rsaquo; Results[% ELSE %] &rsaquo; Lost items[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_items ) %] &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost items</a> &rsaquo; Results[% ELSE %] &rsaquo; Lost items[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -135,4 +117,25 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
+            var lostitems_table = KohaTable("#lostitems-table", {
+                "dom": 'B<"clearfix">t',
+                "aaSorting": [],
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "bPaginate": false,
+            }, columns_settings);
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

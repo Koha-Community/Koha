@@ -1,26 +1,10 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Guided reports &rsaquo; Dictionary</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <style type="text/css">fieldset.rows table { clear: none; margin: 0;}</style>
-<script type="text/javascript">
-    var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
-
-    $(document).ready(function() {
-        $("#delete").on("click",function(){
-            return confirmDelete(MSG_CONFIRM_DELETE);
-        });
-
-        $("#date_range").change(function(){
-            $("input#from").parents('li').show();
-        });
-        $("#all_dates").change(function(){
-            $("input#from").parents('li').hide();
-        });
-        $("#all_dates").click().change();
-    });
-</script>
 </head>
+
 <body id="rep_dictionary" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -284,4 +268,26 @@
 [% INCLUDE 'guided-reports-view.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this dictionary definition? This cannot be undone.");
+
+        $(document).ready(function() {
+            $("#delete").on("click",function(){
+                return confirmDelete(MSG_CONFIRM_DELETE);
+            });
+
+            $("#date_range").change(function(){
+                $("input#from").parents('li').show();
+            });
+            $("#all_dates").change(function(){
+                $("input#from").parents('li').hide();
+            });
+            $("#all_dates").click().change();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

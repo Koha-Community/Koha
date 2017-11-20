@@ -1,45 +1,10 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Catalog statistics &rsaquo; Results[% ELSE %]&rsaquo; Catalog statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    function changeRemovedDateTrStatus() {
-        var Cellvalue = $("input[name='Cellvalue']:checked").val();
-        if(Cellvalue == "deleteditems") {
-            $("#removeddatetr").show();
-            $("input[value='deleteditems.timestamp']").prop('disabled', false);
-            $("#deldateFrom").prop('disabled', false);
-            $("#deldateTo").prop('disabled', false);
-        } else {
-            $("#removeddatetr").hide();
-            $("input[value='deleteditems.timestamp']").prop('disabled', true).prop('checked', false);
-            $("#deldateFrom").prop('disabled', true).val('');
-            $("#deldateTo").prop('disabled', true).val('');
-        }
-    }
-
-    $(document).ready(function() {
-        $('#acqdateFrom, #deldateFrom')
-          .datepicker('option', 'onSelect', function(selectedDate) {
-            var id = $(this).attr('id').replace('From', 'To');
-            $('#' + id).datepicker('option', 'minDate', selectedDate);
-          });
-        $('#acqdateTo, #deldateTo')
-          .datepicker('option', 'onSelect', function(selectedDate) {
-            var id = $(this).attr('id').replace('To', 'From');
-            $('#' + id).datepicker('option', 'maxDate', selectedDate);
-          });
-
-        $("input[name='Cellvalue']").change(function() {
-            changeRemovedDateTrStatus();
-        });
-        changeRemovedDateTrStatus();
-    });
-//]]>
-</script>
 </head>
+
 <body id="rep_catalogue_stats" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -332,4 +297,43 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        function changeRemovedDateTrStatus() {
+            var Cellvalue = $("input[name='Cellvalue']:checked").val();
+            if(Cellvalue == "deleteditems") {
+                $("#removeddatetr").show();
+                $("input[value='deleteditems.timestamp']").prop('disabled', false);
+                $("#deldateFrom").prop('disabled', false);
+                $("#deldateTo").prop('disabled', false);
+            } else {
+                $("#removeddatetr").hide();
+                $("input[value='deleteditems.timestamp']").prop('disabled', true).prop('checked', false);
+                $("#deldateFrom").prop('disabled', true).val('');
+                $("#deldateTo").prop('disabled', true).val('');
+            }
+        }
+
+        $(document).ready(function() {
+            $('#acqdateFrom, #deldateFrom')
+              .datepicker('option', 'onSelect', function(selectedDate) {
+                var id = $(this).attr('id').replace('From', 'To');
+                $('#' + id).datepicker('option', 'minDate', selectedDate);
+              });
+            $('#acqdateTo, #deldateTo')
+              .datepicker('option', 'onSelect', function(selectedDate) {
+                var id = $(this).attr('id').replace('To', 'From');
+                $('#' + id).datepicker('option', 'maxDate', selectedDate);
+              });
+
+            $("input[name='Cellvalue']").change(function() {
+                changeRemovedDateTrStatus();
+            });
+            changeRemovedDateTrStatus();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

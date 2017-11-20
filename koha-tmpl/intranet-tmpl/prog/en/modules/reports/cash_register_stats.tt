@@ -1,63 +1,13 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" id="js">
- $(document).ready(function() {
-    $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "iDisplayLength": 50,
-        "sPaginationType": "full_numbers"
-    }));
- });
-</script>
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-actTotal = "";
-
-
-$(document).ready(function() {
-    // http://jqueryui.com/demos/datepicker/#date-range
-    var dates = $( "#filter_date_begin, #filter_date_end" ).datepicker({
-        changeMonth: true,
-        numberOfMonths: 1,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "filter_date_begin" ? "minDate" : "maxDate",
-                instance = $( this ).data( "datepicker" );
-                date = $.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            dates.not( this ).datepicker( "option", option, date );
-        }
-    });
-
-    $('#frmCashRegister').submit(function() {
-        var isFormValid = true;
-        var alertString= _("Form not submitted because of the following problem(s)")+"\n";
-
-        alertString +="-------------------------------------------------------------------\n\n";
-
-        if ( !$('#from').val() || !$('#to').val()){
-            isFormValid = false;
-            alertString += "\n- " + _("Dates cannot be empty");
-        }
-
-        if (!isFormValid) {
-           alert(alertString);
-           return false;
-        }
-    });
-});
-
-//]]>
-</script>
-
 </head>
+
 <body id="cash_register_stats" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -300,4 +250,55 @@ $(document).ready(function() {
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" id="js">
+        $(document).ready(function() {
+            $("#tbl_cash_register_stats").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "iDisplayLength": 50,
+                "sPaginationType": "full_numbers"
+            }));
+        });
+    </script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        actTotal = "";
+
+        $(document).ready(function() {
+            // http://jqueryui.com/demos/datepicker/#date-range
+            var dates = $( "#filter_date_begin, #filter_date_end" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "filter_date_begin" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    dates.not( this ).datepicker( "option", option, date );
+                }
+            });
+
+            $('#frmCashRegister').submit(function() {
+                var isFormValid = true;
+                var alertString= _("Form not submitted because of the following problem(s)")+"\n";
+
+                alertString +="-------------------------------------------------------------------\n\n";
+
+                if ( !$('#from').val() || !$('#to').val()){
+                    isFormValid = false;
+                    alertString += "\n- " + _("Dates cannot be empty");
+                }
+
+                if (!isFormValid) {
+                   alert(alertString);
+                   return false;
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

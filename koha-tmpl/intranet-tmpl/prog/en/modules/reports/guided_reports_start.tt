@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% USE Koha %]
-
+[% SET footerjs = 1 %]
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
         [%- CASE 'CIRC' -%]Circulation
@@ -29,7 +29,6 @@
 [%- END -%]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <style type="text/css">
     #sql { width: 90%; height: 9em;}
     #update_sql .modal-dialog { width: 80%; }
@@ -40,234 +39,10 @@
     .show_sql { font-family: monospace; }
 </style>
 [% IF ( saved1 ) %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-<script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min.js"></script>
-[% INCLUDE 'datatables.inc' %]
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% END %]
-
-<script type="text/javascript">
-//<![CDATA[
-var group_subgroups = {};
-[% FOREACH group IN groups_with_subgroups %]
-    var gid = "[% group.id %]"
-    group_subgroups[gid] = new Array();
-    [% FOREACH subgroup IN group.subgroups %]
-        var sgid = "[% subgroup.id %]";
-        var sgname = "[% subgroup.name %]";
-        group_subgroups[gid].push([sgid, sgname]);
-    [% END %]
-[% END %]
-
-function load_group_subgroups () {
-    var group = $("#group_select").val();
-    var sg = $("#subgroup");
-    $(sg).find('option[value!=""]').each(function() {
-        $(this).remove();
-    });
-    $(sg).hide();
-    if (group) {
-        var select = $(sg).find('select')[0];
-        $.each( group_subgroups[group], function(index, value) {
-            $('<option value="' + value[0] + '">' + value[1] + '</option>').appendTo(select);
-        } );
-        $("#subgroup, #subgroup *").show();
-    }
-}
-
-$(document).ready(function(){
-    $('#limit').change(function() {
-        $('#limitselect').submit();
-    });
-
-$(".goback").on("click",function(e){
-    e.preventDefault();
-    window.history.back();
-});
-
-$("#addColumn").on("click",function(){
-    addColumn();
-});
-
-$("#delColumn").on("click",function(){
-    delColumn();
-});
-
-[% IF (saved1) %]
-    var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
-        'iDisplayLength': [% Koha.Preference('NumSavedReports') %],
-        'bAutoWidth': false,
-        'sPaginationType': 'four_button',
-        'aaSorting': [[ 1, "asc" ]],
-        'aoColumnDefs': [
-            { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
-            { 'bSearchable': false, 'aTargets': [3] },
-            { "aTargets": [ 1, 2 ], "sType": "natural"  },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        'oLanguage': {
-            'sZeroRecords': _("No matching reports found")
-        }
-    }));
-
-    var rtabs = $("#tabs").tabs();
-    rtabs.on("tabsactivate", function(e, ui) {
-        $("#subgroup_filter option").each(function() {
-            if($(this).val().length > 0) {
-                $(this).remove();
-            }
-        });
-        rtable.fnFilter('', 4);
-        rtable.fnFilter('', 5);
-        rtable.fnSetColumnVis(4, true);
-        rtable.fnSetColumnVis(5, true);
-
-        var g_id = $(ui.newTab).children().attr('id');
-        var g_name = $(ui.newTab).text();
-        if ( g_name == _("All") ) {
-            g_id = "";
-            g_name = "";
-        }
-
-        if (g_id && g_id.length > 0) {
-            rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
-            rtable.fnSetColumnVis(4, false);
-            for(var i in group_subgroups[g_id]) {
-                $("#subgroup_filter").append(
-                    '<option value="' + group_subgroups[g_id][i][0] + '">'
-                    + group_subgroups[g_id][i][1] + '</option>'
-                );
-            }
-            $("#subgroup_filter_block").show();
-        } else {
-            $("#subgroup_filter_block").hide();
-        }
-    });
-    $("#subgroup_filter_block").hide();
-
-    $("#subgroup_filter").change(function() {
-        var selected = $(this).find('option:selected');
-        var sg_id = $(selected).val();
-        var sg_name = $(selected).text();
-        if (sg_id.length > 0) {
-            rtable.fnFilter('^' + sg_name + '$', 5, true, true, true, false);
-            rtable.fnSetColumnVis(5, false);
-        } else {
-            rtable.fnFilter('', 5);
-            rtable.fnSetColumnVis(5, true);
-        }
-    });
-
-    $("#reports_form").submit(function(){
-        var checkedItems = $("input[name=ids]:checked");
-        if ($(checkedItems).size() == 0) {
-            alert(_("You must select one or more reports to delete"));
-            return false;
-        }
-        $(checkedItems).parents('tr').addClass("warn");
-        if( confirm(_("Are you sure you want to delete the selected reports?")) ) {
-            return true;
-        } else {
-            $(checkedItems).parents('tr').removeClass("warn");
-            return false;
-        }
-    });
-
-    $("body").on("click", ".update_sql", function(e){
-        e.preventDefault();
-        var ltitle = $(this).text();
-        var report_id = $(this).data("report_id");
-        var page = $(this).attr("href");
-        $("#update_sql .modal-body").load(page + " div", function(){
-            var diff1 = $("#col1 .show_sql").text();
-            var diff2 = $("#col2 .show_sql").text();
-            var diffs = diffString( escape(diff1), escape(diff2) );
-            $("#col1 .show_sql,#col2 .show_sql").html(diffs);
-        });
-        $('#update_sql').modal('show');
-        $("#update_sql_button").attr("href", "/cgi-bin/koha/reports/guided_reports.pl?phase=Use saved&op=convert&report_id=" + report_id);
-    });
-
-    $("#update_sql").on("hidden.bs.modal", function(){
-        $("#update_sql_label").html("");
-        $("#update_sql .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
-[% END %]
-
-[% IF ( showsql ) %]
-    $("#sql").focus(function() {
-        $(this).select();
-    });
-[% END %]
-
-    $(".toggle_sql").click(function(){
-        $("#sql_output").toggle();
-        $("#toggle_sql_hid").toggle();
-        $("#toggle_sql_vis").toggle();
-    });
-
-    $("#table_reports").delegate(".confirmdelete", 'click', function(){
-        $(this).parents('tr').attr("class","warn");
-        if(confirm(_("Are you sure you want to delete this saved report?"))){
-            return true;
-        } else {
-            $(this).parents('tr').attr("class","");
-            return false;
-        }
-    });
-
-[% IF (create || editsql || save) %]
-    $("#select_group").change(function() {
-        if($(this).prop('checked')) {
-            $("#group_input").prop('disabled', true);
-            $("#groupdesc_input").prop('disabled', true);
-            $("#group_select").prop('disabled', false);
-            if ($("#group_select").val().length > 0) {
-                $("#select_subgroup").prop('checked', true);
-                $("#select_subgroup").change();
-                $("#subgroup, #subgroup *").show();
-            } else {
-                $("#subgroup").hide();
-            }
-        }
-    });
-    $("#create_group").change(function() {
-        if($(this).prop('checked')) {
-            $("#group_input").prop('disabled', false);
-            $("#groupdesc_input").prop('disabled', false);
-            $("#group_select").prop('disabled', true);
-            $("#create_subgroup").prop('checked', true).change();
-            $("#subgroup_select").hide();
-            $("#subgroup input[type='radio']").hide();
-            $("#subgroup label[for]").hide();
-            $("#subgroup_input").show();
-            $("#subgroupdesc_input").show();
-            $("#subgroup").show();
-        }
-    });
-    $("#select_subgroup").change(function() {
-        if($(this).prop('checked')) {
-            $("#subgroup_select").prop('disabled', false);
-            $("#subgroup_input").prop('disabled', true);
-            $("#subgroupdesc_input").prop('disabled', true);
-        }
-    });
-    $("#create_subgroup").change(function() {
-        if($(this).prop('checked')) {
-            $("#subgroup_input").prop('disabled', false);
-            $("#subgroupdesc_input").prop('disabled', false);
-            $("#subgroup_select").prop('disabled', true);
-        }
-    });
-    $("#select_group").change();
-    $("#select_subgroup").change();
-    $("#group_select").on("change",function(){
-        load_group_subgroups();
-    });
-[% END %]
-});
-//]]>
-</script>
 </head>
+
 <body id="rep_guided_reports_start" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -1138,26 +913,253 @@ Sub report:<select name="subreport">
 [% INCLUDE 'guided-reports-view.inc' %]
 </div>
 </div>
-<script type="text/javascript">
-//<![CDATA[
-function addColumn() {
-    $("#availableColumns option:selected").clone().appendTo("#selectedColumns").attr("selected", "selected");
-}
-function delColumn() {
-    $("#selectedColumns option:selected").remove();
-}
-$("#column_submit").submit(function() {
-    if ($("#selectedColumns option").size() < 1) {
-        alert(_("No columns selected!"));
-        return false;
-    }
-    $("#selectedColumns option").attr("selected", "selected");  // Select everything still in #selectedColumns
-    return true;
-});
-//]]>
-</script>
-[% INCLUDE 'intranet-bottom.inc' %]
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% IF ( saved1 ) %]
+        [% INCLUDE 'datatables.inc' %]
+    [% END %]
+    <script type="text/javascript">
+        var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
+        var group_subgroups = {};
+        [% FOREACH group IN groups_with_subgroups %]
+            var gid = "[% group.id %]"
+            group_subgroups[gid] = new Array();
+            [% FOREACH subgroup IN group.subgroups %]
+                var sgid = "[% subgroup.id %]";
+                var sgname = "[% subgroup.name %]";
+                group_subgroups[gid].push([sgid, sgname]);
+            [% END %]
+        [% END %]
+
+        function load_group_subgroups () {
+            var group = $("#group_select").val();
+            var sg = $("#subgroup");
+            $(sg).find('option[value!=""]').each(function() {
+                $(this).remove();
+            });
+            $(sg).hide();
+            if (group) {
+                var select = $(sg).find('select')[0];
+                $.each( group_subgroups[group], function(index, value) {
+                    $('<option value="' + value[0] + '">' + value[1] + '</option>').appendTo(select);
+                } );
+                $("#subgroup, #subgroup *").show();
+            }
+        }
+
+        $(document).ready(function(){
+            $('#limit').change(function() {
+                $('#limitselect').submit();
+            });
+
+            $(".goback").on("click",function(e){
+                e.preventDefault();
+                window.history.back();
+            });
+
+            $("#addColumn").on("click",function(){
+                addColumn();
+            });
+
+            $("#delColumn").on("click",function(){
+                delColumn();
+            });
+
+            [% IF (saved1) %]
+                var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    'iDisplayLength': [% Koha.Preference('NumSavedReports') %],
+                    'bAutoWidth': false,
+                    'sPaginationType': 'four_button',
+                    'aaSorting': [[ 1, "asc" ]],
+                    'aoColumnDefs': [
+                        { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
+                        { 'bSearchable': false, 'aTargets': [3] },
+                        { "aTargets": [ 1, 2 ], "sType": "natural"  },
+                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    ],
+                    'oLanguage': {
+                        'sZeroRecords': _("No matching reports found")
+                    }
+                }));
+
+                var rtabs = $("#tabs").tabs();
+                rtabs.on("tabsactivate", function(e, ui) {
+                    $("#subgroup_filter option").each(function() {
+                        if($(this).val().length > 0) {
+                            $(this).remove();
+                        }
+                    });
+                    rtable.fnFilter('', 4);
+                    rtable.fnFilter('', 5);
+                    rtable.fnSetColumnVis(4, true);
+                    rtable.fnSetColumnVis(5, true);
+
+                    var g_id = $(ui.newTab).children().attr('id');
+                    var g_name = $(ui.newTab).text();
+                    if ( g_name == _("All") ) {
+                        g_id = "";
+                        g_name = "";
+                    }
+
+                    if (g_id && g_id.length > 0) {
+                        rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
+                        rtable.fnSetColumnVis(4, false);
+                        for(var i in group_subgroups[g_id]) {
+                            $("#subgroup_filter").append(
+                                '<option value="' + group_subgroups[g_id][i][0] + '">'
+                                + group_subgroups[g_id][i][1] + '</option>'
+                            );
+                        }
+                        $("#subgroup_filter_block").show();
+                    } else {
+                        $("#subgroup_filter_block").hide();
+                    }
+                });
+                $("#subgroup_filter_block").hide();
+
+                $("#subgroup_filter").change(function() {
+                    var selected = $(this).find('option:selected');
+                    var sg_id = $(selected).val();
+                    var sg_name = $(selected).text();
+                    if (sg_id.length > 0) {
+                        rtable.fnFilter('^' + sg_name + '$', 5, true, true, true, false);
+                        rtable.fnSetColumnVis(5, false);
+                    } else {
+                        rtable.fnFilter('', 5);
+                        rtable.fnSetColumnVis(5, true);
+                    }
+                });
+
+                $("#reports_form").submit(function(){
+                    var checkedItems = $("input[name=ids]:checked");
+                    if ($(checkedItems).size() == 0) {
+                        alert(_("You must select one or more reports to delete"));
+                        return false;
+                    }
+                    $(checkedItems).parents('tr').addClass("warn");
+                    if( confirm(_("Are you sure you want to delete the selected reports?")) ) {
+                        return true;
+                    } else {
+                        $(checkedItems).parents('tr').removeClass("warn");
+                        return false;
+                    }
+                });
+
+                $("body").on("click", ".update_sql", function(e){
+                    e.preventDefault();
+                    var ltitle = $(this).text();
+                    var report_id = $(this).data("report_id");
+                    var page = $(this).attr("href");
+                    $("#update_sql .modal-body").load(page + " div", function(){
+                        var diff1 = $("#col1 .show_sql").text();
+                        var diff2 = $("#col2 .show_sql").text();
+                        var diffs = diffString( escape(diff1), escape(diff2) );
+                        $("#col1 .show_sql,#col2 .show_sql").html(diffs);
+                    });
+                    $('#update_sql').modal('show');
+                    $("#update_sql_button").attr("href", "/cgi-bin/koha/reports/guided_reports.pl?phase=Use saved&op=convert&report_id=" + report_id);
+                });
+
+                $("#update_sql").on("hidden.bs.modal", function(){
+                    $("#update_sql_label").html("");
+                    $("#update_sql .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+                });
+            [% END %]
+
+            [% IF ( showsql ) %]
+                $("#sql").focus(function() {
+                    $(this).select();
+                });
+            [% END %]
+
+                $(".toggle_sql").click(function(){
+                    $("#sql_output").toggle();
+                    $("#toggle_sql_hid").toggle();
+                    $("#toggle_sql_vis").toggle();
+                });
+
+                $("#table_reports").delegate(".confirmdelete", 'click', function(){
+                    $(this).parents('tr').attr("class","warn");
+                    if(confirm(_("Are you sure you want to delete this saved report?"))){
+                        return true;
+                    } else {
+                        $(this).parents('tr').attr("class","");
+                        return false;
+                    }
+                });
+
+            [% IF (create || editsql || save) %]
+                $("#select_group").change(function() {
+                    if($(this).prop('checked')) {
+                        $("#group_input").prop('disabled', true);
+                        $("#groupdesc_input").prop('disabled', true);
+                        $("#group_select").prop('disabled', false);
+                        if ($("#group_select").val().length > 0) {
+                            $("#select_subgroup").prop('checked', true);
+                            $("#select_subgroup").change();
+                            $("#subgroup, #subgroup *").show();
+                        } else {
+                            $("#subgroup").hide();
+                        }
+                    }
+                });
+                $("#create_group").change(function() {
+                    if($(this).prop('checked')) {
+                        $("#group_input").prop('disabled', false);
+                        $("#groupdesc_input").prop('disabled', false);
+                        $("#group_select").prop('disabled', true);
+                        $("#create_subgroup").prop('checked', true).change();
+                        $("#subgroup_select").hide();
+                        $("#subgroup input[type='radio']").hide();
+                        $("#subgroup label[for]").hide();
+                        $("#subgroup_input").show();
+                        $("#subgroupdesc_input").show();
+                        $("#subgroup").show();
+                    }
+                });
+                $("#select_subgroup").change(function() {
+                    if($(this).prop('checked')) {
+                        $("#subgroup_select").prop('disabled', false);
+                        $("#subgroup_input").prop('disabled', true);
+                        $("#subgroupdesc_input").prop('disabled', true);
+                    }
+                });
+                $("#create_subgroup").change(function() {
+                    if($(this).prop('checked')) {
+                        $("#subgroup_input").prop('disabled', false);
+                        $("#subgroupdesc_input").prop('disabled', false);
+                        $("#subgroup_select").prop('disabled', true);
+                    }
+                });
+                $("#select_group").change();
+                $("#select_subgroup").change();
+                $("#group_select").on("change",function(){
+                    load_group_subgroups();
+                });
+            [% END %]
+            $(".delete").on("click",function(){
+                return confirmDelete(MSG_CONFIRM_DELETE);
+            });
+        });
+        function addColumn() {
+            $("#availableColumns option:selected").clone().appendTo("#selectedColumns").attr("selected", "selected");
+        }
+        function delColumn() {
+            $("#selectedColumns option:selected").remove();
+        }
+        $("#column_submit").submit(function() {
+            if ($("#selectedColumns option").size() < 1) {
+                alert(_("No columns selected!"));
+                return false;
+            }
+            $("#selectedColumns option").attr("selected", "selected");  // Select everything still in #selectedColumns
+            return true;
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
 
 [% BLOCK group_and_subgroup_selection %]
     <li id="group">

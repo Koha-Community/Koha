@@ -1,45 +1,10 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Most-circulated items[% IF ( do_it ) %] &rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-[% IF ( do_it ) %]function Dopop(link) {
-	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
-}[% ELSE %]
-    $(document).ready(function() {
-        // http://jqueryui.com/demos/datepicker/#date-range
-        var dates = $( "#from, #to" ).datepicker({
-            changeMonth: true,
-            numberOfMonths: 1,
-            onSelect: function( selectedDate ) {
-                var option = this.id == "from" ? "minDate" : "maxDate",
-                    instance = $( this ).data( "datepicker" );
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings );
-                dates.not( this ).datepicker( "option", option, date );
-            }
-        });
-        var datesRO = $( "#fromRO, #toRO" ).datepicker({
-            changeMonth: true,
-            numberOfMonths: 1,
-            onSelect: function( selectedDate ) {
-                var option = this.id == "fromRO" ? "minDate" : "maxDate",
-                    instance = $( this ).data( "datepicker" );
-                    date = $.datepicker.parseDate(
-                        instance.settings.dateFormat ||
-                        $.datepicker._defaults.dateFormat,
-                        selectedDate, instance.settings );
-                datesRO.not( this ).datepicker( "option", option, date );
-            }
-        });
-    });[% END %]
-//]]>
-</script>
 </head>
+
 <body id="rep_cat_issues_top" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -222,4 +187,42 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        [% UNLESS ( do_it ) %]
+            $(document).ready(function() {
+                // http://jqueryui.com/demos/datepicker/#date-range
+                var dates = $( "#from, #to" ).datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "from" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        dates.not( this ).datepicker( "option", option, date );
+                    }
+                });
+                var datesRO = $( "#fromRO, #toRO" ).datepicker({
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    onSelect: function( selectedDate ) {
+                        var option = this.id == "fromRO" ? "minDate" : "maxDate",
+                            instance = $( this ).data( "datepicker" );
+                            date = $.datepicker.parseDate(
+                                instance.settings.dateFormat ||
+                                $.datepicker._defaults.dateFormat,
+                                selectedDate, instance.settings );
+                        datesRO.not( this ).datepicker( "option", option, date );
+                    }
+                });
+            });
+        [% END %]
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

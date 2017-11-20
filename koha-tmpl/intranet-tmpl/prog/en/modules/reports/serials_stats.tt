@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Serials subscriptions stats</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -7,21 +8,8 @@
 	.sql {display: none;}
 </style>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-	//<![CDATA[
-		$(document).ready(function() {
-            $("#resulttable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "bPaginate": false,
-                "aoColumns": [
-                    null,{ "sType": "anti-the" },null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },null
-                ],
-            }));
-    	});
-	//]]>
-</script>
 </head>
+
 <body id="rep_serials_stats" class="rep">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -146,4 +134,20 @@
 [% INCLUDE 'reports-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+[% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#resulttable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "bPaginate": false,
+                "aoColumns": [
+                    null,{ "sType": "anti-the" },null,null,null,{ "sType": "title-string" },{ "sType": "title-string" },null
+                ],
+            }));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

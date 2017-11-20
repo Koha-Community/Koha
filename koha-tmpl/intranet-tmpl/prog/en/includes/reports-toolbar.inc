@@ -63,13 +63,3 @@
 
     [% END %]
 </div>
-
-<script type="text/javascript">
-var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
-
-$(document).ready(function(){
-    $(".delete").on("click",function(){
-        return confirmDelete(MSG_CONFIRM_DELETE);
-    });
-});
-</script>
