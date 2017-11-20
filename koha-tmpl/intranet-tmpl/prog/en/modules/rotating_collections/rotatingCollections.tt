@@ -1,30 +1,11 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".confirmdelete").click(function(){
-            $(this).parents('tr').addClass("warn");
-            if(confirm(_("Are you sure you want to delete this collection?"))){
-                return true;
-            } else {
-                $(this).parents('tr').removeClass("warn");
-                return false;
-            }
-        });
-        $('#rotating-collections-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "autoWidth": false,
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            ],
-            "sPaginationType": "four_button"
-        } ));
-    });
-</script>
 </head>
+
 <body id="rcoll_rotatingCollections" class="tools rcoll">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -83,4 +64,11 @@
             [% INCLUDE 'tools-menu.inc' %]
         </div>
     </div> <!-- /#bd -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/rotating-collections.js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
