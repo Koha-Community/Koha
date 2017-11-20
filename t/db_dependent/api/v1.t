@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -29,7 +29,7 @@ use Mojolicious::Lite;
 use Try::Tiny;
 
 my $config = {
-    'log4perl.logger.rest.Koha.REST.V1' => 'ERROR, TEST',
+    'log4perl.logger.rest.Koha.REST.V1' => 'DEBUG, TEST',
     'log4perl.appender.TEST' => 'Log::Log4perl::Appender::TestBuffer',
     'log4perl.appender.TEST.layout' => 'SimpleLayout',
 };
@@ -101,6 +101,50 @@ subtest 'default_exception_handling() tests' => sub {
              'Found test unknown exception in log');
         $appender->{appender}->{buffer} = undef;
     };
+};
+
+subtest 'log_response() tests' => sub {
+    plan tests => 12;
+
+    $t->app->routes->get('/response/log/json' => sub {
+        $_[0]->render( status => 200, json => { wow => "it worked" } )
+    });
+    $t->app->routes->get('/response/log/other' => sub {
+        $_[0]->render( status => 200, data => '<b>ERROR!</b>' )
+    });
+    $t->app->routes->get('/response/log/500' => sub {
+        die;
+    });
+
+    my $appender = Log::Log4perl->appenders->{TEST};
+
+    $t->get_ok('/response/log/json')
+      ->status_is(200)
+      ->json_is('/wow' => 'it worked');
+    is($appender->buffer,
+       "DEBUG - {\"json\":{\"wow\":\"it worked\"},\"status\":200}\n",
+       'Found response JSON'
+    );
+    $appender->{appender}->{buffer} = undef;
+
+    $t->get_ok('/response/log/other')
+      ->status_is(200)
+      ->content_is('<b>ERROR!</b>');
+    is($appender->buffer,
+       "DEBUG - {\"data\":\"<b>ERROR!<\\/b>\",\"status\":200}\n",
+       'Found response JSON'
+    );
+    $appender->{appender}->{buffer} = undef;
+
+    $t->get_ok('/response/log/500')
+      ->status_is(500)
+      ->json_is('/error' => 'Something went wrong, check the logs.');
+    like($appender->buffer,
+       qr/DEBUG - \{"json":\{"error":"Something went wrong, check the logs."\},"status":500\}\n/,
+       'Found response error content'
+    );
+    $appender->{appender}->{buffer} = undef;
+
 };
 
 sub add_default_exception_routes {

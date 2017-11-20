@@ -52,6 +52,7 @@ sub startup {
     }
 
     $self->app->hook(before_render => \&default_exception_handling);
+    $self->app->hook(before_render => \&log_response);
 
     $self->plugin(OpenAPI => {
         url => $self->home->rel_file("api/v1/swagger/swagger.json"),
@@ -98,6 +99,16 @@ sub default_exception_handling {
             json => { error => 'Something went wrong, check the logs.' }
         );
     }
+}
+
+=head3 log_response
+
+=cut
+
+sub log_response {
+    my ($c, $args) = @_;
+
+    eval { $c->app->log->debug(Mojo::JSON::encode_json($args)) };
 }
 
 sub hateoas {
