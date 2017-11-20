@@ -2,12 +2,11 @@
 [% USE KohaDates %]
 [% SET PRIVATE = 1 %]
 [% SET PUBLIC = 2 %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname | html %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
 
 [% BLOCK list_permissions %]
     <li>
@@ -28,312 +27,8 @@
         &emsp; <span id="anyone_remark" style="display:none;color:red;">The Anyone permission has no actual effect while this list is strictly private.</span>
     </li>
 [% END %]
-
-[% IF print %]
-<script type="text/javascript">
-    $( document ).ready(function() {
-        window.print();
-        setTimeout('window.close()', 1);
-    });
-</script>
-[% END %]
-
-[% IF op == 'view' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
-[% END %]
-<script type="text/javascript">
-//<![CDATA[ 
-
-var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
-var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
-
-[% IF op == 'list' %]
-$(document).ready(function(){
-    [% IF category == PUBLIC %]
-        var type = [% PUBLIC %];
-    [% ELSE %]
-        var type = [% PRIVATE %];
-    [% END %]
-    var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-
-	"aaSorting": [[ 5, "asc" ]],
-        'bServerSide': true,
-        'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
-        'fnServerData': function(sSource, aoData, fnCallback) {
-            aoData.push({
-                'name': 'type',
-                'value': type,
-            },{
-                'name': 'shelfname',
-                'value': $("#searchshelfname_filter").val(),
-            },{
-                'name': 'owner',
-                'value': $("#searchowner_filter").val(),
-            },{
-                'name': 'sortby',
-                'value': $("#searchsortby_filter").val(),
-            },{
-                'name': 'template_path',
-                'value': 'virtualshelves/tables/shelves_results.tt',
-            });
-            $.ajax({
-                'dataType': 'json',
-                'type': 'POST',
-                'url': sSource,
-                'data': aoData,
-                'success': function(json){
-                    fnCallback(json);
-                }
-            });
-        },
-        'aoColumns':[
-            { 'mDataProp': 'dt_type' },
-            { 'mDataProp': 'dt_shelfname' },
-            { 'mDataProp': 'dt_count' },
-            { 'mDataProp': 'dt_is_shared' },
-            { 'mDataProp': 'dt_owner' },
-            { 'mDataProp': 'dt_sortby' },
-            { 'mDataProp': 'dt_created_on' },
-            { 'mDataProp': 'dt_modification_time' },
-            { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
-        ],
-        "aoColumnDefs": [
-            { "bVisible": false, "aTargets": [ 'NoVisible' ] }
-        ],
-        'bAutoWidth': false,
-        'sPaginationType': 'full_numbers',
-        'bFilter': false,
-        "bProcessing": true,
-        "bSortCellsTop": true
-    }));
-
-    dtListResults.fnAddFilters("filter", 750);
-
-    var tabs = $("#tabs").tabs({
-        [% IF category == PUBLIC %]
-            active: 1,
-        [% ELSE %]
-            active: 0,
-        [% END %]
-        activate: function(e, ui) {
-            var active = tabs.tabs("option", "active" );
-            if ( active == 0 ) {
-                type = [% PRIVATE %];
-                dtListResults.fnDraw();
-            } else if ( active == 1 ) {
-                type = [% PUBLIC %];
-                dtListResults.fnDraw();
-            }
-        }
-    });
-    $("body").on("click", ".deleteshelf", function(){
-        return confirmDelete(MSG_CONFIRM_DELETE_LIST);
-    });
-});
-[% END %]
-
-[% IF shelf AND op == 'view' %]
-$(document).ready(function(){
-    [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-check\"></i>"+_(" Select all")+"<\/a>");
-    $("#CheckAll").click(function(){
-        $(".checkboxed").checkCheckboxes();
-        return false;
-    });
-    $("#CheckNone").click(function(){
-        $(".checkboxed").unCheckCheckboxes();
-        return false;
-    });
-    $(".placehold").on("click",function(e){
-        placeHold();
-        e.preventDefault();
-    });
-    $(".addtocart").show();
-    var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-    [% IF ( intranetbookbag ) %]
-         param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
-    [% END %]
-    [% IF Koha.Preference('virtualshelves') %]
-        [% IF add_to_some_private_shelves.count %]
-            param1 += "<optgroup label=\""+_("Your lists:")+"\">";
-            [% SET number_of_private_shelves = 0 %]
-            [% FOREACH s IN add_to_some_private_shelves %]
-                [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
-                    [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
-                [% END %]
-            [% END %]
-            param1 += "<\/optgroup>";
-        [% END %]
-        [% IF add_to_some_public_shelves.count %]
-            param1 += "<optgroup label=\""+_("Public lists:")+"\">";
-            [% SET number_of_public_shelves = 0 %]
-            [% FOREACH s IN add_to_some_public_shelves %]
-                [% IF shelfnumber != s.shelfnumber %]
-                    param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
-                    [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
-                [% END %]
-            [% END %]
-            param1 += "<\/optgroup>";
-        [% END %]
-        [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
-            param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
-        [% END %]
-        param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
-    [% END %]
-    param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-default btn-xs\">"+_("Save")+"</button>";
-    $("span.addto").html(param1);
-    $("#cartsubmit").on("click",function(e){
-        cartList();
-        e.preventDefault();
-    });
-    $("#addto").change(function(){
-        cartList();
-    });
-    $(".addto").find("input:submit").click(function(e){
-        e.preventDefault();
-        cartList();
-    });
-    $("#selection_ops").show();
-    $(".merge-items").on("click",function(e){
-        e.preventDefault();
-        MergeItems();
-    });
-    $("#listform").on("submit",function(e){
-
-    });
-    $(".list-remove").on("click",function(e){
-        if($(".selection").filter(":checked").length > 0){
-            return confirm(MSG_REMOVE_FROM_LIST);
-        } else {
-            alert(MSG_NO_ITEM_SELECTED);
-            e.preventDefault();
-        }
-    });
-});
-[% END %]
-
-[% IF shelf AND op == 'edit_form' %]
-$(document).ready(function(){
-    AdjustRemark();
-});
-[% END %]
-
-    /**
-     * This function checks if the adequate number of records are checked for merging
-     */
-    function MergeItems() {
-        var checkboxes = $("input:checkbox:checked");
-        if (checkboxes.length < 2) {
-            alert(_("At least two records must be selected for merging."));
-        } else {
-            var params = [];
-            $(checkboxes).each(function() {
-                params.push('biblionumber=' + $(this).val());
-            });
-            var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
-            location.href = url;
-        }
-        return false;
-    }
-
-    /**
-     * This function checks all checkboxes if all are empty,
-     * or unchecks all if any already checked.
-     */
-    function CheckAll(){
-        var checkboxes = document.getElementsByTagName('input');
-        var nbCheckbox = checkboxes.length;
-        var check = areAllChecked();
-        for(var i=0;i<nbCheckbox;i++){
-            if(checkboxes[i].getAttribute('type') == "checkbox" ){
-                checkboxes[i].checked = (check) ? 0 : 1;
-            }
-        }
-    }
-    /**
-     * This function returns true if ALL checkboxes are checked
-     */
-    function areAllChecked(){
-        var checkboxes = document.getElementsByTagName('input');
-        var nbCheckbox = checkboxes.length;
-        for(var i=0;i<nbCheckbox;i++){
-            if(checkboxes[i].getAttribute('type') == "checkbox" ){
-                if(checkboxes[i].checked == 0){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-function placeHold () {
-    var checkedItems = $(".selection:checked");
-    if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_ITEM_SELECTED);
-        return false;
-    }
-    var bibs = "";
-    $(checkedItems).each(function() {
-        bibs += $(this).val() + "/";
-    });
-    $("#hold_form_biblios").val(bibs);
-    $("#hold_form").submit();
-    return false;
-}
-
-    function cartList(){
-        var checkboxes = $("#searchresults").find(":checkbox");
-        var vshelf = vShelfAdd(checkboxes);
-        if($("#addto").find("option:selected").attr("value") == "addtolist"){
-            var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
-            if (vshelf) {
-                 openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf,'popup',500,500);
-            }
-            return false;
-        } else if($("#addto").find("option:selected").attr("value") == "newlist"){
-            if (vshelf) {
-                openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf,'popup',500,500);
-            }
-            return false;
-        } else if($("#addto").find("option:selected").attr("value") == "morelists"){
-            if (vshelf) {
-                openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf,'popup',500,500);
-            }
-            return false;
-        }
-        if($("#addto").find("option:selected").attr("value") == "addtocart"){
-            addMultiple(checkboxes);
-            return false;
-        }
-    }
-
-function AdjustRemark() {
-    var category = $("#category").val();
-    var perms = $("#allow_changes_from").val();
-
-    if( perms < 2 ) {
-        $("#anyone_remark").hide();
-    } else if( category==1 ) {
-        // If we move to Private (without shares), show Anyone remark
-        // Note: the number of shares is not tested real-time
-        [% IF !shelf.is_shared %]
-            $("#anyone_remark").show();
-        [% ELSE %]
-            $("#anyone_remark").hide();
-        [% END %]
-    } else { // category==2
-        $("#anyone_remark").hide();
-    }
-}
-//]]>
-</script>
 </head>
+
 <body id="lists_shelves" class="lists">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -716,4 +411,332 @@ function AdjustRemark() {
 [% END %]
 
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+    [% IF print %]
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                window.print();
+                setTimeout('window.close()', 1);
+            });
+        </script>
+    [% END %]
+
+    [% IF op == 'view' %]
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    [% END %]
+    <script type="text/javascript">
+        var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+        var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
+        var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
+
+        [% IF op == 'list' %]
+            $(document).ready(function(){
+                [% IF category == PUBLIC %]
+                    var type = [% PUBLIC %];
+                [% ELSE %]
+                    var type = [% PRIVATE %];
+                [% END %]
+                var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+
+                "aaSorting": [[ 5, "asc" ]],
+                    'bServerSide': true,
+                    'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
+                    'fnServerData': function(sSource, aoData, fnCallback) {
+                        aoData.push({
+                            'name': 'type',
+                            'value': type,
+                        },{
+                            'name': 'shelfname',
+                            'value': $("#searchshelfname_filter").val(),
+                        },{
+                            'name': 'owner',
+                            'value': $("#searchowner_filter").val(),
+                        },{
+                            'name': 'sortby',
+                            'value': $("#searchsortby_filter").val(),
+                        },{
+                            'name': 'template_path',
+                            'value': 'virtualshelves/tables/shelves_results.tt',
+                        });
+                        $.ajax({
+                            'dataType': 'json',
+                            'type': 'POST',
+                            'url': sSource,
+                            'data': aoData,
+                            'success': function(json){
+                                fnCallback(json);
+                            }
+                        });
+                    },
+                    'aoColumns':[
+                        { 'mDataProp': 'dt_type' },
+                        { 'mDataProp': 'dt_shelfname' },
+                        { 'mDataProp': 'dt_count' },
+                        { 'mDataProp': 'dt_is_shared' },
+                        { 'mDataProp': 'dt_owner' },
+                        { 'mDataProp': 'dt_sortby' },
+                        { 'mDataProp': 'dt_created_on' },
+                        { 'mDataProp': 'dt_modification_time' },
+                        { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
+                    ],
+                    "aoColumnDefs": [
+                        { "bVisible": false, "aTargets": [ 'NoVisible' ] }
+                    ],
+                    'bAutoWidth': false,
+                    'sPaginationType': 'full_numbers',
+                    'bFilter': false,
+                    "bProcessing": true,
+                    "bSortCellsTop": true
+                }));
+
+                dtListResults.fnAddFilters("filter", 750);
+
+                var tabs = $("#tabs").tabs({
+                    [% IF category == PUBLIC %]
+                        active: 1,
+                    [% ELSE %]
+                        active: 0,
+                    [% END %]
+                    activate: function(e, ui) {
+                        var active = tabs.tabs("option", "active" );
+                        if ( active == 0 ) {
+                            type = [% PRIVATE %];
+                            dtListResults.fnDraw();
+                        } else if ( active == 1 ) {
+                            type = [% PUBLIC %];
+                            dtListResults.fnDraw();
+                        }
+                    }
+                });
+                $("body").on("click", ".deleteshelf", function(){
+                    return confirmDelete(MSG_CONFIRM_DELETE_LIST);
+                });
+            });
+        [% END %]
+
+        [% IF shelf AND op == 'view' %]
+            $(document).ready(function(){
+                [% IF ( itemsloop ) %]$('#searchheader').fixFloat();[% END %]
+                $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-remove\"></i>"+_(" Clear all")+"<\/a>");
+                $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\"><i class=\"fa fa-check\"></i>"+_(" Select all")+"<\/a>");
+                $("#CheckAll").click(function(){
+                    $(".checkboxed").checkCheckboxes();
+                    return false;
+                });
+                $("#CheckNone").click(function(){
+                    $(".checkboxed").unCheckCheckboxes();
+                    return false;
+                });
+                $(".placehold").on("click",function(e){
+                    placeHold();
+                    e.preventDefault();
+                });
+                $(".addtocart").show();
+                var param1 = "| <label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+                [% IF ( intranetbookbag ) %]
+                     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
+                [% END %]
+                [% IF Koha.Preference('virtualshelves') %]
+                    [% IF add_to_some_private_shelves.count %]
+                        param1 += "<optgroup label=\""+_("Your lists:")+"\">";
+                        [% SET number_of_private_shelves = 0 %]
+                        [% FOREACH s IN add_to_some_private_shelves %]
+                            [% IF shelfnumber != s.shelfnumber %]
+                                param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                                [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
+                                [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
+                            [% END %]
+                        [% END %]
+                        param1 += "<\/optgroup>";
+                    [% END %]
+                    [% IF add_to_some_public_shelves.count %]
+                        param1 += "<optgroup label=\""+_("Public lists:")+"\">";
+                        [% SET number_of_public_shelves = 0 %]
+                        [% FOREACH s IN add_to_some_public_shelves %]
+                            [% IF shelfnumber != s.shelfnumber %]
+                                param1 += "<option id=\"s[% s.shelfnumber %]\" value=\"addtolist\">[% s.shelfname |html %]<\/option>";
+                                [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
+                                [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
+                            [% END %]
+                        [% END %]
+                        param1 += "<\/optgroup>";
+                    [% END %]
+                    [% IF add_to_some_private_shelves.count > 10 or add_to_some_public_shelves.count > 10 %]
+                        param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";
+                    [% END %]
+                    param1 +="<option value=\"newlist\">"+_("[ New list ]")+"<\/option>"
+                [% END %]
+                param1 += "<\/select> <button id=\"cartsubmit\" type=\"submit\" class=\"btn btn-default btn-xs\">"+_("Save")+"</button>";
+                $("span.addto").html(param1);
+                $("#cartsubmit").on("click",function(e){
+                    cartList();
+                    e.preventDefault();
+                });
+                $("#addto").change(function(){
+                    cartList();
+                });
+                $(".addto").find("input:submit").click(function(e){
+                    e.preventDefault();
+                    cartList();
+                });
+                $("#selection_ops").show();
+                $(".merge-items").on("click",function(e){
+                    e.preventDefault();
+                    MergeItems();
+                });
+                $("#listform").on("submit",function(e){
+
+                });
+                $(".list-remove").on("click",function(e){
+                    if($(".selection").filter(":checked").length > 0){
+                        return confirm(MSG_REMOVE_FROM_LIST);
+                    } else {
+                        alert(MSG_NO_ITEM_SELECTED);
+                        e.preventDefault();
+                    }
+                });
+            });
+        [% END %]
+
+        [% IF shelf AND op == 'edit_form' %]
+            $(document).ready(function(){
+                AdjustRemark();
+            });
+        [% END %]
+
+        /**
+         * This function checks if the adequate number of records are checked for merging
+         */
+        function MergeItems() {
+            var checkboxes = $("input:checkbox:checked");
+            if (checkboxes.length < 2) {
+                alert(_("At least two records must be selected for merging."));
+            } else {
+                var params = [];
+                $(checkboxes).each(function() {
+                    params.push('biblionumber=' + $(this).val());
+                });
+                var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
+                location.href = url;
+            }
+            return false;
+        }
+
+        /**
+         * This function checks all checkboxes if all are empty,
+         * or unchecks all if any already checked.
+         */
+        function CheckAll(){
+            var checkboxes = document.getElementsByTagName('input');
+            var nbCheckbox = checkboxes.length;
+            var check = areAllChecked();
+            for(var i=0;i<nbCheckbox;i++){
+                if(checkboxes[i].getAttribute('type') == "checkbox" ){
+                    checkboxes[i].checked = (check) ? 0 : 1;
+                }
+            }
+        }
+        /**
+         * This function returns true if ALL checkboxes are checked
+         */
+        function areAllChecked(){
+            var checkboxes = document.getElementsByTagName('input');
+            var nbCheckbox = checkboxes.length;
+            for(var i=0;i<nbCheckbox;i++){
+                if(checkboxes[i].getAttribute('type') == "checkbox" ){
+                    if(checkboxes[i].checked == 0){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function placeHold () {
+            var checkedItems = $(".selection:checked");
+            if ($(checkedItems).size() == 0) {
+                alert(MSG_NO_ITEM_SELECTED);
+                return false;
+            }
+            var bibs = "";
+            $(checkedItems).each(function() {
+                bibs += $(this).val() + "/";
+            });
+            $("#hold_form_biblios").val(bibs);
+            $("#hold_form").submit();
+            return false;
+        }
+
+        function cartList(){
+            var checkboxes = $("#searchresults").find(":checkbox");
+            var vshelf = vShelfAdd(checkboxes);
+            if($("#addto").find("option:selected").attr("value") == "addtolist"){
+                var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+                if (vshelf) {
+                     openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf,'popup',500,500);
+                }
+                return false;
+            } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+                if (vshelf) {
+                    openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf,'popup',500,500);
+                }
+                return false;
+            } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+                if (vshelf) {
+                    openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf,'popup',500,500);
+                }
+                return false;
+            }
+            if($("#addto").find("option:selected").attr("value") == "addtocart"){
+                addMultiple(checkboxes);
+                return false;
+            }
+        }
+
+        function AdjustRemark() {
+            var category = $("#category").val();
+            var perms = $("#allow_changes_from").val();
+
+            if( perms < 2 ) {
+                $("#anyone_remark").hide();
+            } else if( category==1 ) {
+                // If we move to Private (without shares), show Anyone remark
+                // Note: the number of shares is not tested real-time
+                [% IF !shelf.is_shared %]
+                    $("#anyone_remark").show();
+                [% ELSE %]
+                    $("#anyone_remark").hide();
+                [% END %]
+            } else { // category==2
+                $("#anyone_remark").hide();
+            }
+        }
+        [% IF op == 'view' %]
+
+            function sendList(){
+                open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelf.shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+             }
+
+             $(document).ready(function() {
+                $("#sendlist").click(function(){
+                    sendList();
+                    return false;
+                });
+                $("#deleteshelf").click(function(e){
+                    if(confirm(_("Are you sure you want to delete this list?"))){
+                        return true;
+                    } else {
+                        e.preventDefault();
+                    }
+                });
+             });
+
+        [% END %]
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

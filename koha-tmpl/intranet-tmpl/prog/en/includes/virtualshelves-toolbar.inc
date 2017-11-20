@@ -1,31 +1,3 @@
-<script type="text/javascript">
-//<![CDATA[
-
-[% IF op == 'view' %]
-
-    function sendList(){
-        open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=[% shelf.shelfnumber %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
-     }
-
-     $(document).ready(function() {
-        $("#sendlist").click(function(){
-            sendList();
-            return false;
-        });
-        $("#deleteshelf").click(function(e){
-            if(confirm(_("Are you sure you want to delete this list?"))){
-                return true;
-            } else {
-                e.preventDefault();
-            }
-        });
-     });
-
-[% END %]
-
-//]]>
-</script>
-
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group"><a id="newshelf" class="btn btn-default btn-sm" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=add_form&amp;referer=[% op %]"><i class="fa fa-plus"></i> New list</a></div>
 
