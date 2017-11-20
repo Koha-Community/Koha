@@ -7,6 +7,7 @@
 <title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname | html %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<style type="text/css">textarea { width: 100%; }</style>
 
 [% BLOCK list_permissions %]
     <li>
@@ -385,7 +386,7 @@
 <div class="yui-b">
   <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
     <fieldset class="brief noprint">
-      <legend>Add items</legend>
+      <h4>Add items</h4>
       <ol>
         <li>
           <label for="barcodes">Barcodes:</label>
