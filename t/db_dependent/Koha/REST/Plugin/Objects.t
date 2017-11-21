@@ -31,12 +31,11 @@ get '/patrons' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
     my $patrons = $c->objects->search(Koha::Patrons->new);
-    $c->render( status => 200, json => $patrons->TO_JSON );
+    $c->render( status => 200, json => $patrons );
 };
 
 
 # The tests
-
 use Test::More tests => 1;
 use Test::Mojo;
 
@@ -44,34 +43,83 @@ use t::lib::TestBuilder;
 use Koha::Database;
 
 my $schema = Koha::Database->new()->schema();
-$schema->storage->txn_begin();
+
 
 my $builder = t::lib::TestBuilder->new;
-$builder->build({
-    source => 'Borrower',
-    value => {
-        firstname => 'Manuel',
-    },
-});
-$builder->build({
-    source => 'Borrower',
-    value => {
-        firstname => 'Manuel',
-    },
-});
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 6;
+    plan tests => 34;
 
     my $t = Test::Mojo->new;
 
-    $t->get_ok('/patrons?firstname=Manuel&_per_page=1&_page=1')
+    $schema->storage->txn_begin;
+
+    # Delete existing patrons
+    Koha::Patrons->search->delete;
+    # Create two sample patrons that match the query
+    $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Manuel'
+        }
+    });
+    $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Manuela'
+        }
+    });
+
+    $t->get_ok('/patrons?firstname=manuel&_per_page=1&_page=1')
         ->status_is(200)
         ->header_like( 'Link' => qr/<http:\/\/.*\?.*&_page=2.*>; rel="next",/ )
         ->json_has('/0')
         ->json_hasnt('/1')
         ->json_is('/0/firstname' => 'Manuel');
-};
 
-$schema->storage->txn_rollback();
+    $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            firstname => 'Emanuel'
+        }
+    });
+
+    # _match=starts_with
+    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=starts_with')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_hasnt('/2')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Manuela');
+
+    # _match=ends_with
+    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=ends_with')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_hasnt('/2')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Emanuel');
+
+    # _match=exact
+    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=exact')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_hasnt('/1')
+        ->json_is('/0/firstname' => 'Manuel');
+
+    # _match=contains
+    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=contains')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_has('/2')
+        ->json_hasnt('/3')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Manuela')
+        ->json_is('/2/firstname' => 'Emanuel');
+
+    $schema->storage->txn_rollback;
+};

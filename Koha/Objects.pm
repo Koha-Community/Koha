@@ -171,47 +171,6 @@ sub search_related {
     }
 }
 
-=head2 _build_query_params_from_api
-
-    my $params = _build_query_params_from_api( $filtered_params, $reserved_params );
-
-Builds the params for searching on DBIC based on the selected matching algorithm.
-Valid options are I<contains>, I<starts_with>, I<ends_with> and I<exact>. Default is
-I<contains>. If other value is passed, a Koha::Exceptions::WrongParameter exception
-is raised.
-
-=cut
-
-sub _build_query_params_from_api {
-
-    my ( $filtered_params, $reserved_params ) = @_;
-
-    my $params;
-    my $match = $reserved_params->{_match} // 'contains';
-
-    foreach my $param ( keys %{$filtered_params} ) {
-        if ( $match eq 'contains' ) {
-            $params->{$param} =
-              { like => '%' . $filtered_params->{$param} . '%' };
-        }
-        elsif ( $match eq 'starts_with' ) {
-            $params->{$param} = { like => $filtered_params->{$param} . '%' };
-        }
-        elsif ( $match eq 'ends_with' ) {
-            $params->{$param} = { like => '%' . $filtered_params->{$param} };
-        }
-        elsif ( $match eq 'exact' ) {
-            $params->{$param} = $filtered_params->{$param};
-        }
-        else {
-            Koha::Exceptions::WrongParameter->throw(
-                "Invalid value for _match param ($match)");
-        }
-    }
-
-    return $params;
-}
-
 =head3 single
 
 my $object = Koha::Objects->search({}, { rows => 1 })->single

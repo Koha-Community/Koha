@@ -19,6 +19,7 @@ use Modern::Perl;
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
+use Try::Tiny;
 
 app->log->level('error');
 
@@ -79,9 +80,26 @@ get '/dbic_merge_sorting' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
+get '/build_query' => sub {
+    my $c = shift;
+    my ( $filtered_params, $reserved_params ) =
+      $c->extract_reserved_params( $c->req->params->to_hash );
+    my $query;
+    try {
+        $query = $c->build_query_params( $filtered_params, $reserved_params );
+        $c->render( json => { query => $query }, status => 200 );
+    }
+    catch {
+        $c->render(
+            json => { exception_msg => $_->message, exception_type => ref($_) },
+            status => 400
+        );
+    };
+};
+
 # The tests
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -127,4 +145,41 @@ subtest 'dbic_merge_sorting() tests' => sub {
             { -asc  => 'cuatro' }
         ]
       );
+};
+
+subtest '_build_query_params_from_api' => sub {
+
+    plan tests => 16;
+
+    my $t = Test::Mojo->new;
+
+    # _match => contains
+    $t->get_ok('/build_query?_match=contains&title=Ender&author=Orson')
+      ->status_is(200)
+      ->json_is( '/query' =>
+          { author => { like => '%Orson%' }, title => { like => '%Ender%' } } );
+
+    # _match => starts_with
+    $t->get_ok('/build_query?_match=starts_with&title=Ender&author=Orson')
+      ->status_is(200)
+      ->json_is( '/query' =>
+          { author => { like => 'Orson%' }, title => { like => 'Ender%' } } );
+
+    # _match => ends_with
+    $t->get_ok('/build_query?_match=ends_with&title=Ender&author=Orson')
+      ->status_is(200)
+      ->json_is( '/query' =>
+          { author => { like => '%Orson' }, title => { like => '%Ender' } } );
+
+    # _match => exact
+    $t->get_ok('/build_query?_match=exact&title=Ender&author=Orson')
+      ->status_is(200)
+      ->json_is( '/query' => { author => 'Orson', title => 'Ender' } );
+
+    # _match => blah
+    $t->get_ok('/build_query?_match=blah&title=Ender&author=Orson')
+      ->status_is(400)
+      ->json_is( '/exception_msg'  => 'Invalid value for _match param (blah)' )
+      ->json_is( '/exception_type' => 'Koha::Exceptions::WrongParameter' );
+
 };

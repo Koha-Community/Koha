@@ -67,6 +67,7 @@ sub register {
                 }
             );
 
+            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
             # Perform search
             my $objects = $objects_set->search( $filtered_params, $attributes );
 
