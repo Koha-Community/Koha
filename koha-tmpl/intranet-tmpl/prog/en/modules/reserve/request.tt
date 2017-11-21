@@ -775,19 +775,19 @@ function checkMultiHold() {
 
      [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
         <td style="white-space:nowrap;">
-            <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+            <a title="Move hold up" href="request.pl?action=move&amp;page=[% biblioloo.pages.page %]&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
             <img src="[% interface %]/[% theme %]/img/go-up.png" alt="Go up" />
                 </a>
 
-                <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+                <a title="Move hold to top" href="request.pl?action=move&amp;page=[% biblioloo.pages.page %]&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
                     <img src="[% interface %]/[% theme %]/img/go-top.png" alt="Go top" />
                 </a>
 
-                <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+                <a title="Move hold to bottom" href="request.pl?action=move&amp;page=[% biblioloo.pages.page %]&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
                     <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Go bottom" />
                 </a>
 
-                <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+                <a title="Move hold down" href="request.pl?action=move&amp;page=[% biblioloo.pages.page %]&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
                     <img src="[% interface %]/[% theme %]/img/go-down.png" alt="Go down" />
                 </a>
         </td>
@@ -861,7 +861,7 @@ function checkMultiHold() {
 
     [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
 	<td>
-                <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+                <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;page=[% biblioloo.pages.page %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
 			[% IF ( reserveloo.lowestPriority ) %]
                         <img src="[% interface %]/[% theme %]/img/go-bottom.png" alt="Unset lowest priority" />
 		        [% ELSE %]
@@ -872,7 +872,7 @@ function checkMultiHold() {
     [% END %]
 
 	<td>
-        <a class="cancel-hold" title="Cancel hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
+        <a class="cancel-hold" title="Cancel hold" href="request.pl?action=cancel&amp;page=[% biblioloo.pages.page %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;date=[% reserveloo.date %]">
                     <img src="[% interface %]/[% theme %]/img/x.png" alt="Cancel" />
                 </a>
 	</td>
@@ -880,7 +880,7 @@ function checkMultiHold() {
         [% IF SuspendHoldsIntranet %]
 	<td>
         [% UNLESS ( reserveloo.found ) %]
-            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% reserveloo.reserve_id %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id %]').val()" />
+            <input type="button" value="[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;page=[% biblioloo.pages.page %]&amp;reserve_id=[% reserveloo.reserve_id %]&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]&amp;suspend_until=' + $('#suspend_until_[% reserveloo.reserve_id %]').val()" />
 
             [% IF AutoResumeSuspendedHolds %]
                 <label for="suspend_until_[% reserveloo.reserve_id %]">[% IF ( reserveloo.suspend ) %] on [% ELSE %] until [% END %]</label>
@@ -901,8 +901,53 @@ function checkMultiHold() {
      </table>
   [% END %]<!-- /reserveloop -->
 [% END %]<!-- /biblioloop -->
+<!-- Paging the results -->
+<div class="col-md-9">
+    <div class="text-center">
+      <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="request.pl?biblionumber=[% biblioloo.biblionumber %]&amp;page=1" aria-label="First">First</a>
+        </li>
+        [% IF biblioloo.pages.page == 1 %]
+            <li class="page-item disabled">
+        [% ELSE %]
+            <li class="page-item">
+        [% END %]
+          <a class="page-link" href="request.pl?biblionumber=[% biblioloo.biblionumber %]&amp;page=[% biblioloo.pages.previous %]" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        [% FOREACH pagenumber IN biblioloo.pages.group %]
+            [% IF pagenumber == biblioloo.pages.page %]
+                <li class="page-item active">
+            [% ELSE %]
+                <li class="page-item">
+            [% END %]
+                <a class="page-link" href="request.pl?biblionumber=[% biblioloo.biblionumber %]&amp;page=[% pagenumber %]">[% pagenumber %]</a>
+            </li>
+            
+        [% END %]
+        [% IF biblioloo.pages.page == biblioloo.pages.lastpage %]
+            <li class="page-item disabled">
+        [% ELSE %]
+            <li class="page-item">
+        [% END %]
+          <a class="page-link" href="request.pl?biblionumber=[% biblioloo.biblionumber %]&amp;page=[% biblioloo.pages.next %]" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="request.pl?biblionumber=[% biblioloo.biblionumber %]&amp;page=[% biblioloo.pages.lastpage %]" aria-label="Last">Last</a>
+        </li>
+      </ul>
+      <p>Page [% biblioloo.pages.page %] of [% biblioloo.pages.lastpage %]<p>
+    </div>
+</div>
 
 <fieldset class="action">
+  <input type = "hidden" name="page" value="[% biblioloo.pages.page %]"/>
   <input type="submit" name="submit" value="Update hold(s)" />
 </fieldset>
 </fieldset>

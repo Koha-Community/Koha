@@ -897,9 +897,6 @@ sub CheckReserves {
     # $highest is the most important item we've seen so far.
     my $highest;
     if (scalar @reserves) {
-        my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
-        my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
-        my $LocalHoldsPriorityItemControl = C4::Context->preference('LocalHoldsPriorityItemControl');
 
         my $priority = 10000000;
         foreach my $res (@reserves) {
@@ -910,27 +907,9 @@ sub CheckReserves {
             } else {
                 my $borrowerinfo;
                 my $iteminfo;
-                my $local_hold_match;
-
-                if ($LocalHoldsPriority) {
-                    $borrowerinfo = C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
-                    $iteminfo = C4::Items::GetItem($itemnumber);
-
-                    my $local_holds_priority_item_branchcode =
-                      $iteminfo->{$LocalHoldsPriorityItemControl};
-                    my $local_holds_priority_patron_branchcode =
-                      ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
-                      ? $res->{branchcode}
-                      : ( $LocalHoldsPriorityPatronControl eq 'HomeLibrary' )
-                      ? $borrowerinfo->{branchcode}
-                      : undef;
-                    $local_hold_match =
-                      $local_holds_priority_item_branchcode eq
-                      $local_holds_priority_patron_branchcode;
-                }
 
                 # See if this item is more important than what we've got so far
-                if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
+                if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) ) {
                     $iteminfo ||= C4::Items::GetItem($itemnumber);
                     next if $res->{itemtype} && $res->{itemtype} ne _get_itype( $iteminfo );
                     $borrowerinfo ||= C4::Members::GetMember( borrowernumber => $res->{'borrowernumber'} );
@@ -941,7 +920,7 @@ sub CheckReserves {
                     next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $iteminfo->{ $branchitemrule->{hold_fulfillment_policy} }) );
                     $priority = $res->{'priority'};
                     $highest  = $res;
-                    last if $local_hold_match;
+                    last;
                 }
             }
         }
@@ -1812,6 +1791,8 @@ sub _Findgroupreserve {
     my ( $bibitem, $biblio, $itemnumber, $lookahead, $ignore_borrowers) = @_;
     my $dbh   = C4::Context->dbh;
 
+    my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
+
     # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
     # check for exact targeted match
     my $item_level_target_query = qq{
@@ -1843,8 +1824,17 @@ sub _Findgroupreserve {
     $sth->execute($itemnumber, $lookahead||0);
     my @results;
     if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data )
-          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        if ($LocalHoldsPriority) {
+            my $checked = _check_local_holds_priority($itemnumber, $data->{borrowernumber}, $data->{branchcode});
+            if ($checked) {
+                push( @results, $data )
+                    unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+                last;
+            }
+        } else {
+            push( @results, $data )
+              unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        }
     }
     return @results if @results;
 
@@ -1878,8 +1868,17 @@ sub _Findgroupreserve {
     $sth->execute($itemnumber, $lookahead||0);
     @results = ();
     if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data )
-          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        if ($LocalHoldsPriority) {
+            my $checked = _check_local_holds_priority($itemnumber, $data->{borrowernumber}, $data->{branchcode});
+            if ($checked) {
+                push( @results, $data )
+                    unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+                last;
+            }
+        } else {
+            push( @results, $data )
+              unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        }
     }
     return @results if @results;
 
@@ -1908,10 +1907,43 @@ sub _Findgroupreserve {
     $sth->execute( $biblio, $itemnumber, $lookahead||0);
     @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data )
-          unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        if ($LocalHoldsPriority) {
+            my $checked = _check_local_holds_priority($itemnumber, $data->{borrowernumber}, $data->{branchcode});
+            if ($checked) {
+                push( @results, $data )
+                    unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+                last;
+            }
+        } else {
+            push( @results, $data )
+              unless any{ $data->{borrowernumber} eq $_ } @$ignore_borrowers ;
+        }
     }
     return @results;
+}
+
+sub _check_local_holds_priority {
+    my ($itemnumber, $borrowernumber, $reservebranch) = @_;
+
+    my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
+    my $LocalHoldsPriorityItemControl = C4::Context->preference('LocalHoldsPriorityItemControl');
+
+    my $patronlibrary;
+    my $itemlibrary;
+
+    if($LocalHoldsPriorityPatronControl eq 'PickupLibrary' ) {
+        $patronlibrary = $reservebranch;
+    }
+    if ($LocalHoldsPriorityPatronControl eq 'HomeLibrary' ) {
+       $patronlibrary = Koha::Patrons->find( $borrowernumber )->branchcode;
+    }
+    $itemlibrary = Koha::Items->find( $itemnumber )->$LocalHoldsPriorityItemControl;
+    if ($itemlibrary eq $patronlibrary) {
+        return 1;
+    } else {
+        return;
+    }
+
 }
 
 =head2 _reserve_last_pickup_date

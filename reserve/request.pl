@@ -31,6 +31,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Date_to_Days/;
+use POSIX;
 use C4::Output;
 use C4::Auth;
 use C4::Reserves;
@@ -72,6 +73,7 @@ my $findborrower = $input->param('findborrower');
 $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
+my $page = $input->param('page') || 1;
 my $messageborrower;
 my $warnings;
 my $messages;
@@ -507,7 +509,8 @@ foreach my $biblionumber (@biblionumbers) {
 
     # existingreserves building
     my @reserveloop;
-    my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority' } );
+    my $rows = 20;
+    my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority', page => $page, rows => $rows } );
     foreach my $res (
         sort {
             my $a_found = $a->found() || '';
@@ -618,6 +621,7 @@ foreach my $biblionumber (@biblionumbers) {
     $biblioloopiter{title} = $dat->{title};
     $biblioloopiter{rank} = $fixedRank;
     $biblioloopiter{reserveloop} = \@reserveloop;
+    $biblioloopiter{pages} = pagination($totalcount, $page, 10, $rows);
 
     if (@reserveloop) {
         $template->param( reserveloop => \@reserveloop );
@@ -655,4 +659,43 @@ sub sort_borrowerlist {
           uc( $b->{surname} . $b->{firstname} )
     } @{$borrowerslist};
     return $ref;
+}
+
+sub pagination {
+    my ($totalcount, $page, $shownpages, $rows) = @_;
+    my $totalpages = $totalcount/$rows;
+    $totalpages = ceil($totalpages);
+
+    my $previous = $page-1 if $page > 1;
+    my $next = $page+1 if $page < $totalpages;
+
+    my @pagenumbers;
+
+    for ( my $i = 1 ; $i <= $totalpages ; $i++ ) {
+        push @pagenumbers, $i;
+    }
+
+    my $pagechunks = {};
+    my $pagelist = {};
+    my $pagecount = 1;
+    while( my @lists = splice( @pagenumbers, 0, $shownpages ) ) {
+         $pagechunks->{$pagecount} = \@lists ;
+         foreach my $list (@lists) {
+            $pagelist->{$list} = $pagecount;
+         }
+         $pagecount++;
+    }
+
+    my $pagegroup = $pagelist->{$page};
+
+    my $pages = {};
+
+    $pages->{group} = $pagechunks->{$pagegroup};
+    $pages->{page} = $page;
+    $pages->{lastpage} = $totalpages;
+    $pages->{previous} = $previous;
+    $pages->{next} = $next;
+
+
+    return $pages;
 }

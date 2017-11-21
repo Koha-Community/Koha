@@ -55,6 +55,7 @@ my $count=@rank;
 my $CancelBiblioNumber = $query->param('CancelBiblioNumber');
 my $CancelBorrowerNumber = $query->param('CancelBorrowerNumber');
 my $CancelItemnumber = $query->param('CancelItemnumber');
+my $page = $query->param('page');
 
 # 2 possibilitys : cancel an item reservation, or modify or cancel the queded list
 
@@ -85,7 +86,7 @@ if ( $from eq 'borrower'){
 } elsif ( $from eq 'circ'){
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
-     my $url = "/cgi-bin/koha/reserve/request.pl?";
+     my $url = "/cgi-bin/koha/reserve/request.pl?page=$page&";
      if ($multi_hold) {
          $url .= "multi_hold=1&biblionumbers=$biblionumbers";
      } else {
