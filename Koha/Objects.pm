@@ -171,47 +171,6 @@ sub search_related {
     }
 }
 
-=head3 search_for_api
-
-    my $objects = Koha::Objects->search_for_api( $c );
-
-Searches for objects given a controller object I<$c>.
-
-=cut
-
-sub search_for_api {
-    my ( $self, $c ) = @_;
-
-    my $args = $c->validation->output;
-    my $attributes;
-
-    # Extract reserved params
-    my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
-
-    # Merge sorting into query attributes
-    $c->dbic_merge_sorting(
-        {
-            attributes => $attributes,
-            params     => $reserved_params
-        }
-    );
-
-    # Merge pagination into query attributes
-    $c->dbic_merge_pagination(
-        {
-            attributes => $attributes,
-            params     => $reserved_params
-        }
-    );
-
-    # Perform search
-    my $objects = $self->search( $filtered_params, $attributes );
-    $c->add_pagination_headers({ total => $objects->count, params => $args })
-        if $objects->is_paged;
-
-    return $objects;
-}
-
 =head2 _build_query_params_from_api
 
     my $params = _build_query_params_from_api( $filtered_params, $reserved_params );
