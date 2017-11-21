@@ -1,91 +1,11 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC records for import</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
-
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed,#fileuploadcancel,#jobpanel,#jobstatus,#jobfailed { display : none; }
 </style>
 
-<script type="text/javascript">
-//<![CDATA[
-var xhr;
-$(document).ready(function(){
-	$("#processfile").hide();
-    $("#record_type").change(function() {
-        if ($(this).val() == 'auth') {
-            $('#items').hide();
-        } else {
-            $('#items').show();
-        }
-    });
-    $("#fileuploadbutton").on("click",function(e){
-        e.preventDefault();
-        StartUpload();
-    });
-    $("#fileuploadcancel").on("click",function(e){
-        e.preventDefault();
-        CancelUpload();
-    });
-    $("#mainformsubmit").on("click",function(){
-        return CheckForm( document.getElementById("processfile"));
-    });
-});
-function CheckForm(f) {
-    if ($("#fileToUpload").value == '') {
-        alert(_("Please upload a file first."));
-    } else {
-        return submitBackgroundJob(f);
-    }
-    return false;
-}
-function StartUpload() {
-    if( $('#fileToUpload').prop('files').length == 0 ) return;
-    $('#fileuploadbutton').hide();
-    $("#fileuploadfailed").hide();
-    $("#processfile").hide();
-    $("#fileuploadstatus").show();
-    $("#uploadedfileid").val('');
-    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
-    $("#fileuploadcancel").show();
-}
-function CancelUpload() {
-    if( xhr ) xhr.abort();
-    $("#fileuploadstatus").hide();
-    $('#fileuploadbutton').show();
-    $("#fileuploadcancel").hide();
-    $("#fileuploadfailed").show();
-    $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
-}
-function cbUpload( status, fileid, errors ) {
-    if( status=='done' ) {
-        $("#uploadedfileid").val( fileid );
-        $('#fileToUpload').prop('disabled',true);
-        $('#fileuploadbutton').prop('disabled',true);
-        $('#fileuploadbutton').show();
-        $("#fileuploadcancel").hide();
-        var filename=$('#fileToUpload').prop('files')[0].name;
-        if( filename.match( new RegExp(/\.[^.]+xml$/) ) ) {
-            $('#format').val('MARCXML');
-        }
-        $("#processfile").show();
-    } else {
-        var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
-        var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
-        $('#fileuploadbutton').show();
-        $("#fileuploadcancel").hide();
-        $("#fileuploadstatus").hide();
-        $("#fileuploadfailed").show();
-        $("#fileuploadfailed").text( _("Upload status: ") +
-            ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
-            ( status=='denied'? _("Denied"): status ))
-        );
-    }
-}
-//]]>
-</script>
 </head>
 <body id="tools_stage-marc-import" class="tools">
 [% INCLUDE 'header.inc' %]
@@ -275,4 +195,86 @@ function cbUpload( status, fileid, errors ) {
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript">
+        var xhr;
+        $(document).ready(function(){
+            $("#processfile").hide();
+            $("#record_type").change(function() {
+                if ($(this).val() == 'auth') {
+                    $('#items').hide();
+                } else {
+                    $('#items').show();
+                }
+            });
+            $("#fileuploadbutton").on("click",function(e){
+                e.preventDefault();
+                StartUpload();
+            });
+            $("#fileuploadcancel").on("click",function(e){
+                e.preventDefault();
+                CancelUpload();
+            });
+            $("#mainformsubmit").on("click",function(){
+                return CheckForm( document.getElementById("processfile"));
+            });
+        });
+        function CheckForm(f) {
+            if ($("#fileToUpload").value == '') {
+                alert(_("Please upload a file first."));
+            } else {
+                return submitBackgroundJob(f);
+            }
+            return false;
+        }
+        function StartUpload() {
+            if( $('#fileToUpload').prop('files').length == 0 ) return;
+            $('#fileuploadbutton').hide();
+            $("#fileuploadfailed").hide();
+            $("#processfile").hide();
+            $("#fileuploadstatus").show();
+            $("#uploadedfileid").val('');
+            xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+            $("#fileuploadcancel").show();
+        }
+        function CancelUpload() {
+            if( xhr ) xhr.abort();
+            $("#fileuploadstatus").hide();
+            $('#fileuploadbutton').show();
+            $("#fileuploadcancel").hide();
+            $("#fileuploadfailed").show();
+            $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
+        }
+        function cbUpload( status, fileid, errors ) {
+            if( status=='done' ) {
+                $("#uploadedfileid").val( fileid );
+                $('#fileToUpload').prop('disabled',true);
+                $('#fileuploadbutton').prop('disabled',true);
+                $('#fileuploadbutton').show();
+                $("#fileuploadcancel").hide();
+                var filename=$('#fileToUpload').prop('files')[0].name;
+                if( filename.match( new RegExp(/\.[^.]+xml$/) ) ) {
+                    $('#format').val('MARCXML');
+                }
+                $("#processfile").show();
+            } else {
+                var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+                var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
+                $('#fileuploadbutton').show();
+                $("#fileuploadcancel").hide();
+                $("#fileuploadstatus").hide();
+                $("#fileuploadfailed").show();
+                $("#fileuploadfailed").text( _("Upload status: ") +
+                    ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
+                    ( status=='denied'? _("Denied"): status ))
+                );
+            }
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

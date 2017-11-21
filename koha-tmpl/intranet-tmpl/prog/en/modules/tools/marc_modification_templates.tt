@@ -1,23 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; MARC modification templates</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    //<![CDATA[
-    var MSG_MMT_SUBFIELDS_MATCH = _("Both subfield values should be filled or empty.");
-    var MSG_MMT_DESTINATION_REQUIRED = _("The destination should be filled.");
-    var MSG_MMT_CONTROL_FIELD_EMPTY = _("If the field is a control field, the subfield should be empty");
-    var MSG_MMT_CONTROL_FIELD = _("A control field cannot be used with a regular field.");
-    var MSG_MMT_SOURCE_SUBFIELD = _("The source subfield should be filled for update.");
-    var MSG_MMT_SOURCE_FIELD = _("The source field should be filled.");
-    var MSG_MMT_EVERY = _("Every");
-    var MSG_MMT_ALL = _("All");
-    var MSG_MMT_CONFIRM_DEL_TEMPLATE = _("Are you sure you wish to delete this template?");
-    var MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION = _("Are you sure you wish to delete this template action?");
-    var MSG_MMT_EDIT_ACTION = _("Edit action %s");
-    var MSG_MMT_UPDATE_ACTION = _("Update action");
-    //]]>
-</script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates.js"></script>
 <style type="text/css">
     #add_action { display: none; }
 </style>
@@ -349,5 +333,24 @@
         [% INCLUDE 'tools-menu.inc' %]
     </div>
   </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript">
+        var MSG_MMT_SUBFIELDS_MATCH = _("Both subfield values should be filled or empty.");
+        var MSG_MMT_DESTINATION_REQUIRED = _("The destination should be filled.");
+        var MSG_MMT_CONTROL_FIELD_EMPTY = _("If the field is a control field, the subfield should be empty");
+        var MSG_MMT_CONTROL_FIELD = _("A control field cannot be used with a regular field.");
+        var MSG_MMT_SOURCE_SUBFIELD = _("The source subfield should be filled for update.");
+        var MSG_MMT_SOURCE_FIELD = _("The source field should be filled.");
+        var MSG_MMT_EVERY = _("Every");
+        var MSG_MMT_ALL = _("All");
+        var MSG_MMT_CONFIRM_DEL_TEMPLATE = _("Are you sure you wish to delete this template?");
+        var MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION = _("Are you sure you wish to delete this template action?");
+        var MSG_MMT_EDIT_ACTION = _("Edit action %s");
+        var MSG_MMT_UPDATE_ACTION = _("Update action");
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates.js"></script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

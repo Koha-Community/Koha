@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
 [% IF ( import_batch_id ) %]
@@ -5,134 +6,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-  $("#staged-record-matching-rules select").change(function(){
-      var str = $(this).attr("id");
-      $("#reset_"+str).parent().show();
-  });
-  $("a.reset").click(function(){
-      var str = $(this).attr("id");
-      str = str.replace("reset_","")
-      $("#"+str+" option[selected='selected']").attr("selected","selected");
-      $(this).parent().hide();
-  });
-
-  [% IF import_batch_id %]
-      $("#records-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-          "bAutoWidth": false,
-          "bFilter": false,
-          "bProcessing": true,
-          "bServerSide": true,
-          "sAjaxSource": 'batch_records_ajax.pl',
-          "sPaginationType": "full_numbers",
-          "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-          "aoColumns": [
-              { "mDataProp": "import_record_id" },
-              { "mDataProp": "citation" },
-              { "mDataProp": "status" },
-              { "mDataProp": "overlay_status" },
-              { "mDataProp": "match_citation" },
-              { "mDataProp": "diff_url" },
-              { "mDataProp": "matched" }
-          ],
-          "fnServerData": function ( sSource, aoData, fnCallback ) {
-              aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
-
-              $.ajax({
-                  'dataType': 'json',
-                  'type': 'POST',
-                  'url': sSource,
-                  'data': aoData,
-                  'success': function(json){
-                      fnCallback(json);
-                  }
-              });
-          },
-          "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            [% IF ( record_type == 'auth' ) %]
-                var record_details_url = "/cgi-bin/koha/authorities/detail.pl?authid=";
-            [% ELSE %]
-                var record_details_url = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=";
-            [% END %]
-
-            $('td:eq(1)', nRow).html(
-                '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a>'
-            );
-
-            $('td:eq(2)', nRow).html(
-                aData['status'] == 'imported' ? _("Imported") :
-                aData['status'] == 'ignored'  ? _("Ignored")  :
-                aData['status'] == 'reverted' ? _("Reverted") :
-                aData['status'] == 'staged'   ? _("Staged")   :
-                aData['status'] == 'error'    ? _("Error")    :
-                aData['status']
-            );
-
-            $('td:eq(3)', nRow).html(
-                aData['overlay_status'] == 'no_match'      ? _("No match")       :
-                aData['overlay_status'] == 'match_applied' ? _("Match applied")  :
-                aData['overlay_status'] == 'auto_match'    ? _("Match found")    :
-                aData['overlay_status']
-            );
-
-            if ( aData['match_id'] ) {
-                [% IF ( record_type == 'auth' ) -%]
-                var matching_msg = _("Matches authority %s (score=%s):%s");
-                [%- ELSE -%]
-                var matching_msg = _("Matches biblio %s (score=%s):%s");
-                [%- END %]
-                $('td:eq(4)', nRow).html(
-                    matching_msg.format(aData['match_id'], aData['score'],
-                    '<a target="_blank" href="' + record_details_url
-                    + aData['match_id'] + '">' + aData['match_citation'] + '</a>')
-                );
-            }
-            if (aData['diff_url']){
-                $('td:eq(5)', nRow).html(
-                    '<a href="'+aData['diff_url']+'">View</a>'
-                );
-            }
-            $('td:eq(6)', nRow).html(
-                '<a target="_blank" href="' + record_details_url
-                    + aData['matched'] + '">' + aData['matched'] + '</a>'
-            );
-          },
-      }));
-        $("#import_batch_form").on("submit",function(){
-            return submitBackgroundJob( document.getElementById("import_batch_form") );
-        });
-        $("#revert_batch_form").on("submit",function(){
-            return confirm( _("Are you sure you want to undo the import of this batch into the catalog?") ) &&   submitBackgroundJob( document.getElementById("revert_batch_form") );
-        });
-    [% END %]
-    $("body").on("click",".previewMARC", function(e){
-        e.preventDefault();
-        var ltitle = $(this).text();
-        var page = $(this).attr("href");
-        $("#marcPreviewLabel").text(ltitle);
-        $("#marcPreview .modal-body").load(page + " table");
-        $('#marcPreview').modal({show:true});
-    });
-    $("#marcPreview").on("hidden", function(){
-        $("#marcPreviewLabel").html("");
-        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
-    $(".batch_form").on("submit",function(){
-        if( $(this).hasClass("batch_delete") ){
-            return confirm( _("Are you sure you want to permanently delete this batch?") );
-        } else {
-            return confirm( _("Clear all reservoir records staged in this batch?  This cannot be undone.") );
-        }
-    });
-});
-
-//]]>
-</script>
 <style type="text/css">
     #jobpanel,#jobstatus,#jobfailed { display : none; }
     span.change-status { font-style:italic; color:#666; display:none; }
@@ -504,4 +378,133 @@ $(document).ready(function(){
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#staged-record-matching-rules select").change(function(){
+                var str = $(this).attr("id");
+                $("#reset_"+str).parent().show();
+            });
+            $("a.reset").click(function(){
+                var str = $(this).attr("id");
+                str = str.replace("reset_","")
+                $("#"+str+" option[selected='selected']").attr("selected","selected");
+                $(this).parent().hide();
+            });
+
+            [% IF import_batch_id %]
+                $("#records-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "bAutoWidth": false,
+                    "bFilter": false,
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": 'batch_records_ajax.pl',
+                    "sPaginationType": "full_numbers",
+                    "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
+                    "aoColumns": [
+                        { "mDataProp": "import_record_id" },
+                        { "mDataProp": "citation" },
+                        { "mDataProp": "status" },
+                        { "mDataProp": "overlay_status" },
+                        { "mDataProp": "match_citation" },
+                        { "mDataProp": "diff_url" },
+                        { "mDataProp": "matched" }
+                    ],
+                    "fnServerData": function ( sSource, aoData, fnCallback ) {
+                        aoData.push( { "name": "import_batch_id", "value": [% import_batch_id %] } );
+
+                        $.ajax({
+                            'dataType': 'json',
+                            'type': 'POST',
+                            'url': sSource,
+                            'data': aoData,
+                            'success': function(json){
+                                fnCallback(json);
+                            }
+                        });
+                    },
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+                      [% IF ( record_type == 'auth' ) %]
+                          var record_details_url = "/cgi-bin/koha/authorities/detail.pl?authid=";
+                      [% ELSE %]
+                          var record_details_url = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=";
+                      [% END %]
+
+                      $('td:eq(1)', nRow).html(
+                          '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a>'
+                      );
+
+                      $('td:eq(2)', nRow).html(
+                          aData['status'] == 'imported' ? _("Imported") :
+                          aData['status'] == 'ignored'  ? _("Ignored")  :
+                          aData['status'] == 'reverted' ? _("Reverted") :
+                          aData['status'] == 'staged'   ? _("Staged")   :
+                          aData['status'] == 'error'    ? _("Error")    :
+                          aData['status']
+                      );
+
+                      $('td:eq(3)', nRow).html(
+                          aData['overlay_status'] == 'no_match'      ? _("No match")       :
+                          aData['overlay_status'] == 'match_applied' ? _("Match applied")  :
+                          aData['overlay_status'] == 'auto_match'    ? _("Match found")    :
+                          aData['overlay_status']
+                      );
+
+                      if ( aData['match_id'] ) {
+                          [% IF ( record_type == 'auth' ) -%]
+                          var matching_msg = _("Matches authority %s (score=%s):%s");
+                          [%- ELSE -%]
+                          var matching_msg = _("Matches biblio %s (score=%s):%s");
+                          [%- END %]
+                          $('td:eq(4)', nRow).html(
+                              matching_msg.format(aData['match_id'], aData['score'],
+                              '<a target="_blank" href="' + record_details_url
+                              + aData['match_id'] + '">' + aData['match_citation'] + '</a>')
+                          );
+                      }
+                      if (aData['diff_url']){
+                          $('td:eq(5)', nRow).html(
+                              '<a href="'+aData['diff_url']+'">View</a>'
+                          );
+                      }
+                      $('td:eq(6)', nRow).html(
+                          '<a target="_blank" href="' + record_details_url
+                              + aData['matched'] + '">' + aData['matched'] + '</a>'
+                      );
+                    },
+                }));
+                $("#import_batch_form").on("submit",function(){
+                    return submitBackgroundJob( document.getElementById("import_batch_form") );
+                });
+                $("#revert_batch_form").on("submit",function(){
+                    return confirm( _("Are you sure you want to undo the import of this batch into the catalog?") ) &&   submitBackgroundJob( document.getElementById("revert_batch_form") );
+                });
+            [% END %]
+            $("body").on("click",".previewMARC", function(e){
+                e.preventDefault();
+                var ltitle = $(this).text();
+                var page = $(this).attr("href");
+                $("#marcPreviewLabel").text(ltitle);
+                $("#marcPreview .modal-body").load(page + " table");
+                $('#marcPreview').modal({show:true});
+            });
+            $("#marcPreview").on("hidden", function(){
+                $("#marcPreviewLabel").html("");
+                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+            $(".batch_form").on("submit",function(){
+                if( $(this).hasClass("batch_delete") ){
+                    return confirm( _("Are you sure you want to permanently delete this batch?") );
+                } else {
+                    return confirm( _("Clear all reservoir records staged in this batch?  This cannot be undone.") );
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

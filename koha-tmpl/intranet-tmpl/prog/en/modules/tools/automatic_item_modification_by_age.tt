@@ -1,24 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Automatic item modifications by age</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/automatic_item_modification_by_age.js"></script>
-[% IF op == 'edit_form' %]
-    <script type="text/javascript">//<![CDATA[
-      $(document).ready(function() {
-            [% IF ( op == 'edit_form' ) %]
-                $('#toolbar').fixFloat();
-            [% END %]
-          [% IF rules.size > 0 %]
-            $("#norules").hide();
-          [% ELSE %]
-            $("#rules").show();
-          [% END %]
-      });
-    //]]>
-    </script>
-[% END %]
 </head>
+
 <body id="tools_automatic_item_modification_by_age" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -236,4 +221,25 @@
     [% INCLUDE 'tools-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/automatic_item_modification_by_age.js"></script>
+    [% IF op == 'edit_form' %]
+        <script type="text/javascript">
+            $(document).ready(function() {
+                  [% IF ( op == 'edit_form' ) %]
+                      $('#toolbar').fixFloat();
+                  [% END %]
+                  [% IF rules.size > 0 %]
+                      $("#norules").hide();
+                  [% ELSE %]
+                      $("#rules").show();
+                  [% END %]
+            });
+        </script>
+    [% END %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
