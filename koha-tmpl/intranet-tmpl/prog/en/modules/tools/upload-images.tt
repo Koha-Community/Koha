@@ -1,58 +1,12 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Upload images</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
-
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
 </style>
-
-<script type="text/javascript">
-//<![CDATA[
-function StartUpload() {
-    if( $('#fileToUpload').prop('files').length == 0 ) return;
-    $('#uploadform button.submit').prop('disabled',true);
-    $("#fileuploadstatus").show();
-    $("#uploadedfileid").val('');
-    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
-}
-function cbUpload( status, fileid, errors ) {
-    if( status=='done' ) {
-        $("#uploadedfileid").val( fileid );
-        $('#fileToUpload').prop('disabled',true);
-        $("#processfile").show();
-    } else {
-        var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
-        var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
-        $("#fileuploadstatus").hide();
-        $("#fileuploadfailed").show();
-        $("#fileuploadfailed").text( _("Upload status: ") +
-            ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
-            ( status=='denied'? _("Denied"): status ))
-        );
-        $("#processfile").hide();
-    }
-}
-$(document).ready(function(){
-	$("#processfile").hide();
-	$("#zipfile").click(function(){
-		$("#bibnum").hide();
-	});
-	$("#image").click(function(){
-		$("#bibnum").show();
-	});
-    $("#uploadfile").validate({
-        submitHandler: function(form) {
-            StartUpload();
-            return false;
-        }
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="tools_upload-images" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -153,4 +107,52 @@ $(document).ready(function(){
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript">
+        function StartUpload() {
+            if( $('#fileToUpload').prop('files').length == 0 ) return;
+            $('#uploadform button.submit').prop('disabled',true);
+            $("#fileuploadstatus").show();
+            $("#uploadedfileid").val('');
+            xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+        }
+        function cbUpload( status, fileid, errors ) {
+            if( status=='done' ) {
+                $("#uploadedfileid").val( fileid );
+                $('#fileToUpload').prop('disabled',true);
+                $("#processfile").show();
+            } else {
+                var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+                var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
+                $("#fileuploadstatus").hide();
+                $("#fileuploadfailed").show();
+                $("#fileuploadfailed").text( _("Upload status: ") +
+                    ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
+                    ( status=='denied'? _("Denied"): status ))
+                );
+                $("#processfile").hide();
+            }
+        }
+        $(document).ready(function(){
+            $("#processfile").hide();
+            $("#zipfile").click(function(){
+                $("#bibnum").hide();
+            });
+            $("#image").click(function(){
+                $("#bibnum").show();
+            });
+            $("#uploadfile").validate({
+                submitHandler: function(form) {
+                    StartUpload();
+                    return false;
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

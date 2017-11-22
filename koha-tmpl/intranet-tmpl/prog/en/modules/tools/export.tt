@@ -1,40 +1,15 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Export data</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $('#exporttype').tabs();
-
-    $("li.csv_profiles").hide();
-
-    $("#bibs select[name='output_format']").on('change', function(){
-        var format = $(this).val();
-        if ( format == 'csv' ) {
-            $("#bibs li.csv_profiles").show();
-        } else {
-            $("#bibs li.csv_profiles").hide();
-        }
-    });
-    $("#checkall").on("click",function(e){
-        e.preventDefault();
-        $(".branch_select").prop("checked",1);
-    });
-    $("#checknone").on("click",function(e){
-        e.preventDefault();
-        $(".branch_select").prop("checked",0);
-    });
-});
-//]]>
-</script>
 <style type="text/css">
     fieldset.rows fieldset.rows {
         width: 90%;
     }
 </style>
 </head>
+
 <body id="tools_export" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -311,4 +286,34 @@ $(document).ready(function() {
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#exporttype').tabs();
+
+            $("li.csv_profiles").hide();
+
+            $("#bibs select[name='output_format']").on('change', function(){
+                var format = $(this).val();
+                if ( format == 'csv' ) {
+                    $("#bibs li.csv_profiles").show();
+                } else {
+                    $("#bibs li.csv_profiles").hide();
+                }
+            });
+            $("#checkall").on("click",function(e){
+                e.preventDefault();
+                $(".branch_select").prop("checked",1);
+            });
+            $("#checknone").on("click",function(e){
+                e.preventDefault();
+                $(".branch_select").prop("checked",0);
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

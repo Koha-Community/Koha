@@ -1,133 +1,12 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-function checkForm() {
-    if ( $('#uploadbarcodes').val() ) {
-        if ( !(
-            $('#branchloop').val()   ||
-            $('#locationloop').val() ||
-            $('#minlocation').val()  ||
-            $('#maxlocation').val()  ||
-            $('#statuses input:checked').length
-        ) ) {
-            return confirm(
-                _("You have not selected any catalog filters and are about to compare a file of barcodes to your entire catalog.") + "\n\n" +
-                _("For large catalogs this can result in unexpected behavior") + "\n\n" +
-                _("Are you sure you want to do this?")
-            );
-        }
-    }
-
-    return true;
-}
-
-$(document).ready(function(){
-        inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
-            'sPaginationType': 'full_numbers',
-            [% IF compareinv2barcd %]
-                // sort on callnumber
-                "aaSorting": [[ 1, "asc" ]],
-            [% ELSE %]
-                // first column contains checkboxes
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] },
-                ],
-                // 3rd column is callnumber
-                "aaSorting": [[ 2, "asc" ]],
-            [% END %]
-            'fnDrawCallback': function() {
-                //bind the click handler script to the newly created elements held in the table
-                $('.openWin').bind('click',function(e){
-                    e.preventDefault();
-                    openWindow(this.href,'marcview',800,600);
-                });
-            }
-        } ));
-
-
-        $("#continuewithoutmarkingbutton").click(function(){
-            inventorydt.fnPageChange( 'next' );
-            return false;
-        });
-
-        $("#markseenandcontinuebutton").click(function(){
-            var param = '';
-            $("input:checked").each(function() {
-                param += "|" + $(this).attr('name');
-            });
-            $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param });
-            inventorydt.fnPageChange( 'next' );
-            return false;
-        });
-
-        $("#markseenandquit").click(function(){
-            var param = '';
-            $("input:checked").each(function() {
-                param += "|" + $(this).attr('name');
-            });
-            $.ajax({
-              type: 'POST',
-              url: '/cgi-bin/koha/tools/ajax-inventory.pl',
-              data: { seen: param},
-              async: false
-            });
-            document.location.href = '/cgi-bin/koha/tools/inventory.pl';
-            return false;
-        });
-
-
-    $(".checkall").click(function(){
-            $(".checkboxed").checkCheckboxes();
-            return false;
-        });
-    $(".clearall").click(function(){
-            $(".checkboxed").unCheckCheckboxes();
-            return false;
-        });
-    $("#inventory_form").on("submit",function(){
-        return checkForm();
-    });
-
-    // #uploadbarcodes and #compareinv2barcd determine the behavior of
-    // the controls within the barcode fieldset and the optional filters
-    $("#uploadbarcodes").change(function() {
-        if( $("#uploadbarcodes").val() ) {
-            $("#setdate").prop('disabled',false);
-            $("#compareinv2barcd").prop('disabled',false);
-            $("#dont_checkin").prop('disabled',false);
-            if( $("#compareinv2barcd").attr('checked') ) {
-                $("fieldset#optionalfilters").show();
-            } else {
-                $("fieldset#optionalfilters").hide();
-            }
-        } else {
-            $("#setdate").prop('disabled',true);
-            $("#compareinv2barcd").prop('disabled',true);
-            $("#compareinv2barcd").attr('checked',false);
-            $("#dont_checkin").prop('disabled',true);
-            $("#dont_checkin").attr('checked',false);
-            $("fieldset#optionalfilters").show();
-        }
-    });
-    $("#compareinv2barcd").click(function() {
-        if( $("#compareinv2barcd").attr('checked') ) {
-            $("fieldset#optionalfilters").show();
-        } else {
-            $("fieldset#optionalfilters").hide();
-        }
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="tools_inventory" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -368,4 +247,130 @@ $(document).ready(function(){
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        function checkForm() {
+            if ( $('#uploadbarcodes').val() ) {
+                if ( !(
+                    $('#branchloop').val()   ||
+                    $('#locationloop').val() ||
+                    $('#minlocation').val()  ||
+                    $('#maxlocation').val()  ||
+                    $('#statuses input:checked').length
+                ) ) {
+                    return confirm(
+                        _("You have not selected any catalog filters and are about to compare a file of barcodes to your entire catalog.") + "\n\n" +
+                        _("For large catalogs this can result in unexpected behavior") + "\n\n" +
+                        _("Are you sure you want to do this?")
+                    );
+                }
+            }
+
+            return true;
+        }
+
+        $(document).ready(function(){
+            inventorydt = $('#inventoryt').dataTable($.extend(true, {}, dataTablesDefaults, {
+                'sPaginationType': 'full_numbers',
+                [% IF compareinv2barcd %]
+                    // sort on callnumber
+                    "aaSorting": [[ 1, "asc" ]],
+                [% ELSE %]
+                    // first column contains checkboxes
+                    "aoColumnDefs": [
+                        { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] },
+                    ],
+                    // 3rd column is callnumber
+                    "aaSorting": [[ 2, "asc" ]],
+                [% END %]
+                'fnDrawCallback': function() {
+                    //bind the click handler script to the newly created elements held in the table
+                    $('.openWin').bind('click',function(e){
+                        e.preventDefault();
+                        openWindow(this.href,'marcview',800,600);
+                    });
+                }
+            } ));
+
+
+            $("#continuewithoutmarkingbutton").click(function(){
+                inventorydt.fnPageChange( 'next' );
+                return false;
+            });
+
+            $("#markseenandcontinuebutton").click(function(){
+                var param = '';
+                $("input:checked").each(function() {
+                    param += "|" + $(this).attr('name');
+                });
+                $.post('/cgi-bin/koha/tools/ajax-inventory.pl', { seen: param });
+                inventorydt.fnPageChange( 'next' );
+                return false;
+            });
+
+            $("#markseenandquit").click(function(){
+                var param = '';
+                $("input:checked").each(function() {
+                    param += "|" + $(this).attr('name');
+                });
+                $.ajax({
+                  type: 'POST',
+                  url: '/cgi-bin/koha/tools/ajax-inventory.pl',
+                  data: { seen: param},
+                  async: false
+                });
+                document.location.href = '/cgi-bin/koha/tools/inventory.pl';
+                return false;
+            });
+
+
+            $(".checkall").click(function(){
+                    $(".checkboxed").checkCheckboxes();
+                    return false;
+                });
+            $(".clearall").click(function(){
+                    $(".checkboxed").unCheckCheckboxes();
+                    return false;
+                });
+            $("#inventory_form").on("submit",function(){
+                return checkForm();
+            });
+
+            // #uploadbarcodes and #compareinv2barcd determine the behavior of
+            // the controls within the barcode fieldset and the optional filters
+            $("#uploadbarcodes").change(function() {
+                if( $("#uploadbarcodes").val() ) {
+                    $("#setdate").prop('disabled',false);
+                    $("#compareinv2barcd").prop('disabled',false);
+                    $("#dont_checkin").prop('disabled',false);
+                    if( $("#compareinv2barcd").attr('checked') ) {
+                        $("fieldset#optionalfilters").show();
+                    } else {
+                        $("fieldset#optionalfilters").hide();
+                    }
+                } else {
+                    $("#setdate").prop('disabled',true);
+                    $("#compareinv2barcd").prop('disabled',true);
+                    $("#compareinv2barcd").attr('checked',false);
+                    $("#dont_checkin").prop('disabled',true);
+                    $("#dont_checkin").attr('checked',false);
+                    $("fieldset#optionalfilters").show();
+                }
+            });
+            $("#compareinv2barcd").click(function() {
+                if( $("#compareinv2barcd").attr('checked') ) {
+                    $("fieldset#optionalfilters").show();
+                } else {
+                    $("fieldset#optionalfilters").hide();
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
