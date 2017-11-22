@@ -1,49 +1,12 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization [% IF step == 2 %]&rsaquo; Confirm[% END %][% IF step == 3 %]&rsaquo; Finished[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#delete_patrons_form").on("submit",function(){
-            return checkForm( this );
-        });
-    });
-
-        /**
-         *  checkForm(form)
-         *  This function check the form is correctly filled.
-         */
-          function checkForm(form) {
-              if((form.checkbox[0].checked)){
-                  if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) [% IF Koha.Preference('TrackLastPatronActivity') %]&& (!form.borrower_lastseen.value) [% END %]&& (!form.borrower_categorycode.value) && (!form.patron_list_id.value)){
-                    alert(_("Please enter at least one criterion for deletion!"));
-                    return false;
-                  }
-              }
-              if((form.checkbox[1].checked)){
-                  if(!(form.date2.value)){
-                      alert(_("Please enter a date!"));
-                      return false;
-                  }
-              }
-              if(!form.checkbox[0].checked && !form.checkbox[1].checked) {
-                alert( _("Please check at least one action") );
-                return false;
-              }
-              return true;
-          }
-
-    $(document).ready(function() {
-        $('#branch').change(function() {
-            $('#selectlibrary').submit();
-        });
-    });
-</script>
-
 </head>
+
 <body id="tools_cleanborrowers" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -240,4 +203,45 @@
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#delete_patrons_form").on("submit",function(){
+                return checkForm( this );
+            });
+
+            $('#branch').change(function() {
+                $('#selectlibrary').submit();
+            });
+        });
+
+        /**
+         *  checkForm(form)
+         *  This function check the form is correctly filled.
+         */
+        function checkForm(form) {
+            if((form.checkbox[0].checked)){
+                if ( (!form.date1.value) && (!form.borrower_dateexpiry.value) [% IF Koha.Preference('TrackLastPatronActivity') %]&& (!form.borrower_lastseen.value) [% END %]&& (!form.borrower_categorycode.value) && (!form.patron_list_id.value)){
+                  alert(_("Please enter at least one criterion for deletion!"));
+                  return false;
+                }
+            }
+            if((form.checkbox[1].checked)){
+                if(!(form.date2.value)){
+                    alert(_("Please enter a date!"));
+                    return false;
+                }
+            }
+            if(!form.checkbox[0].checked && !form.checkbox[1].checked) {
+              alert( _("Please check at least one action") );
+              return false;
+            }
+            return true;
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

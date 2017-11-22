@@ -1,27 +1,11 @@
 [% USE Koha %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Overdue notice/status triggers</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-var tab_map = { "1" : _("First"), "2" : _("Second"), "3" : _("Third")};
-$(document).ready(function() {
-    $('#selectlibrary').find("input:submit").hide();
-    $('#branch').change(function() {
-            $('#selectlibrary').submit();
-    });
-    $("li>a.tab").each( function(){
-        var id = $(this).attr("data-number");
-        $(this).html(tab_map[id]);
-    } );
-    $('#rulestabs').tabs();
-});
-//]]>
-</script>
-
 </head>
+
 <body id="tools_overduerules" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -170,4 +154,23 @@ $(document).ready(function() {
         [% INCLUDE 'tools-menu.inc' %]
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript">
+        var tab_map = { "1" : _("First"), "2" : _("Second"), "3" : _("Third")};
+        $(document).ready(function() {
+            $('#selectlibrary').find("input:submit").hide();
+            $('#branch').change(function() {
+                $('#selectlibrary').submit();
+            });
+            $("li>a.tab").each( function(){
+                var id = $(this).attr("data-number");
+                $(this).html(tab_map[id]);
+            });
+            $('#rulestabs').tabs();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
