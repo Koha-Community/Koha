@@ -83,7 +83,8 @@ sub edit {
 
             # Format wants_digest and days_in_advance values
             my $wants_digest = $body->{$in}->{'digest'} ?
-                $body->{$in}->{'digest'}->{'value'} ? 1 : 0 : 0;
+                $body->{$in}->{'digest'}->{'value'} ? 1 : 0 : $preference ?
+                $preference->wants_digest ? 1 : 0 : 0;
             my $days_in_advance = $body->{$in}->{'days_in_advance'} ?
                 defined $body->{$in}->{'days_in_advance'}->{'value'} ?
                     $body->{$in}->{'days_in_advance'}->{'value'} : undef : undef;
