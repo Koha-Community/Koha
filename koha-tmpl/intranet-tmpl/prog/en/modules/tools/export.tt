@@ -207,7 +207,7 @@ $(document).ready(function() {
             <select name="authtype" id="authtype">
                 <option value="">-- All --</option>
                 [% FOREACH authority_type IN authority_types %]
-                    <option value="[% authtypeloo.value %]">[% authtypeloo.description %]</option>
+                    <option value="[% authority_type.authtypecode %]">[% authority_type.authtypetext %]</option>
                 [% END %]
             </select>
         </li>
