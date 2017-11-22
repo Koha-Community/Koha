@@ -115,7 +115,11 @@
                 <fieldset class="action">
                     <input type="submit" value="Save" class="submit" />
 
-                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id %]" class="cancel">Cancel</a>
+                    [% IF course_id %]
+                        <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id %]" class="cancel">Cancel</a>
+                    [% ELSE %]
+                        <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
+                    [% END %]
                 </fieldset>
             </form>
         </div>
