@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Import patrons [% IF ( uploadborrowers ) %]&rsaquo; Results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -9,20 +10,11 @@
     .line_error { width: 100%; }
     code { background-color: yellow; }
 </style>
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        [%# Make date fields have the datepicker %]
-        $("#dateenrolled").addClass('datepicker');
-        $("#dateexpiry").addClass('datepicker');
-        $("#dateofbirth").addClass('datepicker');
-    });
-</script>
 </head>
+
 <body id="tools_import_borrowers" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-[% INCLUDE 'calendar.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a>[% IF ( uploadborrowers ) %] &rsaquo; Results[% END %]</div>
 
@@ -245,4 +237,17 @@ Alternatively, you can supply dates in ISO format.
 [% INCLUDE 'tools-menu.inc' %]
   </div>
  </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            [%# Make date fields have the datepicker %]
+            $("#dateenrolled, #dateexpiry, #dateofbirth").datepicker();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
