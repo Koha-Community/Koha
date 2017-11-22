@@ -253,11 +253,11 @@ sub t_held {
     is($rule->reservesallowed, 9001, 'As I look at circulation rules, I can see that many reserves are allowed.');
     ok($reserve_id, 'I have placed a hold on an item.');
     is($hold->itemnumber, $item->itemnumber, 'The item I have hold for is the same item I will check availability for.');
-    ok($availability->available, 'When I request availability, then the item is available.');
+    ok(!$availability->available, 'When I request availability, then the item is not available.');
     ok(!$availability->confirm, 'Then there is nothing to be confirmed.');
-    ok(!$availability->unavailable, 'Then there are no reasons for unavailability.');
-    is($availability->note, 1, 'Then there is one additional note.');
-    is(ref($availability->notes->{$expecting}), $expecting,
+    ok(!$availability->note, 'Then there is one additional note.');
+    is($availability->unavailable, 1, 'Then there is only one unavailability reason.');
+    is(ref($availability->unavailabilities->{$expecting}), $expecting,
         'Then there is an additional note indicating that I have already held this.');
 };
 

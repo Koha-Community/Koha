@@ -52,7 +52,7 @@ sub in_opac {
     }
 
     if (!$params->{'ignore_holds'}) {
-        $self->note($reason) if $reason = $itemcalc->held;
+        $self->unavailable($reason) if $reason = $itemcalc->held;
     }
     if (!$params->{'ignore_transfer'}) {
         $self->unavailable($reason) if $reason = $itemcalc->transfer;
