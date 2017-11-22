@@ -2612,7 +2612,7 @@ sub CheckIssuingRules {
 
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $patron->categorycode,
-            itemtype     => $item->itype,
+            itemtype     => $item->effective_itemtype,
             branchcode   => $branch,
             ccode        => $item->ccode,
             permanent_location => $item->permanent_location,
