@@ -202,6 +202,8 @@ if ($show_results) {
 
     }
     else {
+        $from = 1;
+        $to = $total_hits;
         $displayprev = 0;
         $displaynext = 0;
     }
