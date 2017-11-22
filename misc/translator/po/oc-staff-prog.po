@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha\n"
-"POT-Creation-Date: 2017-10-15 12:16-0300\n"
+"POT-Creation-Date: 2017-11-16 00:11-0300\n"
 "PO-Revision-Date: 2016-10-07 11:34+0000\n"
 "Last-Translator: Cédric <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot en òc (totenoc.eu)\n"
@@ -850,7 +850,7 @@ msgstr "%s %s %s Desconegut %s"
 #. %1$s:  END 
 #. %2$s:  IF close_form 
 #. %3$s:  IF budget_periods.size == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:422
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
 #, c-format
 msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
@@ -2031,7 +2031,7 @@ msgstr ""
 #. %3$s:  IF r.unspent_moved 
 #. %4$s:  r.unspent_moved | $Price 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:517
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:527
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
 msgstr "%s %s%s (%s lo reliquat es estat desplaçat)%s"
@@ -2766,7 +2766,7 @@ msgstr "%s (tampat)"
 
 #. %1$s:  r.budget.budget_name 
 #. %2$s:  r.budget.budget_id 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:508
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:518
 #, c-format
 msgid "%s (id=%s)"
 msgstr "%s (id=%s)"
@@ -2777,7 +2777,7 @@ msgstr "%s (id=%s)"
 #. %4$s:  IF r.unspent_moved 
 #. %5$s:  r.unspent_moved | $Price 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:510
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
 msgstr "%s (id=%s) Montant=%s%s (%s restant es estat reportat)%s"
@@ -3622,7 +3622,7 @@ msgstr "%s Cap d'accion pas definida pel modèl. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
 #, c-format
 msgid "%s No active budgets %s "
 msgstr "%s Pas de budgèt actiu %s "
@@ -3654,7 +3654,7 @@ msgstr "%s Reservacion pas autorizada "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:606
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:620
 #, c-format
 msgid "%s No inactive budgets %s "
 msgstr "%s pas de budgèt inactiu %s "
@@ -4262,7 +4262,7 @@ msgstr ""
 "qualques errors se son produitas. %s"
 
 #. %1$s:  ELSIF number_of_unreceived_orders == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
 #, c-format
 msgid "%s There are no unreceived orders for this budget. "
 msgstr "%s I a pas de comandas pas recepcionadas per aqueste budgèt. "
@@ -4612,9 +4612,9 @@ msgstr "%s per %s%s "
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) |html 
 #. %6$s:  biblioitem.publishercode |html 
-#. %7$s:  biblioitem.collectiontitle |html 
+#. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s par%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
@@ -7808,7 +7808,7 @@ msgstr "&rsaquo; Voliatz dire ?"
 # http://pro.test15.biblibre.com/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&budget_period_id=4
 #. %1$s:  END 
 #. %2$s:  IF close_form 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
 #, c-format
 msgid "&rsaquo; Duplicate budget %s %s "
 msgstr "&rsaquo; Duplicar lo budgèt %s %s "
@@ -8868,7 +8868,7 @@ msgstr ""
 msgid "(adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr "(reglat per %s) %sTTC %sHT %s) %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:300
 #, c-format
 msgid "(amounts will be rounded down)"
 msgstr ""
@@ -8878,7 +8878,7 @@ msgstr ""
 msgid "(budgeted cost * quantity) "
 msgstr "(prètz remisat budgetat * quantitat)"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:288
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
 #, c-format
 msgid "(can be positive or negative)"
 msgstr ""
@@ -9304,7 +9304,7 @@ msgstr "-- pas cap -- "
 msgid "-- please choose --"
 msgstr "-- causissètz --"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid ". Deletion is not possible."
@@ -9778,8 +9778,8 @@ msgid "Account summary: %s %s (%s)"
 msgstr "Compte de : %s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:81
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
 #, c-format
 msgid "Account type"
 msgstr "Tipe de compte"
@@ -9950,8 +9950,8 @@ msgstr "Accion se i a pas de concordància : "
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:257
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:261
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:589
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:567
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:603
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
@@ -10036,7 +10036,7 @@ msgstr "Activar la sincronizacion:"
 msgid "Active"
 msgstr "Actiu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
 #, c-format
 msgid "Active budgets"
 msgstr "Budgèts actius"
@@ -10236,8 +10236,8 @@ msgstr "Apondre un registre per "
 msgid "Add biblio"
 msgstr "Apondre una notícia"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:223
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:324
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:330
 #, c-format
 msgid "Add budget"
 msgstr "Apondre un budgèt"
@@ -10297,7 +10297,7 @@ msgstr "Apondre aqueste camp"
 msgid "Add filing rule"
 msgstr "Apondre règla de classament"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:29
 #, c-format
 msgid "Add fund"
 msgstr "Apondre un pòste budgetari"
@@ -10808,7 +10808,7 @@ msgstr "Adreça : "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:33
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:222
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:22
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -11165,7 +11165,6 @@ msgid "All item types"
 msgstr "Totes los tipes de document"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:110
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:254
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:189
@@ -11460,8 +11459,8 @@ msgstr "Amit Gupta"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:759
 #: intranet-tmpl/prog/en/modules/members/pay.tt:84
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:181
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:43
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
@@ -11471,14 +11470,14 @@ msgid "Amount"
 msgstr "Montant"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Amount must be a valid number, or empty"
 msgstr "Lo montant deu èsser un nombre valide, o vide"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:85
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:42
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:127
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
 #, c-format
 msgid "Amount outstanding"
 msgstr "Montant a recobrar"
@@ -13020,9 +13019,9 @@ msgstr "Licéncia BSD"
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:528
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:538
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:83
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:132
 #, c-format
@@ -13239,7 +13238,7 @@ msgid "Basic parameters"
 msgstr "Paramètres de basa"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:499
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
@@ -14054,7 +14053,7 @@ msgstr "Consultation dels logs del sistèma"
 msgid "Bruno Toumi"
 msgstr "Bruno Toumi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "Budget "
 msgstr "Budgèt "
@@ -14071,17 +14070,17 @@ msgid "Budget %s [id=%s]%s (inactive)%s"
 msgstr "Budgèt %s [id=%s]%s (inactive)%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Budget description missing"
 msgstr "Descripcion de budgèt absenta"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:498
 #, c-format
 msgid "Budget id"
 msgstr "ID Budgèt"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:548
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:584
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:562
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
 #, c-format
 msgid "Budget name"
 msgstr "Nom del budgèt"
@@ -14110,11 +14109,11 @@ msgstr "Prètz remisat (budgetat) : "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:238
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:242
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:233
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:244
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:248
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:69
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:95
@@ -14122,8 +14121,8 @@ msgstr "Prètz remisat (budgetat) : "
 msgid "Budgets"
 msgstr "Budgèts"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:533
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:543
 #, c-format
 msgid "Budgets administration"
 msgstr "Gestion dels Budgèts"
@@ -14632,10 +14631,10 @@ msgstr "Impossible d'enregistrar la notícia, los camps seguents son vides :"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:207
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:384
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:386
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:390
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:206
@@ -14698,9 +14697,9 @@ msgstr "Impossible d'enregistrar la notícia, los camps seguents son vides :"
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
 #: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:155
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:196
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:225
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:120
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
@@ -14967,13 +14966,14 @@ msgstr "Prèst impossible ! %s"
 msgid "Cannot delete"
 msgstr "Supression impossibla"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:407
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:412
 #, c-format
 msgid "Cannot delete budget"
 msgstr "Impossible de suprimir lo budgèt"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
 #, c-format
 msgid "Cannot delete budget '%s'"
 msgstr "Impossible de suprimir lo budgèt \"%s\""
@@ -15462,7 +15462,7 @@ msgstr "Las cellulas contenon unicament de valors estimées."
 msgid "Change"
 msgstr "Cambiar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:286
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
 #, fuzzy, c-format
 msgid "Change amounts by"
 msgstr "Montant de l'emenda : "
@@ -17017,7 +17017,7 @@ msgstr "Fracàs de la còpia de las règlas de prèst !"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:26
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:259
@@ -17048,7 +17048,7 @@ msgstr "Tampar e imprimir"
 msgid "Close basket group"
 msgstr "Tampar lo registre"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:245
 #, c-format
 msgid "Close budget "
 msgstr "Clausurar lo budgèt"
@@ -17167,8 +17167,8 @@ msgstr "         Tot redusir        "
 msgid "Collapsed"
 msgstr "Replegat"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:146
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:211
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:147
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:214
 #, c-format
 msgid "Collect from patron: "
 msgstr "Perçu de l'aderent : "
@@ -17473,8 +17473,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:230
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:266
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:315
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:153
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:224
 #, c-format
 msgid "Confirm"
 msgstr "Confirmar"
@@ -19486,7 +19486,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:14
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:19
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:173
@@ -19639,8 +19640,8 @@ msgstr "Suprimir lo lot"
 
 #. For the first occurrence,
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:231
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #, c-format
 msgid "Delete budget '%s'?"
 msgstr "Suprimir lo budgèt '%s' ?"
@@ -20037,7 +20038,7 @@ msgstr "Departament"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:253
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:259
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:287
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:292
@@ -20050,8 +20051,8 @@ msgstr "Departament"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:57
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:206
 #: intranet-tmpl/prog/en/modules/members/pay.tt:79
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:175
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
@@ -20091,7 +20092,7 @@ msgstr "La descripcion es obligatòri"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Description missing"
 msgstr "La descripcion es mancanta"
 
@@ -20123,7 +20124,7 @@ msgstr "Descripcion :"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:79
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:349
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
@@ -20175,7 +20176,7 @@ msgstr "Notícia de destinacion"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:501
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:660
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:81
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
@@ -20774,7 +20775,7 @@ msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:146
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
 #, c-format
@@ -20786,7 +20787,7 @@ msgstr "Duplicar"
 msgid "Duplicate "
 msgstr "Duplicar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:260
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:266
 #, c-format
 msgid "Duplicate budget"
 msgstr "Duplicar budgèt raiç"
@@ -20968,7 +20969,7 @@ msgstr "Ed Summers (Codes e paquetages Perl tels que MARC::Record)"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:136
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:23
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:23
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
@@ -21507,8 +21508,8 @@ msgstr "Data de fin : "
 
 #: intranet-tmpl/prog/en/columns.def:149
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:183
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:550
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:586
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:600
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:371
 #, c-format
 msgid "End date"
@@ -21526,7 +21527,7 @@ msgstr "La data de fin es pas cohérente amb la durada de l'abonament."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "End date missing"
 msgstr "Data de fin mancanta"
 
@@ -21537,8 +21538,8 @@ msgstr "Data de fin mancanta"
 msgid "End date:"
 msgstr "Data de fin :"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #, c-format
 msgid "End date: "
@@ -22502,6 +22503,11 @@ msgstr "Impossible d'aplicar las règlas de concordància"
 msgid "Failed to approve term (%s). %s"
 msgstr "         AJAX a fracassat a aprovar lo tag : %s        "
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:546
+#, c-format
+msgid "Failed to delete budget because funds exist."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:42
 #, c-format
 msgid "Failed to delete field."
@@ -23249,7 +23255,7 @@ msgstr "Deute remise"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:8
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:15
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:15
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:24
@@ -23613,7 +23619,7 @@ msgstr ""
 msgid "Fund amount:"
 msgstr "Montant del pòste budgetari :"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:440
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:450
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:154
 #, c-format
@@ -23631,12 +23637,12 @@ msgstr "Còdi del pòste budgetari : "
 msgid "Fund filters"
 msgstr "Filtres sus los pòstes budgetaris"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:449
 #, c-format
 msgid "Fund id"
 msgstr "Identificant del fons budgetari"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "Fund list of budget "
 msgstr "Lista dels pòstes budgetaris del budgèt "
@@ -23646,7 +23652,7 @@ msgstr "Lista dels pòstes budgetaris del budgèt "
 msgid "Fund locked"
 msgstr "Pòste budgetari verrolhat"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:441
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:451
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:155
@@ -23962,7 +23968,7 @@ msgid "Go to advanced search"
 msgstr "Recèrca avançada"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:13
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:14
 msgid "Go to item details"
 msgstr "Anar al detalh dels exemplars"
@@ -23985,7 +23991,7 @@ msgid "Go to receipt page"
 msgstr "Anatz a la pagina Recepcion"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:7
 msgid "Go to record detail page"
 msgstr "Anatz a la pagina detalh de la notícia"
@@ -24700,7 +24706,7 @@ msgstr "Periòde de tampadura repetida cada annada"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:21
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -25341,7 +25347,7 @@ msgstr ""
 msgid "If all unavailable"
 msgstr "%s indisponible :"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
 #, c-format
 msgid "If amounts changed, round to a multiple of"
 msgstr ""
@@ -25907,7 +25913,7 @@ msgstr "Vòstre panièr"
 msgid "Inactive"
 msgstr "Inactiu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:554
 #, c-format
 msgid "Inactive budgets"
 msgstr "Budgèts inactius"
@@ -27996,7 +28002,7 @@ msgstr ""
 #. %17$s:  IF closed 
 #. %18$s:  budget_period_description 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:183
 #, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets %s&rsaquo; %s Modify budget %s "
@@ -29794,7 +29800,7 @@ msgstr "Koha &rsaquo; Aisinas &rsaquo; Cargar dels imatges"
 msgid "Koha &rsaquo; Tools &rsaquo; Upload patron images"
 msgstr "Koha &rsaquo; Aisinas &rsaquo; Cargar de fòtos d'aderents"
 
-#. %1$s:  bookselname 
+#. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:79
 #, c-format
 msgid "Koha &rsaquo; Vendor %s"
@@ -30433,8 +30439,8 @@ msgid "Letter"
 msgstr "Letra"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, c-format
 msgid "Level"
 msgstr "Nivèl"
@@ -30836,6 +30842,12 @@ msgstr "Nom de la lista"
 msgid "List name: "
 msgstr "Nom de la lista: "
 
+#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
+#, fuzzy, c-format
+msgid "List of biblionumbers or authority ids (one per line): "
+msgstr "Lista de numèros d'exemplars (une per linha) : "
+
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:185
 #, fuzzy, c-format
 msgid "List of rules"
@@ -31067,15 +31079,15 @@ msgstr "Localizacion :"
 msgid "Locations"
 msgstr "Emplaçaments"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:378
 #, c-format
 msgid "Lock budget: "
 msgstr "Clore lo budgèt: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:551
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:587
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:565
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:578
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:601
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:612
 #, c-format
 msgid "Locked"
 msgstr "Verrolhat"
@@ -31534,7 +31546,7 @@ msgstr ""
 "1èr d'Agost de 2012 per ne far un jorn de tampadura, sens afectar las "
 "annadas seguentas."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #, c-format
 msgid "Make budget active: "
 msgstr "Activar lo budgèt : "
@@ -31958,7 +31970,7 @@ msgstr "Marcar coma vist e acabar"
 msgid "Mark selected as: "
 msgstr "Marcar los elements seleccionats comme: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:304
 #, c-format
 msgid "Mark the original budget as inactive"
 msgstr "Marcar lo budgèt initial coma inactiu "
@@ -32562,13 +32574,13 @@ msgstr "Modificar una comuna"
 msgid "Modify authority #%s %s"
 msgstr "Modificar l'autoritat n° %s %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:322
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:328
 #, c-format
 msgid "Modify budget "
 msgstr "Modificar un budgèt "
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
 #, c-format
 msgid "Modify budget '%s'"
 msgstr "Modificar lo budgèt \"%s\""
@@ -32865,7 +32877,7 @@ msgstr "Desplaçar la reservacion tot amont"
 msgid "Move hold up"
 msgstr "Desplaçar la reservacion cap amont"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:469
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:479
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr "Desplaçar los fonds non depensats restants"
@@ -32886,11 +32898,11 @@ msgid "Move to previous position"
 msgstr "Retorn a la pagina precedenta"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:477
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:487
 msgid "Move unreceived orders"
 msgstr "Desplaçar las comandas non recebudas"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:503
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:513
 #, c-format
 msgid "Moved!"
 msgstr "Desplaçat !"
@@ -34344,7 +34356,7 @@ msgstr "Non, suprimir pas"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:221
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:128
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:428
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:123
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
@@ -34703,7 +34715,7 @@ msgstr "Nòta:"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:575
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:216
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:219
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:210
 #, c-format
@@ -34903,8 +34915,8 @@ msgid "Notified by"
 msgstr "Notificat per"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
 #, c-format
 msgid "Notify id"
 msgstr "Identificant notificador"
@@ -35882,7 +35894,7 @@ msgstr "Montant de la comanda"
 msgid "Ordering information"
 msgstr "Paramètres per las comandas"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:490
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
 #, c-format
 msgid "Ordernumber"
 msgstr "Numèro de comanda"
@@ -37090,17 +37102,17 @@ msgstr "Pagar emendas"
 msgid "Pay amount"
 msgstr "Pagar lo montant"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "Pagar un montant per totas las emendas"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "Pagar un montant per las emendas seleccionadas"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:117
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:118
 #, c-format
 msgid "Pay an individual fine"
 msgstr "Pagar individualament una emenda"
@@ -39536,12 +39548,6 @@ msgstr "Règlas de concordància"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
-#, c-format
-msgid "Record number list (one per line): "
-msgstr "Lista de numèros d'exemplars (une per linha) : "
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #, fuzzy
@@ -40171,7 +40177,7 @@ msgstr "Rapòrt %s"
 #. %4$s:  to_budget_period.budget_period_description 
 #. %5$s:  to_budget_period.budget_period_startdate | $KohaDates 
 #. %6$s:  to_budget_period.budget_period_enddate | $KohaDates
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:483
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:493
 #, c-format
 msgid ""
 "Report after moving unreceived orders from budget %s (%s - %s) to %s (%s - "
@@ -41190,7 +41196,7 @@ msgstr "Samedi"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:206
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:381
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:387
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:205
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
@@ -41258,7 +41264,7 @@ msgid "Save "
 msgstr "Enregistrar "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 msgid "Save Changes"
 msgstr "Enregistrar"
 
@@ -42235,7 +42241,7 @@ msgstr ""
 msgid "Select a borrower category"
 msgstr "Seleccionatz una categoria d'aderent"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
 #, c-format
 msgid "Select a budget"
 msgstr "Seleccionatz un pòste budgetari"
@@ -42862,7 +42868,7 @@ msgstr "Vòstra session a pris fin, mercé de vous reconnecter"
 msgid "Session timed out."
 msgstr "La session a pris fin."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:303
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:309
 #, c-format
 msgid "Set all funds to zero"
 msgstr "Remetre totes los pòstes budgetaris a zèro"
@@ -43920,6 +43926,11 @@ msgstr "Numèro normalizat"
 msgid "Standard number:"
 msgstr "Numèro normalizat"
 
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
+#, fuzzy, c-format
+msgid "Standard rules for all libraries"
+msgstr "Causissètz Pas cap per veire totes los sites"
+
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:123
 #, c-format
 msgid "Standing orders do not close when received."
@@ -43932,8 +43943,8 @@ msgstr "Data de début: "
 
 #: intranet-tmpl/prog/en/columns.def:148
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:549
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:585
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:563
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:599
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
 #, c-format
 msgid "Start date"
@@ -43941,13 +43952,13 @@ msgstr "Data de début"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date missing"
 msgstr "Data de començamentmancanta"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date must be before end date"
 msgstr "La data de començamentdeu èsser avant la data de fin"
 
@@ -43959,8 +43970,8 @@ msgid "Start date:"
 msgstr "Data de début:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:29
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:269
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Start date: "
@@ -46433,7 +46444,7 @@ msgstr ""
 "aquesta valor per un o mantun virtual hosts."
 
 # On utilise partout lo terme "pòste budgetari" per traduire "found"
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "The unreceived orders from the following funds will be moved"
 msgstr ""
@@ -46748,7 +46759,7 @@ msgstr ""
 msgid "There were %s barcodes that were too long."
 msgstr "I aviá %s còdi(s) de barras tròp long(s)."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:511
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:521
 #, c-format
 msgid "There were no unreceived orders for this fund."
 msgstr ""
@@ -46811,7 +46822,7 @@ msgid "Third"
 msgstr "Troisième retard"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "This action cannot be reversed. Do you wish to continue?"
 msgstr "Aquesta accion es irréversible. Souhaitez-vous contunhar ?"
 
@@ -46824,6 +46835,15 @@ msgstr "Aqueste atribut serà solament utilizat per la categoria d'usatgièr %s"
 #, fuzzy, c-format
 msgid "This authority type cannot be deleted"
 msgstr "Aquestes exemplars seràn pas suprimits"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:413
+#, fuzzy, c-format
+msgid ""
+"This budget has funds attached. You must delete all attached funds before "
+"you can delete this budget."
+msgstr ""
+"%s exemplar(s) son estacats a aquesta notícia. Vos cal suprimir totes los "
+"exemplars abans de suprimir aquesta notícia."
 
 #. %1$s:  patrons_in_category 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:247
@@ -46870,7 +46890,7 @@ msgstr ""
 "suprimir malgrat tot ?"
 
 # On utilise partout lo terme "pòste budgetari" per traduire "found"
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:520
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:530
 #, c-format
 msgid "This fund code does not exist in the destination budget."
 msgstr ""
@@ -47178,7 +47198,7 @@ msgstr "Aquesta notícia es utilizada "
 
 #. For the first occurrence,
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid "This record is used %s times"
@@ -48002,8 +48022,8 @@ msgstr "Marge de naut del tèxte :"
 msgid "Topics"
 msgstr "Subjèctes (autres)"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:552
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:566
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:602
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:301
 #: intranet-tmpl/prog/en/modules/tags/review.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:199
@@ -48066,7 +48086,7 @@ msgstr "Montant total del solde creditor : %s"
 msgid "Total amount of cash collected: %s "
 msgstr "Montant total encaissat en liquid : %s "
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:210
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "Montant total impagat : "
@@ -48077,7 +48097,7 @@ msgstr "Montant total impagat : "
 msgid "Total amount paid: %s"
 msgstr "Montant Total pagat : %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:129
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:130
 #, c-format
 msgid "Total amount payable:"
 msgstr "Montant total de pagar :"
@@ -48088,12 +48108,12 @@ msgstr "Montant total de pagar :"
 msgid "Total amount refunds: %s"
 msgstr "Montant total dels remborsaments : %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #, c-format
 msgid "Total amount to be written off:"
 msgstr "Total de las pèrdas e profièches :"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:357
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:363
 #, c-format
 msgid "Total amount: "
 msgstr "Montant total "
@@ -48811,7 +48831,7 @@ msgstr "(Desconegut)"
 msgid "Unpacking completed"
 msgstr "Descompression acabada"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:452
 #, c-format
 msgid "Unreceived orders"
 msgstr "Comandas non recebudas"
@@ -49715,13 +49735,13 @@ msgid "View final record"
 msgstr "Veire enregistrament final"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:559
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 msgid "View funds for [% period_active.budget_period_description %]"
 msgstr ""
 "Veire los pòstes budgetaris per [% period_active.budgèt_period_descripcion %]"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:595
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:609
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr ""
 "Veire los pòstes budgetaris per [% period_loo.budgèt_period_descripcion %]"
@@ -50300,7 +50320,7 @@ msgstr "Pèrdas e profièches"
 msgid "Write off all"
 msgstr "Tot en pèrdas e profièches"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:159
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:161
 #, c-format
 msgid "Write off an individual fine"
 msgstr "Una emenda individuala en pèrdas e profièches"
@@ -50311,7 +50331,7 @@ msgid "Write off fines and fees"
 msgstr "Una emenda individuala en pèrdas e profièches"
 
 #. INPUT type=submit name=confirm_writeoff
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
 #, fuzzy
 msgid "Write off this charge"
 msgstr "Passer aqueste montant en Pèrdas e profièches"
@@ -50440,7 +50460,7 @@ msgstr "Òc, tampar (Y)"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
@@ -50864,7 +50884,7 @@ msgstr ""
 "plusieurs valors."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "You have chosen to move all unreceived orders from '%s' to '%s'."
 msgstr ""
 "Avètz causit de desplaçar totas las comandas non recebudas de '%s' a '%s'."
@@ -51465,6 +51485,16 @@ msgstr "[% IF ( date2 ) %][% date2 %][% ELSE %]demain[% END %]"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:814
 msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
+
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#, fuzzy
+msgid ""
+"[% block_budget.count %] fund(s) are attached to this budget. You must "
+"delete all attached funds before deleting this budget."
+msgstr ""
+"[% count %] exemplar(s) son estacat(s) a aquesta notícia. Vos cal totes los "
+"suprimir totes los exemplars abans de suprimir aquesta notícia."
 
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:198
@@ -52178,7 +52208,7 @@ msgstr "causir"
 msgid "click to log out"
 msgstr "clicar per se desconnectar"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "closed"
 msgstr "tampat"

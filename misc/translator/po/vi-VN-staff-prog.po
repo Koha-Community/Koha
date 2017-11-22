@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-15 12:50-0300\n"
+"POT-Creation-Date: 2017-11-16 00:50-0300\n"
 "PO-Revision-Date: 2014-10-08 03:44+0000\n"
 "Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -825,7 +825,7 @@ msgstr "%s %s %s không rõ %s "
 #. %1$s:  END 
 #. %2$s:  IF close_form 
 #. %3$s:  IF budget_periods.size == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:422
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
 #, c-format
 msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
@@ -1938,7 +1938,7 @@ msgstr ""
 #. %3$s:  IF r.unspent_moved 
 #. %4$s:  r.unspent_moved | $Price 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:517
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:527
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
 msgstr ""
@@ -2668,7 +2668,7 @@ msgstr "%s (Đã đóng)"
 
 #. %1$s:  r.budget.budget_name 
 #. %2$s:  r.budget.budget_id 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:508
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:518
 #, fuzzy, c-format
 msgid "%s (id=%s)"
 msgstr "%s (%s ngày)"
@@ -2679,7 +2679,7 @@ msgstr "%s (%s ngày)"
 #. %4$s:  IF r.unspent_moved 
 #. %5$s:  r.unspent_moved | $Price 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:510
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
 msgstr ""
@@ -3516,7 +3516,7 @@ msgstr "%s Không xác định %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
 #, c-format
 msgid "%s No active budgets %s "
 msgstr "%s Không có ngân sách đang hoạt động %s "
@@ -3548,7 +3548,7 @@ msgstr "%s Không cho phép đặt mượn "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:606
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:620
 #, c-format
 msgid "%s No inactive budgets %s "
 msgstr "%s Không có ngân sách dừng hoạt động %s "
@@ -4142,7 +4142,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  ELSIF number_of_unreceived_orders == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
 #, fuzzy, c-format
 msgid "%s There are no unreceived orders for this budget. "
 msgstr "%sBạn chưa nhận được đơn hàng nào.%s "
@@ -4486,9 +4486,9 @@ msgstr "%s_Tác giả: %s%s "
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) |html 
 #. %6$s:  biblioitem.publishercode |html 
-#. %7$s:  biblioitem.collectiontitle |html 
+#. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #, fuzzy, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s %s %s %s Không có %s "
@@ -7693,7 +7693,7 @@ msgstr "&rsaquo; Tùy chỉnh riêng?"
 
 #. %1$s:  END 
 #. %2$s:  IF close_form 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
 #, fuzzy, c-format
 msgid "&rsaquo; Duplicate budget %s %s "
 msgstr "Sao chép %s"
@@ -8766,7 +8766,7 @@ msgstr ""
 msgid "(adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr "(được điều chỉnh cho %s, %sSau thuế%sTrước thuế%s) %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:300
 #, c-format
 msgid "(amounts will be rounded down)"
 msgstr ""
@@ -8776,7 +8776,7 @@ msgstr ""
 msgid "(budgeted cost * quantity) "
 msgstr "(bằng giá thanh toán * số lượng) %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:288
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
 #, c-format
 msgid "(can be positive or negative)"
 msgstr ""
@@ -9203,7 +9203,7 @@ msgstr "-- Không -- "
 msgid "-- please choose --"
 msgstr "-- Chọn tại đây --"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid ". Deletion is not possible."
@@ -9683,8 +9683,8 @@ msgid "Account summary: %s %s (%s)"
 msgstr "Thông tin tài khoản bạn đọc:  %s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:81
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
 #, c-format
 msgid "Account type"
 msgstr "Kiểu tiền phạt"
@@ -9855,8 +9855,8 @@ msgstr "Xử lý nếu không tìm thấy: "
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:257
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:261
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:589
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:567
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:603
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
@@ -9941,7 +9941,7 @@ msgstr "Kích hoạt: "
 msgid "Active"
 msgstr "Kích hoạt"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
 #, c-format
 msgid "Active budgets"
 msgstr "Đang hoạt động"
@@ -10141,8 +10141,8 @@ msgstr "Tạo nhóm giỏ đặt hàng cho nhà cung cấp:  "
 msgid "Add biblio"
 msgstr "Tạo biểu ghi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:223
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:324
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:330
 #, c-format
 msgid "Add budget"
 msgstr "Tạo ngân sách"
@@ -10202,7 +10202,7 @@ msgstr "Thêm trường tìm kiếm"
 msgid "Add filing rule"
 msgstr "Tạo quy tắc phân loại"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:29
 #, c-format
 msgid "Add fund"
 msgstr "Tạo quỹ"
@@ -10712,7 +10712,7 @@ msgstr "Địa chỉ: "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:33
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:222
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:22
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -11070,7 +11070,6 @@ msgid "All item types"
 msgstr "Tất cả kiểu tài liệu"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:110
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:254
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:189
@@ -11366,8 +11365,8 @@ msgstr "Amit Gupta"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:759
 #: intranet-tmpl/prog/en/modules/members/pay.tt:84
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:181
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:43
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
@@ -11377,14 +11376,14 @@ msgid "Amount"
 msgstr "Số lượng"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Amount must be a valid number, or empty"
 msgstr "Số lượng phải là một con số có giá trị hoặc bỏ trống"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:85
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:42
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:127
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
 #, c-format
 msgid "Amount outstanding"
 msgstr "Còn nợ"
@@ -12915,9 +12914,9 @@ msgstr "BSD License"
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:528
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:538
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:83
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:132
 #, c-format
@@ -13134,7 +13133,7 @@ msgid "Basic parameters"
 msgstr "Thông số sơ bản"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:499
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
@@ -13944,7 +13943,7 @@ msgstr "Xem nhật ký hệ thống"
 msgid "Bruno Toumi"
 msgstr "Bruno Toumi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, fuzzy, c-format
 msgid "Budget "
 msgstr "Ngân sách"
@@ -13961,18 +13960,18 @@ msgid "Budget %s [id=%s]%s (inactive)%s"
 msgstr "Ngân sách %s [ID=%s]%s (Ngừng hoạt động)%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 #, fuzzy
 msgid "Budget description missing"
 msgstr "- Thiếu phần mô tả cho kiểu bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:498
 #, fuzzy, c-format
 msgid "Budget id"
 msgstr "Ngân sách"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:548
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:584
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:562
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
 #, c-format
 msgid "Budget name"
 msgstr "Ngân sách"
@@ -14001,11 +14000,11 @@ msgstr "Giá thanh toán: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:238
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:242
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:233
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:244
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:248
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:69
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:95
@@ -14013,8 +14012,8 @@ msgstr "Giá thanh toán: "
 msgid "Budgets"
 msgstr "Ngân sách"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:533
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:543
 #, c-format
 msgid "Budgets administration"
 msgstr "Quản lý ngân sách"
@@ -14527,10 +14526,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:207
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:384
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:386
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:390
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:206
@@ -14593,9 +14592,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
 #: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:155
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:196
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:225
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:120
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
@@ -14861,13 +14860,14 @@ msgstr "Hủy bỏ ghi mượn"
 msgid "Cannot delete"
 msgstr "Không thể xóa"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:407
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:412
 #, c-format
 msgid "Cannot delete budget"
 msgstr "Không thể xóa ngân sách"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
 #, fuzzy, c-format
 msgid "Cannot delete budget '%s'"
 msgstr "Không thể xóa ngân sách"
@@ -15351,7 +15351,7 @@ msgstr "Các ô chỉ chứa giá trị được ước tính."
 msgid "Change"
 msgstr "Sửa"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:286
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
 #, fuzzy, c-format
 msgid "Change amounts by"
 msgstr "Số lượng tiền phạt: "
@@ -16902,7 +16902,7 @@ msgstr "Việc sao chép chính sách lưu thông bị lỗi!"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:26
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:259
@@ -16933,7 +16933,7 @@ msgstr "Thoát và in"
 msgid "Close basket group"
 msgstr "Đóng nhóm giỏ đặt hàng"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:245
 #, fuzzy, c-format
 msgid "Close budget "
 msgstr "&rsaquo; Thông tin chi tiết khóa học "
@@ -17054,8 +17054,8 @@ msgstr "Thu gọn tất cả"
 msgid "Collapsed"
 msgstr "Ẩn"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:146
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:211
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:147
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:214
 #, c-format
 msgid "Collect from patron: "
 msgstr "Số tiền thanh toán: "
@@ -17359,8 +17359,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:230
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:266
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:315
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:153
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:224
 #, c-format
 msgid "Confirm"
 msgstr "Xác nhận"
@@ -19354,7 +19354,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:14
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:19
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:173
@@ -19507,8 +19508,8 @@ msgstr "Xóa giỏ đặt hàng"
 
 #. For the first occurrence,
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:231
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #, c-format
 msgid "Delete budget '%s'?"
 msgstr "Xóa ngân sách '%s'?"
@@ -19906,7 +19907,7 @@ msgstr "Đơn vị"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:253
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:259
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:287
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:292
@@ -19919,8 +19920,8 @@ msgstr "Đơn vị"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:57
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:206
 #: intranet-tmpl/prog/en/modules/members/pay.tt:79
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:175
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
@@ -19960,7 +19961,7 @@ msgstr "Trường mô tả bắt buộc phải khai báo"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Description missing"
 msgstr "Thiếu thông tin mô tả"
 
@@ -19992,7 +19993,7 @@ msgstr "Thông tin mô tả:"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:79
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:349
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
@@ -20044,7 +20045,7 @@ msgstr "Biểu ghi đích"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:501
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:660
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:81
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
@@ -20645,7 +20646,7 @@ msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:146
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
 #, c-format
@@ -20657,7 +20658,7 @@ msgstr "Sao chép"
 msgid "Duplicate "
 msgstr "Sao chép"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:260
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:266
 #, c-format
 msgid "Duplicate budget"
 msgstr "Sao chép ngân sách"
@@ -20837,7 +20838,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:136
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:23
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:23
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
@@ -21377,8 +21378,8 @@ msgstr "Đến ngày: "
 
 #: intranet-tmpl/prog/en/columns.def:149
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:183
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:550
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:586
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:600
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:371
 #, c-format
 msgid "End date"
@@ -21397,7 +21398,7 @@ msgstr "Ngày kết thúc không phù hợp với chiều dài ấn phẩm đị
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "End date missing"
 msgstr "Thiếu ngày kết thúc của ngân sách"
 
@@ -21408,8 +21409,8 @@ msgstr "Thiếu ngày kết thúc của ngân sách"
 msgid "End date:"
 msgstr "Ngày kết thúc:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #, c-format
 msgid "End date: "
@@ -22374,6 +22375,11 @@ msgstr "Không thể cập nhật khung khác"
 msgid "Failed to approve term (%s). %s"
 msgstr "AJAX bị lỗi để chấp nhận từ khóa: %s"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:546
+#, c-format
+msgid "Failed to delete budget because funds exist."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:42
 #, fuzzy, c-format
 msgid "Failed to delete field."
@@ -23116,7 +23122,7 @@ msgstr "Miễn giảm tiền phạt"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:8
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:15
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:15
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:24
@@ -23477,7 +23483,7 @@ msgstr "Thời gian hoạt động của quỹ vượt quá thời gian hoạt �
 msgid "Fund amount:"
 msgstr "Số lượng quỹ:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:440
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:450
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:154
 #, c-format
@@ -23495,12 +23501,12 @@ msgstr "Mã quỹ: "
 msgid "Fund filters"
 msgstr "Tìm kiếm quỹ"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:449
 #, fuzzy, c-format
 msgid "Fund id"
 msgstr "Nguồn quỹ: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, fuzzy, c-format
 msgid "Fund list of budget "
 msgstr "Chỉnh sửa %s"
@@ -23510,7 +23516,7 @@ msgstr "Chỉnh sửa %s"
 msgid "Fund locked"
 msgstr "Nguồn quỹ bị khóa"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:441
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:451
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:155
@@ -23826,7 +23832,7 @@ msgid "Go to advanced search"
 msgstr "Tìm kiếm nâng cao"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:13
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:14
 #, fuzzy
 msgid "Go to item details"
@@ -23850,7 +23856,7 @@ msgid "Go to receipt page"
 msgstr "Nhận tài liệu của đơn hàng"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:7
 #, fuzzy
 msgid "Go to record detail page"
@@ -24571,7 +24577,7 @@ msgstr "Kỳ nghỉ dài theo năm"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:21
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -25212,7 +25218,7 @@ msgstr ""
 msgid "If all unavailable"
 msgstr "%s tài liệu không sẵn sàng:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
 #, c-format
 msgid "If amounts changed, round to a multiple of"
 msgstr ""
@@ -25784,7 +25790,7 @@ msgstr "Giỏ tài liệu"
 msgid "Inactive"
 msgstr "Dừng hoạt động"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:554
 #, c-format
 msgid "Inactive budgets"
 msgstr "Không hoạt động"
@@ -27879,7 +27885,7 @@ msgstr ""
 #. %17$s:  IF closed 
 #. %18$s:  budget_period_description 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:183
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets %s&rsaquo; %s Modify budget %s "
@@ -29686,7 +29692,7 @@ msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bìa cho biể
 msgid "Koha &rsaquo; Tools &rsaquo; Upload patron images"
 msgstr "Koha &rsaquo; Công cụ bổ trợ &rsaquo; Nhập ảnh bạn đọc"
 
-#. %1$s:  bookselname 
+#. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:79
 #, c-format
 msgid "Koha &rsaquo; Vendor %s"
@@ -30325,8 +30331,8 @@ msgid "Letter"
 msgstr "Thông báo"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, c-format
 msgid "Level"
 msgstr "Mức độ"
@@ -30723,6 +30729,12 @@ msgstr "Tên giá sách ảo:"
 msgid "List name: "
 msgstr "Tên giá sách ảo: "
 
+#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
+#, fuzzy, c-format
+msgid "List of biblionumbers or authority ids (one per line): "
+msgstr "Danh sách thẻ bạn đọc (Mỗi thẻ 1 dòng): "
+
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:185
 #, fuzzy, c-format
 msgid "List of rules"
@@ -30955,15 +30967,15 @@ msgstr "Kho tài liệu:"
 msgid "Locations"
 msgstr "Kho tài liệu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:378
 #, c-format
 msgid "Lock budget: "
 msgstr "Khóa ngân sách: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:551
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:587
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:565
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:578
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:601
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:612
 #, c-format
 msgid "Locked"
 msgstr "Khóa"
@@ -31419,7 +31431,7 @@ msgstr ""
 "Tùy chọn này sẽ tạo ra một ngày nghỉ đơn lẻ, ngày nghỉ chỉ áp dụng trên ngày "
 "hiện tại."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #, c-format
 msgid "Make budget active: "
 msgstr "Kích hoạt: "
@@ -31841,7 +31853,7 @@ msgstr "Đánh dấu tìm thấy và thoát"
 msgid "Mark selected as: "
 msgstr "Thay đổi trạng thái (Chọn đề xuất mua trước): "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:304
 #, fuzzy, c-format
 msgid "Mark the original budget as inactive"
 msgstr "Kích hoạt: "
@@ -32447,13 +32459,13 @@ msgstr "Chỉnh sửa địa chỉ thành phố"
 msgid "Modify authority #%s %s"
 msgstr "Chỉnh sửa biểu ghi nhất quán số %s %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:322
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:328
 #, fuzzy, c-format
 msgid "Modify budget "
 msgstr "Chỉnh sửa ngân sách"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
 #, fuzzy, c-format
 msgid "Modify budget '%s'"
 msgstr "Chỉnh sửa ngân sách"
@@ -32751,7 +32763,7 @@ msgstr "Lên trên cùng"
 msgid "Move hold up"
 msgstr "Di chuyển lên"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:469
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:479
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr ""
@@ -32772,12 +32784,12 @@ msgid "Move to previous position"
 msgstr "Kết quả tìm kiếm"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:477
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:487
 #, fuzzy
 msgid "Move unreceived orders"
 msgstr "%sBạn chưa nhận được đơn hàng nào.%s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:503
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:513
 #, fuzzy, c-format
 msgid "Moved!"
 msgstr "Di chuyển"
@@ -34240,7 +34252,7 @@ msgstr "Không xóa"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:221
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:128
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:428
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:123
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
@@ -34601,7 +34613,7 @@ msgstr "Chú ý:"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:575
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:216
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:219
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:210
 #, c-format
@@ -34798,8 +34810,8 @@ msgid "Notified by"
 msgstr "Thông báo qua"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
 #, c-format
 msgid "Notify id"
 msgstr "Mã thông báo"
@@ -35776,7 +35788,7 @@ msgstr "Số lượng đặt mua"
 msgid "Ordering information"
 msgstr "Thông tin đơn hàng"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:490
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
 #, fuzzy, c-format
 msgid "Ordernumber"
 msgstr "Số đơn hàng"
@@ -36982,17 +36994,17 @@ msgstr "Thanh toán"
 msgid "Pay amount"
 msgstr "Thanh toán tất cả"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "Thanh toán tất cả tiền phạt"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "Thanh toán các khoản tiền phạt đã chọn"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:117
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:118
 #, c-format
 msgid "Pay an individual fine"
 msgstr "Thanh toán tiền phạt"
@@ -39422,12 +39434,6 @@ msgstr "Quy tắc kiểm soát biểu ghi"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
-#, fuzzy, c-format
-msgid "Record number list (one per line): "
-msgstr "Danh sách thẻ bạn đọc (Mỗi thẻ 1 dòng): "
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #, fuzzy
@@ -40053,7 +40059,7 @@ msgstr "Báo cáo %s"
 #. %4$s:  to_budget_period.budget_period_description 
 #. %5$s:  to_budget_period.budget_period_startdate | $KohaDates 
 #. %6$s:  to_budget_period.budget_period_enddate | $KohaDates
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:483
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:493
 #, c-format
 msgid ""
 "Report after moving unreceived orders from budget %s (%s - %s) to %s (%s - "
@@ -41070,7 +41076,7 @@ msgstr "Thứ 7"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:206
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:381
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:387
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:205
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
@@ -41138,7 +41144,7 @@ msgid "Save "
 msgstr "Lưu "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 msgid "Save Changes"
 msgstr "Lưu"
 
@@ -42120,7 +42126,7 @@ msgstr ""
 msgid "Select a borrower category"
 msgstr "Chọn kiểu bạn đọc"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
 #, fuzzy, c-format
 msgid "Select a budget"
 msgstr "Chọn quỹ thanh toán"
@@ -42744,7 +42750,7 @@ msgstr "Phiên đăng nhập quá hạn, hãy đăng nhập lại"
 msgid "Session timed out."
 msgstr "Phiên làm việc hết giờ."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:303
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:309
 #, c-format
 msgid "Set all funds to zero"
 msgstr ""
@@ -43811,6 +43817,11 @@ msgstr "Số tiêu chuẩn"
 msgid "Standard number:"
 msgstr "Số tiêu chuẩn"
 
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
+#, fuzzy, c-format
+msgid "Standard rules for all libraries"
+msgstr "Nếu bạn không chọn thư viện hệ thống sẽ thống kê tất cả thư viện"
+
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:123
 #, c-format
 msgid "Standing orders do not close when received."
@@ -43823,8 +43834,8 @@ msgstr "Ngày bắt đầu: "
 
 #: intranet-tmpl/prog/en/columns.def:148
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:549
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:585
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:563
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:599
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
 #, c-format
 msgid "Start date"
@@ -43832,13 +43843,13 @@ msgstr "Ngày bắt đầu"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date missing"
 msgstr "Thiếu ngày bắt đầu của ngân sách"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date must be before end date"
 msgstr "Ngày bắt đầu phải trước ngày kết thúc của ngân sách"
 
@@ -43850,8 +43861,8 @@ msgid "Start date:"
 msgstr "Ngày bắt đầu:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:29
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:269
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Start date: "
@@ -46287,7 +46298,7 @@ msgstr ""
 "Thông số hệ thống [% NAME.name %] có thể bị ghi đè từ giá trị này bằng một "
 "hoặc nhiều máy ảo."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "The unreceived orders from the following funds will be moved"
 msgstr ""
@@ -46600,7 +46611,7 @@ msgstr "One-character code that contains a blank (#) or a fill character (|)."
 msgid "There were %s barcodes that were too long."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:511
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:521
 #, fuzzy, c-format
 msgid "There were no unreceived orders for this fund."
 msgstr "%sBạn chưa nhận được đơn hàng nào.%s "
@@ -46662,7 +46673,7 @@ msgid "Third"
 msgstr "Lần 3"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "This action cannot be reversed. Do you wish to continue?"
 msgstr ""
 
@@ -46675,6 +46686,15 @@ msgstr "Thuộc tính này chỉ được áp dụng với kiểu bạn đọc %
 #, fuzzy, c-format
 msgid "This authority type cannot be deleted"
 msgstr "Bạn không thể xóa mẫu CSV này."
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:413
+#, fuzzy, c-format
+msgid ""
+"This budget has funds attached. You must delete all attached funds before "
+"you can delete this budget."
+msgstr ""
+"%s tài liệu đính kèm biểu ghi này. Bạn phải xóa hết tài liệu trước khi xóa "
+"biểu ghi."
 
 #. %1$s:  patrons_in_category 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:247
@@ -46720,7 +46740,7 @@ msgstr ""
 "Tần suất này đang được sử dụng trong %s ấn phẩm định kỳ. Bạn vẫn muốn xóa "
 "tần suất này? "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:520
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:530
 #, c-format
 msgid "This fund code does not exist in the destination budget."
 msgstr ""
@@ -47022,7 +47042,7 @@ msgstr "Biểu ghi này được sử dụng trong "
 
 #. For the first occurrence,
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid "This record is used %s times"
@@ -47844,8 +47864,8 @@ msgstr "Căn dòng trên:"
 msgid "Topics"
 msgstr "Chủ đề"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:552
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:566
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:602
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:301
 #: intranet-tmpl/prog/en/modules/tags/review.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:199
@@ -47908,7 +47928,7 @@ msgstr "Tổng số lượng nạp trước: %s"
 msgid "Total amount of cash collected: %s "
 msgstr "Tổng số tiền thu: %s "
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:210
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "Tổng số tiền phạt: "
@@ -47919,7 +47939,7 @@ msgstr "Tổng số tiền phạt: "
 msgid "Total amount paid: %s"
 msgstr "Tổng số lượng thanh toán: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:129
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:130
 #, c-format
 msgid "Total amount payable:"
 msgstr "Tổng số tiền phạt:"
@@ -47930,12 +47950,12 @@ msgstr "Tổng số tiền phạt:"
 msgid "Total amount refunds: %s"
 msgstr "Tổng số tiền trả lại: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #, c-format
 msgid "Total amount to be written off:"
 msgstr "Tổng số tiền đã miễn:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:357
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:363
 #, c-format
 msgid "Total amount: "
 msgstr "Tổng số: "
@@ -48654,7 +48674,7 @@ msgstr "(Không rõ)"
 msgid "Unpacking completed"
 msgstr "Quá trình giải nén hoàn thành"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:452
 #, fuzzy, c-format
 msgid "Unreceived orders"
 msgstr "Đơn hàng bị hủy"
@@ -49557,12 +49577,12 @@ msgid "View final record"
 msgstr "Xem biểu ghi cuối"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:559
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 msgid "View funds for [% period_active.budget_period_description %]"
 msgstr "Hiển thị quỹ của [% period_active.budget_period_description %]"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:595
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:609
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "Hiển thị quỹ của [% period_loo.budget_period_description %]"
 
@@ -50137,7 +50157,7 @@ msgstr "Hủy phạt"
 msgid "Write off all"
 msgstr "Hủy phạt tất cả"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:159
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:161
 #, c-format
 msgid "Write off an individual fine"
 msgstr "Hủy khoản tiền phạt"
@@ -50148,7 +50168,7 @@ msgid "Write off fines and fees"
 msgstr "Hủy phạt"
 
 #. INPUT type=submit name=confirm_writeoff
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
 msgid "Write off this charge"
 msgstr "Hủy phạt"
 
@@ -50275,7 +50295,7 @@ msgstr "Đóng"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
@@ -50702,7 +50722,7 @@ msgstr ""
 "nên thực hiện việc đó."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "You have chosen to move all unreceived orders from '%s' to '%s'."
 msgstr ""
 
@@ -51290,6 +51310,16 @@ msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr ""
 "[% IF ( reserveloo.suspend ) %]Không bị tạm dừng[% ELSE %]Bị tạm dừng[% END "
 "%]"
+
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#, fuzzy
+msgid ""
+"[% block_budget.count %] fund(s) are attached to this budget. You must "
+"delete all attached funds before deleting this budget."
+msgstr ""
+"[% count %] tài liệu đính kèm với biểu ghi này. Bạn phải xóa tất cả tài liệu "
+"trước khi xóa biểu ghi thư mục."
 
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:198
@@ -51997,7 +52027,7 @@ msgstr "Chọn"
 msgid "click to log out"
 msgstr "Đăng xuất"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, fuzzy, c-format
 msgid "closed"
 msgstr "Đóng"

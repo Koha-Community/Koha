@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOHA 3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-15 12:30-0300\n"
+"POT-Creation-Date: 2017-11-16 00:30-0300\n"
 "PO-Revision-Date: 2016-09-16 08:38+0000\n"
 "Last-Translator: Viliam <viliam.polonec@gmail.com>\n"
 "Language-Team: Paul Vilhan\n"
@@ -849,7 +849,7 @@ msgstr "%s %s %s Neznámy %s "
 #. %1$s:  END 
 #. %2$s:  IF close_form 
 #. %3$s:  IF budget_periods.size == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:422
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
 #, c-format
 msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
@@ -2026,7 +2026,7 @@ msgstr ""
 #. %3$s:  IF r.unspent_moved 
 #. %4$s:  r.unspent_moved | $Price 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:517
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:527
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
 msgstr "%s %s%s (%s zvyšné bolo presunuté)%s"
@@ -2755,7 +2755,7 @@ msgstr "%s (zatvorená)"
 
 #. %1$s:  r.budget.budget_name 
 #. %2$s:  r.budget.budget_id 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:508
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:518
 #, c-format
 msgid "%s (id=%s)"
 msgstr "%s (id=%s)"
@@ -2766,7 +2766,7 @@ msgstr "%s (id=%s)"
 #. %4$s:  IF r.unspent_moved 
 #. %5$s:  r.unspent_moved | $Price 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:510
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
 msgstr "%s (id=%s) Suma=%s%s (%s zvyšné bolo presunuté)%s"
@@ -3612,7 +3612,7 @@ msgstr "%s Zatiaľ nie je definovaná žiadna akcia pre šablónu. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
 #, c-format
 msgid "%s No active budgets %s "
 msgstr "%s Bez aktívnych rozpočtov %s "
@@ -3644,7 +3644,7 @@ msgstr "%s Rezervácie nie sú povolené "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:606
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:620
 #, c-format
 msgid "%s No inactive budgets %s "
 msgstr "%s Bez neaktívnych rozpočtov %s "
@@ -4248,7 +4248,7 @@ msgstr ""
 "%s / %s záznamov bolo odstránených, ale vyskytli sa nejaké chyby. %s "
 
 #. %1$s:  ELSIF number_of_unreceived_orders == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
 #, c-format
 msgid "%s There are no unreceived orders for this budget. "
 msgstr "%s Neexistujú žiadne neprijaté objednávky pre tento rozpočet. "
@@ -4601,9 +4601,9 @@ msgstr "%s od%s %s "
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) |html 
 #. %6$s:  biblioitem.publishercode |html 
-#. %7$s:  biblioitem.collectiontitle |html 
+#. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s od%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
@@ -7791,7 +7791,7 @@ msgstr "&rsaquo; Mali ste na mysli?"
 
 #. %1$s:  END 
 #. %2$s:  IF close_form 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
 #, c-format
 msgid "&rsaquo; Duplicate budget %s %s "
 msgstr "&rsaquo; Duplikovať rozpočet %s %s "
@@ -8848,7 +8848,7 @@ msgstr ""
 msgid "(adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr "(prispôsobený pre %s, %ss DPH%sbez DPH%s) %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:300
 #, c-format
 msgid "(amounts will be rounded down)"
 msgstr ""
@@ -8858,7 +8858,7 @@ msgstr ""
 msgid "(budgeted cost * quantity) "
 msgstr "(rozpočtový náklad * množstvo) "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:288
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
 #, c-format
 msgid "(can be positive or negative)"
 msgstr ""
@@ -9282,7 +9282,7 @@ msgstr "-- žiaden -- "
 msgid "-- please choose --"
 msgstr "-- zvoľte prosím --"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid ". Deletion is not possible."
@@ -9756,8 +9756,8 @@ msgid "Account summary: %s %s (%s)"
 msgstr "Súhrn účtu: %s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:81
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
 #, c-format
 msgid "Account type"
 msgstr "Typ účtu"
@@ -9928,8 +9928,8 @@ msgstr "Akcia pri nenájdení zhody: "
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:257
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:261
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:589
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:567
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:603
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
@@ -10014,7 +10014,7 @@ msgstr "Aktivovať synchronizáciu: "
 msgid "Active"
 msgstr "Aktívny"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
 #, c-format
 msgid "Active budgets"
 msgstr "Aktívne rozpočty"
@@ -10213,8 +10213,8 @@ msgstr "Pridať skupinu košíkov pre "
 msgid "Add biblio"
 msgstr "Pridať biblio"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:223
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:324
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:330
 #, c-format
 msgid "Add budget"
 msgstr "Pridať rozpočet"
@@ -10274,7 +10274,7 @@ msgstr "Pridať pole"
 msgid "Add filing rule"
 msgstr "Pridať pravidlo zápisu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:29
 #, c-format
 msgid "Add fund"
 msgstr "Pridať fond"
@@ -10784,7 +10784,7 @@ msgstr "Adresa: "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:33
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:222
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:22
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -11139,7 +11139,6 @@ msgid "All item types"
 msgstr "Všetky typy exemplárov"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:110
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:254
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:189
@@ -11434,8 +11433,8 @@ msgstr "Amit Gupta"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:759
 #: intranet-tmpl/prog/en/modules/members/pay.tt:84
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:181
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:43
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
@@ -11445,14 +11444,14 @@ msgid "Amount"
 msgstr "Čiastka"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Amount must be a valid number, or empty"
 msgstr "Čiastka musí byť platné číslo, alebo prázdna"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:85
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:42
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:127
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
 #, c-format
 msgid "Amount outstanding"
 msgstr "Neuhradená čiastka"
@@ -12982,9 +12981,9 @@ msgstr "BSD licencia"
 msgid "BT"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:528
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:538
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:83
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:132
 #, c-format
@@ -13201,7 +13200,7 @@ msgid "Basic parameters"
 msgstr "Základné parametre"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:499
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
@@ -14012,7 +14011,7 @@ msgstr "Prehľadať denníky systému"
 msgid "Bruno Toumi"
 msgstr "Bruno Toumi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "Budget "
 msgstr "Rozpočet "
@@ -14029,17 +14028,17 @@ msgid "Budget %s [id=%s]%s (inactive)%s"
 msgstr "Rozpočet %s [id=%s]%s (neaktívny)%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Budget description missing"
 msgstr "Chýba popis rozpočtu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:498
 #, c-format
 msgid "Budget id"
 msgstr "ID rozpočtu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:548
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:584
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:562
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
 #, c-format
 msgid "Budget name"
 msgstr "Názov rozpočtu"
@@ -14068,11 +14067,11 @@ msgstr "Rozpočtová cena: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:238
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:242
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:233
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:244
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:248
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:69
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:95
@@ -14080,8 +14079,8 @@ msgstr "Rozpočtová cena: "
 msgid "Budgets"
 msgstr "Rozpočty"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:533
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:543
 #, c-format
 msgid "Budgets administration"
 msgstr "Administrácia rozpočtov"
@@ -14588,10 +14587,10 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:207
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:384
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:386
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:390
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:206
@@ -14654,9 +14653,9 @@ msgstr "Nemožno uložiť tento záznam, pretože nasledujúce pole nie je vypln
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
 #: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:155
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:196
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:225
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:120
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
@@ -14921,13 +14920,14 @@ msgstr "Nemožno vypožičať! %s "
 msgid "Cannot delete"
 msgstr "Nemožno odstrániť"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:407
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:412
 #, c-format
 msgid "Cannot delete budget"
 msgstr "Nemožno odstrániť rozpočet"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
 #, c-format
 msgid "Cannot delete budget '%s'"
 msgstr "Nemožno odstrániť rozpočet '%s'"
@@ -15410,7 +15410,7 @@ msgstr "Bunky obsahujú len odhadované hodnoty."
 msgid "Change"
 msgstr "Zmeniť"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:286
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
 #, fuzzy, c-format
 msgid "Change amounts by"
 msgstr "Výška pokuty: "
@@ -16965,7 +16965,7 @@ msgstr "Klonovanie pravidiel obehu a pokút zlyhalo!"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:26
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:259
@@ -16996,7 +16996,7 @@ msgstr "Zatvor a vytlač"
 msgid "Close basket group"
 msgstr "Zatvoriť skupinu košíkov"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:245
 #, c-format
 msgid "Close budget "
 msgstr "Uzavrieť rozpočet "
@@ -17115,8 +17115,8 @@ msgstr "Rozbaliť všetko"
 msgid "Collapsed"
 msgstr "Rozbalené"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:146
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:211
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:147
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:214
 #, c-format
 msgid "Collect from patron: "
 msgstr "Vybrať od čitateľa: "
@@ -17420,8 +17420,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:230
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:266
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:315
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:153
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:224
 #, c-format
 msgid "Confirm"
 msgstr "Potvrdiť"
@@ -19417,7 +19417,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:14
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:19
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:173
@@ -19570,8 +19571,8 @@ msgstr "Odstrániť dávku"
 
 #. For the first occurrence,
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:231
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #, c-format
 msgid "Delete budget '%s'?"
 msgstr "Odstrániť rozpočet '%s'?"
@@ -19974,7 +19975,7 @@ msgstr "Katd."
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:253
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:259
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:287
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:292
@@ -19987,8 +19988,8 @@ msgstr "Katd."
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:57
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:206
 #: intranet-tmpl/prog/en/modules/members/pay.tt:79
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:175
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
@@ -20028,7 +20029,7 @@ msgstr "Vyžaduje sa popis"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Description missing"
 msgstr "Chýba popis"
 
@@ -20060,7 +20061,7 @@ msgstr "Popis:"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:79
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:349
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
@@ -20112,7 +20113,7 @@ msgstr "Cieľový záznam"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:501
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:660
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:81
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
@@ -20711,7 +20712,7 @@ msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:146
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
 #, c-format
@@ -20723,7 +20724,7 @@ msgstr "Duplikovať"
 msgid "Duplicate "
 msgstr "Duplikovať "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:260
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:266
 #, c-format
 msgid "Duplicate budget"
 msgstr "Duplikovať rozpočet"
@@ -20901,7 +20902,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:136
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:23
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:23
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
@@ -21437,8 +21438,8 @@ msgstr "Koncový dátum: "
 
 #: intranet-tmpl/prog/en/columns.def:149
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:183
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:550
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:586
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:600
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:371
 #, c-format
 msgid "End date"
@@ -21456,7 +21457,7 @@ msgstr "Koncový dátum nesedí s dĺžkou predplatného."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "End date missing"
 msgstr "Chýba koncový dátum"
 
@@ -21467,8 +21468,8 @@ msgstr "Chýba koncový dátum"
 msgid "End date:"
 msgstr "Koncový dátum:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #, c-format
 msgid "End date: "
@@ -22430,6 +22431,11 @@ msgstr "Nepodarilo sa uplatniť iné pravidlo zhody"
 msgid "Failed to approve term (%s). %s"
 msgstr "AJAX nedokázal schváliť menovku: %s"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:546
+#, c-format
+msgid "Failed to delete budget because funds exist."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:42
 #, c-format
 msgid "Failed to delete field."
@@ -23170,7 +23176,7 @@ msgstr "Odpustené"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:8
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:15
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:15
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:24
@@ -23532,7 +23538,7 @@ msgstr "Suma fondu prevyšuje časové pridelenie"
 msgid "Fund amount:"
 msgstr "Výška fondu:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:440
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:450
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:154
 #, c-format
@@ -23550,12 +23556,12 @@ msgstr "Kód fondu: "
 msgid "Fund filters"
 msgstr "Filtre fondu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:449
 #, c-format
 msgid "Fund id"
 msgstr "ID fondu"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "Fund list of budget "
 msgstr "Fondový zoznam rozpočtu "
@@ -23565,7 +23571,7 @@ msgstr "Fondový zoznam rozpočtu "
 msgid "Fund locked"
 msgstr "Fond je uzamknutý"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:441
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:451
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:155
@@ -23881,7 +23887,7 @@ msgid "Go to advanced search"
 msgstr "Prejsť na rozšírené hľadanie"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:13
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:14
 msgid "Go to item details"
 msgstr "Prejsť na detaily o exemplári"
@@ -23904,7 +23910,7 @@ msgid "Go to receipt page"
 msgstr "Prejsť na stránku príjemky"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:7
 msgid "Go to record detail page"
 msgstr "Prejsť na stránku podrobností o zázname"
@@ -24618,7 +24624,7 @@ msgstr "Sviatky opakované ročne v rozpätí"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:21
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -25259,7 +25265,7 @@ msgstr ""
 msgid "If all unavailable"
 msgstr "%s iba prezenčne:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
 #, c-format
 msgid "If amounts changed, round to a multiple of"
 msgstr ""
@@ -25826,7 +25832,7 @@ msgstr "Váš košík"
 msgid "Inactive"
 msgstr "Neaktívny"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:554
 #, c-format
 msgid "Inactive budgets"
 msgstr "Neaktívne rozpočty"
@@ -27895,7 +27901,7 @@ msgstr ""
 #. %17$s:  IF closed 
 #. %18$s:  budget_period_description 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:183
 #, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets %s&rsaquo; %s Modify budget %s "
@@ -29668,7 +29674,7 @@ msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať obrázky"
 msgid "Koha &rsaquo; Tools &rsaquo; Upload patron images"
 msgstr "Koha &rsaquo; Nástroje &rsaquo; Načítať obrázky čitateľov"
 
-#. %1$s:  bookselname 
+#. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:79
 #, c-format
 msgid "Koha &rsaquo; Vendor %s"
@@ -30306,8 +30312,8 @@ msgid "Letter"
 msgstr "Korešpondencia"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, c-format
 msgid "Level"
 msgstr "Úroveň"
@@ -30715,6 +30721,12 @@ msgstr "Názov zoznamu"
 msgid "List name: "
 msgstr "Názov zoznamu: "
 
+#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
+#, fuzzy, c-format
+msgid "List of biblionumbers or authority ids (one per line): "
+msgstr "Zoznam čísiel záznamov (jedno na riadok): "
+
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:185
 #, fuzzy, c-format
 msgid "List of rules"
@@ -30943,15 +30955,15 @@ msgstr "Lokácia:"
 msgid "Locations"
 msgstr "Lokácie"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:378
 #, c-format
 msgid "Lock budget: "
 msgstr "Zamknúť rozpočet: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:551
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:587
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:565
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:578
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:601
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:612
 #, c-format
 msgid "Locked"
 msgstr "Zamknutý"
@@ -31409,7 +31421,7 @@ msgstr ""
 "Nastavte jedinečný sviatok. Napríklad, vybratím 1. augusta 2012 sa tento "
 "stane sviatkom, ale nebude mať vplyv na 1. august v ostatných rokoch."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #, c-format
 msgid "Make budget active: "
 msgstr "Aktivovať rozpočet: "
@@ -31833,7 +31845,7 @@ msgstr "Zaevidovať a skončiť"
 msgid "Mark selected as: "
 msgstr "Označiť vybrané ako: "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:304
 #, c-format
 msgid "Mark the original budget as inactive"
 msgstr "Označiť pôvodný rozpočet ako neaktívny"
@@ -32435,13 +32447,13 @@ msgstr "Zmeniť mesto"
 msgid "Modify authority #%s %s"
 msgstr "Zmeniť autoritu #%s %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:322
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:328
 #, c-format
 msgid "Modify budget "
 msgstr "Zmeniť rozpočet "
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
 #, c-format
 msgid "Modify budget '%s'"
 msgstr "Zmeniť rozpočet '%s'"
@@ -32735,7 +32747,7 @@ msgstr "Posunúť rezerváciu na vrch"
 msgid "Move hold up"
 msgstr "Posunúť rezerváciu nahor"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:469
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:479
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr "Presunúť zvyšné neminuté fondy"
@@ -32756,11 +32768,11 @@ msgid "Move to previous position"
 msgstr "Posunúť na predošlú pozíciu"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:477
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:487
 msgid "Move unreceived orders"
 msgstr "Presunúť neprijaté objednávky"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:503
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:513
 #, c-format
 msgid "Moved!"
 msgstr "Presunuté!"
@@ -34205,7 +34217,7 @@ msgstr "Nie, neodstraňovať"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:221
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:128
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:428
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:123
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
@@ -34562,7 +34574,7 @@ msgstr "Poznámka:"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:575
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:216
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:219
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:210
 #, c-format
@@ -34765,8 +34777,8 @@ msgid "Notified by"
 msgstr "Zaznamenal(a)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
 #, c-format
 msgid "Notify id"
 msgstr "Zaznamenal id"
@@ -35737,7 +35749,7 @@ msgstr "Objednané množstvo"
 msgid "Ordering information"
 msgstr "Informácia o objenávaní"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:490
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
 #, c-format
 msgid "Ordernumber"
 msgstr "Číslo objednávky"
@@ -36942,17 +36954,17 @@ msgstr "Zaplatiť všetky pokuty"
 msgid "Pay amount"
 msgstr "Zaplatiť sumu"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "Zaplatiť sumu všetkých položiek"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "Zaplatiť sumu vybraných položiek"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:117
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:118
 #, c-format
 msgid "Pay an individual fine"
 msgstr "Zaplatiť jednotlivú položku"
@@ -39370,12 +39382,6 @@ msgstr "Pravidlá zhody záznamov"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "Záznam neoznačený ako UTF-8, možno je poškodený"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
-#, c-format
-msgid "Record number list (one per line): "
-msgstr "Zoznam čísiel záznamov (jedno na riadok): "
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 msgid "Record saved "
@@ -40000,7 +40006,7 @@ msgstr "Výkaz %s&rsaquo; "
 #. %4$s:  to_budget_period.budget_period_description 
 #. %5$s:  to_budget_period.budget_period_startdate | $KohaDates 
 #. %6$s:  to_budget_period.budget_period_enddate | $KohaDates
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:483
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:493
 #, c-format
 msgid ""
 "Report after moving unreceived orders from budget %s (%s - %s) to %s (%s - "
@@ -41017,7 +41023,7 @@ msgstr "Soboty"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:206
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:381
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:387
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:205
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
@@ -41085,7 +41091,7 @@ msgid "Save "
 msgstr "Uložiť "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 msgid "Save Changes"
 msgstr "Uložiť zmeny"
 
@@ -42049,7 +42055,7 @@ msgstr ""
 msgid "Select a borrower category"
 msgstr "Vybrať kategóriu požičiavateľov"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
 #, c-format
 msgid "Select a budget"
 msgstr "Vybrať rozpočet"
@@ -42675,7 +42681,7 @@ msgstr "Čas pripojenia vypršal, prihláste sa znova, prosím"
 msgid "Session timed out."
 msgstr "Čas pripojenia vypršal."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:303
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:309
 #, c-format
 msgid "Set all funds to zero"
 msgstr "Vynulovať všetky fondy"
@@ -43734,6 +43740,11 @@ msgstr "Štandardné číslo"
 msgid "Standard number:"
 msgstr "Štandardné číslo:"
 
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
+#, fuzzy, c-format
+msgid "Standard rules for all libraries"
+msgstr "Nevybrať žiadne pre zobrazenie všetkých knižníc"
+
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:123
 #, c-format
 msgid "Standing orders do not close when received."
@@ -43746,8 +43757,8 @@ msgstr "Počiatočný dátum: "
 
 #: intranet-tmpl/prog/en/columns.def:148
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:549
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:585
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:563
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:599
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
 #, c-format
 msgid "Start date"
@@ -43755,13 +43766,13 @@ msgstr "Počiatočný dátum"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date missing"
 msgstr "Chýba počiatočný dátum"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date must be before end date"
 msgstr "Počiatočný dátum musí byť pred koncovým dátumom"
 
@@ -43773,8 +43784,8 @@ msgid "Start date:"
 msgstr "Počiatočný dátum:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:29
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:269
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Start date: "
@@ -46242,7 +46253,7 @@ msgstr ""
 "Jeden alebo viac virtuálnych hostiteľov mohol obísť nastavenie systému [% "
 "NAME.name %]."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "The unreceived orders from the following funds will be moved"
 msgstr "Neprijaté objednávky z nasledovných fondov budú presunuté"
@@ -46556,7 +46567,7 @@ msgstr ""
 msgid "There were %s barcodes that were too long."
 msgstr "Našlo sa %s čiarových kódov, ktoré boli pridlhé."
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:511
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:521
 #, c-format
 msgid "There were no unreceived orders for this fund."
 msgstr "Nenašli sa žiadne neprijaté objednávky pre tento fond."
@@ -46618,7 +46629,7 @@ msgid "Third"
 msgstr "Tretie"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "This action cannot be reversed. Do you wish to continue?"
 msgstr "Táto akcia sa nedá vrátiť. Chcete pokračovať?"
 
@@ -46631,6 +46642,15 @@ msgstr "Táto vlastnosť sa bude aplikovať iba na kategóriu čitateľa %s"
 #, fuzzy, c-format
 msgid "This authority type cannot be deleted"
 msgstr "Tento rámec nemožno odstrániť"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:413
+#, fuzzy, c-format
+msgid ""
+"This budget has funds attached. You must delete all attached funds before "
+"you can delete this budget."
+msgstr ""
+"%s záznam(ov) je pripojený(ch) k tomuto záznamu. Musíte odstrániť všetky "
+"exempláre pred odstránením tohto záznamu."
 
 #. %1$s:  patrons_in_category 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:247
@@ -46675,7 +46695,7 @@ msgstr ""
 "Táto opakovanosť sa ešte používa %s v predplatných. Napriek tomu ich chcete "
 "určite odstrániť? "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:520
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:530
 #, c-format
 msgid "This fund code does not exist in the destination budget."
 msgstr "Tento kód fondu neexistuje v cieľovom rozpočte."
@@ -46979,7 +46999,7 @@ msgstr "Tento záznam sa používa "
 
 #. For the first occurrence,
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid "This record is used %s times"
@@ -47803,8 +47823,8 @@ msgstr "Vrchný okraj textu:"
 msgid "Topics"
 msgstr "Témy"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:552
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:566
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:602
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:301
 #: intranet-tmpl/prog/en/modules/tags/review.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:199
@@ -47867,7 +47887,7 @@ msgstr "Celková suma kreditov: %s"
 msgid "Total amount of cash collected: %s "
 msgstr "Celková suma vyzbieranej hotovosti: %s "
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:210
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "Celková neuhradená suma: "
@@ -47878,7 +47898,7 @@ msgstr "Celková neuhradená suma: "
 msgid "Total amount paid: %s"
 msgstr "Zaplatená suma celkom: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:129
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:130
 #, c-format
 msgid "Total amount payable:"
 msgstr "Celková suma na zaplatenie:"
@@ -47889,12 +47909,12 @@ msgstr "Celková suma na zaplatenie:"
 msgid "Total amount refunds: %s"
 msgstr "Celková suma náhrady: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #, c-format
 msgid "Total amount to be written off:"
 msgstr "Celková suma na odpísanie:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:357
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:363
 #, c-format
 msgid "Total amount: "
 msgstr "Celková suma: "
@@ -48610,7 +48630,7 @@ msgstr "Neznáma značka"
 msgid "Unpacking completed"
 msgstr "Dekomprimácia dokončená"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:452
 #, c-format
 msgid "Unreceived orders"
 msgstr "Neprijaté objednávky"
@@ -49507,12 +49527,12 @@ msgid "View final record"
 msgstr "Zobraziť výsledný záznam"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:559
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 msgid "View funds for [% period_active.budget_period_description %]"
 msgstr "Zobraziť fondy pre [% period_active.budget_period_description %]"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:595
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:609
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "Zobraziť fondy pre [% period_loo.budget_period_description %]"
 
@@ -50084,7 +50104,7 @@ msgstr "Odpísať"
 msgid "Write off all"
 msgstr "Odpísať všetko"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:159
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:161
 #, c-format
 msgid "Write off an individual fine"
 msgstr "Odpísať jednotlivú položku"
@@ -50095,7 +50115,7 @@ msgid "Write off fines and fees"
 msgstr "Odpísať pokuty a poplatky"
 
 #. INPUT type=submit name=confirm_writeoff
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
 msgid "Write off this charge"
 msgstr "Odpísať tento poplatok"
 
@@ -50222,7 +50242,7 @@ msgstr "Áno, zatvoriť (A)"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
@@ -50654,7 +50674,7 @@ msgstr ""
 "nerobili."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "You have chosen to move all unreceived orders from '%s' to '%s'."
 msgstr "Vybrali ste si presunúť všetky neprijaté objednávky z '%s' do '%s'."
 
@@ -51249,6 +51269,16 @@ msgstr "[% IF ( date2 ) %][% date2 %][% ELSE %]tomorrow[% END %]"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:814
 msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr "[% IF ( reserveloo.suspend ) %]Neprerušiť[% ELSE %]Prerušiť[% END %]"
+
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#, fuzzy
+msgid ""
+"[% block_budget.count %] fund(s) are attached to this budget. You must "
+"delete all attached funds before deleting this budget."
+msgstr ""
+"[% count %] záznam(ov) je pripojený(ch) k tomuto záznamu. Musíte odstrániť "
+"všetky exempláre pred odstránením tohto záznamu."
 
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:198
@@ -51968,7 +51998,7 @@ msgstr "zvoliť"
 msgid "click to log out"
 msgstr "kliknite na odhlásenie"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "closed"
 msgstr "zatvorená"

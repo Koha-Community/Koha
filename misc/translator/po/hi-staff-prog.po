@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2017-10-15 11:39-0300\n"
+"POT-Creation-Date: 2017-11-15 23:32-0300\n"
 "PO-Revision-Date: 2017-10-14 08:35+0000\n"
 "Last-Translator: Nikunj <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -836,7 +836,7 @@ msgstr "%s %s %s अज्ञात %s "
 #. %1$s:  END 
 #. %2$s:  IF close_form 
 #. %3$s:  IF budget_periods.size == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:422
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
 #, c-format
 msgid ""
 "%s %s %s You cannot move funds of this budget, there is no active budget. "
@@ -2016,7 +2016,7 @@ msgstr ""
 #. %3$s:  IF r.unspent_moved 
 #. %4$s:  r.unspent_moved | $Price 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:517
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:527
 #, c-format
 msgid "%s %s%s (%s remaining has been moved)%s"
 msgstr "%s %s %s ( %s शेष ले जाया गया है) %s"
@@ -2741,7 +2741,7 @@ msgstr "%s (बन्द) "
 
 #. %1$s:  r.budget.budget_name 
 #. %2$s:  r.budget.budget_id 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:508
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:518
 #, c-format
 msgid "%s (id=%s)"
 msgstr "%s (id=%s)"
@@ -2752,7 +2752,7 @@ msgstr "%s (id=%s)"
 #. %4$s:  IF r.unspent_moved 
 #. %5$s:  r.unspent_moved | $Price 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:510
 #, c-format
 msgid "%s (id=%s) Amount=%s%s (%s remaining has been moved)%s"
 msgstr "%s (आईडी = %s ) राशि = %s %s ( %s शेष ले जाया गया है) %s"
@@ -3585,7 +3585,7 @@ msgstr "%s टेमप्लेट के लिए अभी तक परि�
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:574
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
 #, c-format
 msgid "%s No active budgets %s "
 msgstr "%s सक्रिय बजट नही %s "
@@ -3617,7 +3617,7 @@ msgstr "%s  होल्ड की अनुमति नहीं "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:606
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:620
 #, c-format
 msgid "%s No inactive budgets %s "
 msgstr "%s निष्क्रिय बजट नही %s "
@@ -4215,7 +4215,7 @@ msgstr ""
 "सफलतापूर्वक नष्ट कर दिया गया है, लेकिन कुछ त्रुटियाँ हुई। %s "
 
 #. %1$s:  ELSIF number_of_unreceived_orders == 0 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
 #, c-format
 msgid "%s There are no unreceived orders for this budget. "
 msgstr "%s इस बजट के लिए कोई unreceived आदेश हैं. "
@@ -4568,9 +4568,9 @@ msgstr "%s द्वारा%s %s "
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) |html 
 #. %6$s:  biblioitem.publishercode |html 
-#. %7$s:  biblioitem.collectiontitle |html 
+#. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s द्वारा%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
@@ -7739,7 +7739,7 @@ msgstr "&rsaquo; क्या आपका मतलब था?"
 
 #. %1$s:  END 
 #. %2$s:  IF close_form 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
 #, c-format
 msgid "&rsaquo; Duplicate budget %s %s "
 msgstr "&rsaquo; डुप्लिकेट बारकोड %s %s "
@@ -8790,7 +8790,7 @@ msgstr "(एक विकल्प सूची चुनाव के लिए
 msgid "(adjusted for %s, %stax inc.%stax exc.%s) %s "
 msgstr "(के लिए समायोजित %s, %sटैक्स inc.%sटैक्स exc.%s) %s "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:300
 #, c-format
 msgid "(amounts will be rounded down)"
 msgstr "(मात्रा के नीचे गोल किया जाएगा)"
@@ -8800,7 +8800,7 @@ msgstr "(मात्रा के नीचे गोल किया जाए
 msgid "(budgeted cost * quantity) "
 msgstr "(बजट लागत:* मात्रा) "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:288
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:294
 #, c-format
 msgid "(can be positive or negative)"
 msgstr "(सकारात्मक और नकारात्मक हो सकता है)"
@@ -9219,7 +9219,7 @@ msgstr "-- कोई नहीं -- "
 msgid "-- please choose --"
 msgstr "-- कृपया चुनें --"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid ". Deletion is not possible."
@@ -9694,8 +9694,8 @@ msgid "Account summary: %s %s (%s)"
 msgstr "खाता सारांश: %s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:81
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
 #, c-format
 msgid "Account type"
 msgstr "खाता प्रकार"
@@ -9866,8 +9866,8 @@ msgstr "क्रिया अगर कोई मिलान नहीं प�
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:259
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:257
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:261
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:589
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:567
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:603
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:305
@@ -9952,7 +9952,7 @@ msgstr "सक्रिय sync: "
 msgid "Active"
 msgstr "सक्रिय"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:539
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:553
 #, c-format
 msgid "Active budgets"
 msgstr "सक्रिय बजट"
@@ -10151,8 +10151,8 @@ msgstr "बास्केट समूह जोड़े के लिए "
 msgid "Add biblio"
 msgstr "Biblio जोड़ें"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:223
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:324
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:330
 #, c-format
 msgid "Add budget"
 msgstr "बजट जोड़ें"
@@ -10212,7 +10212,7 @@ msgstr "क्षेत्र जोड़ें"
 msgid "Add filing rule"
 msgstr "दाखिल नियम जोड़ें"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:29
 #, c-format
 msgid "Add fund"
 msgstr "कोष जोड़ना"
@@ -10721,7 +10721,7 @@ msgstr "पता: "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:33
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:216
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:222
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:22
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -11076,7 +11076,6 @@ msgid "All item types"
 msgstr "सभी मद प्रकार"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:110
-#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:254
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:189
@@ -11370,8 +11369,8 @@ msgstr "अमित गुप्ता"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:759
 #: intranet-tmpl/prog/en/modules/members/pay.tt:84
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:181
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:43
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:103
@@ -11381,14 +11380,14 @@ msgid "Amount"
 msgstr "मात्रा"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Amount must be a valid number, or empty"
 msgstr "राशि एक मान्य संख्या होनी चाहिए, या खाली"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:85
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:42
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:127
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
 #, c-format
 msgid "Amount outstanding"
 msgstr "राशि बकाया"
@@ -12881,9 +12880,9 @@ msgstr "BSD लाइसेंस"
 msgid "BT"
 msgstr "बीटी"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:429
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:432
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:528
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:538
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:83
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:132
 #, c-format
@@ -13100,7 +13099,7 @@ msgid "Basic parameters"
 msgstr "बुनियादी मानकों"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:18
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:489
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:499
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:939
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:99
@@ -13905,7 +13904,7 @@ msgstr "ब्राउज़ करें प्रणाली लॉग"
 msgid "Bruno Toumi"
 msgstr "ब्रूनो Toumi"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "Budget "
 msgstr "बजट"
@@ -13922,17 +13921,17 @@ msgid "Budget %s [id=%s]%s (inactive)%s"
 msgstr "बजट %s [id = %s ] %s (निष्क्रिय) %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Budget description missing"
 msgstr "विवरण विवरण लापता"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:498
 #, c-format
 msgid "Budget id"
 msgstr "बजट id"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:548
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:584
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:562
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
 #, c-format
 msgid "Budget name"
 msgstr "बजट नाम"
@@ -13961,11 +13960,11 @@ msgstr "बजट लागत: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:59
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:6
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:219
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:238
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:242
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:233
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:241
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:244
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:248
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:69
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:246
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:95
@@ -13973,8 +13972,8 @@ msgstr "बजट लागत: "
 msgid "Budgets"
 msgstr "बजट"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:246
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:533
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:252
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:543
 #, c-format
 msgid "Budgets administration"
 msgstr "बजट प्रशासन"
@@ -14470,10 +14469,10 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:207
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:110
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:384
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:386
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:478
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:390
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:392
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:488
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:117
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:206
@@ -14536,9 +14535,9 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
 #: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:155
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:196
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:225
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:120
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:937
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:75
@@ -14801,13 +14800,14 @@ msgstr "चैक आउट नहीं कर सकते! %s "
 msgid "Cannot delete"
 msgstr "नहीं हटा सकते"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:401
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:407
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:412
 #, c-format
 msgid "Cannot delete budget"
 msgstr "बजट को नष्ट नहीं कर सकते"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:229
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:235
 #, c-format
 msgid "Cannot delete budget '%s'"
 msgstr "बजट को नष्ट नहीं कर सकते  '%s'"
@@ -15288,7 +15288,7 @@ msgstr "प्रकोष्ठों अनुमानित मूल्य�
 msgid "Change"
 msgstr "बदलना"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:286
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
 #, c-format
 msgid "Change amounts by"
 msgstr "द्वारा राशी में बदलें"
@@ -16816,7 +16816,7 @@ msgstr "परिसंचरण और ठीक नियमों की क�
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:42
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:193
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:256
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:20
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:26
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:279
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:259
@@ -16846,7 +16846,7 @@ msgstr "बंद और पीडीएफ के रूप में निर
 msgid "Close basket group"
 msgstr "बंद टोकरी समूह"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:239
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:245
 #, c-format
 msgid "Close budget "
 msgstr "बन्द बजट"
@@ -16965,8 +16965,8 @@ msgstr "सभी को संकुचित करें"
 msgid "Collapsed"
 msgstr "गिर गया"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:146
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:211
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:147
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:214
 #, c-format
 msgid "Collect from patron: "
 msgstr "चुनें एक संरक्षक: "
@@ -17269,8 +17269,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:230
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:266
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:315
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:153
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:221
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:224
 #, c-format
 msgid "Confirm"
 msgstr "पुष्टि"
@@ -19255,7 +19255,8 @@ msgstr "देरी के दिनों की संख्या एक च
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:216
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:229
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:14
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:19
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:74
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:173
@@ -19408,8 +19409,8 @@ msgstr "बैच हटाएँ"
 
 #. For the first occurrence,
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:231
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:406
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:237
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
 #, c-format
 msgid "Delete budget '%s'?"
 msgstr "बजट को हटा दें'%s'?"
@@ -19807,7 +19808,7 @@ msgstr "विभाग"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:245
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:253
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:259
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:287
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:292
@@ -19820,8 +19821,8 @@ msgstr "विभाग"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:57
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:206
 #: intranet-tmpl/prog/en/modules/members/pay.tt:79
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:175
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
@@ -19861,7 +19862,7 @@ msgstr "विवरण आवश्यक है"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Description missing"
 msgstr "विवरण लापता"
 
@@ -19893,7 +19894,7 @@ msgstr "विवरण:"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:96
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:101
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:79
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:349
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
@@ -19945,7 +19946,7 @@ msgstr "गंतव्य रिकार्ड"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:78
 #: intranet-tmpl/prog/en/includes/members-menu.inc:5
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:491
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:501
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:660
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:81
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
@@ -20540,7 +20541,7 @@ msgstr "डंकन टायलर"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:146
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:23
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:206
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
 #, c-format
@@ -20552,7 +20553,7 @@ msgstr "डुप्लिकेट"
 msgid "Duplicate "
 msgstr "डुप्लिकेट"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:260
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:266
 #, c-format
 msgid "Duplicate budget"
 msgstr "डुप्लिकेट बजट"
@@ -20730,7 +20731,7 @@ msgstr "एड ग्रीष्मकाल (कुछ कोड और MARC �
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:136
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:23
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:23
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:31
@@ -21264,8 +21265,8 @@ msgstr "अन्तिम तिथि: "
 
 #: intranet-tmpl/prog/en/columns.def:149
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:183
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:550
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:586
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:600
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:371
 #, c-format
 msgid "End date"
@@ -21283,7 +21284,7 @@ msgstr "अंतिम तिथि सदस्यता की लंबा�
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "End date missing"
 msgstr "अंतिम तिथि लापता"
 
@@ -21294,8 +21295,8 @@ msgstr "अंतिम तिथि लापता"
 msgid "End date:"
 msgstr "अंतिम तिथि:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:281
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:347
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:188
 #, c-format
 msgid "End date: "
@@ -22251,6 +22252,11 @@ msgstr "अलग मिलान शासन लागू करने मे�
 msgid "Failed to approve term (%s). %s"
 msgstr "अवधि का अनुमोदन करने में विफल (%s). %s"
 
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:546
+#, c-format
+msgid "Failed to delete budget because funds exist."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:42
 #, c-format
 msgid "Failed to delete field."
@@ -22993,7 +22999,7 @@ msgstr "क्षमा"
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:8
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:15
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:7
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:15
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:24
@@ -23353,7 +23359,7 @@ msgstr "फंड राशि अवधि आवंटन से अधिक"
 msgid "Fund amount:"
 msgstr "कोष राशि"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:440
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:450
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:296
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:154
 #, c-format
@@ -23371,12 +23377,12 @@ msgstr "कोष कोडः"
 msgid "Fund filters"
 msgstr "कोष फिल्टर"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:449
 #, c-format
 msgid "Fund id"
 msgstr "कोष id"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "Fund list of budget "
 msgstr "बजट के फंड सूची"
@@ -23386,7 +23392,7 @@ msgstr "बजट के फंड सूची"
 msgid "Fund locked"
 msgstr "फंड बंद कर दिया"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:441
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:451
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:104
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:297
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:155
@@ -23705,7 +23711,7 @@ msgid "Go to advanced search"
 msgstr "उन्नत खोज करने के लिए जाओ"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:13
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:14
 msgid "Go to item details"
 msgstr "आइटम जानकारी के लिए जाना"
@@ -23728,7 +23734,7 @@ msgid "Go to receipt page"
 msgstr "रसीद पृष्ठ पर जाएं"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:7
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.inc:7
 msgid "Go to record detail page"
 msgstr "जानकारी के पेज को रिकॉर्ड करने के लिए जाओ"
@@ -24438,7 +24444,7 @@ msgstr "छुट्टी सालाना एक ही तिथि पर 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:59
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:30
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:32
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:21
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:22
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:109
@@ -25078,7 +25084,7 @@ msgstr ""
 msgid "If all unavailable"
 msgstr "यदि सभी अनुपलब्ध है:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:292
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
 #, c-format
 msgid "If amounts changed, round to a multiple of"
 msgstr "मात्रा की एक बहु के लिए बदल गया है, तो दौर"
@@ -25634,7 +25640,7 @@ msgstr "आपकी कार्ट में"
 msgid "Inactive"
 msgstr "निष्क्रिय"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:540
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:554
 #, c-format
 msgid "Inactive budgets"
 msgstr "निष्क्रिय बजटों"
@@ -27696,7 +27702,7 @@ msgstr ""
 #. %17$s:  IF closed 
 #. %18$s:  budget_period_description 
 #. %19$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:177
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:183
 #, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Budgets %s&rsaquo; %s Modify budget %s "
@@ -29437,7 +29443,7 @@ msgstr "कोहा &rsaquo; उपकरण &rsaquo; अपलोड छवि
 msgid "Koha &rsaquo; Tools &rsaquo; Upload patron images"
 msgstr "कोहा &rsaquo; उपकरण &rsaquo; अपलोड संरक्षक छवियाँ"
 
-#. %1$s:  bookselname 
+#. %1$s:  name 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:79
 #, c-format
 msgid "Koha &rsaquo; Vendor %s"
@@ -30075,8 +30081,8 @@ msgid "Letter"
 msgstr "पत्र"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, c-format
 msgid "Level"
 msgstr "स्तर"
@@ -30480,6 +30486,12 @@ msgstr "सूची नाम"
 msgid "List name: "
 msgstr "सूची नामः"
 
+#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
+#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
+#, fuzzy, c-format
+msgid "List of biblionumbers or authority ids (one per line): "
+msgstr "रिकार्ड संख्या सूची (एक प्रति पंक्ति):"
+
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:185
 #, c-format
 msgid "List of rules"
@@ -30708,15 +30720,15 @@ msgstr "स्थानः"
 msgid "Locations"
 msgstr "स्थानों"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:372
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:378
 #, c-format
 msgid "Lock budget: "
 msgstr "बजट बन्दः"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:551
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:564
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:587
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:598
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:565
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:578
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:601
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:612
 #, c-format
 msgid "Locked"
 msgstr "तालाबंद"
@@ -31171,7 +31183,7 @@ msgstr ""
 "एक भी छुट्टी कर। उदाहरण के लिए, 1 अगस्त का चयन, 2012 यह एक छुट्टी कर देगा, लेकिन दूसरे "
 "साल 1 अगस्त को प्रभावित नहीं करेगा।"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:365
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:371
 #, c-format
 msgid "Make budget active: "
 msgstr "बजट सक्रिय करें:"
@@ -31593,7 +31605,7 @@ msgstr "मार्क देखा"
 msgid "Mark selected as: "
 msgstr "मार्क के रूप में चयनित:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:298
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:304
 #, c-format
 msgid "Mark the original budget as inactive"
 msgstr "निष्क्रिय के रूप में मूल बजट मार्क"
@@ -32194,13 +32206,13 @@ msgstr "संशोधित एक शहर"
 msgid "Modify authority #%s %s"
 msgstr "संशोधित अधिकार # %s %s"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:322
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:328
 #, c-format
 msgid "Modify budget "
 msgstr "संशोधित बजट"
 
 #. %1$s:  budget_period_description 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:221
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:227
 #, c-format
 msgid "Modify budget '%s'"
 msgstr "संशोधित बजट  '%s'"
@@ -32493,7 +32505,7 @@ msgstr "ऊपर को होल्ड ले जाएँ "
 msgid "Move hold up"
 msgstr "ऊपर होल्ड ले जाएँ "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:469
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:479
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr "अक्षय निधि शेष ले जाएँ"
@@ -32514,11 +32526,11 @@ msgid "Move to previous position"
 msgstr "पिछली स्थिति में ले जाएँ"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:477
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:487
 msgid "Move unreceived orders"
 msgstr "अप्राप्त आदेश ले जाएँ"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:503
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:513
 #, c-format
 msgid "Moved!"
 msgstr "चले गए!"
@@ -33958,7 +33970,7 @@ msgstr "नहीं, हटाएं नहीं"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:233
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:221
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:128
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:419
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:428
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:123
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:232
@@ -34309,7 +34321,7 @@ msgstr "टिप्पणीः"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:575
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:216
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:219
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:210
 #, c-format
@@ -34510,8 +34522,8 @@ msgid "Notified by"
 msgstr "अधिसूचित द्वारा"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
 #, c-format
 msgid "Notify id"
 msgstr "सूचित आईडी"
@@ -35479,7 +35491,7 @@ msgstr "आदेश दिया राशीः"
 msgid "Ordering information"
 msgstr "जानकारी आदेश"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:490
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:500
 #, c-format
 msgid "Ordernumber"
 msgstr "आदेशसंख्या"
@@ -36676,17 +36688,17 @@ msgstr "सभी जुर्माना का भुगतान करन�
 msgid "Pay amount"
 msgstr "भुगतान की गई राशि"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "सभी जुर्माना की ओर एक राशि का भुगतान करें"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "चुने गए जुर्माने की ओर एक राशि का भुगतान करें"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:117
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:118
 #, c-format
 msgid "Pay an individual fine"
 msgstr "एक व्यक्ति के जुर्माने का भुगतान"
@@ -39085,12 +39097,6 @@ msgstr "रिकार्ड मिलान नियम"
 msgid "Record not marked as UTF-8, may be corrupted"
 msgstr "रिकार्ड के रूप में UTF-8, दूषित हो सकती है चिह्नित नहीं"
 
-#: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:142
-#: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:133
-#, c-format
-msgid "Record number list (one per line): "
-msgstr "रिकार्ड संख्या सूची (एक प्रति पंक्ति):"
-
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 msgid "Record saved "
@@ -39715,7 +39721,7 @@ msgstr "रिपोर्ट %s&rsaquo; "
 #. %4$s:  to_budget_period.budget_period_description 
 #. %5$s:  to_budget_period.budget_period_startdate | $KohaDates 
 #. %6$s:  to_budget_period.budget_period_enddate | $KohaDates
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:483
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:493
 #, c-format
 msgid ""
 "Report after moving unreceived orders from budget %s (%s - %s) to %s (%s - "
@@ -40730,7 +40736,7 @@ msgstr "शनिवार को"
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:159
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:206
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:381
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:387
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:75
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:205
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:197
@@ -40798,7 +40804,7 @@ msgid "Save "
 msgstr "सहेजें"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:311
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:317
 msgid "Save Changes"
 msgstr "परिवर्तन सहेजें"
 
@@ -41762,7 +41768,7 @@ msgstr ""
 msgid "Select a borrower category"
 msgstr "चुनें एक उधारकर्ता वर्ग"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:460
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
 #, c-format
 msgid "Select a budget"
 msgstr "एक बजट चुनें ।"
@@ -42385,7 +42391,7 @@ msgstr "सत्र, फिर में प्रवेश करें बा
 msgid "Session timed out."
 msgstr "सेशन टाइम आउट"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:303
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:309
 #, c-format
 msgid "Set all funds to zero"
 msgstr "शून्य करने के लिए सब धन सेट"
@@ -43442,6 +43448,11 @@ msgstr "मानक संख्या"
 msgid "Standard number:"
 msgstr "मानक संख्या"
 
+#: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:143
+#, fuzzy, c-format
+msgid "Standard rules for all libraries"
+msgstr "चुनें कोई नही सभी शाखाओं को देखने के लिए"
+
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:123
 #, c-format
 msgid "Standing orders do not close when received."
@@ -43454,8 +43465,8 @@ msgstr "प्रारंभ तिथि: "
 
 #: intranet-tmpl/prog/en/columns.def:148
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:182
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:549
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:585
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:563
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:599
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
 #, c-format
 msgid "Start date"
@@ -43463,13 +43474,13 @@ msgstr "आरम्भ तिथि"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date missing"
 msgstr "प्रारंभ तिथि लापता है"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "Start date must be before end date"
 msgstr "प्रारंभ तिथि को समाप्ति तिथि से पहले होना चाहिए"
 
@@ -43481,8 +43492,8 @@ msgid "Start date:"
 msgstr "प्रारंभ तिथि:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:29
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:269
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:335
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:275
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:341
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:183
 #, c-format
 msgid "Start date: "
@@ -45942,7 +45953,7 @@ msgstr ""
 "प्रणाली वरीयता [% NAME.name%] एक या एक से अधिक आभासी मेजबान द्वारा इस मूल्य से "
 "अधिरोहित गया हो सकता है।"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:434
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:444
 #, c-format
 msgid "The unreceived orders from the following funds will be moved"
 msgstr "निम्नलिखित धन से unreceived के आदेश ले जाया जाएगा"
@@ -46252,7 +46263,7 @@ msgstr "वहाँ थे %s बारकोड कि कम से कम �
 msgid "There were %s barcodes that were too long."
 msgstr "वहाँ थे %s बारकोड कि बहुत लंबे थे।"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:511
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:521
 #, c-format
 msgid "There were no unreceived orders for this fund."
 msgstr "इस कोष के लिए कोई unreceived आदेश नही थे।"
@@ -46313,7 +46324,7 @@ msgid "Third"
 msgstr "तीसरा"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "This action cannot be reversed. Do you wish to continue?"
 msgstr "इस कार्रवाई के उलट नहीं किया जा सकता है। क्या आप जारी रखना चाहते हैं?"
 
@@ -46326,6 +46337,15 @@ msgstr "यह विशेषता केवल संरक्षक वर�
 #, c-format
 msgid "This authority type cannot be deleted"
 msgstr "यह प्राधिकरण प्रकार हटाया नहीं जा सकता"
+
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:413
+#, fuzzy, c-format
+msgid ""
+"This budget has funds attached. You must delete all attached funds before "
+"you can delete this budget."
+msgstr ""
+"%s मद (s) इस रिकॉर्ड से जुड़े होते हैं। आप इस रिकॉर्ड को हटाने से पहले सभी वस्तुओं को हटाना "
+"होगा।"
 
 #. %1$s:  patrons_in_category 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:247
@@ -46370,7 +46390,7 @@ msgstr ""
 "यह आवृत्ति अब भी द्वारा प्रयोग किया जाता है %s सदस्यता (s)। आप अभी भी इसे नष्ट करने के "
 "लिए करना चाहते हैं? "
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:520
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:530
 #, c-format
 msgid "This fund code does not exist in the destination budget."
 msgstr "इस निधि कोड गंतव्य के बजट में मौजूद नहीं है।"
@@ -46668,7 +46688,7 @@ msgstr "यह रिकार्ड प्रयोग किया जात�
 
 #. For the first occurrence,
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:402
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:408
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:113
 #, c-format
 msgid "This record is used %s times"
@@ -47484,8 +47504,8 @@ msgstr "शीर्ष पेज मार्जिन:"
 msgid "Topics"
 msgstr "विषय"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:552
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:588
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:566
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:602
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:301
 #: intranet-tmpl/prog/en/modules/tags/review.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:199
@@ -47548,7 +47568,7 @@ msgstr "कुल राशि क्रेडिट: %s"
 msgid "Total amount of cash collected: %s "
 msgstr "नकदी की कुल राशि एकत्र: %s "
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:207
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:210
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "कुल राशि बकायाः "
@@ -47559,7 +47579,7 @@ msgstr "कुल राशि बकायाः "
 msgid "Total amount paid: %s"
 msgstr "कुल राशि का भुगतान किया: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:129
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:130
 #, c-format
 msgid "Total amount payable:"
 msgstr "कुल देय राशि:"
@@ -47570,12 +47590,12 @@ msgstr "कुल देय राशि:"
 msgid "Total amount refunds: %s"
 msgstr "कुल राशि वापसी: %s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:184
 #, c-format
 msgid "Total amount to be written off:"
 msgstr "कुल राशि से माफ होना चाहिए:"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:357
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:363
 #, c-format
 msgid "Total amount: "
 msgstr "कुल राशि:"
@@ -48289,7 +48309,7 @@ msgstr "अज्ञात टैग"
 msgid "Unpacking completed"
 msgstr "Unpacking पूरा"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:442
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:452
 #, c-format
 msgid "Unreceived orders"
 msgstr "अप्राप्त आदेशों"
@@ -49179,12 +49199,12 @@ msgid "View final record"
 msgstr "एक अंतिम रिकार्ड"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:559
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:573
 msgid "View funds for [% period_active.budget_period_description %]"
 msgstr "के लिए कोष देखें [% period_active.budget_period_description %]"
 
 #. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:595
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:609
 msgid "View funds for [% period_loo.budget_period_description %]"
 msgstr "के लिए कोष देखें [% period_loo.budget_period_description %]"
 
@@ -49751,7 +49771,7 @@ msgstr "ख़ारिज करना"
 msgid "Write off all"
 msgstr "सभी को ख़ारिज करना"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:159
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:161
 #, c-format
 msgid "Write off an individual fine"
 msgstr "व्यक्तिगत जुर्माने को खारिज करना"
@@ -49762,7 +49782,7 @@ msgid "Write off fines and fees"
 msgstr "जुर्माना और फीस ख़ारिज करना "
 
 #. INPUT type=submit name=confirm_writeoff
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:193
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
 msgid "Write off this charge"
 msgstr "इस प्रभार को ख़ारिज करना "
 
@@ -49889,7 +49909,7 @@ msgstr "हाँ, बन्द (Y)"
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:184
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:299
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:416
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:425
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
@@ -50314,7 +50334,7 @@ msgstr ""
 "होते हैं, तो यह अत्यधिक है कि ऐसा नहीं करने के लिए सिफारिश की है।"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:39
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:45
 msgid "You have chosen to move all unreceived orders from '%s' to '%s'."
 msgstr "आप 'से सभी unreceived आदेशों स्थानांतरित करने के लिए चुना है %s ' को ' %s '।"
 
@@ -50909,6 +50929,16 @@ msgstr "[% अगर (तिथि 2)%] [% DATE2%] [% और%] कल [% अं�
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:814
 msgid "[% IF ( reserveloo.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
 msgstr "[% IF (reserveloo.suspend)%] का निलंबन रद्द [% और%] को निलंबित [% अंत%]"
+
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:15
+#, fuzzy
+msgid ""
+"[% block_budget.count %] fund(s) are attached to this budget. You must "
+"delete all attached funds before deleting this budget."
+msgstr ""
+"[% गणना %]मद(ओ) इस रिकॉर्ड से जुड़े होते हैं। आप इस रिकॉर्ड को हटाने से पहले सभी वस्तुओं को "
+"हटाना होगा."
 
 #. A
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:198
@@ -51659,7 +51689,7 @@ msgstr "चुनना"
 msgid "click to log out"
 msgstr "लॉग आउट के लिए क्लिक करें"
 
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:243
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:249
 #, c-format
 msgid "closed"
 msgstr "बंद करना"
