@@ -30,9 +30,13 @@ Koha::REST::Plugin::Objects
 =head3 objects.search
 
     my $patrons_set = Koha::Patrons->new;
-    my $patrons = $c->objects->search($patrons_set);
+    my $patrons = $c->objects->search( $patrons_set, [\&to_model] );
 
-Performs a database search using given Koha::Objects object and query parameters
+Performs a database search using given Koha::Objects object and query parameters.
+Optionally, it applies the I<$to_model> function reference before building the
+query itself.
+
+Note: Make sure I<$to_model> doesn't autovivify keys.
 
 Returns a Koha::Objects object
 
@@ -43,7 +47,7 @@ sub register {
 
     $app->helper(
         'objects.search' => sub {
-            my ( $c, $objects_set ) = @_;
+            my ( $c, $objects_set, $to_model ) = @_;
 
             my $args = $c->validation->output;
             my $attributes = {};
@@ -67,7 +71,15 @@ sub register {
                 }
             );
 
-            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+            # Call the to_model function by reference, if defined
+            if ( defined $filtered_params ) {
+
+                # Apply the mapping function to the passed params
+                $filtered_params = $to_model->($filtered_params)
+                  if defined $to_model;
+                $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+            }
+
             # Perform search
             my $objects = $objects_set->search( $filtered_params, $attributes );
 
