@@ -34,6 +34,23 @@ get '/patrons' => sub {
     $c->render( status => 200, json => $patrons );
 };
 
+get '/patrons_to_model' => sub {
+    my $c = shift;
+    $c->validation->output($c->req->params->to_hash);
+    my $patrons_set = Koha::Patrons->new;
+    my $patrons = $c->objects->search( $patrons_set, \&_to_model );
+    $c->render( status => 200, json => $patrons );
+};
+
+sub _to_model {
+    my $params = shift;
+
+    if ( exists $params->{nombre} ) {
+        $params->{firstname} = delete $params->{nombre};
+    }
+
+    return $params;
+}
 
 # The tests
 use Test::More tests => 1;
@@ -49,7 +66,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 34;
+    plan tests => 62;
 
     my $t = Test::Mojo->new;
 
@@ -112,6 +129,43 @@ subtest 'objects.search helper' => sub {
 
     # _match=contains
     $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=contains')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_has('/2')
+        ->json_hasnt('/3')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Manuela')
+        ->json_is('/2/firstname' => 'Emanuel');
+
+    ## _to_model tests
+    # _match=starts_with
+    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_hasnt('/2')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Manuela');
+
+    # _match=ends_with
+    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_has('/1')
+        ->json_hasnt('/2')
+        ->json_is('/0/firstname' => 'Manuel')
+        ->json_is('/1/firstname' => 'Emanuel');
+
+    # _match=exact
+    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=exact')
+        ->status_is(200)
+        ->json_has('/0')
+        ->json_hasnt('/1')
+        ->json_is('/0/firstname' => 'Manuel');
+
+    # _match=contains
+    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
