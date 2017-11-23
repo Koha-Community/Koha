@@ -50,13 +50,13 @@ sub loadDatas{
     $query .= 'left join deletedbiblioitems on items.biblioitemnumber=deletedbiblioitems.biblioitemnumber ';
 
     $query .= 'left join biblio_metadata as bibliometa on items.biblionumber=bibliometa.biblionumber ';
-    $query .= 'left join biblio_metadata as deletedbibliometa on items.biblionumber=deletedbibliometa.biblionumber ';
+    $query .= 'left join deletedbiblio_metadata as deletedbibliometa on items.biblionumber=deletedbibliometa.biblionumber ';
 
     $query .= 'left join biblioitems as dbiblioitems on deleteditems.biblioitemnumber=dbiblioitems.biblioitemnumber ';
     $query .= 'left join deletedbiblioitems as ddeletedbiblioitems on deleteditems.biblioitemnumber=ddeletedbiblioitems.biblioitemnumber ';
 
     $query .= 'left join biblio_metadata as dbibliometa on deleteditems.biblionumber=dbibliometa.biblionumber ';
-    $query .= 'left join biblio_metadata as ddeletedbibliometa on deleteditems.biblionumber=ddeletedbibliometa.biblionumber ';
+    $query .= 'left join deletedbiblio_metadata as ddeletedbibliometa on deleteditems.biblionumber=ddeletedbibliometa.biblionumber ';
 
     $query .= 'left join borrowers on reporting_statistics_tmp.borrowernumber = borrowers.borrowernumber ';
     $query .= "where other != 'KONVERSIO' and type in ('return') and reporting_statistics_tmp.borrowernumber is not NULL ";

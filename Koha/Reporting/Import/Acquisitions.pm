@@ -65,7 +65,7 @@ sub loadDatas{
     $query3 .= 'inner join items ';
     $query3 .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query3 .= 'inner join deletedbiblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
-    $query3 .= 'inner join biblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
+    $query3 .= 'inner join deletedbiblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where3, $parameters3) = $self->getWhere();
     push @parameters, @$parameters3;
 
@@ -78,7 +78,7 @@ sub loadDatas{
     $query4 .= "inner join deleteditems ";
     $query4 .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query4 .= 'inner join deletedbiblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
-    $query4 .= 'inner join biblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
+    $query4 .= 'inner join deletedbiblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where4, $parameters4) = $self->getWhere();
     push @parameters, @$parameters4;
 

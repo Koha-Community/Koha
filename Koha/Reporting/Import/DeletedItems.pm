@@ -34,7 +34,7 @@ sub loadDatas{
     $query .= 'left join biblioitems on deleteditems.biblioitemnumber = biblioitems.biblioitemnumber ';
     $query .= 'left join biblio_metadata as bibliometa on biblioitems.biblionumber = bibliometa.biblionumber ';
     $query .= 'left join deletedbiblioitems on deleteditems.biblioitemnumber = deletedbiblioitems.biblioitemnumber ';
-    $query .= 'left join biblio_metadata as deletedbibliometa on deletedbiblioitems.biblionumber = deletedbibliometa.biblionumber ';
+    $query .= 'left join deletedbiblio_metadata as deletedbibliometa on deletedbiblioitems.biblionumber = deletedbibliometa.biblionumber ';
 
     my $whereDeleted = "where deleteditems.itype in ".$itemtypes;
     if($self->getLastSelectedId()){
