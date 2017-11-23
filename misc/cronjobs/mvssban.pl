@@ -7,7 +7,6 @@
 
 # This will create Mikroväylä self-service library compatible XML
 # patron blocklist based on self-service library blocks set in Koha
-# (borrowerattribute SSBAN or OMATO).
 
 # Enter the location of the output file as a parameter, i.e. where
 # Mikroväylä will be able to fetch it to their machines. Old targetfile
@@ -54,11 +53,28 @@ my $xml = << 'HEAD_END';
   </xs:schema>
 HEAD_END
 
-# Get the patrons to be blocked and put their cardnumbers in XML
 my $dbh=C4::Context->dbh();
-my $blockme=$dbh->prepare ("SELECT DISTINCT cardnumber FROM borrowers WHERE borrowernumber IN (SELECT borrowernumber FROM borrower_attributes WHERE code='SSBAN' OR code='OMATO') OR lost='1' OR categorycode='YHTEISO';"); # FIXME - YHTEISO is hardcoded here, get rid of it one way or another
-$blockme->execute();
-while (my @patron = $blockme->fetchrow_array()) {
+
+# Get self service rules
+my $sth_ssrules=$dbh->prepare ( "SELECT value FROM systempreferences WHERE variable='SSRules'" );
+$sth_ssrules->execute();
+
+my @ssrules = $sth_ssrules->fetchrow_array();
+$sth_ssrules->finish();
+
+@ssrules=split (':', $ssrules[0]);
+@ssrules=split (' ', $ssrules[1]);
+
+my $categories;
+foreach (@ssrules) {
+  $categories.=', ' if ($categories ne '');
+  $categories.='\''. $_ . '\'';
+}
+
+# Get the patrons to be blocked and put their cardnumbers in XML
+my $sth_blockme=$dbh->prepare ("SELECT DISTINCT cardnumber FROM borrowers WHERE borrowernumber IN (SELECT borrowernumber FROM borrower_attributes WHERE code='SSBAN' and attribute in ('1', 'BANNED', 'NOPERMISSION', 'NOTACCEPTED') OR lost='1' OR categorycode NOT IN ($categories));"); 
+$sth_blockme->execute();
+while (my @patron = $sth_blockme->fetchrow_array()) {
     $xml = $xml . "  <patronaccess>\n    <patronid_pac>" . $patron[0] . "</patronid_pac>\n    <type_pac>1</type_pac>\n  </patronaccess>\n" unless $patron[0] eq '';
 }
 $xml = $xml . "</NewDataSet>\n";
