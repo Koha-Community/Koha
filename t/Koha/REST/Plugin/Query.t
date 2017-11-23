@@ -73,7 +73,7 @@ get '/dbic_merge_sorting' => sub {
     $attributes = $c->dbic_merge_sorting(
         {
             attributes => $attributes,
-            params     => { _match => 'exact', _order_by => 'uno|-dos|+tres' }
+            params     => { _match => 'exact', _order_by => [ 'uno', '-dos', '+tres', ' cuatro' ] }
         }
     );
     $c->render( json => $attributes, status => 200 );
@@ -117,9 +117,14 @@ subtest 'dbic_merge_sorting() tests' => sub {
 
     my $t = Test::Mojo->new;
 
-    $t->get_ok('/dbic_merge_sorting')
-      ->status_is(200)
+    $t->get_ok('/dbic_merge_sorting')->status_is(200)
       ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
-      ->json_is( '/b' => 'b', 'Existing values are kept (b)' )
-      ->json_is( '/order_by' => [ 'uno', { -desc => 'dos' }, { -asc => 'tres' } ] );
+      ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
+        '/order_by' => [
+            'uno',
+            { -desc => 'dos' },
+            { -asc  => 'tres' },
+            { -asc  => 'cuatro' }
+        ]
+      );
 };

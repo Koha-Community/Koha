@@ -81,7 +81,7 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
 
             if ( defined $args->{params}->{_order_by} ) {
                 my @order_by = map { _build_order_atom($_) }
-                                split( /\|/, $args->{params}->{_order_by} );
+                               @{ $args->{params}->{_order_by} };
                 $attributes->{order_by} = \@order_by;
             }
 
@@ -120,9 +120,10 @@ according to the following rules:
 sub _build_order_atom {
     my $string = shift;
 
-    if ( $string =~ m/^\+/ ) {
+    if ( $string =~ m/^\+/ or
+         $string =~ m/^\s/ ) {
         # asc order operator present
-        $string =~ s/^\+//;
+        $string =~ s/^(\+|\s)//;
         return { -asc => $string };
     }
     elsif ( $string =~ m/^\-/ ) {
