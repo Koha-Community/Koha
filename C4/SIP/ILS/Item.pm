@@ -102,6 +102,8 @@ sub new {
     $self->{hold_queue} = $holds;
     $self->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$self->{hold_queue}} )];
     $self->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$self->{hold_queue}} )];
+    $self->{title} = $biblio->title;
+    $self->{author} = $biblio->author;
     bless $self, $type;
 
     syslog( "LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
