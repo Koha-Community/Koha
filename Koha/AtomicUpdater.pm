@@ -191,7 +191,8 @@ sub getPendingAtomicUpdates {
     my $atomicUpdatesDeployed = $self->getAtomicUpdates();
     foreach my $key (keys(%$atomicupdateFiles)) {
         my $au = $atomicupdateFiles->{$key};
-        unless ($atomicUpdatesDeployed->{$au->issue_id}) {
+        my $parsedissueId =  $self->_parseIssueIds($au->issue_id);
+        unless ($atomicUpdatesDeployed->{$au->issue_id} || $atomicUpdatesDeployed->{$parsedissueId}) {
             #This script hasn't been deployed.
             $pendingAtomicUpdates{$au->issue_id} = $au;
         }
@@ -416,6 +417,16 @@ sub buildUpdateOrderFromGit {
 
     $self->_saveAsUpdateOrder(\@orderedCommits);
     return \@orderedCommits;
+}
+
+sub _parseIssueIds {
+    my ($self, $issueId) = @_;
+
+    my @keys = split /(-)/, $issueId;
+    delete $keys[1];
+    @keys = grep defined, @keys;
+
+    return join('', @keys);
 }
 
 sub _getGitCommits {
