@@ -66,7 +66,7 @@ while ( my @borrowernumber = $sth_modify->fetchrow_array ) {
     print "$year-$month-$day: Modifying Self-service ban of patron: $borrowernumber[0]\n";
     if ( defined $confirm ) {
         if ( defined $notaccepted ) {
-            $dbh->do( "UPDATE borrower_attributes WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOTACCEPTED');" );
+            $dbh->do( "UPDATE borrower_attributes SET attribute='NOTACCEPTED' WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOPERMISSION';" );
         }
         else {
             $dbh->do( "DELETE FROM borrower_attributes WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOPERMISSION');" );
