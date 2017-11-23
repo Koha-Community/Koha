@@ -19,6 +19,7 @@ package Koha::MessageQueue::PrintProviderEnfo;
 
 use Modern::Perl;
 use Net::FTP;
+use Net::SFTP::Foreign;
 
 use Koha::MessageQueue::PrintProviderInterface;
 use C4::Context;
@@ -89,7 +90,14 @@ sub _sendTheLetterViaFtp {
     my ($file, $providerConfig) = @_;
 
     #Get the ftp-connection.
-    my ($ftpcon, $error) = _getFtpToEnfo( $providerConfig );
+    my ($ftpcon, $error);
+    my $error_fn = 'error';
+    if ($providerConfig->{sftp}) {
+        ($ftpcon, $error) = _getSftpToEnfo( $providerConfig );
+    } else {
+        ($ftpcon, $error) = _getFtpToEnfo( $providerConfig );
+        $error_fn = 'message';
+    }
     if ($error) {
         return(undef, $error);
     }
@@ -97,16 +105,16 @@ sub _sendTheLetterViaFtp {
         #If the remoteDirectory-configuration is defined, try changing to that directory, if it is not present try creating it.
         if ($providerConfig->{remoteDirectory} && length $providerConfig->{remoteDirectory} > 0) {
             unless($ftpcon->cwd( $providerConfig->{remoteDirectory} )) {
-                my $firstError = "FTP: Cannot change working directory :".$ftpcon->message;
+                my $firstError = "FTP: Cannot change working directory :".$ftpcon->$error_fn;
                 unless($ftpcon->mkdir( $providerConfig->{remoteDirectory} )) {
-                    my $secondError = "FTP: Cannot create directory :".$ftpcon->message;
+                    my $secondError = "FTP: Cannot create directory :".$ftpcon->$error_fn;
                     return (undef, "FTP: Failed to change to given directory '".$providerConfig->{remoteDirectory}."'. Trying to create it fails as well. Errors follow:    ".$firstError."  <>  ".$secondError);
                 }
             }
         }
 
         unless($ftpcon->put( $file )) {
-            return (undef, "FTP->put():ing the eLetter '$file' to Enfo Zender failed: ". $ftpcon->message);
+            return (undef, "FTP->put():ing the eLetter '$file' to Enfo Zender failed: ". $ftpcon->$error_fn);
         }
 
         $ftpcon->close();
@@ -131,6 +139,23 @@ sub _getFtpToEnfo {
     else {
         return (undef, "Cannot login to ENFO's ftp server: $@");
     }
+}
+
+sub _getSftpToEnfo {
+    my ($providerConfig) = @_;
+
+    $Net::SFTP::Foreign::debug = 1;
+    my $sftpcon = Net::SFTP::Foreign->new(
+        host => $providerConfig->{host},
+        timeout => 10,
+        user => $providerConfig->{user},
+        password => $providerConfig->{passwd},
+        more => '-v'
+    );
+    unless ($sftpcon) {
+        return (undef, "Cannot connect to ENFO's sftp server: $@");
+    }
+    return ($sftpcon, undef);
 }
 
 sub _validateAllMessageQueues {

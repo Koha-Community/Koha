@@ -129,6 +129,7 @@ EXAMPLES:
    <host>ENFO IP</host>
    <user>USERNAME</user>
    <passwd>PASSWORD</passwd>
+   <sftp>1</sftp>
   </enfo>
  </printProviders>
 
