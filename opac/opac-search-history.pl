@@ -45,6 +45,11 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
+unless ( C4::Context->preference("EnableOpacSearchHistory") ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+    exit;
+}
+
 my $type = $cgi->param('type');
 my $action = $cgi->param('action') || q{};
 my $previous = $cgi->param('previous');
