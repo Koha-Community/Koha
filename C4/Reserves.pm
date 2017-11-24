@@ -922,6 +922,7 @@ sub CheckReserves {
                     $highest  = $res;
                     last;
                 }
+                last;
             }
         }
     }

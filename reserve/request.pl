@@ -509,7 +509,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     # existingreserves building
     my @reserveloop;
-    my $rows = 20;
+    my $rows = 50;
     my @reserves = Koha::Holds->search( { biblionumber => $biblionumber }, { order_by => 'priority', page => $page, rows => $rows } );
     foreach my $res (
         sort {
