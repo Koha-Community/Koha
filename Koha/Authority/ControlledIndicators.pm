@@ -83,6 +83,9 @@ sub get {
             } elsif( $rule->{$ind} eq 'auth2' ) {
                 $result->{$ind} = $report_fld->indicator(2) if $report_fld;
             } elsif( $rule->{$ind} eq 'thesaurus' ) {
+                my @info = _thesaurus_info( $record );
+                $result->{$ind} = $info[0];
+                $result->{sub2} = $info[1];
             } else {
                 $result->{$ind} = substr( $rule->{$ind}, 0, 1);
             }
@@ -115,6 +118,32 @@ sub _load_pref {
         }
     }
     return $res;
+}
+
+sub _thesaurus_info {
+    # This sub is triggered by the term 'thesaurus' in the controlling pref.
+    # The indicator of some MARC21 fields (like 600 ind2) is controlled by
+    # authority field 008/11 and 040$f. Additionally, it may also control $2.
+    my ( $record ) = @_;
+    my $code = $record->field('008')
+        ? substr($record->field('008')->data, 11, 1)
+        : q{};
+    my %thes_mapping = ( a => 0, b => 1, c => 2, d => 3, k => 5, n => 4, r => 7, s => 7, v => 6, z => 7, '|' => 4 );
+    my $ind = $thes_mapping{ $code } // $code // '4';
+
+    # Determine optional subfield $2
+    my $sub2;
+    if( $ind eq '7' ) {
+        # Important now to return a defined value
+        $sub2 = $code eq 'r'
+            ? 'aat'
+            : $code eq 's'
+            ? 'sears'
+            : $code eq 'z' # pick from 040$f
+            ? $record->subfield( '040', 'f' ) // q{}
+            : q{};
+    }
+    return ( $ind, $sub2 );
 }
 
 =head3 clear
