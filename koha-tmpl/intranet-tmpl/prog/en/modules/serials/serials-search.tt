@@ -160,15 +160,15 @@
                   <tfoot>
                     <tr>
                       <td></td>
-                      <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search expiration date" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search title" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search notes" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search library" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search location" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="7" placeholder="Search expiration date" /></td>
                       [% FOR field IN additional_fields_for_subscription %]
-                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 %]" placeholder="Search [% field.name %]" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 7 %]" placeholder="Search [% field.name %]" /></td>
                       [% END %]
                     </tr>
                   </tfoot>
@@ -279,14 +279,14 @@
                   <tfoot>
                     <tr>
                       <td></td>
-                      <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
-                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search ISSN" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search title" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search notes" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search library" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search location" /></td>
+                      <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search callnumber" /></td>
                       [% FOR field IN additional_fields_for_subscription %]
-                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 5 %]" placeholder="Search [% field.name %]" /></td>
+                        <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 %]" placeholder="Search [% field.name %]" /></td>
                       [% END %]
                     </tr>
                   </tfoot>
