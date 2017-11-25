@@ -1447,8 +1447,6 @@ sub merge {
         # We only need it in loose merge mode; replaces the former $exclude
         ? {}
         : { map { ( $_->[0], 1 ); } ( @record_from, @record_to ) };
-    # And we need to add $9 in order not to duplicate
-    $skip_subfields->{9} = 1 if !$overwrite;
 
     my $counteditedbiblio = 0;
     foreach my $biblionumber ( @biblionumbers ) {
@@ -1477,18 +1475,35 @@ sub merge {
                     $newtag,
                     $field->indicator(1),
                     $field->indicator(2),
-                    "9" => $mergeto,
+                    9 => $mergeto, # Needed to create field, will be moved
                 );
-                foreach my $subfield ( grep { $_->[0] ne '9' } @record_to ) {
-                    $field_to->add_subfields( $subfield->[0] => $subfield->[1] );
-                }
+                my ( @prefix, @postfix );
                 if ( !$overwrite ) {
                     # add subfields back in loose mode, check skip_subfields
+                    # The first extra subfields will be in front of the
+                    # controlled block, the rest at the end.
+                    my $prefix_flag = 1;
                     foreach my $subfield ( $field->subfields ) {
-                        next if $skip_subfields->{ $subfield->[0] };
-                        $field_to->add_subfields( $subfield->[0], $subfield->[1] );
+                        next if $subfield->[0] eq '9'; # skip but leave flag
+                        if ( $skip_subfields->{ $subfield->[0] } ) {
+                            # This marks the beginning of the controlled block
+                            $prefix_flag = 0;
+                            next;
+                        }
+                        if ($prefix_flag) {
+                            push @prefix, [ $subfield->[0], $subfield->[1] ];
+                        } else {
+                            push @postfix, [ $subfield->[0], $subfield->[1] ];
+                        }
                     }
                 }
+                foreach my $subfield ( @prefix, @record_to, @postfix ) {
+                    $field_to->add_subfields($subfield->[0] => $subfield->[1]);
+                }
+                # Move $9 to the end
+                $field_to->delete_subfield( code => '9' );
+                $field_to->add_subfields( 9 => $mergeto );
+
                 if ($tags_new && @$tags_new) {
                     $marcrecord->delete_field($field);
                     append_fields_ordered( $marcrecord, $field_to );
