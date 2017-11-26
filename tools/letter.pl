@@ -309,11 +309,11 @@ sub add_validate {
                 q{
                     UPDATE letter
                     SET branchcode = ?, module = ?, name = ?, is_html = ?, title = ?, content = ?, lang = ?
-                    WHERE branchcode = ? AND module = ? AND code = ? AND message_transport_type = ?
+                    WHERE branchcode = ? AND module = ? AND code = ? AND message_transport_type = ? AND lang = ?
                 },
                 undef,
                 $branchcode || '', $module, $name, $is_html || 0, $title, $content, $lang,
-                $branchcode, $oldmodule, $code, $mtt
+                $branchcode, $oldmodule, $code, $mtt, $lang
             );
         } else {
             $dbh->do(
