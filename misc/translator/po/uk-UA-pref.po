@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk-UA-i-staff-t-prog-v-3002000\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-04 07:17+0000\n"
+"PO-Revision-Date: 2017-08-23 06:58+0000\n"
 "Last-Translator: Serhij <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1493882272.000000\n"
+"X-POOTLE-MTIME: 1503471509.000000\n"
 
 # Acquisitions
 msgid "acquisitions.pref"
@@ -29,6 +29,10 @@ msgstr "Друк"
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# Create an item when"
 msgstr "Створювати примірник при "
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqCreateItem# This is only the default behavior, and can be changed per-basket."
+msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# cataloging the record."
@@ -55,7 +59,7 @@ msgid "acquisitions.pref#AcqEnableFiles# enable the ability to upload and attach
 msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\"\")."
+msgid "acquisitions.pref#AcqItemSetSubfieldsWhenReceiptIsCancelled# Upon cancelling a receipt, update the item's subfields if they were created when placing an order (e.g. o=5|a=\"bar foo\")."
 msgstr ""
 
 # Acquisitions > Policy
@@ -228,7 +232,7 @@ msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref Share anonymous usage statistics"
-msgstr ""
+msgstr "Поділитися анонімною статистикою використання"
 
 # Administration > SSL client certificate authentication
 msgid "admin.pref#AllowPKIAuth# Common Name"
@@ -336,6 +340,26 @@ msgstr ""
 
 # Administration > Google OpenID Connect
 msgid "admin.pref#GoogleOpenIDConnect# You will need to select OAuth2 when creating an app in the google cloud console, and set the web origin to your_opac_url and the redirect url to your_opac_url/cgi-bin/koha/svc/auth/googleopenidconnect ."
+msgstr ""
+
+# Administration > Google OpenID Connect
+msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Allow"
+msgstr ""
+
+# Administration > Google OpenID Connect
+msgid "admin.pref#GoogleOpenIDConnectAutoRegister# Don't Allow"
+msgstr ""
+
+# Administration > Google OpenID Connect
+msgid "admin.pref#GoogleOpenIDConnectAutoRegister# users logging in with Google Open ID to automatically register."
+msgstr ""
+
+# Administration > Google OpenID Connect
+msgid "admin.pref#GoogleOpenIDConnectDefaultBranch# Use this branch code when automatically registering a Google Open ID patron."
+msgstr ""
+
+# Administration > Google OpenID Connect
+msgid "admin.pref#GoogleOpenIDConnectDefaultCategory# Use this category code when automatically registering a Google Open ID patron."
 msgstr ""
 
 # Administration > Google OpenID Connect
@@ -1721,6 +1745,14 @@ msgid "cataloguing.pref#DefaultClassificationSource# as the default classificati
 msgstr " у якості джерела класифікації за умовчанням."
 
 # Cataloging > Record Structure
+msgid "cataloguing.pref#DefaultCountryField008#  Empty defaults to xxu for United States."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#DefaultCountryField008# Fill in the default country code for field 008 Range 15-17 of MARC21 - Place of publication, production, or execution. See <a href=\"http://www.loc.gov/marc/countries/countries_code.html\">MARC Code List for Countries</a>"
+msgstr ""
+
+# Cataloging > Record Structure
 msgid "cataloguing.pref#DefaultLanguageField008#  Empty defaults to eng."
 msgstr "  Пусте значення означатиме „eng“ (англійська)."
 
@@ -1781,8 +1813,8 @@ msgid "cataloguing.pref#MARCOrgCode# Fill in the <a href=\"http://www.loc.gov/ma
 msgstr "Введіть <a href=\"http://www.loc.gov/marc/organizations/orgshome.html\">MARC-код організації</a>"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable)."
-msgstr ", що використовуватиметься за умовчанням у нових MARC-записах (залиште порожнім якщо код невідомий)."
+msgid "cataloguing.pref#MARCOrgCode# by default in new MARC21 records (leave blank to disable). This can be also set on libraries level."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#MergeReportFields# <br />example: '001,245ab,600'"
@@ -2184,11 +2216,15 @@ msgstr "Правила резервування"
 
 # Circulation > Housebound module
 msgid "circulation.pref Housebound module"
-msgstr ""
+msgstr "circulation.pref Модуль прикутих до дому"
 
 # Circulation > Interface
 msgid "circulation.pref Interface"
 msgstr "Інтерфейс"
+
+# Circulation > Interlibrary Loans
+msgid "circulation.pref Interlibrary Loans"
+msgstr ""
 
 # Circulation > Self Checkout
 msgid "circulation.pref Self Checkout"
@@ -2532,15 +2568,15 @@ msgstr ""
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Allow"
-msgstr ""
+msgstr "Дозволити"
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Don't allow"
-msgstr ""
+msgstr "Не дозволяти"
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# batch checkouts"
-msgstr ""
+msgstr " пакетну видачу."
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckoutsValidCategories# (list of patron categories separated with a pipe '|')"
@@ -2548,6 +2584,18 @@ msgstr ""
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckoutsValidCategories# Patron categories allowed to checkout in a batch"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#BlockReturnOfLostItems# Block"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#BlockReturnOfLostItems# Don't block"
+msgstr ""
+
+# Circulation > Checkin Policy
+msgid "circulation.pref#BlockReturnOfLostItems# returning of items that have been lost."
 msgstr ""
 
 # Circulation > Checkin Policy
@@ -2616,19 +2664,19 @@ msgstr " вгадати відвідувача при введенні у пол
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# Use the checkout and fines rules of"
-msgstr ""
+msgstr "Використовувати правила обігу і штрафи "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the item is from."
-msgstr ""
+msgstr "від бібліотеки, з якої є примірник."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library the patron is from."
-msgstr ""
+msgstr "від бібліотеки, з якої є відвідувач."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#CircControl# the library you are logged in at."
-msgstr ""
+msgstr "від бібліотеки, у якій Ви увійшли в систему."
 
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# Activate"
@@ -2876,26 +2924,42 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
-msgstr ""
+msgstr "Використовувати правила обігу і штрафи "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the library the item is from."
-msgstr ""
+msgstr "від бібліотеки, з якої є примірник."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the library the item was checked out from."
-msgstr ""
+msgstr "від бібліотеки, з якої був виданий примірник."
 
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# Disable"
-msgstr ""
+msgstr "Вимкнути"
 
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# Enable"
-msgstr ""
+msgstr "Задіяти"
 
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# housebound module"
+msgstr ""
+
+# Circulation > Interlibrary Loans
+msgid "circulation.pref#ILLModule# Disable"
+msgstr ""
+
+# Circulation > Interlibrary Loans
+msgid "circulation.pref#ILLModule# Enable"
+msgstr ""
+
+# Circulation > Interlibrary Loans
+msgid "circulation.pref#ILLModule# the interlibrary loans module (master switch)."
+msgstr ""
+
+# Circulation > Interlibrary Loans
+msgid "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -2984,6 +3048,18 @@ msgid "circulation.pref#ManInvInNoissuesCharge# MANUAL_INV charges when summing 
 msgstr ""
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# Do not mark"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# Mark"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#MarkLostItemsAsReturned# items as returned when flagged as lost"
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking out if the patron has guarantees owing in total more than"
 msgstr ""
 
@@ -3041,6 +3117,22 @@ msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library to pick up a hold from."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Block"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more than the value of OPACFineNoRenewals,"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
 msgstr ""
 
 # Circulation > Holds Policy
@@ -3137,6 +3229,10 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#PrintNoticesMaxLines# item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
+msgstr ""
+
+# Circulation > Fines Policy
+msgid "circulation.pref#ProcessingFeeNote# Set the text to be recorded in the column 'note', table 'accountlines' when the processing fee (defined in item type) is applied."
 msgstr ""
 
 # Circulation > Interface
@@ -3296,6 +3392,10 @@ msgid "circulation.pref#ReturnToShelvingCart# all items to the location CART whe
 msgstr ""
 
 # Circulation > Self Checkout
+msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
+msgstr ""
+
+# Circulation > Self Checkout
 msgid "circulation.pref#SCOUserCSS# Include the following CSS on all pages in the web-based self checkout:"
 msgstr ""
 
@@ -3328,7 +3428,7 @@ msgid "circulation.pref#SelfCheckTimeout# seconds."
 msgstr ""
 
 # Circulation > Self Checkout
-msgid "circulation.pref#SelfCheckoutByLogin# Barcode"
+msgid "circulation.pref#SelfCheckoutByLogin# Cardnumber"
 msgstr ""
 
 # Circulation > Self Checkout
@@ -3810,6 +3910,18 @@ msgstr " календар, продовжуючи дату повернення 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
 msgstr " календар, щоб пропустити усі дні, коли бібліотека зачинена."
+
+# Circulation > Fines Policy
+msgid "circulation.pref#useDefaultReplacementCost# Don't use"
+msgstr ""
+
+# Circulation > Fines Policy
+msgid "circulation.pref#useDefaultReplacementCost# the default replacement cost defined in item type."
+msgstr ""
+
+# Circulation > Fines Policy
+msgid "circulation.pref#useDefaultReplacementCost# use"
+msgstr ""
 
 # Enhanced Content
 msgid "enhanced_content.pref"
@@ -4692,6 +4804,22 @@ msgid "i18n_l10n.pref#TimeFormat# Format times in"
 msgstr "Виводити час у "
 
 # I18N/L10N
+msgid "i18n_l10n.pref#TranslateNotices# Allow"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#TranslateNotices# Don't allow"
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#TranslateNotices# If set, notices will be translatable from the \"Notices and Slips\" interface. The language used to send a notice to a patron will be the one defined for the patron."
+msgstr ""
+
+# I18N/L10N
+msgid "i18n_l10n.pref#TranslateNotices# notices to be translated."
+msgstr ""
+
+# I18N/L10N
 msgid "i18n_l10n.pref#alphabet# <br/> Hint: Changing collation in the database for the 'surname' column of the 'borrowers' table is helpful to make browsing by last name work in members-home.pl when using an alphabet outside of A-Z"
 msgstr ""
 
@@ -5388,18 +5516,6 @@ msgid "opac.pref#OPACShelfBrowser# a shelf browser on item details pages, allowi
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OPACShowBarcode# Don't show"
-msgstr "Не показувати "
-
-# OPAC > Appearance
-msgid "opac.pref#OPACShowBarcode# Show"
-msgstr "Показувати "
-
-# OPAC > Appearance
-msgid "opac.pref#OPACShowBarcode# the item's barcode on the holdings tab."
-msgstr " штрих-коди примірників на вкладці даних про наявність у фондах."
-
-# OPAC > Appearance
 msgid "opac.pref#OPACShowCheckoutName# Don't show"
 msgstr "Не показувати"
 
@@ -5473,6 +5589,18 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OPACUserJS# Include the following JavaScript on all pages in the OPAC:"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACUserSummary# Don't show"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACUserSummary# Show"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OPACUserSummary# a summary of a logged in user's checkouts, overdues, holds and fines on the mainpage"
 msgstr ""
 
 # OPAC > Policy
@@ -5740,23 +5868,31 @@ msgid "opac.pref#OpacLocationBranchToDisplay# home library"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacLocationBranchToDisplayShelving# Display the shelving location under the"
+msgid "opac.pref#OpacLocationOnDetail# <br />Note: If 'on a separate column' is selected, you still need to enable the item_shelving_location display on the <a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> administration page"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacLocationBranchToDisplayShelving# for items on the OPAC record details page."
+msgid "opac.pref#OpacLocationOnDetail# Display the shelving location "
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacLocationBranchToDisplayShelving# holding library"
+msgid "opac.pref#OpacLocationOnDetail# below both home and holding libraries"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacLocationBranchToDisplayShelving# home and holding libraries"
+msgid "opac.pref#OpacLocationOnDetail# below the holding library"
 msgstr ""
 
 # OPAC > Appearance
-msgid "opac.pref#OpacLocationBranchToDisplayShelving# home library"
+msgid "opac.pref#OpacLocationOnDetail# below the home library"
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationOnDetail# for items on the OPAC record details page."
+msgstr ""
+
+# OPAC > Appearance
+msgid "opac.pref#OpacLocationOnDetail# on a separate column"
 msgstr ""
 
 # OPAC > Appearance
@@ -6440,6 +6576,10 @@ msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # Patrons > General
+msgid "patrons.pref#BorrowerMandatoryField# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
 msgstr ""
 
@@ -6480,7 +6620,7 @@ msgid "patrons.pref#CardnumberLength# Card numbers for patrons must be"
 msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size."
+msgid "patrons.pref#CardnumberLength# If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size of 32."
 msgstr ""
 
 # Patrons > General
@@ -6557,6 +6697,14 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# searching, editing and display of custom attributes on patrons."
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#FailedLoginAttempts# Block a patron's account if it reaches"
+msgstr ""
+
+# Patrons > Norwegian patron database
+msgid "patrons.pref#FailedLoginAttempts# failed login attempts."
 msgstr ""
 
 # Patrons > General
@@ -6656,6 +6804,22 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr ""
 
 # Patrons > General
+msgid "patrons.pref#RequireStrongPassword# (Must contain at least one digit, one lowercase and one uppercase)."
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#RequireStrongPassword# Don't require"
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#RequireStrongPassword# Require"
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#SMSSendDriver# Define a username/login"
 msgstr ""
 
@@ -6716,6 +6880,10 @@ msgid "patrons.pref#autoMemberNum# Don't"
 msgstr ""
 
 # Patrons > General
+msgid "patrons.pref#autoMemberNum# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
 msgstr ""
 
@@ -6748,7 +6916,7 @@ msgid "patrons.pref#intranetreadinghistory# Don't allow"
 msgstr "Не дозволяти"
 
 # Patrons > General
-msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout history (reading history is still stored, regardless of staff being allowed access or not)."
+msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout and hold history (reading history is still stored, regardless of staff being allowed access or not)."
 msgstr ""
 
 # Patrons > General
@@ -7480,7 +7648,7 @@ msgid "staff_client.pref#IntranetReportsHomeHTML# Show the following HTML in its
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#IntranetSlipPrinterJS# Use the following JavaScript for printing slips. Define at least function printThenClose(). For use e.g. with Firefox PlugIn jsPrintSetup, see http://jsprintsetup.mozdev.org/:"
+msgid "staff_client.pref#IntranetSlipPrinterJS# Use the following JavaScript for printing slips. See detailed description on the <a href='https://wiki.koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> and eventually Firefox PlugIn <a href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup documentation</a>:"
 msgstr ""
 
 # Staff Client > Appearance
@@ -7513,6 +7681,22 @@ msgstr ""
 
 # Staff Client > Options
 msgid "staff_client.pref#StaffDetailItemSelection# item selection in record detail page."
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#StaffLangSelectorMode# Display language selector on "
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#StaffLangSelectorMode# both top and footer"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#StaffLangSelectorMode# only footer"
+msgstr ""
+
+# Staff Client > Appearance
+msgid "staff_client.pref#StaffLangSelectorMode# top"
 msgstr ""
 
 # Staff Client > Options
@@ -7588,11 +7772,11 @@ msgid "staff_client.pref#intranetstylesheet# on all pages in the staff interface
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#staffClientBaseURL# . Do not include a trailing slash in the URL."
+msgid "staff_client.pref#staffClientBaseURL# The staff client is located at"
 msgstr ""
 
 # Staff Client > Appearance
-msgid "staff_client.pref#staffClientBaseURL# The staff client is located at http://"
+msgid "staff_client.pref#staffClientBaseURL# This should be a complete URL, starting with http:// or https://. Do not include a trailing slash in the URL. (This must be filled in correctly for CAS, svc, and load_testing to work.)"
 msgstr ""
 
 # Staff Client > Appearance
@@ -7655,6 +7839,10 @@ msgstr ""
 msgid "tools.pref Patron cards"
 msgstr ""
 
+# Tools > Reports
+msgid "tools.pref Reports"
+msgstr ""
+
 # Tools > Upload
 msgid "tools.pref Upload"
 msgstr ""
@@ -7701,6 +7889,14 @@ msgstr ""
 
 # Tools > News
 msgid "tools.pref#NewsAuthorDisplay# Staff client only"
+msgstr ""
+
+# Tools > Reports
+msgid "tools.pref#NumSavedReports# By default, show"
+msgstr ""
+
+# Tools > Reports
+msgid "tools.pref#NumSavedReports# reports on the Saved Reports page."
 msgstr ""
 
 # Tools > Upload
