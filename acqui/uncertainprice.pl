@@ -73,7 +73,7 @@ my $op = $input->param('op');
 my $owner = $input->param('owner') || 0 ; # flag to see only "my" orders, or everyone orders
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
-$template->param( basket => Koha::Acquisition::Baskets->find($basketno) );
+$template->param( basket => scalar Koha::Acquisition::Baskets->find($basketno) );
 
 #show all orders that have uncertain price for the bookseller
 my $pendingorders = SearchOrders({
