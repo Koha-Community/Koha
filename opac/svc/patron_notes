@@ -57,7 +57,7 @@ if ($is_ajax) {
         my $issue_id = $query->param('issue_id');
         my $clean_note = $scrubber->scrub($note);
         my $status = "saved";
-        my ($member, $issue);
+        my ($patron, $issue);
 
         my ( $template, $borrowernumber, $cookie ) = C4::Auth::get_template_and_user({
             template_name   => "opac-user.tt",
@@ -68,7 +68,7 @@ if ($is_ajax) {
 
         # verify issue_id
         if ( $issue_id =~ /\d+/ ) {
-            $member = GetMember(borrowernumber => $borrowernumber);
+            $patron = Koha::Patrons->find( $borrowernumber ); # Double fetch is specific to 17.05
             $issue = Koha::Checkouts->find($issue_id);
             if ( $issue->borrowernumber != $borrowernumber ) {
                 $status = "fail";
@@ -86,10 +86,20 @@ if ($is_ajax) {
                     branchcode => $branch,
                     tables => {
                         'biblio' => $biblio->{biblionumber},
-                        'borrowers' => $member->{borrowernumber},
+                        'borrowers' => $patron->borrowernumber,
                     },
                 );
-                C4::Message->enqueue($letter, $member, 'email');
+
+                my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->ReplytoDefault || C4::Context->preference('KohaAdminEmailAddress');
+                my $from_address = $patron->email || $patron->emailpro || $patron->B_email;
+
+                C4::Letters::EnqueueLetter({
+                    letter => $letter,
+                    message_transport_type => 'email',
+                    borrowernumber => $patron->borrowernumber,
+                    to_address => $to_address,
+                    from_address => $from_address,
+                });
             } else { # note empty, i.e removed
                 $status = "removed";
             }

@@ -43,10 +43,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $member = C4::Members::GetMember( borrowernumber => $borrowernumber );
+my $patron = Koha::Patrons->find( $borrowernumber );
 $template->param(
-    firstname      => $member->{'firstname'},
-    surname        => $member->{'surname'},
+    firstname      => $patron->firstname,
+    surname        => $patron->surname,
     borrowernumber => $borrowernumber,
 );
 
@@ -76,10 +76,20 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                 branchcode => $branch,
                 tables => {
                     'biblio' => $biblio->{biblionumber},
-                    'borrowers' => $member->{borrowernumber},
+                    'borrowers' => $patron->borrowernumber,
                 },
             );
-            C4::Message->enqueue($letter, $member, 'email');
+
+            my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->ReplytoDefault || C4::Context->preference('KohaAdminEmailAddress');
+            my $from_address = $patron->email || $patron->emailpro || $patron->B_email;
+
+            C4::Letters::EnqueueLetter({
+                letter => $letter,
+                message_transport_type => 'email',
+                borrowernumber => $patron->borrowernumber,
+                to_address => $to_address,
+                from_address => $from_address,
+            });
         }
     }
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
