@@ -19,10 +19,10 @@ function basketCount(){
 
 function writeCookie(name, val, wd) {
     if (wd) {
-        parent.opener.document.cookie = name + "=" + val;
+        parent.opener.document.cookie = name + "=" + val + ";path=/";
     }
     else {
-        parent.document.cookie = name + "=" + val;
+        parent.document.cookie = name + "=" + val + ";path=/";
     }
 }
 
