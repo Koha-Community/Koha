@@ -79,7 +79,17 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                     'borrowers' => $borrowernumber,
                 },
             );
-            C4::Message->enqueue($letter, $patron->unblessed, 'email');
+
+            my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->ReplytoDefault || C4::Context->preference('KohaAdminEmailAddress');
+            my $from_address = $patron->email || $patron->emailpro || $patron->B_email;
+
+            C4::Letters::EnqueueLetter({
+                letter => $letter,
+                message_transport_type => 'email',
+                borrowernumber => $patron->borrowernumber,
+                to_address => $to_address,
+                from_address => $from_address,
+            });
         }
     }
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
