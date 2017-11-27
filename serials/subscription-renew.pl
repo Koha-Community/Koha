@@ -62,6 +62,10 @@ my $mode           = $query->param('mode') || q{};
 my $op             = $query->param('op') || 'display';
 my @subscriptionids = $query->multi_param('subscriptionid');
 my $branchcode     = $query->param('branchcode');
+my $sublength = $query->param('sublength');
+my $subtype = $query->param('subtype');
+my ($numberlength, $weeklength, $monthlength);
+
 my $done = 0;    # for after form has been submitted
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -80,14 +84,15 @@ if ( $op eq "renew" ) {
     my $subscription = GetSubscription( $subscriptionid );
     output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;
     my $startdate = output_pref( { str => scalar $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
+    ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength( $subtype, $sublength );
     ReNewSubscription(
         {
             subscriptionid => $subscriptionid,
             user           => $loggedinuser,
             startdate      => $startdate,
-            numberlength   => scalar $query->param('numberlength'),
-            weeklength     => scalar $query->param('weeklength'),
-            monthlength    => scalar $query->param('monthlength'),
+            numberlength   => $numberlength,
+            weeklength     => $weeklength,
+            monthlength    => $monthlength,
             note           => scalar $query->param('note'),
             branchcode     => $branchcode
         }
@@ -130,6 +135,7 @@ my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
 $template->param(
     op => $op,
     libraries      => $libraries,
+    subtypes => [ qw( numberlength weeklength monthlength ) ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

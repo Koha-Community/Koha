@@ -36,6 +36,7 @@ use Koha::Serial;
 use Koha::Subscriptions;
 use Koha::Subscription::Histories;
 use Koha::SharedContent;
+use Scalar::Util qw( looks_like_number );
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -74,7 +75,7 @@ BEGIN {
 
       &GetNextSeq &GetSeq &NewIssue           &GetSerials
       &GetLatestSerials   &ModSerialStatus    &GetNextDate       &GetSerials2
-      &ReNewSubscription  &GetLateOrMissingIssues
+      &GetSubscriptionLength &ReNewSubscription  &GetLateOrMissingIssues
       &GetSerialInformation                   &AddItem2Serial
       &PrepareSerialsData &GetNextExpected    &ModNextExpected
       &GetPreviousSerialid
@@ -1482,6 +1483,28 @@ sub NewSubscription {
     }
     return $subscriptionid;
 }
+
+=head2 GetSubscriptionLength
+
+my ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength( $subtype, $sublength );
+
+This function calculates the subscription length.
+
+=cut
+
+sub GetSubscriptionLength {
+    my ($subtype, $length) = @_;
+
+    return unless looks_like_number($length);
+
+    return
+    (
+          $subtype eq 'issues' ? $length : 0,
+          $subtype eq 'weeks'  ? $length : 0,
+          $subtype eq 'months' ? $length : 0,
+    );
+}
+
 
 =head2 ReNewSubscription
 

@@ -3,6 +3,7 @@
 # This script includes tests for ReNewSubscription
 
 # Copyright 2015 BibLibre, Paul Poulain
+# Copyright 2018 Catalyst IT, Alex Buckley
 #
 # This file is part of Koha.
 #
@@ -21,7 +22,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 7;
 use Test::MockModule;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -93,6 +94,31 @@ ReNewSubscription(
         monthlength    => 12
     }
 );
+
+# Calculate the subscription length for the renewal for issues, days and months
+my ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('issues', 7);
+is ( $numberlength, 7, "Subscription length is 7 issues");
+
+($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('weeks', 7);
+is ( $weeklength, 7, "Subscription length is 7 weeks");
+
+($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('months', 7);
+is ( $monthlength, 7, "Subscription length is 7 months");
+
+# Check subscription length when no value is inputted into the numeric sublength field
+($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('months', '');
+is ($monthlength, undef, "Subscription length is undef months, invalid month data was not stored");
+
+# Check subscription length when a letter is inputted into the numeric sublength field
+($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('issues', 'w');
+is ($monthlength, undef, "Subscription length is undef issues, invalid issue data was not stored");
+
+# Check subscription length when a special character is inputted into numberic sublength field
+($numberlength, $weeklength, $monthlength) = GetSubscriptionLength('weeks', '!');
+is ($weeklength, undef, "Subscription length is undef weeks, invalid weeks data was not stored");
+
+# Renew the subscription and check that enddate has not been set
+
 my $history = Koha::Subscription::Histories->find($subscription->{subscriptionid});
 
 is ( $history->histenddate(), undef, 'subscription history not empty after renewal');

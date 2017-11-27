@@ -265,16 +265,6 @@ sub get_letter_loop {
     ];
 }
 
-sub _get_sub_length {
-    my ($type, $length) = @_;
-    return
-        (
-            $type eq 'issues' ? $length : 0,
-            $type eq 'weeks'   ? $length : 0,
-            $type eq 'months'  ? $length : 0,
-        );
-}
-
 sub _guess_enddate {
     my ($startdate_iso, $frequencyid, $numberlength, $weeklength, $monthlength) = @_;
     my ($year, $month, $day);
@@ -330,7 +320,7 @@ sub redirect_add_subscription {
     my $subtype = $query->param('subtype');
     my $sublength = $query->param('sublength');
     my ( $numberlength, $weeklength, $monthlength )
-        = _get_sub_length( $subtype, $sublength );
+        = GetSubscriptionLength( $subtype, $sublength );
     my $add1              = $query->param('add1');
     my $lastvalue1        = $query->param('lastvalue1');
     my $innerloop1        = $query->param('innerloop1');
@@ -443,8 +433,8 @@ sub redirect_mod_subscription {
 
     my $subtype = $query->param('subtype');
     my $sublength = $query->param('sublength');
-    my ($numberlength, $weeklength, $monthlength)
-        = _get_sub_length( $subtype, $sublength );
+    my ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength( $subtype, $sublength );
+    my $numberpattern = $query->param('numbering_pattern');
     my $locale = $query->param('locale');
     my $lastvalue1 = $query->param('lastvalue1');
     my $innerloop1 = $query->param('innerloop1');

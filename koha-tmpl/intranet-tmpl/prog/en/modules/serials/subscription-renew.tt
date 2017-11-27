@@ -35,26 +35,55 @@
                 <input type="text" size="10" id="startdate" name="startdate" value="[% startdate | html %]" class="datepicker"/>
                 <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
             </li>
-		<li><fieldset>
-		<legend>Subscription length:</legend>
-		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="[% subscription.numberlength | html %]" /></li>
-		<li><label for="weeklength">Number of weeks: </label><input type="text" id="weeklength" name="weeklength" value="[% subscription.weeklength | html %]" /></li>
-		<li><label for="monthlength">Number of months: </label><input type="text" id="monthlength" name="monthlength" value="[% subscription.monthlength | html %]" /></li></ol></fieldset></li>
-
-<li><label for="branchcode">Library:</label>
- <select name="branchcode" id="branchcode" style="width: 20em;">
-     [% UNLESS ( Independentbranches ) %]
-        <option value="">None</option>
-     [% END %]
-     [% IF CAN_user_serials_superserials %]
-        [% FOREACH library IN libraries %]
-             <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
+    <li>
+    <label>Subscription length:</label>
+    <select name="subtype" id="subtype">
+        [% FOREACH st IN subtypes %]
+            [% SWITCH st %]
+                [% CASE 'numberlength'%]
+                    [% IF st == subtype %]
+                        <option value="issues" selected="selected">
+                    [% ELSE %]
+                        <option value="issues">
+                    [% END %]
+                    issues
+                [% CASE 'weeklength' %]
+                    [% IF st == subtype %]
+                        <option value="weeks" selected="selected">
+                    [% ELSE %]
+                        <option value="weeks">
+                    [% END %]
+                    weeks
+                [% CASE 'monthlength' %]
+                    [% IF st == subtype %]
+                        <option value="months" selected="selected">
+                    [% ELSE %]
+                        <option value="months">
+                    [% END %]
+                    months
+                [% CASE %][% st | html %]
+            [% END %]
+            </option>
         [% END %]
-     [% END %]
-</select> (select a library)
-</li>
+    </select>
+    <input type="text" name="sublength" id="sublength" size="3" />(enter amount in numerals)
+    <input type="hidden" name="issuelengthcount">
+    </li>
 
-		<li><label for="note">Note for the librarian that will manage your renewal request: </label>
+    <li><label for="branchcode">Library:</label>
+    <select name="branchcode" id="branchcode" style="width: 20em;">
+        [% UNLESS ( Independentbranches ) %]
+            <option value="">None</option>
+        [% END %]
+        [% IF CAN_user_serials_superserials %]
+            [% FOREACH library IN libraries %]
+                <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
+            [% END %]
+        [% END %]
+    </select> (select a library)
+    </li>
+
+    <li><label for="note">Note for the librarian that will manage your renewal request: </label>
 		<textarea name="note" id="note" rows="5" cols="50"></textarea></li></ol></fieldset>
 		<fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
 </form>
