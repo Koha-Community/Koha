@@ -8,6 +8,7 @@
 [% USE ColumnsSettings %]
 
 [% BLOCK display_bormessagepref %]
+    [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
     [% IF ( bormessagepref ) %]
         <li>Patron notification:
             [% FOREACH mtt IN bormessagepref.keys %]
@@ -19,6 +20,7 @@
         </li>
            [% ELSE %]
         <li>Patron is not notified.</li>
+    [% END %] 
     [% END %]
 [% END %]
 
@@ -250,7 +252,8 @@ $(document).ready(function () {
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
         <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber %]&amp;&amp;branchcode=[% TransferWaitingAt %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
-[% IF ( wborcnum ) %]<h5>Hold for:</h5>
+[% IF ( wborcnum ) %]<h5>Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borothernames %]</a></h5>
+        [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
         <ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
             [% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
@@ -258,6 +261,7 @@ $(document).ready(function () {
             [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
             [% IF ( wboremail ) %]<li><a id="boremail" href="mailto:[% wboremail %]">[% wboremail %]</a></li>[% END %]
         </ul>
+	[% END %]
 
     <form method="post" action="returns.pl" class="confirm">
             <input type="hidden" name="WT-itemNumber" value="[% WrongTransferItem %]" />
@@ -296,8 +300,9 @@ $(document).ready(function () {
                         <h4>Notes: [% reservenotes %]</h4>
                     [% END %]
 
-                    <h4>Hold for:</h4>
-                    <ul>
+                    <h4>Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borothernames %]</a></h4>
+                [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
+		<ul>
                     <li>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])
                         <span class="patron-category"> - [% borcategory %]</span>
@@ -319,6 +324,7 @@ $(document).ready(function () {
                         <li class="error">Patron's address is in doubt</li>
                     [% END %]
                     </ul>
+                    [% END %] 
 
                     [% IF ( transfertodo ) %]
                         <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
@@ -372,8 +378,9 @@ $(document).ready(function () {
         <div id="transfer-needed" class="dialog message audio-alert-action">
             <h3>Hold needing transfer found</h3>
                 <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
-                <h4>Hold for: </h4>
-                    <ul>
+                <h4>Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borothernames %]</a></h4>
+                    [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
+                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
                         [% INCLUDE display_holdpatron_address %]
                         [% IF ( borphone ) %]<li>[% borphone %]</li>[% END %]
@@ -381,6 +388,7 @@ $(document).ready(function () {
 [% IF ( debarred ) %]<li class="error">Patron is RESTRICTED</li>[% END %]
 [% IF ( gonenoaddress ) %]<li class="error">Patron's address is in doubt</li>[% END %]
                     </ul>
+                    [% END %]
         [% IF ( transfertodo ) %]
             <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
         [% ELSE %]
@@ -453,6 +461,7 @@ $(document).ready(function () {
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a></caption>
         <tr>
             <th>Hold for:</th>
+            <!-- FIXME!, Use Recude syspref -->
             <td>[% name %]</td>
         </tr>
         </table>
@@ -493,14 +502,13 @@ $(document).ready(function () {
                     [% IF ( reservenotes ) %]
                         <h4>Notes: [% reservenotes %]</h4>
                     [% END %]
-                    <h5>Hold for:</h5>
+                    <h4>Hold for: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borothernames %]</a></h4>
+                        [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
                         <li>
                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
                                 [% borsurname %], [% borfirstname %]
-                            </a>
-                            ([% borcnum %])
-                            <span class="patron-category"> - [% borcategory %]</span>
-                        </li>
+                            <span class="patron-category"> - [% borcategory %]</span> 
+                        </li> 
 
                         [% INCLUDE display_holdpatron_address %]
 
@@ -517,6 +525,7 @@ $(document).ready(function () {
                                 [% END %]
                             </li>
                         [% END %]
+                        [% END %]			
 
                         [% UNLESS ( transfertodo) %]
                             [% INCLUDE display_bormessagepref %]

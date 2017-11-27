@@ -185,6 +185,7 @@ if ( $query->param('reserve_id') ) {
             name           => $name,
             borrowernumber => $borrowernumber,
             borcnum        => $borr->{'cardnumber'},
+            borothernames  => $borr->{'othernames'},
             borfirstname   => $borr->{'firstname'},
             borsurname     => $borr->{'surname'},
             borcategory    => $borr->{'description'},
@@ -430,6 +431,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
             country         => $borr->{'country'},
             wborrowernumber => $reserve->{'borrowernumber'},
             wborcnum        => $borr->{'cardnumber'},
+            wborothernames  => $borr->{'othernames'},
             wtransfertFrom  => $userenv_branch,
     );
 }
@@ -474,6 +476,7 @@ if ( $messages->{'ResFound'}) {
             state          => $borr->{'state'},
             country        => $borr->{'country'},
             borcnum        => $borr->{'cardnumber'},
+            borothernames  => $borr->{'othernames'},
             debarred       => $borr->{'debarred'},
             gonenoaddress  => $borr->{'gonenoaddress'},
             barcode        => $barcode,
@@ -591,6 +594,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             }
             $ri{borrowernumber} = $b->{'borrowernumber'};
             $ri{borcnum}        = $b->{'cardnumber'};
+            $ri{borothernames}  = $b->{'othernames'};
             $ri{borfirstname}   = $b->{'firstname'};
             $ri{borsurname}     = $b->{'surname'};
             $ri{bortitle}       = $b->{'title'};
