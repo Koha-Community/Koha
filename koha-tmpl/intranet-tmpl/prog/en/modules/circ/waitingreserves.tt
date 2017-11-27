@@ -1,28 +1,13 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-     $(document).ready(function() {
-         $('#resultlist').tabs();
-         $("th a").hide();
-        $("#holdst,#holdso").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "sPaginationType": "four_button"
-        }));
-      });
-//]]>
-</script>
 </head>
+
 <body id="circ_waitingreserves" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -213,4 +198,23 @@
 </div>
 [% END %]
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#resultlist').tabs();
+            $("th a").hide();
+            $("#holdst,#holdso").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "four_button"
+            }));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

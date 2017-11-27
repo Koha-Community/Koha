@@ -2,7 +2,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
-
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Article requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -12,99 +12,6 @@
 <body id="circ_article-requests" class="circ">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
-
-    <script type="text/javascript">//<![CDATA[
-        $(document).ready(function() {
-            $('#article-request-tabs').tabs();
-
-            [% IF article_requests_pending.count %]
-                $(".ar-pending-none").hide();
-            [% END %]
-
-            [% IF article_requests_processing.count %]
-                $(".ar-processing-none").hide();
-            [% END %]
-        });
-
-        function PrintSlip(link) {
-            window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
-        }
-
-        function Cancel( id, a ) {
-            notes = prompt(_("Reason for cancellation:"));
-            if ( notes == null ) {
-                return;
-            }
-
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'cancel',
-                    id: id,
-                    notes: notes
-                },
-                success: function( data ) {
-                    a.closest('tr').remove();
-                    UpdateTabCounts()
-                },
-                dataType: 'json'
-            });
-        }
-
-        function Process( id, a ) {
-            var table_row = a.closest('tr').clone();
-            table_row.find('.ar-process-request').remove();
-
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'process',
-                    id: id,
-                },
-                success: function( data ) {
-                    a.closest('tr').remove();
-                    $("#article-requests-processing-table").append( table_row );
-                    $("#article-requests-processing-table .ar-processing-none").hide();
-                    UpdateTabCounts()
-                },
-                dataType: 'json'
-            });
-        }
-
-        function Complete( id, a ) {
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'complete',
-                    id: id,
-                },
-                success: function( data ) {
-                    a.closest('tr').remove();
-                    UpdateTabCounts()
-                },
-                dataType: 'json'
-            });
-        }
-
-        function UpdateTabCounts() {
-            var pending_count = $('#article-requests-pending-table tbody tr.ar-row').length;
-            $("#ar_pending_count").html( pending_count );
-            if ( pending_count == 0 ) $(".ar-pending-none").show();
-
-            var processing_count = $('#article-requests-processing-table tbody tr.ar-row').length;
-            $("#ar_processing_count").html( processing_count );
-            if ( processing_count == 0 ) $(".ar-processing-none").show();
-        }
-    //]]></script>
 
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
@@ -406,4 +313,100 @@
             </div>
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#article-request-tabs').tabs();
+
+            [% IF article_requests_pending.count %]
+                $(".ar-pending-none").hide();
+            [% END %]
+
+            [% IF article_requests_processing.count %]
+                $(".ar-processing-none").hide();
+            [% END %]
+        });
+
+        function PrintSlip(link) {
+            window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+        }
+
+        function Cancel( id, a ) {
+            notes = prompt(_("Reason for cancellation:"));
+            if ( notes == null ) {
+                return;
+            }
+
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'cancel',
+                    id: id,
+                    notes: notes
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function Process( id, a ) {
+            var table_row = a.closest('tr').clone();
+            table_row.find('.ar-process-request').remove();
+
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'process',
+                    id: id,
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    $("#article-requests-processing-table").append( table_row );
+                    $("#article-requests-processing-table .ar-processing-none").hide();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function Complete( id, a ) {
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
+            a.closest('div').hide();
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: {
+                    action: 'complete',
+                    id: id,
+                },
+                success: function( data ) {
+                    a.closest('tr').remove();
+                    UpdateTabCounts()
+                },
+                dataType: 'json'
+            });
+        }
+
+        function UpdateTabCounts() {
+            var pending_count = $('#article-requests-pending-table tbody tr.ar-row').length;
+            $("#ar_pending_count").html( pending_count );
+            if ( pending_count == 0 ) $(".ar-pending-none").show();
+
+            var processing_count = $('#article-requests-processing-table tbody tr.ar-row').length;
+            $("#ar_processing_count").html( processing_count );
+            if ( processing_count == 0 ) $(".ar-processing-none").show();
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

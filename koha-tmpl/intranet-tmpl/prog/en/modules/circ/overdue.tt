@@ -1,82 +1,15 @@
 [% USE KohaDates %]
+[%- USE Branches -%]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-[% INCLUDE 'datatables.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[%- USE Branches -%]
-<script type="text/javascript">
- //<![CDATA[
-     function clone_parent(node) {
-        var parent = node.parentNode;
-        var clone = parent.cloneNode(true);
-        parent.parentNode.insertBefore(clone, parent.nextSibling);
-        $("a", clone).attr("style", "visibility: visible");
-        $("input", clone).attr("value", "");
-
-
-        var theid = $("span", clone).attr("id") || "";
-        var theid = $("span", clone).attr("id") || "";
-        var parts = theid.match(/^pattrodue-getready-(.*)$/);
-        if (parts && parts.length > 1)
-        {
-            var appendid = "-" + Math.floor(Math.random()*1000+1);
-            $("span", clone).attr("id",theid+appendid);
-
-            theid = $("input", clone).attr("id");
-            $("input", clone).attr("id",theid+appendid);
-
-            theid = $("div[id]", clone).attr("id");
-            $("div[id]", clone).attr("id",theid+appendid);
-
-            var attrcode = $("script", clone).attr("x-code");
-            var newsuffix = parts[1] + appendid;
-            create_auto_completion_responder(newsuffix,attrcode);
-        }
-
-    }
-
-
-    function delete_parent(node) {
-        var parent = node.parentNode;
-        parent.parentNode.removeChild(parent);
-    }
-
-    function create_auto_completion_responder(uniqueid,attrcode) {
-       $("#pattrodue-getready-" + uniqueid).ready(function(){
-            $( "#pattrodue-input-" + uniqueid ).autocomplete({
-                source: "/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode,
-                select: function( event, ui ) {
-                    $( "#pattrodue-input-"+uniqueid ).val( ui.item.description );
-                    return false;
-                }
-            })
-            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li></li>" )
-                .data( "ui-autocomplete-item", item )
-                .append( "<a>" + item.description + " (" + item.authorised_value + ")</a>" )
-                .appendTo( ul )
-                .css("font-size","90%").css("width","13em");
-            };
-        });
-    }
-
-    $(document).ready(function(){
-        $("#overduest").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            "aaSorting": [[0, 'asc']],
-            "aoColumnDefs": [
-                { "sType": "title-string", "aTargets": [ "title-string" ] }
-            ]
-        }));
-    });
-//]]>
-</script>
 <style type="text/css">
     .sql {display:none;}
 </style>
 </head>
+
 <body id="circ_overdue" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -261,5 +194,72 @@
   </form>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        function clone_parent(node) {
+            var parent = node.parentNode;
+            var clone = parent.cloneNode(true);
+            parent.parentNode.insertBefore(clone, parent.nextSibling);
+            $("a", clone).attr("style", "visibility: visible");
+            $("input", clone).attr("value", "");
+
+            var theid = $("span", clone).attr("id") || "";
+            var theid = $("span", clone).attr("id") || "";
+            var parts = theid.match(/^pattrodue-getready-(.*)$/);
+            if (parts && parts.length > 1){
+                var appendid = "-" + Math.floor(Math.random()*1000+1);
+                $("span", clone).attr("id",theid+appendid);
+
+                theid = $("input", clone).attr("id");
+                $("input", clone).attr("id",theid+appendid);
+
+                theid = $("div[id]", clone).attr("id");
+                $("div[id]", clone).attr("id",theid+appendid);
+
+                var attrcode = $("script", clone).attr("x-code");
+                var newsuffix = parts[1] + appendid;
+                create_auto_completion_responder(newsuffix,attrcode);
+            }
+        }
+
+
+        function delete_parent(node) {
+            var parent = node.parentNode;
+            parent.parentNode.removeChild(parent);
+        }
+
+        function create_auto_completion_responder(uniqueid,attrcode) {
+            $("#pattrodue-getready-" + uniqueid).ready(function(){
+                $( "#pattrodue-input-" + uniqueid ).autocomplete({
+                    source: "/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode,
+                    select: function( event, ui ) {
+                        $( "#pattrodue-input-"+uniqueid ).val( ui.item.description );
+                        return false;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.description + " (" + item.authorised_value + ")</a>" )
+                    .appendTo( ul )
+                    .css("font-size","90%").css("width","13em");
+                };
+            });
+        }
+
+        $(document).ready(function(){
+            $("#overduest").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "aaSorting": [[0, 'asc']],
+                "aoColumnDefs": [
+                    { "sType": "title-string", "aTargets": [ "title-string" ] }
+                ]
+            }));
+        });
+  </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

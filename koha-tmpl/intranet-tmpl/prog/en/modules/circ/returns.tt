@@ -5,7 +5,7 @@
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
-
+[% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
     [% IF ( bormessagepref ) %]
         <li>Patron notification:
@@ -33,129 +33,8 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Check in [% title |html %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
-[% INCLUDE 'timepicker.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-function Dopop(link) {
-    var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
-    $("#barcode").focus();
-}
-$(document).ready(function () {
-    $(".modal").modal({ backdrop: 'static' }).on('shown', function() {
-        $("#barcode").prop("disabled", true);
-    }).on('hidden', function() {
-        $("#barcode").prop("disabled", false).focus();
-    });
-
-    $(".modal").on('hidden.bs.modal', function (e) { $("#barcode").focus(); });
-
-    [% IF print_slip %]
-        Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
-    [% END %]
-
-    var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]
-    var returns_table = KohaTable("#checkedintable", {
-            "bFilter":false,
-            "bPaginate":false,
-            "bInfo":false,
-            "bSort":false,
-            "dom": 'B<"clearfix">t',
-            }, columns_settings);
-
-    $("#return_date_override").datetimepicker({
-        onClose: function(dateText, inst) {
-            if (validate_date(dateText, inst) ) {
-                $("#barcode").focus();
-            }
-        },
-        defaultDate: -1,
-        hour: 23,
-        minute: 59,
-        maxDate: 0
-    }).on("change", function(e, value) {
-        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-    });
-    $("#return_date_override").on("blur", function() {
-            check_valid_return_date();
-    });
-    $("#checkin-form").submit(function( event ) {
-        if ( !check_valid_return_date() ) {
-            event.preventDefault();
-        }
-    });
-
-    function check_valid_return_date() {
-        if ( $("#return_date_override").val() ) {
-            var datetime = DateTime_from_syspref( $("#return_date_override").val() );
-            var now = new Date();
-            if ( !datetime || datetime > now ) {
-                alert("Invalid return date/time!");
-                $("#return_date_override").val("")
-                return false;
-            }
-        }
-        return true;
-    }
-
-    $("#exemptcheck").change(function () {
-        if (this.checked == true) {
-            $("#barcode").addClass("alert");
-            $("#exemptfines").show();
-        } else {
-            $("#barcode").removeClass("alert");
-            $("#exemptfines").hide();
-        }
-        $("#barcode").focus();
-    });
-    $("#dropboxcheck").change(function () {
-        if (this.checked == true) {
-            $("#barcode").addClass("alert");
-            $("#dropboxmode").show();
-
-            $("#return_date_override_fields :input").prop('disabled', true);
-            $("#return_date_override").datetimepicker("disable");
-        } else {
-            $("#barcode").removeClass("alert");
-            $("#dropboxmode").hide();
-
-            $("#return_date_override_fields :input").prop('disabled', false);
-            $("#return_date_override").datetimepicker("enable");
-        }
-        $("#barcode").focus();
-    });
-    $("#forgivemanualholdsexpire").change(function () {
-        if (this.checked == true) {
-            $("#barcode").addClass("alert");
-            $("#forgivemanualholdsexpire-alert").show();
-        } else {
-            $("#barcode").removeClass("alert");
-            $("#forgivemanualholdsexpire-alert").hide();
-        }
-        $("#barcode").focus();
-    });
-    [% IF(overduecharges) %] $("#barcode").focus(function () {
-        if (($("#exemptcheck").prop("checked") == true) || ($("#dropboxcheck").prop("checked") == true)) {
-            $("#barcode").addClass("alert");
-        } else {
-            $("#barcode").removeClass("alert");
-        }
-    });
-    $("#barcode").blur(function () {
-        $("#barcode").removeClass("alert");
-    });
-    [% END %]
-    $('.openWin').on("click",function(e){
-        Dopop( $(this).data("url") );
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="circ_returns" class="circ">
 <span class="audio-alert-success"></span>
 
@@ -809,4 +688,131 @@ $(document).ready(function () {
 </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
+    [% INCLUDE 'timepicker.inc' %]
+
+    <script type="text/javascript">
+        function Dopop(link) {
+            var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+            $("#barcode").focus();
+        }
+        $(document).ready(function () {
+            $(".modal").modal({ backdrop: 'static' }).on('shown', function() {
+                $("#barcode").prop("disabled", true);
+            }).on('hidden', function() {
+                $("#barcode").prop("disabled", false).focus();
+            });
+
+            $(".modal").on('hidden.bs.modal', function (e) { $("#barcode").focus(); });
+
+            [% IF print_slip %]
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+            [% END %]
+
+            var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]
+            var returns_table = KohaTable("#checkedintable", {
+                    "bFilter":false,
+                    "bPaginate":false,
+                    "bInfo":false,
+                    "bSort":false,
+                    "dom": 'B<"clearfix">t',
+                    }, columns_settings);
+
+            $("#return_date_override").datetimepicker({
+                onClose: function(dateText, inst) {
+                    if (validate_date(dateText, inst) ) {
+                        $("#barcode").focus();
+                    }
+                },
+                defaultDate: -1,
+                hour: 23,
+                minute: 59,
+                maxDate: 0
+            }).on("change", function(e, value) {
+                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+            });
+            $("#return_date_override").on("blur", function() {
+                check_valid_return_date();
+            });
+            $("#checkin-form").submit(function( event ) {
+                if ( !check_valid_return_date() ) {
+                    event.preventDefault();
+                }
+            });
+
+            function check_valid_return_date() {
+                if ( $("#return_date_override").val() ) {
+                    var datetime = DateTime_from_syspref( $("#return_date_override").val() );
+                    var now = new Date();
+                    if ( !datetime || datetime > now ) {
+                        alert("Invalid return date/time!");
+                        $("#return_date_override").val("")
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            $("#exemptcheck").change(function () {
+                if (this.checked == true) {
+                    $("#barcode").addClass("alert");
+                    $("#exemptfines").show();
+                } else {
+                    $("#barcode").removeClass("alert");
+                    $("#exemptfines").hide();
+                }
+                $("#barcode").focus();
+            });
+            $("#dropboxcheck").change(function () {
+                if (this.checked == true) {
+                    $("#barcode").addClass("alert");
+                    $("#dropboxmode").show();
+
+                    $("#return_date_override_fields :input").prop('disabled', true);
+                    $("#return_date_override").datetimepicker("disable");
+                } else {
+                    $("#barcode").removeClass("alert");
+                    $("#dropboxmode").hide();
+
+                    $("#return_date_override_fields :input").prop('disabled', false);
+                    $("#return_date_override").datetimepicker("enable");
+                }
+                $("#barcode").focus();
+            });
+            $("#forgivemanualholdsexpire").change(function () {
+                if (this.checked == true) {
+                    $("#barcode").addClass("alert");
+                    $("#forgivemanualholdsexpire-alert").show();
+                } else {
+                    $("#barcode").removeClass("alert");
+                    $("#forgivemanualholdsexpire-alert").hide();
+                }
+                $("#barcode").focus();
+            });
+
+            [% IF(overduecharges) %]
+                $("#barcode").focus(function () {
+                    if (($("#exemptcheck").prop("checked") == true) || ($("#dropboxcheck").prop("checked") == true)) {
+                        $("#barcode").addClass("alert");
+                    } else {
+                        $("#barcode").removeClass("alert");
+                    }
+                });
+                $("#barcode").blur(function () {
+                    $("#barcode").removeClass("alert");
+                });
+            [% END %]
+
+            $('.openWin').on("click",function(e){
+                Dopop( $(this).data("url") );
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

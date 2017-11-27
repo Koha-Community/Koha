@@ -1,14 +1,11 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Circulation statistics for [% title |html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-$(document).ready(function(){
-    $("tr.mybranch td").css("background-color", "#CFE7FF");
-});
-</script>
 </head>
+
 <body id="circ_bookcount" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -63,4 +60,13 @@ $(document).ready(function(){
 [% INCLUDE 'biblio-view-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+        $("tr.mybranch td").css("background-color", "#CFE7FF");
+    });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

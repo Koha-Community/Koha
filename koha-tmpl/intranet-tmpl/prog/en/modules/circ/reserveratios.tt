@@ -2,33 +2,11 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-     $(document).ready(function() {
-        $(".ratiolimit").click(function () {
-            $("#ratio").val($(this).html());
-        });
-        $(".ratiolimit").hover(
-            function () { $(this).toggleClass("ulined") },
-            function () { $(this).toggleClass("ulined") }
-        );
-        $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [ [2,'desc'], [3,'asc'] ],
-            "aoColumnDefs": [
-                { "aTargets": [ 0,1,2,8 ], "sType": "natural" },
-                { "aTargets": [ 3 ], "sType": "anti-the" },
-            ],
-            "sPaginationType": "four_button"
-        }));
-     });
-//]]>
-</script>
 <style type="text/css">
     .sql { display: none; }
     .ulined { text-decoration: underline; }
@@ -36,6 +14,7 @@
     #holdst ul li {  list-style: outside url("[% interface %]/[% theme %]/img/item-bullet.gif") disc; }
 </style>
 </head>
+
 <body id="circ_reserveratios" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -163,4 +142,29 @@
 
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+  [% INCLUDE 'calendar.inc' %]
+  [% INCLUDE 'datatables.inc' %]
+  <script type="text/javascript">
+       $(document).ready(function() {
+          $(".ratiolimit").click(function () {
+              $("#ratio").val($(this).html());
+          });
+          $(".ratiolimit").hover(
+              function () { $(this).toggleClass("ulined") },
+              function () { $(this).toggleClass("ulined") }
+          );
+          $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
+              "aaSorting": [ [2,'desc'], [3,'asc'] ],
+              "aoColumnDefs": [
+                  { "aTargets": [ 0,1,2,8 ], "sType": "natural" },
+                  { "aTargets": [ 3 ], "sType": "anti-the" },
+              ],
+              "sPaginationType": "four_button"
+          }));
+       });
+  </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

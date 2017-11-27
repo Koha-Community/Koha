@@ -2,6 +2,7 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
@@ -10,30 +11,9 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-        if($('#barcodelist').length) {
-            $('#barcodelist').focus();
-        } else if ($('#checkoutrenew').length) {
-            $('#checkoutrenew').focus();
-        }
-        $("#checkout_infos").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
-            "aaSorting": [],
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
-            ],
-            "bPaginate": false
-        }));
- });
-//]]>
-</script>
 </head>
+
 <body id="circ_circulation_batch_checkouts" class="circ">
 
 [% INCLUDE 'header.inc' %]
@@ -307,4 +287,28 @@ $(document).ready(function() {
     </div>
 [% END %]
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if($('#barcodelist').length) {
+                $('#barcodelist').focus();
+            } else if ($('#checkoutrenew').length) {
+                $('#checkoutrenew').focus();
+            }
+            $("#checkout_infos").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "aaSorting": [],
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                ],
+                "bPaginate": false
+            }));
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

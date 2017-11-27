@@ -1,29 +1,13 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to receive</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    [% FOREACH branchesloo IN branchesloop %]
-    $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        "sDom": 't',
-        "bPaginate": false
-    }));
-    [% END %]
-});
-//]]>
-</script>
 </head>
+
 <body id="circ_transferstoreceive" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -104,4 +88,24 @@ $(document).ready(function() {
 </div>
 [% END %]
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            [% FOREACH branchesloo IN branchesloop %]
+            $("#transferst[% branchesloo.branchcode %]").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sDom": 't',
+                "bPaginate": false
+            }));
+            [% END %]
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

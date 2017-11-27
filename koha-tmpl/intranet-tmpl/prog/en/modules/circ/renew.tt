@@ -1,22 +1,10 @@
 [% USE Koha %]
 [% USE KohaDates %]
-
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>Koha &rsaquo; Circulation &rsaquo; Renew [% title |html %]</title>
-
 [% INCLUDE 'doc-head-close.inc' %]
-
-[% IF error %]
-    <script type="text/javascript">
-    //<![CDATA[
-        $( document ).ready(function() {
-            removeFocus()
-        });
-    //]]>
-    </script>
-[% END %]
-
 </head>
 
 <body id="circ_renew" class="circ">
@@ -173,5 +161,15 @@
 </div>
 [% END %]
 <div>
+
+[% MACRO jsinclude BLOCK %]
+    [% IF error %]
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                removeFocus();
+            });
+        </script>
+    [% END %]
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

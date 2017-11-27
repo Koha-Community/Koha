@@ -2,36 +2,13 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Pending on-site checkouts</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-$(document).ready(function(){
-  if ( $("#pending_onsite_checkout").length ) {
-    $("#pending_onsite_checkout").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-        "aoColumns": [
-            { "sType": "title-string" },
-            { "sType": "html" },
-            { "sType": "html" },
-            null,
-            { "sType": "html" },
-            null,
-            null,
-        ],
-        'bAutoWidth': false,
-        "sPaginationType": "four_button"
-    }));
-  }
-});
-//]]>
-</script>
-
 </head>
+
 <body id="circ_stats" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -83,4 +60,29 @@ $(document).ready(function(){
       [% IF Koha.Preference('CircSidebar') %][% INCLUDE 'circ-nav.inc' %][% END %]
     </div>
   </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            if ( $("#pending_onsite_checkout").length ) {
+                $("#pending_onsite_checkout").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+                    "aoColumns": [
+                        { "sType": "title-string" },
+                        { "sType": "html" },
+                        { "sType": "html" },
+                        null,
+                        { "sType": "html" },
+                        null,
+                        null,
+                    ],
+                    'bAutoWidth': false,
+                    "sPaginationType": "four_button"
+                }));
+            }
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

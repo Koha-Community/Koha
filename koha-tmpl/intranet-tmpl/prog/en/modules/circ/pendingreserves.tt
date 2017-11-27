@@ -3,75 +3,13 @@
 [% USE AuthorisedValues %]
 [%- USE Branches -%]
 [%- USE ItemTypes -%]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<!-- Plugin datatables -->
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/JavaScript">
-//<![CDATA[
-$(document).ready(function() {
-  var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
-  var holdst = KohaTable("#holdst", {
-    "aoColumnDefs": [
-        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-        { "sType": "title-string", "aTargets" : [ "title-string" ] },
-        { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
-    ],
-    "sPaginationType": "full_numbers"
-  }, columns_settings);
-  holdst.fnAddFilters("filter");
-  [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
-  function separateData ( ColumnData ){
-    var cD = ColumnData;
-    var new_array = new Array();
-    for ( j=0 ; j<cD.length ; j++ ) {
-        var split_array = cD[j].split(/<br>/gi);
-        for ( k=0 ; k<split_array.length ; k++ ){
-            var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
-            if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
-                new_array.push(str);
-            }
-        }
-    }
-    new_array.sort();
-    return new_array;
-  }
-  [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
-  function createSelect( data ) {
-      data = separateData(data);
-      var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
-      for ( i=0 ; i<len ; i++ ) {
-          r += '<option value="'+data[i]+'">'+data[i]+'</option>';
-      }
-      return r+'</select>';
-  }
-  $("#homebranchfilter").each( function () {
-      $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
-      $('select', this).change( function () {
-          var filter_value = $(this).val();
-          holdst.fnFilter( filter_value, 5, true );
-      } );
-  } );
-  $("#itypefilter").each( function () {
-      $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
-      $('select', this).change( function () {
-          holdst.fnFilter( $(this).val(), 9 );
-      } );
-  } );
-  $("#locationfilter").each( function () {
-      $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
-      $('select', this).change( function () {
-          holdst.fnFilter( $(this).val(), 10 );
-      } );
-  } );
-});
-//]]>
-</script>
 </head>
+
 <body id="circ_pendingreserves" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -209,4 +147,69 @@ $(document).ready(function() {
 </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+          var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
+          var holdst = KohaTable("#holdst", {
+            "aoColumnDefs": [
+                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
+            ],
+            "sPaginationType": "full_numbers"
+          }, columns_settings);
+          holdst.fnAddFilters("filter");
+          [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
+          function separateData ( ColumnData ){
+            var cD = ColumnData;
+            var new_array = new Array();
+            for ( j=0 ; j<cD.length ; j++ ) {
+                var split_array = cD[j].split(/<br>/gi);
+                for ( k=0 ; k<split_array.length ; k++ ){
+                    var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
+                    if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
+                        new_array.push(str);
+                    }
+                }
+            }
+            new_array.sort();
+            return new_array;
+          }
+          [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
+          function createSelect( data ) {
+              data = separateData(data);
+              var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
+              for ( i=0 ; i<len ; i++ ) {
+                  r += '<option value="'+data[i]+'">'+data[i]+'</option>';
+              }
+              return r+'</select>';
+          }
+          $("#homebranchfilter").each( function () {
+              $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
+              $('select', this).change( function () {
+                  var filter_value = $(this).val();
+                  holdst.fnFilter( filter_value, 5, true );
+              });
+          });
+          $("#itypefilter").each( function () {
+              $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
+              $('select', this).change( function () {
+                  holdst.fnFilter( $(this).val(), 9 );
+              });
+          });
+          $("#locationfilter").each( function () {
+              $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
+              $('select', this).change( function () {
+                  holdst.fnFilter( $(this).val(), 10 );
+              });
+          });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

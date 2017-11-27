@@ -5,45 +5,14 @@
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds queue</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css"> p { margin-top: 0; }</style>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript">//<![CDATA[
-$(document).ready(function() {
-    var holdst;
-
-    // Setup filters before DataTables initialisation, in case some columns are
-    // hidden by default
-    var filterColumnTimeoutId;
-    var filterColumn = function(e) {
-        clearTimeout(filterColumnTimeoutId);
-        filterColumnTimeoutId = setTimeout(function() {
-            var input = $(e.target);
-            var idx = input.parents('td').index();
-            holdst.api().column(idx + ':visible').search(input.val()).draw();
-        }, 200);
-    };
-    $('#holdst thead input').on('change keyup keydown', filterColumn);
-
-    var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
-    var holdst = KohaTable("#holdst", {
-        "aaSorting": [[ 3, "asc" ]],
-        "aoColumns": [
-            { "sType": "anti-the" },null,null,null,null,null,null,null,null,{ "sType": "title-string" },null
-        ],
-        "sDom": 'B<"clearfix">t',
-        "bSortCellsTop": true,
-        "bPaginate": false
-    }, columns_settings);
-
-});
-//]]>
-</script>
 </head>
+
 <body id="circ_view_holdsqueue" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -224,4 +193,40 @@ $(document).ready(function() {
 </div>
 [% END %]
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var holdst;
+
+            // Setup filters before DataTables initialisation, in case some columns are
+            // hidden by default
+            var filterColumnTimeoutId;
+            var filterColumn = function(e) {
+                clearTimeout(filterColumnTimeoutId);
+                filterColumnTimeoutId = setTimeout(function() {
+                    var input = $(e.target);
+                    var idx = input.parents('td').index();
+                    holdst.api().column(idx + ':visible').search(input.val()).draw();
+                }, 200);
+            };
+            $('#holdst thead input').on('change keyup keydown', filterColumn);
+
+            var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') %];
+            var holdst = KohaTable("#holdst", {
+                "aaSorting": [[ 3, "asc" ]],
+                "aoColumns": [
+                    { "sType": "anti-the" },null,null,null,null,null,null,null,null,{ "sType": "title-string" },null
+                ],
+                "sDom": 'B<"clearfix">t',
+                "bSortCellsTop": true,
+                "bPaginate": false
+            }, columns_settings);
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

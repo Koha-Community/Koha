@@ -1,96 +1,13 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% SET footerjs = 1 %]
 [% SET article_requests_view = 1 %]
 [% SET biblionumber = biblio.biblionumber %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Request article</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-// <![CDATA[
-$('#current-article-requests').ready(function() {
-    $(".hide").hide();
-});
-
-$(document).ready(function() {
-    $( "#patron" ).autocomplete({
-        source: "/cgi-bin/koha/circ/ysearch.pl",
-        minLength: 3,
-        select: function( event, ui ) {
-            $( "#patron" ).val( ui.item.cardnumber );
-            $( "#holds_patronsearch" ).submit();
-            return false;
-        }
-    })
-    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        return $( "<li></li>" )
-        .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.surname + ", " + item.firstname +
-                 " (" + item.cardnumber + ") <small>" + item.address +
-                 " " + item.city + " " + item.zipcode + " " +
-                 item.country + "</small></a>" )
-        .appendTo( ul );
-    };
-
-    $( ".ar-update-branchcode" ).on('focus', function(){
-        previous_branchcode = this.value;
-    }).on('change', function(){
-        var branchcode = this.value;
-        var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format( previous_branchcode, branchcode ));
-
-        if ( c ) {
-            var id = this.id.split("branchcode-")[1];
-            $("#update-processing-" + id ).css({opacity: 0, visibility: "visible"}).animate({opacity: 1.0}, 200);
-
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'update_branchcode',
-                    id: id,
-                    branchcode: branchcode,
-                },
-                success: function( data ) {
-                    $("#update-processing-" + id ).css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0}, 200);
-                },
-                dataType: 'json'
-            });
-
-        } else {
-            this.value = previous_branchcode;
-        }
-    });
-
-    $(".ar-cancel-request").on("click", function(){
-        var a = $(this);
-        var notes = prompt(_("Reason for cancellation:"));
-
-        if ( notes != null ) {
-            var id = this.id.split("cancel-")[1];
-            $("#cancel-processing-" + id ).hide('slow');
-            $("#cancel-processing-spinner-" + id ).show('slow');
-
-            $.ajax({
-                type: "POST",
-                url: '/cgi-bin/koha/svc/article_request',
-                data: {
-                    action: 'cancel',
-                    id: id,
-                    notes: notes
-                },
-                success: function( data ) {
-                    a.parents('tr').hide('slow');
-                },
-                dataType: 'json'
-            });
-        }
-    });
-});
-// ]]>
-</script>
 </head>
 
 <body id="circ_request-article" class="circ">
@@ -377,4 +294,90 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+
+    <script type="text/javascript">
+        $('#current-article-requests').ready(function() {
+            $(".hide").hide();
+        });
+
+        $(document).ready(function() {
+            $( "#patron" ).autocomplete({
+                source: "/cgi-bin/koha/circ/ysearch.pl",
+                minLength: 3,
+                select: function( event, ui ) {
+                    $( "#patron" ).val( ui.item.cardnumber );
+                    $( "#holds_patronsearch" ).submit();
+                    return false;
+                }
+            })
+            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                return $( "<li></li>" )
+                .data( "ui-autocomplete-item", item )
+                .append( "<a>" + item.surname + ", " + item.firstname +
+                         " (" + item.cardnumber + ") <small>" + item.address +
+                         " " + item.city + " " + item.zipcode + " " +
+                         item.country + "</small></a>" )
+                .appendTo( ul );
+            };
+
+            $( ".ar-update-branchcode" ).on('focus', function(){
+                previous_branchcode = this.value;
+            }).on('change', function(){
+                var branchcode = this.value;
+                var c = confirm(_("Are you sure you want to change the pickup library from %s to %s for this request?").format( previous_branchcode, branchcode ));
+
+                if ( c ) {
+                    var id = this.id.split("branchcode-")[1];
+                    $("#update-processing-" + id ).css({opacity: 0, visibility: "visible"}).animate({opacity: 1.0}, 200);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/cgi-bin/koha/svc/article_request',
+                        data: {
+                            action: 'update_branchcode',
+                            id: id,
+                            branchcode: branchcode,
+                        },
+                        success: function( data ) {
+                            $("#update-processing-" + id ).css({opacity: 1.0, visibility: "visible"}).animate({opacity: 0}, 200);
+                        },
+                        dataType: 'json'
+                    });
+
+                } else {
+                    this.value = previous_branchcode;
+                }
+            });
+
+            $(".ar-cancel-request").on("click", function(){
+                var a = $(this);
+                var notes = prompt(_("Reason for cancellation:"));
+
+                if ( notes != null ) {
+                    var id = this.id.split("cancel-")[1];
+                    $("#cancel-processing-" + id ).hide('slow');
+                    $("#cancel-processing-spinner-" + id ).show('slow');
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/cgi-bin/koha/svc/article_request',
+                        data: {
+                            action: 'cancel',
+                            id: id,
+                            notes: notes
+                        },
+                        success: function( data ) {
+                            a.parents('tr').hide('slow');
+                        },
+                        dataType: 'json'
+                    });
+                }
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
