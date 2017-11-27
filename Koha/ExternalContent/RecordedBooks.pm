@@ -73,7 +73,6 @@ sub new {
                 library_id        => $library_id,
                 domain            => $domain,
                 user_id           => $email,
-                user_agent_params => { agent => $class->agent_string }
             ) };
             $self->logger->warn("Invalid RecordedBooks user $email ($@)") if $@;
             $self->is_identified($client);
