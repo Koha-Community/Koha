@@ -66,22 +66,22 @@ var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( 
 var results_per_page = [% OPACnumSearchResults || 20 %];
 
 function search( page ) {
-    $( '#recordedbooks-status' ).html( _("Searching RecordedBooks...") + ' <img class="throbber" src="[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+    $( '#recordedbooks-status' ).html( MSG_SEARCHING.format("RecordedBooks") + ' <img class="throbber" src="[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
 
     KOHA.RecordedBooks.search( querystring, results_per_page, page, function( data ) {
         if ( data.error ) {
-            $( '#recordedbooks-status' ).html( '<strong class="unavailable">' + _("Error searching RecordedBooks collection") + ': ' + data.error + '</strong>' );
+            $( '#recordedbooks-status' ).html( '<strong class="unavailable">' + MSG_ERROR_SEARCHING_COLLECTION.format("RecordedBooks") + ': ' + data.error + '</strong>' );
             return;
         }
 
         if ( !data.total ) {
-            $( '#recordedbooks-status' ).html( '<strong>' + _("No results found in the library's RecordedBooks collection.") + '</strong>' );
+            $( '#recordedbooks-status' ).html( '<strong>' + MSG_NO_RESULTS_FOUND_IN_COLLECTION.format("RecordedBooks") + '</strong>' );
             return;
         }
 
         $( '#recordedbooks-results-list tbody' ).empty();
 
-        $( '#recordedbooks-status' ).html( '<strong>' + _("Found") + ' ' + data.total + ' ' + _("results in the library's RecordedBooks collection.") + '</strong>' );
+        $( '#recordedbooks-status' ).html( '<strong>' + MSG_RESULTS_FOUND_IN_COLLECTION.format(data.total, "RecordedBooks") + '</strong>' );
 
         for ( var i = 0; data.items[i]; i++ ) {
             var prod = data.items[i];
@@ -94,9 +94,9 @@ function search( page ) {
             results.push( prod.title );
             if (prod.url) results.push( '</a>' );
             results.push( '</span>' );
-            results.push( '<p>' + _("by") + ' ', prod.author, '</p>' );
+            results.push( '<p>' + MSG_BY + ' ', prod.author, '</p>' );
             if (prod.description) results.push( '<p>' + prod.description, '</p>' );
-            results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.media, '</span>' );
+            results.push( '<span class="results_summary mediatype"><span class="label">' + MSG_TYPE + ': </span>', prod.media, '</span>' );
 
             results.push( '</td>' );
 
@@ -125,7 +125,7 @@ function search( page ) {
         if (data.total == page*results_per_page) max_page++;
 
         if ( page != 1 ) {
-            pages.push( '<li><a class="od-nav" href="#" data-page="' + (page - 1) + '">&laquo; ' + _("Previous") + '</a></li>' );
+            pages.push( '<li><a class="od-nav" href="#" data-page="' + (page - 1) + '">&laquo; ' + MSG_PREVIOUS + '</a></li>' );
         }
 
         for ( var p = Math.max( 0, page - 9 ); p <= Math.min( max_page, p + 9 ); p++ ) {
@@ -137,7 +137,7 @@ function search( page ) {
         }
 
         if ( page < max_page ) {
-            pages.push( ' <li><a class="od-nav" href="#" data-page="' + (page + 1) + '">' + _("Next") + ' &raquo;</a></li>' );
+            pages.push( ' <li><a class="od-nav" href="#" data-page="' + (page + 1) + '">' + MSG_NEXT + ' &raquo;</a></li>' );
         }
 
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');

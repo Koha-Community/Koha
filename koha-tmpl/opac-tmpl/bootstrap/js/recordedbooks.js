@@ -27,11 +27,11 @@ KOHA.RecordedBooks = new function() {
         }
 
         if (data.checkouts) {
-            var checkouts_div = $('<div class="recordedbooks-div">').html('<h3>' + _("Checkouts") + '</h3>');
+            var checkouts_div = $('<div class="recordedbooks-div">').html('<h3>' + MSG_CHECKOUTS + '</h3>');
             var items = data.checkouts.items;
             var checkouts_list;
             if (items.length == 0) {
-                checkouts_list = _("No checkouts");
+                checkouts_list = MSG_NO_CHECKOUTS;
             } else {
                 checkouts_list = $('<ul class="recordedbooks-list">');
                 data.checkouts.items.forEach(function(item) {
@@ -43,11 +43,11 @@ KOHA.RecordedBooks = new function() {
         }
 
         if (data.holds) {
-            var holds_div = $('<div class="recordedbooks-div">').html('<h3>' + _("Holds") + '</h3>');
+            var holds_div = $('<div class="recordedbooks-div">').html('<h3>' + MSG_HOLDS + '</h3>');
             var items = data.holds.items;
             var holds_list;
             if (items.length == 0) {
-                holds_list = _("No holds");
+                holds_list = MSG_NO_HOLDS;
             } else {
                 holds_list = $('<ul class="recordedbooks-list">');
                 data.holds.items.forEach(function(item) {
@@ -203,18 +203,18 @@ KOHA.RecordedBooks = new function() {
             if (item) {
                 var expires = new Date(item.expires);
                 $('<span class="recordedbooks-item-status">')
-                    .text(_("Checked out until") + " " + expires.toLocaleString())
+                    .text(MSG_CHECKED_OUT_UNTIL.format(expires.toLocaleString()))
                     .appendTo(el);
                 $(el).append(" ");
 
                 if (item.url) {
                     var download = $('<a href="'+item.url+'">').appendTo(el);
-                    decorate_button(download, _("Download"));
+                    decorate_button(download, MSG_DOWNLOAD);
                     $(el).append(" ");
                 }
 
-                $(el).append( ajax_button(_("Check in"), function() {
-                    if( confirm(_("Are you sure you want to return this item?")) ) {
+                $(el).append( ajax_button(MSG_CHECK_IN, function() {
+                    if( confirm(MSG_CHECK_IN_CONFIRM) ) {
                         item_action({action: "return", isbn: isbn}, el);
                     }
                 }) );
@@ -225,14 +225,14 @@ KOHA.RecordedBooks = new function() {
             item = item_is_on_hold(isbn);
             if (item) {
                 $('<span class="recordedbooks-status">')
-                    .text(_("On hold"))
+                    .text(MSG_ON_HOLD)
                     .appendTo(el);
                 $(el).append(" ");
             }
 
             if(checkout_popup) {
-                $(el).append( ajax_button(_("Check out"), function() {
-                    if( confirm(_("Are you sure you want to checkout this item?")) ) {
+                $(el).append( ajax_button(MSG_CHECK_OUT, function() {
+                    if( confirm(MSG_CHECK_OUT_CONFIRM) ) {
                         svc_ajax('post', {action: "checkout", isbn: isbn}, function(data) {
                             if (data.checkouts) {
                                 details.checkouts = data.checkouts;
@@ -246,14 +246,14 @@ KOHA.RecordedBooks = new function() {
                 }) );
             }
             if (!item) {
-                $(el).append( ajax_button(_("Place hold"), function() {
+                $(el).append( ajax_button(MSG_PLACE_HOLD, function() {
                     item_action({action: "place_hold", isbn: isbn}, el);
                 }) );
             }
 
             if (item) {
-                $(el).append( ajax_button(_("Cancel"), function() {
-                    if( confirm(_("Are you sure you want to cancel this hold?")) ) {
+                $(el).append( ajax_button(MSG_CANCEL_HOLD, function() {
+                    if( confirm(MSG_CANCEL_HOLD_CONFIRM) ) {
                         item_action({action: "remove_hold", isbn: isbn}, el);
                     }
                 }) );
