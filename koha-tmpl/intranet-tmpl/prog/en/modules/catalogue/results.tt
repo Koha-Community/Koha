@@ -1,10 +1,7 @@
 [% USE Koha %]
 [% USE Biblio %]
 [% USE KohaDates %]
-[% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
-[% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'browser-strings.inc' %]
+[% SET footerjs = 1 %]
 [% IF BiblioDefaultViewmarc %]
     [% SET DetailPage="MARCdetail.pl" %]
 [% ELSIF BiblioDefaultViewlabeled_marc %]
@@ -14,259 +11,11 @@
 [% ELSE %]
     [% SET DetailPage="detail.pl" %]
 [% END %]
-
-<!--[if lt IE 9]>
-<script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
-<![endif]-->
-<script type="text/javascript" src="[% interface %]/js/browser.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
-var q_array = new Array();  // will hold search terms, if present
-[% IF ( AmazonCoverImages ) %]
-// http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
-function verify_images() {
-    $("img").each(function(i){
-        if ((this.src.indexOf('images-amazon.com') >= 0) || (this.src.indexOf('images.amazon.com') >=0)) {
-            w = this.width;
-            h = this.height;
-            if ((w == 1) || (h == 1)) {
-                this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
-            } else if ((this.complete != null) && (!this.complete)) {
-                this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
-            }
-        }
-    });
-}
-
-$(window).load(function() {
-        verify_images();
-     });
-[% END %]
-function Dopop(link) {
-        newin=window.open(link,'popup','width=500,height=500,toolbar=false,scrollbars=yes,resizeable=yes');
-}
-
-$(document).ready(function() {
-
-    $("#searchheader").fixFloat();
-
-    $("#cartsubmit").click(function(e){
-        e.preventDefault();
-        var checkboxes = $("#searchresults").find(":checkbox");
-        addMultiple(checkboxes);
-    });
-
-    $(".addtolist").on("click",function(e){
-        e.preventDefault();
-        var shelfnumber = $(this).data("shelfnumber");
-        var checkboxes = $("#searchresults").find(":checkbox");
-        var vshelf = vShelfAdd(checkboxes);
-        if( vshelf ){
-            if( $(this).hasClass("morelists") ){
-                Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf);
-            } else if( $(this).hasClass("newlist") ){
-                Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf);
-            } else {
-                Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf);
-            }
-        }
-    });
-
-$("#z3950submit").click(function(){
-    PopupZ3950();
-    return false;
-});
-
-$("#searchheader").on("click",".placehold", function(){
-    $("#holdFor").val("");
-    placeHold();
-    $(".btn-group").removeClass("open");
-    return false;
-});
-
-$(".placeholdfor").click(function(){
-    holdForPatron();
-    $(".btn-group").removeClass("open");
-    return false;
-});
-
-$("#forgetholdfor").click(function(){
-    forgetPatron();
-    $(".btn-group").removeClass("open");
-    return false;
-});
-
- $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
-
-    $(".selection").show();
-    [% IF ( query_desc ) %]
-    toHighlight = $("p,span.results_summary,a.title");
-        var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
-        q_array = query_desc.split(" ");
-        // ensure that we don't have "" at the end of the array, which can
-        // break the highlighter
-        while (q_array.length > 0 && q_array[q_array.length-1] == "") {
-            q_array = q_array.splice(0,-1);
-        }
-        highlightOn();
-        $("#highlight_toggle_on" ).hide().click(function(e) {
-            e.preventDefault();
-             highlightOn();
-        });
-        $("#highlight_toggle_off").show().click(function(e) {
-            e.preventDefault();
-            highlightOff();
-        });
-    [% END %]
-
-    [% IF (SEARCH_RESULTS) %]
-        var newresults = [
-            [%- FOREACH result IN SEARCH_RESULTS -%]
-                [%- result.biblionumber %],
-            [%- END -%]
-        ];
-        var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
-        browser.create([% SEARCH_RESULTS.first.result_number %], '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
-               newresults, '[% total %]');
-    [% END %]
-    [% IF (gotoPage && gotoNumber) %]
-        [% IF (gotoNumber == 'first') %]
-            window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.first.biblionumber %] + '&searchid=[% searchid %]';
-        [% ELSIF (gotoNumber == 'last') %]
-            window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.last.biblionumber %] + '&searchid=[% searchid %]';
-        [% END %]
-    [% END %]
-
-    [% IF LocalCoverImages %]
-        KOHA.LocalCover.LoadResultsCovers();
-    [% END %]
-
-    $("#select_all").on("click",function(e){
-        e.preventDefault();
-        selectAll();
-    });
-    $("#clear_all").on("click",function(e){
-        e.preventDefault();
-        clearAll();
-    });
-
-    $("#searchresults").on("click",".addtocart",function(e){
-        e.preventDefault();
-        var selection_id = this.id;
-        var biblionumber = selection_id.replace("cart","");
-        addRecord(biblionumber);
-    });
-
-    $("#searchresults").on("click",".cartRemove",function(e){
-        e.preventDefault();
-        var selection_id = this.id;
-        var biblionumber = selection_id.replace("cartR","");
-        delSingleRecord(biblionumber);
-    });
-
-});
-
-
-[% IF ( query_desc ) %]function highlightOff() {
-    toHighlight.removeHighlight();
-    $(".highlight_toggle").toggle();
-}
-function highlightOn() {
-    var x;
-    for (x in q_array) {
-        q_array[x] = q_array[x].toLowerCase();
-        var myStopwords = "[% Koha.Preference('NotHighlightedWords') %]".toLowerCase().split('|');
-        if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
-            toHighlight.highlight(q_array[x]);
-        }
-    }
-    $(".highlight_toggle").toggle();
-}[% END %]
-
-function selectAll () {
-    $(".selection").prop("checked", true);
-}
-function clearAll () {
-    $(".selection").prop("checked", false);
-}
-function placeHold () {
-    var checkedItems = $(".selection:checked");
-    if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_ITEM_SELECTED);
-        return false;
-    }
-    var bibs = "";
-    var badBibs = false;
-    $(checkedItems).each(function() {
-        var bib = $(this).val();
-        if ($("#reserve_" + bib).size() == 0) {
-            alert(MSG_NON_RESERVES_SELECTED);
-            badBibs = true;
-            return false;
-        }
-        bibs += bib + "/";
-    });
-    if (badBibs) {
-        return false;
-    }
-    $("#hold_form_biblios").val(bibs);
-    $("#hold_form").submit();
-    return false;
-}
-
-function forgetPatron(){
-    $.removeCookie("holdfor", { path: '/' });
-    $(".holdforlink").remove();
-    $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> "+_("Place hold")+"</a>");
-}
-
-function addToList () {
-    var checkedItems = $(".selection:checked");
-    if ($(checkedItems).size() == 0) {
-        alert(MSG_NO_ITEM_SELECTED);
-        return false;
-    }
-    var bibs = "";
-    $(checkedItems).each(function() {
-        bibs += $(this).val() + "/";
-    });
-
-    var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
-	window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
-    return false;
-}
-
-/* this function open a popup to search on z3950 server.  */
-function PopupZ3950() {
-    var strQuery = GetZ3950Terms();
-    if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-    }
-}
-/* provide Z3950 search points */
-function GetZ3950Terms(){
-	var strQuery="&frameworkcode=";
-	[% FOREACH z3950_search_param IN z3950_search_params %]
-        strQuery += "&" + "[% z3950_search_param.name |uri %]" + "=" + "[% z3950_search_param.value |uri %]";
-	[% END %]
-	return strQuery;
-}
-
-function holdfor(){
-    $("#holdFor").val("");
-    placeHold();
-}
-
-function holdForPatron() {
-    $("#holdFor").val("[% holdfor_cardnumber %]");
-    placeHold();
-}
-//]]>
-</script>
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="catalog_results" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -867,4 +616,260 @@ function holdForPatron() {
 [% INCLUDE 'facets.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'browser-strings.inc' %]
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="[% interface %]/lib/shims/json2.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    <script type="text/javascript">
+        var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+        var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
+        var q_array = new Array();  // will hold search terms, if present
+        [% IF ( AmazonCoverImages ) %]
+            // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
+            function verify_images() {
+                $("img").each(function(i){
+                    if ((this.src.indexOf('images-amazon.com') >= 0) || (this.src.indexOf('images.amazon.com') >=0)) {
+                        w = this.width;
+                        h = this.height;
+                        if ((w == 1) || (h == 1)) {
+                            this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                        } else if ((this.complete != null) && (!this.complete)) {
+                            this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                        }
+                    }
+                });
+            }
+
+            $(window).load(function() {
+                verify_images();
+            });
+        [% END %]
+
+        $(document).ready(function() {
+
+            $("#searchheader").fixFloat();
+
+            $("#cartsubmit").click(function(e){
+                e.preventDefault();
+                var checkboxes = $("#searchresults").find(":checkbox");
+                addMultiple(checkboxes);
+            });
+
+            $(".addtolist").on("click",function(e){
+                e.preventDefault();
+                var shelfnumber = $(this).data("shelfnumber");
+                var checkboxes = $("#searchresults").find(":checkbox");
+                var vshelf = vShelfAdd(checkboxes);
+                if( vshelf ){
+                    if( $(this).hasClass("morelists") ){
+                        openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?' + vshelf);
+                    } else if( $(this).hasClass("newlist") ){
+                        openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vshelf);
+                    } else {
+                        openWindow('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vshelf);
+                    }
+                }
+            });
+
+            $("#z3950submit").click(function(){
+                PopupZ3950();
+                return false;
+            });
+
+            $("#searchheader").on("click",".placehold", function(){
+                $("#holdFor").val("");
+                placeHold();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+
+            $(".placeholdfor").click(function(){
+                holdForPatron();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+
+            $("#forgetholdfor").click(function(){
+                forgetPatron();
+                $(".btn-group").removeClass("open");
+                return false;
+            });
+
+            $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+
+            $(".selection").show();
+
+            [% IF ( query_desc ) %]
+                toHighlight = $("p,span.results_summary,a.title");
+                var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                q_array = query_desc.split(" ");
+                // ensure that we don't have "" at the end of the array, which can
+                // break the highlighter
+                while (q_array.length > 0 && q_array[q_array.length-1] == "") {
+                    q_array = q_array.splice(0,-1);
+                }
+                highlightOn();
+                $("#highlight_toggle_on" ).hide().click(function(e) {
+                    e.preventDefault();
+                     highlightOn();
+                });
+                $("#highlight_toggle_off").show().click(function(e) {
+                    e.preventDefault();
+                    highlightOff();
+                });
+            [% END %]
+
+            [% IF (SEARCH_RESULTS) %]
+                var newresults = [
+                    [%- FOREACH result IN SEARCH_RESULTS -%]
+                        [%- result.biblionumber %],
+                    [%- END -%]
+                ];
+                var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+                browser.create([% SEARCH_RESULTS.first.result_number %], '[% query_cgi %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
+                       newresults, '[% total %]');
+            [% END %]
+
+            [% IF (gotoPage && gotoNumber) %]
+                [% IF (gotoNumber == 'first') %]
+                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.first.biblionumber %] + '&searchid=[% searchid %]';
+                [% ELSIF (gotoNumber == 'last') %]
+                    window.location = '/cgi-bin/koha/catalogue/[% gotoPage %]?biblionumber=' + [% SEARCH_RESULTS.last.biblionumber %] + '&searchid=[% searchid %]';
+                [% END %]
+            [% END %]
+
+            [% IF LocalCoverImages %]
+                KOHA.LocalCover.LoadResultsCovers();
+            [% END %]
+
+            $("#select_all").on("click",function(e){
+                e.preventDefault();
+                selectAll();
+            });
+
+            $("#clear_all").on("click",function(e){
+                e.preventDefault();
+                clearAll();
+            });
+
+            $("#searchresults").on("click",".addtocart",function(e){
+                e.preventDefault();
+                var selection_id = this.id;
+                var biblionumber = selection_id.replace("cart","");
+                addRecord(biblionumber);
+            });
+
+            $("#searchresults").on("click",".cartRemove",function(e){
+                e.preventDefault();
+                var selection_id = this.id;
+                var biblionumber = selection_id.replace("cartR","");
+                delSingleRecord(biblionumber);
+            });
+
+        });
+
+
+        [% IF ( query_desc ) %]
+            function highlightOff() {
+                toHighlight.removeHighlight();
+                $(".highlight_toggle").toggle();
+            }
+            function highlightOn() {
+                var x;
+                for (x in q_array) {
+                    q_array[x] = q_array[x].toLowerCase();
+                    var myStopwords = "[% Koha.Preference('NotHighlightedWords') %]".toLowerCase().split('|');
+                    if ( (q_array[x].length > 0) && ($.inArray(q_array[x], myStopwords) == -1) ) {
+                        toHighlight.highlight(q_array[x]);
+                    }
+                }
+                $(".highlight_toggle").toggle();
+            }
+        [% END %]
+
+        function selectAll () {
+            $(".selection").prop("checked", true);
+        }
+        function clearAll () {
+            $(".selection").prop("checked", false);
+        }
+        function placeHold () {
+            var checkedItems = $(".selection:checked");
+            if ($(checkedItems).size() == 0) {
+                alert(MSG_NO_ITEM_SELECTED);
+                return false;
+            }
+            var bibs = "";
+            var badBibs = false;
+            $(checkedItems).each(function() {
+                var bib = $(this).val();
+                if ($("#reserve_" + bib).size() == 0) {
+                    alert(MSG_NON_RESERVES_SELECTED);
+                    badBibs = true;
+                    return false;
+                }
+                bibs += bib + "/";
+            });
+            if (badBibs) {
+                return false;
+            }
+            $("#hold_form_biblios").val(bibs);
+            $("#hold_form").submit();
+            return false;
+        }
+
+        function forgetPatron(){
+            $.removeCookie("holdfor", { path: '/' });
+            $(".holdforlink").remove();
+            $("#placeholdc").html("<a class=\"btn btn-default btn-xs placehold\" href=\"#\"><i class=\"fa fa-sticky-note-o\"></i> "+_("Place hold")+"</a>");
+        }
+
+        function addToList () {
+            var checkedItems = $(".selection:checked");
+            if ($(checkedItems).size() == 0) {
+                alert(MSG_NO_ITEM_SELECTED);
+                return false;
+            }
+            var bibs = "";
+            $(checkedItems).each(function() {
+                bibs += $(this).val() + "/";
+            });
+
+            var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
+            window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
+            return false;
+        }
+
+        /* this function open a popup to search on z3950 server.  */
+        function PopupZ3950() {
+            var strQuery = GetZ3950Terms();
+            if(strQuery){
+                window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            }
+        }
+        /* provide Z3950 search points */
+        function GetZ3950Terms(){
+            var strQuery="&frameworkcode=";
+            [% FOREACH z3950_search_param IN z3950_search_params %]
+                strQuery += "&" + "[% z3950_search_param.name |uri %]" + "=" + "[% z3950_search_param.value |uri %]";
+            [% END %]
+            return strQuery;
+        }
+
+        function holdfor(){
+            $("#holdFor").val("");
+            placeHold();
+        }
+
+        function holdForPatron() {
+            $("#holdFor").val("[% holdfor_cardnumber %]");
+            placeHold();
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
