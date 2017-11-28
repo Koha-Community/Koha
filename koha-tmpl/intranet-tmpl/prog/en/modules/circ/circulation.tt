@@ -11,7 +11,11 @@
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
 [% IF borrowernumber and borrower%]
-  &rsaquo; Checking out to [% INCLUDE 'patron-title-minimal.inc' invert_name = 1 %]
+    [% IF Koha.Preference('ReducePatronInfoOnCirculation') %]
+        &rsaquo; Checking out to [% INCLUDE 'patron-title-minimal.inc' invert_name = 1 %]
+    [% ELSE %]
+        &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' invert_name = 1 %]
+    [% END %]
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -134,7 +138,11 @@ $(document).ready(function() {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
 [% IF borrowernumber and borrower %]
-    <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title-minimal.inc' %]
+    [% IF Koha.Preference('ReducePatronInfoOnCirculation') %]
+         <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title-minimal.inc' %]
+    [% ELSE %]
+         <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+    [% END %]
 [% ELSE %]
     <strong>Checkouts</strong>
 [% END %]
@@ -414,7 +422,11 @@ $(document).ready(function() {
 
 [% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
     [% UNLESS noissues %]
-        <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title-minimal.inc' %]</button>
+        [% IF Koha.Preference('ReducePatronInfoOnCirculation') %]
+            <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title-minimal.inc' %]</button>
+        [% ELSE %]
+            <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
+        [% END %]
     [% END %]
 [% END %]
 </div></div>
@@ -598,7 +610,11 @@ No patron matched <span class="ex">[% message | html %]</span>
 
     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
 
-    <label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title-minimal.inc' %]</label>
+    [% IF Koha.Preference('ReducePatronInfoOnCirculation') %]
+    	<label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title-minimal.inc' %]</label>
+    [% ELSE %]
+    	<label class="circ_barcode" for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
+    [% END %]
 
         [% IF Koha.Preference('itemBarcodeFallbackSearch') %]
             <div class="hint">Enter item barcode or keyword:</div>
@@ -717,7 +733,11 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
                 <div id="circmessages" class="circmessage attention">
             [% ELSE %]
-                <h4>Checking out to [% INCLUDE 'patron-title-minimal.inc' %]</h4>
+                [% IF Koha.Preference('ReducePatronInfoOnCirculation') %]
+                    <h4>Checking out to [% INCLUDE 'patron-title-minimal.inc' %]</h4>
+                [% ELSE %]
+                    <h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
+                [% END %]
                 <div id="circmessages" class="circmessage warning">
             [% END %]
             <h3>

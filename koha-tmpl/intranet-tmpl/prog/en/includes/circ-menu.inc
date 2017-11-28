@@ -1,16 +1,23 @@
 [% USE Koha %]
 [% IF ( borrowernumber ) %]
-<div class="patroninfo"><p>&nbsp;</p> 
+<div class="patroninfo"><h5>
+[% UNLESS Koha.Preference('ReducePatronInfoOnCirculation') %]
+    [% INCLUDE 'patron-title.inc' %]
+[% END %]
+</h5>
 <!--[if IE 6]>
 <style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
 }</style>
 <![endif]-->
-<!--
 <ul class="patronbriefinfo">
     [% IF ( patronimages ) %]
         [% IF ( picture ) %]
             <li>
-                <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname | html %] [% surname | html %] ([% cardnumber | html %])" />
+                [% UNLESS Koha.Preference('ReducePatronInfoOnCirculation') %]
+                    <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="[% firstname | html %] [% surname | html %] ([% cardnumber | html %])" />
+                [% ELSE %]
+                    <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% borrowernumber | uri %]" id="patronimage" alt="image" />
+                [% END %]
             </li>
         [% ELSE %]
             <li id="patronbasics">
@@ -18,13 +25,15 @@
             </li>
         [% END %]
     [% END %]
+    [% UNLESS Koha.Preference ('ReducePatronInfoOnCirculation') %]
     [% IF Koha.Preference( 'AddressFormat' ) %]
         [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
     [% ELSE %]
         [% INCLUDE 'member-display-address-style-us.inc' %]
     [% END %]
 
-    [% IF ( phone ) %]<li class="patronphone">
+    [% IF ( phone || mobile || phonepro ) %]<li class="patronphone">
+    [% IF ( phone ) %]
         <a href="tel:[% phone | url %]">[% phone | html %]</a>
     [% ELSE %]
         [% IF ( mobile ) %]
@@ -33,8 +42,8 @@
             [% IF ( phonepro ) %]
                 <a href="tel:[% phonepro | url %]">[% phonepro | html %]</a>
             [% END %]
-        [% END %]</li>
-    [% END %]
+        [% END %]
+    [% END %]</li>[% END %]
     [% IF ( email ) %]
         <li class="email"> <a href="mailto:[% email | url %]" title="[% email | html %]">[% email | html %]</a></li>
     [% ELSE %]
@@ -65,7 +74,8 @@
     [% END %][% END %]
     <li class="patroncategory">Category: [% categoryname %] ([% categorycode %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( branchcode ) %]</li>
-</ul>--></div>
+    [% END %]
+</ul></div>
 <div id="menu">
 <ul>
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
@@ -86,6 +96,11 @@
     [% IF ( CAN_user_borrowers ) %]
         [% IF ( intranetreadinghistory ) %]
             [% IF ( readingrecordview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrowernumber %]">Circulation history</a></li>
+        [% END %]
+    [% END %]
+    [% IF ( CAN_user_borrowers ) %]
+        [% IF ( intranetreadinghistory ) %]
+            [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% borrowernumber %]">Holds history</a></li>
         [% END %]
     [% END %]
     [% IF ( CAN_user_parameters ) %]
@@ -111,6 +126,9 @@
     [% END %]
     [% IF Koha.Preference('HouseboundModule') %]
         [% IF houseboundview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% borrowernumber %]">Housebound</a></li>
+    [% END %]
+    [% IF Koha.Preference('ILLModule') %]
+        <li><a href="/cgi-bin/koha/ill/ill-requests.pl?borrowernumber=[% borrowernumber %]">Interlibrary loans</a></li>
     [% END %]
 </ul></div>
 [% END %]
