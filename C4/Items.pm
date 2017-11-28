@@ -21,6 +21,7 @@ package C4::Items;
 use strict;
 #use warnings; FIXME - Bug 2505
 
+use Modern::Perl;
 use Carp;
 use C4::Context;
 use C4::Koha;
@@ -1529,6 +1530,71 @@ sub Item2Marc {
         }
     }
 	return $itemmarc;
+}
+
+=head2 GetMarcItemFields
+
+  my @marc_fields = GetMarcItemFields($biblionumber);
+
+Returns an array of MARC::Record objects of the items for the biblio.
+
+=cut
+
+sub GetMarcItemFields {
+	my ( $biblionumber, $itemnumbers, $hidingrules ) = @_;
+
+    my $item_level_itype = C4::Context->preference('item-level_itypes');
+    # This is so much faster than using Koha::Items->search that it makes sense even if it's ugly.
+    state $sth = C4::Context->dbh->prepare( 'SELECT * FROM items WHERE biblionumber = ?' );
+    $sth->execute( $biblionumber );
+    my $items = $sth->fetchall_arrayref({});
+    $sth->finish();
+    my @item_fields;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( 'items.itemnumber' );
+
+    ITEMLOOP: foreach my $item (@$items) {
+
+        # Check itemnumbers
+        next if ( @$itemnumbers && !any { $_ == $item->itemnumber } @$itemnumbers );
+
+        # Check hiding rules
+        if ( defined $hidingrules ) {
+            foreach my $field (keys %$hidingrules) {
+                my $val = $item->{$field};
+                $val = '' unless defined $val;
+
+                # If the results matches the values in the hiding rules, skip the item
+                if (any { $val eq $_ } @{$hidingrules->{$field}}) {
+                    next ITEMLOOP;
+                }
+            }
+        }
+
+        # Set correct item type
+        if ( !$item_level_itype || !$item->{itype} ) {
+            warn 'item-level_itypes set but no itemtype set for item (' . $item->{itemnumber} . ')' if ( !$item->{itype} );
+            my $biblioitem = Koha::Biblioitem::find( $item->{biblioitemnumber} );
+            $item->itype = $biblioitem->itemtype();
+        }
+
+        my $mungeditem = {
+            map {
+                defined($item->{$_}) && $item->{$_} ne '' ? ("items.$_" => $item->{$_}) : ()
+            } keys %{ $item }
+        };
+        my $itemmarc = TransformKohaToMarc($mungeditem);
+
+        my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($mungeditem->{'items.more_subfields_xml'});
+        if (defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1) {
+            foreach my $field ($itemmarc->field($itemtag)){
+                $field->add_subfields(@$unlinked_item_subfields);
+            }
+        }
+
+        push @item_fields, $itemmarc->field( $itemtag );
+    }
+
+    return \@item_fields;
 }
 
 =head1 PRIVATE FUNCTIONS AND VARIABLES

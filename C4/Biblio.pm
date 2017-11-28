@@ -352,7 +352,7 @@ sub ModBiblio {
 
 =head2 _strip_item_fields
 
-  _strip_item_fields($record, $frameworkcode)
+  _strip_item_fields($record)
 
 Utility routine to remove item tags from a
 MARC bib.
@@ -363,7 +363,7 @@ sub _strip_item_fields {
     my $record = shift;
     my $frameworkcode = shift;
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
 
     # delete any item fields from incoming record to avoid
     # duplication or incorrect data - use AddItem() or ModItem()
@@ -1260,8 +1260,17 @@ for the given frameworkcode or default framework if $frameworkcode is missing
 sub GetMarcFromKohaField {
     my ( $kohafield, $frameworkcode ) = @_;
     return (0, undef) unless $kohafield;
-    my $mss = GetMarcSubfieldStructure( $frameworkcode );
-    return ( $mss->{$kohafield}{tagfield}, $mss->{$kohafield}{tagsubfield} );
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key = "MarcFromKohaField-$kohafield";
+    $cache_key .= "-$frameworkcode" if defined $frameworkcode;
+    my $cached    = $cache->get_from_cache($cache_key);
+    if ( !defined $cached ) {
+        my $mss = GetMarcSubfieldStructure( $frameworkcode );
+        my @retval = ( $mss->{$kohafield}{tagfield}, $mss->{$kohafield}{tagsubfield} );
+        $cached = \@retval;
+        $cache->set_in_cache( $cache_key, $cached );
+    }
+    return wantarray ? @$cached : ( @$cached ? $cached->[0] : undef );
 }
 
 =head2 GetMarcSubfieldStructureFromKohaField
@@ -1322,10 +1331,11 @@ sub GetMarcBiblio {
         return;
     }
 
-    my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=? ");
+    # Use state to speed up repeated calls in batch processes
+    state $sth = C4::Context->dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
     my $row     = $sth->fetchrow_hashref;
+    $sth->finish;
     my $biblioitemnumber = $row->{'biblioitemnumber'};
     my $marcxml = GetXmlBiblio( $biblionumber );
     $marcxml = StripNonXmlChars( $marcxml );
@@ -1364,17 +1374,22 @@ The XML should only contain biblio information (item information is no longer st
 
 sub GetXmlBiblio {
     my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
     return unless $biblionumber;
-    my ($marcxml) = $dbh->selectrow_array(
+
+    # Use state to speed up repeated calls in batch processes
+    state $sth = C4::Context->dbh->prepare(
         q|
         SELECT metadata
         FROM biblio_metadata
         WHERE biblionumber=?
             AND format='marcxml'
             AND marcflavour=?
-    |, undef, $biblionumber, C4::Context->preference('marcflavour')
+        |
     );
+
+    $sth->execute( $biblionumber, C4::Context->preference('marcflavour') );
+    my ($marcxml) = $sth->fetchrow();
+    $sth->finish;
     return $marcxml;
 }
 
@@ -2582,10 +2597,11 @@ sub UpsertBiblio {
 
 sub GetFrameworkCode {
     my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $sth            = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
+    # Use state to speed up repeated calls in batch processes
+    state $sth         = C4::Context->dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
     $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
+    $sth->finish;
     return $frameworkcode;
 }
 
@@ -3524,36 +3540,32 @@ sub EmbedItemsInMarcBiblio {
 
     $itemnumbers = [] unless defined $itemnumbers;
 
-    my $frameworkcode = GetFrameworkCode($biblionumber);
-    _strip_item_fields($marc, $frameworkcode);
+    _strip_item_fields($marc);
 
-    # ... and embed the current items
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
-    $sth->execute($biblionumber);
-    my @item_fields;
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my @items;
-    my $opachiddenitems = $opac
-      && ( C4::Context->preference('OpacHiddenItems') !~ /^\s*$/ );
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key = "OpacHiddenItems-parsed" . ($opac ? '-opac' : '');
+    my $hidingrules    = $cache->get_from_cache($cache_key);
+    if ( !defined $hidingrules ) {
+        my $yaml = $opac ? C4::Context->preference('OpacHiddenItems') : '';
+        if ( $yaml =~ /\S/ ) {
+            $yaml = "$yaml\n\n"; # YAML is anal on ending \n. Surplus does not hurt
+            eval {
+                $hidingrules = YAML::Load($yaml);
+            };
+            if ($@) {
+                carp "Unable to parse OpacHiddenItems syspref : $@";
+            }
+        } else {
+            $hidingrules = {};
+        }
+        $cache->set_in_cache( $cache_key, $hidingrules );
+    }
+
     require C4::Items;
-    while ( my ($itemnumber) = $sth->fetchrow_array ) {
-        next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
-        my $i = $opachiddenitems ? C4::Items::GetItem($itemnumber) : undef;
-        push @items, { itemnumber => $itemnumber, item => $i };
-    }
-    my @hiddenitems =
-      $opachiddenitems
-      ? C4::Items::GetHiddenItemnumbers( map { $_->{item} } @items )
-      : ();
-    # Convert to a hash for quick searching
-    my %hiddenitems = map { $_ => 1 } @hiddenitems;
-    foreach my $itemnumber ( map { $_->{itemnumber} } @items ) {
-        next if $hiddenitems{$itemnumber};
-        my $item_marc = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
-        push @item_fields, $item_marc->field($itemtag);
-    }
-    $marc->append_fields(@item_fields);
+
+    my $item_fields = C4::Items::GetMarcItemFields( $biblionumber, $itemnumbers, $hidingrules );
+
+    $marc->append_fields(@$item_fields) if ( @$item_fields );
 }
 
 =head1 INTERNAL FUNCTIONS
