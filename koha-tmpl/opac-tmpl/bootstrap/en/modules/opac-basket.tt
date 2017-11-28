@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]<style>.item-status { display: inline; }</style>[% END %]
+[% BLOCK cssinclude %]<style type="text/css">.item-status { display: inline; } @media print { body { height: 99%; } }</style>[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='basket' %]
     <div class="main">
@@ -14,8 +14,6 @@
                 <div class="span12">
                     <div id="userbasket">
                         <h2>Your cart</h2>
-
-                        [% UNLESS ( print_basket ) %]
                             <div id="toolbar" class="toolbar">
                                 [% IF ( verbose ) %]
                                     <a href="opac-basket.pl" class="brief">Brief display</a>
@@ -26,7 +24,7 @@
                                     <a class="send" href="opac-basket.pl">Send</a>
                                 [% END %]
                                 <a class="download" href="opac-basket.pl">Download</a>
-                                <a class="print-large" href="opac-basket.pl">Print</a>
+                                <a class="print-large" href="#">Print</a>
                                 <a class="empty" href="opac-basket.pl">Empty and close</a>
                                 <a class="hide close" href="opac-basket.pl">Hide window</a>
                             </div>
@@ -59,22 +57,15 @@
                                 </span>
                                 [% END %]
                             </div>
-                        [% END # / UNLESS print_basket %]
 
                         [% IF ( verbose ) %]
                             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form" class="checkboxed">
                                 [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                     <h3>
-                                        [% IF ( print_basket ) %]
-                                            [% BIBLIO_RESULT.title |html %]
-                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield |html %] [% END %][% END %]
-                                                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
-                                        [% ELSE %]
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]">
                                                 [% BIBLIO_RESULT.title |html %]
                                                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield |html %] [% END %][% END %]
                                                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
-                                        [% END # / IF print_basket %]
                                     </h3>
                                     <!-- COinS / Openurl -->
                                     <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
@@ -247,7 +238,7 @@
                                 <table id="itemst" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
+                                            <th class="noprint">&nbsp;</th>
                                             <th>Title</th>
                                             <th>Author</th>
                                             <th>Year</th>
@@ -257,11 +248,9 @@
                                     <tbody>
                                     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                                         <tr>
-                                            [% UNLESS ( print_basket ) %]
-                                                <td>
+                                                <td class="noprint">
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]">
                                                 </td>
-                                            [% END %]
                                             <td>
                                                 <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest %]',[% BIBLIO_RESULT.biblionumber %])">[% BIBLIO_RESULT.title |html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]</a>
                                                 <!-- COinS / Openurl -->
@@ -295,11 +284,9 @@
                             </form>
                         [% END # / verbose %]
 
-                        [% UNLESS ( print_basket ) %]
                             <form name="myform" action="opac-basket.pl" method="get">
                                 <input type="hidden" name="records" id="records" />
                             </form>
-                        [% END %]
 
                 </div> <!-- / #userbasket -->
             </div> <!-- / .span10 -->
@@ -310,17 +297,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 
 [% BLOCK jsinclude %]
-    [% IF ( print_basket ) %]
-        <script type="text/javascript">
-            //<![CDATA[
-                $(document).ready(function(){
-                    print();
-                    location.href="/cgi-bin/koha/opac-basket.pl?bib_list=[% bib_list %][% IF ( verbose ) %]&verbose=1[% END %]";
-                });
-            //]]>
-        </script>
-    [% ELSE %]
-        <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+        <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
         [% INCLUDE 'datatables.inc' %]
         <script type="text/javascript">
             //<![CDATA[
@@ -388,11 +365,6 @@
                 $(".download").click(function(e){
                     e.preventDefault();
                     downloadBasket();
-                });
-
-                $(".print-large").click(function(e){
-                    e.preventDefault();
-                    printBasket();
                 });
 
                 $(".empty").click(function(e){
@@ -487,5 +459,4 @@
             }
             //]]>
         </script>
-    [% END # / IF print_basket %]
 [% END # / BLOCK jsinclude %]

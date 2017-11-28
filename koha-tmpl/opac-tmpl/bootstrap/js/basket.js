@@ -366,11 +366,6 @@ function downloadBasket() {
     open(loc,"win_form",'scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
 }
 
-function printBasket() {
-    var loc = document.location + "&print=1";
-    document.location = loc;
-}
-
 function showMore() {
     var strCookie = "";
 
