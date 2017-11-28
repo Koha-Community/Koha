@@ -43,6 +43,7 @@ use Test::DBIx::Class {
 # Mock Variables
 my $matchpoint = 'userid';
 my $autocreate = 0;
+my $sync = 0;
 my %mapping    = (
     'userid'       => { 'is' => 'uid' },
     'surname'      => { 'is' => 'sn' },
@@ -165,7 +166,7 @@ subtest "get_login_shib tests" => sub {
 
 ## checkpw_shib
 subtest "checkpw_shib tests" => sub {
-    plan tests => 18;
+    plan tests => 21;
 
     my $shib_login;
     my ( $retval, $retcard, $retuserid );
@@ -222,6 +223,22 @@ subtest "checkpw_shib tests" => sub {
       [qw/pika 2017 Address City/],
       'Found $new_users surname';
     $autocreate = 0;
+
+    # sync user
+    $sync = 1;
+    $ENV{'city'} = 'AnotherCity';
+    warnings_are {
+        ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    }
+    [], "good user with sync";
+
+    ok my $sync_user = ResultSet('Borrower')
+      ->search( { 'userid' => 'test4321' }, { rows => 1 } ), "sync user found";
+
+    is_fields [qw/surname dateexpiry address city/], $sync_user->next,
+      [qw/pika 2017 Address AnotherCity/],
+      'Found $sync_user synced city';
+    $sync = 0;
 
     # debug on
     $C4::Auth_with_shibboleth::debug = '1';
@@ -315,6 +332,7 @@ sub mockedConfig {
 
     my %shibboleth = (
         'autocreate' => $autocreate,
+        'sync'       => $sync,
         'matchpoint' => $matchpoint,
         'mapping'    => \%mapping
     );
@@ -349,6 +367,7 @@ sub mockedSchema {
 sub reset_config {
     $matchpoint = 'userid';
     $autocreate = 0;
+    $sync = 0;
     %mapping    = (
         'userid'       => { 'is' => 'uid' },
         'surname'      => { 'is' => 'sn' },

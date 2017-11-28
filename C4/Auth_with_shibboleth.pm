@@ -27,7 +27,7 @@ use Koha::Patrons;
 use C4::Members::Messaging;
 use Carp;
 use CGI;
-use List::Util qw(any);
+use List::MoreUtils qw(any);
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
@@ -107,6 +107,9 @@ sub checkpw_shib {
       Koha::Database->new()->schema()->resultset('Borrower')
       ->find( { $config->{matchpoint} => $match } );
     if ( defined($borrower) ) {
+        if ($config->{'sync'}) {
+            _sync($borrower->borrowernumber, $config, $match);
+        }
         return ( 1, $borrower->get_column('cardnumber'), $borrower->get_column('userid') );
     }
 
@@ -136,6 +139,21 @@ sub _autocreate {
     C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $patron->borrowernumber, categorycode => $patron->categorycode } );
 
     return ( 1, $patron->cardnumber, $patron->userid );
+}
+
+sub _sync {
+    my ($borrowernumber, $config, $match ) = @_;
+    my %borrower;
+    $borrower{'borrowernumber'} = $borrowernumber;
+    while ( my ( $key, $entry ) = each %{$config->{'mapping'}} ) {
+        if ( any { /(^psgi|^plack)/i } keys %ENV ) {
+            $borrower{$key} = ( $entry->{'is'} && $ENV{"HTTP_" . uc($entry->{'is'}) } ) || $entry->{'content'} || '';
+        } else {
+            $borrower{$key} = ( $entry->{'is'} && $ENV{ $entry->{'is'} } ) || $entry->{'content'} || '';
+        }
+    }
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    $patron->set(\%borrower)->store;
 }
 
 sub _get_uri {
