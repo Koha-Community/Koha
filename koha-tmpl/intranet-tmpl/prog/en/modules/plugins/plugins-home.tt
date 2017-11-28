@@ -1,17 +1,8 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Plugins </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $(".uninstall_plugin").on("click", function(){
-            $(".dropdown").removeClass("open");
-            var plugin_name = $(this).data("plugin-name");
-            return confirmDelete( _("Are you sure you want to uninstall the plugin %s?").format( plugin_name ) );
-        });
-    });
-</script>
 </head>
 
 <body id="plugins_plugins_home" class="plugins">
@@ -142,5 +133,18 @@
     </div>
 </div>
 
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".uninstall_plugin").on("click", function(){
+                $(".dropdown").removeClass("open");
+                var plugin_name = $(this).data("plugin-name");
+                return confirmDelete( _("Are you sure you want to uninstall the plugin %s?").format( plugin_name ) );
+            });
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
