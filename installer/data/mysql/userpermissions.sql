@@ -9,7 +9,7 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'parameters',      'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 'parameters',      'manage_circ_rules', 'manage circulation rules'),
    ( 'borrowers',       'view_borrowers', 'Show borrower details and search for borrowers.'),
-   ( 'borrowers',       'manage_api_keys', "Manage Borrowers' REST API keys"),
+   ( 'borrowers',       'manage_api_keys', 'Manage Borrowers\' REST API keys'),
    ( 'borrowers',       'get_self_service_status', 'Allow the user to get the self-service status of a borrower. Eg. can the borrower access self-service resources'),
    ( 'borrowers',       'get_password_reset_uuid', 'Allow the user to get password reset uuid when recovering passwords. Useful for third party service integrations that wish to do something with the uuid, such as handle emails themselves instead of Koha.'),
    ( 'permissions',     'set_permissions', 'Set user permissions'),
