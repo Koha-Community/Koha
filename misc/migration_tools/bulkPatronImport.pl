@@ -19,11 +19,11 @@ use DateTime;
 
 use C4::Members;
 use C4::Members::Attributes;
-use C4::Members::Messaging;
 use Koha::AuthUtils qw(hash_password);
 use Koha::Patron::Debarments qw/AddDebarment/;
 use Koha::Auth::PermissionManager;
 use Koha::Patron;
+use Koha::Patron::Message::Preferences;
 
 use ConversionTable::BorrowernumberConversionTable;
 
@@ -186,7 +186,8 @@ sub processNewFromRow {
     }
 
     if ($patron->{borrowernumber}) {
-        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $patron->{borrowernumber}, categorycode => $patron->{categorycode} } );
+        my $patron_ko = Koha::Patrons->find($patron->{borrowernumber});
+        $patron_ko->set_default_messaging_preferences;
 
         ##Save the new borrowernumber to a conversion table so legacy systems references can keep track of the change.
         $borrowernumberConversionTable->writeRow($legacy_borrowernumber, $patron->{borrowernumber}, $patron->{cardnumber});
