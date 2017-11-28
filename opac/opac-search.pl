@@ -497,7 +497,7 @@ if($params->{'multibranchlimit'}) {
     push @limits, $multibranch if ($multibranch ne  '()');
 }
 
-my ($available, $availableBranch);
+my ($available, $availableBranch, $only_component_parts, $only_host_items);
 foreach my $limit(@limits) {
     if ($limit =~/available/) {
         $available = 1;
@@ -505,12 +505,21 @@ foreach my $limit(@limits) {
     elsif ($limit =~ /branch:(.*?)$/) { #Catch holdingbranch from facets and branch from advanced search
         $availableBranch = $1;
     }
+    elsif ($limit =~ /only_component_parts/) { # Hide component parts
+        $only_component_parts = 1;
+    }
+    elsif ($limit =~ /only_host_items/) { # Hide component parts
+        $only_host_items = 1;
+    }
 }
 if ($availableBranch && $available) {
     $available = $availableBranch;
 }
 undef $availableBranch; #Don't pollute namespace!
 $template->param(available => $available);
+$template->param( only_component_parts => $only_component_parts,
+                  only_host_items => $only_host_items,
+                );
 
 # append year limits if they exist
 if ($params->{'limit-yr'}) {
@@ -781,8 +790,13 @@ for (my $i=0;$i<@servers;$i++) {
             }
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
+            my $limit_cgi_not_only_component_parts = my $limit_cgi_not_only_host_items = $limit_cgi;
             $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;
+            $limit_cgi_not_only_component_parts =~ s/&limit=only_component_parts//g;
+            $limit_cgi_not_only_host_items =~ s/&limit=only_host_items//g;
             $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
+            $template->param(limit_cgi_not_only_component_parts => $limit_cgi_not_only_component_parts);
+            $template->param(limit_cgi_not_only_host_items=> $limit_cgi_not_only_host_items);
             $template->param(limit_cgi => $limit_cgi);
             $template->param(countrss  => $countRSS );
             $template->param(query_cgi => $query_cgi);

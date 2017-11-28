@@ -1746,6 +1746,18 @@ sub buildQuery {
             $limit_desc .= "";
         }
 
+        elsif ( $this_limit =~ /only_component_parts/ ) {
+            $limit_cgi .= "&limit=only_component_parts";
+            $query .= qq(and (Bib-level,rk,r9="a" or Bib-level,rk,r9="b" or Bib-level,rk,r9="d" or Bib-level,rk,r2="c" or Bib-level,rk,r1="i"));
+            $limit_desc .= "";
+        }
+
+        elsif ( $this_limit =~ /only_host_items/ ) {
+            $limit_cgi .= "&limit=only_host_items";
+            $query .= qq(and (Bib-level,rk,r1="m" or Bib-level,rk,r1="s"));
+            $limit_desc .= "";
+        }
+
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
         elsif ( $this_limit =~ /mc/ ) {

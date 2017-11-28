@@ -260,6 +260,17 @@
                     <!-- RANK LIMITS -->
                     </div> <!-- / .span3 -->
                   [% END %]
+                    <div class="span3">
+                        <div id="linked-resources">
+                            <fieldset>
+                                <legend>Limit to linked resources:</legend>
+                                <select name="limit" size="2" multiple>
+                                    <option value="only_host_items">Host items</option>
+                                    <option value="only_component_parts">Component parts</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                    </div>
                 </div> <!-- / .row-fluid -->
 
                 [% IF ( ( OpacAdvSearchOptions     and OpacAdvSearchOptions.grep('subtype').size > 0     and not expanded_options ) or

@@ -3,6 +3,12 @@
     <div id="search-facets">
         <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
         <ul class="menu-collapse">
+            <li id="component_part_facet">Component parts
+                <ul>
+                    [% IF ( !only_host_items ) %]<li>[% IF ( only_component_parts ) %]<a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi_not_only_component_parts %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">Show all</a>[% ELSE %]<a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=only_host_items">Show only host items</a>[% END %]</li>[% END %]
+                    [% IF ( !only_component_parts ) %]<li>[% IF ( only_host_items ) %]<a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi_not_only_host_items %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">Show all</a>[% ELSE %]<a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=only_component_parts">Show only component parts</a>[% END %]</li>[% END %]
+                </ul>
+            </li>
             <li id="availability_facet">Availability
                 <ul>
                     <li>

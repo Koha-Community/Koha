@@ -141,6 +141,11 @@
         [% IF ( loop.last ) %]</tr>[% ELSE %][% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %][% END %]
     [% END %]
     </table>
+    <h4>Limit to linked resources:</h4>
+    <select name="limit" size="2" multiple>
+       <option value="only_host_items">Only host items</option>
+       <option value="only_component_parts">Only component parts</option>
+    </select>
     </div>
     [% END %]
 <!-- /MC-TYPE LIMIT -->
