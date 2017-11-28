@@ -28,6 +28,7 @@ use Koha::Patron::Message::Transport::Preferences;
 use Koha::Patron::Message::Transport::Types;
 use Koha::Patron::Message::Transports;
 use Koha::Patrons;
+use Koha::Validation;
 
 use base qw(Koha::Object);
 
@@ -152,6 +153,69 @@ sub new_from_default {
             message_transport_type => $transport->message_transport_type,
         })->store;
     }
+
+    return $self;
+}
+
+=head3 fix_misconfigured_preference
+
+$preference->fix_misconfigured_preference;
+
+Fixes a misconfigured messaging preference.
+
+A preference can be misconfigured if:
+- digest is forced to be on but patron has wants_digest => 0
+- digest is forced to be off but patron has wants_digest => 1
+- patron has selected a messaging transport type for which he does not have
+  a valid corresponding contact information
+
+In case of misconfigured digest, sets the forced value.
+In case of misconfigured message transport type, deselects the transport type
+
+Returns C<$self>.
+
+=cut
+
+sub fix_misconfigured_preference {
+    my ($self) = @_;
+
+    return $self unless $self->borrowernumber;
+
+    my $options = Koha::Patron::Message::Preferences->get_options;
+    my $opt;
+    foreach my $o (@$options) {
+        if ($o->{message_attribute_id} == $self->message_attribute_id) {
+            $opt = $o;
+            last;
+        }
+    }
+
+    # Check if digest has either forced to be ON or OFF
+    if ($opt->{has_digest} && !$opt->{has_digest_off}) { # forced digest ON
+        $self->set({ wants_digest => 1 });
+    } elsif ($opt->{has_digest_off} && !$opt->{has_digest}) { # forced digest OFF
+        $self->set({ wants_digest => 0 });
+    }
+
+    my $mtt_to_patronfield_to_validator = {
+        email => { email => 'email' },
+        phone => { phone => 'phone' },
+        sms   => { smsalertnumber => 'phone' }
+    };
+
+    my $valid_mtts = [];
+    foreach my $mtt (keys %{$self->message_transport_types}) {
+        if ($mtt_to_patronfield_to_validator->{$mtt}) {
+            my $patron = Koha::Patrons->find($self->borrowernumber);
+            my ($field) = keys %{$mtt_to_patronfield_to_validator->{$mtt}};
+            my $v = $mtt_to_patronfield_to_validator->{$mtt}->{$field};
+            if (Koha::Validation->$v($patron->$field)) {
+                push @{$valid_mtts}, $mtt;
+            }
+        }
+    }
+
+    $self->message_transport_types($valid_mtts)->store;
 
     return $self;
 }

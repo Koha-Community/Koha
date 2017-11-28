@@ -45,6 +45,7 @@ use Koha::Holds;
 use Koha::List::Patron;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Patron::Message::Preferences;
 use Koha::Schema;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
@@ -412,20 +413,13 @@ sub ModMember {
             }
         }
 
-        # Validate messaging preferences if any of the following field have
-        # been removed
-        if (!$data{email} || !$data{phone} || !$data{smsalertnumber}) {
-            C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
-                $data{borrowernumber}
-            );
-        }
-        # ...or if any of the given contact information is invalid
-        elsif ($data{email} && !Koha::Validation::email($data{email}) ||
-               $data{phone} && !Koha::Validation::phone($data{phone}) ||
-               $data{smsalertnumber} && !Koha::Validation::phone($data{phone})) {
-            C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
-                $data{borrowernumber}
-            );
+        foreach my $pref (
+            @{Koha::Patron::Message::Preferences->search({
+                borrowernumber => $data{borrowernumber} })->as_list
+            })
+        {
+
+            $pref->fix_misconfigured_preference;
         }
 
         # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a

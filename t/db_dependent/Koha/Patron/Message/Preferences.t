@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -157,6 +157,149 @@ subtest 'Test Koha::Patron::Message::Preferences->get_options' => sub {
                 is($option->{'transport_'.$trnzport->message_transport_type}, ' ', '$n: transport_'.$trnzport->message_transport_type.' is set');
             }
         }
+
+        $schema->storage->txn_rollback;
+    };
+};
+
+subtest 'Test Koha::Patron::Message::Preference->fix_misconfigured_preference' => sub {
+    plan tests => 5;
+
+    subtest 'Test method availability and return value' => sub {
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        ok(Koha::Patron::Message::Preference->can('fix_misconfigured_preference'),
+            'Method fix_misconfigured_preference is available.');
+        ok(my $options = Koha::Patron::Message::Preferences->next->fix_misconfigured_preference,
+            'Called fix_misconfigured_preference successfully.');
+        is(ref($options), 'Koha::Patron::Message::Preference',
+           'fix_misconfigured_preference returns a Koha::Patron::Message::Preference');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Delete invalid email' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $mtt1 = Koha::Patron::Message::Transport::Types->find('email');
+        my $mtt2 = Koha::Patron::Message::Transport::Types->find('sms');
+
+        my $patron = build_a_test_patron();
+        $patron->set({ email => 'invalid' })->store;
+        $patron->set({ smsalertnumber => '+358500000000'})->store;
+        my ($preference) = build_a_test_complete_preference({
+            patron => $patron,
+            mtt1 => $mtt1,
+            mtt2 => $mtt2,
+        });
+
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next->fix_misconfigured_preference;
+
+        $preference = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next;
+        my $asd = $preference->message_transport_types;
+        ok(!exists $preference->message_transport_types->{email}, 'Email was deleted');
+        ok(exists $preference->message_transport_types->{sms}, 'SMS still enabled');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Delete invalid sms' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $mtt1 = Koha::Patron::Message::Transport::Types->find('email');
+        my $mtt2 = Koha::Patron::Message::Transport::Types->find('sms');
+
+        my $patron = build_a_test_patron();
+        $patron->set({ email => 'nobody@example.com' })->store;
+        $patron->set({ smsalertnumber => 'invalid'})->store;
+        my ($preference) = build_a_test_complete_preference({
+            patron => $patron,
+            mtt1 => $mtt1,
+            mtt2 => $mtt2,
+        });
+
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next->fix_misconfigured_preference;
+
+        $preference = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next;
+        my $asd = $preference->message_transport_types;
+        ok(!exists $preference->message_transport_types->{sms}, 'SMS was deleted');
+        ok(exists $preference->message_transport_types->{email}, 'Email still enabled');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Delete invalid sms & email' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $mtt1 = Koha::Patron::Message::Transport::Types->find('email');
+        my $mtt2 = Koha::Patron::Message::Transport::Types->find('sms');
+
+        my $patron = build_a_test_patron();
+        $patron->set({ email => 'invalid.com' })->store;
+        $patron->set({ smsalertnumber => 'invalid'})->store;
+        my ($preference) = build_a_test_complete_preference({
+            patron => $patron,
+            mtt1 => $mtt1,
+            mtt2 => $mtt2,
+        });
+
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next->fix_misconfigured_preference;
+
+        $preference = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next;
+        my $asd = $preference->message_transport_types;
+        ok(!exists $preference->message_transport_types->{sms}, 'SMS was deleted');
+        ok(!exists $preference->message_transport_types->{email}, 'Email was deleted');
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'Keep valid sms & email' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $mtt1 = Koha::Patron::Message::Transport::Types->find('email');
+        my $mtt2 = Koha::Patron::Message::Transport::Types->find('sms');
+
+        my $patron = build_a_test_patron();
+        $patron->set({ email => 'nobody@example.com' })->store;
+        $patron->set({ smsalertnumber => '+358500000000'})->store;
+        my ($preference) = build_a_test_complete_preference({
+            patron => $patron,
+            mtt1 => $mtt1,
+            mtt2 => $mtt2,
+        });
+
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next->fix_misconfigured_preference;
+
+        $preference = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next;
+        my $asd = $preference->message_transport_types;
+        ok(exists $preference->message_transport_types->{sms}, 'SMS still enabled');
+        ok(exists $preference->message_transport_types->{email}, 'Email still enabled');
 
         $schema->storage->txn_rollback;
     };

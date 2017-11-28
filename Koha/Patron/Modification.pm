@@ -31,6 +31,7 @@ use Koha::Patron::Modifications;
 use Koha::Exceptions::Patron::Modification;
 use Koha::Patron::Attribute;
 use Koha::Patron::Attributes;
+use Koha::Patron::Message::Preferences;
 use Koha::Patron::Modifications;
 
 use Digest::MD5 qw( md5_hex );
@@ -180,21 +181,13 @@ sub approve {
                           );
                 }
 
-                # Validate messaging preferences if any of the following field
-                # have been removed
-                if (!$data->{email} || !$data->{phone} ||
-                    !$data->{smsalertnumber}) {
-                    C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
-                        $self->borrowernumber
-                    );
-                }
-                # ...or if any of the given contact information is invalid
-                elsif (!Koha::Validation::email($data->{email}) ||
-                       !Koha::Validation::phone($data->{phone}) ||
-                       !Koha::Validation::phone($data->{phone})) {
-                    C4::Members::Messaging::DeleteAllMisconfiguredPreferences(
-                        $self->borrowernumber
-                    );
+                foreach my $pref (
+                    @{Koha::Patron::Message::Preferences->search({
+                        borrowernumber => $self->borrowernumber })->as_list
+                    })
+                {
+
+                    $pref->fix_misconfigured_preference;
                 }
             }
             catch {
