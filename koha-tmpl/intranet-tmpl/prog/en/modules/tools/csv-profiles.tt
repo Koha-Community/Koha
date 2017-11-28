@@ -1,28 +1,7 @@
-[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Tools &rsaquo; CSV export profiles</title>[% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-function reloadPage(p) {
-    var id = p.value;
-    if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=" + id; }
-}
-     $(document).ready(function() {
-        $("#type").change(function(){
-            if ( $(this).find("option:selected").val() == "marc" ) {
-                $("li.marc_specific").show();
-                $("#marc_content").attr("required", "required");
-                $("li.sql_specific").hide();
-                $("#sql_content").removeAttr("required");
-            } else {
-                $("li.marc_specific").hide();
-                $("#marc_content").removeAttr("required");
-                $("li.sql_specific").show();
-                $("#sql_content").attr("required", "required");
-            }
-        });
-        $("#type").change();
-     });
-//]]>
-</script>
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; CSV export profiles</title>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="tools_csv-profiles" class="tools">
@@ -304,4 +283,31 @@ function reloadPage(p) {
 [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript">
+        function reloadPage(p) {
+            var id = p.value;
+            if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?op=add_form&amp;export_format_id=" + id; }
+        }
+        $(document).ready(function() {
+            $("#type").change(function(){
+                if ( $(this).find("option:selected").val() == "marc" ) {
+                    $("li.marc_specific").show();
+                    $("#marc_content").attr("required", "required");
+                    $("li.sql_specific").hide();
+                    $("#sql_content").removeAttr("required");
+                } else {
+                    $("li.marc_specific").hide();
+                    $("#marc_content").removeAttr("required");
+                    $("li.sql_specific").show();
+                    $("#sql_content").attr("required", "required");
+                }
+            });
+            $("#type").change();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

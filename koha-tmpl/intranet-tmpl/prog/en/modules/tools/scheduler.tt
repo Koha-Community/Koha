@@ -1,15 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Task scheduler</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/JavaScript">
-//<![CDATA[
-    $(document).ready(function(){
-        $("#startdate").datepicker({ minDate: "+0D" });
-    });
-//]]>
-</script>
 </head>
+
 <body id="tools_scheduler" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -95,4 +89,15 @@
 [% INCLUDE 'guided-reports-view.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#startdate").datepicker({ minDate: "+0D" });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

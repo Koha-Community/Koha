@@ -1,311 +1,12 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Quote uploader</title>
     [% INCLUDE 'doc-head-close.inc' %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/uploader.css" />
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/quotes.css" />
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-    [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.jeditable.mini.js"></script>
-    <script type="text/javascript">
-    //<![CDATA[
-    var oTable; //DataTable object
-    $(document).ready(function() {
-
-        $("#cancel_upload").on("click",function(e){
-            e.preventDefault();
-            fnAbortRead();
-        });
-        $("#cancel_quotes").on("click",function(){
-            return confirm( _("Are you sure you want to cancel this import?") );
-        });
-
-    // Credits:
-    // FileReader() code copied and hacked from:
-    // http://www.html5rocks.com/en/tutorials/file/dndfiles/
-    // fnCSVToArray() gratefully borrowed from:
-    // http://www.bennadel.com/blog/1504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
-
-    var reader;
-    var progress = document.querySelector('.percent');
-    $("#server_response").hide();
-
-    function yuiGetData() {
-        fnGetData(document.getElementById('quotes_editor'));
-    }
-
-    function fnAbortRead() {
-        reader.abort();
-    }
-
-    function fnErrorHandler(evt) {
-        switch(evt.target.error.code) {
-            case evt.target.error.NOT_FOUND_ERR:
-                alert('File Not Found!');
-                break;
-            case evt.target.error.NOT_READABLE_ERR:
-                alert('File is not readable');
-                break;
-            case evt.target.error.ABORT_ERR:
-                break; // noop
-            default:
-                alert('An error occurred reading this file.');
-        };
-    }
-
-    function fnUpdateProgress(evt) {
-        // evt is an ProgressEvent.
-        if (evt.lengthComputable) {
-            var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
-            // Increase the progress bar length.
-            if (percentLoaded < 100) {
-                progress.style.width = percentLoaded + '%';
-                progress.textContent = percentLoaded + '%';
-            }
-        }
-    }
-
-    function fnCSVToArray( strData, strDelimiter ){
-        // This will parse a delimited string into an array of
-        // arrays. The default delimiter is the comma, but this
-        // can be overriden in the second argument.
-
-        // Check to see if the delimiter is defined. If not,
-        // then default to comma.
-        strDelimiter = (strDelimiter || ",");
-
-        // Create a regular expression to parse the CSV values.
-        var objPattern = new RegExp(
-        (
-            // Delimiters.
-            "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
-            // Quoted fields.
-            "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
-            // Standard fields.
-            "([^\"\\" + strDelimiter + "\\r\\n]*))"
-        ),
-            "gi"
-        );
-
-        // Create an array to hold our data. Give the array
-        // a default empty first row.
-        var arrData = [[]];
-
-        // Create an array to hold our individual pattern
-        // matching groups.
-        var arrMatches = null;
-
-        // Keep looping over the regular expression matches
-        // until we can no longer find a match.
-        while (arrMatches = objPattern.exec( strData )){
-
-            // Get the delimiter that was found.
-            var strMatchedDelimiter = arrMatches[ 1 ];
-
-            // Check to see if the given delimiter has a length
-            // (is not the start of string) and if it matches
-            // field delimiter. If it does not, then we know
-            // that this delimiter is a row delimiter.
-            if ( strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter) ){
-                // Since we have reached a new row of data,
-                // add an empty row to our data array.
-                // Note: if there is not more data, we will have to remove this row later
-                arrData.push( [] );
-            }
-
-            // Now that we have our delimiter out of the way,
-            // let's check to see which kind of value we
-            // captured (quoted or unquoted).
-            if (arrMatches[ 2 ]){
-                // We found a quoted value. When we capture
-                // this value, unescape any double quotes.
-                var strMatchedValue = arrMatches[ 2 ].replace(
-                new RegExp( "\"\"", "g" ),
-                    "\""
-                );
-            } else if (arrMatches[3]){
-                // We found a non-quoted value.
-                var strMatchedValue = arrMatches[ 3 ];
-            } else {
-                // There is no more valid data so remove the row we added earlier
-                // Is there a better way? Perhaps a look-ahead regexp?
-                arrData.splice(arrData.length-1, 1);
-            }
-
-            // Now that we have our value string, let's add
-            // it to the data array.
-            arrData[ arrData.length - 1 ].push( strMatchedValue );
-        }
-
-        // Return the parsed data.
-        return( arrData );
-    }
-
-    function fnDataTable(aaData) {
-        for(var i=0; i<aaData.length; i++) {
-            aaData[i].unshift(i+1); // Add a column w/quote number
-        }
-
-
-        /* Transition from the quote file uploader to the quote file editor interface */
-        $('#toolbar').css("visibility","visible");
-        $('#toolbar').css("position","");
-        $('#file_editor_inst').css("visibility", "visible");
-        $('#file_editor_inst').css("position", "");
-        $('#file_uploader_inst').css("visibility", "hidden");
-        $('#save_quotes').css("visibility","visible");
-        $('#file_uploader').css("visibility","hidden");
-        $('#file_uploader').css("position","absolute");
-        $('#file_uploader').css("top","-150px");
-        $('#quotes_editor').css("visibility","visible");
-        $("#save_quotes").on("click", yuiGetData);
-        $("#delete_quote").on("click", fnClickDeleteRow);
-
-
-
-        oTable = $('#quotes_editor').dataTable( {
-            "bAutoWidth"        : false,
-            "bPaginate"         : true,
-            "bSort"             : false,
-            "sPaginationType"   : "full_numbers",
-            "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
-            "aaData"            : aaData,
-            "aoColumns"         : [
-                {
-                    "sTitle"  : "Number",
-                    "sWidth"  : "2%",
-                },
-                {
-                    "sTitle"  : "Source",
-                    "sWidth"  : "15%",
-                },
-                {
-                    "sTitle"  : "Quote",
-                    "sWidth"  : "83%",
-                },
-            ],
-           "fnPreDrawCallback": function(oSettings) {
-                return true;
-            },
-            "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-                /* do foo on various cells in the current row */
-                var quoteNum = $('td', nRow)[0].innerHTML;
-                $(nRow).attr("id", quoteNum); /* set row ids to quote number */
-                $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
-                $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
-                /* apply no_edit id to noEditFields */
-                noEditFields = [0]; /* number */
-                for (i=0; i<noEditFields.length; i++) {
-                    $('td', nRow)[noEditFields[i]].setAttribute("id","no_edit");
-                }
-                return nRow;
-            },
-           "fnDrawCallback": function(oSettings) {
-                /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
-                $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
-                        var cellPosition = oTable.fnGetPosition( this );
-                        oTable.fnUpdate(value, cellPosition[0], cellPosition[1], false, false);
-                        return(value);
-                    },
-                    {
-                    "callback"      : function( sValue, y ) {
-                                          oTable.fnDraw(false); /* no filter/sort or we lose our pagination */
-                                      },
-                    "height"        : "14px",
-                });
-           },
-        });
-        $('#footer').css("visibility","visible");
-    }
-
-    function fnHandleFileSelect(evt) {
-        // Reset progress indicator on new file selection.
-        progress.style.width = '0%';
-        progress.textContent = '0%';
-
-        reader = new FileReader();
-        reader.onerror = fnErrorHandler;
-        reader.onprogress = fnUpdateProgress;
-        reader.onabort = function(e) {
-            alert('File read cancelled');
-            parent.location='quotes-upload.pl';
-        };
-        reader.onloadstart = function(e) {
-            $('#cancel_upload').show();
-            $('#progress_bar').addClass("loading");
-        };
-        reader.onload = function(e) {
-            // Ensure that the progress bar displays 100% at the end.
-            progress.style.width = '100%';
-            progress.textContent = '100%';
-            $('#cancel_upload').hide();
-            quotes = fnCSVToArray(e.target.result, ',');
-            fnDataTable(quotes);
-        }
-
-        // perform various sanity checks on the target file prior to uploading...
-        var fileType = evt.target.files[0].type || 'unknown';
-        var fileSizeInK = Math.round(evt.target.files[0].size/1024);
-
-        if (!fileType.match(/comma-separated-values|csv|excel|calc/i)) {
-            alert(_("Uploads limited to csv. Incorrect filetype: %s").format(fileType));
-            parent.location='quotes-upload.pl';
-            return;
-        }
-        if (fileSizeInK > 512) {
-            if (!confirm(_("%s %s KB Do you really want to upload this file?").format(evt.target.files[0].name, fileSizeInK))) {
-                parent.location='quotes-upload.pl';
-                return;
-            }
-        }
-        // Read in the image file as a text string.
-        reader.readAsText(evt.target.files[0]);
-    }
-
-    $('#file_upload').one('change', fnHandleFileSelect);
-
-    });
-
-    function fnGetData(element) {
-        var jqXHR = $.ajax({
-            url         : "/cgi-bin/koha/tools/quotes/quotes-upload_ajax.pl",
-            type        : "POST",
-            contentType : "application/x-www-form-urlencoded", // we must claim this mimetype or CGI will not decode the URL encoding
-            dataType    : "json",
-            data        : {
-                            "quote"     : encodeURI ( JSON.stringify(oTable.fnGetData()) ),
-                            "action"    : "add",
-                          },
-            success     : function(){
-                            var response = JSON.parse(jqXHR.responseText);
-                            if (response.success) {
-                                alert(_("%s quotes saved.").format(response.records));
-                                window.location.reload(true);   // is this the best route?
-                            }
-                            else {
-                                alert(_("%s quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.").format(response.records));
-                                window.location.reload(true);   // is this the best route?
-                            }
-                          },
-        });
-    }
-
-    function fnClickDeleteRow() {
-        var idsToDelete = oTable.$('.selected').map(function() {
-              return this.id;
-        }).get().join(', ');
-        if (!idsToDelete) {
-            alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
-        }
-        else if (confirm(_("Are you sure you wish to delete quote(s) %s?").format(idsToDelete))) {
-            oTable.$('.selected').each(function(){
-                oTable.fnDeleteRow(this);
-            });
-        }
-    }
-
-    //]]>
-    </script>
 </head>
+
 <body id="tools_quotes" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -370,4 +71,303 @@
         [% INCLUDE 'tools-menu.inc' %]
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript">
+        var oTable; //DataTable object
+        $(document).ready(function() {
+
+            $("#cancel_upload").on("click",function(e){
+                e.preventDefault();
+                fnAbortRead();
+            });
+            $("#cancel_quotes").on("click",function(){
+                return confirm( _("Are you sure you want to cancel this import?") );
+            });
+
+        // Credits:
+        // FileReader() code copied and hacked from:
+        // http://www.html5rocks.com/en/tutorials/file/dndfiles/
+        // fnCSVToArray() gratefully borrowed from:
+        // http://www.bennadel.com/blog/1504-Ask-Ben-Parsing-CSV-Strings-With-Javascript-Exec-Regular-Expression-Command.htm
+
+        var reader;
+        var progress = document.querySelector('.percent');
+        $("#server_response").hide();
+
+        function yuiGetData() {
+            fnGetData(document.getElementById('quotes_editor'));
+        }
+
+        function fnAbortRead() {
+            reader.abort();
+        }
+
+        function fnErrorHandler(evt) {
+            switch(evt.target.error.code) {
+                case evt.target.error.NOT_FOUND_ERR:
+                    alert('File Not Found!');
+                    break;
+                case evt.target.error.NOT_READABLE_ERR:
+                    alert('File is not readable');
+                    break;
+                case evt.target.error.ABORT_ERR:
+                    break; // noop
+                default:
+                    alert('An error occurred reading this file.');
+            };
+        }
+
+        function fnUpdateProgress(evt) {
+            // evt is an ProgressEvent.
+            if (evt.lengthComputable) {
+                var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+                // Increase the progress bar length.
+                if (percentLoaded < 100) {
+                    progress.style.width = percentLoaded + '%';
+                    progress.textContent = percentLoaded + '%';
+                }
+            }
+        }
+
+        function fnCSVToArray( strData, strDelimiter ){
+            // This will parse a delimited string into an array of
+            // arrays. The default delimiter is the comma, but this
+            // can be overriden in the second argument.
+
+            // Check to see if the delimiter is defined. If not,
+            // then default to comma.
+            strDelimiter = (strDelimiter || ",");
+
+            // Create a regular expression to parse the CSV values.
+            var objPattern = new RegExp(
+            (
+                // Delimiters.
+                "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                // Quoted fields.
+                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                // Standard fields.
+                "([^\"\\" + strDelimiter + "\\r\\n]*))"
+            ),
+                "gi"
+            );
+
+            // Create an array to hold our data. Give the array
+            // a default empty first row.
+            var arrData = [[]];
+
+            // Create an array to hold our individual pattern
+            // matching groups.
+            var arrMatches = null;
+
+            // Keep looping over the regular expression matches
+            // until we can no longer find a match.
+            while (arrMatches = objPattern.exec( strData )){
+
+                // Get the delimiter that was found.
+                var strMatchedDelimiter = arrMatches[ 1 ];
+
+                // Check to see if the given delimiter has a length
+                // (is not the start of string) and if it matches
+                // field delimiter. If it does not, then we know
+                // that this delimiter is a row delimiter.
+                if ( strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter) ){
+                    // Since we have reached a new row of data,
+                    // add an empty row to our data array.
+                    // Note: if there is not more data, we will have to remove this row later
+                    arrData.push( [] );
+                }
+
+                // Now that we have our delimiter out of the way,
+                // let's check to see which kind of value we
+                // captured (quoted or unquoted).
+                if (arrMatches[ 2 ]){
+                    // We found a quoted value. When we capture
+                    // this value, unescape any double quotes.
+                    var strMatchedValue = arrMatches[ 2 ].replace(
+                    new RegExp( "\"\"", "g" ),
+                        "\""
+                    );
+                } else if (arrMatches[3]){
+                    // We found a non-quoted value.
+                    var strMatchedValue = arrMatches[ 3 ];
+                } else {
+                    // There is no more valid data so remove the row we added earlier
+                    // Is there a better way? Perhaps a look-ahead regexp?
+                    arrData.splice(arrData.length-1, 1);
+                }
+
+                // Now that we have our value string, let's add
+                // it to the data array.
+                arrData[ arrData.length - 1 ].push( strMatchedValue );
+            }
+
+            // Return the parsed data.
+            return( arrData );
+        }
+
+        function fnDataTable(aaData) {
+            for(var i=0; i<aaData.length; i++) {
+                aaData[i].unshift(i+1); // Add a column w/quote number
+            }
+
+            /* Transition from the quote file uploader to the quote file editor interface */
+            $('#toolbar').css("visibility","visible");
+            $('#toolbar').css("position","");
+            $('#file_editor_inst').css("visibility", "visible");
+            $('#file_editor_inst').css("position", "");
+            $('#file_uploader_inst').css("visibility", "hidden");
+            $('#save_quotes').css("visibility","visible");
+            $('#file_uploader').css("visibility","hidden");
+            $('#file_uploader').css("position","absolute");
+            $('#file_uploader').css("top","-150px");
+            $('#quotes_editor').css("visibility","visible");
+            $("#save_quotes").on("click", yuiGetData);
+            $("#delete_quote").on("click", fnClickDeleteRow);
+
+            oTable = $('#quotes_editor').dataTable( {
+                "bAutoWidth"        : false,
+                "bPaginate"         : true,
+                "bSort"             : false,
+                "sPaginationType"   : "full_numbers",
+                "sDom": '<"top pager"iflp>rt<"bottom pager"flp><"clear">',
+                "aaData"            : aaData,
+                "aoColumns"         : [
+                    {
+                        "sTitle"  : "Number",
+                        "sWidth"  : "2%",
+                    },
+                    {
+                        "sTitle"  : "Source",
+                        "sWidth"  : "15%",
+                    },
+                    {
+                        "sTitle"  : "Quote",
+                        "sWidth"  : "83%",
+                    },
+                ],
+               "fnPreDrawCallback": function(oSettings) {
+                    return true;
+                },
+                "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                    /* do foo on various cells in the current row */
+                    var quoteNum = $('td', nRow)[0].innerHTML;
+                    $(nRow).attr("id", quoteNum); /* set row ids to quote number */
+                    $('td:eq(0)', nRow).click(function() {$(this.parentNode).toggleClass('selected',this.clicked);}); /* add row selectors */
+                    $('td:eq(0)', nRow).attr("title", _("Click ID to select/deselect quote"));
+                    /* apply no_edit id to noEditFields */
+                    noEditFields = [0]; /* number */
+                    for (i=0; i<noEditFields.length; i++) {
+                        $('td', nRow)[noEditFields[i]].setAttribute("id","no_edit");
+                    }
+                    return nRow;
+                },
+               "fnDrawCallback": function(oSettings) {
+                    /* Apply the jEditable handlers to the table on all fields w/o the no_edit id */
+                    $('#quotes_editor tbody td[id!="no_edit"]').editable( function(value, settings) {
+                            var cellPosition = oTable.fnGetPosition( this );
+                            oTable.fnUpdate(value, cellPosition[0], cellPosition[1], false, false);
+                            return(value);
+                        },
+                        {
+                        "callback"      : function( sValue, y ) {
+                                              oTable.fnDraw(false); /* no filter/sort or we lose our pagination */
+                                          },
+                        "height"        : "14px",
+                    });
+               },
+            });
+            $('#footer').css("visibility","visible");
+        }
+
+        function fnHandleFileSelect(evt) {
+            // Reset progress indicator on new file selection.
+            progress.style.width = '0%';
+            progress.textContent = '0%';
+
+            reader = new FileReader();
+            reader.onerror = fnErrorHandler;
+            reader.onprogress = fnUpdateProgress;
+            reader.onabort = function(e) {
+                alert('File read cancelled');
+                parent.location='quotes-upload.pl';
+            };
+            reader.onloadstart = function(e) {
+                $('#cancel_upload').show();
+                $('#progress_bar').addClass("loading");
+            };
+            reader.onload = function(e) {
+                // Ensure that the progress bar displays 100% at the end.
+                progress.style.width = '100%';
+                progress.textContent = '100%';
+                $('#cancel_upload').hide();
+                quotes = fnCSVToArray(e.target.result, ',');
+                fnDataTable(quotes);
+            }
+
+            // perform various sanity checks on the target file prior to uploading...
+            var fileType = evt.target.files[0].type || 'unknown';
+            var fileSizeInK = Math.round(evt.target.files[0].size/1024);
+
+            if (!fileType.match(/comma-separated-values|csv|excel|calc/i)) {
+                alert(_("Uploads limited to csv. Incorrect filetype: %s").format(fileType));
+                parent.location='quotes-upload.pl';
+                return;
+            }
+            if (fileSizeInK > 512) {
+                if (!confirm(_("%s %s KB Do you really want to upload this file?").format(evt.target.files[0].name, fileSizeInK))) {
+                    parent.location='quotes-upload.pl';
+                    return;
+                }
+            }
+            // Read in the image file as a text string.
+            reader.readAsText(evt.target.files[0]);
+        }
+
+        $('#file_upload').one('change', fnHandleFileSelect);
+
+        });
+
+        function fnGetData(element) {
+            var jqXHR = $.ajax({
+                url         : "/cgi-bin/koha/tools/quotes/quotes-upload_ajax.pl",
+                type        : "POST",
+                contentType : "application/x-www-form-urlencoded", // we must claim this mimetype or CGI will not decode the URL encoding
+                dataType    : "json",
+                data        : {
+                                "quote"     : encodeURI ( JSON.stringify(oTable.fnGetData()) ),
+                                "action"    : "add",
+                              },
+                success     : function(){
+                    var response = JSON.parse(jqXHR.responseText);
+                    if (response.success) {
+                        alert(_("%s quotes saved.").format(response.records));
+                        window.location.reload(true);   // is this the best route?
+                    } else {
+                        alert(_("%s quotes saved, but an error has occurred. Please ask your administrator to check the server log for more details.").format(response.records));
+                        window.location.reload(true);   // is this the best route?
+                    }
+                  },
+            });
+        }
+
+        function fnClickDeleteRow() {
+            var idsToDelete = oTable.$('.selected').map(function() {
+                  return this.id;
+            }).get().join(', ');
+            if (!idsToDelete) {
+                alert(_("Please select a quote(s) by clicking the quote id(s) you desire to delete."));
+            }
+            else if (confirm(_("Are you sure you wish to delete quote(s) %s?").format(idsToDelete))) {
+                oTable.$('.selected').each(function(){
+                    oTable.fnDeleteRow(this);
+                });
+            }
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

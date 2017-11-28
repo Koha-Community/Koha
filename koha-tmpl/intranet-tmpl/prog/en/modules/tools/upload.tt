@@ -1,5 +1,6 @@
-[% INCLUDE 'doc-head-open.inc' %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
 [% IF plugin %]
     <title>Upload plugin</title>
 [% ELSE %]
@@ -186,172 +187,13 @@
    </table>
 [% END %]
 
-[% INCLUDE 'datatables.inc' %]
 <style type="text/css">
     #fileuploadstatus,#fileuploadfailed { display : none; }
     #fileuploadstatus { margin:.4em; }
     #fileuploadprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface %]/[% theme %]/img/progress.png') -300px 0px no-repeat; }
 </style>
 
-<script type="text/javascript">
-//<![CDATA[
-    var errMESSAGES = [
-        "Error 0: Not in use",
-        _("This file already exists (in this category)."),
-        _("File could not be created. Check permissions."),
-        _("Your koha-conf.xml does not contain a valid upload_path."),
-        _("No temporary directory found."),
-        _("File could not be read."),
-        _("File has been deleted."),
-        _("File or upload record could not be deleted."),
-    ];
-//]]>
-</script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-function StartUpload() {
-    if( $('#fileToUpload').prop('files').length == 0 ) return;
-    $('#fileToUpload').prop('disabled',true);
-    $('#fileuploadbutton').hide();
-    $("#fileuploadcancel").show();
-    $("#fileuploadfailed").html('');
-    $("#myalerts").hide('');
-    $("#myalerts").html('');
-    $("#fileuploadstatus").show();
-    $("#uploadedfileid").val('');
-    $("#searchfile").hide();
-    $("#lastbreadcrumb").text( _("Add a new upload") );
 
-    var cat, xtra='';
-    if( $("#uploadcategory").val() )
-        cat = encodeURIComponent( $("#uploadcategory").val() );
-    if( cat ) xtra= 'category=' + cat + '&';
-    [% IF plugin %]
-        xtra = xtra + 'public=1&temp=0';
-    [% ELSE %]
-        if( !cat ) xtra = 'temp=1&';
-        if( $('#public').prop('checked') ) xtra = xtra + 'public=1';
-    [% END %]
-    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), xtra, cbUpload );
-}
-function CancelUpload() {
-    if( xhr ) xhr.abort();
-    $("#fileuploadstatus").hide();
-    $('#fileToUpload').prop('disabled', false);
-    $('#fileuploadbutton').show();
-    $("#fileuploadcancel").hide();
-    $("#fileuploadfailed").show();
-    $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
-}
-function cbUpload( status, fileid, err ) {
-    $('#fileToUpload').prop('disabled', false);
-    if( status=='done' ) {
-        var e = err? JSON.stringify(err): '';
-        SubmitMe( 'search', fileid, e );
-    } else {
-        $('#fileuploadbutton').show();
-        $("#fileuploadcancel").hide();
-        $("#fileuploadstatus").hide();
-        $("#fileuploadfailed").show();
-        $("#fileuploadfailed").html( _("Upload status: ") +
-            ( status=='failed'? _("Failed"):
-            ( status=='denied'? _("Denied"): status ))
-        );
-        ShowAlerts( err );
-    }
-}
-function ShowAlerts(err) {
-    var str = '';
-    for( var file in err ) {
-        str= str + '<p>' + file + ': ' +
-            errMESSAGES[ err[file].code ] + '</p>';
-    }
-    if( str ) {
-        $('#myalerts').html(str);
-        $('#myalerts').show();
-    }
-}
-function CheckSearch() {
-    if( $("#term").val()=="" ) {
-        alert( _("Please enter a search term.") );
-        return false;
-    }
-    return true;
-}
-function SubmitMe(op, id, msg ) {
-    $("#submitter #op").val( op );
-    $("#submitter #id").val( id );
-    $("#submitter #msg").val( msg );
-    $("#submitter").submit();
-}
-function DeleteEntry(id) {
-    if( !confirm( _("Do you really want to delete this upload?") ))
-        return false;
-    ClearField();
-    SubmitMe( 'delete', id );
-}
-function ClearField() {
-    [% IF plugin %]
-        $(window.opener.document).find('#[% index %]').val( '' );
-    [% END %]
-}
-function Choose(hashval) {
-    var res = '[% Koha.Preference('OPACBaseURL') %]';
-    res = res.replace( /\/$/, '');
-    res = res + '/cgi-bin/koha/opac-retrieve-file.pl?id=' + hashval;
-    [% IF index %]
-        $(window.opener.document).find('#[% index %]').val( res );
-    [% END %]
-    window.close();
-}
-$(document).ready(function() {
-    $("#uploadresults").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { 'bSortable': false, 'aTargets': [ 'nosort' ] }
-        ],
-        "sPaginationType": "four_button"
-    }));
-    [% IF msg %]
-        ShowAlerts( [% msg %] );
-    [% END %]
-    $("#fileuploadcancel").hide();
-    $("#public_cb").click(function() {
-        $("#public").click();
-    });
-    $("#fileuploadbutton").on("click",function(e){
-        e.preventDefault();
-        StartUpload();
-    });
-    $("#fileuploadcancel").on("click",function(e){
-        e.preventDefault();
-        CancelUpload();
-    });
-    $("#searchbutton").on("click",function(){
-        return CheckSearch();
-    });
-    $(".choose_entry").on("click",function(e){
-        e.preventDefault();
-        var record_hashvalue = $(this).data("record-hashvalue");
-        Choose( record_hashvalue );
-    });
-    $(".download_entry").on("click",function(e){
-        e.preventDefault();
-        var record_id = $(this).data("record-id");
-        SubmitMe( 'download', record_id );
-    });
-    $(".delete_entry").on("click",function(e){
-        e.preventDefault();
-        var record_id = $(this).data("record-id");
-        DeleteEntry( record_id );
-    });
-    $("#new_search").on("click",function(e){
-        e.preventDefault();
-        SubmitMe('new');
-    });
-});
-//]]>
-</script>
 </head>
 
 [% IF ( plugin ) %]
@@ -402,4 +244,165 @@ $(document).ready(function() {
 [% END %]
 
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        var errMESSAGES = [
+            "Error 0: Not in use",
+            _("This file already exists (in this category)."),
+            _("File could not be created. Check permissions."),
+            _("Your koha-conf.xml does not contain a valid upload_path."),
+            _("No temporary directory found."),
+            _("File could not be read."),
+            _("File has been deleted."),
+            _("File or upload record could not be deleted."),
+        ];
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript">
+        function StartUpload() {
+            if( $('#fileToUpload').prop('files').length == 0 ) return;
+            $('#fileToUpload').prop('disabled',true);
+            $('#fileuploadbutton').hide();
+            $("#fileuploadcancel").show();
+            $("#fileuploadfailed").html('');
+            $("#myalerts").hide('');
+            $("#myalerts").html('');
+            $("#fileuploadstatus").show();
+            $("#uploadedfileid").val('');
+            $("#searchfile").hide();
+            $("#lastbreadcrumb").text( _("Add a new upload") );
+
+            var cat, xtra='';
+            if( $("#uploadcategory").val() )
+                cat = encodeURIComponent( $("#uploadcategory").val() );
+            if( cat ) xtra= 'category=' + cat + '&';
+            [% IF plugin %]
+                xtra = xtra + 'public=1&temp=0';
+            [% ELSE %]
+                if( !cat ) xtra = 'temp=1&';
+                if( $('#public').prop('checked') ) xtra = xtra + 'public=1';
+            [% END %]
+            xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), xtra, cbUpload );
+        }
+        function CancelUpload() {
+            if( xhr ) xhr.abort();
+            $("#fileuploadstatus").hide();
+            $('#fileToUpload').prop('disabled', false);
+            $('#fileuploadbutton').show();
+            $("#fileuploadcancel").hide();
+            $("#fileuploadfailed").show();
+            $("#fileuploadfailed").text( _("Upload status: Cancelled ") );
+        }
+        function cbUpload( status, fileid, err ) {
+            $('#fileToUpload').prop('disabled', false);
+            if( status=='done' ) {
+                var e = err? JSON.stringify(err): '';
+                SubmitMe( 'search', fileid, e );
+            } else {
+                $('#fileuploadbutton').show();
+                $("#fileuploadcancel").hide();
+                $("#fileuploadstatus").hide();
+                $("#fileuploadfailed").show();
+                $("#fileuploadfailed").html( _("Upload status: ") +
+                    ( status=='failed'? _("Failed"):
+                    ( status=='denied'? _("Denied"): status ))
+                );
+                ShowAlerts( err );
+            }
+        }
+        function ShowAlerts(err) {
+            var str = '';
+            for( var file in err ) {
+                str= str + '<p>' + file + ': ' +
+                    errMESSAGES[ err[file].code ] + '</p>';
+            }
+            if( str ) {
+                $('#myalerts').html(str);
+                $('#myalerts').show();
+            }
+        }
+        function CheckSearch() {
+            if( $("#term").val()=="" ) {
+                alert( _("Please enter a search term.") );
+                return false;
+            }
+            return true;
+        }
+        function SubmitMe(op, id, msg ) {
+            $("#submitter #op").val( op );
+            $("#submitter #id").val( id );
+            $("#submitter #msg").val( msg );
+            $("#submitter").submit();
+        }
+        function DeleteEntry(id) {
+            if( !confirm( _("Do you really want to delete this upload?") ))
+                return false;
+            ClearField();
+            SubmitMe( 'delete', id );
+        }
+        function ClearField() {
+            [% IF plugin %]
+                $(window.opener.document).find('#[% index %]').val( '' );
+            [% END %]
+        }
+        function Choose(hashval) {
+            var res = '[% Koha.Preference('OPACBaseURL') %]';
+            res = res.replace( /\/$/, '');
+            res = res + '/cgi-bin/koha/opac-retrieve-file.pl?id=' + hashval;
+            [% IF index %]
+                $(window.opener.document).find('#[% index %]').val( res );
+            [% END %]
+            window.close();
+        }
+        $(document).ready(function() {
+            $("#uploadresults").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { 'bSortable': false, 'aTargets': [ 'nosort' ] }
+                ],
+                "sPaginationType": "four_button"
+            }));
+            [% IF msg %]
+                ShowAlerts( [% msg %] );
+            [% END %]
+            $("#fileuploadcancel").hide();
+            $("#public_cb").click(function() {
+                $("#public").click();
+            });
+            $("#fileuploadbutton").on("click",function(e){
+                e.preventDefault();
+                StartUpload();
+            });
+            $("#fileuploadcancel").on("click",function(e){
+                e.preventDefault();
+                CancelUpload();
+            });
+            $("#searchbutton").on("click",function(){
+                return CheckSearch();
+            });
+            $(".choose_entry").on("click",function(e){
+                e.preventDefault();
+                var record_hashvalue = $(this).data("record-hashvalue");
+                Choose( record_hashvalue );
+            });
+            $(".download_entry").on("click",function(e){
+                e.preventDefault();
+                var record_id = $(this).data("record-id");
+                SubmitMe( 'download', record_id );
+            });
+            $(".delete_entry").on("click",function(e){
+                e.preventDefault();
+                var record_id = $(this).data("record-id");
+                DeleteEntry( record_id );
+            });
+            $("#new_search").on("click",function(e){
+                e.preventDefault();
+                SubmitMe('new');
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

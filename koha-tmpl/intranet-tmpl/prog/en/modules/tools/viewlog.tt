@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
 	Koha &rsaquo; Tools &rsaquo;
@@ -11,8 +12,8 @@
 	[% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 </head>
+
 <body id="tools_viewlog" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -56,12 +57,12 @@
 [% END %]
 
 [% BLOCK translate_log_interface %]
-[%    SWITCH interface %]
+[%    SWITCH log_interface %]
 [%        CASE 'INTRANET'    %]Intranet
 [%        CASE 'OPAC'        %]OPAC
 [%        CASE 'SIP'         %]SIP
 [%        CASE 'COMMANDLINE' %]Command-line
-[%        CASE %][% interface %]
+[%        CASE %][% log_interface %]
 [%    END %]
 [% END %]
 
@@ -145,9 +146,9 @@
 
                                     [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' ] %]
                                         [% IF interfaces.grep(interf).size %]
-                                            <option value="[% interf %]" selected="selected">[% PROCESS translate_log_interface interface=interf %]</option>
+                                            <option value="[% interf %]" selected="selected">[% PROCESS translate_log_interface log_interface=interf %]</option>
                                         [% ELSE %]
-                                            <option value="[% interf %]">[% PROCESS translate_log_interface interface=interf %]</option>
+                                            <option value="[% interf %]">[% PROCESS translate_log_interface log_interface=interf %]</option>
                                         [% END %]
                                     [% END %]
                                 </select>
@@ -244,7 +245,7 @@
                                             [% loopro.info |html %]
                                         [% END %]
                                     </td>
-                                    <td>[% PROCESS translate_log_interface interface=loopro.interface %]</td>
+                                    <td>[% PROCESS translate_log_interface log_interface=loopro.interface %]</td>
                                 </tr>
                             [% END %]
                             </tbody>
@@ -276,4 +277,10 @@
 			[% END %]
 		</div>
 	</div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
