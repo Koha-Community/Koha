@@ -1,13 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Libraries and groups
 [% IF op == 'editcategory' %]
-    &rsaquo;[% IF category.categorycode %]Edit group [% category.categorycode%][% ELSE %]New group[% END %]
+    &rsaquo; [% IF category.categorycode %] Edit group [% category.categorycode%] [% ELSE %] New group [% END %]
 [% ELSIF op == 'delete_confirm_category' %]
     &rsaquo; Confirm deletion of group [% category.categorycode %]
 [% ELSIF op == 'add_form' %]
-    &rsaquo;[% IF library %]Modify library[% ELSE %]New library [% library.branchcode %][% END %]
+    &rsaquo; [% IF library %] Modify library [% library.branchcode | html %] [% ELSE %] New library [% END %]
 [% ELSIF op == 'delete_confirm' %]
-    &rsaquo; Confirm deletion of library '[% library.branchcode %]'
+    &rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -63,13 +63,13 @@ tinyMCE.init({
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/branches.pl">Libraries and groups</a>
 [% IF op == 'add_form_category' %]
-&rsaquo; [% IF category.categorycode %]Edit group [% category.categorycode %][% ELSE %]New group[% END %]
+&rsaquo; [% IF category.categorycode %] Edit group [% category.categorycode %] [% ELSE %] New group [% END %]
 [% ELSIF op == 'delete_confirm_category' %]
 &rsaquo; Confirm deletion of group [% category.categorycode %]
 [% ELSIF op == 'add_form'  %]
-&rsaquo; [% IF library %]Modify library[% ELSE %]New library [% library.branchcode %][% END %]
+&rsaquo; [% IF library %] Modify library [% library.branchcode | html %] [% ELSE %] New library [% END %]
 [% ELSIF op == 'delete_confirm' %]
-&rsaquo; Confirm deletion of library '[% library.branchcode %]'
+&rsaquo; Confirm deletion of library '[% library.branchcode | html %]'
 [% END %]
 </div>
 
@@ -143,7 +143,7 @@ tinyMCE.init({
                     [% IF library %]
                         <span class="label">Library code: </span>
                         <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
-                        [% library.branchcode %]
+                        [% library.branchcode | html %]
                     [% ELSE %]
                         <label for="branchcode" class="required">Library code: </label>
                         <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="[% library.branchcode |html %]" class="required" required="required" />
@@ -204,7 +204,7 @@ tinyMCE.init({
 [% IF op == 'delete_confirm' and not ( items_count or patrons_count )%]
     <div class="dialog alert">
         <form action="/cgi-bin/koha/admin/branches.pl" method="post">
-            <h3>Are you sure you want to delete [% library.branchname |html %] ([% library.branchcode %])?</h3>
+            <h3>Are you sure you want to delete [% library.branchname |html %] ([% library.branchcode | html %])?</h3>
             <input type="hidden" name="op" value="delete_confirmed" />
             <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
             <input type="hidden" name="branchname" value="[% library.branchname |html %]">
@@ -269,8 +269,8 @@ tinyMCE.init({
                         </td>
                         <td>[% library.branchip %]</td>
                         <td class="actions">
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode %]"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode %]"><i class="fa fa-trash"></i> Delete</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=add_form&amp;branchcode=[% library.branchcode | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-mini" href="/cgi-bin/koha/admin/branches.pl?op=delete_confirm&amp;branchcode=[% library.branchcode | html %]"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                 [% END %]
