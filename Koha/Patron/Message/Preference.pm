@@ -154,6 +154,8 @@ sub new_from_default {
         })->store;
     }
 
+    $self->fix_misconfigured_preference;
+
     return $self;
 }
 
@@ -209,7 +211,7 @@ sub fix_misconfigured_preference {
             my $patron = Koha::Patrons->find($self->borrowernumber);
             my ($field) = keys %{$mtt_to_patronfield_to_validator->{$mtt}};
             my $v = $mtt_to_patronfield_to_validator->{$mtt}->{$field};
-            if (Koha::Validation->$v($patron->$field)) {
+            if ($patron->$field && Koha::Validation->$v($patron->$field)) {
                 push @{$valid_mtts}, $mtt;
             }
         }
