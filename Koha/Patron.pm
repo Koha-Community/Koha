@@ -858,6 +858,13 @@ sub set_default_messaging_preferences {
         })->count) {
             next;
         }
+
+        # Delete current setting
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $self->borrowernumber,
+             message_attribute_id => $option->{message_attribute_id},
+        })->delete;
+
         Koha::Patron::Message::Preference->new_from_default({
             borrowernumber => $self->borrowernumber,
             categorycode   => $categorycode || $self->categorycode,
