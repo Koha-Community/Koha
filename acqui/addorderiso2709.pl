@@ -48,6 +48,7 @@ use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Currencies;
 use Koha::Patrons;
 
 my $input = new CGI;
@@ -327,6 +328,11 @@ if ($op eq ""){
                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
                 $price =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
                 $price = Koha::Number::Price->new($price)->unformat;
+                # RECALCALCULATE PRICE BASED ON CURRENCY 
+                my $currency_code = $bookseller->listprice;
+                my $currency = Koha::Acquisition::Currencies->find($currency_code);
+                my $currency_rate = $currency->rate;
+                $price = $price * $currency_rate;
                 $orderinfo{tax_rate} = $bookseller->tax_rate;
                 my $c = $c_discount ? $c_discount : $bookseller->discount / 100;
                 $orderinfo{discount} = $c;
