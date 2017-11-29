@@ -55,11 +55,12 @@ Usage: $0 OUTPUT_DIRECTORY
   -m --message  Choose which messages are printed, can be repeated.
   -l --library  Get print notices by branchcode, can be repeated.
   -e --email    Get print notices by email postfix eg. \@mail.com, can be repeated.
+  --prefix      Set prefix to output filename
 USAGE
     exit $_[0];
 }
 
-my ( $stylesheet, $help, $split, $HOLDbarcodeParsingRegexp, @messagecodes, @branchcodes, @emails );
+my ( $stylesheet, $help, $split, $HOLDbarcodeParsingRegexp, @messagecodes, @branchcodes, @emails, $prefix );
 
 GetOptions(
     'h|help'  => \$help,
@@ -68,6 +69,7 @@ GetOptions(
     'message=s' => \@messagecodes,
     'library=s' => \@branchcodes,
     'email=s' => \@emails,
+    'prefix=s' => \$prefix,
 ) || usage(1);
 
 usage(0) if ($help);
@@ -156,21 +158,18 @@ if ($split) {
     }
 }
 else {
-    if (@branchcodes) {
-        my $code;
-        foreach my $branch (@branchcodes) {
-            $code = substr($branch, 0, 3);
-        }
-        my $output_file = File::Spec->catdir( $output_directory,
-            "notices-" . $today . "-$code.html" );
-        open $OUTPUT, '>encoding(utf-8)', $output_file
-            or die "Could not open $output_file: $!";
+
+    my $filename;
+
+    if($prefix) {
+        $filename = $prefix."-notices-" . $today . ".html";
     } else {
-        my $output_file = File::Spec->catdir( $output_directory,
-            "notices-" . $today . ".html" );
-        open $OUTPUT, '>encoding(utf-8)', $output_file
-            or die "Could not open $output_file: $!";
+        $filename = "notices-" . $today . ".html";
     }
+    my $output_file = File::Spec->catdir( $output_directory,
+        $filename );
+    open $OUTPUT, '>encoding(utf-8)', $output_file
+        or die "Could not open $output_file: $!";
 
 
     my $template =
