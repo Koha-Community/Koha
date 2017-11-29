@@ -159,7 +159,7 @@ sub handle_form_action {
     if (! $prefs_set && $insert){
         # this is new borrower, and we have no preferences set, use the defaults
         $target_params->{categorycode} = $categorycode;
-        my $patron = Koha::Patron->find($target_params->{'borrowernumber'});
+        my $patron = Koha::Patrons->find($target_params->{'borrowernumber'});
         $patron->set_default_messaging_preferences if $patron;
     }
     # show the success message
