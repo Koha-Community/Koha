@@ -299,6 +299,39 @@ $(document).ready(function() {
 [% END %]
 [% END %]
 [% END %]
+    <fieldset class="rows" id="ssn_fieldset">
+        <legend id="ssn_legend">Tarkista sotun olemassaolo</legend>
+
+        <div id="ssn_notifier" style="font-weight: bold"></div>
+
+        <ol>
+            [% IF NOT Koha.Preference('LoginWithSSNProviderCredentials') %]
+                <li>
+                    <label for="ssn_username" class="">Käyttäjätunnuksesi: </label>
+                    <input type="text" name="ssn_username" value="[% ssn_user %]" class="valid">
+                </li>
+                <li>
+                    <label for="ssn_password" class="">Salasanasi: </label>
+                    <input type="password" name="ssn_password" value="[% ssn_pass %]" class="valid">
+                </li>
+            [% ELSE %]
+                <li>
+                    <input type="hidden" name="ssn_username" value="[% ssn_user %]">
+                </li>
+                <li>
+                    <input type="hidden" name="ssn_password" value="[% ssn_pass %]">
+                </li>
+            [% END %]
+            <li>
+                <label for="ssn_ssn" class="">Sotu: </label>
+                <input type="text" name="ssn_ssn" class="valid">
+            </li>
+            <li>
+                <input type="hidden" name="ssn_url" value="[% ssn_url %]"> 
+            </li>
+       </ol>
+        <input id="ssn_submit" type="submit" value="Lisää sotu!" style="margin-left: 129px; margin-bottom: 13px;">
+    </fieldset>
 
 [% IF ( step_1 ) %]
 [%UNLESS notitle && nosurname && nofirstname && nodateofbirth && noinitials && noothernames &&nosex %]
@@ -1323,3 +1356,4 @@ $(document).ready(function() {
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
 
+<script type="text/javascript" src="[% themelang %]/js/ssn-service.js"></script>
