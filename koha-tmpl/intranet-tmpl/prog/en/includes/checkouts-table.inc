@@ -32,8 +32,10 @@
                 [% INCLUDE 'checkouts-table-footer.inc' %]
             </table>
 
-            <label for="issues-table-load-immediately">Always show checkouts immediately</label>
-            <input id="issues-table-load-immediately" type="checkbox" />
+            [% UNLESS Koha.Preference('ReducePatronInfoOnCirculation') %]
+                <label for="issues-table-load-immediately">Always show checkouts immediately</label>
+                <input id="issues-table-load-immediately" type="checkbox" />
+            [% END %] 
 
             <div id="issues-table-actions">
                 <fieldset class="action">
