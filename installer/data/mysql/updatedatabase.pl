@@ -15164,6 +15164,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19096 - Make Default authoritative for Koha to MARC mappings)\n";
 }
 
+$DBversion = '17.12.00.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|DROP TABLE IF EXISTS notifys|);
+
+    if( column_exists( 'accountlines', 'notify_id' ) ) {
+        $dbh->do(q|ALTER TABLE accountlines DROP COLUMN notify_id|);
+        $dbh->do(q|ALTER TABLE accountlines DROP COLUMN notify_level|);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 10021 - Drop notifys-related table and columns)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
