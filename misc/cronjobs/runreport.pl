@@ -66,6 +66,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --from=s        e-mail address to send report from
    --subject=s     subject for the e-mail
    --store-results store the result of the report
+   --csv-header    add column names as first line of csv output
 
 
  Arguments:
@@ -175,6 +176,7 @@ my $subject = "";
 my $separator = ',';
 my $quote = '"';
 my $store_results = 0;
+my $csv_header = 0;
 
 my $username = undef;
 my $password = undef;
@@ -194,6 +196,7 @@ GetOptions(
     'password:s'        => \$password,
     'method:s'          => \$method,
     'store-results'     => \$store_results,
+    'csv-header'        => \$csv_header,
 
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
@@ -273,6 +276,14 @@ foreach my $report_id (@ARGV) {
             quote_char  => $quote,
             sep_char    => $separator,
             });
+
+        if ( $csv_header ) {
+            my $fields = $sth->{NAME};
+            $csv->combine( @$fields );
+            $message .= $csv->string() . "\n";
+            push @rows_to_store, [@$fields] if $store_results;
+        }
+
         while (my $line = $sth->fetchrow_arrayref) {
             $csv->combine(@$line);
             $message .= $csv->string() . "\n";
