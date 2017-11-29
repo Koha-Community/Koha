@@ -862,7 +862,7 @@ sub set_default_messaging_preferences {
             borrowernumber => $self->borrowernumber,
             categorycode   => $categorycode || $self->categorycode,
             message_attribute_id => $option->{message_attribute_id},
-        })->store;
+        });
     }
 
     return $self;
