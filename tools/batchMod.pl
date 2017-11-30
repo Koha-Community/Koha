@@ -279,13 +279,14 @@ if ($op eq "show"){
     # Flag to tell the template there are valid results, hidden or not
     if(scalar(@itemnumbers) > 0){ $template->param("itemresults" => 1); }
     # Only display the items if there are no more than pref MaxItemsToProcessForBatchMod or MaxItemsToDisplayForBatchDel
-    my $max_items = $del
+    my $max_display_items = $del
         ? C4::Context->preference("MaxItemsToDisplayForBatchDel")
-        : C4::Context->preference("MaxItemsToProcessForBatchMod");
-    if (scalar(@itemnumbers) <= ( $max_items // 1000 ) ) {
+        : C4::Context->preference("MaxItemsToDisplayForBatchMod");
+    $template->param("too_many_items_process" => scalar(@itemnumbers)) if !$del && scalar(@itemnumbers) >= C4::Context->preference("MaxItemsToProcessForBatchMod");
+    if (scalar(@itemnumbers) <= ( $max_display_items // 1000 ) ) {
         $items_display_hashref=BuildItemsData(@itemnumbers);
     } else {
-        $template->param("too_many_items" => scalar(@itemnumbers));
+        $template->param("too_many_items_display" => scalar(@itemnumbers));
         # Even if we do not display the items, we need the itemnumbers
         $template->param(itemnumbers_array => \@itemnumbers);
     }

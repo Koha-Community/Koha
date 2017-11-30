@@ -293,6 +293,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MARCOrgCode','OSt','','Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html','free'),
 ('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
 ('MaxItemsToDisplayForBatchDel','1000',NULL,'Display up to a given number of items in a single item deletionbatch.','Integer'),
+('MaxItemsToDisplayForBatchMod','1000',NULL,'Display up to a given number of items in a single item modification batch.','Integer'),
 ('MaxItemsToProcessForBatchMod','1000',NULL,'Process up to a given number of items in a single item modification batch.','Integer'),
 ('maxItemsInSearchResults','20',NULL,'Specify the maximum number of items to display for each result on a page of results','free'),
 ('MaxOpenSuggestions','',NULL,'Limit the number of open suggestions a patron can have at once','Integer'),
