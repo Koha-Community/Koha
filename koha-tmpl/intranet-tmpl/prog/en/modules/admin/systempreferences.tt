@@ -1,85 +1,12 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System preferences &rsaquo; Data added[% END %]
 [% IF ( delete_confirm ) %] System preferences &rsaquo; [% searchfield %] &rsaquo; Confirm deletion of parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System preferences &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[%# Add WYSIWYG editor for htmlarea system preferences %]
-[% INCLUDE 'wysiwyg-systempreferences.inc' %]
-[% IF ( else ) %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-    //<![CDATA[
-     $(document).ready(function() {
-        [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": '<"top pager"ilf>t',
-            "aoColumnDefs": [
-                { "aTargets": [ -1, -2, -3 ], "bSortable": false }
-            ],
-            "bPaginate": false
-        }));[% END %]
-     });
-</script>
-[% END %]
-<script type="text/javascript">
-//<![CDATA[
-[% IF ( add_form ) %]
-    $(document).ready(function() {
-        $('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
-        $('.variabletype').click(function() {
-            $('#preftype').attr("value",$(this).attr("id"));
-        });
-    });
-[% END %]
-        // FIXME: many of these js functions appear unused
-        function isNotNull(f,noalert) {
-            if (f.value.length ==0) {
-    return false;
-            }
-            return true;
-        }
-        //
-        function isNum(v,maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-            return false;
-            }
-        if (maybenull==0 && v.value=='') {
-            return false;
-        }
-        return true;
-        }
-        //
-        function Check(f) {
-            var ok=1;
-            var _alertString="";
-            var alertString2;
-            if (f.variable.value.length==0) {
-                _alertString += "\n- " + _("variable missing");
-            }
-            if (f.value.value.length==0) {
-                _alertString += "\n- " + _("value missing");
-            }
-            if (_alertString.length==0) {
-                document.Aform.submit();
-            } else {
-                alertString2  = _("Form not submitted because of the following problem(s)");
-                alertString2 += "\n------------------------------------------------------------------------------------\n";
-                alertString2 += _alertString;
-                alert(alertString2);
-            }
-        }
-        $( function() {
-            $( '#sysprefst .expand-textarea' ).show().click( function () {
-                $( this ).hide().nextAll( 'textarea, input[type=submit]' ).show( 'slow' );
-
-                return false;
-            } ).nextAll( 'textarea, input[type=submit]' ).hide();
-        } );
-
-        //]]>
-</script>
 </head>
+
 <body id="admin_systempreferences" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
@@ -449,4 +376,79 @@
 [% INCLUDE 'prefs-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [%# Add WYSIWYG editor for htmlarea system preferences %]
+    [% INCLUDE 'wysiwyg-systempreferences.inc' %]
+    [% IF ( else ) %]
+        [% INCLUDE 'datatables.inc' %]
+        <script type="text/javascript">
+             $(document).ready(function() {
+                [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "sDom": '<"top pager"ilf>t',
+                    "aoColumnDefs": [
+                        { "aTargets": [ -1, -2, -3 ], "bSortable": false }
+                    ],
+                    "bPaginate": false
+                }));[% END %]
+             });
+        </script>
+    [% END %]
+    <script type="text/javascript">
+        [% IF ( add_form ) %]
+            $(document).ready(function() {
+                $('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
+                $('.variabletype').click(function() {
+                    $('#preftype').attr("value",$(this).attr("id"));
+                });
+            });
+        [% END %]
+            // FIXME: many of these js functions appear unused
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+        return false;
+                }
+                return true;
+        }
+
+        function isNum(v,maybenull) {
+            var n = new Number(v.value);
+            if (isNaN(n)) {
+                return false;
+                }
+            if (maybenull==0 && v.value=='') {
+                return false;
+            }
+            return true;
+        }
+
+        function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            if (f.variable.value.length==0) {
+                _alertString += "\n- " + _("variable missing");
+            }
+            if (f.value.value.length==0) {
+                _alertString += "\n- " + _("value missing");
+            }
+            if (_alertString.length==0) {
+                document.Aform.submit();
+            } else {
+                alertString2  = _("Form not submitted because of the following problem(s)");
+                alertString2 += "\n------------------------------------------------------------------------------------\n";
+                alertString2 += _alertString;
+                alert(alertString2);
+            }
+        }
+        $( function() {
+            $( '#sysprefst .expand-textarea' ).show().click( function () {
+                $( this ).hide().nextAll( 'textarea, input[type=submit]' ).show( 'slow' );
+
+                return false;
+            } ).nextAll( 'textarea, input[type=submit]' ).hide();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
