@@ -58,7 +58,7 @@ sub GetRecords {
     # first deleted records ($deleted == 1), then normal records ($deleted == 0)
     STAGELOOP:
     for ( ; $deleted >= 0; $deleted-- ) {
-        my $table = $deleted ? 'deletedbiblioitems' : 'biblioitems';
+        my $table = $deleted ? 'deletedbiblio_metadata' : 'biblio_metadata';
         my $sql = "
             SELECT biblionumber
             FROM $table
@@ -103,7 +103,7 @@ sub GetRecords {
             $sql = "
                 SELECT MAX(timestamp)
                 FROM (
-                    SELECT timestamp FROM deletedbiblioitems WHERE biblionumber = ?
+                    SELECT timestamp FROM deletedbiblio_metadata WHERE biblionumber = ?
                     UNION
                     SELECT timestamp FROM deleteditems WHERE biblionumber = ?
                 ) bis
@@ -112,7 +112,7 @@ sub GetRecords {
             $sql = "
                 SELECT MAX(timestamp)
                 FROM (
-                    SELECT timestamp FROM biblioitems WHERE biblionumber = ?
+                    SELECT timestamp FROM biblio_metadata WHERE biblionumber = ?
                     UNION
                     SELECT timestamp FROM deleteditems WHERE biblionumber = ?
                     UNION
