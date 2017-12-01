@@ -85,7 +85,6 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     $sth->execute($biblionumber);
     my $timestamp = $sth->fetchrow_array . 'Z';
     $timestamp =~ s/ /T/;
-    $timestamp = manipulate_timestamp( $index, $biblionumber, $timestamp );
     $record = GetMarcBiblio({ biblionumber => $biblionumber });
     $record = XMLin($record->as_xml_record);
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
@@ -353,6 +352,7 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
     my $record = GetMarcBiblio({biblionumber => $biblionumber});
     $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
     ModBiblio($record, $biblionumber);
+    $oaidc[0]->{header}->{datestamp} = $from;
 
     test_query(
         'ListRecords oai_dc with parameter from',
@@ -364,15 +364,3 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
 };
 
 $schema->storage->txn_rollback;
-
-sub manipulate_timestamp {
-# This eliminates waiting a few seconds in order to get a higher timestamp
-# Works only for 60 records..
-    my ( $index, $bibno, $timestamp ) = @_;
-    return $timestamp if $timestamp !~ /\d{2}Z/;
-    my $secs = sprintf( "%02d", $index );
-    $timestamp =~ s/\d{2}Z/${secs}Z/;
-    $dbh->do("UPDATE biblioitems SET timestamp=? WHERE biblionumber=?", undef,
-        ( $timestamp, $bibno ));
-    return $timestamp;
-}
