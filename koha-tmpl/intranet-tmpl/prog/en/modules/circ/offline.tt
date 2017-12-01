@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 <!DOCTYPE html>
 [% IF (AllowOfflineCirculation) %]
 [% SET manifestattr = 'manifest="/cgi-bin/koha/circ/offline-mf.pl"' %]
@@ -9,576 +10,8 @@
 <head>
 <title>Koha &rsaquo; Circulation</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.indexeddb.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/offlinecirc.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
-[% INCLUDE 'timepicker.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
-var ALERT_MATERIALS = _("Note about the accompanying materials: %s");
-var ALERT_RESTRICTED = _("Patron is RESTRICTED");
-var ALERT_NO_MATCHING_ITEM = _("No item with barcode in offline database (transaction recorded anyway): %s");
-var ALERT_NOT_CHECKED_OUT = _("Item not listed as checked out in offline database (transaction recorded anyway)");
-var ALERT_ITEM_WITHDRAWN = _("Item has been withdrawn (transaction recorded anyway)");
-var ALERT_ITEM_RESTRICTED = _("Item is restricted (transaction recorded anyway)");
-var ALERT_ITEM_LOST = _("Item has been lost (transaction recorded anyway)");
-var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): %s");
-var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (proceeding anyway)");
-var ALERT_PATRON_CARD_LOST = _("Patron's card is lost");
-var ALERT_PATRON_EXPIRED = _("Patron's card is expired (%s)");
-var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted until: %s");
-var ALERT_PATRON_RESTRICTED = _("Patron is restricted");
-var ALERT_PATRON_FINE = _("Patron has outstanding fines: %s");
-var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: %s");
-var UPLOAD_PENDING_MESSAGE = _("You have transactions in the offline circulation database on this computer that have not been uploaded.");
-var NO_UPLOAD_PENDING_MESSAGE = _("You do not have any pending transactions in the offline circulation database on this computer.");
-
-var start;
-
-var dateformat = '[% IF ( dateformat_us ) %]mm/dd/yy[% ELSIF ( dateformat_metric ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]';
-
-function checkin(barcode, item, error) {
-    var alerts = checkAlerts(barcode, item);
-    if (typeof item === 'undefined') {
-        item = { };
-    }
-    item.title = item.title || _("(Unknown)");
-    item.author = item.author || _("(Unknown)");
-    item.homebranch = item.homebranch || "";
-    item.holdingbranch = item.holdingbranch || "";
-    item.callnumber = item.callnumber || "";
-    item.itemtype = item.itemtype || "";
-    item.barcode = item.barcode || barcode;
-    var trans = { "timestamp" : new Date().toMySQLString(),
-                  "barcode" : barcode,
-                  "action" : "return"
-                };
-    $('#alerts').empty();
-    $('.offline-home').hide();
-    $('.offline-sync').hide();
-    $('.offline-circulation').hide();
-    $('.offline-circulation-instructions').hide();
-    $('.offline-returns').show();
-    kohadb.recordTransaction(trans, function () {
-        $('#session-returned').show();
-        $('#already-checked-in tbody').prepend('<tr><td>' + item.title + '</td><td>' + item.author + '</td><td>' + barcode + '</td><td>' + item.homebranch + '</td><td>' + item.holdingbranch + '</td><td></td><td>' + item.callnumber + '</td><td>' + item.itemtype + '</td></tr>');
-        if (alerts.length > 0) {
-            $('#alerts').append('<div class="dialog alert"><h3>' + _("Check in message") + '</h3></div>');
-            for (var msg in alerts) {
-                $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
-            }
-        } else {
-            $('#alerts').append('<div class="dialog"><h3>' + ALERT_SUCCESSFUL_CHECKIN + '</h3></div>');
-        }
-    });
-    setTimeout(function() { $('#checkin-barcode').trigger('focus'), 1 });
-}
-
-function checkAlerts(barcode, item) {
-    var alerts = [];
-    if (typeof item === 'undefined') {
-        alerts.push(ALERT_NO_MATCHING_ITEM.format(barcode));
-    } else {
-        if (typeof item.materials !== 'undefined' && item.materials != null) {
-            alerts.push(ALERT_MATERIALS.format(item.materials));
-        }
-    }
-    return alerts;
-}
-
-function showSyncInfo() {
-    kohadb.loadSetting("item-timestamp", showTimestamp);
-    kohadb.loadSetting("patron-timestamp", showTimestamp);
-    kohadb.loadSetting("issue-timestamp", showTimestamp);
-    kohadb.loadSetting("dirty", function (key, val) {
-        if (val) {
-            $('#upload-message').text(UPLOAD_PENDING_MESSAGE);
-        } else {
-            $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
-        }
-    });
-}
-
-function synchronize() {
-    kohadb.saveSetting("userid", "[% loggedinusername %]");
-    kohadb.saveSetting("branchcode", "[% LoginBranchcode %]");
-    showSyncInfo();
-    [% UNLESS (AllowOfflineCirculation) %]
-        reloadRecords();
-    [% END %]
-    showSyncInfo();
-    $('#download-records').click(reloadRecords);
-    $('#upload-transactions').click(function () {
-        $('.loading-overlay div').text(_("Uploading transactions, please wait..."));
-        $('.loading-overlay').show();
-        $.ajax({
-            type: "GET",
-            url: "/cgi-bin/koha/offline_circ/service.pl",
-        }).done(function (data) {
-            if (data) {
-                $('.loading-overlay').hide();
-                alert(_("Please log in to Koha and try again. (Error: '%s')").format(data));
-            } else {
-                var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
-                uploadIter.done(function() {
-                    $.indexedDB("koha").transaction(["transactions"]).then(function(){
-                    }, function(err, e){
-                    }, function(transaction){
-                        transaction.objectStore("transactions").clear();
-                    });
-                    $('.loading-overlay').hide();
-                    kohadb.saveSetting("dirty", false);
-                    $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
-                });
-            }
-        });
-    });
-
-}
-
-function showTimestamp(key, value) {
-    if (typeof value !== 'undefined') {
-        var ts = new Date(value);
-        $('#' + key).text($.datepicker.formatDate(dateformat, ts) + ' ' + ts.toTimeString());
-    } else {
-        $('#' + key).text(_("(never)"));
-    }
-}
-
-function reloadRecords(ev) {
-    $(".loading-overlay div").text(_("Loading records, please wait..."));
-    $(".loading-overlay").show();
-    start = new Date();
-    $.indexedDB("koha").transaction(["patrons", "items", "issues"]).then(function(){
-        loadRecords(0);
-    }, function(err, e){
-    }, function(transaction){
-        transaction.objectStore("patrons").clear();
-        transaction.objectStore("items").clear();
-        transaction.objectStore("issues").clear();
-    });
-    if (typeof ev !== 'undefined') {
-        ev.stopPropagation();
-    }
-}
-
-function uploadTransaction(transaction) {
-    $.ajax({
-        type: "POST",
-        url: "/cgi-bin/koha/offline_circ/service.pl",
-        data: { "userid" : kohadb.settings.userid,
-                "branchcode" : kohadb.settings.branchcode,
-                "timestamp" : transaction.value.timestamp,
-                "action" : transaction.value.action,
-                "barcode" : transaction.value.barcode,
-                "cardnumber" : transaction.value.cardnumber,
-                "amount" : transaction.value.amount,
-                "pending" : true,
-              },
-    });
-    return undefined, true;
-}
-
-function finishedLoading() {
-    kohadb.saveSetting('item-timestamp', start.toISOString())
-    kohadb.saveSetting('patron-timestamp', start.toISOString())
-    kohadb.saveSetting('issue-timestamp', start.toISOString())
-    showTimestamp('item-timestamp', start.toISOString());
-    showTimestamp('patron-timestamp', start.toISOString());
-    showTimestamp('issue-timestamp', start.toISOString());
-    $(".loading-overlay").hide();
-}
-
-function loadRecords(page) {
-[% IF (AllowOfflineCirculation) %]
-    $(".loading-overlay div").text(_("Loading page %s, please wait...").format(page));
-    $(".loading-overlay").show();
-    $.ajax({
-        type: "GET",
-        url: "/cgi-bin/koha/offline_circ/download.pl",
-        data: { "data": "all",
-                "page": page
-              },
-        dataType: "json",
-    }).done(function (data) {
-        $.indexedDB("koha").transaction(["patrons", "items", "issues"]).then(function(){
-            if (data.finished) {
-                finishedLoading();
-            } else {
-                setTimeout(function () { loadRecords(page + 1); }, 200);
-            }
-        }, function(err, e){
-        }, function(transaction){
-            if (data.patrons) {
-                var patrons = transaction.objectStore("patrons");
-                $.each(data.patrons, function () {
-                    patrons.put(this);
-                });
-            }
-            if (data.items) {
-                var items = transaction.objectStore("items");
-                $.each(data.items, function () {
-                    items.put(this);
-                });
-            }
-            if (data.issues) {
-                var issues = transaction.objectStore("issues");
-                $.each(data.issues, function () {
-                    issues.put(this);
-                });
-            }
-        });
-    });
-[% END %]
-}
-
-function validate1(date) {
-    var today = new Date();
-    if ( date < today ) {
-        return true;
-     } else {
-        return false;
-     }
-};
-
-function loadPatron(barcode) {
-    $('#oldissues').hide();
-    $('#session-issues').hide();
-    $('#issuest tbody').empty();
-    $('#session-payments').hide();
-    $('.checkout-count').text(0);
-    $.indexedDB("koha").transaction(["patrons", "issues"]).then(function() {
-    }, function(err, e){
-    }, function(transaction){
-        var patrons = transaction.objectStore("patrons");
-        patrons.get(barcode).done(function (patron, error) {
-            showPatron(barcode, patron, error);
-        });
-        var issuesidx = transaction.objectStore("issues").index("cardnumber");
-        $('#oldissuest tbody').empty();
-        issuesidx.each(function (item) {
-            $('#oldissues').show();
-            $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.title + "</td><td>" + item.value.barcode + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
-            $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
-        }, barcode);
-    });
-}
-
-function checkout(barcode, item, error) {
-    var alerts = checkAlerts(barcode, item);
-    if (typeof item === 'undefined') {
-        item = { };
-    }
-    item.title = item.title || "";
-    item.author = item.author || "";
-    item.homebranch = item.homebranch || "";
-    item.holdingbranch = item.holdingbranch || "";
-    item.callnumber = item.callnumber || "";
-    item.itemtype = item.itemtype || "";
-    if ($('#duedatespec').val().length === 0) {
-        alert(_("You must set a due date in order to use offline circulation!"));
-        setTimeout(function() { $('#duedatespec').trigger('focus'), 1 });
-        return;
-    }
-    var date_due = new Date($('#duedatespec').datepicker('getDate'));
-    var trans = { "timestamp" : new Date().toMySQLString(),
-                  "barcode" : barcode,
-                  "cardnumber" : curpatron.cardnumber,
-                  "date_due" : date_due.toMySQLString(),
-                  "action" : "issue"
-                };
-    $('#alerts').empty();
-    kohadb.recordTransaction(trans, function () {
-        $('#session-issues').show();
-        $('#issuest tbody').prepend('<tr><td>' + $.datepicker.formatDate(dateformat, date_due) + date_due.toTimeString() + '</td><td>' + item.title + '</td><td>' + barcode + '</td><td>' + item.itemtype + '</td><td>' + $.datepicker.formatDate(dateformat, new Date()) + '</td><td>' + kohadb.settings.branchcode + '</td><td>' + item.callnumber + '</td><td></td></tr>');
-        $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
-        if (alerts.length > 0) {
-            $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
-            for (var msg in alerts) {
-                $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
-            }
-        }
-        $('#checkout-barcode').val('');
-    });
-}
-
-function recordFine(amount) {
-    var timestamp = new Date()
-    var trans = { "timestamp" : timestamp.toMySQLString(),
-                  "cardnumber" : curpatron.cardnumber,
-                  "amount" : amount,
-                  "action" : "payment",
-                };
-    kohadb.recordTransaction(trans, function () {
-        $('#session-payments').show();
-        $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + $.datepicker.formatDate(dateformat, timestamp) + timestamp.toTimeString() + '</td></tr>');
-        $('.fine-amount').text(parseInt($('.fine-amount').text()) - amount);
-    });
-}
-
-function checkPatronAlerts(cardnumber, patron) {
-    var alerts = [];
-    if (typeof patron === 'undefined') {
-        alerts.push(ALERT_NO_MATCHING_PATRON.format(cardnumber));
-    } else {
-        if (patron.gonenoaddress !== '0') {
-            alerts.push(ALERT_PATRON_GONE_NO_ADDRESS);
-        }
-        if (patron.lost !== '0') {
-            alerts.push(ALERT_PATRON_CARD_LOST);
-        }
-        if (patron.debarred !== null) {
-            if (patron.debarred != '9999-12-31') {
-                alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY.format($.datepicker.formatDate(dateformat, new Date(patron.debarred))));
-            } else {
-                alerts.push(ALERT_PATRON_RESTRICTED);
-            }
-        }
-        if (new Date(patron.dateexpiry) < new Date()) {
-            alerts.push(ALERT_PATRON_EXPIRED.format($.datepicker.formatDate(dateformat, new Date(patron.dateexpiry))));
-        }
-        if (parseInt(patron.fine) > [% maxoutstanding %]) {
-            alerts.push(ALERT_PATRON_FINE_OVER_LIMIT.format(patron.fine));
-        } else if (parseInt(patron.fine) > 0) {
-            alerts.push(ALERT_PATRON_FINE.format(patron.fine));
-        }
-    }
-    return alerts;
-}
-
-var curpatron;
-
-function showPatron(barcode, patron, error) {
-    var alerts = checkPatronAlerts(barcode, patron);
-    if (typeof patron === 'undefined') {
-        patron = { };
-    }
-    patron.surname = patron.surname || "";
-    patron.firstname = patron.firstname || "";
-    patron.othernames = patron.othernames || "";
-    patron.address = patron.address || "";
-    patron.address2 = patron.address2 || "";
-    patron.city = patron.city || "";
-    patron.state = patron.state || "";
-    patron.country = patron.country || "";
-    patron.zipcode = patron.zipcode || "";
-    patron.phone = patron.phone || "";
-    patron.mobile = patron.mobile || "";
-    patron.phonepro = patron.phonepro || "";
-    patron.email = patron.email || "";
-    patron.emailpro = patron.emailpro || "";
-    patron.categorycode = patron.categorycode || "";
-    patron.branchcode = patron.branchcode || "";
-    patron.cardnumber = barcode;
-    patron.fine = patron.fine || "0";
-
-    patron.name = patron.firstname + (patron.othernames.length > 0 ? " (" + patron.othernames + ") " : " ") + patron.surname + " (" + barcode + ")";
-    if (patron.name.length > 0) {
-        $('.patron-title').text(patron.name);
-    } else {
-        $('.patron-title').text(_("Unrecognized patron (%s)").format(barcode));
-    }
-    if (patron.address.length > 0 || patron.address2.length > 0) {
-        $('#patron-address-1').text(patron.address);
-        $('#patron-address-2').text(patron.address2);
-    } else {
-        $('#patron-address-1').html('<span class="empty" id="noaddressstored">' + _("No address stored.") + '</span></li>');
-        $('#patron-address-2').text('');
-    }
-    if (patron.city.length > 0) {
-        $('#patron-address-parts').text(patron.city + (patron.state.length > 0 ? ", " + patron.state : "") + " " + patron.zipcode + (patron.country.length > 0 ? ", " + patron.country : ""));
-    } else {
-        $('#patron-address-parts').html('<span class="empty" id="nocitystored">' + _("No city stored.") + '</span></li>');
-    }
-    if (patron.phone.length > 0 || patron.mobile.length > 0 || patron.phonepro.length > 0) {
-        $('#patron-phone').text((patron.phone.length > 0 ? patron.phone : (patron.mobile.length > 0 ? patron.mobile : (patron.phonepro.length > 0 ? patron.phonepro : ''))));
-    } else {
-        $('#patron-phone').html('<span class="empty" id="nophonestored">' + _("No phone stored.") + '</span></li>');
-    }
-    if (patron.email.length > 0 || patron.emailpro.length > 0) {
-        $('#patron-email').text((patron.email.length > 0 ? patron.email : (patron.emailpro.length > 0 ? patron.emailpro : "")));
-    } else {
-        $('#patron-email').html('<span class="empty" id="noemailstored">' + _("No email stored.") + '</span></li>');
-    }
-    if (patron.categorycode.length > 0) {
-        $('#patron-category').text(_("Category: %s").format(patron.categorycode));
-    } else {
-        $('#patron-category').html('<span class="empty" id="unknowncategory">' + _("Category code unknown.") + '</span></li>');
-    }
-    if (patron.branchcode.length > 0) {
-        $('#patron-library').text(_("Home library: %s").format(patron.branchcode));
-    } else {
-        $('#patron-library').html('<span class="empty" id="unknowncategory">' + _("Home library unknown.") + '</span></li>');
-    }
-    $('.fine-amount').text(patron.fine);
-    $('#alerts').empty();
-    if (alerts.length > 0) {
-        $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
-        for (var msg in alerts) {
-            $('#alerts .dialog').append('<p>' + alerts[msg] + '</p>');
-        }
-    }
-    curpatron = patron;
-    $('#yui-main').show();
-    setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
-}
-
-// This next bit of code is to deal with the updated session issue
-window.addEventListener('load', function(e) {
-    window.applicationCache.addEventListener('updateready', function(e) {
-        if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-            // Browser downloaded a new app cache.
-            // Swap it in and reload the page to get the new hotness.
-            window.applicationCache.swapCache();
-            if (confirm(_("A new version of this site is available. Load it?"))) {
-                window.location.reload();
-            }
-        } else {
-        // Manifest didn't changed. Nothing new to server.
-        }
-    }, false);
-}, false);
-
-
-$(document).ready(function () {
-    kohadb.initialize();
-    $('#header_search #circ_search .tip').text(_("Enter patron card number:"));
-
-    $('ul[aria-labelledby="drop3"]').html('<li><a class="toplinks">You cannot change your branch or logout while using offline circulation</a></li>');
-
-    // Returns code
-    $('#checkin-form, #checkin_search form').submit(function (event) {
-        event.preventDefault();
-        var barcode = $('input[name="barcode"]', this).val();
-        $('input[name="barcode"]', this).val('');
-        $.indexedDB("koha").transaction(["items"]).then(function() {
-        }, function(err, e){
-        }, function(transaction){
-            var items = transaction.objectStore("items");
-            items.get(barcode).done(function (item, error) {
-                checkin(barcode, item, error);
-            });
-        });
-    });
-
-    $('#go-to-home').click(function () {
-        $('#alerts').empty();
-        $('.offline-sync').hide();
-        $('.offline-circulation').hide();
-        $('.offline-returns').hide();
-        $('.offline-circulation-instructions').hide();
-        $('.offline-home').show();
-    });
-
-    $('#go-to-returns').click(function () {
-        $('#alerts').empty();
-        $('.offline-home').hide();
-        $('.offline-sync').hide();
-        $('.offline-circulation').hide();
-        $('.offline-circulation-instructions').hide();
-        $('.offline-returns').show();
-        setTimeout(function() { $('#checkin-form input[name="barcode"]').trigger('focus'), 1 });
-    });
-
-    $('#go-to-circ').click(function () {
-        $('#alerts').empty();
-        $('.offline-home').hide();
-        $('.offline-sync').hide();
-        $('.offline-returns').hide();
-        $('.offline-circulation').hide();
-        $('.offline-circulation-instructions').show();
-        $('#header_search').tabs("option", "active", 0);
-        setTimeout(function() { $('#circ_search input[name="findborrower"]').trigger('focus'), 1 });
-    });
-
-    $('#go-to-sync').click(function () {
-        $('#alerts').empty();
-        showSyncInfo();
-        $.ajax({
-            type: "GET",
-            url: "/cgi-bin/koha/offline_circ/list.pl",
-            success: function () {
-                $('.offline-home').hide();
-                $('.offline-returns').hide();
-                $('.offline-circulation').hide();
-                $('.offline-circulation-instructions').hide();
-                $('.offline-sync').show();
-                synchronize();
-            },
-            error: function () {
-                alert(_("You are offline and therefore cannot sync your database"));
-            }
-        });
-    });
-
-    $('#go-to-pending').click(function (ev) {
-        $('#alerts').empty();
-        ev.preventDefault();
-        $.ajax({
-            type: "GET",
-            url: "/cgi-bin/koha/offline_circ/list.pl",
-            success: function () {
-                window.location = '/cgi-bin/koha/offline_circ/list.pl';
-            },
-            error: function () {
-                alert(_("You are offline and therefore cannot process pending operations"));
-            }
-        });
-    });
-
-    $('#patronsearch').submit(function (event) {
-        event.preventDefault();
-        loadPatron($('#findborrower').val());
-        $('.offline-home').hide();
-        $('.offline-returns').hide();
-        $('.offline-sync').hide();
-        $('.offline-circulation-instructions').hide();
-        $('.offline-circulation').show();
-        $('#findborrower').val('');
-        setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
-    });
-
-    $('#pay-fine').click(function (event) {
-        event.preventDefault();
-        recordFine($('#pay-fine-amount').val());
-    });
-
-    $('#patronlists').tabs();
-
-    $("#newduedate").datetimepicker({
-        minDate: 1, // require that renewal date is after today
-        hour: 23,
-        minute: 59
-    });
-    $("#duedatespec").datetimepicker({
-        onClose: function(dateText, inst) {
-            if (validate_date(dateText, inst) ) {
-                setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
-            }
-        },
-        hour: 23,
-        minute: 59
-    }).on("change", function(e, value) {
-        if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-    });
-    $('#mainform').submit(function (event) {
-        event.preventDefault();
-        var barcode = $('#checkout-barcode').val();
-        $.indexedDB("koha").transaction(["items"]).then(function() {
-        }, function(err, e){
-        }, function(transaction){
-            var items = transaction.objectStore("items");
-            items.get(barcode).done(function (item, error) {
-                checkout(barcode, item, error);
-            });
-        });
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="circ_offline" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -780,5 +213,575 @@ $(document).ready(function () {
         </div>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.indexeddb.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/offlinecirc.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
+    [% INCLUDE 'timepicker.inc' %]
+    <script type="text/javascript">
+        var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
+        var ALERT_MATERIALS = _("Note about the accompanying materials: %s");
+        var ALERT_RESTRICTED = _("Patron is RESTRICTED");
+        var ALERT_NO_MATCHING_ITEM = _("No item with barcode in offline database (transaction recorded anyway): %s");
+        var ALERT_NOT_CHECKED_OUT = _("Item not listed as checked out in offline database (transaction recorded anyway)");
+        var ALERT_ITEM_WITHDRAWN = _("Item has been withdrawn (transaction recorded anyway)");
+        var ALERT_ITEM_RESTRICTED = _("Item is restricted (transaction recorded anyway)");
+        var ALERT_ITEM_LOST = _("Item has been lost (transaction recorded anyway)");
+        var ALERT_NO_MATCHING_PATRON = _("No patron cardnumber in offline database (proceeding anyway): %s");
+        var ALERT_PATRON_GONE_NO_ADDRESS = _("Patron's address is in doubt (proceeding anyway)");
+        var ALERT_PATRON_CARD_LOST = _("Patron's card is lost");
+        var ALERT_PATRON_EXPIRED = _("Patron's card is expired (%s)");
+        var ALERT_PATRON_BLOCKED_TEMPORARY = _("Patron has had overdue items and is restricted until: %s");
+        var ALERT_PATRON_RESTRICTED = _("Patron is restricted");
+        var ALERT_PATRON_FINE = _("Patron has outstanding fines: %s");
+        var ALERT_PATRON_FINE_OVER_LIMIT = _("Patron fines are over limit: %s");
+        var UPLOAD_PENDING_MESSAGE = _("You have transactions in the offline circulation database on this computer that have not been uploaded.");
+        var NO_UPLOAD_PENDING_MESSAGE = _("You do not have any pending transactions in the offline circulation database on this computer.");
+
+        var start;
+
+        var dateformat = '[% IF ( dateformat_us ) %]mm/dd/yy[% ELSIF ( dateformat_metric ) %]dd/mm/yy[% ELSE %]yy-mm-dd[% END %]';
+
+        function checkin(barcode, item, error) {
+            var alerts = checkAlerts(barcode, item);
+            if (typeof item === 'undefined') {
+                item = { };
+            }
+            item.title = item.title || _("(Unknown)");
+            item.author = item.author || _("(Unknown)");
+            item.homebranch = item.homebranch || "";
+            item.holdingbranch = item.holdingbranch || "";
+            item.callnumber = item.callnumber || "";
+            item.itemtype = item.itemtype || "";
+            item.barcode = item.barcode || barcode;
+            var trans = { "timestamp" : new Date().toMySQLString(),
+                          "barcode" : barcode,
+                          "action" : "return"
+                        };
+            $('#alerts').empty();
+            $('.offline-home').hide();
+            $('.offline-sync').hide();
+            $('.offline-circulation').hide();
+            $('.offline-circulation-instructions').hide();
+            $('.offline-returns').show();
+            kohadb.recordTransaction(trans, function () {
+                $('#session-returned').show();
+                $('#already-checked-in tbody').prepend('<tr><td>' + item.title + '</td><td>' + item.author + '</td><td>' + barcode + '</td><td>' + item.homebranch + '</td><td>' + item.holdingbranch + '</td><td></td><td>' + item.callnumber + '</td><td>' + item.itemtype + '</td></tr>');
+                if (alerts.length > 0) {
+                    $('#alerts').append('<div class="dialog alert"><h3>' + _("Check in message") + '</h3></div>');
+                    for (var msg in alerts) {
+                        $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
+                    }
+                } else {
+                    $('#alerts').append('<div class="dialog"><h3>' + ALERT_SUCCESSFUL_CHECKIN + '</h3></div>');
+                }
+            });
+            setTimeout(function() { $('#checkin-barcode').trigger('focus'), 1 });
+        }
+
+        function checkAlerts(barcode, item) {
+            var alerts = [];
+            if (typeof item === 'undefined') {
+                alerts.push(ALERT_NO_MATCHING_ITEM.format(barcode));
+            } else {
+                if (typeof item.materials !== 'undefined' && item.materials != null) {
+                    alerts.push(ALERT_MATERIALS.format(item.materials));
+                }
+            }
+            return alerts;
+        }
+
+        function showSyncInfo() {
+            kohadb.loadSetting("item-timestamp", showTimestamp);
+            kohadb.loadSetting("patron-timestamp", showTimestamp);
+            kohadb.loadSetting("issue-timestamp", showTimestamp);
+            kohadb.loadSetting("dirty", function (key, val) {
+                if (val) {
+                    $('#upload-message').text(UPLOAD_PENDING_MESSAGE);
+                } else {
+                    $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
+                }
+            });
+        }
+
+        function synchronize() {
+            kohadb.saveSetting("userid", "[% loggedinusername %]");
+            kohadb.saveSetting("branchcode", "[% LoginBranchcode %]");
+            showSyncInfo();
+            [% UNLESS (AllowOfflineCirculation) %]
+                reloadRecords();
+            [% END %]
+            showSyncInfo();
+            $('#download-records').click(reloadRecords);
+            $('#upload-transactions').click(function () {
+                $('.loading-overlay div').text(_("Uploading transactions, please wait..."));
+                $('.loading-overlay').show();
+                $.ajax({
+                    type: "GET",
+                    url: "/cgi-bin/koha/offline_circ/service.pl",
+                }).done(function (data) {
+                    if (data) {
+                        $('.loading-overlay').hide();
+                        alert(_("Please log in to Koha and try again. (Error: '%s')").format(data));
+                    } else {
+                        var uploadIter = $.indexedDB("koha").objectStore("transactions").each(uploadTransaction);
+                        uploadIter.done(function() {
+                            $.indexedDB("koha").transaction(["transactions"]).then(function(){
+                            }, function(err, e){
+                            }, function(transaction){
+                                transaction.objectStore("transactions").clear();
+                            });
+                            $('.loading-overlay').hide();
+                            kohadb.saveSetting("dirty", false);
+                            $('#upload-message').text(NO_UPLOAD_PENDING_MESSAGE);
+                        });
+                    }
+                });
+            });
+
+        }
+
+        function showTimestamp(key, value) {
+            if (typeof value !== 'undefined') {
+                var ts = new Date(value);
+                $('#' + key).text($.datepicker.formatDate(dateformat, ts) + ' ' + ts.toTimeString());
+            } else {
+                $('#' + key).text(_("(never)"));
+            }
+        }
+
+        function reloadRecords(ev) {
+            $(".loading-overlay div").text(_("Loading records, please wait..."));
+            $(".loading-overlay").show();
+            start = new Date();
+            $.indexedDB("koha").transaction(["patrons", "items", "issues"]).then(function(){
+                loadRecords(0);
+            }, function(err, e){
+            }, function(transaction){
+                transaction.objectStore("patrons").clear();
+                transaction.objectStore("items").clear();
+                transaction.objectStore("issues").clear();
+            });
+            if (typeof ev !== 'undefined') {
+                ev.stopPropagation();
+            }
+        }
+
+        function uploadTransaction(transaction) {
+            $.ajax({
+                type: "POST",
+                url: "/cgi-bin/koha/offline_circ/service.pl",
+                data: { "userid" : kohadb.settings.userid,
+                        "branchcode" : kohadb.settings.branchcode,
+                        "timestamp" : transaction.value.timestamp,
+                        "action" : transaction.value.action,
+                        "barcode" : transaction.value.barcode,
+                        "cardnumber" : transaction.value.cardnumber,
+                        "amount" : transaction.value.amount,
+                        "pending" : true,
+                      },
+            });
+            return undefined, true;
+        }
+
+        function finishedLoading() {
+            kohadb.saveSetting('item-timestamp', start.toISOString())
+            kohadb.saveSetting('patron-timestamp', start.toISOString())
+            kohadb.saveSetting('issue-timestamp', start.toISOString())
+            showTimestamp('item-timestamp', start.toISOString());
+            showTimestamp('patron-timestamp', start.toISOString());
+            showTimestamp('issue-timestamp', start.toISOString());
+            $(".loading-overlay").hide();
+        }
+
+        function loadRecords(page) {
+        [% IF (AllowOfflineCirculation) %]
+            $(".loading-overlay div").text(_("Loading page %s, please wait...").format(page));
+            $(".loading-overlay").show();
+            $.ajax({
+                type: "GET",
+                url: "/cgi-bin/koha/offline_circ/download.pl",
+                data: { "data": "all",
+                        "page": page
+                      },
+                dataType: "json",
+            }).done(function (data) {
+                $.indexedDB("koha").transaction(["patrons", "items", "issues"]).then(function(){
+                    if (data.finished) {
+                        finishedLoading();
+                    } else {
+                        setTimeout(function () { loadRecords(page + 1); }, 200);
+                    }
+                }, function(err, e){
+                }, function(transaction){
+                    if (data.patrons) {
+                        var patrons = transaction.objectStore("patrons");
+                        $.each(data.patrons, function () {
+                            patrons.put(this);
+                        });
+                    }
+                    if (data.items) {
+                        var items = transaction.objectStore("items");
+                        $.each(data.items, function () {
+                            items.put(this);
+                        });
+                    }
+                    if (data.issues) {
+                        var issues = transaction.objectStore("issues");
+                        $.each(data.issues, function () {
+                            issues.put(this);
+                        });
+                    }
+                });
+            });
+        [% END %]
+        }
+
+        function validate1(date) {
+            var today = new Date();
+            if ( date < today ) {
+                return true;
+             } else {
+                return false;
+             }
+        };
+
+        function loadPatron(barcode) {
+            $('#oldissues').hide();
+            $('#session-issues').hide();
+            $('#issuest tbody').empty();
+            $('#session-payments').hide();
+            $('.checkout-count').text(0);
+            $.indexedDB("koha").transaction(["patrons", "issues"]).then(function() {
+            }, function(err, e){
+            }, function(transaction){
+                var patrons = transaction.objectStore("patrons");
+                patrons.get(barcode).done(function (patron, error) {
+                    showPatron(barcode, patron, error);
+                });
+                var issuesidx = transaction.objectStore("issues").index("cardnumber");
+                $('#oldissuest tbody').empty();
+                issuesidx.each(function (item) {
+                    $('#oldissues').show();
+                    $('#oldissuest tbody').append("<tr><td>" + item.value.date_due + "</td><td>" + item.value.title + "</td><td>" + item.value.barcode + "</td><td>" + item.value.itype + "</td><td>" + item.value.issuedate + "</td><td>" + item.value.issuebranch + "</td><td>" + item.value.callnumber + "</td><td>" + "" + "</td></tr>");
+                    $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
+                }, barcode);
+            });
+        }
+
+        function checkout(barcode, item, error) {
+            var alerts = checkAlerts(barcode, item);
+            if (typeof item === 'undefined') {
+                item = { };
+            }
+            item.title = item.title || "";
+            item.author = item.author || "";
+            item.homebranch = item.homebranch || "";
+            item.holdingbranch = item.holdingbranch || "";
+            item.callnumber = item.callnumber || "";
+            item.itemtype = item.itemtype || "";
+            if ($('#duedatespec').val().length === 0) {
+                alert(_("You must set a due date in order to use offline circulation!"));
+                setTimeout(function() { $('#duedatespec').trigger('focus'), 1 });
+                return;
+            }
+            var date_due = new Date($('#duedatespec').datepicker('getDate'));
+            var trans = { "timestamp" : new Date().toMySQLString(),
+                          "barcode" : barcode,
+                          "cardnumber" : curpatron.cardnumber,
+                          "date_due" : date_due.toMySQLString(),
+                          "action" : "issue"
+                        };
+            $('#alerts').empty();
+            kohadb.recordTransaction(trans, function () {
+                $('#session-issues').show();
+                $('#issuest tbody').prepend('<tr><td>' + $.datepicker.formatDate(dateformat, date_due) + date_due.toTimeString() + '</td><td>' + item.title + '</td><td>' + barcode + '</td><td>' + item.itemtype + '</td><td>' + $.datepicker.formatDate(dateformat, new Date()) + '</td><td>' + kohadb.settings.branchcode + '</td><td>' + item.callnumber + '</td><td></td></tr>');
+                $('.checkout-count').text(parseInt($('.checkout-count').text()) + 1);
+                if (alerts.length > 0) {
+                    $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
+                    for (var msg in alerts) {
+                        $('#alerts .dialog').append('<p>' + alerts[msg] + '</p');
+                    }
+                }
+                $('#checkout-barcode').val('');
+            });
+        }
+
+        function recordFine(amount) {
+            var timestamp = new Date()
+            var trans = { "timestamp" : timestamp.toMySQLString(),
+                          "cardnumber" : curpatron.cardnumber,
+                          "amount" : amount,
+                          "action" : "payment",
+                        };
+            kohadb.recordTransaction(trans, function () {
+                $('#session-payments').show();
+                $('#session-payments tbody').prepend('<tr><td>' + amount + '</td><td>' + $.datepicker.formatDate(dateformat, timestamp) + timestamp.toTimeString() + '</td></tr>');
+                $('.fine-amount').text(parseInt($('.fine-amount').text()) - amount);
+            });
+        }
+
+        function checkPatronAlerts(cardnumber, patron) {
+            var alerts = [];
+            if (typeof patron === 'undefined') {
+                alerts.push(ALERT_NO_MATCHING_PATRON.format(cardnumber));
+            } else {
+                if (patron.gonenoaddress !== '0') {
+                    alerts.push(ALERT_PATRON_GONE_NO_ADDRESS);
+                }
+                if (patron.lost !== '0') {
+                    alerts.push(ALERT_PATRON_CARD_LOST);
+                }
+                if (patron.debarred !== null) {
+                    if (patron.debarred != '9999-12-31') {
+                        alerts.push(ALERT_PATRON_BLOCKED_TEMPORARY.format($.datepicker.formatDate(dateformat, new Date(patron.debarred))));
+                    } else {
+                        alerts.push(ALERT_PATRON_RESTRICTED);
+                    }
+                }
+                if (new Date(patron.dateexpiry) < new Date()) {
+                    alerts.push(ALERT_PATRON_EXPIRED.format($.datepicker.formatDate(dateformat, new Date(patron.dateexpiry))));
+                }
+                if (parseInt(patron.fine) > [% maxoutstanding %]) {
+                    alerts.push(ALERT_PATRON_FINE_OVER_LIMIT.format(patron.fine));
+                } else if (parseInt(patron.fine) > 0) {
+                    alerts.push(ALERT_PATRON_FINE.format(patron.fine));
+                }
+            }
+            return alerts;
+        }
+
+        var curpatron;
+
+        function showPatron(barcode, patron, error) {
+            var alerts = checkPatronAlerts(barcode, patron);
+            if (typeof patron === 'undefined') {
+                patron = { };
+            }
+            patron.surname = patron.surname || "";
+            patron.firstname = patron.firstname || "";
+            patron.othernames = patron.othernames || "";
+            patron.address = patron.address || "";
+            patron.address2 = patron.address2 || "";
+            patron.city = patron.city || "";
+            patron.state = patron.state || "";
+            patron.country = patron.country || "";
+            patron.zipcode = patron.zipcode || "";
+            patron.phone = patron.phone || "";
+            patron.mobile = patron.mobile || "";
+            patron.phonepro = patron.phonepro || "";
+            patron.email = patron.email || "";
+            patron.emailpro = patron.emailpro || "";
+            patron.categorycode = patron.categorycode || "";
+            patron.branchcode = patron.branchcode || "";
+            patron.cardnumber = barcode;
+            patron.fine = patron.fine || "0";
+
+            patron.name = patron.firstname + (patron.othernames.length > 0 ? " (" + patron.othernames + ") " : " ") + patron.surname + " (" + barcode + ")";
+            if (patron.name.length > 0) {
+                $('.patron-title').text(patron.name);
+            } else {
+                $('.patron-title').text(_("Unrecognized patron (%s)").format(barcode));
+            }
+            if (patron.address.length > 0 || patron.address2.length > 0) {
+                $('#patron-address-1').text(patron.address);
+                $('#patron-address-2').text(patron.address2);
+            } else {
+                $('#patron-address-1').html('<span class="empty" id="noaddressstored">' + _("No address stored.") + '</span></li>');
+                $('#patron-address-2').text('');
+            }
+            if (patron.city.length > 0) {
+                $('#patron-address-parts').text(patron.city + (patron.state.length > 0 ? ", " + patron.state : "") + " " + patron.zipcode + (patron.country.length > 0 ? ", " + patron.country : ""));
+            } else {
+                $('#patron-address-parts').html('<span class="empty" id="nocitystored">' + _("No city stored.") + '</span></li>');
+            }
+            if (patron.phone.length > 0 || patron.mobile.length > 0 || patron.phonepro.length > 0) {
+                $('#patron-phone').text((patron.phone.length > 0 ? patron.phone : (patron.mobile.length > 0 ? patron.mobile : (patron.phonepro.length > 0 ? patron.phonepro : ''))));
+            } else {
+                $('#patron-phone').html('<span class="empty" id="nophonestored">' + _("No phone stored.") + '</span></li>');
+            }
+            if (patron.email.length > 0 || patron.emailpro.length > 0) {
+                $('#patron-email').text((patron.email.length > 0 ? patron.email : (patron.emailpro.length > 0 ? patron.emailpro : "")));
+            } else {
+                $('#patron-email').html('<span class="empty" id="noemailstored">' + _("No email stored.") + '</span></li>');
+            }
+            if (patron.categorycode.length > 0) {
+                $('#patron-category').text(_("Category: %s").format(patron.categorycode));
+            } else {
+                $('#patron-category').html('<span class="empty" id="unknowncategory">' + _("Category code unknown.") + '</span></li>');
+            }
+            if (patron.branchcode.length > 0) {
+                $('#patron-library').text(_("Home library: %s").format(patron.branchcode));
+            } else {
+                $('#patron-library').html('<span class="empty" id="unknowncategory">' + _("Home library unknown.") + '</span></li>');
+            }
+            $('.fine-amount').text(patron.fine);
+            $('#alerts').empty();
+            if (alerts.length > 0) {
+                $('#alerts').append('<div class="dialog alert"><h3>' + _("Check out message") + '</h3></div>');
+                for (var msg in alerts) {
+                    $('#alerts .dialog').append('<p>' + alerts[msg] + '</p>');
+                }
+            }
+            curpatron = patron;
+            $('#yui-main').show();
+            setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
+        }
+
+        // This next bit of code is to deal with the updated session issue
+        window.addEventListener('load', function(e) {
+            window.applicationCache.addEventListener('updateready', function(e) {
+                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                    // Browser downloaded a new app cache.
+                    // Swap it in and reload the page to get the new hotness.
+                    window.applicationCache.swapCache();
+                    if (confirm(_("A new version of this site is available. Load it?"))) {
+                        window.location.reload();
+                    }
+                } else {
+                // Manifest didn't changed. Nothing new to server.
+                }
+            }, false);
+        }, false);
+
+
+        $(document).ready(function () {
+            kohadb.initialize();
+            $('#header_search #circ_search .tip').text(_("Enter patron card number:"));
+
+            $('ul[aria-labelledby="drop3"]').html('<li><a class="toplinks">You cannot change your branch or logout while using offline circulation</a></li>');
+
+            // Returns code
+            $('#checkin-form, #checkin_search form').submit(function (event) {
+                event.preventDefault();
+                var barcode = $('input[name="barcode"]', this).val();
+                $('input[name="barcode"]', this).val('');
+                $.indexedDB("koha").transaction(["items"]).then(function() {
+                }, function(err, e){
+                }, function(transaction){
+                    var items = transaction.objectStore("items");
+                    items.get(barcode).done(function (item, error) {
+                        checkin(barcode, item, error);
+                    });
+                });
+            });
+
+            $('#go-to-home').click(function () {
+                $('#alerts').empty();
+                $('.offline-sync').hide();
+                $('.offline-circulation').hide();
+                $('.offline-returns').hide();
+                $('.offline-circulation-instructions').hide();
+                $('.offline-home').show();
+            });
+
+            $('#go-to-returns').click(function () {
+                $('#alerts').empty();
+                $('.offline-home').hide();
+                $('.offline-sync').hide();
+                $('.offline-circulation').hide();
+                $('.offline-circulation-instructions').hide();
+                $('.offline-returns').show();
+                setTimeout(function() { $('#checkin-form input[name="barcode"]').trigger('focus'), 1 });
+            });
+
+            $('#go-to-circ').click(function () {
+                $('#alerts').empty();
+                $('.offline-home').hide();
+                $('.offline-sync').hide();
+                $('.offline-returns').hide();
+                $('.offline-circulation').hide();
+                $('.offline-circulation-instructions').show();
+                $('#header_search').tabs("option", "active", 0);
+                setTimeout(function() { $('#circ_search input[name="findborrower"]').trigger('focus'), 1 });
+            });
+
+            $('#go-to-sync').click(function () {
+                $('#alerts').empty();
+                showSyncInfo();
+                $.ajax({
+                    type: "GET",
+                    url: "/cgi-bin/koha/offline_circ/list.pl",
+                    success: function () {
+                        $('.offline-home').hide();
+                        $('.offline-returns').hide();
+                        $('.offline-circulation').hide();
+                        $('.offline-circulation-instructions').hide();
+                        $('.offline-sync').show();
+                        synchronize();
+                    },
+                    error: function () {
+                        alert(_("You are offline and therefore cannot sync your database"));
+                    }
+                });
+            });
+
+            $('#go-to-pending').click(function (ev) {
+                $('#alerts').empty();
+                ev.preventDefault();
+                $.ajax({
+                    type: "GET",
+                    url: "/cgi-bin/koha/offline_circ/list.pl",
+                    success: function () {
+                        window.location = '/cgi-bin/koha/offline_circ/list.pl';
+                    },
+                    error: function () {
+                        alert(_("You are offline and therefore cannot process pending operations"));
+                    }
+                });
+            });
+
+            $('#patronsearch').submit(function (event) {
+                event.preventDefault();
+                loadPatron($('#findborrower').val());
+                $('.offline-home').hide();
+                $('.offline-returns').hide();
+                $('.offline-sync').hide();
+                $('.offline-circulation-instructions').hide();
+                $('.offline-circulation').show();
+                $('#findborrower').val('');
+                setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
+            });
+
+            $('#pay-fine').click(function (event) {
+                event.preventDefault();
+                recordFine($('#pay-fine-amount').val());
+            });
+
+            $('#patronlists').tabs();
+
+            $("#newduedate").datetimepicker({
+                minDate: 1, // require that renewal date is after today
+                hour: 23,
+                minute: 59
+            });
+            $("#duedatespec").datetimepicker({
+                onClose: function(dateText, inst) {
+                    if (validate_date(dateText, inst) ) {
+                        setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
+                    }
+                },
+                hour: 23,
+                minute: 59
+            }).on("change", function(e, value) {
+                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+            });
+            $('#mainform').submit(function (event) {
+                event.preventDefault();
+                var barcode = $('#checkout-barcode').val();
+                $.indexedDB("koha").transaction(["items"]).then(function() {
+                }, function(err, e){
+                }, function(transaction){
+                    var items = transaction.objectStore("items");
+                    items.get(barcode).done(function (item, error) {
+                        checkout(barcode, item, error);
+                    });
+                });
+            });
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

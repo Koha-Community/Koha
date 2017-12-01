@@ -1,74 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Offline circulation file upload</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var xhr;
-$(document).ready(function(){
-    $("#enqueuefile").hide();
-    $("#processfile").hide();
-    $("#upload_file").on("click",function(){
-        StartUpload();
-    });
-    $("#queueformsubmit").on("click",function(){
-        var processfile = document.getElementById("processfile");
-        return CheckForm( processfile );
-    });
-    $("#mainformsubmit").on("click",function(){
-        var enqueuefile = document.getElementById("enqueuefile");
-        return CheckForm( enqueuefile );
-    });
-});
-
-function StartUpload() {
-    if( $('#fileToUpload').prop('files').length == 0 ) return;
-    $('#fileuploadform input.submit').prop('disabled',true);
-    $("#fileuploadfailed").hide();
-    $("#processfile").hide();
-    $("#fileuploadstatus").show();
-    $("form#processfile #uploadedfileid").val('');
-    $("form#enqueuefile #uploadedfileid").val('');
-    xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
-}
-
-function cbUpload( status, fileid, errors ) {
-    if( status=='done' ) {
-        $("form#processfile #uploadedfileid").val( fileid );
-        $("form#enqueuefile #uploadedfileid").val( fileid );
-        $('#fileToUpload').prop('disabled',true);
-        $("#processfile").show();
-        $("#enqueuefile").show();
-    } else {
-        var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
-        var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
-        $("#fileuploadstatus").hide();
-        $("#fileuploadfailed").show();
-        $("#fileuploadfailed").text( _("Upload status: ") +
-            ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
-            ( status=='denied'? _("Denied"): status ))
-        );
-    }
-}
-
-function CheckForm(f) {
-    if (f.uploadedfileid.value == '') {
-        alert(_("Please upload a file first."));
-    } else {
-        $("#fileuploadstatus").hide();
-        $("#fileuploadform").slideUp();
-        $("#mainformsubmit").prop('disabled',true);
-        $("#queueformsubmit").prop('disabled',true);
-        return submitBackgroundJob(f);
-    }
-    return false;
-}
-
-//]]>
-</script>
 </head>
+
 <body id="ocirc_process_koc" class="circ ocirc">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -128,4 +63,71 @@ function CheckForm(f) {
 
 
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript">
+        var xhr;
+        $(document).ready(function(){
+            $("#enqueuefile").hide();
+            $("#processfile").hide();
+            $("#upload_file").on("click",function(){
+                StartUpload();
+            });
+            $("#queueformsubmit").on("click",function(){
+                var processfile = document.getElementById("processfile");
+                return CheckForm( processfile );
+            });
+            $("#mainformsubmit").on("click",function(){
+                var enqueuefile = document.getElementById("enqueuefile");
+                return CheckForm( enqueuefile );
+            });
+        });
+
+        function StartUpload() {
+            if( $('#fileToUpload').prop('files').length == 0 ) return;
+            $('#fileuploadform input.submit').prop('disabled',true);
+            $("#fileuploadfailed").hide();
+            $("#processfile").hide();
+            $("#fileuploadstatus").show();
+            $("form#processfile #uploadedfileid").val('');
+            $("form#enqueuefile #uploadedfileid").val('');
+            xhr= AjaxUpload( $('#fileToUpload'), $('#fileuploadprogress'), 'temp=1', cbUpload );
+        }
+
+        function cbUpload( status, fileid, errors ) {
+            if( status=='done' ) {
+                $("form#processfile #uploadedfileid").val( fileid );
+                $("form#enqueuefile #uploadedfileid").val( fileid );
+                $('#fileToUpload').prop('disabled',true);
+                $("#processfile").show();
+                $("#enqueuefile").show();
+            } else {
+                var errMsgs = [ _("Error code 0 not used"), _("File already exists"), _("Directory is not writeable"), _("Root directory for uploads not defined"), _("Temporary directory for uploads not defined") ];
+                var errCode = errors[$('#fileToUpload').prop('files')[0].name].code;
+                $("#fileuploadstatus").hide();
+                $("#fileuploadfailed").show();
+                $("#fileuploadfailed").text( _("Upload status: ") +
+                    ( status=='failed'? _("Failed") + " - (" + errCode + ") " + errMsgs[errCode]:
+                    ( status=='denied'? _("Denied"): status ))
+                );
+            }
+        }
+
+        function CheckForm(f) {
+            if (f.uploadedfileid.value == '') {
+                alert(_("Please upload a file first."));
+            } else {
+                $("#fileuploadstatus").hide();
+                $("#fileuploadform").slideUp();
+                $("#mainformsubmit").prop('disabled',true);
+                $("#queueformsubmit").prop('disabled',true);
+                return submitBackgroundJob(f);
+            }
+            return false;
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

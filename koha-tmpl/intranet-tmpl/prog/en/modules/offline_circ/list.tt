@@ -1,58 +1,9 @@
+[% SET footerjs = 1 %]
     [% INCLUDE "doc-head-open.inc" %]
     <title>Koha &rsaquo; Circulation &rsaquo; Offline circulation</title>
     [% INCLUDE "doc-head-close.inc" %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-    <script type="text/javascript">
-    //<![CDATA[
-        $(document).ready(function() {
-
-        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Uncheck all")+"<\/a>");
-        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Check all")+"<\/a>");
-            $('#CheckNone').click(function() {
-                $("#operations").unCheckCheckboxes();
-                return false;
-            });
-            $('#CheckAll').click(function() {
-                $("#operations").checkCheckboxes();
-                return false;
-            });
-            $('#process,#delete').click(function() {
-                var action = $(this).attr("id");
-                $(":checkbox[name=operationid]:checked").each(function() {
-                    var cb = $(this);
-                    $.ajax({
-                        url: "process.pl",
-                        data: { 'action': action, 'operationid': this.value },
-                        async: false,
-                        dataType: "text",
-                        success: function(data) {
-                            if( data == "Added." ){
-                                cb.replaceWith(_("Added."));
-                            } else if ( data == "Deleted."){
-                                cb.replaceWith(_("Deleted."));
-                            } else if ( data == "Success."){
-                                cb.replaceWith(_("Success."));
-                            } else if ( data == "Item not issued."){
-                                cb.replaceWith(_("Item not checked out."));
-                            } else if ( data == "Item not found."){
-                                cb.replaceWith(_("Item not found."));
-                            } else if ( data == "Barcode not found."){
-                                cb.replaceWith(_("Item not found."));
-                            } else if ( data == "Borrower not found."){
-                                cb.replaceWith(_("Patron not found."));
-                            } else {
-                                cb.replaceWith(data);
-                            }
-                        }});
-                });
-                if( $('#operations tbody :checkbox').size() == 0 ) {
-                    $('#actions').hide();
-                }
-            });
-        });
-    //]]>
-    </script>
 </head>
+
 <body id="ocirc_list" class="circ ocirc">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'circ-search.inc' %]
@@ -134,4 +85,56 @@
 
     </div>
 
-    [% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Uncheck all")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/offline_circ/list.pl\">"+_("Check all")+"<\/a>");
+            $('#CheckNone').click(function() {
+                $("#operations").unCheckCheckboxes();
+                return false;
+            });
+            $('#CheckAll').click(function() {
+                $("#operations").checkCheckboxes();
+                return false;
+            });
+            $('#process,#delete').click(function() {
+                var action = $(this).attr("id");
+                $(":checkbox[name=operationid]:checked").each(function() {
+                    var cb = $(this);
+                    $.ajax({
+                        url: "process.pl",
+                        data: { 'action': action, 'operationid': this.value },
+                        async: false,
+                        dataType: "text",
+                        success: function(data) {
+                            if( data == "Added." ){
+                                cb.replaceWith(_("Added."));
+                            } else if ( data == "Deleted."){
+                                cb.replaceWith(_("Deleted."));
+                            } else if ( data == "Success."){
+                                cb.replaceWith(_("Success."));
+                            } else if ( data == "Item not issued."){
+                                cb.replaceWith(_("Item not checked out."));
+                            } else if ( data == "Item not found."){
+                                cb.replaceWith(_("Item not found."));
+                            } else if ( data == "Barcode not found."){
+                                cb.replaceWith(_("Item not found."));
+                            } else if ( data == "Borrower not found."){
+                                cb.replaceWith(_("Patron not found."));
+                            } else {
+                                cb.replaceWith(data);
+                            }
+                        }});
+                });
+                if( $('#operations tbody :checkbox').size() == 0 ) {
+                    $('#actions').hide();
+                }
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
