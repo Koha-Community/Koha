@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 use DateTime;
 use Test::MockModule;
 use Test::Warn;
@@ -89,18 +89,22 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     $record = GetMarcBiblio({ biblionumber => $biblionumber });
     $record = XMLin($record->as_xml_record);
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
+    my $dc = {
+        'dc:title' => "Title $index",
+        'dc:language' => "lng",
+        'dc:type' => {},
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
+        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+    };
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        $dc->{'dc:identifier'} = $biblionumber;
+    }
     push @oaidc, {
         header => $header[$index],
         metadata => {
-            'oai_dc:dc' => {
-                'dc:title' => "Title $index",
-                'dc:language' => "lng",
-                'dc:type' => {},
-                'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-                'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
-                'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-            },
+            'oai_dc:dc' => $dc,
         },
     };
     push @marcxml, {
@@ -334,6 +338,30 @@ test_query(
         record => $oaidc[9],
     },
 });
+
+subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_metadata.timestamp' => sub {
+    plan tests => 1;
+
+    # Wait 1 second to be sure no timestamp will be equal to $from defined below
+    sleep 1;
+
+    my $from_dt = DateTime->now;
+    my $from = $from_dt->ymd . 'T' . $from_dt->hms . 'Z';
+
+    # Modify record to trigger auto update of timestamp
+    (my $biblionumber = $marcxml[0]->{header}->{identifier}) =~ s/^.*:(.*)/$1/;
+    my $record = GetMarcBiblio({biblionumber => $biblionumber});
+    $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
+    ModBiblio($record, $biblionumber);
+
+    test_query(
+        'ListRecords oai_dc with parameter from',
+        { verb => 'ListRecords', metadataPrefix => 'oai_dc', from => $from },
+        { ListRecords => {
+            record => $oaidc[0],
+        },
+    });
+};
 
 $schema->storage->txn_rollback;
 
