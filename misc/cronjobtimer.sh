@@ -8,7 +8,7 @@
 # This script also locks the given script to prevent cronjobs from going to a repeating loop.
 #
 
-logdirectory=$(grep -Po '(?<=<logdir>).*?(?=</logdir>)' $KOHA_CONF)
+logdirectory="$(grep -Po '(?<=<logdir>).*?(?=</logdir>)' $KOHA_CONF)/cronjob-timer"
 logfile=$logdirectory/${1#*/}.log
 croncommand=$KOHA_PATH"/misc/$@"
 lockdirectory="${KOHA_CONF%/etc/koha-conf.xml}/var/lock"
@@ -21,7 +21,7 @@ if [ -z "$1" ]; then
 fi
 
 # Create required directories
-mkdir -p "$logdirectory/$cronjobdir" "$lockdirectory"
+mkdir -p "$logdirectory" "$lockdirectory"
 
 starttime=$(date +%s)
 startMsg='Start: '$(date --date="@$starttime" "+%Y-%m-%d %H:%M:%S")
@@ -42,7 +42,7 @@ echo $$ > $lockfile
 
 starttime=$(date +%s)
 
-$croncommand 1> $logfile 2>&1
+$croncommand 1>> $logfile 2>&1
 wait # We need to wait here so that lockfile doesn't get released too early!
 
 endtime=$(date +%s)
