@@ -104,16 +104,16 @@ if ( $record_type eq 'bibs' ) {
     if ( $timestamp ) {
         push @record_ids, $_->{biblionumber} for @{
             $dbh->selectall_arrayref(q| (
-                SELECT biblionumber
-                FROM biblioitems
+                SELECT biblio_metadata.biblionumber
+                FROM biblio_metadata
                   LEFT JOIN items USING(biblionumber)
-                WHERE biblioitems.timestamp >= ?
+                WHERE biblio_metadata.timestamp >= ?
                   OR items.timestamp >= ?
             ) UNION (
-                SELECT biblionumber
-                FROM biblioitems
+                SELECT biblio_metadata.biblionumber
+                FROM biblio_metadata
                   LEFT JOIN deleteditems USING(biblionumber)
-                WHERE biblioitems.timestamp >= ?
+                WHERE biblio_metadata.timestamp >= ?
                   OR deleteditems.timestamp >= ?
             ) |, { Slice => {} }, ( $timestamp ) x 4 );
         };
