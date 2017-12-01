@@ -25,9 +25,10 @@ use Pod::Usage;
 
 use C4::AuthoritiesMarc qw/AddAuthority DelAuthority GetAuthority merge/;
 
-my ( @authid, $delete, $help, $merge, $reference, $renumber, $verbose );
+my ( @authid, $commit, $delete, $help, $merge, $reference, $renumber, $verbose );
 GetOptions(
     'authid:s'    => \@authid,
+    'commit'      => \$commit,
     'delete'      => \$delete,
     'help'        => \$help,
     'merge'       => \$merge,
@@ -37,14 +38,17 @@ GetOptions(
 );
 
 @authid = map { split /[,]/, $_; } @authid;
-if( $delete ) {
+if( $help ) {
+    pod2usage(1);
+} elsif( !$commit ) {
+    print "Please add -commit parameter\n";
+    exit;
+} elsif( $delete ) {
     delete_auth( \@authid );
 } elsif( $merge ) {
     merge_auth( \@authid, $reference );
 } elsif( $renumber ) {
     renumber( \@authid );
-} elsif( $help ) {
-    pod2usage(1);
 } else {
     pod2usage(1);
 }
@@ -71,7 +75,11 @@ sub merge_auth {
     my $marc;
     foreach my $authid ( uniq(@$auths) ) {
         next if $authid == $reference;
-        $marc = GetAuthority($authid) || next;
+        $marc = GetAuthority($authid);
+        if( !$marc ) {
+            print "Authority id $authid ignored, does not exist.\n";
+            next;
+        }
         merge({ mergefrom => $authid, MARCfrom => $marc, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 });
         DelAuthority({ authid => $authid, skip_merge => 1 });
         print "Record $authid merged into reference.\n" if $verbose;
@@ -107,20 +115,22 @@ It also allows you to force a renumber, i.e. save the authid into field 001.
 
 =head1 SYNOPSIS
 
-update_authorities.pl -authid 1,2,3 -delete
+update_authorities.pl -c -authid 1,2,3 -delete
 
-update_authorities.pl -authid 1 -authid 2 -authid 3 -delete
+update_authorities.pl -c -authid 1 -authid 2 -authid 3 -delete
 
-update_authorities.pl -authid 1,2 -merge -reference 3
+update_authorities.pl -c -authid 1,2 -merge -reference 3
 
-update_authorities.pl -merge -reference 4
+update_authorities.pl -c -merge -reference 4
 
-update_authorities.pl -authid 1,2,3 -renumber
+update_authorities.pl -c -authid 1,2,3 -renumber
 
 =head1 OPTIONS
 
 authid: List authority numbers separated by commas or repeat the
 parameter.
+
+commit: Needed to commit changes.
 
 delete: Delete the listed authority numbers and remove its references from
 linked biblio records.
