@@ -370,6 +370,8 @@ sub _get_effective_issuing_rule {
         branchcode => $self->branchcode,
         ccode => $item ? $item->ccode : undef,
         permanent_location => $item ? $item->permanent_location : undef,
+        sub_location => $item ? $item->sub_location : undef,
+        genre => $item ? $item->genre : undef,
     });
 
     return $rule;
