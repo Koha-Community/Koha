@@ -27,7 +27,7 @@
 	</tr>
 	[% FOREACH loop_supplier IN loop_suppliers %]
         <tr>
-			<td>[% loop_supplier.name %]</td>
+            <td>[% loop_supplier.name |html %]</td>
             <td><a class="btn btn-default btn-xs select_vendor" href="#" data-vendorid="[% loop_supplier.aqbooksellerid %]" data-vendorname="[% loop_supplier.name |html%]">Choose</a></td>
 		</tr>
 	[% END %]

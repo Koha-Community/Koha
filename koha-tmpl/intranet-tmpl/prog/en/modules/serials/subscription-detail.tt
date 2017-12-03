@@ -64,7 +64,7 @@
 		<ol>
 		<li><span class="label">Subscription ID: </span>[% subscriptionid %]</li>
         <li><span class="label">Librarian identity:</span> [% librarian %]</li>
-        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid %]">[% aqbooksellername %]</a></li>
+        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid %]">[% aqbooksellername |html %]</a></li>
         <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% bibnum %]">[% bibliotitle %]</a> <i>([% bibnum %])</i></li>
         [% IF ( OPACBaseURL ) %]
             <li>
