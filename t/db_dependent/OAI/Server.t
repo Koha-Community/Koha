@@ -20,8 +20,10 @@
 use Modern::Perl;
 use Test::MockTime qw/set_fixed_time restore_time/;
 
-use Test::More tests => 30;
+use Test::More tests => 31;
 use DateTime;
+use File::Basename;
+use File::Spec;
 use Test::MockModule;
 use Test::Warn;
 use XML::Simple;
@@ -75,7 +77,7 @@ set_fixed_time(CORE::time());
 my $base_datetime = dt_from_string();
 my $date_added = $base_datetime->ymd . ' ' .$base_datetime->hms . 'Z';
 my $date_to = substr($date_added, 0, 10) . 'T23:59:59Z';
-my (@header, @marcxml, @oaidc);
+my (@header, @marcxml, @oaidc, @marcxml_transformed);
 my $sth = $dbh->prepare('UPDATE biblioitems     SET timestamp=? WHERE biblionumber=?');
 my $sth2 = $dbh->prepare('UPDATE biblio_metadata SET timestamp=? WHERE biblionumber=?');
 
@@ -85,9 +87,11 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
         $record->append_fields( MARC::Field->new('101', '', '', 'a' => "lng" ) );
         $record->append_fields( MARC::Field->new('200', '', '', 'a' => "Title $index" ) );
+        $record->append_fields( MARC::Field->new('995', '', '', 'a' => "Code" ) );
     } else {
         $record->append_fields( MARC::Field->new('008', '                                   lng' ) );
         $record->append_fields( MARC::Field->new('245', '', '', 'a' => "Title $index" ) );
+        $record->append_fields( MARC::Field->new('995', '', '', 'a' => "Code" ) );
     }
     my ($biblionumber) = AddBiblio($record, '');
     my $timestamp = $base_datetime->ymd . ' ' .$base_datetime->hms;
@@ -96,6 +100,9 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
     $timestamp .= 'Z';
     $timestamp =~ s/ /T/;
     $record = GetMarcBiblio({ biblionumber => $biblionumber });
+    my $record_transformed = $record->clone;
+    $record_transformed->delete_fields( $record_transformed->field('995'));
+    $record_transformed = XMLin($record_transformed->as_xml_record);
     $record = XMLin($record->as_xml_record);
     push @header, { datestamp => $timestamp, identifier => "TEST:$biblionumber" };
     my $dc = {
@@ -120,6 +127,13 @@ foreach my $index ( 0 .. NUMBER_OF_MARC_RECORDS - 1 ) {
         header => $header[$index],
         metadata => {
             record => $record,
+        },
+    };
+
+    push @marcxml_transformed, {
+        header => $header[$index],
+        metadata => {
+            record => $record_transformed,
         },
     };
 }
@@ -347,6 +361,20 @@ test_query(
         record => $oaidc[9],
     },
 });
+
+#  List records, but now transformed by XSLT
+t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" =>  File::Spec->rel2abs(dirname(__FILE__)) . "/oaiconf.yaml");
+test_query('ListRecords marcxml with xsl transformation',
+    { verb => 'ListRecords', metadataPrefix => 'marcxml' },
+    { ListRecords => {
+        record => [ @marcxml_transformed[0..2] ],
+        resumptionToken => {
+            content => "marcxml/3/1970-01-01T00:00:00Z/$date_to//0/0",
+            cursor => 3,
+        }
+    },
+});
+t::lib::Mocks::mock_preference("OAI-PMH:ConfFile" => undef);
 
 restore_time();
 
