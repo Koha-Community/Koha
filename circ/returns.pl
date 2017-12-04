@@ -32,9 +32,6 @@ use warnings;
 
 # FIXME There are weird things going on with $patron and $borrowernumber in this script
 
-use Carp 'verbose';
-$SIG{ __DIE__ } = sub { Carp::confess( @_ ) };
-
 use CGI qw ( -utf8 );
 use DateTime;
 use C4::Context;
