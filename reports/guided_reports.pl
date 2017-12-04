@@ -138,7 +138,7 @@ elsif ( $phase eq 'Build new' ) {
     my $has_obsolete_reports;
     for my $report ( @$reports ) {
         $report->{results} = C4::Reports::Guided::get_results( $report->{id} );
-        if ( $report->{savedsql} =~ m|marcxml| ) {
+        if ( $report->{savedsql} =~ m|biblioitems| and $report->{savedsql} =~ m|marcxml| ) {
             $report->{seems_obsolete} = 1;
             $has_obsolete_reports++;
         }
