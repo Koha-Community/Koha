@@ -61,6 +61,7 @@ my $dbh   = C4::Context->dbh;
 my $mode           = $query->param('mode') || q{};
 my $op             = $query->param('op') || 'display';
 my @subscriptionids = $query->multi_param('subscriptionid');
+my $branchcode     = $query->param('branchcode');
 my $done = 0;    # for after form has been submitted
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -83,7 +84,7 @@ if ( $op eq "renew" ) {
         $subscriptionid, $loggedinuser,
         $startdate, scalar $query->param('numberlength'),
         scalar $query->param('weeklength'), scalar $query->param('monthlength'),
-        scalar $query->param('note')
+        scalar $query->param('note'), $branchcode
     );
 } elsif ( $op eq 'multi_renew' ) {
     for my $subscriptionid ( @subscriptionids ) {
@@ -113,8 +114,11 @@ if ( $op eq "renew" ) {
     );
 }
 
+my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
+
 $template->param(
     op => $op,
+    libraries      => $libraries,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

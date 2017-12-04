@@ -1476,7 +1476,8 @@ this function renew a subscription with values given on input args.
 =cut
 
 sub ReNewSubscription {
-    my ( $subscriptionid, $user, $startdate, $numberlength, $weeklength, $monthlength, $note ) = @_;
+    my ( $subscriptionid, $user, $startdate, $numberlength, $weeklength, $monthlength, $note, $branchcode ) = @_;
+    warn $note;
     my $dbh          = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
     my $query        = qq|
@@ -1496,8 +1497,9 @@ sub ReNewSubscription {
                 'title'         => $subscription->{bibliotitle},
                 'author'        => $biblio->{author},
                 'publishercode' => $biblio->{publishercode},
-                'note'          => $biblio->{note},
-                'biblionumber'  => $subscription->{biblionumber}
+                'note'          => $note,
+                'biblionumber'  => $subscription->{biblionumber},
+                'branchcode'    => $branchcode,
             }
         );
     }

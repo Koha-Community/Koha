@@ -40,6 +40,20 @@
 		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="[% subscription.numberlength | html %]" /></li>
 		<li><label for="weeklength">Number of weeks: </label><input type="text" id="weeklength" name="weeklength" value="[% subscription.weeklength | html %]" /></li>
 		<li><label for="monthlength">Number of months: </label><input type="text" id="monthlength" name="monthlength" value="[% subscription.monthlength | html %]" /></li></ol></fieldset></li>
+
+<li><label for="branchcode">Library:</label>
+ <select name="branchcode" id="branchcode" style="width: 20em;">
+     [% UNLESS ( Independentbranches ) %]
+        <option value="">None</option>
+     [% END %]
+     [% IF CAN_user_serials_superserials %]
+        [% FOREACH library IN libraries %]
+             <option value="[% library.branchcode %]"> [% library.branchname %] </option>
+        [% END %]
+     [% END %]
+</select> (select a library)
+</li>
+
 		<li><label for="note">Note for the librarian that will manage your renewal request: </label>
 		<textarea name="note" id="note" rows="5" cols="50"></textarea></li></ol></fieldset>
 		<fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
