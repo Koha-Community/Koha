@@ -311,10 +311,12 @@ If passed a string, it'll append the string to the message.
 # $object->append($letter_or_item) -- add a new item to a message's content
 sub append {
     my ($self, $letter_or_item, $format) = @_;
-    my $item;
+    my ( $item, $header, $footer );
     if (ref($letter_or_item)) {
         my $letter   = $letter_or_item;
         my $metadata = _metadata($letter);
+        $header = $metadata->{header};
+        $footer = $metadata->{footer};
         $item = $metadata->{body}->[0];
     } else {
         $item = $letter_or_item;
@@ -325,6 +327,8 @@ sub append {
     }
     my $metadata = $self->metadata;
     push @{$metadata->{body}}, $item;
+    $metadata->{header} = $header;
+    $metadata->{footer} = $footer;
     $self->metadata($metadata);
     my $new_content = $self->render_metadata($format);
     return $self->content($new_content);
