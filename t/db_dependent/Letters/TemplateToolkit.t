@@ -286,7 +286,7 @@ $prepared_letter = GetPreparedLetter(
 is( $prepared_letter->{content}, $modification->id(), 'Patron modification object used correctly' );
 
 subtest 'regression tests' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower' } );
@@ -858,6 +858,130 @@ EOF
         );
 
         is( $tt_letter->{content}, $letter->{content}, );
+    };
+
+    subtest 'Bug 19743 - Header and Footer should be updated on each item for checkin / checkout / renewal notices' => sub {
+        plan tests => 8;
+
+        my $checkout_code = 'CHECKOUT';
+        my $checkin_code = 'CHECKIN';
+
+        my $dbh = C4::Context->dbh;
+        $dbh->do("DELETE FROM letter");
+        $dbh->do("DELETE FROM issues");
+        $dbh->do("DELETE FROM message_queue");
+
+        # Enable notification for CHECKOUT - Things are hardcoded here but should work with default data
+        $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ? )|, undef, $patron->{borrowernumber}, 6 );
+        my $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+        $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+        # Enable notification for CHECKIN - Things are hardcoded here but should work with default data
+        $dbh->do(q|INSERT INTO borrower_message_preferences( borrowernumber, message_attribute_id ) VALUES ( ?, ? )|, undef, $patron->{borrowernumber}, 5 );
+        $borrower_message_preference_id = $dbh->last_insert_id(undef, undef, "borrower_message_preferences", undef);
+        $dbh->do(q|INSERT INTO borrower_message_transport_preferences( borrower_message_preference_id, message_transport_type) VALUES ( ?, ? )|, undef, $borrower_message_preference_id, 'email' );
+
+        my $checkout_template = q|
+<<branches.branchname>>
+----
+----
+|;
+        reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
+        my $checkin_template = q[
+<<branches.branchname>>
+----
+----
+];
+        reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
+
+        my $issue = C4::Circulation::AddIssue( $patron, $item1->{barcode} );
+        my $first_checkout_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        my $library_object = Koha::Libraries->find( $issue->branchcode );
+        my $old_branchname = $library_object->branchname;
+        my $new_branchname = "Kyle M Hall Memorial Library";
+
+        # Change branch name for second checkout notice
+        $library_object->branchname($new_branchname);
+        $library_object->store();
+
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} );
+        my $second_checkout_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        # Restore old name for first checkin notice
+        $library_object->branchname( $old_branchname );
+        $library_object->store();
+
+        AddReturn( $item1->{barcode} );
+        my $first_checkin_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        # Change branch name for second checkin notice
+        $library_object->branchname($new_branchname);
+        $library_object->store();
+
+        AddReturn( $item2->{barcode} );
+        my $second_checkin_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        # Restore old name for first TT checkout notice
+        $library_object->branchname( $old_branchname );
+        $library_object->store();
+
+        Koha::Notice::Messages->delete;
+
+        # TT syntax
+        $checkout_template = q|
+[% branch.branchname %]
+----
+----
+|;
+        reset_template( { template => $checkout_template, code => $checkout_code, module => 'circulation' } );
+        $checkin_template = q[
+[% branch.branchname %]
+----
+----
+];
+        reset_template( { template => $checkin_template, code => $checkin_code, module => 'circulation' } );
+
+        C4::Circulation::AddIssue( $patron, $item1->{barcode} );
+        my $first_checkout_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        # Change branch name for second checkout notice
+        $library_object->branchname($new_branchname);
+        $library_object->store();
+
+        C4::Circulation::AddIssue( $patron, $item2->{barcode} );
+        my $second_checkout_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        # Restore old name for first checkin notice
+        $library_object->branchname( $old_branchname );
+        $library_object->store();
+
+        AddReturn( $item1->{barcode} );
+        my $first_checkin_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+#
+        # Change branch name for second checkin notice
+        $library_object->branchname($new_branchname);
+        $library_object->store();
+
+        AddReturn( $item2->{barcode} );
+        my $second_checkin_tt_letter = Koha::Notice::Messages->search( {}, { order_by => { -desc => 'message_id' } } )->next;
+
+        my $first_letter = qq[
+$old_branchname
+];
+        my $second_letter = qq[
+$new_branchname
+];
+
+
+        is( $first_checkout_letter->content, $first_letter, 'Verify first checkout letter' );
+        is( $second_checkout_letter->content, $second_letter, 'Verify second checkout letter' );
+        is( $first_checkin_letter->content, $first_letter, 'Verify first checkin letter'  );
+        is( $second_checkin_letter->content, $second_letter, 'Verify second checkin letter' );
+
+        is( $first_checkout_tt_letter->content, $first_letter, 'Verify TT first checkout letter' );
+        is( $second_checkout_tt_letter->content, $second_letter, 'Verify TT second checkout letter' );
+        is( $first_checkin_tt_letter->content, $first_letter, 'Verify TT first checkin letter'  );
+        is( $second_checkin_tt_letter->content, $second_letter, 'Verify TT second checkin letter' );
     };
 
 };
