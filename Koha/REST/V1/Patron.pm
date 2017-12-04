@@ -20,38 +20,52 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Members qw( AddMember ModMember );
-use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
-use Koha::Patron::Categories;
-use Koha::Patron::Modifications;
-use Koha::Libraries;
 
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 
+=head1 NAME
+
+Koha::REST::V1::Patron
+
+=head1 API
+
+=head2 Methods
+
+=head3 list
+
+Controller function that handles listing Koha::Patron objects
+
+=cut
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-
-    my $args   = $c->req->params->to_hash;
-    my $filter = {};
-    for my $filter_param ( keys %$args ) {
-        $filter->{$filter_param} = { LIKE => $args->{$filter_param} . "%" };
-    }
-
     return try {
-        my $patrons = Koha::Patrons->search_limited($filter);
-        return $c->render(status => 200, openapi => $patrons);
+        my $patrons_set = Koha::Patrons->new;
+        my @patrons = $c->objects->search( $patrons_set )->as_list;
+        return $c->render( status => 200, openapi => \@patrons );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status => 500, openapi => { error => $_->{msg} } );
+            return $c->render( status => 500,
+                openapi => { error => $_->{msg} } );
         }
         else {
-            return $c->render( status => 500, openapi => { error => "Something went wrong, check the logs." } );
+            return $c->render(
+                status  => 500,
+                openapi => { error => "Something went wrong, check the logs." }
+            );
         }
     };
 }
+
+=head3 get
+
+Controller function that handles retrieving a single Koha::Patron object
+
+=cut
 
 sub get {
     my $c = shift->openapi->valid_input or return;
@@ -66,140 +80,213 @@ sub get {
     return $c->render(status => 200, openapi => $patron);
 }
 
+=head3 add
+
+Controller function that handles adding a new Koha::Patron object
+
+=cut
+
 sub add {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body = $c->req->json;
+        my $body = $c->validation->param('body');
 
         Koha::Patron->new($body)->_validate;
+
         # TODO: Use AddMember until it has been moved to Koha-namespace
         my $borrowernumber = AddMember(%$body);
-        my $patron = Koha::Patrons->find($borrowernumber);
+        my $patron         = Koha::Patrons->find($borrowernumber);
 
-        return $c->$cb($patron, 201);
+        return $c->render( status => 201, openapi => $patron );
     }
     catch {
-        unless (blessed $_ && $_->can('rethrow')) {
-            return $c->$cb({ error =>
-                "Something went wrong, check Koha logs for details."}, 500);
+        unless ( blessed $_ && $_->can('rethrow') ) {
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error => "Something went wrong, check Koha logs for details."
+                }
+            );
         }
-        if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
-            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
+        if ( $_->isa('Koha::Exceptions::Patron::DuplicateObject') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => $_->error, conflict => $_->conflict }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
-            return $c->$cb({ error => "Given branchcode does not exist" }, 400);
+        elsif ( $_->isa('Koha::Exceptions::Library::BranchcodeNotFound') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Given branchcode does not exist" }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
-            return $c->$cb({ error => "Given categorycode does not exist"}, 400);
+        elsif ( $_->isa('Koha::Exceptions::Category::CategorycodeNotFound') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Given categorycode does not exist" }
+            );
         }
         else {
-            return $c->$cb({ error =>
-                "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error => "Something went wrong, check Koha logs for details."
+                }
+            );
         }
     };
 }
 
-sub edit {
-    my ($c, $args, $cb) = @_;
+=head3 update
 
-    my $patron;
+Controller function that handles updating a Koha::Patron object
+
+=cut
+
+sub update {
+    my $c = shift->openapi->valid_input or return;
+
+    my $patron = Koha::Patrons->find( $c->validation->param('borrowernumber') );
+
     return try {
-        my $user = $c->stash('koha.user');
-        $patron = Koha::Patrons->find($args->{borrowernumber});
-        my $body = $c->req->json;
+        my $body = $c->validation->param('body');
 
-        $body->{borrowernumber} = $args->{borrowernumber};
+        $patron->set( _to_model($body) )->_validate;
 
-        if (!C4::Auth::haspermission($user->userid, { borrowers => 1 }) &&
-            $user->borrowernumber == $patron->borrowernumber){
-            if (C4::Context->preference('OPACPatronDetails')) {
-                $body = _delete_unmodifiable_parameters($body);
-                die unless $patron->set($body)->_validate;
-                my $m = Koha::Patron::Modification->new($body)->store();
-                return $c->$cb({}, 202);
-            } else {
-                return $c->$cb({ error => "You need a permission to change"
-                                ." Your personal details"}, 403);
-            }
+        # TODO: Use ModMember until it has been moved to Koha-namespace
+        if ( ModMember(%$body) ) {
+            return $c->render( status => 200, openapi => $patron );
         }
         else {
-            delete $body->{borrowernumber};
-            die unless $patron->set($body)->_validate;
-            # TODO: Use ModMember until it has been moved to Koha-namespace
-            $body->{borrowernumber} = $args->{borrowernumber};
-            die unless ModMember(%$body);
-            return $c->$cb($patron, 200);
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error => 'Something went wrong, check Koha logs for details.'
+                }
+            );
         }
     }
     catch {
         unless ($patron) {
-            return $c->$cb({error => "Patron not found"}, 404);
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Patron not found" }
+            );
         }
-        unless (blessed $_ && $_->can('rethrow')) {
-            return $c->$cb({ error =>
-                "Something went wrong, check Koha logs for details."}, 500);
+        unless ( blessed $_ && $_->can('rethrow') ) {
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error => "Something went wrong, check Koha logs for details."
+                }
+            );
         }
-        if ($_->isa('Koha::Exceptions::Patron::DuplicateObject')) {
-            return $c->$cb({ error => $_->error, conflict => $_->conflict }, 409);
+        if ( $_->isa('Koha::Exceptions::Patron::DuplicateObject') ) {
+            return $c->render(
+                status  => 409,
+                openapi => { error => $_->error, conflict => $_->conflict }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::Library::BranchcodeNotFound')) {
-            return $c->$cb({ error => "Given branchcode does not exist" }, 400);
+        elsif ( $_->isa('Koha::Exceptions::Library::BranchcodeNotFound') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Given branchcode does not exist" }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::Category::CategorycodeNotFound')) {
-            return $c->$cb({ error => "Given categorycode does not exist"}, 400);
+        elsif ( $_->isa('Koha::Exceptions::Category::CategorycodeNotFound') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Given categorycode does not exist" }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::MissingParameter')) {
-            return $c->$cb({error => "Missing mandatory parameter(s)",
-                            parameters => $_->parameter }, 400);
+        elsif ( $_->isa('Koha::Exceptions::MissingParameter') ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error      => "Missing mandatory parameter(s)",
+                    parameters => $_->parameter
+                }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::BadParameter')) {
-            return $c->$cb({error => "Invalid parameter(s)",
-                            parameters => $_->parameter }, 400);
+        elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
+            return $c->render(
+                status  => 400,
+                openapi => {
+                    error      => "Invalid parameter(s)",
+                    parameters => $_->parameter
+                }
+            );
         }
-        elsif ($_->isa('Koha::Exceptions::NoChanges')) {
-            return $c->$cb({error => "No changes have been made"}, 204);
+        elsif ( $_->isa('Koha::Exceptions::NoChanges') ) {
+            return $c->render(
+                status  => 204,
+                openapi => { error => "No changes have been made" }
+            );
         }
         else {
-            return $c->$cb({ error =>
-                "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error =>
+                      "Something went wrong, check Koha logs for details."
+                }
+            );
         }
     };
 }
+
+=head3 delete
+
+Controller function that handles deleting a Koha::Patron object
+
+=cut
 
 sub delete {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
     my $patron;
 
     return try {
-        $patron = Koha::Patrons->find($args->{borrowernumber});
+        $patron = Koha::Patrons->find( $c->validation->param('borrowernumber') );
+
         # check if loans, reservations, debarrment, etc. before deletion!
         my $res = $patron->delete;
-
-        return $c->$cb({}, 200);
+        return $c->render( status => 200, openapi => {} );
     }
     catch {
         unless ($patron) {
-            return $c->$cb({error => "Patron not found"}, 404);
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Patron not found" }
+            );
         }
         else {
-            return $c->$cb({ error =>
-                "Something went wrong, check Koha logs for details."}, 500);
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error =>
+                      "Something went wrong, check Koha logs for details."
+                }
+            );
         }
     };
 }
 
-sub _delete_unmodifiable_parameters {
-    my ($body) = @_;
+=head3 _to_model
 
-    my %columns = map { $_ => 1 } Koha::Patron::Modifications->columns;
-    foreach my $param (keys %$body) {
-        unless (exists $columns{$param}) {
-            delete $body->{$param};
-        }
-    }
-    return $body;
+Helper function that maps REST api objects into Koha::Patron
+attribute names.
+
+=cut
+
+sub _to_model {
+    my $params = shift;
+
+    $params->{lost} = ($params->{lost}) ? 1 : 0;
+    $params->{gonenoaddress} = ($params->{gonenoaddress}) ? 1 : 0;
+
+    return $params;
 }
 
 1;

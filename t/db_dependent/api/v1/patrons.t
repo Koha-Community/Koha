@@ -19,13 +19,11 @@ use Modern::Perl;
 
 use Test::More tests => 5;
 use Test::Mojo;
-use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Auth;
-use Koha::Cities;
 use Koha::Database;
 
 my $schema  = Koha::Database->new->schema;
@@ -168,7 +166,7 @@ subtest 'add() tests' => sub {
             authorized => 1 });
 
         $newpatron->{branchcode} = "nonexistent"; # Test invalid branchcode
-        my $tx = $t->ua->build_tx(POST => "/api/v1/patrons" =>json => $newpatron);
+        my $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(400)
@@ -216,92 +214,48 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'edit() tests' => sub {
-    plan tests => 3;
+subtest 'update() tests' => sub {
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
     unauthorized_access_tests('PUT', 123, {email => 'nobody@example.com'});
 
-    subtest 'patron modifying own data' => sub {
-        plan tests => 7;
-
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 0 });
-        my $patron = Koha::Patrons->find($borrowernumber)->TO_JSON;
-
-        t::lib::Mocks::mock_preference("OPACPatronDetails", 0);
-        my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                            $patron->{borrowernumber} => json => $patron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(403, 'OPACPatronDetails off - modifications not allowed.');
-
-        t::lib::Mocks::mock_preference("OPACPatronDetails", 1);
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                            $patron->{borrowernumber} => json => $patron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(204, 'Updating myself with my current data');
-
-        $patron->{'firstname'} = "noob";
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                            $patron->{borrowernumber} => json => $patron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(202, 'Updating myself with my current data');
-
-        # Approve changes
-        Koha::Patron::Modifications->find({
-            borrowernumber => $patron->{borrowernumber},
-            firstname => "noob"
-        })->approve;
-        is(Koha::Patrons->find({
-            borrowernumber => $patron->{borrowernumber}})->firstname,
-           "noob", "Changes approved");
-    };
-
     subtest 'librarian access tests' => sub {
         plan tests => 20;
 
         t::lib::Mocks::mock_preference('minPasswordLength', 1);
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 1 });
-        my ($borrowernumber2, undef) = create_user_and_session({
-            authorized => 0 });
-        my $patron    = Koha::Patrons->find($borrowernumber2);
-        my $newpatron = Koha::Patrons->find($borrowernumber2)->TO_JSON;
+        my ($borrowernumber, $sessionid) = create_user_and_session({ authorized => 1 });
+        my ($borrowernumber2, undef) = create_user_and_session({ authorized => 0 });
 
-        my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/-1" =>
-                                  json => $newpatron);
+        my $patron_1  = Koha::Patrons->find($borrowernumber);
+        my $patron_2  = Koha::Patrons->find($borrowernumber2);
+        my $newpatron = $patron_2->TO_JSON;
+
+        my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/-1" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(404)
           ->json_has('/error', 'Fails when trying to PUT nonexistent patron');
 
         $newpatron->{categorycode} = 'nonexistent';
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                    $newpatron->{borrowernumber} => json => $newpatron
-        );
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(400)
           ->json_is('/error' => "Given categorycode does not exist");
-        $newpatron->{categorycode} = $patron->categorycode;
+        $newpatron->{categorycode} = $patron_2->categorycode;
 
         $newpatron->{branchcode} = 'nonexistent';
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                    $newpatron->{borrowernumber} => json => $newpatron
-        );
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(400)
           ->json_is('/error' => "Given branchcode does not exist");
-        $newpatron->{branchcode} = $patron->branchcode;
+        $newpatron->{branchcode} = $patron_2->branchcode;
 
         $newpatron->{falseproperty} = "Non existent property";
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                    $newpatron->{borrowernumber} => json => $newpatron);
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(400)
@@ -309,18 +263,20 @@ subtest 'edit() tests' => sub {
                     'Properties not allowed: falseproperty.');
         delete $newpatron->{falseproperty};
 
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                    $borrowernumber => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(409)
-          ->json_has('/error' => "Fails when trying to update to an existing"
-                     ."cardnumber or userid")
-          ->json_has('/conflict', {
-                cardnumber => $newpatron->{ cardnumber },
-                userid => $newpatron->{ userid }
-                }
-            );
+        # Set both cardnumber and userid to already existing values
+        $newpatron->{cardnumber} = $patron_1->cardnumber;
+        $newpatron->{userid}     = $patron_1->userid;
+
+        $tx = $t->ua->build_tx( PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
+        $tx->req->cookies({ name => 'CGISESSID', value => $sessionid });
+        $t->request_ok($tx)->status_is(409)
+          ->json_has( '/error' => "Fails when trying to update to an existing cardnumber or userid")
+          ->json_is(  '/conflict',
+                        {
+                            cardnumber => $newpatron->{cardnumber},
+                            userid     => $newpatron->{userid}
+                        }
+          );
 
         $newpatron->{ cardnumber } = $borrowernumber.$borrowernumber2;
         $newpatron->{ userid } = "user".$borrowernumber.$borrowernumber2;
@@ -390,7 +346,7 @@ sub unauthorized_access_tests {
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(403)
-          ->json_is('/required_permissions', {"borrowers" => "1"});
+          ->json_has('/required_permissions');
     };
 }
 
@@ -398,7 +354,6 @@ sub create_user_and_session {
 
     my $args  = shift;
     my $flags = ( $args->{authorized} ) ? 16 : 0;
-    my $dbh   = C4::Context->dbh;
 
     my $user = $builder->build(
         {
@@ -409,7 +364,7 @@ sub create_user_and_session {
                 lost => 0,
                 email => 'nobody@example.com',
                 emailpro => 'nobody@example.com',
-                B_email => 'nobody@example.com',
+                B_email => 'nobody@example.com'
             }
         }
     );
