@@ -1,7 +1,7 @@
 {
   "/patrons": {
     "get": {
-      "x-mojo-to": "Patron#list",
+      "x-mojo-to": "Patrons#list",
       "operationId": "listPatrons",
       "tags": ["patrons"],
       "produces": [
@@ -490,7 +490,7 @@
       }
     },
     "post": {
-      "x-mojo-to": "Patron#add",
+      "x-mojo-to": "Patrons#add",
       "operationId": "addPatron",
       "tags": ["patrons"],
       "parameters": [{
@@ -565,7 +565,7 @@
   },
   "/patrons/{borrowernumber}": {
     "get": {
-      "x-mojo-to": "Patron#get",
+      "x-mojo-to": "Patrons#get",
       "operationId": "getPatron",
       "tags": ["patrons"],
       "parameters": [{
@@ -621,7 +621,7 @@
       }
     },
     "put": {
-      "x-mojo-to": "Patron#update",
+      "x-mojo-to": "Patrons#update",
       "operationId": "updatePatron",
       "tags": ["patrons"],
       "parameters": [
@@ -699,7 +699,7 @@
       }
     },
     "delete": {
-      "x-mojo-to": "Patron#delete",
+      "x-mojo-to": "Patrons#delete",
       "operationId": "deletePatron",
       "tags": ["patrons"],
       "parameters": [{

@@ -1,4 +1,4 @@
-package Koha::REST::V1::Patron;
+package Koha::REST::V1::Patrons;
 
 # This file is part of Koha.
 #
@@ -27,7 +27,7 @@ use Try::Tiny;
 
 =head1 NAME
 
-Koha::REST::V1::Patron
+Koha::REST::V1::Patrons
 
 =head1 API
 
