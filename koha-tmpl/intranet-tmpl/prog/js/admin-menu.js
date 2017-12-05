@@ -6,6 +6,8 @@ $(document).ready(function() {
         $('#navmenulist a[href$="/cgi-bin/koha/admin/authtypes.pl"]').css('font-weight','bold');
     } else if (path == "cgi-bin/koha/admin/oai_set_mappings.pl") {
         $('#navmenulist a[href$="/cgi-bin/koha/admin/oai_sets.pl"]').css('font-weight','bold');
+    } else if (path == "cgi-bin/koha/admin/items_search_field.pl") {
+        $('#navmenulist a[href$="/cgi-bin/koha/admin/items_search_fields.pl"]').css('font-weight','bold');
     } else {
         $('#navmenulist a[href$="/' + path + '"]').css('font-weight','bold');
     }
