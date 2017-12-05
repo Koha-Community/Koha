@@ -28,9 +28,13 @@ use DateTime::TimeZone;
 
 my $cgi = CGI->new;
 
+# used by the KOCT firefox extension
+# (or any third-party that doesn't want to rely on cookies for authentication)
+my $nocookie = $cgi->param('nocookie') || 0;
+
 # get the status of the user, this will check his credentials and rights
 my ($status, $cookie, $sessionId) = C4::Auth::check_api_auth($cgi, undef);
-($status, $sessionId) = C4::Auth::check_cookie_auth($cgi, undef) if ($status ne 'ok');
+($status, $sessionId) = C4::Auth::check_cookie_auth($cgi, undef) if ($status ne 'ok' && !$nocookie);
 
 my $result;
 
@@ -76,9 +80,11 @@ if ($status eq 'ok') { # if authentication is ok
             }
         );
     }
-} else {
-    $result = "Authentication failed."
+
+    print CGI::header('-type'=>'text/plain', '-charset'=>'utf-8');
+    print $result;
+    exit;
 }
 
-print CGI::header('-type'=>'text/plain', '-charset'=>'utf-8');
+print CGI::header('-type'=>'text/plain', '-charset'=>'utf-8', '-status' => '401 Unauthorized');
 print $result;
