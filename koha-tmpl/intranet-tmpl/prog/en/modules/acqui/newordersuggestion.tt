@@ -1,30 +1,10 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Add order from a suggestion</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
- $(document).ready(function() {
-    var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": true }, // must be searchable for fnFilter
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    } ) );
-    $("#show_only_mine").on('click', function(e){
-        e.preventDefault();
-        suggestionst.fnFilter('^[% loggedinuser %]$', 0, true);
-    });
-    $("#show_all").on('click', function(e){
-        e.preventDefault();
-        suggestionst.fnFilter('', 0 );
-    });
- });
- //]]>
-</script>
 </head>
+
 <body id="acq_newordersuggestion" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'suggestions-add-search.inc' %]
@@ -92,4 +72,29 @@
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+                { "aTargets": [ 0 ],  "bVisible": false, "bSearchable": true }, // must be searchable for fnFilter
+                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+            ],
+            "sPaginationType": "four_button"
+        }));
+        $("#show_only_mine").on('click', function(e){
+            e.preventDefault();
+            suggestionst.fnFilter('^[% loggedinuser %]$', 0, true);
+        });
+        $("#show_all").on('click', function(e){
+            e.preventDefault();
+            suggestionst.fnFilter('', 0 );
+        });
+     });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

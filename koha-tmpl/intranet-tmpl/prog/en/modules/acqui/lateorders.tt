@@ -1,73 +1,13 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE ColumnsSettings %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-var late_orderst;
-function check_uncheck() {
-    var all_nodes = $(late_orderst.fnGetNodes());
-    if ( $(all_nodes).find("input:checkbox[name=ordernumber]:checked").length > 0) {
-        var booksellerid = $(all_nodes).find("input:checkbox[name=ordernumber]:checked:first").attr("data-booksellerid");
-        $(all_nodes).find("input:checkbox[name=ordernumber][data-booksellerid!="+booksellerid+"]").prop('disabled', true);
-    } else {
-        $("input:checkbox[name=ordernumber]").prop('disabled', false);
-    }
-}
-
-$(document).ready(function() {
-
-    var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) %];
-    late_orderst = KohaTable("late_orders", {
-        "aoColumnDefs": [
-            { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-            { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        "sPaginationType": "four_button",
-        "bAutoWidth": false,
-        "fnDrawCallback": function() {
-            if ( typeof late_orderst != 'undefined' ) {
-                check_uncheck();
-                $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
-            };
-        }
-    }, columns_settings );
-    $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
-    $('#CheckAll').click(function(){ $(late_orderst.fnGetNodes()).find("td").checkCheckboxes();});
-    $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
-
-    // Generates a dynamic link for exporting the selection's data as CSV
-    $("#ExportSelected").click(function() {
-        var all_nodes = $(late_orderst.fnGetNodes());
-        var selected = $(all_nodes).find("input[name='ordernumber']:checked");
-
-        if (selected.length == 0) {
-            alert(_("Please select at least one item to export."));
-            return false;
-        }
-
-        // Building the url from currently checked boxes
-        var url = '/cgi-bin/koha/acqui/lateorders-export.pl?op=export';
-        for (var i = 0; i < selected.length; i++) {
-            url += '&amp;ordernumber=' + selected[i].value;
-        }
-        // And redirecting to the CSV page
-        location.href = url;
-        return false;
-    });
-});
-//]]>
-</script>
 </head>
+
 <body id="acq_lateorders" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -249,4 +189,68 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        var late_orderst;
+        function check_uncheck() {
+            var all_nodes = $(late_orderst.fnGetNodes());
+            if ( $(all_nodes).find("input:checkbox[name=ordernumber]:checked").length > 0) {
+                var booksellerid = $(all_nodes).find("input:checkbox[name=ordernumber]:checked:first").attr("data-booksellerid");
+                $(all_nodes).find("input:checkbox[name=ordernumber][data-booksellerid!="+booksellerid+"]").prop('disabled', true);
+            } else {
+                $("input:checkbox[name=ordernumber]").prop('disabled', false);
+            }
+        }
+
+        $(document).ready(function() {
+
+            var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'lateorders', 'late_orders', 'json' ) %];
+            late_orderst = KohaTable("late_orders", {
+                "aoColumnDefs": [
+                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "four_button",
+                "bAutoWidth": false,
+                "fnDrawCallback": function() {
+                    if ( typeof late_orderst != 'undefined' ) {
+                        check_uncheck();
+                        $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
+                    };
+                }
+            }, columns_settings );
+            $('input:checkbox[name=ordernumber]').bind('click', check_uncheck);
+            $('#CheckAll').click(function(){ $(late_orderst.fnGetNodes()).find("td").checkCheckboxes();});
+            $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
+
+            // Generates a dynamic link for exporting the selection's data as CSV
+            $("#ExportSelected").click(function() {
+                var all_nodes = $(late_orderst.fnGetNodes());
+                var selected = $(all_nodes).find("input[name='ordernumber']:checked");
+
+                if (selected.length == 0) {
+                    alert(_("Please select at least one item to export."));
+                    return false;
+                }
+
+                // Building the url from currently checked boxes
+                var url = '/cgi-bin/koha/acqui/lateorders-export.pl?op=export';
+                for (var i = 0; i < selected.length; i++) {
+                    url += '&amp;ordernumber=' + selected[i].value;
+                }
+                // And redirecting to the CSV page
+                location.href = url;
+                return false;
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

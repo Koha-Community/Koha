@@ -1,203 +1,11 @@
-[% USE KohaDates %]
-[% INCLUDE 'doc-head-open.inc' %]
 [% USE Koha %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber %])[% ELSE %]New order[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'additem.js.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/additem_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/prevent_submit_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript">
-//<![CDATA[
-actTotal = "";
-
-function Check(ff) {
-    [% IF (AcqCreateItemOrdering) %]
-        // Remove last itemblock if it is not in items_list
-        var lastitemblock = $("#outeritemblock > div:last");
-        var tobedeleted = true;
-        var listitems = $("#items_list tr");
-        $(listitems).each(function(){
-            if($(this).attr('idblock') == $(lastitemblock).attr('id')){
-                tobedeleted = false;
-            }
-        });
-        if(tobedeleted){
-            $(lastitemblock).remove();
-        }
-    [% END %]
-
-    var ok=0;
-    var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
-
-    _alertString +="-------------------------------------------------------------------\n\n";
-
-    if ( isNull(ff.title,1)  &&  isNull(ff.entertitle,1)   ){
-        ok=1;
-                    _alertString += "\n- " + _("Title cannot be empty");
-    }
-    
-    if(isNull(ff.budget_id,1)){
-		ok=1;
-        _alertString += "\n- "+ _("You must select a fund");
-    }
-
-    if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
-        ok=1;
-                    _alertString += "\n- " + _("Quantity must be greater than '0'");
-    }
-
-    if (!(isNum(ff.listprice,0))){
-        ok=1;
-                    _alertString += "\n- " + _("Vendor price must be a number");
-    }
-
-    if (!(isNum(ff.total,0))){
-        ok=1;
-                    _alertString += "\n- " + _("Total must be a number");
-    }
-
-    if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
-        ok=1;
-        _alertString += "\n- " + _("Order total (%s) exceeds budget available (%s)").format(ff.total.value, actTotal);
-    }
-
-    if ( ff.field_value ) {
-        var empty_item_mandatory = CheckMandatorySubfields(ff);
-        if (empty_item_mandatory > 0) {
-            ok = 1;
-            _alertString +=
-                "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
-        }
-
-    }
-
-    if (ok) {
-        alert(_alertString);
-        [% IF (AcqCreateItemOrdering) %]
-            if(tobedeleted) {
-                $(lastitemblock).appendTo('#outeritemblock');
-            }
-        [% END %]
-        return false;
-    }
-
-    [% IF (AcqCreateItemOrdering) %]
-        if(check_additem('[% UniqueItemFields %]') == false) {
-            alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
-            if(tobedeleted) {
-                $(lastitemblock).appendTo('#outeritemblock');
-            }
-            return false;
-        }
-    [% END %]
-}
-
-$(document).ready(function() 
-    {
-        [% IF AcqCreateItemOrdering and not basket.is_standing %]
-            cloneItemBlock(0, '[% UniqueItemFields %]');
-        [% END %]
-
-        [% IF ( suggestionid ) %]updateCosts();[% END %]
-        $("#quantity").change(function() {
-            updateCosts();
-        });
-
-        //We apply the fonction only for modify option
-        [% IF ( quantityrec ) %]
-        [% IF ( acqcreate ) %]
-        $('#quantity').blur(function() 
-        {
-            // if user decreases the quantity
-            if($(this).val() < [% quantityrec %]) 
-            {
-                alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
-                return true;
-            } 
-            else 
-            {
-                // if user increases the quantity
-                alert(_("You can't add a new item, please create a new order line"));
-                // and we replace the original value
-                $(this).val([% quantityrec %])
-                updateCosts(); // blur is invoked after change which updated values
-                return false;
-            }
-        });
-        [% END %]
-        [% END %]
-        
-        //keep a copy of all budgets before removing the inactives
-        disabledBudgetsCopy = $('#budget_id').html();
-        $('#budget_id .b_inactive').remove();
-
-        $('#showallbudgets').click(function() {
-            if ($(this).is(":checked")) {
-                $('#budget_id').html(disabledBudgetsCopy); //Puts back all the funds
-            }
-            else {
-                $('#budget_id .b_inactive').remove();
-            }
-        });
-
-        $("#budget_id").change(function(){
-            var destination_sort1 = $(this).parents('fieldset.rows').find('input[name="sort1"]');
-            var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
-            var sort1 = $(destination_sort1).val() || "";
-            if ( destination_sort1.length < 1 ) {
-                destination_sort1 = $(this).parents('fieldset.rows').find('select[name="sort1"]');
-            }
-            var destination_sort2 = $(this).parents('fieldset.rows').find('input[name="sort2"]');
-            var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
-            var sort2 = $(destination_sort2).val() || "";
-            if ( destination_sort2.length < 1 ) {
-                destination_sort2 = $(this).parents('fieldset.rows').find('select[name="sort2"]');
-            }
-            getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
-            getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
-        });
-        $("#budget_id").change();
-    });
-
-    function UserSearchPopup(f) {
-        window.open(
-            "/cgi-bin/koha/acqui/add_user_search.pl",
-            'UserSearchPopup',
-            'width=740, height=450, scrollbars=yes, toolbar=no,'
-         );
-    }
-
-    function add_user(borrowernumber, borrowername) {
-        var ids = $("#users_ids").val();
-        if(ids.length > 0) {
-            ids = ids.split(':');
-        } else {
-            ids = new Array;
-        }
-        if (ids.indexOf(borrowernumber.toString()) < 0) {
-            ids.push(borrowernumber);
-            $("#users_ids").val(ids.join(':'));
-            var li = '<li id="user_'+borrowernumber+'">'+borrowername
-                + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
-                + _("Delete user") + '</a>]</li>';
-            $("#users_names").append(li);
-            return 0;
-        }
-        return -1;
-    }
-
-    function del_user(borrowernumber) {
-      $("#user_"+borrowernumber).remove();
-      var ids = $("#users_ids").val().split(':');
-      ids.splice(ids.indexOf(borrowernumber.toString()), 1);
-      $("#users_ids").val(ids.join(':'));
-    }
-//]]>
-</script>
 </head>
+
 <body id="acq_neworderempty" class="acq">
 
 [% INCLUDE 'header.inc' %]
@@ -679,4 +487,195 @@ $(document).ready(function()
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'additem.js.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/additem_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/prevent_submit_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript">
+        actTotal = "";
+
+        function Check(ff) {
+            [% IF (AcqCreateItemOrdering) %]
+                // Remove last itemblock if it is not in items_list
+                var lastitemblock = $("#outeritemblock > div:last");
+                var tobedeleted = true;
+                var listitems = $("#items_list tr");
+                $(listitems).each(function(){
+                    if($(this).attr('idblock') == $(lastitemblock).attr('id')){
+                        tobedeleted = false;
+                    }
+                });
+                if(tobedeleted){
+                    $(lastitemblock).remove();
+                }
+            [% END %]
+
+            var ok=0;
+            var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
+
+            _alertString +="-------------------------------------------------------------------\n\n";
+
+            if ( isNull(ff.title,1)  &&  isNull(ff.entertitle,1)   ){
+                ok=1;
+                            _alertString += "\n- " + _("Title cannot be empty");
+            }
+
+            if(isNull(ff.budget_id,1)){
+                ok=1;
+                _alertString += "\n- "+ _("You must select a fund");
+            }
+
+            if (!(isNum(ff.quantity,0)) || ff.quantity.value == 0){
+                ok=1;
+                            _alertString += "\n- " + _("Quantity must be greater than '0'");
+            }
+
+            if (!(isNum(ff.listprice,0))){
+                ok=1;
+                            _alertString += "\n- " + _("Vendor price must be a number");
+            }
+
+            if (!(isNum(ff.total,0))){
+                ok=1;
+                            _alertString += "\n- " + _("Total must be a number");
+            }
+
+            if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
+                ok=1;
+                _alertString += "\n- " + _("Order total (%s) exceeds budget available (%s)").format(ff.total.value, actTotal);
+            }
+
+            if ( ff.field_value ) {
+                var empty_item_mandatory = CheckMandatorySubfields(ff);
+                if (empty_item_mandatory > 0) {
+                    ok = 1;
+                    _alertString +=
+                        "\n- " + _("%s item mandatory fields empty").format(empty_item_mandatory);
+                }
+
+            }
+
+            if (ok) {
+                alert(_alertString);
+                [% IF (AcqCreateItemOrdering) %]
+                    if(tobedeleted) {
+                        $(lastitemblock).appendTo('#outeritemblock');
+                    }
+                [% END %]
+                return false;
+            }
+
+            [% IF (AcqCreateItemOrdering) %]
+                if(check_additem('[% UniqueItemFields %]') == false) {
+                    alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
+                    if(tobedeleted) {
+                        $(lastitemblock).appendTo('#outeritemblock');
+                    }
+                    return false;
+                }
+            [% END %]
+        }
+
+        $(document).ready(function(){
+            [% IF AcqCreateItemOrdering and not basket.is_standing %]
+                cloneItemBlock(0, '[% UniqueItemFields %]');
+            [% END %]
+
+            [% IF ( suggestionid ) %]updateCosts();[% END %]
+            $("#quantity").change(function() {
+                updateCosts();
+            });
+
+            //We apply the fonction only for modify option
+            [% IF ( quantityrec ) %]
+                [% IF ( acqcreate ) %]
+                    $('#quantity').blur(function(){
+                        // if user decreases the quantity
+                        if($(this).val() < [% quantityrec %]){
+                            alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
+                            return true;
+                        } else {
+                            // if user increases the quantity
+                            alert(_("You can't add a new item, please create a new order line"));
+                            // and we replace the original value
+                            $(this).val([% quantityrec %])
+                            updateCosts(); // blur is invoked after change which updated values
+                            return false;
+                        }
+                    });
+                [% END %]
+            [% END %]
+
+            //keep a copy of all budgets before removing the inactives
+            disabledBudgetsCopy = $('#budget_id').html();
+            $('#budget_id .b_inactive').remove();
+
+            $('#showallbudgets').click(function() {
+                if ($(this).is(":checked")) {
+                    $('#budget_id').html(disabledBudgetsCopy); //Puts back all the funds
+                }
+                else {
+                    $('#budget_id .b_inactive').remove();
+                }
+            });
+
+            $("#budget_id").change(function(){
+                var destination_sort1 = $(this).parents('fieldset.rows').find('input[name="sort1"]');
+                var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+                var sort1 = $(destination_sort1).val() || "";
+                if ( destination_sort1.length < 1 ) {
+                    destination_sort1 = $(this).parents('fieldset.rows').find('select[name="sort1"]');
+                }
+                var destination_sort2 = $(this).parents('fieldset.rows').find('input[name="sort2"]');
+                var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+                var sort2 = $(destination_sort2).val() || "";
+                if ( destination_sort2.length < 1 ) {
+                    destination_sort2 = $(this).parents('fieldset.rows').find('select[name="sort2"]');
+                }
+                getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
+                getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
+            });
+            $("#budget_id").change();
+        });
+
+        function UserSearchPopup(f) {
+            window.open(
+                "/cgi-bin/koha/acqui/add_user_search.pl",
+                'UserSearchPopup',
+                'width=740, height=450, scrollbars=yes, toolbar=no,'
+             );
+        }
+
+        function add_user(borrowernumber, borrowername) {
+            var ids = $("#users_ids").val();
+            if(ids.length > 0) {
+                ids = ids.split(':');
+            } else {
+                ids = new Array;
+            }
+        if (ids.indexOf(borrowernumber.toString()) < 0) {
+                ids.push(borrowernumber);
+                $("#users_ids").val(ids.join(':'));
+                var li = '<li id="user_'+borrowernumber+'">'+borrowername
+                    + ' [<a style="cursor:pointer" onclick="del_user('+borrowernumber+');">'
+                    + _("Delete user") + '</a>]</li>';
+                $("#users_names").append(li);
+                return 0;
+            }
+            return -1;
+        }
+
+        function del_user(borrowernumber) {
+            $("#user_"+borrowernumber).remove();
+            var ids = $("#users_ids").val().split(':');
+            ids.splice(ids.indexOf(borrowernumber.toString()), 1);
+            $("#users_ids").val(ids.join(':'));
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

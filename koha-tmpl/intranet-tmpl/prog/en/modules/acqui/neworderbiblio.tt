@@ -1,34 +1,10 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Search existing records</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
- $(document).ready(function() {
-    var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        'sDom': 't',
-        'bPaginate': false,
-        'bFilter': false,
-        'bInfo': false,
-        'bSort': false,
-    } ) );
-    $(".previewMARC").on("click", function(e){
-        e.preventDefault();
-        var ltitle = $(this).text();
-        var page = $(this).attr("href");
-        $("#marcPreviewLabel").text(ltitle);
-        $("#marcPreview .modal-body").load(page + " table");
-        $('#marcPreview').modal({show:true});
-    });
-    $("#marcPreview").on("hidden", function(){
-        $("#marcPreviewLabel").html("");
-        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
- });
- //]]>
-</script>
 </head>
+
 <body id="acq_neworderbiblio" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -129,4 +105,33 @@
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+         $(document).ready(function() {
+            var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'sDom': 't',
+                'bPaginate': false,
+                'bFilter': false,
+                'bInfo': false,
+                'bSort': false,
+            } ) );
+            $(".previewMARC").on("click", function(e){
+                e.preventDefault();
+                var ltitle = $(this).text();
+                var page = $(this).attr("href");
+                $("#marcPreviewLabel").text(ltitle);
+                $("#marcPreview .modal-body").load(page + " table");
+                $('#marcPreview').modal({show:true});
+            });
+            $("#marcPreview").on("hidden", function(){
+                $("#marcPreviewLabel").html("");
+                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+         });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,42 +1,13 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials [% biblionumber %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    function updateRowsVisibility(show_only_renewed) {
-        if ( show_only_renewed ) {
-            $("#srlt [data-reneweddate='']").hide();
-        } else {
-            $("#srlt > tbody > tr").show();
-        }
-    }
-
-    $(document).ready(function() {
-        $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "sPaginationType": "four_button"
-        } ) )
-
-        $("#show_only_renewed").click(function(){
-            updateRowsVisibility( $(this).is(":checked") );
-        });
-        $("#show_only_renewed").prop('checked', false);
-        updateRowsVisibility(false);
-
-        $("#advsearch_form").show();
-    });
- //]]>
-</script>
 </head>
+
 <body id="acq_newordersubscription" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -123,4 +94,38 @@
         [% INCLUDE 'acquisitions-menu.inc' %]
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        function updateRowsVisibility(show_only_renewed) {
+            if ( show_only_renewed ) {
+                $("#srlt [data-reneweddate='']").hide();
+            } else {
+                $("#srlt > tbody > tr").show();
+            }
+        }
+
+        $(document).ready(function() {
+            $("#srlt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "four_button"
+            }));
+
+            $("#show_only_renewed").click(function(){
+                updateRowsVisibility( $(this).is(":checked") );
+            });
+            $("#show_only_renewed").prop('checked', false);
+            updateRowsVisibility(false);
+
+            $("#advsearch_form").show();
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
