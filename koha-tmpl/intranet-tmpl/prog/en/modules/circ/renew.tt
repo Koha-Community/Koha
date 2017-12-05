@@ -90,7 +90,19 @@
                                     </form>
                                 [% END %]
 
-                            [% ELSIF error == "auto_renew" or error == "auto_too_much_oweing" %]
+                            [% ELSIF error == "auto_account_expired" %]
+
+                                <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal and cannot be renewed because the patron's account is expired</p>
+
+                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                                        <input type="hidden" name="barcode" value="[% item.barcode %]"/>
+                                        <input type="hidden" name="override_limit" value="1" />
+                                        <input type="submit" class="approve" value="Override and renew" />
+                                    </form>
+                                [% END %]
+
+                            [% ELSIF error == "auto_renew" or error == "auto_too_much_oweing" or error == "auto_account_expired" %]
 
                                 <p>[% item.biblio.title %] [% item.biblioitem.subtitle %] ( [% item.barcode %] ) has been scheduled for automatic renewal. </p>
 
