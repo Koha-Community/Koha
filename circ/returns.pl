@@ -446,6 +446,7 @@ if ( $messages->{'ResFound'}) {
             borrowernumber => $reserve->{'borrowernumber'},
             message_name   => 'Hold_Filled',
         });
+    my $mtts = $holdmsgpreferences->message_transport_types if defined $holdmsgpreferences;
     if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
@@ -488,7 +489,7 @@ if ( $messages->{'ResFound'}) {
             itemnumber     => $reserve->{'itemnumber'},
             reservenotes   => $reserve->{'reservenotes'},
             reserve_id     => $reserve->{reserve_id},
-            bormessagepref => $holdmsgpreferences->message_transport_types,
+            bormessagepref => $mtts,
         );
     } # else { ; }  # error?
 }
