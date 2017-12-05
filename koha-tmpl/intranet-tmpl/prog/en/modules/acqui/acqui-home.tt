@@ -1,90 +1,13 @@
 [% USE Price %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
 <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-
-dt_overwrite_html_sorting_localeCompare();
-
-$(document).ready(function() {
-
-    var oTable = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "fnDrawCallback": function ( oSettings ) {
-            if ( oSettings.aiDisplay.length == 0 )
-            {
-                return;
-            }
-
-            var nTrs = $('#accounts tbody tr');
-            var iColspan = nTrs[0].getElementsByTagName('td').length;
-            var sLastGroup = "";
-            for ( var i=0 ; i<nTrs.length ; i++ )
-            {
-                var iDisplayIndex = oSettings._iDisplayStart + i;
-                var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
-                if ( sGroup != sLastGroup )
-                {
-                    var nGroup = document.createElement( 'tr' );
-                    var nCell = document.createElement( 'td' );
-                    nCell.colSpan = iColspan;
-                    nCell.className = "group";
-                    nCell.innerHTML = sGroup;
-                    nGroup.appendChild( nCell );
-                    nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
-                    sLastGroup = sGroup;
-                }
-            }
-        },
-        "footerCallback": function ( row, data, start, end, display ) {
-            var api = this.api(), data;
-            footer_column_sum( api, [ 6, 7, 8, 9 ] );
-        },
-        "aoColumnDefs": [
-            { "bVisible": false, "aTargets": [ 0, 1 ] },
-            { "bSortable": false, "aTargets": ["_all"] }
-        ],
-        'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
-        'bSort': true,
-        'aaSortingFixed': [[ 1, 'asc' ]],
-        'bPaginate': false,
-        "bAutoWidth": false
-    }));
-
-    $(oTable).treetable({
-        expandable: true
-    });
-    $(oTable).treetable('expandAll');
-    $("#expand_all").click(function(e){
-        e.preventDefault();
-        $(oTable).treetable('expandAll');
-    });
-    $("#collapse_all").click(function(e){
-        e.preventDefault();
-        $(oTable).treetable('collapseAll');
-    });
-
-    $("#hide_inactive").click(function(e){
-        e.preventDefault();
-        oTable.fnFilter( 1, 0 ); // Show only active=1
-    });
-    $("#show_inactive").click(function(e){
-        e.preventDefault();
-        oTable.fnFilter( '', 0 );
-    });
-    $("#hide_inactive").click();
-
-});
-//]]>
-</script>
-
 </head>
+
 <body id="acq_acqui-home" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -243,4 +166,83 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+    <script type="text/javascript">
+        dt_overwrite_html_sorting_localeCompare();
+
+        $(document).ready(function() {
+
+            var oTable = $("#accounts").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "fnDrawCallback": function ( oSettings ) {
+                    if ( oSettings.aiDisplay.length == 0 )
+                    {
+                        return;
+                    }
+
+                    var nTrs = $('#accounts tbody tr');
+                    var iColspan = nTrs[0].getElementsByTagName('td').length;
+                    var sLastGroup = "";
+                    for ( var i=0 ; i<nTrs.length ; i++ )
+                    {
+                        var iDisplayIndex = oSettings._iDisplayStart + i;
+                        var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[1];
+                        if ( sGroup != sLastGroup )
+                        {
+                            var nGroup = document.createElement( 'tr' );
+                            var nCell = document.createElement( 'td' );
+                            nCell.colSpan = iColspan;
+                            nCell.className = "group";
+                            nCell.innerHTML = sGroup;
+                            nGroup.appendChild( nCell );
+                            nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+                            sLastGroup = sGroup;
+                        }
+                    }
+                },
+                "footerCallback": function ( row, data, start, end, display ) {
+                    var api = this.api(), data;
+                    footer_column_sum( api, [ 6, 7, 8, 9 ] );
+                },
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [ 0, 1 ] },
+                    { "bSortable": false, "aTargets": ["_all"] }
+                ],
+                'dom': '<"top pager"ilpf>tr<"bottom pager"ip>',
+                'bSort': true,
+                'aaSortingFixed': [[ 1, 'asc' ]],
+                'bPaginate': false,
+                "bAutoWidth": false
+            }));
+
+            $(oTable).treetable({
+                expandable: true
+            });
+            $(oTable).treetable('expandAll');
+            $("#expand_all").click(function(e){
+                e.preventDefault();
+                $(oTable).treetable('expandAll');
+            });
+            $("#collapse_all").click(function(e){
+                e.preventDefault();
+                $(oTable).treetable('collapseAll');
+            });
+
+            $("#hide_inactive").click(function(e){
+                e.preventDefault();
+                oTable.fnFilter( 1, 0 ); // Show only active=1
+            });
+            $("#show_inactive").click(function(e){
+                e.preventDefault();
+                oTable.fnFilter( '', 0 );
+            });
+            $("#hide_inactive").click();
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Order staged MARC records
 [% IF ( batch_details ) %]
@@ -11,169 +12,8 @@
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 <style type="text/css">#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-<script type="text/JavaScript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
-            ],
-            "sPaginationType": "four_button",
-            "aaSorting": []
-        } ) );
-
-        // keep copy of the inactive budgets
-        disabledBudgetsCopy = $("select[name='all_budget_id']").html();
-        $("select[name='all_budget_id'] .b_inactive").remove();
-        $("select[name='budget_id'] .b_inactive").remove();
-
-        $("#showallbudgets").click(function() {
-            if ($(this).is(":checked")) {
-                $("select[name='budget_id']").html(disabledBudgetsCopy)
-            }
-            else {
-                $("select[name='budget_id'] .b_inactive").remove();
-            }
-        });
-
-        $("#all_showallbudgets").click(function() {
-            if ($(this).is(":checked")) {
-                $("select[name='all_budget_id']").html(disabledBudgetsCopy);
-            }
-            else {
-                $("select[name='all_budget_id'] .b_inactive").remove();
-            }
-        });
-
-        $("select[name='budget_id']").change(function(){
-            var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
-            var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
-            var destination_sort1 = $(this).parents('fieldset').find('li.sort1').find('input[name="sort1"]');
-            var sort1 = $(destination_sort1).val() || "";
-            if ( destination_sort1.length < 1 ) {
-                destination_sort1 = $(this).parents('fieldset').find('li.sort1 > select[name="sort1"]');
-            }
-            var destination_sort2 = $(this).parents('fieldset').find('li.sort2').find('input[name="sort2"]');
-            var sort2 = $(destination_sort2).val() || "";
-            if ( destination_sort2.length < 1 ) {
-                destination_sort2 = $(this).parents('fieldset').find('li.sort2').find('select[name="sort2"]');
-            }
-            getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
-
-            getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
-        } );
-
-        $("select[name='budget_id']").change();
-
-        $("select[name='all_budget_id']").change(function(){
-            var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
-            var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
-            var destination_sort1 = $(this).parent().siblings('li').find('input[name="all_sort1"]');
-            if ( destination_sort1.length < 1 ) {
-                destination_sort1 = $(this).parent().siblings('li').find('select[name="all_sort1"]');
-            }
-            var destination_sort2 = $(this).parent().siblings('li').find('input[name="all_sort2"]');
-            if ( destination_sort2.length < 1 ) {
-                destination_sort2 = $(this).parent().siblings('li').find('select[name="all_sort2"]');
-            }
-            getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1 );
-            getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2 );
-            $(this).parent().siblings('li').find('select[name="sort1"]').attr('name', 'all_sort1');
-            $(this).parent().siblings('li').find('input[name="sort1"]').attr('name', 'all_sort1');
-            $(this).parent().siblings('li').find('select[name="sort2"]').attr('name', 'all_sort2');
-            $(this).parent().siblings('li').find('input[name="sort2"]').attr('name', 'all_sort2');
-        } );
-
-        $("select[name='all_budget_id']").change();
-
-        $("#records_to_import fieldset.rows div").hide();
-        $('input:checkbox[name="import_record_id"]').change(function(){
-            var container = $(this).parents("fieldset");
-            if ( $(this).is(':checked') ) {
-                $(container).addClass("selected");
-                $(container).removeClass("unselected");
-                $(container).find("div").toggle(true);
-            } else {
-                $(container).addClass("unselected");
-                $(container).removeClass("selected");
-                $(container).find("div").toggle(false);
-            }
-        } );
-
-        $("input:checkbox").prop("checked", false);
-        $("div.biblio.unselected select").prop('disabled', false);
-        $("div.biblio.unselected input").prop('disabled', false);
-
-        $("#checkAll").click(function(){
-            $("#Aform").checkCheckboxes();
-            $("input:checkbox[name='import_record_id']").change();
-            return false;
-        });
-        $("#unCheckAll").click(function(){
-            $("#Aform").unCheckCheckboxes();
-            $("input:checkbox[name='import_record_id']").change();
-            return false;
-        });
-
-        $("#Aform").on("submit", function(){
-            if ( $("input:checkbox[name='import_record_id']:checked").length < 1 ) {
-                alert(_("There is no record selected"));
-                return false;
-            }
-
-            var error = 0;
-            $("input:checkbox[name='import_record_id']:checked").parents('fieldset').find('input[name="quantity"]').each(function(){
-                if ( $(this).val().length < 1 || isNaN( $(this).val() ) ) {
-                    error++;
-                }
-            });
-            if ( error > 0 ) {
-                alert(error + " " + _("quantity values are not filled in or are not numbers"));
-                return false;
-
-            }
-            var error = 0;
-            $("select[name='budget_id']").each(function() {
-                if (!$(this).val()) {
-                    error++;
-                }
-            });
-            if ( error > 0 ) {
-                alert(_("Some budgets are not defined in item records"));
-                return false;
-            }
-
-            return disableUnchecked($(this));
-        });
-        $('#tabs').tabs();
-        $(".previewData").on("click", function(e){
-            e.preventDefault();
-            var ltitle = $(this).text();
-            var page = $(this).attr("href");
-            $("#dataPreviewLabel").text(ltitle);
-            $("#dataPreview .modal-body").load(page + " div");
-            $('#dataPreview').modal({show:true});
-        });
-        $("#dataPreview").on("hidden", function(){
-            $("#dataPreviewLabel").html("");
-            $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-        });
-    });
-
-    function disableUnchecked(form){
-        $("fieldset.biblio.unselected").each(function(){
-            $(this).remove();
-        });
-        return 1;
-    }
-//]]>
-</script>
 </head>
+
 <body id="acq_addorderiso2709" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -583,5 +423,169 @@
        </div>
    </div>
 </div>
-</body>
-</html>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+[% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/JavaScript">
+        $(document).ready(function() {
+            $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "four_button",
+                "aaSorting": []
+            } ) );
+
+            // keep copy of the inactive budgets
+            disabledBudgetsCopy = $("select[name='all_budget_id']").html();
+            $("select[name='all_budget_id'] .b_inactive").remove();
+            $("select[name='budget_id'] .b_inactive").remove();
+
+            $("#showallbudgets").click(function() {
+                if ($(this).is(":checked")) {
+                    $("select[name='budget_id']").html(disabledBudgetsCopy)
+                }
+                else {
+                    $("select[name='budget_id'] .b_inactive").remove();
+                }
+            });
+
+            $("#all_showallbudgets").click(function() {
+                if ($(this).is(":checked")) {
+                    $("select[name='all_budget_id']").html(disabledBudgetsCopy);
+                }
+                else {
+                    $("select[name='all_budget_id'] .b_inactive").remove();
+                }
+            });
+
+            $("select[name='budget_id']").change(function(){
+                var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+                var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+                var destination_sort1 = $(this).parents('fieldset').find('li.sort1').find('input[name="sort1"]');
+                var sort1 = $(destination_sort1).val() || "";
+                if ( destination_sort1.length < 1 ) {
+                    destination_sort1 = $(this).parents('fieldset').find('li.sort1 > select[name="sort1"]');
+                }
+                var destination_sort2 = $(this).parents('fieldset').find('li.sort2').find('input[name="sort2"]');
+                var sort2 = $(destination_sort2).val() || "";
+                if ( destination_sort2.length < 1 ) {
+                    destination_sort2 = $(this).parents('fieldset').find('li.sort2').find('select[name="sort2"]');
+                }
+                getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1, sort1 );
+
+                getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2, sort2 );
+            } );
+
+            $("select[name='budget_id']").change();
+
+            $("select[name='all_budget_id']").change(function(){
+                var sort1_authcat = $(this).find("option:selected").attr('data-sort1-authcat');
+                var sort2_authcat = $(this).find("option:selected").attr('data-sort2-authcat');
+                var destination_sort1 = $(this).parent().siblings('li').find('input[name="all_sort1"]');
+                if ( destination_sort1.length < 1 ) {
+                    destination_sort1 = $(this).parent().siblings('li').find('select[name="all_sort1"]');
+                }
+                var destination_sort2 = $(this).parent().siblings('li').find('input[name="all_sort2"]');
+                if ( destination_sort2.length < 1 ) {
+                    destination_sort2 = $(this).parent().siblings('li').find('select[name="all_sort2"]');
+                }
+                getAuthValueDropbox( 'sort1', sort1_authcat, destination_sort1 );
+                getAuthValueDropbox( 'sort2', sort2_authcat, destination_sort2 );
+                $(this).parent().siblings('li').find('select[name="sort1"]').attr('name', 'all_sort1');
+                $(this).parent().siblings('li').find('input[name="sort1"]').attr('name', 'all_sort1');
+                $(this).parent().siblings('li').find('select[name="sort2"]').attr('name', 'all_sort2');
+                $(this).parent().siblings('li').find('input[name="sort2"]').attr('name', 'all_sort2');
+            } );
+
+            $("select[name='all_budget_id']").change();
+
+            $("#records_to_import fieldset.rows div").hide();
+            $('input:checkbox[name="import_record_id"]').change(function(){
+                var container = $(this).parents("fieldset");
+                if ( $(this).is(':checked') ) {
+                    $(container).addClass("selected");
+                    $(container).removeClass("unselected");
+                    $(container).find("div").toggle(true);
+                } else {
+                    $(container).addClass("unselected");
+                    $(container).removeClass("selected");
+                    $(container).find("div").toggle(false);
+                }
+            } );
+
+            $("input:checkbox").prop("checked", false);
+            $("div.biblio.unselected select").prop('disabled', false);
+            $("div.biblio.unselected input").prop('disabled', false);
+
+            $("#checkAll").click(function(){
+                $("#Aform").checkCheckboxes();
+                $("input:checkbox[name='import_record_id']").change();
+                return false;
+            });
+            $("#unCheckAll").click(function(){
+                $("#Aform").unCheckCheckboxes();
+                $("input:checkbox[name='import_record_id']").change();
+                return false;
+            });
+
+            $("#Aform").on("submit", function(){
+                if ( $("input:checkbox[name='import_record_id']:checked").length < 1 ) {
+                    alert(_("There is no record selected"));
+                    return false;
+                }
+
+                var error = 0;
+                $("input:checkbox[name='import_record_id']:checked").parents('fieldset').find('input[name="quantity"]').each(function(){
+                    if ( $(this).val().length < 1 || isNaN( $(this).val() ) ) {
+                        error++;
+                    }
+                });
+                if ( error > 0 ) {
+                    alert(error + " " + _("quantity values are not filled in or are not numbers"));
+                    return false;
+
+                }
+                var error = 0;
+                $("select[name='budget_id']").each(function() {
+                    if (!$(this).val()) {
+                        error++;
+                    }
+                });
+                if ( error > 0 ) {
+                    alert(_("Some budgets are not defined in item records"));
+                    return false;
+                }
+
+                return disableUnchecked($(this));
+            });
+            $('#tabs').tabs();
+            $(".previewData").on("click", function(e){
+                e.preventDefault();
+                var ltitle = $(this).text();
+                var page = $(this).attr("href");
+                $("#dataPreviewLabel").text(ltitle);
+                $("#dataPreview .modal-body").load(page + " div");
+                $('#dataPreview').modal({show:true});
+            });
+            $("#dataPreview").on("hidden", function(){
+                $("#dataPreviewLabel").html("");
+                $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+        });
+
+        function disableUnchecked(form){
+            $("fieldset.biblio.unselected").each(function(){
+                $(this).remove();
+            });
+            return 1;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

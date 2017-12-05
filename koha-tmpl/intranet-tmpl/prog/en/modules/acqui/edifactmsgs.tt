@@ -1,45 +1,14 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; EDIFACT messages</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#edi_msgs').dataTable($.extend(true, {}, dataTablesDefaults, {
-        'aaSorting': [[1, "desc" ]],
-        'sPaginationType': "four_button",
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ]
-    }));
-
-    var EDIModal = $("#EDI_modal");
-    var EDIModalBody = $("#EDI_modal .modal-body");
-
-    $(".view_message").on("click", function(e){
-        e.preventDefault();
-        var page = $(this).attr("href");
-        EDIModalBody.load(page + " #edimsg");
-        EDIModal.modal("show");
-    });
-    EDIModal.on("click",".closebtn",function(e){
-        e.preventDefault();
-        EDIModal.modal("hide");
-    });
-    EDIModal.on("hidden", function(){
-        EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
-    $(".delete_msg").on("click",function(){
-        return confirm(_("Are you sure you want to delete this message?"));
-    });
-});
-</script>
 <style type="text/css">
 #EDI_modal { width : 80%; } @media (max-width: 767px) { #EDI_modal { margin: 0; width : auto; } }
 </style>
 </head>
+
 <body id="acq_edifactmsgs" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -139,4 +108,42 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#edi_msgs').dataTable($.extend(true, {}, dataTablesDefaults, {
+                'aaSorting': [[1, "desc" ]],
+                'sPaginationType': "four_button",
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ]
+            }));
+
+            var EDIModal = $("#EDI_modal");
+            var EDIModalBody = $("#EDI_modal .modal-body");
+
+            $(".view_message").on("click", function(e){
+                e.preventDefault();
+                var page = $(this).attr("href");
+                EDIModalBody.load(page + " #edimsg");
+                EDIModal.modal("show");
+            });
+            EDIModal.on("click",".closebtn",function(e){
+                e.preventDefault();
+                EDIModal.modal("hide");
+            });
+            EDIModal.on("hidden", function(){
+                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+            $(".delete_msg").on("click",function(){
+                return confirm(_("Are you sure you want to delete this message?"));
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

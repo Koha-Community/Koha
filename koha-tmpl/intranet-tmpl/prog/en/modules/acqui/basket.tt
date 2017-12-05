@@ -16,178 +16,16 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE AuthorisedValues %]
-
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname|html %] ([% basketno |html %]) for [% booksellername|html %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-    function updateColumnsVisibility(visible) {
-        if ( visible ) {
-            $("table .tax_excluded, .tax_included").show();
-        } else {
-            [% IF ( listincgst ) %]
-                $("table .tax_excluded").hide();
-            [% ELSE %]
-                $("table .tax_included").hide();
-            [% END %]
-        }
-    }
-
-    $(document).ready(function() {
-        if ( $('#toolbar').length ) {$('#toolbar').fixFloat();}
-        $("#show_all_details").click(function(){
-            updateColumnsVisibility($(this).is(":checked"));
-        });
-
-        $("#show_all_details").prop('checked', false);
-        updateColumnsVisibility(false);
-        [% UNLESS ( closedate ) %]
-            $('#addtoBasket').on('show', function () {
-               $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
-            });
-        [% END %]
-
-        $("body").on("click", ".del_user", function(e){
-            e.preventDefault();
-            del_user( $(this).data("borrowernumber") );
-        });
-
-        $("#add_user").on("click",function(e){
-            e.preventDefault();
-            UserSearchPopup();
-        });
-
-        $(".transfer_order").on("click",function(e){
-            e.preventDefault();
-            transfer_order_popup( $(this).data("ordernumber"));
-        });
-    });
-//]]>
-</script>
-
-[% UNLESS ( closedate ) %]
-<script type="text/javascript">
-//<![CDATA[
-
-            function transfer_order_popup(ordernumber) {
-                var url = "/cgi-bin/koha/acqui/transferorder.pl?"
-                    + "ordernumber=" + ordernumber
-                window.open(url, 'TransferOrder','width=600,height=400,toolbar=false,scrollbars=yes');
-            }
-
-            function confirm_ediorder() {
-                var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an EDIFACT order?"));
-                if (is_confirmed) {
-                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno |html %]";
-                }
-            }
-
-//]]>
-</script>
-[% ELSE %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function(){
-        $("#basketgroupid").change(function(){
-            if($(this).val() == "new"){
-                location.href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% booksellerid %]";
-            }
-        });
-    });
-//]]>
-</script>
-[% UNLESS ( grouped ) %]
-<script type="text/javascript">
-//<![CDATA[
-            function confirm_reopen() {
-                var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
-                var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
-                if (is_confirmed) {
-                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno |html %]";
-                }
-            }
-//]]>
-</script>
-[% END %]
-[% END %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            [% IF ( active ) %]
-                "aoColumnDefs": [
-                    [% UNLESS ( closedate ) %]
-                        { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-                    [% END %]
-                    { "sType": "anti-the", "aTargets": [ "anti-the" ] }
-                ],
-            [% END %]
-        } ) );
-        var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button"
-        } ) );
-        $("#reopenbutton").on("click",function(e){
-            e.preventDefault();
-            confirm_reopen();
-        });
-        // Generates a dynamic link for exporting the selections data as CSV
-        $("#exportbutton, #export-csv-menu a").click(function() {
-            // Building the url from currently checked boxes
-            var url = '/cgi-bin/koha/acqui/basket.pl';
-            url += $('#exportbutton').attr('href');
-            if($(this).attr("data-value")) {
-                url += '&amp;csv_profile=' + $(this).attr("data-value");
-            }
-            // And redirecting to the CSV page
-            location.href = url;
-            return false;
-        });
-    });
-
-    function UserSearchPopup(f) {
-        window.open(
-            "/cgi-bin/koha/acqui/add_user_search.pl",
-            'UserSearchPopup',
-            'width=840, height=500, scrollbars=yes, toolbar=no,'
-         );
-    }
-
-    function add_user(borrowernumber, borrowername) {
-        var ids = $("#users_ids").val();
-        if(ids.length > 0) {
-            ids = ids.split(':');
-        } else {
-            ids = new Array;
-        }
-        if (ids.indexOf(borrowernumber) < 0) {
-            ids.push(borrowernumber);
-            $("#users_ids").val(ids.join(':'));
-            var li = '<li id="user_'+borrowernumber+'">'+borrowername
-            + ' <a href="#" data-borrowernumber="'+borrowernumber+'" class="del_user"><i class="fa fa-trash"></i> '
-                + _("Delete user") + '</a></li>';
-            $("#users_names").append(li);
-            return 0;
-        }
-        return -1;
-    }
-
-    function del_user(borrowernumber) {
-      $("#user_"+borrowernumber).remove();
-      var ids = $("#users_ids").val().split(':');
-      ids.splice(ids.indexOf(borrowernumber.toString()), 1);
-      $("#users_ids").val(ids.join(':'));
-    }
-//]]>
-</script>
 <style type="text/css">
-.sortmsg {font-size: 80%;}
+    .sortmsg {font-size: 80%;}
 </style>
 </head>
+
 <body id="acq_basket" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -842,4 +680,160 @@
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+[% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    <script type="text/javascript">
+        function updateColumnsVisibility(visible) {
+            if ( visible ) {
+                $("table .tax_excluded, .tax_included").show();
+            } else {
+                [% IF ( listincgst ) %]
+                    $("table .tax_excluded").hide();
+                [% ELSE %]
+                    $("table .tax_included").hide();
+                [% END %]
+            }
+        }
+
+        $(document).ready(function() {
+            if ( $('#toolbar').length ) {$('#toolbar').fixFloat();}
+            $("#show_all_details").click(function(){
+                updateColumnsVisibility($(this).is(":checked"));
+            });
+
+            $("#show_all_details").prop('checked', false);
+            updateColumnsVisibility(false);
+            [% UNLESS ( closedate ) %]
+                $('#addtoBasket').on('show', function () {
+                   $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
+                });
+            [% END %]
+
+            $("body").on("click", ".del_user", function(e){
+                e.preventDefault();
+                del_user( $(this).data("borrowernumber") );
+            });
+
+            $("#add_user").on("click",function(e){
+                e.preventDefault();
+                UserSearchPopup();
+            });
+
+            $(".transfer_order").on("click",function(e){
+                e.preventDefault();
+                transfer_order_popup( $(this).data("ordernumber"));
+            });
+        });
+    </script>
+
+    [% UNLESS ( closedate ) %]
+        <script type="text/javascript">
+            function transfer_order_popup(ordernumber) {
+                var url = "/cgi-bin/koha/acqui/transferorder.pl?"
+                    + "ordernumber=" + ordernumber
+                window.open(url, 'TransferOrder','width=600,height=400,toolbar=false,scrollbars=yes');
+            }
+
+            function confirm_ediorder() {
+                var is_confirmed = confirm(_("Are you sure you want to close this basket and generate an EDIFACT order?"));
+                if (is_confirmed) {
+                    window.location = "/cgi-bin/koha/acqui/basket.pl?op=edi_confirm&basketno=[% basketno |html %]";
+                }
+            }
+        </script>
+    [% ELSE %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#basketgroupid").change(function(){
+                    if($(this).val() == "new"){
+                        location.href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% booksellerid %]";
+                    }
+                });
+            });
+        </script>
+        [% UNLESS ( grouped ) %]
+            <script type="text/javascript">
+                function confirm_reopen() {
+                    var skip = [% IF ( skip_confirm_reopen ) %] 1 [% ELSE %] 0 [% END %];
+                    var is_confirmed = skip || confirm(_("Are you sure you want to reopen this basket?"));
+                    if (is_confirmed) {
+                        window.location = "/cgi-bin/koha/acqui/basket.pl?op=reopen&basketno=[% basketno |html %]";
+                    }
+                }
+            </script>
+        [% END %]
+    [% END %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                [% IF ( active ) %]
+                    "aoColumnDefs": [
+                        [% UNLESS ( closedate ) %]
+                            { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
+                        [% END %]
+                        { "sType": "anti-the", "aTargets": [ "anti-the" ] }
+                    ],
+                [% END %]
+            } ) );
+            var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button"
+            } ) );
+            $("#reopenbutton").on("click",function(e){
+                e.preventDefault();
+                confirm_reopen();
+            });
+            // Generates a dynamic link for exporting the selections data as CSV
+            $("#exportbutton, #export-csv-menu a").click(function() {
+                // Building the url from currently checked boxes
+                var url = '/cgi-bin/koha/acqui/basket.pl';
+                url += $('#exportbutton').attr('href');
+                if($(this).attr("data-value")) {
+                    url += '&amp;csv_profile=' + $(this).attr("data-value");
+                }
+                // And redirecting to the CSV page
+                location.href = url;
+                return false;
+            });
+        });
+
+        function UserSearchPopup(f) {
+            window.open(
+                "/cgi-bin/koha/acqui/add_user_search.pl",
+                'UserSearchPopup',
+                'width=840, height=500, scrollbars=yes, toolbar=no,'
+             );
+        }
+
+        function add_user(borrowernumber, borrowername) {
+            var ids = $("#users_ids").val();
+            if(ids.length > 0) {
+                ids = ids.split(':');
+            } else {
+                ids = new Array;
+            }
+            if (ids.indexOf(borrowernumber) < 0) {
+                ids.push(borrowernumber);
+                $("#users_ids").val(ids.join(':'));
+                var li = '<li id="user_'+borrowernumber+'">'+borrowername
+                + ' <a href="#" data-borrowernumber="'+borrowernumber+'" class="del_user"><i class="fa fa-trash"></i> '
+                    + _("Delete user") + '</a></li>';
+                $("#users_names").append(li);
+                return 0;
+            }
+            return -1;
+        }
+
+        function del_user(borrowernumber) {
+            $("#user_"+borrowernumber).remove();
+            var ids = $("#users_ids").val().split(':');
+            ids.splice(ids.indexOf(borrowernumber.toString()), 1);
+            $("#users_ids").val(ids.join(':'));
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

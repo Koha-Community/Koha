@@ -1,4 +1,5 @@
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Search for vendor [% supplier %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -8,49 +9,8 @@
 }
 </style>
 <link rel="stylesheet" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $("table.baskets").dataTable($.extend(true, {}, dataTablesDefaults, {
-        'sDom': 't',
-        'bPaginate': false,
-        'bFilter': false,
-        'bInfo': false,
-        "aaSorting": [[ 1, "asc" ]],
-        "aoColumnDefs": [
-            { "sType": "title-string", "aTargets" : [ "title-string" ] },
-            { "sType": "title-numeric", "aTargets" : [ "title-numeric" ] },
-            { 'aTargets': [-1], 'bSortable': false }
-        ]
-    }));
-    $("#supplierlist").change(function() {
-        var id = $(this).find("option:selected").val();
-        window.location.href = "#" + id;
-    });
-    $(".modal").on("show", function(){
-        var basket = $(this).data("basketno");
-        var legend = _("Add order to basket %s").format(basket);
-        $(this).find("legend").html(legend);
-    });
-    $("#show_all_vendors").hide();
-    $("#show_active_vendors").on('click', function(e){
-        e.preventDefault();
-        $(".inactive").hide();
-        $("#show_active_vendors").hide();
-        $("#show_all_vendors").show();
-    });
-    $("#show_all_vendors").on('click', function(e){
-        e.preventDefault();
-        $(".inactive").show();
-        $("#show_all_vendors").hide();
-        $("#show_active_vendors").show();
-    });
-});
-//]]>
-</script>
-
 </head>
+
 <body id="acq_booksellers" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -222,4 +182,48 @@ $(document).ready(function() {
 [% INCLUDE 'acquisitions-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("table.baskets").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'sDom': 't',
+                'bPaginate': false,
+                'bFilter': false,
+                'bInfo': false,
+                "aaSorting": [[ 1, "asc" ]],
+                "aoColumnDefs": [
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                    { "sType": "title-numeric", "aTargets" : [ "title-numeric" ] },
+                    { 'aTargets': [-1], 'bSortable': false }
+                ]
+            }));
+            $("#supplierlist").change(function() {
+                var id = $(this).find("option:selected").val();
+                window.location.href = "#" + id;
+            });
+            $(".modal").on("show", function(){
+                var basket = $(this).data("basketno");
+                var legend = _("Add order to basket %s").format(basket);
+                $(this).find("legend").html(legend);
+            });
+            $("#show_all_vendors").hide();
+            $("#show_active_vendors").on('click', function(e){
+                e.preventDefault();
+                $(".inactive").hide();
+                $("#show_active_vendors").hide();
+                $("#show_all_vendors").show();
+            });
+            $("#show_all_vendors").on('click', function(e){
+                e.preventDefault();
+                $(".inactive").show();
+                $("#show_all_vendors").hide();
+                $("#show_active_vendors").show();
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

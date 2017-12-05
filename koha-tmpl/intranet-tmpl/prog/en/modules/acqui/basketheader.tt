@@ -1,5 +1,6 @@
 [% USE Branches %]
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo;
 [% IF ( add_form ) %]
@@ -9,8 +10,8 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
 </head>
+
 <body id="acq_basketheader" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -138,5 +139,10 @@
     [% END %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
