@@ -8,8 +8,8 @@
 # This script also locks the given script to prevent cronjobs from going to a repeating loop.
 #
 
-logdirectory="$(grep -Po '(?<=<logdir>).*?(?=</logdir>)' $KOHA_CONF)/cronjob-timer"
-logfile=$logdirectory/${1#*/}.log
+logdirectory="$(grep -Po '(?<=<logdir>).*?(?=</logdir>)' $KOHA_CONF)/cronjobs"
+logfile=$logdirectory/${1##*/}.log
 croncommand=$KOHA_PATH"/misc/$@"
 lockdirectory="${KOHA_CONF%/etc/koha-conf.xml}/var/lock"
 lockfile="$lockdirectory/${1##*/}.lock"
