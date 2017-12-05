@@ -24,6 +24,22 @@ use Scalar::Util qw( blessed );
 
 use Try::Tiny;
 
+=head1 NAME
+
+Koha::REST::V1::Library - Koha REST API for handling libraries (V1)
+
+=head1 API
+
+=head2 Methods
+
+=cut
+
+=head3 list
+
+Controller function that handles listing Koha::Library objects
+
+=cut
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
@@ -51,6 +67,12 @@ sub list {
     };
 }
 
+=head3 get
+
+Controller function that handles retrieving a single Koha::Library
+
+=cut
+
 sub get {
     my $c = shift->openapi->valid_input or return;
 
@@ -63,6 +85,12 @@ sub get {
 
     return $c->render( status => 200, openapi => $library );
 }
+
+=head3 add
+
+Controller function that handles adding a new Koha::Library object
+
+=cut
 
 sub add {
     my $c = shift->openapi->valid_input or return;
@@ -89,6 +117,12 @@ sub add {
     };
 }
 
+=head3 update
+
+Controller function that handles updating a Koha::Library object
+
+=cut
+
 sub update {
     my $c = shift->openapi->valid_input or return;
 
@@ -113,6 +147,12 @@ sub update {
         }
     };
 }
+
+=head3 delete
+
+Controller function that handles deleting a Koha::Library object
+
+=cut
 
 sub delete {
     my $c = shift->openapi->valid_input or return;
