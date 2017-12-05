@@ -930,7 +930,20 @@
             <xsl:if test="marc:subfield[@code='t']">
     <span class="results_summary">
     <span class="label">Source: </span>
-            <xsl:value-of select="marc:subfield[@code='t']"/>
+        <xsl:choose>
+        <!-- Add a link to the parent record -->
+            <xsl:when test="marc:subfield[@code='w'] and $controlField003">
+                <a>
+                    <xsl:attribute name="href">
+                        /cgi-bin/koha/catalogue/search.pl?q=Control-number:
+                        <xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template>
+                        and cni:<xsl:value-of select="$controlField003"/>
+                    </xsl:attribute>
+                    <xsl:value-of select="marc:subfield[@code='t']"/>
+                </a>
+            </xsl:when>
+        </xsl:choose>
+        <!-- Added a link to the parent record -->
     </span>
             </xsl:if>
         </xsl:for-each>
