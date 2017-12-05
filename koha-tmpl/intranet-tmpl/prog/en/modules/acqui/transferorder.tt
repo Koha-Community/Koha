@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
 [%- USE KohaDates -%]
@@ -5,29 +6,8 @@
     <style type="text/css">
     #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
     </style>
-[% IF transferred %]
-    <script type="text/javascript">
-    //<![CDATA[
-        opener.location.reload();
-        window.close();
-    //]]>
-    </script>
-[% END %]
-
-[% IF ( bookselleridfrom ) %]
-    <script type="text/javascript">
-    //<![CDATA[
-        $(document).ready(function(){
-            $(".confirm_transfer").on("click",function(){
-                return confirm( _("Transfer order to this basket?") );
-            });
-        });
-    //]]>
-    </script>
-[% END %]
-
-
 </head>
+
 <body id="acq_transferorder" class="acq">
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
@@ -149,5 +129,24 @@
 
 </div>
 </div>
-</body>
-</html>
+
+[% MACRO jsinclude BLOCK %]
+    [% IF transferred %]
+        <script type="text/javascript">
+            opener.location.reload();
+            window.close();
+        </script>
+    [% END %]
+
+    [% IF ( bookselleridfrom ) %]
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".confirm_transfer").on("click",function(){
+                    return confirm( _("Transfer order to this basket?") );
+                });
+            });
+        </script>
+    [% END %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

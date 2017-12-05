@@ -1,29 +1,11 @@
 [% USE Koha %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername %][% ELSE %]Orders with uncertain prices[% END %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
- $(document).ready(function() {
-    var uncertainpricet = $("#uncertainpricet").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    } ) );
-    $(".check_uncertain").on("change",function(){
-        var form = document.getElementById("uncertainprices");
-        var ordernumber = $(this).data("ordernumber");
-        uncheckbox( form, ordernumber );
-    });
- });
-var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the price and try again!");
- //]]>
-</script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
 </head>
+
 <body id="acq_uncertainprice" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -154,4 +136,27 @@ var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the p
 [% INCLUDE 'vendor-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var uncertainpricet = $("#uncertainpricet").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1, -2, -3 ], "bSortable": false, "bSearchable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+            $(".check_uncertain").on("change",function(){
+                var form = document.getElementById("uncertainprices");
+                var ordernumber = $(this).data("ordernumber");
+                uncheckbox( form, ordernumber );
+            });
+        });
+        var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the price and try again!");
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

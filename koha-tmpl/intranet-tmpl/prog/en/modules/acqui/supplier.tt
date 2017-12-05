@@ -85,86 +85,13 @@
     [% END %]
 [% END %]
 
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Vendor [% name %]</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-function confirm_deletion() {
-    if (confirm(_("Confirm deletion of this vendor ?"))) {
-        window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=delete";
-    }
-}
-
-function add_contact() {
-    var new_contact = $('#contact-template').clone();
-    var timestamp = new Date().getTime();
-    $(new_contact).removeAttr('id');
-    $('input, textarea', new_contact).each(function () {
-        $(this).attr('id', $(this).attr('id') + '_' + timestamp);
-    });
-    $('label', new_contact).each(function () {
-        $(this).attr('for', $(this).attr('for') + '_' + timestamp);
-    });
-    $(new_contact).insertBefore(this);
-    if ($('.supplier-contact').length === 2) { // First contact
-        $.each(['.contact_acqprimary', '.contact_serialsprimary', '.contact_orderacquisition', '.contact_claimacquisition', '.contact_claimissues'], function (idx, checkbox) {
-            $(checkbox, new_contact).click();
-        });
-    }
-    $('input[name="contact_name"]', new_contact).focus();
-    return false;
-}
-
-function delete_contact(ev) {
-    $(this).parents('.supplier-contact').remove();
-    ev.preventDefault();
-}
-
- $(document).ready(function() {
-    var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-          { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-          { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        'sDom': 't'
-    } ) );
-    $('body').on('click', '.delete-contact', null, delete_contact);
-    $('#add-contact').click(add_contact);
-    $('body').on('click', '.contact_acqprimary', null, function () {
-        if ($(this).is(':checked')) {
-            $('.contact_acqprimary').filter(':checked').not(this).prop('checked', false);
-            $('.contact_acqprimary_hidden').each(function () {
-                $(this).val('0');
-            });
-        }
-        $(this).next('.contact_acqprimary_hidden').val('1');
-    });
-    $('body').on('click', '.contact_serialsprimary', null, function () {
-        if ($(this).is(':checked')) {
-            $('.contact_serialsprimary').filter(':checked').not(this).prop('checked', false);
-            $('.contact_serialsprimary_hidden').each(function () {
-                $(this).val('0');
-            });
-        }
-        $(this).next('.contact_serialsprimary_hidden').val($(this).is(':checked') ? '1' : '0');
-    });
-    $('body').on('click', '.contact_orderacquisition', null, function () {
-        $(this).next('.contact_orderacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
-    });
-    $('body').on('click', '.contact_claimacquisition', null, function () {
-        $(this).next('.contact_claimacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
-    });
-    $('body').on('click', '.contact_claimissues', null, function () {
-        $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
-    });
- });
-//]]>
-</script>
 </head>
+
 <body id="acq_supplier" class="acq">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
@@ -422,4 +349,81 @@ function delete_contact(ev) {
 [% INCLUDE 'vendor-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        function confirm_deletion() {
+            if (confirm(_("Confirm deletion of this vendor ?"))) {
+                window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=delete";
+            }
+        }
+
+        function add_contact() {
+            var new_contact = $('#contact-template').clone();
+            var timestamp = new Date().getTime();
+            $(new_contact).removeAttr('id');
+            $('input, textarea', new_contact).each(function () {
+                $(this).attr('id', $(this).attr('id') + '_' + timestamp);
+            });
+            $('label', new_contact).each(function () {
+                $(this).attr('for', $(this).attr('for') + '_' + timestamp);
+            });
+            $(new_contact).insertBefore(this);
+            if ($('.supplier-contact').length === 2) { // First contact
+                $.each(['.contact_acqprimary', '.contact_serialsprimary', '.contact_orderacquisition', '.contact_claimacquisition', '.contact_claimissues'], function (idx, checkbox) {
+                    $(checkbox, new_contact).click();
+                });
+            }
+            $('input[name="contact_name"]', new_contact).focus();
+            return false;
+        }
+
+        function delete_contact(ev) {
+            $(this).parents('.supplier-contact').remove();
+            ev.preventDefault();
+        }
+
+         $(document).ready(function() {
+            var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                'sDom': 't'
+            } ) );
+            $('body').on('click', '.delete-contact', null, delete_contact);
+            $('#add-contact').click(add_contact);
+            $('body').on('click', '.contact_acqprimary', null, function () {
+                if ($(this).is(':checked')) {
+                    $('.contact_acqprimary').filter(':checked').not(this).prop('checked', false);
+                    $('.contact_acqprimary_hidden').each(function () {
+                        $(this).val('0');
+                    });
+                }
+                $(this).next('.contact_acqprimary_hidden').val('1');
+            });
+            $('body').on('click', '.contact_serialsprimary', null, function () {
+                if ($(this).is(':checked')) {
+                    $('.contact_serialsprimary').filter(':checked').not(this).prop('checked', false);
+                    $('.contact_serialsprimary_hidden').each(function () {
+                        $(this).val('0');
+                    });
+                }
+                $(this).next('.contact_serialsprimary_hidden').val($(this).is(':checked') ? '1' : '0');
+            });
+            $('body').on('click', '.contact_orderacquisition', null, function () {
+                $(this).next('.contact_orderacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
+            });
+            $('body').on('click', '.contact_claimacquisition', null, function () {
+                $(this).next('.contact_claimacquisition_hidden').val($(this).is(':checked') ? '1' : '0');
+            });
+            $('body').on('click', '.contact_claimissues', null, function () {
+                $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
