@@ -809,6 +809,7 @@ sub GetReserveStatus {
   ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber);
   ($status, $reserve, $all_reserves) = &CheckReserves(undef, $barcode);
   ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber,undef,$lookahead);
+  ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber,undef, undef, $limit);
 
 Find a book in the reserves.
 
@@ -834,7 +835,7 @@ table in the Koha database.
 =cut
 
 sub CheckReserves {
-    my ( $item, $barcode, $lookahead_days, $ignore_borrowers) = @_;
+    my ( $item, $barcode, $lookahead_days, $limit, $ignore_borrowers) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     my $select;
@@ -849,7 +850,6 @@ sub CheckReserves {
            items.homebranch,
            items.holdingbranch
            FROM   items
-           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
            LEFT JOIN itemtypes   ON items.itype   = itemtypes.itemtype
         ";
     }
@@ -864,7 +864,6 @@ sub CheckReserves {
            items.homebranch,
            items.holdingbranch
            FROM   items
-           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
            LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
         ";
     }
@@ -889,7 +888,7 @@ sub CheckReserves {
     return if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $ignore_borrowers);
+    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $limit, $ignore_borrowers);
 
     # $priority and $highest are used to find the most important item
     # in the list returned by &_Findgroupreserve. (The lower $priority,
@@ -1775,7 +1774,7 @@ sub _FixPriority {
 
 =head2 _Findgroupreserve
 
-  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead, $ignore_borrowers);
+  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber, $lookahead, $limit, $ignore_borrowers);
 
 Looks for a holds-queue based item-specific match first, then for a holds-queue title-level match, returning the
 first match found.  If neither, then we look for non-holds-queue based holds.
@@ -1789,7 +1788,7 @@ C<biblioitemnumber>.
 =cut
 
 sub _Findgroupreserve {
-    my ( $bibitem, $biblio, $itemnumber, $lookahead, $ignore_borrowers) = @_;
+    my ( $bibitem, $biblio, $itemnumber, $lookahead, $limit, $ignore_borrowers) = @_;
     my $dbh   = C4::Context->dbh;
 
     my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
@@ -1821,6 +1820,7 @@ sub _Findgroupreserve {
         AND suspend = 0
         ORDER BY priority
     };
+    $item_level_target_query .= "LIMIT ".$limit if $limit;
     my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
     my @results;
@@ -1865,6 +1865,7 @@ sub _Findgroupreserve {
         AND suspend = 0
         ORDER BY priority
     };
+    $title_level_target_query .= "LIMIT ".$limit if $limit;
     $sth = $dbh->prepare($title_level_target_query);
     $sth->execute($itemnumber, $lookahead||0);
     @results = ();
@@ -1904,6 +1905,7 @@ sub _Findgroupreserve {
           AND suspend = 0
           ORDER BY priority
     };
+    $query .= "LIMIT ".$limit if $limit;
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $itemnumber, $lookahead||0);
     @results = ();

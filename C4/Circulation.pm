@@ -2772,7 +2772,7 @@ sub CanBookBeRenewed {
     my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber )
       or return;
 
-    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
+    my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber, undef, undef, 1);
 
     # This item can fill one or more unfilled reserve, can those unfilled reserves
     # all be filled by other available items?
@@ -2799,12 +2799,13 @@ sub CanBookBeRenewed {
                 { columns => 'itemnumber' }
             )->get_column('itemnumber')->all();
 
+            my $size = @itemnumbers;
             # Get all other reserves that could have been filled by this item
             my @borrowernumbers;
             while (1) {
                 my ( $reserve_found, $reserve, undef ) =
-                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, \@borrowernumbers );
-
+                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, $size, \@borrowernumbers );
+                  
                 if ($reserve_found) {
                     push( @borrowernumbers, $reserve->{borrowernumber} );
                 }
