@@ -1,130 +1,12 @@
-[% USE Branches %]
-
-[% INCLUDE 'doc-head-open.inc' %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    var sTable;
-	 $(document).ready(function() {
-         sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": 't',
-                "aoColumnDefs": [
-                    { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] },
-                    { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
-                ],
-            "bPaginate": false
-        }));
-        sTable.fnAddFilters("filter", "200");
-	    $('#supplierid').change(function() {
-    	    $('#claims').submit();
-	    });
-
-	    // Checkboxes : Select All / None
-	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
-
-        $("#CheckAll").click(function() {
-            $("#claimst tr:visible :checkbox").prop('checked', $("#CheckAll").is(':checked'));
-        });
-
-        // Generates a dynamic link for exporting the selections data as CSV
-	    $("#ExportSelected").click(function() {
-               // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
-             var selected = $("input[name=serialid]:checked");
-
-        if (selected.length == 0) {
-            alert(_("Please select at least one item to export."));
-            return false;
-        }
-
-        // Building the url from currently checked boxes
-        var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
-        for (var i = 0; i < selected.length; i++) {
-            url += '&amp;serialid=' + selected[i].value;
-        }
-        url += '&amp;csv_profile=' + $("#csv_profile_for_export option:selected").val();
-        // And redirecting to the CSV page
-        location.href = url;
-        return false;
-        });
-        $("#filterByDate").on("click",function(e){
-            e.preventDefault();
-            filterByDate();
-        });
-        $("#clearfilter").on("click",function(e){
-            e.preventDefault();
-            $("#from,#to").val("");
-            $("table#claimst tbody tr").show();
-        });
-        $("#claims_form").on("submit",function(){
-             return checkForm();
-        });
-        $("#filter_claims_form").on("submit",function(){
-            return false;
-        });
-	 });
-
-	// Checks if the form can be sent (at least one checkbox must be checked)
-	function checkForm() {
-	    if ($("input:checked").length == 0) {
-        alert(_("Please select at least one issue."));
-		return false;
-	    }
-	}
-
-	// Filter by date
-	function filterByDate() {
-        var beginDate = Date_from_syspref($("#from").val()).getTime();
-        var endDate   = Date_from_syspref($("#to").val()).getTime();
-	    
-	    // Checks if the beginning date is valid
-	    if (!parseInt(beginDate)) {
-		alert(_("The beginning date is missing or invalid."));
-		return false;
-	    }
-
-	    // Checks if the ending date is valid
-	    if (!parseInt(endDate)) {
-		alert(_("The ending date is missing or invalid."));
-		return false;
-	    }
-
-	    // Checks if beginning date is before ending date
-	    if (beginDate > endDate) {
-		// If not, we swap them
-		var tmpDate = endDate;
-		endDate = beginDate;
-		beginDate = tmpDate;
-	    }
-	   
-	    // We hide everything
-	    $("table#claimst tbody tr").hide();
-
-	    // For each date in the table
-	    $(".planneddate").each(function() {
-
-		// We make a JS Date Object, according to the locale
-		var pdate = Date_from_syspref($(this).text()).getTime();
-
-		// And checks if the date is between the beginning and ending dates
-		if (pdate > beginDate && 
-		    pdate < endDate) {
-			// If so, we can show the row
-			$(this).parent().show();
-		    }
-
-	    });
-	}
-
-
-//]]>
-</script>
 </head>
+
 <body id="ser_claims" class="ser">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'serials-search.inc' %]
@@ -321,4 +203,122 @@
 [% INCLUDE 'serials-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        var sTable;
+        $(document).ready(function() {
+            sTable = $("#claimst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                    "aoColumnDefs": [
+                        { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+                        { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] },
+                        { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
+                    ],
+                "bPaginate": false
+            }));
+            sTable.fnAddFilters("filter", "200");
+            $('#supplierid').change(function() {
+                $('#claims').submit();
+            });
+
+            // Checkboxes : Select All / None
+            $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
+
+            $("#CheckAll").click(function() {
+                $("#claimst tr:visible :checkbox").prop('checked', $("#CheckAll").is(':checked'));
+            });
+
+            // Generates a dynamic link for exporting the selections data as CSV
+            $("#ExportSelected").click(function() {
+                // We need to use "input[name=serialid]:checked" instead of "input:checked". Otherwise, the "check all" box will pass the value of "on" as a serialid, which produces a SQL error.
+                var selected = $("input[name=serialid]:checked");
+
+            if (selected.length == 0) {
+                alert(_("Please select at least one item to export."));
+                return false;
+            }
+
+            // Building the url from currently checked boxes
+            var url = '/cgi-bin/koha/serials/lateissues-export.pl?supplierid=&amp;op=claims';
+            for (var i = 0; i < selected.length; i++) {
+                url += '&amp;serialid=' + selected[i].value;
+            }
+            url += '&amp;csv_profile=' + $("#csv_profile_for_export option:selected").val();
+            // And redirecting to the CSV page
+            location.href = url;
+            return false;
+            });
+            $("#filterByDate").on("click",function(e){
+                e.preventDefault();
+                filterByDate();
+            });
+            $("#clearfilter").on("click",function(e){
+                e.preventDefault();
+                $("#from,#to").val("");
+                $("table#claimst tbody tr").show();
+            });
+            $("#claims_form").on("submit",function(){
+                return checkForm();
+            });
+            $("#filter_claims_form").on("submit",function(){
+                return false;
+            });
+         });
+
+        // Checks if the form can be sent (at least one checkbox must be checked)
+        function checkForm() {
+            if ($("input:checked").length == 0) {
+            alert(_("Please select at least one issue."));
+            return false;
+            }
+        }
+
+        // Filter by date
+        function filterByDate() {
+            var beginDate = Date_from_syspref($("#from").val()).getTime();
+            var endDate   = Date_from_syspref($("#to").val()).getTime();
+
+            // Checks if the beginning date is valid
+            if (!parseInt(beginDate)) {
+                alert(_("The beginning date is missing or invalid."));
+                return false;
+            }
+
+            // Checks if the ending date is valid
+            if (!parseInt(endDate)) {
+                alert(_("The ending date is missing or invalid."));
+                return false;
+            }
+
+            // Checks if beginning date is before ending date
+            if (beginDate > endDate) {
+                // If not, we swap them
+                var tmpDate = endDate;
+                endDate = beginDate;
+                beginDate = tmpDate;
+            }
+
+            // We hide everything
+            $("table#claimst tbody tr").hide();
+
+            // For each date in the table
+            $(".planneddate").each(function() {
+
+            // We make a JS Date Object, according to the locale
+            var pdate = Date_from_syspref($(this).text()).getTime();
+
+            // And checks if the date is between the beginning and ending dates
+            if (pdate > beginDate &&
+                pdate < endDate) {
+                // If so, we can show the row
+                $(this).parent().show();
+                }
+            });
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

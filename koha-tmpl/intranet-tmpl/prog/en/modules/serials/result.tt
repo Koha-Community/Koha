@@ -1,24 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function(){
-        $(".select_title").on("click",function(e){
-            e.preventDefault();
-            var biblionumber = $(this).data("biblionumber");
-            GetIt( biblionumber, $(this) );
-        });
-    });
-    function GetIt(bibno,title) {
-        title = title.parents('tr').find('.title').text();
-        opener.document.f.biblionumber.value = bibno;
-        opener.document.f.title.value = title;
-        window.close();
-    }
-//]]>
-</script>
 </head>
+
 <body id="ser_result" class="ser">
 
 <div id="doc" class="yui-t7">
@@ -78,5 +63,23 @@
 <div id="closewindow"><a class="btn btn-default btn-default close" href="#">Close</a></div>
 
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".select_title").on("click",function(e){
+                e.preventDefault();
+                var biblionumber = $(this).data("biblionumber");
+                GetIt( biblionumber, $(this) );
+            });
+        });
+        function GetIt(bibno,title) {
+            title = title.parents('tr').find('.title').text();
+            opener.document.f.biblionumber.value = bibno;
+            opener.document.f.title.value = title;
+            window.close();
+        }
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

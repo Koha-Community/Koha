@@ -1,26 +1,11 @@
 [% USE Branches %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Check expiration</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" language="JavaScript">
-// <![CDATA[
-    $(document).ready(function(){
-        $(".renew_subscription").on("click",function(e){
-            e.preventDefault();
-            var subscriptionid = $(this).data("subscriptionid");
-            popup( subscriptionid );
-        });
-    });
-	function popup(subscriptionid) {
-	   newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
-	}
-
-     // ]]>
-</script>
-<!-- End of additions -->
 </head>
+
 <body id="ser_checkexpiration" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
@@ -128,4 +113,21 @@
 [% INCLUDE 'serials-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript" language="JavaScript">
+        $(document).ready(function(){
+            $(".renew_subscription").on("click",function(e){
+                e.preventDefault();
+                var subscriptionid = $(this).data("subscriptionid");
+                popup( subscriptionid );
+            });
+        });
+        function popup(subscriptionid) {
+           newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

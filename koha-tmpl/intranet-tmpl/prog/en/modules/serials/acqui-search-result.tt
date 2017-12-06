@@ -1,24 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Select vendor</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-
-function GetIt(aqbooksellerid,name)
-{
-  opener.document.f.aqbooksellerid.value = aqbooksellerid;
-  opener.document.f.aqbooksellername.value = name;
-  window.close();
-}
-$(document).ready(function(){
-    $(".select_vendor").on("click",function(e){
-        e.preventDefault();
-        var vendorname = $(this).data("vendorname");
-        var vendorid = $(this).data("vendorid");
-        GetIt( vendorid, vendorname );
-    });
-});
-</script>
 </head>
+
 <body id="ser_acqui-search-result" class="ser">
 
 <div id="doc" class="yui-t7">
@@ -54,5 +39,24 @@ $(document).ready(function(){
     <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Cancel</a></div>
 
 </div>
+
+[% MACRO jsinclude BLOCK %]
+  <script type="text/javascript">
+    function GetIt(aqbooksellerid,name){
+      opener.document.f.aqbooksellerid.value = aqbooksellerid;
+      opener.document.f.aqbooksellername.value = name;
+      window.close();
+    }
+
+    $(document).ready(function(){
+        $(".select_vendor").on("click",function(e){
+            e.preventDefault();
+            var vendorname = $(this).data("vendorname");
+            var vendorid = $(this).data("vendorid");
+            GetIt( vendorid, vendorname );
+        });
+    });
+  </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
