@@ -48,7 +48,7 @@ sub read_from_file {
     };
 
     if ($@) {
-        warn "Error reading file $file";
+        die "\nError reading file $file.\nTry running this again as the koha instance user (or use the koha-shell command in debian)\n\n";
     }
 
     return $xml;
