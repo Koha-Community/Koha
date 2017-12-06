@@ -85,7 +85,7 @@ subtest 'Build all sources' => sub {
 
 
 subtest 'Test length of some generated fields' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     # Test the length of a returned character field
     my $bookseller = $builder->build({ source  => 'Aqbookseller' });
@@ -94,6 +94,9 @@ subtest 'Test length of some generated fields' => sub {
         'The length for a generated string (phone) should not be zero' );
     is( length( $bookseller->{phone} ) <= $max, 1,
         'Check maximum length for a generated string (phone)' );
+
+    my $item = $builder->build({ source => 'Item' });
+    is( $item->{replacementprice}, sprintf("%.2f", $item->{replacementprice}), "The number of decimals for floats should not be more than 2" );
 };
 
 
