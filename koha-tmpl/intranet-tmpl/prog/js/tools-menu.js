@@ -8,6 +8,8 @@
         $('#navmenulist a[href$="/cgi-bin/koha/patron_lists/lists.pl"]').css('font-weight','bold');
       } else if ((path+location.search).indexOf("batchMod.pl?del=1") >= 0 ) {
         $('#navmenulist a[href$="/cgi-bin/koha/tools/batchMod.pl?del=1"]').css('font-weight','bold');
+      } else if (path.indexOf("quotes-upload.pl") >= 0 ){
+        $('#navmenulist a[href$="/cgi-bin/koha/tools/quotes.pl"]').css('font-weight','bold');
       } else {
         $('#navmenulist a[href$="/' + path + '"]').css('font-weight','bold');
       }
