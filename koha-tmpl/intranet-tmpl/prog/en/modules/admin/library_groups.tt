@@ -270,10 +270,10 @@
         </td>
         <td>
             [% IF group.branchcode %]
-                <button class="btn btn-sm remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
+                <button class="btn btn-default btn-sm remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
-                    <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
+                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li>
                             <a id="add-group-[% group.id %]" href="#" class="add-group" data-group-id="[% group.id %]">
@@ -296,7 +296,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
+                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         [% FOREACH library IN group.libraries_not_direct_children %]
                             <li>
