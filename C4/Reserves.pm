@@ -890,8 +890,9 @@ sub ModReserve {
 
     my $hold;
     unless ( $reserve_id ) {
-        $hold = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber, itemnumber => $itemnumber });
-        return unless $hold; # FIXME Should raise an exception
+        my $holds = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $borrowernumber, itemnumber => $itemnumber });
+        return unless $holds->count; # FIXME Should raise an exception
+        $hold = $holds->next;
         $reserve_id = $hold->reserve_id;
     }
 

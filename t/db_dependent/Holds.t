@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 54;
+use Test::More tests => 55;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
@@ -146,6 +146,15 @@ $hold = Koha::Holds->find( $reserve_id );
 ok( $hold->priority eq '4', "Test ModReserve, priority changed correctly" );
 ok( $hold->suspend, "Test ModReserve, suspend hold" );
 is( $hold->suspend_until, '2013-01-01 00:00:00', "Test ModReserve, suspend until date" );
+
+ModReserve({ # call without reserve_id
+    rank          => '3',
+    biblionumber  => $item_bibnum,
+    itemnumber    => $itemnumber,
+    borrowernumber => $borrowernumber,
+});
+$hold = Koha::Holds->find( $reserve_id );
+ok( $hold->priority eq '3', "Test ModReserve, priority changed correctly" );
 
 ToggleSuspend( $reserve_id );
 $hold = Koha::Holds->find( $reserve_id );
