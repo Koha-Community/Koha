@@ -34,7 +34,7 @@ my $builder = t::lib::TestBuilder->new();
 
 $ENV{ DEBUG } = 0;
 
-my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 
 subtest 'Tests for CanBookBeIssued related to dateexpiry' => sub {
     plan tests => 4;

@@ -42,7 +42,7 @@ my $item = $builder->build(
     }
 );
 
-my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my $patron = $builder->build(
     {
         source => 'Borrower',

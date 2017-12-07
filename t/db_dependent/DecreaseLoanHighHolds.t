@@ -51,7 +51,7 @@ C4::Context->_new_userenv('xxx');
 C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'Midway Public Library', '', '', '' );
 is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
-my $patron_category = $builder->build({ source => 'Category', value => { categorycode => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
 my @patrons;
 for my $i ( 1 .. 20 ) {
     my $patron = Koha::Patron->new(
