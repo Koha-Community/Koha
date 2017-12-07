@@ -313,7 +313,6 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
             $template->param( elasticsearch_fatal_config_error => $_->message );
             $es_config_error = 1;
         }
-        warn p($_);
     };
     if ( !$es_config_error ) {
 
