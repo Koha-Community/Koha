@@ -233,10 +233,10 @@ delete_all( $userid );
 sub add {
     my ( $userid, $current_session_id, $previous_sessionid, $total, $query_cgi_b, $query_cgi_a ) = @_;
 
-    my $days_ago_2 = dt_from_string()->add_duration( DateTime::Duration->new( days => -2 ) );
-    my $days_ago_4 = dt_from_string()->add_duration( DateTime::Duration->new( days => -4 ) );
-    my $days_ago_6 = dt_from_string()->add_duration( DateTime::Duration->new( days => -6 ) );
-    my $days_ago_8 = dt_from_string()->add_duration( DateTime::Duration->new( days => -8 ) );
+    my $days_ago_2 = dt_from_string()->add_duration( DateTime::Duration->new( days => -2, minutes => 1 ) );
+    my $days_ago_4 = dt_from_string()->add_duration( DateTime::Duration->new( days => -4, minutes => 1 ) );
+    my $days_ago_6 = dt_from_string()->add_duration( DateTime::Duration->new( days => -6, minutes => 1 ) );
+    my $days_ago_8 = dt_from_string()->add_duration( DateTime::Duration->new( days => -8, minutes => 1 ) );
 
     my $query_desc_b1_p = q{first previous biblio search};
     my $first_previous_biblio_search = {
