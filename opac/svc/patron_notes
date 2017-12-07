@@ -90,7 +90,7 @@ if ($is_ajax) {
                     },
                 );
 
-                my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->ReplytoDefault || C4::Context->preference('KohaAdminEmailAddress');
+                my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->preference('ReplytoDefault') || C4::Context->preference('KohaAdminEmailAddress');
                 my $from_address = $patron->email || $patron->emailpro || $patron->B_email;
 
                 C4::Letters::EnqueueLetter({
