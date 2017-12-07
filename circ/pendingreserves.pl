@@ -29,6 +29,7 @@ use Koha::Biblios;
 use C4::Debug;
 use Koha::DateUtils;
 use DateTime::Duration;
+use C4::RotatingCollections;
 
 my $input = new CGI;
 my $startdate = $input->param('from');
@@ -100,7 +101,7 @@ my $strsth =
                     ORDER BY items.itemnumber SEPARATOR '|') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '|') l_location,
-            GROUP_CONCAT(DISTINCT(CONCAT_WS(' Col ', items.cn_sort, collections_tracking.colId))
+            GROUP_CONCAT(DISTINCT items.cn_sort
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
             GROUP_CONCAT(DISTINCT items.enumchron
                     ORDER BY items.itemnumber SEPARATOR '<br/>') l_enumchron,
@@ -113,13 +114,14 @@ my $strsth =
             count(DISTINCT items.itemnumber) as icount,
             count(DISTINCT reserves.borrowernumber) as rcount,
             borrowers.firstname,
-            borrowers.surname
+            borrowers.surname,
+            GROUP_CONCAT(DISTINCT items.itemnumber
+                    ORDER BY items.itemnumber SEPARATOR '|') l_itemnumbers
     FROM  reserves
         LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
         LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
-        LEFT JOIN collections_tracking ON collections_tracking.itemnumber = items.itemnumber
         LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
     WHERE
     reserves.found IS NULL
@@ -150,6 +152,8 @@ while ( my $data = $sth->fetchrow_hashref ) {
     if ($record){
         $data->{subtitle} = [ $record->subtitles ];
     }
+    $data = check_issuingrules($data);
+
     push(
         @reservedata, {
             reservedate     => $data->{l_reservedate},
@@ -187,3 +191,56 @@ $template->param(
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub check_issuingrules {
+    my ($data) = @_;
+
+    my $borrower = Koha::Patrons->find($data->{borrowernumber});
+    my @itemnumbers = split('\|', $data->{l_itemnumbers});
+    my $itemcallnumbers;
+    my $locations;
+    my $itypes;
+    my $holdingbranches;
+    my $count;
+    my $rotColUrl = "/cgi-bin/koha/rotating_collections/addItems.pl?colId=";
+    foreach my $itemnumber (@itemnumbers) {
+        my $item = Koha::Items->find( $itemnumber );
+        my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+            {   categorycode => $borrower->{categorycode},
+                itemtype     => $item->itype,
+                branchcode   => $data->{l_branch},
+                ccode        => $item->ccode,
+                permanent_location => $item->permanent_location,
+                sub_location => $item->sub_location,
+                genre        => $item->genre,
+                circulation_level => $item->circulation_level,
+                reserve_level => $item->reserve_level,
+            }
+        );
+        if ($issuing_rule->reservesallowed && $issuing_rule->reservesallowed != 0) {
+            my $colid = GetItemsCollection($itemnumber);
+
+            if ($colid) {
+                $itemcallnumbers .= $item->cn_sort." <a href=".$rotColUrl.$colid.">Col. ".$colid."</a><br/>";
+            } else {
+                $itemcallnumbers .= $item->cn_sort."<br/>";
+            }
+            $locations .= $item->location."|";
+            $locations =~ s/(.*)\1/$1/g;
+            $itypes .= $item->itype."|";
+            $itypes =~ s/(.*)\1/$1/g;
+            $holdingbranches .= $item->holdingbranch."|";
+            $holdingbranches =~ s/(.*)\1/$1/g;
+            $count++;
+        }
+
+    }
+
+    $data->{l_itemcallnumber} = $itemcallnumbers;
+    $data->{l_location} = $locations;
+    $data->{l_itype} = $itypes;
+    $data->{l_holdingbranch} = $holdingbranches;
+    $data->{icount} = $count;
+    return $data
+
+}

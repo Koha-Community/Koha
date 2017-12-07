@@ -70,36 +70,6 @@ $(document).ready(function() {
           holdst.fnFilter( $(this).val(), 11 );
       } );
   } );
-  // Generate links for rotating collections
-  var rotColUrl = "/cgi-bin/koha/rotating_collections/addItems.pl?colId=";
-  var allNodes = holdst.fnGetNodes();
-  var columnNodes = [];
-
-  for (var i = 0; i < allNodes.length; i++) {
-    columnNodes.push($(allNodes[i]).find("td:eq(5)"));
-  }
-
-  columnNodes.map(function (node) {
-    var tdRowspan = $(node).attr('rowspan');
-    var newContent = $(node).clone().empty();
-      if (!tdRowspan) {
-        var html = node.html();
-        var cellCallNums = html.split('<br>');
-        cellCallNums.forEach(function(row) {
-          var splitRow = row.split('Col');
-          var callNum = splitRow[0];
-          if (splitRow.length > 1) {
-            var colId = splitRow[1].trim();
-            $(newContent).append(callNum);
-            $(newContent).append($('<a href="' + rotColUrl + colId + '">Col. ' + colId + '</a><br>'));
-          }
-          else {
-            $(newContent).append(callNum + "<br>");
-          }
-        });
-        $(node).replaceWith(newContent);
-      }
-  });
 });
 //]]>
 </script>
@@ -129,9 +99,9 @@ $(document).ready(function() {
         <th>Items available</th>
         <th>Patrons with holds</th>
         <th>First patron</td>
-        <th class="anti-the">Title</th>
-        <th class="string-sort">Libraries</th>
-        <th>Available call numbers</th>
+        <th class="anti-the" style="min-width:120px">Title</th>
+        <th class="string-sort" style="min-width:200px">Libraries</th>
+        <th style="min-width:150px">Available call numbers</th>
         <th>Available copy numbers</th>
         <th>Itemnotes</th>
         <th>Available enumeration</th>
@@ -162,23 +132,29 @@ $(document).ready(function() {
             <td>"</td>
         [% END %]
         <td>
+            <ul>
             [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
-                [% Branches.GetName ( holdingbranch ) %]<br>
+                <li>[% Branches.GetName ( holdingbranch ) %]</li>
             [% END %]
+            </ul>
         </td>
         <td>[% reserveloo.itemcallnumber %]</td>
         <td>[% reserveloo.copyno %]</td>
         <td>[% reserveloo.itemnotes %]<br/></td>
         <td>[% reserveloo.enumchron %]</td>
         <td>
-        [% FOREACH itype IN reserveloo.itypes %]
-            [% ItemTypes.GetDescription( itype ) %]
-        [% END %]
+          <ul>
+          [% FOREACH itype IN reserveloo.itypes %]
+              <li>[% ItemTypes.GetDescription( itype ) %]</li>
+          [% END %]
+          </ul>
         </td>
         <td>
-        [% FOREACH loc IN reserveloo.locations %]
-            [% AuthorisedValues.GetByCode('LOC', loc) %]<br>
-        [% END %]
+          <ul>
+          [% FOREACH loc IN reserveloo.locations %]
+              <li>[% AuthorisedValues.GetByCode('LOC', loc) %]</li>
+          [% END %]
+          </ul>
         </td>
         <td>
             <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
