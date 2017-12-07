@@ -115,6 +115,12 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
+
+    # We will send alert 53 whenever notforloan status gets changed
+    if ($messages->{NotForLoanStatusUpdated}) {
+        $self->alert_type('53'); #Alert type 53 is arbitrary and might conflict with other alert_types! Be aware!
+    }
+
     $self->alert(1) if defined $self->alert_type;  # alert_type could be "00", hypothetically
     $self->ok($return);
 }
