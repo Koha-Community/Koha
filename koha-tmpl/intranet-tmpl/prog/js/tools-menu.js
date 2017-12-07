@@ -4,6 +4,8 @@
         $('#navmenulist a[href$="/cgi-bin/koha/labels/label-home.pl"]').css('font-weight','bold');
       } else if (path.indexOf("patroncards") >= 0 ) {
         $('#navmenulist a[href$="/cgi-bin/koha/patroncards/home.pl"]').css('font-weight','bold');
+      } else if (path.indexOf("clubs") >= 0 ) {
+          $('#navmenulist a[href$="/cgi-bin/koha/clubs/clubs.pl"]').css('font-weight','bold');
       } else if (path.indexOf("patron_lists") >= 0 ) {
         $('#navmenulist a[href$="/cgi-bin/koha/patron_lists/lists.pl"]').css('font-weight','bold');
       } else if (path.indexOf("rotating_collections") >= 0 ){

@@ -221,7 +221,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
