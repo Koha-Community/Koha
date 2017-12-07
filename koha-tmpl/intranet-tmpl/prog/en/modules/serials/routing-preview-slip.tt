@@ -1,15 +1,7 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials  &rsaquo; Routing slip preview</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#print_slip").on("click",function(e){
-            e.preventDefault();
-            window.print();
-            self.close();
-        });
-    });
-</script>
 <style type="text/css">
    #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin:auto; text-align:left; }
 </style>
@@ -17,6 +9,7 @@
    .yui-t7, #custom-doc { min-width:0; width:auto; }
 </style>
 </head>
+
 <body id="ser_routing-preview-slip" class="ser">
 
 <div id="custom-doc" class="yui-t7">
@@ -49,5 +42,17 @@
     <div id="closewindow" class="noprint"><a class="btn btn-default btn-default" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a> <a class="btn btn-default btn-default close" href="#">Close</a></div>
 
    </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#print_slip").on("click",function(e){
+                e.preventDefault();
+                window.print();
+                self.close();
+            });
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

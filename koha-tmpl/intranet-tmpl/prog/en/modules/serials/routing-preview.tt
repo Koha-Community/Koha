@@ -1,20 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Preview routing list</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#save_and_preview").on("click",function(e){
-            e.preventDefault();
-            print_slip( $("#subscriptionid").val(), $("#issue_escaped").val() );
-        });
-    });
-function print_slip(subscriptionid,issue){
-    var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
-    window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
-    window.location.href='subscription-detail.pl?subscriptionid=' + subscriptionid;
-}
-</script>
 </head>
+
 <body id="ser_routing-preview" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
@@ -58,4 +47,21 @@ function print_slip(subscriptionid,issue){
 [% INCLUDE 'serials-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#save_and_preview").on("click",function(e){
+                e.preventDefault();
+                print_slip( $("#subscriptionid").val(), $("#issue_escaped").val() );
+            });
+        });
+        function print_slip(subscriptionid,issue){
+            var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
+            window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+            window.location.href='subscription-detail.pl?subscriptionid=' + subscriptionid;
+        }
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
