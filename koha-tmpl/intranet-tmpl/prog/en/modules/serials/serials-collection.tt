@@ -1,83 +1,13 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-
-<script type="text/javascript">
-//<![CDATA[
-function generateReceive(subscriptionid) {
-    if(nbissues=prompt(_("How many issues do you want to receive ?"))){
-        document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid+'&nbissues='+nbissues;
-    }
-}
-function print_slip(subscriptionid,issue){
-    var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
-    window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
-}
-function addsubscriptionid()
-{
-	var tab=new Array();
-    var serialids = document.edition.serialid;
-    for (i=0; i<serialids.length; i++){
-      if (serialids[i].checked == true){
-        var found=false;
-        for (var val in tab){
-          if (tab[val] == document.getElementsByName("subs")[i].getAttribute('val')){found = true;}
-        }
-        if (found == false){
-          tab=tab.concat((document.getElementsByName("subs")[i].getAttribute('val')));
-        }
-      }
-    }
-    var string="";
-    for (var val in tab){
-      string = string + tab[val] + ",";
-    }
-    string=string.substring(0,string.length -1);
-    document.edition.subscriptionid.value=string;
-}
-function popup(subscriptionid) {
-    newin=window.open('subscription-renew.pl?mode=popup&subscriptionid='+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-function generateNext(subscriptionid) {
-	if(confirm(_("Do you really want to generate next serial?"))){
-		document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid;
-	}
-}
-
-function CheckAll( node ) {
-    $("#"+node).checkCheckboxes();
-    return false;
-}
-function CheckNone( node ) {
-    $("#"+node).unCheckCheckboxes();
-    return false;
-}
-$(document).ready(function() {
-    $('#subscription_years').tabs();
-    $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false },
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ],
-        "aaSorting": [[0, 'desc']],
-        "sDom": 't',
-        "bAutoWidth": false,
-        "bPaginate": false,
-        "bInfo": false,
-        "bFilter": false,
-    } ));
-});
-
-//]]>
-</script>
 </head>
+
 <body id="ser_serials-collection" class="ser">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
@@ -331,4 +261,63 @@ $(document).ready(function() {
 [% INCLUDE 'serials-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        var subscriptionid = "[% subscriptionid %]";
+        var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");
+        var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
+        var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/serials-toolbar.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        function generateReceive(subscriptionid) {
+            if(nbissues=prompt(_("How many issues do you want to receive ?"))){
+                document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid+'&nbissues='+nbissues;
+            }
+        }
+        function print_slip(subscriptionid,issue){
+            var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
+            window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+        }
+
+        function popup(subscriptionid) {
+            newin=window.open('subscription-renew.pl?mode=popup&subscriptionid='+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+        }
+
+        function generateNext(subscriptionid) {
+            if(confirm(_("Do you really want to generate next serial?"))){
+                document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid;
+            }
+        }
+
+        function CheckAll( node ) {
+            $("#"+node).checkCheckboxes();
+            return false;
+        }
+        function CheckNone( node ) {
+            $("#"+node).unCheckCheckboxes();
+            return false;
+        }
+        $(document).ready(function() {
+            $('#subscription_years').tabs();
+            $(".subscription-year-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "aaSorting": [[0, 'desc']],
+                "sDom": 't',
+                "bAutoWidth": false,
+                "bPaginate": false,
+                "bInfo": false,
+                "bFilter": false,
+            } ));
+        });
+
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
