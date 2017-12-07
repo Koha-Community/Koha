@@ -9,6 +9,13 @@
 ### END INIT INFO
 
 . /etc/environment
+
+# Export these here in just case, so that systemd doesn't trip on them.
+# They should actually be exported in /etc/environment.
+export KOHA_PATH
+export KOHA_CONF
+export PERL5LIB
+
 SIPCONFIGDIR="__KOHA_CONF_DIR__/SIPconfig"
 
 LOGBASEDIR="__LOG_DIR__"
@@ -124,3 +131,5 @@ case $ACTION in start | stop | restart )
 * )
     help_usage
 esac
+
+exit 0
