@@ -153,30 +153,31 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $data->{subtitle} = [ $record->subtitles ];
     }
     $data = check_issuingrules($data);
-
-    push(
-        @reservedata, {
-            reservedate     => $data->{l_reservedate},
-            firstname       => $data->{firstname} || '',
-            surname         => $data->{surname},
-            title           => $data->{title},
-            subtitle        => $data->{subtitle},
-            author          => $data->{author},
-            borrowernumber  => $data->{borrowernumber},
-            biblionumber    => $data->{biblionumber},
-            holdingbranches => [split('\|', $data->{l_holdingbranch})],
-            branch          => $data->{l_branch},
-            itemcallnumber  => $data->{l_itemcallnumber},
-            enumchron       => $data->{l_enumchron},
-            copyno          => $data->{l_copynumber},
-            itemnotes       => $data->{l_itemnotes},
-            count           => $data->{icount},
-            rcount          => $data->{rcount},
-            pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
-            itypes          => [split('\|', $data->{l_itype})],
-            locations       => [split('\|', $data->{l_location})],
-        }
-    );
+    if ($data->{l_itemcallnumber}) {
+        push(
+            @reservedata, {
+                reservedate     => $data->{l_reservedate},
+                firstname       => $data->{firstname} || '',
+                surname         => $data->{surname},
+                title           => $data->{title},
+                subtitle        => $data->{subtitle},
+                author          => $data->{author},
+                borrowernumber  => $data->{borrowernumber},
+                biblionumber    => $data->{biblionumber},
+                holdingbranches => [split('\|', $data->{l_holdingbranch})],
+                branch          => $data->{l_branch},
+                itemcallnumber  => $data->{l_itemcallnumber},
+                enumchron       => $data->{l_enumchron},
+                copyno          => $data->{l_copynumber},
+                itemnotes       => $data->{l_itemnotes},
+                count           => $data->{icount},
+                rcount          => $data->{rcount},
+                pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
+                itypes          => [split('\|', $data->{l_itype})],
+                locations       => [split('\|', $data->{l_location})],
+            }
+        );
+    }
 }
 $sth->finish;
 
