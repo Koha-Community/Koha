@@ -126,6 +126,18 @@ $(document).ready(function() {
         minDate: 1, // require that hold suspended until date is after today
     });
 
+    //1457 Alt-P will print slip on checkout
+    function printKeyCode(e) {
+        var keycode;
+        if (window.event) keycode = window.event.keyCode;
+        else if (e) keycode = e.which;
+        var e = e || window.event;
+        if(keycode==80 && e.altKey){
+            window.open("/cgi-bin/koha/members/printslip.pl?borrowernumber=[% borrowernumber %]&amp;print=qslip", "printwindow");
+        }
+    }
+    document.onkeydown = printKeyCode;
+
 });
 
 //]]>
