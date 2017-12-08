@@ -1969,7 +1969,13 @@ sub _reserve_last_pickup_date {
         $reserve : Koha::Holds->find($reserve->{reserve_id});
     my $delay = $hold ? $hold->max_pickup_delay : 7;
 
-    $expiration = $calendar->days_forward( $startdate, $delay );
+
+    if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
+        $expiration = $calendar->days_forward( $startdate, $delay );
+    } else {
+        $expiration = $startdate;
+        $expiration->add(days => $delay);
+    }
 
        #It is necessary to set the time portion of DateTime as well, because we are actually getting the
        #  last pickup datetime and importantly days end at 23:59:59.
