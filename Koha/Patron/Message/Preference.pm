@@ -215,6 +215,9 @@ sub fix_misconfigured_preference {
                 push @{$valid_mtts}, $mtt;
             }
         }
+        else {
+            push @{$valid_mtts}, $mtt;
+        }
     }
 
     $self->message_transport_types($valid_mtts)->store;
