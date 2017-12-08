@@ -30,6 +30,7 @@ use C4::Debug;
 use Koha::DateUtils;
 use DateTime::Duration;
 use C4::RotatingCollections;
+use List::MoreUtils qw(uniq);
 
 my $input = new CGI;
 my $startdate = $input->param('from');
@@ -199,9 +200,9 @@ sub check_issuingrules {
     my $borrower = Koha::Patrons->find($data->{borrowernumber});
     my @itemnumbers = split('\|', $data->{l_itemnumbers});
     my $itemcallnumbers;
-    my $locations;
-    my $itypes;
-    my $holdingbranches;
+    my @locations;
+    my @itypes;
+    my @holdingbranches;
     my $count;
     my $rotColUrl = "/cgi-bin/koha/rotating_collections/addItems.pl?colId=";
     foreach my $itemnumber (@itemnumbers) {
@@ -226,21 +227,17 @@ sub check_issuingrules {
             } else {
                 $itemcallnumbers .= $item->cn_sort."<br/>";
             }
-            $locations .= $item->location."|";
-            $locations =~ s/(.*)\1/$1/g;
-            $itypes .= $item->itype."|";
-            $itypes =~ s/(.*)\1/$1/g;
-            $holdingbranches .= $item->holdingbranch."|";
-            $holdingbranches =~ s/(.*)\1/$1/g;
+            push @locations, $item->location;
+            push @itypes, $item->itype;
+            push @holdingbranches, $item->holdingbranch;
             $count++;
         }
 
     }
-
     $data->{l_itemcallnumber} = $itemcallnumbers;
-    $data->{l_location} = $locations;
-    $data->{l_itype} = $itypes;
-    $data->{l_holdingbranch} = $holdingbranches;
+    $data->{l_location} = join('|', uniq(@locations));
+    $data->{l_itype} = join('|', uniq(@itypes));
+    $data->{l_holdingbranch} = join('|', uniq(@holdingbranches));
     $data->{icount} = $count;
     return $data
 
