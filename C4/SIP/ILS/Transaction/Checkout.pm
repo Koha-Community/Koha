@@ -131,15 +131,6 @@ sub do_checkout {
 		$self->ok(0);
 		return $self;
 	}
-    # Fill any reserves the patron had on the item.  
-    # TODO: this logic should be pulled internal to AddIssue for all Koha. 
-    $debug and warn "pending_queue: " . (@$pending) ? Dumper($pending) : '[]';
-    foreach (grep {$_->{borrowernumber} eq $self->{patron}->{borrowernumber}} @$pending) {
-        $debug and warn "Filling reserve (borrowernumber,biblionumber,reservedate): "
-            . sprintf("(%s,%s,%s)\n",$_->{borrowernumber},$_->{biblionumber},$_->{reservedate});
-        ModReserveFill($_);
-        # TODO: adjust representation in $self->item
-    }
 	# can issue
 	$debug and warn "do_checkout: calling AddIssue(\$borrower,$barcode, $overridden_duedate, 0)\n"
 		# . "w/ \$borrower: " . Dumper($borrower)
