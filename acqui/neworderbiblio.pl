@@ -127,7 +127,7 @@ my @results;
 foreach my $result ( @{$marcresults} ) {
     my $marcrecord = C4::Search::new_record_from_zebra( 'biblioserver', $result );
     my $biblio = TransformMarcToKoha( $marcrecord, '' );
-    $biblio->{subtitles} = GetRecordValue( 'subtitle', GetMarcBiblio( $biblio->{biblionumber} ),  GetFrameworkCode( $biblio->{biblionumber} ) );
+    $biblio->{subtitles} = GetRecordValue( 'subtitle', GetMarcBiblio({ biblionumber => $biblio->{biblionumber} }),  GetFrameworkCode( $biblio->{biblionumber} ) );
 
     $biblio->{booksellerid} = $booksellerid;
     push @results, $biblio;
