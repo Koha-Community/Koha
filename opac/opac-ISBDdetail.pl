@@ -71,8 +71,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = int($biblionumber);
 
-my $biblio = Koha::Biblios->find( $biblionumber );
-
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
     my @cart_list = split(/\//, $cart_list);
@@ -102,6 +100,9 @@ if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
+
+my $biblio = Koha::Biblios->find( $biblionumber );
+
 my $framework = GetFrameworkCode( $biblionumber );
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',

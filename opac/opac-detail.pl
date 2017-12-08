@@ -78,7 +78,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
 $biblionumber = int($biblionumber);
-my $biblio = Koha::Biblios->find( $biblionumber );
 
 my @all_items = GetItemsInfo($biblionumber);
 my @hiddenitems;
@@ -96,6 +95,8 @@ if ( ! $record ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
     exit;
 }
+
+my $biblio = Koha::Biblios->find( $biblionumber );
 my $framework = &GetFrameworkCode( $biblionumber );
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
