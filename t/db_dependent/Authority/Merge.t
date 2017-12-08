@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use Getopt::Long;
 use MARC::Record;
@@ -358,6 +358,31 @@ subtest "Graceful resolution of missing reporting tag" => sub {
     is( $biblio->subfield('612', 'a'), ' ', 'Kept an empty $a too' );
 
     $fw2->auth_tag_to_report('112')->store;
+};
+
+subtest 'merge should not reorder too much' => sub {
+    plan tests => 2;
+
+    # Back to loose mode
+    t::lib::Mocks::mock_preference('AuthorityMergeMode', 'loose');
+
+    my $authmarc = MARC::Record->new;
+    $authmarc->append_fields( MARC::Field->new( '109', '', '', 'a' => 'aa', b => 'bb' ));
+    my $id = AddAuthority( $authmarc, undef, $authtype1 );
+    my $biblio = MARC::Record->new;
+    $biblio->append_fields(
+        MARC::Field->new( '109', '', '', 9 => $id, i => 'in front', a => 'aa', c => 'after controlled block' ), # this field shows the old situation when $9 is the first subfield
+        MARC::Field->new( '609', '', '', i => 'in front', a => 'aa', c => 'after controlled block', 9 => $id ), # here $9 is already the last one
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $biblio, '' );
+
+    # Merge 109 and 609 and check order of subfields
+    merge({ mergefrom => $id, MARCfrom => $authmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
+    my $biblio2 = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    my $subfields = [ map { $_->[0] } $biblio2->field('109')->subfields ];
+    is_deeply( $subfields, [ 'i', 'a', 'b', 'c', '9' ], 'Merge only moved $9' );
+    $subfields = [ map { $_->[0] } $biblio2->field('609')->subfields ];
+    is_deeply( $subfields, [ 'i', 'a', 'b', 'c', '9' ], 'Order kept' );
 };
 
 sub set_mocks {
