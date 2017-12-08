@@ -254,7 +254,8 @@ sub check_object_ownership {
 
     my $parameters = {
         accountlines_id => \&_object_ownership_by_accountlines_id,
-        borrowernumber  => \&_object_ownership_by_borrowernumber,
+        borrowernumber  => \&_object_ownership_by_patron_id,
+        patron_id       => \&_object_ownership_by_patron_id,
         checkout_id     => \&_object_ownership_by_checkout_id,
         reserve_id      => \&_object_ownership_by_reserve_id,
     };
@@ -296,10 +297,10 @@ Compares C<$borrowernumber> to currently logged in C<$user>.
 
 =cut
 
-sub _object_ownership_by_borrowernumber {
-    my ($c, $user, $borrowernumber) = @_;
+sub _object_ownership_by_patron_id {
+    my ($c, $user, $patron_id) = @_;
 
-    return $user->borrowernumber == $borrowernumber;
+    return $user->borrowernumber == $patron_id;
 }
 
 =head3 _object_ownership_by_checkout_id

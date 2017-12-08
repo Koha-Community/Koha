@@ -8,9 +8,9 @@
           "application/json"
       ],
       "parameters": [{
-        "name": "borrowernumber",
+        "name": "patron_id",
         "in": "query",
-        "description": "Case insensitive search on borrowernumber",
+        "description": "Search on patron_id",
         "required": false,
         "type": "string"
       }, {
@@ -38,7 +38,7 @@
         "required": false,
         "type": "string"
       }, {
-        "name": "othernames",
+        "name": "other_name",
         "in": "query",
         "description": "Case insensitive search on othernames",
         "required": false,
@@ -50,13 +50,13 @@
         "required": false,
         "type": "string"
       }, {
-        "name": "streetnumber",
+        "name": "street_number",
         "in": "query",
         "description": "Case insensitive search on streetnumber",
         "required": false,
         "type": "string"
       }, {
-        "name": "streettype",
+        "name": "street_type",
         "in": "query",
         "description": "Case insensitive search on streettype",
         "required": false,
@@ -86,7 +86,7 @@
         "required": false,
         "type": "string"
       }, {
-        "name": "zipcode",
+        "name": "postal_code",
         "in": "query",
         "description": "Case insensitive search on zipcode",
         "required": false,
@@ -122,183 +122,147 @@
         "required": false,
         "type": "string"
       }, {
-        "name": "emailpro",
+        "name": "secondary_email",
         "in": "query",
-        "description": "Case insensitive search on emailpro",
+        "description": "Case insensitive search on secondary_email",
         "required": false,
         "type": "string"
       }, {
-        "name": "phonepro",
+        "name": "secondary_phone",
         "in": "query",
-        "description": "Case insensitive search on phonepro",
+        "description": "Case insensitive search on secondary_phone",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_streetnumber",
+        "name": "altaddress_street_number",
         "in": "query",
-        "description": "Case insensitive search on B_streetnumber",
+        "description": "Case insensitive search on altaddress_street_number",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_streettype",
+        "name": "altaddress_street_type",
         "in": "query",
-        "description": "Case insensitive search on B_streettype",
+        "description": "Case insensitive search on altaddress_street_type",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_address",
+        "name": "altaddress_address",
         "in": "query",
-        "description": "Case insensitive search on B_address",
+        "description": "Case insensitive search on altaddress_address",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_address2",
+        "name": "altaddress_address2",
         "in": "query",
-        "description": "Case insensitive search on B_address2",
+        "description": "Case insensitive search on altaddress_address2",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_city",
+        "name": "altaddress_city",
         "in": "query",
-        "description": "Case insensitive search on B_city",
+        "description": "Case insensitive search on altaddress_city",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_state",
+        "name": "altaddress_state",
         "in": "query",
-        "description": "Case insensitive search on B_state",
+        "description": "Case insensitive search on altaddress_state",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_zipcode",
+        "name": "altaddress_postal_code",
         "in": "query",
-        "description": "Case insensitive search on B_zipcode",
+        "description": "Case insensitive search on altaddress_postal_code",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_country",
+        "name": "altaddress_country",
         "in": "query",
-        "description": "Case insensitive search on B_country",
+        "description": "Case insensitive search on altaddress_country",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_email",
+        "name": "altaddress_email",
         "in": "query",
-        "description": "Case insensitive search on B_email",
+        "description": "Case insensitive search on altaddress_email",
         "required": false,
         "type": "string"
       }, {
-        "name": "B_phone",
+        "name": "altaddress_phone",
         "in": "query",
-        "description": "Case insensitive search on B_phone",
+        "description": "Case insensitive search on altaddress_phone",
         "required": false,
         "type": "string"
       }, {
-        "name": "dateofbirth",
+        "name": "date_of_birth",
         "in": "query",
-        "description": "Case insensitive search on dateofbirth",
+        "description": "Case insensitive search on date_of_birth",
         "required": false,
         "type": "string"
       }, {
-        "name": "branchcode",
+        "name": "library_id",
         "in": "query",
-        "description": "Case insensitive search on branchcode",
+        "description": "Case insensitive search on library_id",
         "required": false,
         "type": "string"
       }, {
-        "name": "categorycode",
+        "name": "category_id",
         "in": "query",
-        "description": "Case insensitive search on categorycode",
+        "description": "Case insensitive search on category_id",
         "required": false,
         "type": "string"
       }, {
-        "name": "dateenrolled",
+        "name": "date_enrolled",
         "in": "query",
-        "description": "Case insensitive search on dateenrolled",
+        "description": "Case insensitive search on date_enrolled",
         "required": false,
         "type": "string"
       }, {
-        "name": "dateexpiry",
+        "name": "expiry_date",
         "in": "query",
-        "description": "Case insensitive search on dateexpiry",
+        "description": "Case insensitive search on expiry_date",
         "required": false,
         "type": "string"
       }, {
-        "name": "gonenoaddress",
+        "name": "incorrect_address",
         "in": "query",
-        "description": "Search on gonenoaddress",
+        "description": "Search on incorrect_address",
         "required": false,
         "type": "boolean"
       }, {
-        "name": "lost",
+        "name": "patron_card_lost",
         "in": "query",
-        "description": "Search on lost",
+        "description": "Search on patron_card_lost",
         "required": false,
         "type": "boolean"
       }, {
-        "name": "debarred",
+        "name": "restricted",
         "in": "query",
-        "description": "Case insensitive search on debarred",
+        "description": "Filter search by restricted",
+        "required": false,
+        "type": "boolean"
+      }, {
+        "name": "guarantor_id",
+        "in": "query",
+        "description": "Search on guarantor_id",
         "required": false,
         "type": "string"
       }, {
-        "name": "debarredcomment",
+        "name": "staff_notes",
         "in": "query",
-        "description": "Case insensitive search on debarredcomment",
+        "description": "Case insensitive search on staff_notes",
         "required": false,
         "type": "string"
       }, {
-        "name": "contactname",
+        "name": "relationship_type",
         "in": "query",
-        "description": "Case insensitive search on contactname",
+        "description": "Case insensitive search on relationship_type",
         "required": false,
         "type": "string"
       }, {
-        "name": "contactfirstname",
+        "name": "gender",
         "in": "query",
-        "description": "Case insensitive search on contactfirstname",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "contacttitle",
-        "in": "query",
-        "description": "Case insensitive search on contacttitle",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "guarantorid",
-        "in": "query",
-        "description": "Case insensitive search on guarantorid",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "borrowernotes",
-        "in": "query",
-        "description": "Case insensitive search on borrowernotes",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "relationship",
-        "in": "query",
-        "description": "Case insensitive search on relationship",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "sex",
-        "in": "query",
-        "description": "Case insensitive search on sex",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "password",
-        "in": "query",
-        "description": "Case insensitive search on password",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "flags",
-        "in": "query",
-        "description": "Case insensitive search on flags",
+        "description": "Case insensitive search on gender",
         "required": false,
         "type": "string"
       }, {
@@ -308,87 +272,87 @@
         "required": false,
         "type": "string"
       }, {
-        "name": "opacnote",
+        "name": "opac_notes",
         "in": "query",
-        "description": "Case insensitive search on opacnote",
+        "description": "Case insensitive search on opac_notes",
         "required": false,
         "type": "string"
       }, {
-        "name": "contactnote",
+        "name": "altaddress_notes",
         "in": "query",
-        "description": "Case insensitive search on contactnote",
+        "description": "Case insensitive search on altaddress_notes",
         "required": false,
         "type": "string"
       }, {
-        "name": "sort1",
+        "name": "statistics_1",
         "in": "query",
-        "description": "Case insensitive search on sort1",
+        "description": "Case insensitive search on statistics_1",
         "required": false,
         "type": "string"
       }, {
-        "name": "sort2",
+        "name": "statistics_2",
         "in": "query",
-        "description": "Case insensitive search on sort2",
+        "description": "Case insensitive search on statistics_2",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactfirstname",
+        "name": "altcontact_firstname",
         "in": "query",
-        "description": "Case insensitive search on altcontactfirstname",
+        "description": "Case insensitive search on altcontact_firstname",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactsurname",
+        "name": "altcontact_surname",
         "in": "query",
-        "description": "Case insensitive search on altcontactsurname",
+        "description": "Case insensitive search on altcontact_surname",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactaddress1",
+        "name": "altcontact_address",
         "in": "query",
-        "description": "Case insensitive search on altcontactaddress1",
+        "description": "Case insensitive search on altcontact_address",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactaddress2",
+        "name": "altcontact_address2",
         "in": "query",
-        "description": "Case insensitive search on altcontactaddress2",
+        "description": "Case insensitive search on altcontact_address2",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactaddress3",
+        "name": "altcontact_city",
         "in": "query",
-        "description": "Case insensitive search on altcontactaddress3",
+        "description": "Case insensitive search on altcontact_city",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactstate",
+        "name": "altcontact_state",
         "in": "query",
-        "description": "Case insensitive search on altcontactstate",
+        "description": "Case insensitive search on altcontact_state",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactzipcode",
+        "name": "altcontact_postal_code",
         "in": "query",
-        "description": "Case insensitive search on altcontactzipcode",
+        "description": "Case insensitive search on altcontact_postal_code",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactcountry",
+        "name": "altcontact_country",
         "in": "query",
-        "description": "Case insensitive search on altcontactcountry",
+        "description": "Case insensitive search on altcontact_country",
         "required": false,
         "type": "string"
       }, {
-        "name": "altcontactphone",
+        "name": "altcontact_phone",
         "in": "query",
-        "description": "Case insensitive search on altcontactphone",
+        "description": "Case insensitive search on altcontact_phone",
         "required": false,
         "type": "string"
       }, {
-        "name": "smsalertnumber",
+        "name": "sms_number",
         "in": "query",
-        "description": "Case insensitive search on smsalertnumber",
+        "description": "Case insensitive search on sms_number",
         "required": false,
         "type": "string"
       }, {
@@ -400,31 +364,31 @@
       }, {
         "name": "privacy",
         "in": "query",
-        "description": "Case insensitive search on privacy",
+        "description": "Search on privacy",
         "required": false,
         "type": "string"
       }, {
         "name": "privacy_guarantor_checkouts",
         "in": "query",
-        "description": "Case insensitive search on privacy_guarantor_checkouts",
+        "description": "Search on privacy_guarantor_checkouts",
         "required": false,
         "type": "string"
       }, {
-        "name": "checkprevcheckout",
+        "name": "check_previous_checkout",
         "in": "query",
-        "description": "Case insensitive search on checkprevcheckout",
+        "description": "Case insensitive search on check_previous_checkout",
         "required": false,
         "type": "string"
       }, {
         "name": "updated_on",
         "in": "query",
-        "description": "Case insensitive search on updated_on",
+        "description": "Search on updated_on",
         "required": false,
         "type": "string"
       }, {
-        "name": "lastseen",
+        "name": "last_seen",
         "in": "query",
-        "description": "Case insensitive search on lastseen",
+        "description": "Case insensitive search on last_seen",
         "required": false,
         "type": "string"
       }, {
@@ -436,13 +400,7 @@
       }, {
         "name": "login_attempts",
         "in": "query",
-        "description": "Case insensitive search on login_attempts",
-        "required": false,
-        "type": "string"
-      }, {
-        "name": "overdrive_auth_token",
-        "in": "query",
-        "description": "Case insensitive search on overdrive_auth_token",
+        "description": "Search on login_attempts",
         "required": false,
         "type": "string"
       }, {
@@ -563,13 +521,13 @@
       }
     }
   },
-  "/patrons/{borrowernumber}": {
+  "/patrons/{patron_id}": {
     "get": {
       "x-mojo-to": "Patrons#get",
       "operationId": "getPatron",
       "tags": ["patrons"],
       "parameters": [{
-        "$ref": "../parameters.json#/borrowernumberPathParam"
+          "$ref": "../parameters.json#/patron_id_pp"
       }],
       "produces": [
         "application/json"
@@ -626,7 +584,7 @@
       "tags": ["patrons"],
       "parameters": [
         {
-          "$ref": "../parameters.json#/borrowernumberPathParam"
+          "$ref": "../parameters.json#/patron_id_pp"
         },
         {
           "name": "body",
@@ -703,7 +661,7 @@
       "operationId": "deletePatron",
       "tags": ["patrons"],
       "parameters": [{
-        "$ref": "../parameters.json#/borrowernumberPathParam"
+        "$ref": "../parameters.json#/patron_id_pp"
       }],
       "produces": ["application/json"],
       "responses": {
