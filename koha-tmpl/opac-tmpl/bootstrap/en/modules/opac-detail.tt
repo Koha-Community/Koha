@@ -57,7 +57,7 @@
 
                     <div id="bookcover">
                     [% IF ( OPACLocalCoverImages ) %]
-                        <div title="[% biblionumber |url %]" class="[% biblio.biblionumber %]" id="local-thumbnail-preview"></div>
+                        <div title="[% biblio.biblionumber %]" class="[% biblio.biblionumber %]" id="local-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
                         [% IF ( OPACURLOpenInNewWindow ) %]
@@ -82,14 +82,14 @@
                     [% END %]
 
                     [% IF ( GoogleJackets ) %]
-                        <div title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="gbs-thumbnail-preview"></div>
+                        <div title="[% biblio.biblionumber %]" class="[% normalized_isbn %]" id="gbs-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                       [% coce_id = normalized_ean || normalized_isbn %]
-                      <div style="block" title="[% biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview"></div>
+                      <div style="block" title="[% biblio.biblionumber %]" class="[% coce_id %]" id="coce-thumbnail-preview"></div>
                     [% END %]
                     [% IF OpenLibraryCovers %]
-                        <div title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="openlibrary-thumbnail-preview"></div>
+                        <div title="[% biblio.biblionumber %]" class="[% normalized_isbn %]" id="openlibrary-thumbnail-preview"></div>
                     [% END %]
                     [% bt_id = ( normalized_upc || normalized_isbn ) %]
                     [% IF ( BakerTaylorEnabled && bt_id ) %]
@@ -344,13 +344,13 @@
 
                                         [% IF ( OPACURLOpenInNewWindow ) %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">
                                             [% ELSE %]
                                                 <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank" rel="noreferrer">
                                             [% END %]
                                         [% ELSE %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblionumber | url %]" title="[% MARCurl.MARCURL %]">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber %]" title="[% MARCurl.MARCURL %]">
                                             [% ELSE %]
                                                 <a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">
                                             [% END %]
@@ -1323,9 +1323,9 @@
                             [% IF ITEM_RESULT.uri %]
                                 [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
-                                    <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% ELSE %]
-                                    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblionumber |url %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% END %]
 
                                 [% ELSE %]
