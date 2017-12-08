@@ -12,7 +12,10 @@
           "type": "integer"
         },
         {
-          "$ref": "../parameters.json#/borrowernumberQueryParam"
+          "name": "borrowernumber",
+          "in": "query",
+          "description": "Internal patron identifier",
+          "type": "integer"
         },
         {
           "name": "reservedate",
@@ -171,7 +174,7 @@
             "type": "object",
             "properties": {
               "borrowernumber": {
-                "description": "Borrower internal identifier",
+                "description": "Internal patron identifier",
                 "type": "integer"
               },
               "biblionumber": {
