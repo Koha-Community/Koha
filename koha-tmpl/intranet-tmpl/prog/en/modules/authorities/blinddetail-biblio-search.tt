@@ -1,129 +1,131 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authority details</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function(){
-        var index_start = "[% index %]";
-        var whichfield;
-        try {
-            whichfield = opener.opener.document.getElementById(index_start);
-        } catch(e) {
-            return;
-        }
-
-        var field_start = whichfield.parentNode.parentNode;
-
-        // Sets the good number of form fields for the specified subfield
-        // Returns false if the cloning failed
-        function SetSubfieldNumber(subfield_name, nb) {
-            // Nothing to do if we only have one value
-            if(nb <= 1) {
-                return true;
-            }
-            
-            // Find the subfield we want to clone
-            var re = new RegExp('^subfield' + subfield_name,'g');
-            var subfields = $(field_start).children('div').filter( function() {
-                return this.id.match(re);
-            });
-
-            // Try to add as many clones as needed
-            try {
-                for(var i=0; i<nb-subfields.length; i++) {
-                    window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor %]');
-                }
-            }
-            catch(err) {
-                return false;
-            }
-            return true;
-        }
-
-        // Fills the subfield with the values entered in argument
-        function SetSubfieldValues() {
-            // Get the arguments
-            var subfield_name = arguments[0];
-            var values = new Array();
-            for(var i=1; i<arguments.length; i++) {
-                values.push(arguments[i]);
-            }
-
-            // Create the correct number of form fields for all values
-            // If the field cloning failed, only the first value will be added to the form.
-            SetSubfieldNumber(subfield_name, values.length);
-            
-            // Find the subfields where we will add the new values
-            var re = new RegExp('^subfield' + subfield_name,'g');
-            var subfields = $(field_start).children('div').filter( function() {
-                return this.id.match(re);
-            });
-
-            // Add the new values to those subfields, empty the additional fields
-            var i=0;
-            subfields.each(function() {
-                if(i in values) {
-                    this.getElementsByTagName('input')[1].value = values[i];
-                }
-                else {
-                    this.getElementsByTagName('input')[1].value = "";
-                }
-                i++;
-            });
-        }
-
-        [% UNLESS ( clear ) %]
-        [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
-            SetSubfieldValues(
-                "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
-            [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
-                ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
-            [% END %]
-            );
-        [% END %]
-            var indicators = field_start.getElementsByClassName('indicator flat');
-            indicators[0].value="[% indicator1 %]";
-            indicators[1].value="[% indicator2 %]";
-        [% END %]
-
-        // browse all its subfields (clear and $9)
-        var subfields = field_start.getElementsByTagName('input');
-        var re = /^tag_\d*_code_/;
-        for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
-            if(subfields[i].hasAttribute('name') == 0 ) {continue; }  // div elements specific to Select2
-            if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
-                var code     = subfields[i];   // code is the first input
-                var subfield = subfields[i+1]; // subfield the second
-
-            [% IF ( clear ) %]
-                if (subfield){subfield.value="" ;}
-            [% ELSE %]
-                if(code.value=='9'){
-                    subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
-                    break;
-                }
-            [% END %]
-            }
-        }
-
-      	opener.close();
-       	window.close();
-            
-       	return false;
-    });
-//]]>
-</script>
 </head>
+
 <body id="auth_blinddetail-biblio-search" class="auth">
 
 <div id="doc" class="yui-t7">
    <div id="bd">
 	<div class="yui-g">
 
-
+        <div id="loading"> <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" /> Loading </div>
 
 </div>
 </div>
 </div>
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var index_start = "[% index %]";
+            var whichfield;
+            try {
+                whichfield = opener.opener.document.getElementById(index_start);
+            } catch(e) {
+                return;
+            }
+
+            var field_start = whichfield.parentNode.parentNode;
+
+            // Sets the good number of form fields for the specified subfield
+            // Returns false if the cloning failed
+            function SetSubfieldNumber(subfield_name, nb) {
+                // Nothing to do if we only have one value
+                if(nb <= 1) {
+                    return true;
+                }
+
+                // Find the subfield we want to clone
+                var re = new RegExp('^subfield' + subfield_name,'g');
+                var subfields = $(field_start).children('div').filter( function() {
+                    return this.id.match(re);
+                });
+
+                // Try to add as many clones as needed
+                try {
+                    for(var i=0; i<nb-subfields.length; i++) {
+                        window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'),'[% advancedMARCEditor %]');
+                    }
+                }
+                catch(err) {
+                    return false;
+                }
+                return true;
+            }
+
+            // Fills the subfield with the values entered in argument
+            function SetSubfieldValues() {
+                // Get the arguments
+                var subfield_name = arguments[0];
+                var values = new Array();
+                for(var i=1; i<arguments.length; i++) {
+                    values.push(arguments[i]);
+                }
+
+                // Create the correct number of form fields for all values
+                // If the field cloning failed, only the first value will be added to the form.
+                SetSubfieldNumber(subfield_name, values.length);
+
+                // Find the subfields where we will add the new values
+                var re = new RegExp('^subfield' + subfield_name,'g');
+                var subfields = $(field_start).children('div').filter( function() {
+                    return this.id.match(re);
+                });
+
+                // Add the new values to those subfields, empty the additional fields
+                var i=0;
+                subfields.each(function() {
+                    if(i in values) {
+                        this.getElementsByTagName('input')[1].value = values[i];
+                    }
+                    else {
+                        this.getElementsByTagName('input')[1].value = "";
+                    }
+                    i++;
+                });
+            }
+
+            [% UNLESS ( clear ) %]
+            [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
+                SetSubfieldValues(
+                    "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
+                    ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+                [% END %]
+                );
+            [% END %]
+                var indicators = field_start.getElementsByClassName('indicator flat');
+                indicators[0].value="[% indicator1 %]";
+                indicators[1].value="[% indicator2 %]";
+            [% END %]
+
+            // browse all its subfields (clear and $9)
+            var subfields = field_start.getElementsByTagName('input');
+            var re = /^tag_\d*_code_/;
+            for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
+                if(subfields[i].hasAttribute('name') == 0 ) {continue; }  // div elements specific to Select2
+                if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
+                    var code     = subfields[i];   // code is the first input
+                    var subfield = subfields[i+1]; // subfield the second
+
+                [% IF ( clear ) %]
+                    if (subfield){subfield.value="" ;}
+                [% ELSE %]
+                    if(code.value=='9'){
+                        subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                        break;
+                    }
+                [% END %]
+                }
+            }
+
+            opener.close();
+            window.close();
+            return false;
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window = 1 %]
