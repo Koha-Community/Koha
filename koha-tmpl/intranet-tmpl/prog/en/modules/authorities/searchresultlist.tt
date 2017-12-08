@@ -1,46 +1,10 @@
+[% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; Authority search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-function confirm_deletion(id) {
-    var is_confirmed = confirm(_("Are you sure you want to delete this authority?"));
-    if (is_confirmed) {
-      window.location="authorities-home.pl?op=delete"
-          + "&authid=" + id
-          + "&type=intranet"
-          + "&authtypecode=[% authtypecode %]"
-          + "&marclist=[% marclist %]"
-          + "&and_or=[% and_or %]"
-          + "&excluding=[% excluding %]"
-          + "&operator=[% operator %]"
-          + "&orderby=[% orderby %]"
-          + "&value=[% value |url %]"
-          + "&startfrom=[% startfrom %]"
-          + "&resultsperpage=[% resultsperpage %]"
-          + "&csrf_token=[% csrf_token %]";
-    }
-}
-
-function Help() {
-    newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
-}
-
-function addauthority() {
-    X = document.forms[0].authtype.value;
-    window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
-}
-function searchauthority() {
-    X = document.forms[0].authtype2.value;
-    Y = document.forms[0].value.value;
-    window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
-}
-//]]>
-</script>
-[% INCLUDE 'authorities_js.inc' %]
 </head>
+
 <body id="auth_searchresultlist" class="auth">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'authorities-search.inc' %]
@@ -116,4 +80,9 @@ function searchauthority() {
 </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'authorities_js.inc' %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

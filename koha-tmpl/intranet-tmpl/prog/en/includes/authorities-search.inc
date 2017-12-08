@@ -1,22 +1,6 @@
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1>
 <!-- Begin Authorities Resident Search Box -->
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        var searchType = '[% marclist %]';
-        if (searchType) {
-            if ('mainentry' == searchType) {
-                $("#header_search").tabs( "option", "selected", 0 );
-            } else if ('match' == searchType) {
-                $("#header_search").tabs( "option", "selected", 1 );
-            } else if ('all' == searchType) {
-                $("#header_search").tabs( "option", "selected", 2 );
-            }
-        }
-    });
-//]]>
-</script>
 <div id="header_search" class="residentsearch">
     <div id="mainmain_heading" class="residentsearch">
     <p class="tip">Enter main heading ($a only):</p>

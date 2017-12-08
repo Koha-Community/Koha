@@ -1,47 +1,15 @@
 [% PROCESS 'merge-record.inc' %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/merge-record_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'merge-record-strings.inc' %]
 <style type="text/css">
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
 /* We use this style "against" the li ui-tabs-nav style automatically applied */
 </style>
-<script type="text/javascript">
-//<![CDATA[
-
-    // When submiting the form
-    function mergeformsubmit() {
-        $('#tabs').remove();
-    }
-
-$(document).ready(function(){
-    // Getting marc structure via ajax
-    tagslib = [];
-    $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
-        tagslib = json;
-        rebuild_target($("#tabs"), $("#resultul"));
-    });
-
-    $('.preview-merge-reference').click(function (ev) {
-        ev.preventDefault();
-        newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
-    });
-
-    // Creating tabs
-    $("#tabs").tabs();
-});
-
-
-function changeFramework(fw) {
-    $("#Frameworks").val(fw);
-}
-
-//]]>
-</script>
 </head>
+
 <body id="auth_merge" class="cat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'authorities-search.inc' %]
@@ -138,5 +106,44 @@ function changeFramework(fw) {
 </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'merge-record-strings.inc' %]
+    [% INCLUDE 'authorities_js.inc' %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/merge-record_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'merge-record-strings.inc' %]
+    <script type="text/javascript">
+    //<![CDATA[
+
+        // When submiting the form
+        function mergeformsubmit() {
+            $('#tabs').remove();
+        }
+
+    $(document).ready(function(){
+        // Getting marc structure via ajax
+        tagslib = [];
+        $.getJSON("/cgi-bin/koha/authorities/merge_ajax.pl", {frameworkcode : "[% framework %]" }, function(json) {
+            tagslib = json;
+            rebuild_target($("#tabs"), $("#resultul"));
+        });
+
+        $('.preview-merge-reference').click(function (ev) {
+            ev.preventDefault();
+            newin=window.open($(this).attr('href'),'merge_reference', 'width=1000,height=600,toolbar=false,scrollbars=yes');
+        });
+
+        // Creating tabs
+        $("#tabs").tabs();
+    });
+
+
+    function changeFramework(fw) {
+        $("#Frameworks").val(fw);
+    }
+
+    //]]>
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

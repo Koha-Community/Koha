@@ -1,28 +1,4 @@
 [% INCLUDE 'blocking_errors.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $("#delAuth").click(function(){
-            confirm_deletion();
-            return false;
-        });
-
-        $("#z3950submit").click(function(){
-            [% IF ( authid ) %]
-                if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
-                    window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid %]","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-                }
-            [% ELSE %]
-                window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-            [% END %]
-            return false;
-        });
-
-    });
-
-//]]>
-</script>
-
 [% IF ( authid || CAN_user_editauthorities) %]
 
 <div id="toolbar" class="btn-toolbar">
