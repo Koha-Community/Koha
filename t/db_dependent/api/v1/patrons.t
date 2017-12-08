@@ -26,6 +26,7 @@ use t::lib::Mocks;
 
 use C4::Auth;
 use Koha::Database;
+use Koha::Patron::Debarments qw/AddDebarment/;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -41,104 +42,116 @@ subtest 'list() tests' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-
     unauthorized_access_tests('GET', undef, undef);
+    $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 8;
+        plan tests => 13;
 
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 1 });
-        my $patron = Koha::Patrons->find($borrowernumber);
-        Koha::Patrons->search({
-            borrowernumber => { '!=' => $borrowernumber},
-            cardnumber => { LIKE => $patron->cardnumber . "%" }
-        })->delete;
-        Koha::Patrons->search({
-            borrowernumber => { '!=' => $borrowernumber},
-            address2 => { LIKE => $patron->address2 . "%" }
-        })->delete;
+        $schema->storage->txn_begin;
+
+        Koha::Patrons->search->delete;
+
+        my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 1 });
+        my $patron = Koha::Patrons->find($patron_id);
 
         my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
         $t->request_ok($tx)
           ->status_is(200);
 
-        $tx = $t->ua->build_tx(GET => '/api/v1/patrons?cardnumber='.
-                                  $patron->cardnumber);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $tx = $t->ua->build_tx(GET => '/api/v1/patrons?cardnumber=' . $patron->cardnumber);
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
         $t->request_ok($tx)
           ->status_is(200)
           ->json_is('/0/cardnumber' => $patron->cardnumber);
 
         $tx = $t->ua->build_tx(GET => '/api/v1/patrons?address2='.
                                   $patron->address2);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
         $t->request_ok($tx)
           ->status_is(200)
           ->json_is('/0/address2' => $patron->address2);
-    };
 
-    $schema->storage->txn_rollback;
+        my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+        AddDebarment({ borrowernumber => $patron_2->id });
+        # re-read from DB
+        $patron_2->discard_changes;
+        my $ub = $patron_2->unblessed;
+
+        $tx = $t->ua->build_tx( GET => '/api/v1/patrons?restricted=' . Mojo::JSON->true );
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
+        $t->request_ok($tx)
+          ->status_is(200)
+          ->json_has('/0/restricted')
+          ->json_is( '/0/restricted' => Mojo::JSON->true )
+          ->json_hasnt('/1');
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'get() tests' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
-
     unauthorized_access_tests('GET', -1, undef);
+    $schema->storage->txn_rollback;
 
     subtest 'access own object tests' => sub {
         plan tests => 4;
 
-        my ($patronid, $patronsessionid) = create_user_and_session({
-            authorized => 0 });
+        $schema->storage->txn_begin;
+
+        my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 0 });
 
         # Access patron's own data even though they have no borrowers flag
-        my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patronid");
-        $tx->req->cookies({name => 'CGISESSID', value => $patronsessionid});
-        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron_id);
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
         $t->request_ok($tx)
           ->status_is(200);
 
-        my $guarantee = $builder->build({
-            source => 'Borrower',
-            value  => {
-                guarantorid => $patronid,
+        my $guarantee = $builder->build_object({
+            class => 'Koha::Patrons',
+            value => {
+                guarantorid => $patron_id,
             }
         });
 
         # Access guarantee's data even though guarantor has no borrowers flag
-        my $guaranteenumber = $guarantee->{borrowernumber};
-        $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$guaranteenumber");
-        $tx->req->cookies({name => 'CGISESSID', value => $patronsessionid});
-        $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+        $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $guarantee->id );
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
         $t->request_ok($tx)
           ->status_is(200);
+
+        $schema->storage->txn_rollback;
     };
 
     subtest 'librarian access tests' => sub {
-        plan tests => 5;
+        plan tests => 6;
 
-        my ($patron_id) = create_user_and_session({
-            authorized => 0 });
-        my $patron = Koha::Patrons->find($patron_id);
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 1 });
-        my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id");
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $schema->storage->txn_begin;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my ( undef, $session_id ) = create_user_and_session({ authorized => 1 });
+
+        my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->id);
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(200)
-          ->json_is('/borrowernumber' => $patron_id)
-          ->json_is('/surname' => $patron->surname)
-          ->json_is('/lost' => Mojo::JSON->false );
-    };
+          ->json_is('/patron_id'        => $patron->id)
+          ->json_is('/category_id'      => $patron->categorycode )
+          ->json_is('/surname'          => $patron->surname)
+          ->json_is('/patron_card_lost' => Mojo::JSON->false );
 
-    $schema->storage->txn_rollback;
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'add() tests' => sub {
@@ -146,124 +159,157 @@ subtest 'add() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
-    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
-    my $newpatron = {
-        address      => 'Street',
-        branchcode   => $branchcode,
-        cardnumber   => $branchcode.$categorycode,
-        categorycode => $categorycode,
-        city         => 'Joenzoo',
-        surname      => "TestUser",
-        userid       => $branchcode.$categorycode,
-    };
+    my $patron = Koha::REST::V1::Patrons::_to_api(
+        $builder->build_object( { class => 'Koha::Patrons' } )->TO_JSON );
 
-    unauthorized_access_tests('POST', undef, $newpatron);
+    unauthorized_access_tests('POST', undef, $patron);
+
+    $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
         plan tests => 20;
 
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 1 });
+        $schema->storage->txn_begin;
 
-        $newpatron->{branchcode} = "nonexistent"; # Test invalid branchcode
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        my $newpatron = Koha::REST::V1::Patrons::_to_api( $patron->TO_JSON );
+        # delete RO attributes
+        delete $newpatron->{patron_id};
+        delete $newpatron->{restricted};
+
+        # Create a library just to make sure its ID doesn't exist on the DB
+        my $library_to_delete = $builder->build_object({ class => 'Koha::Libraries' });
+        my $deleted_library_id = $library_to_delete->id;
+        # Delete library
+        $library_to_delete->delete;
+
+        my ( undef, $session_id ) = create_user_and_session({ authorized => 1 });
+
+        $newpatron->{library_id} = $deleted_library_id;
         my $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron );
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         warning_like {
             $t->request_ok($tx)
-              ->status_is(400)
-              ->json_is('/error' => "Given branchcode does not exist"); }
-            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
+              ->status_is(409)
+              ->json_is('/error' => "Duplicate ID"); }
+            qr/^DBD::mysql::st execute failed: Duplicate entry/;
 
-        $newpatron->{branchcode} = $branchcode;
+        $newpatron->{library_id} = $patron->branchcode;
 
-        $newpatron->{categorycode} = "nonexistent"; # Test invalid patron category
+        # Create a library just to make sure its ID doesn't exist on the DB
+        my $category_to_delete = $builder->build_object({ class => 'Koha::Patron::Categories' });
+        my $deleted_category_id = $category_to_delete->id;
+        # Delete library
+        $category_to_delete->delete;
+
+        $newpatron->{category_id} = $deleted_category_id; # Test invalid patron category
         $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(400)
-          ->json_is('/error' => "Given categorycode does not exist");
-        $newpatron->{categorycode} = $categorycode;
+          ->json_is('/error' => "Given category_id does not exist");
+        $newpatron->{category_id} = $patron->categorycode;
 
         $newpatron->{falseproperty} = "Non existent property";
         $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(400);
         delete $newpatron->{falseproperty};
 
-        $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(201, 'Patron created successfully')
-          ->json_has('/borrowernumber', 'got a borrowernumber')
-          ->json_is('/cardnumber', $newpatron->{ cardnumber })
-          ->json_is('/surname' => $newpatron->{ surname })
-          ->json_is('/firstname' => $newpatron->{ firstname });
-        $newpatron->{borrowernumber} = $tx->res->json->{borrowernumber};
+        my $patron_to_delete = $builder->build_object({ class => 'Koha::Patrons' });
+        $newpatron = Koha::REST::V1::Patrons::_to_api($patron_to_delete->TO_JSON);
+        # delete RO attributes
+        delete $newpatron->{patron_id};
+        delete $newpatron->{restricted};
+        $patron_to_delete->delete;
 
         $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+        $t->request_ok($tx)
+          ->status_is(201, 'Patron created successfully')
+          ->json_has('/patron_id', 'got a patron_id')
+          ->json_is( '/cardnumber' => $newpatron->{ cardnumber })
+          ->json_is( '/surname'    => $newpatron->{ surname })
+          ->json_is( '/firstname'  => $newpatron->{ firstname });
+
+        $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         warning_like {
             $t->request_ok($tx)
               ->status_is(409)
               ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
               ->json_has( '/conflict', 'cardnumber' ); }
             qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
-    };
 
-    $schema->storage->txn_rollback;
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'update() tests' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-
     unauthorized_access_tests('PUT', 123, {email => 'nobody@example.com'});
+    $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
         plan tests => 23;
 
-        t::lib::Mocks::mock_preference('minPasswordLength', 1);
-        my ($borrowernumber, $sessionid) = create_user_and_session({ authorized => 1 });
-        my ($borrowernumber2, undef) = create_user_and_session({ authorized => 0 });
+        $schema->storage->txn_begin;
 
-        my $patron_1  = Koha::Patrons->find($borrowernumber);
-        my $patron_2  = Koha::Patrons->find($borrowernumber2);
-        my $newpatron = $patron_2->TO_JSON;
-        # borrowernumber should not be passed in the request body for PUT
-        delete $newpatron->{borrowernumber};
+        t::lib::Mocks::mock_preference('minPasswordLength', 1);
+        my ( $patron_id_1, $session_id ) = create_user_and_session({ authorized => 1 });
+        my ( $patron_id_2, undef )       = create_user_and_session({ authorized => 0 });
+
+        my $patron_1  = Koha::Patrons->find($patron_id_1);
+        my $patron_2  = Koha::Patrons->find($patron_id_2);
+        my $newpatron = Koha::REST::V1::Patrons::_to_api($patron_2->TO_JSON);
+        # delete RO attributes
+        delete $newpatron->{patron_id};
+        delete $newpatron->{restricted};
 
         my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/-1" => json => $newpatron );
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         $t->request_ok($tx)
           ->status_is(404)
           ->json_has('/error', 'Fails when trying to PUT nonexistent patron');
 
-        $newpatron->{categorycode} = 'nonexistent';
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        warning_like {
-            $t->request_ok($tx)
-              ->status_is(400)
-              ->json_is('/error' => "Given categorycode does not exist"); }
-            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
-        $newpatron->{categorycode} = $patron_2->categorycode;
+        # Create a library just to make sure its ID doesn't exist on the DB
+        my $category_to_delete = $builder->build_object({ class => 'Koha::Patron::Categories' });
+        my $deleted_category_id = $category_to_delete->id;
+        # Delete library
+        $category_to_delete->delete;
 
-        $newpatron->{branchcode} = 'nonexistent';
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $newpatron->{category_id} = $deleted_category_id;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$patron_id_2" => json => $newpatron );
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         warning_like {
             $t->request_ok($tx)
               ->status_is(400)
-              ->json_is('/error' => "Given branchcode does not exist"); }
+              ->json_is('/error' => "Given category_id does not exist"); }
             qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
-        $newpatron->{branchcode} = $patron_2->branchcode;
+        $newpatron->{category_id} = $patron_2->categorycode;
+
+        # Create a library just to make sure its ID doesn't exist on the DB
+        my $library_to_delete = $builder->build_object({ class => 'Koha::Libraries' });
+        my $deleted_library_id = $library_to_delete->id;
+        # Delete library
+        $library_to_delete->delete;
+
+        $newpatron->{library_id} = $deleted_library_id;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron_2->id => json => $newpatron );
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(400)
+              ->json_is('/error' => "Given library_id does not exist"); }
+            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
+        $newpatron->{library_id} = $patron_2->branchcode;
 
         $newpatron->{falseproperty} = "Non existent property";
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron_2->id => json => $newpatron );
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         $t->request_ok($tx)
           ->status_is(400)
           ->json_is('/errors/0/message' =>
@@ -274,8 +320,8 @@ subtest 'update() tests' => sub {
         $newpatron->{cardnumber} = $patron_1->cardnumber;
         $newpatron->{userid}     = $patron_1->userid;
 
-        $tx = $t->ua->build_tx( PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
-        $tx->req->cookies({ name => 'CGISESSID', value => $sessionid });
+        $tx = $t->ua->build_tx( PUT => "/api/v1/patrons/" . $patron_2->id => json => $newpatron );
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         warning_like {
             $t->request_ok($tx)
               ->status_is(409)
@@ -283,58 +329,58 @@ subtest 'update() tests' => sub {
               ->json_is(  '/conflict', 'cardnumber' ); }
             qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
 
-        $newpatron->{ cardnumber } = $borrowernumber.$borrowernumber2;
-        $newpatron->{ userid } = "user".$borrowernumber.$borrowernumber2;
-        $newpatron->{ surname } = "user".$borrowernumber.$borrowernumber2;
+        $newpatron->{ cardnumber } = $patron_id_1.$patron_id_2;
+        $newpatron->{ userid }     = "user".$patron_id_1.$patron_id_2;
+        $newpatron->{ surname }    = "user".$patron_id_1.$patron_id_2;
 
         $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron_2->id => json => $newpatron);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         $t->request_ok($tx)
           ->status_is(200, 'Patron updated successfully')
           ->json_has($newpatron);
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
-    };
 
-    $schema->storage->txn_rollback;
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'delete() tests' => sub {
     plan tests => 2;
 
     $schema->storage->txn_begin;
-
     unauthorized_access_tests('DELETE', 123, undef);
+    $schema->storage->txn_rollback;
 
     subtest 'librarian access test' => sub {
         plan tests => 4;
 
-        my ($borrowernumber, $sessionid) = create_user_and_session({
-            authorized => 1 });
-        my ($borrowernumber2, $sessionid2) = create_user_and_session({
-            authorized => 0 });
+        $schema->storage->txn_begin;
+
+        my ( undef, $session_id ) = create_user_and_session({ authorized => 1 });
+        my ( $patron_id, undef )  = create_user_and_session({ authorized => 0 });
 
         my $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/-1");
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(404, 'Patron not found');
 
-        $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/$borrowernumber2");
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/$patron_id");
+        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(200, 'Patron deleted successfully');
-    };
 
-    $schema->storage->txn_rollback;
+        $schema->storage->txn_rollback;
+    };
 };
 
 # Centralized tests for 401s and 403s assuming the endpoint requires
 # borrowers flag for access
 sub unauthorized_access_tests {
-    my ($verb, $patronid, $json) = @_;
+    my ($verb, $patron_id, $json) = @_;
 
     my $endpoint = '/api/v1/patrons';
-    $endpoint .= ($patronid) ? "/$patronid" : '';
+    $endpoint .= ($patron_id) ? "/$patron_id" : '';
 
     subtest 'unauthorized access tests' => sub {
         plan tests => 5;
@@ -343,11 +389,11 @@ sub unauthorized_access_tests {
         $t->request_ok($tx)
           ->status_is(401);
 
-        my ($borrowernumber, $sessionid) = create_user_and_session({
+        my ($borrowernumber, $session_id) = create_user_and_session({
             authorized => 0 });
 
         $tx = $t->ua->build_tx($verb => $endpoint => json => $json);
-        $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+        $tx->req->cookies({name => 'CGISESSID', value => $session_id});
         $t->request_ok($tx)
           ->status_is(403)
           ->json_has('/required_permissions');
