@@ -551,10 +551,10 @@ sub hasPermission {
 
     $borrower = Koha::Patrons->cast($borrower);
     $permissionModule = Koha::Auth::PermissionModules->cast($permissionModule);
-    $permission = Koha::Auth::Permissions->cast($permission) unless $permission eq '*';
+    $permission = Koha::Auth::Permissions->cast($permission) unless $permission eq '*' || $permission eq '1';
 
     my $error;
-    if ($permission eq '*') {
+    if ($permission eq '*' || $permission eq '1') {
         my $borrowerPermission = Koha::Auth::BorrowerPermissions->search({borrowernumber => $borrower->borrowernumber,
                                                  permission_module_id => $permissionModule->permission_module_id,
                                                 })->next();

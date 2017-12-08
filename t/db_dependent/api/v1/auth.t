@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 use Test::Warn;
 
@@ -30,6 +30,9 @@ use C4::Auth;
 use C4::Context;
 use Koha::AuthUtils;
 use Koha::Database;
+
+use DateTime::Format::HTTP;
+use Digest::SHA qw( hmac_sha256_hex );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -95,6 +98,37 @@ subtest 'under() tests' => sub {
       ->json_is('/error', 'System is under maintenance.');
 
     t::lib::Mocks::mock_preference('Version', $ver);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Authorization header tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my ($borrowernumber, $session_id) = create_user_and_session();
+    my $apikey = $builder->build(
+        {
+            source => 'ApiKey',
+            value  => {
+                borrowernumber => $borrowernumber,
+                active => 1,
+            }
+        }
+    );
+    Koha::Auth::PermissionManager->grantAllSubpermissions(
+        $borrowernumber, 'borrowers'
+    );
+    my $kohadate = DateTime::Format::HTTP->format_datetime();
+    my $signature = hmac_sha256_hex("GET $borrowernumber $kohadate", $apikey->{api_key});
+
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx->req->headers->header('X-Koha-Date' => $kohadate);
+    $tx->req->headers->header('Authorization' => "Koha $borrowernumber:$signature");
+    $t->request_ok($tx)
+      ->status_is(200);
 
     $schema->storage->txn_rollback;
 };
@@ -231,7 +265,8 @@ sub create_user_and_session {
         {
             source => 'Borrower',
             value  => {
-                flags => 0
+                flags => 0,
+                lost => 0,
             }
         }
     );

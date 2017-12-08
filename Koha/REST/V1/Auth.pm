@@ -26,6 +26,7 @@ use CGI;
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 
 use Koha::Account::Lines;
+use Koha::Auth;
 use Koha::Checkouts;
 use Koha::Holds;
 use Koha::Notice::Messages;
@@ -191,38 +192,11 @@ sub authenticate_api_request {
 
     my $spec = $c->openapi->spec;
     my $authorization = $spec->{'x-koha-authorization'};
-    my $cookie = $c->cookie('CGISESSID');
-    my ($session, $user);
-    # Mojo doesn't use %ENV the way CGI apps do
-    # Manually pass the remote_address to check_auth_cookie
-    my $remote_addr = $c->tx->remote_address;
-    my ($status, $sessionID) = check_cookie_auth(
-                                            $cookie, undef,
-                                            { remote_addr => $remote_addr });
-    if ($status eq "ok") {
-        $session = get_session($sessionID);
-        $user = Koha::Patrons->find($session->param('number'));
-        $c->stash('koha.user' => $user);
-    }
-    elsif ($status eq "maintenance") {
-        Koha::Exceptions::UnderMaintenance->throw(
-            error => 'System is under maintenance.'
-        );
-    }
-    elsif ($status eq "expired" and $authorization) {
-        Koha::Exceptions::Authentication::SessionExpired->throw(
-            error => 'Session has been expired.'
-        );
-    }
-    elsif ($status eq "failed" and $authorization) {
-        Koha::Exceptions::Authentication::Required->throw(
-            error => 'Authentication failure.'
-        );
-    }
-    elsif ($authorization) {
-        Koha::Exceptions::Authentication->throw(
-            error => 'Unexpected authentication status.'
-        );
+    my $user;
+    if ($c->req->headers->header('Authorization')) {
+        ($user, undef) = _header_auth($c, $authorization);
+    } else {
+        ($user, undef) = _cookie_auth($c, $authorization);
     }
 
     # We do not need any authorization
@@ -276,6 +250,93 @@ sub validate_query_parameters {
     ) if @errors;
 }
 
+
+sub _cookie_auth {
+    my ($c, $authorization) = @_;
+
+    my $cookie = $c->cookie('CGISESSID');
+    my $user;
+    # Mojo doesn't use %ENV the way CGI apps do
+    # Manually pass the remote_address to check_auth_cookie
+    my $remote_addr = $c->tx->remote_address;
+    my ($status, $sessionID) = check_cookie_auth(
+                                            $cookie, undef,
+                                            { remote_addr => $remote_addr });
+    my $session;
+    if ($status eq "ok") {
+        $session = get_session($sessionID);
+        $user = Koha::Patrons->find($session->param('number'));
+        $c->stash('koha.user' => $user);
+    }
+    elsif ($status eq "maintenance") {
+        Koha::Exceptions::UnderMaintenance->throw(
+            error => 'System is under maintenance.'
+        );
+    }
+    elsif ($status eq "expired" and $authorization) {
+        Koha::Exceptions::Authentication::SessionExpired->throw(
+            error => 'Session has been expired.'
+        );
+    }
+    elsif ($status eq "failed" and $authorization) {
+        Koha::Exceptions::Authentication::Required->throw(
+            error => 'Authentication failure.'
+        );
+    }
+    elsif ($authorization) {
+        Koha::Exceptions::Authentication->throw(
+            error => 'Unexpected authentication status.'
+        );
+    }
+
+    return ($user, $cookie);
+}
+
+sub _header_auth {
+    my ($c, $authorization) = @_;
+
+    try {
+        return Koha::Auth::authenticate(
+            $c, $authorization->{'permissions'},
+            { authnotrequired => defined $authorization ? 0 : 1 }
+        );
+    }
+    catch {
+        my $e = $_;
+        die $e unless blessed($e);
+
+        if (
+            $e->isa('Koha::Exception::LoginFailed') ||
+            $e->isa('Koha::Exception::UnknownObject')
+        ) {
+            Koha::Exceptions::Authentication::Required->throw(
+                error => $e->error
+            );
+        }
+        elsif ($e->isa('Koha::Exception::NoPermission')) {
+            Koha::Exceptions::Authorization::Unauthorized->throw(
+                error => $e->error,
+                required_permissions => $authorization->{'permissions'},
+            );
+        }
+        elsif ($e->isa('Koha::Exception::BadParameter')) {
+            Koha::Exceptions::BadParameter->throw(
+                error => $e->error
+            );
+        }
+        elsif ($e->isa('Koha::Exception::VersionMismatch') ||
+               $e->isa('Koha::Exception::BadSystemPreference') ||
+               $e->isa('Koha::Exception::ServiceTemporarilyUnavailable')
+        ){
+            Koha::Exceptions::UnderMaintenance->throw(
+                error => $e->error
+            );
+        }
+        else {
+            $e->rethrow();
+        }
+    };
+}
 
 =head3 allow_owner
 
