@@ -1,0 +1,60 @@
+=head1 NAME
+
+Mojolicious::Plugin::OpenAPI::Guides::Swagger2 - Swagger2 back compat guide
+
+=head1 OVERVIEW
+
+This guide is useful if your application is already using
+L<Mojolicious::Plugin::Swagger2>.
+
+The old plugin used to pass on C<$args> and C<$cb> to the action. This can be
+emulated using an L<around_action|Mojolicious/around_action> hook. The
+L</SYNOPSIS> below contains example code that you can use to make your old
+controllers and actions work with L<Mojolicious::Plugin::OpenAPI>.
+
+=head1 SYNOPSIS
+
+  package MyApp;
+  use Mojo::Base "Mojolicious";
+
+  sub startup {
+    my $self = shift;
+
+    # Load your specification
+    $self->plugin("OpenAPI" => {url => $app->home->rel_file("myapi.json")});
+
+    $self->hook(around_action => sub {
+      my ($next, $c, $action, $last) = @_;
+
+      # Do not call the action with ($args, $cb) unless it is an
+      # OpenAPI endpoint.
+      return $next->() unless $last;
+      return $next->() unless $c->openapi->spec;
+
+      # Render error document unless the input is valid
+      return unless $c->openapi->valid_input;
+
+      my $cb = sub {
+        my ($c, $data, $code) = @_;
+        $c->render(openapi => $data, status => $code);
+      };
+
+      # Call the action with ($args, $cb)
+      return $c->$action($c->validation->output, $cb);
+    });
+  }
+
+=head1 MOVING FORWARD
+
+Note that the C<around_action> hook above does not prevent you from writing new
+actions using the standard L<Mojolicious::Plugin::OpenAPI> API. In the new actions,
+you can simply drop using C<$args> and C<$cb> and it will work as expected as
+well.
+
+=head1 SEE ALSO
+
+L<https://github.com/jhthorsen/mojolicious-plugin-openapi/blob/master/t/swagger2.t>
+
+L<Mojolicious::Plugin::OpenAPI>.
+
+=cut
