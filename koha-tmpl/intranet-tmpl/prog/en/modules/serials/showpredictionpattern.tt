@@ -1,5 +1,4 @@
 [% USE KohaDates %]
-
 <h2>Prediction pattern</h1>
 [% IF (not_consistent_end_date) %]
   <p><em>End date is not consistent with subscription length.</em></p>
@@ -7,26 +6,6 @@
 [% IF (ask_for_irregularities) %]
     <p><em>Please check issues that are NOT published (irregularities)</em></p>
     [% IF (daily_options) %]
-        <script type="text/javascript">
-        //<![CDATA[
-        function Check_boxes(dow) {
-            if($(":checkbox[data-dow='"+dow+"']:first").is(':checked')) {
-                $("#predictionst :checkbox[data-dow='"+dow+"']").each(function(){
-                    $(this).prop('checked', true);
-                });
-            } else {
-                $("#predictionst :checkbox[data-dow='"+dow+"']").each(function(){
-                    $(this).prop('checked', false);
-                });
-            }
-        }
-        $(document).ready(function(){
-            $(".skipday").on("change",function(){
-                Check_boxes( $(this).data("dow"));
-            });
-        });
-        //]]>
-        </script>
         <p><em>
             If there is a day (or more) in the week where issues are never
             published, you can check corresponding boxes below.
@@ -104,4 +83,5 @@
     [% END %]
   </tbody>
 </table>
+
 [% END %]

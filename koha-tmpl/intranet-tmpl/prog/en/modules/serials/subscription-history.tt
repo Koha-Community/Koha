@@ -1,9 +1,8 @@
 [% USE KohaDates %]
-
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Subscription history</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 </head>
 
 <body id="ser_subscription_history" class="ser">
@@ -64,4 +63,9 @@
     [% INCLUDE 'serials-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

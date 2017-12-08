@@ -1,91 +1,8 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Numbering patterns</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-
-function confirmDelete() {
-  return confirm(_("Are you sure you want to delete this numbering pattern?"));
-}
-
-[% IF (new or modify) %]
-  function testPattern() {
-      var frequencyid = $("#frequency").val();
-      var firstacquidate = $("#firstacquidate").val();
-      var error = 0;
-      var error_msg = "";
-      if(frequencyid == undefined || frequencyid == "") {
-          error_msg += _("- Frequency is not defined") + "\n";
-          error ++;
-      }
-      if(firstacquidate == undefined || firstacquidate == "") {
-          error_msg += _("- First publication date is not defined") + "\n";
-          error ++;
-      }
-
-      if(error){
-          alert(_("Cannot test prediction pattern for the following reason(s):") + "\n\n"
-              + error_msg);
-          return false;
-      }
-
-      var ajaxData = {
-          'custompattern': true,
-      };
-      var ajaxParams = [
-          'firstacquidate', 'subtype', 'sublength', 'frequency', 'numberingmethod',
-          'lastvalue1', 'lastvalue2', 'lastvalue3', 'add1', 'add2', 'add3',
-          'every1', 'every2', 'every3', 'innerloop1', 'innerloop2', 'innerloop3',
-          'setto1', 'setto2', 'setto3', 'numbering1', 'numbering2', 'numbering3',
-          'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale'
-      ];
-      for(i in ajaxParams) {
-          var param = ajaxParams[i];
-          var value = $("#"+param).val();
-          if(value.length > 0)
-              ajaxData[param] = value;
-      }
-
-      $.ajax({
-          url: "/cgi-bin/koha/serials/showpredictionpattern.pl",
-          data: ajaxData,
-          async: false,
-          dataType: "text",
-          success: function(data) {
-              $("#predictionpattern").html(data);
-          }
-      });
-  }
-[% END %]
-
-function show_blocking_subs() {
-    $("#blocking_subs").show();
-}
-$(document).ready(function(){
-
-    $("#numberpatternst").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-            { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-        ],
-        "sPaginationType": "four_button"
-    }));
-
-    $(".delete_pattern").on("click",function(){
-        return confirmDelete();
-    });
-    $("#show_blocking_subs").on("click",function(e){
-        e.preventDefault();
-        $("#blocking_subs").show();
-    });
-    $("#test_pattern").on("click",function(){
-         testPattern();
-    });
-});
-//]]>
-</script>
 </head>
 
 <body id="ser_subscription_numberpatterns" class="ser">
@@ -381,4 +298,92 @@ $(document).ready(function(){
     [% INCLUDE 'serials-menu.inc' %]
   </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% IF (daily_options) %]
+        <script type="text/javascript" src="[% interface %]/[% theme %]/js/showpredictionpattern.js"></script>
+    [% END %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+        function confirmDelete() {
+            return confirm(_("Are you sure you want to delete this numbering pattern?"));
+        }
+
+        [% IF (new or modify) %]
+            function testPattern() {
+                var frequencyid = $("#frequency").val();
+                var firstacquidate = $("#firstacquidate").val();
+                var error = 0;
+                var error_msg = "";
+                if(frequencyid == undefined || frequencyid == "") {
+                    error_msg += _("- Frequency is not defined") + "\n";
+                    error ++;
+                }
+                if(firstacquidate == undefined || firstacquidate == "") {
+                    error_msg += _("- First publication date is not defined") + "\n";
+                    error ++;
+                }
+
+                if(error){
+                    alert(_("Cannot test prediction pattern for the following reason(s):") + "\n\n"
+                        + error_msg);
+                    return false;
+                }
+
+                var ajaxData = {
+                    'custompattern': true,
+                };
+                var ajaxParams = [
+                    'firstacquidate', 'subtype', 'sublength', 'frequency', 'numberingmethod',
+                    'lastvalue1', 'lastvalue2', 'lastvalue3', 'add1', 'add2', 'add3',
+                    'every1', 'every2', 'every3', 'innerloop1', 'innerloop2', 'innerloop3',
+                    'setto1', 'setto2', 'setto3', 'numbering1', 'numbering2', 'numbering3',
+                    'whenmorethan1', 'whenmorethan2', 'whenmorethan3', 'locale'
+                ];
+                for(i in ajaxParams) {
+                    var param = ajaxParams[i];
+                    var value = $("#"+param).val();
+                    if(value.length > 0)
+                        ajaxData[param] = value;
+                }
+
+                $.ajax({
+                    url: "/cgi-bin/koha/serials/showpredictionpattern.pl",
+                    data: ajaxData,
+                    async: false,
+                    dataType: "text",
+                    success: function(data) {
+                        $("#predictionpattern").html(data);
+                    }
+                });
+            }
+        [% END %]
+
+        function show_blocking_subs() {
+            $("#blocking_subs").show();
+        }
+        $(document).ready(function(){
+
+            $("#numberpatternst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+
+            $(".delete_pattern").on("click",function(){
+                return confirmDelete();
+            });
+            $("#show_blocking_subs").on("click",function(e){
+                e.preventDefault();
+                $("#blocking_subs").show();
+            });
+            $("#test_pattern").on("click",function(){
+                 testPattern();
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
