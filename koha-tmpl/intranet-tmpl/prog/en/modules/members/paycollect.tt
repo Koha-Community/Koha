@@ -119,13 +119,11 @@ function moneyFormat(textObj) {
     <thead><tr>
             <th>Description</th>
             <th>Account type</th>
-            <th>Notify id</th>
-            <th>Level</th>
             <th>Amount</th>
             <th>Amount outstanding</th>
         </tr></thead>
     <tfoot>
-        <td colspan="5">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td>
+        <td colspan="3">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td>
     </tfoot>
     <tbody><tr>
             <td>
@@ -169,12 +167,10 @@ function moneyFormat(textObj) {
     <thead><tr>
             <th>Description</th>
             <th>Account type</th>
-            <th>Notify id</th>
-            <th>Level</th>
             <th>Amount</th>
             <th>Amount outstanding</th>
         </tr></thead>
-    <tfoot><td colspan="5">Total amount to be written off:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
+    <tfoot><td colspan="3">Total amount to be written off:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
     <tbody><tr>
             <td>[% description %] [% title %]</td>
             <td>[% accounttype %]</td>
