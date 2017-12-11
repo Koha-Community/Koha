@@ -178,7 +178,6 @@
                     <th>Name</th>
                     <th>Code</th>
                     <th>Address</th>
-                    <th>Properties</th>
                     <th>MARC organization code</th>
                     <th>IP</th>
                     <th>Actions</th>
@@ -215,11 +214,6 @@
                                 <br />OPAC Info: <div>[% library.opac_info %]</div>[% END %]
                             [% IF library.branchnotes %]
                                 <br />Notes: [% library.branchnotes |html %][% END %]
-                        </td>
-                        <td>
-                            [% FOREACH category IN library.get_categories %]
-                                [% category.categoryname |html %]<br />
-                            [% END %]
                         </td>
                         <td>[% library.marcorgcode %]</td>
                         <td>[% library.branchip %]</td>
