@@ -2376,7 +2376,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('700', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('700', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('700', '9', 'Koha-Normdatenidentnummer', 'Koha-Normdatenidentnummer', 0, 0, '', 7, '', '', '', 0, -5, '', '', '', NULL),
-		('700', 'a', 'Personenname', 'Personenname', 0, 0, 'additionalauthors.author', 7, '', 'PERSO_NAME', '', NULL, 0, '', '', '', NULL),
+		('700', 'a', 'Personenname', 'Personenname', 0, 0, '', 7, '', 'PERSO_NAME', '', NULL, 0, '', '', '', NULL),
 		('700', 'b', 'Zählung', 'Zählung', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('700', 'c', 'Titel und andere Wörter in Verbindung mit einem Namen', 'Titel und andere Wörter in Verbindung mit einem Namen', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('700', 'd', 'Datumsangaben in Verbindung mit einem Namen', 'Datumsangaben in Verbindung mit einem Namen', 0, 0, '', 7, '', '', '', NULL, 0, '', '', '', NULL),

@@ -2064,7 +2064,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('700', '6', 'Linkage', 'Linkage', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('700', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('700', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 7, '', '', '', 0, -5, '', '', '', NULL),
-		('700', 'a', 'Personal name', 'Personal name', 0, 0, 'additionalauthors.author', 7, '', 'PERSO_NAME', '', NULL, 0, '', '', '', NULL),
+		('700', 'a', 'Personal name', 'Personal name', 0, 0, '', 7, '', 'PERSO_NAME', '', NULL, 0, '', '', '', NULL),
 		('700', 'b', 'Numeration', 'Numeration', 0, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('700', 'c', 'Titles and other words associated with a name', 'Titles and other words associated with a name', 1, 0, '', 7, '', '', '', NULL, -1, '', '', '', NULL),
 		('700', 'd', 'Dates associated with a name', 'Dates associated with a name', 0, 0, '', 7, '', '', '', NULL, 0, '', '', '', NULL),
