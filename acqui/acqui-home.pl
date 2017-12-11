@@ -78,9 +78,6 @@ foreach my $budget ( @{$budget_arr} ) {
     if ( !defined $budget->{budget_amount} ) {
         $budget->{budget_amount} = 0;
     }
-
-    $budget->{'budget_ordered'} = GetBudgetOrdered( $budget->{'budget_id'} );
-    $budget->{'budget_spent'}   = GetBudgetSpent( $budget->{'budget_id'} );
     if ( !defined $budget->{budget_spent} ) {
         $budget->{budget_spent} = 0;
     }

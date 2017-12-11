@@ -480,10 +480,12 @@ sub GetBudgetHierarchy {
     my @bind_params;
     my $dbh   = C4::Context->dbh;
     my $query = qq|
-                    SELECT aqbudgets.*, aqbudgetperiods.budget_period_active, aqbudgetperiods.budget_period_description
+                    SELECT aqbudgets.*, aqbudgetperiods.budget_period_active, aqbudgetperiods.budget_period_description,
+                           b.firstname as budget_owner_firstname, b.surname as budget_owner_surname, b.borrowernumber as budget_owner_borrowernumber
                     FROM aqbudgets 
+                    LEFT JOIN borrowers b on b.borrowernumber = aqbudgets.budget_owner_id
                     JOIN aqbudgetperiods USING (budget_period_id)|;
-                        
+
 	my @where_strings;
     # show only period X if requested
     if ($budget_period_id) {
@@ -541,12 +543,64 @@ sub GetBudgetHierarchy {
         _add_budget_children(\@sort, $first_parent, 0);
     }
 
+    # Get all the budgets totals in as few queries as possible
+    my $hr_budget_spent = $dbh->selectall_hashref(qq|
+        SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
+               SUM( COALESCE(unitprice_tax_included, ecost_tax_included) * quantity ) AS budget_spent
+        FROM aqorders JOIN aqbudgets USING (budget_id)
+        WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
+        GROUP BY budget_id
+        |, 'budget_id');
+    my $hr_budget_ordered = $dbh->selectall_hashref(qq|
+        SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
+               SUM(ecost_tax_included *  quantity) AS budget_ordered
+        FROM aqorders JOIN aqbudgets USING (budget_id)
+        WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
+        GROUP BY budget_id
+        |, 'budget_id');
+    my $hr_budget_spent_shipment = $dbh->selectall_hashref(qq|
+        SELECT shipmentcost_budgetid as budget_id,
+               SUM(shipmentcost) as shipmentcost
+        FROM aqinvoices
+        WHERE closedate IS NOT NULL
+        GROUP BY shipmentcost_budgetid
+        |, 'budget_id');
+    my $hr_budget_ordered_shipment = $dbh->selectall_hashref(qq|
+        SELECT shipmentcost_budgetid as budget_id,
+               SUM(shipmentcost) as shipmentcost
+        FROM aqinvoices
+        WHERE closedate IS NULL
+        GROUP BY shipmentcost_budgetid
+        |, 'budget_id');
+
+    my $recursiveAdd;
+    $recursiveAdd = sub {
+        my ($budget, $parent) = @_;
+
+        foreach my $child (@{$budget->{children}}){
+            $recursiveAdd->($child, $budget);
+        }
+
+        $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent};
+        $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost};
+        $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered};
+        $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost};
+
+        $budget->{total_spent} += $budget->{budget_spent};
+        $budget->{total_ordered} += $budget->{budget_ordered};
+
+        if ($parent) {
+            $parent->{total_spent} += $budget->{total_spent};
+            $parent->{total_ordered} += $budget->{total_ordered};
+        }
+    };
+
     foreach my $budget (@sort) {
-        $budget->{budget_spent}   = GetBudgetSpent( $budget->{budget_id} );
-        $budget->{budget_ordered} = GetBudgetOrdered( $budget->{budget_id} );
-        $budget->{total_spent} = GetBudgetHierarchySpent( $budget->{budget_id} );
-        $budget->{total_ordered} = GetBudgetHierarchyOrdered( $budget->{budget_id} );
+        if ($budget->{budget_parent_id} == undef) {
+            $recursiveAdd->($budget);
+        }
     }
+
     return \@sort;
 }
 
