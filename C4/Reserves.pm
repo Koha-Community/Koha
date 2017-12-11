@@ -1969,7 +1969,22 @@ sub _reserve_last_pickup_date {
         $reserve : Koha::Holds->find($reserve->{reserve_id});
     my $delay = $hold ? $hold->max_pickup_delay : 7;
 
+    # Getting the ReservesMaxPickUpDelayBranch
+    my $branches = C4::Context->preference("ReservesMaxPickUpDelayBranch");
 
+    my $yaml = YAML::XS::Load(
+                        Encode::encode(
+                            'UTF-8',
+                            $branches,
+                            Encode::FB_CROAK
+                        )
+                    );
+
+    if ($yaml->{$branch}) {
+        $delay = $yaml->{$branch};
+
+    }
+    
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
         $expiration = $calendar->days_forward( $startdate, $delay );
     } else {

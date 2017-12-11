@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Carp;
 use Data::Dumper qw(Dumper);
+use YAML::XS;
 
 use C4::Context qw(preference);
 use C4::Log;
@@ -135,6 +136,22 @@ sub set_waiting {
     my $max_pickup_delay = $self->max_pickup_delay;
     my $cancel_on_holidays = C4::Context->preference('ExpireReservesOnHolidays');
     my $calendar = Koha::Calendar->new( branchcode => $self->branchcode );
+
+    # Getting the ReservesMaxPickUpDelayBranch
+    my $branches = C4::Context->preference("ReservesMaxPickUpDelayBranch");
+
+    my $yaml = YAML::XS::Load(
+                        Encode::encode(
+                            'UTF-8',
+                            $branches,
+                            Encode::FB_CROAK
+                        )
+                    );
+
+    if ($yaml->{$self->branchcode}) {
+        $max_pickup_delay = $yaml->{$self->branchcode};
+
+    }
 
     my $expirationdate = $today->clone;
     $expirationdate->add(days => $max_pickup_delay);
