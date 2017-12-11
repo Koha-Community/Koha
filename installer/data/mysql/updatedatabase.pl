@@ -15177,6 +15177,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 10021 - Drop notifys-related table and columns)\n";
 }
 
+$DBversion = '17.12.00.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES
+            ('RESTdefaultPageSize','20','','Set the default number of results returned by the REST API endpoints','Integer')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19278: Add a configurable default page size for REST endpoints)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
