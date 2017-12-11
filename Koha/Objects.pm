@@ -23,7 +23,6 @@ use Carp;
 use List::MoreUtils qw( none );
 
 use Koha::Database;
-use Koha::Exceptions;
 
 =head1 NAME
 
