@@ -41,6 +41,7 @@
         <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
         <xsl:variable name="isbn" select="marc:datafield[@tag=020]/marc:subfield[@code='a']"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
+        <xsl:variable name="controlField003" select="marc:controlfield[@tag=003]"/>
         <xsl:variable name="typeOf008">
             <xsl:choose>
                 <xsl:when test="$leader19='a'">ST</xsl:when>
