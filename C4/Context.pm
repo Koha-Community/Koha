@@ -496,6 +496,7 @@ preference.
 sub set_preference {
     my ( $self, $variable, $value, $explanation, $type, $options ) = @_;
 
+    my $variable_case = $variable;
     $variable = lc $variable;
 
     my $syspref = Koha::Config::SysPrefs->find($variable);
@@ -521,7 +522,7 @@ sub set_preference {
         )->store;
     } else {
         $syspref = Koha::Config::SysPref->new(
-            {   variable    => $variable,
+            {   variable    => $variable_case,
                 value       => $value,
                 explanation => $explanation || undef,
                 type        => $type,
