@@ -62,7 +62,7 @@
                     |
                     Indices:
                   [% FOREACH index IN elasticsearch_status.indexes %]
-                      [% index.index_name %] (count: <emph>[% index.count %]</emph>)
+                      [% index.index_name %] (count: <emph>[% index.count %]</emph>)[% UNLESS loop.last %], [% END %]
                   [% END %]
                 [% ELSE %]
                     <span class="status_warn">not running</span>
