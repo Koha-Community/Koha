@@ -33,7 +33,7 @@ Koha::Library::Group - Koha Library::Group object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -119,7 +119,7 @@ sub libraries {
 
 =head3 all_libraries
 
-my @libraries = $group->libraries( { [invert => 1] } );
+my @libraries = $group->all_libraries( { [invert => 1] } );
 
 Returns the libraries set as children of this group or any subgroup.
 
@@ -174,7 +174,9 @@ sub store {
     return $self->SUPER::store(@_);
 }
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 

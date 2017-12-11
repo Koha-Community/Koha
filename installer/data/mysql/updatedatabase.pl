@@ -15247,7 +15247,6 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '17.12.00.008';
 if ( CheckVersion($DBversion) ) {
-    require Koha::Library::Group;
 
     $dbh->do(q{
         INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups - Staff only', NOW() )
@@ -15287,7 +15286,7 @@ if ( CheckVersion($DBversion) ) {
         }
     }
 
-    print "Upgrade to $DBversion done (Bug 16735 - Replace existing library search groups functionality with the new hierarchical groups system)\n";
+    print "Upgrade to $DBversion done (Bug 16735 - Migrate library search groups into the new hierarchical groups)\n";
     SetVersion($DBversion);
 }
 
