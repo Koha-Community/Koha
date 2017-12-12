@@ -231,6 +231,8 @@ subtest 'update() tests' => sub {
         my $patron_1  = Koha::Patrons->find($borrowernumber);
         my $patron_2  = Koha::Patrons->find($borrowernumber2);
         my $newpatron = $patron_2->TO_JSON;
+        # borrowernumber should not be passed in the request body for PUT
+        delete $newpatron->{borrowernumber};
 
         my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/-1" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
@@ -282,13 +284,12 @@ subtest 'update() tests' => sub {
         $newpatron->{ userid } = "user".$borrowernumber.$borrowernumber2;
         $newpatron->{ surname } = "user".$borrowernumber.$borrowernumber2;
 
-        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" .
-                    $newpatron->{borrowernumber} => json => $newpatron);
+        $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/" . $patron_2->id => json => $newpatron);
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
         $t->request_ok($tx)
           ->status_is(200, 'Patron updated successfully')
           ->json_has($newpatron);
-        is(Koha::Patrons->find($newpatron->{borrowernumber})->cardnumber,
+        is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
     };
 

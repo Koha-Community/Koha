@@ -154,7 +154,10 @@ sub update {
 
         $patron->set( _to_model($body) )->_validate;
 
-        # TODO: Use ModMember until it has been moved to Koha-namespace
+        ## TODO: Use ModMember until it has been moved to Koha-namespace
+        # Add borrowernumber to $body, as required by ModMember
+        $body->{borrowernumber} = $patron->borrowernumber;
+
         if ( ModMember(%$body) ) {
             return $c->render( status => 200, openapi => $patron );
         }
