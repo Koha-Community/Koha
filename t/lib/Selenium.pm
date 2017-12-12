@@ -85,6 +85,40 @@ sub fill_form {
     }
 }
 
+sub submit_form {
+    my ( $self ) = @_;
+
+    my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
+    $self->click_when_visible( $default_submit_selector );
+}
+
+sub click {
+    my ( $self, $params ) = @_;
+    my $xpath_selector;
+    if ( exists $params->{main} ) {
+        $xpath_selector = '//div[@id="'.$params->{main}.'"]';
+    }
+    if ( exists $params->{href} ) {
+        $xpath_selector .= '//a[contains(@href, "'.$params->{href}.'")]';
+    }
+    if ( exists $params->{id} ) {
+        $xpath_selector .= '//*[@id="'.$params->{id}.'"]';
+    }
+    $self->click_when_visible( $xpath_selector );
+}
+
+sub click_when_visible {
+    my ( $self, $xpath_selector ) = @_;
+    $self->driver->set_implicit_wait_timeout(20000);
+    my ($visible, $elt);
+    while ( not $visible ) {
+        $elt = $self->driver->find_element($xpath_selector);
+        $visible = $elt->is_displayed;
+        $self->driver->pause(1000) unless $visible;
+    }
+    $elt->click;
+}
+
 =head1 NAME
 
 t::lib::Selenium - Selenium helper module
@@ -132,9 +166,36 @@ when we use automation test using Selenium
     The keys must be element ids (input and select are supported so far)
     The values must a string.
 
-=head1 AUTHOR
+=head2 submit_form
+
+    $s->submit_form;
+
+    It will submit the form using the submit button present in in the fieldset with a clas="action".
+    It should be the default way. If it does not work you should certainly fix the Koha interface.
+
+=head2 click
+
+    $s->click
+
+    This is a bit dirty for now but will evolve depending on the needs
+    3 parameters possible but only the following 2 forms are used:
+    $s->click({ href => '/module/script.pl?foo=bar', main => 'doc3' }); # Sometimes we have doc or doc3. To make sure we are not going to hit a link in the header
+    $s->click({ id => 'element_id });
+
+=head2 click_when_visible
+
+    $c->click_when_visible
+
+    Should always be called to avoid the "An element could not be located on the page" error
+
+=head2
+
+
+=head1 AUTHORS
 
 Jonathan Druart <jonathan.druart@bugs.koha-community.org>
+
+Alex Buckley <alexbuckley@catalyst.net.nz>
 
 Koha Development Team
 
