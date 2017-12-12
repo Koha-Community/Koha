@@ -29,9 +29,9 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'json' => sub {
     plan tests => 1;
-    my $patron = $builder->build_object(
+    my $patron = $builder->build(
         {
-            class => 'Koha::Patrons',
+            source => 'Borrower',
             value => {
                 borrowernotes => q|
 several
@@ -40,7 +40,7 @@ lines|,
         }
     );
     my $expected_escaped_notes = q|\\\\nseveral\\\\nlines|;
-    is( Koha::Template::Plugin::To->json( $patron->borrowernotes ), $expected_escaped_notes );
+    is( Koha::Template::Plugin::To->json( $patron->{borrowernotes} ), $expected_escaped_notes );
 };
 
 $schema->storage->txn_rollback;
