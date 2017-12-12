@@ -1,81 +1,11 @@
+[% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch record modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-  $("#selectall").click(function(e){
-    e.preventDefault();
-    $(".records").checkCheckboxes();
-  });
-  $("#clearall").click(function(e){
-    e.preventDefault();
-    $(".records").unCheckCheckboxes();
-  });
-  $("#selectall").click();
-
-  $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
-    "aoColumnDefs": [
-      { "aTargets": [ 0, 3 ], "bSortable": false, "bSearchable": false },
-      { "aTargets": [ 1 ], "sType": "num-html" }
-    ],
-    "sDom": 't',
-    "aaSorting": [],
-    "bPaginate": false
-  }));
-
-  $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
-    "aoColumnDefs": [
-      { "aTargets": [ 0, 3 ], "bSortable": false, "bSearchable": false },
-      { "aTargets": [ 1 ], "sType": "num-html" }
-    ],
-    "sDom": 't',
-    "aaSorting": [],
-    "bPaginate": false
-  }));
-
-  $("#mainformsubmit").click(function(){
-    if ($("input[type=checkbox][name='record_id']:checked").length == 0 ) {
-      alert(_("Please select at least one record to process"));
-      return false;
-    }
-    if ( $("#marc_modification_template_id").val() <= 0 ) {
-      alert(_("Please select a modification template."));
-      return false;
-    }
-    return submitBackgroundJob(document.getElementById("process"));
-  });
-
-  $("#marc_modification_template_id").change(function(){
-    var url = "/cgi-bin/koha/svc/records/preview?"
-    var mmtid = $(this).val();
-    $("a.previewMARC").each(function(){
-      $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid);
-    });
-  });
-
-    $("body").on("click",".previewMARC", function(e){
-        e.preventDefault();
-        var ltitle = $(this).text();
-        var page = $(this).attr("href");
-        $("#marcPreviewLabel").text(ltitle);
-        $("#marcPreview .modal-body").load(page + " div");
-        $('#marcPreview').modal({show:true});
-    });
-    $("#marcPreview").on("hidden", function(){
-        $("#marcPreviewLabel").html("");
-        $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-    });
-
-});
-//]]>
-</script>
 </head>
+
 <body id="tools_batch_record_modification" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -303,4 +233,79 @@ $(document).ready(function() {
   [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $("#selectall").click(function(e){
+            e.preventDefault();
+            $(".records").checkCheckboxes();
+          });
+          $("#clearall").click(function(e){
+            e.preventDefault();
+            $(".records").unCheckCheckboxes();
+          });
+          $("#selectall").click();
+
+          $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+              { "aTargets": [ 0, 3 ], "bSortable": false, "bSearchable": false },
+              { "aTargets": [ 1 ], "sType": "num-html" }
+            ],
+            "sDom": 't',
+            "aaSorting": [],
+            "bPaginate": false
+          }));
+
+          $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+              { "aTargets": [ 0, 3 ], "bSortable": false, "bSearchable": false },
+              { "aTargets": [ 1 ], "sType": "num-html" }
+            ],
+            "sDom": 't',
+            "aaSorting": [],
+            "bPaginate": false
+          }));
+
+          $("#mainformsubmit").click(function(){
+            if ($("input[type=checkbox][name='record_id']:checked").length == 0 ) {
+              alert(_("Please select at least one record to process"));
+              return false;
+            }
+            if ( $("#marc_modification_template_id").val() <= 0 ) {
+              alert(_("Please select a modification template."));
+              return false;
+            }
+            return submitBackgroundJob(document.getElementById("process"));
+          });
+
+          $("#marc_modification_template_id").change(function(){
+            var url = "/cgi-bin/koha/svc/records/preview?"
+            var mmtid = $(this).val();
+            $("a.previewMARC").each(function(){
+              $(this).attr("href", url + "record_type=" + $(this).attr("data-record_type") + "&record_id=" + $(this).attr("data-record_id") + "&mmtid=" + mmtid);
+            });
+          });
+
+            $("body").on("click",".previewMARC", function(e){
+                e.preventDefault();
+                var ltitle = $(this).text();
+                var page = $(this).attr("href");
+                $("#marcPreviewLabel").text(ltitle);
+                $("#marcPreview .modal-body").load(page + " div");
+                $('#marcPreview').modal({show:true});
+            });
+            $("#marcPreview").on("hidden", function(){
+                $("#marcPreviewLabel").html("");
+                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            });
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,85 +1,11 @@
+[% SET footerjs = 1 %]
 [% PROCESS 'authorities-search-results.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch record deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
-$(document).ready(function() {
-  $("#selectall").click(function(e){
-    e.preventDefault();
-    $(".records").checkCheckboxes();
-  });
-  $("#clearall").click(function(e){
-    e.preventDefault();
-    $(".records").unCheckCheckboxes();
-  });
-  $("#selectwithoutitems").click(function(e){
-    e.preventDefault();
-    $("#biblios").checkCheckboxes(":input[data-items='0']:not(:disabled)");
-  });
-  $("#selectnotreserved").click(function(e){
-    e.preventDefault();
-    $("#biblios").checkCheckboxes(":input[data-reserves='0']:not(:disabled)");
-
-  });
-  $("#clearlinkedtobiblio").click(function(e){
-    e.preventDefault();
-    $("#authorities").unCheckCheckboxes(":not(input[data-usage='0'])");
-  });
-  $("#selectall").click();
-
-  [% IF recordtype == 'biblio' %]
-    $(".records input:checkbox[data-issues!='0']").each(function(){
-      $(this).attr('title', MSG_CANNOT_BE_DELETED)
-      $(this).prop('disabled', true);
-      $(this).prop('checked', false);
-      $(this).parents('tr').find('td').css('background-color', '#ffff99');
-    });
-  [% END %]
-
-  $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
-    "aoColumnDefs": [
-      { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-      { "aTargets": [ 3, 4 ], "sType": "num-html" }
-    ],
-    "sDom": 't',
-    "aaSorting": [],
-    "bPaginate": false
-  }));
-
-  $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
-    "aoColumnDefs": [
-      { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-      { "aTargets": [ 3 ], "sType": "num-html" }
-    ],
-    "sDom": 't',
-    "aaSorting": [],
-    "bPaginate": false
-  }));
-
-  $("#selectrecords").on("submit",function(){
-    var nb_checked = $("#selectrecords").find("input[type='checkbox'][name='record_id']:checked").size();
-    if (nb_checked == 0){
-      alert(_("No records have been selected."));
-      return false;
-    }
-  });
-
-  $("#selectauths").on("submit",function(){
-    var checked = $("#selectauths").find("input[type='checkbox'][name='record_id']:checked").size();
-    if (checked == 0) {
-      alert(_("No authorities have been selected."));
-      return false;
-    }
-  });
-});
-//]]>
-</script>
 </head>
+
 <body id="tools_batch_delete_records" class="tools">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -249,4 +175,83 @@ $(document).ready(function() {
   [% INCLUDE 'tools-menu.inc' %]
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item is currently checked out.");
+        $(document).ready(function() {
+          $("#selectall").click(function(e){
+            e.preventDefault();
+            $(".records").checkCheckboxes();
+          });
+          $("#clearall").click(function(e){
+            e.preventDefault();
+            $(".records").unCheckCheckboxes();
+          });
+          $("#selectwithoutitems").click(function(e){
+            e.preventDefault();
+            $("#biblios").checkCheckboxes(":input[data-items='0']:not(:disabled)");
+          });
+          $("#selectnotreserved").click(function(e){
+            e.preventDefault();
+            $("#biblios").checkCheckboxes(":input[data-reserves='0']:not(:disabled)");
+
+          });
+          $("#clearlinkedtobiblio").click(function(e){
+            e.preventDefault();
+            $("#authorities").unCheckCheckboxes(":not(input[data-usage='0'])");
+          });
+          $("#selectall").click();
+
+          [% IF recordtype == 'biblio' %]
+            $(".records input:checkbox[data-issues!='0']").each(function(){
+              $(this).attr('title', MSG_CANNOT_BE_DELETED)
+              $(this).prop('disabled', true);
+              $(this).prop('checked', false);
+              $(this).parents('tr').find('td').css('background-color', '#ffff99');
+            });
+          [% END %]
+
+          $("table#biblios").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+              { "aTargets": [ 3, 4 ], "sType": "num-html" }
+            ],
+            "sDom": 't',
+            "aaSorting": [],
+            "bPaginate": false
+          }));
+
+          $("table#authorities").dataTable($.extend(true, {}, dataTablesDefaults, {
+            "aoColumnDefs": [
+              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
+              { "aTargets": [ 3 ], "sType": "num-html" }
+            ],
+            "sDom": 't',
+            "aaSorting": [],
+            "bPaginate": false
+          }));
+
+          $("#selectrecords").on("submit",function(){
+            var nb_checked = $("#selectrecords").find("input[type='checkbox'][name='record_id']:checked").size();
+            if (nb_checked == 0){
+              alert(_("No records have been selected."));
+              return false;
+            }
+          });
+
+          $("#selectauths").on("submit",function(){
+            var checked = $("#selectauths").find("input[type='checkbox'][name='record_id']:checked").size();
+            if (checked == 0) {
+              alert(_("No authorities have been selected."));
+              return false;
+            }
+          });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
