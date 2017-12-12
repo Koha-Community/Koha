@@ -363,7 +363,11 @@
                     { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'text' },
-          { 'type': 'select', 'values': [% ccodes.json %] },
+                    [% IF ccodes.size %]
+                        { 'type': 'select', 'values': [% ccodes.json %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
                     { 'type': 'text' },
                     { 'type': 'text' },
                     { 'type': 'select', 'values': [% branches.json %] },
