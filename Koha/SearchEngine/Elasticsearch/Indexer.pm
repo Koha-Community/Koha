@@ -66,22 +66,62 @@ sub update_index {
         $self->_sanitise_records($biblionums, $records);
     }
 
-    my $from    = $self->_convert_marc_to_json($records);
-    if ( !$self->store ) {
-        my $params  = $self->get_elasticsearch_params();
-        $self->store(
-            Catmandu::Store::ElasticSearch->new(
-                %$params,
-                index_settings => $self->get_elasticsearch_settings(),
-                index_mappings => $self->get_elasticsearch_mappings(),
-            )
+    $self->ensure_mappings_updated();
+    $self->bulk_index($records);
+    return 1;
+}
+
+sub bulk_index {
+    my ($self, $records) = @_;
+    my $conf = $self->get_elasticsearch_params();
+    my $elasticsearch = $self->get_elasticsearch();
+    my $documents = $self->marc_records_to_documents($records);
+    my @body;
+
+    foreach my $document_info (@{$documents}) {
+        my ($id, $document) = @{$document_info};
+        push @body, {
+            index => {
+                _id => $id
+            }
+        };
+        push @body, $document;
+    }
+    if (@body) {
+        my $response = $elasticsearch->bulk(
+            index => $conf->{index_name},
+            type => 'data', # is just hard coded in Indexer.pm?
+            body => \@body
         );
     }
-
-    #print Data::Dumper::Dumper( $from->to_array );
-    $self->store->bag->add_many($from);
-    $self->store->bag->commit;
+    # TODO: handle response
     return 1;
+}
+
+sub ensure_mappings_updated {
+    my ($self) = @_;
+    unless ($self->{_mappings_updated}) {
+        $self->update_mappings();
+    }
+}
+
+sub update_mappings {
+    my ($self) = @_;
+    my $conf = $self->get_elasticsearch_params();
+    my $elasticsearch = $self->get_elasticsearch();
+    my $mappings = $self->get_elasticsearch_mappings();
+
+    foreach my $type (keys %{$mappings}) {
+        my $response = $elasticsearch->indices->put_mapping(
+            index => $conf->{index_name},
+            type => $type,
+            body => {
+                $type => $mappings->{$type}
+            }
+        );
+        # TODO: process response, produce errors etc
+    }
+    $self->{_mappings_updated} = 1;
 }
 
 =head2 $indexer->update_index_background($biblionums, $records)
@@ -139,28 +179,6 @@ sub delete_index_background {
     $self->delete_index(@_);
 }
 
-=head2 $indexer->create_index();
-
-Create an index on the Elasticsearch server.
-
-=cut
-
-sub create_index {
-    my ($self) = @_;
-
-    if (!$self->store) {
-        my $params  = $self->get_elasticsearch_params();
-        $self->store(
-            Catmandu::Store::ElasticSearch->new(
-                %$params,
-                index_settings => $self->get_elasticsearch_settings(),
-                index_mappings => $self->get_elasticsearch_mappings(),
-            )
-        );
-    }
-    $self->store->bag->commit;
-}
-
 =head2 $indexer->drop_index();
 
 Drops the index from the elasticsearch server. Calling C<update_index>
@@ -170,22 +188,35 @@ after this will recreate it again.
 
 sub drop_index {
     my ($self) = @_;
-
-    if (!$self->store) {
-        # If this index doesn't exist, this will create it. Then it'll be
-        # deleted. That's not the end of the world however.
-        my $params  = $self->get_elasticsearch_params();
-        $self->store(
-            Catmandu::Store::ElasticSearch->new(
-                %$params,
-                index_settings => $self->get_elasticsearch_settings(),
-                index_mappings => $self->get_elasticsearch_mappings(),
-            )
-        );
+    if ($self->index_exists) {
+        my $conf = $self->get_elasticsearch_params();
+        my $elasticsearch = $self->get_elasticsearch();
+        my $response = $elasticsearch->indices->delete(index => $conf->{index_name});
+        # TODO: Handle response? Convert errors to exceptions/die
     }
-    my $store = $self->store;
-    $self->store(undef);
-    $store->drop();
+}
+
+sub create_index {
+    my ($self) = @_;
+    my $conf = $self->get_elasticsearch_params();
+    my $settings = $self->get_elasticsearch_settings();
+    my $elasticsearch = $self->get_elasticsearch();
+    my $response = $elasticsearch->indices->create(
+        index => $conf->{index_name},
+        body => {
+            settings => $settings
+        }
+    );
+    # TODO: Handle response? Convert errors to exceptions/die
+}
+
+sub index_exists {
+    my ($self) = @_;
+    my $conf = $self->get_elasticsearch_params();
+    my $elasticsearch = $self->get_elasticsearch();
+    return $elasticsearch->indices->exists(
+        index => $conf->{index_name},
+    );
 }
 
 sub _sanitise_records {
@@ -207,16 +238,6 @@ sub _sanitise_records {
             $rec->append_fields(MARC::Field->new('999','','','c' => $bibnum, 'd' => $bibnum));
         }
     }
-}
-
-sub _convert_marc_to_json {
-    my $self    = shift;
-    my $records = shift;
-    my $importer =
-      Catmandu::Importer::MARC->new( records => $records, id => '999c' );
-    my $fixer = Catmandu::Fix->new( fixes => $self->get_fixer_rules() );
-    $importer = $fixer->fix($importer);
-    return $importer;
 }
 
 1;

@@ -49,9 +49,10 @@ use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Search;
 use MARC::Record;
 use Catmandu::Store::ElasticSearch;
-
+use MARC::File::XML;
 use Data::Dumper; #TODO remove
 use Carp qw(cluck);
+use MIME::Base64;
 
 Koha::SearchEngine::Elasticsearch::Search->mk_accessors(qw( store ));
 
@@ -157,15 +158,13 @@ sub search_compat {
     my $results = $self->search($query, undef, $results_per_page, %options);
 
     # Convert each result into a MARC::Record
-    my (@records, $index);
-    $index = $offset; # opac-search expects results to be put in the
-        # right place in the array, according to $offset
+    my @records;
+    # opac-search expects results to be put in the
+    # right place in the array, according to $offset
+    my $index = $offset;
     $results->each(sub {
-            # The results come in an array for some reason
-            my $marc_json = $_[0]->{record};
-            my $marc = $self->json2marc($marc_json);
-            $records[$index++] = $marc;
-        });
+        $records[$index++] = $self->decode_record_from_result(@_);
+    });
     # consumers of this expect a name-spaced result, we provide the default
     # configuration.
     my %result;
@@ -196,14 +195,14 @@ sub search_auth_compat {
     $res->each(
         sub {
             my %result;
-            my $record    = $_[0];
-            my $marc_json = $record->{record};
 
             # I wonder if these should be real values defined in the mapping
             # rather than hard-coded conversions.
+            my $record    = $_[0];
             # Handle legacy nested arrays indexed with splitting enabled.
             my $authid = $record->{ 'Local-number' }[0];
             $authid = @$authid[0] if (ref $authid eq 'ARRAY');
+
             $result{authid} = $authid;
 
             # TODO put all this info into the record at index time so we
@@ -219,7 +218,7 @@ sub search_auth_compat {
             # it's not reproduced here yet.
             my $authtype           = $rs->single;
             my $auth_tag_to_report = $authtype ? $authtype->auth_tag_to_report : "";
-            my $marc               = $self->json2marc($marc_json);
+            my $marc               = $self->decode_record_from_result(@_);
             my $mainentry          = $marc->field($auth_tag_to_report);
             my $reported_tag;
             if ($mainentry) {
@@ -338,9 +337,7 @@ sub simple_search_compat {
     my $results = $self->search($query, undef, $max_results, %options);
     my @records;
     $results->each(sub {
-            # The results come in an array for some reason
-            my $marc_json = $_[0]->{record};
-            my $marc = $self->json2marc($marc_json);
+            my $marc = $self->decode_record_from_result(@_);
             push @records, $marc;
         });
     return (undef, \@records, $results->total);
@@ -361,43 +358,23 @@ sub extract_biblionumber {
     return Koha::SearchEngine::Search::extract_biblionumber( $searchresultrecord );
 }
 
-=head2 json2marc
+=head2 decode_record_from_result
+    my $marc_record = $self->decode_record_from_result(@result);
 
-    my $marc = $self->json2marc($marc_json);
-
-Converts the form of marc (based on its JSON, but as a Perl structure) that
-Catmandu stores into a MARC::Record object.
+Extracts marc data from Elasticsearch result and decodes to MARC::Record object
 
 =cut
 
-sub json2marc {
-    my ( $self, $marcjson ) = @_;
-
-    my $marc = MARC::Record->new();
-    $marc->encoding('UTF-8');
-
-    # fields are like:
-    # [ '245', '1', '2', 'a' => 'Title', 'b' => 'Subtitle' ]
-    # or
-    # [ '001', undef, undef, '_', 'a value' ]
-    # conveniently, this is the form that MARC::Field->new() likes
-    foreach my $field (@$marcjson) {
-        next if @$field < 5;
-        if ( $field->[0] eq 'LDR' ) {
-            $marc->leader( $field->[4] );
-        }
-        else {
-            my $tag = $field->[0];
-            my $marc_field;
-            if ( MARC::Field->is_controlfield_tag( $field->[0] ) ) {
-                $marc_field = MARC::Field->new($field->[0], $field->[4]);
-            } else {
-                $marc_field = MARC::Field->new(@$field);
-            }
-            $marc->append_fields($marc_field);
-        }
+sub decode_record_from_result {
+    # Result is passed in as array, will get flattened
+    # and first element will be $result
+    my ( $self, $result ) = @_;
+    if (C4::Context->preference('ElasticsearchMARCSerializationFormat') eq 'MARCXML') {
+        return MARC::Record->new_from_xml($result->{marc_data}, 'UTF-8', uc C4::Context->preference('marcflavour'));
     }
-    return $marc;
+    else {
+        return MARC::Record->new_from_usmarc(decode_base64($result->{marc_data}));
+    }
 }
 
 =head2 max_result_window
