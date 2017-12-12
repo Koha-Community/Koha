@@ -4,6 +4,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 use JSON::Validator::OpenAPI::Mojolicious;
 use Mojo::JSON;
 use Mojo::Util 'deprecated';
+use Mojolicious::Plugin::OpenAPI::CORS;
 use constant DEBUG => $ENV{MOJO_OPENAPI_DEBUG} || 0;
 
 our $VERSION = '1.17';
@@ -48,8 +49,11 @@ sub _add_routes {
   my $route_prefix = "";
   my %uniq;
 
+  my $placeholder = $api_spec->get('/x-mojo-placeholder') || ':';
   $route = $route->any($base_path) if $route and !$route->pattern->unparsed;
   $route = $app->routes->any($base_path) unless $route;
+  my $xcors = Mojolicious::Plugin::OpenAPI::CORS->use_CORS($app, $self);
+  Mojolicious::Plugin::OpenAPI::CORS->set_default_CORS($route, $xcors) if $xcors;
   $base_path = $api_spec->data->{basePath} = $route->to_string;
   $base_path =~ s!/$!!;
 
@@ -64,19 +68,25 @@ sub _add_routes {
 
   for my $path (_sort_paths(keys %$paths)) {
     next if $path =~ $X_RE;
+    my @http_methods;
     my @parameters = @{$paths->{$path}{parameters} || []};
     my $route_path = $path;
     my $has_options;
 
     for my $http_method (keys %{$paths->{$path}}) {
       next if $http_method =~ $X_RE or $http_method eq 'parameters';
+      push @http_methods, $http_method;
       my $op_spec = $paths->{$path}{$http_method};
       my $name    = $op_spec->{'x-mojo-name'} || $op_spec->{operationId};
       my $to      = $op_spec->{'x-mojo-to'};
       my $endpoint;
 
       $has_options = 1 if lc $http_method eq 'options';
-      $route_path = _route_path($path, $op_spec);
+      $route_path = _route_path($path, $op_spec, $placeholder);
+
+      my $xcors = Mojolicious::Plugin::OpenAPI::CORS->use_CORS($app, $self);
+      my $route_params = {}; #Add params for the route here
+      Mojolicious::Plugin::OpenAPI::CORS->get_opts($route_params, $xcors, $route_path, $op_spec) if $xcors; #Set CORS options to $route_params
 
       die qq([OpenAPI] operationId "$op_spec->{operationId}" is not unique)
         if $op_spec->{operationId} and $uniq{o}{$op_spec->{operationId}}++;
@@ -89,7 +99,7 @@ sub _add_routes {
         $route->add_child($endpoint);
       }
       if (!$endpoint) {
-        $endpoint = $route->$http_method($route_path);
+        $endpoint = $route->$http_method($route_path, $route_params);
         $endpoint->name("$route_prefix$name") if $name;
       }
 
@@ -99,7 +109,18 @@ sub _add_routes {
     }
 
     unless ($has_options) {
-      $route->options($route_path => sub { _render_route_spec($_[0], $path) });
+      my $route_params = {};
+      my $xcors = Mojolicious::Plugin::OpenAPI::CORS->use_CORS($app, $self);
+      Mojolicious::Plugin::OpenAPI::CORS->get_opts($route_params, $xcors, $route_path, $paths->{$path}) if $xcors;
+      $route_params->{available_methods} = \@http_methods;
+      $route_params->{path_spec} = $paths->{$path};
+      $route->options($route_path => sub {
+        my $c = shift;
+        $c->res->headers->header('Allow' => $c->stash('available_methods'));
+          my $errors = Mojolicious::Plugin::OpenAPI::CORS->handle_preflight_cors($c);
+          $errors ? $c->render(status => 200, json => $errors)
+                  : _render_route_spec($c, $path);
+      }, $route_params);
     }
   }
 }
@@ -243,12 +264,14 @@ sub _reply_spec {
 }
 
 sub _route_path {
-  my ($path, $op_spec) = @_;
+  my ($path, $op_spec, $placeholder) = @_;
   my %parameters = map { ($_->{name}, $_) } @{$op_spec->{parameters} || []};
   $path =~ s/{([^}]+)}/{
-    my $pname = $1;
-    my $type = $parameters{$pname}{'x-mojo-placeholder'} || ':';
-    "($type$pname)";
+    my $name = $1;
+    my $type = (%parameters && $parameters{$name})
+                ? $parameters{$name}{'x-mojo-placeholder'} || $placeholder
+                : $placeholder;
+    "($type$name)";
   }/ge;
   return $path;
 }
@@ -276,6 +299,14 @@ sub _validate {
   my ($c, $args) = @_;
   my $self    = _self($c);
   my $op_spec = $c->openapi->spec;
+
+  my $cors_errors = Mojolicious::Plugin::OpenAPI::CORS->handle_simple_cors($c);
+  if ($cors_errors) {
+    $self->_log($c, '<<<', $cors_errors);
+    $c->render(data => $self->{renderer}->($c, {errors => $cors_errors, status => 403}), status => 403)
+      if $args->{auto_render} // 1;
+      return @$cors_errors;
+  }
 
   # Write validated data to $c->validation->output
   my @errors = $self->_validator->validate_request($c, $op_spec, $c->validation->output);
@@ -532,6 +563,8 @@ the terms of the Artistic License version 2.0.
 =over 2
 
 =item * L<Mojolicious::Plugin::OpenAPI::Guides::Tutorial>
+
+=item * L<Mojolicious::Plugin::OpenAPI::CORS> - CORS support
 
 =item * L<http://thorsen.pm/perl/programming/2015/07/05/mojolicious-swagger2.html>.
 
