@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 3;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -37,16 +37,11 @@ ok(
 
 my $marc_record = MARC::Record->new();
 $marc_record->append_fields(
-    MARC::Field->new( '001', '1234567' ),
-    MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
-    MARC::Field->new( '245', '', '', 'a' => 'Title' )
+	MARC::Field->new( '001', '1234567' ),
+	MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
+	MARC::Field->new( '245', '', '', 'a' => 'Title' )
 );
-
 my $records = [$marc_record];
-ok( my $converted = $indexer->_convert_marc_to_json($records),
-    'Convert some records' );
-
-is( $converted->count, 1, 'One converted record' );
 
 SKIP: {
 
@@ -55,111 +50,5 @@ SKIP: {
     skip 'Elasticsearch configuration not available', 1
         if $@;
 
-    ok( $indexer->update_index(undef,$records), 'Update Index' );
+    ok( $indexer->update_index(undef, $records), 'Update Index' );
 }
-
-subtest 'create_index() tests' => sub {
-
-    plan tests => 3;
-
-    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-    $se->mock( 'get_elasticsearch_params', sub {
-        my ($self, $sub ) = @_;
-
-        my $method = $se->original( 'get_elasticsearch_params' );
-        my $params = $method->( $self );
-        $params->{index_name} .= '__test';
-        return $params;
-    });
-
-    my $indexer;
-    ok(
-        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
-        'Creating a new indexer object'
-    );
-    ok(
-        $indexer->create_index(),
-        'Creating an index'
-    );
-    $indexer->drop_index();
-    ok(
-        $indexer->drop_index(),
-        'Dropping the index'
-    );
-};
-
-subtest '_convert_marc_to_json() tests' => sub {
-
-    plan tests => 4;
-
-    $schema->storage->txn_begin;
-
-    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
-
-    my @mappings = (
-        {
-            name => 'author',
-            type => 'string',
-            facet => 1,
-            suggestible => 1,
-            sort => '~',
-            marc_type => 'marc21',
-            marc_field => '100a',
-        },
-        {
-            name => 'author',
-            type => 'string',
-            facet => 1,
-            suggestible => 1,
-            sort => '~',
-            marc_type => 'marc21',
-            marc_field => '110a',
-        },
-    );
-
-
-    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-    $se->mock( '_foreach_mapping', sub {
-        my ($self, $sub ) = @_;
-
-        foreach my $map ( @mappings ) {
-            $sub->(
-                $map->{name},
-                $map->{type},
-                $map->{facet},
-                $map->{suggestible},
-                $map->{sort},
-                $map->{marc_type},
-                $map->{marc_field}
-            );
-        }
-    });
-
-    my $marc_record = MARC::Record->new();
-    $marc_record->append_fields(
-        MARC::Field->new( '001', '1234567' ),
-        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
-        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
-        MARC::Field->new( '110', '', '', 'a' => 'Corp Author' ),
-        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
-    );
-    my $marc_record_2 = MARC::Record->new();
-    $marc_record_2->append_fields(
-        MARC::Field->new( '001', '1234567' ),
-        MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
-        MARC::Field->new( '100', '', '', 'a' => 'Author' ),
-        MARC::Field->new( '245', '', '', 'a' => 'Title' ),
-    );
-    my @records = ( $marc_record, $marc_record_2 );
-
-    my $importer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => 'biblios' })->_convert_marc_to_json( \@records );
-    my $conv = $importer->next();
-    is( $conv->{author}[0], "Author", "First mapped author should be 100a");
-    is( $conv->{author}[1], "Corp Author", "Second mapped author should be 110a");
-
-    $conv = $importer->next();
-    is( $conv->{author}[0], "Author", "First mapped author should be 100a");
-    is( scalar @{$conv->{author}} , 1, "We should map field only if exists, shouldn't add extra nulls");
-
-    $schema->storage->txn_rollback;
-};

@@ -34,6 +34,12 @@ use Search::Elasticsearch;
 use Try::Tiny;
 use YAML::Syck;
 
+use List::Util qw( sum0 reduce );
+use Search::Elasticsearch;
+use MARC::File::XML;
+use MIME::Base64;
+use Encode qw(encode);
+
 __PACKAGE__->mk_ro_accessors(qw( index ));
 __PACKAGE__->mk_accessors(qw( sort_fields ));
 
@@ -65,6 +71,19 @@ sub new {
     # Check for a valid index
     croak('No index name provided') unless $self->index;
     return $self;
+}
+
+sub get_elasticsearch {
+    my $self = shift @_;
+    unless (defined $self->{elasticsearch}) {
+        my $conf = $self->get_elasticsearch_params();
+        $self->{elasticsearch} = Search::Elasticsearch->new(
+            client => "5_0::Direct",
+            nodes => $conf->{nodes},
+            cxn_pool => 'Sniff'
+        );
+    }
+    return $self->{elasticsearch};
 }
 
 =head2 get_elasticsearch_params
@@ -281,48 +300,205 @@ sub sort_fields {
     return $self->_sort_fields_accessor();
 }
 
-# Provides the rules for data conversion.
-sub get_fixer_rules {
+sub marc_records_to_documents {
+    my ($self, $records) = @_;
+    my $rules = $self->get_marc_mapping_rules();
+    my $control_fields_rules = $rules->{control_fields};
+    my $data_fields_rules = $rules->{data_fields};
+    my $marcflavour = lc C4::Context->preference('marcflavour');
+    my $serialization_format = C4::Context->preference('ElasticsearchMARCSerializationFormat');
+
+    my @record_documents;
+
+    sub _process_mappings {
+        my ($mappings, $data, $record_document) = @_;
+        foreach my $mapping (@{$mappings}) {
+            my ($target, $options) = @{$mapping};
+            # Copy (scalar) data since can have multiple targets
+            # with differing options for (possibly) mutating data
+            # so need a different copy for each
+            my $_data = $data;
+            $record_document->{$target} //= [];
+            if (defined $options->{substr}) {
+                my ($start, $length) = @{$options->{substr}};
+                $_data = length($data) > $start ? substr $data, $start, $length : '';
+            }
+            if (defined $options->{value_callbacks}) {
+                $_data = reduce { $b->($a) } ($_data, @{$options->{value_callbacks}});
+            }
+            if (defined $options->{property}) {
+                $_data = {
+                    $options->{property} => $_data
+                }
+            }
+            push @{$record_document->{$target}}, $_data;
+        }
+    }
+    foreach my $record (@{$records}) {
+        my $record_document = {};
+        my $mappings = $rules->{leader};
+        if ($mappings) {
+            _process_mappings($mappings, $record->leader(), $record_document);
+        }
+        foreach my $field ($record->fields()) {
+            if($field->is_control_field()) {
+                my $mappings = $control_fields_rules->{$field->tag()};
+                if ($mappings) {
+                    _process_mappings($mappings, $field->data(), $record_document);
+                }
+            }
+            else {
+                my $subfields_mappings = $data_fields_rules->{$field->tag()};
+                if ($subfields_mappings) {
+                    my $wildcard_mappings = $subfields_mappings->{'*'};
+                    foreach my $subfield ($field->subfields()) {
+                        my ($code, $data) = @{$subfield};
+                        my $mappings = $subfields_mappings->{$code} // [];
+                        if ($wildcard_mappings) {
+                            $mappings = [@{$mappings}, @{$wildcard_mappings}];
+                        }
+                        if (@{$mappings}) {
+                            _process_mappings($mappings, $data, $record_document);
+                        }
+                    }
+                }
+            }
+        }
+        foreach my $field (keys %{$rules->{defaults}}) {
+            unless (defined $record_document->{$field}) {
+                $record_document->{$field} = $rules->{defaults}->{$field};
+            }
+        }
+        foreach my $field (@{$rules->{sum}}) {
+            if (defined $record_document->{$field}) {
+                # TODO: validate numeric? filter?
+                # TODO: Or should only accept fields without nested values?
+                # TODO: Quick and dirty, improve if needed
+                $record_document->{$field} = sum0(grep { !ref($_) && m/\d+(\.\d+)?/} @{$record_document->{$field}});
+            }
+        }
+        # TODO: Perhaps should check if $records_document non empty, but really should never be the case
+        $record->encoding('UTF-8');
+        if ($serialization_format eq 'base64ISO2709') {
+            $record_document->{'marc_data'} = encode_base64(encode('UTF-8', $record->as_usmarc()));
+        }
+        else {
+            $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
+        }
+        my $id = $record->subfield('999', 'c');
+        push @record_documents, [$id, $record_document];
+    }
+    return \@record_documents;
+}
+
+# Provides the rules for marc to Elasticsearch JSON document conversion.
+sub get_marc_mapping_rules {
     my ($self) = @_;
 
     my $marcflavour = lc C4::Context->preference('marcflavour');
     my @rules;
 
-    $self->_foreach_mapping(
-        sub {
-            my ( $name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field ) = @_;
-            return if $marc_type ne $marcflavour;
-            my $options ='';
+    sub _field_mappings {
+        my ($facet, $suggestible, $sort, $target_name, $target_type, $range) = @_;
+        my %mapping_defaults = ();
+        my @mappings;
 
-            push @rules, "marc_map('$marc_field','${name}.\$append', $options)";
-            if ($facet) {
-                push @rules, "marc_map('$marc_field','${name}__facet.\$append', $options)";
-            }
-            if ($suggestible) {
-                push @rules,
-                    #"marc_map('$marc_field','${name}__suggestion.input.\$append', '')"; #must not have nested data structures in .input
-                    "marc_map('$marc_field','${name}__suggestion.input.\$append')";
-            }
-            if ( $type eq 'boolean' ) {
+        my $substr_args = undef;
+        if ($range) {
+            # TODO: use value_callback instead?
+            my ($start, $end) = map(int, split /-/, $range, 2);
+            $substr_args = [$start];
+            push @{$substr_args}, (defined $end ? $end - $start + 1 : 1);
+        }
+        my $default_options = {};
+        if ($substr_args) {
+            $default_options->{substr} = $substr_args;
+        }
 
-                # boolean gets special handling, basically if it doesn't exist,
-                # it's added and set to false. Otherwise we can't query it.
-                push @rules,
-                  "unless exists('$name') add_field('$name', 0) end";
+        # TODO: Should probably have per type value callback/hook
+        # but hard code for now
+        if ($target_type eq 'boolean') {
+            $default_options->{value_callbacks} //= [];
+            push @{$default_options->{value_callbacks}}, sub {
+                my ($value) = @_;
+                # Trim whitespace at both ends
+                $value =~ s/^\s+|\s+$//g;
+                return $value ? 'true' : 'false';
+            };
+        }
+
+        my $mapping = [$target_name, $default_options];
+        push @mappings, $mapping;
+
+        my @suffixes = ();
+        push @suffixes, 'facet' if $facet;
+        push @suffixes, 'suggestion' if $suggestible;
+        push @suffixes, 'sort' if !defined $sort || $sort;
+
+        foreach my $suffix (@suffixes) {
+            my $mapping = ["${target_name}__$suffix"];
+            # Hack, fix later in less hideous manner
+            if ($suffix eq 'suggestion') {
+                push @{$mapping}, {%{$default_options}, property => 'input'};
             }
-            if ($type eq 'sum' ) {
-                push @rules, "sum('$name')";
+            else {
+                push @{$mapping}, $default_options;
             }
-            if ($self->sort_fields()->{$name}) {
-                if ($sort || !defined $sort) {
-                    push @rules, "marc_map('$marc_field','${name}__sort.\$append', $options)";
+            push @mappings, $mapping;
+        }
+        return @mappings;
+    };
+    my $field_spec_regexp = qr/^([0-9]{3})([0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
+    my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
+    my $rules = {
+        'leader' => [],
+        'control_fields' => {},
+        'data_fields' => {},
+        'sum' => [],
+        'defaults' => {}
+    };
+
+    $self->_foreach_mapping(sub {
+        my ( $name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field ) = @_;
+        return if $marc_type ne $marcflavour;
+
+        if ($type eq 'sum') {
+            push @{$rules->{sum}}, $name;
+        }
+        elsif($type eq 'boolean') {
+            # boolean gets special handling, if value doesn't exist for a field,
+            # it is set to false
+            $rules->{defaults}->{$name} = 'false';
+        }
+
+        if ($marc_field =~ $field_spec_regexp) {
+            my $field_tag = $1;
+            my $subfields = defined $2 ? $2 : '*';
+            my $range = defined $3 ? $3 : undef;
+            if ($field_tag < 10) {
+                $rules->{control_fields}->{$field_tag} //= [];
+                my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+                push @{$rules->{control_fields}->{$field_tag}}, @mappings;
+            }
+            else {
+                $rules->{data_fields}->{$field_tag} //= {};
+                foreach my $subfield (split //, $subfields) {
+                    $rules->{data_fields}->{$field_tag}->{$subfield} //= [];
+                    my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+                    push @{$rules->{data_fields}->{$field_tag}->{$subfield}}, @mappings;
                 }
             }
         }
-    );
-
-    push @rules, "move_field(_id,es_id)"; #Also you must set the Catmandu::Store::ElasticSearch->new(key_prefix: 'es_');
-    return \@rules;
+        elsif ($marc_field =~ $leader_regexp) {
+            my $range = defined $1 ? $1 : undef;
+            my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+            push @{$rules->{leader}}, @mappings;
+        }
+        else {
+            die("Invalid marc field: $marc_field");
+        }
+    });
+    return $rules;
 }
 
 =head2 _foreach_mapping

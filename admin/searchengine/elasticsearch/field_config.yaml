@@ -5,9 +5,11 @@ general:
     type: string
     analyzer: analyser_standard
   properties:
-    record:
+    marc_data:
       store: true
       type: text
+      analyzer: keyword
+      index: false
 # Search fields
 search:
   boolean:

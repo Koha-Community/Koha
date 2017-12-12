@@ -160,8 +160,13 @@ sub do_reindex {
     my ( $next, $index_name ) = @_;
 
     my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
+
     if ($delete) {
-        $indexer->drop_index();
+        $indexer->drop_index() if $indexer->index_exists();
+        $indexer->create_index();
+    }
+    elsif (!$indexer->index_exists()) {
+        # Create index if does not exist
         $indexer->create_index();
     }
 
