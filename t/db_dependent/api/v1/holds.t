@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Reserves;
 
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
@@ -219,11 +220,17 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
     my $reserve_id3 = Koha::Holds->find({ borrowernumber => $nopermission->{borrowernumber} })->reserve_id;
     $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id3" => json => $put_data);
     $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
-    $t->request_ok($tx) # create hold to myself
-      ->status_is(200)
-      ->json_is('/reserve_id', $reserve_id3)
-      ->json_is('/suspend_until', $suspend_until . ' 00:00:00')
-      ->json_is('/priority', 2);
+    $t->request_ok($tx)    # create hold to myself
+      ->status_is(200)->json_is( '/reserve_id', $reserve_id3 )->json_is(
+        '/suspend_until',
+        output_pref(
+            {
+                dateformat => 'rfc3339',
+                dt => dt_from_string( $suspend_until . ' 00:00:00', 'sql' )
+            }
+        )
+      )
+      ->json_is( '/priority', 2 );
 };
 
 subtest "Test endpoints with permission" => sub {
@@ -247,11 +254,17 @@ subtest "Test endpoints with permission" => sub {
 
     $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id" => json => $put_data);
     $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
-      ->status_is(200)
-      ->json_is('/reserve_id', $reserve_id)
-      ->json_is('/suspend_until', $suspend_until . ' 00:00:00')
-      ->json_is('/priority', 2);
+    $t->request_ok($tx)->status_is(200)->json_is( '/reserve_id', $reserve_id )
+      ->json_is(
+        '/suspend_until',
+        output_pref(
+            {
+                dateformat => 'rfc3339',
+                dt => dt_from_string( $suspend_until . ' 00:00:00', 'sql' )
+            }
+        )
+      )
+      ->json_is( '/priority', 2 );
 
     $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
     $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
