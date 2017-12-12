@@ -156,7 +156,8 @@
         </xsl:if>
 
             <!--Bug 13381 -->
-            <xsl:if test="marc:datafield[@tag=245]">
+            <xsl:choose>
+            <xsl:when test="marc:datafield[@tag=245]">
                 <h1 class="title" property="name">
                     <xsl:for-each select="marc:datafield[@tag=245]">
                         <xsl:call-template name="subfieldSelect">
@@ -182,7 +183,36 @@
                         </xsl:for-each>
                     </xsl:for-each>
                 </h1>
-            </xsl:if>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag=240]">
+                <h1 class="title" property="name">
+                    <xsl:for-each select="marc:datafield[@tag=240]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">a</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text> </xsl:text>
+                    <xsl:for-each select="marc:subfield[contains('mnp', @code)]">
+                        <xsl:apply-templates/>
+                        <xsl:text> </xsl:text>
+                    </xsl:for-each>
+                    </xsl:for-each>
+                </h1>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag=130]">
+                <h1 class="title" property="name">
+                    <xsl:for-each select="marc:datafield[@tag=130]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">a</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text> </xsl:text>
+                    <xsl:for-each select="marc:subfield[contains('mnp', @code)]">
+                        <xsl:apply-templates/>
+                        <xsl:text> </xsl:text>
+                    </xsl:for-each>
+                    </xsl:for-each>
+                </h1>
+            </xsl:when>
+        </xsl:choose>
 
 
         <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
