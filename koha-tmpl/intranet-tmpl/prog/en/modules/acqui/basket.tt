@@ -62,6 +62,9 @@
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
+                        <div class="btn-group">
+                            <a href="" class="btn btn-default btn-sm disabled" id="closebutton" title="Can not close baskets that have items with uncertain prices in them."><i class="fa fa-times-circle"></i> Close this basket</a>
+                        </div>
                     [% ELSE %]
                         <div class="btn-group">
                             <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
