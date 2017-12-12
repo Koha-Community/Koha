@@ -42,12 +42,9 @@ use Test::More tests => 20;
 use MARC::Record;
 use MARC::Field;
 
+use t::lib::Selenium;
+
 my $dbh      = C4::Context->dbh;
-my $login    = $ENV{KOHA_USER} || 'koha';
-my $password = $ENV{KOHA_PASS} || 'koha';
-my $base_url= ( $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/";
-my $selenium_addr = $ENV{SELENIUM_ADDR} || 'localhost';
-my $selenium_port = $ENV{SELENIUM_PORT} || 4444;
 
 my $number_of_biblios_to_insert = 3;
 our $sample_data = {
@@ -90,29 +87,29 @@ SKIP: {
 
     open my $fh, '>>', '/tmp/output.txt';
 
-    my $driver = Selenium::Remote::Driver->new(
-        port               => $selenium_port,
-        remote_server_addr => $selenium_addr
-    );
+    my $s = t::lib::Selenium->new;
+
+    my $driver = $s->driver;
+    my $base_url = $s->base_url;
 
     $start = gettimeofday;
     $prev_time = $start;
     $driver->get($base_url."mainpage.pl");
     like( $driver->get_title(), qr(Log in to Koha), );
-    auth( $driver, $login, $password );
+    $s->auth;
     time_diff("main");
 
     $driver->get($base_url.'admin/categories.pl');
     like( $driver->get_title(), qr(Patron categories), );
     $driver->find_element('//a[@id="newcategory"]')->click;
     like( $driver->get_title(), qr(New category), );
-    fill_form( $driver, $sample_data->{category} );
+    $s->fill_form( $sample_data->{category} );
     $driver->find_element('//fieldset[@class="action"]/input[@type="submit"]')->click;
 
     time_diff("add patron category");
     $driver->get($base_url.'/members/memberentry.pl?op=add&amp;categorycode='.$sample_data->{category}{categorycode});
     like( $driver->get_title(), qr(Add .*$sample_data->{category}{description}), );
-    fill_form( $driver, $sample_data->{patron} );
+    $s->fill_form( $sample_data->{patron} );
     $driver->find_element('//button[@id="saverecord"]')->click;
     like( $driver->get_title(), qr(Patron details for $sample_data->{patron}{surname}), );
 
@@ -204,26 +201,6 @@ SKIP: {
 END {
     cleanup() if $cleanup_needed;
 };
-
-sub auth {
-    my ( $driver, $login, $password) = @_;
-    fill_form( $driver, { userid => $login, password => $password } );
-    my $login_button = $driver->find_element('//input[@id="submit"]');
-    $login_button->submit();
-}
-
-sub fill_form {
-    my ( $driver, $values ) = @_;
-    while ( my ( $id, $value ) = each %$values ) {
-        my $element = $driver->find_element('//*[@id="'.$id.'"]');
-        my $tag = $element->get_tag_name();
-        if ( $tag eq 'input' ) {
-            $driver->find_element('//input[@id="'.$id.'"]')->send_keys($value);
-        } elsif ( $tag eq 'select' ) {
-            $driver->find_element('//select[@id="'.$id.'"]/option[@value="'.$value.'"]')->click;
-        }
-    }
-}
 
 sub cleanup {
     my $dbh = C4::Context->dbh;
