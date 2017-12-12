@@ -25,16 +25,21 @@ use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Auth;
-use Koha::Biblios;
 use C4::Debug;
+use C4::Items qw( ModItem ModItemTransfer );
+use C4::Reserves qw( ModReserveCancelAll );
+use Koha::Biblios;
 use Koha::DateUtils;
+use Koha::Holds;
 use DateTime::Duration;
 
 my $input = new CGI;
 my $startdate = $input->param('from');
 my $enddate = $input->param('to');
-
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
+my $op         = $input->param('op') || '';
+my $borrowernumber = $input->param('borrowernumber');
+my $reserve_id = $input->param('reserve_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -46,6 +51,80 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+my @messages;
+if ( $op eq 'cancel_reserve' and $reserve_id ) {
+    my $hold = Koha::Holds->find( $reserve_id );
+    if ( $hold ) {
+        $hold->cancel;
+        push @messages, { type => 'message', code => 'hold_cancelled' };
+    }
+} elsif ( $op =~ m|^mark_as_lost| ) {
+    my $hold = Koha::Holds->find( $reserve_id );
+    die "wrong reserve_id" unless $hold; # This is a bit rude, but we are not supposed to get a wrong reserve_id
+    my $item = $hold->item;
+    if ( $item and C4::Context->preference('CanMarkHoldsToPullAsLost') =~ m|^allow| ) {
+        my $patron = $hold->borrower;
+        C4::Circulation::LostItem( $item->itemnumber );
+        if ( $op eq 'mark_as_lost_and_notify' and C4::Context->preference('CanMarkHoldsToPullAsLost') eq 'allow_and_notify' ) {
+            my $library = $hold->branch;
+            my $letter = C4::Letters::GetPreparedLetter(
+                module => 'reserves',
+                letter_code => 'CANCEL_HOLD_ON_LOST',
+                branchcode => $library->branchcode, # FIXME Is it what we want?
+                lang => $patron->lang,
+                tables => {
+                    branches    => $library->branchcode,
+                    borrowers   => $patron->borrowernumber,
+                    items       => $item->itemnumber,
+                    biblio      => $hold->biblionumber,
+                    biblioitems => $hold->biblionumber,
+                    reserves    => $hold->unblessed,
+                },
+            );
+            if ( $letter ) {
+                my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+
+                C4::Letters::EnqueueLetter(
+                    {   letter                 => $letter,
+                        borrowernumber         => $patron->borrowernumber,
+                        message_transport_type => 'email',
+                        from_address           => $admin_email_address,
+                    }
+                );
+                unless ( C4::Members::GetNoticeEmailAddress( $patron->borrowernumber ) ) {
+                    push @messages, {type => 'alert', code => 'no_email_address', };
+                }
+                push @messages, { type => 'message', code => 'letter_enqueued' };
+            } else {
+                push @messages, { type => 'error', code => 'no_template_notice' };
+            }
+        }
+        $hold->cancel;
+        if ( $item->homebranch ne $item->holdingbranch ) {
+            C4::Items::ModItemTransfer( $item->itemnumber, $item->holdingbranch, $item->homebranch );
+        }
+
+        if ( my $yaml = C4::Context->preference('UpdateItemWhenLostFromHoldList') ) {
+            $yaml = "$yaml\n\n";  # YAML is anal on ending \n. Surplus does not hurt
+            my $assignments;
+            eval { $assignments = YAML::Load($yaml); };
+            if ($@) {
+                warn "Unable to parse UpdateItemWhenLostFromHoldList syspref : $@" if $@;
+            }
+            else {
+                eval {
+                    C4::Items::ModItem( $assignments, undef, $item->itemnumber );
+                };
+                warn "Unable to modify item itemnumber=" . $item->itemnumber . ": $@" if $@;
+            }
+        }
+
+    } elsif ( not $item ) {
+        push @messages, { type => 'alert', code => 'hold_placed_at_biblio_level'};
+    } # else the url parameters have been modified and the user is not allowed to continue
+}
+
 
 my $today = dt_from_string;
 
@@ -91,11 +170,16 @@ if ($enddate_iso) {
 
 my $strsth =
     "SELECT min(reservedate) as l_reservedate,
+            reserves.reserve_id,
             reserves.borrowernumber as borrowernumber,
+
             GROUP_CONCAT(DISTINCT items.holdingbranch 
                     ORDER BY items.itemnumber SEPARATOR '|') l_holdingbranch,
             reserves.biblionumber,
             reserves.branchcode as l_branch,
+            items.itemnumber,
+            items.holdingbranch,
+            items.homebranch,
             GROUP_CONCAT(DISTINCT items.itype 
                     ORDER BY items.itemnumber SEPARATOR '|') l_itype,
             GROUP_CONCAT(DISTINCT items.location 
@@ -167,6 +251,10 @@ while ( my $data = $sth->fetchrow_hashref ) {
             pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
             itypes          => [split('\|', $data->{l_itype})],
             locations       => [split('\|', $data->{l_location})],
+            reserve_id      => $data->{reserve_id},
+            holdingbranch   => $data->{holdingbranch},
+            homebranch      => $data->{homebranch},
+            itemnumber      => $data->{itemnumber},
         }
     );
 }
@@ -180,6 +268,7 @@ $template->param(
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     HoldsToPullStartDate => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL,
     HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds') || 0,
+    messages            => \@messages,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

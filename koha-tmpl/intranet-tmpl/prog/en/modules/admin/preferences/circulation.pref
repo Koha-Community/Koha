@@ -712,6 +712,18 @@ Circulation:
             - "Patron categories not affected by OPACHoldsIfAvailableAtPickup"
             - pref: OPACHoldsIfAvailableAtPickupExceptions
             - "(list of patron categories separated with a pipe '|')"
+        -
+            - pref: CanMarkHoldsToPullAsLost
+              choices:
+                  do_not_allow: "Do not allow to mark items as lost"
+                  allow: "Allow to mark items as lost"
+                  allow_and_notify: "Allow to mark items as lost and notify the patron"
+            - "from the 'Holds to pull' screen"
+        -
+            - Update item's values when marked as lost from the hold to pull screen
+            - pref: UpdateItemWhenLostFromHoldList
+              type: textarea
+            - This is a list of values to update an item when it is marked as lost from the holds to pull screen.
     Interlibrary Loans:
         -
             - pref: ILLModule

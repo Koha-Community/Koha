@@ -1,4 +1,5 @@
 [% USE Asset %]
+[% USE Koha %]
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
 [% USE AuthorisedValues %]
@@ -23,6 +24,24 @@
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
+        [% FOR m IN messages %]
+            <div class="dialog [% m.type %]">
+                [% SWITCH m.code %]
+                [% CASE 'letter_enqueued' %]
+                    <span>The notice has been correctly enqueued.</span>
+                [% CASE 'no_email_address' %]
+                    <span>The patron does not have an email address defined.</span>
+                [% CASE 'no_template_notice' %]
+                    <span>There is no notice template with a code 'CANCEL_HOLD_ON_LOST' defined in your system.</span>
+                [% CASE 'hold_cancelled' %]
+                    <span>The hold has been correctly cancelled.</span>
+                [% CASE 'hold_placed_at_biblio_level' %]
+                    <span>The hold has been placed at biblio level. It is not possible to mark it as lost.</span>
+                [% CASE %]
+                    [% m.code %]
+                [% END %]
+            </div>
+        [% END %]
 
 <h2>Holds to pull placed between [% from | $KohaDates %] and [% to | $KohaDates %]</h2>
 <h3>Reported on [% todaysdate | $KohaDates %]</h3>
@@ -44,6 +63,7 @@
         <th class="string-sort">Available itypes</th>
         <th class="string-sort">Available locations</th>
         <th class="title-string">Earliest hold date</th>
+        <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -88,6 +108,29 @@
         <td>
             <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
         </td>
+        <td>
+            <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                <input type="hidden" name="op" value="cancel_reserve" />
+                <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
+                [% IF reserveloo.holdingbranch != reserveloo.homebranch %]
+                    <input type="submit" value="Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) %]" />
+                [% ELSE %]
+                    <input type="submit" value="Cancel hold" />
+                [% END %]
+            </form>
+
+        [% IF Koha.Preference('CanMarkHoldsToPullAsLost') != 'do_not_allow' %]
+            <form name="cancelReserve" action="/cgi-bin/koha/circ/pendingreserves.pl" method="post">
+                <input type="hidden" name="reserve_id" value="[% reserveloo.reserve_id %]" />
+                [% IF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow' %]
+                    <input type="hidden" name="op" value="mark_as_lost" />
+                    <input type="submit" value="Mark item as lost" />
+                [% ELSIF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow_and_notify' %]
+                    <input type="hidden" name="op" value="mark_as_lost_and_notify" />
+                    <input type="submit" value="Mark item as lost and notify the patron" />
+                [% END %]
+            </form>
+        [% END %]
         </tr>
         [% END %]
     </tbody>
@@ -104,6 +147,7 @@
         <td><input type="text" class="filter" data-column_num="8" placeholder="Available enumeration" style="width:95%"/></td>
         <td id="itypefilter"></td>
         <td id="locationfilter"></td>
+        <td></td>
         <td></td>
         </tr>
     </tfoot>
