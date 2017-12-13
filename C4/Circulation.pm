@@ -22,6 +22,7 @@ package C4::Circulation;
 use strict;
 #use warnings; FIXME - Bug 2505
 use DateTime;
+use POSIX qw( floor );
 use Koha::DateUtils;
 use C4::Context;
 use C4::Stats;
@@ -2236,6 +2237,13 @@ sub _debar_user_on_return {
                     $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
                     $has_been_extended = 1;
                 }
+            }
+
+            if ( $issuing_rule->suspension_chargeperiod > 1 ) {
+                # No need to / 1 and do not consider / 0
+                $suspension_days = DateTime::Duration->new(
+                    days => floor( $suspension_days->in_units('days') / $issuing_rule->suspension_chargeperiod )
+                );
             }
 
             my $new_debar_dt =

@@ -17,10 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 113;
+use Test::More tests => 114;
 
 use DateTime;
-
+use POSIX qw( floor );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -1749,6 +1749,115 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     );
     is( $debarments->[0]->{expiration}, $expected_expiration );
 };
+
+subtest 'AddReturn + suspension_chargeperiod' => sub {
+    plan tests => 6;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+
+    # Add 2 items
+    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
+    my $item_1 = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem_1->{biblionumber}
+            }
+        }
+    );
+
+    # And the issuing rule
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => '*',
+            maxissueqty  => 99,
+            issuelength  => 1,
+            firstremind  => 0,        # 0 day of grace
+            finedays     => 2,        # 2 days of fine per day of overdue
+            suspension_chargeperiod => 1,
+            lengthunit   => 'days',
+        }
+    );
+    $rule->store();
+
+    my $five_days_ago = dt_from_string->subtract( days => 5 );
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+
+    # We want to charge 2 days every day, without grace
+    # With 5 days of overdue: 5 * Z
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    my $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+
+    my $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => ( 5 * 2 ) / 1 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+    # We want to charge 2 days every 2 days, without grace
+    # With 5 days of overdue: (5 * 2) / 2
+    $rule->suspension_chargeperiod(2)->store;
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => floor( 5 * 2 ) / 2 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+    # We want to charge 2 days every 3 days, with 1 day of grace
+    # With 5 days of overdue: ((5-1) / 3 ) * 2
+    $rule->suspension_chargeperiod(3)->store;
+    $rule->firstremind(1)->store;
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1 );
+
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+};
+
 
 subtest 'AddReturn | is_overdue' => sub {
     plan tests => 5;
