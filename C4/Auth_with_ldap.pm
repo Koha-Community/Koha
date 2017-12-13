@@ -59,7 +59,6 @@ my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		;
 $ldappassword = $ldap->{pass}		;
-$ldap->{anonymous_bind} = 1 unless $ldapname && $ldappassword;
 our %mapping  = %{$ldap->{mapping}}; # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
 my @mapkeys = keys %mapping;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
@@ -76,7 +75,7 @@ if(defined $ldap->{categorycode_mapping}) {
 }
 
 my %config = (
-	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
+    anonymous => defined ($ldap->{anonymous_bind}) ? $ldap->{anonymous_bind} : 1,
     replicate => defined($ldap->{replicate}) ? $ldap->{replicate} : 1,  #    add from LDAP to Koha database for new user
        update => defined($ldap->{update}   ) ? $ldap->{update}    : 1,  # update from LDAP to Koha database for existing user
 );
@@ -127,7 +126,7 @@ sub checkpw_ldap {
     # first, LDAP authentication
     if ( $ldap->{auth_by_bind} ) {
         my $principal_name;
-        if ( $ldap->{anonymous_bind} ) {
+        if ( $config{anonymous} ) {
 
             # Perform an anonymous bind
             my $res = $db->bind;
@@ -155,7 +154,7 @@ sub checkpw_ldap {
         # Perform a LDAP bind for the given username using the matched DN
         my $res = $db->bind( $principal_name, password => $password );
         if ( $res->code ) {
-            if ( $ldap->{anonymous_bind} ) {
+            if ( $config{anonymous} ) {
                 # With anonymous_bind approach we can be sure we have found the correct user
                 # and that any 'code' response indicates a 'bad' user (be that blocked, banned
                 # or password changed). We should not fall back to local accounts in this case.
@@ -176,7 +175,7 @@ sub checkpw_ldap {
             $userldapentry = $search->shift_entry;
         }
     } else {
-		my $res = ($ldap->{anonymous_bind}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
+        my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
 		if ($res->code) {		# connection refused
 			warn "LDAP bind failed as ldapuser " . ($ldapname || '[ANONYMOUS]') . ": " . description($res);
 			return 0;

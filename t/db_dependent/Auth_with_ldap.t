@@ -41,6 +41,8 @@ my $update         = 0;
 my $replicate      = 0;
 my $auth_by_bind   = 1;
 my $anonymous_bind = 1;
+my $user           = 'cn=Manager,dc=metavore,dc=com';
+my $pass           = 'metavore';
 
 # Variables controlling LDAP behaviour
 my $desired_authentication_result = 'success';
@@ -143,7 +145,7 @@ subtest 'checkpw_ldap tests' => sub {
 
     subtest 'auth_by_bind = 1 tests' => sub {
 
-        plan tests => 9;
+        plan tests => 11;
 
         $auth_by_bind = 1;
 
@@ -160,6 +162,19 @@ subtest 'checkpw_ldap tests' => sub {
         qr/Anonymous LDAP bind failed: LDAP error #1: error_name/,
           'checkpw_ldap prints correct warning if LDAP anonymous bind fails';
         is( $ret, 0, 'checkpw_ldap returns 0 if LDAP anonymous bind fails' );
+
+        $anonymous_bind = 0;
+        $user = undef;
+        $pass = undef;
+        reload_ldap_module();
+
+        warning_like {
+            $ret = C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola',
+                password => 'hey' );
+        }
+        qr/LDAP bind failed as kohauser hola: LDAP error #1: error_name/,
+          'checkpw_ldap prints correct warning if LDAP bind_by_auth fails';
+        is( $ret, 0, 'checkpw_ldap returns 0 if LDAP bind_by_auth fails' );
 
         $desired_authentication_result = 'success';
         $anonymous_bind                = 1;
@@ -251,8 +266,10 @@ subtest 'checkpw_ldap tests' => sub {
 
         # Anonymous bind
         $anonymous_bind            = 1;
+        $user                      = 'cn=Manager,dc=metavore,dc=com';
+        $pass                      = 'metavore';
         $desired_admin_bind_result = 'error';
-        $desired_bind_result = 'error';
+        $desired_bind_result       = 'error';
         reload_ldap_module();
 
         warning_like {
@@ -361,11 +378,11 @@ sub mockedC4Config {
             base           => 'dc=metavore,dc=com',
             hostname       => 'localhost',
             mapping        => \%ldap_mapping,
-            pass           => 'metavore',
+            pass           => $pass,
             principal_name => '%s@my_domain.com',
             replicate      => $replicate,
             update         => $update,
-            user           => 'cn=Manager,dc=metavore,dc=com',
+            user           => $user,
         );
         return \%ldap_config;
     }
