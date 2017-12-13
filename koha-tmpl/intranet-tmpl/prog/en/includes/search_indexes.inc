@@ -1,3 +1,4 @@
+[% USE Koha %]
 <select class="advsearch" name="idx">
     <option value="kw">Keyword</option>
     <option value="kw,phr">&nbsp;&nbsp;&nbsp;&nbsp; Keyword as phrase</option>
@@ -21,14 +22,14 @@
     [% END %]
     <option value="bc">Barcode</option>
     <option value="location">Shelving location</option>
-    [% IF (numbersphr) %]
+    [% IF ( Koha.Preference('IntranetNumbersPreferPhrase') ) %]
     <option value="sn,phr">Standard number</option>
     [% ELSE %]
     <option value="sn">Standard number</option>
     [% END %]
     <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
     <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-    [% IF (numbersphr) %]
+    [% IF ( Koha.Preference('IntranetNumbersPreferPhrase') ) %]
     <option value="callnum,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call number</option>
     [% ELSE %]
     <option value="callnum">&nbsp;&nbsp;&nbsp;&nbsp; Call number</option>
