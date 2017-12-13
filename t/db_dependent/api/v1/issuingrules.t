@@ -46,7 +46,7 @@ subtest 'get_effective() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    # Empty current issuign rules and create two random issuing rules
+    # Empty current issuign rules
     Koha::IssuingRules->search->delete;
 
     my $context1 = create_test_context();
@@ -58,8 +58,6 @@ subtest 'get_effective() tests' => sub {
         itemtype => '*',
         branchcode => '*'
     });
-    create_issuing_rule();
-    create_issuing_rule();
     create_issuing_rule({
         categorycode => $context1->{patron}->{categorycode},
         itemtype => $context1->{item}->{itype},
