@@ -78,6 +78,7 @@
                 <th>Cap fine at replacement price</th>
                 <th>Suspension in days (day)</th>
                 <th>Max. suspension duration (day)</th>
+                <th>Fine day charging interval</th>
                 <th>Renewals allowed (count)</th>
                 <th>Renewal period</th>
                 <th>No renewal before</th>
@@ -165,6 +166,7 @@
                             </td>
 							<td>[% rule.finedays %]</td>
                             <td>[% rule.maxsuspensiondays %]</td>
+                            <td>[% rule.suspension_chargeperiod %]</td>
 							<td>[% rule.renewalsallowed %]</td>
                             <td>[% rule.renewalperiod %]</td>
                             <td>[% rule.norenewalbefore %]</td>
@@ -269,6 +271,7 @@
                     <td><input type="checkbox" name="cap_fine_to_replacement_price" id="cap_fine_to_replacement_price" /></td>
                     <td><input type="text" name="finedays" id="fined" size="3" /> </td>
                     <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
+                    <td><input type="text" name="suspension_chargeperiod" id="suspension_chargeperiod" size="3" /> </td>
                     <td><input type="text" name="renewalsallowed" id="renewalsallowed" size="2" /></td>
                     <td><input type="text" name="renewalperiod" id="renewalperiod" size="3" /></td>
                     <td><input type="text" name="norenewalbefore" id="norenewalbefore" size="3" /></td>
@@ -331,6 +334,7 @@
                       <th>Overdue fines cap (amount)</th>
                       <th>Cap fine at replacement price</th>
                       <th>Suspension in days (day)</th>
+                      <th>Fine day charging interval</th>
                       <th>Max. suspension duration (day)</th>
                       <th>Renewals allowed (count)</th>
                       <th>Renewal period</th>

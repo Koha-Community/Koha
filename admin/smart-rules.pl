@@ -125,6 +125,7 @@ elsif ($op eq 'add') {
     my $finedays     = $input->param('finedays');
     my $maxsuspensiondays = $input->param('maxsuspensiondays');
     $maxsuspensiondays = undef if $maxsuspensiondays eq q||;
+    my $suspension_chargeperiod = $input->param('suspension_chargeperiod') || 1;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
     my $chargeperiod_charge_at = $input->param('chargeperiod_charge_at');
@@ -168,6 +169,7 @@ elsif ($op eq 'add') {
         fine                          => $fine,
         finedays                      => $finedays,
         maxsuspensiondays             => $maxsuspensiondays,
+        suspension_chargeperiod       => $suspension_chargeperiod,
         firstremind                   => $firstremind,
         chargeperiod                  => $chargeperiod,
         chargeperiod_charge_at        => $chargeperiod_charge_at,
