@@ -70,6 +70,12 @@ __PACKAGE__->table("issuingrules");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 suspension_chargeperiod
+
+  data_type: 'integer'
+  default_value: 1
+  is_nullable: 1
+
 =head2 firstremind
 
   data_type: 'integer'
@@ -234,6 +240,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "maxsuspensiondays",
   { data_type => "integer", is_nullable => 1 },
+  "suspension_chargeperiod",
+  { data_type => "integer", default_value => 1, is_nullable => 1 },
   "firstremind",
   { data_type => "integer", is_nullable => 1 },
   "chargeperiod",
@@ -313,8 +321,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:15:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D1443VWPcoIXN3+lIkckIQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-12-13 12:44:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VBD8atc/D/6rN0D+aTaSOQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
