@@ -2,13 +2,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Koha to MARC mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
 </head>
 
 <body id="admin_koha2marclinks" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a> &rsaquo;</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC Mapping</a></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -39,10 +40,10 @@
     <td>[% loo.tagfield %]</td>
     <td>[% loo.tagsubfield %]</td>
     <td>[% loo.liblibrarian %]</td>
-    <td>
+    <td class="actions">
         [% IF !loo.readonly %]
-            <a onclick="AddFld('[% loo.kohafield %]');" class="btn btn-default btn-xs">Add</a>
-            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield %]','[% loo.tagsubfield %]');" class="btn btn-default btn-xs">Remove</a> [% END %]
+            <a onclick="AddFld('[% loo.kohafield %]');" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add</a>
+            [% IF loo.tagfield %] <a onclick="RemFld('[% loo.tagfield %]','[% loo.tagsubfield %]');" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Remove</a> [% END %]
         [% END %]
     </td>
     </td>
@@ -66,6 +67,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
     <script type="text/javascript">
         function AddFld(kohafield) {
@@ -85,6 +87,15 @@
                 $('#koha2marc').submit();
             }
         }
+        $(document).ready(function() {
+            $("#kohafields").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "paging":   false
+            } ));
+
+         });
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
