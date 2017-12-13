@@ -41,6 +41,7 @@ var relatives_borrowernumbers = new Array();
 [% END %]
 
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
+var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
 columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) %]
 
@@ -190,6 +191,31 @@ function validate1(date) {
       </ul>
     </div>
     [% END %]
+    <div id="messages" class="circmessage">
+        <h4>Messages:</h4>
+        <ul>
+            [% FOREACH patron_message IN patron_messages %]
+                <li>
+                    [% IF(patron_message.message_type == "L") %]
+                        <span class="circ-hlt">
+                    [% ELSE %]
+                        <span>
+                    [% END %]
+                        [% patron_message.message_date | $KohaDates %]
+                        [% Branches.GetName( patron_message.branchcode ) %]
+                        [% IF patron_message.manager_id %]
+                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id %]">[% patron_message.get_column('manager_firstname') %] [% patron_message.get_column('manager_surname') %]</a> )
+                        [% END %]
+                        <i>"[% patron_message.message | html %]"</i>
+                    </span>
+                    [% IF patron_message.branchcode == branchcode OR Koha.Preference('AllowAllMessageDeletion') %]
+                        <a class="btn btn-link btn-sm" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id %]&amp;borrowernumber=[% patron_message.borrowernumber %]&amp;from=moremember" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
+                    [% END %]
+                </li>
+            [% END %]
+        </ul>
+        <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
+    </div>
 
     [% IF ( flagged ) %]
     <div id="circmessages" class="circmessage attention">
@@ -217,7 +243,6 @@ function validate1(date) {
         </ul>
     </div>
     [% END %]
-
 <h3>[% UNLESS ( I ) %]
    [% title | html %] [% firstname | html %] [% END %] [% surname | html %] ([% cardnumber | html %])</h3>
  <div class="yui-u first">
@@ -500,7 +525,6 @@ function validate1(date) {
 
 </div>
 </div>
-
 <div id="finesholdsissues" class="toptabs">
     <ul>
         <li><a href="#checkouts">[% issuecount %] Checkout(s)</a></li>

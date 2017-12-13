@@ -54,6 +54,7 @@ use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Images;
+use Koha::Patron::Messages;
 use Module::Load;
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
@@ -331,6 +332,18 @@ if ( C4::Context->preference("ExportCircHistory") ) {
     $template->param(csv_profiles => [ Koha::CsvProfiles->search({ type => 'marc' }) ]);
 }
 
+my $patron_messages = Koha::Patron::Messages->search(
+    {
+        'me.borrowernumber' => $borrowernumber,
+    },
+    {
+        join => 'manager',
+        '+select' => ['manager.surname', 'manager.firstname' ],
+        '+as' => ['manager_surname', 'manager_firstname'],
+    }
+);
+
+
 # Display the language description instead of the code
 # Note that this is certainly wrong
 my ( $subtag, $region ) = split '-', $patron->lang;
@@ -359,6 +372,7 @@ $template->param(
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
+    patron_messages       => $patron_messages,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -43,5 +43,10 @@ my $message_id     = $input->param('message_id');
 my $message = Koha::Patron::Messages->find($message_id);
 $message->delete if $message;
 
-print $input->redirect(
-    "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+if ( $input->param('from') eq  "moremember" ) {
+    print $input->redirect(
+        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+} else {
+    print $input->redirect(
+        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+}
