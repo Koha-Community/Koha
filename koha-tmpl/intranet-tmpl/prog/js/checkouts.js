@@ -258,7 +258,7 @@ $(document).ready(function() {
                             if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
                                 span_class = "circ-hlt";
                             }
-                            title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>";
+                            title += " - <span class='" + span_class + " item-note-public'>" + oObj.itemnotes + "</span>";
                         }
 
                         if ( oObj.itemnotes_nonpublic ) {
@@ -266,7 +266,7 @@ $(document).ready(function() {
                             if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
                                 span_class = "circ-hlt";
                             }
-                            title += " - <span class='" + span_class + "'>" + oObj.itemnotes_nonpublic + "</span>";
+                            title += " - <span class='" + span_class + " item-note-nonpublic'>" + oObj.itemnotes_nonpublic + "</span>";
                         }
 
                         var onsite_checkout = '';
