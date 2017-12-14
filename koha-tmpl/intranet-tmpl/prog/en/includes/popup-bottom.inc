@@ -1,5 +1,5 @@
     [% IF ( footerjs ) %]
-        [% INCLUDE js_includes.inc %]
+        [% INCLUDE js_includes.inc popup=1 %]
         [% jsinclude # Parse the page template's JavaScript block if necessary %]
     [% END %]
 </body>
