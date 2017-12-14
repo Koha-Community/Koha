@@ -687,18 +687,21 @@ sub get_infos_syspref {
 
 sub equal_number_of_fields {
     my ($tags_list, $record) = @_;
-    my $refcount = 0;
-    my $count = 0;
+    my $tag_fields_count;
     for my $tag (@$tags_list) {
-        return -1 if $count != $refcount;
-        $count = 0;
-        for my $field ($record->field($tag)) {
-            $count++;
-        }
-        $refcount = $count if ($refcount == 0);
+        my @fields = $record->field($tag);
+        $tag_fields_count->{$tag} = scalar @fields;
     }
-    return -1 if $count != $refcount;
-    return $count;
+
+    my $tags_count;
+    foreach my $key ( keys %$tag_fields_count ) {
+        if ( $tag_fields_count->{$key} > 0 ) { # Having 0 of a field is ok
+            $tags_count //= $tag_fields_count->{$key}; # Start with the count from the first occurrence
+            return -1 if $tag_fields_count->{$key} != $tags_count; # All counts of various fields should be equal if they exist
+        }
+    }
+
+    return $tags_count;
 }
 
 sub get_infos_syspref_on_item {
@@ -728,7 +731,7 @@ sub get_infos_syspref_on_item {
     @tags_list = List::MoreUtils::uniq(@tags_list);
 
     my $tags_count = equal_number_of_fields(\@tags_list, $record);
-    # Return if the number of theses fields in the record is not the same.
+    # Return if the number of these fields in the record is not the same.
     return -1 if $tags_count == -1;
 
     # Gather the fields
@@ -749,7 +752,7 @@ sub get_infos_syspref_on_item {
             for my $field ( @fields ) {
                 my ( $f, $sf ) = split /\$/, $field;
                 next unless $f and $sf;
-                my $v = $fields_hash->{$f}[$i]->subfield( $sf );
+                my $v = $fields_hash->{$f}[$i] ? $fields_hash->{$f}[$i]->subfield( $sf ) : undef;
                 $r->{$field_name} = $v if (defined $v);
                 last if $yaml->{$field};
             }
