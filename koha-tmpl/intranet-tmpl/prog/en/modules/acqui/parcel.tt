@@ -219,7 +219,7 @@
           <th>Basket</th>
           <th>Basket group</th>
           <th>Order line</th>
-          <th>Holds</th>
+          <th title="Item holds / Total holds">Holds</th>
           <th>Summary</th>
           <th>View record</th>
           <th>Quantity</th>
@@ -281,8 +281,14 @@
                   [% END %]
                 </td>
                 <td>
-                  [% IF order.holds > 0 %]
-                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber %]">[% order.holds %]</a></span>
+                  [% IF order.total_holds > 0 %]
+                    [% IF order.item_holds > 0 %]
+                      <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber %]">[% order.item_holds %]</a></span>
+                    [% ELSE %]
+                      0
+                    [% END %]
+                    /
+                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber %]">[% order.total_holds %]</a></span>
                   [% ELSE %]
                     0
                   [% END %]
