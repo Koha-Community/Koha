@@ -818,7 +818,7 @@ sub CheckReserves {
                         || ( $res->{branchcode} ne
                             $item->$hold_fulfillment_policy )
                       );
-                    next unless $item->can_be_transferred( { to => scalar Koha::Libraries->find( $res->{branchcode} ) } );
+                    next unless $item->can_be_transferred( { to => Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
                     last if $local_hold_match;

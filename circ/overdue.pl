@@ -309,7 +309,7 @@ if ($noreport) {
         }
 
         push @overduedata, {
-            patron                 => scalar Koha::Patrons->find( $data->{borrowernumber} ),
+            patron                 => Koha::Patrons->find( $data->{borrowernumber} ),
             duedate                => $data->{date_due},
             borrowernumber         => $data->{borrowernumber},
             cardnumber             => $data->{cardnumber},

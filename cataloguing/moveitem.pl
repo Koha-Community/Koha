@@ -79,7 +79,7 @@ if ( $barcode && $biblionumber ) {
         if ($moveresult) {
             $template->param(
                 success => 1,
-                from_biblio => scalar Koha::Biblios->find($frombiblionumber),
+                from_biblio => Koha::Biblios->find($frombiblionumber),
             );
         }
         else {

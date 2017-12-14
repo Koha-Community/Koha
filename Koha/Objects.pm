@@ -76,6 +76,8 @@ Similar to DBIx::Class::ResultSet->find this method accepts:
 Strictly speaking, columns_values should only refer to columns under an
 unique constraint.
 
+It returns undef if no results were found
+
 my $object = Koha::Objects->find( { col1 => $val1, col2 => $val2 } );
 my $object = Koha::Objects->find( $id );
 my $object = Koha::Objects->find( $idpart1, $idpart2, $attrs ); # composite PK
@@ -85,15 +87,14 @@ my $object = Koha::Objects->find( $idpart1, $idpart2, $attrs ); # composite PK
 sub find {
     my ( $self, @pars ) = @_;
 
-    croak 'Cannot use "->find" in list context' if wantarray;
+    my $object;
 
-    return if !@pars || none { defined($_) } @pars;
-
-    my $result = $self->_resultset()->find( @pars );
-
-    return unless $result;
-
-    my $object = $self->object_class()->_new_from_dbic( $result );
+    unless (!@pars || none { defined($_) } @pars) {
+        my $result = $self->_resultset()->find(@pars);
+        if ($result) {
+            $object = $self->object_class()->_new_from_dbic($result);
+        }
+    }
 
     return $object;
 }
