@@ -39,7 +39,7 @@ my $library = $builder->build({ source => 'Branch' });
 C4::Context->_new_userenv('xxx');
 C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, $library->{branchname}, '', '', '');
 
-my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });
 my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode} } } );
 
 my $biblioitem = $builder->build( { source => 'Biblioitem' } );

@@ -63,7 +63,7 @@ my $itemtype = $builder->build(
         value  => { notforloan => undef, rentalcharge => 0, defaultreplacecost => undef, processfee => undef }
     }
 )->{itemtype};
-my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'NOT_X', category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });
 
 my $CircControl = C4::Context->preference('CircControl');
 my $HomeOrHoldingBranch = C4::Context->preference('HomeOrHoldingBranch');
