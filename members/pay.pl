@@ -115,7 +115,7 @@ elsif ( $input->param('confirm_writeoff') ) {
         $payment_id = Koha::Account->new( { patron_id => $borrowernumber } )->pay(
             {
                 amount     => $amount,
-                lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
+                lines      => [ Koha::Account::Lines->find($accountlines_id) ],
                 type       => 'WRITEOFF',
                 note       => $payment_note,
                 interface  => C4::Context->interface,
@@ -222,7 +222,7 @@ sub writeoff_all {
             Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                 {
                     amount => $amount,
-                    lines  => [ scalar Koha::Account::Lines->find($accountlines_id) ],
+                    lines  => [ Koha::Account::Lines->find($accountlines_id) ],
                     type   => 'WRITEOFF',
                     note   => $payment_note,
                     interface  => C4::Context->interface,

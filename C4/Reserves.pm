@@ -830,7 +830,7 @@ sub CheckReserves {
                     next if ( ($hold_fulfillment_policy eq 'holdgroup') && (!$library->validate_hold_sibling({branchcode => $res->{branchcode}})) );
                     next if ( ($hold_fulfillment_policy eq 'homebranch') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
                     next if ( ($hold_fulfillment_policy eq 'holdingbranch') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
-                    next unless $item->can_be_transferred( { to => scalar Koha::Libraries->find( $res->{branchcode} ) } );
+                    next unless $item->can_be_transferred( { to => Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
                     last if $local_hold_match;

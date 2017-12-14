@@ -61,7 +61,7 @@ sub cancel {
 
 sub club {
     my ( $self ) = @_;
-    return scalar Koha::Clubs->find( $self->club_id() );
+    return Koha::Clubs->find( $self->club_id() );
 }
 
 =head3 patron
@@ -70,7 +70,7 @@ sub club {
 
 sub patron {
     my ( $self ) = @_;
-    return scalar Koha::Patrons->find( $self->borrowernumber() );
+    return Koha::Patrons->find( $self->borrowernumber() );
 }
 
 =head3 is_canceled

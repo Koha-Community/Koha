@@ -60,7 +60,7 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    unless ( $item->can_be_transferred( { to => scalar Koha::Libraries->find( $branch ) } ) ) {
+    unless ( $item->can_be_transferred( { to => Koha::Libraries->find( $branch ) } ) ) {
         $self->screen_msg('Item cannot be transferred.');
         $self->ok(0);
         return $self;

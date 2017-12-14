@@ -46,13 +46,20 @@ my $borrowernumber_exists = grep { /^borrowernumber$/ } @columns;
 is( $borrowernumber_exists, 1, 'Koha::Objects->columns should return the table columns' );
 
 subtest 'find' => sub {
-    plan tests => 4;
+    plan tests => 6;
     my $patron = $builder->build({source => 'Borrower'});
     my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
     is( $patron_object->borrowernumber, $patron->{borrowernumber}, '->find should return the correct object' );
 
-    eval { my @patrons = Koha::Patrons->find( $patron->{borrowernumber} ); };
-    like( $@, qr|^Cannot use "->find" in list context|, "->find should not be called in list context to avoid side-effects" );
+    my @patrons = Koha::Patrons->find( $patron->{borrowernumber} );
+    is(scalar @patrons, 1, '->find in list context returns a value');
+    is($patrons[0]->borrowernumber, $patron->{borrowernumber}, '->find in list context returns the same value as in scalar context');
+
+    my $patrons = {
+        foo => Koha::Patrons->find('foo'),
+        bar => 'baz',
+    };
+    is ($patrons->{foo}, undef, '->find in list context returns undef when no record is found');
 
     # Test sending undef to find; should not generate a warning
     warning_is { $patron = Koha::Patrons->find( undef ); }

@@ -51,7 +51,7 @@ Returns the biblio linked to this subscription as a Koha::Biblio object
 sub biblio {
     my ($self) = @_;
 
-    return scalar Koha::Biblios->find($self->biblionumber);
+    return Koha::Biblios->find($self->biblionumber);
 }
 
 =head3 vendor
@@ -62,7 +62,7 @@ Returns the vendor/supplier linked to this subscription as a Koha::Acquisition::
 
 sub vendor {
     my ($self) = @_;
-    return scalar Koha::Acquisition::Booksellers->find($self->aqbooksellerid);
+    return Koha::Acquisition::Booksellers->find($self->aqbooksellerid);
 }
 
 =head3 subscribers
