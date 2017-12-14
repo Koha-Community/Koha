@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2010 Koha Development team
+# Copyright 2017 Koha Development team
 #
 # This file is part of Koha.
 #
@@ -18,51 +18,14 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Templates;
-use C4::Output;
-# use C4::Auth;
 use C4::Context;
 use CGI qw ( -utf8 );
 
-sub _help_template_file_of_url {
-    my $url = shift;
-    my $file;
-    if ($url =~ /koha\/(.*)\.pl/) {
-        $file = $1;
-    } else {
-        $file = 'mainpage';
-    }
-    $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
-    return "help/$file.tt";
-}
-
 my $query = new CGI;
-
-# Init the interface to get the correct language.
-# This is usually set by get_template_and_user
-C4::Context->interface('intranet');
 
 # find the script that called the online help using the CGI referer()
 our $refer = $query->param('url');
 $refer = $query->referer()  if !$refer || $refer eq 'undefined';
-my $from = _help_template_file_of_url($refer);
-my $htdocs = C4::Context->config('intrahtdocs');
-
-#
-# checking that the help file exist, otherwise, display nohelp.tt page
-#
-my ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
-unless ( -e "$htdocs/$theme/$lang/modules/$from" ) {
-    $from = "help/nohelp.tt";
-    ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
-}
-
-my $template = C4::Templates::gettemplate($from, 'intranet', $query);
-$template->param(
-    referer => $refer,
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-);
 
 my $help_version = C4::Context->preference("Version");
 if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
@@ -72,6 +35,218 @@ if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
     $major = sprintf("%02d", $major);
     $help_version = "$version.$major";
 }
-$template->param( helpVersion => $help_version );
 
-output_html_with_http_headers $query, "", $template->output;
+# FIXME remote url must be a pref
+# FIXME /en/ must be configurable (or guessed)
+our $base_url = 'http://koha-community.org/manual/' . $help_version . '/en/html';
+our $mapping = {
+    'about'                                    => '/14_plugins.html#about-koha',
+    'acqui/acqui-home'                         => '/09_acquisitions.html',
+    'acqui/addorderiso2709'                    => '/09_acquisitions.html#create-a-basket',
+    'acqui/basket'                             => '/09_acquisitions.html#create-a-basket',
+    'acqui/basketgroup'                        => '/09_acquisitions.html#create-a-basket-group',
+    'acqui/basketheader'                       => '/09_acquisitions.html#create-a-basket',
+    'acqui/booksellers'                        => '/09_acquisitions.html#acquisition-searches',
+    'acqui/edifactmsgs'                        => '/09_acquisitions.html#edifact-messages',
+    'acqui/histsearch'                         => '/09_acquisitions.html#acquisition-searches',
+    'acqui/invoice'                            => '/09_acquisitions.html#invoices',
+    'acqui/invoices'                           => '/09_acquisitions.html#invoices',
+    'acqui/lateorders'                         => '/09_acquisitions.html#claims-late-orders',
+    'acqui/neworderbiblio'                     => '/09_acquisitions.html#create-a-basket',
+    'acqui/neworderempty'                      => '/09_acquisitions.html#create-a-basket',
+    'acqui/newordersubscription'               => '/09_acquisitions.html#create-a-basket',
+    'acqui/newordersuggestion'                 => '/09_acquisitions.html#create-a-basket',
+    'acqui/orderreceive'                       => '/09_acquisitions.html#receiving-orders',
+    'acqui/parcel'                             => '/09_acquisitions.html#receiving-orders',
+    'acqui/parcels'                            => '/09_acquisitions.html#receiving-orders',
+    'acqui/supplier'                           => '/09_acquisitions.html#vendors',
+    'acqui/uncertainprice'                     => '/09_acquisitions.html#create-a-basket',
+    'acqui/z3950_search'                       => '/09_acquisitions.html#create-a-basket',
+    'admin/admin-home'                         => '/02_administration.html',
+    'admin/aqbudgetperiods'                    => '/02_administration.html#budgets',
+    'admin/aqbudgets'                          => '/02_administration.html#funds',
+    'admin/aqcontract'                         => '/09_acquisitions.html#vendor-contracts',
+    'admin/aqplan'                             => '/02_administration.html#budget-planning',
+    'admin/auth_subfields_structure'           => '/02_administration.html#authority-types',
+    'admin/auth_tag_structure'                 => '/02_administration.html#authority-types',
+    'admin/authorised_values'                  => '/02_administration.html#authorized-values',
+    'admin/authtypes'                          => '/02_administration.html#authority-types',
+    'admin/biblio_framework'                   => '/02_administration.html#marc-bibliographic-frameworks',
+    'admin/branch_transfer_limits'             => '/02_administration.html#library-transfer-limits',
+    'admin/branches'                           => '/02_administration.html#libraries-&-groups',
+    'admin/categorie'                          => '/02_administration.html#patron-categories',
+    'admin/checkmarc'                          => '/02_administration.html#marc-bibliographic-framework-test',
+    'admin/cities'                             => '/02_administration.html#cities-and-towns',
+    'admin/classsources'                       => '/02_administration.html#classification-sources',
+    'admin/columns_settings'                   => '/02_administration.html#column-settings',
+    'admin/currency'                           => '/02_administration.html#currencies-and-exchange-rates',
+    'admin/didyoumean'                         => '/02_administration.html#did-you-mean?',
+    'admin/edi_accounts'                       => '/02_administration.html#edi-accounts',
+    'admin/edi_ean_accounts'                   => '/02_administration.html#library-eans',
+    'admin/fieldmapping'                       => '/02_administration.html#keywords-to-marc-mapping',
+    'admin/item_circulation_alerts'            => '/02_administration.html#item-circulation-alerts',
+    'admin/items_search_fields'                => '/02_administration.html#item-search-fields',
+    'admin/itemtypes'                          => '/02_administration.html#item-types',
+    'admin/koha2marclinks'                     => '/02_administration.html#koha-to-marc-mapping',
+    'admin/marc_subfields_structure'           => '/02_administration.html#marc-bibliographic-frameworks',
+    'admin/marctagstructure'                   => '/02_administration.html#marc-bibliographic-frameworks',
+    'admin/matching-rules'                     => '/02_administration.html#record-matching-rules',
+    'admin/oai_set_mappings'                   => '/02_administration.html#oai-sets-configuration',
+    'admin/oai_sets'                           => '/02_administration.html#oai-sets-configuration',
+    'admin/patron-attr-types'                  => '/02_administration.html#patron-attribute-types',
+    'admin/preferences'                        => '/02_administration.html#global-system-preferences',
+    'admin/smart-rules'                        => '/02_administration.html#circulation-and-fine-rules',
+    'admin/systempreferences'                  => '/02_administration.html#global-system-preferences',
+    'admin/transport-cost-matrix'              => '/02_administration.html#transport-cost-matrix',
+    'admin/z3950servers'                       => '/02_administration.html#z39.50/sru-servers',
+    'authorities/authorities-home'             => '/06_cataloging.html#authorities',
+    'authorities/authorities'                  => '/06_cataloging.html#authorities',
+    'authorities/detail'                       => '/06_cataloging.html#authorities',
+    'authorities/merge'                        => '/06_cataloging.html#merging-authorities',
+    'catalogue/detail'                         => '/06_cataloging.html#bibliographic-records',
+    'catalogue/issuehistory'                   => '/06_cataloging.html#item-specific-circulation-history',
+    'catalogue/itemsearch'                     => '/13_searching.html#item-searching',
+    'catalogue/moredetail'                     => '/06_cataloging.html#item-records',
+    'catalogue/search-history'                 => '/14_plugins.html#search-history',
+    'catalogue/search'                         => '/13_searching.html',
+    'cataloguing/addbiblio'                    => '/06_cataloging.html#bibliographic-records',
+    'cataloguing/addbooks'                     => '/06_cataloging.html',
+    'cataloguing/additem'                      => '/06_cataloging.html#item-records',
+    'cataloguing/linkitem'                     => '/06_cataloging.html#adding-analytic-records',
+    'cataloguing/merge'                        => '/06_cataloging.html#merging-records',
+    'cataloguing/moveitem'                     => '/06_cataloging.html#moving-items',
+    'circ/branchoverdues'                      => '/05_circulation.html#overdues-with-fines',
+    'circ/branchtransfers'                     => '/05_circulation.html#transfers',
+    'circ/circulation-home'                    => '/05_circulation.html',
+    'circ/circulation'                         => '/05_circulation.html#check-out-(issuing)',
+    'circ/offline'                             => '/05_circulation.html#offline-circulation-in-koha',
+    'circ/on-site_checkouts'                   => '/05_circulation.html#pending-on-site-checkouts',
+    'circ/overdue'                             => '/05_circulation.html#overdues',
+    'circ/pendingreserves'                     => '/05_circulation.html#holds-to-pull',
+    'circ/renew'                               => '/05_circulation.html#renewing',
+    'circ/reserveratios'                       => '/05_circulation.html#hold-ratios',
+    'circ/returns'                             => '/05_circulation.html#check-in-returning',
+    'circ/selectbranchprinter'                 => '/05_circulation.html#set-library',
+    'circ/transferstoreceive'                  => '/05_circulation.html#transfers-to-receive',
+    'circ/view_holdsqueue'                     => '/05_circulation.html#holds-queue',
+    'circ/waitingreserves'                     => '/05_circulation.html#holds-awaiting-pickup',
+    'course_reserves/add_items'                => '/07_course_reserves.html',
+    'course_reserves/course-details'           => '/07_course_reserves.html',
+    'course_reserves/course-reserves'          => '/07_course_reserves.html',
+    'course_reserves/course'                   => '/07_course_reserves.html#adding-courses',
+    'labels/label-edit-batch'                  => '/03_tools.html#batches',
+    'labels/label-edit-layout'                 => '/03_tools.html#layouts',
+    'labels/label-edit-profile'                => '/03_tools.html#profiles',
+    'labels/label-edit-template'               => '/03_tools.html#templates',
+    'labels/label-home'                        => '/03_tools.html#label-creator',
+    'labels/label-manage'                      => '/03_tools.html#layouts',
+    'labels/label-manage'                      => '/03_tools.html#templates',
+    'labels/label-manage'                      => '/03_tools.html#profiles',
+    'labels/label-manage'                      => '/03_tools.html#batches',
+    'labels/spinelabel-home'                   => '/03_tools.html#quick-spine-label-creator',
+    'mainpage'                                 => '/',
+    'members/boraccount'                       => '/04_patrons.html#fines',
+    'members/discharge'                        => '/04_patrons.html#patron-discharges',
+    'members/files'                            => '/04_patrons.html#files',
+    'members/mancredit'                        => '/04_patrons.html#creating-manual-credits',
+    'members/maninvoice'                       => '/04_patrons.html#creating-manual-invoices',
+    'members/member-flags'                     => '/04_patrons.html#patron-permissions',
+    'members/member-password'                  => '/04_patrons.html#editing-patrons',
+    'members/member'                           => '/04_patrons.html#patron-search',
+    'members/memberentry'                      => '/04_patrons.html#add-a-new-patron',
+    'members/members-home'                     => '/04_patrons.html',
+    'members/members-update'                   => '/04_patrons.html#managing-patron-self-edits',
+    'members/moremember'                       => '/04_patrons.html#patron-information',
+    'members/notices'                          => '/04_patrons.html#notices',
+    'members/pay'                              => '/04_patrons.html#pay/reverse-fines',
+    'members/paycollect'                       => '/04_patrons.html#pay/reverse-fines',
+    'members/purchase-suggestions'             => '/04_patrons.html#purchase-suggestions',
+    'members/readingrec'                       => '/04_patrons.html#circulation-history',
+    'members/routing-lists'                    => '/04_patrons.html#routing-lists',
+    'members/statistics'                       => '/04_patrons.html#statistics',
+    'offline_circ/list'                        => '/05_circulation.html#offline-circulation-utilities',
+    'offline_circ/process_koc'                 => '/05_circulation.html#upload-offline-circ-file',
+    'patron_lists/lists'                       => '/03_tools.html#patron-lists',
+    'patroncards/edit-batch'                   => '/03_tools.html#batches',
+    'patroncards/edit-layout'                  => '/03_tools.html#layouts',
+    'patroncards/edit-profile'                 => '/03_tools.html#profiles',
+    'patroncards/edit-template'                => '/03_tools.html#templates',
+    'patroncards/home'                         => '/03_tools.html#patron-card-creator',
+    'patroncards/image-manage'                 => '/03_tools.html#manage-images',
+    'patroncards/manage'                       => '/03_tools.html#patron-card-creator',
+    'plugins/plugins-home'                     => '/14_plugins.html',
+    'plugins/plugins-upload'                   => '/14_plugins.html',
+    'reports/acquisitions_stats'               => '/11_reports.html#acquisitions-statistics',
+    'reports/bor_issues_top'                   => '/11_reports.html#patrons-with-the-most-checkouts',
+    'reports/borrowers_out'                    => '/11_reports.html#patrons-with-no-checkouts',
+    'reports/borrowers_stats'                  => '/11_reports.html#patron-statistics',
+    'reports/cat_issues_top'                   => '/11_reports.html#most-circulated-items',
+    'reports/catalogue_out'                    => '/11_reports.html#items-with-no-checkouts',
+    'reports/catalogue_stats'                  => '/11_reports.html#catalog-statistics',
+    'reports/dictionary'                       => '/11_reports.html#report-dictionary',
+    'reports/guided_reports'                   => '/11_reports.html#custom-reports',
+    'reports/issues_avg_stats'                 => '/11_reports.html#average-loan-time',
+    'reports/issues_stats'                     => '/11_reports.html#circulation-statistics',
+    'reports/itemslost'                        => '/11_reports.html#lost-items',
+    'reports/manager'                          => '/11_reports.html#catalog-by-item-type',
+    'reports/reports-home'                     => '/11_reports.html',
+    'reports/reserves_stats'                   => '/11_reports.html#holds-statistics',
+    'reports/serials_stats'                    => '/11_reports.html#serials-statistics',
+    'reserve/request'                          => '/05_circulation.html#holds',
+    'reviews/reviewswaiting'                   => '/03_tools.html#comments',
+    'rotating_collections/rotatingCollections' => '/03_tools.html#rotating-collections',
+    'serials/checkexpiration'                  => '/08_serials.html#check-serial-expiration',
+    'serials/claims'                           => '/08_serials.html#claim-late-serials',
+    'serials/routing'                          => '/08_serials.html#create-a-routing-list',
+    'serials/serials-collection'               => '/08_serials.html',
+    'serials/serials-edit'                     => '/08_serials.html#receive-issues',
+    'serials/serials-home'                     => '/08_serials.html',
+    'serials/subscription-add'                 => '/08_serials.html#add-a-subscription',
+    'serials/subscription-detail'              => '/08_serials.html',
+    'serials/subscription-frequencies'         => '/08_serials.html#manage-serial-frequencies',
+    'serials/subscription-numberpatterns'      => '/08_serials.html#manage-serial-numbering-patterns',
+    'suggestion/suggestion'                    => '/09_acquisitions.html#managing-suggestions',
+    'tags/list'                                => '/03_tools.html#tag-moderation',
+    'tags/review'                              => '/03_tools.html#tag-moderation',
+    'tools/batchMod'                           => '/03_tools.html#batch-item-deletion',
+    'tools/batch_delete_records'               => '/03_tools.html#batch-record-deletion',
+    'tools/batch_record_modification'          => '/03_tools.html#batch-record-modification',
+    'tools/cleanborrowers'                     => '/03_tools.html#patrons-anonymize-bulk-delete',
+    'tools/csv-profiles'                       => '/03_tools.html#csv-profiles',
+    'tools/export'                             => '/03_tools.html#export-bibliographic-records',
+    'tools/holidays'                           => '/03_tools.html#calendar',
+    'tools/import_borrowers'                   => '/03_tools.html#patron-import',
+    'tools/inventory'                          => '/03_tools.html#inventory-stocktaking',
+    'tools/koha-news'                          => '/03_tools.html#news',
+    'tools/letter'                             => '/03_tools.html#notices-slips',
+    'tools/manage-marc-import'                 => '/03_tools.html#staged-marc-record-management',
+    'tools/marc_modification_templates'        => '/03_tools.html#marc-modification-templates',
+    'tools/modborrowers'                       => '/03_tools.html#batch-patron-modification',
+    'tools/overduerules'                       => '/03_tools.html#overdue-notice-status-triggers',
+    'tools/picture-upload'                     => '/03_tools.html#upload-patron-images',
+    'tools/quotes-upload'                      => '/03_tools.html#import-quotes',
+    'tools/quotes'                             => '/03_tools.html#quote-of-the-day-(qotd)-editor',
+    'tools/scheduler'                          => '/03_tools.html#task-scheduler',
+    'tools/stage-marc-import'                  => '/03_tools.html#stage-marc-records-for-import',
+    'tools/tools-home'                         => '/03_tools.html',
+    'tools/upload-cover-image'                 => '/03_tools.html#upload-local-cover-image',
+    'tools/viewlog'                            => '/03_tools.html#log-viewer',
+    'virtualshelves/shelves'                   => '/10_lists.html#lists',
+};
+
+sub _get_manual_url {
+    my $url = shift;
+    my $file;
+    if ($url =~ /koha\/(.*)\.pl/) {
+        $file = $1;
+    } else {
+        $file = 'mainpage';
+    }
+    $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
+
+    return $base_url . ( exists $mapping->{$file} ? $mapping->{$file} : $mapping->{mainpage} );
+}
+
+my $manual_url = _get_manual_url($refer);
+
+print $query->redirect($manual_url);
