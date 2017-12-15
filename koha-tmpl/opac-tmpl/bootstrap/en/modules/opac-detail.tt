@@ -905,7 +905,7 @@
                             <div id="newcomment"></div>
                                 [% IF ( reviews ) %]
                                     [% FOREACH review IN reviews %]
-                                        [% IF review.borrowernumber == borrowernumber %]
+                                        [% IF borrowernumber && review.borrowernumber == borrowernumber %]
                                             <div class="commentline yours" id="c[% review.reviewid %]">
                                                 [% IF ( review.avatarurl ) %]
                                                     <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
@@ -925,26 +925,28 @@
                                             </div>
                                         [% ELSE %]
                                             <div class="commentline">
-                                                [% IF ( ShowReviewer != "none" ) %]
+                                                [% IF ( ShowReviewer != "none" && review.patron) %]
+
                                                     [% IF ( review.avatarurl ) %]
                                                         <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
                                                     [% END %]
                                                     [% SWITCH ShowReviewer %]
                                                     [% CASE 'full' %]
-                                                        <h5>Comment by [% review.title %] [% review.firstname %] [% review.surname %]</h5>
+                                                        <h5>Comment by [% review.patron.title %] [% review.patron.firstname %] [% review.patron.surname %]</h5>
                                                     [% CASE 'first' %]
-                                                        <h5>Comment by [% review.firstname %]</h5>
+                                                        <h5>Comment by [% review.patron.firstname %]</h5>
                                                     [% CASE 'surname' %]
-                                                        <h5>Comment by [% review.surname %]</h5>
+                                                        <h5>Comment by [% review.patron.surname %]</h5>
                                                     [% CASE 'firstandinitial' %]
-                                                        <h5>Comment by [% review.firstname %] [% review.surname|truncate(2,'.') %]</h5>
+                                                        <h5>Comment by [% review.patron.firstname %] [% review.patron.surname|truncate(2,'.') %]</h5>
                                                     [% CASE 'username' %]
-                                                        <h5>Comment by [% review.userid %]</h5>
+                                                        <h5>Comment by [% review.patron.userid %]</h5>
                                                     [% END %]
+
                                                     <small>[% review.datereviewed | $KohaDates %]</small>
-                                                [% ELSIF ( ShowReviewer == "none") %]
+                                                [% ELSE %]
                                                     <h5>Patron comment on [% review.datereviewed | $KohaDates %]</h5>
-                                                [% END # / IF ShowReviewer != "none"%]
+                                                [% END # / IF ShowReviewer != "none" && review.patron %]
                                                 <p>
                                                   [% FILTER html_break %]
                                                   [% review.review |html %]
