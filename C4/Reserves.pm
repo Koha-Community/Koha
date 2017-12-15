@@ -1141,18 +1141,9 @@ sub IsAvailableForItemLevelRequest {
         }
 
         return $any_available ? 0 : 1;
+    } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
+        return $item->{onloan} || IsItemOnHoldAndFound( $item->{itemnumber} );
     }
-
-    if ($item->{onloan}) {
-        return 1;
-    }
-
-    if ( Koha::Holds->search({itemnumber => $item->{itemnumber},
-                              found => ['W', 'T']})->count ) {
-        return 1;
-    }
-
-    return 0;
 }
 
 =head2 OnShelfHoldsAllowed
