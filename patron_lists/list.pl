@@ -24,6 +24,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use Koha::List::Patron;
+use List::MoreUtils qw/uniq/;
 
 my $cgi = new CGI;
 
@@ -39,6 +40,14 @@ my ( $template, $logged_in_user, $cookie ) = get_template_and_user(
 
 my ($list) =
   GetPatronLists( { patron_list_id => scalar $cgi->param('patron_list_id') } );
+
+my $cardnumbers = $cgi->param('patrons_by_barcode');
+my @patrons_by_barcode;
+
+if ( $cardnumbers ){
+    push my @patrons_by_barcode, uniq( split(/\s\n/, $cardnumbers) );
+    AddPatronsToList( { list => $list, cardnumbers => \@patrons_by_barcode } );
+}
 
 my @patrons_to_add = $cgi->multi_param('patrons_to_add');
 if (@patrons_to_add) {

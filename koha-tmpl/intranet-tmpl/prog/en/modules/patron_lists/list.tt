@@ -5,6 +5,20 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+<style type="text/css">
+    #add_patrons_by_search {
+        display: none;
+    }
+    #patron_barcodes_line {
+        display: none;
+    }
+    #patron_barcodes_submit {
+        display: none;
+    }
+    #searchheader {
+        margin-top: 1em;
+    }
+</style>
 </head>
 
 <body id="patlist_list" class="pat patlist">
@@ -18,25 +32,41 @@
         <div class="yui-b">
         <h1>[% list.name |html %]</h1>
 
-        <form action="list.pl" id="add_patrons" method="post">
-            <fieldset>
+        <form action="list.pl" id="add_patrons" method="post" class="clearfix">
+            <fieldset class="rows">
                 <legend>Add patrons</legend>
+                <ol>
+                    <li id="patron_search_line">
+                        <label for="find_patron">Patron search: </label>
+                        <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
+                    </li>
+                    <li id="add_patrons_by_search"><a href="#">
+                        <span class="label">&nbsp;</span>
+                        <i class="fa fa-plus"></i> Search for patrons</a></li>
+                    <li id="add_patrons_by_barcode"><a href="#">
+                        <span class="label">&nbsp;</span>
+                        <i class="fa fa-plus"></i> Enter multiple card numbers</a></li>
+                    <li id="patron_barcodes_line">
+                        <label for="patrons_by_barcode">Card number list (one barcode per line):</label>
+                        <textarea id="patrons_by_barcode" name="patrons_by_barcode" id="" cols="30" rows="10"></textarea>
+                    </li>
+                </ol>
+            </fieldset>
+            <fieldset id="patron_barcodes_submit" class="action">
+                <input type="submit" value="Submit" />
+            </fieldset>
 
-                    <label for="find_patron">Patron search: </label>
-                    <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
-                    <div id="find_patron_container"></div>
+            <div class="clearfix"></div>
 
-                <fieldset id="patrons_to_add_fieldset">
-                    <legend>Patrons to be added</legend>
-                    <div id="patrons_to_add"></div>
+            <fieldset id="patrons_to_add_fieldset">
+                <legend>Patrons to be added</legend>
+                <div id="patrons_to_add"></div>
 
-                    <fieldset class="action">
-                        <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
-                        <input type="submit" value="Add patrons" />
-                        <a href="lists.pl" class="cancel">Cancel</a>
-                    </fieldset>
+                <fieldset class="action">
+                    <input type="hidden" name="patron_list_id" value="[% list.patron_list_id %]" />
+                    <input type="submit" value="Add patrons" />
+                    <a href="lists.pl" class="cancel">Cancel</a>
                 </fieldset>
-
             </fieldset>
         </form>
 
@@ -158,6 +188,16 @@
                     $(checkedItems).parents('tr').removeClass("warn");
                     return false;
                 }
+            });
+
+            $("#add_patrons_by_barcode a").on("click", function(){
+                $("#add_patrons_by_barcode, #patron_search_line").hide();
+                $("#add_patrons_by_search, #patron_barcodes_line, #patron_barcodes_submit").show();
+            });
+
+            $("#add_patrons_by_search a").on("click", function(){
+                $("#add_patrons_by_barcode, #patron_search_line").show();
+                $("#add_patrons_by_search, #patron_barcodes_line, #patron_barcodes_submit").hide();
             });
         });
     </script>
