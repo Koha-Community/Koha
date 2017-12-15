@@ -7,7 +7,7 @@ use C4::Items;
 use C4::Circulation;
 use Koha::IssuingRule;
 
-use Test::More tests => 7;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -254,11 +254,6 @@ $rule->store();
 
 $is = IsAvailableForItemLevelRequest( $item3, $borrower1);
 is( $is, 1, "Item can be held, items in transit are not available" );
-
-Koha::Holds->find($hold->{reserve_id})->found('F')->store;
-
-$is = IsAvailableForItemLevelRequest( $item3, $borrower1);
-is( $is, 0, "Item is neither waiting nor in transit." );
 
 # Cleanup
 $schema->storage->txn_rollback;
