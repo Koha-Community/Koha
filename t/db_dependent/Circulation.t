@@ -222,14 +222,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 # CanBookBeRenewed tests
 
     # Generate test biblio
-    my $biblio = MARC::Record->new();
     my $title = 'Silence in the library';
-    $biblio->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
-    );
-
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
 
     my $barcode = 'R00000342';
     my $branch = $library2->{branchcode};
@@ -911,13 +905,8 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $branch   = $library2->{branchcode};
 
     #Create another record
-    my $biblio2 = MARC::Record->new();
     my $title2 = 'Something is worng here';
-    $biblio2->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Anonymous'),
-        MARC::Field->new('245', ' ', ' ', a => $title2),
-    );
-    my ($biblionumber2, $biblioitemnumber2) = AddBiblio($biblio2, '');
+    my ($biblionumber2, $biblioitemnumber2) = add_biblio($title2, 'Anonymous');
 
     #Create third item
     AddItem(
@@ -996,8 +985,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $barcode  = '1234567890';
     my $branch   = $library2->{branchcode};
 
-    my $biblio = MARC::Record->new();
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = add_biblio();
 
     #Create third item
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -1054,8 +1042,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         undef,  0,
         .10, 1
     );
-    my $biblio = MARC::Record->new();
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
 
     my $barcode1 = '1234';
     my ( undef, undef, $itemnumber1 ) = AddItem(
@@ -1138,12 +1125,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $branch   = $library->{branchcode};
 
     #Create another record
-    my $biblio = MARC::Record->new();
-    $biblio->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Anonymous'),
-        MARC::Field->new('245', ' ', ' ', a => 'A title'),
-    );
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = add_biblio('A title', 'Anonymous');
 
     my (undef, undef, $itemnumber) = AddItem(
         {
@@ -1173,8 +1155,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 {
     my $library = $builder->build({ source => 'Branch' });
 
-    my $biblio = MARC::Record->new();
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = add_biblio();
 
     my $barcode = 'just a barcode';
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -1486,14 +1467,8 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 subtest 'MultipleReserves' => sub {
     plan tests => 3;
 
-    my $biblio = MARC::Record->new();
     my $title = 'Silence in the library';
-    $biblio->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
-    );
-
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
+    my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
 
     my $branch = $library2->{branchcode};
 
@@ -1855,14 +1830,8 @@ subtest '_FixAccountForLostAndReturned' => sub {
     plan tests => 2;
 
     # Generate test biblio
-    my $biblio = MARC::Record->new();
     my $title  = 'Koha for Dummies';
-    $biblio->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Hall, Daria' ),
-        MARC::Field->new( '245', ' ', ' ', a => $title ),
-    );
-
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio($title, 'Hall, Daria');
 
     my $barcode = 'KD123456789';
     my $branchcode  = $library2->{branchcode};
@@ -1902,14 +1871,8 @@ subtest '_FixOverduesOnReturn' => sub {
     plan tests => 6;
 
     # Generate test biblio
-    my $biblio = MARC::Record->new();
     my $title  = 'Koha for Dummies';
-    $biblio->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Hall, Kylie' ),
-        MARC::Field->new( '245', ' ', ' ', a => $title ),
-    );
-
-    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio($title, 'Hall, Kylie');
 
     my $barcode = 'KD987654321';
     my $branchcode  = $library2->{branchcode};
@@ -2096,4 +2059,27 @@ sub str {
     $s .= %$question ? ' (question: ' . join( ' ', keys %$question ) . ')' : '';
     $s .= %$alert    ? ' (alert: '    . join( ' ', keys %$alert    ) . ')' : '';
     return $s;
+}
+
+sub add_biblio {
+    my ($title, $author) = @_;
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    my $biblio = MARC::Record->new();
+    if ($title) {
+        my $tag = $marcflavour eq 'UNIMARC' ? '200' : '245';
+        $biblio->append_fields(
+            MARC::Field->new($tag, ' ', ' ', a => $title),
+        );
+    }
+
+    if ($author) {
+        my ($tag, $code) = $marcflavour eq 'UNIMARC' ? (200, 'f') : (100, 'a');
+        $biblio->append_fields(
+            MARC::Field->new($tag, ' ', ' ', $code => $author),
+        );
+    }
+
+    return AddBiblio($biblio, '');
 }
