@@ -79,8 +79,6 @@ if(my $cart_list = $query->cookie("bib_list")){
     }
 }
 
-$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
-
 my $marcflavour      = C4::Context->preference("marcflavour");
 
 my @items = GetItemsInfo($biblionumber);
@@ -183,9 +181,12 @@ for my $itm (@items) {
       unless $allow_onshelf_holds;
 }
 
+if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->hasItemswaitingOrInTransit ) {
+    $template->param( ReservableItems => 1 );
+}
+
 $template->param(
     RequestOnOpac       => C4::Context->preference("RequestOnOpac"),
-    AllowOnShelfHolds   => $allow_onshelf_holds,
     norequests   => $norequests,
     ISBD         => $res,
     biblio       => $biblio,

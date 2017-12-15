@@ -136,8 +136,9 @@ for my $itm (@all_items) {
     last if $allow_onshelf_holds;
 }
 
-$template->param( 'AllowOnShelfHolds' => $allow_onshelf_holds );
-$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
+if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->hasItemswaitingOrInTransit ) {
+    $template->param( ReservableItems => 1 );
+}
 
 # adding the $RequestOnOpac param
 my $RequestOnOpac;

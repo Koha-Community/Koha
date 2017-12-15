@@ -719,9 +719,9 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
   }
 }
 
-my $itemsWaitingOrInTransit = Koha::Biblios->find($biblionumber)->hasItemswaitingOrInTransit || 0;
-my $itemsIssued = CountItemsIssued( $biblionumber );
-$template->param( 'ReservableItems' => $itemsWaitingOrInTransit || $itemsIssued || $allow_onshelf_holds );
+if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->hasItemswaitingOrInTransit ) {
+    $template->param( ReservableItems => 1 );
+}
 
 # Display only one tab if one items list is empty
 if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
