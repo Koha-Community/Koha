@@ -1,113 +1,15 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloguing &rsaquo; plugin for links</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( fillinput ) %]
-        <script type="text/javascript">
+    </head>
 
-            function go() {
-
-                var index_start = "[% index %]";
-                var whichfield;
-                try {
-                        whichfield = opener.opener.document.getElementById(index_start);
-                } catch(e) {
-                        return;
-                }
-
-                // browse all its subfields
-
-                var subfields = whichfield.parentNode.parentNode.getElementsByTagName('input');
-
-                var re = /^tag_\d*_code_/;
-                for(var i=0, len = subfields.length ; i< len ; i++) {
-                    if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
-                        var code     = subfields[i];
-                        var subfield = subfields[i+1];
-
-                        if(code.value == '9'){
-                                subfield.value = "[% subfield_value_9 %]";
-                        }
-                        if(code.value == '0'){
-                                subfield.value = "[% subfield_value_0 %]";
-                        }
-                        if(code.value == 'a'){
-                                subfield.value = "[% subfield_value_a %]";
-                        }
-                        if(code.value == 'c'){
-                                subfield.value = "[% subfield_value_c %]";
-                        }
-                        if(code.value == 'd'){
-                                subfield.value = "[% subfield_value_d %]";
-                        }
-                        if(code.value == 'e'){
-                                subfield.value = "[% subfield_value_e %]";
-                        }
-                        if(code.value == 'h'){
-                                subfield.value = "[% subfield_value_h %]";
-                        }
-                        if(code.value == 'i'){
-                                subfield.value = "[% subfield_value_i %]";
-                        }
-                        if(code.value == 'p'){
-                                subfield.value = "[% subfield_value_p %]";
-                        }
-                        if(code.value == 't'){
-                                subfield.value = "[% subfield_value_t %]";
-                        }
-                        if(code.value == 'u'){
-                                subfield.value = "[% subfield_value_u %]";
-                        }
-                        if(code.value == 'v'){
-                                subfield.value = "[% subfield_value_v %]";
-                        }
-                                         if(code.value == 'w'){
-                                subfield.value = "[% subfield_value_w %]";
-                        }
-                        if(code.value == 'x'){
-                                subfield.value = "[% subfield_value_x %]";
-                        }
-                        if(code.value == 'y'){
-                                subfield.value = "[% subfield_value_y %]";
-                        }
-                                            if(code.value == 'z'){
-                                subfield.value = "[% subfield_value_z %]";
-                        }
-                    }
-                }
-                    return false;
-            }
-
-            window.onload = go();
-            opener.close();
-            window.close();
-        //]]>
-</script>
-
-</head>
 <body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
 <h3>MARC21 Plugin to build links between records</h3>
 [% ELSE %]
-           <script type="text/javascript">
-//<![CDATA[
-// 			document.getElementById('searchbox').focus();
+    </head>
 
-                       function report(value2report) {
-                            if (document.f_pop.result.value.length==0) {
-                                    document.f_pop.result.value = value2report;
-                            } else {
-                                    document.f_pop.result.value = document.f_pop.result.value+'|'+value2report;
-                            }
-                            return true;
-                   }
-                      function finish() {
-                            opener.document.f.field_value[[% index %]].value= document.f_pop.result.value;
-                            self.close();
-                            return false;
-                     }
-              //]]>
-</script>
-
-</head>
 <body id="cat_marc21_linking_section" class="cat" style="padding:1em;">
 <h3>Plugin to build links between records</h3>
     [% IF ( Search ) %]
@@ -219,17 +121,113 @@
                            [% END %]
                       </p>
            </div>
-
-<script type="text/javascript">
-//<![CDATA[
-            function jumpfull(page){
-                       window.open(page,'','fullscreen,scrollbars');
-          }
-//]]>
-</script>
-
-
     [% END %]
 
 [% END %]
-[% INCLUDE 'popup-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    [% IF ( fillinput ) %]
+        <script type="text/javascript">
+            function go() {
+
+                var index_start = "[% index %]";
+                var whichfield;
+                try {
+                    whichfield = opener.opener.document.getElementById(index_start);
+                } catch (e) {
+                    return;
+                }
+
+                // browse all its subfields
+
+                var subfields = whichfield.parentNode.parentNode.getElementsByTagName('input');
+
+                var re = /^tag_\d*_code_/;
+                for (var i = 0, len = subfields.length; i < len; i++) {
+                    if (subfields[i].getAttribute('name').match(re)) { // it s a subfield
+                        var code = subfields[i];
+                        var subfield = subfields[i + 1];
+
+                        if (code.value == '9') {
+                            subfield.value = "[% subfield_value_9 %]";
+                        }
+                        if (code.value == '0') {
+                            subfield.value = "[% subfield_value_0 %]";
+                        }
+                        if (code.value == 'a') {
+                            subfield.value = "[% subfield_value_a %]";
+                        }
+                        if (code.value == 'c') {
+                            subfield.value = "[% subfield_value_c %]";
+                        }
+                        if (code.value == 'd') {
+                            subfield.value = "[% subfield_value_d %]";
+                        }
+                        if (code.value == 'e') {
+                            subfield.value = "[% subfield_value_e %]";
+                        }
+                        if (code.value == 'h') {
+                            subfield.value = "[% subfield_value_h %]";
+                        }
+                        if (code.value == 'i') {
+                            subfield.value = "[% subfield_value_i %]";
+                        }
+                        if (code.value == 'p') {
+                            subfield.value = "[% subfield_value_p %]";
+                        }
+                        if (code.value == 't') {
+                            subfield.value = "[% subfield_value_t %]";
+                        }
+                        if (code.value == 'u') {
+                            subfield.value = "[% subfield_value_u %]";
+                        }
+                        if (code.value == 'v') {
+                            subfield.value = "[% subfield_value_v %]";
+                        }
+                        if (code.value == 'w') {
+                            subfield.value = "[% subfield_value_w %]";
+                        }
+                        if (code.value == 'x') {
+                            subfield.value = "[% subfield_value_x %]";
+                        }
+                        if (code.value == 'y') {
+                            subfield.value = "[% subfield_value_y %]";
+                        }
+                        if (code.value == 'z') {
+                            subfield.value = "[% subfield_value_z %]";
+                        }
+                    }
+                }
+                return false;
+            }
+
+            window.onload = go();
+            opener.close();
+            window.close();
+        </script>
+    [% ELSE %]
+        <script type="text/javascript">
+            function report(value2report) {
+                if (document.f_pop.result.value.length == 0) {
+                    document.f_pop.result.value = value2report;
+                } else {
+                    document.f_pop.result.value = document.f_pop.result.value + '|' + value2report;
+                }
+                return true;
+            }
+
+            function finish() {
+                opener.document.f.field_value[[ % index % ]].value = document.f_pop.result.value;
+                self.close();
+                return false;
+            }
+        </script>
+    [% END %]
+    <script type="text/javascript">
+        function jumpfull(page){
+            window.open(page,'','width=100,height=100,toolbar=false,scrollbars=yes');
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

@@ -1,41 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; 006 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript" src='[% interface %]/[% theme %]/js/xmlControlfield.js'></script>
-<script type="text/javascript">
-    var objXmlControlField;
-    var tr_result;
-    var h4_result;
-
-    function loadXmlValues()
-    {
-        [% IF ( errorXml ) %]
-        alert("[% errorXml %]");
-        [% ELSE %]
-        var form = document.f_pop;
-        h4_result = document.getElementById("h4_result");
-        tr_result = document.getElementById("tr_result");
-        objXmlControlField = new xmlControlField('[% tagfield %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang %]', '[% marcflavour %]');
-        [% IF ( material_configuration ) %]
-        objXmlControlField.idMaterial = "[% material_configuration %]";
-        [% END %]
-        objXmlControlField.loadXmlValues();
-        renderResult(tr_result, (form.result.value != "")?form.result.value:returnValueParam("result"));
-        [% END %]
-    }//loadXmlValues
-
-    function changeTypeofMaterial(form)
-    {
-        if (form.material_type.options[form.material_type.selectedIndex].value != "" && confirm(_("Show values for '%s' material type?").format(form.material_type.options[form.material_type.selectedIndex].text))) {
-            objXmlControlField.setIdMaterial(form.material_type.options[form.material_type.selectedIndex].value);
-            objXmlControlField.renderTemplate();
-            renderResult(tr_result, form.result.value, true);
-        }
-    }//changeTypeofMaterial
-</script>
-
 </head>
+
 <body id="cat_marc21_field_006" class="cat" style="padding:1em;" onload="loadXmlValues()">
 <h3>006 Fixed-length data elements--Additional material characteristics--General information</h3>
 
@@ -61,15 +29,46 @@
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">//<![CDATA[
-function report() {
-        var doc   = opener.document;
-        var field = doc.getElementById("[% index %]");
-        field.value = document.getElementById("result").value;
-        self.close();
-        return false;
-    }
-    //]]>
-</script>
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src='[% interface %]/[% theme %]/js/xmlControlfield_[% KOHA_VERSION %].js'></script>
+    <script type="text/javascript">
+        var objXmlControlField;
+        var tr_result;
+        var h4_result;
+
+        function loadXmlValues(){
+            [% IF ( errorXml ) %]
+            alert("[% errorXml %]");
+            [% ELSE %]
+            var form = document.f_pop;
+            h4_result = document.getElementById("h4_result");
+            tr_result = document.getElementById("tr_result");
+            objXmlControlField = new xmlControlField('[% tagfield %]', 'f_pop', document.getElementById('material_type'), document.getElementById('table_material_types'), 'h4_result', 'tr_result', '', '[% themelang %]', '[% marcflavour %]');
+            [% IF ( material_configuration ) %]
+            objXmlControlField.idMaterial = "[% material_configuration %]";
+            [% END %]
+            objXmlControlField.loadXmlValues();
+            renderResult(tr_result, (form.result.value != "")?form.result.value:returnValueParam("result"));
+            [% END %]
+        } // loadXmlValues
+
+        function changeTypeofMaterial(form){
+            if (form.material_type.options[form.material_type.selectedIndex].value != "" && confirm(_("Show values for '%s' material type?").format(form.material_type.options[form.material_type.selectedIndex].text))) {
+                objXmlControlField.setIdMaterial(form.material_type.options[form.material_type.selectedIndex].value);
+                objXmlControlField.renderTemplate();
+                renderResult(tr_result, form.result.value, true);
+            }
+        } // changeTypeofMaterial
+
+        function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+            field.value = document.getElementById("result").value;
+            self.close();
+            return false;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

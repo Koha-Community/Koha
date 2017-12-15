@@ -1,7 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; 008 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_marc21_field_008_authorities" class="cat" style="padding:1em;">
 <h3> 008 Fixed-length data elements</h3>
 <form name="f_pop" onsubmit="report()" action="">
@@ -712,39 +714,42 @@
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">//<![CDATA[
-function report() {
-            var doc   = opener.document; 
-            var field = doc.getElementById("[% index %]");
-        
-            field.value = 
-			document.f_pop.f1.value+
-			document.f_pop.f6.value+
-			document.f_pop.f7.value+
-			document.f_pop.f8.value+
-			document.f_pop.f9.value+
-			document.f_pop.f10.value+
-			document.f_pop.f11.value+
-			document.f_pop.f12.value+
-			document.f_pop.f13.value+
-			document.f_pop.f14.value+
-			document.f_pop.f15.value+
-			document.f_pop.f16.value+
-			document.f_pop.f17.value+
-            '          '+
-			document.f_pop.f28.value+
-			document.f_pop.f29.value+
-			' '+
-			document.f_pop.f31.value+
-			document.f_pop.f32.value+
-			document.f_pop.f33.value+
-            '    '+
-			document.f_pop.f38.value+
-			document.f_pop.f39.value;
-		self.close();
-		return false;
-	}
-	//]]>
-</script>
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+
+            field.value =
+            document.f_pop.f1.value +
+            document.f_pop.f6.value +
+            document.f_pop.f7.value +
+            document.f_pop.f8.value +
+            document.f_pop.f9.value +
+            document.f_pop.f10.value +
+            document.f_pop.f11.value +
+            document.f_pop.f12.value +
+            document.f_pop.f13.value +
+            document.f_pop.f14.value +
+            document.f_pop.f15.value +
+            document.f_pop.f16.value +
+            document.f_pop.f17.value +
+            '          '+
+            document.f_pop.f28.value +
+            document.f_pop.f29.value +
+            ' '+
+            document.f_pop.f31.value +
+            document.f_pop.f32.value +
+            document.f_pop.f33.value +
+            '    '+
+            document.f_pop.f38.value +
+            document.f_pop.f39.value;
+            self.close();
+            return false;
+        }
+
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

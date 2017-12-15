@@ -1,7 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; 000 - Leader builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_marc21_leader" class="cat" style="padding:1em;">
 <form name="f_pop" onsubmit="report()" action="">
 <input type="hidden" name="plugin_name" value="marc21_leader.pl" />
@@ -316,27 +318,28 @@
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-function report() {
-            var doc   = opener.document; 
-            var field = doc.getElementById("[% index %]");
-        
-            field.value = 
-			'     '+
-			document.f_pop.f5.value+
-			document.f_pop.f6.value+
-			document.f_pop.f7.value+
-			document.f_pop.f8.value+
-			'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
-			'22     '+
-			document.f_pop.f17.value+
-			document.f_pop.f18.value+
-			document.f_pop.f19.value+
-			'4500';
-		self.close();
-		return false;
-	}
-	//]]>
-</script>
-[% INCLUDE 'popup-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
+                var doc   = opener.document;
+                var field = doc.getElementById("[% index %]");
+                field.value =
+                '     '+
+                document.f_pop.f5.value +
+                document.f_pop.f6.value +
+                document.f_pop.f7.value +
+                document.f_pop.f8.value +
+                'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
+                '22     '+
+                document.f_pop.f17.value +
+                document.f_pop.f18.value +
+                document.f_pop.f19.value +
+                '4500';
+            self.close();
+            return false;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
