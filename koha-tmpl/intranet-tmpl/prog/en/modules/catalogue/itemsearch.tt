@@ -134,7 +134,9 @@
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select name="itype" options = itemtypes empty_option = "All item types" %]
-            [% INCLUDE form_field_select name="ccode" options = ccodes empty_option = "All collection codes" %]
+            [% IF ccodes.size %]
+                [% INCLUDE form_field_select name="ccode" options = ccodes empty_option = "All collection codes" %]
+            [% END %]
             [% IF notforloans.size %]
                 [% INCLUDE form_field_select name="notforloan" options = notforloans empty_option = "All statuses" %]
             [% END %]
