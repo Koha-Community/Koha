@@ -50,7 +50,7 @@
                                 [% END -%]
                             </td>
 			                <td>
-			                    [% IF ( biblionumber ) %]
+                                [% IF ( operation.biblionumber ) %]
 			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber %]" title="[% operation.bibliotitle %]">[% operation.barcode %]</a>
 			                    [% ELSE %]
 			                        <span class="error">[% operation.barcode %]</span>
