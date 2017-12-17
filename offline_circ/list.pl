@@ -46,10 +46,12 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $operations = GetOfflineOperations;
 
 for (@$operations) {
-    my $item = Koha::Items->find({ barcode => $_->{barcode} });
-    my $biblio = $item->biblio;
-    $_->{'bibliotitle'}    = $biblio->title;
-    $_->{'biblionumber'}   = $biblio->biblionumber;
+    my $item = $_->{barcode} ? Koha::Items->find({ barcode => $_->{barcode} }) : undef;
+    if ($item) {
+        my $biblio = $item->biblio;
+        $_->{'bibliotitle'}    = $biblio->title;
+        $_->{'biblionumber'}   = $biblio->biblionumber;
+    }
     my $patron             = $_->{cardnumber} ? Koha::Patrons->find( { cardnumber => $_->{cardnumber} } ) : undef;
     if ($patron) {
         $_->{'borrowernumber'} = $patron->borrowernumber;
