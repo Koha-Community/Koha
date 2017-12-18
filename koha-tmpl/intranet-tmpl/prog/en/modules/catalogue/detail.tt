@@ -467,12 +467,12 @@
                                     <span class="enum">[% item.enumchron %]</span>
                                     [% IF ( item.serialseq && item.enumchron!=item.serialseq ) %]
                                         <span class="sep"> -- </span>
-                                        <span class="serialseq">[% item.serialseq %]</span>
+                                        <span class="serialseq">[% item.serialseq | html %]</span>
                                     [% END %]
                                 [% ELSIF item.enumchron %]
-                                    <span class="enum">[% item.enumchron %]</span>
+                                    <span class="enum">[% item.enumchron | html %]</span>
                                 [% ELSIF item.serialseq %]
-                                    <span class="serialseq">[% item.serialseq %]</span>
+                                    <span class="serialseq">[% item.serialseq | html %]</span>
                                 [% END %]
                                 [% IF ( item.publisheddate ) %]
                                     <span class="pubdate">([% item.publisheddate | $KohaDates %])</span>
