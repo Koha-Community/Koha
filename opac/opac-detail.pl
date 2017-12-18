@@ -844,13 +844,15 @@ if ( C4::Context->preference('reviewson') ) {
         my $patron = Koha::Patrons->find( $review->{borrowernumber} );
 
         # setting some borrower info into this hash
-        $review->{patron} = $patron;
-        if ( $libravatar_enabled and $patron and $patron->email ) {
-            $review->{avatarurl} = libravatar_url( email => $patron->email, https => $ENV{HTTPS} );
-        }
+        if ( $patron ) {
+            $review->{patron} = $patron;
+            if ( $libravatar_enabled and $patron->email ) {
+                $review->{avatarurl} = libravatar_url( email => $patron->email, https => $ENV{HTTPS} );
+            }
 
-        if ( $patron and $patron->borrowernumber eq $borrowernumber ) {
-            $loggedincommenter = 1;
+            if ( $patron->borrowernumber eq $borrowernumber ) {
+                $loggedincommenter = 1;
+            }
         }
     }
 }
