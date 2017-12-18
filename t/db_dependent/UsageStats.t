@@ -551,7 +551,6 @@ sub mocking_systempreferences_to_a_set_value {
         EnhancedMessagingPreferences
         ExtendedPatronAttributes
         intranetreadinghistory
-        memberofinstitution
         patronimages
         TalkingTechItivaPhoneNotification
         uppercasesurnames

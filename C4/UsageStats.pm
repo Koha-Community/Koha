@@ -297,7 +297,6 @@ sub BuildReport {
         EnhancedMessagingPreferences
         ExtendedPatronAttributes
         intranetreadinghistory
-        memberofinstitution
         patronimages
         TalkingTechItivaPhoneNotification
         uppercasesurnames
