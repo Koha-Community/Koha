@@ -1306,12 +1306,12 @@
                                 <span class="enum">[% ITEM_RESULT.enumchron %]</span>
                                 [% IF ( ITEM_RESULT.serialseq && ITEM_RESULT.enumchron!=ITEM_RESULT.serialseq ) %]
                                     <span class="sep"> -- </span>
-                                    <span class="serialseq">[% ITEM_RESULT.serialseq %]</span>
+                                    <span class="serialseq">[% ITEM_RESULT.serialseq | html %]</span>
                                 [% END %]
                             [% ELSIF ITEM_RESULT.enumchron %]
-                                <span class="enum">[% ITEM_RESULT.enumchron %]</span>
+                                <span class="enum">[% ITEM_RESULT.enumchron | html %]</span>
                             [% ELSIF ITEM_RESULT.serialseq %]
-                                    <span class="serialseq">[% ITEM_RESULT.serialseq %]</span>
+                                    <span class="serialseq">[% ITEM_RESULT.serialseq | html %]</span>
                             [% END %]
                             [% IF ( ITEM_RESULT.publisheddate ) %]
                                 <span class="pubdate">([% ITEM_RESULT.publisheddate | $KohaDates %])</span>
