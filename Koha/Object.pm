@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use Mojo::JSON;
+use Try::Tiny;
 
 use Koha::Database;
 use Koha::Exceptions::Object;
@@ -119,7 +120,32 @@ Returns:
 sub store {
     my ($self) = @_;
 
-    return $self->_result()->update_or_insert() ? $self : undef;
+    try {
+        return $self->_result()->update_or_insert() ? $self : undef;
+    }
+    catch {
+        # Catch problems and raise relevant exceptions
+        if (ref($_) eq 'DBIx::Class::Exception') {
+            if ( $_->{msg} =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
+                # FK constraints
+                # FIXME: MySQL error, if we support more DB engines we should implement this for each
+                if ( $_->{msg} =~ /FOREIGN KEY \(`(?<column>.*?)`\)/ ) {
+                    Koha::Exceptions::Object::FKConstraint->throw(
+                        error     => 'Broken FK constraint',
+                        broken_fk => $+{column}
+                    );
+                }
+            }
+            elsif( $_->{msg} =~ /Duplicate entry '(.*?)' for key '(?<key>.*?)'/ ) {
+                Koha::Exceptions::Object::DuplicateID->throw(
+                    error => 'Duplicate ID',
+                    duplicate_id => $+{key}
+                );
+            }
+            # Catch-all for foreign key breakages. It will help find other use cases
+            $->rethrow();
+        }
+    }
 }
 
 =head3 $object->delete();

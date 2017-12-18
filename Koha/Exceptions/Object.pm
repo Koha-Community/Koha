@@ -7,6 +7,16 @@ use Exception::Class (
     'Koha::Exceptions::Object' => {
         description => 'Something went wrong!',
     },
+    'Koha::Exceptions::Object::DuplicateID' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => "Duplicate ID passed",
+        fields      =>  ['duplicate_id']
+    },
+    'Koha::Exceptions::Object::FKConstraint' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => "Foreign key constraint broken",
+        fields      =>  ['broken_fk']
+    },
     'Koha::Exceptions::Object::MethodNotFound' => {
         isa => 'Koha::Exceptions::Object',
         description => "Invalid method",
