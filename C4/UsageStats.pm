@@ -247,7 +247,6 @@ sub BuildReport {
         OPACShowCheckoutName
         OpacShowFiltersPulldownMobile
         OPACShowHoldQueueDetails
-        OpacShowLibrariesPulldownMobile
         OpacShowRecentComments
         OPACShowUnusedAuthorities
         OpacStarRatings
