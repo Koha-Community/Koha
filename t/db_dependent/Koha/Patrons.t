@@ -425,8 +425,8 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     $patron->delete;
 };
 
-subtest 'checkouts + get_overdues' => sub {
-    plan tests => 8;
+subtest 'checkouts + get_overdues + old_checkouts' => sub {
+    plan tests => 12;
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
@@ -436,7 +436,9 @@ subtest 'checkouts + get_overdues' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
+                biblionumber  => $biblionumber_1,
+                itemlost      => 0,
+                withdrawn     => 0,
             }
         }
     );
@@ -446,7 +448,9 @@ subtest 'checkouts + get_overdues' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_1
+                biblionumber  => $biblionumber_1,
+                itemlost      => 0,
+                withdrawn     => 0,
             }
         }
     );
@@ -457,7 +461,9 @@ subtest 'checkouts + get_overdues' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber_2
+                biblionumber  => $biblionumber_2,
+                itemlost      => 0,
+                withdrawn     => 0,
             }
         }
     );
@@ -472,6 +478,9 @@ subtest 'checkouts + get_overdues' => sub {
     my $checkouts = $patron->checkouts;
     is( $checkouts->count, 0, 'checkouts should not return any issues for that patron' );
     is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
+    my $old_checkouts = $patron->old_checkouts;
+    is( $old_checkouts->count, 0, 'old_checkouts should not return any issues for that patron' );
+    is( ref($old_checkouts), 'Koha::Old::Checkouts', 'old_checkouts should return a Koha::Old::Checkouts object' );
 
     # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
     $patron = GetMember( borrowernumber => $patron->borrowernumber );
@@ -493,6 +502,13 @@ subtest 'checkouts + get_overdues' => sub {
     is( ref($overdues), 'Koha::Checkouts', 'Koha::Patron->get_overdues should return Koha::Checkouts' );
     is( $overdues->next->itemnumber, $item_1->{itemnumber}, 'The issue should be returned in the same order as they have been done, first is correct' );
     is( $overdues->next->itemnumber, $item_2->{itemnumber}, 'The issue should be returned in the same order as they have been done, second is correct' );
+
+
+    C4::Circulation::AddReturn( $item_1->{barcode} );
+    C4::Circulation::AddReturn( $item_2->{barcode} );
+    $old_checkouts = $patron->old_checkouts;
+    is( $old_checkouts->count, 2, 'old_checkouts should return 2 old checkouts that patron' );
+    is( ref($old_checkouts), 'Koha::Old::Checkouts', 'old_checkouts should return a Koha::Old::Checkouts object' );
 
     # Clean stuffs
     Koha::Checkouts->search( { borrowernumber => $patron->borrowernumber } )->delete;
