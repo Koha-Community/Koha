@@ -242,6 +242,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('itemBarcodeInputFilter','','whitespace|T-prefix|cuecat|libsuite8|EAN13','If set, allows specification of a item barcode input filter','Choice'),
 ('itemcallnumber','082ab',NULL,'The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record','free'),
 ('KohaAdminEmailAddress','root@localhost','','Define the email address where patron modification requests are sent','free'),
+('KohaManualBaseURL','http://koha-community.org/manual/','','Where is the Koha manual/documentation located?','Free'),
 ('LabelMARCView','standard','standard|economical','Define how a MARC record will display','Choice'),
 ('language','en',NULL,'Set the default language in the staff client.','Languages'),
 ('LetterLog','1',NULL,'If ON, log all notices sent','YesNo'),

@@ -36,9 +36,12 @@ if ( $help_version =~ m|^(\d+)\.(\d{2}).*$| ) {
     $help_version = "$version.$major";
 }
 
-# FIXME remote url must be a pref
 # FIXME /en/ must be configurable (or guessed)
-our $base_url = 'http://koha-community.org/manual/' . $help_version . '/en/html';
+my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'http://koha-community.org/manual';
+if ( $KohaManualBaseURL =~ m|^/| ) {
+    $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
+}
+our $base_url = $KohaManualBaseURL . '/' . $help_version . '/en/html';
 our $mapping = {
     'about'                                    => '/14_plugins.html#about-koha',
     'acqui/acqui-home'                         => '/09_acquisitions.html',
