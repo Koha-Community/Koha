@@ -67,14 +67,17 @@ my $reviews = Koha::Reviews->search(
     }
 )->unblessed;
 
-foreach ( @$reviews ) {
-    my $borrowernumber = $_->{borrowernumber};
-    my $patron = Koha::Patrons->find( $borrowernumber);
-    my $biblio         = Koha::Biblios->find( $_->{biblionumber} );
+for my $review ( @$reviews ) {
+    my $biblio         = Koha::Biblios->find( $review->{biblionumber} );
     # setting some borrower info into this hash
-    $_->{bibliotitle} = $biblio->title;
-    $_->{surname}     = $patron->surname;
-    $_->{firstname}   = $patron->firstname;
+    $review->{bibliotitle} = $biblio->title;
+
+    my $borrowernumber = $review->{borrowernumber};
+    my $patron = Koha::Patrons->find( $borrowernumber);
+    if ( $patron ) {
+        $review->{surname}     = $patron->surname;
+        $review->{firstname}   = $patron->firstname;
+    }
 }
 
 my $url = "/cgi-bin/koha/reviews/reviewswaiting.pl?status=$status";
