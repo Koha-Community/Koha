@@ -512,14 +512,26 @@ sub add_enrolment_fee_if_needed {
 
 =head3 checkouts
 
-my $issues = $patron->checkouts
+my $checkouts = $patron->checkouts
 
 =cut
 
 sub checkouts {
     my ($self) = @_;
-    my $issues = $self->_result->issues;
-    return Koha::Checkouts->_new_from_dbic( $issues );
+    my $checkouts = $self->_result->issues;
+    return Koha::Checkouts->_new_from_dbic( $checkouts );
+}
+
+=head3 old_checkouts
+
+my $old_checkouts = $patron->old_checkouts
+
+=cut
+
+sub old_checkouts {
+    my ($self) = @_;
+    my $old_checkouts = $self->_result->old_issues;
+    return Koha::Old::Checkouts->_new_from_dbic( $old_checkouts );
 }
 
 =head3 get_overdues
