@@ -93,7 +93,6 @@ for my $result (@$reviews){
     my $biblioitem = $biblio->biblioitem;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber });
     my $frameworkcode = GetFrameworkCode($biblionumber);
-    my $borr = Koha::Patrons->find( $result->{borrowernumber} )->unblessed;
 	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);
 	$result->{normalized_ean} = GetNormalizedEAN($record,$marcflavour);
 	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);
@@ -108,17 +107,21 @@ for my $result (@$reviews){
     $result->{size} = $biblioitem->size;
     $result->{notes} = $biblioitem->notes;
     $result->{timestamp} = $biblioitem->timestamp;
-    $result->{borrtitle} = $borr->{'title'};
-	$result->{firstname} = $borr->{'firstname'};
-	$result->{surname} = $borr->{'surname'};
-    $result->{userid} = $borr->{'userid'};
-        if ($libravatar_enabled and $borr->{'email'}) {
-            $result->{avatarurl} = libravatar_url(email => $borr->{'email'}, size => 40, https => $ENV{HTTPS});
-        }
 
-    if ($result->{borrowernumber} eq $borrowernumber) {
-		$result->{your_comment} = 1;
-	}
+    my $patron = Koha::Patrons->find( $result->{borrowernumber} );
+    if ( $patron ) {
+        $result->{borrtitle} = $patron->title;
+        $result->{firstname} = $patron->firstname;
+        $result->{surname} = $patron->surname;
+        $result->{userid} = $patron->userid;
+            if ($libravatar_enabled and $patron->email) {
+                $result->{avatarurl} = libravatar_url(email => $patron->email, size => 40, https => $ENV{HTTPS});
+            }
+
+        if ($result->{borrowernumber} eq $borrowernumber) {
+            $result->{your_comment} = 1;
+        }
+    }
 
     if($format eq "rss"){
         my $rsstimestamp = eval { dt_from_string( $result->{datereviewed} ); };
