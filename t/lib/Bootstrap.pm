@@ -28,6 +28,7 @@ sub import {
 
     my ($fh, $filename) = tempfile('koha-conf.XXXXXX', TMPDIR => 1, UNLINK => 1);
     $xml->toFH($fh);
+    close $fh;
 
     $ENV{KOHA_CONF} = $filename;
 
@@ -45,7 +46,7 @@ sub import {
     my $user = C4::Context->config('user');
     my $pass = C4::Context->config('pass');
 
-    say "Create test database...";
+    say "Create test database $database...";
 
     my $dbh = DBI->connect("dbi:mysql:;host=$host;port=$port", $user, $pass, {
         RaiseError => 1,
