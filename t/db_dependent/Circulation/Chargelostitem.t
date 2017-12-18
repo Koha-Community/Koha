@@ -68,7 +68,7 @@ C4::Accounts::chargelostitem( $borrowernumber, $issue->{itemnumber}, '1.00');
 
 my $accountline = Koha::Account::Lines->search( { borrowernumber => $borrowernumber, accounttype => 'PF' } )->next();
 
-is( int($accountline->amount), $itemtype->{processfee}, "The accountline amount should be precessfee value " );
+is( int($accountline->amount), int($itemtype->{processfee}), "The accountline amount should be precessfee value " );
 is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should the linked with barcode '0101'" );
 is( $accountline->note, C4::Context->preference("ProcessingFeeNote"), "The accountline description should be 'test'" );
 
