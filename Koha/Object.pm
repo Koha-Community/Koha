@@ -224,7 +224,7 @@ sub TO_JSON {
         }
         elsif ( _datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             eval {
-                return undef unless $unblessed->{$col};
+                return unless $unblessed->{$col};
                 $unblessed->{$col} = output_pref({
                     dateformat => 'rfc3339',
                     dt         => dt_from_string($unblessed->{$col}, 'sql'),
