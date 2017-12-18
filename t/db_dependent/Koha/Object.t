@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
+use Test::Exception;
 use Test::Warn;
 
 use C4::Context;
@@ -215,6 +216,96 @@ subtest "Test update method" => sub {
     # Check if the columns are not updated
     is( $library->branchcity, 'AMS', 'First column not updated' );
     is( $library->branchname, 'New_Name', 'Third column not updated' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store() tests' => sub {
+
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    # Create a category to make sure its ID doesn't exist on the DB
+    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    my $category_id = $category->id;
+    $category->delete;
+
+    my $patron = Koha::Patron->new({ categorycode => $category_id });
+
+    my $print_error = $schema->storage->dbh->{PrintError};
+    $schema->storage->dbh->{PrintError} = 0;
+    throws_ok
+        { $patron->store }
+        'Koha::Exceptions::Object::FKConstraint',
+        'Exception is thrown correctly';
+    is(
+        $@->message,
+        "Broken FK constraint",
+        'Exception message is correct'
+    );
+    is(
+        $@->broken_fk,
+        'categorycode',
+        'Exception field is correct'
+    );
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    $category   = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    $patron     = $builder->build_object({ class => 'Koha::Patrons' });
+
+    my $new_patron = Koha::Patron->new({
+        branchcode   => $library->id,
+        cardnumber   => $patron->cardnumber,
+        categorycode => $category->id
+    });
+
+    throws_ok
+        { $new_patron->store }
+        'Koha::Exceptions::Object::DuplicateID',
+        'Exception is thrown correctly';
+
+    is(
+        $@->message,
+        'Duplicate ID',
+        'Exception message is correct'
+    );
+
+    is(
+       $@->duplicate_id,
+       'cardnumber',
+       'Exception field is correct'
+    );
+
+    $new_patron = Koha::Patron->new({
+        branchcode   => $library->id,
+        userid       => $patron->userid,
+        categorycode => $category->id
+    });
+
+    throws_ok
+        { $new_patron->store }
+        'Koha::Exceptions::Object::DuplicateID',
+        'Exception is thrown correctly';
+
+    is(
+        $@->message,
+        'Duplicate ID',
+        'Exception message is correct'
+    );
+
+    is(
+       $@->duplicate_id,
+       'userid',
+       'Exception field is correct'
+    );
+
+    $schema->storage->dbh->{PrintError} = $print_error;
+
+    # Successful test
+    $patron->set({ firstname => 'Manuel' });
+    my $ret = $patron->store;
+    is( ref($ret), 'Koha::Patron', 'store() returns the object on success' );
 
     $schema->storage->txn_rollback;
 };
