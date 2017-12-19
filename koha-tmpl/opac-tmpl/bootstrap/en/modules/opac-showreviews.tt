@@ -86,8 +86,12 @@
                                             [% FILTER html_break %]
                                                 [% review.review |html %]
                                             [% END %]
-                                        <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed | $KohaDates %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
-                                        [% IF ( review.borrowernumber && ShowReviewer != "none" ) %] by
+                                        <span style="font-size:87%;font-color:#CCC;">
+                                        [% IF review.your_comment %]
+                                            Added [% review.datereviewed | $KohaDates %] by you
+                                        [% ELSE %]
+                                        [% IF ( review.borrowernumber && ShowReviewer != "none" ) %]
+                                            Added [% review.datereviewed | $KohaDates %] by
                                             [% SWITCH ShowReviewer %]
                                             [% CASE 'full' %]
                                                 [% review.borrtitle %] [% review.firstname %] [% review.surname %]
