@@ -2,7 +2,6 @@ package Koha::Patron;
 
 # Copyright ByWater Solutions 2014
 # Copyright PTFS Europe 2016
-# Copyright Koha-Suomi Oy 2017
 #
 # This file is part of Koha.
 #
@@ -31,11 +30,6 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Old::Checkouts;
-use Koha::Exceptions;
-use Koha::Exceptions::Category;
-use Koha::Exceptions::Library;
-use Koha::Exceptions::Patron;
-use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
@@ -849,121 +843,14 @@ sub store {
     return $self->SUPER::store();
 }
 
-=head3 type
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
 sub _type {
     return 'Borrower';
-}
-
-=head2 Internal methods
-
-=head3 _check_branchcode
-
-Checks the existence of patron's branchcode and throws
-Koha::Exceptions::Library::BranchcodeNotFound if branchcode is not found.
-
-=cut
-
-sub _check_branchcode {
-    my ($self) = @_;
-
-    return unless $self->branchcode;
-    unless (Koha::Libraries->find($self->branchcode)) {
-        Koha::Exceptions::Library::BranchcodeNotFound->throw(
-            error => "Library does not exist",
-            branchcode => $self->branchcode,
-        );
-    }
-    return 1;
-}
-
-=head3 _check_categorycode
-
-Checks the existence of patron's categorycode and throws
-Koha::Exceptions::Category::CategorycodeNotFound if categorycode is not found.
-
-=cut
-
-sub _check_categorycode {
-    my ($self) = @_;
-
-    return unless $self->categorycode;
-    unless (Koha::Patron::Categories->find($self->categorycode)) {
-        Koha::Exceptions::Category::CategorycodeNotFound->throw(
-            error => "Patron category does not exist",
-            categorycode => $self->categorycode,
-        );
-    }
-    return 1;
-}
-
-=head3 _check_uniqueness
-
-Checks patron's cardnumber and userid for uniqueness and throws
-Koha::Exceptions::Patron::DuplicateObject if conflicting with another patron.
-
-=cut
-
-sub _check_uniqueness {
-    my ($self) = @_;
-
-    my $select = {};
-    $select->{cardnumber} = $self->cardnumber if $self->cardnumber;
-    $select->{userid} = $self->userid if $self->userid;
-
-    return unless keys %$select;
-
-    # Find conflicting patrons
-    my $patrons = Koha::Patrons->search({
-        '-or' => $select
-    });
-
-    if ($patrons->count) {
-        my $conflict = {};
-        foreach my $patron ($patrons->as_list) {
-            # New patron $self: a conflicting patron $patron found.
-            # Updating patron $self: first make sure conflicting patron $patron is
-            #                        not this patron $self.
-            if (!$self->in_storage || $self->in_storage &&
-            $self->borrowernumber != $patron->borrowernumber) {
-                # Populate conflict information to exception
-                if ($patron->cardnumber && $self->cardnumber &&
-                    $patron->cardnumber eq $self->cardnumber)
-                {
-                    $conflict->{cardnumber} = $self->cardnumber;
-                }
-                if ($patron->userid && $self->userid &&
-                    $patron->userid eq $self->userid)
-                {
-                    $conflict->{userid} = $self->userid;
-                }
-            }
-        }
-
-        Koha::Exceptions::Patron::DuplicateObject->throw(
-            error => "Patron data conflicts with another patron",
-            conflict => $conflict
-        ) if keys %$conflict;
-    }
-    return 1;
-}
-
-=head3 _validate
-
-Performs a set of validations on this object and throws Koha::Exceptions if errors
-are found.
-
-=cut
-
-sub _validate {
-    my ($self) = @_;
-
-    $self->_check_branchcode;
-    $self->_check_categorycode;
-    $self->_check_uniqueness;
-    return $self;
 }
 
 =head1 AUTHOR

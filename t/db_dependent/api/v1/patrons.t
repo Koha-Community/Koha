@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 5;
 use Test::Mojo;
+use Test::Warn;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -160,7 +161,7 @@ subtest 'add() tests' => sub {
     unauthorized_access_tests('POST', undef, $newpatron);
 
     subtest 'librarian access tests' => sub {
-        plan tests => 18;
+        plan tests => 20;
 
         my ($borrowernumber, $sessionid) = create_user_and_session({
             authorized => 1 });
@@ -168,9 +169,12 @@ subtest 'add() tests' => sub {
         $newpatron->{branchcode} = "nonexistent"; # Test invalid branchcode
         my $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(400)
-          ->json_is('/error' => "Given branchcode does not exist");
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(400)
+              ->json_is('/error' => "Given branchcode does not exist"); }
+            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
+
         $newpatron->{branchcode} = $branchcode;
 
         $newpatron->{categorycode} = "nonexistent"; # Test invalid patron category
@@ -200,15 +204,12 @@ subtest 'add() tests' => sub {
 
         $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(409)
-          ->json_has('/error', 'Fails when trying to POST duplicate'.
-                     ' cardnumber or userid')
-          ->json_has('/conflict', {
-                        userid => $newpatron->{ userid },
-                        cardnumber => $newpatron->{ cardnumber }
-                    }
-            );
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(409)
+              ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
+              ->json_has( '/conflict', 'cardnumber' ); }
+            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
     };
 
     $schema->storage->txn_rollback;
@@ -222,7 +223,7 @@ subtest 'update() tests' => sub {
     unauthorized_access_tests('PUT', 123, {email => 'nobody@example.com'});
 
     subtest 'librarian access tests' => sub {
-        plan tests => 20;
+        plan tests => 23;
 
         t::lib::Mocks::mock_preference('minPasswordLength', 1);
         my ($borrowernumber, $sessionid) = create_user_and_session({ authorized => 1 });
@@ -243,17 +244,21 @@ subtest 'update() tests' => sub {
         $newpatron->{categorycode} = 'nonexistent';
         $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(400)
-          ->json_is('/error' => "Given categorycode does not exist");
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(400)
+              ->json_is('/error' => "Given categorycode does not exist"); }
+            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
         $newpatron->{categorycode} = $patron_2->categorycode;
 
         $newpatron->{branchcode} = 'nonexistent';
         $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
-        $t->request_ok($tx)
-          ->status_is(400)
-          ->json_is('/error' => "Given branchcode does not exist");
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(400)
+              ->json_is('/error' => "Given branchcode does not exist"); }
+            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
         $newpatron->{branchcode} = $patron_2->branchcode;
 
         $newpatron->{falseproperty} = "Non existent property";
@@ -271,14 +276,12 @@ subtest 'update() tests' => sub {
 
         $tx = $t->ua->build_tx( PUT => "/api/v1/patrons/$borrowernumber2" => json => $newpatron );
         $tx->req->cookies({ name => 'CGISESSID', value => $sessionid });
-        $t->request_ok($tx)->status_is(409)
-          ->json_has( '/error' => "Fails when trying to update to an existing cardnumber or userid")
-          ->json_is(  '/conflict',
-                        {
-                            cardnumber => $newpatron->{cardnumber},
-                            userid     => $newpatron->{userid}
-                        }
-          );
+        warning_like {
+            $t->request_ok($tx)
+              ->status_is(409)
+              ->json_has( '/error' => "Fails when trying to update to an existing cardnumber or userid")
+              ->json_is(  '/conflict', 'cardnumber' ); }
+            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
 
         $newpatron->{ cardnumber } = $borrowernumber.$borrowernumber2;
         $newpatron->{ userid } = "user".$borrowernumber.$borrowernumber2;

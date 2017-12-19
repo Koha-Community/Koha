@@ -90,9 +90,8 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $body = $c->validation->param('body');
 
-        Koha::Patron->new($body)->_validate;
+        my $body = _to_model($c->validation->param('body'));
 
         # TODO: Use AddMember until it has been moved to Koha-namespace
         my $borrowernumber = AddMember(%$body);
@@ -109,22 +108,22 @@ sub add {
                 }
             );
         }
-        if ( $_->isa('Koha::Exceptions::Patron::DuplicateObject') ) {
+        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
-                openapi => { error => $_->error, conflict => $_->conflict }
+                openapi => { error => $_->error, conflict => $_->duplicate_id }
             );
         }
-        elsif ( $_->isa('Koha::Exceptions::Library::BranchcodeNotFound') ) {
+        elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Given branchcode does not exist" }
+                openapi => { error => "Given " . $_->broken_fk . " does not exist" }
             );
         }
-        elsif ( $_->isa('Koha::Exceptions::Category::CategorycodeNotFound') ) {
+        elsif ( $_->isa('Koha::Exceptions::BadParameter') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Given categorycode does not exist" }
+                openapi => { error => "Given " . $_->parameter . " does not exist" }
             );
         }
         else {
@@ -147,18 +146,26 @@ Controller function that handles updating a Koha::Patron object
 sub update {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron = Koha::Patrons->find( $c->validation->param('borrowernumber') );
+    my $patron_id = $c->validation->param('borrowernumber');
+    my $patron    = Koha::Patrons->find( $patron_id );
+
+    unless ($patron) {
+         return $c->render(
+             status  => 404,
+             openapi => { error => "Patron not found" }
+         );
+     }
 
     return try {
-        my $body = $c->validation->param('body');
-
-        $patron->set( _to_model($body) )->_validate;
+        my $body = _to_model($c->validation->param('body'));
 
         ## TODO: Use ModMember until it has been moved to Koha-namespace
         # Add borrowernumber to $body, as required by ModMember
-        $body->{borrowernumber} = $patron->borrowernumber;
+        $body->{borrowernumber} = $patron_id;
 
         if ( ModMember(%$body) ) {
+            # Fetch the updated Koha::Patron object
+            $patron->discard_changes;
             return $c->render( status => 200, openapi => $patron );
         }
         else {
@@ -171,12 +178,6 @@ sub update {
         }
     }
     catch {
-        unless ($patron) {
-            return $c->render(
-                status  => 404,
-                openapi => { error => "Patron not found" }
-            );
-        }
         unless ( blessed $_ && $_->can('rethrow') ) {
             return $c->render(
                 status  => 500,
@@ -185,22 +186,16 @@ sub update {
                 }
             );
         }
-        if ( $_->isa('Koha::Exceptions::Patron::DuplicateObject') ) {
+        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
-                openapi => { error => $_->error, conflict => $_->conflict }
+                openapi => { error => $_->error, conflict => $_->duplicate_id }
             );
         }
-        elsif ( $_->isa('Koha::Exceptions::Library::BranchcodeNotFound') ) {
+        elsif ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
             return $c->render(
                 status  => 400,
-                openapi => { error => "Given branchcode does not exist" }
-            );
-        }
-        elsif ( $_->isa('Koha::Exceptions::Category::CategorycodeNotFound') ) {
-            return $c->render(
-                status  => 400,
-                openapi => { error => "Given categorycode does not exist" }
+                openapi => { error => "Given " . $_->broken_fk . " does not exist" }
             );
         }
         elsif ( $_->isa('Koha::Exceptions::MissingParameter') ) {
