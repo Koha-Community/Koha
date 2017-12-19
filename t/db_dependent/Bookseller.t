@@ -66,7 +66,9 @@ my $sample_supplier1 = {
     tax_rate       => '1.0000',
     discount      => '1.0000',
     notes         => 'notes1',
-    deliverytime  => undef
+    deliverytime  => undef,
+    basketcount   => 0,
+    subscriptioncount => 0
 };
 my $sample_supplier2 = {
     name          => 'Name2',
@@ -86,7 +88,9 @@ my $sample_supplier2 = {
     tax_rate       => '2.0000',
     discount      => '2.0000',
     notes         => 'notes2',
-    deliverytime  => 2
+    deliverytime  => 2,
+    basketcount   => 0,
+    subscriptioncount => 0
 };
 
 my $id_supplier1 = C4::Bookseller::AddBookseller($sample_supplier1);
@@ -144,6 +148,7 @@ is( $bookseller1fromid, undef,
     "fetch returns undef if no id given" );
 $bookseller1fromid = Koha::Acquisition::Bookseller->fetch({ id => $id_supplier1});
 $bookseller1fromid = field_filter($bookseller1fromid);
+$sample_supplier1->{basketcount}=2;
 is_deeply( $bookseller1fromid, $sample_supplier1,
     "Get Supplier1 (fetch a bookseller by id)" );
 
