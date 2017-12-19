@@ -281,9 +281,8 @@ if ($barcode) {
         my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
         $materials = $descriptions->{lib} // $materials;
 
-        my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } );
-
-        my $biblio = $item->biblio;
+        my $checkout = $item->checkout;
+        my $biblio   = $item->biblio;
         $template->param(
             title            => $biblio->title,
             homebranch       => $item->homebranch,
@@ -297,7 +296,7 @@ if ($barcode) {
             biblionumber     => $biblio->biblionumber,
             borrower         => $borrower,
             additional_materials => $materials,
-            issue            => $issue,
+            issue            => $checkout,
         );
     } # FIXME else we should not call AddReturn but set BadBarcode directly instead
 
