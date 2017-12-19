@@ -398,7 +398,7 @@ sub CanItemBeReserved {
 
     # we retrieve count
 
-    $querycount .= "AND $branchfield = ?";
+    $querycount .= "AND ( $branchfield = ? OR $branchfield IS NULL )";
 
     # If using item-level itypes, fall back to the record
     # level itemtype if the hold has no associated item
