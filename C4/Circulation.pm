@@ -2265,8 +2265,6 @@ sub MarkIssueReturned {
         $old_checkout_data->{issue_id} = $issue_id;
         my $old_checkout = Koha::Old::Checkout->new($old_checkout_data)->store;
 
-        # Update the fines
-        $dbh->do(q|UPDATE accountlines SET issue_id = ? WHERE issue_id = ?|, undef, $old_checkout->issue_id, $issue->issue_id);
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy == 2) {
