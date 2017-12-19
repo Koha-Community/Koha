@@ -94,7 +94,7 @@ sub update_patterns_xyz {
     }
     else {
         $self->set({
-            serialseq_x => $z,
+            serialseq_x => $x ? $x : undef,
         });
     }
 
