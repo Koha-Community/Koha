@@ -77,7 +77,7 @@
         <h1>Patron note</h1>
         <p>[% issue.notedate | $KohaDates %]</p>
         <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]"> [% title |html %]</a> [% author %]</p>
-        <p>[% issue.note %]</p>
+        <p>[% issue.note | html %]</p>
     </div>
 [% END %]
 
