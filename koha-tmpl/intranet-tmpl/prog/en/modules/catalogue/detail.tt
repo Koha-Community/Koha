@@ -1188,7 +1188,7 @@ function verify_images() {
 <script src="[% themelang %]/js/RemoteAPIs/Driver_[% KOHA_VERSION %].js"></script>
 <script src="[% themelang %]/js/RemoteAPIs/Driver/KohaSuomi_[% KOHA_VERSION %].js"></script>
 <script src="[% themelang %]/js/Cataloguing/RecordPusher_[% KOHA_VERSION %].js"></script>
-[% IF subscriptionsnumber && serialsadditems %]
+[% IF SerialsDisplayTree && subscriptionsnumber && serialsadditems %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jstree.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% interface %]/lib/log4javascript_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% themelang %]/js/Serials/CollectionMap_[% KOHA_VERSION %].js"></script>
@@ -1207,7 +1207,7 @@ function verify_images() {
     var recordPusher = new Cataloguing.RecordPusher("#saveDropdownContainer .dropdown-menu", "dropdown-menu-list", "body", remoteAPIs, biblio);
   }
 
-  [% IF subscriptionsnumber && serialsadditems %]
+  [% IF SerialsDisplayTree && subscriptionsnumber && serialsadditems %]
     var branches = [% branchloopJSON %];
     var MSG_AVAILABLE = _("Available");
     var MSG_BARCODE = _("Barcode");

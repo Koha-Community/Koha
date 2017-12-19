@@ -94,6 +94,8 @@ my $fw           = GetFrameworkCode($biblionumber);
 my $showallitems = $query->param('showallitems');
 my $marcflavour  = C4::Context->preference("marcflavour");
 
+my $use_serials_display_tree = C4::Context->preference("SerialsDisplayTree");
+
 # XSLT processing of some stuff
 my $xslfile = C4::Context->preference('XSLTDetailsDisplay');
 my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
@@ -155,11 +157,14 @@ my $json = JSON::XS->new();
 my $branchLoopJSON = $json->encode(
     Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed
 );
-$template->param( branchloopJSON  => $branchLoopJSON );
+$template->param(
+    SerialsDisplayTree => $use_serials_display_tree,
+    branchloopJSON  => $branchLoopJSON
+);
 
 #Serials have a REST-API-driven data source to facilitate pagination in the GUI.
 #So only take as many Items as it is reasonable to show.
-my @all_items = GetItemsInfo( $biblionumber ) unless $dat->{serial};
+my @all_items = GetItemsInfo( $biblionumber ) if !$use_serials_display_tree || $use_serials_display_tree && !$dat->{serial};
 my @items;
 my $patron = Koha::Patrons->find( $borrowernumber );
 for my $itm (@all_items) {
