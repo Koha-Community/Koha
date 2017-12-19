@@ -87,6 +87,7 @@ if( !@errors && defined $review ) {
                     {   biblionumber   => $biblionumber,
                         borrowernumber => $borrowernumber,
                         review         => $clean,
+                        datereviewed   => dt_from_string
                     }
                 )->store->reviewid;
             }
