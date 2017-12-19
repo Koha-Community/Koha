@@ -263,6 +263,7 @@ if ($barcode) {
     my $item = Koha::Items->find({ barcode => $barcode });
 
     if ( $item ) {
+        $itemnumber = $item->itemnumber;
         # Check if we should display a checkin message, based on the the item
         # type of the checked in item
         my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
