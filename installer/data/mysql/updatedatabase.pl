@@ -6626,6 +6626,13 @@ $atomicUpdater->buildUpdateOrderFromGit(1000);
 $atomicUpdater->applyAtomicUpdates();
 
 
+
+require Koha::Auth::PermissionMaintainer;
+my $pmaint = Koha::Auth::PermissionMaintainer->new();
+$pmaint->removeExcessPermissions();
+$pmaint->installMissingPermissions();
+
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -857,6 +857,16 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '5.61',
     },
+    'Struct::Diff' => {
+        'usage'    => 'Diff installed and available permissions',
+        'required' => '0',
+        'min_ver'  => '0.9',
+    },
+    'SQL::Parser' => {
+        'usage'    => 'Parse userpermissions.sql',
+        'required' => '0',
+        'min_ver'  => '1.4',
+    },
     'PDF::FromHTML' => {
         'usage'    => 'Discharge generation',
         'required' => '0',
