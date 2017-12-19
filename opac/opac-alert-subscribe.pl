@@ -78,6 +78,7 @@ else {
         my $subscription = &GetSubscription($externalid);
         $template->param(
             "typeissue$op" => 1,
+            alerttype      => $alerttype,
             bibliotitle    => $subscription->{bibliotitle},
             notes          => $subscription->{notes},
             externalid     => $externalid,
