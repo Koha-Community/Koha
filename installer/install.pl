@@ -394,7 +394,7 @@ elsif ( $step && $step == 3 ) {
         system($cmd );
 
         my $fh;
-        open( $fh, "<", $logfilepath )
+        open( $fh, "<:encoding(utf-8)", $logfilepath )
           or die "Cannot open log file $logfilepath: $!";
         my @report = <$fh>;
         close $fh;
@@ -407,7 +407,7 @@ elsif ( $step && $step == 3 ) {
         else {
             eval { `rm $logfilepath` };
         }
-        open( $fh, "<", $logfilepath_errors )
+        open( $fh, "<:encoding(utf-8)", $logfilepath_errors )
           or die "Cannot open log file $logfilepath_errors: $!";
         @report = <$fh>;
         close $fh;
