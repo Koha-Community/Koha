@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 77;
+use Test::More tests => 75;
 use Test::MockModule;
 use Test::Warn;
 
@@ -237,9 +237,8 @@ my $letter14206_c = C4::Letters::getletter('my module', $overdue_rules->{"letter
 is( $letter14206_c->{message_transport_type}, 'print', 'Bug 14206 - correct mtt detected for call from overdue_notices.pl' );
 
 # addalert
-my $type = 'my type';
 my $externalid = 'my external id';
-my $alert_id = C4::Letters::addalert($borrowernumber, $type, $externalid);
+my $alert_id = C4::Letters::addalert($borrowernumber, $externalid);
 isnt( $alert_id, undef, 'addalert does not return undef' );
 
 
@@ -249,16 +248,13 @@ is( @$alerts, 1, 'getalert should not fail without parameter' );
 $alerts = C4::Letters::getalert($borrowernumber);
 is( @$alerts, 1, 'addalert adds an alert' );
 is( $alerts->[0]->{alertid}, $alert_id, 'addalert returns the alert id correctly' );
-is( $alerts->[0]->{type}, $type, 'addalert stores the type correctly' );
 is( $alerts->[0]->{externalid}, $externalid, 'addalert stores the externalid correctly' );
 
-$alerts = C4::Letters::getalert($borrowernumber, $type);
+$alerts = C4::Letters::getalert($borrowernumber);
 is( @$alerts, 1, 'getalert returns the correct number of alerts' );
-$alerts = C4::Letters::getalert($borrowernumber, $type, $externalid);
+$alerts = C4::Letters::getalert($borrowernumber, $externalid);
 is( @$alerts, 1, 'getalert returns the correct number of alerts' );
-$alerts = C4::Letters::getalert($borrowernumber, 'another type');
-is( @$alerts, 0, 'getalert returns the correct number of alerts' );
-$alerts = C4::Letters::getalert($borrowernumber, $type, 'another external id');
+$alerts = C4::Letters::getalert($borrowernumber, 'another external id');
 is( @$alerts, 0, 'getalert returns the correct number of alerts' );
 
 
@@ -513,7 +509,7 @@ my $borrowernumber = AddMember(
     dateofbirth  => $date,
     email        => 'john.smith@test.de',
 );
-my $alert_id = C4::Letters::addalert($borrowernumber, 'issue', $subscriptionid);
+my $alert_id = C4::Letters::addalert($borrowernumber, $subscriptionid);
 
 
 my $err2;

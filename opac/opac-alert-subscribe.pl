@@ -37,7 +37,6 @@ my $dbh   = C4::Context->dbh;
 my $sth;
 my ( $template, $loggedinuser, $cookie );
 my $externalid   = $query->param('externalid');
-my $alerttype    = $query->param('alerttype') || '';
 my $referer      = $query->param('referer') || 'detail';
 my $biblionumber = $query->param('biblionumber');
 
@@ -53,7 +52,7 @@ my $biblionumber = $query->param('biblionumber');
 );
 
 if ( $op eq 'alert_confirmed' ) {
-    addalert( $loggedinuser, $alerttype, $externalid );
+    addalert( $loggedinuser, $externalid );
     if ( $referer eq 'serial' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
@@ -65,8 +64,8 @@ if ( $op eq 'alert_confirmed' ) {
     }
 }
 elsif ( $op eq 'cancel_confirmed' ) {
-    my $alerts = getalert( $loggedinuser, $alerttype, $externalid );
-    warn "CANCEL confirmed : $loggedinuser, $alerttype, $externalid".Data::Dumper::Dumper( $alerts );
+    my $alerts = getalert( $loggedinuser, $externalid );
+    warn "CANCEL confirmed : $loggedinuser, $externalid".Data::Dumper::Dumper( $alerts );
     foreach (@$alerts)
     {    # we are supposed to have only 1 result, but just in case...
         delalert( $_->{alertid} );
@@ -84,17 +83,14 @@ elsif ( $op eq 'cancel_confirmed' ) {
 
 }
 else {
-    if ( $alerttype eq 'issue' ) { # alert for subscription issues
-        my $subscription = &GetSubscription($externalid);
-        $template->param(
-            alerttype      => $alerttype,
-            referer        => $referer,
-            "typeissue$op" => 1,
-            bibliotitle    => $subscription->{bibliotitle},
-            notes          => $subscription->{notes},
-            externalid     => $externalid,
-            biblionumber   => $biblionumber,
-        );
-    }
+    my $subscription = &GetSubscription($externalid);
+    $template->param(
+        referer        => $referer,
+        "typeissue$op" => 1,
+        bibliotitle    => $subscription->{bibliotitle},
+        notes          => $subscription->{notes},
+        externalid     => $externalid,
+        biblionumber   => $biblionumber,
+    );
 }
 output_html_with_http_headers $query, $cookie, $template->output;

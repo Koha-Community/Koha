@@ -137,11 +137,11 @@
                                     [% IF ( subscription_LOO.letter ) %]
                                         [% IF ( loggedinusername ) %]
                                             [% IF ( subscription_LOO.hasalert ) %]
-                                                You have subscribed to email notification on new issues <a href="opac-alert-subscribe.pl?op=cancel&amp;externalid=[% subscription_LOO.subscriptionid %]&amp;alerttype=issue&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Cancel email notification">
+                                                You have subscribed to email notification on new issues <a href="opac-alert-subscribe.pl?op=cancel&amp;externalid=[% subscription_LOO.subscriptionid %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Cancel email notification">
                                                     Cancel email notification
                                                 </a>
                                             [% ELSE %]
-                                                <a href="opac-alert-subscribe.pl?externalid=[% subscription_LOO.subscriptionid %]&amp;alerttype=issue&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Subscribe to email notification on new issues">
+                                                <a href="opac-alert-subscribe.pl?externalid=[% subscription_LOO.subscriptionid %]&amp;referer=serial&amp;biblionumber=[% subscription_LOO.biblionumber %]" class="btn" title="Subscribe to email notification on new issues">
                                                     Subscribe to email notification on new issues
                                                 </a>
                                             [% END %]

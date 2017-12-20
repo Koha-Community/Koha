@@ -589,7 +589,7 @@ foreach my $subscription (@subscriptions) {
     $cell{latestserials} =
       GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     if ( $borrowernumber ) {
-        my $sub = getalert($borrowernumber,'issue',$subscription->{subscriptionid});
+        my $sub = getalert($borrowernumber, $subscription->{subscriptionid});
         if (@$sub[0]) {
             $cell{hasalert} = 1;
         }

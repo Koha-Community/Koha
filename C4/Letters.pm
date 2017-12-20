@@ -266,24 +266,23 @@ sub DelLetter {
     , undef, $branchcode, $module, $code, ( $mtt ? $mtt : () ), ( $lang ? $lang : () ) );
 }
 
-=head2 addalert ($borrowernumber, $type, $externalid)
+=head2 addalert ($borrowernumber, $subscriptionid)
 
     parameters : 
     - $borrowernumber : the number of the borrower subscribing to the alert
-    - $type : the type of alert.
-    - $externalid : the primary key of the object to put alert on. For issues, the alert is made on subscriptionid.
-    
+    - $subscriptionid
+
     create an alert and return the alertid (primary key)
 
 =cut
 
 sub addalert {
-    my ( $borrowernumber, $type, $externalid ) = @_;
+    my ( $borrowernumber, $subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
-        "insert into alert (borrowernumber, type, externalid) values (?,?,?)");
-    $sth->execute( $borrowernumber, $type, $externalid );
+        "insert into alert (borrowernumber, externalid) values (?,?)");
+    $sth->execute( $borrowernumber, $subscriptionid );
 
     # get the alert number newly created and return it
     my $alertid = $dbh->{'mysql_insertid'};
@@ -305,18 +304,17 @@ sub delalert {
     $sth->execute($alertid);
 }
 
-=head2 getalert ([$borrowernumber], [$type], [$externalid])
+=head2 getalert ([$borrowernumber], [$subscriptionid])
 
     parameters :
     - $borrowernumber : the number of the borrower subscribing to the alert
-    - $type : the type of alert.
-    - $externalid : the primary key of the object to put alert on. For issues, the alert is made on subscriptionid.
-    all parameters NON mandatory. If a parameter is omitted, the query is done without the corresponding parameter. For example, without $externalid, returns all alerts for a borrower on a topic.
+    - $subscriptionid
+    all parameters NON mandatory. If a parameter is omitted, the query is done without the corresponding parameter. For example, without $subscriptionid, returns all alerts for a borrower on a topic.
 
 =cut
 
 sub getalert {
-    my ( $borrowernumber, $type, $externalid ) = @_;
+    my ( $borrowernumber, $subscriptionid ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE 1";
     my @bind;
@@ -324,13 +322,9 @@ sub getalert {
         $query .= " AND borrowernumber=?";
         push @bind, $borrowernumber;
     }
-    if ($type) {
-        $query .= " AND type=?";
-        push @bind, $type;
-    }
-    if ($externalid) {
+    if ($subscriptionid) {
         $query .= " AND externalid=?";
-        push @bind, $externalid;
+        push @bind, $subscriptionid;
     }
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
@@ -386,7 +380,7 @@ sub SendAlerts {
 
         my %letter;
         # find the list of borrowers to alert
-        my $alerts = getalert( '', 'issue', $subscriptionid );
+        my $alerts = getalert( '', $subscriptionid );
         foreach (@$alerts) {
             my $patron = Koha::Patrons->find( $_->{borrowernumber} );
             next unless $patron; # Just in case

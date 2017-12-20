@@ -62,7 +62,7 @@ if ( $selectview eq "full" ) {
     # now, check is there is an alert subscription for one of the subscriptions
     if ($loggedinuser) {
         foreach (@$subscriptions) {
-            my $sub = getalert($loggedinuser,'issue',$_->{subscriptionid});
+            my $sub = getalert($loggedinuser, $_->{subscriptionid});
             if ($sub) {
                 $_->{hasalert} = 1;
             }
@@ -102,7 +102,7 @@ else {
     # now, check is there is an alert subscription for one of the subscriptions
     if ($loggedinuser){
         foreach (@$subscriptions) {
-            my $subscription = getalert($loggedinuser,'issue',$_->{subscriptionid});
+            my $subscription = getalert($loggedinuser, $_->{subscriptionid});
             if (@$subscription[0]) {
                 $_->{hasalert} = 1;
             }

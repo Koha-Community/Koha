@@ -43,7 +43,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $subscriptionid=$input->param('subscriptionid');
 
-my $borrowers = getalert('','issue',$subscriptionid);
+my $borrowers = getalert('', $subscriptionid);
 my $subscription = GetSubscription($subscriptionid);
 
 for my $borrowernumber (@$borrowers) {
