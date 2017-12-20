@@ -135,10 +135,28 @@ sub getPriceFixedRPExcludingTax {
     return $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "FixedRPExcludingTax"]/MonetaryAmount')->string_value;
 }
 
+sub getPriceFixedRPIncludingTax {
+    my $self = shift;
+    my $xmlData = $self->getXmlData();
+    my $price = $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "FixedRPExcludingTax"]/MonetaryAmount')->string_value;
+    my $tax_percent = $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "FixedRPExcludingTax"]/Tax/Percent')->string_value;
+    my $tax_price = $price * sprintf("%.2f", '1.'.$tax_percent);
+    return $tax_price;
+}
+
 sub getPriceSRPExcludingTax {
     my $self = shift;
     my $xmlData = $self->getXmlData();
     return $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "SRPExcludingTax"]/MonetaryAmount')->string_value;
+}
+
+sub getPriceSRPIncludingTax {
+    my $self = shift;
+    my $xmlData = $self->getXmlData();
+    my $price = $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "SRPExcludingTax"]/MonetaryAmount')->string_value;
+    my $tax_percent = $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "SRPExcludingTax"]/Tax/Percent')->string_value;
+    my $tax_price = $price * sprintf("%.2f", '1.'.$tax_percent);
+    return $tax_price;
 }
 
 sub getPriceSRPECurrency {
@@ -151,6 +169,12 @@ sub getPriceSRPETaxPercent {
     my $self = shift;
     my $xmlData = $self->getXmlData();
     return $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "SRPExcludingTax"]/Tax/Percent')->string_value;
+}
+
+sub getPriceFixedRPETaxPercent {
+    my $self = shift;
+    my $xmlData = $self->getXmlData();
+    return $xmlData->find('PricingDetail/Price[PriceQualifierCode/text() = "FixedRPExcludingTax"]/Tax/Percent')->string_value;
 }
 
 sub getIsbns {

@@ -10,6 +10,7 @@ use Koha::Database;
 use Koha::Item;
 use Koha::Biblio;
 use Koha::Biblioitem;
+use Koha::Biblio::Metadata;
 use C4::Biblio;
 use utf8;
 use List::MoreUtils qw(uniq);
@@ -108,6 +109,7 @@ sub process{
                     $itemId = $self->createItem($copyDetail, $item, $order, $barCode, $biblio, $biblioitem);
                     $orderCreator->createOrderItem($itemId, $orderId);
                 }
+                ModZebra( $biblio, "specialUpdate", "biblioserver" );
                 $self->updateAqbudgetLog($copyDetail, $item, $order, $biblio);
             }
         }
@@ -119,17 +121,17 @@ sub process{
 sub getBiblioDatas {
     my $self = shift;
     my ($copyDetail, $itemDetail, $order) = @_;
-    my ($biblio, $biblioitem);
+    my ($biblio, $biblioitem, $bibliometa);
 
     if($self->getConfig()->getUseAutomatchBiblios() ne 'no'){
         ($biblio, $biblioitem) = $self->getBiblioItemData($copyDetail, $itemDetail, $order);
     }
-
     if( !$biblio && !$biblioitem ){
         $biblio = $self->createBiblio($copyDetail, $itemDetail, $order);
-        $copyDetail->addMarc942($itemDetail->getProductForm());
+        $copyDetail->addMarc942($self->getProductForm($itemDetail->getProductForm()));
         $copyDetail->fixMarcIsbn();
         ($biblioitem) = $self->createBiblioItem($copyDetail, $itemDetail, $order, $biblio);
+        ($bibliometa) = $self->createBiblioMetadata($copyDetail, $itemDetail, $order, $biblio);
 
         my $marcBiblio = GetMarcBiblio($biblio);
         if(! $marcBiblio){
@@ -335,9 +337,7 @@ sub createBiblioItem{
             $biblioItem->set({'biblionumber', $data->{'biblio'}});
             $biblioItem->set({'itemtype', $data->{'productform'}});
             $biblioItem->set({'timestamp', $data->{'timestamp'}});
-            $biblioItem->set({'marcxml', $data->{'marcxml'}});
             $biblioItem->set({'notes', $data->{'notes'}});
-            $biblioItem->set({'marc', $data->{'marcxml'}});
 
             if(defined $data->{'isbn'} && $data->{'isbn'} ne ''){
                 $biblioItem->set({'isbn', $data->{'isbn'}});
@@ -393,6 +393,45 @@ sub createBiblioItem{
     return @result;
 }
 
+sub createBiblioMetadata {
+    my $self = shift;
+    my ($copyDetail, $itemDetail, $order, $biblio) = @_;
+    my $result = 0;
+    my $data = {};
+
+    if($itemDetail->isa('Koha::Procurement::EditX::LibraryShipNotice::ItemDetail') ){
+        $data->{'biblio'} = $biblio;
+        my $marc = $copyDetail->getMarcXml();
+        utf8::decode($marc);
+        $data->{'marcxml'} = $marc;
+        $data->{'format'} = 'marcxml';
+        $data->{'marcflavour'} = C4::Context->preference('marcflavour');
+
+        my @paramsToValidate = ('biblio', 'marcxml');
+        if($self->validate({'params', \@paramsToValidate , 'data', $data })){
+            my $biblioMetadata = new Koha::Biblio::Metadata;
+            $biblioMetadata->set({'biblionumber', $data->{'biblio'}});
+            $biblioMetadata->set({'metadata', $data->{'marcxml'}});
+            $biblioMetadata->set({'format', $data->{'format'}});
+            $biblioMetadata->set({'marcflavour', $data->{'marcflavour'}});
+
+            $biblioMetadata->store() or die($DBI::errstr);
+
+            if($biblioMetadata->id){
+                $result = $biblioMetadata->id;
+            }
+            else{
+                die('Bibliometaid not set after db save.')
+            }
+        }
+        else{
+            die('Required params not set.');
+        }
+    }
+    return $result;
+}
+
+
 
 sub createItem{
     my $self = shift;
@@ -403,7 +442,8 @@ sub createItem{
     if($itemDetail->isa('Koha::Procurement::EditX::LibraryShipNotice::ItemDetail') ){
         $data->{'booksellerid'} = $order->getSellerId();
         $data->{'destinationlocation'} = $copyDetail->getBranchCode();
-        $data->{'monetaryamount'} = $itemDetail->getPriceFixedRPExcludingTax();
+        $data->{'price'} = $itemDetail->getPriceFixedRPExcludingTax();
+        $data->{'replacementprice'} = $itemDetail->getPriceSRPIncludingTax();
         $data->{'timestamp'} = $order->getTimeStamp();
         $data->{'productform'} = $self->getProductForm($itemDetail->getProductForm());
         $data->{'notes'} = $itemDetail->getNotes();
@@ -416,18 +456,18 @@ sub createItem{
             $data->{'barcode'} = "HANK_" . $barcode;
         }
 
-        my @paramsToValidate = ('biblio', 'biblioitem', 'booksellerid', 'destinationlocation', 'monetaryamount', 'productform', 'notes', 'datecreated', 'collectioncode', 'barcode');
+        my @paramsToValidate = ('biblio', 'biblioitem', 'booksellerid', 'destinationlocation', 'price', 'replacementprice', 'productform', 'notes', 'datecreated', 'collectioncode', 'barcode');
         if($self->validate({'params', \@paramsToValidate , 'data', $data })){
             my $item  = new Koha::Item;
             $item->set({'biblionumber', $data->{'biblio'}});
             $item->set({'biblioitemnumber', $data->{'biblioitem'}});
             $item->set({'booksellerid', $data->{'booksellerid'}});
             $item->set({'homebranch', $data->{'destinationlocation'}});
-            $item->set({'replacementprice', $data->{'monetaryamount'}});
+            $item->set({'replacementprice', $data->{'replacementprice'}});
             $item->set({'timestamp', $data->{'timestamp'}});
             $item->set({'itype', $data->{'productform'}});
             $item->set({'coded_location_qualifier', $data->{'notes'}});
-            $item->set({'price', $data->{'monetaryamount'}});
+            $item->set({'price', $data->{'price'}});
             $item->set({'dateaccessioned', $data->{'datecreated'}});
             $item->set({'barcode', $data->{'barcode'}});
             $item->set({'datelastseen', $data->{'datecreated'}});
