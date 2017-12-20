@@ -62,10 +62,9 @@ if ( $selectview eq "full" ) {
     # now, check is there is an alert subscription for one of the subscriptions
     if ($loggedinuser) {
         foreach (@$subscriptions) {
-            my $sub = getalert($loggedinuser, $_->{subscriptionid});
-            if ($sub) {
-                $_->{hasalert} = 1;
-            }
+            my $subscription = Koha::Subscriptions->find( $_->{subscriptionid} );
+            my $subscriber = $subscription->subscribers->find( $loggedinuser );
+            $_->{hasalert} = 1 if $subscriber;
         }
     }
 
@@ -100,12 +99,11 @@ else {
 
     my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
     # now, check is there is an alert subscription for one of the subscriptions
-    if ($loggedinuser){
+    if ($loggedinuser) {
         foreach (@$subscriptions) {
-            my $subscription = getalert($loggedinuser, $_->{subscriptionid});
-            if (@$subscription[0]) {
-                $_->{hasalert} = 1;
-            }
+            my $subscription = Koha::Subscriptions->find( $_->{subscriptionid} );
+            my $subscriber = $subscription->subscribers->find( $loggedinuser );
+            $_->{hasalert} = 1 if $subscriber;
         }
     }
 

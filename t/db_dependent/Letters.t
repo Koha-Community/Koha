@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 75;
+use Test::More tests => 64;
 use Test::MockModule;
 use Test::Warn;
 
@@ -48,6 +48,8 @@ use Koha::Acquisition::Bookseller::Contacts;
 use Koha::Acquisition::Orders;
 use Koha::Libraries;
 use Koha::Notice::Templates;
+use Koha::Patrons;
+use Koha::Subscriptions;
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
@@ -235,41 +237,6 @@ my $i = 1;
 my $branchcode = 'FFL';
 my $letter14206_c = C4::Letters::getletter('my module', $overdue_rules->{"letter$i"}, $branchcode);
 is( $letter14206_c->{message_transport_type}, 'print', 'Bug 14206 - correct mtt detected for call from overdue_notices.pl' );
-
-# addalert
-my $externalid = 'my external id';
-my $alert_id = C4::Letters::addalert($borrowernumber, $externalid);
-isnt( $alert_id, undef, 'addalert does not return undef' );
-
-
-# getalert
-my $alerts = C4::Letters::getalert();
-is( @$alerts, 1, 'getalert should not fail without parameter' );
-$alerts = C4::Letters::getalert($borrowernumber);
-is( @$alerts, 1, 'addalert adds an alert' );
-is( $alerts->[0]->{alertid}, $alert_id, 'addalert returns the alert id correctly' );
-is( $alerts->[0]->{externalid}, $externalid, 'addalert stores the externalid correctly' );
-
-$alerts = C4::Letters::getalert($borrowernumber);
-is( @$alerts, 1, 'getalert returns the correct number of alerts' );
-$alerts = C4::Letters::getalert($borrowernumber, $externalid);
-is( @$alerts, 1, 'getalert returns the correct number of alerts' );
-$alerts = C4::Letters::getalert($borrowernumber, 'another external id');
-is( @$alerts, 0, 'getalert returns the correct number of alerts' );
-
-
-# delalert
-eval {
-    C4::Letters::delalert();
-};
-isnt( $@, undef, 'delalert without argument returns an error' );
-$alerts = C4::Letters::getalert($borrowernumber);
-is( @$alerts, 1, 'delalert without argument does not remove an alert' );
-
-C4::Letters::delalert($alert_id);
-$alerts = C4::Letters::getalert($borrowernumber);
-is( @$alerts, 0, 'delalert removes an alert' );
-
 
 # GetPreparedLetter
 t::lib::Mocks::mock_preference('OPACBaseURL', 'http://thisisatest.com');
@@ -509,8 +476,8 @@ my $borrowernumber = AddMember(
     dateofbirth  => $date,
     email        => 'john.smith@test.de',
 );
-my $alert_id = C4::Letters::addalert($borrowernumber, $subscriptionid);
-
+my $subscription = Koha::Subscriptions->find( $subscriptionid );
+$subscription->add_subscriber( scalar Koha::Patrons->find( $borrowernumber ) );
 
 my $err2;
 warning_is {

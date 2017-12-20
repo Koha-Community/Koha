@@ -36,7 +36,7 @@ my $dbh   = C4::Context->dbh;
 
 my $sth;
 my ( $template, $loggedinuser, $cookie );
-my $externalid   = $query->param('externalid');
+my $subscriptionid = $query->param('subscriptionid');
 my $referer      = $query->param('referer') || 'detail';
 my $biblionumber = $query->param('biblionumber');
 
@@ -51,8 +51,11 @@ my $biblionumber = $query->param('biblionumber');
     }
 );
 
+my $subscription = Koha::Subscriptions->find( $subscriptionid );
+my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+
 if ( $op eq 'alert_confirmed' ) {
-    addalert( $loggedinuser, $externalid );
+    $subscription->add_subscriber( $logged_in_patron );
     if ( $referer eq 'serial' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
@@ -64,12 +67,8 @@ if ( $op eq 'alert_confirmed' ) {
     }
 }
 elsif ( $op eq 'cancel_confirmed' ) {
-    my $alerts = getalert( $loggedinuser, $externalid );
-    warn "CANCEL confirmed : $loggedinuser, $externalid".Data::Dumper::Dumper( $alerts );
-    foreach (@$alerts)
-    {    # we are supposed to have only 1 result, but just in case...
-        delalert( $_->{alertid} );
-    }
+    $subscription->remove_subscriber( $logged_in_patron );
+    warn "CANCEL confirmed : $loggedinuser, $subscriptionid";
     if ( $referer eq 'serial' ) {
         print $query->redirect(
             "opac-serial-issues.pl?biblionumber=$biblionumber");
@@ -83,13 +82,13 @@ elsif ( $op eq 'cancel_confirmed' ) {
 
 }
 else {
-    my $subscription = &GetSubscription($externalid);
+    my $subscription = &GetSubscription($subscriptionid);
     $template->param(
         referer        => $referer,
         "typeissue$op" => 1,
         bibliotitle    => $subscription->{bibliotitle},
         notes          => $subscription->{notes},
-        externalid     => $externalid,
+        subscriptionid     => $subscriptionid,
         biblionumber   => $biblionumber,
     );
 }

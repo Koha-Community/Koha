@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Subscriptions;
 use Koha::Biblio;
@@ -40,7 +40,38 @@ subtest 'Koha::Subscription->biblio' => sub {
     })->store();
 
     my $b = $subscription->biblio;
-    is($b->biblionumber, $biblio->biblionumber, 'Koha::Subscription::biblio returns the correct biblio');
+    is($b->biblionumber, $biblio->biblionumber, 'Koha::Subscription->biblio returns the correct biblio');
+};
+
+subtest 'Notifications on new issues - add_subscriber|remove_subscriber|subscribers' => sub {
+    plan tests => 5;
+    my $subscriber_1 = $builder->build_object( { class => 'Koha::Patrons' });
+    my $subscriber_2 = $builder->build_object( { class => 'Koha::Patrons' });
+
+    my $subscription = Koha::Subscription->new({
+        biblionumber => Koha::Biblio->new->store->biblionumber,
+    })->store();
+
+    my $subscribers = $subscription->subscribers;
+    is( $subscribers->count, 0, '->subscribers should return 0 if there are no subscribers');
+    is( ref($subscribers), 'Koha::Patrons', '->subscribers should return a Koha::Patrons object');
+
+    $subscription->add_subscriber( $subscriber_1 );
+    $subscription->add_subscriber( $subscriber_2 );
+
+    $subscribers = $subscription->subscribers;
+    is( $subscribers->count, 2, '->subscribers should return 2 if there are 2 subscribers' );
+
+    $subscription->remove_subscriber( $subscriber_1 );
+
+    $subscribers = $subscription->subscribers;
+    is( $subscribers->count, 1, '->remove_subscriber should have remove the subscriber' );
+
+    $subscription->remove_subscriber( $subscriber_1 ); # We do not explode if the patron is not a subscriber
+
+    my $is_subscriber = $subscribers->find( $subscriber_2->borrowernumber );
+    ok( $is_subscriber, 'This structure is used in the code and should work as expected' );
+
 };
 
 subtest 'Koha::Subscription->vendor' => sub {

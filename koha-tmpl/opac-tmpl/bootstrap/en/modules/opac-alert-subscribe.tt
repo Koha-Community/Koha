@@ -24,7 +24,7 @@
                                 <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
                                 <h4>[% bibliotitle %]</h4>
                                 [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
-                                <input type="hidden" name="externalid" value="[% externalid %]">
+                                <input type="hidden" name="subscriptionid" value="[% subscriptionid %]">
                                 <input type="hidden" name="referer" value="[% referer %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="alert_confirmed">
@@ -38,7 +38,7 @@
                                 <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription.</p>
                                 <h4>[% bibliotitle %]</h4>
                                 [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
-                                <input type="hidden" name="externalid" value="[% externalid %]">
+                                <input type="hidden" name="subscriptionid" value="[% subscriptionid %]">
                                 <input type="hidden" name="referer" value="[% referer %]">
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]">
                                 <input type="hidden" name="op" value="cancel_confirmed">

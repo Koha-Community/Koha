@@ -39,6 +39,7 @@ use Koha::Email;
 use Koha::Notice::Messages;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 use Koha::Patrons;
+use Koha::Subscriptions;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -46,7 +47,7 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &SendAlerts &GetPrintMessages &GetMessageTransportTypes
     );
 }
 
@@ -266,71 +267,6 @@ sub DelLetter {
     , undef, $branchcode, $module, $code, ( $mtt ? $mtt : () ), ( $lang ? $lang : () ) );
 }
 
-=head2 addalert ($borrowernumber, $subscriptionid)
-
-    parameters : 
-    - $borrowernumber : the number of the borrower subscribing to the alert
-    - $subscriptionid
-
-    create an alert and return the alertid (primary key)
-
-=cut
-
-sub addalert {
-    my ( $borrowernumber, $subscriptionid) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "insert into alert (borrowernumber, externalid) values (?,?)");
-    $sth->execute( $borrowernumber, $subscriptionid );
-
-    # get the alert number newly created and return it
-    my $alertid = $dbh->{'mysql_insertid'};
-    return $alertid;
-}
-
-=head2 delalert ($alertid)
-
-    parameters :
-    - alertid : the alert id
-    deletes the alert
-
-=cut
-
-sub delalert {
-    my $alertid = shift or die "delalert() called without valid argument (alertid)";    # it's gonna die anyway.
-    $debug and warn "delalert: deleting alertid $alertid";
-    my $sth = C4::Context->dbh->prepare("delete from alert where alertid=?");
-    $sth->execute($alertid);
-}
-
-=head2 getalert ([$borrowernumber], [$subscriptionid])
-
-    parameters :
-    - $borrowernumber : the number of the borrower subscribing to the alert
-    - $subscriptionid
-    all parameters NON mandatory. If a parameter is omitted, the query is done without the corresponding parameter. For example, without $subscriptionid, returns all alerts for a borrower on a topic.
-
-=cut
-
-sub getalert {
-    my ( $borrowernumber, $subscriptionid ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT a.*, b.branchcode FROM alert a JOIN borrowers b USING(borrowernumber) WHERE 1";
-    my @bind;
-    if ($borrowernumber and $borrowernumber =~ /^\d+$/) {
-        $query .= " AND borrowernumber=?";
-        push @bind, $borrowernumber;
-    }
-    if ($subscriptionid) {
-        $query .= " AND externalid=?";
-        push @bind, $subscriptionid;
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    return $sth->fetchall_arrayref({});
-}
-
 =head2 SendAlerts
 
     my $err = &SendAlerts($type, $externalid, $letter_code);
@@ -379,22 +315,21 @@ sub SendAlerts {
              return;
 
         my %letter;
-        # find the list of borrowers to alert
-        my $alerts = getalert( '', $subscriptionid );
-        foreach (@$alerts) {
-            my $patron = Koha::Patrons->find( $_->{borrowernumber} );
-            next unless $patron; # Just in case
+        # find the list of subscribers to notify
+        my $subscription = Koha::Subscriptions->find( $subscriptionid );
+        my $subscribers = $subscription->subscribers;
+        while ( my $patron = $subscribers->next ) {
             my $email = $patron->email or next;
 
 #                    warn "sending issues...";
             my $userenv = C4::Context->userenv;
-            my $library = Koha::Libraries->find( $_->{branchcode} );
+            my $library = $patron->library;
             my $letter = GetPreparedLetter (
                 module => 'serial',
                 letter_code => $letter_code,
                 branchcode => $userenv->{branch},
                 tables => {
-                    'branches'    => $_->{branchcode},
+                    'branches'    => $library->branchcode,
                     'biblio'      => $biblionumber,
                     'biblioitems' => $biblionumber,
                     'borrowers'   => $patron->unblessed,

@@ -589,10 +589,9 @@ foreach my $subscription (@subscriptions) {
     $cell{latestserials} =
       GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     if ( $borrowernumber ) {
-        my $sub = getalert($borrowernumber, $subscription->{subscriptionid});
-        if (@$sub[0]) {
-            $cell{hasalert} = 1;
-        }
+        my $subscription_object = Koha::Subscriptions->find( $subscription->{subscriptionid} );
+        my $subscriber = $subscription_object->subscribers->find( $borrowernumber );
+        $cell{hasalert} = 1 if $subscriber;
     }
     push @subs, \%cell;
 }
