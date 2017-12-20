@@ -9,194 +9,197 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'home-search.inc' %]
 
-<div id="breadcrumbs" >Home</div>
+<div id="breadcrumbs">Home</div>
 
-
-<div id="doc3" class="yui-t3">
-   <div id="bd" role="main">
-    <div id="yui-main">
-    <div class="yui-b"><div class="yui-g">
-    [% IF adminWarning %]
-        <div id="adminwarning" class="dialog alert">
-            <p><strong>Warning:</strong> You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
-            <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
-<p><a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/members-home.pl"><i class="fa fa-plus"> </i> Create patron</a></p>
-        </div>
-    [% END %]
-    <div class="yui-u first">
-
-            <div id="area-list-left">
-                <ul class="biglinks-list">
-                    [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-                    <li>
-                        <a class="icon_general icon_circulation" href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-                    </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_borrowers ) %]
-                    <li>
-                        <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-                    </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_catalogue ) %]
-                    <li>
-                        <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a>
-                    </li>
-                    [% END %]
-
-                    <li>
-                        <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
-                    </li>
-
-                    [% IF ( UseCourseReserves ) %]
-                        <li>
-                            <a class="icon_general icon_course_reserves" href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
-                        </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
-                    <li>
-                        <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
-                    </li>
-                    [% END %]
-                    <li>
-                        <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
-                    </li>
-                    [% IF Koha.Preference('ILLModule') %]
-                    <li>
-                        <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
-                    </li>
-                    [% END %]
-                </ul>
-            </div><!-- /area-list-left -->
-        </div><!-- /yui-u first -->
-    <div class="yui-u">
-            <div id="area-list-right">
-                <ul class="biglinks-list">
-                    [% IF ( CAN_user_serials ) %]
-                    <li>
-                        <a class="icon_general icon_serials" href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
-                        <span class="biglink"></span>
-                    </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_acquisition ) %]
-                    <li>
-                        <a class="icon_general icon_acquisitions" href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-                        <span class="biglink"></span>
-                    </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_reports ) %]
-                    <li>
-                        <a class="icon_general icon_reports" href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
-                    </li>
-                    [% END %]
-
-
-                    [% IF ( CAN_user_tools ) %]
-                    <li>
-                        <a class="icon_general icon_tools" href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-                    </li>
-                    [% END %]
-
-                    [% IF ( CAN_user_parameters ) %]
-                    <li>
-                        <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>
-                    </li>
-                    [% END %]
-                    <li>
-                        <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl">About Koha</a>
-                    </li>
-                </ul>
-            </div><!-- /area-list-right -->
-        </div><!-- /yui-u -->
-</div><!-- /yui-g -->
-<div class="yui-g">
-            [%# Following statement must be in one line for translatability %]
-            [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && pending_borrower_modifications ) || ( CAN_user_acquisition && pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) || pending_article_requests) %]
-                <div id="area-pending">
-                    [% IF pending_article_requests %]
-                    <div class="pending-info" id="article_requests_pending">
-
-                        <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>:
-                        <span class="pending-number-link">[% pending_article_requests %]</span>
-                    </div>
-                    [% END %]
-
-                    [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
-                    <div class="pending-info" id="suggestions_pending">
-
-                        <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Suggestions pending approval</a>:
-                        <span class="pending-number-link">[% pendingsuggestions %]</span>
-                    </div>
-                    [% END %]
-
-                    [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
-                    <div class="pending-info" id="comments_pending">
-                        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>:
-                        <span class="pending-number-link">[% pendingcomments %]</span>
-                    </div>
-                    [% END %]
-
-                    [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
-                    <div class="pending-info" id="tags_pending">
-                        <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>:
-                        <span class="pending-number-link">[% pendingtags %]</span>
-                    </div>
-                    [% END %]
-
-
-                    [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
-                    <div class="pending-info" id="patron_updates_pending">
-                        <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
-                        <span class="pending-number-link">[% pending_borrower_modifications %]</span>
-                    </div>
-                    [% END %]
-
-                    [% IF CAN_user_borrowers && pending_discharge_requests %]
-                    <div class="pending-info" id="patron_discharges_pending">
-                        <a href="/cgi-bin/koha/members/discharges.pl">Discharge requests pending</a>:
-                        <span class="pending-number-link">[% pending_discharge_requests %]</span>
-                    </div>
-                    [% END %]
-
-                </div>
-
-            [% END %]
-
-</div>
-            [% IF ( IntranetmainUserblock ) %]
-                <div class="yui-g" id="area-userblock">
-                    <div class="user-info">
-                        [% IntranetmainUserblock %]
-                    </div>
-                </div>
-            [% END %]
-</div>
-    </div>
-    <div class="yui-b"><!-- YOUR NAVIGATION GOES HERE -->
-    [% IF ( koha_news_count ) %]
-        <div id="area-news">
-            <h3><span class="news_title">News</span></h3>
-            [% SET newsdisp = Koha.Preference('NewsAuthorDisplay') %]
-            [% FOREACH koha_new IN koha_news %]
-                <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
-                    <div class="newsbody">[% koha_new.content %]</div>
-                    <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
-                        [% IF ( CAN_user_tools ) %]
-                            <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
-                             | <a class="news_delete" href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
-                             | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
+    <div id="container-main" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                [% IF ( koha_news_count ) %]
+                    <div id="area-news">
+                        <h3><span class="news_title">News</span></h3>
+                        [% SET newsdisp = Koha.Preference('NewsAuthorDisplay') %]
+                        [% FOREACH koha_new IN koha_news %]
+                            <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
+                                <div class="newsbody">[% koha_new.content %]</div>
+                                <p class="newsfooter"> Posted on [% koha_new.newdate %][% IF( ( newsdisp == 'staff' || newsdisp == 'both' ) && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title %] </span>[% koha_new.author_firstname %] [% koha_new.author_surname %]<br />[% END %]
+                                    [% IF ( CAN_user_tools ) %]
+                                        <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a>
+                                         | <a class="news_delete" href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a>
+                                         | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>
+                                    [% END %]
+                                </p>
+                            </div>
                         [% END %]
-                    </p>
-                </div>
-            [% END %]
-        </div><!-- /koha-news -->
-    [% END %]
-    </div>
-</div>
+                    </div><!-- /koha-news -->
+                [% END %]
+            </div> <!-- /.col-sm-2 -->
+            <div class="col-sm-9">
+                [% IF adminWarning %]
+                    <div id="adminwarning" class="dialog alert">
+                        <p><strong>Warning:</strong> You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
+                        <p>Please log in instead with a regular staff account. To create a staff account, create a library, a patron category 'Staff' and add a new patron. Then give this patron permissions from 'More' in the toolbar.</p>
+                        <p><a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/members-home.pl"><i class="fa fa-plus"> </i> Create patron</a></p>
+                    </div>
+                [% END %]
+                <div class="row">
+                    <div class="col-xs-6">
+                        <ul class="biglinks-list">
+                            [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                            <li>
+                                <a class="icon_general icon_circulation" href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+                            </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_borrowers ) %]
+                            <li>
+                                <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                            </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_catalogue ) %]
+                            <li>
+                                <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a>
+                            </li>
+                            [% END %]
+
+                            <li>
+                                <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+                            </li>
+
+                            [% IF ( UseCourseReserves ) %]
+                                <li>
+                                    <a class="icon_general icon_course_reserves" href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
+                                </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
+                            <li>
+                                <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+                            </li>
+                            [% END %]
+                            <li>
+                                <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+                            </li>
+                            [% IF Koha.Preference('ILLModule') %]
+                            <li>
+                                <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+                            </li>
+                            [% END %]
+                        </ul>
+                    </div> <!-- /.col-xs-6 -->
+                    <div class="col-xs-6">
+                        <ul class="biglinks-list">
+                            [% IF ( CAN_user_serials ) %]
+                            <li>
+                                <a class="icon_general icon_serials" href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+                                <span class="biglink"></span>
+                            </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_acquisition ) %]
+                            <li>
+                                <a class="icon_general icon_acquisitions" href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+                                <span class="biglink"></span>
+                            </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_reports ) %]
+                            <li>
+                                <a class="icon_general icon_reports" href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+                            </li>
+                            [% END %]
+
+
+                            [% IF ( CAN_user_tools ) %]
+                            <li>
+                                <a class="icon_general icon_tools" href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+                            </li>
+                            [% END %]
+
+                            [% IF ( CAN_user_parameters ) %]
+                            <li>
+                                <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>
+                            </li>
+                            [% END %]
+                            <li>
+                                <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl">About Koha</a>
+                            </li>
+                        </ul>
+                    </div> <!-- /.col-sm-6 -->
+
+                </div> <!-- /.row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        [%# Following statement must be in one line for translatability %]
+                        [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers && pending_borrower_modifications ) || ( CAN_user_acquisition && pendingsuggestions ) || ( CAN_user_borrowers && pending_discharge_requests ) || pending_article_requests) %]
+                            <div id="area-pending">
+                                [% IF pending_article_requests %]
+                                <div class="pending-info" id="article_requests_pending">
+
+                                    <a href="/cgi-bin/koha/circ/article-requests.pl">Article requests</a>:
+                                    <span class="pending-number-link">[% pending_article_requests %]</span>
+                                </div>
+                                [% END %]
+
+                                [% IF ( CAN_user_acquisition && pendingsuggestions ) %]
+                                <div class="pending-info" id="suggestions_pending">
+
+                                    <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Suggestions pending approval</a>:
+                                    <span class="pending-number-link">[% pendingsuggestions %]</span>
+                                </div>
+                                [% END %]
+
+                                [% IF ( CAN_user_tools_moderate_comments  && pendingcomments ) %]
+                                <div class="pending-info" id="comments_pending">
+                                    <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments pending approval</a>:
+                                    <span class="pending-number-link">[% pendingcomments %]</span>
+                                </div>
+                                [% END %]
+
+                                [% IF ( CAN_user_tools_moderate_tags && pendingtags ) %]
+                                <div class="pending-info" id="tags_pending">
+                                    <a href="/cgi-bin/koha/tags/review.pl">Tags pending approval</a>:
+                                    <span class="pending-number-link">[% pendingtags %]</span>
+                                </div>
+                                [% END %]
+
+
+                                [% IF ( CAN_user_borrowers && pending_borrower_modifications ) %]
+                                <div class="pending-info" id="patron_updates_pending">
+                                    <a href="/cgi-bin/koha/members/members-update.pl">Patrons requesting modifications</a>:
+                                    <span class="pending-number-link">[% pending_borrower_modifications %]</span>
+                                </div>
+                                [% END %]
+
+                                [% IF CAN_user_borrowers && pending_discharge_requests %]
+                                <div class="pending-info" id="patron_discharges_pending">
+                                    <a href="/cgi-bin/koha/members/discharges.pl">Discharge requests pending</a>:
+                                    <span class="pending-number-link">[% pending_discharge_requests %]</span>
+                                </div>
+                                [% END %]
+
+                            </div>
+
+                        [% END %]
+
+                    </div> <!-- /.col-sm-12 -->
+                </div> <!-- /.row -->
+
+                [% IF ( IntranetmainUserblock ) %]
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="area-userblock">
+                                <div class="user-info">
+                                    [% IntranetmainUserblock %]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                [% END %]
+            </div> <!-- /.col-sm-9 -->
+
+        </div> <!-- /.row -->
+    </div> <!-- /.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
