@@ -41,6 +41,11 @@ sub format {
 
     my $format_params = $self->_format_params( $params );
 
+    # To avoid the system to crash, we will not format big number
+    # We divide per 100 because we want to keep the default DECIMAL_DIGITS (2)
+    # error - round() overflow. Try smaller precision or use Math::BigFloat
+    return $self->value if $self->value > Number::Format::MAX_INT/100;
+
     return Number::Format->new(%$format_params)->format_price($self->value);
 }
 
