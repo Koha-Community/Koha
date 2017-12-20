@@ -1209,6 +1209,9 @@ function verify_images() {
 
   [% IF SerialsDisplayTree && subscriptionsnumber && serialsadditems %]
     var branches = [% branchloopJSON %];
+    var itemTypeImages = [% noItemTypeImages ? "false" : "true" %];
+
+    var MSG_ALL = _("All");
     var MSG_AVAILABLE = _("Available");
     var MSG_BARCODE = _("Barcode");
     var MSG_CALL_NUMBER = _("Call number");
@@ -1253,7 +1256,7 @@ function verify_images() {
     $(document).ready(function() {
         Branches.createBranchSelectorHtml(branches, null, "[% LoginBranchcode %]");
 
-        $("div#menu").parent().append('<h4 style="padding-left: 10px;">'+MSG_SERIAL_NUMBERS+'</h4><div id="jstree2">'+MSG_CANNOT_LOAD_AVAILABILITY_MAP+'</div>');
+        $("div#menu").parent().append('<h4 style="padding-left: 10px;">'+MSG_SERIAL_NUMBERS+'</h4><a href="#" onclick="return false;" id="show_all_serialitems">'+MSG_ALL+'</a><div id="jstree2">'+MSG_CANNOT_LOAD_AVAILABILITY_MAP+'</div>');
         $("div#noitems").remove();
         $("div#holdings").append('<table id="itemtable"></table>');
         collectionMap = new Serials.CollectionMap.CollectionMap($("#jstree2"), [% biblionumber %]);
@@ -1277,6 +1280,11 @@ function verify_images() {
           pickupBranch: {branchcode: "[% LoginBranchcode %]"},
         });
 
+        $("#show_all_serialitems").on('click', function() {
+            Serials.CollectionMap.getSerialItems(collectionMap, {
+                biblionumber: [% biblionumber %]
+            });
+        });
     });
     [% END %]
 </script>

@@ -129,6 +129,14 @@ Serials.CollectionMap = {
         .on('activate_node.jstree', function (what, data){
             if (data.node.children.length > 0) {
                 //This is not a leaf node.
+                var node_id = data.node.id;
+                var serialseqs_xyz = node_id.split(":");
+                Serials.CollectionMap.displaySerialItems(self, {
+                    serialseq_x: serialseqs_xyz[0],
+                    serialseq_y: serialseqs_xyz[1],
+                    serialseq_z: serialseqs_xyz[2],
+                    biblionumber: self.biblionumber,
+                });
                 return;
             }
             var node_id = data.node.id;

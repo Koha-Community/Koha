@@ -178,7 +178,8 @@ SELECT i.*,
   bt.transfertfrom,
   bt.transfertto,
   bt.transfertwhen,
-  itps.imageurl
+  itps.imageurl,
+  COALESCE( localization.translation, itps.description ) AS translated_description
 FROM serial s
     LEFT JOIN subscription sub ON sub.subscriptionid = s.subscriptionid
     LEFT JOIN serialitems si ON s.serialid = si.serialid
@@ -188,6 +189,7 @@ FROM serial s
     LEFT JOIN (SELECT bt.itemnumber, bt.frombranch as transfertfrom, bt.tobranch as transfertto, bt.datesent as transfertwhen FROM branchtransfers bt WHERE bt.datearrived IS NULL) as bt ON bt.itemnumber = i.itemnumber
     LEFT JOIN itemtypes itps ON itps.itemtype = i.itype
     LEFT JOIN (SELECT resb.cardnumber, resb.borrowernumber, r.itemnumber, r.waitingdate FROM reserves r LEFT JOIN borrowers resb ON resb.borrowernumber = r.borrowernumber ORDER BY priority ASC) as resbor ON resbor.itemnumber = i.itemnumber
+    LEFT JOIN localization ON itps.itemtype = localization.code
 WHERE s.biblionumber = ?
 AND i.itemnumber IS NOT NULL
 ";

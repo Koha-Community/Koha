@@ -171,14 +171,36 @@ Items.ItemsTable = {
                         Items.Cache.clear();
                         Items.Cache.addLocalItems(jqXHR.serialItems);
                         var htmlTableContent = Items.ItemsTableView.template();
-                        $(self.node).html(htmlTableContent).DataTable($.extend(true, {}, dataTablesDefaults, {
+                        var aoColumns = [];
+
+                        $(self.node).html(htmlTableContent);
+                        var thead_row = self.datatable.find('thead tr');
+                        var clone = thead_row.clone().addClass('filters_row');
+                        clone.find("th.NoSort").html('');
+                        thead_row.before(clone);
+                        filters_row = self.datatable.find('thead tr.filters_row');
+
+                        self.datatable.DataTable($.extend(true, {}, dataTablesDefaults, {
                             'sDom': 't',
                             'bPaginate': false,
-                            'bAutoWidth': false
-                            ,   "aoColumnDefs": [
+                            'bAutoWidth': false,
+                            "aoColumnDefs": [
                                     { "aTargets": [ "NoSort" ], "bSortable": false, "bSearchable": false }
                                 ]
                         }));
+                        filters_row.find('th').each(function() {
+                                if (this.className.match(/NoSort/)){
+                                    aoColumns.push(null);
+                                } else {
+                                    aoColumns.push('text');
+                                }
+                        });
+                        self.datatable.dataTable().columnFilter({
+                            'sPlaceHolder': 'head:after',
+                            'aoColumns': aoColumns
+                        });
+                        filters_row.addClass('columnFilter');
+
                         Items.ItemsTable.setItems(self, serialItems);
 
                         if (typeof self.events.callback == "function") {

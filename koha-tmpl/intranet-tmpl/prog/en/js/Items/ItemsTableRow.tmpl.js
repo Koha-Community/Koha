@@ -56,7 +56,7 @@ Items.ItemsTableRowTmpl = {
     transform: function (item) {
         return [
             '<input id="'+Items.ItemsTableRowTmpl.getId(item)+'" value="'+item.itemnumber+'" name="itemnumber" type="checkbox">',
-            '<img src="/intranet-tmpl/prog/img/itemtypeimg/bridge/periodical.gif" alt="'+item.c_itype+'" title="'+item.c_itype+'">',
+            (itemTypeImages===true ? '<img src="/intranet-tmpl/prog/img/itemtypeimg/bridge/periodical.gif" alt="'+item.c_itype+'" title="'+item.c_itype+'" />' : '') + item.translated_description,
             (item.c_holdingbranch ? item.c_holdingbranch : ''),
             item.c_homebranch+'<span class="shelvingloc">'+item.c_location+'</span>',
             (item.c_ccode ? item.c_ccode : ''),
