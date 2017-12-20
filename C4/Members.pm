@@ -387,6 +387,14 @@ sub AddMember {
     my $dbh = C4::Context->dbh;
     my $schema = Koha::Database->new()->schema;
 
+    my $category = Koha::Patron::Categories->find( $data{categorycode} );
+    unless ($category) {
+        Koha::Exceptions::BadParameter->throw(
+            error => 'Invalid parameter passed',
+            parameter => 'categorycode'
+        );
+    }
+
     # trim whitespace from data which has some non-whitespace in it.
     foreach my $field_name (keys(%data)) {
         if ( defined $data{$field_name} && $data{$field_name} =~ /\S/ ) {
@@ -399,7 +407,7 @@ sub AddMember {
       if ( $data{'userid'} eq '' || !Check_Userid( $data{'userid'} ) );
 
     # add expiration date if it isn't already there
-    $data{dateexpiry} ||= Koha::Patron::Categories->find( $data{categorycode} )->get_expiry_date;
+    $data{dateexpiry} ||= $category->get_expiry_date;
 
     # add enrollment date if it isn't already there
     unless ( $data{'dateenrolled'} ) {
@@ -412,12 +420,11 @@ sub AddMember {
         }
     }
 
-    my $patron_category = $schema->resultset('Category')->find( $data{'categorycode'} );
     $data{'privacy'} =
-        $patron_category->default_privacy() eq 'default' ? 1
-      : $patron_category->default_privacy() eq 'never'   ? 2
-      : $patron_category->default_privacy() eq 'forever' ? 0
-      :                                                    undef;
+        $category->default_privacy() eq 'default' ? 1
+      : $category->default_privacy() eq 'never'   ? 2
+      : $category->default_privacy() eq 'forever' ? 0
+      :                                             undef;
 
     $data{'privacy_guarantor_checkouts'} = 0 unless defined( $data{'privacy_guarantor_checkouts'} );
 
