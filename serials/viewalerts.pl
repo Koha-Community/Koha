@@ -46,8 +46,10 @@ my $subscriptionid=$input->param('subscriptionid');
 my $borrowers = getalert('','issue',$subscriptionid);
 my $subscription = GetSubscription($subscriptionid);
 
-foreach (@$borrowers) {
-    $_->{name} = findrelatedto('borrower',$_->{borrowernumber});
+for my $borrowernumber (@$borrowers) {
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    next unless $borrowernumber; # Just in case...
+    $borrowers->{name} = join( ' ', $patron->firstname, $patron->surname );
 }
 $template->param(alertloop => $borrowers,
                 bibliotitle => $subscription->{bibliotitle},

@@ -46,7 +46,7 @@ BEGIN {
     require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &findrelatedto &SendAlerts &GetPrintMessages &GetMessageTransportTypes
+        &GetLetters &GetLettersAvailableForALibrary &GetLetterTemplates &DelLetter &GetPreparedLetter &GetWrappedLetter &addalert &getalert &delalert &SendAlerts &GetPrintMessages &GetMessageTransportTypes
     );
 }
 
@@ -335,37 +335,6 @@ sub getalert {
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     return $sth->fetchall_arrayref({});
-}
-
-=head2 findrelatedto($type, $externalid)
-
-    parameters :
-    - $type : the type of alert
-    - $externalid : the id of the "object" to query
-
-    In the table alert, a "id" is stored in the externalid field. This "id" is related to another table, depending on the type of the alert.
-    When type=issue, the id is related to a subscriptionid and this sub returns the name of the biblio.
-
-=cut
-    
-# outmoded POD:
-# When type=virtual, the id is related to a virtual shelf and this sub returns the name of the sub
-
-sub findrelatedto {
-    my $type       = shift or return;
-    my $externalid = shift or return;
-    my $q = ($type eq 'issue'   ) ?
-"select title as result from subscription left join biblio on subscription.biblionumber=biblio.biblionumber where subscriptionid=?" :
-            ($type eq 'borrower') ?
-"select concat(firstname,' ',surname) from borrowers where borrowernumber=?" : undef;
-    unless ($q) {
-        warn "findrelatedto(): Illegal type '$type'";
-        return;
-    }
-    my $sth = C4::Context->dbh->prepare($q);
-    $sth->execute($externalid);
-    my ($result) = $sth->fetchrow;
-    return $result;
 }
 
 =head2 SendAlerts
