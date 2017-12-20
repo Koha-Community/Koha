@@ -21,6 +21,7 @@
 use Modern::Perl;
 use C4::Context;
 use C4::Auth qw(checkauth);
+use C4::Biblio;
 use Koha::Linktracker;
 use CGI qw ( -utf8 );
 
@@ -54,25 +55,28 @@ if ($uri) {
         my $biblionumber = $cgi->param('biblionumber') || 0;
         my $itemnumber   = $cgi->param('itemnumber')   || 0;
 
-        $tracker->trackclick(
-            {
-                uri            => $uri,
-                biblionumber   => $biblionumber,
-                borrowernumber => $borrowernumber,
-                itemnumber     => $itemnumber
-            }
-        );
-        print $cgi->redirect($uri);
+        my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+        my $marc_urls = C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour'));
+        if ( grep { /^$uri$/ } map { $_->{MARCURL} } @$marc_urls ) {
+            $tracker->trackclick(
+                {
+                    uri            => $uri,
+                    biblionumber   => $biblionumber,
+                    borrowernumber => $borrowernumber,
+                    itemnumber     => $itemnumber
+                }
+            );
+            print $cgi->redirect($uri);
+            exit;
+        }
     }
     else {
 
         # We have a valid url, but we shouldn't track it, just redirect
         print $cgi->redirect($uri);
+        exit;
     }
 }
-else {
 
-    # we shouldn't be here, bail out
-    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
-    exit;
-}
+print $cgi->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
+exit;
