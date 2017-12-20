@@ -3137,3 +3137,74 @@ fieldset.rows + fieldset.action {
 table#ill-requests {
     width: 100% !important;
 }
+
+#helper span {
+    display: none;
+}
+
+#logged-in-info-full {
+    display: none;
+}
+
+.loggedin-menu-label {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.42857143;
+    padding: 4px 12px;
+    white-space: nowrap;
+}
+
+.loggedin-menu-label.divider {
+    padding: 0;
+}
+
+.loggedin-menu-label span {
+    color: #000;
+    font-weight: bold;
+}
+
+@media (min-width: 200px) {
+    .navbar-nav > li {
+        float: left;
+    }
+    .navbar-right {
+        float: right !important;
+        margin-right: -15px;
+    }
+    .navbar-nav {
+        float: left;
+        margin: 0;
+    }
+
+    .navbar-nav .open .dropdown-menu {
+        position: absolute;
+        float: left;
+        left: auto;
+        right: 0;
+        width: auto;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,0.15);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    }
+}
+
+@media (min-width: 800px) {
+    #helper span {
+        display: inline;
+    }
+
+    #helper i {
+        display: none;
+    }
+
+    #logged-in-info-full {
+        display: inline;
+    }
+
+    #logged-in-info-brief {
+        display: none;
+    }
+    .loggedin-menu-label {
+        display: none;
+    }
+}
