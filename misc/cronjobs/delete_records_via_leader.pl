@@ -53,7 +53,14 @@ GetOptions(
     'h|help'            => \$help,
 );
 
-if ( $help || !$confirm ) {
+pod2usage(q|--test and --confirm cannot be specified together|) if $test and $confirm;
+
+unless ( $confirm or $test ) {
+    warn "Running in test mode as --confirm is not passed\n";
+    $test = 1;
+}
+
+if ( $help ) {
     say qq{
 delete_records_via_leader.pl - Attempt to delete any MARC records where the leader character 5 equals 'd'
 usage: delete_records_via_leader.pl --confirm --verbose [--test]
