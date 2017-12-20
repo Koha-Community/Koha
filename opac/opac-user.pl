@@ -306,13 +306,6 @@ $template->param(
     showpriority   => $show_priority,
 );
 
-# current alert subscriptions
-my $alerts = getalert($borrowernumber);
-foreach ( @$alerts ) {
-    $_->{ $_->{type} } = 1;
-    $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
-}
-
 if (C4::Context->preference('BakerTaylorEnabled')) {
     $template->param(
         BakerTaylorEnabled  => 1,
