@@ -112,7 +112,11 @@ Using this account is not recommended because some parts of Koha will not functi
                                             Comment:
                                             <span id="userdebarred_comment">
                                                 <strong>
-                                                    [% BORROWER_INFO.debarredcomment %]
+                                                    [% IF BORROWER_INFO.debarredcomment.search('OVERDUES_PROCESS') %]
+                                                        Restriction added by overdues process [% BORROWER_INFO.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                                    [% ELSE %]
+                                                        [% BORROWER_INFO.debarredcomment | html_line_break %]
+                                                    [% END %]
                                                 </strong>
                                             </span>
                                         [% END %]
@@ -120,6 +124,7 @@ Using this account is not recommended because some parts of Koha will not functi
                                             End date:
                                             <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>
                                         [% END %]
+
                                         <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
                                     [% END %]
                                 [% END %]
