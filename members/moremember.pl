@@ -247,13 +247,6 @@ if ($borrowernumber) {
           ->count( { borrowernumber => $borrowernumber } ) );
 }
 
-# current alert subscriptions
-my $alerts = getalert($borrowernumber);
-foreach (@$alerts) {
-    $_->{ $_->{type} } = 1;
-    $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
-}
-
 # Add sync data to the user data
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
