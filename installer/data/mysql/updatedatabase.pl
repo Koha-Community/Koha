@@ -14601,6 +14601,28 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 17.05.06)\n";
 }
 
+$DBversion = '17.05.06.001';
+if( CheckVersion( $DBversion ) ) {
+    foreach my $table (qw(biblio_metadata deletedbiblio_metadata)) {
+        if (!column_exists($table, 'timestamp')) {
+            $dbh->do(qq{
+                ALTER TABLE `$table`
+                ADD COLUMN `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER `metadata`,
+                ADD KEY `timestamp` (`timestamp`)
+            });
+            $dbh->do(qq{
+                UPDATE $table metadata
+                    LEFT JOIN biblioitems ON (biblioitems.biblionumber = metadata.biblionumber)
+                    LEFT JOIN biblio ON (biblio.biblionumber = metadata.biblionumber)
+                SET metadata.timestamp = GREATEST(biblioitems.timestamp, biblio.timestamp);
+            });
+        }
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19724 - Add [deleted]biblio_metadata.timestamp)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
