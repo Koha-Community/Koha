@@ -42,16 +42,23 @@
                         [% IF ( debarred ) %]
                             <li id="debarred">
                                 Your account has been frozen.
-                                [% IF debarred_comment %] Comment: <span id="userdebarred_comment">"
-				    [% IF debarred_comment.search('OVERDUES_PROCESS') %]
-                                         Restriction added by overdues process [% debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break %]
-                                    [% ELSE %]
-                                         [% debarred_comment | html_line_break %]
+                                [% IF debarred_comment %]
+                                    Comment:
+                                    <span id="userdebarred_comment">
+                                        <strong>
+                                            [% IF debarred_comment.search('OVERDUES_PROCESS') %]
+                                                Restriction added by overdues process [% debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                            [% ELSE %]
+                                                [% debarred_comment | html_line_break %]
+                                            [% END %]
+                                        </strong>
+                                    </span>
                                 [% END %]
-			        </span>
-			[% END %]
 
-                                [% IF debarred_date && debarred_date != '9999-12-31' %] End date: <span id="userdebarred_date">[% debarred_date | $KohaDates %]</span>[% END %]
+                                [% IF debarred_date && debarred_date != '9999-12-31' %]
+                                    End date:
+                                    <span id="userdebarred_date">[% debarred_date | $KohaDates %]</span>
+                                [% END %]
                                 <br /><em>Usually the reason for freezing an account is old overdues or damage fees. If shows your account to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a>
                             </li>
                         [% END %]
