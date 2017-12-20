@@ -169,7 +169,7 @@ if ( $action eq 'create' ) {
                 $verification_token = md5_hex( time().{}.rand().{}.$$ );
             }
 
-            $borrower{password}           = Koha::AuthUtils::generate_password;
+            $borrower{password}           = Koha::AuthUtils::generate_password unless $borrower{password};
             $borrower{verification_token} = $verification_token;
 
             Koha::Patron::Modification->new( \%borrower )->store();
