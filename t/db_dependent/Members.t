@@ -17,8 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 63;
+use Test::More tests => 64;
 use Test::MockModule;
+use Test::Exception;
+
 use Data::Dumper qw/Dumper/;
 use C4::Context;
 use Koha::Database;
@@ -501,3 +503,25 @@ subtest 'Trivial test for AddMember_Auto' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'AddMember (invalid categorycode) tests' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $category    = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    my $category_id = $category->id;
+    # Remove category to make sure the id is not on the DB
+    $category->delete;
+
+    my $patron_data = {
+        categorycode => $category_id
+    };
+
+    throws_ok
+        { AddMember( %{ $patron_data } ); }
+        'Koha::Exceptions::BadParameter',
+        'AddMember raises an exception on invalid categorycode';
+
+    $schema->storage->txn_rollback;
+};
