@@ -318,7 +318,7 @@ subtest 'Handle ids duplication' => sub {
     }
     [
         qr{.*DBD::mysql::st execute failed: Duplicate entry.*},
-        { carped => qr{The checkin for the following issue failed.*DBIx::Class::Storage::DBI::_dbh_execute.*} }
+        { carped => qr{The checkin for the following issue failed.*Duplicate ID.*} }
     ],
     'DBD should have raised an error about dup primary key';
 
