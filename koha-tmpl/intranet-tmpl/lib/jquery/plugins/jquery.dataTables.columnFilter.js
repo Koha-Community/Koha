@@ -154,7 +154,8 @@
                         }
                     }
                     /* Filter on the column (the index) of this element */
-                    oTable.fnFilter(this.value, _fnColumnIndex(index), regex, smart); //Issue 37
+                    oTable.fnFilter( this.value, oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(),
+                    $(this).parent().parent().index() ), regex, smart ); //Issue 37
                     fnOnFiltered();
                 });
             }
