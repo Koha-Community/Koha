@@ -393,6 +393,7 @@ my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
 my $anyholdable = 0;
 my $itemLevelTypes = C4::Context->preference('item-level_itypes');
+my $pickup_locations = Koha::Libraries->search({ pickup_location => 1 });
 $template->param('item_level_itypes' => $itemLevelTypes);
 
 foreach my $biblioNum (@biblionumbers) {
@@ -532,7 +533,7 @@ foreach my $biblioNum (@biblionumbers) {
         my $policy_holdallowed = !$itemLoopIter->{already_reserved};
         $policy_holdallowed &&=
             IsAvailableForItemLevelRequest($itemInfo,$borr) &&
-            CanItemBeReserved($borrowernumber,$itemNum,$branch) eq 'OK';
+            CanItemBeReserved($borrowernumber,$itemNum) eq 'OK';
 
         if ($policy_holdallowed) {
             if ( my $hold_allowed = OPACItemHoldsAllowed( $itemInfo, $borr ) ) {
@@ -591,7 +592,7 @@ foreach my $biblioNum (@biblionumbers) {
         }
     }
 
-    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum,$branch) eq 'OK';
+    $biblioLoopIter{holdable} &&= CanBookBeReserved($borrowernumber,$biblioNum) eq 'OK';
 
     # For multiple holds per record, if a patron has previously placed a hold,
     # the patron can only place more holds of the same type. That is, if the
@@ -616,6 +617,14 @@ foreach my $biblioNum (@biblionumbers) {
     $anyholdable = 1 if $biblioLoopIter{holdable};
 }
 
+unless ($pickup_locations->count) {
+    $numBibsAvailable = 0;
+    $anyholdable = 0;
+    $template->param(
+        message => 1,
+        no_pickup_locations => 1
+    );
+}
 
 if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
