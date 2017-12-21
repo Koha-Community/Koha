@@ -120,7 +120,7 @@
                                 </table>
                                 <div>
                                     <form method="post" action="#" id="finish_form">
-                                        <button type="submit" class="btn"><i class="icon finish"></i> Finish</button>
+                                        <button id="sci_finish_button" type="submit" class="btn"><i class="icon finish"></i> Finish</button>
                                     </form>
                                 </div>
                         [% ELSE %]
@@ -242,6 +242,30 @@
             // set focus at the beginning
             dofocus();
         });
+
+        var idleTime = 0;
+        $(document).ready(function () {
+            //Increment the idle time counter every minute.
+            var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+
+            //Zero the idle timer on mouse movement.
+            $(this).mousemove(function (e) {
+                idleTime = 0;
+            });
+            $(this).keypress(function (e) {
+                idleTime = 0;
+            });
+        });
+
+        function timerIncrement() {
+            if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
+                idleTime = idleTime + 1;
+                if (idleTime >= 30 ) { // 30 seconds
+                    if ( $("#sci_finish_button").is(":visible") ) $("#sci_finish_button").click();
+                    if ( $("#sci_refresh_button").is(":visible") ) $("#sci_refresh_button").click();
+                }
+            }
+        }
     </script>
 
     [% IF ( Koha.Preference('SCOUserJS') ) %]<script type="text/javascript">[% Koha.Preference('SCOUserJS') %]</script>[% END %]
