@@ -122,6 +122,11 @@
                     </div>
                 [% END %]
             [% END %]
+            [% IF ( summary.control_number ) %]
+                <div class="standard_ids">
+                    <span class="standard_ids">Control number: <span class="control_numbers">[% summary.control_number %]</span></span>
+                </div>
+            [% END %]
         [% END # / IF marcflavour = 'UNIMARC' %]
     [% END # / UNLESS summary.summaryonly %]
 [% END # / BLOCK authresult %]

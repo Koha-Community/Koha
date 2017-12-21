@@ -1035,6 +1035,7 @@ sub BuildSummary {
     my @seealso;
     my @otherscript;
     my @equalterm;
+    my $control_number;
 
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
 # construct UNIMARC summary, that is quite different from MARC21 one
@@ -1253,6 +1254,7 @@ sub BuildSummary {
             my $direction = $linkage =~ m#/r$# ? 'rtl' : 'ltr';
             push @otherscript, { term => $field->as_string($subfields_to_report), category => $category, type => $type, direction => $direction, linkage => $linkage };
         }
+        $control_number = $record->subfield('010', 'a');
     }
     $summary{mainentry}     = $authorized[0]->{heading};
     $summary{mainmainentry} = $authorized[0]->{hemain};
@@ -1262,6 +1264,7 @@ sub BuildSummary {
     $summary{seealso}       = \@seealso;
     $summary{otherscript}   = \@otherscript;
     $summary{equalterm}     = \@equalterm;
+    $summary{control_number} = $control_number;
     return \%summary;
 }
 
