@@ -62,7 +62,8 @@ $builder->build({
     source => 'HouseboundRole',
     value  => {
         borrowernumber_id  => $patron_chooser->{borrowernumber},
-        housebound_chooser => 1,
+        housebound_chooser   => 1,
+        housebound_deliverer => 0,
     },
 });
 
@@ -72,6 +73,7 @@ $builder->build({
     value  => {
         borrowernumber_id    => $patron_deliverer->{borrowernumber},
         housebound_deliverer => 1,
+        housebound_chooser   => 0,
     },
 });
 
