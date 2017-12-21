@@ -217,61 +217,67 @@ subtest '_get_biblio_for_export' => sub {
     my $biblio = MARC::Record->new();
     $biblio->leader('00266nam a22001097a 4500');
     $biblio->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Thurber, James'),
-        MARC::Field->new('245', ' ', ' ', a => "The 13 Clocks"),
+        MARC::Field->new( '100', ' ', ' ', a => 'Thurber, James' ),
+        MARC::Field->new( '245', ' ', ' ', a => "The 13 Clocks" ),
     );
-    my ($biblionumber, $biblioitemnumber) = AddBiblio($biblio, '');
-    my $branch_a = $builder->build({
-        source => 'Branch',
-        value => {
+    my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
+    my $branch_a = $builder->build({source => 'Branch',});
+    my $branch_b = $builder->build({source => 'Branch',});
+    my $item_branch_a = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber       => $biblionumber,
+                homebranch         => $branch_a->{branchcode},
+                more_subfields_xml => '',
+            }
         }
-    });
-    my $branch_b = $builder->build({
-        source => 'Branch',
-        value => {
+    );
+    my $item_branch_b = $builder->build(
+        {
+            source => 'Item',
+            value  => {
+                biblionumber       => $biblionumber,
+                homebranch         => $branch_b->{branchcode},
+                more_subfields_xml => '',
+            }
         }
-    });
-    my $item_branch_a = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblionumber,
-            homebranch   => $branch_a->{branchcode},
-            more_subfields_xml => '',
-        }
-    });
-    my $item_branch_b = $builder->build({
-        source => 'Item',
-        value => {
-            biblionumber => $biblionumber,
-            homebranch   => $branch_b->{branchcode},
-            more_subfields_xml => '',
-        }
-    });
+    );
 
-    my $record = Koha::Exporter::Record::_get_biblio_for_export( {
-        biblionumber => $biblionumber,
-        export_items => 1,
-        only_export_items_for_branches => undef
-    });
+    my $record = Koha::Exporter::Record::_get_biblio_for_export(
+        {
+            biblionumber                   => $biblionumber,
+            export_items                   => 1,
+            only_export_items_for_branches => undef
+        }
+    );
     my @items = $record->field('952');
-    is(scalar @items,2,"We should retrieve all items if we don't pass specific branches and request items");
+    is( scalar @items, 2, "We should retrieve all items if we don't pass specific branches and request items" );
 
-    $record = Koha::Exporter::Record::_get_biblio_for_export( {
-        biblionumber => $biblionumber,
-        export_items => 1,
-        only_export_items_for_branches => [$branch_b->{branchcode}]
-    });
+    $record = Koha::Exporter::Record::_get_biblio_for_export(
+        {
+            biblionumber                   => $biblionumber,
+            export_items                   => 1,
+            only_export_items_for_branches => [ $branch_b->{branchcode} ]
+        }
+    );
     @items = $record->field('952');
-    is(scalar @items,1,"We should retrieve only item for branch_b item if we request items and pass branch");
-    is($items[0]->subfield('a'),$branch_b->{branchcode},"And the homebranch for that item should be branch_b branchcode");
+    is( scalar @items, 1, "We should retrieve only item for branch_b item if we request items and pass branch" );
+    is(
+        $items[0]->subfield('a'),
+        $branch_b->{branchcode},
+        "And the homebranch for that item should be branch_b branchcode"
+    );
 
-    $record = Koha::Exporter::Record::_get_biblio_for_export( {
-        biblionumber => $biblionumber,
-        export_items => 0,
-        only_export_items_for_branches => [$branch_b->{branchcode}]
-    });
+    $record = Koha::Exporter::Record::_get_biblio_for_export(
+        {
+            biblionumber                   => $biblionumber,
+            export_items                   => 0,
+            only_export_items_for_branches => [ $branch_b->{branchcode} ]
+        }
+    );
     @items = $record->field('952');
-    is(@items,0,"We should not have any items if we don't request items and pass a branch");
+    is( scalar @items, 0, "We should not have any items if we don't request items and pass a branch");
 
 };
 
