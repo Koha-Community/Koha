@@ -847,11 +847,11 @@
                                     <table class="table table-bordered table-striped" id="subscriptionst">
                                         <thead>
                                         <tr>
-                                            <th id="serial_serialseq" data-colname="serial_serialseq" class="serialseq">Issue #</th>
-                                            <th id="serial_publisheddate" data-colname="serial_publisheddate" class="publisheddate">Publication date</th>
-                                            <th id="serial_planneddate" data-colname="serial_planneddate" class="planneddate">Received date</th>
-                                            <th id="serial_status" data-colname="serial_status" class="serial_status">Status</th>
-                                            <th id="serial_notes" data-colname="serial_notes" class="serial_notes">Note</th>
+                                            <th id="serial_serialseq" data-colname="serial_serialseq">Issue #</th>
+                                            <th id="serial_publisheddate" data-colname="serial_publisheddate" class="title-string">Publication date</th>
+                                            <th id="serial_planneddate" data-colname="serial_planneddate" class="title-string">Received date</th>
+                                            <th id="serial_status" data-colname="serial_status">Status</th>
+                                            <th id="serial_notes" data-colname="serial_notes">Note</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -1474,7 +1474,6 @@
         KohaTable("#subscriptionst", {
             dom: 'B<"clearfix">t',
             "columnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
             "bKohaColumnsUseNames": true
