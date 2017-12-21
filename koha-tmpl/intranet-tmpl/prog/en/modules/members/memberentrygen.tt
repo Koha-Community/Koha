@@ -1241,6 +1241,7 @@ $(document).ready(function() {
         <p><label for="SMSnumber">SMS number:</label>
             <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
         </p>
+        [% UNLESS nosms_provider_id %]
         <p>
             <label for="sms_provider_id">SMS provider:</label>
             <select id="sms_provider_id" name="sms_provider_id"/>
@@ -1254,6 +1255,7 @@ $(document).ready(function() {
                 [% END %]
             </select>
         </p>
+        [% END %]
     [% END %]
   </fieldset>
 [% END %] [% END %]
