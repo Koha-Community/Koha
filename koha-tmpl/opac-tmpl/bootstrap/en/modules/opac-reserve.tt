@@ -112,6 +112,11 @@
                             </li>
                         [% END %]
 
+                        [% IF ( no_pickup_locations ) %]
+                            <li id="no_pickup_locations">
+                                None of the libraries are available for pickup location.
+                            </li>
+                        [% END %]
                     [% ELSE %]
 
                         [% IF ( none_available && multi_hold ) %]
