@@ -653,33 +653,39 @@ $(document).ready(function() {
     <legend id="library_management_lgd">Library management</legend><ol>
       [% UNLESS nocardnumber %]
         <li>
-          [% IF mandatorycardnumber and not autoMemberNum %]
+          [% IF mandatorycardnumber %]
             <label for="cardnumber" class="required">
           [% ELSE %]
             <label for="cardnumber" class="validated">
           [% END %]
-          [% IF autoMemberNum %]
-              Card number<br>(<u>leave blank for auto calc during registration</u>): </label>
-          [% ELSE %]
-              Card number: </label>
-          [% END %]
+            Card number: </label>
+
+          <!-- NOTE: div.hint closing tag isn't on the same line -->
           [% IF minlength_cardnumber == maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.</div>
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
+                <div class="hint">Card number must be exactly [% minlength_cardnumber %] characters.
           [% ELSIF minlength_cardnumber && maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" minlength="[% minlength_cardnumber %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.</div>
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
+                <div class="hint">Card number must be between [% minlength_cardnumber %] and [% maxlength_cardnumber %] characters.
           [% ELSIF maxlength_cardnumber %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" maxlength="[% maxlength_cardnumber %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
-                <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.</div>
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]<span id="cn_max" class="required">Card number must not be more than [% maxlength_cardnumber %] characters.</span>
+                <div class="hint">Card number can be up to [% maxlength_cardnumber %] characters.
           [% ELSE %]
                 <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber | html %]" />
-                [% IF mandatorycardnumber and not autoMemberNum %]<span class="required">Required</span>[% END %]
-                <div class="hint">There is no minimum or maximum character length.</div>
+                [% IF mandatorycardnumber %]<span class="required">Required</span>[% END %]
+                <div class="hint">There is no minimum or maximum character length.
           [% END %]
+          [% IF autoMemberNum %]
+                [% IF mandatorycardnumber %]
+                    <br/><span class="error">AutoMemberNum is set to enabled, but cardnumber is marked as mandatory in BorrowerMandatoryField: auto calc has been disabled.</span>
+                [% ELSE %]
+                    <br/>Leave empty for auto calc during registration
+                [% END %]
+          [% END %]
+                </div><!--/hint div -->
         </li>
       [% END %]
       [% UNLESS nobranchcode %]
