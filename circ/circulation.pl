@@ -83,12 +83,18 @@ if (!C4::Context->userenv){
 
 my $barcodes = [];
 my $barcode =  $query->param('barcode');
+my $findborrower;
+my $autoswitched;
 
 if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
     if (Koha::Patrons->search( { cardnumber => $barcode} )->count() > 0) {
-        print $query->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$barcode&amp;autoswitched=1");
+        $findborrower = $barcode;
+        undef $barcode;
+        $autoswitched = 1;
     }
 }
+$findborrower ||= $query->param('findborrower') || q{};
+$findborrower =~ s|,| |g;
 
 # Barcode given by user could be '0'
 if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
@@ -153,9 +159,6 @@ our %return_failed = ();
 for (@failedreturns) { $return_failed{$_} = 1; }
 
 my $searchtype = $query->param('searchtype') || q{contain};
-
-my $findborrower = $query->param('findborrower') || q{};
-$findborrower =~ s|,| |g;
 
 my $branch = C4::Context->userenv->{'branch'};
 
@@ -669,7 +672,7 @@ $template->param(
     has_modifications         => $has_modifications,
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
-    autoswitched              => $query->param("autoswitched"),
+    autoswitched              => $autoswitched,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
