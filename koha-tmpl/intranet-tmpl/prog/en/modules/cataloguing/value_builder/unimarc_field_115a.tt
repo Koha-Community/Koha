@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 115a builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -1189,20 +1190,21 @@
 </table>
 <fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-	function report() {
-        document.f_pop.f2.value=document.f_pop.f2.value+'   ';
-        document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
 
-        var doc   = opener.document; 
-        var field = doc.getElementById("[% index %]");
-        
-        field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value;
-		self.close();
-		return false;
-	}
-//]]>
-</script>
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
+            document.f_pop.f2.value=document.f_pop.f2.value+'   ';
+            document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
 
-[% INCLUDE 'popup-bottom.inc' %]
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+
+            field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value;
+            self.close();
+            return false;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

@@ -1,7 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 100 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_unimarc_field_100" class="cat" style="padding:1em;">
 <h3>UNIMARC field 100 builder</h3>
 <form name="f_pop" action="">
@@ -683,69 +685,34 @@ languages and obsolete typography)</option>
 </table>
 <p><input type="button" value="OK"  onclick="report();" /> <a href="#" class="cancel close">Cancel</a> </p>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-//     GetPublicationDate(); // running directly.
-// 
-//     /**
-//      *  GetPublicationDate.
-//      *  This function get the publication date if it's written on 210d
-//      */
-//     function GetPublicationDate() {
-//         var PublicationDate = null;
-//         
-//         for (i=0 ; i<NbFields ; i++) {
-//             if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
-//                 if (doc.f.field_value[i].value != ""){
-//                     PublicationDate = doc.f.field_value[i].value;
-//                     document.getElementById('pubdate1').value = PublicationDate;
-//                 }
-//                 return;
-//             }
-//         }
-//     }
-//     
-//     /**
-//      *  SetPublicationDate.
-//      *  This function set the publication date here
-//      */
-//     function SetPublicationDate() {
-//         var PublicationDate = document.getElementById('pubdate1').value;
-//         if (PublicationDate == "    " || !PublicationDate){
-//             return ;
-//         }
-//         for (i=0 ; i<NbFields ; i++) {
-//             if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
-//                 doc.f.field_value[i].value = PublicationDate;
-//                 break;
-//             }
-//         }
-//     }
-    
-    function report() {
-        var doc   = opener.document;
-        var field = doc.getElementById("[% index %]");
-        
-        document.f_pop.f1.value=document.f_pop.f1.value+'        ';
-        document.f_pop.f3.value=document.f_pop.f3.value+'    ';
-        document.f_pop.f4.value=document.f_pop.f4.value+'    ';
-        document.f_pop.f10.value=document.f_pop.f10.value+'   ';
-        document.f_pop.f14.value=document.f_pop.f14.value+'    ';
 
-        document.f_pop.f1.value=document.f_pop.f1.value.substring(0,8);
-        document.f_pop.f3.value=document.f_pop.f3.value.substring(0,4);
-        document.f_pop.f4.value=document.f_pop.f4.value.substring(0,4);
-        document.f_pop.f10.value=document.f_pop.f10.value.substring(0,3);
-        document.f_pop.f14.value=document.f_pop.f14.value.substring(0,4);
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
 
-        field.value= document.f_pop.f1.value +
-        document.f_pop.f2.value +document.f_pop.f3.value
-        +document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value;
-        
-//         SetPublicationDate();
-        self.close();
-        return false;
-    }
-//]]>
-</script>
-[% INCLUDE 'popup-bottom.inc' %]
+            document.f_pop.f1.value=document.f_pop.f1.value+'        ';
+            document.f_pop.f3.value=document.f_pop.f3.value+'    ';
+            document.f_pop.f4.value=document.f_pop.f4.value+'    ';
+            document.f_pop.f10.value=document.f_pop.f10.value+'   ';
+            document.f_pop.f14.value=document.f_pop.f14.value+'    ';
+
+            document.f_pop.f1.value=document.f_pop.f1.value.substring(0,8);
+            document.f_pop.f3.value=document.f_pop.f3.value.substring(0,4);
+            document.f_pop.f4.value=document.f_pop.f4.value.substring(0,4);
+            document.f_pop.f10.value=document.f_pop.f10.value.substring(0,3);
+            document.f_pop.f14.value=document.f_pop.f14.value.substring(0,4);
+
+            field.value= document.f_pop.f1.value +
+            document.f_pop.f2.value +document.f_pop.f3.value
+            +document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value;
+
+            self.close();
+            return false;
+        }
+    //]]>
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
