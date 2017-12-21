@@ -31,9 +31,10 @@ $(document).ready(function() {
     var cD = ColumnData;
     var new_array = new Array();
     for ( j=0 ; j<cD.length ; j++ ) {
-        var split_array = cD[j].split(/<li>/gi);
+        var split_array = cD[j].split(/<\/ul>/gi);
         for ( k=0 ; k<split_array.length ; k++ ){
-            var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
+            var str = $.trim(split_array[k].replace(/<ul><li>/g, ''));
+            str = $.trim(str.replace(/<\/li>/g, ''));
             if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
                 new_array.push(str);
             }
@@ -132,29 +133,23 @@ $(document).ready(function() {
             <td>"</td>
         [% END %]
         <td>
-            <ul>
             [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
-                <li>[% Branches.GetName ( holdingbranch ) %]</li>
+                <ul><li>[% Branches.GetName ( holdingbranch ) %]</li></ul>
             [% END %]
-            </ul>
         </td>
         <td>[% reserveloo.itemcallnumber %]</td>
         <td>[% reserveloo.copyno %]</td>
         <td>[% reserveloo.itemnotes %]<br/></td>
         <td>[% reserveloo.enumchron %]</td>
         <td>
-          <ul>
           [% FOREACH itype IN reserveloo.itypes %]
-              <li>[% ItemTypes.GetDescription( itype ) %]</li>
+              <ul><li>[% ItemTypes.GetDescription( itype ) %]</li></ul>
           [% END %]
-          </ul>
         </td>
         <td>
-          <ul>
           [% FOREACH loc IN reserveloo.locations %]
-              <li>[% AuthorisedValues.GetByCode('LOC', loc) %]</li>
+              <ul><li>[% AuthorisedValues.GetByCode('LOC', loc) %]</li></ul>
           [% END %]
-          </ul>
         </td>
         <td>
             <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %] in [% Branches.GetName ( reserveloo.branch ) %]</span>
