@@ -258,6 +258,7 @@
                                             <li class="attributes">
                                                 <label style="width:auto;">Attribute:
                                                     <select name="patron_attributes">
+                                                        <option value=""></option>
                                                         [% FOREACH pac IN patron_attributes_codes %]
                                                             <option value="[% pac.attribute_code %]" data-type="[% pac.type %]" data-category="[% pac.category_lib %]">[% pac.attribute_lib %]</option>
                                                         [% END %]
@@ -365,22 +366,31 @@
 
         function updateAttrValues (select_attr) {
             var attr_code = $(select_attr).val();
-            var type = $(select_attr).find("option:selected").attr('data-type');
-            var category = $(select_attr).find("option:selected").attr('data-category');
-            var span = $(select_attr).parent().parent().find('span.patron_attributes_value');
-            var information_category_node = $(select_attr).parent().parent().find('span.information_category');
+            var selected_option = $(select_attr).find("option:selected");
+            var type = $(selected_option).attr('data-type');
+            var category = $(selected_option).attr('data-category');
+            var li_node = $(select_attr).parent().parent();
+            var span = $(li_node).find('span.patron_attributes_value');
+            var information_category_node = $(li_node).find('span.information_category');
             information_category_node.html("");
-            if ( category.length > 0 ) {
+
+            if ( category && category.length > 0 ) {
                 information_category_node.html(_("This attribute will be only applied to the patron's category %s").format(category));
             }
+            var disable_input_node = $(li_node).find("input:checkbox[name='disable_input']");
             if ( type == 'select' ) {
                 var options = '<option value = ""></option>';
                 for ( var i = 0 ; i < patron_attributes_values[attr_code].length ; i++ ) {
                     options += '<option value="'+patron_attributes_values[attr_code][i]+'">'+patron_attributes_lib[attr_code][i]+'</option>';
                 }
                 span.html('<select name="patron_attributes_value">' + options + '</select>');
+                $(disable_input_node).show();
+            } else if ( $(selected_option).val() != "" ) {
+                span.html('<input type="text" name="patron_attributes_value"/>');
+                $(disable_input_node).show();
             } else {
-                span.html('<input type="text" name="patron_attributes_value"/>')
+                span.html('');
+                $(disable_input_node).hide();
             }
         }
 

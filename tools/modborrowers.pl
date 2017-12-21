@@ -320,9 +320,6 @@ if ( $op eq 'do' ) {
                 };
                 push @errors, { error => $@ } if $@;
             } else {
-                # Attribute's value is empty, we don't want to modify it
-                ++$i and next if not $attribute->{attribute};
-
                 eval {
                     C4::Members::Attributes::UpdateBorrowerAttribute( $borrowernumber, $attribute );
                 };
