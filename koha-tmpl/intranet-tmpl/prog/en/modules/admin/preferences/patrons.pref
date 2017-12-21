@@ -218,6 +218,15 @@ Patrons:
                yes: Show
                no: "Don't show"
          - "patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
+     - Use the following regex /
+         - pref: ValidatePhoneNumber
+           type: textarea
+           class: code
+         - / to validate patrons' phone numbers.
+         - <br>Example<br >^((\+)?[1-9]{1,2})?([-\s\.])?((\(\d{1,4}\))|\d{1,4})(([-\s\.])?[0-9]{1,12}){1,2}$
+         - <br>(Source of example http://regexlib.com/REDetails.aspx?regexp_id=3009)<br>
+         - <br>Example (Finland)<br>^((90[0-9]{3})?0|\+358\s?)(?!(100|20(0|2(0|[2-3])|9[8-9])|300|600|700|708|75(00[0-3]|(1|2)\d{2}|30[0-2]|32[0-2]|75[0-2]|98[0-2])))(4|50|10[1-9]|20(1|2(1|[4-9])|[3-9])|29|30[1-9]|71|73|75(00[3-9]|30[3-9]|32[3-9]|53[3-9]|83[3-9])|2|3|5|6|8|9|1[3-9])\s?(\d\s?){4,19}\d$
+         - <br><br>Leave blank to accept any phone number.
      -
          - pref: TrackLastPatronActivity
            choices:
@@ -251,13 +260,3 @@ Patrons:
          - pref: FailedLoginAttempts
            class: integer
          - failed login attempts.
-     -
-         - Use the following regex /
-         - pref: ValidatePhoneNumber
-           type: textarea
-           class: code
-         - / to validate patrons' phone numbers.
-         - <br>Example<br >^((\+)?[1-9]{1,2})?([-\s\.])?((\(\d{1,4}\))|\d{1,4})(([-\s\.])?[0-9]{1,12}){1,2}$
-         - <br>(Source of example http://regexlib.com/REDetails.aspx?regexp_id=3009)<br>
-         - <br>Example (Finland)<br>^((90[0-9]{3})?0|\+358\s?)(?!(100|20(0|2(0|[2-3])|9[8-9])|300|600|700|708|75(00[0-3]|(1|2)\d{2}|30[0-2]|32[0-2]|75[0-2]|98[0-2])))(4|50|10[1-9]|20(1|2(1|[4-9])|[3-9])|29|30[1-9]|71|73|75(00[3-9]|30[3-9]|32[3-9]|53[3-9]|83[3-9])|2|3|5|6|8|9|1[3-9])\s?(\d\s?){4,19}\d$
-         - <br><br>Leave blank to accept any phone number.
