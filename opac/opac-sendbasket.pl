@@ -192,13 +192,14 @@ END_OF_BODY
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 else {
+    my $new_session_id = $cookie->value;
     $template->param(
         bib_list       => $bib_list,
         url            => "/cgi-bin/koha/opac-sendbasket.pl",
         suggestion     => C4::Context->preference("suggestion"),
         virtualshelves => C4::Context->preference("virtualshelves"),
         csrf_token => Koha::Token->new->generate_csrf(
-            { session_id => scalar $query->cookie('CGISESSID'), } ),
+            { session_id => $new_session_id, } ),
     );
     output_html_with_http_headers $query, $cookie, $template->output;
 }
