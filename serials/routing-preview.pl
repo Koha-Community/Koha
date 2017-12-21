@@ -63,13 +63,14 @@ my $subs = GetSubscription($subscriptionid);
 my ($tmp ,@serials) = GetSerials($subscriptionid);
 my ($template, $loggedinuser, $cookie);
 
+my $library;
 if($ok){
     # get biblio information....
     my $biblionumber = $subs->{'bibnum'};
     my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblionumber);
     my @itemresults = GetItemsInfo( $biblionumber );
     my $branch = @itemresults ? $itemresults[0]->{'holdingbranch'} : $subs->{branchcode};
-    my $branchname = Koha::Libraries->find($branch)->branchname;
+    $library = Koha::Libraries->find($branch);
 
 	if (C4::Context->preference('RoutingListAddReserves')){
 		# get existing reserves .....
@@ -108,7 +109,6 @@ if($ok){
 				flagsrequired => {serials => '*'},
 				debug => 1,
 				});
-    $template->param("libraryname"=>$branchname);
 } else {
     ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/routing-preview.tt",
@@ -119,6 +119,8 @@ if($ok){
 				debug => 1,
 				});
 }
+
+$template->param( libraryname => $library->branchname ) if $library;
 
 my $memberloop = [];
 for my $routing (@routinglist) {
