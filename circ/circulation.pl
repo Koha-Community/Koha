@@ -85,11 +85,13 @@ my $barcodes = [];
 my $barcode =  $query->param('barcode');
 my $findborrower;
 my $autoswitched;
+my $borrowernumber = $query->param('borrowernumber');
 
 if (C4::Context->preference("AutoSwitchPatron") && $barcode) {
     if (Koha::Patrons->search( { cardnumber => $barcode} )->count() > 0) {
         $findborrower = $barcode;
         undef $barcode;
+        undef $borrowernumber;
         $autoswitched = 1;
     }
 }
@@ -117,7 +119,6 @@ if ( $barcode || ( defined($barcode) && $barcode eq '0' ) ) {
 $barcodes = [ uniq @$barcodes ];
 
 my $template_name = q|circ/circulation.tt|;
-my $borrowernumber = $query->param('borrowernumber');
 my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
 my $batch = $query->param('batch');
 my $batch_allowed = 0;
