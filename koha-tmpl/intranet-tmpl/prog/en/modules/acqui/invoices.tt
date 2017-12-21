@@ -10,7 +10,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
-    $(".delete").click(function(){
+    $(".delete_invoice").click(function(){
         return confirmDelete(_("Are you sure you want to delete this invoice?"));
     });
 
@@ -163,7 +163,7 @@ $(document).ready(function() {
                                 <li><a href="invoice.pl?op=close&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]"><i class="fa fa-times-circle"></i> Close</a></li>
                             [% END %]
                             [% UNLESS invoice.receivedbiblios || invoice.receiveditems %]
-                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]" class="delete"><i class="fa fa-trash"></i> Delete</a></li>
+                                <li><a href="invoice.pl?op=delete&amp;invoiceid=[% invoice.invoiceid %]&amp;referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber %]%26supplier=[% booksellerid %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn %]%26title=[% title %]%26author=[% author %]%26publisher=[% publisher %]%26publicationyear=[% publicationyear %]%26branch=[% branch %]" class="delete_invoice"><i class="fa fa-trash"></i> Delete</a></li>
                             [% END %]
                           </ul>
                       </div>
