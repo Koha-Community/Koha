@@ -846,7 +846,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
 subtest "Koha::Account::Line::void tests" => sub {
 
-    plan tests => 12;
+    plan tests => 14;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -876,6 +876,12 @@ subtest "Koha::Account::Line::void tests" => sub {
             amount => 30,
         }
     );
+
+    # Test debit and credit methods fo Koha::Account::Offset
+    my $account_offset = Koha::Account::Offsets->find( { credit_id => $id, debit_id => $line1->id } );
+    is( $account_offset->debit->id, $line1->id, "Koha::Account::Offset->debit gets correct accountline" );
+    is( $account_offset->credit->id, $id, "Koha::Account::Offset->credit gets correct accountline" );
+
     my $account_payment = Koha::Account::Lines->find( $id );
 
     is( $account->balance(), 0, "Account balance is 0" );

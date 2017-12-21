@@ -56,30 +56,7 @@
    <tr>
    <td><span title="[% account.date %]">[% account.date |$KohaDates %]</span></td>
       <td>
-        [% SWITCH account.accounttype %]
-          [% CASE 'Pay' %]Payment, thanks
-          [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
-          [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
-          [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
-          [% CASE 'VOID' %]Payment, voided
-          [% CASE 'N' %]New card
-          [% CASE 'F' %]Fine
-          [% CASE 'A' %]Account management fee
-          [% CASE 'M' %]Sundry
-          [% CASE 'L' %]Lost item
-          [% CASE 'W' %]Writeoff
-          [% CASE 'FU' %]Accruing fine
-          [% CASE 'HE' %]Hold waiting too long
-          [% CASE 'Rent' %]Rental fee
-          [% CASE 'FOR' %]Forgiven
-          [% CASE 'LR' %]Lost item fee refund
-          [% CASE 'PF' %]Processing fee
-          [% CASE 'PAY' %]Payment
-          [% CASE 'WO' %]Writeoff
-          [% CASE 'C' %]Credit
-          [% CASE 'CR' %]Credit
-          [% CASE %][% account.accounttype %]
-        [%- END -%]
+        [% INCLUDE 'accounttype.inc' accountline => account %]
         [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) %][% END %]
         [%- IF account.description %], [% account.description %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.item.biblio.title |html %]</a>[% END %]</td>
@@ -92,6 +69,7 @@
         [% ELSE %]
           <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% END %]
+        <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
         [% IF ( reverse_col) %]
           [% IF ( account.payment ) %]
             <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>

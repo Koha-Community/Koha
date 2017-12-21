@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Account::Line;
 
 use base qw(Koha::Object);
 
@@ -34,6 +35,28 @@ Account offsets are used to track the changes in account lines
 =head2 Internal methods
 
 =cut
+
+=head3 debit
+
+=cut
+
+sub debit {
+    my ( $self ) = @_;
+    my $debit_rs = $self->_result->debit;
+    return unless $debit_rs;
+    return Koha::Account::Line->_new_from_dbic( $debit_rs );
+}
+
+=head3 credit
+
+=cut
+
+sub credit {
+    my ( $self ) = @_;
+    my $credit_rs = $self->_result->credit;
+    return unless $credit_rs;
+    return Koha::Account::Line->_new_from_dbic( $credit_rs );
+}
 
 =head3 _type
 
