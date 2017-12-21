@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 123d builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -46,9 +47,10 @@
 </table>
 <fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-	function report() {
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
             document.f_pop.f2.value=document.f_pop.f2.value+'   ';
             document.f_pop.f3.value=document.f_pop.f3.value+'  ';
             document.f_pop.f4.value=document.f_pop.f4.value+'  ';
@@ -56,14 +58,13 @@
             document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
             document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
 
-            var doc   = opener.document; 
+            var doc   = opener.document;
             var field = doc.getElementById("[% index %]");
-        
             field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value;
-	    window.close();
-	    return false;
-	}
-//]]>
-</script>
+            window.close();
+            return false;
+        }
+    </script>
+[% END %]
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
