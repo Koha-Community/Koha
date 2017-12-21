@@ -38,15 +38,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $action = $cgi->param('action') || '';
+my $course_id = $cgi->param('course_id');
 
 if ( $action eq 'del' ) {
-    DelCourse( $cgi->param('course_id') );
+    DelCourse( $course_id );
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-reserves.pl");
 } else {
     my %params;
 
-    $params{'course_id'} = $cgi->param('course_id')
-      if ( $cgi->param('course_id') );
+    $params{'course_id'}      = $course_id;
     $params{'department'}     = $cgi->param('department');
     $params{'course_number'}  = $cgi->param('course_number');
     $params{'section'}        = $cgi->param('section');
@@ -57,13 +57,13 @@ if ( $action eq 'del' ) {
     $params{'students_count'} = $cgi->param('students_count');
     $params{'enabled'}        = ( $cgi->param('enabled') eq 'on' ) ? 'yes' : 'no';
 
-    my $course_id = ModCourse(%params);
+    my $new_course_id = ModCourse(%params);
 
     my @instructors = $cgi->multi_param('instructors');
     ModCourseInstructors(
         mode        => 'replace',
         cardnumbers => \@instructors,
-        course_id   => $course_id
+        course_id   => $new_course_id
     );
-    print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$course_id");
+    print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$new_course_id");
 }
