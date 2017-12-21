@@ -277,7 +277,12 @@ function checkMultiHold() {
                 <div class="hint">Enter patron card number or partial name:</div>
                 <input type="text" size="40" id="patron" class="focus" name="findborrower" />
                 <input type="submit" value="Search" />
+            [% IF multi_hold %]
+                <input type="hidden" name="multi_hold" value="[% multi_hold %]"/>
+                <input type="hidden" name="biblionumbers" value="[% biblionumbers %]"/>
+            [% ELSE %]
                 <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+            [% END %]
             </fieldset>
         [% ELSE %]
             [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]

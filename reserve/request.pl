@@ -65,8 +65,6 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     }
 );
 
-my $multihold = $input->param('multi_hold');
-$template->param(multi_hold => $multihold);
 my $showallitems = $input->param('showallitems');
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
@@ -127,13 +125,16 @@ if ($findborrower) {
 }
 
 my @biblionumbers = ();
+my $biblionumber = $input->param('biblionumber');
 my $biblionumbers = $input->param('biblionumbers');
-if ($multihold) {
+if ( $biblionumbers ) {
     @biblionumbers = split '/', $biblionumbers;
 } else {
     push @biblionumbers, $input->multi_param('biblionumber');
 }
 
+# FIXME multi_hold should not be a variable but depends on the number of elements in @biblionumbers
+$template->param(multi_hold => scalar $input->param('multi_hold'));
 
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
@@ -626,10 +627,6 @@ $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
-
-if ($multihold) {
-    $template->param( multi_hold => 1 );
-}
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );
