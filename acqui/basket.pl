@@ -171,13 +171,7 @@ if ( $op eq 'delete_confirm' ) {
         -attachment => 'basket' . $basket->{'basketno'} . '.csv',
     );
     my $csv_profile_id = $query->param('csv_profile');
-    if (defined $csv_profile_id) {
-        # using a csv profile
-        print GetBasketAsCSV(scalar $query->param('basketno'), $query, $csv_profile_id);
-    } else {
-        # using default
-        print GetBasketAsCSV(scalar $query->param('basketno'), $query);
-    }
+    print GetBasketAsCSV( scalar $query->param('basketno'), $query, $csv_profile_id ); # if no csv_profile_id passed, using default rows
     exit;
 } elsif ($op eq 'email') {
     my $err = eval {
