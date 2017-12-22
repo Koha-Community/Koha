@@ -142,9 +142,9 @@ sub store {
                     duplicate_id => $+{key}
                 );
             }
-            # Catch-all for foreign key breakages. It will help find other use cases
-            $->rethrow();
         }
+        # Catch-all for foreign key breakages. It will help find other use cases
+        $_->rethrow();
     }
 }
 
