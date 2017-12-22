@@ -1,7 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 128c builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_unimarc_field_128c" class="cat" style="padding:1em;">
 <h3>UNIMARC field 128c builder</h3>
 <form name="f_pop" action="">
@@ -455,16 +457,18 @@
 </table>
 <fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-	function report() {
-            var doc   = opener.document; 
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        var dateformat = "[% Koha.Preference('dateformat') %]";
+        function report() {
+            var doc   = opener.document;
             var field = doc.getElementById("[% index %]");
             field.value =  document.f_pop.f1.value;
-	    window.close();
-	    return false;
-	}
-//]]>
-</script>
+            window.close();
+            return false;
+        }
+    </script>
+[% END %]
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
