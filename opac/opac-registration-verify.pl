@@ -38,7 +38,15 @@ my $token = $cgi->param('token');
 my $m = Koha::Patron::Modifications->find( { verification_token => $token } );
 
 my ( $template, $borrowernumber, $cookie );
-if ( $m ) {
+
+if (
+    $m # The token exists and the email is unique if requested
+    and not(
+            C4::Context->preference('PatronSelfRegistrationEmailMustBeUnique')
+        and Koha::Patrons->search( { email => $m->email } )->count
+    )
+  )
+{
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-registration-confirmation.tt",
