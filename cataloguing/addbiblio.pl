@@ -733,6 +733,10 @@ if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
 }
 
+if ($op eq 'delete') {
+    $userflags = 'delete_catalogue';
+}
+
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
