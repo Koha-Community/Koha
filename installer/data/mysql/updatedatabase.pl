@@ -15044,26 +15044,6 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Koha 17.11)\n";
 }
 
-# DEVELOPER PROCESS, search for anything to execute in the db_update directory
-# SEE bug 13068
-# if there is anything in the atomicupdate, read and execute it.
-
-my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
-opendir( my $dirh, $update_dir );
-foreach my $file ( sort readdir $dirh ) {
-    next if $file !~ /\.(sql|perl)$/;  #skip other files
-    next if $file eq 'skeleton.perl'; # skip the skeleton file
-    print "DEV atomic update: $file\n";
-    if ( $file =~ /\.sql$/ ) {
-        my $installer = C4::Installer->new();
-        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
-    } elsif ( $file =~ /\.perl$/ ) {
-        my $code = read_file( $update_dir . $file );
-        eval $code;
-        say "Atomic update generated errors: $@" if $@;
-    }
-}
-
 $DBversion = '17.11.00.001';
 if( CheckVersion( $DBversion ) ) {
     foreach my $table (qw(biblio_metadata deletedbiblio_metadata)) {
@@ -15084,6 +15064,32 @@ if( CheckVersion( $DBversion ) ) {
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 19724 - Add [deleted]biblio_metadata.timestamp)\n";
+}
+
+$DBversion = '17.11.01.000';
+if( CheckVersion( $DBversion ) ) {
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Koha 17.11)\n";
+}
+
+# DEVELOPER PROCESS, search for anything to execute in the db_update directory
+# SEE bug 13068
+# if there is anything in the atomicupdate, read and execute it.
+
+my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
+opendir( my $dirh, $update_dir );
+foreach my $file ( sort readdir $dirh ) {
+    next if $file !~ /\.(sql|perl)$/;  #skip other files
+    next if $file eq 'skeleton.perl'; # skip the skeleton file
+    print "DEV atomic update: $file\n";
+    if ( $file =~ /\.sql$/ ) {
+        my $installer = C4::Installer->new();
+        my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
+    } elsif ( $file =~ /\.perl$/ ) {
+        my $code = read_file( $update_dir . $file );
+        eval $code;
+        say "Atomic update generated errors: $@" if $@;
+    }
 }
 
 =head1 FUNCTIONS
