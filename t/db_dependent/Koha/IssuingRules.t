@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Benchmark;
 
@@ -288,6 +288,22 @@ subtest 'get_opacitemholds_policy' => sub {
     is ( $opacitemholds, 'Y', 'Patrons can place a hold on this itemtype');
 
     $patron->delete;
+};
+
+subtest 'get_onshelfholds_policy' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    Koha::IssuingRules->delete;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_object({ class => 'Koha::Items' });
+
+    is( Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron }), undef, 'Should return undef when no rules can be found' );
+    Koha::IssuingRule->new({ categorycode => $patron->categorycode, itemtype => $item->itype, branchcode => '*', onshelfholds => "0" })->store;
+    is( Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron }), 0, 'Should be zero' );
+    Koha::IssuingRule->new({ categorycode => $patron->categorycode, itemtype => $item->itype, branchcode => $item->holdingbranch, onshelfholds => "2" })->store;
+    is( Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron }), 2, 'Should be two now' );
 };
 
 sub _row_match {
