@@ -52,10 +52,8 @@ subtest 'read_from_file() tests' => sub {
 
     $parsing_result = 'error';
 
-    warning_is
-        {$result = Koha::Config->read_from_file("SomeFile.xml")}
-        'Error reading file SomeFile.xml',
-        'File failing to read raises warning';
+    $result = eval {Koha::Config->read_from_file("SomeFile.xml")};
+    like( $@, qr{.*Error reading file.*}, 'File failing to read raises warning');
     is( $result, undef, 'Returns undef on error confition' );
 };
 
