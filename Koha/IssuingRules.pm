@@ -100,6 +100,12 @@ sub get_opacitemholds_policy {
     return $issuing_rule ? $issuing_rule->opacitemholds : undef;
 }
 
+=head3 get_onshelfholds_policy
+
+    my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron });
+
+=cut
+
 sub get_onshelfholds_policy {
     my ( $class, $params ) = @_;
     my $item = $params->{item};

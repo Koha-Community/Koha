@@ -58,6 +58,8 @@ use C4::Acquisition;
 use C4::Koha;
 use List::MoreUtils qw( any uniq );
 use Koha::Biblios;
+use Koha::IssuingRules;
+use Koha::Items;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 
@@ -132,7 +134,7 @@ if(my $cart_list = $query->cookie("bib_list")){
 my $allow_onshelf_holds;
 my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@all_items) {
-    my $items = Koha::Items->find( $itm->{itemnumber} );
+    my $item = Koha::Items->find( $itm->{itemnumber} );
     $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
     last if $allow_onshelf_holds;
 }
