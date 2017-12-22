@@ -30,6 +30,7 @@ use Mojo::Server::PSGI;
 
 # Pre-load libraries
 use C4::Boolean;
+use C4::Context;
 use C4::Koha;
 use C4::Languages;
 use C4::Letters;
@@ -98,8 +99,13 @@ my $apiv1  = builder {
     $server->to_psgi_app;
 };
 
+my $proxies = C4::Context->config('trusted_proxy');
+
 builder {
     enable "ReverseProxy";
+    enable_if { $proxies } "Plack::Middleware::RealIP",
+        header => 'X-Forwarded-For',
+        trusted_proxy => [split /[ ,]+/, $proxies];
     enable "Plack::Middleware::Static";
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";

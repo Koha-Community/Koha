@@ -124,6 +124,11 @@ __PAZPAR2_TOGGLE_XML_POST__
       <template_cache_dir>/tmp</template_cache_dir>
  -->
 
+ <!-- Trusted proxies/load balancers, separated by a space or a comma. Used for
+      accessing client's real IP via $ENV{REMOTE_ADDR}.
+ -->
+ <trusted_proxy></trusted_proxy>
+
  <!-- Secret passphrase used by Mojolicious for signed cookies -->
  <api_secret_passphrase>CHANGEME</api_secret_passphrase>
 
