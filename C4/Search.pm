@@ -1532,7 +1532,7 @@ sub buildQuery {
         for ( my $i = 0 ; $i <= @operands ; $i++ ) {
 
             # COMBINE OPERANDS, INDEXES AND OPERATORS
-            if ( $operands[$i] ) {
+            if ( $operands[$i] ne '' ) {
 		$operands[$i]=~s/^\s+//;
 
               # A flag to determine whether or not to add the index to the query
@@ -1677,7 +1677,7 @@ sub buildQuery {
                     query_desc => $query_desc,
                     operator => ($operators[ $i - 1 ]) ? $operators[ $i - 1 ] : '',
                     parsed_operand => $operand,
-                    original_operand => ($operands[$i]) ? $operands[$i] : '',
+                    original_operand => ($operands[$i] ne '') ? $operands[$i] : '',
                     index => $index,
                     index_plus => $index_plus,
                     indexes_set => $indexes_set,
