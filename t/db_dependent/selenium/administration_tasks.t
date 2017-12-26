@@ -33,6 +33,7 @@ my $itemtype      = 'UT_DVD';
 my $frameworkcode = 'UTFW';     # frameworkcode is only 4 characters max!
 my $branchcode    = 'UT_BC';
 my $av_category   = 'AV_CAT_TEST';
+my $category_code = 'PATRON_CAT';
 our ($cleanup_needed);
 
 SKIP: {
@@ -159,23 +160,28 @@ SKIP: {
                 main => 'doc3'
             }
         );
-        $s->driver->accept_alert;
+        $s->driver->accept_alert; # Accept the modal "Are you sure you want to delete this authorized value?"
     };
 
-    { #Patron categories
+    { # Patron categories
         $driver->get($mainpage);
-        $s->click( { href => '/admin/categories.pl', main => 'doc3' } ); #Koha administration
-        $s->click( { href => '/admin/categories.pl?op=add_form', main => 'doc' } ); #New patron category
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); # Koha administration
+        $s->click( { href => '/admin/categories.pl', main => 'doc' } ); # Patron categories
+        $s->click( { href => '/admin/categories.pl?op=add_form', main => 'doc3' } ); # New patron category
 
-        $s->fill_form( { categorycode => 'Test', description => 'Test category', enrolmentperiod => 12, category_type => 'Adult' } );
+        $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );
         $s->submit_form;
 
         $s->click(
             {
-                href => '/admin/categories.pl?op=delete_confirm&categorycode=TEST',
+                href => '/admin/categories.pl?op=delete_confirm&categorycode=' . $category_code,
                 main => 'doc3'
             }
-        );
+        ); # Delete button
+
+        $s->submit_form; # Delete this category
+
+        # TODO Make sure the category has been deleted
     };
 
     $driver->quit();
@@ -191,4 +197,5 @@ sub cleanup {
     $dbh->do(q|DELETE FROM biblio_framework WHERE frameworkcode=?|, undef, $frameworkcode);
     $dbh->do(q|DELETE FROM branches WHERE branchcode=?|, undef, $branchcode);
     $dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name=?|, undef, $av_category);
+    $dbh->do(q|DELETE FROM categories WHERE categorycode=?|, undef, $category_code);
 }
