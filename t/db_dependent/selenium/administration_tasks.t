@@ -49,7 +49,7 @@ SKIP: {
     $s->auth;
     { # Item types
         # Navigate to the Administration area and create an item type
-        $s->click( { href => '/admin/admin-home.pl', main => 'doc3' } )
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/itemtypes.pl', main => 'doc' } );  # Item Types
         $s->click( { href => '/admin/itemtypes.pl?op=add_form', main => 'doc3' } )
@@ -67,7 +67,7 @@ SKIP: {
 
     { # Circulation/fine rules
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main => 'doc3' } )
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/smart-rules.pl', main => 'doc' } )
           ;    # Circulation and fines rules
@@ -76,7 +76,7 @@ SKIP: {
 
     { # Biblio frameworks
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main => 'doc3' } )
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/biblio_framework.pl', main => 'doc' } )
           ;    # MARC bibliographic framework
@@ -102,7 +102,7 @@ SKIP: {
 
     { #Libraries
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main => 'doc3' } )
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/branches.pl', main => 'doc' } )
           ;    # Libraries and groups
@@ -128,7 +128,7 @@ SKIP: {
 
     { #Authorized values
         $driver->get($mainpage);
-        $s->click( { href => '/admin/admin-home.pl', main => 'doc3' } ); #Koha administration
+        $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); #Koha administration
 
         $s->click( { href => '/admin/authorised_values.pl', main => 'doc' } ); #Authorized values
 
