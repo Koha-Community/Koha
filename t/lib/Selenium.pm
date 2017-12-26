@@ -99,7 +99,22 @@ sub click {
         $xpath_selector = '//div[@id="'.$params->{main}.'"]';
     }
     if ( exists $params->{href} ) {
-        $xpath_selector .= '//a[contains(@href, "'.$params->{href}.'")]';
+        if ( ref( $params->{href} ) ) {
+            for my $k ( keys %{ $params->{href} } ) {
+                if ( $k eq 'ends-with' ) {
+                    # ends-with version for xpath version 1
+                    my $ends_with = $params->{href}{"ends-with"};
+                    $xpath_selector .= '//a[substring(@href, string-length(@href) - string-length("'.$ends_with.'") + 1 ) = "'.$ends_with.'"]';
+                    # ends-with version for xpath version 2
+                    #$xpath_selector .= '//a[ends-with(@href, "'.$ends_with.'") ]';
+
+            } else {
+                    die "Only ends-with is supported so far ($k)";
+                }
+            }
+        } else {
+            $xpath_selector .= '//a[contains(@href, "'.$params->{href}.'")]';
+        }
     }
     if ( exists $params->{id} ) {
         $xpath_selector .= '//*[@id="'.$params->{id}.'"]';

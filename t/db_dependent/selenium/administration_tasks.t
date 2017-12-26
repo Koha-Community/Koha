@@ -32,7 +32,7 @@ my $login = $ENV{KOHA_USER} || 'koha';
 my $itemtype      = 'UT_DVD';
 my $frameworkcode = 'UTFW';     # frameworkcode is only 4 characters max!
 my $branchcode    = 'UT_BC';
-my $categoryname = 'Test';
+my $av_category   = 'AV_CAT_TEST';
 our ($cleanup_needed);
 
 SKIP: {
@@ -131,16 +131,35 @@ SKIP: {
 
         $s->click( { href => '/admin/authorised_values.pl', main => 'doc' } ); #Authorized values
 
-        $s->click( { href => '/admin/authorised_values.pl?op=add_form&category=Adult', main => 'doc3' } ); # New category
-        $s->fill_form( { authorised_value => 'Hardover', lib => 'Hardcover book'} );
+        $s->click( { href => { 'ends-with' => '/admin/authorised_values.pl?op=add_form' }, main => 'doc3' } ); # New category
+        $s->fill_form( { category => $av_category } );
         $s->submit_form;
 
         $s->click(
             {
-                href => '/admin/authorised_values.pl?op=delete&searchfield=Adult&id=400',
+                href => '/admin/authorised_values.pl?op=add_form&category=' . $av_category,
+                main => 'doc3'
+            }
+        );    # New authorised value for ...
+        $s->fill_form(
+            {
+                authorised_value => "$av_category" . "_xxx",
+                lib              => "This is a description for staff",
+                lib_opac         => "This is a description for OPAC"
+            }
+        );
+        $s->submit_form;
+
+        my $dbh = C4::Context->dbh;
+        my ( $av_id ) = $dbh->selectrow_array(q|
+            SELECT id FROM authorised_values WHERE category=?|, undef, $av_category );
+        $s->click(
+            {
+                href => '/admin/authorised_values.pl?op=delete&searchfield=' . $av_category . '&id=' . $av_id,
                 main => 'doc3'
             }
         );
+        $s->driver->accept_alert;
     };
 
     { #Patron categories
@@ -171,4 +190,5 @@ sub cleanup {
     $dbh->do(q|DELETE FROM itemtypes WHERE itemtype=?|, undef, $itemtype);
     $dbh->do(q|DELETE FROM biblio_framework WHERE frameworkcode=?|, undef, $frameworkcode);
     $dbh->do(q|DELETE FROM branches WHERE branchcode=?|, undef, $branchcode);
+    $dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name=?|, undef, $av_category);
 }
