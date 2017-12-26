@@ -120,8 +120,7 @@ SKIP: {
         $s->submit_form;
         $s->click(
             {
-                href => '/admin/branches.pl?op=delete_confirm&branchcode='. $branchcode,
-                main => 'doc3'
+                id => 'delete_library_'.$branchcode,
             }
         );     # Delete
     };
