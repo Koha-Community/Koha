@@ -17,6 +17,8 @@ package t::lib::Selenium;
 
 
 use Modern::Perl;
+use Carp qw( croak );
+
 use C4::Context;
 
 use base qw(Class::Accessor);
@@ -34,6 +36,15 @@ sub new {
     $self->{driver} = Selenium::Remote::Driver->new(
         port               => $self->{selenium_port},
         remote_server_addr => $self->{selenium_addr},
+        error_handler => sub {
+            my $selenium_error = $_[1];
+            print STDERR "\nSTRACE:";
+            my $i = 1;
+            while ( (my @call_details = (caller($i++))) ){
+                print STDERR "\t" . $call_details[1]. ":" . $call_details[2] . " in " . $call_details[3]."\n";
+            }
+            print STDERR "\n";
+            croak $selenium_error; }
     );
     return bless $self, $class;
 }
