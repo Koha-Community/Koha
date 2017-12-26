@@ -132,13 +132,13 @@ SKIP: {
 
         $s->click( { href => '/admin/authorised_values.pl', main => 'doc' } ); #Authorized values
 
-        $s->click( { href => '/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=Adult', main => 'doc3' } ); # New category
+        $s->click( { href => '/admin/authorised_values.pl?op=add_form&category=Adult', main => 'doc3' } ); # New category
         $s->fill_form( { authorised_value => 'Hardover', lib => 'Hardcover book'} );
         $s->submit_form;
 
         $s->click(
             {
-                href => '/cgi-bin/koha/admin/authorised_values.pl?op=delete&searchfield=Adult&id=400',
+                href => '/admin/authorised_values.pl?op=delete&searchfield=Adult&id=400',
                 main => 'doc3'
             }
         );
@@ -146,15 +146,15 @@ SKIP: {
 
     { #Patron categories
         $driver->get($mainpage);
-        $s->click( { href => '/cgi-bin/koha/admin/categories.pl', main => 'doc3' } ); #Koha administration
-        $s->click( { href => '/cgi-bin/koha/admin/categories.pl?op=add_form', main => 'doc' } ); #New patron category
+        $s->click( { href => '/admin/categories.pl', main => 'doc3' } ); #Koha administration
+        $s->click( { href => '/admin/categories.pl?op=add_form', main => 'doc' } ); #New patron category
 
         $s->fill_form( { categorycode => 'Test', description => 'Test category', enrolmentperiod => 12, category_type => 'Adult' } );
         $s->submit_form;
 
         $s->click(
             {
-                href => '/cgi-bin/koha/admin/categories.pl?op=delete_confirm&categorycode=TEST',
+                href => '/admin/categories.pl?op=delete_confirm&categorycode=TEST',
                 main => 'doc3'
             }
         );
