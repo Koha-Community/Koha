@@ -238,12 +238,12 @@
                 [% END %]
                 [% IF AutoSelfCheckPatronDoesNotHaveSelfCheckPerm %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
-                    The patron used for the self checkout module at the OPAC does not have the circulate => self_checkout permission.
+                    The patron used for the self checkout module at the OPAC does not have the self_check => self_checkout_module permission.
                     </td></tr>
                 [% END %]
                 [% IF AutoSelfCheckPatronHasTooManyPerm %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
-                    The patron used for the self checkout module at the OPAC has too many permissions. They should only have circulate => self_checkout.
+                    The patron used for the self checkout module at the OPAC has too many permissions. They should only have self_check => self_checkout_module.
                     </td></tr>
                 [% END %]
                 [% IF warnNoTemplateCaching %]

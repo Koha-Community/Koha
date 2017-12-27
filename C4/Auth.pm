@@ -179,40 +179,40 @@ sub get_template_and_user {
         );
     }
 
+    if ( $in->{type} eq 'opac' ) {
+        my $kick_out;
 
-    # If the user logged in is the SCO user and they try to go out of the SCO module, log the user out removing the CGISESSID cookie
-    if ( $in->{type} eq 'opac' and $in->{template_name} !~ m|sco/| ) {
-        if ( $user && C4::Context->preference('AutoSelfCheckID') && $user eq C4::Context->preference('AutoSelfCheckID') ) {
-            $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac', $in->{query} );
-            my $cookie = $in->{query}->cookie(
-                -name     => 'CGISESSID',
-                -value    => '',
-                -expires  => '',
-                -HttpOnly => 1,
-            );
-
-            $template->param(
-                loginprompt => 1,
-                script_name => get_script_name(),
-            );
-            print $in->{query}->header(
-                {   type              => 'text/html',
-                    charset           => 'utf-8',
-                    cookie            => $cookie,
-                    'X-Frame-Options' => 'SAMEORIGIN'
-                }
-              ),
-            $template->output;
-            safe_exit;
+        if (
+# If the user logged in is the SCO user and they try to go out of the SCO module,
+# log the user out removing the CGISESSID cookie
+               $in->{template_name} !~ m|sco/|
+            && $user
+            && C4::Context->preference('AutoSelfCheckID')
+            && $user eq C4::Context->preference('AutoSelfCheckID')
+          )
+        {
+            $kick_out = 1;
         }
-    }
+        elsif (
+# If the user logged in is the SCI user and they try to go out of the SCI module,
+# kick them out unless it is SCO with a valid permission
+               $in->{template_name} !~ m|sci/|
+            && $user
+            && haspermission( $user, { self_check => 'self_checkin_module' } )
+            && !(
+                $in->{template_name} =~ m|sco/| && haspermission(
+                    $user, { self_check => 'self_checkout_module' }
+                )
+            )
+          )
+        {
+            $kick_out = 1;
+        }
 
-    # If the user logged in is the SCI user and they try to go out of the SCI module,
-    # log the user out removing the CGISESSID cookie
-    if ( $in->{type} eq 'opac' and $in->{template_name} !~ m|sci/| ) {
-        if ( $user && C4::Context->preference('AutoSelfCheckID') && $user eq C4::Context->preference('AutoSelfCheckID') ) {
-            $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac', $in->{query} );
-            my $cookie = $in->{query}->cookie(
+        if ($kick_out) {
+            $template = C4::Templates::gettemplate( 'opac-auth.tt', 'opac',
+                $in->{query} );
+            $cookie = $in->{query}->cookie(
                 -name     => 'CGISESSID',
                 -value    => '',
                 -expires  => '',
@@ -223,14 +223,16 @@ sub get_template_and_user {
                 loginprompt => 1,
                 script_name => get_script_name(),
             );
+
             print $in->{query}->header(
-                {   type              => 'text/html',
+                {
+                    type              => 'text/html',
                     charset           => 'utf-8',
                     cookie            => $cookie,
                     'X-Frame-Options' => 'SAMEORIGIN'
                 }
               ),
-            $template->output;
+              $template->output;
             safe_exit;
         }
     }

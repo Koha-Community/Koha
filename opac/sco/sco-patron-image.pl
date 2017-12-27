@@ -25,7 +25,7 @@ use Koha::Patron::Images;
 use Koha::Patrons;
 use Koha::Token;
 
-my ($query, $response) = C4::Service->init(circulate => 'self_checkout');
+my ( $query, $response ) = C4::Service->init( self_check => 'self_checkout_module' );
 
 unless (C4::Context->preference('WebBasedSelfCheck')) {
     print $query->header(status => '403 Forbidden - web-based self-check not enabled');

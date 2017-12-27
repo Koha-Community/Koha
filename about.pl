@@ -365,9 +365,9 @@ if (  C4::Context->preference('WebBasedSelfCheck')
     my $all_permissions = C4::Auth::get_user_subpermissions( $userid );
     my ( $has_self_checkout_perm, $has_other_permissions );
     while ( my ( $module, $permissions ) = each %$all_permissions ) {
-        if ( $module eq 'circulate' ) {
+        if ( $module eq 'self_check' ) {
             while ( my ( $permission, $flag ) = each %$permissions ) {
-                if ( $permission eq 'self_checkout' ) {
+                if ( $permission eq 'self_checkout_module' ) {
                     $has_self_checkout_perm = 1;
                 } else {
                     $has_other_permissions = 1;

@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "sci/sci-main.tt",
         authnotrequired => 0,
-        flagsrequired   => { circulate => "self_checkout" },
+        flagsrequired   => { self_check => 'self_checkin_module' },
         query           => $cgi,
         type            => "opac"
     }
@@ -92,5 +92,9 @@ if ( $op eq 'check_in' ) {
     }
     $template->param( success => \@success, errors => \@errors, checkins => 1 );
 }
+
+# Make sure timeour has a reasonable value
+my $timeout = C4::Context->preference('SelfCheckInTimeout') // 120;
+$template->param( refresh_timeout => $timeout );
 
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };
