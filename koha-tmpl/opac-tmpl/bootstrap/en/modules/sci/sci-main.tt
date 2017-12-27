@@ -31,9 +31,9 @@
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/jquery/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/font-awesome/css/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/sco.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/sci.css" />
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style type="text/css">[% Koha.Preference('OPACUserCSS') %]</style>[% END %]
-[% IF ( Koha.Preference('SCOUserCSS') ) %]<style type="text/css">[% Koha.Preference('SCOUserCSS') %]</style>[% END %]
+[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style type="text/css">[% Koha.Preference('SelfCheckInUserCSS') %]</style>[% END %]
 <!--[if lt IE 9]>
     <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
 <![endif]-->
@@ -168,8 +168,8 @@
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
 
-        [% IF ( Koha.Preference('SCOMainUserBlock' ) ) %]
-            <div id="scomainuserblock">[% Koha.Preference('SCOMainUserBlock' ) %]</div>
+        [% IF ( Koha.Preference('SelfCheckInMainUserBlock' ) ) %]
+            <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) %]</div>
         [% END %]
     </div> <!-- / .main -->
 
@@ -260,7 +260,8 @@
         function timerIncrement() {
             if ( $("#sci_finish_button").is(":visible") || $("#sci_refresh_button").is(":visible") ) {
                 idleTime = idleTime + 1;
-                if (idleTime >= 30 ) { // 30 seconds
+                idleTimeout = [% refresh_timeout %];
+                if (idleTime >= idleTimeout ) {
                     if ( $("#sci_finish_button").is(":visible") ) $("#sci_finish_button").click();
                     if ( $("#sci_refresh_button").is(":visible") ) $("#sci_refresh_button").click();
                 }
@@ -268,5 +269,5 @@
         }
     </script>
 
-    [% IF ( Koha.Preference('SCOUserJS') ) %]<script type="text/javascript">[% Koha.Preference('SCOUserJS') %]</script>[% END %]
+    [% IF ( Koha.Preference('SelfCheckInUserJS') ) %]<script type="text/javascript">[% Koha.Preference('SelfCheckInUserJS') %]</script>[% END %]
 [% END %]
