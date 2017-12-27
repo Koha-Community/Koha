@@ -573,35 +573,34 @@ sub GetBudgetHierarchy {
         GROUP BY shipmentcost_budgetid
         |, 'budget_id');
 
-    my $recursiveAdd;
-    $recursiveAdd = sub {
-        my ($budget, $parent) = @_;
-
-        foreach my $child (@{$budget->{children}}){
-            $recursiveAdd->($child, $budget);
-        }
-
-        $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent};
-        $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost};
-        $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered};
-        $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost};
-
-        $budget->{total_spent} += $budget->{budget_spent};
-        $budget->{total_ordered} += $budget->{budget_ordered};
-
-        if ($parent) {
-            $parent->{total_spent} += $budget->{total_spent};
-            $parent->{total_ordered} += $budget->{total_ordered};
-        }
-    };
 
     foreach my $budget (@sort) {
         if ($budget->{budget_parent_id} == undef) {
-            $recursiveAdd->($budget);
+            _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment );
         }
     }
-
     return \@sort;
+}
+
+sub _recursiveAdd {
+    my ($budget, $parent, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment ) = @_;
+
+    foreach my $child (@{$budget->{children}}){
+        _recursiveAdd($child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment );
+    }
+
+    $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent};
+    $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost};
+    $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered};
+    $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost};
+
+    $budget->{total_spent} += $budget->{budget_spent};
+    $budget->{total_ordered} += $budget->{budget_ordered};
+
+    if ($parent) {
+        $parent->{total_spent} += $budget->{total_spent};
+        $parent->{total_ordered} += $budget->{total_ordered};
+    }
 }
 
 # Recursive method to add a budget and its chidren to an array
