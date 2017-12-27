@@ -4,15 +4,15 @@
 [%# Helper template functions %]
 [% BLOCK error_message %]
     [% IF messages.BadBarcode %]
-        <span>(Barcode not found on the database)</span>
-    [% ELSIF messages.DataCorrupted %]
-        <span>(Data corruption detected. Contact your librarian)</span>
+        <span>(Barcode not found on the database, please see library staff for assistance)</span>
     [% ELSIF messages.Wrongbranch %]
-        <span>(The item cannot be returned at this library)</span>
+        <span>(The item cannot be returned at this library, please see library staff for assistance)</span>
     [% ELSIF messages.withdrawn %]
-        <span>(Item is withdrawn and check-in blocked by policy. Contact your librarian)</span>
+        <span>(Item is withdrawn and check-in blocked by policy, please see library staff for assistance)</span>
     [% ELSIF messages.NotIssued %]
-        <span>(The book is not currently on loan. Contact your librarian)</span>
+        <span>(The book is not currently on loan, please see library staff for assistance)</span>
+    [% ELSE %]
+        <span>(There was a problem returning this item, please see library staff for assistance)</span>
     [% END %]
 [% END %]
 
