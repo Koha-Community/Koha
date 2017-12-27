@@ -4,7 +4,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'overdues_report', 'Execute overdue items report'),
    ( 1, 'force_checkout', 'Force checkout if a limitation exists'),
    ( 1, 'manage_restrictions', 'Manage restrictions for accounts'),
-   ( 1, 'self_checkout', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 3, 'manage_circ_rules', 'Manage circulation rules'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
@@ -83,5 +82,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (20, 'delete_public_lists', 'Delete public lists'),
    (21, 'edit_templates', 'Create and update club templates'),
    (21, 'edit_clubs', 'Create and update clubs'),
-   (21, 'enroll', 'Enroll patrons in clubs')
+   (21, 'enroll', 'Enroll patrons in clubs'),
+   (23, 'self_checkin_module', 'Log into the self check-in module'),
+   (23, 'self_checkout_module', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
 ;

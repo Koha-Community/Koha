@@ -19,5 +19,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (19, 'plugins', 'Koha plugins', '0'),
 (20, 'lists', 'Lists', 0),
 (21, 'clubs', 'Patron clubs', '0'),
-(22,'ill','The Interlibrary Loans Module',0)
+(22,'ill','The Interlibrary Loans Module',0),
+(23,'self_check','Self check modules',0)
 ;

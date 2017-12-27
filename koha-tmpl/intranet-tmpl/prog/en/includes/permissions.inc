@@ -21,17 +21,17 @@
     [%- CASE 'lists' -%]<span>Lists</span>
     [%- CASE 'clubs' -%]<span>Patron clubs</span>
     [%- CASE 'ill' -%]<span>Create and modify Interlibrary loan requests</span>
+    [%- CASE 'self_check' -%]<span>Self check modules</span>
     [%- END -%]
 [%- END -%]
 
 [%- BLOCK sub_permissions -%]
-    [% SWITCH name %]
+  [% SWITCH name %]
     [%- CASE 'circulate_remaining_permissions' -%]<span>Remaining circulation permissions</span>
     [%- CASE 'force_checkout' -%]<span>Force checkout if a limitation exists</span>
     [%- CASE 'manage_restrictions' -%]<span>Manage restrictions for accounts</span>
     [%- CASE 'overdues_report' -%]<span>Execute overdue items report</span>
     [%- CASE 'override_renewals' -%]<span>Override blocked renewals</span>
-    [%- CASE 'self_checkout' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
     [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
     [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
     [%- CASE 'edit_borrowers' -%]<span>Add, modify and view patron information</span>
@@ -111,5 +111,8 @@
     [%- CASE 'edit_templates' -%]<span>Create and edit club templates</span>
     [%- CASE 'enroll' -%]<span>Enroll patrons in clubs</span>
     [%- CASE 'edi_manage' -%]<span>Manage EDIFACT transmissions</span>
-    [%- END -%]
+  [%# self_check %]
+    [%- CASE 'self_checkin_module' -%]<span>Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality</span>
+    [%- CASE 'self_checkout_module' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
+  [%- END -%]
 [%- END -%]
