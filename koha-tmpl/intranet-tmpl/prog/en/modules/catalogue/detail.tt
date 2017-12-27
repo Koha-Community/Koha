@@ -303,7 +303,7 @@
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
 </ul>
@@ -547,7 +547,7 @@
 
 <div id="holdings">
 
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'above' ) %]
     <span class="results_summary NovelistSelect" style="display:none;">
         <span class="label">Novelist Select: </span>
         <div data-novelist-novelistselect=[% normalized_isbn %]></div>
@@ -579,7 +579,7 @@
     [% END %]
 [% END %]
 
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'below' ) %]
     <span class="results_summary NovelistSelect" style="display:none;">
         <span class="label">Novelist Select: </span>
         <div data-novelist-novelistselect=[% normalized_isbn %]></div>
@@ -805,7 +805,7 @@
 [% END %]
 
 
-[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
+[% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <div id="NovelistSelect" class="novelistSelect">
         <div data-novelist-novelistselect=[% normalized_isbn %]></div>
     </div>
@@ -1025,13 +1025,13 @@
             $("#marcPreview").on("hidden", function(){
                 $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
-            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && ( normalized_isbn || normalized_upc ) ) %]
+            [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
                 novSelect.loadContentForQuery({
                     ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
                     ISBN : '[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]',
                     version : '2.1'
                 },
-                '[% Koha.Preference('NovelistSelectProfile') %]',
+                '[% Koha.Preference('NovelistSelectStaffProfile') %]',
                 '[% Koha.Preference('NovelistSelectPassword') %]',
                 function(d){
                     if ( d.length > 0 ){ //If no content
@@ -1046,7 +1046,7 @@
             verify_images();
         });[% END %]
     </script>
-    [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && ( normalized_isbn || normalized_upc ) ) %]
+    [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
         [% Asset.js("https://imageserver.ebscohost.com/novelistselect/ns2init.js") %]
     [% END %]
     [% INCLUDE 'datatables.inc' %]
