@@ -136,7 +136,7 @@ for my $order ( @orders ) {
         $order->{unitprice} = $order->{unitprice_tax_excluded};
     }
 
-    $order->{total} = $order->{unitprice} * $order->{quantity};
+    $order->{total} = get_rounded_price($order->{unitprice}) * $order->{quantity};
 
     my %line = %{ $order };
     $line{invoice} = $invoice->{invoicenumber};
@@ -154,8 +154,8 @@ for my $order ( @orders ) {
     $line{tax_rate} = $line{tax_rate_on_receiving};
     $foot{$line{tax_rate}}{tax_rate} = $line{tax_rate};
     $foot{$line{tax_rate}}{tax_value} += $line{tax_value};
-    $total_tax_excluded += $line{unitprice_tax_excluded} * $line{quantity};
-    $total_tax_included += $line{unitprice_tax_included} * $line{quantity};
+    $total_tax_excluded += get_rounded_price($line{unitprice_tax_excluded}) * $line{quantity};
+    $total_tax_included += get_rounded_price($line{unitprice_tax_included}) * $line{quantity};
 
     my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
     $line{suggestionid}         = $suggestion->{suggestionid};
@@ -174,7 +174,7 @@ for my $order ( @orders ) {
     my $budget_name = GetBudgetName( $line{budget_id} );
     $line{budget_name} = $budget_name;
 
-    $subtotal_for_funds->{ $line{budget_name} }{ecost} += $order->{ecost} * $order->{quantity};
+    $subtotal_for_funds->{ $line{budget_name} }{ecost} += get_rounded_price($order->{ecost}) * $order->{quantity};
     $subtotal_for_funds->{ $line{budget_name} }{unitprice} += $order->{total};
 
     push @loop_received, \%line;
@@ -232,7 +232,7 @@ unless( defined $invoice->{closedate} ) {
         } else {
             $order->{ecost} = $order->{ecost_tax_excluded};
         }
-        $order->{total} = $order->{ecost} * $order->{quantity};
+        $order->{total} = get_rounded_price($order->{ecost}) * $order->{quantity};
 
         my %line = %$order;
 

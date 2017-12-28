@@ -51,7 +51,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use File::Spec;
 
-use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
+use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV get_rounded_price/;
 use Koha::EDI qw/create_edi_order get_edifact_ean/;
 
 use Koha::Biblioitems;
@@ -78,9 +78,9 @@ sub BasketTotal {
     for my $order (@orders){
         # FIXME The following is wrong
         if ( $bookseller->listincgst ) {
-            $total = $total + ( $order->{ecost_tax_included} * $order->{quantity} );
+            $total = $total + ( get_rounded_price($order->{ecost_tax_included}) * $order->{quantity} );
         } else {
-            $total = $total + ( $order->{ecost_tax_excluded} * $order->{quantity} );
+            $total = $total + ( get_rounded_price($order->{ecost_tax_excluded}) * $order->{quantity} );
         }
     }
     return $total;
@@ -169,8 +169,8 @@ sub printbasketgrouppdf{
 
             $ord->{tax_value} = $ord->{tax_value_on_ordering};
             $ord->{tax_rate} = $ord->{tax_rate_on_ordering};
-            $ord->{total_tax_included} = $ord->{ecost_tax_included} * $ord->{quantity};
-            $ord->{total_tax_excluded} = $ord->{ecost_tax_excluded} * $ord->{quantity};
+            $ord->{total_tax_included} = get_rounded_price($ord->{ecost_tax_included}) * $ord->{quantity};
+            $ord->{total_tax_excluded} = get_rounded_price($ord->{ecost_tax_excluded}) * $ord->{quantity};
 
             my $biblioitem = Koha::Biblioitems->search({ biblionumber => $ord->{biblionumber} })->next;
 

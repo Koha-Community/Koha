@@ -27,6 +27,7 @@ use List::MoreUtils qw/uniq/;
 use Modern::Perl;
 use utf8;
 
+use C4::Acquisition;
 use Koha::Number::Price;
 use Koha::DateUtils;
 use Koha::Libraries;
@@ -220,9 +221,9 @@ sub printbaskets {
             $total_tax_excluded += $ord->{total_tax_excluded};
             $total_tax_included += $ord->{total_tax_included};
             $totaltax_value += $ord->{tax_value};
-            $totaldiscount += ($ord->{rrp_tax_excluded} - $ord->{ecost_tax_excluded} ) * $ord->{quantity};
-            $total_rrp_tax_excluded += $ord->{rrp_tax_excluded} * $ord->{quantity};
-            $total_rrp_tax_included += $ord->{rrp_tax_included} * $ord->{quantity};
+            $totaldiscount += (get_rounded_price($ord->{rrp_tax_excluded}) - get_rounded_price($ord->{ecost_tax_excluded}) ) * $ord->{quantity};
+            $total_rrp_tax_excluded += get_rounded_price($ord->{rrp_tax_excluded}) * $ord->{quantity};
+            $total_rrp_tax_included += get_rounded_price($ord->{rrp_tax_included}) * $ord->{quantity};
             push @gst, $ord->{tax_rate};
         }
         @gst = uniq map { $_ * 100 } @gst;

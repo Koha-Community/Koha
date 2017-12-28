@@ -93,6 +93,8 @@ BEGIN {
         &NotifyOrderUsers
 
         &FillWithDefaultValues
+
+        &get_rounded_price
     );
 }
 
@@ -1461,8 +1463,8 @@ sub ModReceiveOrder {
         $dbh->do(q|
             UPDATE aqorders
             SET
-                tax_value_on_ordering = quantity * ecost_tax_excluded * tax_rate_on_ordering,
-                tax_value_on_receiving = quantity * unitprice_tax_excluded * tax_rate_on_receiving
+                tax_value_on_ordering = quantity * | . _get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
+                tax_value_on_receiving = quantity * | . _get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
             WHERE ordernumber = ?
         |, undef, $order->{ordernumber});
 
@@ -1474,8 +1476,8 @@ sub ModReceiveOrder {
         $order->{tax_rate_on_ordering} //= 0;
         $order->{unitprice_tax_excluded} //= 0;
         $order->{tax_rate_on_receiving} //= 0;
-        $order->{tax_value_on_ordering} = $order->{quantity} * $order->{ecost_tax_excluded} * $order->{tax_rate_on_ordering};
-        $order->{tax_value_on_receiving} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate_on_receiving};
+        $order->{tax_value_on_ordering} = $order->{quantity} * get_rounded_price($order->{ecost_tax_excluded}) * $order->{tax_rate_on_ordering};
+        $order->{tax_value_on_receiving} = $order->{quantity} * get_rounded_price($order->{unitprice_tax_excluded}) * $order->{tax_rate_on_receiving};
         $order->{datereceived} = $datereceived;
         $order->{invoiceid} = $invoice->{invoiceid};
         $order->{orderstatus} = 'complete';
@@ -1645,8 +1647,8 @@ sub CancelReceipt {
         $dbh->do(q|
             UPDATE aqorders
             SET
-                tax_value_on_ordering = quantity * ecost_tax_excluded * tax_rate_on_ordering,
-                tax_value_on_receiving = quantity * unitprice_tax_excluded * tax_rate_on_receiving
+                tax_value_on_ordering = quantity * | . _get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
+                tax_value_on_receiving = quantity * | . _get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
             WHERE ordernumber = ?
         |, undef, $parent_ordernumber);
 
@@ -1997,6 +1999,37 @@ sub TransferOrder {
 
     return $newordernumber;
 }
+
+=head3 _get_rounding_sql
+
+    $rounding_sql = _get_rounding_sql("mysql_variable_to_round_string");
+
+returns the correct SQL routine based on OrderPriceRounding system preference.
+
+=cut
+
+sub _get_rounding_sql {
+    my ( $round_string ) = @_;
+    my $rounding_pref = C4::Context->preference('OrderPriceRounding');
+    if ( $rounding_pref eq "nearest_cent"  ) { return ("CAST($round_string*100 AS INTEGER)/100"); }
+    else                                     { return ("$round_string"); }
+}
+
+=head3 get_rounded_price
+
+    $rounded_price = get_rounded_price( $price );
+
+returns a price rounded as specified in OrderPriceRounding system preference.
+
+=cut
+
+sub get_rounded_price {
+    my ( $price ) =  @_;
+    my $rounding_pref = C4::Context->preference('OrderPriceRounding');
+    if( $rounding_pref eq 'nearest_cent' ) { return Koha::Number::Price->new( $price )->format(); }
+    else                                   { return $price; }
+}
+
 
 =head2 FUNCTIONS ABOUT PARCELS
 
@@ -3012,7 +3045,7 @@ sub populate_order_with_prices {
 
         # tax value = quantity * ecost tax excluded * tax rate
         $order->{tax_value_on_ordering} =
-            $order->{quantity} * $order->{ecost_tax_excluded} * $order->{tax_rate_on_ordering};
+            $order->{quantity} * get_rounded_price($order->{ecost_tax_excluded}) * $order->{tax_rate_on_ordering};
     }
 
     if ($receiving) {
@@ -3046,7 +3079,7 @@ sub populate_order_with_prices {
         }
 
         # tax value = quantity * unit price tax excluded * tax rate
-        $order->{tax_value_on_receiving} = $order->{quantity} * $order->{unitprice_tax_excluded} * $order->{tax_rate_on_receiving};
+        $order->{tax_value_on_receiving} = $order->{quantity} * get_rounded_price($order->{unitprice_tax_excluded}) * $order->{tax_rate_on_receiving};
     }
 
     return $order;

@@ -107,7 +107,7 @@ my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
     if ( $recv > 0 ) {
-        my $rowtotal = $recv * $data->{'unitprice_tax_included'};
+        my $rowtotal = $recv * get_rounded_price($data->{'unitprice_tax_included'});
         $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
         $data->{'unitprice_tax_included'} = sprintf( "%.2f", $data->{'unitprice_tax_included'} );
         $subtotal += $rowtotal;

@@ -107,8 +107,8 @@ if ( $get_orders ) {
         $order->{title} = $biblio ? $biblio->title : '';
         $order->{title} ||= $order->{biblionumber};
 
-        $order->{'total_rrp'} = $order->{'quantity'} * $order->{'rrp'};
-        $order->{'total_ecost'} = $order->{'quantity'} * $order->{'ecost'};
+        $order->{'total_rrp'} = get_rounded_price($order->{'quantity'}) * $order->{'rrp'};
+        $order->{'total_ecost'} = get_rounded_price($order->{'quantity'}) * $order->{'ecost'};
 
         # Format the dates and currencies correctly
         $order->{'datereceived'} = output_pref(dt_from_string($order->{'datereceived'}));
