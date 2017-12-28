@@ -27,6 +27,7 @@ use List::MoreUtils qw/uniq/;
 use Modern::Perl;
 use utf8;
 
+use C4::Acquisition;
 use Koha::Number::Price;
 use Koha::DateUtils;
 use Koha::Libraries;

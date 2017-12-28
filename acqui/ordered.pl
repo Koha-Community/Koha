@@ -33,6 +33,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use Koha::Acquisition::Invoice::Adjustments;
+use C4::Acquisition;
 
 my $dbh     = C4::Context->dbh;
 my $input   = new CGI;
@@ -98,7 +99,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $left = $data->{'quantity'};
     }
     if ( $left && $left > 0 ) {
-        my $subtotal = $left * $data->{'ecost_tax_included'};
+        my $subtotal = $left * get_rounded_price($data->{'ecost_tax_included'});
         $data->{subtotal} = sprintf( "%.2f", $subtotal );
         $data->{'left'} = $left;
         push @ordered, $data;

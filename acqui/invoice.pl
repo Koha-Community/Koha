@@ -165,21 +165,21 @@ my $total_tax_value = 0;
 foreach my $order (@$orders) {
     my $line = get_infos( $order, $bookseller);
 
-    $line->{total_tax_excluded} = $line->{unitprice_tax_excluded} * $line->{quantity};
-    $line->{total_tax_included} = $line->{unitprice_tax_included} * $line->{quantity};
+    $line->{total_tax_excluded} = get_rounded_price($line->{unitprice_tax_excluded}) * $line->{quantity};
+    $line->{total_tax_included} = get_rounded_price($line->{unitprice_tax_included}) * $line->{quantity};
 
     $line->{tax_value} = $line->{tax_value_on_receiving};
     $line->{tax_rate} = $line->{tax_rate_on_receiving};
 
     $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
-    $foot{$$line{tax_rate}}{tax_value} += $$line{tax_value};
+    $foot{$$line{tax_rate}}{tax_value} += get_rounded_price($$line{tax_value});
     $total_tax_value += $$line{tax_value};
     $foot{$$line{tax_rate}}{quantity}  += $$line{quantity};
     $total_quantity += $$line{quantity};
-    $foot{$$line{tax_rate}}{total_tax_excluded} += $$line{total_tax_excluded};
-    $total_tax_excluded += $$line{total_tax_excluded};
-    $foot{$$line{tax_rate}}{total_tax_included} += $$line{total_tax_included};
-    $total_tax_included += $$line{total_tax_included};
+    $foot{$$line{tax_rate}}{total_tax_excluded} += get_rounded_price($$line{total_tax_excluded});
+    $total_tax_excluded += get_rounded_price($$line{total_tax_excluded});
+    $foot{$$line{tax_rate}}{total_tax_included} += get_rounded_price($$line{total_tax_included});
+    $total_tax_included += get_rounded_price($$line{total_tax_included});
 
     $line->{orderline} = $line->{parent_ordernumber};
     push @orders_loop, $line;

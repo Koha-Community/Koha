@@ -347,9 +347,9 @@ if ( $op eq 'list' ) {
         push @books_loop, $line;
 
         $foot{$$line{tax_rate}}{tax_rate} = $$line{tax_rate};
-        $foot{$$line{tax_rate}}{tax_value} += $$line{tax_value};
+        $foot{$$line{tax_rate}}{tax_value} += get_rounded_price($$line{tax_value});
         $total_tax_value += $$line{tax_value};
-        $foot{$$line{tax_rate}}{quantity}  += $$line{quantity};
+        $foot{$$line{tax_rate}}{quantity}  += get_rounded_price($$line{quantity});
         $total_quantity += $$line{quantity};
         $foot{$$line{tax_rate}}{total_tax_excluded} += $$line{total_tax_excluded};
         $total_tax_excluded += $$line{total_tax_excluded};
@@ -452,8 +452,8 @@ sub get_order_infos {
     $line{basketno}       = $basketno;
     $line{budget_name}    = $budget->{budget_name};
 
-    $line{total_tax_included} = $line{ecost_tax_included} * $line{quantity};
-    $line{total_tax_excluded} = $line{ecost_tax_excluded} * $line{quantity};
+    $line{total_tax_included} = get_rounded_price($line{ecost_tax_included}) * $line{quantity};
+    $line{total_tax_excluded} = get_rounded_price($line{ecost_tax_excluded}) * $line{quantity};
     $line{tax_value} = $line{tax_value_on_ordering};
     $line{tax_rate} = $line{tax_rate_on_ordering};
 
