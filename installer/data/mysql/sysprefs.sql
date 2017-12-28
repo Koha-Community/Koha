@@ -433,6 +433,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpenLibraryCovers','0',NULL,'If ON Openlibrary book covers will be show','YesNo'),
 ('OpenLibrarySearch','0',NULL,'If Yes Open Library search results will show in OPAC','YesNo'),
 ('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free'),
+('OrderPriceRounding','','|nearest_cent','Local preference for rounding orders before calculations to ensure correct calculations','Choice'),
 ('OverDriveCirculation','0','Enable client to see their OverDrive account','','YesNo'),
 ('OverDriveClientKey','','Client key for OverDrive integration','30','Free'),
 ('OverDriveClientSecret','','Client key for OverDrive integration','30','YesNo'),

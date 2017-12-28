@@ -83,7 +83,14 @@ Acquisitions:
             - "days. Example: [30] Sets purgation of suggestions for those older than 30 days."
             - "<br><strong>WARNING:</strong> Leave this field empty if you don't want to activate this automatic feature."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
-
+        -
+            - pref: OrderPriceRounding
+              default: ''
+              choices:
+                '': Don't round
+                nearest_cent: Round
+            - to nearest cent.<br>
+            - Determines whether full precision values or rounded values should be used in price calculations
         -
             - pref: UseACQFrameworkForBiblioRecords
               default: no
