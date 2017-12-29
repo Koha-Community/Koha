@@ -3172,7 +3172,8 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `purchaseordernumber` LONGTEXT, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
-  `rrp` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
+  `rrp` decimal(13,2) DEFAULT NULL, -- the retail cost for this line item
+  `replacementprice` decimal(28,6) DEFAULT NULL, -- the replacement cost for this line item
   `rrp_tax_excluded` decimal(28,6) default NULL, -- the replacement cost excluding tax
   `rrp_tax_included` decimal(28,6) default NULL, -- the replacement cost including tax
   `ecost` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
