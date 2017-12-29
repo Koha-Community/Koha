@@ -262,6 +262,7 @@ if ($op eq ""){
                     );
 
                     my $price = $infos->{price};
+                    my $replacementprice = $infos->{replacementprice};
                     if ($price){
                         # in France, the cents separator is the , but sometimes, ppl use a .
                         # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
@@ -283,6 +284,7 @@ if ($op eq ""){
                     } else {
                         $orderinfo{listprice} = 0;
                     }
+                    $orderinfo{replacementprice} = $replacementprice || 0;
 
                     # remove uncertainprice flag if we have found a price in the MARC record
                     $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
@@ -511,8 +513,9 @@ sub import_biblios_list {
         my ( $marcblob, $encoding ) = GetImportRecordMarc( $biblio->{'import_record_id'} );
         my $marcrecord = MARC::Record->new_from_usmarc($marcblob) || die "couldn't translate marc information";
 
-        my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2']);
+        my $infos = get_infos_syspref('MarcFieldsToOrder', $marcrecord, ['price', 'quantity', 'budget_code', 'discount', 'sort1', 'sort2','replacementprice']);
         my $price = $infos->{price};
+        my $replacementprice = $infos->{replacementprice};
         my $quantity = $infos->{quantity};
         my $budget_code = $infos->{budget_code};
         my $discount = $infos->{discount};
@@ -573,7 +576,7 @@ sub import_biblios_list {
                         'quantity' => $item_quantity,
                         'budget_id' => $item_budget_id || $budget_id,
                         'itemprice' => $item_price || $price,
-                        'replacementprice' => $item_replacement_price,
+                        'replacementprice' => $item_replacement_price || $replacementprice,
                         'itemcallnumber' => $item_callnumber,
                     );
                     $all_items_quantity++;
@@ -590,6 +593,7 @@ sub import_biblios_list {
 
         if ($alliteminfos == -1 || scalar(@$alliteminfos) == 0) {
             $cellrecord{price} = $price || '';
+            $cellrecord{replacementprice} = $replacementprice || '';
             $cellrecord{quantity} = $quantity || '';
             $cellrecord{budget_id} = $budget_id || '';
             $cellrecord{discount} = $discount || '';

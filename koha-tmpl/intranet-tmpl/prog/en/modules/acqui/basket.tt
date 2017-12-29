@@ -358,6 +358,7 @@
                         <th class="tax_excluded">ecost tax exc.</th>
                         <th class="tax_included">RRP tax inc.</th>
                         <th class="tax_included">ecost tax inc.</th>
+                        <th class="replacementprice">Replacement price</th>
                         <th>Qty.</th>
                         <th class="tax_excluded">Total tax exc. ([% currency | html %])</th>
                         <th class="tax_included">Total tax inc. ([% currency | html %])</th>
@@ -382,6 +383,7 @@
                         <th class="tax_excluded">&nbsp;</th>
                         <th class="tax_included">&nbsp;</th>
                         <th class="tax_included">&nbsp;</th>
+                        <th class="replacementprice">&nbsp;</th>
                         <th>[% foot_loo.quantity | html %]</th>
                         <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price | html %]</th>
                         <th class="tax_included">[% foot_loo.total_tax_included | $Price | html %]</th>
@@ -404,6 +406,7 @@
                     <th class="tax_excluded">&nbsp;</th>
                     <th class="tax_included">&nbsp;</th>
                     <th class="tax_included">&nbsp;</th>
+                    <th class="replacementprice">&nbsp;</th>
                     <th>[% total_quantity | html %]</th>
                     <th class="tax_excluded">[% total_tax_excluded | $Price | html %]</th>
                     <th class="tax_included">[% total_tax_included | $Price | html %]</th>
@@ -479,6 +482,7 @@
                         <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price | html %]</td>
                         <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price | html %]</td>
                         <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price | html %]</td>
+                        <td class="number replacementprice [% IF books_loo.replacementprice.search(zero_regex) %]error[% END %]">[% books_loo.replacementprice | $Price | html %]</td>
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity | html %]</td>
                         <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price | html %]</td>
                         <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price | html %]</td>
@@ -541,6 +545,7 @@
                   <th class="tax_excluded">ecost tax exc.</th>
                   <th class="tax_included">RRP tax inc.</th>
                   <th class="tax_included">ecost tax inc.</th>
+                  <th class="replacementprice">Replacement price</th>
                   <th>Qty.</th>
                   <th class="tax_excluded">Total tax exc. ([% currency | html %])</th>
                   <th class="tax_included">Total tax inc. ([% currency | html %])</th>
@@ -593,6 +598,7 @@
                     <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price | html %]</td>
                     <td class="number tax_included">[% order.rrp_tax_included | $Price | html %]</td>
                     <td class="number tax_included">[% order.ecost_tax_included | $Price | html %]</td>
+                    <td class="number replacementprice">[% order.replacementprice | $Price | html %]</td>
                     <td class="number">[% order.quantity | html %]</td>
                     <td class="number tax_excluded">[% order.total_tax_excluded | $Price | html %]</td>
                     <td class="number tax_included">[% order.total_tax_included | $Price | html %]</td>

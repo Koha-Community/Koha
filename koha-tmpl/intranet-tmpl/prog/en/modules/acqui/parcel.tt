@@ -104,6 +104,7 @@
             <th>Order line search</th>
             <th>Summary search</th>
             <th>&nbsp;</th>
+            <th>Replacement price search</th>
             <th>Quantity search</th>
             <th>Unit cost search</th>
             <th>Order cost search</th>
@@ -117,6 +118,7 @@
             <th>Order line</th>
             <th>Summary</th>
             <th>More</th>
+            <th>Replacement price</th>
             <th>Quantity</th>
             <th>Unit cost</th>
             <th>Order cost</th>
@@ -169,6 +171,7 @@
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber | html %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber | html %]" class="previewData">Card</a>
                 </td>
+                <td>[% loop_order.replacementprice | $Price | html %]</td>
                 <td>[% loop_order.quantity | html %]</td>
                 <td>[% loop_order.ecost | $Price | html %]</td>
                 <td>[% loop_order.total | $Price | html %]</td>
@@ -229,6 +232,7 @@
           <th title="Item holds / Total holds">Holds</th>
           <th>Summary</th>
           <th>More</th>
+          <th>Replacement price</th>
           <th>Quantity</th>
           <th>Fund</th>
           <th>Est cost</th>
@@ -320,6 +324,7 @@
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber | html %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber | html %]" class="previewData">Card</a>
                 </td>
+                <td>[% order.replacementprice | $Price | html %]</td>
                 <td>[% order.quantityreceived | html %]</td>
                 <td>[% order.budget.budget_name | html %]</td>
                 <td>[% order.ecost | $Price | html %]</td>
@@ -445,90 +450,92 @@
         var sticky_filters = [% sticky_filters | html %];
 
         $(document).ready(function(){
-            if ( $("#pendingt").length ) {
-                var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "bStateSave": true,
-                    "iCookieDuration": 60*60*24*1000, // 1000 days
-                    "iDisplayLength": 10,
-                    "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
-                    "aoColumnDefs": [
-                        { "aTargets": [ 4, 9, 10 ], "bSortable": false, "bSearchable": false },
-                    ],
-                    "aoColumns": [
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        { "sType": "num-html" },
-                        { "sType": "anti-the" },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                    ],
-                    'bAutoWidth': false,
-                    "sPaginationType": "four_button"
-                })
-                ).columnFilter({
-                    sPlaceHolder: "head:after",
-                    aoColumns: [
-                        { type: "text" },
-                        { type: "text" },
-                        { type: "text" },
-                        { type: "text" },
-                        null,
-                        { type: "text" },
-                        { type: "text" },
-                        { type: "text" },
-                        { type: "text" },
-                        null,
-                        null
-                    ]
-                });
-            }
+          if ( $("#pendingt").length ) {
+            var pendingt = $("#pendingt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "bStateSave": true,
+                "iCookieDuration": 60*60*24*1000, // 1000 days
+                "iDisplayLength": 10,
+                "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
+                "aoColumnDefs": [
+                    { "aTargets": [ 4, 9, 10 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aoColumns": [
+                    { "sType": "html" },
+                    { "sType": "html" },
+                    { "sType": "num-html" },
+                    { "sType": "anti-the" },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                ],
+                'bAutoWidth': false,
+                "sPaginationType": "four_button"
+            } )
+            ).columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "text" },
+                    null,
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "text" },
+                    null,
+                    null
+                ]
+            });
+          }
 
-            if ( $("#receivedt").length ) {
-                var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "bStateSave": true,
-                    "iCookieDuration": 60*60*24*1000, // 1000 days
-                    "iDisplayLength": 10,
-                    "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
-                    "aoColumnDefs": [
-                        { "aTargets": [ 5, -1 ], "bSortable": false, "bSearchable": false },
-                    ],
-                    "aoColumns": [
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        { "sType": "html" },
-                        { "sType": "num-html" },
-                        { "sType": "anti-the" },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    ],
-                    "sPaginationType": "four_button"
-                }));
-            }
+          if ( $("#receivedt").length ) {
+            var receivedt = $("#receivedt").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "bStateSave": true,
+                "iCookieDuration": 60*60*24*1000, // 1000 days
+                "iDisplayLength": 10,
+                "aLengthMenu": [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, _("All")]],
+                "aoColumnDefs": [
+                    { "aTargets": [ 5, -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aoColumns": [
+                    { "sType": "html" },
+                    { "sType": "html" },
+                    { "sType": "html" },
+                    { "sType": "num-html" },
+                    { "sType": "anti-the" },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "sPaginationType": "four_button"
+            }));
+          }
 
-            // Keep filters from finishreceive.pl to parcel.pl
+          // Keep filters from finishreceive.pl to parcel.pl
+          $.cookie("filter_parcel_summary", $("#summaryfilter").val());
+          $.cookie("filter_parcel_basketname", $("#basketfilter").val());
+          $.cookie("filter_parcel_orderno", $("#orderfilter").val());
+          $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
+          $.cookie("filter_parcel_ean", $("#eanfilter").val());
+
+          $("#filterform").on('submit', function(){
             $.cookie("filter_parcel_summary", $("#summaryfilter").val());
             $.cookie("filter_parcel_basketname", $("#basketfilter").val());
             $.cookie("filter_parcel_orderno", $("#orderfilter").val());
             $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
             $.cookie("filter_parcel_ean", $("#eanfilter").val());
-
-            $("#filterform").on('submit', function(){
-                $.cookie("filter_parcel_summary", $("#summaryfilter").val());
-                $.cookie("filter_parcel_basketname", $("#basketfilter").val());
-                $.cookie("filter_parcel_orderno", $("#orderfilter").val());
-                $.cookie("filter_parcel_basketgroupname", $("#basketgroupnamefilter").val());
-                $.cookie("filter_parcel_ean", $("#eanfilter").val());
-            });
+          });
 
             $(".previewData").on("click", function(e){
                 e.preventDefault();
@@ -545,21 +552,21 @@
 
         });
 
-        // Case-insensitive version of jquery's contains function
-        jQuery.extend(jQuery.expr[':'], {
-            icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0"
-        });
+         // Case-insensitive version of jquery's contains function
+         jQuery.extend(jQuery.expr[':'], {
+	    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0"
+         });
 
          // Contains exactly function
-        jQuery.extend(jQuery.expr[':'], {
-            containsExactly: "$(a).text() == m[3]"
-        });
+         jQuery.extend(jQuery.expr[':'], {
+              containsExactly: "$(a).text() == m[3]"
+         });
 
-        function transfer_order_popup(ordernumber) {
+         function transfer_order_popup(ordernumber) {
             var url = "/cgi-bin/koha/acqui/transferorder.pl?"
                 + "ordernumber=" + ordernumber
                 window.open(url, 'TransferOrder');
-        }
+         }
     </script>
 [% END %]
 

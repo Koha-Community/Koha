@@ -48,6 +48,7 @@ my $origquantityrec  = $input->param('origquantityrec');
 my $quantityrec      = $input->param('quantityrec');
 my $quantity         = $input->param('quantity');
 my $unitprice        = $input->param('unitprice');
+my $replacementprice = $input->param('replacementprice');
 my $datereceived     = $input->param('datereceived'),
 my $invoiceid        = $input->param('invoiceid');
 my $invoice          = GetInvoice($invoiceid);
@@ -59,6 +60,8 @@ my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
 
 $unitprice = Koha::Number::Price->new( $unitprice )->unformat();
+$replacementprice = Koha::Number::Price->new( $replacementprice )->unformat();
+warn "Replacement $replacementprice";
 my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
 
 #need old receivedate if we update the order, parcel.pl only shows the right parcel this way FIXME
@@ -85,6 +88,7 @@ if ($quantityrec > $origquantityrec ) {
 
     $order->{order_internalnote} = $input->param("order_internalnote");
     $order->{tax_rate_on_receiving} = $input->param("tax_rate");
+    $order->{replacementprice} = $replacementprice;
     $order->{unitprice} = $unitprice;
 
     $order = C4::Acquisition::populate_order_with_prices(
@@ -156,7 +160,7 @@ ModItem(
         dateaccessioned      => $datereceived,
         datelastseen         => $datereceived,
         price                => $unitprice,
-        replacementprice     => $order->{rrp},
+        replacementprice     => $replacementprice,
         replacementpricedate => $datereceived,
     },
     $biblionumber,

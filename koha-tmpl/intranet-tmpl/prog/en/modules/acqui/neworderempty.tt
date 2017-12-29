@@ -433,12 +433,16 @@
             </li>
             <li>
                 [% IF ( close ) %]
-                    <span class="label">Replacement cost: </span>
+                    <span class="label">Retail price: </span>
                     <input type="hidden" name="rrp" id="rrp" value="[% rrp | html %]" />[% rrp | html %]  (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% ELSE %]
-                    <label for="rrp">Replacement cost: </label>
+                    <label for="rrp">Retail price: </label>
                     <input type="text" size="20" name="rrp" id="rrp" value="[% rrp | html %]" /> (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
                 [% END %]
+            </li>
+            <li>
+                <label for="replacementprice">Replacement cost: </label>
+                <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | html %]" />
             </li>
             <li>
                 <label for="ecost">Budgeted cost: </label>

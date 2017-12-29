@@ -213,6 +213,7 @@ $template->param(
     quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
     quantityreceived      => $order->{'quantityreceived'},
     rrp                   => $rrp,
+    replacementprice      => $order->{'replacementprice'},
     ecost                 => $ecost,
     unitprice             => $unitprice,
     tax_rate              => $tax_rate,

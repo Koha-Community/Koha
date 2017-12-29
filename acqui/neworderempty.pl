@@ -371,6 +371,7 @@ if ( defined $from_subscriptionid ) {
         $data->{tax_rate}       = $lastOrderReceived->{tax_rate_on_ordering};
         $data->{discount}       = $lastOrderReceived->{discount};
         $data->{rrp}            = $lastOrderReceived->{rrp};
+        $data->{replacementprice} = $lastOrderReceived->{replacementprice};
         $data->{ecost}          = $lastOrderReceived->{ecost};
         $data->{quantity}       = $lastOrderReceived->{quantity};
         $data->{unitprice}      = $lastOrderReceived->{unitprice};
@@ -454,6 +455,7 @@ $template->param(
     quantity         => $quantity,
     quantityrec      => $quantity,
     rrp              => $data->{'rrp'},
+    replacementprice => $data->{'replacementprice'},
     gst_values       => \@gst_values,
     tax_rate         => $data->{tax_rate_on_ordering} ? $data->{tax_rate_on_ordering}+0.0 : $bookseller->tax_rate ? $bookseller->tax_rate+0.0 : 0,
     listprice        => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice),

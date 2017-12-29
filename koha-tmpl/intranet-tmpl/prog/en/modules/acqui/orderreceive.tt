@@ -239,7 +239,11 @@
             <input type="hidden" name="tax_rate" value="0" />
         [% END %]
 
-        <li><label for="rrp">Replacement cost: </label>[% rrp | $Price | html %]</li>
+        <li><label for="rrp">Retail price: </label>[% rrp | $Price | html %]</li>
+        <li>
+            <label for="replacementprice">Replacement price:</label>
+            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price | html %]" />
+        </li>
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price | html %]</li>
         <li>
             <label for="unitprice">Actual cost:</label>
