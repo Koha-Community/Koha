@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 68;
+use Test::More tests => 70;
 use t::lib::Mocks;
 use Koha::Database;
 
@@ -31,6 +31,7 @@ BEGIN {
     use_ok('C4::Budgets');
     use_ok('Koha::Acquisition::Orders');
     use_ok('Koha::Acquisition::Booksellers');
+    use_ok('t::lib::TestBuilder');
 }
 
 # Sub used for testing C4::Acquisition subs returning order(s):
@@ -664,5 +665,47 @@ sub create_isbn_field {
 
     return $field;
 }
+
+subtest 'ModReceiveOrder replacementprice tests' => sub {
+    plan tests => 2;
+    #Let's build an order, we need a couple things though
+    my $builder = t::lib::TestBuilder->new;
+    my $order_biblio = $builder->build({ source => 'Biblio' });
+    my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
+    my $order_invoice = $builder->build({ source => 'Aqinvoice'});
+    my $order_currency = $builder->build({ source => 'Currency', value => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'FOO' }  });
+    my $order_vendor = $builder->build({ source => 'Aqbookseller',value => { listincgst => 0, listprice => $order_currency->{currency}, invoiceprice => $order_currency->{currency} } });
+    my $orderinfo ={
+        basketno => $order_basket->{basketno},
+        booksellerid => $order_vendor->{id},
+        rrp => 19.99,
+        replacementprice => undef,
+        quantity => 1,
+        quantityreceived => 0,
+        datereceived => undef,
+        datecancellationprinted => undef,
+    };
+    my $receive_order = $builder->build({ source => 'Aqorder', value => $orderinfo });
+    (undef, my $received_ordernumber) = ModReceiveOrder({
+            biblionumber => $order_biblio->{biblionumber},
+            order        => $receive_order,
+            invoice      => $order_invoice,
+            quantityreceived => $receive_order->{quantity},
+            budget_id    => $order->{budget_id},
+    });
+    my $received_order = GetOrder($received_ordernumber);
+    is ($received_order->{replacementprice},undef,"No price set if none passed in");
+    $orderinfo->{replacementprice} = 16.12;
+    $receive_order = $builder->build({ source => 'Aqorder', value => $orderinfo });
+    (undef, $received_ordernumber) = ModReceiveOrder({
+            biblionumber => $order_biblio->{biblionumber},
+            order        => $receive_order,
+            invoice      => $order_invoice,
+            quantityreceived => $receive_order->{quantity},
+            budget_id    => $order->{budget_id},
+    });
+    $received_order = GetOrder($received_ordernumber);
+    is ($received_order->{replacementprice},'16.120000',"Replacement price set if none passed in");
+};
 
 $schema->storage->txn_rollback();
