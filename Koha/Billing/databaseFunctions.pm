@@ -34,6 +34,7 @@ sub getbillableitems {
   my $currentdate=DateTime->from_epoch(epoch => time, time_zone => "local");
   my $overduedays=DateTime::Duration->new(days => $overdue);
   my $duebefore=($currentdate - $overduedays);
+  $duebefore=~s/T\d\d:\d\d:\d\d$/T23:59:59/;
 
   my $sth_issues=$dbh->prepare("SELECT itemnumber
                                 FROM issues
