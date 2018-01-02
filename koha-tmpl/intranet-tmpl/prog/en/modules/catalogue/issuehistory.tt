@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% biblio.title |html %]</title>
@@ -98,15 +99,18 @@
 
 [% MACRO jsinclude BLOCK %]
 [% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript" id="js">
         $(document).ready(function() {
-            $("#table_issues").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var columns_settings = [% ColumnsSettings.GetColumns('catalogue', 'detail', 'checkoutshistory-table', 'json') %];
+            var table = KohaTable("table_issues", {
                 "aoColumnDefs": [
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
+                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "aaSorting": [[ 4, "desc" ]],
                 "sPaginationType": "full_numbers"
-            }));
+            }, columns_settings);
         });
     </script>
 [% END %]

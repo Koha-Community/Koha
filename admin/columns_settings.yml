@@ -83,6 +83,28 @@ modules:
         -
           columnname: actions
 
+  catalogue:
+    detail:
+      checkoutshistory-table:
+        -
+          columnname: patron
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: barcode
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: checked_out_from
+        -
+          columnname: renewed
+        -
+          columnname: checkout_on
+        -
+          columnname: due_date
+        -
+          columnname: checkin_on
+
   cataloguing:
     additem:
       itemst:
