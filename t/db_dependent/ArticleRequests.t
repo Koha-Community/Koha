@@ -19,12 +19,13 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 49;
+use Test::More tests => 54;
 
 use t::lib::TestBuilder;
 
 use Koha::Database;
 use Koha::Biblio;
+use Koha::Notice::Messages;
 use Koha::Patron;
 use Koha::Library;
 
@@ -73,21 +74,41 @@ my $patron   = Koha::Patron->new(
 )->store();
 ok( $patron->id, 'Koha::Patron created' );
 
+# store
+Koha::Notice::Messages->delete;
+my $article_request_title = 'an article request title';
 my $article_request = Koha::ArticleRequest->new(
     {
         borrowernumber => $patron->id,
         biblionumber   => $biblio->id,
         itemnumber     => $item->id,
+        title          => $article_request_title,
     }
 )->store();
+
+my $notify_message = Koha::Notice::Messages->search->next;
+is( $notify_message->letter_code, "AR_".Koha::ArticleRequest::Status::Pending);
+# Default AR_PROCESSING template content "Title: <<article_requests.title>>"
+like( $notify_message->content, qr{Title: $article_request_title}, 'Values from article_requests table must be fetched for the notification' );
+
 $article_request = Koha::ArticleRequests->find( $article_request->id );
 ok( $article_request->id, 'Koha::ArticleRequest created' );
-
 is( $article_request->status, Koha::ArticleRequest::Status::Pending, 'New article request has status of Open' );
+is( $article_request->updated_on, undef, 'New article request has not an updated_on date set yet' );
+
+# process
+Koha::Notice::Messages->delete;
 $article_request->process();
+$notify_message = Koha::Notice::Messages->search->next;
+is( $notify_message->letter_code, "AR_".Koha::ArticleRequest::Status::Processing);
 is( $article_request->status, Koha::ArticleRequest::Status::Processing, '$ar->process() changes status to Processing' );
+isnt( $article_request->updated_on, undef, 'Updated article request has an updated_on date set' );
+
+# complete
 $article_request->complete();
 is( $article_request->status, Koha::ArticleRequest::Status::Completed, '$ar->complete() changes status to Completed' );
+
+# cancel
 $article_request->cancel();
 is( $article_request->status, Koha::ArticleRequest::Status::Canceled, '$ar->complete() changes status to Canceled' );
 $article_request->status(Koha::ArticleRequest::Status::Pending);
