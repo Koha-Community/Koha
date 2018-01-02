@@ -1,8 +1,10 @@
 [% PROCESS 'authorities-search-results.inc' %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 210c builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_unimarc_field_210c" class="cat" style="padding:1em;">
 <h3>UNIMARC field 210c builder</h3>
     <h4>Search for authority type: EDITORS</h4>
@@ -77,17 +79,17 @@
                           [% pagination_bar %]      
                         </div>
             [% END %]
-<script type="text/javascript">
-//<![CDATA[
-function report(summary)
-{    
-    var doc   = opener.document; 
-    var field = doc.getElementById('[% index %]');
 
-    field.value = summary;
-    self.close();
-}
-//]]>
-</script>
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report(summary){
+            var doc   = opener.document;
+            var field = doc.getElementById('[% index %]');
 
-[% INCLUDE 'popup-bottom.inc' %]
+            field.value = summary;
+            self.close();
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

@@ -1,32 +1,12 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; UNIMARC field 210c builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">
     #custom-doc { width:37.85em;*width:36.93em;min-width:492px; margin:auto; text-align:left; }
 </style>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-    $( "#findvalue" ).autocomplete({
-        source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=publishercode",
-        minLength: 3,
-        select: function( event, ui ) {
-            $( "#findvalue" ).val( ui.item.fieldvalue );
-            return false;
-        }
-    })
-    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        return $( "<li></li>" )
-        .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.fieldvalue + "</a>" )
-        .appendTo( ul );
-    };
-
-});
-//]]>
-</script>
-
 </head>
+
 <body id="cat_unimarc_field_210c_bis" class="cat">
 
 <div id="custom-doc" class="yui-t7">
@@ -47,14 +27,37 @@ $(document).ready(function(){
     </div>
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
         function report() {
-            var doc   = opener.document; 
+            var doc   = opener.document;
             var field = doc.getElementById("[% index %]");
             field.value =  document.f_pop.findvalue.value;
 
             window.close();
             return false;
         }
+
+        $(document).ready(function(){
+            $( "#findvalue" ).autocomplete({
+                source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=publishercode",
+                minLength: 3,
+                select: function( event, ui ) {
+                    $( "#findvalue" ).val( ui.item.fieldvalue );
+                    return false;
+                }
+            })
+            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                return $( "<li></li>" )
+                .data( "ui-autocomplete-item", item )
+                .append( "<a>" + item.fieldvalue + "</a>" )
+                .appendTo( ul );
+            };
+
+        });
+
     </script>
-[% INCLUDE 'popup-bottom.inc' %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

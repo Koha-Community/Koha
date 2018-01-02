@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; UNIMARC field 225a builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -9,8 +10,8 @@
         text-align:left;
     }
 </style>
-
 </head>
+
 <body id="cat_unimarc_field_225a_bis" class="cat">
 
   <div id="custom-doc" class="yui-t7">
@@ -31,33 +32,33 @@
     </div>
   </div>
 
-  <script>
-    //<![CDATA[
-    $(document).ready(function(){
-        $("#findvalue").autocomplete({
-            source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=collectiontitle",
-            minLength: 3,
-            select: function(event, ui) {
-                $("#findvalue").val(ui.item.fieldvalue);
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#findvalue").autocomplete({
+                source: "/cgi-bin/koha/cataloguing/ysearch.pl?table=biblioitems&field=collectiontitle",
+                minLength: 3,
+                select: function(event, ui) {
+                    $("#findvalue").val(ui.item.fieldvalue);
+                    return false;
+                }
+            })
+            .data("ui-autocomplete")._renderItem = function(ul, item) {
+                return $("<li></li>")
+                    .data("ui-autocomplete-item", item)
+                    .append("<a>" + item.fieldvalue + "</a>")
+                    .appendTo(ul);
+            };
+
+            $('form').submit(function() {
+                var field = opener.document.getElementById("[% index %]");
+                field.value = $('#findvalue').val();
+
+                window.close();
                 return false;
-            }
-        })
-        .data("ui-autocomplete")._renderItem = function(ul, item) {
-            return $("<li></li>")
-                .data("ui-autocomplete-item", item)
-                .append("<a>" + item.fieldvalue + "</a>")
-                .appendTo(ul);
-        };
-
-        $('form').submit(function() {
-            var field = opener.document.getElementById("[% index %]");
-            field.value = $('#findvalue').val();
-
-            window.close();
-            return false;
+            });
         });
-    });
-    //]]>
-  </script>
+    </script>
+[% END %]
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

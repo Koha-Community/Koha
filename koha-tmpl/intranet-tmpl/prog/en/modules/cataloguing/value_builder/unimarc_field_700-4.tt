@@ -1,7 +1,9 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>UNIMARC field 700-4 builder</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
+
 <body id="cat_unimarc_field_700-4" class="cat" style="padding:1em;">
 <h3>UNIMARC field 700-4 builder</h3>
 <p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
@@ -44,21 +46,22 @@
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script type="text/javascript">
-//<![CDATA[
-	function report() {
-		x = document.f_pop.f1.value.split(' - ');
-		var doc   = opener.document; 
-            var field = doc.getElementById("[% index %]");
-        
-            field.value =  x[0];
-		if ([% index2 %]>0) {
-			opener.document.f.field_value[[% index2 %]].value= x[1];
-		}
-		self.close();
-		return false;
-	}
-//]]>
-</script>
 
-[% INCLUDE 'popup-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        function report() {
+            x = document.f_pop.f1.value.split(' - ');
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+
+            field.value =  x[0];
+            if ([% index2 %] > 0) {
+                opener.document.f.field_value[[% index2 %]].value= x[1];
+            }
+            self.close();
+            return false;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
