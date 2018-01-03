@@ -785,21 +785,7 @@ elsif ($phase eq 'Run this report'){
                             'reports'      => $report_id,
                             );
         } else {
-            # OK, we have parameters, or there are none, we run the report
-            # if there were parameters, replace before running
-            # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
-            my @split = split /<<|>>/,$sql;
-            my @tmpl_parameters;
-            for(my $i=0;$i<$#split/2;$i++) {
-                my $quoted = $sql_params[$i];
-                # if there are special regexp chars, we must \ them
-                $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
-                if ($split[$i*2+1] =~ /\|\s*date\s*$/) {
-                    $quoted = output_pref({ dt => dt_from_string($quoted), dateformat => 'iso', dateonly => 1 }) if $quoted;
-                }
-                $quoted = C4::Context->dbh->quote($quoted);
-                $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
-            }
+            my $sql = get_prepped_report( $sql, @sql_params );
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
             my $total = nb_rows($sql) || 0;
             unless ($sth) {
@@ -841,10 +827,15 @@ elsif ($phase eq 'Run this report'){
 elsif ($phase eq 'Export'){
 
 	# export results to tab separated text or CSV
-	my $sql    = $input->param('sql');  # FIXME: use sql from saved report ID#, not new user-supplied SQL!
-    my $format = $input->param('format');
-    my $reportname = $input->param('reportname');
+    my $report_id      = $input->param('report_id');
+    my $report         = get_saved_report($report_id);
+    my $sql            = $report->{savedsql};
+    my @sql_params     = $input->multi_param('sql_params');
+    my $format         = $input->param('format');
+    my $reportname     = $input->param('reportname');
     my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
+
+    $sql = get_prepped_report( $sql, @sql_params );
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
@@ -1052,4 +1043,21 @@ sub create_non_existing_group_and_subgroup {
             }
         }
     }
+}
+
+# pass $sth and sql_params, get back an executable query
+sub get_prepped_report {
+    my ($sql, @sql_params ) = @_;
+    my @split = split /<<|>>/,$sql;
+    for(my $i=0;$i<$#split/2;$i++) {
+        my $quoted = $sql_params[$i];
+        # if there are special regexp chars, we must \ them
+        $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+        if ($split[$i*2+1] =~ /\|\s*date\s*$/) {
+            $quoted = output_pref({ dt => dt_from_string($quoted), dateformat => 'iso', dateonly => 1 }) if $quoted;
+        }
+        $quoted = C4::Context->dbh->quote($quoted);
+        $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
+    }
+    return $sql;
 }
