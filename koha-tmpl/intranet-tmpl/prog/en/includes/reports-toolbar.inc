@@ -52,10 +52,11 @@
                 [%- FOREACH param IN sql_params %]&amp;sql_params=[% param %][% END %]
             [%- END %]
 
+
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-upload"></i> Download <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">Comma separated text</a></li>
+                    <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
                     <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
                     <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
                 </ul>
