@@ -1245,18 +1245,6 @@
                 else {return false;}
             });
 
-            $("#entryform").validate({
-                rules: {
-                    password: {
-                        password_strong: true,
-                        password_no_spaces: true
-                    },
-                    password2: {
-                        password_match: true
-                    }
-                }
-            });
-
             $("#saverecord").click(function(){
                 if( check_form_borrowers() ){
                     $("#entryform").submit();
