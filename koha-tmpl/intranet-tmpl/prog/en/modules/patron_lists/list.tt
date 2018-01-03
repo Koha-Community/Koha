@@ -32,6 +32,34 @@
         <div class="yui-b">
         <h1>[% list.name |html %]</h1>
 
+        [% IF ( not_found.size > 0 ) %]
+        <div class="dialog alert"><p>Warning, the following cardnumbers were not found:</p></div>
+        <table style="margin:auto;">
+            <thead>
+                <tr><th>Cardnumbers not found</th></tr>
+            </thead>
+            <tbody>
+            [% FOREACH nf IN not_found %]
+                <tr><td>[% nf |html %]</td></td>
+            [% END %]
+            </tbody>
+        </table>
+        [% END %]
+
+        [% IF ( existed.size > 0 ) %]
+        <div class="dialog alert"><p>Warning, the following cardnumbers were already in this list:</p></div>
+        <table style="margin:auto;">
+            <thead>
+                <tr><th>Cardnumbers already in list</th></tr>
+            </thead>
+            <tbody>
+            [% FOREACH ed IN existed %]
+                <tr><td>[% ed |html %]</td></td>
+            [% END %]
+            </tbody>
+        </table>
+        [% END %]
+
         <form action="list.pl" id="add_patrons" method="post" class="clearfix">
             <fieldset class="rows">
                 <legend>Add patrons</legend>
