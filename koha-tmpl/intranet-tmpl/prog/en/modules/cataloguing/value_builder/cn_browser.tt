@@ -1,32 +1,20 @@
 [% USE Asset %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools</title>
-[% Asset.css("css/datatables.css") %]
+<title>Koha &rsaquo; Cataloging &rsaquo; Call number browser</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'datatables.inc' %]
 </head>
+
 <body id="cat_cn_browser" class="cat">
+    <div class="main container-fluid">
 [% UNLESS ( popup ) %]
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 [% END %]
 
-<script language="JavaScript">
-$(document).ready(function()
-{
-    $("#cn_browser_table").DataTable({"paging":   false, "bFilter": false, "info": false, "bSort": false});
-    $("#cn_browser_submit").click(function(){
-        window.location.href='/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q='+$("#cn_browser_input").val();
-        return false;
-    });
-}
+<h1>Call number browser</h1>
 
-);
-</script>
-
-<h1 style="text-align:center">Call numbers browser</h1>
-
-<div style="margin:auto;text-align:center;">
+<div>
     <form method="get" action="cn_browser.pl">
     <label for="searchcn">Search call number:</label>
     <input type="text" id="cn_browser_input" name="q" value="[% q %]" />
@@ -59,4 +47,15 @@ $(document).ready(function()
     </tbody>
 </table>
 
-<br />
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(document).ready(function(){
+            $("#cn_browser_submit").click(function(){
+                window.location.href='/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q='+$("#cn_browser_input").val();
+                return false;
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
