@@ -170,7 +170,7 @@ function checkMultiHold() {
         var value = parseInt($(this).val());
         var after = row.parent().find("tr:nth-child("+(value+1)+")");
 
-        if (prev_rank_request > value) {
+        /*if (prev_rank_request > value) {
             row.insertBefore(after);
         } else {
             row.insertAfter(after);
@@ -180,7 +180,7 @@ function checkMultiHold() {
         $("select[name=rank-request]").each(function () {
             $(this).val(next_priority);
             next_priority++;
-        });
+        });*/
     });
 
     $(".clear-date").on("click",function(e){
