@@ -42,7 +42,7 @@
                             </p>
                             <p id="patron-password-p">
                                 <span id="patron-password-label">Password:</span>
-                                <span id="patron-password">[% password_cleartext %]</span>
+                                <span id="patron-password">[% password_cleartext | html %]</span>
                             </p>
 
                             [% IF borrower.cardnumber %]
@@ -78,7 +78,7 @@
                                                     [% END %]
                                                     <label for="password">Password:</label>
                                                     [% IF Koha.Preference('PatronSelfRegistrationPrefillForm') %]
-                                                        <input type="password" id="password" size="10" name="password" value="[% password_cleartext %]" />
+                                                        <input type="password" id="password" size="10" name="password" value="[% password_cleartext | html %]" />
                                                     [% ELSE %]
                                                         <input type="password" id="password" size="10" name="password" value="" />
                                                     [% END %]
