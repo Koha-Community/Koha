@@ -319,6 +319,13 @@ $(document).ready(function(){
             },
             B_email: {
                 email: true
+            },
+            password: {
+               password_strong: true,
+               password_no_spaces: true
+            },
+            password2: {
+               password_match: true
             }
         },
         submitHandler: function(form) {
