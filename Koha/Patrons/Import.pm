@@ -167,7 +167,7 @@ sub import_patrons {
         if ( defined($matchpoint) && ( $matchpoint eq 'cardnumber' ) && ( $borrower{'cardnumber'} ) ) {
             $member = Koha::Patrons->find( { cardnumber => $borrower{'cardnumber'} } );
         }
-        elsif ( ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
+        elsif ( defined($matchpoint) && ($matchpoint eq 'userid') && ($borrower{'userid'}) ) {
             $member = Koha::Patrons->find( { userid => $borrower{userid} } );
         }
         elsif ($extended) {
@@ -201,7 +201,7 @@ sub import_patrons {
         }
 
         # Check if the userid provided does not exist yet
-        if (  $matchpoint ne 'userid' and exists $borrower{userid}
+        if ( defined($matchpoint) and $matchpoint ne 'userid' and exists $borrower{userid}
                  and $borrower{userid}
              and not Check_Userid( $borrower{userid}, $borrower{borrowernumber} ) ) {
              push @errors, { duplicate_userid => 1, userid => $borrower{userid} };

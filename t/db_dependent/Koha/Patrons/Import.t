@@ -317,7 +317,6 @@ subtest 'test_prepare_columns' => sub {
     plan tests => 16;
 
     # Given ... no header row
-    my $headerrow_0;
     my %csvkeycol_0;
     my @errors_0;
 
