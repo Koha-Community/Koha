@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use Getopt::Long;
+use Pod::Usage;
 
 use Koha::Patrons::Import;
 my $Import = Koha::Patrons::Import->new();
@@ -42,9 +43,13 @@ GetOptions(
     'p|preserve-extended-atributes' => \$ext_preserve,
     'v|verbose+'                    => \$verbose,
     'h|help|?'                      => \$help,
-);
+) or pod2usage(2);
 
-print_help() if ( $help || !$csv_file || !$matchpoint || !$confirm );
+pod2usage(1) if $help;
+pod2usage(q|--file is required|) unless $csv_file;
+pod2usage(q|--matchpoint is required|) unless $matchpoint;
+
+warn "Running in dry-run mode, provide --confirm to apply the changes\n" unless $confirm;
 
 my $handle;
 open( $handle, "<", $csv_file ) or die $!;
@@ -88,16 +93,50 @@ if ($verbose > 2 ) {
     say Data::Dumper::Dumper( $feedback );
 }
 
-sub print_help {
-    print <<_USAGE_;
-import_patrons.pl -c /path/to/patrons.csv -m cardnumber
-    -c --confirm                        Confirms you really want to import these patrons, otherwise prints this help
-    -f --file                           Path to the CSV file of patrons to import
-    -m --matchpoint                     Field on which to match incoming patrons to existing patrons
-    -d --default                        Set defaults to patron fields, repeatable e.g. --default branchcode=MPL --default categorycode=PT
-    -p --preserve-extended-atributes    Retain extended patron attributes for existing patrons being overwritten
-    -o --overwrite                      Overwrite existing patrons with new data if a match is found
-    -v --verbose                        Be verbose
-_USAGE_
-    exit;
-}
+=head1 NAME
+
+import_patrons.pl - CLI script to import patrons data into Koha
+
+=head1 SYNOPSIS
+
+import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve-extended-atributes] [--verbose]
+
+=head1 OPTIONS
+
+=over8
+
+=item B<-h|--help>
+
+Prints a brief help message and exits
+
+=item B<-c|--confirm>
+
+Confirms you really want to import these patrons, otherwise prints this help
+
+=item B<-f|--file>
+
+Path to the CSV file of patrons to import
+
+=item B<-c|--matchpoint>
+
+Field on which to match incoming patrons to existing patrons
+
+=item B<-d|--default>
+
+Set defaults to patron fields, repeatable e.g. --default branchcode=MPL --default categorycode=PT
+
+=item B<-o|--overwrite>
+
+Overwrite existing patrons with new data if a match is found
+
+=item B<-p|--preserve-extended-atributes>
+
+Retain extended patron attributes for existing patrons being overwritten
+
+=item B<-v|--verbose>
+
+Be verbose
+
+=back
+
+=cut
