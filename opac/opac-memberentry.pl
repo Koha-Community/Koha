@@ -441,10 +441,15 @@ sub ParseCgiForBorrower {
     my $scrubber = C4::Scrubber->new();
     my %borrower;
 
-    foreach ( $cgi->param ) {
-        if ( $_ =~ '^borrower_' ) {
-            my ($key) = substr( $_, 9 );
-            $borrower{$key} = $scrubber->scrub( scalar $cgi->param($_) );
+    foreach my $field ( $cgi->param ) {
+        if ( $field =~ '^borrower_' ) {
+            my ($key) = substr( $field, 9 );
+            if ( $field !~ '^borrower_password' ) {
+                $borrower{$key} = $scrubber->scrub( scalar $cgi->param($field) );
+            } else {
+                # Allow html characters for passwords
+                $borrower{$key} = $cgi->param($field);
+            }
         }
     }
 
