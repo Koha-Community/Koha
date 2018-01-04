@@ -237,7 +237,7 @@
                             <form action="/cgi-bin/koha/admin/branches.pl" method="post">
                                 <input type="hidden" name="branchcode" value="[% library.branchcode |html %]" />
                                 <input type="hidden" name="op" value="delete_confirm" />
-                                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
+                                <button type="submit" id="delete_library_[% library.branchcode | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</button>
                             </form>
                         </td>
                     </tr>
