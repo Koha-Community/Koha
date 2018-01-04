@@ -803,6 +803,7 @@ sub GetItemsForInventory {
     my ( $parameters ) = @_;
     my $minlocation  = $parameters->{'minlocation'}  // '';
     my $maxlocation  = $parameters->{'maxlocation'}  // '';
+    my $class_source = $parameters->{'class_source'}  // C4::Context->preference('DefaultClassificationSource');
     my $location     = $parameters->{'location'}     // '';
     my $itemtype     = $parameters->{'itemtype'}     // '';
     my $ignoreissued = $parameters->{'ignoreissued'} // '';
@@ -816,6 +817,9 @@ sub GetItemsForInventory {
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
+
+    my $min_cnsort = GetClassSort($class_source,undef,$minlocation);
+    my $max_cnsort = GetClassSort($class_source,undef,$maxlocation);
 
     my $select_columns = q{
         SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber
@@ -836,13 +840,13 @@ sub GetItemsForInventory {
     }
 
     if ($minlocation) {
-        push @where_strings, 'itemcallnumber >= ?';
-        push @bind_params, $minlocation;
+        push @where_strings, 'items.cn_sort >= ?';
+        push @bind_params, $min_cnsort;
     }
 
     if ($maxlocation) {
-        push @where_strings, 'itemcallnumber <= ?';
-        push @bind_params, $maxlocation;
+        push @where_strings, 'items.cn_sort <= ?';
+        push @bind_params, $max_cnsort;
     }
 
     if ($datelastseen) {

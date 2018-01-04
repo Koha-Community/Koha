@@ -82,7 +82,18 @@
                 <input type="text" name="minlocation" id="minlocation" value="[% minlocation | html %]" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label>
                 <input type="text" name="maxlocation" id="maxlocation" value="[% maxlocation | html %]" />
-        </li>
+           <li>
+            <label for="class_source">Callnumber classification scheme</label>
+            <select name="class_source">
+            [% FOREACH class_source IN class_sources %]
+                [% IF class_source.cn_source == pref_class %]
+                <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %] (default)</option>
+                [% ELSE %]
+                <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
+                [% END %]
+            [% END %]
+            </select>
+          </li>
     </ol>
     </fieldset>
 

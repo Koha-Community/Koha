@@ -39,10 +39,12 @@ use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
+use Koha::ClassSources;
 use List::MoreUtils qw( none );
 
 my $minlocation=$input->param('minlocation') || '';
 my $maxlocation=$input->param('maxlocation');
+my $class_source=$input->param('class_source');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
 my $location=$input->param('location') || '';
 my $ignoreissued=$input->param('ignoreissued');
@@ -116,6 +118,10 @@ for my $authvfield (@$statuses) {
     }
 }
 
+my @class_sources = Koha::ClassSources->search();
+my $pref_class = C4::Context->preference("DefaultClassificationSource");
+
+
 $template->param(
     authorised_values        => \@authorised_value_list,
     today                    => dt_from_string,
@@ -129,6 +135,8 @@ $template->param(
     compareinv2barcd         => $compareinv2barcd,
     uploadedbarcodesflag     => $uploadbarcodes ? 1 : 0,
     ignore_waiting_holds     => $ignore_waiting_holds,
+    class_sources            => \@class_sources,
+    pref_class               => $pref_class
 );
 
 # Walk through uploaded barcodes, report errors, mark as seen, check in
@@ -225,6 +233,7 @@ if ( $op && ( !$uploadbarcodes || $compareinv2barcd )) {
     ( $inventorylist ) = GetItemsForInventory({
       minlocation  => $minlocation,
       maxlocation  => $maxlocation,
+      class_source => $class_source,
       location     => $location,
       ignoreissued => $ignoreissued,
       datelastseen => $datelastseen,
@@ -240,6 +249,7 @@ if( @scanned_items ) {
     ( $rightplacelist ) = GetItemsForInventory({
       minlocation  => $minlocation,
       maxlocation  => $maxlocation,
+      class_source => $class_source,
       location     => $location,
       ignoreissued => undef,
       datelastseen => undef,
