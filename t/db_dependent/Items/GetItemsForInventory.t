@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use t::lib::TestBuilder;
 
 use List::MoreUtils qw( any none );
 
 use C4::Biblio qw(AddBiblio);
 use C4::Reserves;
+use C4::ClassSource;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::Database;
@@ -59,6 +60,7 @@ subtest 'Old version is unchanged' => sub {
     $schema->storage->txn_rollback;
 };
 
+<<<<<<< HEAD
 subtest 'Skip items with waiting holds' => sub {
 
     plan tests => 6;
@@ -125,6 +127,46 @@ subtest 'Skip items with waiting holds' => sub {
         'Item on hold skipped, no one matches' );
 
     $schema->storage->txn_rollback;
+=======
+$dbh->rollback;
+$dbh->{AutoCommit} = 1;
+
+subtest 'Use cn_sort rather than callnumber to determine correct location' => sub {
+
+    plan tests => 1;
+    my $builder = t::lib::TestBuilder->new;
+    my $schema  = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+    $builder->schema->resultset( 'Issue' )->delete_all;
+    $builder->schema->resultset( 'Item' )->delete_all;
+
+    my $class_rule = $builder->build({
+        source => 'ClassSortRule',
+        value => { sort_routine => "LCC" }
+    });
+    my $class_source = $builder->build({
+        source => 'ClassSource',
+        value => {
+            class_sort_rule => $class_rule->{class_sort_rule},
+        }
+    });
+    my $item_1 = $builder->build({
+            source => 'Item',
+            value  => {
+                itemcallnumber => 'GT95',
+                cn_sort => GetClassSort($class_source->{cn_source},undef,'GT95'),
+            }
+    });
+
+    my( undef, $item_count) = GetItemsForInventory({
+        maxlocation => 'GT100',
+        minlocation => 'GT90',
+        class_source => $class_source->{cn_source},
+    });
+    is($item_count,1,"We should return GT95 as between GT90 and GT100");
+    $schema->storage->txn_rollback;
+
+>>>>>>> Bug 19915: Add unit test to GetItemsForInventory.t
 };
 
 sub OldWay {
