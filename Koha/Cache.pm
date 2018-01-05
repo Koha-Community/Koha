@@ -142,8 +142,8 @@ sub _initialize_memcached {
 
     # Ensure we can actually talk to the memcached server
     my $ismemcached = $memcached->set('ismemcached','1');
-    unless ($ismemcached) { #Value is undefined or False, so there was an error with the server, the connection to it, or a protocol error
-        warn "Connection to the memcached servers '@servers' failed. Are the unix socket permissions set properly? Is the host reachable?";
+    unless ($ismemcached) {
+        warn "\nConnection to the memcached servers '@servers' failed. Are the unix socket permissions set properly? Is the host reachable?\nIf you ignore this warning, you will face performance issues\n";
         return $self;
     }
     $self->{'memcached_cache'} = $memcached;
