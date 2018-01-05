@@ -26,6 +26,7 @@ use C4::Context;
 use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
 use Date::Calc qw/Today check_date Date_to_Days/;
+use List::MoreUtils qw( uniq );
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -63,8 +64,6 @@ BEGIN {
 
         &GetPendingIssues
         &GetAllIssues
-
-        &GetMemberAccountRecords
 
         &GetBorrowersToExpunge
 
@@ -736,49 +735,6 @@ sub GetAllIssues {
 }
 
 
-=head2 GetMemberAccountRecords
-
-  ($total, $acctlines, $count) = &GetMemberAccountRecords($borrowernumber);
-
-Looks up accounting data for the patron with the given borrowernumber.
-
-C<&GetMemberAccountRecords> returns a three-element array. C<$acctlines> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields of the C<accountlines> table in the Koha database.
-C<$count> is the number of elements in C<$acctlines>. C<$total> is the
-total amount outstanding for all of the account lines.
-
-=cut
-
-sub GetMemberAccountRecords {
-    my ($borrowernumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my @acctlines;
-    my $numlines = 0;
-    my $strsth      = qq(
-                        SELECT * 
-                        FROM accountlines 
-                        WHERE borrowernumber=?);
-    $strsth.=" ORDER BY accountlines_id desc";
-    my $sth= $dbh->prepare( $strsth );
-    $sth->execute( $borrowernumber );
-
-    my $total = 0;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{itemnumber} ) {
-            my $item = Koha::Items->find( $data->{itemnumber} );
-            my $biblio = $item->biblio;
-            $data->{biblionumber} = $biblio->biblionumber;
-            $data->{title}        = $biblio->title;
-        }
-        $acctlines[$numlines] = $data;
-        $numlines++;
-        $total += sprintf "%.0f", 1000*$data->{amountoutstanding}; # convert float to integer to avoid round-off errors
-    }
-    $total /= 1000;
-    return ( $total, \@acctlines,$numlines);
-}
-
 =head2 GetMemberAccountBalance
 
   ($total_balance, $non_issue_balance, $other_charges) = &GetMemberAccountBalance($borrowernumber);
@@ -795,6 +751,7 @@ Charges exempt from non-issue are:
 sub GetMemberAccountBalance {
     my ($borrowernumber) = @_;
 
+    # FIXME REMOVE And add a warning in the about page + update DB if length(MANUAL_INV) > 5
     my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
 
     my @not_fines;
@@ -802,16 +759,17 @@ sub GetMemberAccountBalance {
     push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
     unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
         my $dbh = C4::Context->dbh;
-        my $man_inv_types = $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'});
-        push @not_fines, map substr($_, 0, $ACCOUNT_TYPE_LENGTH), @$man_inv_types;
+        push @not_fines, @{ $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'}) };
     }
-    my %not_fine = map {$_ => 1} @not_fines;
+    @not_fines = map { substr($_, 0, $ACCOUNT_TYPE_LENGTH) } uniq (@not_fines);
 
-    my ($total, $acctlines) = GetMemberAccountRecords($borrowernumber);
-    my $other_charges = 0;
-    foreach (@$acctlines) {
-        $other_charges += $_->{amountoutstanding} if $not_fine{ substr($_->{accounttype}, 0, $ACCOUNT_TYPE_LENGTH) };
-    }
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $total = $patron->account->balance;
+    my $other_charges = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, accounttype => { -in => \@not_fines } }, {
+            select => [ { sum => 'amountoutstanding' } ],
+            as => ['total_other_charges'],
+        });
+    $other_charges = $other_charges->count ? $other_charges->next->get_column('total_other_charges') : 0;
 
     return ( $total, $total - $other_charges, $other_charges);
 }

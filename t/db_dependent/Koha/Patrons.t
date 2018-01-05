@@ -396,14 +396,15 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     my $borrowernumber = C4::Members::AddMember(%borrower_data);
     $borrower_data{borrowernumber} = $borrowernumber;
 
-    my ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
-    is( $total, $enrolmentfee_K, "New kid pay $enrolmentfee_K" );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $total = $patron->account->balance;
+    is( int($total), int($enrolmentfee_K), "New kid pay $enrolmentfee_K" );
 
     t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 0 );
     $borrower_data{categorycode} = 'J';
     C4::Members::ModMember(%borrower_data);
-    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
-    is( $total, $enrolmentfee_K, "Kid growing and become a juvenile, but shouldn't pay for the upgrade " );
+    $total = $patron->account->balance;
+    is( int($total), int($enrolmentfee_K), "Kid growing and become a juvenile, but shouldn't pay for the upgrade " );
 
     $borrower_data{categorycode} = 'K';
     C4::Members::ModMember(%borrower_data);
@@ -411,16 +412,15 @@ subtest 'add_enrolment_fee_if_needed' => sub {
 
     $borrower_data{categorycode} = 'J';
     C4::Members::ModMember(%borrower_data);
-    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
-    is( $total, $enrolmentfee_K + $enrolmentfee_J, "Kid growing and become a juvenile, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
+    $total = $patron->account->balance;
+    is( int($total), int($enrolmentfee_K + $enrolmentfee_J), "Kid growing and become a juvenile, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
 
     # Check with calling directly Koha::Patron->get_enrolment_fee_if_needed
-    my $patron = Koha::Patrons->find($borrowernumber);
     $patron->categorycode('YA')->store;
     my $fee = $patron->add_enrolment_fee_if_needed;
-    ($total) = C4::Members::GetMemberAccountRecords($borrowernumber);
-    is( $total,
-        $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA,
+    $total = $patron->account->balance;
+    is( int($total),
+        int($enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA),
         "Juvenile growing and become an young adult, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA )
     );
 

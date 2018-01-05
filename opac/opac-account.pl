@@ -24,6 +24,7 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Auth;
 use C4::Output;
+use Koha::Account::Lines;
 use Koha::Patrons;
 use Koha::Plugins;
 
@@ -45,32 +46,30 @@ $borrower->{description} = $category->description;
 $borrower->{category_type} = $category->category_type;
 $template->param( BORROWER_INFO => $borrower );
 
-#get account details
-my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+my $total = $patron->account->balance;
+my $accts = Koha::Account::Lines->search(
+    { borrowernumber => $patron->borrowernumber },
+    { order_by       => { -desc => 'accountlines_id' } }
+);
 
-for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
-    $accts->[$i]{'amount'} = sprintf( "%.2f", $accts->[$i]{'amount'} || '0.00');
-    if ( $accts->[$i]{'amount'} >= 0 ) {
-        $accts->[$i]{'amountcredit'} = 1;
+my @accountlines;
+while ( my $line = $accts->next ) {
+    my $accountline = $line->unblessed;
+    $accountline->{'amount'} = sprintf( "%.2f", $accountline->{'amount'} || '0.00');
+    if ( $accountline->{'amount'} >= 0 ) {
+        $accountline->{'amountcredit'} = 1;
     }
-    $accts->[$i]{'amountoutstanding'} =
-      sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} || '0.00' );
-    if ( $accts->[$i]{'amountoutstanding'} >= 0 ) {
-        $accts->[$i]{'amountoutstandingcredit'} = 1;
+    $accountline->{'amountoutstanding'} =
+      sprintf( "%.2f", $accountline->{'amountoutstanding'} || '0.00' );
+    if ( $accountline->{'amountoutstanding'} >= 0 ) {
+        $accountline->{'amountoutstandingcredit'} = 1;
     }
-}
-
-# add the row parity
-my $num = 0;
-foreach my $row (@$accts) {
-    $row->{'even'} = 1 if $num % 2 == 0;
-    $row->{'odd'}  = 1 if $num % 2 == 1;
-    $num++;
+    push @accountlines, $accountline;
 }
 
 $template->param(
-    ACCOUNT_LINES => $accts,
-    total         => sprintf( "%.2f", $total ),
+    ACCOUNT_LINES => \@accountlines,
+    total         => sprintf( "%.2f", $total ), # FIXME Use TT plugin Price
     accountview   => 1,
     message       => scalar $query->param('message') || q{},
     message_value => scalar $query->param('message_value') || q{},

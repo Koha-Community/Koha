@@ -71,14 +71,23 @@ if ( $patron->is_child ) {
 }
 
 #get account details
-my ($total,$accts,undef)=GetMemberAccountRecords($borrowernumber);
+my $total = $patron->account->balance;
+
+my $accts = Koha::Account::Lines->search(
+    { borrowernumber => $patron->borrowernumber },
+    { order_by       => { -desc => 'accountlines_id' } }
+);
+
 my $totalcredit;
 if($total <= 0){
         $totalcredit = 1;
 }
 
 my $reverse_col = 0; # Flag whether we need to show the reverse column
-foreach my $accountline ( @{$accts}) {
+my @accountlines;
+while ( my $line = $accts->next ) {
+    # FIXME We should pass the $accts iterator to the template and do this formatting part there
+    my $accountline = $line->unblessed;
     $accountline->{amount} += 0.00;
     if ($accountline->{amount} <= 0 ) {
         $accountline->{amountcredit} = 1;
@@ -94,6 +103,12 @@ foreach my $accountline ( @{$accts}) {
         $accountline->{payment} = 1;
         $reverse_col = 1;
     }
+
+    if ( $accountline->{itemnumber} ) {
+        # Because we will not have access to the object from the template
+        $accountline->{item} = { biblionumber => $line->item->biblionumber, };
+    }
+    push @accountlines, $accountline;
 }
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
@@ -110,7 +125,7 @@ $template->param(
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     reverse_col         => $reverse_col,
-    accounts            => $accts,
+    accounts            => \@accountlines,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

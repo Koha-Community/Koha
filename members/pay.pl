@@ -124,7 +124,8 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub add_accounts_to_template {
 
-    my ( $total, undef, undef ) = GetMemberAccountRecords($borrowernumber);
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $total = $patron->account->balance;
     my $account_lines = Koha::Account::Lines->search({ borrowernumber => $borrowernumber, amountoutstanding => { '!=' => 0 } }, { order_by => ['accounttype'] });
     my @accounts;
     while ( my $account_line = $account_lines->next ) {

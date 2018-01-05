@@ -29,6 +29,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
+use Koha::Account::Lines;
 use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -64,59 +65,46 @@ if ( $patron->is_child ) {
 }
 
 #get account details
-my ($total,$accts,$numaccts)=GetMemberAccountRecords($borrowernumber);
+my $total = $patron->account->balance;
+
+# FIXME This whole stuff is ugly and should be rewritten
+# FIXME We should pass the $accts iterator to the template and do this formatting part there
+my $accountline = Koha::Account::Lines->find($accountlines_id)->unblessed;
 my $totalcredit;
 if($total <= 0){
         $totalcredit = 1;
 }
-my @accountrows; # this is for the tmpl-loop
 
-my $toggle;
-for (my $i=0;$i<$numaccts;$i++){
-    next if ( $accts->[$i]{'accountlines_id'} ne $accountlines_id );
-    if($i%2){
-            $toggle = 0;
-    } else {
-            $toggle = 1;
-    }
-    $accts->[$i]{'toggle'} = $toggle;
-    $accts->[$i]{'amount'}+=0.00;
-    if($accts->[$i]{'amount'} <= 0){
-        $accts->[$i]{'amountcredit'} = 1;
-	$accts->[$i]{'amount'}*=-1.00;
-    }
-    $accts->[$i]{'amountoutstanding'}+=0.00;
-    if($accts->[$i]{'amountoutstanding'} <= 0){
-        $accts->[$i]{'amountoutstandingcredit'} = 1;
-    }
-
-    my %row = ( 'date'         => dt_from_string( $accts->[$i]{'date'} ),
-                'amountcredit' => $accts->[$i]{'amountcredit'},
-                'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
-                'toggle' => $accts->[$i]{'toggle'},
-                'description'       => $accts->[$i]{'description'},
-				'itemnumber'       => $accts->[$i]{'itemnumber'},
-				'biblionumber'       => $accts->[$i]{'biblionumber'},
-                'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
-                'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}),
-                'accountno' => $accts->[$i]{'accountno'},
-                accounttype => $accts->[$i]{accounttype},
-                'note' => $accts->[$i]{'note'},
-                );
-
-    if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
-        $row{'printtitle'}=1;
-        $row{'title'} = $accts->[$i]{'title'};
-    }
-
-    push(@accountrows, \%row);
+$accountline->{'amount'} += 0.00;
+if ( $accountline->{'amount'} <= 0 ) {
+    $accountline->{'amountcredit'} = 1;
+    $accountline->{'amount'} *= -1.00;
 }
+$accountline->{'amountoutstanding'} += 0.00;
+if ( $accountline->{'amountoutstanding'} <= 0 ) {
+    $accountline->{'amountoutstandingcredit'} = 1;
+}
+
+my %row = (
+    'date'                    => dt_from_string( $accountline->{'date'} ),
+    'amountcredit'            => $accountline->{'amountcredit'},
+    'amountoutstandingcredit' => $accountline->{'amountoutstandingcredit'},
+    'description'             => $accountline->{'description'},
+    'amount'                  => sprintf( "%.2f", $accountline->{'amount'} ),
+    'amountoutstanding' =>
+      sprintf( "%.2f", $accountline->{'amountoutstanding'} ),
+    'accountno' => $accountline->{'accountno'},
+    accounttype => $accountline->{accounttype},
+    'note'      => $accountline->{'note'},
+);
+
 
 $template->param(
     patron               => $patron,
     finesview           => 1,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    accounts            => \@accountrows );
+    accounts            => [$accountline], # FIXME There is always only 1 row!
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;

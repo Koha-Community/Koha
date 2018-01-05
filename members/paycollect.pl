@@ -58,7 +58,7 @@ my $user           = $input->remote_user;
 
 my $branch         = C4::Context->userenv->{'branch'};
 
-my ( $total_due, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
+my $total_due = $patron->account->balance;
 my $total_paid = $input->param('paid');
 
 my $individual   = $input->param('pay_individual');

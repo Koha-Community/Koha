@@ -179,12 +179,13 @@ if ($borrowernumber_hold && !$action) {
         $diffbranch = 1;
     }
 
+    my $amount_outstanding = $patron->account->balance;
     $template->param(
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
                 messages            => $messages,
                 warnings            => $warnings,
-                amount_outstanding  => GetMemberAccountRecords($patron->borrowernumber),
+                amount_outstanding  => $amount_outstanding,
     );
 }
 

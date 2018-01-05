@@ -279,7 +279,8 @@ sub balance {
             as => ['total_amountoutstanding'],
         }
     );
-    return $fines->count
+
+    my $total = $fines->count
       ? $fines->next->get_column('total_amountoutstanding')
       : 0;
 }

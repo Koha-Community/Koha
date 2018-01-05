@@ -47,14 +47,11 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my ( $total, $accts, $numaccts ) = GetMemberAccountRecords($borrowernumber);
-foreach my $accountline (@$accts) {
-    if (   $accountline->{accounttype} ne 'F'
-        && $accountline->{accounttype} ne 'FU' )
-    {
-        $accountline->{printtitle} = 1;
-    }
-}
+my $total = $patron->account->balance;
+my $accts = Koha::Account::Lines->search(
+    { borrowernumber => $patron->borrowernumber },
+    { order_by       => { -desc => 'accountlines_id' } }
+);
 
 our $totalprice = 0;
 

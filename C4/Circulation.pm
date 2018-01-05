@@ -2696,7 +2696,7 @@ sub CanBookBeRenewed {
 
         if ( C4::Context->preference('OPACFineNoRenewalsBlockAutoRenew') ) {
             my $fine_no_renewals = C4::Context->preference("OPACFineNoRenewals");
-            my ( $amountoutstanding ) = C4::Members::GetMemberAccountRecords($patron->borrowernumber);
+            my $amountoutstanding = $patron->account->balance;
             if ( $amountoutstanding and $amountoutstanding > $fine_no_renewals ) {
                 return ( 0, "auto_too_much_oweing" );
             }

@@ -88,7 +88,7 @@ sub new {
         hold_ok         => ( !$debarred && !$expired && !$fine_blocked),
         card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
         claims_returned => 0,
-        fines           => $fines_amount, # GetMemberAccountRecords($kp->{borrowernumber})
+        fines           => $fines_amount,
         fees            => 0,             # currently not distinct from fines
         recall_overdue  => 0,
         items_billed    => 0,

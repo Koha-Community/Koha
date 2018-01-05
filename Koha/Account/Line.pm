@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Items;
 
 use base qw(Koha::Object);
 
@@ -33,7 +34,19 @@ Koha::Account::Lines - Koha accountline Object class
 
 =cut
 
-=head3 type
+=head3 item
+
+Return the item linked to this account line if exists
+
+=cut
+
+sub item {
+    my ( $self ) = @_;
+    my $rs = $self->_result->itemnumber;
+    return Koha::Item->_new_from_dbic( $rs );
+}
+
+=head3 _type
 
 =cut
 

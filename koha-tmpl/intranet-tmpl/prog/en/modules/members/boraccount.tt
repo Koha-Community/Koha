@@ -78,7 +78,7 @@
           [% CASE %][% account.accounttype %]
         [%- END -%]
         [%- IF account.description %], [% account.description %][% END %]
-        &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.title |html %]</a>[% END %]</td>
+        &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% account.item.biblio.title |html %]</a>[% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
