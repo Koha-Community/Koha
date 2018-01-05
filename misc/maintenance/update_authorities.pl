@@ -38,11 +38,9 @@ GetOptions(
 );
 
 @authid = map { split /[,]/, $_; } @authid;
+print "No changes will be made\n" unless $commit;
 if( $help ) {
     pod2usage(1);
-} elsif( !$commit ) {
-    print "Please add -commit parameter\n";
-    exit;
 } elsif( $delete ) {
     delete_auth( \@authid );
 } elsif( $merge ) {
@@ -56,8 +54,12 @@ if( $help ) {
 sub delete_auth {
     my ( $auths ) = @_;
     foreach my $authid ( uniq(@$auths) ) {
-        DelAuthority({ authid => $authid }); # triggers a merge (read: cleanup)
-        print "Removing $authid\n" if $verbose;
+        if( $commit ) {
+            DelAuthority({ authid => $authid }); # triggers a merge (read: cleanup)
+            print "Removing $authid\n" if $verbose;
+        } else {
+            print "Would have removed $authid\n" if $verbose;
+        }
     }
 }
 
@@ -67,9 +69,9 @@ sub merge_auth {
         print "Reference parameter is missing\n";
         return;
     }
-    my $marc_ref = GetAuthority( $reference ) || return;
+    my $marc_ref = GetAuthority( $reference ) || die "Reference record $reference not found\n";
     # First update all linked biblios of reference
-    merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 });
+    merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 }) if $commit;
 
     # Merge all authid's into reference
     my $marc;
@@ -80,9 +82,19 @@ sub merge_auth {
             print "Authority id $authid ignored, does not exist.\n";
             next;
         }
-        merge({ mergefrom => $authid, MARCfrom => $marc, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 });
-        DelAuthority({ authid => $authid, skip_merge => 1 });
-        print "Record $authid merged into reference.\n" if $verbose;
+        if( $commit ) {
+            merge({
+                mergefrom      => $authid,
+                MARCfrom       => $marc,
+                mergeto        => $reference,
+                MARCto         => $marc_ref,
+                override_limit => 1
+            });
+            DelAuthority({ authid => $authid, skip_merge => 1 });
+            print "Record $authid merged into reference $reference.\n" if $verbose;
+        } else {
+            print "Would have merged record $authid into reference $reference.\n" if $verbose;
+        }
     }
 }
 
@@ -91,9 +103,13 @@ sub renumber {
     foreach my $authid ( uniq(@$auths) ) {
         if( my $obj = Koha::Authorities->find($authid) ) {
             my $marc = GetAuthority( $authid );
-            AddAuthority( $marc, $authid, $obj->authtypecode );
-                # AddAuthority contains an update of 001, 005 etc.
-            print "Renumbered $authid\n" if $verbose;
+            if( $commit ) {
+                AddAuthority( $marc, $authid, $obj->authtypecode );
+                    # AddAuthority contains an update of 001, 005 etc.
+                print "Renumbered $authid\n" if $verbose;
+            } else {
+                print "Would have renumbered $authid\n" if $verbose;
+            }
         } else {
             print "Record $authid not found!\n"  if $verbose;
         }
