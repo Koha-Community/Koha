@@ -276,7 +276,7 @@ if ($barcode) {
 
         # make sure return branch respects home branch circulation rules, default to homebranch
         my $hbr = GetBranchItemRule($item->homebranch, $itemtype ? $itemtype->itemtype : undef )->{'returnbranch'} || "homebranch";
-        $returnbranch = $item->$hbr;
+        $returnbranch = $hbr ne 'noreturn' ? $item->$hbr : $userenv_branch; # can be noreturn, homebranch or holdingbranch
 
         my $materials = $item->materials;
         my $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => '', kohafield =>'items.materials', authorised_value => $materials });
