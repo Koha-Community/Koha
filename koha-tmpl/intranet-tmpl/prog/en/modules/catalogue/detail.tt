@@ -684,6 +684,7 @@
       <thead>
         <tr>
           <th>Vendor</th>
+          <th>Invoice</th>
           <th>Basket group</th>
           <th>Basket</th>
           <th>Order number</th>
@@ -699,6 +700,17 @@
             <td>
             [% IF (order.id) %]
                 <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id %]" title="Vendor detail page">[% order.name %]</a>
+            [% END %]
+            </td>
+            <td>
+            [% IF (order.invoiceid) %]
+                [% IF CAN_user_acquisition %]
+                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]"
+                       title="Invoice detail page">
+                       [% order.invoicenumber %]</a>
+                [% ELSE %]
+                    [% order.invoicenumber %]
+                [% END %]
             [% END %]
             </td>
             <td>
