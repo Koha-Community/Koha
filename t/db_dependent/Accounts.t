@@ -25,7 +25,6 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Members;
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
@@ -284,7 +283,7 @@ subtest "Koha::Account::pay particular line tests" => sub {
     my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 3 })->store();
     my $line4 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 4 })->store();
 
-    is( $account->balance(), "10.000000", "Account balance is 10" );
+    is( $account->balance(), 10, "Account balance is 10" );
 
     $account->pay(
         {
@@ -326,7 +325,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42 })->store();
 
-    is( $account->balance(), "42.000000", "Account balance is 42" );
+    is( $account->balance(), 42, "Account balance is 42" );
 
     my $id = $account->pay(
         {
@@ -675,13 +674,15 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         }
     )->store;
 
+    my $account = $patron->account;
+
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    my ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    my ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    my $other_charges = $total - $non_issues_charges;
     is(
-        $total,
+        $account->balance,
         $res + $rent + $manual,
         'Total charges should be Res + Rent + Manual'
     );
@@ -692,8 +693,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
@@ -710,8 +711,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
@@ -728,8 +729,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
@@ -745,8 +746,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
@@ -763,8 +764,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  0 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
@@ -781,8 +782,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   1 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 1 );
     t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge',  1 );
-    ( $total, $non_issues_charges, $other_charges ) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    ( $total, $non_issues_charges ) = ( $account->balance, $account->non_issues_charges );
+    $other_charges = $total - $non_issues_charges;
     is(
         $total,
         $res + $rent + $manual,
