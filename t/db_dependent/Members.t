@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 60;
 use Test::MockModule;
 use Test::Exception;
 
@@ -372,43 +372,6 @@ ok( $borrower->{userid},  'A userid should have been generated correctly' );
 # Regression tests for BZ12226
 is( Check_Userid( C4::Context->config('user'), '' ), 0,
     'Check_Userid should return 0 for the DB user (Bug 12226)');
-
-subtest 'GetMemberAccountBalance' => sub {
-
-    plan tests => 6;
-
-    my $members_mock = new Test::MockModule('C4::Members');
-    $members_mock->mock( 'GetMemberAccountRecords', sub {
-        my ($borrowernumber) = @_;
-        if ($borrowernumber) {
-            my @accountlines = (
-            { amountoutstanding => '7', accounttype => 'Rent' },
-            { amountoutstanding => '5', accounttype => 'Res' },
-            { amountoutstanding => '3', accounttype => 'Pay' } );
-            return ( 15, \@accountlines );
-        }
-        else {
-            my @accountlines;
-            return ( 0, \@accountlines );
-        }
-    });
-
-    # do not count holds charges
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge', '1' );
-    t::lib::Mocks::mock_preference( 'ManInvInNoissuesCharge', '0' );
-    my ($total, $total_minus_charges,
-        $other_charges) = C4::Members::GetMemberAccountBalance(123);
-    is( $total, 15 , "Total calculated correctly");
-    is( $total_minus_charges, 15, "Holds charges are not count if HoldsInNoissuesCharge=1");
-    is( $other_charges, 0, "Holds charges are not considered if HoldsInNoissuesCharge=1");
-
-    t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge', '0' );
-    ($total, $total_minus_charges,
-        $other_charges) = C4::Members::GetMemberAccountBalance(123);
-    is( $total, 15 , "Total calculated correctly");
-    is( $total_minus_charges, 10, "Holds charges are count if HoldsInNoissuesCharge=0");
-    is( $other_charges, 5, "Holds charges are considered if HoldsInNoissuesCharge=1");
-};
 
 subtest 'purgeSelfRegistration' => sub {
     plan tests => 2;

@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Carp;
 use Data::Dumper;
+use List::MoreUtils qw( uniq );
 
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
@@ -281,7 +282,57 @@ sub balance {
     );
 
     my $total = $fines->count
-      ? $fines->next->get_column('total_amountoutstanding')
+      ? $fines->next->get_column('total_amountoutstanding') + 0
+      : 0;
+}
+
+=head3 non_issues_charges
+
+my $non_issues_charges = $self->non_issues_charges
+
+Calculates amount immediately owing by the patron - non-issue charges.
+
+Charges exempt from non-issue are:
+* Res (holds) if HoldsInNoissuesCharge syspref is set to false
+* Rent (rental) if RentalsInNoissuesCharge syspref is set to false
+* Manual invoices if ManInvInNoissuesCharge syspref is set to false
+
+=cut
+
+sub non_issues_charges {
+    my ($self) = @_;
+
+    # FIXME REMOVE And add a warning in the about page + update DB if length(MANUAL_INV) > 5
+    my $ACCOUNT_TYPE_LENGTH = 5;    # this is plain ridiculous...
+
+    my @not_fines;
+    push @not_fines, 'Res'
+      unless C4::Context->preference('HoldsInNoissuesCharge');
+    push @not_fines, 'Rent'
+      unless C4::Context->preference('RentalsInNoissuesCharge');
+    unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
+        my $dbh = C4::Context->dbh;
+        push @not_fines,
+          @{
+            $dbh->selectcol_arrayref(q|
+                SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'
+            |)
+          };
+    }
+    @not_fines = map { substr( $_, 0, $ACCOUNT_TYPE_LENGTH ) } uniq(@not_fines);
+
+    my $non_issues_charges = Koha::Account::Lines->search(
+        {
+            borrowernumber => $self->{patron_id},
+            accounttype    => { -not_in => \@not_fines }
+        },
+        {
+            select => [ { sum => 'amountoutstanding' } ],
+            as     => ['non_issues_charges'],
+        }
+    );
+    return $non_issues_charges->count
+      ? $non_issues_charges->next->get_column('non_issues_charges') + 0
       : 0;
 }
 

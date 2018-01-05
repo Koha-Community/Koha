@@ -746,8 +746,10 @@ sub CanBookBeIssued {
     #
 
     # DEBTS
-    my ($balance, $non_issue_charges, $other_charges) =
-      C4::Members::GetMemberAccountBalance( $patron->borrowernumber );
+    my $account = $patron->account;
+    my $balance = $account->balance;
+    my $non_issues_charges = $account->non_issues_charges;
+    my $other_charges = $balance - $non_issues_charges;
 
     my $amountlimit = C4::Context->preference("noissuescharge");
     my $allowfineoverride = C4::Context->preference("AllowFineOverride");
@@ -760,8 +762,7 @@ sub CanBookBeIssued {
         my @guarantees = $patron->guarantees();
         my $guarantees_non_issues_charges;
         foreach my $g ( @guarantees ) {
-            my ( $b, $n, $o ) = C4::Members::GetMemberAccountBalance( $g->id );
-            $guarantees_non_issues_charges += $n;
+            $guarantees_non_issues_charges += $g->account->non_issues_charges;
         }
 
         if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees && !$inprocess && !$allowfineoverride) {
@@ -774,21 +775,21 @@ sub CanBookBeIssued {
     }
 
     if ( C4::Context->preference("IssuingInProcess") ) {
-        if ( $non_issue_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issue_charges );
-        } elsif ( $non_issue_charges > $amountlimit && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
-        } elsif ( $allfinesneedoverride && $non_issue_charges > 0 && $non_issue_charges <= $amountlimit && !$inprocess ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        if ( $non_issues_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issues_charges );
+        } elsif ( $non_issues_charges > $amountlimit && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+        } elsif ( $allfinesneedoverride && $non_issues_charges > 0 && $non_issues_charges <= $amountlimit && !$inprocess ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
         }
     }
     else {
-        if ( $non_issue_charges > $amountlimit && $allowfineoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
-        } elsif ( $non_issue_charges > $amountlimit && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issue_charges );
-        } elsif ( $non_issue_charges > 0 && $allfinesneedoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issue_charges );
+        if ( $non_issues_charges > $amountlimit && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+        } elsif ( $non_issues_charges > $amountlimit && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issues_charges );
+        } elsif ( $non_issues_charges > 0 && $allfinesneedoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
         }
     }
 

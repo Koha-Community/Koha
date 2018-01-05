@@ -166,8 +166,17 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         }
     } );
 
-    my $members = Test::MockModule->new('C4::Members');
-    $members->mock( 'GetMemberAccountBalance', sub { return ( 10, 10, 0 ); } );
+    $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $brwr->{borrowernumber},
+                accountno         => 1,
+                accounttype       => 'xxx',
+                amountoutstanding => 10
+            }
+        }
+    );
 
     # Prepare and send web request for IL-SDI server:
     my $query = new CGI;

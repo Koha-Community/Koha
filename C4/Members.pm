@@ -176,7 +176,9 @@ sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
     my $dbh=C4::Context->dbh;
-    my ($balance, $owing) = GetMemberAccountBalance( $patroninformation->{'borrowernumber'});
+    my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
+    my $account = $patron->account;
+    my $owing = $account->non_issues_charges;
     if ( $owing > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
@@ -187,7 +189,7 @@ sub patronflags {
         }
         $flags{'CHARGES'} = \%flaginfo;
     }
-    elsif ( $balance < 0 ) {
+    elsif ( ( my $balance = $account->balance ) < 0 ) {
         my %flaginfo;
         $flaginfo{'message'} = sprintf 'Patron has credit of %.02f', -$balance;
         $flaginfo{'amount'}  = sprintf "%.02f", $balance;
@@ -202,8 +204,7 @@ sub patronflags {
         my @guarantees = $p->guarantees();
         my $guarantees_non_issues_charges;
         foreach my $g ( @guarantees ) {
-            my ( $b, $n, $o ) = C4::Members::GetMemberAccountBalance( $g->id );
-            $guarantees_non_issues_charges += $n;
+            $guarantees_non_issues_charges += $g->account->non_issues_charges;
         }
 
         if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
@@ -260,7 +261,6 @@ sub patronflags {
         $flags{'ODUES'} = \%flaginfo;
     }
 
-    my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
     my $waiting_holds = $patron->holds->search({ found => 'W' });
     my $nowaiting = $waiting_holds->count;
     if ( $nowaiting > 0 ) {
@@ -732,46 +732,6 @@ sub GetAllIssues {
     my $sth = $dbh->prepare($query);
     $sth->execute( $borrowernumber, $borrowernumber );
     return $sth->fetchall_arrayref( {} );
-}
-
-
-=head2 GetMemberAccountBalance
-
-  ($total_balance, $non_issue_balance, $other_charges) = &GetMemberAccountBalance($borrowernumber);
-
-Calculates amount immediately owing by the patron - non-issue charges.
-Based on GetMemberAccountRecords.
-Charges exempt from non-issue are:
-* Res (reserves)
-* Rent (rental) if RentalsInNoissuesCharge syspref is set to false
-* Manual invoices if ManInvInNoissuesCharge syspref is set to false
-
-=cut
-
-sub GetMemberAccountBalance {
-    my ($borrowernumber) = @_;
-
-    # FIXME REMOVE And add a warning in the about page + update DB if length(MANUAL_INV) > 5
-    my $ACCOUNT_TYPE_LENGTH = 5; # this is plain ridiculous...
-
-    my @not_fines;
-    push @not_fines, 'Res' unless C4::Context->preference('HoldsInNoissuesCharge');
-    push @not_fines, 'Rent' unless C4::Context->preference('RentalsInNoissuesCharge');
-    unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
-        my $dbh = C4::Context->dbh;
-        push @not_fines, @{ $dbh->selectcol_arrayref(qq{SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'}) };
-    }
-    @not_fines = map { substr($_, 0, $ACCOUNT_TYPE_LENGTH) } uniq (@not_fines);
-
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $total = $patron->account->balance;
-    my $other_charges = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, accounttype => { -in => \@not_fines } }, {
-            select => [ { sum => 'amountoutstanding' } ],
-            as => ['total_other_charges'],
-        });
-    $other_charges = $other_charges->count ? $other_charges->next->get_column('total_other_charges') : 0;
-
-    return ( $total, $total - $other_charges, $other_charges);
 }
 
 sub checkcardnumber {
