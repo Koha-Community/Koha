@@ -544,28 +544,28 @@ sub GetBudgetHierarchy {
     }
 
     # Get all the budgets totals in as few queries as possible
-    my $hr_budget_spent = $dbh->selectall_hashref(qq|
+    my $hr_budget_spent = $dbh->selectall_hashref(q|
         SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
                SUM( COALESCE(unitprice_tax_included, ecost_tax_included) * quantity ) AS budget_spent
         FROM aqorders JOIN aqbudgets USING (budget_id)
         WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
         GROUP BY budget_id
         |, 'budget_id');
-    my $hr_budget_ordered = $dbh->selectall_hashref(qq|
+    my $hr_budget_ordered = $dbh->selectall_hashref(q|
         SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
                SUM(ecost_tax_included *  quantity) AS budget_ordered
         FROM aqorders JOIN aqbudgets USING (budget_id)
         WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
         GROUP BY budget_id
         |, 'budget_id');
-    my $hr_budget_spent_shipment = $dbh->selectall_hashref(qq|
+    my $hr_budget_spent_shipment = $dbh->selectall_hashref(q|
         SELECT shipmentcost_budgetid as budget_id,
                SUM(shipmentcost) as shipmentcost
         FROM aqinvoices
         WHERE closedate IS NOT NULL
         GROUP BY shipmentcost_budgetid
         |, 'budget_id');
-    my $hr_budget_ordered_shipment = $dbh->selectall_hashref(qq|
+    my $hr_budget_ordered_shipment = $dbh->selectall_hashref(q|
         SELECT shipmentcost_budgetid as budget_id,
                SUM(shipmentcost) as shipmentcost
         FROM aqinvoices
@@ -575,7 +575,7 @@ sub GetBudgetHierarchy {
 
 
     foreach my $budget (@sort) {
-        if ($budget->{budget_parent_id} == undef) {
+        if ( not defined $budget->{budget_parent_id} ) {
             _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment );
         }
     }
