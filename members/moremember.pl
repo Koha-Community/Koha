@@ -172,7 +172,7 @@ $data->{ "sex_".$data->{'sex'}."_p" } = 1 if defined $data->{sex};
 if ( $category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
     $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
-    $template->param( 'catcode' => $patron_categories->next )  if $patron_categories->count == 1;
+    $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
 }
 
 my @relatives;
