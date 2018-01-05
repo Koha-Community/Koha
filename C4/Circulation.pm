@@ -817,6 +817,8 @@ sub CanBookBeIssued {
     }
 
     $patron = Koha::Patrons->find( $patron->borrowernumber ); # FIXME Refetch just in case, to avoid regressions. But must not be needed
+    $patron_unblessed = $patron->unblessed;
+
     if ( my $debarred_date = $patron->is_debarred ) {
          # patron has accrued fine days or has a restriction. $count is a date
         if ($debarred_date eq '9999-12-31') {
