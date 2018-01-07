@@ -38,18 +38,18 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-    $kp = Koha::Patrons->find( { cardnumber => $patron_id } )
+    my $patron = Koha::Patrons->find( { cardnumber => $patron_id } )
       || Koha::Patrons->find( { userid => $patron_id } );
-    $debug and warn "new Patron: " . Dumper($kp->unblessed) if $kp;
-    unless ($kp) {
+    $debug and warn "new Patron: " . Dumper($patron->unblessed) if $patron;
+    unless ($patron) {
         syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
         return;
     }
-    $kp = $kp->unblessed;
+    $kp = $patron->unblessed;
     my $pw        = $kp->{password};
     my $flags     = C4::Members::patronflags( $kp );
-    my $debarred  = defined($flags->{DBARRED});
-    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%$flags);
+    my $debarred  = $patron->is_debarred;
+    $debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')); # Do we need more debug info here?
     my ($day, $month, $year) = (localtime)[3,4,5];
     my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
     my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;
@@ -65,7 +65,7 @@ sub new {
     $dob and $dob =~ s/-//g;    # YYYYMMDD
     my $dexpiry     = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
-    my $fines_amount = $flags->{CHARGES}->{amount};
+    my $fines_amount = $patron->account->balance;
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     my $fee_limit = _fee_limit();
     my $fine_blocked = $fines_amount > $fee_limit;
@@ -112,6 +112,10 @@ sub new {
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
+
+    if ( $patron->is_debarred and $patron->debarredcomment ) {
+        $ilspatron{screen_msg} .= " -- " . $patron->debarredcomment;
+    }
     for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
         ($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {

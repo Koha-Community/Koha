@@ -43,10 +43,10 @@
 [% ELSIF patron and noissues and not checkout_infos %]
   <div class="dialog alert">
     Cannot check out!
-    [% IF charges_is_blocker %]
+    [% IF charges %]
       <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
     [% END %]
-    [% IF charges_guarantees_is_blocker %]
+    [% IF charges_guarantees %]
         <li>
             <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
         </li>

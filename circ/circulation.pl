@@ -28,6 +28,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use DateTime;
 use DateTime::Duration;
+use Scalar::Util qw( looks_like_number );
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
@@ -272,6 +273,7 @@ if ($findborrower) {
 }
 
 # get the borrower information.....
+my $balance = 0;
 $patron ||= Koha::Patrons->find( $borrowernumber ) if $borrowernumber;
 if ($patron) {
 
@@ -280,7 +282,7 @@ if ($patron) {
 
     my $overdues = $patron->get_overdues;
     my $issues = $patron->checkouts;
-    my $balance = $patron->account->balance;
+    $balance = $patron->account->balance;
 
 
     # if the expiry date is before today ie they have expired
@@ -468,91 +470,72 @@ if ($patron) {
     );
 }
 
-#title
-my $flags = $patron ? C4::Members::patronflags( $patron->unblessed ) : {};
-foreach my $flag ( sort keys %$flags ) {
-    $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
-    if ( $flags->{$flag}->{'noissues'} ) {
+if ( $patron ) {
+    my $noissues;
+    if ( $patron->gonenoaddress ) {
+        $template->param( gna => 1 );
+        $noissues = 1;
+    }
+    if ( $patron->lost ) {
+        $template->param( lost=> 1 );
+        $noissues = 1;
+    }
+    if ( $patron->is_debarred ) {
+        $template->param( dbarred=> 1 );
+        $noissues = 1;
+    }
+    my $account = $patron->account;
+    if( ( my $owing = $account->non_issues_charges ) > 0 ) {
+        my $noissuescharge = C4::Context->preference("noissuescharge") || 5; # FIXME If noissuescharge == 0 then 5, why??
+        $noissues = ( not C4::Context->preference("AllowFineOverride") and ( $owing > $noissuescharge ) );
+        $template->param(
+            charges => 1,
+            chargesamount => $owing,
+        )
+    } elsif ( $balance < 0 ) {
+        $template->param(
+            credits => 1,
+            creditsamount => -$balance,
+        );
+    }
+
+    my $no_issues_charge_guarantees = C4::Context->preference("NoIssuesChargeGuarantees");
+    $no_issues_charge_guarantees = undef unless looks_like_number( $no_issues_charge_guarantees );
+    if ( defined $no_issues_charge_guarantees ) {
+        my $guarantees_non_issues_charges = 0;
+        my $guarantees = $patron->guarantees;
+        while ( my $g = $guarantees->next ) {
+            $guarantees_non_issues_charges += $g->account->non_issues_charges;
+        }
+        if ( $guarantees_non_issues_charges > $no_issues_charge_guarantees ) {
+            $template->param(
+                charges_guarantees    => 1,
+                chargesamount_guarantees => $guarantees_non_issues_charges,
+            );
+            $noissues = 1 unless C4::Context->preference("allowfineoverride");
+        }
+    }
+
+    if ( $patron->has_overdues ) {
+        $template->param( odues => 1 );
+    }
+
+    if ( $patron->borrowernotes ) {
+        my $borrowernotes = $patron->borrowernotes;
+        $borrowernotes =~ s#\n#<br />#g;
+        $template->param(
+            notes =>1,
+            notesmsg => $borrowernotes,
+        )
+    }
+
+    if ( $noissues ) {
         $template->param(
             noissues => ($force_allow_issue) ? 0 : 'true',
             forceallow => $force_allow_issue,
         );
-        if ( $flag eq 'GNA' ) {
-            $template->param( gna => 'true' );
-        }
-        elsif ( $flag eq 'LOST' ) {
-            $template->param( lost => 'true' );
-        }
-        elsif ( $flag eq 'DBARRED' ) {
-            $template->param( dbarred => 'true' );
-        }
-        elsif ( $flag eq 'CHARGES' ) {
-            $template->param(
-                charges    => 'true',
-                chargesmsg => $flags->{'CHARGES'}->{'message'},
-                chargesamount => $flags->{'CHARGES'}->{'amount'},
-                charges_is_blocker => 1
-            );
-        }
-        elsif ( $flag eq 'CHARGES_GUARANTEES' ) {
-            $template->param(
-                charges_guarantees    => 'true',
-                chargesmsg_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'message'},
-                chargesamount_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'amount'},
-                charges_guarantees_is_blocker => 1
-            );
-        }
-        elsif ( $flag eq 'CREDITS' ) {
-            $template->param(
-                credits    => 'true',
-                creditsmsg => $flags->{'CREDITS'}->{'message'},
-                creditsamount => sprintf("%.02f", -($flags->{'CREDITS'}->{'amount'})), # from patron's pov
-            );
-        }
-    }
-    else {
-        if ( $flag eq 'CHARGES' ) {
-            $template->param(
-                charges    => 'true',
-                chargesmsg => $flags->{'CHARGES'}->{'message'},
-                chargesamount => $flags->{'CHARGES'}->{'amount'},
-            );
-        }
-        elsif ( $flag eq 'CHARGES_GUARANTEES' ) {
-            $template->param(
-                charges_guarantees    => 'true',
-                chargesmsg_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'message'},
-                chargesamount_guarantees => $flags->{'CHARGES_GUARANTEES'}->{'amount'},
-            );
-        }
-        elsif ( $flag eq 'CREDITS' ) {
-            $template->param(
-                credits    => 'true',
-                creditsmsg => $flags->{'CREDITS'}->{'message'},
-                creditsamount => sprintf("%.02f", -($flags->{'CREDITS'}->{'amount'})), # from patron's pov
-            );
-        }
-        elsif ( $flag eq 'ODUES' ) {
-            $template->param(
-                odues    => 'true',
-                oduesmsg => $flags->{'ODUES'}->{'message'}
-            );
-
-            my $items = $flags->{$flag}->{'itemlist'};
-            if ( ! $query->param('module') || $query->param('module') ne 'returns' ) {
-                $template->param( nonreturns => 'true' );
-            }
-        }
-        elsif ( $flag eq 'NOTES' ) {
-            $template->param(
-                notes    => 'true',
-                notesmsg => $flags->{'NOTES'}->{'message'}
-            );
-        }
     }
 }
-
-my $total = $patron ? $patron->account->balance : 0;
 
 if ( $patron && $patron->is_child) {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
@@ -634,7 +617,7 @@ $template->param(
     duedatespec       => $duedatespec,
     restoreduedatespec => $restoreduedatespec,
     message           => $message,
-    totaldue          => sprintf('%.2f', $total),
+    totaldue          => sprintf('%.2f', $balance), # FIXME not used in template?
     inprocess         => $inprocess,
     $view             => 1,
     batch_allowed     => $batch_allowed,

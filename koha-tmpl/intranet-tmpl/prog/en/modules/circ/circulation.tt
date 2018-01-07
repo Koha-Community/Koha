@@ -707,7 +707,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                </li>
             [% END %]
 
-                [% IF ( odues ) %]<li>[% IF ( nonreturns ) %]<span class="circ-hlt">Overdues: Patron has ITEMS OVERDUE.</span> <a href="#checkouts">See highlighted items below</a>[% END %]</li>
+                [% IF ( odues ) %]<li><span class="circ-hlt">Overdues: Patron has ITEMS OVERDUE.</span> <a href="#checkouts">See highlighted items below</a></li>
             [% END %]
 
             [% IF ( charges ) %]
@@ -717,7 +717,7 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% IF ( charges_guarantees ) %]
                 <li>
                     <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
-                        [% IF ( charges_guarantees_is_blocker ) %]
+                        [% IF noissues %]
                             <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
                         [% END %]
                 </li>
@@ -726,7 +726,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
             [% IF ( credits ) %]
                 <li>
-                    <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of [% creditsamount %][% END %]
+                    <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of [% creditsamount | $Price %][% END %]
                 </li>
             [% END %]
 

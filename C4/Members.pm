@@ -173,6 +173,7 @@ The "message" field that comes from the DB is OK.
 
 # TODO: use {anonymous => hashes} instead of a dozen %flaginfo
 # FIXME rename this function.
+# DEPRECATED Do not use this subroutine!
 sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
