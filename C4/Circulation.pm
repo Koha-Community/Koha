@@ -724,17 +724,15 @@ sub CanBookBeIssued {
         return( { STATS => 1 }, {});
     }
 
-    my $flags = C4::Members::patronflags( $patron_unblessed );
-    if ( ref $flags ) {
-        if ( $flags->{GNA} ) {
-            $issuingimpossible{GNA} = 1;
-        }
-        if ( $flags->{'LOST'} ) {
-            $issuingimpossible{CARD_LOST} = 1;
-        }
-        if ( $flags->{'DBARRED'} ) {
-            $issuingimpossible{DEBARRED} = 1;
-        }
+    if ( $patron->gonenoaddress == 1 ) {
+        $issuingimpossible{GNA} = 1;
+    }
+
+    if ( $patron->lost == 1 ) {
+        $issuingimpossible{CARD_LOST} = 1;
+    }
+    if ( $patron->is_debarred ) {
+        $issuingimpossible{DEBARRED} = 1;
     }
 
     if ( $patron->is_expired ) {
