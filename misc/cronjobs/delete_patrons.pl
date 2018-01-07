@@ -66,14 +66,17 @@ for my $member (@$members) {
       if $verbose;
 
     my $borrowernumber = $member->{borrowernumber};
-    my $flags = C4::Members::patronflags( $member );
-    if ( my $charges = $flags->{CHARGES}{amount} ) {
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    unless ( $patron ) {
+        say "Patron with borrowernumber $borrowernumber does not exist";
+        next;
+    }
+    if ( my $charges = $patron->account->non_issues_charges ) { # And what if we owe to this patron?
         say "Failed to delete patron $borrowernumber: patron has $charges in fines";
         next;
     }
 
     if ( $confirm ) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
         my $deleted = eval { $patron->move_to_deleted; };
         if ($@ or not $deleted) {
             say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" );

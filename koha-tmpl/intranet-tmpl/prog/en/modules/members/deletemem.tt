@@ -1,3 +1,4 @@
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Delete patron [% patron.firstname %] [% patron.surname %]</title>
@@ -22,7 +23,7 @@
                 <li>Patron has [% ItemsOnIssues %] item(s) checked out.</li>
             [% END %]
             [% IF ( charges ) %]
-                <li>Patron has [% charges %] in fines.</li>
+                <li>Patron has [% charges | $Prices %] in fines.</li>
             [% END %]
             [% IF ( guarantees ) %]
                 <li>Patron's record has guaranteed accounts attached.</li>

@@ -393,8 +393,7 @@ sub GetPatronInfo {
 
     # Cleaning the borrower hashref
     my $borrower = $patron->unblessed;
-    my $flags = C4::Members::patronflags( $borrower );
-    $borrower->{'charges'} = $flags->{'CHARGES'}->{'amount'};
+    $borrower->{charges} = sprintf "%.02f", $patron->account->non_issues_charges; # FIXME Formatting should not be done here
     my $library = Koha::Libraries->find( $borrower->{branchcode} );
     $borrower->{'branchname'} = $library ? $library->branchname : '';
     delete $borrower->{'userid'};
