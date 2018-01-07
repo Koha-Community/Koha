@@ -552,9 +552,6 @@ foreach my $flag ( sort keys %$flags ) {
     }
 }
 
-my $amountold = $flags ? $flags->{'CHARGES'}->{'message'} || 0 : 0;
-$amountold =~ s/^.*\$//;    # remove upto the $, if any
-
 my $total = $patron ? $patron->account->balance : 0;
 
 if ( $patron && $patron->is_child) {
@@ -632,7 +629,6 @@ $template->param(
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     was_renewed       => scalar $query->param('was_renewed') ? 1 : 0,
-    amountold         => $amountold,
     barcodes          => $barcodes,
     stickyduedate     => $stickyduedate,
     duedatespec       => $duedatespec,
