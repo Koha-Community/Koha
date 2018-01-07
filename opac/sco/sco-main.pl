@@ -114,11 +114,6 @@ if ( $patronid ) {
     $borrower = $patron->unblessed if $patron;
 }
 
-my $currencySymbol = "";
-if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
-    $currencySymbol = $active_currency->symbol;
-}
-
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
@@ -163,7 +158,7 @@ elsif ( $patron and $op eq "checkout" ) {
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
-            $template->param(amount => $currencySymbol.$impossible->{DEBT});
+            $template->param(DEBT => $impossible->{DEBT});
         }
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
@@ -195,7 +190,7 @@ elsif ( $patron and $op eq "checkout" ) {
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
-            $template->param(amount => $currencySymbol.$needconfirm->{DEBT});
+            $template->param(DEBT => $needconfirm->{DEBT});
         }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.

@@ -776,20 +776,20 @@ sub CanBookBeIssued {
 
     if ( C4::Context->preference("IssuingInProcess") ) {
         if ( $non_issues_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $issuingimpossible{DEBT} = $non_issues_charges;
         } elsif ( $non_issues_charges > $amountlimit && !$inprocess && $allowfineoverride) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $needsconfirmation{DEBT} = $non_issues_charges;
         } elsif ( $allfinesneedoverride && $non_issues_charges > 0 && $non_issues_charges <= $amountlimit && !$inprocess ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $needsconfirmation{DEBT} = $non_issues_charges;
         }
     }
     else {
         if ( $non_issues_charges > $amountlimit && $allowfineoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $needsconfirmation{DEBT} = $non_issues_charges;
         } elsif ( $non_issues_charges > $amountlimit && !$allowfineoverride) {
-            $issuingimpossible{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $issuingimpossible{DEBT} = $non_issues_charges;
         } elsif ( $non_issues_charges > 0 && $allfinesneedoverride ) {
-            $needsconfirmation{DEBT} = sprintf( "%.2f", $non_issues_charges );
+            $needsconfirmation{DEBT} = $non_issues_charges;
         }
     }
 

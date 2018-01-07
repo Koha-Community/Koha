@@ -247,7 +247,7 @@
                       <li><i class="fa fa-li fa-exclamation"></i>The barcode was not found [% checkout_info.barcode |html %].</li>
                   [% END %]
                   [% IF checkout_info.DEBT %]
-                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT %].</li> <!-- Need debt_confirmed -->
+                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price %].</li> <!-- Need debt_confirmed -->
                   [% END %]
                 </p>
               [% END %]
