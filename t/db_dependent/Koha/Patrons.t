@@ -429,8 +429,8 @@ subtest 'add_enrolment_fee_if_needed' => sub {
     $patron->delete;
 };
 
-subtest 'checkouts + get_overdues + old_checkouts' => sub {
-    plan tests => 12;
+subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
+    plan tests => 17;
 
     my $library = $builder->build( { source => 'Branch' } );
     my ($biblionumber_1) = AddBiblio( MARC::Record->new, '' );
@@ -482,6 +482,9 @@ subtest 'checkouts + get_overdues + old_checkouts' => sub {
     my $checkouts = $patron->checkouts;
     is( $checkouts->count, 0, 'checkouts should not return any issues for that patron' );
     is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
+    my $pending_checkouts = $patron->pending_checkouts;
+    is( $pending_checkouts->count, 0, 'pending_checkouts should not return any issues for that patron' );
+    is( ref($pending_checkouts), 'Koha::Checkouts', 'pending_checkouts should return a Koha::Checkouts object' );
     my $old_checkouts = $patron->old_checkouts;
     is( $old_checkouts->count, 0, 'old_checkouts should not return any issues for that patron' );
     is( ref($old_checkouts), 'Koha::Old::Checkouts', 'old_checkouts should return a Koha::Old::Checkouts object' );
@@ -500,6 +503,12 @@ subtest 'checkouts + get_overdues + old_checkouts' => sub {
     $checkouts = $patron->checkouts;
     is( $checkouts->count, 3, 'checkouts should return 3 issues for that patron' );
     is( ref($checkouts), 'Koha::Checkouts', 'checkouts should return a Koha::Checkouts object' );
+    $pending_checkouts = $patron->pending_checkouts;
+    is( $pending_checkouts->count, 3, 'pending_checkouts should return 3 issues for that patron' );
+    is( ref($pending_checkouts), 'Koha::Checkouts', 'pending_checkouts should return a Koha::Checkouts object' );
+
+    my $first_checkout = $pending_checkouts->next;
+    is( $first_checkout->unblessed_all_relateds->{biblionumber}, $item_3->{biblionumber}, 'pending_checkouts should prefetch values from other tables (here biblio)' );
 
     my $overdues = $patron->get_overdues;
     is( $overdues->count, 2, 'Patron should have 2 overdues');

@@ -523,6 +523,37 @@ sub checkouts {
     return Koha::Checkouts->_new_from_dbic( $checkouts );
 }
 
+=head3 pending_checkouts
+
+my $pending_checkouts = $patron->pending_checkouts
+
+This method will return the same as $self->checkouts, but with a prefetch on
+items, biblio and biblioitems.
+
+It has been introduced to replaced the C4::Members::GetPendingIssues subroutine
+
+It should not be used directly, prefer to access fields you need instead of
+retrieving all these fields in one go.
+
+
+=cut
+
+sub pending_checkouts {
+    my( $self ) = @_;
+    my $checkouts = $self->_result->issues->search(
+        {},
+        {
+            order_by => [
+                { -desc => 'me.timestamp' },
+                { -desc => 'issuedate' },
+                { -desc => 'issue_id' }, # Sort by issue_id should be enough
+            ],
+            prefetch => { item => { biblio => 'biblioitems' } },
+        }
+    );
+    return Koha::Checkouts->_new_from_dbic( $checkouts );
+}
+
 =head3 old_checkouts
 
 my $old_checkouts = $patron->old_checkouts
