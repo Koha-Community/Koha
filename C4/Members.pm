@@ -86,7 +86,6 @@ BEGIN {
     #Check data
     push @EXPORT, qw(
         &checkuserpassword
-        &Check_Userid
         &Generate_Userid
         &fixup_cardnumber
         &checkcardnumber
@@ -481,38 +480,6 @@ sub AddMember {
     $patron->add_enrolment_fee_if_needed;
 
     return $data{borrowernumber};
-}
-
-=head2 Check_Userid
-
-    my $uniqueness = Check_Userid($userid,$borrowernumber);
-
-    $borrowernumber is optional (i.e. it can contain a blank value). If $userid is passed with a blank $borrowernumber variable, the database will be checked for all instances of that userid (i.e. userid=? AND borrowernumber != '').
-
-    If $borrowernumber is provided, the database will be checked for every instance of that userid coupled with a different borrower(number) than the one provided.
-
-    return :
-        0 for not unique (i.e. this $userid already exists)
-        1 for unique (i.e. this $userid does not exist, or this $userid/$borrowernumber combination already exists)
-
-=cut
-
-sub Check_Userid {
-    my ( $uid, $borrowernumber ) = @_;
-
-    return 0 unless ($uid); # userid is a unique column, we should assume NULL is not unique
-
-    return 0 if ( $uid eq C4::Context->config('user') );
-
-    my $rs = Koha::Database->new()->schema()->resultset('Borrower');
-
-    my $params;
-    $params->{userid} = $uid;
-    $params->{borrowernumber} = { '!=' => $borrowernumber } if ($borrowernumber);
-
-    my $count = $rs->count( $params );
-
-    return $count ? 0 : 1;
 }
 
 =head2 Generate_Userid
