@@ -74,10 +74,8 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
     }
 }
 
-my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
-my $countissues = scalar(@$issues);
-
 my $charges = $patron->account->non_issues_charges;
+my $countissues = $patron->pending_checkouts->count;
 my $userenv = C4::Context->userenv;
 
 if ($patron->category->category_type eq "S") {
