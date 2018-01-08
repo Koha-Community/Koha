@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 60;
+use Test::More tests => 51;
 use Test::MockModule;
 use Test::Exception;
 
@@ -139,7 +139,7 @@ $checkcardnum=C4::Members::checkcardnumber($IMPOSSIBLE_CARDNUMBER, "");
 is ($checkcardnum, "2", "Card number is too long");
 
 
-# Check_Userid tests
+# Add a new borrower
 %data = (
     cardnumber   => "123456789",
     firstname    => "Tomasito",
@@ -151,17 +151,7 @@ is ($checkcardnum, "2", "Card number is too long");
     dateexpiry   => '',
     dateenrolled => '',
 );
-# Add a new borrower
 my $borrowernumber = AddMember( %data );
-is( Check_Userid( 'tomasito.non', $borrowernumber ), 1,
-    'recently created userid -> unique (borrowernumber passed)' );
-is( Check_Userid( 'tomasitoxxx', $borrowernumber ), 1,
-    'non-existent userid -> unique (borrowernumber passed)' );
-is( Check_Userid( 'tomasito.none', '' ), 0,
-    'userid exists (blank borrowernumber)' );
-is( Check_Userid( 'tomasitoxxx', '' ), 1,
-    'non-existent userid -> unique (blank borrowernumber)' );
-
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 is( $borrower->{dateofbirth}, undef, 'AddMember should undef dateofbirth if empty string is given');
 is( $borrower->{debarred}, undef, 'AddMember should undef debarred if empty string is given');
@@ -182,24 +172,14 @@ is( $borrower->{debarred}, '2042-01-01', 'ModMember should correctly set debarre
 is( $borrower->{dateexpiry}, '9999-12-31', 'ModMember should correctly set dateexpiry if a valid date is given');
 is( $borrower->{dateenrolled}, '2015-09-06', 'ModMember should correctly set dateenrolled if a valid date is given');
 
-# Add a new borrower with the same userid but different cardnumber
-$data{ cardnumber } = "987654321";
-my $new_borrowernumber = AddMember( %data );
-is( Check_Userid( 'tomasito.none', '' ), 0,
-    'userid not unique (blank borrowernumber)' );
-is( Check_Userid( 'tomasito.none', $new_borrowernumber ), 0,
-    'userid not unique (second borrowernumber passed)' );
-$borrower = Koha::Patrons->find( $new_borrowernumber )->unblessed;
-ok( $borrower->{userid} ne 'tomasito', "Borrower with duplicate userid has new userid generated" );
-
-$data{ cardnumber } = "234567890";
-$data{userid} = 'a_user_id';
-$borrowernumber = AddMember( %data );
-$borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
-is( $borrower->{userid}, $data{userid}, 'AddMember should insert the given userid' );
-
 subtest 'ModMember should not update userid if not true' => sub {
     plan tests => 3;
+
+    $data{ cardnumber } = "234567890";
+    $data{userid} = 'a_user_id';
+    $borrowernumber = AddMember( %data );
+    $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+
     ModMember( borrowernumber => $borrowernumber, firstname => 'Tomas', userid => '' );
     $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
     is ( $borrower->{userid}, $data{userid}, 'ModMember should not update the userid with an empty string' );
@@ -368,10 +348,6 @@ $borrowernumber = AddMember( categorycode => $patron_category->{categorycode}, b
 ok( $borrowernumber > 0, 'AddMember should have inserted the patron even if no userid is given' );
 $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 ok( $borrower->{userid},  'A userid should have been generated correctly' );
-
-# Regression tests for BZ12226
-is( Check_Userid( C4::Context->config('user'), '' ), 0,
-    'Check_Userid should return 0 for the DB user (Bug 12226)');
 
 subtest 'purgeSelfRegistration' => sub {
     plan tests => 2;

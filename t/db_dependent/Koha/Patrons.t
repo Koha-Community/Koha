@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
@@ -1195,6 +1195,65 @@ subtest 'get_overdues' => sub {
     # Clean stuffs
     $patron->checkouts->delete;
     $patron->delete;
+};
+
+subtest 'userid_is_valid' => sub {
+    plan tests => 9;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'P', enrolmentfee => 0 }
+        }
+    );
+    my %data = (
+        cardnumber   => "123456789",
+        firstname    => "Tomasito",
+        surname      => "None",
+        categorycode => $patron_category->categorycode,
+        branchcode   => $library->branchcode,
+    );
+
+    my $borrowernumber = AddMember(%data);
+    my $patron_1       = Koha::Patrons->find($borrowernumber);
+
+    is( Check_Userid( 'tomasito.non', $patron_1->borrowernumber ),
+        1, 'recently created userid -> unique (borrowernumber passed)' );
+    is( Check_Userid( 'tomasitoxxx', $patron_1->borrowernumber ),
+        1, 'non-existent userid -> unique (borrowernumber passed)' );
+    is( Check_Userid( 'tomasito.none', '' ),
+        0, 'userid exists (blank borrowernumber)' );
+    is( Check_Userid( 'tomasitoxxx', '' ),
+        1, 'non-existent userid -> unique (blank borrowernumber)' );
+
+    # Regression tests for BZ12226
+    is( Check_Userid( C4::Context->config('user'), '' ),
+        0, 'Check_Userid should return 0 for the DB user (Bug 12226)' );
+
+    # Add a new borrower with the same userid but different cardnumber
+    $data{cardnumber} = "987654321";
+    my $new_borrowernumber = AddMember(%data);
+    is( Check_Userid( 'tomasito.none', '' ),
+        0, 'userid not unique (blank borrowernumber)' );
+    is( Check_Userid( 'tomasito.none', $new_borrowernumber ),
+        0, 'userid not unique (second borrowernumber passed)' );
+    my $patron_2 = Koha::Patrons->find($new_borrowernumber);
+    ok( $patron_2->userid ne 'tomasito',
+        "Borrower with duplicate userid has new userid generated" );
+
+    my $new_userid = 'a_user_id';
+    $data{cardnumber} = "234567890";
+    $data{userid}     = 'a_user_id';
+    $borrowernumber   = AddMember(%data);
+    my $patron_3 = Koha::Patrons->find($borrowernumber);
+    is( $patron_3->userid, $new_userid,
+        'AddMember should insert the given userid' );
+
+    # Cleanup
+    $patron_1->delete;
+    $patron_2->delete;
+    $patron_3->delete;
 };
 
 $retrieved_patron_1->delete;
