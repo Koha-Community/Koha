@@ -414,9 +414,9 @@ sub AddMember {
         }
     }
 
-    my $p = Koha::Patron->new( { userid => $data{userid} } );
+    my $p = Koha::Patron->new( { userid => $data{userid}, firstname => $data{firstname}, surname => $data{surname} } );
     # generate a proper login if none provided
-    $data{'userid'} = Generate_Userid( $data{'borrowernumber'}, $data{'firstname'}, $data{'surname'} )
+    $data{'userid'} = $p->generate_userid
       if ( $data{'userid'} eq '' || ! $p->has_valid_userid );
 
     # add expiration date if it isn't already there
