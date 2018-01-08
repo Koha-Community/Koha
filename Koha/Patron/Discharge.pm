@@ -6,7 +6,6 @@ use File::Temp qw( :POSIX );
 use Carp;
 
 use C4::Templates qw ( gettemplate );
-use C4::Members qw( GetPendingIssues );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -34,13 +33,11 @@ sub can_be_discharged {
     my ($params) = @_;
     return unless $params->{borrowernumber};
 
-    my $issues = GetPendingIssues( $params->{borrowernumber} );
-    if( @$issues ) {
-        return 0;
-    }
-    else {
-        return 1;
-    }
+    my $patron = Koha::Patrons->find( $params->{borrowernumber} );
+    return unless $patron;
+
+    my $has_pending_checkouts = $patron->pending_checkouts->count;
+    return $has_pending_checkouts ? 0 : 1;
 }
 
 sub is_discharged {
