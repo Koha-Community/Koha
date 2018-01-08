@@ -184,9 +184,10 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-my $issues = GetPendingIssues($borrowernumber);
-if ($issues){
-    foreach my $issue ( sort { $b->{date_due}->datetime() cmp $a->{date_due}->datetime() } @{$issues} ) {
+my $pending_checkouts = $patron->pending_checkouts({}, { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] });
+if ( $pending_checkouts->count ) { # Useless test
+    while ( my $c = $pending_checkouts->next ) {
+        my $issue = $c->unblessed_all_relateds;
         # check for reserves
         my $restype = GetReserveStatus( $issue->{'itemnumber'} );
         if ( $restype ) {
@@ -251,7 +252,7 @@ if ($issues){
             }
         }
 
-        if ( $issue->{'overdue'} ) {
+        if ( $c->is_overdue ) {
             push @overdues, $issue;
             $overdues_count++;
             $issue->{'overdue'} = 1;
