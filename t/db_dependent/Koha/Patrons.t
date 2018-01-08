@@ -1198,7 +1198,7 @@ subtest 'get_overdues' => sub {
 };
 
 subtest 'userid_is_valid' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category = $builder->build_object(
@@ -1215,32 +1215,46 @@ subtest 'userid_is_valid' => sub {
         branchcode   => $library->branchcode,
     );
 
+    my $expected_userid_patron_1 = 'tomasito.none';
     my $borrowernumber = AddMember(%data);
     my $patron_1       = Koha::Patrons->find($borrowernumber);
+    is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
 
-    is( Check_Userid( 'tomasito.non', $patron_1->borrowernumber ),
+    $patron_1->userid( 'tomasito.non' );
+    is( $patron_1->has_valid_userid, # FIXME Joubu: What is the difference with the next test?
         1, 'recently created userid -> unique (borrowernumber passed)' );
-    is( Check_Userid( 'tomasitoxxx', $patron_1->borrowernumber ),
+
+    $patron_1->userid( 'tomasitoxxx' );
+    is( $patron_1->has_valid_userid,
         1, 'non-existent userid -> unique (borrowernumber passed)' );
-    is( Check_Userid( 'tomasito.none', '' ),
-        0, 'userid exists (blank borrowernumber)' );
-    is( Check_Userid( 'tomasitoxxx', '' ),
-        1, 'non-existent userid -> unique (blank borrowernumber)' );
+    $patron_1->discard_changes; # We compare with the original userid later
+
+    my $patron_not_in_storage = Koha::Patron->new( { userid => '' } );
+    is( $patron_not_in_storage->has_valid_userid,
+        0, 'userid exists for another patron, patron is not in storage yet' );
+
+    $patron_not_in_storage = Koha::Patron->new( { userid => 'tomasitoxxx' } );
+    is( $patron_not_in_storage->has_valid_userid,
+        1, 'non-existent userid, patron is not in storage yet' );
 
     # Regression tests for BZ12226
-    is( Check_Userid( C4::Context->config('user'), '' ),
-        0, 'Check_Userid should return 0 for the DB user (Bug 12226)' );
+    my $db_patron = Koha::Patron->new( { userid => C4::Context->config('user') } );
+    is( $db_patron->has_valid_userid,
+        0, 'Koha::Patron->has_valid_userid should return 0 for the DB user (Bug 12226)' );
 
     # Add a new borrower with the same userid but different cardnumber
     $data{cardnumber} = "987654321";
     my $new_borrowernumber = AddMember(%data);
-    is( Check_Userid( 'tomasito.none', '' ),
-        0, 'userid not unique (blank borrowernumber)' );
-    is( Check_Userid( 'tomasito.none', $new_borrowernumber ),
-        0, 'userid not unique (second borrowernumber passed)' );
     my $patron_2 = Koha::Patrons->find($new_borrowernumber);
-    ok( $patron_2->userid ne 'tomasito',
-        "Borrower with duplicate userid has new userid generated" );
+    $patron_2->userid($patron_1->userid);
+    is( $patron_2->has_valid_userid,
+        0, 'The userid is already in used, it cannot be used for another patron' );
+
+    $patron_2 = Koha::Patrons->find($new_borrowernumber);
+    isnt( $patron_2->userid, 'tomasito',
+        "Patron with duplicate userid has new userid generated" );
+    is( $patron_2->userid, $expected_userid_patron_1 . '1', # TODO we could make that configurable
+        "Patron with duplicate userid has new userid generated (1 is appened" );
 
     my $new_userid = 'a_user_id';
     $data{cardnumber} = "234567890";

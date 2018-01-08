@@ -862,6 +862,41 @@ sub is_child {
     return $self->category->category_type eq 'C' ? 1 : 0;
 }
 
+=head3 has_valid_userid
+
+my $patron = Koha::Patrons->find(42);
+$patron->userid( $new_userid );
+my $has_a_valid_userid = $patron->has_valid_userid
+
+my $patron = Koha::Patron->new( $params );
+my $has_a_valid_userid = $patron->has_valid_userid
+
+Return true if the current userid of this patron is valid/unique, otherwise false.
+
+Note that this should be done in $self->store instead and raise an exception if needed.
+
+=cut
+
+sub has_valid_userid {
+    my ($self) = @_;
+
+    return 0 unless $self->userid;
+
+    return 0 if ( $self->userid eq C4::Context->config('user') );    # DB user
+
+    my $already_exists = Koha::Patrons->search(
+        {
+            userid => $self->userid,
+            (
+                $self->in_storage
+                ? ( borrowernumber => { '!=' => $self->borrowernumber } )
+                : ()
+            ),
+        }
+    )->count;
+    return $already_exists ? 0 : 1;
+}
+
 =head2 Internal methods
 
 =head3 _type
