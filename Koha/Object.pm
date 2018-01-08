@@ -293,6 +293,37 @@ sub _numeric_column_type {
     return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
 }
 
+=head3 $object->unblessed_all_relateds
+
+my $everything_into_one_hashref = $object->unblessed_all_relateds
+
+The unblessed method only retrieves column' values for the column of the object.
+In a *few* cases we want to retrieve the information of all the prefetched data.
+
+=cut
+
+sub unblessed_all_relateds {
+    my ($self) = @_;
+
+    my %data;
+    my $related_resultsets = $self->_result->{related_resultsets} || {};
+    my $rs = $self;
+    while ( $related_resultsets and %$related_resultsets ) {
+        my @relations = keys %{ $related_resultsets };
+        if ( @relations ) {
+            my $relation = $relations[0];
+            $rs = $rs->related_resultset($relation)->get_cache;
+            $rs = $rs->[0]; # Does it makes sense to have several values here?
+            my $object_class = Koha::Object::_get_object_class( $rs->result_class );
+            my $koha_object = $object_class->_new_from_dbic( $rs );
+            $related_resultsets = $rs->{related_resultsets};
+            %data = ( %data, %{ $koha_object->unblessed } );
+        }
+    }
+    %data = ( %data, %{ $self->unblessed } );
+    return \%data;
+}
+
 =head3 $object->_result();
 
 Returns the internal DBIC Row object
@@ -324,6 +355,17 @@ sub _columns {
     return $self->{_columns};
 }
 
+sub _get_object_class {
+    my ( $type ) = @_;
+    return unless $type;
+
+    if( $type->can('koha_object_class') ) {
+        return $type->koha_object_class;
+    }
+    $type =~ s|Schema::Result::||;
+    return ${type};
+}
+
 =head3 AUTOLOAD
 
 The autoload method is used only to get and set values for an objects properties.
@@ -348,7 +390,8 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes update );
+    my @known_methods = qw( is_changed id in_storage get_column discard_changes update related_resultset );
+
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw( "The method $method is not covered by tests!" ) unless grep {/^$method$/} @known_methods;
 
     my $r = eval { $self->_result->$method(@_) };
