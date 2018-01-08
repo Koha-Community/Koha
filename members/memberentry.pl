@@ -348,7 +348,9 @@ if ($op eq 'save' || $op eq 'insert'){
   # the edited values list when editing certain sub-forms. Get it straight
   # from the DB if absent.
   my $userid = $newdata{ userid } // $borrower_data->{ userid };
-  unless (Check_Userid($userid,$borrowernumber)) {
+  my $p = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : Koha::Patron->new;
+  $p->userid( $userid );
+  unless ( $p->has_valid_userid ) {
     push @errors, "ERROR_login_exist";
   }
 

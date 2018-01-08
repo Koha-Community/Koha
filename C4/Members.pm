@@ -415,9 +415,10 @@ sub AddMember {
         }
     }
 
+    my $p = Koha::Patron->new( { userid => $data{userid} } );
     # generate a proper login if none provided
     $data{'userid'} = Generate_Userid( $data{'borrowernumber'}, $data{'firstname'}, $data{'surname'} )
-      if ( $data{'userid'} eq '' || !Check_Userid( $data{'userid'} ) );
+      if ( $data{'userid'} eq '' || ! $p->has_valid_userid );
 
     # add expiration date if it isn't already there
     $data{dateexpiry} ||= $category->get_expiry_date;
@@ -523,7 +524,7 @@ sub Check_Userid {
     $borrowernumber is optional (i.e. it can contain a blank value). A value is passed when generating a new userid for an existing borrower. When a new userid is created for a new borrower, a blank value is passed to this sub.
 
     return :
-        new userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $newuid is unique, or a higher numeric value if Check_Userid finds an existing match for the $newuid in the database).
+        new userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $newuid is unique, or a higher numeric value if not unique).
 
 =cut
 
@@ -531,16 +532,17 @@ sub Generate_Userid {
   my ($borrowernumber, $firstname, $surname) = @_;
   my $newuid;
   my $offset = 0;
-  #The script will "do" the following code and increment the $offset until Check_Userid = 1 (i.e. until $newuid comes back as unique)
+  my $patron = Koha::Patron->new;
+  #The script will "do" the following code and increment the $offset until the generated userid is unique
   do {
     $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $newuid = lc(($firstname)? "$firstname.$surname" : $surname);
     $newuid = unac_string('utf-8',$newuid);
     $newuid .= $offset unless $offset == 0;
+    $patron->userid( $newuid );
     $offset++;
-
-   } while (!Check_Userid($newuid,$borrowernumber));
+   } while (! $patron->has_valid_userid );
 
    return $newuid;
 }
