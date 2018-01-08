@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw( uniq );
+use Text::Unaccent qw( unac_string );
 
 use C4::Context;
 use C4::Log;
@@ -895,6 +896,42 @@ sub has_valid_userid {
         }
     )->count;
     return $already_exists ? 0 : 1;
+}
+
+=head3 generate_userid
+
+my $patron = Koha::Patron->new( $params );
+my $userid = $patron->generate_userid
+
+Generate a userid using the $surname and the $firstname (if there is a value in $firstname).
+
+Return the generate userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $userid is unique, or a higher numeric value if not unique).
+
+# Note: Should we set $self->userid with the generated value?
+# Certainly yes, but we AddMember and ModMember will be rewritten
+
+=cut
+
+sub generate_userid {
+    my ($self) = @_;
+    my $userid;
+    my $offset = 0;
+    my $patron = Koha::Patron->new;
+    my $firstname = $self->firstname;
+    my $surname = $self->surname;
+    #The script will "do" the following code and increment the $offset until the generated userid is unique
+    do {
+      $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
+      $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
+      $userid = lc(($firstname)? "$firstname.$surname" : $surname);
+      $userid = unac_string('utf-8',$userid);
+      $userid .= $offset unless $offset == 0;
+      $patron->userid( $userid );
+      $offset++;
+     } while (! $patron->has_valid_userid );
+
+     return $userid;
+
 }
 
 =head2 Internal methods
