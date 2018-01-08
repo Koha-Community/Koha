@@ -17,11 +17,15 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 use Test::Warn;
+use DateTime;
 
 use C4::Context;
+use C4::Biblio; # AddBiblio
+use C4::Circulation; # AddIssue
+use C4::Members;# AddMember
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
@@ -306,6 +310,58 @@ subtest 'store() tests' => sub {
     $patron->set({ firstname => 'Manuel' });
     my $ret = $patron->store;
     is( ref($ret), 'Koha::Patron', 'store() returns the object on success' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'unblessed_all_relateds' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # FIXME It's very painful to create an issue in tests!
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    C4::Context->_new_userenv('xxx');
+    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->branchcode, 'Midway Public Library', '', '', '');
+    my $patron_category = $builder->build(
+        {
+            source => 'Category',
+            value  => {
+                category_type                 => 'P',
+                enrolmentfee                  => 0,
+                BlockExpiredPatronOpacActions => -1, # Pick the pref value
+            }
+        }
+    );
+    my $patron_data = {
+        firstname =>  'firstname',
+        surname => 'surname',
+        categorycode => $patron_category->{categorycode},
+        branchcode => $library->branchcode,
+    };
+    my $borrowernumber = C4::Members::AddMember(%$patron_data);
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                homebranch    => $library->branchcode,
+                holdingbranch => $library->branchcode,
+                biblionumber  => $biblio->biblionumber,
+                itemlost      => 0,
+                withdrawn     => 0,
+            }
+        }
+    );
+
+    my $issue = AddIssue( $patron->unblessed, $item->barcode, DateTime->now->subtract( days => 1 ) );
+    my $overdues = Koha::Patrons->find( $patron->id )->get_overdues; # Koha::Patron->get_overdue prefetches
+    my $overdue = $overdues->next->unblessed_all_relateds;
+    is( $overdue->{issue_id}, $issue->issue_id, 'unblessed_all_relateds has field from the original table (issues)' );
+    is( $overdue->{title}, $biblio->title, 'unblessed_all_relateds has field from other tables (biblio)' );
+    is( $overdue->{homebranch}, $item->homebranch, 'unblessed_all_relateds has field from other tables (items)' );
 
     $schema->storage->txn_rollback;
 };
