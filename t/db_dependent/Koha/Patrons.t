@@ -1283,14 +1283,15 @@ subtest 'generate_userid' => sub {
     );
 
     my $expected_userid_patron_1 = 'tomasito.none';
-    my $userid = C4::Members::Generate_Userid( undef, $data{firstname}, $data{surname} );
-    is( $userid, $expected_userid_patron_1, 'Generate_Userid should generate the userid we expect' );
+    my $new_patron = Koha::Patron->new({ firstname => $data{firstname}, surname => $data{surname} } );
+    my $userid = $new_patron->generate_userid;
+    is( $userid, $expected_userid_patron_1, 'generate_userid should generate the userid we expect' );
     my $borrowernumber = AddMember(%data);
     my $patron_1 = Koha::Patrons->find($borrowernumber);
     is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
 
-    $userid = C4::Members::Generate_Userid( $borrowernumber, $data{firstname}, $data{surname} );
-    is( $userid, $expected_userid_patron_1 . '1', 'Generate_Userid should generate the userid we expect' );
+    $userid = $new_patron->generate_userid;
+    is( $userid, $expected_userid_patron_1 . '1', 'generate_userid should generate the userid we expect' );
     $data{cardnumber} = '987654321';
     my $new_borrowernumber = AddMember(%data);
     my $patron_2 = Koha::Patrons->find($new_borrowernumber);
@@ -1299,8 +1300,8 @@ subtest 'generate_userid' => sub {
     is( $patron_2->userid, $expected_userid_patron_1 . '1', # TODO we could make that configurable
         "Patron with duplicate userid has new userid generated (1 is appened" );
 
-    $userid = C4::Members::Generate_Userid( $borrowernumber, $data{firstname}, $data{surname} );
-    is( $userid, $expected_userid_patron_1 . '2', 'Generate_Userid should generate the userid we expect' );
+    $userid = $new_patron->generate_userid;
+    is( $userid, $expected_userid_patron_1 . '2', 'generate_userid should generate the userid we expect' );
 
     # Cleanup
     $patron_1->delete;
