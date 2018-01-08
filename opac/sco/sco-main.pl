@@ -248,24 +248,25 @@ if ($borrower) {
 #   warn "issuer's  branchcode: " .   $issuer->{branchcode};
 #   warn   "user's  branchcode: " . $borrower->{branchcode};
     my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');
-    my @issues;
-    my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
-    foreach my $it (@$issueslist) {
+    my $pending_checkouts = $patron->pending_checkouts;
+    my @checkouts;
+    while ( my $c = $pending_checkouts->next ) {
+        my $checkout = $c->unblessed_all_relateds;
         my ($can_be_renewed, $renew_error) = CanBookBeRenewed(
             $borrower->{borrowernumber},
-            $it->{itemnumber},
+            $checkout->{itemnumber},
         );
-        $it->{can_be_renewed} = $can_be_renewed;
-        $it->{renew_error} = $renew_error;
-        $it->{date_due}  = $it->{date_due_sql};
-        push @issues, $it;
+        $checkout->{can_be_renewed} = $can_be_renewed; # In the future this will be $checkout->can_be_renewed
+        $checkout->{renew_error} = $renew_error;
+        $checkout->{overdue} = $c->is_overdue;
+        push @checkouts, $checkout;
     }
 
     $template->param(
         validuser => 1,
         borrowername => $borrowername,
-        issues_count => scalar(@issues),
-        ISSUES => \@issues,
+        issues_count => scalar(@checkouts),
+        ISSUES => \@checkouts,
         patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
