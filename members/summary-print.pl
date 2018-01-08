@@ -75,36 +75,35 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub build_issue_data {
     my ( $borrowernumber ) = @_;
-    my $issues = GetPendingIssues( $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    return unless $patron;
 
-    my $return = [];
+    my $pending_checkouts = $patron->pending_checkouts->search( {},
+        { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] } );
 
-    my $today = DateTime->now( time_zone => C4::Context->tz );
-    $today->truncate( to => 'day' );
+    my @checkouts;
 
-    foreach my $issue ( @{$issues} ) {
+    while ( my $c = $pending_checkouts->next ) {
+        my $checkout = $c->unblessed_all_relateds;
 
-        my %row = %{$issue};
-        $totalprice += $issue->{replacementprice}
-            if ( $issue->{replacementprice} );
+        $totalprice += $checkout->{replacementprice}
+            if $checkout->{replacementprice};
 
         #find the charge for an item
         my ( $charge, $itemtype ) =
-          GetIssuingCharges( $issue->{itemnumber}, $borrowernumber );
+          GetIssuingCharges( $checkout->{itemnumber}, $borrowernumber );
 
         $itemtype = Koha::ItemTypes->find( $itemtype );
-        $row{'itemtype_description'} = $itemtype->description; #FIXME Should not it be translated_description
+        $checkout->{itemtype_description} = $itemtype->description; #FIXME Should not it be translated_description
 
-        $row{'charge'} = sprintf( "%.2f", $charge );
+        $checkout->{charge} = sprintf( "%.2f", $charge ); # TODO Should be done in the template using Price
 
-        $row{date_due} = $row{date_due_sql};
+        $checkout->{overdue} = $c->is_overdue;
 
-        push( @{$return}, \%row );
+        push @checkouts, $checkout;
     }
 
-    @{$return} = sort { $a->{date_due} eq $b->{date_due} } @{$return};
-
-    return $return;
+    return \@checkouts;
 
 }
 
