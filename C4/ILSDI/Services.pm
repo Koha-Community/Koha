@@ -465,12 +465,14 @@ sub GetPatronInfo {
 
     # Issues management
     if ( $cgi->param('show_loans') && $cgi->param('show_loans') eq "1" ) {
-        my $issues = GetPendingIssues($borrowernumber);
-        foreach my $issue ( @$issues ){
-            $issue->{'issuedate'} = $issue->{'issuedate'}->strftime('%Y-%m-%d %H:%M');
-            $issue->{'date_due'} = $issue->{'date_due'}->strftime('%Y-%m-%d %H:%M');
+        my $pending_checkouts = $patron->pending_checkouts;
+        my @checkouts;
+        while ( my $c = $pending_checkouts->next ) {
+            # FIXME We should only retrieve what is needed in the template
+            my $issue = $c->unblessed_all_relateds;
+            push @checkouts, $issue
         }
-        $borrower->{'loans'}->{'loan'} = $issues;
+        $borrower->{'loans'}->{'loan'} = \@checkouts;
     }
 
     if ( $cgi->param('show_attributes') eq "1" ) {
