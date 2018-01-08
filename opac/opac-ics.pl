@@ -50,13 +50,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # Create Calendar
 my $calendar = Data::ICal->new();
 
-# get issued items ....
-my $issues = GetPendingIssues($borrowernumber);
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $pending_checkouts = $patron->pending_checkouts;
 
-foreach my $issue ( @$issues ) {
+while ( my $c = $pending_checkouts->next ) {
+    my $issue = $c->unblessed_all_relateds;
     my $vevent = Data::ICal::Entry::Event->new();
     my $timestamp = DateTime->now(); # Defaults to UTC
     # Send some values to the template to generate summary and description
+    $issue->{overdue} = $c->is_overdue;
     $template->param(
         overdue => $issue->{'overdue'},
         title   => $issue->{'title'},
