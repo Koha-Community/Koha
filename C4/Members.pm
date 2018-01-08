@@ -924,56 +924,73 @@ sub IssueSlip {
     my $patron = Koha::Patrons->find( $borrowernumber );
     return unless $patron;
 
-    my @issues = @{ GetPendingIssues($borrowernumber) };
-
-    for my $issue (@issues) {
-        $issue->{date_due} = $issue->{date_due_sql};
-        if ($quickslip) {
-            my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-            if ( substr( $issue->{issuedate}, 0, 10 ) eq $today
-                or substr( $issue->{lastreneweddate}, 0, 10 ) eq $today ) {
-                  $issue->{now} = 1;
-            };
-        }
-    }
-
-    # Sort on timestamp then on issuedate then on issue_id
-    # useful for tests and could be if modified in a batch
-    @issues = sort {
-            $b->{timestamp} <=> $a->{timestamp}
-         or $b->{issuedate} <=> $a->{issuedate}
-         or $b->{issue_id}  <=> $a->{issue_id}
-    } @issues;
+    my $pending_checkouts = $patron->pending_checkouts; # Should be $patron->checkouts->pending?
 
     my ($letter_code, %repeat, %loops);
     if ( $quickslip ) {
+        my $today_start = dt_from_string->set( hour => 0, minute => 0, second => 0 );
+        my $today_end = dt_from_string->set( hour => 23, minute => 59, second => 0 );
+        $today_start = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_start );
+        $today_end = Koha::Database->new->schema->storage->datetime_parser->format_datetime( $today_end );
         $letter_code = 'ISSUEQSLIP';
-        my @checkouts = map {
-                'biblio'       => $_,
-                'items'        => $_,
-                'biblioitems'  => $_,
-                'issues'       => $_,
-            }, grep { $_->{'now'} } @issues;
+
+        # issue date or lastreneweddate is today
+        my $todays_checkouts = $pending_checkouts->search(
+            {
+                -or => {
+                    issuedate => {
+                        '>=' => $today_start,
+                        '<=' => $today_end,
+                    },
+                    lastreneweddate =>
+                      { '>=' => $today_start, '<=' => $today_end, }
+                }
+            }
+        );
+        my @checkouts;
+        while ( my $c = $todays_checkouts->next ) {
+            my $all = $c->unblessed_all_relateds;
+            push @checkouts, {
+                biblio      => $all,
+                items       => $all,
+                biblioitems => $all,
+                issues      => $all,
+            };
+        }
+
         %repeat =  (
-            checkedout => \@checkouts, # History syntax
+            checkedout => \@checkouts, # Historical syntax
         );
         %loops = (
             issues => [ map { $_->{issues}{itemnumber} } @checkouts ], # TT syntax
         );
     }
     else {
-        my @checkouts = map {
-            'biblio'        => $_,
-              'items'       => $_,
-              'biblioitems' => $_,
-              'issues'      => $_,
-        }, grep { !$_->{'overdue'} } @issues;
-        my @overdues = map {
-            'biblio'        => $_,
-              'items'       => $_,
-              'biblioitems' => $_,
-              'issues'      => $_,
-        }, grep { $_->{'overdue'} } @issues;
+        my $today = Koha::Database->new->schema->storage->datetime_parser->format_datetime( dt_from_string );
+        # Checkouts due in the future
+        my $checkouts = $pending_checkouts->search({ date_due => { '>' => $today } });
+        my @checkouts; my @overdues;
+        while ( my $c = $checkouts->next ) {
+            my $all = $c->unblessed_all_relateds;
+            push @checkouts, {
+                biblio      => $all,
+                items       => $all,
+                biblioitems => $all,
+                issues      => $all,
+            };
+        }
+
+        # Checkouts due in the past are overdues
+        my $overdues = $pending_checkouts->search({ date_due => { '<=' => $today } });
+        while ( my $o = $overdues->next ) {
+            my $all = $o->unblessed_all_relateds;
+            push @overdues, {
+                biblio      => $all,
+                items       => $all,
+                biblioitems => $all,
+                issues      => $all,
+            };
+        }
         my $news = GetNewsToDisplay( "slip", $branch );
         my @news = map {
             $_->{'timestamp'} = $_->{'newdate'};
