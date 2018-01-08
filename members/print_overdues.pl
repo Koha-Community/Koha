@@ -24,7 +24,6 @@ use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Members qw(GetOverduesForPatron);
 use C4::Overdues qw(parse_overdues_letter);
 
 use Koha::Patrons;
@@ -51,7 +50,9 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $overdues = GetOverduesForPatron($borrowernumber);
+my $overdues = [
+    map { $_->unblessed_all_relateds } $patron->get_overdues
+];
 
 my $letter = parse_overdues_letter(
     {
