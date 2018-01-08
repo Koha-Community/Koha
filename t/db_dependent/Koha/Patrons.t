@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
@@ -1198,7 +1198,7 @@ subtest 'get_overdues' => sub {
 };
 
 subtest 'userid_is_valid' => sub {
-    plan tests => 10;
+    plan tests => 8;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category = $builder->build_object(
@@ -1250,12 +1250,6 @@ subtest 'userid_is_valid' => sub {
     is( $patron_2->has_valid_userid,
         0, 'The userid is already in used, it cannot be used for another patron' );
 
-    $patron_2 = Koha::Patrons->find($new_borrowernumber);
-    isnt( $patron_2->userid, 'tomasito',
-        "Patron with duplicate userid has new userid generated" );
-    is( $patron_2->userid, $expected_userid_patron_1 . '1', # TODO we could make that configurable
-        "Patron with duplicate userid has new userid generated (1 is appened" );
-
     my $new_userid = 'a_user_id';
     $data{cardnumber} = "234567890";
     $data{userid}     = 'a_user_id';
@@ -1269,6 +1263,50 @@ subtest 'userid_is_valid' => sub {
     $patron_2->delete;
     $patron_3->delete;
 };
+
+subtest 'generate_userid' => sub {
+    plan tests => 6;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'P', enrolmentfee => 0 }
+        }
+    );
+    my %data = (
+        cardnumber   => "123456789",
+        firstname    => "Tomasito",
+        surname      => "None",
+        categorycode => $patron_category->categorycode,
+        branchcode   => $library->branchcode,
+    );
+
+    my $expected_userid_patron_1 = 'tomasito.none';
+    my $userid = C4::Members::Generate_Userid( undef, $data{firstname}, $data{surname} );
+    is( $userid, $expected_userid_patron_1, 'Generate_Userid should generate the userid we expect' );
+    my $borrowernumber = AddMember(%data);
+    my $patron_1 = Koha::Patrons->find($borrowernumber);
+    is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
+
+    $userid = C4::Members::Generate_Userid( $borrowernumber, $data{firstname}, $data{surname} );
+    is( $userid, $expected_userid_patron_1 . '1', 'Generate_Userid should generate the userid we expect' );
+    $data{cardnumber} = '987654321';
+    my $new_borrowernumber = AddMember(%data);
+    my $patron_2 = Koha::Patrons->find($new_borrowernumber);
+    isnt( $patron_2->userid, 'tomasito',
+        "Patron with duplicate userid has new userid generated" );
+    is( $patron_2->userid, $expected_userid_patron_1 . '1', # TODO we could make that configurable
+        "Patron with duplicate userid has new userid generated (1 is appened" );
+
+    $userid = C4::Members::Generate_Userid( $borrowernumber, $data{firstname}, $data{surname} );
+    is( $userid, $expected_userid_patron_1 . '2', 'Generate_Userid should generate the userid we expect' );
+
+    # Cleanup
+    $patron_1->delete;
+    $patron_2->delete;
+};
+
 
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );
