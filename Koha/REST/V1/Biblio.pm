@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Biblio qw( GetBiblioData AddBiblio ModBiblio DelBiblio );
+use C4::Biblio qw( GetBiblioData AddBiblio ModBiblio DelBiblio BiblioAutoLink GetFrameworkCode );
 use C4::Items qw ( AddItemBatchFromMarc );
 use Koha::Biblios;
 use MARC::Record;
@@ -102,6 +102,9 @@ sub add {
     if ($@) {
         return $c->render(status => 400, openapi => {error => $@});
     } else {
+        if (C4::Context->preference("BiblioAddsAuthorities")){
+            BiblioAutoLink($record, '');
+        }
         ( $biblionumber, $biblioitemnumber ) = &AddBiblio($record, '');
     }
     if ($biblionumber) {
@@ -135,11 +138,15 @@ sub update {
     if ($@) {
         return $c->render(status => 400, openapi => {error => $@});
     } else {
-        $success = &ModBiblio($record, $biblionumber, '');
+        my $frameworkcode = GetFrameworkCode( $biblionumber );
+        if (C4::Context->preference("BiblioAddsAuthorities")){
+            BiblioAutoLink($record, $frameworkcode);
+        }
+        $success = &ModBiblio($record, $biblionumber, $frameworkcode);
     }
     if ($success) {
-        $c->res->headers->location($c->url_for('/api/v1/biblios/')->to_abs . $biblionumber);
-        return $c->render(status => 200, openapi => {biblio => Koha::Biblios->find($biblionumber)});
+        my $biblio = Koha::Biblios->find($c->validation->param('biblionumber'));
+        return $c->render(status => 200, openapi => {biblio => $biblio});
     } else {
         return $c->render(status => 400, openapi => {error => "unable to update record"});
     }
