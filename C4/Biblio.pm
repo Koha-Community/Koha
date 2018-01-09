@@ -68,7 +68,6 @@ BEGIN {
       GetBiblioData
       GetMarcBiblio
       GetBiblioItemData
-      GetBiblioItemInfosOf
 
       &GetRecordValue
 
@@ -883,28 +882,6 @@ sub GetISBDView {
     $res =~ s/\(\)//g;
 
     return $res;
-}
-
-=head2 GetBiblioItemInfosOf
-
-  GetBiblioItemInfosOf(@biblioitemnumbers);
-
-=cut
-
-sub GetBiblioItemInfosOf {
-    my @biblioitemnumbers = @_;
-
-    my $biblioitemnumber_values = @biblioitemnumbers ? join( ',', @biblioitemnumbers ) : "''";
-
-    my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT biblioitemnumber,
-            publicationyear,
-            itemtype
-        FROM biblioitems
-        WHERE biblioitemnumber IN ($biblioitemnumber_values)
-    ";
-    return $dbh->selectall_hashref($query, 'biblioitemnumber');
 }
 
 =head1 FUNCTIONS FOR HANDLING MARC MANAGEMENT

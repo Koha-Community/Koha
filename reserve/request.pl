@@ -316,8 +316,16 @@ foreach my $biblionumber (@biblionumbers) {
     ## Should be same as biblionumber
     my @biblioitemnumbers = keys %itemnumbers_of_biblioitem;
 
-    ## Hash of biblioitemnumber to 'biblioitem' table records
-    my $biblioiteminfos_of  = GetBiblioItemInfosOf(@biblioitemnumbers);
+    my $biblioiteminfos_of = {
+        map {
+            my $biblioitem = $_;
+            ( $biblioitem->{biblioitemnumber} => $biblioitem )
+          } @{ Koha::Biblioitems->search(
+                { biblioitemnumber => { -in => \@biblioitemnumbers } },
+                { select => ['biblioitemnumber', 'publicationyear', 'itemtype']}
+            )->unblessed
+          }
+    };
 
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my @notforloan_avs = Koha::AuthorisedValues->search_by_koha_field({ kohafield => 'items.notforloan', frameworkcode => $frameworkcode });
