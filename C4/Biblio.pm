@@ -2700,12 +2700,15 @@ sub _adjust_pubyear {
         $retval = $1;
     } elsif( $retval =~ m/(\d\d\d\d)/ && $1 > 0 ) {
         $retval = $1;
-    } elsif( $retval =~ m/(\d)[.Xx?]{3}|(\d\d)[.Xx?]{2}|(\d{3})[.Xx?]/ ) {
-        my $digits = $1 || $2 || $3;
-        $retval = $digits * ( 10 ** ( 4 - length($digits) ));
-    } elsif( $retval =~ m/(\d)[-]{3}\?|(\d\d)[-]{2}\?|(\d{3})[-]\?/ ) {
-        # the form 198-? occurred in Dutch ISBD rules
-        my $digits = $1 || $2 || $3;
+    } elsif( $retval =~ m/
+             (?<year>\d)[-]?[.Xx?]{3}
+            |(?<year>\d{2})[.Xx?]{2}
+            |(?<year>\d{3})[.Xx?]
+            |(?<year>\d)[-]{3}\?
+            |(?<year>\d\d)[-]{2}\?
+            |(?<year>\d{3})[-]\?
+    /xms ) { # the form 198-? occurred in Dutch ISBD rules
+        my $digits = $+{year};
         $retval = $digits * ( 10 ** ( 4 - length($digits) ));
     }
     return $retval;
