@@ -67,7 +67,6 @@ BEGIN {
     push @EXPORT, qw(
       GetBiblioData
       GetMarcBiblio
-      GetBiblioItemData
 
       &GetRecordValue
 
@@ -719,34 +718,6 @@ sub GetBiblioData {
 
     return ($data);
 }    # sub GetBiblioData
-
-=head2 GetBiblioItemData
-
-  $itemdata = &GetBiblioItemData($biblioitemnumber);
-
-Looks up the biblioitem with the given biblioitemnumber. Returns a
-reference-to-hash. The keys are the fields from the C<biblio>,
-C<biblioitems>, and C<itemtypes> tables in the Koha database, except
-that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
-
-=cut
-
-sub GetBiblioItemData {
-    my ($biblioitemnumber) = @_;
-    my $dbh                = C4::Context->dbh;
-    my $query              = "SELECT *,biblioitems.notes AS bnotes
-        FROM biblio LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber ";
-    unless ( C4::Context->preference('item-level_itypes') ) {
-        $query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
-    }
-    $query .= " WHERE biblioitemnumber = ? ";
-    my $sth = $dbh->prepare($query);
-    my $data;
-    $sth->execute($biblioitemnumber);
-    $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
-}    # sub &GetBiblioItemData
 
 =head2 GetISBDView 
 
