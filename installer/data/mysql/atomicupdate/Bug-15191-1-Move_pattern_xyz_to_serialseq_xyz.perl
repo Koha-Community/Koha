@@ -4,9 +4,6 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do("UPDATE serial SET serialseq_y=pattern_y");
     $dbh->do("UPDATE serial SET serialseq_z=pattern_z");
 
-    $dbh->do("ALTER TABLE serial DROP INDEX (pattern_x)");
-    $dbh->do("ALTER TABLE serial DROP INDEX (pattern_y)");
-    $dbh->do("ALTER TABLE serial DROP INDEX (pattern_z)");
     $dbh->do("ALTER TABLE serial DROP COLUMN pattern_x");
     $dbh->do("ALTER TABLE serial DROP COLUMN pattern_y");
     $dbh->do("ALTER TABLE serial DROP COLUMN pattern_z");
