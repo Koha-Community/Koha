@@ -86,7 +86,6 @@ BEGIN {
     #Check data
     push @EXPORT, qw(
         &checkuserpassword
-        &Generate_Userid
         &fixup_cardnumber
         &checkcardnumber
     );
@@ -480,38 +479,6 @@ sub AddMember {
     $patron->add_enrolment_fee_if_needed;
 
     return $data{borrowernumber};
-}
-
-=head2 Generate_Userid
-
-    my $newuid = Generate_Userid($borrowernumber, $firstname, $surname);
-
-    Generate a userid using the $surname and the $firstname (if there is a value in $firstname).
-
-    $borrowernumber is optional (i.e. it can contain a blank value). A value is passed when generating a new userid for an existing borrower. When a new userid is created for a new borrower, a blank value is passed to this sub.
-
-    return :
-        new userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $newuid is unique, or a higher numeric value if not unique).
-
-=cut
-
-sub Generate_Userid {
-  my ($borrowernumber, $firstname, $surname) = @_;
-  my $newuid;
-  my $offset = 0;
-  my $patron = Koha::Patron->new;
-  #The script will "do" the following code and increment the $offset until the generated userid is unique
-  do {
-    $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
-    $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
-    $newuid = lc(($firstname)? "$firstname.$surname" : $surname);
-    $newuid = unac_string('utf-8',$newuid);
-    $newuid .= $offset unless $offset == 0;
-    $patron->userid( $newuid );
-    $offset++;
-   } while (! $patron->has_valid_userid );
-
-   return $newuid;
 }
 
 =head2 fixup_cardnumber
