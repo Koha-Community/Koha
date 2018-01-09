@@ -669,7 +669,8 @@ sub CanBookBeIssued {
 
     my $item = GetItem(undef, $barcode );
     my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
-	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
+    my $biblio = Koha::Biblios->find( $item->{biblionumber} );
+    my $biblioitem = $biblio->biblioitem;
     my $effective_itemtype = $item->{itype}; # GetItem deals with that
     my $dbh             = C4::Context->dbh;
     my $patron_unblessed = $patron->unblessed;
@@ -927,7 +928,7 @@ sub CanBookBeIssued {
                 }
             }
         }
-        elsif ($biblioitem->{'notforloan'} == 1){
+        elsif ($biblioitem->notforloan == 1){
             if (!C4::Context->preference("AllowNotForLoanOverride")) {
                 $issuingimpossible{NOT_FOR_LOAN} = 1;
                 $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
@@ -1009,7 +1010,7 @@ sub CanBookBeIssued {
     }
 
     ## CHECK AGE RESTRICTION
-    my $agerestriction  = $biblioitem->{'agerestriction'};
+    my $agerestriction  = $biblioitem->agerestriction;
     my ($restriction_age, $daysToAgeRestriction) = GetAgeRestriction( $agerestriction, $patron->unblessed );
     if ( $daysToAgeRestriction && $daysToAgeRestriction > 0 ) {
         if ( C4::Context->preference('AgeRestrictionOverride') ) {

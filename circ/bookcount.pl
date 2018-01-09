@@ -28,7 +28,7 @@ use C4::Circulation;
 use C4::Output;
 use C4::Koha;
 use C4::Auth;
-use C4::Biblio; # GetBiblioItemData
+use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Libraries;
 
@@ -38,7 +38,8 @@ my $bi           = $input->param('bi');
 my $biblionumber = $input->param('biblionumber');
 
 my $idata = itemdatanum($itm);
-my $data  = GetBiblioItemData($bi);
+my $biblio = Koha::Biblios->find( $biblionumber );
+die "No valid biblionumber passed" unless $biblio; # FIXME A bit rude!
 
 my $lastmove = lastmove($itm);
 
@@ -73,8 +74,8 @@ for my $library ( @$libraries ) {
 
 $template->param(
     biblionumber            => $biblionumber,
-    title                   => $data->{'title'},
-    author                  => $data->{'author'},
+    title                   => $biblio->title,
+    author                  => $biblio->author,
     barcode                 => $idata->{'barcode'},
     biblioitemnumber        => $bi,
     homebranch              => $idata->{homebranch},

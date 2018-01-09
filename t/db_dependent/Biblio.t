@@ -197,10 +197,10 @@ sub run_tests {
     my ( $title_field, $title_subfield ) = get_title_field();
     is( $marc->subfield( $title_field, $title_subfield ), $title, );
 
-    my $itemdata = GetBiblioItemData( $biblioitemnumber );
-    is( $itemdata->{ title }, $title,
-        'First test of GetBiblioItemData to get same result of previous two GetBiblioData tests.');
-    is( $itemdata->{ isbn }, $isbn,
+    my $biblioitem = Koha::Biblioitems->find( $biblioitemnumber );
+    is( $biblioitem->_result->biblio->title, $title, # Should be $biblioitem->biblio instead, but not needed elsewhere for now
+        'Do not know if this makes sense - compare result of previous two GetBiblioData tests.');
+    is( $biblioitem->isbn, $isbn,
         'Second test checking it returns the correct isbn.');
 
     my $success = 0;
