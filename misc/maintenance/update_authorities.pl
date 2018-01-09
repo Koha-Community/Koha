@@ -39,11 +39,16 @@ GetOptions(
 
 @authid = map { split /[,]/, $_; } @authid;
 print "No changes will be made\n" unless $commit;
-if( $help ) {
-    pod2usage(1);
-} elsif( $delete ) {
+pod2usage(1) if $help;
+
+if ( $delete and $merge and $renumber ) {
+    pod2usage(q|Only one action parameter can be passed (delete, merge or renumber)|);
+}
+
+if( $delete ) {
     delete_auth( \@authid );
 } elsif( $merge ) {
+    pod2usage(q|Reference parameter is missing|) unless $reference;
     merge_auth( \@authid, $reference );
 } elsif( $renumber ) {
     renumber( \@authid );
@@ -65,10 +70,9 @@ sub delete_auth {
 
 sub merge_auth {
     my ( $auths, $reference ) = @_;
-    if( !$reference ) {
-        print "Reference parameter is missing\n";
-        return;
-    }
+
+    return unless $reference;
+
     my $marc_ref = GetAuthority( $reference ) || die "Reference record $reference not found\n";
     # First update all linked biblios of reference
     merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 }) if $commit;
@@ -101,10 +105,10 @@ sub merge_auth {
 sub renumber {
     my ( $auths ) = @_;
     foreach my $authid ( uniq(@$auths) ) {
-        if( my $obj = Koha::Authorities->find($authid) ) {
+        if( my $authority = Koha::Authorities->find($authid) ) {
             my $marc = GetAuthority( $authid );
             if( $commit ) {
-                AddAuthority( $marc, $authid, $obj->authtypecode );
+                AddAuthority( $marc, $authid, $authority->authtypecode );
                     # AddAuthority contains an update of 001, 005 etc.
                 print "Renumbered $authid\n" if $verbose;
             } else {
