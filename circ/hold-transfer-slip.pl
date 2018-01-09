@@ -38,6 +38,7 @@ my $session = get_session($sessionID);
 
 my $biblionumber = $input->param('biblionumber');
 my $borrowernumber = $input->param('borrowernumber');
+my $itemnumber = $input->param('itemnumber');
 my $transfer = $input->param('transfer');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -53,7 +54,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $userenv = C4::Context->userenv;
 my ($slip, $is_html);
-if ( my $letter = ReserveSlip ($session->param('branch') || $userenv->{branch}, $borrowernumber, $biblionumber, $transfer) ) {
+if ( my $letter = ReserveSlip ($session->param('branch') || $userenv->{branch}, $borrowernumber, $biblionumber, $transfer, $itemnumber) ) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};
 }

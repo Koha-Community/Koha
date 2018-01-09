@@ -2399,7 +2399,7 @@ available within the slip:
 =cut
 
 sub ReserveSlip {
-    my ($branch, $borrowernumber, $biblionumber, $transfer) = @_;
+    my ($branch, $borrowernumber, $biblionumber, $transfer, $itemnumber) = @_;
 
 #   return unless ( C4::Context->boolean_preference('printreserveslips') );
     my $patron = Koha::Patrons->find( $borrowernumber );
@@ -2408,7 +2408,8 @@ sub ReserveSlip {
 
     my $reserve_id = GetReserveId({
         biblionumber => $biblionumber,
-        borrowernumber => $borrowernumber
+        borrowernumber => $borrowernumber,
+        itemnumber => $itemnumber
     }) or return;
     my $reserve = Koha::Holds->find($reserve_id) or return;
     my $library = Koha::Libraries->find( $reserve->branchcode )->unblessed;
@@ -2426,9 +2427,9 @@ sub ReserveSlip {
             'reserves'       => $reserve->unblessed,
             'items'          => $reserve->itemnumber,
         },
-        substitute => {
-            lastpickupdate => output_pref( { dt => $reserve->waiting_expires_on })
-        },
+        substitute => { 
+            lastpickupdate => output_pref( { dt => $reserve->waiting_expires_on, dateonly => 1 }) 
+        }, 
     );
 }
 

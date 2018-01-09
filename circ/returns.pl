@@ -81,6 +81,7 @@ if ( $query->param('print_slip') ) {
         print_slip     => 1,
         borrowernumber => scalar $query->param('borrowernumber'),
         biblionumber   => scalar $query->param('biblionumber'),
+        itemnumber   => scalar $query->param('itemnumber'),
     );
 }
 
@@ -89,6 +90,7 @@ if ( $query->param('transfer_slip') ) {
         transfer_slip  => 1,
         borrowernumber => scalar $query->param('borrowernumber'),
         biblionumber   => scalar $query->param('biblionumber'),
+        itemnumber   => scalar $query->param('itemnumber'),
     );
 }
 
@@ -304,6 +306,7 @@ if ($barcode) {
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
+        itemnumber       => $itemnumber,
         ccode            => $biblio->{'ccode'},
         itembiblionumber => $biblio->{'biblionumber'},
         biblionumber     => $biblio->{'biblionumber'},
