@@ -917,8 +917,8 @@ sub generate_userid {
     my $userid;
     my $offset = 0;
     my $patron = Koha::Patron->new;
-    my $firstname = $self->firstname;
-    my $surname = $self->surname;
+    my $firstname = $self->firstname // q{};
+    my $surname = $self->surname // q{};
     #The script will "do" the following code and increment the $offset until the generated userid is unique
     do {
       $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
