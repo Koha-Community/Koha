@@ -47,10 +47,10 @@ my @sort_columns =
 my $import_batch_id   = $input->param('import_batch_id');
 my $offset            = $input->param('iDisplayStart');
 my $results_per_page  = $input->param('iDisplayLength');
-my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') ];
+my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') // 0 ];
 my $sorting_direction = $input->param('sSortDir_0');
 
-$results_per_page = undef if ( $results_per_page == -1 );
+$results_per_page = undef if $results_per_page && $results_per_page == -1;
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
