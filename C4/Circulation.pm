@@ -670,7 +670,7 @@ sub CanBookBeIssued {
     my $item = GetItem(undef, $barcode );
     my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
-	$item->{'itemtype'}=$item->{'itype'}; 
+    my $effective_itemtype = $item->{itype}; # GetItem deals with that
     my $dbh             = C4::Context->dbh;
     my $patron_unblessed = $patron->unblessed;
 
@@ -691,8 +691,7 @@ sub CanBookBeIssued {
         my $issuedate = $now->clone();
 
         my $branch = _GetCircControlBranch($item, $patron_unblessed);
-        my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
-        $duedate = CalcDateDue( $issuedate, $itype, $branch, $patron_unblessed );
+        $duedate = CalcDateDue( $issuedate, $effective_itemtype, $branch, $patron_unblessed );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -716,7 +715,7 @@ sub CanBookBeIssued {
                      branch => C4::Context->userenv->{'branch'},
                      type => 'localuse',
                      itemnumber => $item->{'itemnumber'},
-                     itemtype => $item->{'itype'},
+                     itemtype => $effective_itemtype,
                      borrowernumber => $patron->borrowernumber,
                      ccode => $item->{'ccode'}}
                     );
@@ -921,20 +920,20 @@ sub CanBookBeIssued {
             if ($notforloan->{'notforloan'}) {
                 if (!C4::Context->preference("AllowNotForLoanOverride")) {
                     $issuingimpossible{NOT_FOR_LOAN} = 1;
-                    $issuingimpossible{itemtype_notforloan} = $item->{'itype'};
+                    $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
                 } else {
                     $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
-                    $needsconfirmation{itemtype_notforloan} = $item->{'itype'};
+                    $needsconfirmation{itemtype_notforloan} = $effective_itemtype;
                 }
             }
         }
         elsif ($biblioitem->{'notforloan'} == 1){
             if (!C4::Context->preference("AllowNotForLoanOverride")) {
                 $issuingimpossible{NOT_FOR_LOAN} = 1;
-                $issuingimpossible{itemtype_notforloan} = $biblioitem->{'itemtype'};
+                $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
             } else {
                 $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
-                $needsconfirmation{itemtype_notforloan} = $biblioitem->{'itemtype'};
+                $needsconfirmation{itemtype_notforloan} = $effective_itemtype;
             }
         }
     }
