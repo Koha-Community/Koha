@@ -4,10 +4,6 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 <style type="text/css">
-.linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
-.linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
-.linktools a:hover { background-color:#EEE;color:#CC3300;border-right:1px solid #CCC;}
-tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }
 #dataPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
 </head>
@@ -104,24 +100,32 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <th>Edition</th>
         <th>ISBN</th>
         <th>LCCN</th>
-        <th>MARC</th>
-        <th>Card</th>
-		<th>&nbsp;</th>
+        <th>Actions</th>
     </tr></thead>
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
         [% IF ( breeding_loo.breedingid ) %]
 
 	    <tr id="row[% breeding_loo.breedingid %]">
-            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" class="previewData">Preview card</a> <a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-biblionumber="[% breeding_loo.biblionumber %]" data-frameworkcode="[% frameworkcode | uri %]">Import</a><a href="#" id="close_menu" title="Close this menu"> X </a></div> </td>
+            <td>[% breeding_loo.server %]</td>
             <td>[% breeding_loo.title |html %]</td>
             <td>[% breeding_loo.author %]</td>
             <td>[% breeding_loo.date %]</td>
             <td>[% breeding_loo.edition %]</td>
             <td>[% breeding_loo.isbn %]</td>
             <td>[% breeding_loo.lccn %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewData">MARC</a></td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" class="previewData">Card</a></td>
-            <td><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-biblionumber="[% breeding_loo.biblionumber %]" data-frameworkcode="[% frameworkcode | uri %]">Import</a></td>
+
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid %]" role="button" data-toggle="dropdown" href="#">
+                      Actions <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid %]">
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" title="MARC" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" title="Card" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-biblionumber="[% breeding_loo.biblionumber %]" data-frameworkcode="[% frameworkcode | uri %]"><i class="fa fa-download"></i> Import</a></li>
+                    </ul>
+                </div>
+            </td>
         </tr>
         [% END %]
     [% END %]</tbody>
@@ -189,6 +193,17 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <script type="text/javascript">
         $(document).ready(function(){
 
+            $(".dropdown").on("hidden.bs.dropdown", function(){
+                // Reset menu styles so that a click on the
+                // original dropdown button toggle works correctly
+                $(".dropdown").css("position","absolute");
+                $(".dropdown-menu").css({
+                    "top" : "100%",
+                    "left" : "auto",
+                    "right" : 0
+                });
+            });
+
             $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
                 "aoColumnDefs": [
@@ -198,23 +213,33 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
             }));
-                /* Inline edit/delete links */
-                $("td").click(function(event){
-                    var $tgt = $(event.target);
-                    var row = $(this).parent();
-                    $(".linktools").hide();
-                    $("tr").removeClass("selected");
-                    row.addClass("selected");
-                    if($tgt.is("a")||$tgt.is(":nth-child(8)")||$tgt.is(":nth-child(9)")||$tgt.is(":nth-child(10)")){
-                        //Don't show inline links for cells containing links of their own.
-                    } else {
-                        var position = $(this).offset();
-                        var top = position.top+5;
-                        var left = position.left+5;
-                        $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
-                    }
-                });
 
+            /* Display actions menu anywhere the table is clicked */
+            $("td").click(function(event){
+                var tgt = $(event.target);
+                var row = $(this).parent();
+                var rowid = row.attr("id");
+                $("tr").removeClass("highlighted-row");
+                row.addClass("highlighted-row");
+                $(".dropdown").removeClass("open");
+                if(tgt.is("a")||tgt.is(":nth-child(8)")){
+                    // Don't show inline links for cells containing links of their own.
+                } else {
+                    event.stopPropagation();
+                    var dropdown = $(".dropdown", row);
+                    dropdown.addClass("open");
+                    var position = $(this).offset();
+                    var top = position.top + 5;
+                    var left = position.left + 5;
+                    dropdown.css("position","unset");
+                    $(".dropdown-menu", row).css({
+                        "top" : top,
+                        "left" : left,
+                        "right" : "unset"
+                    });
+
+               }
+            });
         });
     </script>
     [% INCLUDE 'z3950_search.inc' %]
