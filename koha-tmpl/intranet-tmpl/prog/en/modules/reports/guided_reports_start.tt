@@ -204,9 +204,9 @@ canned reports and writing custom SQL reports.</p>
                         </td>
                         <td class="report_json_url">
                         [% IF (savedreport.public) %]
-                            <a href="[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]">[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]">[% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% END %]
                         </td>
                         [% IF (usecache) %] <td>[% savedreport.cache_expiry %]</td> [% END %]
