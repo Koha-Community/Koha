@@ -470,7 +470,7 @@
     </div>
     [% IF ( show_branch_cat_rule_form ) %]
     <div id="holds-policy-by-patron-category" class="container">
-    <h3>[% IF humanbranch %]Checkout limit by patron category for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default checkout limit by patron category[% END %]</h3>
+    <h3>[% IF humanbranch %]Checkout, hold policy by patron category for [% Branches.GetName( humanbranch ) | html %][% ELSE %]Default checkout, hold policy by patron category[% END %]</h3>
         <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
@@ -485,7 +485,7 @@
                     <th>Patron category</th>
                     <th>Total current checkouts allowed</th>
                     <th>Total current on-site checkouts allowed</th>
-                    <th>Maximum total holds allowed (count)</th>
+                    <th>Total holds allowed</th>
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH branch_cat_rule_loo IN branch_cat_rule_loop %]
