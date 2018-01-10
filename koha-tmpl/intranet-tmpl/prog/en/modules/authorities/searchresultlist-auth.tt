@@ -3,21 +3,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging authority plugin</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
-#custom-doc { width:51.46em;*width:50.17em;min-width:675px; margin:auto; text-align:left; } 
-</style>
 </head>
 
 <body id="auth_searchresultlist_auth" class="auth">
-<div id="custom-doc" class="yui-t7">
-
-   <div id="bd">
-           <div id="yui-main">
-	           <div class="yui-b"><div class="yui-g">
+    <div class="container-fluid">
 
     	<h1>Authority search results</h1>
     	[% INCLUDE 'auth-finder-search.inc' %]
-    	[% IF ( total ) %]<div id="resultnumber">
+        [% IF ( total ) %]<div class="resultnumber">
             [% IF ( displayprev ) %]
                     <a href="auth_finder.pl?startfrom=[% startfromprev %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
                         &lt;&lt;
@@ -70,7 +63,7 @@
             </table>
     
         </div>
-        <div id="resultnumber">
+        <div class="resultnumber">
             [% IF ( displayprev ) %]
                     <a href="auth_finder.pl?startfrom=[% startfromprev %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranetamp;&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
                         &lt;&lt;
@@ -89,11 +82,7 @@
                         &gt;&gt;</a>
                 [% END %]
         </div>[% END %]
-</div>
-</div>
-</div>
-</div>
-</div>
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
