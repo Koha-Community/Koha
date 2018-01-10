@@ -1,37 +1,26 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Z39.50 search results</title>
+[% IF ( opsearch ) %]
+    <title>Koha &rsaquo; Z39.50 authority search points</title>
+[% ELSE %]
+    <title>Koha &rsaquo; Z39.50 authority search results</title>
+    [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 <style type="text/css">
-.linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
-.linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
-.linktools a:hover { background-color:#EEE;color:#CC3300;border-right:1px solid #CCC;}
-tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; } #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
+    #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 </style>
 
-[% IF ( opsearch ) %]
-    <style type="text/css">
-    #custom-doc { width:53em;*width:51.72em;min-width:689px; margin:auto; text-align:left; }
-    </style>
-    </head>
-    <body id="cat_z3950_auth_search" class="cat">
-    <div id="custom-doc" class="yui-t7">
-[% ELSE %]
-    </head>
+<body id="cat_z3950_auth_search" class="cat">
+    <div class="container-fluid">
 
-    <body id="cat_z3950_search" class="cat" style="padding:.5em;">
-    <div>
-[% END %]
-
-    <div id="bd">
     [% IF ( opsearch ) %]
-        <h2>Z39.50 Authority search points</h2>
+        <h2>Z39.50 authority search points</h2>
         <form method="post" action="z3950_auth_search.pl" name="f" class="checkboxed">
         <input type="hidden" name="op" id="op" value="do_search" />
         <input type="hidden" name="authid" value="[% authid %]" />
-        <div class="yui-g">
-            <div class="yui-u first">
+            <div class="row">
+            <div class="col-xs-6">
                 <fieldset class="rows">
                 <ol>
                     <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
@@ -43,37 +32,41 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                 </ol>
                 </fieldset>
             </div>
-            <div class="yui-u">
-                <fieldset class="rows">
-                <ol>
-                    <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
-                    <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="" /></li>
-                    <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
-                    <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
-                    <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
-                </ol>
-                </fieldset>
-            </div>
-            <div class="yui-g">
-                <h2>Search targets</h2>
-                <div id="z3950_search_targets_auth">
-                    <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></span>
-                [% FOREACH serverloo IN serverloop %]
-                    <p>
-                    [% IF ( serverloo.checked ) %]
-                        <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
-                    [% ELSE %]
-                        <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
-                    [% END %]
-                    <label for="z3950_[% serverloo.id %]">[% serverloo.servername %]</label>
-                    </p>
-                [% END %]
+            <div class="col-xs-6">
+                <div class="row">
+                    <fieldset class="rows">
+                    <ol>
+                        <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
+                        <li><label for="subjectsubdiv">Subject sub-division: </label> <input type="text" id="subjectsubdiv" name="subjectsubdiv" value="" /></li>
+                        <li><label for="title">Title (any): </label> <input type="text" id="title"  name="title" value="[% title | html %]" /></li>
+                        <li><label for="uniformtitle">Title (uniform): </label> <input type="text" id="uniformtitle"  name="uniformtitle" value="[% uniformtitle | html %]" /></li>
+                        <li><a id="resetZ3950Search" href="#"><i class="fa fa-trash"></i> Clear search form</a></li>
+                    </ol>
+                    </fieldset>
                 </div>
+
+                <div class="row">
+                    <h2>Search targets</h2>
+                    <div id="z3950_search_targets_auth">
+                        <span class="z3950checks"><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></span>
+                    [% FOREACH serverloo IN serverloop %]
+                        <p>
+                        [% IF ( serverloo.checked ) %]
+                            <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
+                        [% END %]
+                        <label for="z3950_[% serverloo.id %]">[% serverloo.servername %]</label>
+                        </p>
+                    [% END %]
+                    </div>
+                </div>
+            </div>
             </div>
         <fieldset class="action"><input type="submit"  class="submit" value="Search"/> <a class="cancel close" href="#">Cancel</a></fieldset>
         </form>
 [% ELSE %]
-    <h2>Results for Authority Records</h2>
+    <h2>Results for authority records</h2>
     [% IF ( breeding_loop ) %]
     <table id="resultst">
 <thead>    <tr>
@@ -85,12 +78,19 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
         [% IF ( breeding_loo.breedingid ) %]
         <tr id="row[% breeding_loo.breedingid %]">
-            <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC">Preview MARC</a> <a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]">Import</a><a href="#" id="close_menu" title="Close this menu"> X </a></div> </td>
+            <td>[% breeding_loo.server %]</td>
             <td>[% breeding_loo.heading %]</td>
             <td>[% breeding_loo.heading_code %]</td>
             <td class="actions">
-                <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC btn btn-default btn-xs"><i class="fa fa-eye"></i> Show MARC</a>
-                <a href="#" class="import_record btn btn-default btn-xs" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]"><i class="fa fa-download"></i> Import</a>
+                <div class="dropdown">
+                    <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid %]" role="button" data-toggle="dropdown" href="#">
+                      Actions <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid %]">
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" class="previewMARC"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid %]" data-heading_code="[% breeding_loo.heading_code %]" data-authid="[% breeding_loo.authid %]"><i class="fa fa-download"></i> Import</a></li>
+                    </ul>
+                </div>
             </td>
         </tr>
         [% END %]
@@ -158,8 +158,6 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     [% END %]
 
 [% END %]
-</div>
-</div>
 
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending %] servers to search</h3>[% END %]
 
@@ -169,30 +167,52 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <script type="text/javascript">
         $(document).ready(function(){
 
+            $(".dropdown").on("hidden.bs.dropdown", function(){
+                // Reset menu styles so that a click on the
+                // original dropdown button toggle works correctly
+                $(".dropdown").css("position","absolute");
+                $(".dropdown-menu").css({
+                    "top" : "100%",
+                    "left" : "auto",
+                    "right" : 0
+                });
+            });
+
             $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
                 "aoColumnDefs": [
-                    { "aTargets": [ -1,-2 ], "bSortable": false, "bSearchable": false },
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 ],
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
             }));
-                /* Inline edit/delete links */
-                $("td").click(function(event){
-                    var $tgt = $(event.target);
-                    var row = $(this).parent();
-                    $(".linktools").hide();
-                    $("tr").removeClass("selected");
-                    row.addClass("selected");
-                    if($tgt.is("a")||$tgt.is(":nth-child(4)")||$tgt.is(":nth-child(5)")){
-                        //Don't show inline links for cells containing links of their own.
-                    } else {
-                        var position = $(this).offset();
-                        var top = position.top+5;
-                        var left = position.left+5;
-                        $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
-                    }
-                });
+
+            /* Display actions menu anywhere the table is clicked */
+            $("td").click(function(event){
+                var tgt = $(event.target);
+                var row = $(this).parent();
+                var rowid = row.attr("id");
+                $("tr").removeClass("highlighted-row");
+                row.addClass("highlighted-row");
+                $(".dropdown").removeClass("open");
+                if(tgt.is("a")||tgt.is(":nth-child(8)")){
+                    // Don't show inline links for cells containing links of their own.
+                } else {
+                    event.stopPropagation();
+                    var dropdown = $(".dropdown", row);
+                    dropdown.addClass("open");
+                    var position = $(this).offset();
+                    var top = position.top + 5;
+                    var left = position.left + 5;
+                    dropdown.css("position","unset");
+                    $(".dropdown-menu", row).css({
+                        "top" : top,
+                        "left" : left,
+                        "right" : "unset"
+                    });
+
+               }
+            });
 
         });
     </script>
