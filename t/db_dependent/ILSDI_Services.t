@@ -297,41 +297,96 @@ subtest 'LookupPatron test' => sub {
     $schema->storage->txn_rollback;
 };
 
-# This is a stub, as it merely is for triggering the GetMarcBiblio call.
-subtest 'GetRecords' => sub {
+subtest 'Holds test' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
+    t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
+
+    my $patron = $builder->build({
+        source => 'Borrower',
+    });
+
     my $biblio = $builder->build({
         source => 'Biblio',
-        value  => {
-            title => 'Title 1',    },
+    });
+
+    my $biblioitems = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio->{biblionumber},
+        }
     });
 
     my $item = $builder->build({
         source => 'Item',
-        value  => {
+        value => {
             biblionumber => $biblio->{biblionumber},
-        },
+            damaged => 1
+        }
     });
 
-    my $biblioitem = $builder->build({
+    my $query = new CGI;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio->{biblionumber});
+
+    my $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is( $reply->{code}, 'damaged', "Item damaged" );
+
+    my $item_o = Koha::Items->find($item->{itemnumber});
+    $item_o->damaged(0)->store;
+
+    my $hold = $builder->build({
+        source => 'Reserve',
+        value => {
+            borrowernumber => $patron->{borrowernumber},
+            biblionumber => $biblio->{biblionumber},
+            itemnumber => $item->{itemnumber}
+        }
+    });
+
+    $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is( $reply->{code}, 'itemAlreadyOnHold', "Item already on hold" );
+
+    my $biblio2 = $builder->build({
+        source => 'Biblio',
+    });
+
+    my $biblioitems2 = $builder->build({
         source => 'Biblioitem',
-        value  => {
-            biblionumber => $biblio->{biblionumber},
-            itemnumber   => $item->{itemnumber},
-        },
+        value => {
+            biblionumber => $biblio2->{biblionumber},
+        }
     });
 
-    my $query = CGI->new({
-        'schema' => 'MARCXML',
-        'id'     => [ $biblio->{biblionumber} ]
+    my $item2 = $builder->build({
+        source => 'Item',
+        value => {
+            biblionumber => $biblio2->{biblionumber},
+            damaged => 0
+        }
     });
 
-    my $result = C4::ILSDI::Services::GetRecords($query);
-    ok($result,'There is a result');
+    t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+    my $issuingrule = $builder->build({
+        source => 'Issuingrule',
+        value => {
+            categorycode => $patron->{categorycode},
+            itemtype => $item2->{itype},
+            branchcode => $patron->{branchcode},
+            reservesallowed => 0,
+        }
+    });
+
+    $query = new CGI;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio2->{biblionumber});
+    $query->param( 'item_id', $item2->{itemnumber});
+
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, 'tooManyReserves', "Too many reserves" );
 
     $schema->storage->txn_rollback;
-}
+};
