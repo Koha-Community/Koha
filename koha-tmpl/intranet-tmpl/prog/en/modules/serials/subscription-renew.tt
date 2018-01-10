@@ -2,14 +2,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials subscription renew #[% subscriptionid %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
-   #custom-doc { width:39.85em;*width:38.86em;min-width:531px; margin:auto; text-align:left; }
-   </style>
 </head>
 
 <body id="ser_subscription-renew" class="ser">
+    <div class="container-fluid">
 
-<div id="custom-doc" class="yui-t7">
 [% IF ( renew ) %]
   Subscription renewed.
   
@@ -40,12 +37,11 @@
 		<textarea name="note" id="note" rows="5" cols="50"></textarea></li></ol></fieldset>
 		<fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
 </form>
-</div>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
 [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
 

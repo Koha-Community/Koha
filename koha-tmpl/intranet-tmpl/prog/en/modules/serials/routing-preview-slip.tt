@@ -2,18 +2,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials  &rsaquo; Routing slip preview</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
-   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin:auto; text-align:left; }
-</style>
-<style type="text/css" media="print">
-   .yui-t7, #custom-doc { min-width:0; width:auto; }
+<style media="print">
+     #ser_routing-preview-slip { min-width:0; width:auto; }
 </style>
 </head>
 
 <body id="ser_routing-preview-slip" class="ser">
-
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
+    <div class="container-fluid">
 
 <table>
     <tr>
@@ -41,8 +36,6 @@
 
     <div id="closewindow" class="noprint"><a class="btn btn-default btn-default" id="print_slip" href="#"><i class="fa fa-print"></i> Print</a> <a class="btn btn-default btn-default close" href="#">Close</a></div>
 
-   </div>
-
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
         $(document).ready(function(){
@@ -55,4 +48,4 @@
     </script>
 [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
