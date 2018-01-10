@@ -25,10 +25,10 @@ use Pod::Usage;
 
 use C4::AuthoritiesMarc qw/AddAuthority DelAuthority GetAuthority merge/;
 
-my ( @authid, $commit, $delete, $help, $merge, $reference, $renumber, $verbose );
+my ( @authid, $confirm, $delete, $help, $merge, $reference, $renumber, $verbose );
 GetOptions(
     'authid:s'    => \@authid,
-    'commit'      => \$commit,
+    'confirm'     => \$confirm,
     'delete'      => \$delete,
     'help'        => \$help,
     'merge'       => \$merge,
@@ -38,7 +38,7 @@ GetOptions(
 );
 
 @authid = map { split /[,]/, $_; } @authid;
-print "No changes will be made\n" unless $commit;
+print "No changes will be made\n" unless $confirm;
 pod2usage(1) if $help;
 
 if ( $delete and $merge and $renumber ) {
@@ -59,7 +59,7 @@ if( $delete ) {
 sub delete_auth {
     my ( $auths ) = @_;
     foreach my $authid ( uniq(@$auths) ) {
-        if( $commit ) {
+        if( $confirm ) {
             DelAuthority({ authid => $authid }); # triggers a merge (read: cleanup)
             print "Removing $authid\n" if $verbose;
         } else {
@@ -75,7 +75,7 @@ sub merge_auth {
 
     my $marc_ref = GetAuthority( $reference ) || die "Reference record $reference not found\n";
     # First update all linked biblios of reference
-    merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 }) if $commit;
+    merge({ mergefrom => $reference, MARCfrom => $marc_ref, mergeto => $reference, MARCto => $marc_ref, override_limit => 1 }) if $confirm;
 
     # Merge all authid's into reference
     my $marc;
@@ -86,7 +86,7 @@ sub merge_auth {
             print "Authority id $authid ignored, does not exist.\n";
             next;
         }
-        if( $commit ) {
+        if( $confirm ) {
             merge({
                 mergefrom      => $authid,
                 MARCfrom       => $marc,
@@ -107,7 +107,7 @@ sub renumber {
     foreach my $authid ( uniq(@$auths) ) {
         if( my $authority = Koha::Authorities->find($authid) ) {
             my $marc = GetAuthority( $authid );
-            if( $commit ) {
+            if( $confirm ) {
                 AddAuthority( $marc, $authid, $authority->authtypecode );
                     # AddAuthority contains an update of 001, 005 etc.
                 print "Renumbered $authid\n" if $verbose;
@@ -150,7 +150,7 @@ update_authorities.pl -c -authid 1,2,3 -renumber
 authid: List authority numbers separated by commas or repeat the
 parameter.
 
-commit: Needed to commit changes.
+confirm: Needed to commit changes.
 
 delete: Delete the listed authority numbers and remove its references from
 linked biblio records.
