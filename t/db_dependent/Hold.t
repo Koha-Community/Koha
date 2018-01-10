@@ -126,11 +126,11 @@ ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
 # Test method is_cancelable
 $hold->found(undef);
-ok( $hold->is_cancelable(), "Unfound hold is cancelable" );
+is( $hold->is_cancelable, 1, "Unfound hold is cancelable" );
 $hold->found('W');
-ok( $hold->is_cancelable, "Waiting hold is cancelable" );
+is( $hold->is_cancelable, 0, "Waiting hold is not cancelable" );
 $hold->found('T');
-ok( !$hold->is_cancelable, "In transit hold is not cancelable" );
+is( $hold->is_cancelable, 0, "In transit hold is not cancelable" );
 
 # Test method is_at_destination
 $hold->found(undef);
