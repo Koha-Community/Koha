@@ -1,8 +1,22 @@
+[%- USE Koha -%]
+[%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
+
 [%- USE KohaDates -%]
 [%- INCLUDE csv_headers/acqui/lateorders.tt -%]
 [%- INCLUDE empty_line.inc -%]
+
 [%- FOREACH o IN orders -%]
-"[% o.orderdate %] ([% o.latesince %] days)","[% o.estimateddeliverydate | $KohaDates %]","[% o.supplier (o.supplierid) %]","[% o.title %] [% IF o.author %]Author: [% o.author %].[% END %][% IF o.publisher %]Published by: [% o.publisher %].[% END %]","[% o.unitpricesupplier %] x [% o.quantity_to_receive %] = [% o.subtotal %] ([% o.budget %])","[% o.basketname %] ([% o.basketno %])","[% o.claims_count %]","[% o.claimed_date %]"
+"[% o.orderdate %] ([% o.latesince %] days)"[%- delimiter -%]
+"[% o.estimateddeliverydate | $KohaDates %]"[%- delimiter -%]
+"[% o.supplier (o.supplierid) %]"[%- delimiter -%]
+"[% o.title %] [% IF o.author %]Author: [% o.author %].[% END %][% IF o.publisher %]Published by: [% o.publisher %].[% END %]"[%- delimiter -%]
+"[% o.unitpricesupplier %] x [% o.quantity_to_receive %] = [% o.subtotal %] ([% o.budget %])"[%- delimiter -%]
+"[% o.basketname %] ([% o.basketno %])"[%- delimiter -%]
+"[% o.claims_count %]"[%- delimiter -%]
+"[% o.claimed_date %]"
 [%- INCLUDE empty_line.inc -%]
 [%- END -%]
-,,Total orders in late, [% orders.size %]
+[%- delimiter -%]
+[%- delimiter -%]
+"Total orders in late"[%- delimiter -%]
+[% orders.size %]

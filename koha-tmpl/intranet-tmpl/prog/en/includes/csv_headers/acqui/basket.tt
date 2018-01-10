@@ -1,1 +1,4 @@
-[%- BLOCK -%]Contract name,Order number,Entry date,ISBN,Author,Title,Publication year,Publisher,Collection title,Note for vendor,Quantity,RRP,Delivery place,Billing place[%- END -%]
+[%- USE Koha -%]
+[%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
+
+[%- BLOCK -%]Contract name[% delimiter %]Order number[% delimiter %]Entry date[% delimiter %]ISBN[% delimiter %]Author[% delimiter %]Title[% delimiter %]Publication year[% delimiter %]Publisher[% delimiter %]Collection title[% delimiter %]Note for vendor[% delimiter %]Quantity[% delimiter %]RRP[% delimiter %]Delivery place[% delimiter %]Billing place[%- END -%]
