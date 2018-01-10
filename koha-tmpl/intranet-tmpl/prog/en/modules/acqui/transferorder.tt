@@ -3,15 +3,10 @@
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
 [%- USE KohaDates -%]
 [% INCLUDE 'doc-head-close.inc' %]
-    <style type="text/css">
-    #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
-    </style>
 </head>
 
 <body id="acq_transferorder" class="acq">
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
-    <div class="yui-g">
+    <div class="container-fluid">
         [% IF ( bookselleridfrom ) %]
             <h3>Search for a vendor to transfer to</h3>
               <div class="transferinfo">
@@ -123,12 +118,8 @@
                 <p>No results found.</p>
             [% END %]
         [% END %]
-</div>
 
 <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Cancel</a></div>
-
-</div>
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% IF transferred %]
@@ -149,4 +140,4 @@
     [% END %]
 [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
