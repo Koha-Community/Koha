@@ -1,6 +1,23 @@
+[%- USE Koha -%]
+[%- SET delimiter = Koha.Preference( 'delimiter' ) || ',' -%]
+
 [%- INCLUDE csv_headers/acqui/basket.tt -%]
 [%- INCLUDE empty_line.inc -%]
+
 [%- FOREACH r IN rows -%]
-"[% r.contractname %]",[% r.ordernumber %],[% r.entrydate %],[% r.isbn %],"[% r.author %]","[% r.title %]",[% r.publicationyear %],"[% r.publishercode %]","[% r.collectiontitle %]","[% r.notes %]",[% r.quantity %],[% r.rrp %],"[% r.deliveryplace %]","[% r.billingplace %]"
+"[% r.contractname %]"[%- delimiter -%]
+[% r.ordernumber %][%- delimiter -%]
+[% r.entrydate %][%- delimiter -%]
+[% r.isbn %][%- delimiter -%]
+"[% r.author %]"[%- delimiter -%]
+"[% r.title %]"[%- delimiter -%]
+[% r.publicationyear %][%- delimiter -%]
+"[% r.publishercode %]"[%- delimiter -%]
+"[% r.collectiontitle %]"[%- delimiter -%]
+"[% r.notes %]"[%- delimiter -%]
+[% r.quantity %][%- delimiter -%]
+[% r.rrp %][%- delimiter -%]
+"[% r.deliveryplace %]"[%- delimiter -%]
+"[% r.billingplace %]"
 [%- INCLUDE empty_line.inc -%]
 [%- END -%]
