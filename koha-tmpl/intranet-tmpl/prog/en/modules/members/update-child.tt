@@ -3,15 +3,10 @@
 <title>Koha &rsaquo; Choose adult category</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-<style type="text/css">
-    #custom-doc { width:29em;*width:28.3em;min-width:377px; margin:auto; text-align:left; }
-</style>
 </head>
 
 <body id="pat_update-child" class="pat">
-
-<div id="custom-doc" class="yui-t7">
-<div id="bd">
+    <div class="container-fluid">
 
 [% IF ( MULTI ) %]
 
@@ -53,12 +48,22 @@
         </form>
     [% END %]
 [% END %]
-</div>
+
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
+
+        /* Set some variables needed in members-menu.js */
+        var advsearch = "[% advsearch %]";
+        var dateformat = "[% dateformat %]";
+        var CAN_user_borrowers = "[% CAN_user_borrowers %]";
+        var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
+        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
+        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
+        var catcode = "[% catcode %]";
+        var destination = "[% destination %]";
+
         $(document).ready(function() {
             $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
@@ -88,6 +93,7 @@
             window.close();
         </script>
     [% END %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

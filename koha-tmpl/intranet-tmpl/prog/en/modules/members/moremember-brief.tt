@@ -4,26 +4,30 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Check duplicate patron</title>
 [% INCLUDE 'doc-head-close.inc' %]
-	<style type="text/css">
-		#custom-doc { width:44.23em;*width:43.12em;min-width:491px; margin:auto; text-align:left; } 
-	</style>
 </head>
-<body id="pat_moremember-brief" class="pat" style="padding:.5em;">
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
+
+<body id="pat_moremember-brief" class="pat">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-xs-12">
 	<h3>[% UNLESS ( I ) %]
    [% title %] [% firstname %] [% END %] [% surname %] ([% cardnumber %])</h3>
-<div class="yui-g">
-<div class="yui-u first">
-	<div id="patron-information" style="padding: .5em;">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="patron-information">
 
      [% UNLESS ( I ) %][% IF ( othernames ) %]&ldquo;[% othernames %]&rdquo;[% END %]
         <div class = "address">
-            [% IF Koha.Preference( 'AddressFormat' ) %]
-                [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-            [% ELSE %]
-                [% INCLUDE 'member-display-address-style-us.inc' %]
-            [% END %]
+            <ul>
+                [% IF Koha.Preference( 'AddressFormat' ) %]
+                    [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+                [% ELSE %]
+                    [% INCLUDE 'member-display-address-style-us.inc' %]
+                [% END %]
+            </ul>
         </div>
 	<div class="rows">
 		<ol>
@@ -49,9 +53,10 @@
     [% END %]
 	</ol>
 	</div>
-	</div>
-	</div>
-	<div class="yui-u">
+    </div>
+    </div>
+
+    <div class="col-xs-6">
 	<div id="patron-library-details">
 	<h3>Library use</h3>
 	<div class="rows">
@@ -74,10 +79,12 @@
 	</ol>
 	</div>
 	</div>
-    <fieldset class="action"><input type="button" class="close" value="Close window" /></fieldset>
-	</div>
-	</div>
+    </div>
 </div>
+<div class="row">
+    <div class="col-xs-12">
+        <fieldset class="action"><input type="button" class="close" value="Close window" /></fieldset>
+    </div>
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
