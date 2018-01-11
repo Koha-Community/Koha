@@ -124,13 +124,13 @@ isnt( $hold->is_waiting, 1, 'The hold is not waiting (W)' );
 is( $hold->is_found, 0, 'The hold is not found' );
 ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
-# Test method is_cancelable
+# Test method is_cancelable_from_opac
 $hold->found(undef);
-is( $hold->is_cancelable, 1, "Unfound hold is cancelable" );
+is( $hold->is_cancelable_from_opac, 1, "Unfound hold is cancelable" );
 $hold->found('W');
-is( $hold->is_cancelable, 0, "Waiting hold is not cancelable" );
+is( $hold->is_cancelable_from_opac, 0, "Waiting hold is not cancelable" );
 $hold->found('T');
-is( $hold->is_cancelable, 0, "In transit hold is not cancelable" );
+is( $hold->is_cancelable_from_opac, 0, "In transit hold is not cancelable" );
 
 # Test method is_at_destination
 $hold->found(undef);

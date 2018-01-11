@@ -685,7 +685,7 @@
                                             </td>
                                             [% IF SuspendHoldsOpac %]
                                                 <td>
-                                                    [% IF ( RESERVE.is_cancelable ) %]
+                                                    [% IF ( RESERVE.is_cancelable_from_opac ) %]
                                                         [% IF RESERVE.suspend %]
                                                             <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                                                 <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
@@ -726,11 +726,11 @@
                                                                 </form>
                                                             [% END # / IF AutoResumeSuspendedHolds %]
                                                         [% END # / IF RESERVE.suspend %]
-                                                    [% END # / IF ( RESERVE.is_cancelable )%]
+                                                    [% END # / IF ( RESERVE.is_cancelable_from_opac )%]
                                                 </td>
                                             [% END # / IF SuspendHoldsOpac %]
                                             <td class="modify">
-                                                [% IF ( RESERVE.is_cancelable ) %]
+                                                [% IF ( RESERVE.is_cancelable_from_opac ) %]
                                                     <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id %]" />
