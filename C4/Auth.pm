@@ -86,7 +86,7 @@ BEGIN {
         }
     }
     if ($cas) {
-        import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
+        import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_required);
     }
 
 }

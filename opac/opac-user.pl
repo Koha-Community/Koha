@@ -61,22 +61,9 @@ BEGIN {
         import C4::External::BakerTaylor qw(&image_url &link_url);
     }
 }
-my $logout='';
-# CAS Single Sign Out
-if (C4::Context->preference('casAuthentication')){
-    # Check we havent been hit by a logout call
-    my $xml = $query->param('logoutRequest');
-    if ($xml) {
-        my $dom = XML::LibXML->load_xml(string => $xml);
-        my $ticket;
-        foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
-            $ticket = $node->findvalue('./samlp:SessionIndex');
-        }
-        $query->param(-name =>'logout.x', -value => 1);
-        $query->param(-name =>'cas_ticket', -value => $ticket);
-        $logout=1;
-    }
-}
+
+my $cas_logout_required = C4::Context->preference('casAuthentication')
+  and C4::Auth_with_ldap::logout_required($query);
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -88,7 +75,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if ($logout){
+if ($cas_logout_required){
     print $query->header;
     exit;
 }

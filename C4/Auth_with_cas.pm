@@ -228,6 +228,23 @@ sub _url_with_get_params {
     return $uri_base_part . $uri_params_part;
 }
 
+sub logout_required {
+    my ( $query ) = @_;
+    # Check we havent been hit by a logout call
+    my $xml = $query->param('logoutRequest');
+    if ($xml) {
+        my $dom = XML::LibXML->load_xml(string => $xml);
+        my $ticket;
+        foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
+            $ticket = $node->findvalue('./samlp:SessionIndex');
+        }
+        $query->param(-name =>'logout.x', -value => 1);
+        $query->param(-name =>'cas_ticket', -value => $ticket);
+        return 1;
+    }
+    return 0;
+}
+
 1;
 __END__
 
