@@ -1030,7 +1030,8 @@ ENDSQL
         letter_code => $letter_code,
         borrowernumber => $who_letter_is_for,
         limit => 50,
-        verbose => 1
+        verbose => 1,
+        type => 'sms',
     });
 
 Sends all of the 'pending' items in the message queue, unless
@@ -1054,6 +1055,7 @@ sub SendQueuedMessages {
         'limit'          => $params->{'limit'} // 0,
         'borrowernumber' => $params->{'borrowernumber'} // q{},
         'letter_code'    => $params->{'letter_code'} // q{},
+        'type'           => $params->{'type'} // q{},
     };
     my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
     MESSAGE: foreach my $message ( @$unsent_messages ) {
@@ -1323,6 +1325,10 @@ sub _get_unsent_messages {
         if ( $params->{'letter_code'} ) {
             $statement .= ' AND mq.letter_code = ? ';
             push @query_params, $params->{'letter_code'};
+        }
+        if ( $params->{'type'} ) {
+            $statement .= ' AND message_transport_type = ? ';
+            push @query_params, $params->{'type'};
         }
         if ( $params->{'limit'} ) {
             $statement .= ' limit ? ';

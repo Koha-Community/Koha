@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 76;
+use Test::More tests => 77;
 use Test::MockModule;
 use Test::Warn;
 
@@ -133,8 +133,10 @@ is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pendin
 
 
 # SendQueuedMessages
-my $messages_processed = C4::Letters::SendQueuedMessages();
-is($messages_processed, 1, 'all queued messages processed');
+my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
+is($messages_processed, 0, 'No queued messaged process if type limit passed with unused type');
+$messages_processed = C4::Letters::SendQueuedMessages( { type => 'sms' });
+is($messages_processed, 1, 'all queued messages processed, found correct number of messages with type limit');
 $messages = C4::Letters::GetQueuedMessages({ borrowernumber => $borrowernumber });
 is(
     $messages->[0]->{status},
