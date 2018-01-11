@@ -6,6 +6,7 @@
 [% USE ItemTypes %]
 [% USE Price %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
@@ -14,118 +15,9 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
-
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-[% INCLUDE 'strings.inc' %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'columns_settings.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
-[% INCLUDE 'timepicker.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript">
-//<![CDATA[
-/* Set some variable needed in circulation.js */
-var MSG_DT_LOADING_RECORDS = _("Loading... you may continue scanning.");
-var interface = "[% interface %]";
-var theme = "[% theme %]";
-var borrowernumber = "[% borrowernumber %]";
-var branchcode = "[% branch %]";
-var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
-var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
-var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %];
-var script = "circulation";
-var relatives_borrowernumbers = new Array();
-[% FOREACH b IN relatives_borrowernumbers %]
-    relatives_borrowernumbers.push("[% b %]");
-[% END %]
-
-var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
-var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
-
-columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) %]
-
-[% IF borrowernumber and borrower %]
-    if($.cookie("holdfor") != [% borrowernumber %]){
-        $.removeCookie("holdfor", { path: '/' });
-    }
-[% ELSE %]
-    $.removeCookie("holdfor", { path: '/' });
-[% END %]
-
-[% UNLESS ( borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
-
-// On-site checkout
-function toggle_onsite_checkout(){
-    if ( $("#onsite_checkout").prop('checked') ) {
-        $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1%]")
-        [% IF !Koha.Preference('SpecifyDueDate') %]
-            $("#duedatespec").datetimepicker('destroy');
-        [% END %]
-    } else {
-        $("#duedatespec").datetimepicker({
-            onClose: function(dateText, inst) {
-                if (validate_date(dateText, inst) ) {
-                    $("#barcode").focus();
-                }
-            },
-            hour: 23,
-            minute: 59
-        }).on("change", function(e, value) {
-            if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-        });
-    }
-}
-
-function Dopop(link) {
-    var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
-}
-$(document).ready(function() {
-    $('#mainform').on('submit',function() {
-        if ($("#barcode") && $("#barcode").val()) {
-            $('#barcode').on('keypress',function(event) {
-                $('#barcodeSubmittedModal').modal();
-                event.preventDefault(); }
-            );
-        }
-    });
-
-    if ( $('#clubs-tab').length ) {
-        $('#clubs-tab-link').on('click', function() {
-            $('#clubs-tab').text(_("Loading..."));
-            $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
-        });
-    }
-
-    [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
-        // listen submit to trigger qslip on empty checkout
-        $('#mainform').bind('submit',function() {
-            if ($('#barcode').val() == '') {
-                return printx_window( '[% CircAutoPrintQuickSlip %]' );
-            }
-        });
-    [% END %]
-    toggle_onsite_checkout();
-    $("#onsite_checkout").click(function(){
-        toggle_onsite_checkout();
-    });
-
-    $("#suspend_until").datepicker({
-        onClose: function(dateText, inst) {
-            validate_date(dateText, inst);
-        },
-        minDate: 1, // require that hold suspended until date is after today
-    });
-
-});
-
-//]]>
-</script>
 </head>
+
 <body id="circ_circulation" class="circ">
 
 [% INCLUDE 'header.inc' %]
@@ -303,27 +195,6 @@ $(document).ready(function() {
   </li>
 [% END %]
 </ul>
-
-[% IF HIGHHOLDS %]
-<script language="JavaScript" type="text/javascript">
-$(document).ready(function() {
-    [% IF !override_high_holds %]
-        $("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate %]');
-        if ('[% duedatespec %]' === '') {
-            $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
-        } else {
-            $("input[name=restoreduedatespec]:hidden").val('[% duedatespec %]');
-        }
-    [% END %]
-
-    $("#override_high_holds_tmp").on( 'change', function() {
-        if ( this.checked ) {
-            $("input[name=duedatespec]:hidden").val('');
-        }
-    });
-});
-</script>
-[% END %]
 
 [% IF CAN_user_circulate_force_checkout or HIGHHOLDS %]
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
@@ -1099,4 +970,140 @@ No patron matched <span class="ex">[% message | html %]</span>
     </div>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'strings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'timepicker.inc' %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript">
+        /* Set some variable needed in circulation.js */
+        var MSG_DT_LOADING_RECORDS = _("Loading... you may continue scanning.");
+        var interface = "[% interface %]";
+        var theme = "[% theme %]";
+        var borrowernumber = "[% borrowernumber %]";
+        var branchcode = "[% branch %]";
+        var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
+        var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
+        var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 %];
+        var script = "circulation";
+        var relatives_borrowernumbers = new Array();
+        [% FOREACH b IN relatives_borrowernumbers %]
+            relatives_borrowernumbers.push("[% b %]");
+        [% END %]
+
+        var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
+        var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
+
+        /* Set some variables needed in members-menu.js */
+        var advsearch = "[% advsearch %]";
+        var dateformat = "[% dateformat %]";
+        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
+        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
+        var catcode = "[% catcode %]";
+        var destination = "[% destination %]";
+        var CAN_user_borrowers = "[% CAN_user_borrowers %]";
+
+        columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) %]
+
+        [% IF borrowernumber and borrower %]
+            if($.cookie("holdfor") != [% borrowernumber %]){
+                $.removeCookie("holdfor", { path: '/' });
+            }
+        [% ELSE %]
+            $.removeCookie("holdfor", { path: '/' });
+        [% END %]
+
+        [% UNLESS ( borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
+
+        // On-site checkout
+        function toggle_onsite_checkout(){
+            if ( $("#onsite_checkout").prop('checked') ) {
+                $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1%]")
+                [% IF !Koha.Preference('SpecifyDueDate') %]
+                    $("#duedatespec").datetimepicker('destroy');
+                [% END %]
+            } else {
+                $("#duedatespec").datetimepicker({
+                    onClose: function(dateText, inst) {
+                        if (validate_date(dateText, inst) ) {
+                            $("#barcode").focus();
+                        }
+                    },
+                    hour: 23,
+                    minute: 59
+                }).on("change", function(e, value) {
+                    if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+                });
+            }
+        }
+
+        function Dopop(link) {
+            var newin = window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
+        }
+        $(document).ready(function() {
+            $('#mainform').on('submit',function() {
+                if ($("#barcode") && $("#barcode").val()) {
+                    $('#barcode').on('keypress',function(event) {
+                        $('#barcodeSubmittedModal').modal();
+                        event.preventDefault(); }
+                    );
+                }
+            });
+
+            if ( $('#clubs-tab').length ) {
+                $('#clubs-tab-link').on('click', function() {
+                    $('#clubs-tab').text(_("Loading..."));
+                    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
+                });
+            }
+
+            [% IF !( CircAutoPrintQuickSlip == 'clear' ) %]
+                // listen submit to trigger qslip on empty checkout
+                $('#mainform').bind('submit',function() {
+                    if ($('#barcode').val() == '') {
+                        return printx_window( '[% CircAutoPrintQuickSlip %]' );
+                    }
+                });
+            [% END %]
+            toggle_onsite_checkout();
+            $("#onsite_checkout").click(function(){
+                toggle_onsite_checkout();
+            });
+
+            $("#suspend_until").datepicker({
+                onClose: function(dateText, inst) {
+                    validate_date(dateText, inst);
+                },
+                minDate: 1, // require that hold suspended until date is after today
+            });
+
+            [% IF HIGHHOLDS %]
+                [% IF !override_high_holds %]
+                    $("input[name=duedatespec]:hidden").val('[% HIGHHOLDS.returndate %]');
+                    if ('[% duedatespec %]' === '') {
+                        $("input[name=restoreduedatespec]:hidden").val('highholds_empty');
+                    } else {
+                        $("input[name=restoreduedatespec]:hidden").val('[% duedatespec %]');
+                    }
+                [% END %]
+
+                $("#override_high_holds_tmp").on( 'change', function() {
+                    if ( this.checked ) {
+                        $("input[name=duedatespec]:hidden").val('');
+                    }
+                });
+            [% END %]
+        });
+    </script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
