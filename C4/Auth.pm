@@ -905,22 +905,6 @@ sub checkauth {
             }
         }
     }
-    elsif ($logout && $cas) {
-        # We got a cas single logout request from a cas server;
-        my $ticket = $query->param('cas_ticket');
-        # We've been called as part of the single logout destroy the session associated with the cas ticket
-        my $params = _get_session_params();
-        my $success =  CGI::Session->find( $params->{dsn}, sub {delete_cas_session(@_, $ticket)}, $params->{dsn_args} );
-
-        sub delete_cas_session {
-            my $session = shift;
-            my $ticket = shift;
-            if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
-                $session->delete;
-                $session->flush;
-            }
-        }
-    }
     unless ( $userid || $sessionID ) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
         my $session = get_session("") or die "Auth ERROR: Cannot get_session()";

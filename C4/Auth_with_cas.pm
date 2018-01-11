@@ -228,21 +228,37 @@ sub _url_with_get_params {
     return $uri_base_part . $uri_params_part;
 }
 
-sub logout_required {
+# CAS single logout
+sub logout_if_required {
     my ( $query ) = @_;
     # Check we havent been hit by a logout call
     my $xml = $query->param('logoutRequest');
-    if ($xml) {
-        my $dom = XML::LibXML->load_xml(string => $xml);
-        my $ticket;
-        foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
-            $ticket = $node->findvalue('./samlp:SessionIndex');
-        }
-        $query->param(-name =>'logout.x', -value => 1);
-        $query->param(-name =>'cas_ticket', -value => $ticket);
-        return 1;
+    return 0 unless $xml;
+
+    my $dom = XML::LibXML->load_xml(string => $xml);
+    my $ticket;
+    foreach my $node ($dom->findnodes('/samlp:LogoutRequest')){
+        # We got a cas single logout request from a cas server;
+        $ticket = $node->findvalue('./samlp:SessionIndex');
     }
-    return 0;
+
+    return 0 unless $ticket;
+
+    # We've been called as part of the single logout destroy the session associated with the cas ticket
+    my $params = C4::Auth::_get_session_params();
+    my $success = CGI::Session->find( $params->{dsn}, sub {delete_cas_session(@_, $ticket)}, $params->{dsn_args} );
+
+    sub delete_cas_session {
+        my $session = shift;
+        my $ticket = shift;
+        if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
+            $session->delete;
+            $session->flush;
+        }
+    }
+
+    print $query->header;
+    exit;
 }
 
 1;
