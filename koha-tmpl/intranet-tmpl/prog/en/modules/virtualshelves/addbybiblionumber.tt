@@ -1,11 +1,10 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Add to list</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
-   #custom-doc { width:34.62em;*width:33.78em;min-width:450px; margin:auto; margin-top: .4em;text-align:left; }
-   </style>
 </head>
+
 <body id="lists_addbybiblionumber" class="lists">
+    <div class="container-fluid">
 
 [% UNLESS (authorized) %]
     <p align="center">
@@ -14,8 +13,7 @@
         <a href="javascript:self.close();">Close this window.</a>
     </p>
 [% ELSE %]
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
+
                 [% IF ( multiple ) %]
 		    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html%]</em>: [% ELSE %]a list:[% END %]</h1>
                 [% ELSE %]
@@ -113,7 +111,6 @@
 		</form>
 <!-- /SAVE -->
 
-</div>
 [% SET popup_window = 1 %]
 [% INCLUDE 'intranet-bottom.inc' %]
 [% END %]
