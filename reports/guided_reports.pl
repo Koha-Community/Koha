@@ -144,12 +144,12 @@ elsif ( $phase eq 'Build new' ) {
         }
     }
     $template->param(
-        'saved1' => 1,
-        'savedreports' => $reports,
-        'usecache' => $usecache,
-        'groups_with_subgroups'=> groups_with_subgroups($group, $subgroup),
-        filters => $filter,
-        has_obsolete_reports => $has_obsolete_reports,
+        'saved1'                => 1,
+        'savedreports'          => $reports,
+        'usecache'              => $usecache,
+        'groups_with_subgroups' => groups_with_subgroups( $group, $subgroup ),
+        filters                 => $filter,
+        has_obsolete_reports    => $has_obsolete_reports,
     );
 }
 
@@ -279,6 +279,13 @@ elsif ( $phase eq 'Update SQL'){
                 'save_successful'       => 1,
                 'reportname'            => $reportname,
                 'id'                    => $id,
+                'editsql'               => 1,
+                'sql'                   => $sql,
+                'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
+                'notes'                 => $notes,
+                'cache_expiry'          => $cache_expiry,
+                'public'                => $public,
+                'usecache'              => $usecache,
             );
             logaction( "REPORTS", "MODIFY", $id, "$reportname | $sql" ) if C4::Context->preference("ReportsLog");
         }
@@ -648,6 +655,13 @@ elsif ( $phase eq 'Save Report' ) {
                 'save_successful' => 1,
                 'reportname'      => $name,
                 'id'              => $id,
+                'editsql'         => 1,
+                'sql'             => $sql,
+                'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
+                'notes'      => $notes,
+                'cache_expiry' => $cache_expiry,
+                'public' => $public,
+                'usecache' => $usecache,
             );
         }
     }

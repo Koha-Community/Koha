@@ -812,6 +812,17 @@ Sub report:<select name="subreport">
 </fieldset>
 [% END %]
 
+[% IF ( save_successful ) %]
+[% UNLESS ( errors ) %]
+</br>
+<div id="report_updated">
+    <div class="dialog message">
+        <p>Your report "[% reportname %]" has been saved</p>
+    </div>
+</div>
+[% END %]
+[% END %]
+
 [% IF ( editsql ) %]
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <input type="hidden" name="phase" value="Update SQL" />
@@ -852,21 +863,6 @@ Sub report:<select name="subreport">
 </form>
 
 
-[% END %]
-
-[% IF ( save_successful ) %]
-[% UNLESS ( errors ) %]
-<h2>Your report has been saved</h2>
-<h4>[% reportname %]</h4>
-<ul>
-    [% IF ( id ) %]
-    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">Run this report</a></li>
-    [% END %]
-    <li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports page</a></li>
-    <li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler tool</a></li>
-    <li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Guided reports</a></li>
-</ul>
-[% END %]
 [% END %]
 
 [% IF ( errors ) %]
@@ -961,6 +957,10 @@ Sub report:<select name="subreport">
         $(document).ready(function(){
             $('#limit').change(function() {
                 $('#limitselect').submit();
+            });
+
+            $(document).click(function() {
+                $('#report_updated').hide();
             });
 
             $(".goback").on("click",function(e){
