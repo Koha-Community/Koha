@@ -909,31 +909,9 @@ sub checkauth {
         # We got a cas single logout request from a cas server;
         my $ticket = $query->param('cas_ticket');
         # We've been called as part of the single logout destroy the session associated with the cas ticket
-        my $storage_method = C4::Context->preference('SessionStorage');
-        my $dsn;
-        my $dsn_options;
-        # shift this to a function make get_session use the function too
-        my $dbh            = C4::Context->dbh;
-        if ( $storage_method eq 'mysql' ) {
-            $dsn = "driver:MySQL;serializer:yaml;id:md5";
-            $dsn_options = { Handle => $dbh };
-        }
-        elsif (  $storage_method eq 'Pg' ) {
-            $dsn = "driver:PostgreSQL;serializer:yaml;id:md5";
-            $dsn_options = { Handle => $dbh };
-        }
-        elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
-            $dsn = "driver:memcached;serializer:yaml;id:md5";
-            my $memcached = Koha::Caches->get_instance()->memcached_cache;
-            $dsn_options =  { Memcached => $memcached };
-        }
-        else {
-            $dsn = "driver:File;serializer:yaml;id:md5";
-            my $dir = File::Spec->tmpdir;
-            my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
-            $dsn_options =  { Directory => "$dir/cgisess_$instance" };
-        }
-        my $success =  CGI::Session->find( $dsn, sub {delete_cas_session(@_, $ticket)}, $dsn_options );
+        my $params = _get_session_params();
+        my $success =  CGI::Session->find( $params->{dsn}, sub {delete_cas_session(@_, $ticket)}, $params->{dsn_args} );
+
         sub delete_cas_session {
             my $session = shift;
             my $ticket = shift;
@@ -1770,28 +1748,32 @@ will be created.
 
 =cut
 
-sub get_session {
-    my $sessionID      = shift;
+sub _get_session_params {
     my $storage_method = C4::Context->preference('SessionStorage');
-    my $dbh            = C4::Context->dbh;
-    my $session;
     if ( $storage_method eq 'mysql' ) {
-        $session = new CGI::Session( "driver:MySQL;serializer:yaml;id:md5", $sessionID, { Handle => $dbh } );
+        my $dbh = C4::Context->dbh;
+        return { dsn => "driver:MySQL;serializer:yaml;id:md5", dsn_args => { Handle => $dbh } };
     }
     elsif ( $storage_method eq 'Pg' ) {
-        $session = new CGI::Session( "driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, { Handle => $dbh } );
+        my $dbh = C4::Context->dbh;
+        return { dsn => "driver:PostgreSQL;serializer:yaml;id:md5", dsn_args => { Handle => $dbh } };
     }
     elsif ( $storage_method eq 'memcached' && Koha::Caches->get_instance->memcached_cache ) {
         my $memcached = Koha::Caches->get_instance()->memcached_cache;
-        $session = new CGI::Session( "driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => $memcached } );
+        return { dsn => "driver:memcached;serializer:yaml;id:md5", dsn_args => { Memcached => $memcached } };
     }
     else {
         # catch all defaults to tmp should work on all systems
         my $dir = File::Spec->tmpdir;
         my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
-        $session = new CGI::Session( "driver:File;serializer:yaml;id:md5", $sessionID, { Directory => "$dir/cgisess_$instance" } );
+        return { dsn => "driver:File;serializer:yaml;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
     }
-    return $session;
+}
+
+sub get_session {
+    my $sessionID      = shift;
+    my $params = _get_session_params();
+    return new CGI::Session( $params->{dsn}, $sessionID, $params->{dsn_args} );
 }
 
 
