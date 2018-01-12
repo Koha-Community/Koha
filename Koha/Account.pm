@@ -26,6 +26,7 @@ use List::MoreUtils qw( uniq );
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
 
+use Koha::Patrons;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
@@ -78,6 +79,8 @@ sub pay {
     my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
 
     my $userenv = C4::Context->userenv;
+
+    my $patron = Koha::Patrons->find( $self->{patron_id} );
 
     # We should remove accountno, it is no longer needed
     my $last = Koha::Account::Lines->search(
@@ -258,6 +261,31 @@ sub pay {
                 }
             )
         );
+    }
+
+    require C4::Letters;
+    if (
+        my $letter = C4::Letters::GetPreparedLetter(
+            module                 => 'circulation',
+            letter_code            => uc("ACCOUNT_$type"),
+            message_transport_type => 'email',
+            lang    => Koha::Patrons->find( $self->{patron_id} )->lang,
+            objects => {
+                patron  => scalar Koha::Patrons->find( $self->{patron_id} ),
+                library => scalar Koha::Libraries->find( $self->{library_id} ),
+                offsets => \@account_offsets,
+                credit  => $payment,
+            },
+          )
+      )
+    {
+        C4::Letters::EnqueueLetter(
+            {
+                letter                 => $letter,
+                borrowernumber         => $self->{patron_id},
+                message_transport_type => 'email',
+            }
+        ) or warn "can't enqueue letter $letter";
     }
 
     return $payment->id;
