@@ -719,7 +719,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
   }
 }
 
-if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->hasItemswaitingOrInTransit ) {
+if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
 

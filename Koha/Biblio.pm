@@ -318,11 +318,15 @@ sub subscriptions {
     return $self->{_subscriptions};
 }
 
-=head3 hasItemswaitingOrInTransit
+=head3 has_items_waiting_or_intransit
+
+my $itemsWaitingOrInTransit = $biblio->has_items_waiting_or_intransit
+
+Tells if this bibliographic record has items waiting or in transit.
 
 =cut
 
-sub hasItemswaitingOrInTransit {
+sub has_items_waiting_or_intransit {
     my ( $self ) = @_;
 
     if ( Koha::Holds->search({ biblionumber => $self->id,

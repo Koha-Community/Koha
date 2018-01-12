@@ -181,7 +181,7 @@ for my $itm (@items) {
       unless $allow_onshelf_holds;
 }
 
-if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->hasItemswaitingOrInTransit ) {
+if( $allow_onshelf_holds || CountItemsIssued($biblionumber) || $biblio->has_items_waiting_or_intransit ) {
     $template->param( ReservableItems => 1 );
 }
 

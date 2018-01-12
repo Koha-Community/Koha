@@ -100,13 +100,13 @@ subtest 'waiting_or_in_transit' => sub {
     $reserve = Koha::Holds->find($reserve->{reserve_id});
     $biblio = Koha::Biblios->find($biblio->{biblionumber});
 
-    is($biblio->hasItemswaitingOrInTransit, 0, 'Item is neither waiting nor in transit');
+    is($biblio->has_items_waiting_or_intransit, 0, 'Item is neither waiting nor in transit');
 
     $reserve->found('W')->store;
-    is($biblio->hasItemswaitingOrInTransit, 1, 'Item is waiting');
+    is($biblio->has_items_waiting_or_intransit, 1, 'Item is waiting');
 
     $reserve->found('T')->store;
-    is($biblio->hasItemswaitingOrInTransit, 1, 'Item is in transit');
+    is($biblio->has_items_waiting_or_intransit, 1, 'Item is in transit');
 
     my $transfer = $builder->build({
         source => 'Branchtransfer',
@@ -117,7 +117,7 @@ subtest 'waiting_or_in_transit' => sub {
     });
     my $t = Koha::Database->new()->schema()->resultset( 'Branchtransfer' )->find($transfer->{branchtransfer_id});
     $reserve->found(undef)->store;
-    is($biblio->hasItemswaitingOrInTransit, 1, 'Item has transfer');
+    is($biblio->has_items_waiting_or_intransit, 1, 'Item has transfer');
 };
 
 $schema->storage->txn_rollback;
