@@ -24,10 +24,15 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 
-use C4::Auth   qw(get_template_and_user);
+use C4::Auth   qw(get_template_and_user in_ipset);
 use C4::Output qw(output_html_with_http_headers);
 
 my $query = new CGI;
+unless ( in_ipset(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+    print $query->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "sco/help.tt",

@@ -29,12 +29,17 @@ It is called from sco-main.pl
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
-use C4::Auth qw/:DEFAULT get_session/;
+use C4::Auth qw/:DEFAULT get_session in_ipset/;
 use C4::Output;
 use C4::Members;
 use C4::Koha;
 
 my $input = new CGI;
+unless ( in_ipset(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+    print $input->header(status => '403 Forbidden - functionality not available from your location');
+    exit;
+}
+
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 

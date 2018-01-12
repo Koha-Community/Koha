@@ -528,6 +528,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SearchEngine','Zebra','Elasticsearch|Zebra','Search Engine','Choice'),
 ('SearchMyLibraryFirst','0',NULL,'If ON, OPAC searches return results limited by the user\'s library by default if they are logged in','YesNo'),
 ('SearchWithISBNVariations','0',NULL,'If enabled, search on all variations of the ISBN','YesNo'),
+('SelfCheckAllowByIPRanges','',NULL,'(Leave blank if not used. Use ranges or simple ip addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)','Short'),
 ('SelfCheckHelpMessage','','70|10','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','Textarea'),
 ('SelfCheckInMainUserBlock','','70|10','Add a block of HTML that will display on the self check-in screen.','Textarea'),
 ('SelfCheckInModule', 0, NULL, 'Enable the standalone self-checkin module.', 'YesNo'),

@@ -35,7 +35,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use C4::Auth qw(get_template_and_user checkpw);
+use C4::Auth qw(get_template_and_user checkpw in_ipset);
 use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
@@ -59,7 +59,13 @@ unless (C4::Context->preference('WebBasedSelfCheck')) {
     exit;
 }
 
-if (C4::Context->preference('AutoSelfCheckAllowed')) 
+unless ( in_ipset(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+    # redirect to OPAC home if self-checkout not permitted from current IP
+    print $query->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
+}
+
+if (C4::Context->preference('AutoSelfCheckAllowed'))
 {
     my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
     my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
