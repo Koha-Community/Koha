@@ -1335,7 +1335,7 @@ sub _handle_exploding_index {
 
     ( $operators, $operands, $indexes, $limits,
       $sort_by, $scan, $lang ) =
-            buildQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
+            parseQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
 Shim function to ease the transition from buildQuery to a new QueryParser.
 This function is called at the beginning of buildQuery, and modifies
