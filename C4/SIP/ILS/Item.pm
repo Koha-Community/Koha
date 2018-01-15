@@ -84,7 +84,11 @@ sub new {
     my $self = $item->unblessed;
     $self->{_object}            = $item;
     $self->{id}                 = $item->barcode; # to SIP, the barcode IS the id.
-    $self->{permanent_location} = $item->homebranch;
+    if (C4::Context->preference('UseLocationAsAQInSIP')) {
+        $self->{permanent_location} = $item->permanent_location;
+    } else {
+        $self->{permanent_location} = $item->homebranch;
+    }
     $self->{collection_code}    = $item->ccode;
     $self->{call_number}        = $item->itemcallnumber;
     $self->{'shelving_location'}           = $item->location;
