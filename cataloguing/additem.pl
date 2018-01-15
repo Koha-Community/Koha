@@ -687,20 +687,20 @@ if ($op eq "additem") {
     # check that the barcode don't exist already
     my $addedolditem = TransformMarcToKoha($itemtosave);
     my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
+    my $item = GetItem( $itemnumber );
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
     } else {
         ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
         $itemnumber="";
     }
-  my $item = GetItem( $itemnumber );
     my $olditemlost =  $item->{'itemlost'};
 
    my ($lost_tag,$lost_subfield) = GetMarcFromKohaField("items.itemlost",'');
 
    my $newitemlost = $itemtosave->subfield( $lost_tag, $lost_subfield );
     if (($olditemlost eq '0' or $olditemlost eq '' ) and $newitemlost ge '1'){
-        LostItem($itemnumber);
+        LostItem( $item->{itemnumber} );
     }
     $nextop="additem";
 } elsif ($op eq "delinkitem"){
