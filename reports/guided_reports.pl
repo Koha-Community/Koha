@@ -673,6 +673,8 @@ elsif ($phase eq 'Run this report'){
     my $offset     = 0;
     my $report_id  = $input->param('reports');
     my @sql_params = $input->multi_param('sql_params');
+    my @param_names = $input->multi_param('param_name');
+
     # offset algorithm
     if ($input->param('page')) {
         $offset = ($input->param('page') - 1) * $limit;
@@ -696,8 +698,13 @@ elsif ($phase eq 'Run this report'){
             my @split = split /<<|>>/,$sql;
             my @tmpl_parameters;
             my @authval_errors;
+            my %uniq_params;
             for(my $i=0;$i<($#split/2);$i++) {
                 my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
+                my $sep = $authorised_value ? "|" : "";
+                if( defined $uniq_params{$text.$sep.$authorised_value} ){
+                    next;
+                } else { $uniq_params{$text.$sep.$authorised_value} = "$i"; }
                 my $input;
                 my $labelid;
                 if ( not defined $authorised_value ) {
@@ -789,7 +796,7 @@ elsif ($phase eq 'Run this report'){
                     };
                 }
 
-                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid };
+                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid, 'name' => $text.$sep.$authorised_value };
             }
             $template->param('sql'         => $sql,
                             'name'         => $name,
@@ -799,7 +806,7 @@ elsif ($phase eq 'Run this report'){
                             'reports'      => $report_id,
                             );
         } else {
-            my $sql = get_prepped_report( $sql, @sql_params );
+            my $sql = get_prepped_report( $sql, \@param_names, \@sql_params);
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
             my $total = nb_rows($sql) || 0;
             unless ($sth) {
@@ -830,6 +837,7 @@ elsif ($phase eq 'Run this report'){
                 'pagination_bar'  => pagination_bar($url, $totpages, scalar $input->param('page')),
                 'unlimited_total' => $total,
                 'sql_params'      => \@sql_params,
+                'param_names'     => \@param_names,
             );
         }
     }
@@ -844,12 +852,13 @@ elsif ($phase eq 'Export'){
     my $report_id      = $input->param('report_id');
     my $report         = get_saved_report($report_id);
     my $sql            = $report->{savedsql};
+    my @param_names    = $input->multi_param('param_name');
     my @sql_params     = $input->multi_param('sql_params');
     my $format         = $input->param('format');
     my $reportname     = $input->param('reportname');
     my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
 
-    $sql = get_prepped_report( $sql, @sql_params );
+    $sql = get_prepped_report( $sql, \@param_names, \@sql_params );
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
@@ -1061,10 +1070,13 @@ sub create_non_existing_group_and_subgroup {
 
 # pass $sth and sql_params, get back an executable query
 sub get_prepped_report {
-    my ($sql, @sql_params ) = @_;
+    my ($sql, $param_names, $sql_params ) = @_;
+    my %lookup;
+    @lookup{@$param_names} = @$sql_params;
     my @split = split /<<|>>/,$sql;
+    my @tmpl_parameters;
     for(my $i=0;$i<$#split/2;$i++) {
-        my $quoted = $sql_params[$i];
+        my $quoted = @$param_names ? $lookup{ $split[$i*2+1] } : @$sql_params[$i];
         # if there are special regexp chars, we must \ them
         $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
         if ($split[$i*2+1] =~ /\|\s*date\s*$/) {

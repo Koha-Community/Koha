@@ -663,6 +663,7 @@ canned reports and writing custom SQL reports.</p>
         <fieldset class="rows">
             <ol>
             [% FOREACH sql_param IN sql_params %]
+                <input name="param_name" value="[% sql_param.name %]" type="hidden" />
                 [% IF sql_param.input == 'date' %]
                     <li>
                     <label for="date_[% sql_param_entry %][% loop.count %]">[% sql_param.entry %]:</label> <input id="date_[% sql_param_entry %][% loop.count %]" type="text" value="" size="10" name="sql_params" class="datepicker" />
