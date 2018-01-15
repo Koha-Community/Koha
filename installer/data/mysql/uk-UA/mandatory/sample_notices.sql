@@ -257,5 +257,7 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
  'print'),
 
  ('circulation', 'AR_PROCESSING', '', 'запит статті - обробка', 0, 'Обробка запиту статті', '<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\n Ми зараз обробляємо Ваш запит на статтю зі „<<biblio.title>>“ (<<items.barcode>>).\r\n\r\n Запитувана стаття:\r\n Заголовок: <<article_requests.title>>\r\n Автор: <<article_requests.author>>\r\n Том: <<article_requests.volume>>\r\n Випуск: <<article_requests.issue>>\r\n Дата: <<article_requests.date>>\r\n Сторінки: <<article_requests.pages>>\r\n Розділи: <<article_requests.chapters>>\r\n Примітки: <<article_requests.patron_notes>>\r\n\r\n Спасибі!',
- 'email');
+ 'email'),
+
+('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
 
