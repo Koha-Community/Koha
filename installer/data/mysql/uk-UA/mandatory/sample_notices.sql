@@ -40,7 +40,7 @@ INSERT INTO `letter` (module, code, name, title, content, message_transport_type
 
 ('circulation','RENEWAL','продовження примірників', 'Продовження примірників',
  'Наступні примірники продовжено:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Дякуємо Вам за відвідування! <<branches.branchname>>.',
- 'email');
+ 'email'),
 
 ('reserves', 'HOLD', 'резервування, що очікує на отримання', 'Резервування, що очікує на отримання у бібліотеці – „<<branches.branchname>>“',
  'Шановн(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\n у Вас є резервування, що очікує на отримання до <<reserves.waitingdate>>:\r\n\r\n Заголовок: „<<biblio.title>>“\r\n Автор: <<biblio.author>>\r\n Номер примірника: <<items.copynumber>>\r\n Розташування: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>',
