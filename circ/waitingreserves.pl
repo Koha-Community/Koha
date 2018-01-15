@@ -34,7 +34,11 @@ use C4::Koha;
 use Koha::DateUtils;
 use Koha::BiblioFrameworks;
 use Koha::ItemTypes;
-use Date::Calc qw/Date_to_Days/;
+use Date::Calc qw( 
+  Today 
+  Add_Delta_Days 
+  Date_to_Days 
+); 
 
 my $input = new CGI;
 
@@ -85,7 +89,7 @@ warn Data::Dumper::Dumper $expiredReserves;
 push @getreserves, @$expiredReserves;
 # get reserves for the branch we are logged into, or for all branches
 
-my $today = DateTime->now();
+my $today = Date_to_Days(&Today);
 
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
@@ -111,10 +115,9 @@ foreach my $num (@getreserves) {
     if(!$num->{'branchcode'}) {
         $num->{'branchcode'} = Koha::Holds->find($num->{'reserve_id'})->branchcode;
     }
-    my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $num );
 
     $getreserv{'itemtype'}       = $itemtype->description if $itemtype; # FIXME Should not it be translated_description?
-    $getreserv{'lastpickupdate'} = output_pref({ dt => $lastpickupdate, dateonly => 1 });
+    $getreserv{'lastpickupdate'} = format_sqldatetime($num->{'expirationdate'}, undef, undef, 1);
     $getreserv{'title'}          = $gettitle->{'title'};
     $getreserv{'subtitle'}       = GetRecordValue('subtitle', GetMarcBiblio($gettitle->{'biblionumber'}), GetFrameworkCode($gettitle->{'biblionumber'}));
     $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};
@@ -138,7 +141,7 @@ foreach my $num (@getreserves) {
         $getreserv{'borrowermail'}  = $borEmail;
     }
 
-    if (   DateTime->compare( $today,$lastpickupdate ) == 1   ) {
+    if ( $today > $calcDate) {
         if ($cancelall) {
             my $res = cancel( $itemnumber, $borrowernum, $holdingbranch, $homebranch, !$transfer_when_cancel_all );
             push @cancel_result, $res if $res;

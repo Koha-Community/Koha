@@ -170,27 +170,6 @@ sub set_waiting {
     return $self;
 }
 
-=head3 waiting_expires_on
-
-Returns a DateTime for the date a waiting holds expires on.
-Returns undef if hold max pickup delay is not set in circulation rules.
-Returns undef if the hold is not waiting ( found = 'W' ).
-
-=cut
-
-sub waiting_expires_on {
-    my ($self) = @_;
-
-    my $found = $self->found;
-    return unless $found && $found eq 'W';
-
-    my $hold_max_pickup_delay = $self->max_pickup_delay;
-    return unless $hold_max_pickup_delay;
-
-    my $lastpickupdate = C4::Reserves::_reserve_last_pickup_date( $self );
-    return $lastpickupdate;
-}
-
 =head3 is_found
 
 Returns true if hold is a waiting or in transit
