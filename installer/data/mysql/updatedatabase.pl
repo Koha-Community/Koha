@@ -15186,7 +15186,28 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 19278: Add a configurable default page size for REST endpoints)\n";
+    print "Upgrade to $DBversion done (Bug 19278 - Add a configurable default page size for REST endpoints)\n";
+}
+
+$DBversion = '17.12.00.005';
+if( CheckVersion( $DBversion ) ) {
+    # For installations having the note already
+    $dbh->do(q{
+        UPDATE letter
+        SET code    = 'CHECKOUT_NOTE',
+            name    = 'Checkout note on item set by patron',
+            title   = 'Checkout note',
+            content = REPLACE(content, "<<biblio.item>>", "<<biblio.title>>")
+        WHERE code = 'PATRON_NOTE'
+    });
+    # For installations coming from 17.11
+    $dbh->do(q{
+        INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`)
+        VALUES ('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18915 - Correct CHECKOUT_NOTE notice template)\n";
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
