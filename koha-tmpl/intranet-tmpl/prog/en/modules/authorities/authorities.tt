@@ -175,11 +175,9 @@ function confirmnotdup(redirect){
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; [% IF ( authid ) %]Modify authority #[% authid %] ([% authtypetext %])[% ELSE %]Adding authority [% authtypetext %][% END %]  </div>
 
-<div id="doc" class="yui-t7">
-
-<div id="bd">
-        <div id="yui-main">
-        <div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
 
 [% IF ( authid ) %]
 <h1>Modify authority #[% authid %] [% authtypetext %]</h1>
