@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 96;
+use Test::More tests => 115;
 
 use Koha::SimpleMARC;
 
@@ -42,9 +42,17 @@ is( AddModificationTemplateAction(
     'Copy field 606$a to 607$a unless 606$a matches RegEx m^AJAX'
 ), 1, "Add third action");
 
+is( AddModificationTemplateAction(
+    $template_id, 'add_field', 0,
+    '650', 'a', 'Additional', '', '',
+    '', '', '',
+    'unless', '650', 'a', 'exists', '', '',
+    'Add field 650$aAdditional unless 650$a exists'
+), 1, "Add fourth action");
 # Getter
+
 my @actions = GetModificationTemplateActions( $template_id );
-is( @actions, 3, "3 actions are insered");
+is( @actions, 4, "4 actions are insered");
 
 for my $action ( @actions ) {
     isnt( GetModificationTemplateAction( $action->{mmta_id} ), undef, "action with id $action->{mmta_id} exists" );
@@ -73,7 +81,7 @@ is( $second_action->{conditional_comparison}, 'equals', "test conditional_compar
 
 my $third_action = $actions[2];
 is( $third_action->{ordering}, 3, "test ordering for third action" );
-is( $third_action->{action}, 'copy_field', "test  factionor third action" );
+is( $third_action->{action}, 'copy_field', "test action for third action" );
 is( $third_action->{from_field}, '606', "test from_field for third action" );
 is( $third_action->{from_subfield}, 'a', "test from_subfield for third action" );
 is( $third_action->{to_field}, '607', "test to_field for third action" );
@@ -84,6 +92,18 @@ is( $third_action->{conditional_subfield}, 'a', "test conditional_subfield for t
 is( $third_action->{conditional_comparison}, 'not_equals', "test conditional_comparison for third action" );
 is( $third_action->{conditional_value}, '^AJAX', "test conditional_value for third action" );
 
+my $fourth_action = $actions[3];
+is( $fourth_action->{ordering}, 4, "test ordering for fourth action" );
+is( $fourth_action->{action}, 'add_field', "test action for fourth action" );
+is( $fourth_action->{from_field}, '650', "test from_field for fourth action" );
+is( $fourth_action->{from_subfield}, 'a', "test from_subfield for fourth action" );
+is( $fourth_action->{to_field}, '', "test to_field for fourth action" );
+is( $fourth_action->{to_subfield}, '', "test to_subfield for fourth action" );
+is( $fourth_action->{conditional}, 'unless', "test conditional for fourth action" );
+is( $fourth_action->{conditional_field}, '650', "test conditional_field for fourth action" );
+is( $fourth_action->{conditional_subfield}, 'a', "test conditional_subfield for fourth action" );
+is( $fourth_action->{conditional_comparison}, 'exists', "test conditional_comparison for fourth action" );
+is( $fourth_action->{conditional_value}, '', "test conditional_value for fourth action" );
 
 # Modifications
 is( ModModificationTemplateAction(
@@ -111,26 +131,29 @@ is( $second_action->{conditional_comparison}, 'equals', "test conditional_compar
 is( MoveModificationTemplateAction( $actions[2]->{mmta_id}, 'top' ), '1', 'Move the third action on top' );
 is( MoveModificationTemplateAction( $actions[0]->{mmta_id}, 'bottom' ), '1', 'Move the first action on bottom' );
 
-is( GetModificationTemplateAction( $actions[0]->{mmta_id} )->{ordering}, '3', 'First becomes third' );
+is( GetModificationTemplateAction( $actions[0]->{mmta_id} )->{ordering}, '4', 'First becomes fourth' );
 is( GetModificationTemplateAction( $actions[1]->{mmta_id} )->{ordering}, '2', 'Second stays second' );
 is( GetModificationTemplateAction( $actions[2]->{mmta_id} )->{ordering}, '1', 'Third becomes first' );
+is( GetModificationTemplateAction( $actions[3]->{mmta_id} )->{ordering}, '3', 'Fourth becomes third' );
 
+is( MoveModificationTemplateAction( $actions[0]->{mmta_id}, 'up' ), '1', 'Move up the first action (was fourth)' );
 is( MoveModificationTemplateAction( $actions[0]->{mmta_id}, 'up' ), '1', 'Move up the first action (was third)' );
-is( MoveModificationTemplateAction( $actions[0]->{mmta_id}, 'up' ), '1', 'Move up the first action (was second)' );
-is( MoveModificationTemplateAction( $actions[2]->{mmta_id}, 'down' ), '1', 'Move down the third action (was second)' );
+is( MoveModificationTemplateAction( $actions[2]->{mmta_id}, 'down' ), '1', 'Move down the third action (was first)' );
 
 is( GetModificationTemplateAction( $actions[0]->{mmta_id} )->{ordering}, '1', 'First becomes again first' );
-is( GetModificationTemplateAction( $actions[1]->{mmta_id} )->{ordering}, '2', 'Second stays again second' );
-is( GetModificationTemplateAction( $actions[2]->{mmta_id} )->{ordering}, '3', 'Third becomes again third' );
+is( GetModificationTemplateAction( $actions[1]->{mmta_id} )->{ordering}, '3', 'Second becomes third' );
+is( GetModificationTemplateAction( $actions[2]->{mmta_id} )->{ordering}, '2', 'Third becomes second' );
+is( GetModificationTemplateAction( $actions[3]->{mmta_id} )->{ordering}, '4', 'Fourth becomes again fourth' );
 
 # Cleaning
-is( DelModificationTemplateAction( $actions[0]->{mmta_id} ), 2, "Delete the first action, 2 others are reordered" );
+is( DelModificationTemplateAction( $actions[0]->{mmta_id} ), 3, "Delete the first action, 2 others are reordered" );
 is( GetModificationTemplateAction( $actions[0]->{mmta_id} ), undef, "first action does not exist anymore" );
 
 is( DelModificationTemplate( $template_id ), 1, "The template has been deleted" );
 
 is( GetModificationTemplateAction( $actions[1]->{mmta_id} ), undef, "second action does not exist anymore" );
 is( GetModificationTemplateAction( $actions[2]->{mmta_id} ), undef, "third action does not exist anymore" );
+is( GetModificationTemplateAction( $actions[3]->{mmta_id} ), undef, "fourth action does not exist anymore" );
 
 is( GetModificationTemplateActions( $template_id ), 0, "There is no action for deleted template" );
 
@@ -215,8 +238,31 @@ is( AddModificationTemplateAction(
     'Update non existent field 999$a with "non existent"'
 ), 1, 'Add eighth action: update field non existent 999$a with "non existent."');
 
-my $record = new_record();
+is( AddModificationTemplateAction(
+    $template_id, 'update_field', 0,
+    '999', 'a', 'existent - updated.', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Update existent field 999$a with "existent - updated."'
+), 1, 'Add ninth action: update field non existent 999$a with "existent - updated."');
 
+is( AddModificationTemplateAction(
+    $template_id, 'add_field', 0,
+    '999', 'a', 'additional existent.', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Add new existent field 999$a with "additional existent"'
+), 1, 'Add tenth action: add additional field existent 999$a with "additional existent."');
+
+is( AddModificationTemplateAction(
+    $template_id, 'add_field', 0,
+    '007', '', 'vxcdq', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Add new existent field 999$a with "additional existent"'
+), 1, 'Add eleventh action: add additional field existent 007');
+
+my $record = new_record();
 is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
 
 my $expected_record = expected_record_1();
@@ -454,7 +500,14 @@ sub expected_record_1 {
         ),
         MARC::Field->new(
             999, ' ', ' ',
-            a => 'non existent.',
+            a => 'existent - updated.',
+        ),
+        MARC::Field->new(
+            999, ' ', ' ',
+            a => 'additional existent.',
+        ),
+        MARC::Field->new(
+           '007', 'vxcdq',
         ),
     );
     $record->append_fields(@fields);
