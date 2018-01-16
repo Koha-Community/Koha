@@ -201,6 +201,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
         );
         if ($issue_error eq 'DEBT') {
             $template->param(DEBT => $impossible->{DEBT});
+            $template->param(currencySym => $currencySymbol);
         }
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
@@ -225,6 +226,7 @@ elsif ( $patron && ( $op eq 'checkout' ) ) {
         );
         if ($issue_error eq 'DEBT') {
             $template->param(DEBT => $needconfirm->{DEBT});
+            $template->param(currencySym => $currencySymbol);
         }
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
