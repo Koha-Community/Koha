@@ -3568,7 +3568,7 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   mmta_id int(11) NOT NULL AUTO_INCREMENT,
   template_id int(11) NOT NULL,
   ordering int(3) NOT NULL,
-  action ENUM('delete_field','update_field','move_field','copy_field','copy_and_replace_field') NOT NULL,
+  action ENUM('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field') NOT NULL,
   field_number smallint(6) NOT NULL DEFAULT '0',
   from_field varchar(3) NOT NULL,
   from_subfield varchar(1) DEFAULT NULL,
