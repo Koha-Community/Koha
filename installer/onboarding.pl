@@ -146,8 +146,6 @@ if ( $step == 3 ) {
         my $cardnumber     = $input->param('cardnumber');
         my $userid         = $input->param('userid');
 
-        my ( $is_valid, $passworderror) = Koha::AuthUtils::is_password_valid( $firstpassword );
-
         if ( my $error_code = checkcardnumber($cardnumber) ) {
             if ( $error_code == 1 ) {
                 push @messages, { code => 'ERROR_cardnumber_already_exists' };
@@ -160,13 +158,8 @@ if ( $step == 3 ) {
 
             push @messages, { code => 'ERROR_password_mismatch' };
         }
-        elsif ( $passworderror) {
-                push @messages, { code => 'ERROR_password_too_short'} if $passworderror eq 'too_short';
-                push @messages, { code => 'ERROR_password_too_weak'} if $passworderror eq 'too_weak';
-                push @messages, { code => 'ERROR_password_has_whitespaces'} if $passworderror eq 'has_whitespaces';
-
-        }
         else {
+
             my $patron_data = {
                 surname      => scalar $input->param('surname'),
                 firstname    => scalar $input->param('firstname'),
