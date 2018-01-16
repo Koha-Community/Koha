@@ -226,7 +226,10 @@ my $itemtypes = GetItemTypesCategorized;
 # add translated_description to itemtypes
 foreach my $itemtype ( keys %{$itemtypes} ) {
     # Itemtypes search categories don't have (yet) translated descriptions, they are auth values (and could still have no descriptions too BZ 18400)
-    my $translated_description = Koha::ItemTypes->find( $itemtype )->translated_description;
+    # If 'iscat' (see ITEMTYPECAT) then there is no itemtype and the description is not translated
+    my $translated_description = $itemtypes->{$itemtype}->{iscat}
+      ? $itemtypes->{$itemtype}->{description}
+      : Koha::ItemTypes->find($itemtype)->translated_description;
     $itemtypes->{$itemtype}->{translated_description} = $translated_description || $itemtypes->{$itemtype}->{description} || q{};
 }
 
