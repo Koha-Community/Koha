@@ -151,7 +151,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
 ('EnableOpacSearchHistory','1','YesNo','Enable or disable opac search history',''),
 ('EnableSearchHistory','0','','Enable or disable search history','YesNo'),
-('EnhancedMessagingPreferences','0','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
+('EnhancedMessagingPreferences','1','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
 ('expandedSearchOption','0',NULL,'If ON, set advanced search to be expanded by default','YesNo'),
 ('ExpireReservesMaxPickUpDelay','0','','Enabling this allows holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay','YesNo'),
