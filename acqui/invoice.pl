@@ -201,7 +201,6 @@ sub get_infos {
     $line{budget_name}    = $budget->{budget_name};
 
     if ( $line{uncertainprice} ) {
-        $template->param( uncertainprices => 1 );
         $line{rrp} .= ' (Uncertain)';
     }
     if ( $line{'title'} ) {
