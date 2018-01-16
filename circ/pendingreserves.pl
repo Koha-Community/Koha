@@ -168,6 +168,8 @@ if ($enddate_iso) {
     push @query_params, $enddate_iso;
 }
 
+my $item_type = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
+
 my $strsth =
     "SELECT min(reservedate) as l_reservedate,
             reserves.reserve_id,
@@ -180,8 +182,8 @@ my $strsth =
             reserves.itemnumber,
             items.holdingbranch,
             items.homebranch,
-            GROUP_CONCAT(DISTINCT items.itype 
-                    ORDER BY items.itemnumber SEPARATOR '|') l_itype,
+            GROUP_CONCAT(DISTINCT $item_type
+                    ORDER BY items.itemnumber SEPARATOR '|') l_item_type,
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '|') l_location,
             GROUP_CONCAT(DISTINCT items.itemcallnumber 
@@ -199,6 +201,7 @@ my $strsth =
     FROM  reserves
         LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
         LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
+        LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
         LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
@@ -249,7 +252,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             count           => $data->{icount},
             rcount          => $data->{rcount},
             pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
-            itypes          => [split('\|', $data->{l_itype})],
+            itemTypes       => [split('\|', $data->{l_item_type})],
             locations       => [split('\|', $data->{l_location})],
             reserve_id      => $data->{reserve_id},
             holdingbranch   => $data->{holdingbranch},
