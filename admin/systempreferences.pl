@@ -391,7 +391,7 @@ sub get_prefs_from_files {
                         '/prog/en/modules/admin/preferences';
     # Get all .pref file names
     opendir ( my $fh, $path_pref_en );
-    my @pref_files = grep { /.pref/ } readdir($fh);
+    my @pref_files = grep { /.pref$/ } readdir($fh);
     close $fh;
 
     my @names = ();
