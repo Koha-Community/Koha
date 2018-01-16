@@ -56,7 +56,7 @@ $(document).ready(function() {
           holdst.fnFilter( filter_value, 5, true );
       } );
   } );
-  $("#itypefilter").each( function () {
+  $("#type-filter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
       $('select', this).change( function () {
           holdst.fnFilter( $(this).val(), 9 );
@@ -102,7 +102,7 @@ $(document).ready(function() {
         <th>Available call numbers</th>
         <th>Available copy numbers</th>
         <th>Available enumeration</th>
-        <th class="string-sort">Available itypes</th>
+        <th class="string-sort">Available item types</th>
         <th class="string-sort">Available locations</th>
         <th class="title-string">Earliest hold date</th>
         </tr>
@@ -137,8 +137,8 @@ $(document).ready(function() {
         <td><p>[% reserveloo.copyno %]</p></td>
         <td><p>[% reserveloo.enumchron %]</p></td>
         <td>
-        [% FOREACH itype IN reserveloo.itypes %]
-            [% ItemTypes.GetDescription( itype ) %]
+        [% FOREACH itemType IN reserveloo.itemTypes %]
+            [% ItemTypes.GetDescription( itemType ) %]
         [% END %]
         </td>
         <td>
@@ -163,7 +163,7 @@ $(document).ready(function() {
         <td><input type="text" class="filter" data-column_num="6" placeholder="Call number" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="7" placeholder="Available copy" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="8" placeholder="Available enumeration" style="width:95%"/></td>
-        <td id="itypefilter"></td>
+        <td id="type-filter"></td>
         <td id="locationfilter"></td>
         <td></td>
         </tr>
