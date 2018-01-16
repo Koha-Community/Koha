@@ -1,3 +1,6 @@
+<div id="navmenu">
+<div id="navmenulist">
+
 <h5>Run reports</h5>
 <ul>
 	[% IF ( CAN_user_reports_execute_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved reports</a></li>[% END %]
@@ -11,3 +14,5 @@
 <li><a href="http://wiki.koha-community.org/wiki/SQL_Reports_Library" target="blank">Koha report library</a></li>
 <li><a href="http://schema.koha-community.org/" target="blank">Koha database schema</a></li>
 </ul>
+</div>
+</div>
