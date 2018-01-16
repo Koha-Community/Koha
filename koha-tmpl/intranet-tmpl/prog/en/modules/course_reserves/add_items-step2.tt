@@ -11,8 +11,9 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Reserve <i><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">[% biblio.title %]</a></i> for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
 
-<div id="doc" class="yui-t7">
-    <div id="bd">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
 
         [% IF course_reserve %]<div class="dialog message" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
         [% IF course_item %]<div class="dialog message" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.size %]</div>[% END %]
@@ -112,5 +113,6 @@
             </fieldset>
         </form>
     </div>
+</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

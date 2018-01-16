@@ -9,8 +9,9 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
 
-<div id="doc" class="yui-t7">
-    <div id="bd">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
 
         [% IF ERROR_ITEM_NOT_FOUND %]
             [% IF UNKNOWN_BARCODE %]
@@ -41,5 +42,6 @@
             </fieldset>
         </form>
     </div>
+</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]

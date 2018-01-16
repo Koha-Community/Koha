@@ -13,8 +13,10 @@
 
 [% IF ( departments ) %]
 
-    <div id="doc" class="yui-t7">
-        <div id="bd">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+
             <form method="post" action="/cgi-bin/koha/course_reserves/mod_course.pl" class="validated">
                 [% IF course_id %]<input type="hidden" name="course_id" value="[% course_id %]" />[% END %]
                 <fieldset class="rows">
@@ -123,6 +125,7 @@
                 </fieldset>
             </form>
         </div>
+    </div>
 
 [% ELSE %]
 

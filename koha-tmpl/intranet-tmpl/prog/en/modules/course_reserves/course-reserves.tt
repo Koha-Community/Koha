@@ -14,11 +14,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a></div>
 
-<div id="doc2" class="yui-t7">
-    <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
-                <div class="yui-g">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+
                     [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
                     <div id="toolbar">
                         <ul class="toolbar">
@@ -93,11 +92,9 @@
                             [% END %]
                         </tbody>
                     </table>
-                </div>
+
             </div>
         </div>
-    </div>
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
