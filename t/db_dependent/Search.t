@@ -865,6 +865,8 @@ if ( $indexing_mode eq 'dom' ) {
                 'su-ut' => { 'expanded'    => undef,
                              'label_value' => "Titles" }
     };
+    delete $expected_facets_info_marc21->{holdingbranch}
+        if Koha::Libraries->search->count == 1;
     is_deeply( $facets_info, $expected_facets_info_marc21,
         "_get_facets_info returns the correct data");
 
@@ -959,6 +961,8 @@ sub run_unimarc_search_tests {
                 'su-ut' => { 'expanded'    => undef,
                              'label_value' => "Titles" }
     };
+    delete $expected_facets_info_unimarc->{holdingbranch}
+        if Koha::Libraries->search->count == 1;
     is_deeply( $facets_info, $expected_facets_info_unimarc,
         "_get_facets_info returns the correct data");
 
