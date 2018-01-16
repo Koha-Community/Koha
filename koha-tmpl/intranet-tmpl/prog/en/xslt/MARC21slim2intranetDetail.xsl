@@ -166,7 +166,7 @@
 
     <xsl:if test="$DisplayIconsXSLT!='0' and $materialTypeCode!=''">
         <span class="results_summary type"><span class="label">Material type: </span>
-        <xsl:element name="img"><xsl:attribute name="src">/intranet-tmpl/prog/img/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt"></xsl:attribute></xsl:element>
+    <xsl:element name="img"><xsl:attribute name="class">materialtype mt_icon_<xsl:value-of select="$materialTypeCode"/></xsl:attribute><xsl:attribute name="src">/intranet-tmpl/prog/img/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt"></xsl:attribute></xsl:element>
         <xsl:text> </xsl:text>
         <xsl:value-of select="$materialTypeLabel"/>
         </span>
