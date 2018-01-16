@@ -1,1 +1,1 @@
-UPDATE systempreferences set value =  replace(value, "http://www.", "https://") where variable = 'OPACSearchForTitleIn';
+UPDATE systempreferences set value =  replace(value, "http://www.scholar", "https://scholar") where variable = 'OPACSearchForTitleIn';
