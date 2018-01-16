@@ -644,6 +644,15 @@ sub ModifyRecordWithTemplate {
                     field_numbers => $field_numbers,
                 });
             }
+            elsif ( $action eq 'add_field' ) {
+                add_field({
+                    record => $record,
+                    field => $from_field,
+                    subfield => $from_subfield,
+                    values => [ $field_value ],
+                    field_numbers => $field_numbers,
+                });
+            }
             elsif ( $action eq 'update_field' ) {
                 update_field({
                     record => $record,

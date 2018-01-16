@@ -116,6 +116,7 @@ my @templates = GetModificationTemplates( $template_id );
 my @actions = GetModificationTemplateActions( $template_id );
 foreach my $action ( @actions ) {
   $action->{'action_delete_field'} = ( $action->{'action'} eq 'delete_field' );
+  $action->{'action_add_field'} = ( $action->{'action'} eq 'add_field' );
   $action->{'action_update_field'} = ( $action->{'action'} eq 'update_field' );
   $action->{'action_move_field'} = ( $action->{'action'} eq 'move_field' );
   $action->{'action_copy_field'} = ( $action->{'action'} eq 'copy_field' );

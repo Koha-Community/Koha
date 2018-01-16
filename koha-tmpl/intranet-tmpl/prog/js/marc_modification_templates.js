@@ -105,6 +105,12 @@ function onActionChange(selectObj) {
             hide('to_field_block');
             break;
 
+        case 'add_field':
+            hide('field_number_block');
+            show('with_value_block');
+            hide('to_field_block');
+            break;
+
         case 'update_field':
             hide('field_number_block');
             show('with_value_block');

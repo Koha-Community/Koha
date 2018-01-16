@@ -17,6 +17,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 our @EXPORT = qw(
   read_field
+  add_field
   update_field
   copy_field
   copy_and_replace_field
@@ -169,6 +170,45 @@ sub update_field {
         #_update_field({ record => $record, field => $fieldName, values => \@values });
     } else {
         _update_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, values => \@values, field_numbers => $field_numbers });
+    }
+}
+
+=head2 add_field
+
+  add_field({
+      record   => $record,
+      field    => $fieldName,
+      subfield => $subfieldName,
+      values   => \@values,
+      field_numbers => $field_numbers,
+  });
+
+  Adds a new field/subfield with supplied value(s).
+  This function always add a new field as opposed to 'update_field' which will
+  either update if field exists and add if it does not.
+
+=cut
+
+
+sub add_field {
+    my ( $params ) = @_;
+    my $record = $params->{record};
+    my $fieldName = $params->{field};
+    my $subfieldName = $params->{subfield};
+    my @values = @{ $params->{values} };
+    my $field_numbers = $params->{field_numbers} // [];
+
+    if ( ! ( $record && $fieldName ) ) { return; }
+    if ( $fieldName > 10 ) {
+        foreach my $value ( @values ) {
+            my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $value );
+            $record->append_fields( $field );
+        }
+    } else {
+        foreach my $value ( @values ) {
+            my $field = MARC::Field->new( $fieldName, $value );
+            $record->append_fields( $field );
+        }
     }
 }
 

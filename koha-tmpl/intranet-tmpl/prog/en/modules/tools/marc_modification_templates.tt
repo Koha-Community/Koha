@@ -117,7 +117,8 @@
                                         <td>[% ActionsLoo.ordering %]</td>
                                         <td>
                                             [% IF ( ActionsLoo.action_delete_field ) %] Delete [% END %]
-                                            [% IF ( ActionsLoo.action_update_field ) %] Update [% END %]
+                                            [% IF ( ActionsLoo.action_add_field ) %] Add new [% END %]
+                                            [% IF ( ActionsLoo.action_update_field ) %] Update existing or add new [% END %]
                                             [% IF ( ActionsLoo.action_move_field ) %] Move [% END %]
                                             [% IF ( ActionsLoo.action_copy_field ) %] Copy [% END %]
                                             [% IF ( ActionsLoo.action_copy_and_replace_field ) %] Copy and replace [% END %]
@@ -203,7 +204,8 @@
 
                             <select name="action" id="action" onchange="onActionChange(this);">
                                 <option value="delete_field">Delete</option>
-                                <option value="update_field">Add/Update</option>
+                                <option value="add_field">Add new</option>
+                                <option value="update_field">Update existing or add new</option>
                                 <option value="move_field">Move</option>
                                 <option value="copy_field">Copy</option>
                                 <option value="copy_and_replace_field">Copy and replace</option>
