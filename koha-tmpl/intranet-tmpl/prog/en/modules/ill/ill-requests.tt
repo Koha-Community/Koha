@@ -186,7 +186,7 @@
                 func: createStatus
             },
             biblio_id: {
-                name: _("Biblio ID")
+                name: _("Bibliograpic Record ID")
             },
             library: {
                 name: _("Library"),
@@ -417,7 +417,7 @@
                                     <input name="borrowernumber" id="borrowernumber" type="text" value="[% request.borrowernumber | html %]">
                                 </li>
                                 <li class="biblio_id">
-                                    <label for="biblio_id" class="biblio_id">Biblio ID:</label>
+                                    <label for="biblio_id" class="biblio_id">Bibliographic Record ID:</label>
                                     <input name="biblio_id" id="biblio_id" type="text" value="[% request.biblio_id | html %]">
                                 </li>
                                 <li class="branchcode">
@@ -522,7 +522,7 @@
                                 </div>
 
                                 <div class="biblio_id">
-                                    <span class="label biblio_id">Biblio ID:</span>
+                                    <span class="label biblio_id">Bibliographic record ID:</span>
                                     [% request.biblio_id || "N/A" | html %]
                                 </div>
                                 <div class="branchcode">
@@ -606,7 +606,7 @@
                                     <th>Author</th>
                                     <th>Title</th>
                                     <th>Patron</th>
-                                    <th>Biblio ID</th>
+                                    <th>Bibliographic Record ID</th>
                                     <th>Library</th>
                                     <th>Status</th>
                                     <th>Updated on</th>
