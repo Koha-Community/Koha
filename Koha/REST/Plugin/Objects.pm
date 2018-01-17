@@ -30,15 +30,16 @@ Koha::REST::Plugin::Objects
 =head3 objects.search
 
     my $patrons_set = Koha::Patrons->new;
-    my $patrons = $c->objects->search( $patrons_set, [\&to_model] );
+    my $patrons = $c->objects->search( $patrons_set, [\&to_model, \&to_api] );
 
 Performs a database search using given Koha::Objects object and query parameters.
-Optionally, it applies the I<$to_model> function reference before building the
-query itself.
+It (optionally) applies the I<$to_model> function reference before building the
+query itself, and (optionally) applies I<$to_api> to the result.
 
-Note: Make sure I<$to_model> doesn't autovivify keys.
+Returns an arrayref of the hashrefs representing the resulting objects
+for JSON rendering.
 
-Returns a Koha::Objects object
+Note: Make sure I<$to_model> and I<$to_api> don't autovivify keys.
 
 =cut
 
@@ -47,7 +48,7 @@ sub register {
 
     $app->helper(
         'objects.search' => sub {
-            my ( $c, $objects_set, $to_model ) = @_;
+            my ( $c, $objects_set, $to_model, $to_api ) = @_;
 
             my $args = $c->validation->output;
             my $attributes = {};
@@ -90,7 +91,13 @@ sub register {
                 });
             }
 
-            return $objects;
+            my @objects_list = map {
+                ( defined $to_api )
+                  ? $to_api->( $_->TO_JSON )
+                  : $_->TO_JSON
+            } $objects->as_list;
+
+            return \@objects_list;
         }
     );
 }
