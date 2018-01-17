@@ -17,8 +17,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
