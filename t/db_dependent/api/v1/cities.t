@@ -53,48 +53,57 @@ subtest 'list() tests' => sub {
     my $tx = $t->ua->build_tx( GET => '/api/v1/cities' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [] );
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is( [] );
 
-    my $city_country = 'France';
-    my $city         = $builder->build(
-        { source => 'City', value => { city_country => $city_country } } );
+    my $city = $builder->build_object({ class => 'Koha::Cities' });
 
     # One city created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/cities' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [$city] );
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is( [Koha::REST::V1::Cities::_to_api( $city->TO_JSON )] );
 
-    my $another_city = $builder->build(
-        { source => 'City', value => { city_country => $city_country } } );
-    my $city_with_another_country = $builder->build( { source => 'City' } );
+    my $another_city = $builder->build_object(
+        { class => 'Koha::Cities', value => { city_country => $city->city_country } } );
+    my $city_with_another_country = $builder->build_object({ class => 'Koha::Cities' });
 
     # Two cities created, they should both be returned
     $tx = $t->ua->build_tx( GET => '/api/v1/cities' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
-      ->json_is( [ $city, $another_city, $city_with_another_country ] );
+      ->json_is([Koha::REST::V1::Cities::_to_api($city->TO_JSON),
+                 Koha::REST::V1::Cities::_to_api($another_city->TO_JSON),
+                 Koha::REST::V1::Cities::_to_api($city_with_another_country->TO_JSON)
+                 ] );
 
     # Filtering works, two cities sharing city_country
-    $tx =
-      $t->ua->build_tx( GET => "/api/v1/cities?city_country=" . $city_country );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    my $result =
-      $t->request_ok($tx)->status_is(200)->json_is( [ $city, $another_city ] );
+    $tx = $t->ua->build_tx( GET => "/api/v1/cities?country=" . $city->city_country );
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is([ Koha::REST::V1::Cities::_to_api($city->TO_JSON),
+                  Koha::REST::V1::Cities::_to_api($another_city->TO_JSON)
+                  ]);
 
-    $tx = $t->ua->build_tx(
-        GET => "/api/v1/cities?city_name=" . $city->{city_name} );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [$city] );
+    $tx = $t->ua->build_tx( GET => "/api/v1/cities?name=" . $city->city_name );
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is( [Koha::REST::V1::Cities::_to_api($city->TO_JSON)] );
 
     # Warn on unsupported query parameter
     $tx = $t->ua->build_tx( GET => '/api/v1/cities?city_blah=blah' );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(400)
       ->json_is( [{ path => '/query/city_blah', message => 'Malformed query string'}] );
 
     $schema->storage->txn_rollback;
@@ -106,20 +115,25 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $city = $builder->build( { source => 'City' } );
-    my ( $borrowernumber, $session_id ) =
-      create_user_and_session( { authorized => 0 } );
+    my $city = $builder->build_object({ class => 'Koha::Cities' });
+    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 0 });
 
-    my $tx = $t->ua->build_tx( GET => "/api/v1/cities/" . $city->{cityid} );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is($city);
+    my $tx = $t->ua->build_tx( GET => "/api/v1/cities/" . $city->id );
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is(Koha::REST::V1::Cities::_to_api($city->TO_JSON));
 
-    my $non_existent_id = $city->{cityid} + 1;
+    my $city_to_delete = $builder->build_object({ class => 'Koha::Cities' });
+    my $non_existent_id = $city_to_delete->id;
+    $city_to_delete->delete;
+
     $tx = $t->ua->build_tx( GET => "/api/v1/cities/" . $non_existent_id );
-    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(404)
+    $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(404)
       ->json_is( '/error' => 'City not found' );
 
     $schema->storage->txn_rollback;
@@ -136,74 +150,75 @@ subtest 'add() tests' => sub {
     my ( $authorized_borrowernumber, $authorized_session_id ) =
       create_user_and_session( { authorized => 1 } );
     my $city = {
-        city_name    => "City Name",
-        city_state   => "City State",
-        city_zipcode => "City Zipcode",
-        city_country => "City Country"
+        name        => "City Name",
+        state       => "City State",
+        postal_code => "City Zipcode",
+        country     => "City Country"
     };
 
     # Unauthorized attempt to write
     my $tx = $t->ua->build_tx( POST => "/api/v1/cities/" => json => $city );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(403);
+    $tx->req->cookies({ name => 'CGISESSID', value => $unauthorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(403);
 
     # Authorized attempt to write invalid data
     my $city_with_invalid_field = {
-        city_blah    => "City Blah",
-        city_state   => "City State",
-        city_zipcode => "City Zipcode",
-        city_country => "City Country"
+        blah        => "City Blah",
+        state       => "City State",
+        postal_code => "City Zipcode",
+        country     => "City Country"
     };
 
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/cities/" => json => $city_with_invalid_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
+    $tx = $t->ua->build_tx( POST => "/api/v1/cities/" => json => $city_with_invalid_field );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)->json_is(
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_is(
         "/errors" => [
             {
-                message => "Properties not allowed: city_blah.",
+                message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
-    );
+      );
 
     # Authorized attempt to write
     $tx = $t->ua->build_tx( POST => "/api/v1/cities/" => json => $city );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    my $cityid = $t->request_ok($tx)->status_is(200)
-      ->json_is( '/city_name'    => $city->{city_name} )
-      ->json_is( '/city_state'   => $city->{city_state} )
-      ->json_is( '/city_zipcode' => $city->{city_zipcode} )
-      ->json_is( '/city_country' => $city->{city_country} )
-      ->tx->res->json->{cityid};
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    my $city_id =
+      $t->request_ok($tx)
+        ->status_is(200)
+        ->json_is( '/name'        => $city->{name} )
+        ->json_is( '/state'       => $city->{state} )
+        ->json_is( '/postal_code' => $city->{postal_code} )
+        ->json_is( '/country'     => $city->{country} )
+        ->tx->res->json->{city_id};
 
     # Authorized attempt to create with null id
-    $city->{cityid} = undef;
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/cities/" => json => $city );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)->json_has('/errors');
+    $city->{city_id} = undef;
+    $tx = $t->ua->build_tx( POST => "/api/v1/cities/" => json => $city );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_has('/errors');
 
     # Authorized attempt to create with existing id
-    $city->{cityid} = $cityid;
-    $tx = $t->ua->build_tx(
-        POST => "/api/v1/cities/" => json => $city );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)->json_is(
+    $city->{city_id} = $city_id;
+    $tx = $t->ua->build_tx( POST => "/api/v1/cities/" => json => $city );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_is(
         "/errors" => [
             {
                 message => "Read-only.",
-                path    => "/body/cityid"
+                path    => "/body/city_id"
             }
         ]
     );
@@ -222,90 +237,91 @@ subtest 'update() tests' => sub {
     my ( $authorized_borrowernumber, $authorized_session_id ) =
       create_user_and_session( { authorized => 1 } );
 
-    my $city_id = $builder->build( { source => 'City' } )->{cityid};
+    my $city_id = $builder->build_object({ class => 'Koha::Cities' } )->id;
 
     # Unauthorized attempt to update
     my $tx = $t->ua->build_tx( PUT => "/api/v1/cities/$city_id" => json =>
-          { city_name => 'New unauthorized name change' } );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(403);
+          { name => 'New unauthorized name change' } );
+    $tx->req->cookies({ name => 'CGISESSID', value => $unauthorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(403);
 
     # Attempt partial update on a PUT
     my $city_with_missing_field = {
-        city_name    => 'New name',
-        city_state   => 'New state',
-        city_country => 'New country'
+        name    => 'New name',
+        state   => 'New state',
+        country => 'New country'
     };
 
     $tx = $t->ua->build_tx(
         PUT => "/api/v1/cities/$city_id" => json => $city_with_missing_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
     $t->request_ok($tx)->status_is(400)
       ->json_is( "/errors" =>
-          [ { message => "Missing property.", path => "/body/city_zipcode" } ]
+          [ { message => "Missing property.", path => "/body/postal_code" } ]
       );
 
     # Full object update on PUT
     my $city_with_updated_field = {
-        city_name    => "London",
-        city_state   => "City State",
-        city_zipcode => "City Zipcode",
-        city_country => "City Country"
+        name        => "London",
+        state       => "City State",
+        postal_code => "City Zipcode",
+        country     => "City Country"
     };
 
-    $tx = $t->ua->build_tx(
-        PUT => "/api/v1/cities/$city_id" => json => $city_with_updated_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( '/city_name' => 'London' );
+    $tx = $t->ua->build_tx( PUT => "/api/v1/cities/$city_id" => json => $city_with_updated_field );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is( '/name' => 'London' );
 
     # Authorized attempt to write invalid data
     my $city_with_invalid_field = {
-        city_blah    => "City Blah",
-        city_state   => "City State",
-        city_zipcode => "City Zipcode",
-        city_country => "City Country"
+        blah        => "City Blah",
+        state       => "City State",
+        postal_code => "City Zipcode",
+        country     => "City Country"
     };
 
-    $tx = $t->ua->build_tx(
-        PUT => "/api/v1/cities/$city_id" => json => $city_with_invalid_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(400)->json_is(
+    $tx = $t->ua->build_tx( PUT => "/api/v1/cities/$city_id" => json => $city_with_invalid_field );
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_is(
         "/errors" => [
             {
-                message => "Properties not allowed: city_blah.",
+                message => "Properties not allowed: blah.",
                 path    => "/body"
             }
         ]
     );
 
-    my $non_existent_id = $city_id + 1;
-    $tx =
-      $t->ua->build_tx( PUT => "/api/v1/cities/$non_existent_id" => json =>
+    my $city_to_delete = $builder->build_object({ class => 'Koha::Cities' });
+    my $non_existent_id = $city_to_delete->id;
+    $city_to_delete->delete;
+
+    $tx = $t->ua->build_tx( PUT => "/api/v1/cities/$non_existent_id" => json =>
           $city_with_updated_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(404);
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(404);
 
     $schema->storage->txn_rollback;
 
-    # Wrong mathod (POST)
-    $city_with_updated_field->{cityid} = 2;
+    # Wrong method (POST)
+    $city_with_updated_field->{city_id} = 2;
 
     $tx = $t->ua->build_tx(
         POST => "/api/v1/cities/$city_id" => json => $city_with_updated_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(404);
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(404);
 };
 
 subtest 'delete() tests' => sub {
@@ -319,26 +335,27 @@ subtest 'delete() tests' => sub {
     my ( $authorized_borrowernumber, $authorized_session_id ) =
       create_user_and_session( { authorized => 1 } );
 
-    my $city_id = $builder->build( { source => 'City' } )->{cityid};
+    my $city_id = $builder->build_object({ class => 'Koha::Cities' })->id;
 
-    # Unauthorized attempt to update
+    # Unauthorized attempt to delete
     my $tx = $t->ua->build_tx( DELETE => "/api/v1/cities/$city_id" );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $unauthorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(403);
+    $tx->req->cookies({ name => 'CGISESSID', value => $unauthorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(403);
 
     $tx = $t->ua->build_tx( DELETE => "/api/v1/cities/$city_id" );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->content_is('""');
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->content_is('""');
 
     $tx = $t->ua->build_tx( DELETE => "/api/v1/cities/$city_id" );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
-    $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(404);
+    $tx->req->cookies({ name => 'CGISESSID', value => $authorized_session_id });
+    $tx->req->env({ REMOTE_ADDR => $remote_address });
+    $t->request_ok($tx)
+      ->status_is(404);
 
     $schema->storage->txn_rollback;
 };
