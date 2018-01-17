@@ -25,8 +25,7 @@
 #
 # The script can be called with one of the parameters, both or none
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output;

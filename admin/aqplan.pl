@@ -20,8 +20,7 @@
 #written 20/02/2002 by paul.poulain@free.fr
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use List::Util qw/min/;
 use Date::Calc qw/Delta_YMD Easter_Sunday Today Decode_Date_EU/;
