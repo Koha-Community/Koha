@@ -118,8 +118,7 @@ if ( $input->param('add_debarment') ) {
     my $expiration = $input->param('debarred_expiration');
     $expiration =
       $expiration
-      ? output_pref(
-        { 'dt' => dt_from_string($expiration), 'dateformat' => 'iso' } )
+      ? dt_from_string($expiration)->ymd
       : undef;
 
     AddDebarment(
