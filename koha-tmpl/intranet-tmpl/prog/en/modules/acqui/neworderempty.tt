@@ -455,7 +455,7 @@ $(document).ready(function()
               <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
           [% END %]
 
-          [% UNLESS Koha.Preference('autoBarcode') == 'OFF' %]
+          [% UNLESS Koha.Preference('autoBarcode') == 'OFF' ||  Koha.Preference('autoBarcode') == 'vaarakirjastot' || Koha.Preference('autoBarcode') == 'hbyyyyincr'%]
               <div class="dialog message">The autoBarcode system preference is set to [% Koha.Preference('autoBarcode') %] and items with blank barcodes will have barcodes generated upon save to database</div>
           [% END %]
 

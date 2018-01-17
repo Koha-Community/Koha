@@ -327,7 +327,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
             next unless ( defined $barcodefield && defined $barcodesubfield );
             my $barcode = $record->subfield($barcodefield,$barcodesubfield) || '';
             my $aBpref = C4::Context->preference('autoBarcode');
-            if( $barcode eq '' && $aBpref ne 'OFF'){
+            if( $barcode eq '' && $aBpref ne 'OFF' && $aBpref ne 'hbyyyyincr' && $aBpref ne 'vaarakirjastot'){
                 my $barcodeobj;
                 if ( $aBpref eq 'hbyymmincr'){
                     my ($homebranchfield,$homebranchsubfield) = GetMarcFromKohaField('items.homebranch');
