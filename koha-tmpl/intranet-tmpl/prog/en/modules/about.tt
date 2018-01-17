@@ -206,7 +206,7 @@
                 <p>[% FOR p IN ai_patrons %][% p.borrowernumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_biblios %]
-                <h4>Bibliographic Records</h4>
+                <h4>Bibliographic records</h4>
                 <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblio" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR b IN ai_biblios %][% b.biblionumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
