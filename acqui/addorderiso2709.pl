@@ -544,6 +544,13 @@ sub import_biblios_list {
                 my $item_copyno = $iteminfos->{copyno};
                 my $item_quantity = $iteminfos->{quantity} || 1;
                 my $item_budget_code = $iteminfos->{budget_code};
+                my $item_budget_id;
+                if ( $iteminfos->{budget_code} ) {
+                    my $item_budget = GetBudgetByCode( $iteminfos->{budget_code} );
+                    if ( $item_budget ) {
+                        $item_budget_id = $item_budget->{budget_id};
+                    }
+                }
                 my $item_price = $iteminfos->{price};
                 my $item_replacement_price = $iteminfos->{replacementprice};
                 my $item_callnumber = $iteminfos->{itemcallnumber};
@@ -564,7 +571,7 @@ sub import_biblios_list {
                         'uri' => $item_uri,
                         'copyno' => $item_copyno,
                         'quantity' => $item_quantity,
-                        'budget_code' => $item_budget_code || $budget_code,
+                        'budget_id' => $item_budget_id || $budget_id,
                         'itemprice' => $item_price || $price,
                         'replacementprice' => $item_replacement_price,
                         'itemcallnumber' => $item_callnumber,

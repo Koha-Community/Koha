@@ -227,7 +227,7 @@
                         <li><label for="budget_code_item_[% item.item_id | html %]">budget_code</label><select id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% item.biblio_count | html %]">
                         <option value="">Select a fund</option>
                         [% FOREACH budget_loo IN budget_loop %]
-                            [% IF ( budget_loo.b_code ) == ( item.budget_code ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
+                            [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
                             [% ELSE %]<option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
                             [% END %]
                         [% END %]
