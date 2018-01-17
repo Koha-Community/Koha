@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Budgets;
+use Koha::Acquisition::Funds;
 use JSON qw(to_json);
 
 use Try::Tiny;
@@ -50,10 +50,10 @@ sub list_funds {
     }
 
     return try {
-        my $funds = GetBudgets($filter);
-        my @fundsArray = map { _to_api($_) } @$funds;
+        my @funds = Koha::Acquisition::Funds->search($filter);
+        @funds = map { _to_api($_->TO_JSON) } @funds;
         return $c->render( status  => 200,
-                           openapi =>  \@fundsArray);
+                           openapi =>  \@funds);
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
