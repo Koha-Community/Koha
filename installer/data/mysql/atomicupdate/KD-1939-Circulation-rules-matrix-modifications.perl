@@ -1,15 +1,11 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
-    $dbh->do( "ALTER TABLE `issuingrules` DROP PRIMARY KEY" );
-    $dbh->do( "ALTER TABLE `issuingrules` ADD `issuingrules_id` INT( 11 ) NOT NULL auto_increment PRIMARY KEY FIRST" );
-
     $dbh->do("ALTER TABLE issuingrules
         ADD COLUMN ccode VARCHAR(10) NOT NULL DEFAULT '*' AFTER `itemtype`,
         ADD COLUMN permanent_location VARCHAR(80) NOT NULL DEFAULT '*' AFTER `ccode`
     ");
     $dbh->do("ALTER TABLE issuingrules
-        DROP INDEX issuingrules_id,
         ADD UNIQUE KEY `issuingrules_selects` (`branchcode`,`categorycode`,`itemtype`,`ccode`,`permanent_location`),
         ADD KEY `ccode` (`ccode`),
         ADD KEY `permanent_location` (`permanent_location`)

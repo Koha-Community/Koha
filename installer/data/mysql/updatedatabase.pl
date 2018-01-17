@@ -3994,7 +3994,7 @@ if ( CheckVersion($DBversion) ) {
                       borrowernumber,
                       itemnumber
                FROM   accountlines
-               WHERE  accounttype = 'FU'
+               WHERE  accounttype = 'FU' and amountoutstanding > 0 and amount > 0
                GROUP BY borrowernumber, itemnumber
               ) a2 USING ( borrowernumber, itemnumber )
     SET    a1.accounttype = 'F'
