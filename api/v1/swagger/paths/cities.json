@@ -8,27 +8,27 @@
         "application/json"
       ],
       "parameters": [{
-        "name": "city_name",
+        "name": "name",
         "in": "query",
-        "description": "Case insensative 'starts-with' search on city name",
+        "description": "Case insensative search on city name",
         "required": false,
         "type": "string"
       }, {
-        "name": "city_state",
+        "name": "state",
         "in": "query",
-        "description": "Case insensative 'starts-with' search on city state",
+        "description": "Case insensative search on city state",
         "required": false,
         "type": "string"
       }, {
-        "name": "city_country",
+        "name": "country",
         "in": "query",
-        "description": "Case insensative 'starts_with' search on city country",
+        "description": "Case insensative search on city country",
         "required": false,
         "type": "string"
       }, {
-        "name": "city_zipcode",
+        "name": "postal_code",
         "in": "query",
-        "description": "Case Insensative 'starts-with' search on zipcode",
+        "description": "Case Insensative search on city postal code",
         "required": false,
         "type": "string"
       }],
@@ -117,13 +117,13 @@
       }
     }
   },
-  "/cities/{cityid}": {
+  "/cities/{city_id}": {
     "get": {
       "x-mojo-to": "Cities#get",
       "operationId": "getCity",
       "tags": ["cities"],
       "parameters": [{
-        "$ref": "../parameters.json#/cityidPathParam"
+        "$ref": "../parameters.json#/city_id_pp"
       }],
       "produces": [
         "application/json"
@@ -160,11 +160,11 @@
       "operationId": "updateCity",
       "tags": ["cities"],
       "parameters": [{
-        "$ref": "../parameters.json#/cityidPathParam"
+        "$ref": "../parameters.json#/city_id_pp"
       }, {
         "name": "body",
         "in": "body",
-        "description": "A JSON object containing informations about the new hold",
+        "description": "A city object",
         "required": true,
         "schema": {
           "$ref": "../definitions.json#/city"
@@ -222,7 +222,7 @@
       "operationId": "deleteCity",
       "tags": ["cities"],
       "parameters": [{
-        "$ref": "../parameters.json#/cityidPathParam"
+        "$ref": "../parameters.json#/city_id_pp"
       }],
       "produces": [
         "application/json"

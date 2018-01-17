@@ -1,26 +1,26 @@
 {
   "type": "object",
   "properties": {
-    "cityid": {
-      "$ref": "../x-primitives.json#/cityid"
+    "city_id": {
+      "$ref": "../x-primitives.json#/city_id"
     },
-    "city_name": {
+    "name": {
       "description": "city name",
       "type": "string"
     },
-    "city_state": {
+    "state": {
       "description": "city state",
       "type": ["string", "null"]
     },
-    "city_zipcode": {
-      "description": "city zipcode",
+    "postal_code": {
+      "description": "city postal code",
       "type": ["string", "null"]
     },
-    "city_country": {
+    "country": {
       "description": "city country",
       "type": ["string", "null"]
     }
   },
   "additionalProperties": false,
-  "required": ["city_name", "city_state", "city_zipcode", "city_country"]
+  "required": ["name", "state", "postal_code", "country"]
 }
