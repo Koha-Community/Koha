@@ -92,7 +92,6 @@ BEGIN {
 
     #Check data
     push @EXPORT, qw(
-        &checkuniquemember
         &checkuserpassword
         &Check_Userid
         &Generate_Userid
