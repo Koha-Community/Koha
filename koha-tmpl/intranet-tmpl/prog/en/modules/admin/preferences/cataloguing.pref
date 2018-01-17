@@ -69,7 +69,7 @@ Cataloging:
             - pref: item-level_itypes
               choices:
                   yes: specific item
-                  no: biblio record
+                  no: bibliographic record
             - as the authoritative item type (for determining circulation and fines rules, for displaying an item type icon on either opac detail or results page, etc).
         -
             - Map the MARC subfield
@@ -175,7 +175,7 @@ Cataloging:
                   economical: Do
             - collapse repeated tags of the same type into one tag entry on the display.
         -
-            - By default, display biblio records in
+            - By default, display bibliographic records in
             - pref: IntranetBiblioDefaultView
               choices:
                   normal: normal form.
@@ -192,7 +192,7 @@ Cataloging:
               choices:
                   yes: Hide
                   no: "Don't hide"
-            - biblios marked as suppressed from OPAC search results.
+            - bibliographic records marked as suppressed from OPAC search results.
             - <br />Restrict the suppression to IP addresses outside of the IP range
             - pref: OpacSuppressionByIPRange
               class: short
@@ -202,7 +202,7 @@ Cataloging:
               choices:
                   yes: "an explanatory page ('This record is blocked')."
                   no: "the 404 error page ('Not found')."
-            - <br />Display the following message on the redirect page for suppressed biblios
+            - <br />Display the following message on the redirect page for suppressed bibliographic records
             - pref: OpacSuppressionMessage
               type: textarea
               class: code
@@ -227,7 +227,7 @@ Cataloging:
               choices:
                   yes: Display
                   no: "Don't display"
-            - acquisition details on the biblio detail page.
+            - acquisition details on the bibliographic record detail page.
         -
             - pref: MergeReportFields
             - "fields to display for deleted records after merge"

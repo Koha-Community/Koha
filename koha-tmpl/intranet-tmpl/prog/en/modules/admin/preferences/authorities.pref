@@ -31,7 +31,7 @@ Authorities:
                   no: "do not generate"
             - authority records that are missing (BiblioAddsAuthorities must be set to "allow" for this to have any effect).
         -
-            - When modifying an authority record, do not update attached biblio records if the number exceeds
+            - When modifying an authority record, do not update attached bibliographic records if the number exceeds
             - pref: AuthorityMergeLimit
               default: 50
             - records. (Above this limit, the merge_authority cron job will merge them.)
@@ -55,7 +55,7 @@ Authorities:
               type: textarea
               class: code
         -
-            - When updating biblio records from an attached authority record ("merging"), handle subfields of relevant biblio record fields in
+            - When updating bibliographic records from an attached authority record ("merging"), handle subfields of relevant bibliographic record fields in
             - pref: AuthorityMergeMode
               default: "loose"
               choices:
