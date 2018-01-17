@@ -19,8 +19,7 @@
 
 # This script builds an ICalendar file (rfc 2445) for use in programs such as Ical
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Data::ICal;

@@ -18,8 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Members;
 use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request

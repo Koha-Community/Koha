@@ -26,8 +26,7 @@ It is called from sco-main.pl
 =cut
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;

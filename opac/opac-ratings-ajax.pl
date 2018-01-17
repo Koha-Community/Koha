@@ -23,8 +23,7 @@ A script that takes an ajax json query, and then inserts or modifies a star-rati
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use CGI::Cookie;  # need to check cookies before having CGI parse the POST request
