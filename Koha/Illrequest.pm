@@ -478,8 +478,8 @@ Return a list of available backends.
 
 sub available_backends {
     my ( $self ) = @_;
-    my @backends = $self->_config->available_backends;
-    return \@backends;
+    my $backends = $self->_config->available_backends;
+    return $backends;
 }
 
 =head3 available_actions
