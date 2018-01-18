@@ -26,8 +26,7 @@
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use URI::Escape;
 use C4::Context;

@@ -4,8 +4,7 @@
 #by chris@katipo.co.nz
 #converted to using templates 3/16/03 by mwhansen@hmc.edu
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Auth;
 use Koha::AuthUtils;

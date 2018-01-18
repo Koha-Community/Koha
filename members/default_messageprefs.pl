@@ -18,8 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Service;
 use C4::Form::MessagingPreferences;
 

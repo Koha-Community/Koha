@@ -19,8 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 # pragma
-use strict;
-use warnings;
+use Modern::Perl;
 
 # external modules
 use CGI qw ( -utf8 );

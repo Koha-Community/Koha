@@ -32,8 +32,7 @@
 
 =cut
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;

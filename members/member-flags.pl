@@ -4,8 +4,7 @@
 # Written by Steve Tonnesen
 # July 26, 2002 (my birthday!)
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use C4::Output;
