@@ -14,10 +14,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername|html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketname|html %] ([% basketno %])</a> &rsaquo; Change order [% IF (type == "vendor") %]vendor[% ELSE %]internal[% END %] note</div>
 
-<div id="doc" class="yui-t7">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-<div id="bd">
-  <div id="yui-main">
       [% IF (type == "vendor") %]
           <h1>Change order vendor note (order no. [% ordernumber %])</h1>
       [% ELSE %]
@@ -39,4 +39,5 @@
       </form>
   </div>
 </div>
+
 [% INCLUDE 'intranet-bottom.inc' %]

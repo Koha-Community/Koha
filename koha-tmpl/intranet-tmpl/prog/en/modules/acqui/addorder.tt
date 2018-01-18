@@ -6,11 +6,7 @@
 <body id="acq_addorder" class="acq">
 [% INCLUDE "header.inc" %]
 
-<div id="doc3" class="yui-t7">
-
-<div id="bd">
-  <div id="yui-main">
-    <div class="yui-b">
+    <div class="container-fluid">
       [% IF (not_enough_budget) %]
         <form action="/cgi-bin/koha/acqui/addorder.pl" method="post">
           [% FOREACH var IN vars_loop %]
@@ -35,7 +31,5 @@
           </div>
         </form>
       [% END %]
-    </div>
-  </div>
-</div>
+
 [% INCLUDE "intranet-bottom.inc" %]
