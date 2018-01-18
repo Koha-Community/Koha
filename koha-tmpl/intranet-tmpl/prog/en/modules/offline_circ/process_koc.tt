@@ -10,9 +10,9 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; [% IF ( transactions_loaded ) %] <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline circulation file upload</a> &rsaquo; Results[% ELSE %] Offline circulation file upload[% END %]</div>
 
-<div id="doc" class="yui-t7">
-
-   <div id="bd">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
 [% IF ( transactions_loaded ) %]
   <h2>Koha offline circulation</h2>
@@ -63,6 +63,7 @@
 [% END %]
 
 
+    </div>
 </div>
 
 [% MACRO jsinclude BLOCK %]
