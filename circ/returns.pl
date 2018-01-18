@@ -596,7 +596,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{bortitle}       = $patron->title;
             $ri{bornote}        = $patron->borrowernotes;
             $ri{borcategorycode}= $patron->categorycode;
-            $ri{borissuescount} = Koha::Checkouts->count( { borrowernumber => $b->{'borrowernumber'} } );
+            $ri{borissuescount} = Koha::Checkouts->count( { borrowernumber => $patron->borrowernumber } );
         }
         else {
             $ri{borrowernumber} = $riborrowernumber{$_};
