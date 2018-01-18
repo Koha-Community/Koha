@@ -23,8 +23,7 @@
 #
 #
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );    #qw(:standard escapeHTML);
 use C4::Context;

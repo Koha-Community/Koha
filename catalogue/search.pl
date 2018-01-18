@@ -132,8 +132,7 @@ Not yet completed...
 
 =cut
 
-use strict;            # always use
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 ## STEP 1. Load things that are used in both search page and
 # results page and decide which template to load, operations 

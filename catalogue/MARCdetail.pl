@@ -43,8 +43,7 @@ the items attached to the biblio
 
 =cut
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use HTML::Entities;
 

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use C4::Record;
 use C4::Auth;
