@@ -10,14 +10,14 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Circulation</div>
 
-<div id="doc" class="yui-t7">
-   
-   <div id="bd">
-	<div class="yui-g"> 
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
 
 <h1>Circulation</h1>
 
-<div class="yui-u first">	
+<div class="row">
+<div class="col-sm-4">
 	<ul>
         <li><a href="/cgi-bin/koha/circ/circulation.pl">Check out</a></li>
         <li><a href="/cgi-bin/koha/circ/returns.pl">Check in</a></li>
@@ -32,10 +32,10 @@
 	    [% END %]
 	[% END %]
 	</ul>
-	</div>
+</div>
 
-	<div class="yui-u">
-	
+<div class="col-sm-4">
+
 <h5>Circulation reports</h5>
 <ul>
     <li>    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a></li>
@@ -56,11 +56,10 @@
         <li><a href="/cgi-bin/koha/circ/on-site_checkouts.pl">Pending on-site checkouts</a></li>
     [% END %]
 </ul>
-	
-	</div>
 
+</div>
 
-	<div class="yui-u">
+<div class="col-sm-4">
         <h5>Offline circulation</h5>
 		<ul>
             [% IF (AllowOfflineCirculation) %]
@@ -74,11 +73,14 @@
             </ul>
 		</ul>
 	</div>
-
 </div>
-    <div class="yui-g" id="intranet-circulation-home-html">
-        [% Koha.Preference('IntranetCirculationHomeHTML') %]
+
+    <div class="row" id="intranet-circulation-home-html">
+        <div class="col-md-12">
+            [% Koha.Preference('IntranetCirculationHomeHTML') %]
+        </div>
     </div>
+</div>
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
