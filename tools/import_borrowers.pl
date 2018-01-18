@@ -34,8 +34,7 @@
 # dates should be in the format you have set up Koha to expect
 # branchcode and categorycode need to be valid
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Auth;
 use C4::Output;

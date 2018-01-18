@@ -40,8 +40,7 @@
 # TODO This script drives the CRUD operations on the letter table
 # The DB interaction should be handled by calls to C4/Letters.pm
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Context;

@@ -37,8 +37,7 @@ resized, maintaining aspect ratio.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use File::Temp;
 use CGI qw ( -utf8 );

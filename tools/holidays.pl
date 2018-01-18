@@ -16,8 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 #####Sets holiday periods for each branch. Datedues will be extended if branch is closed -TG
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
