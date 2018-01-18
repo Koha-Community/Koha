@@ -214,7 +214,19 @@ if ( $op eq '' ) {
 
 }
 
+my $schema = Koha::Database->new()->schema();
+my $servers = $schema->resultset('Z3950server')->search(
+        {
+            recordtype => 'biblio',
+            servertype => ['zed', 'sru'],
+        },
+        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+            order_by     => ['rank', 'servername'],
+        },
+);
+
 $template->param(
+    servers => $servers,
     authority_types => $authority_types,
     op            => $op,
 );
