@@ -18,8 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+
+use Modern::Perl;
 use vars qw($debug);
 
 use CGI qw ( -utf8 );

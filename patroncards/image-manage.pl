@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-use warnings;
-use strict;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Graphics::Magick;
