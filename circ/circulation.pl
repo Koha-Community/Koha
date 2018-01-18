@@ -24,8 +24,7 @@
 
 # FIXME There are too many calls to Koha::Patrons->find in this script
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use DateTime;
 use DateTime::Duration;

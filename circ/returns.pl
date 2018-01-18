@@ -27,8 +27,7 @@ script to execute returns of books
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 # FIXME There are weird things going on with $patron and $borrowernumber in this script
 
