@@ -380,9 +380,6 @@ if ( $template_type && $template_type eq 'advsearch' ) {
         }
     }
 
-    if (C4::Context->preference('OPACNumbersPreferPhrase')) {
-        $template->param('numbersphr' => 1);
-    }
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;

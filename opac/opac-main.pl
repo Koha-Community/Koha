@@ -102,8 +102,4 @@ if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
 
-if (C4::Context->preference('OPACNumbersPreferPhrase')) {
-        $template->param('numbersphr' => 1);
-}
-
 output_html_with_http_headers $input, $cookie, $template->output;
