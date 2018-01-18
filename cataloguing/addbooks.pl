@@ -133,8 +133,20 @@ for my $resultsbr (@resultsbr) {
     };
 }
 
+my $schema = Koha::Database->new()->schema();
+my $servers = $schema->resultset('Z3950server')->search(
+        {
+            recordtype => 'biblio',
+            servertype => ['zed', 'sru'],
+        },
+        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+            order_by     => ['rank', 'servername'],
+        },
+);
+
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 $template->param(
+    servers           => $servers,
     frameworks        => $frameworks,
     breeding_count    => $countbr,
     breeding_loop     => $breeding_loop,

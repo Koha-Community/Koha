@@ -59,9 +59,11 @@
             [% END %]
         </ul>
     </div>
-    <div class="btn-group">
-        <a class="btn btn-default btn-sm" id="z3950submit" href="#"><i class="fa fa-search"></i> New from Z39.50</a>
-    </div>
+    [% IF servers.count > 0 %]
+        <div class="btn-group">
+            <a class="btn btn-default btn-sm" id="z3950submit" href="#"><i class="fa fa-search"></i> New from Z39.50</a>
+        </div>
+    [% END %]
 [% END %]
 </div>
 

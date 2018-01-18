@@ -30,6 +30,7 @@
                 [% END %]
             </ul>
         </div>
+        [% IF servers.count > 0 %]
         <div class="btn-group">
             <button class="btn btn-default btn-sm" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
             <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -42,6 +43,7 @@
                 [% END %]
             </ul>
         </div>
+        [% END %]
     [% IF ( total ) %]
         <div class="btn-group"><button type="submit" class="btn btn-default btn-sm merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
     [% END %]
