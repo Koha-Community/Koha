@@ -28,9 +28,10 @@
     [% END %]
 </div>
 
-<div id="doc" class="yui-t7">
-    <div id="bd">
-        <div class="yui-main">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+
             <form method="post" class="validated">
                 <input type="hidden" name="id" value="[% club_template.id %]" />
 
@@ -52,12 +53,12 @@
                         </li>
 
                         <li>
-                            <label for="description">Description:</label>
+                            <label for="club-template-description">Description:</label>
                             <input id="club-template-description" name="description" type="text" value="[% club_template.description %]" />
                         </li>
 
                         <li>
-                            <label for="is_enrollable_from_opac">Allow public enrollment:</label>
+                            <label for="club-template-is-enrollable-from-opac">Allow public enrollment:</label>
                             [% IF club_template.is_enrollable_from_opac %]
                                 <input type="checkbox" id="club-template-is-enrollable-from-opac" name="is_enrollable_from_opac" checked="checked" />
                             [% ELSE %]
@@ -67,7 +68,7 @@
                         </li>
 
                         <li>
-                            <label for="is_email_required">Require valid email address:</label>
+                            <label for="club-template-is-email-required">Require valid email address:</label>
                             [% IF club_template.is_email_required %]
                                 <input type="checkbox" id="club-template-is-email-required" name="is_email_required" checked="checked" />
                             [% ELSE %]
@@ -77,7 +78,7 @@
                         </li>
 
                         <li>
-                            <label for="branchcode">Library:</label>
+                            <label for="club-template-branchcode">Library:</label>
                             <select name="branchcode" id="club-template-branchcode">
                                 <option value=""></option>
                                 [% PROCESS options_for_libraries libraries => Branches.all( selected => club_template.branchcode ) %]
@@ -107,7 +108,7 @@
                                     </li>
 
                                     <li>
-                                        <label for="field-description-[% f.id %]">Authorised value category:</label>
+                                        <label for="field-authorised-value-category-[% f.id %]">Authorised value category:</label>
                                         <select name="club_template_field_authorised_value_category" id="field-authorised-value-category-[% f.id %]">
                                             <option value=""></option>
                                             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
@@ -152,7 +153,7 @@
                                     </li>
 
                                     <li>
-                                        <label for="enrollment-field-description-[% f.id %]">Authorised value category:</label>
+                                        <label for="enrollment-field-authorised-value-category-[% f.id %]">Authorised value category:</label>
                                         <select name="club_template_enrollment_field_authorised_value_category" id="enrollment-field-authorised-value-category-[% f.id %]">
                                             <option value=""></option>
                                             [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => f.authorised_value_category) %]
@@ -181,8 +182,8 @@
                 </fieldset>
             </form>
 
-        </div> <!-- /#yui-main -->
-    </div> <!-- /#bd -->
+        </div> <!-- /.col-md-8 .col-md-offset-2 -->
+    </div> <!-- /.row -->
 
 
 <div id="new-field-template" class="club-field" style="display:none">
@@ -236,7 +237,6 @@
         </li>
     </ol>
     <fieldset class="action"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><i class="fa fa-trash"></i> Delete field</a></fieldset>
-    </div>
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
