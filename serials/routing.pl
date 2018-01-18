@@ -25,8 +25,7 @@ printed out
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Auth;

@@ -18,8 +18,7 @@
 # Routing Preview.pl script used to view a routing list after creation
 # lets one print out routing slip and create (in this instance) the heirarchy
 # of reserves for the serial
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Koha;
 use C4::Auth;

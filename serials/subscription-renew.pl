@@ -43,8 +43,7 @@ Id of the subscription this script has to renew
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Carp;
