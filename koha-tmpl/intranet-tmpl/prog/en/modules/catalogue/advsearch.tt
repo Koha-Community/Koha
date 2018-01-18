@@ -10,9 +10,10 @@
 [% INCLUDE 'adv-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Advanced search</div>
 
-<div id="doc" class="yui-t7">
-   <div id="bd">
-	
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+
 <form action="search.pl" method="get">
 <div id="advanced-search">
 <h1>Advanced search</h1>
@@ -96,7 +97,6 @@
 
 </div>
 <!-- MC-TYPE LIMITS -->
-    <div class="yui-g">
       <div id="advsearches" class="toptabs">
       <ul>
       [% FOREACH advsearchloo IN advancedsearchesloop %]
@@ -269,10 +269,10 @@
     </select>
         </p>
 </fieldset>
+</div>
 <!-- /RANK LIMITS -->
-</div>
-</div>
 </form>
+</div>
 </div>
 
 [% MACRO jsinclude BLOCK %]

@@ -113,7 +113,10 @@
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Item search
   </div>
 
-  <div id="doc" class="yui-t7">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+
     <div id="item-search-block">
       <h1>Item search</h1>
       <p><a href="/cgi-bin/koha/catalogue/search.pl">Go to advanced search</a></p>
@@ -191,9 +194,13 @@
           </fieldset>
       </form>
     </div>
+    </div>
   </div>
-  <div id="doc3" class="yui-t7">
+    <div class="row">
+        <div class="col-md-12">
       <div id="results-wrapper"></div>
+        </div>
+      </div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

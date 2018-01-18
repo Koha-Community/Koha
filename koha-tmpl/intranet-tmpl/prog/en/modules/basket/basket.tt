@@ -37,7 +37,10 @@
 </head>
 [% IF ( print_basket ) %]<body id="cart_basket" class="cart" onload="print();history.back();">[% ELSE %]<body id="cart_basket" class="cart">[% END %]
 
-<div id="doc" class="yui-t7">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
 <div class="container">
 [% UNLESS ( print_basket ) %]
 <h1>Your cart</h1>
@@ -285,7 +288,9 @@
     <input type="hidden" name="records" id="records" />
 </form>
 
-</div>
+            </div>
+        </div>
+    </div>
 </div>
             [% INCLUDE js_includes.inc %]
             [% UNLESS ( print_basket ) %]
