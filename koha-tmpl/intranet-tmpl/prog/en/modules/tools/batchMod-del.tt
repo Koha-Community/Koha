@@ -17,9 +17,8 @@
     <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch item deletion</a>
 </div>
 
-<div id="doc3" class="yui-t7">
-    <div id="bd">
-        <div id="yui-main">
+<div class="main container-fluid">
+
                 [% IF ( show ) %]<h1>Batch item deletion</h1>[% ELSE %]<h1>Batch item deletion results</h1>[% END %]
         [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
         [% IF ( no_next_barcode ) %]<div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div>[% END %]
@@ -182,7 +181,6 @@
         [% END %]
     </p>
 [% END %]
-    </div>
     </div>
 
 [% MACRO jsinclude BLOCK %]
