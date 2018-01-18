@@ -19,7 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
+use Modern::Perl;
+
 #use warnings; FIXME - Bug 2505
 use CGI q(-utf8);
 use C4::Output;

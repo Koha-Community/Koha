@@ -38,7 +38,7 @@ It need :
 
 =cut
 
-use strict;
+use Modern::Perl;
 
 #use warnings; FIXME - Bug 2505
 use C4::Auth;
