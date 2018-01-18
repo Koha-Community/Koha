@@ -32,8 +32,7 @@ The Proxy Ticket, needed for check_api_auth, that will try to make the CAS Serve
 =cut 
 
 use utf8;
-use strict;
-use warnings;
+use Modern::Perl;
 binmode(STDOUT, ":utf8");
 
 use C4::Auth qw(check_api_auth);

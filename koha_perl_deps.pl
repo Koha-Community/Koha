@@ -9,8 +9,7 @@ use lib $FindBin::Bin;
 
 use C4::Installer::PerlModules;
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 my $help = 0;
 my $missing = 0;

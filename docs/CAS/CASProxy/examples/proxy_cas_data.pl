@@ -30,8 +30,7 @@ This PGTIOU will allow us to retrive the matching PGTID
 
 =cut 
 
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use Authen::CAS::Client;
 use Storable qw(fd_retrieve);

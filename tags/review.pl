@@ -19,8 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use warnings;
-use strict;
+use Modern::Perl;
 use Data::Dumper;
 use POSIX;
 use CGI qw ( -utf8 );
