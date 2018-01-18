@@ -17,8 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Output;

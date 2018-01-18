@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Output;
 
