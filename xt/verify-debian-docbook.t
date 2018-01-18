@@ -20,9 +20,7 @@
 # This runs 'xmllint' (part of libxml2-utils) over each xml file that
 # generates the koha-common man pages and ensures they're correct.
 
-use strict;
-use warnings;
-
+use Modern::Perl;
 use Test::More qw(no_plan);
 
 my $doc_dir = 'debian/docs';

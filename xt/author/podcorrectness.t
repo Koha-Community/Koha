@@ -1,7 +1,5 @@
 #!/usr/bin/env perl
-use strict;
-use warnings;
-
+use Modern::Perl;
 =head2 podcorrectness.t
 
 This test file checks all perl modules in the C4 directory for POD
