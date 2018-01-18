@@ -6,9 +6,7 @@
 
 <body id="ser_result" class="ser">
 
-<div id="doc" class="yui-t7">
-   <div id="bd">
-	
+<div class="main container-fluid">
 
 [% IF ( total ) %]
 <h1>Search results from [% from %] to [% to %] of [% total %]</h1>
@@ -62,8 +60,6 @@
 
 <div id="closewindow"><a class="btn btn-default btn-default close" href="#">Close</a></div>
 
-</div>
-
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
         $(document).ready(function(){
@@ -82,4 +78,4 @@
     </script>
 [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
