@@ -32,8 +32,7 @@ this script is designed to show the spent amount in budgets
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use strict;
-use warnings;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 
 my $dbh      = C4::Context->dbh;

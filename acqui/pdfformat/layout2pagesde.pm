@@ -24,8 +24,7 @@
 package pdfformat::layout2pagesde;
 use vars qw(@ISA @EXPORT);
 use MIME::Base64;
-use strict;
-use warnings;
+use Modern::Perl;
 use utf8;
 
 use Koha::Number::Price;

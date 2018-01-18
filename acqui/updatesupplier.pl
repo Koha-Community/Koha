@@ -46,8 +46,7 @@ contact_serialsprimary.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use List::Util;
 use C4::Context;
 use C4::Auth;

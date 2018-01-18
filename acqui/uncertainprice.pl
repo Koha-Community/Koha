@@ -43,8 +43,7 @@ The bookseller who we want to display the orders of.
 =cut
 
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Auth;
 use C4::Output;

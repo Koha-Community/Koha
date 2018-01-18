@@ -21,8 +21,7 @@
 # but as all sites so far are single ordering ean its not clear what we should
 # replace it with
 #
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Auth;
 use C4::Koha;

@@ -54,8 +54,7 @@ To filter the results list on this given date.
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use C4::Auth;
 use C4::Acquisition;

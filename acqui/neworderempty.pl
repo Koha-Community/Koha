@@ -66,8 +66,7 @@ the item's id in the breeding reservoir
 
 =cut
 
-use warnings;
-use strict;
+use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Context;
 

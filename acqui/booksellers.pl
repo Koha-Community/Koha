@@ -51,8 +51,7 @@ The id of the supplier whose baskets we will display
 
 =cut
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Auth;
 use C4::Biblio;
 use C4::Budgets;
