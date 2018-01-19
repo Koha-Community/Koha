@@ -53,7 +53,7 @@
         <ul class="nav navbar-nav navbar-right">
             [% IF ( loggedinusername ) %]
             <li class="dropdown">
-                <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" id="logged-in-menu" role="button" class="dropdown-toggle" data-toggle="dropdown">
                     <span id="logged-in-info-brief">
                         <i class="fa fa-user"></i>
                     </span>
@@ -69,15 +69,15 @@
                                 [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
                                     NO LIBRARY SET
                                 [% ELSE %]
-                                    <span id="logged-in-branch-name">[% LoginBranchname %]</span>
-                                    <span id="logged-in-branch-code" class="content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
+                                    <span class="logged-in-branch-name">[% LoginBranchname %]</span>
+                                    <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
                                 [% END %]
                             </strong>
                         [% END %]
                     </span>
                     <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                <ul class="dropdown-menu" role="menu" aria-labelledby="logged-in-menu">
 
                     <li class="loggedin-menu-label">
                         Logged in as:<br />
@@ -93,8 +93,8 @@
                                 NO LIBRARY SET
                             [% ELSE %]
                                 Location: <br />
-                                <span id="logged-in-branch-name">[% LoginBranchname %]</span>
-                                <span id="logged-in-branch-code" class="content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
+                                <span class="logged-in-branch-name">[% LoginBranchname %]</span>
+                                <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode %]</span>
                             [% END %]
                         [% END %]
                     </li>
