@@ -86,6 +86,9 @@ sub is_testable {
     elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Search/xsm ) {
         @needed_module_names = ( 'Catmandu::Store::ElasticSearch' );
     }
+    elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch/xsm ) {
+        @needed_module_names = ( 'Search::Elasticsearch' );
+    }
     elsif ( $module_name =~ /^Koha::ExternalContent/xsm ) {
         @needed_module_names = ( 'WebService::ILS' );
     }
