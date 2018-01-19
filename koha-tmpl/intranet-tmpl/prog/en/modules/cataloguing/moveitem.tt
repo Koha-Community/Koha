@@ -1,12 +1,15 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Attach an item to [% bibliotitle | html %]</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; Attach an item to [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_moveitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle | html %][% IF ( itemsloo.subtitle ) %][% itemsloo.subtitle | html %][% END %]</i></div>
-<div id="doc" class="yui-t7">
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
 [% BLOCK actions %]
                         [% IF ( BiblioDefaultViewmarc ) %]
@@ -90,4 +93,8 @@
 	[% END %]
     [% END %]
 [% END %]
+
+    </div>
+</div>
+
 [% INCLUDE 'intranet-bottom.inc' %]

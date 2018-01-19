@@ -19,11 +19,9 @@ div#result { margin-top: 1em; }
 [% INCLUDE 'cataloging-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Merging records</div>
 
-<div id="doc" class="yui-t7">
-
-<div id="bd">
-        <div id="yui-main">
-
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
 <h1>Merging records</h1>
 [% IF ( result ) %]
@@ -158,12 +156,12 @@ div#result { margin-top: 1em; }
 <form id="mergeform" action="/cgi-bin/koha/cataloguing/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
 <div class="yui-g">
-<div class="yui-u first">
+<div class="col-sm-6">
 [% PROCESS mergesource sourcerecords=records %]
 </div>
-<div class="yui-u">
+<div class="col-sm-6">
 [% PROCESS mergetarget %]
-</div> <!-- .yui-u -->
+</div> <!-- .col-sm-6 -->
 
 <input type="hidden" name="ref_biblionumber" value="[% ref_biblionumber | html %]" />
 [% FOREACH record IN records %]
@@ -183,7 +181,6 @@ div#result { margin-top: 1em; }
 [% END %]
 [% END %]
 
-</div>
 </div>
 </div>
 
