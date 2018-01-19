@@ -17,7 +17,7 @@
                                 [% IF ( limit == 100 ) %]<option value ="100" selected="selected">100 titles</option>[% ELSE %]<option value="100">100 titles</option>[% END %]
                             </select></li>
 
-                [% UNLESS Branches.all.size == 1 %]
+                [% IF Branches.all.size > 1 %]
                 <li><label for="branch">From: </label>
                             <select name="branch" id="branch">
                                 <option value="">All libraries</option>
