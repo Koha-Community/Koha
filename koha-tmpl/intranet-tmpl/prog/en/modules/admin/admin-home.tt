@@ -10,13 +10,14 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Administration</div>
 
-<div id="doc" class="yui-t7">
-    <div id="bd">
-        <div id="yui-main" class="sysprefs">
-            <div class="yui-g"><h1>Koha administration</h1></div>
-            <div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-                <div class="yui-u first">
+        <h1>Koha administration</h1>
+        <div class="row">
+            <div class="col-md-6 sysprefs">
+
                 <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
                 <fieldset>
                     <h4><a href="/cgi-bin/koha/admin/preferences.pl">Global system preferences</a></h4>
@@ -67,7 +68,7 @@
                     </dl>
                 [% END %]
                 </div>
-                <div class="yui-u">
+                <div class="col-md-6 sysprefs">
                 <h3>Catalog</h3>
                 <dl>
                     <dt><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC bibliographic framework</a></dt>
@@ -134,4 +135,5 @@
         </div>
     </div>
 </div>
+
 [% INCLUDE 'intranet-bottom.inc' %]

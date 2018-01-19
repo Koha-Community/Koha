@@ -18,9 +18,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
 
-<div id="doc3" class="yui-t7">
-    <div id="bd">
-        <div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+
             <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
             <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
                 [% IF ( modify ) %]
@@ -33,7 +33,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                 <input type="hidden" name="irreg_check" value="0" />
 
                 <div id="page_1">
-                    <div class="yui-u first">
+                    <div class="col-md-6">
                         <fieldset id="subscription_add_information" class="rows">
                             <legend>Subscription details</legend>
                             <ol>
@@ -203,7 +203,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                 </div>
 
                 <div id="page_2">
-                    <div class="yui-u first">
+                    <div class="col-md-6">
                         <div id="subscription_form_planning">
                             <fieldset class="rows">
                                 <legend>Serials planning</legend>
@@ -357,7 +357,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         <table id="advancedpredictionpatternt">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="4">Advanced prediction pattern</td>
+                                                    <th colspan="4">Advanced prediction pattern</th>
                                                 </tr>
                                                 <tr>
                                                     <th>&nbsp;</th>
@@ -411,7 +411,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                 </tr>
                                                 <tr>
                                                     [% BLOCK numbering_select %]
-                                                        <select disabled="disabled" id="[% name %]" name="[% name %]" />
+                                                        <select disabled="disabled" id="[% name %]" name="[% name %]">
                                                             <option value=""></option>
                                                             <option value="dayname">Name of day</option>
                                                             <option value="dayabrv">Name of day (abbreviated)</option>
@@ -475,14 +475,12 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                             </fieldset>
                         </div>
                     </div>
-                    <div class="yui-u">
+                    <div class="col-md-6">
                         <li id="displayexample"></li>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

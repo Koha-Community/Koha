@@ -220,10 +220,17 @@
 </div>
 [% ELSE %]
 
-[% IF ( op_save ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+[% IF ( op_save ) %]
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+[% ELSE %]
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+[% END %]
+
 [% IF ( op_save ) %]
     <form id="add_edit" action="suggestion.pl" method="post" class="validated">
     <input type="hidden" name="redirect" id="redirect" value="[% redirect %]" />
