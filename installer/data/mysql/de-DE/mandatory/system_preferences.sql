@@ -28,7 +28,7 @@ UPDATE systempreferences SET value = '' WHERE variable = 'OpacNav';
 UPDATE systempreferences SET value = '' WHERE variable = 'OpacNavBottom';
 UPDATE systempreferences SET value = 
     '<li><a href="http://worldcat.org/search?q={TITLE}" target="_blank">Andere Bibliotheken (WorldCat)</a></li>
-    <li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Google Scholar</a></li>
+    <li><a href="https://scholar.google.com/scholar?q={TITLE}" target="_blank">Google Scholar</a></li>
     <li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Online-Buchhandel (Bookfinder.com)</a></li>' 
     WHERE variable = 'OPACSearchForTitleIn';
 -- Sunday = 0, Monday = 1, etc.
