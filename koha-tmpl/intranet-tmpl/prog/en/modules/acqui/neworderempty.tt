@@ -68,7 +68,7 @@
     </div>
 [% END %]
 
-<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform" onsubmit="return Check(this);">
+<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" class="validated" id="Aform" onsubmit="return Check(this);" >
 
     <fieldset class="rows">
         <legend>Patrons</legend>
@@ -121,8 +121,8 @@
                 <span class="label">Title</span>
                     <input type="hidden" name="title" value="[% title |html %]" /> <span class="title">[% title |html %]</span>
                 [% ELSE %]
-                <label for="entertitle" class="required">Title: </label>
-                    <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" />
+                <label for="entertitle">Title: </label>
+                    <input type="text" id="entertitle" size="50" name="title" value="[% title |html %]" class="focus" required="required" />
                     <span class="required">Required</span>
                 [% END %]
             </li>
@@ -545,11 +545,6 @@
 
             _alertString +="-------------------------------------------------------------------\n\n";
 
-            if ( isNull(ff.title,1)  &&  isNull(ff.entertitle,1)   ){
-                ok=1;
-                            _alertString += "\n- " + _("Title cannot be empty");
-            }
-
             if(isNull(ff.budget_id,1)){
                 ok=1;
                 _alertString += "\n- "+ _("You must select a fund");
@@ -707,20 +702,24 @@
 [% INCLUDE 'intranet-bottom.inc' %]
 
 [% BLOCK display_subfield %]
-    [% IF field.mandatory %]
-        <label class="required">[% field.lib %] ([% field.tag %][% field.subfield %])</label>
-    [% ELSE %]
-        <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
-    [% END %]
+    <label>[% field.lib %] ([% field.tag %][% field.subfield %])</label>
     [% IF field.authorised_value %]
         [% SWITCH field.authorised_value %]
         [% CASE 'branches' %]
+            [% IF field.mandatory %]
+            <select name="bib_field_value" required="required">
+            [% ELSE %]
             <select name="bib_field_value">
+            [% END %]
                 <option value=""></option>
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => "FIXME" ) %]
             </select>
         [% CASE 'itemtypes' %]
+            [% IF field.mandatory %]
+            <select name="bib_field_value" required="required">
+            [% ELSE %]
             <select name="bib_field_value">
+            [% END %]
                 <option value=""></option>
                 [% PROCESS options_for_itemtypes itemtypes => ItemTypes.Get(), selected_itemtype => "FIXME" %]
             </select>
@@ -729,7 +728,12 @@
             [% PROCESS 'av-build-dropbox.inc' name="bib_field_value", category=field.authorised_value, default="FIXME" %]
         [% END %]
     [% ELSE %]
-        <input type="text" name="bib_field_value" value="[% field.value %]" />
+        [% IF field.mandatory %]
+        <input type="text" name="bib_field_value" value="[% field.value %]" required="required"/>
+        [% ELSE %]
+        <input type="text" name="bib_field_value" value="[% field.value %]"/>
+        [% END %]
+
     [% END %]
     <input type="hidden" name="bib_kohafield" value="[% field.kohafield %]" />
     <input type="hidden" name="bib_tag" value="[% field.tag %]" />
