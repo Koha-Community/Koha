@@ -32,7 +32,7 @@ BEGIN {
 }
 
 use Getopt::Long;
-
+use Pod::Usage;
 use C4::Biblio;
 use C4::Items;
 use Koha::Database;
