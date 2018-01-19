@@ -25,7 +25,7 @@ UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'language';
 UPDATE systempreferences SET value = 'nb-NO' WHERE variable = 'opaclanguages';
 UPDATE systempreferences SET value = '<p>Velkommen til Koha...</p><hr />' WHERE variable = 'OpacMainUserBlock';
 UPDATE systempreferences SET value = '<p>Viktige lenker kan plasseres her</p>' WHERE variable = 'OpacNav';
-UPDATE systempreferences SET value = '<li><a href="http://worldcat.org/search?q={TITLE}" target="_blank">Andre bibliotek (WorldCat)</a></li><li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Andre databaser (Google Scholar)</a></li><li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Nettbutikker (Bookfinder.com)</a></li>' WHERE variable = 'OPACSearchForTitleIn';
+UPDATE systempreferences SET value = '<li><a href="http://worldcat.org/search?q={TITLE}" target="_blank">Andre bibliotek (WorldCat)</a></li><li><a href="https://scholar.google.com/scholar?q={TITLE}" target="_blank">Andre databaser (Google Scholar)</a></li><li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Nettbutikker (Bookfinder.com)</a></li>' WHERE variable = 'OPACSearchForTitleIn';
 -- Sunday = 0, Monday = 1, etc.
 UPDATE systempreferences SET value = '1' WHERE variable = 'CalendarFirstDayOfWeek';
 UPDATE systempreferences SET value = 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å' WHERE variable = 'alphabet';
