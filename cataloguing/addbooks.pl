@@ -37,6 +37,7 @@ use C4::Search;
 use Koha::BiblioFrameworks;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
+use Koha::Z3950Servers;
 
 my $input = new CGI;
 
@@ -133,16 +134,7 @@ for my $resultsbr (@resultsbr) {
     };
 }
 
-my $schema = Koha::Database->new()->schema();
-my $servers = $schema->resultset('Z3950server')->search(
-        {
-            recordtype => 'biblio',
-            servertype => ['zed', 'sru'],
-        },
-        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-            order_by     => ['rank', 'servername'],
-        },
-);
+my $servers = Koha::Z3950Servers->search();
 
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 $template->param(

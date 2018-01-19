@@ -37,6 +37,7 @@ use Koha::Authority::Types;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Token;
+use Koha::Z3950Servers;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -205,15 +206,14 @@ if ( $op eq '' ) {
 
 }
 
-my $schema = Koha::Database->new()->schema();
-my $servers = $schema->resultset('Z3950server')->search(
-        {
-            recordtype => 'authority',
-            servertype => ['zed', 'sru'],
-        },
-        {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-            order_by     => ['rank', 'servername'],
-        },
+my $servers = Koha::Z3950Servers->search(
+    {
+        recordtype => 'authority',
+        servertype => ['zed', 'sru'],
+    },
+    {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+        order_by     => ['rank', 'servername'],
+    },
 );
 
 $template->param(
