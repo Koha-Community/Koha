@@ -92,7 +92,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
                         from_address           => $admin_email_address,
                     }
                 );
-                unless ( C4::Members::GetNoticeEmailAddress( $patron->borrowernumber ) ) {
+                unless ( $patron->notice_email_address ) {
                     push @messages, {type => 'alert', code => 'no_email_address', };
                 }
                 push @messages, { type => 'message', code => 'letter_enqueued' };
