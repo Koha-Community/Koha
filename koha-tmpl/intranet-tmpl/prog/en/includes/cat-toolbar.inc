@@ -27,7 +27,7 @@
 	function addToShelf() {	window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=[% biblionumber %]','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
     function printBiblio() {window.print(); }
-[% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
+[% IF CAN_user_editcatalogue_edit_catalogue or CAN_user_editcatalogue_delete_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     function confirm_deletion() {
         var count = [% count %];
         var holdcount = [% holdcount %];
