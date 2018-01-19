@@ -15210,6 +15210,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18915 - Correct CHECKOUT_NOTE notice template)\n";
 }
 
+$DBversion = '17.12.00.006';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET value=replace(value, "http://www.scholar", "https://scholar") WHERE variable='OPACSearchForTitleIn';
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17682 - Update URL for Google Scholar in OPACSearchForTitleIn)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
