@@ -34,11 +34,11 @@
 [% IF ( bidi ) %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
 [% END %]
-[% IF ( OPACUserCSS ) %]<style type="text/css">[% OPACUserCSS %]</style>[% END %]
+[% IF ( OPACUserCSS ) %]<style>[% OPACUserCSS %]</style>[% END %]
 [% IF SCO_login %]
     [% SET SCOUserCSS = Koha.Preference('SCOUserCSS') %]
     [% IF SCOUserCSS %]
-        <style type="text/css">[% SCOUserCSS %]</style>
+        <style>[% SCOUserCSS %]</style>
     [% END %]
 [% END %]
 <link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL %]/cgi-bin/koha/unapi" />
