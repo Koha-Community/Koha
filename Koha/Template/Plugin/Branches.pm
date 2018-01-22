@@ -66,7 +66,7 @@ sub all {
 
     for my $l ( @$libraries ) {
         if (       defined $selected and $l->{branchcode} eq $selected
-            or not defined $selected and C4::Context->userenv and $l->{branchcode} eq C4::Context->userenv->{branch}
+            or not defined $selected and C4::Context->userenv and $l->{branchcode} eq ( C4::Context->userenv->{branch} // q{} )
         ) {
             $l->{selected} = 1;
         }
