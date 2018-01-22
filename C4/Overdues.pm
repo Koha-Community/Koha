@@ -589,7 +589,26 @@ sub UpdateFine {
             my $accountline = Koha::Account::Lines->find( $data->{accountlines_id} );
             my $diff = $amount - $data->{'amount'};
 
-            #3341: diff could be positive or negative!
+            # 3341: diff could be positive or negative!
+
+	    # Negative diff implies that the borrower has paid (some amount of) FU-type fee
+	    # at some point. What happens is this:
+
+	    # 1) Old amountoutstanding of the fee + increment becomes the new amount, whis is what
+	    #    gets passed to this sub
+
+	    # 2) diff is calculated dy deducting old amount from the new amount, which will cause
+	    #    diff to be negative if old amount is greater than new amount (happens if the
+	    #    the fine originally came from KS3.16 and the item is overdue again)
+
+            # 3) new amountoutstanding is calculated by adding new diff to old amountoutstanding,
+	    #    also making amountoutstanding end up negative
+
+	    # We don't generally want negative diffs, so if the diff would turn negative,
+	    # calculate it again using the new amount - old amountoutstanding:
+
+            $diff = $amount - $data->{'amountoutstanding'} if ($diff < 0); 
+
             my $out   = $data->{'amountoutstanding'} + $diff;
 
             $accountline->set(
