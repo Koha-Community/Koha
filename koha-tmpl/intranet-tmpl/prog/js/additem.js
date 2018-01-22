@@ -42,7 +42,7 @@ function addMulti( count, node, unique_item_fields){
                         $("#multiValue").val('');
                         $('#'+index).appendTo('#outeritemblock');
                         $('#'+index).show();
-                        $('#'+index + ' #add_multiple_copies' ).css("visibility","hidden");
+                        $('#'+index + ' #add_multiple_copies' ).css("display","none");
                         $("#procModal").modal('hide');
                     }
             });
