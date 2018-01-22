@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 8;
 use t::lib::TestBuilder;
 use DateTime;
 use File::Spec;
@@ -30,155 +30,233 @@ my $scriptDir = dirname(File::Spec->rel2abs( __FILE__ ));
 
 my $dbh = C4::Context->dbh;
 
-# Set only to avoid exception.
-$ENV{"OVERRIDE_SYSPREF_dateformat"} = 'metric';
+my $library1;
+my $library2;
+my $library3;
+my $borrower;
 
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+sub build_test_objects {
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
 
-my $builder = t::lib::TestBuilder->new;
+    # Set only to avoid exception.
+    $ENV{"OVERRIDE_SYSPREF_dateformat"} = 'metric';
 
-my $library1 = $builder->build({
-    source => 'Branch',
-});
-my $library2 = $builder->build({
-    source => 'Branch',
-});
-my $library3 = $builder->build({
-    source => 'Branch',
-});
-my $borrower = $builder->build({
-    source => 'Borrower',
-    value => {
-        branchcode => $library1->{branchcode},
-    }
-});
-$dbh->do(<<DELETESQL);
+    my $builder = t::lib::TestBuilder->new;
+
+    $library1 = $builder->build({
+        source => 'Branch',
+    });
+    $library2 = $builder->build({
+        source => 'Branch',
+    });
+    $library3 = $builder->build({
+        source => 'Branch',
+    });
+    $borrower = $builder->build({
+        source => 'Borrower',
+        value => {
+            branchcode => $library1->{branchcode},
+        }
+    });
+    $dbh->do(<<DELETESQL);
 DELETE FROM letter
  WHERE module='circulation'
    AND code = 'PREDUEDGST'
    AND message_transport_type='email'
    AND branchcode=''
 DELETESQL
-$dbh->do(<<DELETESQL);
+
+    $dbh->do(<<DELETESQL);
 DELETE FROM message_attributes WHERE message_name = 'Advance_Notice'
 DELETESQL
 
-my $message_attribute = $builder->build({
-    source => 'MessageAttribute',
-    value => {
-        message_name => 'Advance_Notice'
-    }
-});
+    my $message_attribute = $builder->build({
+        source => 'MessageAttribute',
+        value => {
+            message_name => 'Advance_Notice'
+        }
+    });
 
-my $letter = $builder->build({
-    source => 'Letter',
-    value => {
-        module => 'circulation',
-        code => 'PREDUEDGST',
-        branchcode => '',
-        message_transport_type => 'email',
-        lang => 'default',
-        is_html => 0,
-        content => '<<count>> <<branches.branchname>>'
-    }
-});
-my $borrower_message_preference = $builder->build({
-    source => 'BorrowerMessagePreference',
-    value => {
-        borrowernumber => $borrower->{borrowernumber},
-        wants_digest => 1,
-        days_in_advance => 1,
-        message_attribute_id => $message_attribute->{message_attribute_id}
-    }
-});
+    my $letter = $builder->build({
+        source => 'Letter',
+        value => {
+            module => 'circulation',
+            code => 'PREDUEDGST',
+            branchcode => '',
+            message_transport_type => 'email',
+            lang => 'default',
+            is_html => 0,
+            content => '<<count>> <<branches.branchname>>'
+        }
+    });
+    my $borrower_message_preference = $builder->build({
+        source => 'BorrowerMessagePreference',
+        value => {
+            borrowernumber => $borrower->{borrowernumber},
+            wants_digest => 1,
+            days_in_advance => 1,
+            message_attribute_id => $message_attribute->{message_attribute_id}
+        }
+    });
 
-my $borrower_message_transport_preference = $builder->build({
-    source => 'BorrowerMessageTransportPreference',
-    value => {
-        borrower_message_preference_id => $borrower_message_preference->{borrower_message_preference_id},
-        message_transport_type => 'email'
-    }
-});
+    my $borrower_message_transport_preference = $builder->build({
+        source => 'BorrowerMessageTransportPreference',
+        value => {
+            borrower_message_preference_id => $borrower_message_preference->{borrower_message_preference_id},
+            message_transport_type => 'email'
+        }
+    });
 
-my $biblio = $builder->build({
-    source => 'Biblio',
-});
-my $biblioitem = $builder->build({
-    source => 'Biblioitem',
-    value => {
-        biblionumber => $biblio->{biblionumber}
-    }
-});
-my $item1 = $builder->build({
-    source => 'Item'
-});
-my $item2 = $builder->build({
-    source => 'Item'
-});
-my $now = DateTime->now();
-my $tomorrow = $now->add(days => 1)->strftime('%F');
+    my $biblio = $builder->build({
+        source => 'Biblio',
+    });
+    my $biblioitem = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio->{biblionumber}
+        }
+    });
+    my $item1 = $builder->build({
+        source => 'Item'
+    });
+    my $item2 = $builder->build({
+        source => 'Item'
+    });
+    my $item3 = $builder->build({
+        source => 'Item'
+    });
+    my $now = DateTime->now();
+    my $tomorrow = $now->add(days => 1)->strftime('%F');
 
-my $issue1 = $builder->build({
-    source => 'Issue',
-    value => {
-        date_due => $tomorrow,
-        itemnumber => $item1->{itemnumber},
-        branchcode => $library1->{branchcode},
-        borrowernumber => $borrower->{borrowernumber},
-        returndate => undef
-    }
-});
+    my $issue1 = $builder->build({
+        source => 'Issue',
+        value => {
+            date_due => $tomorrow,
+            itemnumber => $item1->{itemnumber},
+            branchcode => $library2->{branchcode},
+            borrowernumber => $borrower->{borrowernumber},
+            returndate => undef
+        }
+    });
 
-my $issue2 = $builder->build({
-    source => 'Issue',
-    value => {
-        date_due => $tomorrow,
-        itemnumber => $item2->{itemnumber},
-        branchcode => $library2->{branchcode},
-        branchcode => $library3->{branchcode},
-        borrowernumber => $borrower->{borrowernumber},
-        returndate => undef
-    }
-});
+    my $issue2 = $builder->build({
+        source => 'Issue',
+        value => {
+            date_due => $tomorrow,
+            itemnumber => $item2->{itemnumber},
+            branchcode => $library3->{branchcode},
+            borrowernumber => $borrower->{borrowernumber},
+            returndate => undef
+        }
+                                 });
+    my $issue3 = $builder->build({
+        source => 'Issue',
+        value => {
+            date_due => $tomorrow,
+            itemnumber => $item3->{itemnumber},
+            branchcode => $library3->{branchcode},
+            borrowernumber => $borrower->{borrowernumber},
+            returndate => undef
+        }
+    });
 
-C4::Context->set_preference('EnhancedMessagingPreferences', 1);
+    C4::Context->set_preference('EnhancedMessagingPreferences', 1);
+}
 
-my $script = '';
+sub run_script {
+    my $script = shift;
+    local @ARGV = @_;
+
+    ## no critic
+
+    # We simulate script execution by evaluating the script code in the context
+    # of this unit test.
+
+    eval $script; #Violates 'ProhibitStringyEval'
+
+    ## use critic
+
+    die $@ if $@;
+}
+
+my $scriptContent = '';
 my $scriptFile = "$scriptDir/../../../misc/cronjobs/advance_notices.pl";
 open my $scriptfh, "<", $scriptFile or die "Failed to open $scriptFile: $!";
 
 while (<$scriptfh>) {
-    $script .= $_;
+    $scriptContent .= $_;
 }
 close $scriptfh;
 
-@ARGV = ('advanced_notices.pl', '-c');
-
-## no critic
-
-# We simulate script execution by evaluating the script code in the context
-# of this unit test.
-
-eval $script; #Violates 'ProhibitStringyEval'
-
-## use critic
-
-die $@ if $@;
-
 my $sthmq = $dbh->prepare('SELECT * FROM message_queue WHERE borrowernumber = ?');
+
+#
+# Test default behavior
+#
+
+build_test_objects();
+
+run_script($scriptContent, 'advanced_notices.pl', '-c');
+
 $sthmq->execute($borrower->{borrowernumber});
 
 my $messages = $sthmq->fetchall_hashref('message_id');
 
 is(scalar(keys %$messages), 1, 'There is one message in the queue');
+
 for my $message (keys %$messages) {
     $messages->{$message}->{content} =~ /(\d+) (.*)/;
     my $count = $1;
     my $branchname = $2;
 
-    is ($count, '2', 'Issue count is 2');
+    is ($count, '3', 'Issue count is 3');
     is ($branchname, $library1->{branchname}, 'Branchname is that of borrowers home branch.');
+}
+
+$dbh->rollback;
+
+#
+# Test -digest-per-branch
+#
+
+build_test_objects();
+
+run_script($scriptContent, 'advanced_notices.pl', '-c', '-digest-per-branch');
+
+$sthmq->execute($borrower->{borrowernumber});
+
+$messages = $sthmq->fetchall_hashref('message_id');
+
+is(scalar(keys %$messages), 2, 'There are two messages in the queue');
+
+my %expected = (
+    $library2->{branchname} => {
+        count => 1,
+    },
+    $library3->{branchname} => {
+        count => 2,
+    }
+ );
+
+my %expected_branchnames = (
+    $library2->{branchname} => 1,
+    $library3->{branchname} => 1
+);
+
+my $i = 0;
+for my $message (keys %$messages) {
+    $messages->{$message}->{content} =~ /(\d+) (.*)/;
+    my $count = $1;
+    my $branchname = $2;
+
+    ok ($expected_branchnames{$branchname}, 'Branchname is that of expected issuing branch.');
+
+    $expected_branchnames{$branchname} = 0;
+
+    is ($count, $expected{$branchname}->{count}, 'Issue count is ' . $expected{$branchname}->{count});
+
+    $i++;
 }
 
 $dbh->rollback;
