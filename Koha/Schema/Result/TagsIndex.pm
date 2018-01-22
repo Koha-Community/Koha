@@ -28,7 +28,7 @@ __PACKAGE__->table("tags_index");
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 0
-  size: 255
+  size: 191
 
 =head2 biblionumber
 
@@ -46,7 +46,7 @@ __PACKAGE__->table("tags_index");
 
 __PACKAGE__->add_columns(
   "term",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 191 },
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "weight",
@@ -100,8 +100,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LCvvyig+memFWmWUdCStXQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-01-18 08:31:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ewTrnc9D1jcoyf65+MrSGQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

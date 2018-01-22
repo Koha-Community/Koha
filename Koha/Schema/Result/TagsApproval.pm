@@ -27,7 +27,7 @@ __PACKAGE__->table("tags_approval");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 255
+  size: 191
 
 =head2 approved
 
@@ -57,7 +57,7 @@ __PACKAGE__->table("tags_approval");
 
 __PACKAGE__->add_columns(
   "term",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 191 },
   "approved",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "date_approved",
@@ -122,8 +122,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:V6O4TG3vfkRovbGgNP3HmA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-01-18 08:31:57
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4cvTasSpJ2c1vvVVe/R3UQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
