@@ -67,22 +67,27 @@ my $koha_news_count = scalar @$all_koha_news;
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
 
 # For dashboard
-my $checkouts = Koha::Checkouts->search({ borrowernumber => $borrowernumber })->count;
-my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
-my $holds_pending = Koha::Holds->search({ borrowernumber => $borrowernumber, found => undef })->count;
-my $holds_waiting = Koha::Holds->search({ borrowernumber => $borrowernumber })->waiting->count;
-my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+if ( defined $borrowernumber ){
+    my $checkouts = Koha::Checkouts->search({ borrowernumber => $borrowernumber })->count;
+    my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
+    my $holds_pending = Koha::Holds->search({ borrowernumber => $borrowernumber, found => undef })->count;
+    my $holds_waiting = Koha::Holds->search({ borrowernumber => $borrowernumber })->waiting->count;
+    my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
-if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 ) {
-    $template->param( dashboard_info => 1 );
+    if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 ) {
+        $template->param( dashboard_info => 1 );
+    }
+
+    $template->param(
+        checkouts           => $checkouts,
+        overdues            => $overdues_count,
+        holds_pending       => $holds_pending,
+        holds_waiting       => $holds_waiting,
+        total_owing         => $total,
+    );
 }
 
 $template->param(
-    checkouts           => $checkouts,
-    overdues            => $overdues_count,
-    holds_pending       => $holds_pending,
-    holds_waiting       => $holds_waiting,
-    total_owing         => $total,
     koha_news           => $all_koha_news,
     koha_news_count     => $koha_news_count,
     branchcode          => $homebranch,
