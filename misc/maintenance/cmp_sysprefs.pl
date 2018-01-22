@@ -217,7 +217,7 @@ sub InsertIgnoreOnePref {
 
 sub UpdateOnePref {
     my ( $k, $v ) = @_;
-    return if lc $k eq 'version';
+    return 0 if lc $k eq 'version';
     my $i = $dbh->do( 'UPDATE systempreferences SET value=? WHERE variable=?', undef, ( $v, $k ) );
     return !defined($i) || $i eq '0E0'? 0: $i;
 }
