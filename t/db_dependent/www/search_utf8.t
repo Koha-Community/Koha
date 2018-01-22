@@ -55,6 +55,11 @@ my $file2 =
   ? "$testdir/data/unimarclatin1utf8rec.mrc"
   : "$testdir/data/marc21latin1utf8rec.mrc";
 
+my $file3 =
+  $marcflavour eq 'UNIMARC'
+  ? "$testdir/data/unimarcutf8supprec.mrc"
+  : "$testdir/data/marc21utf8supprec.mrc";
+
 my $user     = $ENV{KOHA_USER} || $xml->{config}->{user};
 my $password = $ENV{KOHA_PASS} || $xml->{config}->{pass};
 my $intranet = $ENV{KOHA_INTRANET_URL};
@@ -70,7 +75,7 @@ elsif ( not defined $opac ) {
    plan skip_all => "Tests skip. You must set env. variable KOHA_OPAC_URL to do tests\n";
 }
 else {
-    plan tests => 66;
+    plan tests => 99;
 }
 
 $intranet =~ s#/$##;
@@ -104,6 +109,17 @@ if ( not defined $indexer_pid ) {
 my $utf8_reg2 = qr/Tòmas/;
 test_search($file2,'Ramòn', 'Tòmas',$utf8_reg2);
 
+#--------------------------------- Test with supplementary utf-8 chars;
+launch_zebra( $datadir, $koha_conf );
+if ( not defined $zebra_pid ) {
+    plan skip_all => "Tests skip. Error starting Zebra Server to do those tests\n";
+}
+launch_indexer( );
+if ( not defined $indexer_pid ) {
+    plan skip_all => "Tests skip. Error starting the indexer daemon to do those tests\n";
+}
+my $utf8_reg3 = qr/😀/;
+test_search($file3, "𠻺tomasito𠻺", 'A tiny record', $utf8_reg3);
 
 sub test_search{
     #Params

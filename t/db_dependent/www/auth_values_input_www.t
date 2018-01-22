@@ -49,7 +49,7 @@ elsif (not defined $intranet) {
     plan skip_all => "Tests skip. You must set env. variable KOHA_INTRANET_URL to do tests\n";
 }
 else {
-    plan tests => 33;
+    plan tests => 34;
 }
 
 my $dbh = C4::Context->dbh;
@@ -71,9 +71,9 @@ $agent->field( 'branch',   '' );
 $agent->click_ok( '', 'login to staff client' );
 $agent->get_ok( "$intranet/cgi-bin/koha/mainpage.pl", 'load main page' );
 
-#--------------------------------------------------- Test with corean and greek chars
+#---------------------------------------- Test with corean, greek and emoji chars
 
-$category = '学協会μμ';
+$category = '学協会μμ😀';
 $dbh->do(q|DELETE FROM authorised_values WHERE category = ?|, undef, $category);
 $dbh->do(q|DELETE FROM authorised_value_categories WHERE category_name = ?|, undef, $category);
 
@@ -123,6 +123,7 @@ my $text = $agent->text() ;
 ok ( ( length(Encode::encode('UTF-8', $text)) != length($text) ) , 'UTF-8 are multi-byte. Good') ;
 ok ($text =~  m/学協会μμ/, 'UTF-8 (Asia) chars are correctly present. Good');
 ok ($text =~  m/επιμεq/, 'UTF-8 (Greek) chars are correctly present. Good');
+ok ($text =~  m/😀/, 'UTF-8 (emoji) chars are correctly present. Good');
 my @links = $agent->links;
 my $id_to_del ='';
 $delete_re = q|op=delete\&searchfield=| . uri_escape_utf8($category) . '\&id=(\d+)';
