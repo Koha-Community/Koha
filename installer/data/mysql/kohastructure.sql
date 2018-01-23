@@ -1349,7 +1349,7 @@ CREATE TABLE `printers` (
   `printername` varchar(40) NOT NULL default '',
   `printqueue` varchar(20) default NULL,
   `printtype` varchar(20) default NULL,
-  PRIMARY KEY  (`printername`)
+  PRIMARY KEY (`printername`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1441,7 +1441,7 @@ CREATE TABLE saved_reports (
    `report_id` int(11) default NULL,
    `report` longtext,
    `date_run` datetime default NULL,
-   PRIMARY KEY  (`id`)
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1455,7 +1455,7 @@ CREATE TABLE `search_field` (
   `label` varchar(255) NOT NULL COMMENT 'the human readable name of the field, for display',
   `type` ENUM('', 'string', 'date', 'number', 'boolean', 'sum') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`name` (191) )
+  UNIQUE KEY (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1474,7 +1474,7 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
   KEY `userid` (`userid`),
   KEY `sessionid` (`sessionid`),
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Opac search history results';
 
 --
@@ -1488,7 +1488,7 @@ CREATE TABLE `search_marc_map` (
   marc_type ENUM('marc21', 'unimarc', 'normarc') NOT NULL COMMENT 'what MARC type this map is for',
   marc_field VARCHAR(255) NOT NULL COMMENT 'the MARC specifier for this field',
   PRIMARY KEY(`id`),
-  UNIQUE key(index_name, marc_field(191), marc_type),
+  UNIQUE key `index_name` (`index_name`, `marc_field` (191), `marc_type`),
   INDEX (`index_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1529,7 +1529,7 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
   `claimdate` date default NULL, -- date claimed
   claims_count int(11) default 0, -- number of claims made related to this issue
   `routingnotes` text, -- notes from the routing list
-  PRIMARY KEY  (`serialid`)
+  PRIMARY KEY (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
