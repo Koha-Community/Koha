@@ -472,6 +472,7 @@ sub get_template_and_user {
             UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
             useDischarge                                                               => C4::Context->preference('useDischarge'),
+            KOHA_VERSION                                                               => C4::Context->preference('Version'),
         );
     }
     else {
@@ -545,6 +546,7 @@ sub get_template_and_user {
             OpacTopissue                          => C4::Context->preference("OpacTopissue"),
             RequestOnOpac                         => C4::Context->preference("RequestOnOpac"),
             'Version'                             => C4::Context->preference('Version'),
+            KOHA_VERSION                          => C4::Context->preference('Version'),
             hidelostitems                         => C4::Context->preference("hidelostitems"),
             mylibraryfirst                        => ( C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv ) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet                  => "" . C4::Context->preference("opaclayoutstylesheet"),
