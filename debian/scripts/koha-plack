@@ -93,6 +93,11 @@ start_plack()
              --error-log /var/log/koha/${instancename}/plack-error.log"
     max_requests_and_workers="--max-requests ${PLACK_MAX_REQUESTS} --workers ${PLACK_WORKERS}"
 
+    if [ "$DEV_INSTALL" = "1" ]; then
+        # Maybe we should switch off debug_mode if DEV_INSTALL is not set?
+        environment="development"
+    fi
+
     if [ "$debug_mode" = "yes" ]; then
         environment="development"
         daemonize=""
