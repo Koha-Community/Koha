@@ -16,6 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use DateTime;
 
 use C4::Circulation;
 use Koha::Database;
@@ -41,6 +42,10 @@ $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do('DELETE FROM borrowers');
 $dbh->do('DELETE FROM items');
+
+my $now_value       = DateTime->now();
+my $mocked_datetime = Test::MockModule->new('DateTime');
+$mocked_datetime->mock( 'now', sub { return $now_value; } );
 
 my $library  = $builder->build( { source => 'Branch' } );
 my $category = $builder->build( { source => 'Category' } );
