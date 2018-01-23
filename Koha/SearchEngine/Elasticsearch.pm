@@ -34,8 +34,6 @@ use Search::Elasticsearch;
 use Try::Tiny;
 use YAML::Syck;
 
-use Data::Dumper;    # TODO remove
-
 __PACKAGE__->mk_ro_accessors(qw( index ));
 __PACKAGE__->mk_accessors(qw( sort_fields ));
 
@@ -137,24 +135,14 @@ A hashref containing the settings is returned.
 sub get_elasticsearch_settings {
     my ($self) = @_;
 
-    # Ultimately this should come from a file or something, and not be
-    # hardcoded.
-    my $settings = {
-        index => {
-            analysis => {
-                analyzer => {
-                    analyser_phrase => {
-                        tokenizer => 'icu_tokenizer',
-                        filter    => ['icu_folding'],
-                    },
-                    analyser_standard => {
-                        tokenizer => 'icu_tokenizer',
-                        filter    => ['icu_folding'],
-                    },
-                },
-            }
-        }
-    };
+    # Use state to speed up repeated calls
+    state $settings = undef;
+    if (!defined $settings) {
+        my $config_file = C4::Context->config('elasticsearch_index_config');
+        $config_file ||= C4::Context->config('intranetdir') . '/etc/searchengine/elasticsearch/index_config.yaml';
+        $settings = LoadFile( $config_file );
+    }
+
     return $settings;
 }
 
@@ -170,116 +158,97 @@ created.
 sub get_elasticsearch_mappings {
     my ($self) = @_;
 
-    # TODO cache in the object?
-    my $mappings = {
-        data => {
-            _all => {type => "string", analyzer => "analyser_standard"},
-            properties => {
-                record => {
-                    store          => "true",
-                    include_in_all => JSON::false,
-                    type           => "text",
-                },
-            }
-        }
-    };
-    my %sort_fields;
-    my $marcflavour = lc C4::Context->preference('marcflavour');
-    $self->_foreach_mapping(
-        sub {
-            my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
-            return if $marc_type ne $marcflavour;
-            # TODO if this gets any sort of complexity to it, it should
-            # be broken out into its own function.
+    # Use state to speed up repeated calls
+    state %all_mappings;
+    state %sort_fields;
 
-            # TODO be aware of date formats, but this requires pre-parsing
-            # as ES will simply reject anything with an invalid date.
-            my $es_type =
-              $type eq 'boolean'
-              ? 'boolean'
-              : 'text';
+    if (!defined $all_mappings{$self->index}) {
+        $sort_fields{$self->index} = {};
+        my $mappings = {
+            data => _get_elasticsearch_mapping('general', '')
+        };
+        my $marcflavour = lc C4::Context->preference('marcflavour');
+        $self->_foreach_mapping(
+            sub {
+                my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
+                return if $marc_type ne $marcflavour;
+                # TODO if this gets any sort of complexity to it, it should
+                # be broken out into its own function.
 
-            if ($es_type eq 'boolean') {
-                $mappings->{data}{properties}{$name} = _elasticsearch_mapping_for_boolean( $name, $es_type, $facet, $suggestible, $sort, $marc_type );
-                return; #Boolean cannot have facets nor sorting nor suggestions
-            } else {
-                $mappings->{data}{properties}{$name} = _elasticsearch_mapping_for_default( $name, $es_type, $facet, $suggestible, $sort, $marc_type );
-            }
+                # TODO be aware of date formats, but this requires pre-parsing
+                # as ES will simply reject anything with an invalid date.
+                my $es_type = 'text';
+                if ($type eq 'boolean') {
+                    $es_type = 'boolean';
+                } elsif ($type eq 'number' || $type eq 'sum') {
+                    $es_type = 'integer';
+                } elsif ($type eq 'isbn' || $type eq 'stdno') {
+                    $es_type = 'stdno';
+                }
 
-            if ($facet) {
-                $mappings->{data}{properties}{ $name . '__facet' } = {
-                    type  => "keyword",
-                };
+                $mappings->{data}{properties}{$name} = _get_elasticsearch_mapping('search', $es_type);
+
+                if ($facet) {
+                    $mappings->{data}{properties}{ $name . '__facet' } = _get_elasticsearch_mapping('facet', $es_type);
+                }
+                if ($suggestible) {
+                    $mappings->{data}{properties}{ $name . '__suggestion' } = _get_elasticsearch_mapping('suggestible', $es_type);
+                }
+                # Sort is a bit special as it can be true, false, undef.
+                # We care about "true" or "undef",
+                # "undef" means to do the default thing, which is make it sortable.
+                if (!defined $sort || $sort) {
+                    $mappings->{data}{properties}{ $name . '__sort' } = _get_elasticsearch_mapping('sort', $es_type);
+                    $sort_fields{$self->index}{$name} = 1;
+                }
             }
-            if ($suggestible) {
-                $mappings->{data}{properties}{ $name . '__suggestion' } = {
-                    type => 'completion',
-                    analyzer => 'simple',
-                    search_analyzer => 'simple',
-                };
-            }
-            # Sort is a bit special as it can be true, false, undef.
-            # We care about "true" or "undef",
-            # "undef" means to do the default thing, which is make it sortable.
-            if ($sort || !defined $sort) {
-                $mappings->{data}{properties}{ $name . '__sort' } = {
-                    search_analyzer => "analyser_phrase",
-                    analyzer  => "analyser_phrase",
-                    type            => "text",
-                    include_in_all  => JSON::false,
-                    fields          => {
-                        phrase => {
-                            type            => "keyword",
-                        },
-                    },
-                };
-                $sort_fields{$name} = 1;
-            }
-        }
-    );
-    $self->sort_fields(\%sort_fields);
-    return $mappings;
+        );
+        $all_mappings{$self->index} = $mappings;
+    }
+    $self->sort_fields(\%{$sort_fields{$self->index}});
+
+    return $all_mappings{$self->index};
 }
 
-=head2 _elasticsearch_mapping_for_*
+=head2 _get_elasticsearch_mapping
 
-Get the ES mappings for the given data type or a special mapping case
+Get the ES mappings for the given purpose and data type
 
-Receives the same parameters from the $self->_foreach_mapping() dispatcher
+$mapping = _get_elasticsearch_mapping('search', 'text');
 
 =cut
 
-sub _elasticsearch_mapping_for_boolean {
-    my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
+sub _get_elasticsearch_mapping {
 
-    return {
-        type            => $type,
-        null_value      => 0,
-    };
-}
+    my ( $purpose, $type ) = @_;
 
-sub _elasticsearch_mapping_for_default {
-    my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
+    # Use state to speed up repeated calls
+    state $settings = undef;
+    if (!defined $settings) {
+        my $config_file = C4::Context->config('elasticsearch_field_config');
+        $config_file ||= C4::Context->config('intranetdir') . '/etc/searchengine/elasticsearch/field_config.yaml';
+        $settings = LoadFile( $config_file );
+    }
 
-    return {
-        search_analyzer => "analyser_standard",
-        analyzer        => "analyser_standard",
-        type            => $type,
-        fields          => {
-            phrase => {
-                search_analyzer => "analyser_phrase",
-                analyzer        => "analyser_phrase",
-                type            => "text",
-            },
-            raw => {
-                type    => "keyword",
-            }
-        },
-    };
+    if (!defined $settings->{$purpose}) {
+        die "Field purpose $purpose not defined in field config";
+    }
+    if ($type eq '') {
+        return $settings->{$purpose};
+    }
+    if (defined $settings->{$purpose}{$type}) {
+        return $settings->{$purpose}{$type};
+    }
+    if (defined $settings->{$purpose}{'default'}) {
+        return $settings->{$purpose}{'default'};
+    }
+    return undef;
 }
 
 sub reset_elasticsearch_mappings {
-    my $mappings_yaml = C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
+    my ( $reset_fields ) = @_;
+    my $mappings_yaml = C4::Context->config('elasticsearch_index_mappings');
+    $mappings_yaml ||= C4::Context->config('intranetdir') . '/etc/searchengine/elasticsearch/mappings.yaml';
     my $indexes = LoadFile( $mappings_yaml );
 
     while ( my ( $index_name, $fields ) = each %$indexes ) {
