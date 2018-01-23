@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-12-18 09:51-0300\n"
-"PO-Revision-Date: 2017-06-19 18:37+0000\n"
-"Last-Translator: zhamar <zhamarusa@gmail.com>\n"
+"PO-Revision-Date: 2017-12-30 10:26+0000\n"
+"Last-Translator: Scherlac <Scherlac@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1497897444.000000\n"
+"X-POOTLE-MTIME: 1514629563.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -25,7 +25,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
 #, c-format
 msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr " %s Korlátozásra került sor a késedelmek folytán %s %s %s %s "
+msgstr "\" %s Korlátozásra került sor a késedelmek folytán %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -555,9 +555,9 @@ msgid ""
 "%s Checked out (%s), %s %s Withdrawn (%s), %s %s%s Lost (%s),%s%s %s Damaged "
 "(%s),%s %s On order (%s),%s %s On hold (%s),%s %s In transit (%s),%s "
 msgstr ""
-"%s Kikölcsönözve (%s), %s %s Visszavonva (%s), %s %s%s Elveszett (%s),%s %s "
-"%s Sérült (%s),%s %s Megrendelve (%s),%s %s  Előjegyezve (%s),%s %s "
-"Szállítás alatt (%s),%s "
+"%s Kikölcsönözve (%s), %s %s Visszavonva (%s), %s %s%s Elveszett (%s),%s %s %"
+"s Sérült (%s),%s %s Megrendelve (%s),%s %s Előjegyezve (%s),%s %s Szállítás "
+"alatt (%s),%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -593,9 +593,11 @@ msgstr "%s Internetes felhasználói kritika"
 #. %1$s:  IF not(Koha.Preference("AllowCheckoutNotes")) 
 #. %2$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "%s Issue notes have not been enabled. Please contact the library. %s "
-msgstr "Elérhetõ a könyvtárban:"
+msgstr ""
+"%s Megjegyzés a kiadáshoz nincs engedélyezve. Kérjük, lépjen kapcsolatba a "
+"könyvtárral. %s "
 
 #. %1$s:  ELSE 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
@@ -619,10 +621,12 @@ msgstr "%s Cikk igénylés, ezen bejegyzés alapján, nem lehetséges. %s "
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
-msgstr "%s Nem megújítható %s Automatikus meghosszabbítás  "
+msgstr ""
+"%s Nem megújítható %s Automatikus meghosszabbítás sikertelen, korábbi "
+"késedelmek miatt. "
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
@@ -670,7 +674,7 @@ msgstr "%s Nem megújítható %s Nem engedélyezett "
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #, c-format
 msgid "%s On hold %s No renewals left %s "
-msgstr "%s Előjegyezve %s Nincs lehetőség újabb meghosszabbításra %s  "
+msgstr "%s Előjegyezve %s Nincs lehetőség újabb meghosszabbításra %s "
 
 #. %1$s:  IF ( passwords_mismatch ) 
 #. %2$s:  END 
@@ -771,18 +775,16 @@ msgstr ""
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
-msgstr ""
-"A jelszónak legalább %s karakterből kell állnia. %s Vagy érvénytelen, vagy "
-"lejért a hivatkozás, amelyre kattintott."
+msgstr "%s Érvénytelen, vagy lejért hivatkozásra kattintott. "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s The passwords do not match. %s "
-msgstr "A jelszavak nem egyeznek! "
+msgstr "%s A jelszavak nem egyeznek meg! %s "
 
 #. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
 #. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
@@ -1467,11 +1469,11 @@ msgstr "%s%s%sKoha online%s katalógus &rsaquo; Előfizetéshez tartozó számok
 #. %4$s:  END 
 #. %5$s:  biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
 msgstr ""
 "%s%s%sKoha online%s katalógus &rsaquo; MARC részletek a következő "
-"bejegyzésszámhoz %s %s "
+"bejegyzésszámhoz %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2768,7 +2770,7 @@ msgstr ", nem foglalható le."
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:70
 #, c-format
 msgid "-- Choose --"
-msgstr "--Kérjük válasszon --"
+msgstr "-- Kérjük válasszon --"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:15
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:54
@@ -2784,19 +2786,19 @@ msgstr "-- semelyik -- "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid ". %s Please contact a library staff member. %s "
-msgstr "Másodlagos elérhetõségi információk"
+msgstr ". %s Kérjük lépjen kapcsolatba a könyvtár személyzetével. %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:96
 #, c-format
 msgid ". Once you've confirmed the deletion, no one can retrieve the list!"
-msgstr "Miután megerősítette a törlést, már senki sem érheti el a listát."
+msgstr ". Miután megerősítette a törlést, már senki sem érheti el a listát!"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid ". Please contact the library for more information."
-msgstr "Másodlagos elérhetõségi információk"
+msgstr ". További információért, kérjük, lépjen kapcsolatba a könyvtárral."
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4976,8 +4978,8 @@ msgid ""
 "Enter your User ID%s and password%s, and click the submit button (or press "
 "the enter key)."
 msgstr ""
-" Írja be a felhasználó nevet%s és jelszót%s, majd kattintson a Mehet gombra "
-"(vagy nyomja meg az Enter gombot)."
+"Írja be a felhasználó nevet%s és jelszót%s, majd kattintson a Mehet gombra ("
+"vagy nyomja meg az Enter gombot)."
 
 #. For the first occurrence,
 #. %1$s:  authtypetext 
@@ -5849,15 +5851,15 @@ msgstr ""
 "kijavíthassuk."
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If this is your first time using the self checkout system, or if the system "
 "is not behaving as expected, you may want to refer to this guide to get "
 "yourself started."
 msgstr ""
-" Ha ez az első alkalom amikor az ön-kölcsönzési rendszert használja, vagy ha "
-"a rendszer nem úgy működik, ahogy kellene, akkor forduljon az útmutatóhoz "
-"segítségként."
+"Amennyiben első alkalommal használja az önkiszolgáló-kölcsönzési rendszert, "
+"avagy a rendszer vélhetően nem működik megfelelően, kérjük tekintse meg a "
+"leírást iránymutatásként."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
 #, c-format
@@ -5871,15 +5873,14 @@ msgid ""
 "If you do not click the 'Finish' button, your session will automatically "
 "expire in %s seconds."
 msgstr ""
-"Ha nem kattint a \"Befejezés\" gombra, munkamenete automatikusan lejár %s "
-"másodperc múlva."
+"Amennyiben nem kattint a 'Befejezés' gombra, a munkamenete automatikusan "
+"lejár %s másodperc múlva."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:812
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not enter a password a system generated password will be created."
-msgstr ""
-"%s %s Jelszó beírás hiányában, rendszer generálta jelszó lesz megadva. %s "
+msgstr "Jelszó beírás hiányában, rendszer generálta jelszó lesz megadva."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
@@ -7095,9 +7096,9 @@ msgid "No operation parameter has been passed."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:706
-#, fuzzy, c-format
+#, c-format
 msgid "No other items."
-msgstr "%s %s %s Nincs több tétel. %s %s "
+msgstr "Nincs több tétel."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:692
 #, c-format
@@ -7301,8 +7302,8 @@ msgid ""
 "Note: you can only tag an item with a given term once. Check 'My Tags' to "
 "see your current tags."
 msgstr ""
-"Egy művet egy adott címkével csak egyszer láthat el. Ellenőrizze a \"Címkéim"
-"\" menüvel a címkéit."
+"Megjegyzés: egy művet, egy adott címkével, csak egyszer jelölhet meg. "
+"Ellenőrizze a saját címkéit a 'Címkéim' menüpont alatt."
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:28
 #, c-format
@@ -7477,15 +7478,15 @@ msgid "Online resources:"
 msgstr "Bármely tartalom"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Only certain fields (marked in red) are required, but the more information "
 "you enter the easier it will be for the librarians to find the title you're "
 "requesting. The \"Notes\" field can be used to provide any additional "
 "information."
 msgstr ""
-" Egyik mezõ sem kötelező. Adjon meg bármilyen információt, amely "
-"rendelkezésére áll. A \"Megjegyzések\" mezõbe bármilyen kiegészítő "
+"Egyik mező sem kötelező. Adjon meg bármilyen információt, amely "
+"rendelkezésére áll. A \"Megjegyzések\" mezőbe bármilyen kiegészítő "
 "információt megadhat."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:237
@@ -7637,30 +7638,31 @@ msgstr "A jelszó előtt, vagy után szóköz(ök) található(k)."
 #. %1$s:  minPasswordLength 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:72
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Password must be at least %s characters long."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az új jelszónak legalább %s karakter hosszúnak kell lennie."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/password_check.inc:3
-#, fuzzy
 msgid "Password must contain at least %s characters"
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az új jelszónak legalább %s karakter hosszúnak kell lennie."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/password_check.inc:3
-#, fuzzy
 msgid ""
 "Password must contain at least %s characters, including UPPERCASE, lowercase "
 "and numbers"
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr ""
+"Az új jelszó legalább %s karakter hosszú kel legyen, továbbá NAGY- és "
+"kisbetűt, valamint számot is tartalmazzon"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:72
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr ""
+"Az új jelszónak legalább egy-egy számot, kis- és nagybetűt tartalmaznia kell."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:75
@@ -7795,9 +7797,8 @@ msgstr "Előjegyzés"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:177
-#, fuzzy
 msgid "Place request"
-msgstr ". <a1>Visszavonom előjegyzésem</a>"
+msgstr "Élőjegyzés"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:587
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
@@ -8062,7 +8063,7 @@ msgstr "Népszerűség (csökkenő)"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:962
 #, c-format
 msgid "Post your comments on this item. "
-msgstr "Tegye közzé e dokumentumhoz kapcsolódó megjegyzését.  "
+msgstr "Tegye közzé e dokumentumhoz kapcsolódó megjegyzését. "
 
 #. %1$s:  IF template.name.match('opac-main.tt') 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:20
@@ -8417,9 +8418,9 @@ msgid "Relative"
 msgstr "Relatív"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
-#, fuzzy, c-format
+#, c-format
 msgid "Relatives' checkouts"
-msgstr "0 Kölcsönzések"
+msgstr "Hozzátartozó kölcsönzések"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -8871,7 +8872,7 @@ msgid ""
 "item. The checked-out item should appear in your checkouts list. The Submit "
 "button only needs to be clicked if you enter the barcode manually."
 msgstr ""
-" Szkennelje be egyenként a dokumentumokat és várjon míg a képernyő frissül "
+"Szkennelje be egyenként a dokumentumokat és várjon míg a képernyő frissül "
 "mielőtt a következőt szkennelné. A kölcsönzött dokumentumnak meg kell "
 "jelennie a kiadott dokumentumok listájában. A Mehet gombot csak a kézzel "
 "beírt vonalkód esetén kell használni."
@@ -9070,9 +9071,9 @@ msgstr "Összes kiválasztása"
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:137
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:219
-#, fuzzy, c-format
+#, c-format
 msgid "Select searches to: "
-msgstr "Keresés kiválasztás:  "
+msgstr "Keresés kiválasztás: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:166
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:278
@@ -9558,7 +9559,7 @@ msgstr "Első lépés: Írja be a felhasználói nevét%s és a jelszavát%s"
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:48
 #, c-format
 msgid "Step three: Click the 'Finish' button"
-msgstr "3. lépés: Klikkeljen a Befejezés gombra."
+msgstr "3. lépés: Kattints a 'Befejezés' gombra."
 
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:43
 #, c-format
@@ -9993,11 +9994,9 @@ msgid "The ISBD cloud is not enabled."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "The browser table is empty. this feature is not fully set-up. See the "
-msgstr ""
-" A böngésző tábla üres. Ez a jellemző nincs beállítva. Lásd a  <a1>Koha "
-"Wiki</ a>, hogy többet megtudj, hogy mit tud és, hogy kell beállítani. "
+msgstr "A böngésző tábla üres. Ez a jellemző nincs beállítva. Lásd a "
 
 #. %1$s:  email_add | html 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:18
@@ -10164,15 +10163,15 @@ msgstr "A(z) %s művelet nem támogatott."
 
 #. %1$s:  username 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "The password has been changed for user \"%s\"."
-msgstr "Megváltozott a jelszavad "
+msgstr "Megváltozott \"%s\" felhasználó jelszava."
 
 #. %1$s:  minPasswordLength 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid "The password must contain at least %s characters."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az új jelszónak legalább %s karakter hosszúnak kell lennie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:125
 #, c-format
@@ -10282,19 +10281,19 @@ msgid "Theses"
 msgstr "Tézis"
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This &quot;cloud&quot; shows the most used topics in our catalog. Click on "
 "any subject below to see the items in our collection."
 msgstr ""
-" Ez a &quot;felhő&quot; a leggyakrabban használt témákat mutatja. Klikkelj a "
-"szóra, hogy mgtekinthesd a hozzá kötödő dokumentumokat."
+"Ez a &quot;felhő&quot; a leggyakrabban használt témákat mutatja. Kattints "
+"valamelyik szóra, hogy megtekinthesd a tételeket."
 
 #. %1$s:  IF Koha.Preference('OpacResetPassword') 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "This account has been locked! %s "
-msgstr "<em>MESSAGE 12:</em> A felhasználói fiokódat felfüggesztették. "
+msgstr "A felhasználói fiók felfüggesztve! %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
@@ -10356,7 +10355,7 @@ msgstr "Ez a lista nem létezik."
 #, c-format
 msgid ""
 "This list is empty. %s You can add to your lists from the results of any "
-msgstr "Ez a lista üres. %s Hozzáadható a listához bármeny  "
+msgstr "Ez a lista üres. %s Hozzáadható a listához bármeny "
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:30
 #, c-format
@@ -10390,9 +10389,9 @@ msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:182
-#, fuzzy, c-format
+#, c-format
 msgid "This title cannot be requested."
-msgstr "Ez  a mű nem kérhető."
+msgstr "Ez a mű nem kérhető."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10721,24 +10720,24 @@ msgstr ""
 "jelentkezzen be."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If shows your account to be clear, please contact the library."
 msgstr ""
-" Azonosítója felfüggesztésének oka késedelmi és megrongálási díjak ki nem "
-"fizetése lehet. Ha a <a1>Saját számla</a> azt mutatja, hogy ez nem esedékes, "
-"akkor keresse meg könyvtárosunkat a hiba kiigazítása végett. "
+"A fiók felfüggesztésének a hátterében, feltehetőleg, korábbi késedelem vagy "
+"egyéb díjtartozás lehet. Számlával kapcsolatos kérdések rendezéséhez, "
+"kérjük, keresse meg a könyvtárat."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
 "If your account shows to be clear, please contact the library."
 msgstr ""
-" Azonosítója felfüggesztésének oka késedelmi és megrongálási díjak ki nem "
-"fizetése lehet. Ha a <a1>Saját számla</a> azt mutatja, hogy ez nem esedékes, "
-"akkor keresse meg könyvtárosunkat a hiba kiigazítása végett. "
+"A fiók felfüggesztésének a hátterében, feltehetőleg, korábbi késedelem vagy "
+"egyéb díjtartozás lehet. Számlával kapcsolatos kérdések rendezéséhez, "
+"kérjük, keresse meg a könyvtárat."
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
 #, c-format
@@ -10977,7 +10976,7 @@ msgstr "A %s azonosítóval vagy belépve."
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:52
 #, c-format
 msgid "You are logging from a different IP address. Please log in again."
-msgstr "Egy új IP-ről léptél be a Kohába, kérlek jelentkezz be újra."
+msgstr "Bejelentkezés másik IP címről. Kérlek, jelentkezz be újra."
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:165
 #, fuzzy, c-format
@@ -11073,9 +11072,9 @@ msgid "You currently owe fines and charges amounting to:"
 msgstr "A teljes fizetési kötelezettsége:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "You did not specify any search criteria"
-msgstr "%s Nem adott meg keresési feltételt. %s"
+msgstr "Nem adott meg keresési feltételt"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:25
 #, c-format
@@ -11123,9 +11122,9 @@ msgid ""
 "You entered an incorrect username or password. Please try again! And "
 "remember, passwords are case sensitive."
 msgstr ""
-" Érvénytelen felhasználónevet vagy jelszót adott meg. Kérjük, próbálja meg "
-"még egyszer. Az azonosító és a jelszó megadásakor a kis- és nagybetű "
-"különbözik."
+"A megadott felhasználónév vagy jelszó érvénytelen. Kérjük, próbálja meg még "
+"egyszer. A jelszó megadásakor kérjük figyeljen a kis- és nagybetűk "
+"bevitelére."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:50
 #, c-format
@@ -11208,7 +11207,7 @@ msgstr "Sikeresen regisztrálta új fiókját."
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:60
 #, c-format
 msgid "You have unpaid fines. Amount: %s. "
-msgstr "Vannak kiegyenlítetlen bírságai: %s Ft"
+msgstr "Fennálló tartozások vagy késedelmek. Összeg: %s. "
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:49
 #, c-format
@@ -11260,9 +11259,9 @@ msgid "You must reset your password"
 msgstr "Nem változtathatod meg a jelszavad."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "You must select a library for pickup. "
-msgstr "Válassz ki egy fiókkönyvtárat az  átvételhez! "
+msgstr "Válassz ki egy fiókkönyvtárat az átvételhez! "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:78
 #, fuzzy, c-format
@@ -11309,23 +11308,27 @@ msgstr ""
 #. %1$s:  IF debarred_comment 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid "Your account has been frozen. %s Comment: "
-msgstr "<em>MESSAGE 12:</em> A felhasználói fiokódat felfüggesztették. "
+msgstr "A felhasználói fiókot felfüggesztették. %s Megjegyzés: "
 
 #. %1$s:  BORROWER_INFO.warnexpired | $KohaDates 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your account has expired as of %s. Please contact the library if you wish to "
 "renew your account."
-msgstr "Másodlagos elérhetõségi információk"
+msgstr ""
+"Az előfizetői fiók érvényessége lejárt - %s. Kérjük, vegye fel a kapcsolatot "
+"a könyvtárral, amennyiben meg szeretné hosszabbítani."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your account has expired. Please contact the library for more information."
-msgstr "Másodlagos elérhetõségi információk"
+msgstr ""
+"Az előfizetői fiók érvényessége lejárat. További információér, kérjük vegye "
+"fel a kapcsolatot a könyvtárral. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
 #, c-format
@@ -11447,11 +11450,13 @@ msgstr ""
 "szerint elveszett vagy ellopták)."
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your library card has expired. Please contact your librarian if you wish to "
 "renew your card. "
-msgstr "Másodlagos elérhetõségi információk"
+msgstr ""
+"Az előfizetői kártya érvényessége lejárt. Kérjük, vegye fel a kapcsolatot a "
+"könyvtárral, amennyiben meg szeretné hosszabbítani. "
 
 #. %1$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:1
@@ -11475,9 +11480,9 @@ msgid "Your lists:"
 msgstr "Saját listák:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:83
-#, fuzzy, c-format
+#, c-format
 msgid "Your loan renewal failed because of the following reason(s): "
-msgstr "Az űrlap nem lett elküldve a következő ok(ok) miatt"
+msgstr "A kölcsönzés meghosszabbítása sikertelen a következő okból: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:27
@@ -11518,7 +11523,7 @@ msgstr "Megváltozott a jelszava "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:810
 #, c-format
 msgid "Your password must be at least %s characters long."
-msgstr "Az új jelszónak legalább %s  karakter hosszúnak kell lennie."
+msgstr "Az új jelszónak legalább %s karakter hosszúnak kell lennie."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:13
 #, c-format
@@ -11606,10 +11611,10 @@ msgstr ""
 "véglegesítené őket."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:159
-#, fuzzy, c-format
+#, c-format
 msgid "Your userid was not found in the database. Please try again."
 msgstr ""
-" A felhasználó neved nem találtuk az adatbázisban. Kérlek próbálkozz még "
+"A felhasználó neved nem találtuk az adatbázisban. Kérlek próbálkozz még "
 "egyszer!"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:439
