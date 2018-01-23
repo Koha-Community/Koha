@@ -125,6 +125,8 @@ sub latest_sha1 {
 
 sub adjust_debian_changelog {
     my ($newversion) = @_;
+    # debian revision
+    $newversion .= "-1";
 
     sys_command_output( qq{dch --force-distribution -D "$distribution" -v "$newversion" "Building git snapshot."} );
     sys_command_output( qq{dch -r "Building git snapshot."} );
@@ -136,7 +138,7 @@ sub reset_debian_changelog {
 
 sub build_package {
     my ($newversion) = @_;
-    sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.tar.gz"} );
+    sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.orig.tar.gz"} );
 
     my $pdebuildopts = $buildresult ? "--buildresult $buildresult" : "";
     my $pdebuildbasetgz = $basetgz ? "-- --basetgz /var/cache/pbuilder/" . $basetgz . ".tgz" : "";
