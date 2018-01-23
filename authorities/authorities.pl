@@ -187,7 +187,7 @@ sub create_input {
     }
     
     $subfield_data{visibility} = "display:none;"
-        if (    ($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne ''
+        if( $tagslib->{$tag}->{$subfield}->{hidden} and $value ne ''
             or ($value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory})
         );
     
