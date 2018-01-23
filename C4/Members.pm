@@ -1337,7 +1337,7 @@ sub FineSlip {
 
     $returns = GetTodaysReturnsForBorrower($borrowernumber, $branch);
 
-Return a list of items borrower has checked-in today in branch.
+Return a list of items borrower has checked-in today in any branch.
 
 =cut
 
@@ -1351,11 +1351,10 @@ sub GetTodaysReturnsForBorrower {
        FROM old_issues
        WHERE DATE(returndate) = ?
          AND borrowernumber = ?
-         AND branchcode = ?
     ";
 
     my $sth = $dbh->prepare($query);
-    $sth->execute($date, $borrowernumber, $branch);
+    $sth->execute($date, $borrowernumber);
     my @results;
 
     while ( my $data = $sth->fetchrow_hashref ) {
