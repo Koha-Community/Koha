@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use File::Temp qw/ tempdir /;
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::Warn;
 
 use Test::MockModule;
@@ -316,6 +316,17 @@ subtest 'Testing delete_temporary' => sub {
         'Still 3 permanent uploads' );
 };
 
+subtest 'Testing download headers' => sub {
+    plan tests => 2;
+    my $test_pdf = Koha::UploadedFile->new({ filename => 'pdf.pdf', uploadcategorycode => 'B', filesize => 1000 });
+    my $test_not = Koha::UploadedFile->new({ filename => 'pdf.not', uploadcategorycode => 'B', filesize => 1000 });
+    my @pdf_expect = ( '-type'=>'application/pdf','Content-Disposition'=>'inline; filename=pdf.pdf' );
+    my @not_expect = ( '-type'=>'application/octet-stream','-attachment'=>'pdf.not' );
+    my @pdf_head = $test_pdf->httpheaders;
+    my @not_head = $test_not->httpheaders;
+    is_deeply(\@pdf_head, \@pdf_expect,"Get inline pdf headers for pdf");
+    is_deeply(\@not_head, \@not_expect,"Get download headers for non pdf");
+};
 # The end
 $schema->storage->txn_rollback;
 

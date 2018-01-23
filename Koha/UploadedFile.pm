@@ -134,10 +134,17 @@ Will be extended by report 14282
 
 sub httpheaders {
     my ( $self ) = @_;
-    return (
-        '-type'       => 'application/octet-stream',
-        '-attachment' => $self->filename,
-    );
+    if( $self->filename =~ /\.pdf$/ ) {
+        return (
+            '-type'       => 'application/pdf',
+            'Content-Disposition' => 'inline; filename='.$self->filename,
+        );
+    } else {
+        return (
+            '-type'       => 'application/octet-stream',
+            '-attachment' => $self->filename,
+        );
+    }
 }
 
 =head2 CLASS METHODS
