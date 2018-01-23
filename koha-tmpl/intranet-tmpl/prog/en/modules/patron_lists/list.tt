@@ -4,7 +4,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; [% list.name %] &rsaquo; Add patrons</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="patlist_list" class="pat patlist">
@@ -104,10 +104,10 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'datatables.inc' %]
 
-    <script type="text/javascript" src="[% interface %]/js/autocomplete/patrons.js"></script>
+    <script type="text/javascript" src="[% interface %]/js/autocomplete/patrons_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {

@@ -1,8 +1,8 @@
 [% INCLUDE 'format_price.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/buttons.dataTables.min.css" />
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/buttons.colVis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/buttons.dataTables.min_[% KOHA_VERSION %].css" />
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/dataTables.buttons.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/buttons.colVis.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
@@ -22,4 +22,4 @@
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
 //]]>
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/datatables.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/datatables_[% KOHA_VERSION %].js"></script>

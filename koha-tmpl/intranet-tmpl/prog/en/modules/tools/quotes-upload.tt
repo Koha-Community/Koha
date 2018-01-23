@@ -2,9 +2,9 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Quote uploader</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/uploader.css" />
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/quotes.css" />
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/uploader_[% KOHA_VERSION %].css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/quotes_[% KOHA_VERSION %].css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="tools_quotes" class="tools">
@@ -73,9 +73,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.jeditable.mini_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var oTable; //DataTable object
         $(document).ready(function() {

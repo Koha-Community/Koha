@@ -34,7 +34,7 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% IF close_form %]
     <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css" rel="stylesheet" type="text/css" />
 [% END %]
@@ -495,9 +495,9 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% IF close_form %]
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable.js"></script>
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable_[% KOHA_VERSION %].js"></script>
     [% END %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
     // #################################################################################
     // Javascript

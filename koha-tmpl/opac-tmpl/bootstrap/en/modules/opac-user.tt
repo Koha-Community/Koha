@@ -1043,7 +1043,7 @@ Using this account is not recommended because some parts of Koha will not functi
         //]]>
     </script>
     [% IF Koha.Preference('OverDriveCirculation') %]
-    <script type="text/javascript" src="[% interface %]//[% theme %]/js/overdrive.js"></script>
+    <script type="text/javascript" src="[% interface %]//[% theme %]/js/overdrive_[% KOHA_VERSION %].js"></script>
     <script type="text/JavaScript">
     $(document).ready(function() {
         [% IF ( overdrive_error ) %]

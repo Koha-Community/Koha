@@ -19,7 +19,7 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( op_else ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% END %]
 [% IF ( op_else ) %]
     <style type="text/css">
@@ -759,7 +759,7 @@
     [% END %]
     [% IF ( op_else ) %]
         [% INCLUDE 'datatables.inc' %]
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
         <script type="text/javascript">
             /**
             *  displayOther.
@@ -914,8 +914,8 @@
             });
         </script>
     [% END %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

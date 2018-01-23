@@ -1,5 +1,5 @@
 [% #Enable tinymce for system preferences %]
-<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce_[% KOHA_VERSION %].js"></script>
 <script>
 
 [%# Save TinyMCE content and trigger an event on the original element %]

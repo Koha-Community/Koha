@@ -5,11 +5,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
             Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% datereceived | $KohaDates %][% ELSE %]Receive orders from [% name %][% END %]</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
 <style type="text/css">#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 <script type="text/javascript">
 //<![CDATA[

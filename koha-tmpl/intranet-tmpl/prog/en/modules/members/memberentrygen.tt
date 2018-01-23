@@ -4,7 +4,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF ( categoryname ) %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -145,7 +145,7 @@ $(document).ready(function() {
 
 //]]>
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/members.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/members_[% KOHA_VERSION %].js"></script>
 </head>
 <body id="pat_memberentrygen" class="pat">
 [% INCLUDE 'header.inc' %]

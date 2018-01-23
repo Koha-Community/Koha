@@ -216,9 +216,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.indexeddb.js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/offlinecirc.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.indexeddb_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/offlinecirc_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'timepicker.inc' %]
     <script type="text/javascript">
         var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");

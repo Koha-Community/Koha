@@ -1,4 +1,4 @@
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
@@ -17,4 +17,4 @@
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
 //]]>
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/datatables.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/datatables_[% KOHA_VERSION %].js"></script>

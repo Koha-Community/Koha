@@ -96,13 +96,13 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var MSG_SMS_PATRONS_USING = _("Are you sure you want to delete %s? %s patron(s) are using it!");
         var MSG_SMS_DELETE_CONFIRM = _("Are you sure you want to delete %s?");
         var LABEL_SMS_ADD_PROVIDER = _("Add an SMS cellular provider");
         var LABEL_SMS_EDIT_PROVIDER = _("Edit provider %s");
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/sms_providers.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/sms_providers_[% KOHA_VERSION %].js"></script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -33,7 +33,7 @@
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="catalog_detail" class="catalog">
@@ -848,7 +848,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'greybox.inc' %]
     <script type="text/javascript">
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
@@ -1036,12 +1036,12 @@
         });[% END %]
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectProfile') && ( normalized_isbn || normalized_upc ) ) %]
-        <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
+        <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init_[% KOHA_VERSION %].js"></script>
     [% END %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'browser-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+    <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var browser = KOHA.browser('[% searchid %]', parseInt(biblionumber, 10));
         browser.show();

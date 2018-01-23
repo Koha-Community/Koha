@@ -7,7 +7,7 @@
     <title>Koha &rsaquo; Tools &rsaquo; Upload</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 
 [% BLOCK plugin_pars %]
     [% IF plugin %]
@@ -246,7 +246,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         var errMESSAGES = [
@@ -260,7 +260,7 @@
             _("File or upload record could not be deleted."),
         ];
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;

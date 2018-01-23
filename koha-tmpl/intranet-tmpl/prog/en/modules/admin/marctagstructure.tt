@@ -7,7 +7,7 @@
 [% IF ( delete_confirmed ) %]MARC frameworks &rsaquo;  Data deleted[% END %]
 [% IF ( else ) %]MARC frameworks[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="admin_marctagstructure" class="admin">
@@ -242,8 +242,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {

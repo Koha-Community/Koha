@@ -619,8 +619,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat.js"></script>
+    <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");

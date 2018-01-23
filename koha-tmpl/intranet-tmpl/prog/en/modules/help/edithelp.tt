@@ -1,6 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Online help</title>
-<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript">//<![CDATA[
 tinyMCE.init({
 	mode : "textareas",
@@ -22,7 +22,7 @@ tinyMCE.init({
 //]]>
 </script>
 [% INCLUDE intranetstylesheet.inc %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/help.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/help_[% KOHA_VERSION %].css" />
 </head>
 <body id="help_edithelp" class="help">
 	<h1>Online Help</h1>

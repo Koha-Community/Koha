@@ -109,9 +109,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar.js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;

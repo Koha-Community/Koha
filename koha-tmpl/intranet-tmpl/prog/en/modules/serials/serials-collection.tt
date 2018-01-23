@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Serial collection information for [% bibliotitle %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="ser_serials-collection" class="ser">
@@ -270,8 +270,8 @@
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/serials-toolbar.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/serials-toolbar_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         function generateReceive(subscriptionid) {
             if(nbissues=prompt(_("How many issues do you want to receive ?"))){

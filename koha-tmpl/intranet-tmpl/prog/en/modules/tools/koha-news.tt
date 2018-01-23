@@ -5,7 +5,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; News</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( opac_news_count ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% END %]
 </head>
 
@@ -219,7 +219,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script type="text/javascript">
@@ -259,7 +259,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             });
         </script>
     [% END %]
-    <script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         tinyMCE.init({
             mode : "textareas",

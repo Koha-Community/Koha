@@ -2,7 +2,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Numbering patterns</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="ser_subscription_numberpatterns" class="ser">
@@ -301,7 +301,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% IF (daily_options) %]
-        <script type="text/javascript" src="[% interface %]/[% theme %]/js/showpredictionpattern.js"></script>
+        <script type="text/javascript" src="[% interface %]/[% theme %]/js/showpredictionpattern_[% KOHA_VERSION %].js"></script>
     [% END %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]

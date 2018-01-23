@@ -11,16 +11,16 @@
     </script>
 [% END %]
 
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min_[% KOHA_VERSION %].js"></script>
 <!-- koha core js -->
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global_[% KOHA_VERSION %].js"></script>
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
@@ -51,11 +51,11 @@
     //]]>
     </script>
 
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/basket.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/basket_[% KOHA_VERSION %].js"></script>
 [% END %]
 
 [% IF LocalCoverImages %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/localcovers.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/localcovers_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         //<![CDATA[
             var NO_LOCAL_JACKET = _("No cover image available");

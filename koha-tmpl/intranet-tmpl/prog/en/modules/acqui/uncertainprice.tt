@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername %][% ELSE %]Orders with uncertain prices[% END %]</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
 <script type="text/javascript">
@@ -22,7 +22,7 @@
 var MSG_INVALIDPRICE = _("ERROR: Price is not a valid number, please check the price and try again!");
  //]]>
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq.js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
 </head>
 <body id="acq_uncertainprice" class="acq">
 [% INCLUDE 'header.inc' %]

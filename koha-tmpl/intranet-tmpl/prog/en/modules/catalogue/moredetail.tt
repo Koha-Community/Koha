@@ -274,9 +274,9 @@
 </div>
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/catalog_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'browser-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/js/browser.js"></script>
+    <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
         browser.show();

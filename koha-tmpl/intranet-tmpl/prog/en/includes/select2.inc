@@ -1,6 +1,6 @@
 <script src="[% interface %]/lib/select2/js/select2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/select2/css/select2.min.css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/select2.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/lib/select2/css/select2.min_[% KOHA_VERSION %].css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/select2_[% KOHA_VERSION %].css" />
 <script>
   jQuery.extend($.fn.select2.defaults, {
     allowClear: true,

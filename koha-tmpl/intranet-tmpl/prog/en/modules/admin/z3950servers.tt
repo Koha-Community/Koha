@@ -16,7 +16,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% IF op == 'list' %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% END %]
 </head>
 
@@ -198,7 +198,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
     [% IF op == 'list' %]
         [% INCLUDE 'datatables.inc' %]
     [% END %]

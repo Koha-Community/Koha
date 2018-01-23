@@ -8,7 +8,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 
 <body id="admin_biblio_framework" class="admin">
@@ -281,7 +281,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         /* Set some variable needed in biblio_framework.js */
         var MSG_IMPORT_ERROR = _("Error importing the framework");
@@ -290,6 +290,6 @@
         var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
         var template_path = "[% interface %]/[% theme %]";
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/biblio_framework.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/biblio_framework_[% KOHA_VERSION %].js"></script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

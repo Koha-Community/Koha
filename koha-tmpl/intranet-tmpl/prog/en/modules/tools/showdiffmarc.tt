@@ -47,8 +47,8 @@
 <p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Return to staged MARC batch [% batchid %]</a></p>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
           var diff1 = $("#col1 pre").text();

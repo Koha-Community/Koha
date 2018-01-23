@@ -7,7 +7,7 @@
 [% IF op == 'delete_confirm' %][% IF ( patrons_in_category > 0 ) %]Cannot delete: category [% categorycode |html %] in use[% ELSE %]Confirm deletion of category '[% categorycode |html %]'[% END %][% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 <style type="text/css">#enrolmentmessage.hint { display : none; }</style>
 </head>
 
@@ -491,13 +491,13 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
         var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
     </script>
-    <script type="text/javascript" src="[% themelang %]/js/categories.js"></script>
+    <script type="text/javascript" src="[% themelang %]/js/categories_[% KOHA_VERSION %].js"></script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

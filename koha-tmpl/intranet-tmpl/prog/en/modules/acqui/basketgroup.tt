@@ -1,19 +1,19 @@
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/yui/utilities/utilities.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/button/button-min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/container/container_core-min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/menu/menu-min.js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/basketgroup.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/utilities/utilities_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/button/button-min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/container/container_core-min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/menu/menu-min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/basketgroup_[% KOHA_VERSION %].js"></script>
 [% IF ( grouping ) %]
-<script type="text/javascript" src="[% interface %]/lib/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/animation/animation-min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="[% interface %]/lib/yui/element/element-min.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/yahoo-dom-event/yahoo-dom-event_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/animation/animation-min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/dragdrop/dragdrop-min_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/lib/yui/element/element-min_[% KOHA_VERSION %].js"></script>
 <style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
