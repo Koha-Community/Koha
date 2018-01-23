@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 3;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -83,4 +83,28 @@ subtest '_read_configuration() tests' => sub {
     $configuration = Koha::SearchEngine::Elasticsearch::_read_configuration;
     is( $configuration->{index_name}, 'index', 'Index configuration parsed correctly' );
     is_deeply( $configuration->{nodes}, \@servers , 'Server configuration parsed correctly' );
+};
+
+subtest 'get_elasticsearch_settings() tests' => sub {
+
+    plan tests => 1;
+
+    my $settings;
+
+    # test reading index settings
+    my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
+    $settings = $es->get_elasticsearch_settings();
+    is( $settings->{index}{analysis}{analyzer}{analyser_phrase}{tokenizer}, 'keyword', 'Index settings parsed correctly' );
+};
+
+subtest 'get_elasticsearch_mappings() tests' => sub {
+
+    plan tests => 1;
+
+    my $mappings;
+
+    # test reading mappings
+    my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
+    $mappings = $es->get_elasticsearch_mappings();
+    is( $mappings->{data}{_all}{type}, 'string', 'Field mappings parsed correctly' );
 };

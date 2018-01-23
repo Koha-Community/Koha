@@ -1,4 +1,5 @@
 ---
+# Basic mappings from MARC fields to Elasticsearch fields.
 authorities:
   Corporate-name-see-also-from:
     label: Corporate-name-see-also-from
@@ -1549,7 +1550,7 @@ biblios:
         marc_type: unimarc
         sort: ~
         suggestible: ''
-    type: ''
+    type: 'stdno'
   isbn:
     label: isbn
     mappings:
@@ -1568,7 +1569,7 @@ biblios:
         marc_type: unimarc
         sort: ~
         suggestible: ''
-    type: ''
+    type: 'isbn'
   issn:
     label: issn
     mappings:
@@ -1587,7 +1588,7 @@ biblios:
         marc_type: unimarc
         sort: ~
         suggestible: ''
-    type: ''
+    type: 'stdno'
   issues:
     label: issues
     mappings:
