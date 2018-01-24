@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 use t::lib::Mocks;
 use Koha::Database;
 
@@ -164,32 +164,14 @@ my $budgetid = C4::Budgets::AddBudget(
 );
 my $budget = C4::Budgets::GetBudget($budgetid);
 
-# Prepare a sample MARC record with a ISBN to test GetHistory()
-my $marcxml = qq{<?xml version="1.0" encoding="UTF-8"?>
-<record
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"
-    xmlns="http://www.loc.gov/MARC21/slim">
-
-  <leader>03108cam a2200277 i 4500</leader>
-  <controlfield tag="001">a2526595</controlfield>
-  <controlfield tag="003">Koha</controlfield>
-  <controlfield tag="005">20170306104815.0</controlfield>
-  <controlfield tag="006">m     o  d        </controlfield>
-  <controlfield tag="007">cr |||||||||||</controlfield>
-  <controlfield tag="008">150723s2016    vau      b    000 0 eng d</controlfield>
-  <datafield tag="020" ind1=" " ind2=" ">
-    <subfield code="a">9780136019701</subfield>
-  </datafield>
-</record>
-};
-
 my @ordernumbers;
 my ( $biblionumber1, $biblioitemnumber1 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber2, $biblioitemnumber2 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber3, $biblioitemnumber3 ) = AddBiblio( MARC::Record->new, '' );
 my ( $biblionumber4, $biblioitemnumber4 ) = AddBiblio( MARC::Record->new, '' );
-my ( $biblionumber5, $biblioitemnumber5 ) = AddBiblio( MARC::Record->new_from_xml( $marcxml, 'utf8', 'MARC21' ), '' );
+my ( $biblionumber5, $biblioitemnumber5 ) = AddBiblio( MARC::Record->new, '' );
+
+
 
 # Prepare 5 orders, and make distinction beween fields to be tested with eq and with ==
 # Ex : a price of 50.1 will be stored internally as 5.100000
@@ -458,13 +440,6 @@ is( scalar( @$orders ), 2, 'GetHistory with a given ordernumber and search_child
 
 # Test GetHistory() with and without SearchWithISBNVariations
 # The ISBN passed as a param is the ISBN-10 version of the 13-digit ISBN in the sample record declared in $marcxml
-t::lib::Mocks::mock_preference('SearchWithISBNVariations', 0);
-$orders = GetHistory( isbn => '0136019706' );
-is( scalar(@$orders), 0, "GetHistory searches correctly by ISBN" );
-
-t::lib::Mocks::mock_preference('SearchWithISBNVariations', 1);
-$orders = GetHistory( isbn => '0136019706' );
-is( scalar(@$orders), 1, "GetHistory searches correctly by ISBN" );
 
 my $budgetid2 = C4::Budgets::AddBudget(
     {
@@ -573,5 +548,121 @@ ok($active_count >= 1 , "GetBudgetsReport(1) OK");
 
 is($all_count, scalar GetBudgetsReport(), "GetBudgetReport returns inactive budget period acquisitions.");
 ok($active_count >= scalar GetBudgetsReport(1), "GetBudgetReport doesn't return inactive budget period acquisitions.");
+
+# "Flavoured" tests (tests that required a run for each marc flavour)
+# Tests should be added to the run_flavoured_tests sub below
+my $biblio_module = new Test::MockModule('C4::Biblio');
+$biblio_module->mock(
+    'GetMarcSubfieldStructure',
+    sub {
+        my ($self) = shift;
+
+        my ( $title_field,            $title_subfield )            = get_title_field();
+        my ( $isbn_field,             $isbn_subfield )             = get_isbn_field();
+        my ( $issn_field,             $issn_subfield )             = get_issn_field();
+        my ( $biblionumber_field,     $biblionumber_subfield )     = ( '999', 'c' );
+        my ( $biblioitemnumber_field, $biblioitemnumber_subfield ) = ( '999', '9' );
+        my ( $itemnumber_field,       $itemnumber_subfield )       = get_itemnumber_field();
+
+        return {
+            'biblio.title'                 => [ { tagfield => $title_field,            tagsubfield => $title_subfield } ],
+            'biblio.biblionumber'          => [ { tagfield => $biblionumber_field,     tagsubfield => $biblionumber_subfield } ],
+            'biblioitems.isbn'             => [ { tagfield => $isbn_field,             tagsubfield => $isbn_subfield } ],
+            'biblioitems.issn'             => [ { tagfield => $issn_field,             tagsubfield => $issn_subfield } ],
+            'biblioitems.biblioitemnumber' => [ { tagfield => $biblioitemnumber_field, tagsubfield => $biblioitemnumber_subfield } ],
+            'items.itemnumber'             => [ { tagfield => $itemnumber_subfield,    tagsubfield => $itemnumber_subfield } ],
+        };
+      }
+);
+
+sub run_flavoured_tests {
+    my $marcflavour = shift;
+    t::lib::Mocks::mock_preference('marcflavour', $marcflavour);
+
+    #
+    # Test SearchWithISBNVariations syspref
+    #
+    my $marc_record = MARC::Record->new;
+    $marc_record->append_fields( create_isbn_field( '9780136019701', $marcflavour ) );
+    my ( $biblionumber6, $biblioitemnumber6 ) = AddBiblio( $marc_record, '' );
+
+    # Create order
+    my $ordernumber = Koha::Acquisition::Order->new( {
+            basketno     => $basketno,
+            biblionumber => $biblionumber6,
+            budget_id    => $budget->{budget_id},
+            order_internalnote => "internal note",
+            order_vendornote   => "vendor note",
+            quantity       => 1,
+            ecost          => 10,
+            rrp            => 10,
+            listprice      => 10,
+            ecost          => 10,
+            rrp            => 10,
+            discount       => 0,
+            uncertainprice => 0,
+    } )->store->ordernumber;
+
+    t::lib::Mocks::mock_preference('SearchWithISBNVariations', 0);
+    $orders = GetHistory( isbn => '0136019706' );
+    is( scalar(@$orders), 0, "GetHistory searches correctly by ISBN" );
+
+    t::lib::Mocks::mock_preference('SearchWithISBNVariations', 1);
+    $orders = GetHistory( isbn => '0136019706' );
+    is( scalar(@$orders), 1, "GetHistory searches correctly by ISBN" );
+
+    my $order = GetOrder($ordernumber);
+    DelOrder($order->{biblionumber}, $order->{ordernumber}, 1);
+}
+
+# Do "flavoured" tests
+subtest 'MARC21' => sub {
+    plan tests => 2;
+    run_flavoured_tests('MARC21');
+};
+
+subtest 'UNIMARC' => sub {
+    plan tests => 2;
+    run_flavoured_tests('UNIMARC');
+};
+
+subtest 'NORMARC' => sub {
+    plan tests => 2;
+    run_flavoured_tests('NORMARC');
+};
+
+### Functions required for "flavoured" tests
+sub get_title_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'a' ) : ( '245', 'a' );
+}
+
+sub get_isbn_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '010', 'a' ) : ( '020', 'a' );
+}
+
+sub get_issn_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '011', 'a' ) : ( '022', 'a' );
+}
+
+sub get_itemnumber_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '995', '9' ) : ( '952', '9' );
+}
+
+sub create_isbn_field {
+    my ( $isbn, $marcflavour ) = @_;
+
+    my ( $isbn_field, $isbn_subfield ) = get_isbn_field();
+    my $field = MARC::Field->new( $isbn_field, '', '', $isbn_subfield => $isbn );
+
+    # Add the price subfield
+    my $price_subfield = ( $marcflavour eq 'UNIMARC' ) ? 'd' : 'c';
+    $field->add_subfields( $price_subfield => '$100' );
+
+    return $field;
+}
 
 $schema->storage->txn_rollback();
