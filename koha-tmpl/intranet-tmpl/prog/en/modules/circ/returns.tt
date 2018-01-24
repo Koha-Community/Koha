@@ -270,6 +270,7 @@ $(document).ready(function () {
             <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
             <input type="hidden" name="transfer_slip" value="0" />
+            <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
             <button type="submit" class="print" onclick="this.form.transfer_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
@@ -399,6 +400,7 @@ $(document).ready(function () {
             <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
             <input type="hidden" name="transfer_slip" value="0" />
+            <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
             <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
             <button type="submit" class="print" onclick="this.form.transfer_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and continue</button>
