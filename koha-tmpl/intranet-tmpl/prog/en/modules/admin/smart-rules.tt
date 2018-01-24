@@ -114,13 +114,13 @@
                                                         </td>
 
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
-									Unlimited
+									<span>Unlimited</span>
 								[% ELSE %]
 									[% rule.maxissueqty %]
 								[% END %]
 							</td>
                             <td>[% IF rule.unlimited_maxonsiteissueqty %]
-                                    Unlimited
+                                    <span>Unlimited</span>
                                 [% ELSE %]
                                     [% rule.maxonsiteissueqty %]
                                 [% END %]
@@ -142,12 +142,18 @@
                                   <input type="hidden" name="hardduedatecomparebackup" value="1" />
                                 [% END %]
                               [% ELSE %]
-                                None defined
+                                <span>None defined</span>
                               [% END %]
                             </td>
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
-                <td>[% IF rule.chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
+                            <td>
+                                [% IF rule.chargeperiod_charge_at %]
+                                    <span>Start of interval</span>
+                                [% ELSE %]
+                                    <span>End of interval</span>
+                                [% END %]
+                            </td>
 							<td>[% rule.firstremind %]</td>
                             <td>[% rule.overduefinescap FILTER format("%.2f") %]</td>
                             <td>
@@ -164,9 +170,9 @@
                             <td>[% rule.norenewalbefore %]</td>
                             <td>
                                 [% IF ( rule.auto_renew ) %]
-                                Yes
+                                    <span>Yes</span>
                                 [% ELSE %]
-                                No
+                                    <span>No</span>
                                 [% END %]
                             </td>
                             <td>[% rule.no_auto_renewal_after %]</td>
@@ -175,22 +181,31 @@
                                                         <td>[% rule.holds_per_record %]</td>
                                                         <td>
                                                             [% IF rule.onshelfholds == 1 %]
-                                                                Yes
+                                                                <span>Yes</span>
                                                             [% ELSIF rule.onshelfholds == 2 %]
-                                                                If all unavailable
+                                                                <span>If all unavailable</span>
                                                             [% ELSE %]
-                                                                If any unavailable
-                                                            [% END %]</td>
-                                                        <td>[% IF rule.opacitemholds == 'F'%]Force[% ELSIF rule.opacitemholds == 'Y'%]Allow[% ELSE %]Don't allow[% END %]</td>
+                                                                <span>If any unavailable</span>
+                                                            [% END %]
+                                                        </td>
+                                                        <td>
+                                                            [% IF rule.opacitemholds == 'F'%]
+                                                                <span>Force</span>
+                                                            [% ELSIF rule.opacitemholds == 'Y'%]
+                                                                <span>Allow</span>
+                                                            [% ELSE %]
+                                                                <span>Don't allow</span>
+                                                            [% END %]
+                                                        </td>
                                                         <td>
                                                             [% IF rule.article_requests == 'no' %]
-                                                                No
+                                                                <span>No</span>
                                                             [% ELSIF rule.article_requests == 'yes' %]
-                                                                Yes
+                                                                <span>Yes</span>
                                                             [% ELSIF rule.article_requests == 'bib_only' %]
-                                                                Record only
+                                                                <span>Record only</span>
                                                             [% ELSIF rule.article_requests == 'item_only' %]
-                                                                Item only
+                                                                <span>Item only</span>
                                                             [% END %]
                                                         </td>
 							<td>[% rule.rentaldiscount %]</td>
@@ -479,13 +494,13 @@
                             [% END %]
                         </td>
                         <td>[% IF ( branch_cat_rule_loo.unlimited_maxissueqty ) %]
-                                Unlimited
+                                <span>Unlimited</span>
                             [% ELSE %]
                                 [% branch_cat_rule_loo.maxissueqty %]
                             [% END %]
                         </td>
                         <td>[% IF ( branch_cat_rule_loo.unlimited_maxonsiteissueqty ) %]
-                                Unlimited
+                                <span>Unlimited</span>
                             [% ELSE %]
                                 [% branch_cat_rule_loo.maxonsiteissueqty %]
                             [% END %]
@@ -635,29 +650,29 @@
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.holdallowed_any ) %]
-                                From any library
+                                <span>From any library</span>
                             [% ELSIF ( branch_item_rule_loo.holdallowed_same ) %]
-                                From home library
+                                <span>From home library</span>
                             [% ELSE %]
-                                No holds allowed
+                                <span>No holds allowed</span>
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.hold_fulfillment_policy == 'any' ) %]
-                                any library
+                                <span>any library</span>
                             [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'homebranch' ) %]
-                                item's home library
+                                <span>item's home library</span>
                             [% ELSIF ( branch_item_rule_loo.hold_fulfillment_policy == 'holdingbranch' ) %]
-                                item's holding library
+                                <span>item's holding library</span>
                             [% END %]
                         </td>
                         <td>[% IF ( branch_item_rule_loo.returnbranch == 'homebranch' ) %]
-                                Item returns home
+                                <span>Item returns home</span>
                             [% ELSIF ( branch_item_rule_loo.returnbranch == 'holdingbranch' ) %]
-                                Item returns to issuing branch
+                                <span>Item returns to issuing branch</span>
                             [% ELSIF ( branch_item_rule_loo.returnbranch == 'noreturn' ) %]
-                                Item floats
+                                <span>Item floats</span>
                             [% ELSE %]
-                                Error - unknown option
+                                <span>Error - unknown option</span>
                             [% END %]
                         </td>
                         <td class="actions">
