@@ -182,6 +182,15 @@ sub sftp_download {
 sub ingest {
     my ( $self, $msg_hash, @downloaded_files ) = @_;
     foreach my $f (@downloaded_files) {
+
+        # Check file has not been downloaded already
+        my $existing_file = $self->{schema}->resultset('EdifactMessage')
+          ->find( { filename => $f, } );
+        if ($existing_file) {
+            carp "skipping ingest of $f : filename exists";
+            next;
+        }
+
         $msg_hash->{filename} = $f;
         my $file_content =
           read_file( "$self->{working_dir}/$f", binmode => ':raw' );
