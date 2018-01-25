@@ -54,8 +54,8 @@ my $borrowernumber    = $input->param('borrowernumber');
 my $offset            = $input->param('iDisplayStart');
 my $results_per_page  = $input->param('iDisplayLength');
 my $sorting_direction = $input->param('sSortDir_0') || 'desc';
-my $sorting_column    = $sort_columns[ $input->param('iSortCol_0') ]
-  || 'reservedate';
+my $iSortCol          = $input->param('iSortCol_0') // 0;
+my $sorting_column    = $sort_columns[$iSortCol] // 'reservedate';
 
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
