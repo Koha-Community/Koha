@@ -46,9 +46,10 @@ $template->param( action => $action );
 if ( $action eq 'create' ) {
     my $title       = $query->param('title');
     my $description = $query->param('description');
+    my $owningBranch = C4::Context->userenv->{branch};
 
     my ( $createdSuccessfully, $errorCode, $errorMessage ) =
-      CreateCollection( $title, $description );
+      CreateCollection( $title, $description, $owningBranch );
 
     $template->param(
         previousActionCreate => 1,
