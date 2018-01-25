@@ -175,6 +175,7 @@ sub swaggerize {
         holdingbranch => $item->holdingbranch,
         homebranch => $item->homebranch,
         itemcallnumber => $item->itemcallnumber,
+        itemcallnumber_display => $item->cn_sort, # FIXME: Find a proper solution
         itemnotes => $item->itemnotes,
         location => $item->location,
         location_description => $loc_desc,
