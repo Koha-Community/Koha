@@ -1654,6 +1654,7 @@
 
     $(function () {
       $(".auto-submit-star").rating({
+        cancel: _('Cancel rating'),
         callback: function (value, link) {
 
           // if the new value equals the old value, dont execute callback...
@@ -1676,12 +1677,12 @@
                   $("#rating_value").val(data.rating_value);
 
                   if (data.rating_value) {
-                    $("#rating_value_text").text(_("your rating: ") + data.rating_value + ", ");
+                    $("#rating_value_text").text(_("your rating: %s, ").format(data.rating_value));
                   } else {
                     $("#rating_value_text").text('');
                   }
 
-                  $("#rating_text").text(_("average rating: ") + data.rating_avg + " (" + data.rating_total + ' ' + _("votes") + ")");
+                  $("#rating_text").text(_("average rating: %s (%s votes)").format(data.rating_avg, data.rating_total));
 
                 }
               }, "json");
