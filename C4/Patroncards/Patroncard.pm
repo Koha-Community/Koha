@@ -394,7 +394,7 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
             PDF::Reuse::Barcode::COOP2of5(
                 x                   => $params{'llx'}* $self->{'unitvalue'},
                 y                   => $params{'lly'}* $self->{'unitvalue'},
-                value               => "*$params{barcode_data}*",
+                value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
                 mode                    => 'graphic',
@@ -412,7 +412,7 @@ sub _draw_barcode {   # this is cut-and-paste from Label.pm because there is no 
             PDF::Reuse::Barcode::Industrial2of5(
                 x                   => $params{'llx'}* $self->{'unitvalue'} ,
                 y                   => $params{'lly'}* $self->{'unitvalue'},
-                value               => "*$params{barcode_data}*",
+                value               => $params{barcode_data},
                 xSize               => $x_scale_factor,
                 ySize               => $params{'y_scale_factor'},
                 mode                    => 'graphic',
