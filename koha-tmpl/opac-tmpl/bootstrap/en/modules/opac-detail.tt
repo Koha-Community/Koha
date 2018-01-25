@@ -532,11 +532,12 @@
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
-                    [% IF ( NovelistSelectProfile && normalized_isbn ) %]
+                    [% IF ( NovelistSelectProfile && (normalized_isbn || normalized_upc) ) %]
                         [% IF ( NovelistSelectView == 'above') %]
                             <span class="results_summary NovelistSelect" style="display:none;">
                             <span class="label">Novelist Select: </span>
-                            <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+                            <div data-novelist-novelistselect=[% IF normalized_isbn %][% normalized_isbn %][% ELSE %][% normalized_upc %][% END %]></div>
+
                             </span>
                         [% END %]
                     [% END # / IF NovelistSelectProfile %]
@@ -603,7 +604,7 @@
                             <li id="tab_comments"><a href="#comments">Comments[% ' ( ' _ (reviews.size || 0) _ ' )' %]</a></li>
                         [% END %]
 
-                        [% IF ( NovelistSelectProfile && normalized_isbn ) %]
+                        [% IF ( NovelistSelectProfile && (normalized_isbn || normalized_upc) ) %]
                             [% IF ( NovelistSelectView == 'tab') %]
                                 <li id="tab_NovelistSelect" class="NovelistSelect" style="display:none;"> <a href="#NovelistSelect">Novelist Select</a></li>
                             [% END %]
@@ -1167,7 +1168,7 @@
             <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
         [% END %]
 
-        [% IF ( NovelistSelectProfile && normalized_isbn ) %]
+        [% IF ( NovelistSelectProfile && normalized_isbn || normalized_upc) ) %]
             <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
         [% END %]
 
