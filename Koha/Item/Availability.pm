@@ -159,7 +159,12 @@ sub swaggerize {
         category => 'CCODE',
         authorised_value => $item->ccode
     })->next;
+    my $loc_desc = Koha::AuthorisedValues->search({
+        category => 'LOC',
+        authorised_value => $item->location
+    })->next;
     $ccode_desc = $ccode_desc->lib if defined $ccode_desc;
+    $loc_desc   = $loc_desc->lib if defined $loc_desc;
     my $hash = {
         itemnumber => 0+$item->itemnumber,
         biblionumber => 0+$item->biblionumber,
@@ -172,6 +177,7 @@ sub swaggerize {
         itemcallnumber => $item->itemcallnumber,
         itemnotes => $item->itemnotes,
         location => $item->location,
+        location_description => $loc_desc,
         ccode => $item->ccode,
         ccode_description => $ccode_desc,
     };
