@@ -1471,10 +1471,11 @@ sub merge {
                 my $newtag = $tags_new && @$tags_new
                   ? _merge_newtag( $tag, $tags_new )
                   : $tag;
+                my $controlled_ind = Koha::Authority->new({ authtypecode => $authtypeto ? $authtypeto->authtypecode : undef })->controlled_indicators({ record => $MARCto, biblio_tag => $newtag }); #FIXME Replace this tric with new when refactoring
                 my $field_to = MARC::Field->new(
                     $newtag,
-                    $field->indicator(1),
-                    $field->indicator(2),
+                    $controlled_ind->{ind1} // $field->indicator(1),
+                    $controlled_ind->{ind2} // $field->indicator(2),
                     9 => $mergeto, # Needed to create field, will be moved
                 );
                 my ( @prefix, @postfix );
@@ -1499,6 +1500,15 @@ sub merge {
                 }
                 foreach my $subfield ( @prefix, @record_to, @postfix ) {
                     $field_to->add_subfields($subfield->[0] => $subfield->[1]);
+                }
+                if( exists $controlled_ind->{sub2} ) { # thesaurus info
+                    if( defined $controlled_ind->{sub2} ) {
+                        # Add or replace
+                        $field_to->update( 2 => $controlled_ind->{sub2} );
+                    } else {
+                        # Key alerts us here to remove $2
+                        $field_to->delete_subfield( code => '2' );
+                    }
                 }
                 # Move $9 to the end
                 $field_to->delete_subfield( code => '9' );

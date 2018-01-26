@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use MARC::Field;
 use MARC::File::XML;
 use MARC::Record;
@@ -29,7 +29,9 @@ use Test::MockObject;
 use Test::Warn;
 
 use C4::Context;
+use C4::AuthoritiesMarc;
 use Koha::Authority;
+use Koha::Authority::ControlledIndicators;
 use Koha::Authorities;
 use Koha::Authority::MergeRequest;
 use Koha::Authority::Type;
@@ -164,6 +166,37 @@ subtest 'Trivial tests for get_usage_count and linked_biblionumbers' => sub {
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
     cmp_deeply( [ $auth1->linked_biblionumbers ], [ 2001 ],
         'linked_biblionumbers with Elasticsearch' );
+    t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
+};
+
+subtest 'Simple test for controlled_indicators' => sub {
+    plan tests => 4;
+
+    # NOTE: See more detailed tests in t/Koha/Authority/ControlledIndicators.t
+
+    # Mock pref so that authority indicators are swapped for marc21/unimarc
+    # The biblio tag is actually made irrelevant here
+    t::lib::Mocks::mock_preference('AuthorityControlledIndicators', q|marc21,*,ind1:auth2,ind2:auth1
+unimarc,*,ind1:auth2,ind2:auth1|);
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+
+    my $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '100', '1', '2', a => 'Name' ) );
+    my $type = $builder->build({ source => 'AuthType', value => { auth_tag_to_report => '100'} });
+    my $authid = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} );
+    my $auth = Koha::Authorities->find( $authid );
+    is( $auth->controlled_indicators({ biblio_tag => '123' })->{ind1}, '2', 'MARC21: Swapped ind2' );
+    is( $auth->controlled_indicators({ biblio_tag => '234' })->{ind2}, '1', 'MARC21: Swapped ind1' );
+
+    # try UNIMARC too
+    t::lib::Mocks::mock_preference( 'marcflavour', 'UNIMARC' );
+    $record = MARC::Record->new;
+    $record->append_fields( MARC::Field->new( '210', '1', '2', a => 'Name' ) );
+    $type = $builder->build({ source => 'AuthType', value => { auth_tag_to_report => '210'} });
+    $authid = C4::AuthoritiesMarc::AddAuthority( $record, undef, $type->{authtypecode} );
+    $auth = Koha::Authorities->find( $authid );
+    is( $auth->controlled_indicators({ biblio_tag => '345' })->{ind1}, '2', 'UNIMARC: Swapped ind2' );
+    is( $auth->controlled_indicators({ biblio_tag => '456' })->{ind2}, '1', 'UNIMARC: Swapped ind1' );
 };
 
 sub simple_search_compat {

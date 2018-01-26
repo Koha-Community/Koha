@@ -20,6 +20,8 @@ package Koha::Authority;
 use Modern::Perl;
 
 use base qw(Koha::Object);
+
+use Koha::Authority::ControlledIndicators;
 use Koha::SearchEngine::Search;
 
 =head1 NAME
@@ -57,6 +59,55 @@ sub linked_biblionumbers {
     my ( $self, $params ) = @_;
     $params->{authid} = $self->authid;
     return Koha::Authorities->linked_biblionumbers( $params );
+}
+
+=head3 controlled_indicators
+
+    Some authority types control the indicators of some corresponding
+    biblio fields (especially in MARC21).
+    For example, if you have a PERSO_NAME authority (report tag 100), the
+    first indicator of biblio field 600 directly comes from the authority,
+    and the second indicator depends on thesaurus settings in the authority
+    record. Use this method to obtain such controlled values. In this example
+    you should pass 600 in the biblio_tag parameter.
+
+    my $result = $self->controlled_indicators({
+        record => $auth_marc, biblio_tag => $bib_tag
+    });
+    my $ind1 = $result->{ind1};
+    my $ind2 = $result->{ind2};
+    my $subfield_2 = $result->{sub2}; # Optional subfield 2 when ind==7
+
+    If an indicator is not controlled, the result hash does not contain a key
+    for its value. (Same for the sub2 key for an optional subfield $2.)
+
+    Note: The record parameter is a temporary bypass in order to prevent
+    needless conversion of $self->marcxml.
+
+=cut
+
+sub controlled_indicators {
+    my ( $self, $params ) = @_;
+    my $tag = $params->{biblio_tag} // q{};
+    my $record = $params->{record};
+
+    my $flavour = C4::Context->preference('marcflavour') eq 'UNIMARC'
+        ? 'UNIMARCAUTH'
+        : 'MARC21';
+    if( !$record ) {
+        $record = MARC::Record->new_from_xml(
+            $self->marcxml, 'UTF-8', $flavour );
+    }
+
+    my $authtype = Koha::Authority::Types->find( $self->authtypecode );
+    return {} if !$authtype;
+
+    return Koha::Authority::ControlledIndicators->new->get({
+        auth_record => $record,
+        report_tag  => $authtype->auth_tag_to_report,
+        biblio_tag  => $tag,
+        flavour     => $flavour,
+    });
 }
 
 =head2 Class Methods

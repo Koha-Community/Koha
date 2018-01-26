@@ -4,7 +4,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use Getopt::Long;
 use MARC::Record;
@@ -15,6 +15,7 @@ use t::lib::TestBuilder;
 
 use C4::Biblio;
 use Koha::Authorities;
+use Koha::Authority::ControlledIndicators;
 use Koha::Authority::MergeRequests;
 use Koha::Database;
 
@@ -383,6 +384,42 @@ subtest 'merge should not reorder too much' => sub {
     is_deeply( $subfields, [ 'i', 'a', 'b', 'c', '9' ], 'Merge only moved $9' );
     $subfields = [ map { $_->[0] } $biblio2->field('609')->subfields ];
     is_deeply( $subfields, [ 'i', 'a', 'b', 'c', '9' ], 'Order kept' );
+};
+
+subtest 'Test how merge handles controlled indicators' => sub {
+    plan tests => 4;
+
+    # Note: See more detailed tests in t/Koha/Authority/ControlledIndicators.t
+
+    # Testing MARC21 because thesaurus code makes it more interesting
+    t::lib::Mocks::mock_preference( 'marcflavour', 'MARC21' );
+    t::lib::Mocks::mock_preference('AuthorityControlledIndicators', q|marc21,*,ind1:auth1,ind2:thesaurus|);
+
+    my $authmarc = MARC::Record->new;
+    $authmarc->append_fields(
+        MARC::Field->new( '008', (' 'x11).'r' ), # thesaurus code
+        MARC::Field->new( '109', '7', '', 'a' => 'a' ),
+    );
+    my $id = AddAuthority( $authmarc, undef, $authtype1 );
+    my $biblio = MARC::Record->new;
+    $biblio->append_fields(
+        MARC::Field->new( '609', '8', '4', a => 'a', 2 => '2', 9 => $id ),
+    );
+    my ( $biblionumber ) = C4::Biblio::AddBiblio( $biblio, '' );
+
+    # Merge and check indicators and $2
+    merge({ mergefrom => $id, MARCfrom => $authmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
+    my $biblio2 = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    is( $biblio2->field('609')->indicator(1), '7', 'Indicator1 OK' );
+    is( $biblio2->field('609')->indicator(2), '7', 'Indicator2 OK' );
+    is( $biblio2->subfield('609', '2'), 'aat', 'Subfield $2 OK' );
+
+    # Test $2 removal now
+    $authmarc->field('008')->update( (' 'x11).'a' ); # LOC, no $2 needed
+    AddAuthority( $authmarc, $id, $authtype1 ); # modify
+    merge({ mergefrom => $id, MARCfrom => $authmarc, mergeto => $id, MARCto => $authmarc, biblionumbers => [ $biblionumber ] });
+    $biblio2 = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
+    is( $biblio2->subfield('609', '2'), undef, 'No subfield $2 left' );
 };
 
 sub set_mocks {
