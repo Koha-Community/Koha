@@ -36,6 +36,17 @@ use C4::ImportBatch;
 use C4::XSLT ();
 
 my $input= new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+  {
+    template_name   => "catalogue/showmarc.tt",
+    query           => $input,
+    type            => "intranet",
+    authnotrequired => 0,
+    flagsrequired   => { catalogue => 1  },
+    debug           => 1,
+  }
+);
+
 my $biblionumber= $input->param('id');
 my $importid= $input->param('importid');
 my $view= $input->param('viewas')||'';
@@ -69,16 +80,6 @@ if($view eq 'card' || $view eq 'html') {
           Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
 }
 else {
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-      {
-        template_name   => "catalogue/showmarc.tt",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { catalogue => 1  },
-        debug           => 1,
-      }
-    );
     $template->param( MARC_FORMATTED => $record->as_formatted );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
