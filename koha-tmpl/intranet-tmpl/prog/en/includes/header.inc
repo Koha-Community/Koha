@@ -28,6 +28,9 @@
                         <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
                     [% END %]
                     <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+                    [% IF ( Koha.Preference('ILLModule') ) %]
+                        <li><a href="/cgi-bin/koha/ill/ill-requests.pl">ILL Requests</a></li>
+                    [% END %]
                     [% IF ( CAN_user_serials ) %]
                         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
                     [% END %]
