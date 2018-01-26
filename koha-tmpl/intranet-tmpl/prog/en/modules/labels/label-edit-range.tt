@@ -15,7 +15,7 @@
 
         function validate() {
             var error = false;
-            if (parseInt(document.getElementById("from-input").value) == 0) {
+            if (parseInt(document.getElementById("from-input").value) < 1) {
                 document.getElementById("from-error").innerHTML = "  *Cannot be smaller than 1";
                 error = true;
             } else {
