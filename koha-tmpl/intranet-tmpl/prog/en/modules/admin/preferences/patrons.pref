@@ -200,6 +200,11 @@ Patrons:
                no: "Don't"
          - track last patron activity.
          - Everytime a patron will connect, the borrowers.lastseen will be updated with the current time.
+     -
+         - Block a patron's account if it reaches
+         - pref: FailedLoginAttempts
+           class: integer
+         - failed login attempts.
     "Norwegian patron database":
      -
          - pref: NorwegianPatronDBEnable
@@ -221,8 +226,3 @@ Patrons:
                yes: Do
                no: "Don't"
          - search the Norwegian national patron database after a local search result was found.
-     -
-         - Block a patron's account if it reaches
-         - pref: FailedLoginAttempts
-           class: integer
-         - failed login attempts.
