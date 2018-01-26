@@ -57,9 +57,13 @@ $(document).ready(function(){
             $(".btn-group").removeClass("open");
             return false;
         });
-        $("#updatechild").click(function(){
-            update_child();
-            $(".btn-group").removeClass("open");
+        $("#updatechild").click(function(e){
+            if( $(this).data("toggle") == "tooltip"){ // Disabled menu option has tooltip attribute
+                e.preventDefault();
+            } else {
+                update_child();
+                $(".btn-group").removeClass("open");
+            }
         });
     }
 
