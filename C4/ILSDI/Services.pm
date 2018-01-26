@@ -48,27 +48,27 @@ C4::ILS-DI::Services - ILS-DI Services
 =head1 DESCRIPTION
 
 Each function in this module represents an ILS-DI service.
-They all takes a CGI instance as argument and most of them return a 
+They all takes a CGI instance as argument and most of them return a
 hashref that will be printed by XML::Simple in opac/ilsdi.pl
 
 =head1 SYNOPSIS
 
-	use C4::ILSDI::Services;
-	use XML::Simple;
-	use CGI qw ( -utf8 );
+    use C4::ILSDI::Services;
+    use XML::Simple;
+    use CGI qw ( -utf8 );
 
-	my $cgi = new CGI;
+    my $cgi = new CGI;
 
-	$out = LookupPatron($cgi);
+    $out = LookupPatron($cgi);
 
-	print CGI::header('text/xml');
-	print XMLout($out,
-		noattr => 1, 
-		noescape => 1,
-		nosort => 1,
+    print CGI::header('text/xml');
+    print XMLout($out,
+        noattr => 1,
+        noescape => 1,
+        nosort => 1,
                 xmldecl => '<?xml version="1.0" encoding="UTF-8" ?>',
-		RootName => 'LookupPatron', 
-		SuppressEmpty => 1);
+        RootName => 'LookupPatron',
+        SuppressEmpty => 1);
 
 =cut
 
@@ -76,7 +76,7 @@ hashref that will be printed by XML::Simple in opac/ilsdi.pl
 
 =head2 GetAvailability
 
-Given a set of biblionumbers or itemnumbers, returns a list with 
+Given a set of biblionumbers or itemnumbers, returns a list with
 availability of the items associated with the identifiers.
 
 Parameters:
@@ -84,9 +84,10 @@ Parameters:
 =head3 id (Required)
 
 list of either biblionumbers or itemnumbers
+
 =head3 id_type (Required)
 
-defines the type of record identifier being used in the request, 
+defines the type of record identifier being used in the request,
 possible values:
 
   - bib
@@ -94,7 +95,7 @@ possible values:
 
 =head3 return_type (Optional)
 
-requests a particular level of detail in reporting availability, 
+requests a particular level of detail in reporting availability,
 possible values:
 
   - bib
@@ -102,8 +103,8 @@ possible values:
 
 =head3 return_fmt (Optional)
 
-requests a particular format or set of formats in reporting 
-availability 
+requests a particular format or set of formats in reporting
+availability
 
 =cut
 
@@ -171,13 +172,13 @@ sub GetAvailability {
 
 =head2 GetRecords
 
-Given a list of biblionumbers, returns a list of record objects that 
+Given a list of biblionumbers, returns a list of record objects that
 contain bibliographic information, as well as associated holdings and item
-information. The caller may request a specific metadata schema for the 
+information. The caller may request a specific metadata schema for the
 record objects to be returned.
 
-This function behaves similarly to HarvestBibliographicRecords and 
-HarvestExpandedRecords in Data Aggregation, but allows quick, real time 
+This function behaves similarly to HarvestBibliographicRecords and
+HarvestExpandedRecords in Data Aggregation, but allows quick, real time
 lookup by bibliographic identifier.
 
 You can use OAI-PMH ListRecords instead of this service.
@@ -185,11 +186,11 @@ You can use OAI-PMH ListRecords instead of this service.
 Parameters:
 
   - id (Required)
-	list of system record identifiers
+    list of system record identifiers
   - id_type (Optional)
-	Defines the metadata schema in which the records are returned, 
-	possible values:
-  	  - MARCXML
+    Defines the metadata schema in which the records are returned,
+    possible values:
+        - MARCXML
 
 =cut
 
@@ -253,8 +254,8 @@ sub GetRecords {
 
 =head2 GetAuthorityRecords
 
-Given a list of authority record identifiers, returns a list of record 
-objects that contain the authority records. The function user may request 
+Given a list of authority record identifiers, returns a list of record
+objects that contain the authority records. The function user may request
 a specific metadata schema for the record objects.
 
 Parameters:
@@ -294,14 +295,14 @@ Looks up a patron in the ILS by an identifier, and returns the borrowernumber.
 Parameters:
 
   - id (Required)
-	an identifier used to look up the patron in Koha
+    an identifier used to look up the patron in Koha
   - id_type (Optional)
-	the type of the identifier, possible values:
-	- cardnumber
-	- userid
+    the type of the identifier, possible values:
+    - cardnumber
+    - userid
         - email
-	- borrowernumber
-	- firstname
+    - borrowernumber
+    - firstname
         - surname
 
 =cut
@@ -312,17 +313,17 @@ sub LookupPatron {
     my $patrons;
 
     if(!$cgi->param('id')) {
-	return { message => 'PatronNotFound' };
+    return { message => 'PatronNotFound' };
     }
 
     if($cgi->param('id_type')) {
-	$patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
+    $patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
     } else {
-	foreach my $id_type ('cardnumber', 'userid', 'email', 'borrowernumber',
-				     'surname', 'firstname') {
-	    $patrons = Koha::Patrons->search( { $id_type => $cgi->param('id') } );
-	    last if($patrons->count);
-	}
+    foreach my $id_type ('cardnumber', 'userid', 'email', 'borrowernumber',
+                     'surname', 'firstname') {
+        $patrons = Koha::Patrons->search( { $id_type => $cgi->param('id') } );
+        last if($patrons->count);
+    }
     }
     unless ( $patrons->count ) {
         return { message => 'PatronNotFound' };
@@ -333,7 +334,7 @@ sub LookupPatron {
 
 =head2 AuthenticatePatron
 
-Authenticates a user's login credentials and returns the identifier for 
+Authenticates a user's login credentials and returns the identifier for
 the patron.
 
 Parameters:
@@ -362,22 +363,22 @@ sub AuthenticatePatron {
 
 =head2 GetPatronInfo
 
-Returns specified information about the patron, based on options in the 
-request. This function can optionally return patron's contact information, 
+Returns specified information about the patron, based on options in the
+request. This function can optionally return patron's contact information,
 fine information, hold request information, and loan information.
 
 Parameters:
 
   - patron_id (Required)
-	the borrowernumber
+    the borrowernumber
   - show_contact (Optional, default 1)
-	whether or not to return patron's contact information in the response
+    whether or not to return patron's contact information in the response
   - show_fines (Optional, default 0)
-	whether or not to return fine information in the response
+    whether or not to return fine information in the response
   - show_holds (Optional, default 0)
-	whether or not to return hold request information in the response
+    whether or not to return hold request information in the response
   - show_loans (Optional, default 0)
-	whether or not to return loan information request information in the response 
+    whether or not to return loan information request information in the response
 
 =cut
 
@@ -484,7 +485,7 @@ Returns a patron's status information.
 Parameters:
 
   - patron_id (Required)
-	the borrower ID
+    the borrower ID
 
 =cut
 
@@ -506,15 +507,15 @@ sub GetPatronStatus {
 
 =head2 GetServices
 
-Returns information about the services available on a particular item for 
+Returns information about the services available on a particular item for
 a particular patron.
 
 Parameters:
 
   - patron_id (Required)
-	a borrowernumber
+    a borrowernumber
   - item_id (Required)
-	an itemnumber
+    an itemnumber
 
 =cut
 
@@ -583,11 +584,11 @@ Extends the due date for a borrower's existing issue.
 Parameters:
 
   - patron_id (Required)
-	a borrowernumber
+    a borrowernumber
   - item_id (Required)
-	an itemnumber
+    an itemnumber
   - desired_due_date (Required)
-	the date the patron would like the item returned by 
+    the date the patron would like the item returned by
 
 =cut
 
@@ -627,17 +628,17 @@ Creates, for a borrower, a biblio-level hold reserve.
 Parameters:
 
   - patron_id (Required)
-	a borrowernumber
+    a borrowernumber
   - bib_id (Required)
-	a biblionumber
+    a biblionumber
   - request_location (Required)
-	IP address where the end user request is being placed
+    IP address where the end user request is being placed
   - pickup_location (Optional)
-	a branch code indicating the location to which to deliver the item for pickup
+    a branch code indicating the location to which to deliver the item for pickup
   - needed_before_date (Optional)
-	date after which hold request is no longer needed
+    date after which hold request is no longer needed
   - pickup_expiry_date (Optional)
-	date after which item returned to shelf if item is not picked up 
+    date after which item returned to shelf if item is not picked up
 
 =cut
 
@@ -689,23 +690,23 @@ sub HoldTitle {
 
 =head2 HoldItem
 
-Creates, for a borrower, an item-level hold request on a specific item of 
+Creates, for a borrower, an item-level hold request on a specific item of
 a bibliographic record in Koha.
 
 Parameters:
 
   - patron_id (Required)
-	a borrowernumber
+    a borrowernumber
   - bib_id (Required)
-	a biblionumber
+    a biblionumber
   - item_id (Required)
-	an itemnumber
+    an itemnumber
   - pickup_location (Optional)
-	a branch code indicating the location to which to deliver the item for pickup
+    a branch code indicating the location to which to deliver the item for pickup
   - needed_before_date (Optional)
-	date after which hold request is no longer needed
+    date after which hold request is no longer needed
   - pickup_expiry_date (Optional)
-	date after which item returned to shelf if item is not picked up 
+    date after which item returned to shelf if item is not picked up
 
 =cut
 
