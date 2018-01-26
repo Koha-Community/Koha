@@ -50,7 +50,6 @@ use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::BiblioFrameworks;
-use Koha::Checkouts;
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
@@ -596,7 +595,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{bortitle}       = $patron->title;
             $ri{bornote}        = $patron->borrowernotes;
             $ri{borcategorycode}= $patron->categorycode;
-            $ri{borissuescount} = Koha::Checkouts->count( { borrowernumber => $patron->borrowernumber } );
+            $ri{borissuescount} = $patron->checkouts->count;
         }
         else {
             $ri{borrowernumber} = $riborrowernumber{$_};
