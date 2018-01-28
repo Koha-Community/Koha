@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -198,3 +198,58 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     $schema->storage->txn_rollback;
 };
 
+
+subtest 'LookupPatron test' => sub {
+
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    $schema->resultset( 'Issue' )->delete_all;
+    $schema->resultset( 'Borrower' )->delete_all;
+    $schema->resultset( 'BorrowerAttribute' )->delete_all;
+    $schema->resultset( 'BorrowerAttributeType' )->delete_all;
+    $schema->resultset( 'Category' )->delete_all;
+    $schema->resultset( 'Item' )->delete_all; # 'Branch' deps. on this
+    $schema->resultset( 'Branch' )->delete_all;
+
+    my $borrower = $builder->build({
+        source => 'Borrower',
+    });
+
+    my $query = CGI->new();
+    my $bad_result = C4::ILSDI::Services::LookupPatron($query);
+    is( $bad_result->{message}, 'PatronNotFound', 'No parameters' );
+
+    $query->delete_all();
+    $query->param( 'id', $borrower->{firstname} );
+    my $optional_result = C4::ILSDI::Services::LookupPatron($query);
+    is(
+        $optional_result->{id},
+        $borrower->{borrowernumber},
+        'Valid Firstname only'
+    );
+
+    $query->delete_all();
+    $query->param( 'id', 'ThereIsNoWayThatThisCouldPossiblyBeValid' );
+    my $bad_optional_result = C4::ILSDI::Services::LookupPatron($query);
+    is( $bad_optional_result->{message}, 'PatronNotFound', 'Invalid ID' );
+
+    foreach my $id_type (
+        'cardnumber',
+        'userid',
+        'email',
+        'borrowernumber',
+        'surname',
+        'firstname'
+    ) {
+        $query->delete_all();
+        $query->param( 'id_type', $id_type );
+        $query->param( 'id', $borrower->{$id_type} );
+        my $result = C4::ILSDI::Services::LookupPatron($query);
+        is( $result->{'id'}, $borrower->{borrowernumber}, "Checking $id_type" );
+    }
+
+    # Cleanup
+    $schema->storage->txn_rollback;
+};
