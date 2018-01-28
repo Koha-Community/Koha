@@ -310,20 +310,21 @@ Parameters:
 sub LookupPatron {
     my ($cgi) = @_;
 
+    my $id      = $cgi->param('id');
+    if(!$id) {
+        return { message => 'PatronNotFound' };
+    }
+
     my $patrons;
-
-    if(!$cgi->param('id')) {
-    return { message => 'PatronNotFound' };
-    }
-
-    if($cgi->param('id_type')) {
-    $patrons = Koha::Patrons->search( { $cgi->param('id_type') => $cgi->param('id') } );
+    my $passed_id_type = $cgi->param('id_type');
+    if($passed_id_type) {
+        $patrons = Koha::Patrons->search( { $passed_id_type => $id } );
     } else {
-    foreach my $id_type ('cardnumber', 'userid', 'email', 'borrowernumber',
+        foreach my $id_type ('cardnumber', 'userid', 'email', 'borrowernumber',
                      'surname', 'firstname') {
-        $patrons = Koha::Patrons->search( { $id_type => $cgi->param('id') } );
-        last if($patrons->count);
-    }
+            $patrons = Koha::Patrons->search( { $id_type => $id } );
+            last if($patrons->count);
+        }
     }
     unless ( $patrons->count ) {
         return { message => 'PatronNotFound' };
