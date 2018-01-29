@@ -505,7 +505,7 @@ sub TooMany {
 
     # Now count total loans against the limit for the branch
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
-    if (defined($branch_borrower_circ_rule->{patron_maxissueqty})) {
+    if (defined($branch_borrower_circ_rule->{patron_maxissueqty}) and $branch_borrower_circ_rule->{patron_maxissueqty} ne '') {
         my @bind_params = ();
         my $branch_count_query = q|
             SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
@@ -528,7 +528,7 @@ sub TooMany {
         my $max_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxissueqty};
         my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxonsiteissueqty};
 
-        if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
+        if ( $onsite_checkout and $max_onsite_checkouts_allowed ne '' ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
                 return {
                     reason => 'TOO_MANY_ONSITE_CHECKOUTS',

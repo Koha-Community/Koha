@@ -547,14 +547,14 @@
                             [% END %]
                         </td>
                         <td>
-                            [% IF patron_maxissueqty  %]
+                            [% IF patron_maxissueqty.defined && patron_maxissueqty != '' %]
                                 [% patron_maxissueqty | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
                             [% END %]
                         </td>
                         <td>
-                            [% IF patron_maxonsiteissueqty  %]
+                            [% IF patron_maxonsiteissueqty.defined && patron_maxonsiteissueqty != '' %]
                                 [% patron_maxonsiteissueqty | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
