@@ -108,6 +108,11 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/amazonimages_[% KOHA_VERSION %].js"></script>
 [% END %]
 
+<script src="[% interface %]/lib/emoji-picker/js/config.js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/util.js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/jquery.emojiarea.js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/emoji-picker.js"></script>
+
 <script type="text/javascript">
     //<![CDATA[
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
@@ -252,6 +257,13 @@ $(document).ready(function() {
             jQuery.removeCookie("search_path_code", { path: '/'});
         });
     }
+
+    window.emojiPicker = new EmojiPicker({
+      emojiable_selector: '[data-emojiable=true]',
+      assetsPath: '[% interface %]/lib/emoji-picker/img/',
+      popupButtonClasses: 'fa fa-smile-o'
+    });
+    window.emojiPicker.discover();
 });
 </script>
 [% PROCESS jsinclude %]

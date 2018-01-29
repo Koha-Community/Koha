@@ -40,6 +40,7 @@
     [% BLOCK cssinclude %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/jquery.rating_[% KOHA_VERSION %].css" />[% END %]
 [% END %]
 [% INCLUDE greybox.inc %]
+    <link href="[% interface %]/lib/emoji-picker/css/emoji.css" rel="stylesheet">
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -411,10 +412,19 @@
                                 [% IF ( loggedinusername ) %]
                                     <form id="tagform[% biblio.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl" style="display:none;">
                                         <label for="newtag[% biblio.biblionumber %]">New tag(s), separated by a comma:</label>
-                                        <input name="newtag[% biblio.biblionumber %]" id="newtag[% biblio.biblionumber %]" maxlength="100" type="text"/>
+                                        <p class="emoji-picker-container">
+                                          <input
+                                            name="newtag[% biblio.biblionumber %]"
+                                            id="newtag[% biblio.biblionumber %]"
+                                            type="text"
+                                            maxlength="100"
+                                            data-emojiable="true"
+                                            data-emoji-input="unicode">
+                                        </p>
                                         <input name="tagbutton" class="btn btn-small tagbutton" title="[% biblio.biblionumber %]" type="submit" value="Add" />
                                         <a class="cancel_tag_add" id="cancel[% biblio.biblionumber %]" href="#">(done)</a>
                                     </form>
+
                                     <span id="newtag[% biblio.biblionumber %]_status" class="tagstatus" style="display:none;">
                                         Tag status here.
                                     </span>
