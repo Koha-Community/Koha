@@ -27,13 +27,15 @@ if( CheckVersion( $DBversion ) ) {
         onshelfholds
         opacitemholds
         article_requests
+        maxissueqty
+        maxonsiteissueqty
     );
 
     if ( column_exists( 'issuingrules', 'categorycode' ) ) {
         foreach my $column ( @columns ) {
             $dbh->do("
                 INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
-                SELECT categorycode, branchcode, itemtype, \'$column\', $column
+                SELECT categorycode, branchcode, itemtype, \'$column\', COALESCE( $column, '' )
                 FROM issuingrules
             ");
         }

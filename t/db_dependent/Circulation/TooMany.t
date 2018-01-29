@@ -164,7 +164,7 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
         {
             branchcode   => $branch->{branchcode},
             categorycode => $category->{categorycode},
-            itemtype     => '*',
+            itemtype     => undef,
             rules        => {
                 maxissueqty       => 1,
                 maxonsiteissueqty => undef,

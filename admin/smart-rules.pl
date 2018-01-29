@@ -253,6 +253,7 @@ elsif ($op eq 'add') {
     my $finedays     = $input->param('finedays');
     my $maxsuspensiondays = $input->param('maxsuspensiondays');
     $maxsuspensiondays = undef if $maxsuspensiondays eq q||;
+    $maxsuspensiondays = '' if $maxsuspensiondays eq q||;
     my $suspension_chargeperiod = $input->param('suspension_chargeperiod') || 1;
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
@@ -262,11 +263,11 @@ elsif ($op eq 'add') {
     my $renewalsallowed  = $input->param('renewalsallowed');
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
-    $norenewalbefore = undef if $norenewalbefore =~ /^\s*$/;
+    $norenewalbefore = '' if $norenewalbefore =~ /^\s*$/;
     my $auto_renew = $input->param('auto_renew') eq 'yes' ? 1 : 0;
     my $no_auto_renewal_after = $input->param('no_auto_renewal_after');
-    $no_auto_renewal_after = undef if $no_auto_renewal_after =~ /^\s*$/;
-    my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || undef;
+    $no_auto_renewal_after = '' if $no_auto_renewal_after =~ /^\s*$/;
+    my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || '';
     $no_auto_renewal_after_hard_limit = eval { dt_from_string( $input->param('no_auto_renewal_after_hard_limit') ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = $input->param('reservesallowed');
@@ -289,7 +290,7 @@ elsif ($op eq 'add') {
     my $rentaldiscount = $input->param('rentaldiscount');
     my $opacitemholds = $input->param('opacitemholds') || 0;
     my $article_requests = $input->param('article_requests') || 'no';
-    my $overduefinescap = $input->param('overduefinescap') || undef;
+    my $overduefinescap = $input->param('overduefinescap') || '';
     my $cap_fine_to_replacement_price = $input->param('cap_fine_to_replacement_price') eq 'on';
     my $note = $input->param('note');
     $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";

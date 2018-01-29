@@ -473,7 +473,7 @@ sub TooMany {
         my $max_checkouts_allowed = $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef;
         my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef;
 
-        if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
+        if ( $onsite_checkout and $max_onsite_checkouts_allowed ne '' ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
                 return {
                     reason => 'TOO_MANY_ONSITE_CHECKOUTS',
@@ -2303,7 +2303,7 @@ sub _calculate_new_debar_dt {
         # If the max suspension days is < than the suspension days
         # the suspension days is limited to this maximum period.
         my $max_sd = $issuing_rule->{maxsuspensiondays};
-        if ( defined $max_sd ) {
+        if ( defined $max_sd && $max_sd ne '' ) {
             $max_sd = DateTime::Duration->new( days => $max_sd );
             $suspension_days = $max_sd
               if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;

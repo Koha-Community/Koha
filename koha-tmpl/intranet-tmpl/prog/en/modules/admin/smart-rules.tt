@@ -185,14 +185,14 @@
                                         [% ELSE %]<span>&nbsp;</span>[% END %]
                                     </td>
                                     <td>
-                                        [% IF maxissueqty  %]
+                                        [% IF maxissueqty.defined && maxissueqty != '' %]
                                             [% maxissueqty %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
                                         [% END %]
                                     </td>
                                     <td>
-                                        [% IF maxonsiteissueqty  %]
+                                        [% IF maxonsiteissueqty.defined && maxonsiteissueqty != ''  %]
                                             [% maxonsiteissueqty %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
