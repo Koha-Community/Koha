@@ -294,7 +294,7 @@ sub marc2dcxml {
         };
     } elsif ( $record =~ /^MARC::Record/ ) { # if OK makes xslt transformation
         my $xslt_engine = Koha::XSLT_Handler->new;
-        if ( $format =~ /oaidc|srwdc|rdfdc/ ) {
+        if ( $format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
             $output = $xslt_engine->transform( $marcxml, $xsl );
         } else {
             croak "The format argument ($format) not accepted.\n" .

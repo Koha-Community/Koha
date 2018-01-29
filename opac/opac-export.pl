@@ -78,7 +78,7 @@ elsif ($format =~ /bibtex/) {
     $marc = marc2bibtex($marc,$biblionumber);
     $format = 'bibtex';
 }
-elsif ($format =~ /dc$/) {
+elsif ($format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
     # TODO: Dublin Core leaks fields marked hidden by framework.
     $marc = marc2dcxml($marc, undef, $biblionumber, $format);
     $format = "dublin-core.xml";
