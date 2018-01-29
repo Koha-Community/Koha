@@ -349,7 +349,7 @@ if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     $csv->combine(@translated_keys);
     print $csv->string, "\n";
 
-    my @keys = qw/ title author barcode itemnumber homebranch location itemcallnumber notforloan lost damaged withdrawn stocknumber /;
+    my @keys = qw/ title author barcode itemnumber homebranch location itemcallnumber notforloan itemlost damaged withdrawn stocknumber /;
     for my $item ( @$loop ) {
         my @line;
         for my $key (@keys) {
