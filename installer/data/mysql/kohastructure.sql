@@ -1101,7 +1101,7 @@ CREATE TABLE `creator_templates` (
 DROP TABLE IF EXISTS `marc_subfield_structure`;
 CREATE TABLE `marc_subfield_structure` (
   `tagfield` varchar(3) NOT NULL default '',
-  `tagsubfield` varchar(1) NOT NULL default '' COLLATE utf8_bin,
+  `tagsubfield` varchar(1) NOT NULL default '' COLLATE utf8mb4_bin,
   `liblibrarian` varchar(255) NOT NULL default '',
   `libopac` varchar(255) NOT NULL default '',
   `repeatable` tinyint(4) NOT NULL default 0,
