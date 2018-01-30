@@ -34,6 +34,13 @@ use C4::Templates;
 use Koha::RecordProcessor;
 
 my $input       = new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+    template_name   => "opac-showmarc.tt",
+    query           => $input,
+    type            => "opac",
+    authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+    debug           => 1,
+});
 my $biblionumber = $input->param('id');
 $biblionumber   = int($biblionumber);
 my $importid= $input->param('importid');
@@ -71,13 +78,6 @@ if ($view eq 'card' || $view eq 'html') {
     output_html_with_http_headers $input, undef, Encode::encode_utf8(C4::XSLT::engine->transform($xml, $xsl));
 }
 else { #view eq marc
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => "opac-showmarc.tt",
-        query           => $input,
-        type            => "opac",
-        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-        debug           => 1,
-    });
     $template->param( MARC_FORMATTED => $record->as_formatted );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
