@@ -255,6 +255,7 @@ sub AUTOLOAD {
 
     if (!exists $self->{logger}) {
         # do not use log4perl; no print to stderr
+        return undef;
     }
     elsif ($self->{logger}->can($method)) {
         return $self->{logger}->$method(@_);
