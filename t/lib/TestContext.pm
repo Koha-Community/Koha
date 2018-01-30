@@ -51,12 +51,12 @@ sub setUserenv {
             $borrower = t::lib::TestObjects::PatronFactory->createTestGroup( $borrowerFactoryParams, undef, $testContext );
         }
         C4::Context->_new_userenv('DUMMY SESSION');
-        C4::Context::set_userenv($borrower->borrowernumber, $borrower->userid, $borrower->cardnumber, $borrower->firstname, $borrower->surname, $borrower->branchcode, 'Library 1', {}, $borrower->email, '', '');
+        C4::Context->set_userenv($borrower->borrowernumber, $borrower->userid, $borrower->cardnumber, $borrower->firstname, $borrower->surname, $borrower->branchcode, 'Library 1', {}, $borrower->email, '', '');
         return $borrower;
     }
     else {
         C4::Context->_new_userenv('DUMMY SESSION');
-        C4::Context::set_userenv(0,0,0,'firstname','surname', 'CPL', 'CPL', {}, 'dummysession@example.com', '', '');
+        C4::Context->set_userenv(0,0,0,'firstname','surname', 'CPL', 'CPL', {}, 'dummysession@example.com', '', '');
     }
 }
 
