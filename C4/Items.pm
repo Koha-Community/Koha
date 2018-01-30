@@ -622,7 +622,7 @@ sub ModItemTransfer {
     # Remove the 'shelving cart' location status if it is being used.
     CartToShelf( $itemnumber ) if ( C4::Context->preference("ReturnToShelvingCart") );
 
-    $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ?", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
+    $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ? AND datearrived IS NULL", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
 
     #new entry in branchtransfers....
     my $sth = $dbh->prepare(
