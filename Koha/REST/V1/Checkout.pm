@@ -277,6 +277,21 @@ sub expanded {
             $borrowernumber, $checkout->{'itemnumber'});
         }
 
+        # TODO: Create Koha::Availability::Renew for checking renewability
+        #       via Koha::Availability
+        my $patron_checks = Koha::Availability::Checks::Patron->new(
+            scalar Koha::Patrons->find($borrowernumber)
+        );
+        if (!$error && (my $err = $patron_checks->debt_renew_opac ||
+            $patron_checks->debarred || $patron_checks->gonenoaddress ||
+            $patron_checks->lost)) {
+            $err = ref($err);
+            $can_renew = 0;
+            $err =~ s/Koha::Exceptions::Patron:://;
+            $error = lc($err);
+        }
+        # END TODO
+
         $checkout->{'renewable'} = $can_renew
         ? Mojo::JSON->true : Mojo::JSON->false;
         $checkout->{'renewability_error'} = $error;
