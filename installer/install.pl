@@ -89,11 +89,13 @@ if ( $step && $step == 1 ) {
     #Whenever there is an error, adding a report to the page
     my $op = $query->param('op') || 'noop';
     $template->param( language      => 1 );
+    my $checkmodule = 1;
     $template->param( 'checkmodule' => 1 )
       ; # we start with the assumption that there are no problems and set this to 0 if there are
 
     unless ( $] >= 5.010000 ) {    # Bug 7375
         $template->param( problems => 1, perlversion => 1, checkmodule => 0 );
+        $checkmodule = 0;
     }
 
     my $perl_modules = C4::Installer::PerlModules->new;
@@ -102,7 +104,6 @@ if ( $step && $step == 1 ) {
     my $modules = $perl_modules->get_attr('missing_pm');
     if ( scalar(@$modules) ) {
         my @components  = ();
-        my $checkmodule = 1;
         foreach (@$modules) {
             my ( $module, $stats ) = each %$_;
             $checkmodule = 0 if $stats->{'required'};
