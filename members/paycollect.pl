@@ -123,7 +123,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             $payment->{total_paid}          = $total_paid;
             $payment->{total_due}           = $total_due;
             $payment->{payment_note}        = $payment_note || $input->param('notes') || $input->param('selected_accts_notes');
-            my @selected = (defined $select) ? split /,/, $select : $accountno;
+            my @selected = (defined $select) ? split /,/, $select : $accountlines_id;
             $payment->{selected}             = \@selected;
 
             # Initialize the transaction
