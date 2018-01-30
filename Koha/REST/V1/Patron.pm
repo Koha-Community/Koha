@@ -336,6 +336,7 @@ sub _parameters_require_modification_request {
     my $not_required = {
         'privacy' => 1,
         'smsalertnumber' => 1,
+        'email' => 1,
     };
 
     my $params = {
