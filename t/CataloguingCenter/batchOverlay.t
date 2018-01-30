@@ -76,7 +76,10 @@ my $testContext = {};
 
 t::lib::TestContext::setUserenv({cardnumber => '1AbatchOverlay'}, $testContext);
 my $cataloguingCenterZ3950 = t::CataloguingCenter::z3950Params::getCataloguingCenterZ3950params();
-$cataloguingCenterZ3950 = Koha::Z3950Server->new($cataloguingCenterZ3950)->store->unblessed;
+unless ($cataloguingCenterZ3950 = Koha::Z3950Servers->search($cataloguingCenterZ3950)->next) {
+    $cataloguingCenterZ3950 = Koha::Z3950Server->new($cataloguingCenterZ3950)->store;
+}
+$cataloguingCenterZ3950 = $cataloguingCenterZ3950->unblessed;
 my $mergeMatcher = t::CataloguingCenter::matchers::create($testContext)->{MERGE_MATCHER};
 t::CataloguingCenter::ContextSysprefs::createBatchOverlayRules($testContext);
 

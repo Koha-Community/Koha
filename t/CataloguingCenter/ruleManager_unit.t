@@ -35,7 +35,7 @@ sub loadBatchOverlayRules_exceptions {
     default => {}, #Left concise for brevity.
   }, 'Given a malformed default rule');
 
-  my $ruleManager = bless ({}, 'C4::BatchOverlay::RuleManager');
+  $ruleManager = bless ({}, 'C4::BatchOverlay::RuleManager');
   try {
     $ruleManager->_loadBatchOverlayRules($badBatchOverlayRule);
   } catch {

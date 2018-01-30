@@ -32,7 +32,10 @@ use t::CataloguingCenter::z3950Params;
 my $testContext = {};
 
 my $cataloguingCenterZ3950 = t::CataloguingCenter::z3950Params::getCataloguingCenterZ3950params();
-Koha::Z3950Server->new($cataloguingCenterZ3950)->store->unblessed;
+unless ($cataloguingCenterZ3950 = Koha::Z3950Servers->search($cataloguingCenterZ3950)->next) {
+    $cataloguingCenterZ3950 = Koha::Z3950Server->new($cataloguingCenterZ3950)->store;
+}
+$cataloguingCenterZ3950 = $cataloguingCenterZ3950->unblessed;
 
 use t::CataloguingCenter::ContextSysprefs;
 t::CataloguingCenter::ContextSysprefs::createBatchOverlayRules($testContext);

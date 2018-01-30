@@ -309,7 +309,7 @@ sub testRemoteTargetConnections {
 
         my $status = {
             ruleName => $key,
-            server => $remoteTarget->{name},
+            server => $remoteTarget->{servername},
         };
 
         if (scalar(@{$z3950results->{errconn}})) {

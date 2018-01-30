@@ -31,6 +31,7 @@ use Koha::Exception::BadParameter;
 use Koha::Exception::BatchOverlay::UnknownSearchAlgorithm;
 use Koha::Exception::BatchOverlay::UnknownMatcher;
 use Koha::Exception::BatchOverlay::UnknownRemoteTarget;
+use Koha::Exception::DuplicateObject;
 use Koha::Exception::FeatureUnavailable;
 
 sub new {
@@ -152,10 +153,15 @@ sub getRemoteTarget {
     if ($self->{remoteTarget}) {
         return $self->{remoteTarget};
     }
-    $self->{remoteTarget} = Koha::Z3950Servers->find({servername => $self->{remoteTargetCode}});
-    unless ($self->{remoteTarget}) {
+    $self->{remoteTarget} = Koha::Z3950Servers->search({servername => $self->{remoteTargetCode}});
+    unless ($self->{remoteTarget}->count) {
         Koha::Exception::BatchOverlay::UnknownRemoteTarget->throw(error => "Remote cataloguing source '".$self->{remoteTargetCode}."' not found. This should probably be a Z39.50 or a SRU server.");
     }
+    if ($self->{remoteTarget}->count > 1) {
+        Koha::Exception::DuplicateObject->throw(error => "Too many Z3950 servers found with search term\nservername:> ".$self->{remoteTargetCode}."\n");
+    }
+    $self->{remoteTarget} = $self->{remoteTarget}->next->unblessed;
+
     return $self->{remoteTarget};
 }
 

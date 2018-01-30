@@ -65,7 +65,7 @@ sub interface {
 }
 sub _validateInterfaceCall {
     my ($z3950Server, $localRecord) = @_;
-    unless (ref($z3950Server) eq 'HASH' && $z3950Server->{name}) {
+    unless (ref($z3950Server) eq 'HASH' && $z3950Server->{servername}) {
         my @cc1 = caller(1);
         Koha::Exception::BadParameter->throw(error => $cc1[3]."()> Param \$z3950Server '$z3950Server' is not a proper z39.50 server HASH");
     }
@@ -123,10 +123,10 @@ sub z3950Search {
 
     if (scalar(@{$z3950results->{errconn}})) {
         my @errDescs = map {C4::Breeding::translateZOOMError($_->{error})} @{$z3950results->{errconn}};
-        Koha::Exception::BatchOverlay::RemoteSearchFailed->throw(error => "Remote target '".$remoteTarget->{name}."' failed with '".join(', ', @errDescs)."'");
+        Koha::Exception::BatchOverlay::RemoteSearchFailed->throw(error => "Remote target '".$remoteTarget->{servername}."' failed with '".join(', ', @errDescs)."'");
     }
     unless(@$searchResults) {
-        Koha::Exception::BatchOverlay::RemoteSearchNoResults->throw(error => "Remote target '".$remoteTarget->{name}."'");
+        Koha::Exception::BatchOverlay::RemoteSearchNoResults->throw(error => "Remote target '".$remoteTarget->{servername}."'");
     }
     if ($acceptMultiple) {
         return $searchResults;
@@ -136,7 +136,7 @@ sub z3950Search {
             return $searchResults->[0];
         }
         elsif (@$searchResults > 1) {
-            Koha::Exception::BatchOverlay::RemoteSearchAmbiguous->throw(error => "Remote target '".$remoteTarget->{name}."'");
+            Koha::Exception::BatchOverlay::RemoteSearchAmbiguous->throw(error => "Remote target '".$remoteTarget->{servername}."'");
         }
     }
 }
@@ -213,7 +213,7 @@ sub Standard_identifier {
         return $searchResult if $searchResult;
         push @usedStdids, $stdid;
     }
-    Koha::Exception::BatchOverlay::RemoteSearchNoResults->throw(error => "Remote target '".$z3950Server->{name}."'",
+    Koha::Exception::BatchOverlay::RemoteSearchNoResults->throw(error => "Remote target '".$z3950Server->{servername}."'",
                                                                 searchTerm => join(', ', @usedStdids));
 }
 
