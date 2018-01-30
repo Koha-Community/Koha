@@ -48,8 +48,8 @@
 
         [% IF ( execute ) %]
             [% BLOCK params %]
-                [% FOREACH param IN sql_params %]&amp;sql_params=[% param %][% END %]
-            [% END %]
+                [%- FOREACH param IN sql_params %]&amp;sql_params=[% param %][% END %]
+            [%- END %]
 
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" id="format"><i class="fa fa-upload"></i> Download <span class="caret"></span></button>
