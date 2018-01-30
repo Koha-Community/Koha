@@ -1,0 +1,109 @@
+#!/usr/bin/perl
+
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use strict;
+use C4::Auth;
+use CGI qw ( -utf8 );
+use C4::Context;
+use C4::Search;
+use C4::Output;
+use C4::Koha;
+=head1
+
+=cut
+
+sub set_parameters {
+    my ($template) = @_;
+    return $template;
+}
+
+sub calculate {
+	my ($parameters) = @_;
+	my @results =();
+	my $branch = @$parameters[0];
+	my $dbh = C4::Context->dbh;
+	my $sth;
+	if ($branch) {
+		if (C4::Context->preference('item-level_itypes')) {
+		$sth = $dbh->prepare("
+        SELECT itemtype, description, items.itype as itemtype, COUNT(*) AS total
+			FROM itemtypes,items         
+		WHERE items.itype=itemtypes.itemtype         
+		AND items.holdingbranch=?            
+		GROUP BY items.itype
+		ORDER BY itemtypes.description");
+
+		}
+		else {
+		$sth = $dbh->prepare("
+        SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
+			FROM itemtypes, biblioitems, items 
+		WHERE biblioitems.itemtype=itemtypes.itemtype 
+		AND items.biblioitemnumber=biblioitems.biblioitemnumber
+		AND items.holdingbranch=?
+			GROUP BY  biblioitems.itemtype
+			ORDER BY itemtypes.description");
+		}
+		$sth->execute($branch);
+	} else {
+		if (C4::Context->preference('item-level_itypes')) {
+		$sth = $dbh->prepare("
+        SELECT itemtype, description,items.itype AS itemtype, COUNT(*) AS total
+			FROM itemtypes,items
+		WHERE items.itype=itemtypes.itemtype
+			GROUP BY items.itype
+			ORDER BY itemtypes.description");
+		}
+		else {
+        $sth = $dbh->prepare("SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
+			FROM itemtypes, biblioitems,items 
+		WHERE biblioitems.itemtype=itemtypes.itemtype 
+		AND biblioitems.biblioitemnumber = items.biblioitemnumber
+			GROUP BY biblioitems.itemtype
+			ORDER BY itemtypes.description");
+		}
+		$sth->execute;
+	}
+    my ($itemtype, $description,$biblioitems,$total);
+	my $grantotal = 0;
+	my $count = 0;
+    while (($itemtype, $description,$biblioitems,$total) = $sth->fetchrow) {
+		my %line;
+		if($count % 2){
+			$line{toggle} = 1;
+			} else {
+				$line{toggle} = 0;
+			}
+        $line{itemtype} = $itemtype;
+		$line{count} = $total;
+		$grantotal += $total;
+		push @results,\%line;
+		$count ++;
+	}
+	my @mainloop;
+	my %globalline;
+	$globalline{loopitemtype} = \@results;
+	$globalline{total} = $grantotal;
+	$globalline{branch} = $branch;
+	push @mainloop,\%globalline;
+	return \@mainloop;
+}
+
+1;
