@@ -44,10 +44,13 @@ sub TO_JSON {
 
     my $json = $self->SUPER::TO_JSON;
 
+    my $itemnumber  = $self->itemnumber;
+    my $description = $self->description;
+    $description =~ s/^\s+|\s+$//g if defined $description;
     # If accountline description is an itemnumber, replace it with record title
-    if (defined $self->description && defined $self->itemnumber &&
-        $self->description == $self->itemnumber) {
-        my $item = Koha::Items->find($self->itemnumber);
+    if (defined $description && defined $itemnumber &&
+        $description == $itemnumber) {
+        my $item = Koha::Items->find($itemnumber);
         if (defined $item) {
             my $biblio = $item->biblio;
             $json->{description} = $biblio->title if defined $biblio;
