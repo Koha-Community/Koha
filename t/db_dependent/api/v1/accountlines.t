@@ -42,7 +42,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 my $path = '/api/v1/accountlines';
 
 subtest 'list() tests' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -65,6 +65,21 @@ subtest 'list() tests' => sub {
     Koha::Account::Line->new({
         borrowernumber => $borrowernumber2,
         amount => 80, accounttype => 'F', amountoutstanding => 80
+    })->store;
+
+    my $biblio = Koha::Biblio->new({ title => 'test title' })->store;
+    my $biblioitem = Koha::Biblioitem->new({
+        biblionumber => $biblio->biblionumber
+    })->store;
+    my $item = Koha::Item->new({
+        biblionumber => $biblio->biblionumber,
+        biblioitemnumber => $biblioitem->biblioitemnumber,
+    })->store;
+    Koha::Account::Line->new({
+        borrowernumber => $borrowernumber2,
+        amount => 20, accounttype => 'A', amountoutstanding => 20,
+        description => $item->itemnumber,
+        itemnumber => $item->itemnumber,
     })->store;
 
     $t->get_ok($path)
@@ -94,7 +109,8 @@ subtest 'list() tests' => sub {
 
     $json = $t->tx->res->json;
     ok(ref $json eq 'ARRAY', 'response is a JSON array');
-    ok(scalar @$json == 3, 'response array contains 3 elements');
+    ok(scalar @$json == 4, 'response array contains 4 elements');
+    is($json->[3]->{description} => 'test title', 'Itemnumber converted');
 
     $schema->storage->txn_rollback;
 };
