@@ -342,8 +342,18 @@ sub _build_languages_arrayref {
             push ( @{ $language_groups->{$language_subtags_hashref->{language}} }, $language_subtags_hashref );
         }
         # $key is a language subtag like 'en'
-        while( my ($key, $value) = each %$language_groups) {
 
+        my %idx = map { $enabled_languages->[$_] => $_ } reverse 0 .. @$enabled_languages-1;
+        my @ordered_keys = sort {
+            my $aa = $language_groups->{$a}->[0]->{rfc4646_subtag};
+            my $bb = $language_groups->{$b}->[0]->{rfc4646_subtag};
+            ( exists $idx{$aa} and exists $idx{$bb} and ( $idx{$aa} cmp $idx{$bb} ) )
+            || ( exists $idx{$aa} and exists $idx{$bb} )
+            || exists $idx{$bb}
+        } keys %$language_groups;
+
+        for my $key ( @ordered_keys ) {
+            my $value = $language_groups->{$key};
             # is this language group enabled? are any of the languages within it enabled?
             my $enabled;
             for my $enabled_language (@enabled_languages) {
