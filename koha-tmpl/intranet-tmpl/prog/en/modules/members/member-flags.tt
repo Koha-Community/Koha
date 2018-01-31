@@ -122,6 +122,12 @@
                 }
             });
 
+            [% IF disable_superlibrarian_privs %]
+                $("input#flag-0").attr("disabled", true);
+                $("form").submit(function(e) {
+                    $("input#flag-0").removeAttr("disabled");
+                });
+            [% END %]
         });
 
         // manage checking/unchecking parent permissions
