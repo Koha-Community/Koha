@@ -82,6 +82,12 @@ $( document ).ready( function () {
         return false;
     });
 
+    $("dl.sortable").sortable();
+    $("dl.sortable").on( "sortchange", function( event, ui ) {
+        // This is not exact but we just need to trigger a change
+        $(ui.item.find('input:first')).change();
+    } );
+
     window.onbeforeunload = function () {
         if ( KOHA.Preferences.Modified ) {
             return MSG_MADE_CHANGES;
