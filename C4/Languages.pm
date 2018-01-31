@@ -111,44 +111,27 @@ Returns a reference to an array of hashes:
 
 sub getTranslatedLanguages {
     my ($interface, $theme, $current_language, $which) = @_;
-    my $htdocs;
     my @languages;
-    my @enabled_languages;
- 
+    my @enabled_languages =
+      ( $interface && $interface eq 'intranet' )
+      ? split ",", C4::Context->preference('language')
+      : split ",", C4::Context->preference('opaclanguages');
+
     if ($interface && $interface eq 'opac' ) {
-        @enabled_languages = split ",", C4::Context->preference('opaclanguages');
-        $htdocs = C4::Context->config('opachtdocs');
-        if ( $theme and -d "$htdocs/$theme" ) {
-            (@languages) = _get_language_dirs($htdocs,$theme);
-        }
-        else {
-            for my $theme ( _get_themes('opac') ) {
-                push @languages, _get_language_dirs($htdocs,$theme);
-            }
-        }
+        my $htdocs = C4::Context->config('opachtdocs');
+        @languages = _get_opac_language_dirs( $htdocs, $theme );
     }
     elsif ($interface && $interface eq 'intranet' ) {
-        @enabled_languages = split ",", C4::Context->preference('language');
-        $htdocs = C4::Context->config('intrahtdocs');
-        if ( $theme and -d "$htdocs/$theme" ) {
-            @languages = _get_language_dirs($htdocs,$theme);
-        }
-        else {
-            foreach my $theme ( _get_themes('intranet') ) {
-                push @languages, _get_language_dirs($htdocs,$theme);
-            }
-        }
+        my $htdocs = C4::Context->config('intrahtdocs');
+        @languages = _get_intranet_language_dirs( $htdocs, $theme );
     }
     else {
-        @enabled_languages = split ",", C4::Context->preference('opaclanguages');
         my $htdocs = C4::Context->config('intrahtdocs');
-        foreach my $theme ( _get_themes('intranet') ) {
-            push @languages, _get_language_dirs($htdocs,$theme);
-        }
+        push @languages, _get_intranet_language_dirs( $htdocs );
+
         $htdocs = C4::Context->config('opachtdocs');
-        foreach my $theme ( _get_themes('opac') ) {
-            push @languages, _get_language_dirs($htdocs,$theme);
-        }
+        push @languages, _get_opac_language_dirs( $htdocs );
+
         my %seen;
         $seen{$_}++ for @languages;
         @languages = keys %seen;
@@ -244,6 +227,37 @@ sub getLanguages {
         }
     }
     return \@languages_loop;
+}
+
+sub _get_opac_language_dirs {
+    my ( $htdocs, $theme ) = @_;
+
+    my @languages;
+    if ( $theme and -d "$htdocs/$theme" ) {
+        (@languages) = _get_language_dirs($htdocs,$theme);
+    }
+    else {
+        for my $theme ( _get_themes('opac') ) {
+            push @languages, _get_language_dirs($htdocs,$theme);
+        }
+    }
+    return @languages;
+}
+
+
+sub _get_intranet_language_dirs {
+    my ( $htdocs, $theme ) = @_;
+
+    my @languages;
+    if ( $theme and -d "$htdocs/$theme" ) {
+        @languages = _get_language_dirs($htdocs,$theme);
+    }
+    else {
+        foreach my $theme ( _get_themes('intranet') ) {
+            push @languages, _get_language_dirs($htdocs,$theme);
+        }
+    }
+    return @languages;
 }
 
 =head2 _get_themes
