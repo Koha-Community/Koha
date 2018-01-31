@@ -104,8 +104,9 @@
                         <a class="collapse-textarea" style="display:none" href="#">Click to collapse</br></a>
                         [% END %]
                     [% ELSIF ( CHUNK.type_languages ) %]
-                    <dl>
+                    <dl class="sortable">
                     [% FOREACH language IN CHUNK.languages %]
+                    <div>
                         [% IF ( language.plural ) %]
                         <dt>
                             [% IF ( language.native_description ) %][% language.native_description %][% ELSE %][% language.rfc4646_subtag %][% END %]
@@ -130,6 +131,7 @@
                             [% END %]
                         </dt>
                         [% END %]
+                    </div>
                     [% END %]
                     </dl>
                     [% END %]
@@ -160,6 +162,7 @@
             });[% END %]
 
         $(document).ready(function(){
+            $("dl.sortable").sortable();
             $("select[multiple='multiple']").multipleSelect( {
                 placeholder: _("Please select ..."),
                 selectAllText: _("Select all"),
