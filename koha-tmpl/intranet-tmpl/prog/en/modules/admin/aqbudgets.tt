@@ -491,7 +491,7 @@
                     var li = '<li id="user_' + borrowernumber + '">'
                         + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
                         + borrowernumber + '">' + borrowername + '</a> '
-                        + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> Remove</a> '
+                        + ' &bull; <a data-borrowernumber=" + borrowernumber +" class="del_user" href="#"><i class="fa fa-trash"></i> '+_('Remove')+'</a> '
                         + '</li>';
                     $("#budget_users").prepend(li);
                     ids.push(borrowernumber);
