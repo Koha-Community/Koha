@@ -487,7 +487,7 @@
 
             function add_user(borrowernumber, borrowername) {
                 var ids = $("#budget_users_id").val().split(':');
-                if(borrowernumber && ids.indexOf(borrowernumber) == -1) {
+                if(borrowernumber && ids.indexOf(borrowernumber.toString()) == -1) {
                     var li = '<li id="user_' + borrowernumber + '">'
                         + '<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber='
                         + borrowernumber + '">' + borrowername + '</a> '
