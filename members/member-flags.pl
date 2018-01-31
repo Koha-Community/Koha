@@ -84,7 +84,17 @@ if ($input->param('newflags')) {
     }
     
     $sth = $dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
-    $sth->execute($module_flags, $member);
+    if( !C4::Context->preference('ProtectSuperlibPrivs') || C4::Context->IsSuperLibrarian ) {
+        $sth->execute($module_flags, $member);
+    } else {
+        my $old_flags = $patron->flags // 0;
+        if( ( $old_flags == 1 || $module_flags == 1 ) &&
+              $old_flags != $module_flags ) {
+           die "Non-superlibrarian is changing superlibrarian privileges"; # Interface should not allow this, so we can just die here
+        } else {
+            $sth->execute($module_flags, $member);
+        }
+    }
     
     # deal with subpermissions
     $sth = $dbh->prepare("DELETE FROM user_permissions WHERE borrowernumber = ?");
@@ -196,6 +206,7 @@ $template->param(
     loop           => \@loop,
     csrf_token =>
         Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
+    disable_superlibrarian_privs => C4::Context->preference('ProtectSuperlibPrivs') ? !C4::Context->IsSuperLibrarian : 0,
 );
 
     output_html_with_http_headers $input, $cookie, $template->output;
