@@ -26,6 +26,7 @@ use Carp;
 use CGI;
 use List::MoreUtils qw( any );
 use C4::Context;
+use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -117,13 +118,27 @@ sub getTranslatedLanguages {
       ? split ",", C4::Context->preference('language')
       : split ",", C4::Context->preference('opaclanguages');
 
+    my $cache = Koha::Caches->get_instance;
+    my $cache_key = "languages_${interface}_${theme}";
     if ($interface && $interface eq 'opac' ) {
         my $htdocs = C4::Context->config('opachtdocs');
-        @languages = _get_opac_language_dirs( $htdocs, $theme );
+        my $cached = $cache->get_from_cache($cache_key);
+        if ( $cached ) {
+            @languages = @{$cached};
+        } else {
+            @languages = _get_opac_language_dirs( $htdocs, $theme );
+            $cache->set_in_cache($cache_key, \@languages );
+        }
     }
     elsif ($interface && $interface eq 'intranet' ) {
         my $htdocs = C4::Context->config('intrahtdocs');
-        @languages = _get_intranet_language_dirs( $htdocs, $theme );
+        my $cached = $cache->get_from_cache($cache_key);
+        if ( $cached ) {
+            @languages = @{$cached};
+        } else {
+            @languages = _get_intranet_language_dirs( $htdocs, $theme );
+            $cache->set_in_cache($cache_key, \@languages );
+        }
     }
     else {
         my $htdocs = C4::Context->config('intrahtdocs');
