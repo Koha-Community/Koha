@@ -70,7 +70,7 @@
                                 [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
                                     <span id="ce_not_for_loan">This item is not for loan.</span>
                                 [% ELSIF ( circ_error_DEBT ) %]
-                                    <span id="ce_too_much_debt">You owe the library [% currencySym %] [% DEBT | $Price %] and cannot check out.</span>
+                                    <span id="ce_too_much_debt">You owe the library [% DEBT | $Price with_symbol => 1%] and cannot check out.</span>
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
                                     <span id="ce_wthdrawn">This item has been withdrawn from the collection.</span>
                                 [% ELSIF ( circ_error_RESTRICTED ) %]
