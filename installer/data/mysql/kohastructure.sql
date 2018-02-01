@@ -458,6 +458,7 @@ CREATE TABLE `currency` (
   `rate` float(15,5) default NULL,
   `active` tinyint(1) default NULL,
   `archived` tinyint(1) DEFAULT 0,
+  `p_sep_by_space` tinyint(1) DEFAULT 0,
   PRIMARY KEY  (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
