@@ -53,7 +53,11 @@ sub public_location {
     my $locCode = $item->{permanent_location} || $item->{location};
     return '' if(not($locCode));
 
-    my $av = C4::Koha::GetAuthorisedValueByCode('LOC', $locCode);
+    my $av = Koha::AuthorisedValues->search({
+        category => 'LOC',
+        authorised_value => $locCode
+    });
+    $av = $av->count ? $av->next->lib : '';
     return $av;
 }
 
