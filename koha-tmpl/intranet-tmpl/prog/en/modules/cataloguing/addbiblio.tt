@@ -163,7 +163,13 @@ function PopupZ3950() {
 }
 
 function PopupMARCFieldDoc(field) {
-    [% IF ( marcflavour == 'MARC21' ) %]
+    [% IF Koha.Preference('marcfielddocurl') %]
+        var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') %]";
+        docurl = docurl.replace("{MARC}", "[% marcflavour %]");
+        docurl = docurl.replace("{FIELD}", ""+field);
+        docurl = docurl.replace("{LANG}", "[% lang %]");
+        window.open(docurl);
+    [% ELSIF ( marcflavour == 'MARC21' ) %]
         _MARC21FieldDoc(field);
     [% ELSIF ( marcflavour == 'UNIMARC' ) %]
         _UNIMARCFieldDoc(field);

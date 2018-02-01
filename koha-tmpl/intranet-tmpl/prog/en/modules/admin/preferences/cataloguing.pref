@@ -155,6 +155,14 @@ Cataloging:
                   no: "Don't use"
             - record control number ($w subfields) and control number (001) for linking of bibliographic records.
         -
+            - Use
+            - pref: MarcFieldDocURL
+              class: url
+            - as the URL for MARC field documentation.
+            - Possible substitutions are <tt>{MARC}</tt> (marc flavour, eg. "MARC21" or "UNIMARC"), <tt>{FIELD}</tt> (field number, eg. "000" or "048"), <tt>{LANG}</tt> (user language, eg. "en" or "fi-FI").
+            - If left empty, the format documentation on http://loc.gov (MARC21) or http://archive.ifla.org (UNIMARC) is used.
+            - For example <tt>http://fielddoc.example.com/?marc={MARC}&field={FIELD}&language={LANG}</tt>
+        -
             - pref: hide_marc
               choices:
                   yes: "Don't display"
