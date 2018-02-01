@@ -86,11 +86,10 @@ sub _format_params {
     my ( $self, $params ) = @_;
     my $with_symbol = $params->{with_symbol} || 0;
     my $p_cs_precedes = $params->{p_cs_precedes};
-    my $p_sep_by_space = $params->{p_sep_by_space};
     my $currency        = Koha::Acquisition::Currencies->get_active;
     my $currency_format = C4::Context->preference("CurrencyFormat");
 
-    my $int_curr_symbol = q||;
+    my $int_curr_symbol = $with_symbol ? $currency->symbol : q||;
     my %format_params = (
         decimal_fill      => '2',
         decimal_point     => '.',
@@ -101,8 +100,6 @@ sub _format_params {
     );
 
     if ( $currency_format eq 'FR' ) {
-        # FIXME This test should be done for all currencies
-        $int_curr_symbol = $currency->symbol if $with_symbol;
         %format_params = (
             decimal_fill      => '2',
             decimal_point     => ',',
@@ -114,7 +111,6 @@ sub _format_params {
     }
 
     if ( $currency_format eq 'CH' ) {
-        $int_curr_symbol = $currency->symbol if $with_symbol;
         %format_params = (
             decimal_fill      => '2',
             decimal_point     => '.',
@@ -127,7 +123,7 @@ sub _format_params {
 
 
     $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
-    $format_params{p_sep_by_space} = ( $int_curr_symbol and defined $p_sep_by_space ) ? $p_sep_by_space : 0;
+    $format_params{p_sep_by_space} = $currency->p_sep_by_space ? 1 : 0;
 
     return \%format_params;
 }

@@ -35,15 +35,14 @@ is( Koha::Number::Price->new(1234567890)->format( $format ),
 
 is( Koha::Number::Price->new(100000000000000)->format, '100000000000000', 'Numbers too big are not formatted');
 
-# FIXME This should be display symbol, but it was the case before the creation of this module
 is( Koha::Number::Price->new->format( { %$format, with_symbol => 1 } ),
-    '0.00', 'US: format 0 with symbol' );
+    '$0.00', 'US: format 0 with symbol' );
 is( Koha::Number::Price->new(3)->format( { %$format, with_symbol => 1 } ),
-    '3.00', 'US: format 3 with symbol' );
+    '$3.00', 'US: format 3 with symbol' );
 is(
     Koha::Number::Price->new(1234567890)
       ->format( { %$format, with_symbol => 1 }, 'US: format 1234567890 with symbol' ),
-    '1,234,567,890.00'
+    '$1,234,567,890.00'
 );
 
 is( Koha::Number::Price->new->unformat,    '0', 'US: unformat 0' );
