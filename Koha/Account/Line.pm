@@ -53,7 +53,12 @@ sub TO_JSON {
         my $item = Koha::Items->find($itemnumber);
         if (defined $item) {
             my $biblio = $item->biblio;
-            $json->{description} = $biblio->title if defined $biblio;
+            if (defined $biblio) {
+                my $title = $biblio->title;
+                my $remainder = $biblio->title_remainder;
+                $title .= ' ' . $remainder if defined $remainder;
+                $json->{description} = $title if defined $title;
+            }
         }
     }
 
