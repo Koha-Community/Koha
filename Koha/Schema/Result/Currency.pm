@@ -66,6 +66,12 @@ __PACKAGE__->table("currency");
   default_value: 0
   is_nullable: 1
 
+=head2 p_sep_by_space
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -87,6 +93,8 @@ __PACKAGE__->add_columns(
   "active",
   { data_type => "tinyint", is_nullable => 1 },
   "archived",
+  { data_type => "tinyint", default_value => 0, is_nullable => 1 },
+  "p_sep_by_space",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
 );
 
@@ -150,8 +158,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0xP1adf+TPUi2cBn8Qah5A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-01 14:23:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PnJEcCgrM1Edf99phWFdyQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
