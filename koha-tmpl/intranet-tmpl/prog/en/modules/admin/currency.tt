@@ -94,6 +94,14 @@
                 <span class="label">Last updated: </span>[% currency.timestamp | $KohaDates %]
             </li>
             <li>
+                <label for="p_sep_by_space">Space separation between symbol and value: </label>
+                [% IF currency.p_sep_by_space %]
+                    <input type="checkbox" id="p_sep_by_space" name="p_sep_by_space" value="1" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="p_sep_by_space" name="p_sep_by_space" value="1" />
+                [% END %]
+            </li>
+            <li>
                 <label for="active">Active: </label>
                 [% IF currency.active %]
                 <input type="checkbox" id="active" name="active" value="1" checked="checked" />

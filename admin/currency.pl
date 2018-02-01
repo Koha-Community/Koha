@@ -57,6 +57,7 @@ if ( $op eq 'add_form' ) {
     my $isocode       = $input->param('isocode');
     my $rate          = $input->param('rate');
     my $active        = $input->param('active');
+    my $p_sep_by_space = $input->param('p_sep_by_space');
     my $is_a_modif    = $input->param('is_a_modif');
 
     if ($is_a_modif) {
@@ -65,6 +66,7 @@ if ( $op eq 'add_form' ) {
         $currency->isocode($isocode);
         $currency->rate($rate);
         $currency->active($active);
+        $currency->p_sep_by_space($p_sep_by_space);
         eval { $currency->store; };
         if ($@) {
             push @messages, { type => 'error', code => 'error_on_update' };
@@ -78,6 +80,7 @@ if ( $op eq 'add_form' ) {
                 isocode  => $isocode,
                 rate     => $rate,
                 active   => $active,
+                p_sep_by_space => $p_sep_by_space,
             }
         );
         eval { $currency->store; };
