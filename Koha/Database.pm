@@ -70,7 +70,7 @@ sub _new_schema {
 
 
     my ( %encoding_attr, $encoding_query, $tz_query, $sql_mode_query );
-    my $tz = $ENV{TZ};
+    my $tz = C4::Context->timezone;
     if ( $db_driver eq 'mysql' ) {
         %encoding_attr = ( mysql_enable_utf8 => 1 );
         $encoding_query = "set NAMES 'utf8mb4'";
