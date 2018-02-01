@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -18,7 +18,6 @@ use_ok('Koha::Number::Price');
 my $orig_locale = setlocale(LC_NUMERIC);
 my $format = {
     p_cs_precedes => 1, # Force to place the symbol at the beginning
-    p_sep_by_space => 0, # Force to not add a space between the symbol and the number
 };
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'US' );
 $currency = Koha::Acquisition::Currency->new({
@@ -26,6 +25,7 @@ $currency = Koha::Acquisition::Currency->new({
     symbol   => '$',
     rate     => 1,
     active   => 1,
+    p_sep_by_space => 0, # Force to not add a space between the symbol and the number. This is the default behaviour
 });
 
 is( Koha::Number::Price->new->format( $format ),    '0.00', 'US: format 0' );
@@ -44,6 +44,10 @@ is(
       ->format( { %$format, with_symbol => 1 }, 'US: format 1234567890 with symbol' ),
     '$1,234,567,890.00'
 );
+
+$currency->p_sep_by_space(1);
+is( Koha::Number::Price->new(3)->format( { %$format, with_symbol => 1 } ),
+    '$ 3.00', 'US: format 3 with symbol and a space' );
 
 is( Koha::Number::Price->new->unformat,    '0', 'US: unformat 0' );
 is( Koha::Number::Price->new(3)->unformat, '3', 'US: unformat 3' );
