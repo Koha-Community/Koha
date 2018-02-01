@@ -1136,10 +1136,13 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES ( 'vi','vie');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'vi', 'language', 'vi', '㗂越');
+VALUES ( 'vi', 'language', 'vi', 'Tiếng Việt');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'vi', 'language', 'en', 'Vietnamese');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'vi', 'language', 'de', 'Vietnamesisch');
 
 -- Chinese
 INSERT INTO language_subtag_registry( subtag, type, description, added)
