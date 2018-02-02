@@ -3337,6 +3337,8 @@ sub ModBiblioMarc {
         format       => 'marcxml',
         marcflavour  => C4::Context->preference('marcflavour'),
     };
+    $record->as_usmarc; # Bug 20126/10455 This triggers field length calculation
+
     # FIXME To replace with ->find_or_create?
     if ( my $m_rs = Koha::Biblio::Metadatas->find($metadata) ) {
         $m_rs->metadata( $record->as_xml_record($encoding) );
