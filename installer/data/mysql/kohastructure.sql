@@ -4143,6 +4143,7 @@ CREATE TABLE library_groups (
     branchcode VARCHAR(10) NULL DEFAULT NULL, -- The branchcode of a branch belonging to the parent group
     title VARCHAR(100) NULL DEFAULT NULL,     -- Short description of the goup
     description TEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
+    ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0, -- Turn on the feature "Hide patron's info" for this group
     created_on TIMESTAMP NULL,             -- Date and time of creation
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
     PRIMARY KEY id ( id ),
