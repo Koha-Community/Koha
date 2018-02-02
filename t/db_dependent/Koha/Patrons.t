@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
@@ -947,8 +947,8 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
     #   + library_12
     # group2
     #   + library21
-    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
-    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_hide_patron_info => 1 } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_hide_patron_info => 1 } )->store;
     my $library_11 = $builder->build( { source => 'Branch' } );
     my $library_12 = $builder->build( { source => 'Branch' } );
     my $library_21 = $builder->build( { source => 'Branch' } );

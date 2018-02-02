@@ -778,16 +778,18 @@ sub libraries_where_can_see_patrons {
             )
           )
         {
-            my $library_groups = $self->library->library_groups;
+            my $library_groups = $self->library->library_groups({ ft_hide_patron_info => 1 });
             if ( $library_groups->count )
             {
                 while ( my $library_group = $library_groups->next ) {
-                    push @restricted_branchcodes, $library_group->parent->children->get_column('branchcode');
+                    my $parent = $library_group->parent;
+                    if ( $parent->has_child( $self->branchcode ) ) {
+                        push @restricted_branchcodes, $parent->children->get_column('branchcode');
+                    }
                 }
             }
-            else {
-                push @restricted_branchcodes, $self->branchcode;
-            }
+
+            @restricted_branchcodes = ( $self->branchcode ) unless @restricted_branchcodes;
         }
     }
 
