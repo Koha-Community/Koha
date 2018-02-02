@@ -893,7 +893,8 @@ sub _parseletter {
     }
 
     if ($letter->{content} && $letter->{content} =~ /<<today>>/) {
-        my $todaysdate = output_pref( DateTime->now() );
+	# Bug#2741 Drop hour:min from <<today>> 
+        my $todaysdate = output_pref({ dt => DateTime->now(), dateonly => 1 });
         $letter->{content} =~ s/<<today>>/$todaysdate/go;
     }
 
