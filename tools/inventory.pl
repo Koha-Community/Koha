@@ -95,7 +95,7 @@ for my $statfield (qw/items.notforloan items.itemlost items.withdrawn items.dama
         if ( $statfield eq 'items.notforloan') {
             # Add notforloan == 0 to the list of possible notforloan statuses
             # The lib value is replaced in the template
-            push @$arr, { authorised_value => 0, id => 'stat0' , lib => 'ignore' } if ! grep { $_->{authorised_value} eq '0' } @$arr;
+            push @$arr, { authorised_value => 0, id => 'stat0' , lib => '__IGNORE__' } if ! grep { $_->{authorised_value} eq '0' } @$arr;
             @notforloans = map { $_->{'authorised_value'} } @$arr;
         }
         $hash->{values} = $arr;
