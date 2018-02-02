@@ -22,9 +22,10 @@ use Modern::Perl;
 
 use List::MoreUtils qw( any );
 
-use C4::Context;
+use C4::Context qw(preference);
 use C4::Letters qw( GetPreparedLetter EnqueueLetter );
 use C4::Log qw( logaction );
+use C4::Reserves;
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils qw( dt_from_string );
@@ -636,6 +637,12 @@ Cancel a hold:
 
 sub cancel {
     my ( $self, $params ) = @_;
+<<<<<<< HEAD
+=======
+
+    my $autofill_next = $params->{autofill} && $self->itemnumber && $self->found && $self->found eq 'W';
+
+>>>>>>> Bug 14364: Allow automatically canceled expired waiting holds to fill the next hold
     $self->_result->result_source->schema->txn_do(
         sub {
             my $patron = $self->patron;
@@ -688,7 +695,6 @@ sub cancel {
                 if $patron->privacy == 2;
 
             $self->SUPER::delete(); # Do not add a DELETE log
-
             # now fix the priority on the others....
             C4::Reserves::_FixPriority({ biblionumber => $self->biblionumber });
 
@@ -719,6 +725,17 @@ sub cancel {
             ) unless $params->{skip_holds_queue} or !C4::Context->preference('RealTimeHoldsQueue');
         }
     );
+
+    if ($autofill_next) {
+        my ( undef, $next_hold ) = C4::Reserves::CheckReserves( $self->itemnumber );
+        if ($next_hold) {
+            my $is_transfer = $self->branchcode ne $next_hold->{branchcode};
+
+            C4::Reserves::ModReserveAffect( $self->itemnumber, $self->borrowernumber, $is_transfer, $next_hold->{reserve_id}, $self->desk_id, $autofill_next );
+            C4::Reserves::ModItemTransfer( $self->itemnumber, $self->branchcode, $next_hold->{branchcode}, "Reserve" ) if $is_transfer;
+        }
+    }
+
     return $self;
 }
 
