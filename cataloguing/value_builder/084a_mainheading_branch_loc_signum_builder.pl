@@ -85,9 +85,9 @@ if (marc100a) {
 } else if (marc110a) {
     var mainHeading = marc110a;
 } else if (marc111a) {
-    var mainHeading = marc110a;
+    var mainHeading = marc111a;
 } else if (marc130a) {
-    var mainHeading = marc110a;
+    var mainHeading = marc130a;
 } else if (marc245a) {
     var mainHeading = marc245a;
 }
