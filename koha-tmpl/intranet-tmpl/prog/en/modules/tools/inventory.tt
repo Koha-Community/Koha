@@ -98,7 +98,7 @@
                                   [% IF (value.lib) %]
                                     <li>
                                     <label for="[% value.id | html %]">
-                                        [% IF value.authorised_value==0 %]
+                                        [% IF ( status.fieldname == 'items.notforloan' && value.authorised_value == 0 && value.lib == '__IGNORE__' ) %]
                                             For loan
                                         [% ELSE %]
                                             [% value.lib | html %]
