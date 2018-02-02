@@ -46,6 +46,7 @@ if ( $action eq 'add' ) {
     my $parent_id   = $cgi->param('parent_id')   || undef;
     my $title       = $cgi->param('title')       || undef;
     my $description = $cgi->param('description') || undef;
+    my $ft_hide_patron_info = $cgi->param('ft_hide_patron_info') || 0;
     my $branchcode  = $cgi->param('branchcode')  || undef;
 
     if ( !$branchcode && Koha::Library::Groups->search( { title => $title } )->count() ) {
@@ -57,6 +58,7 @@ if ( $action eq 'add' ) {
                 parent_id   => $parent_id,
                 title       => $title,
                 description => $description,
+                ft_hide_patron_info => $ft_hide_patron_info,
                 branchcode  => $branchcode,
             }
         )->store();
@@ -68,6 +70,7 @@ elsif ( $action eq 'edit' ) {
     my $id          = $cgi->param('id')          || undef;
     my $title       = $cgi->param('title')       || undef;
     my $description = $cgi->param('description') || undef;
+    my $ft_hide_patron_info = $cgi->param('ft_hide_patron_info') || 0;
 
     if ($id) {
         my $group = Koha::Library::Groups->find($id);
@@ -76,6 +79,7 @@ elsif ( $action eq 'edit' ) {
             {
                 title       => $title,
                 description => $description,
+                ft_hide_patron_info => $ft_hide_patron_info,
             }
         )->store();
 

@@ -22,9 +22,11 @@
 
         $('.edit-group').on('click', function() {
             var id = $(this).data('groupId');
+            var parent_id = $(this).data('groupParentId');
             var title = $(this).data('groupTitle');
             var description = $(this).data('groupDescription');
-            edit_group( id, title, description );
+            var ft_hide_patron_info = $(this).data('groupFt_hide_patron_info');
+            edit_group( id, parent_id, title, description, ft_hide_patron_info );
         });
 
         $('.delete-group').on('click', function() {
@@ -51,13 +53,32 @@
             $('#add-group-modal-title').focus();
         });
 
+        $('#add-group-modal-ft_hide_patron_info').prop('checked', false);
+        if ( parent_id ) {
+            $('#add-group-modal-ft_hide_patron_info').parent().hide();
+        } else {
+            $('#add-group-modal-ft_hide_patron_info').parent().show();
+        }
         $('#add-group-modal').modal('show');
     }
 
-    function edit_group( id, title, description ) {
+    function edit_group( id, parent_id, title, description, ft_hide_patron_info ) {
         $('#edit-group-modal-id').val( id );
         $('#edit-group-modal-title').val( title );
         $('#edit-group-modal-description').val( description );
+
+        if ( parent_id ) {
+            $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
+            $('#edit-group-modal-ft_hide_patron_info').parent().hide();
+        } else {
+            if ( ft_hide_patron_info ) {
+                $('#edit-group-modal-ft_hide_patron_info').prop('checked', true);
+            } else {
+                $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
+            }
+
+            $('#edit-group-modal-ft_hide_patron_info').parent().show();
+        }
 
         $('#edit-group-modal').on('shown', function() {
             $('#edit-group-modal-title').focus();
@@ -133,6 +154,7 @@
                         <tr>
                             <th>&nbsp;</th>
                             <th>Description</th>
+                            <th>Features enabled</th>
                             <th>&nbsp;</th>
                         </tr>
                         [% PROCESS tree group=root_group %]
@@ -157,14 +179,18 @@
                         <input type="hidden" id="add-group-modal-action" name="action" value="add">
 
                         <p>
-                            <label for="title">Title: </label>
+                            <label for="add-group-modal-title">Title: </label>
                             <input type="text" name="title" id="add-group-modal-title" required="required" />
                             <i>required</i>
                         </p>
 
                         <p>
-                            <label for="description">Description: </label>
+                            <label for="add-group-modal-description">Description: </label>
                             <input type="text" name="description" id="add-group-modal-description" />
+                        </p>
+                        <p>
+                            <label for="add-group-modal-ft_hide_patron_info">Feature hide patron's info</label>
+                            <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -188,14 +214,18 @@
                         <input type="hidden" id="edit-group-modal-action" name="action" value="edit" />
 
                         <p>
-                            <label for="title">Title: </label>
+                            <label for="edit-group-modal-title">Title: </label>
                             <input type="text" id="edit-group-modal-title" name="title" value="" required="required" />
                             <i>required</i>
                         </p>
 
                         <p>
-                            <label for="description">Description: </label>
+                            <label for="edit-group-modal-description">Description: </label>
                             <input type="text" id="edit-group-modal-description" name="description" value="" />
+                        </p>
+                        <p>
+                            <label for="edit-group-modal-ft_hide_patron_info">Feature hide patron's info</label>
+                            <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -269,6 +299,13 @@
             [% END %]
         </td>
         <td>
+            [% UNLESS group.branchcode %]
+                [% IF group.ft_hide_patron_info %]
+                    <span> * Hide patron's info for librarians outside of this group.</span>
+                [% END %]
+            [% END %]
+        </td>
+        <td>
             [% IF group.branchcode %]
                 <button class="btn btn-default btn-sm remove-library" data-group-id="[% group.id %]" data-group-library="[% group.library.branchname %]" data-group-parent-title="[% group.parent.title %]" ><i class="fa fa-trash"></i> Remove from group</button>
             [% ELSE %]
@@ -282,7 +319,7 @@
                        </li>
 
                         <li>
-                            <a class="edit-group" id="edit-group-[% group.id %]" href="#" class="edit-group" data-group-id="[% group.id %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]">
+                            <a class="edit-group" id="edit-group-[% group.id %]" href="#" class="edit-group" data-group-id="[% group.id %]" data-group-parent-id="[% group.parent_id %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]">
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
                        </li>
