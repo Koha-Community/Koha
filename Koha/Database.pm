@@ -119,9 +119,10 @@ sub _new_schema {
 
     my $dbh = $schema->storage->dbh;
     eval {
-        if ($db_driver eq 'mysql') {
-            $dbh->{mysql_auto_reconnect} = 1;
-        }
+	# Unfortunately this seems to cause internal server errors, it needs more investigating
+        #if ($db_driver eq 'mysql') {
+        #    $dbh->{mysql_auto_reconnect} = 1;
+        #}
         $dbh->{RaiseError} = 1;
         if ( $ENV{KOHA_DB_DO_NOT_RAISE_OR_PRINT_ERROR} ) {
             $dbh->{RaiseError} = 0;
