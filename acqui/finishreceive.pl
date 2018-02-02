@@ -35,6 +35,7 @@ use Koha::Number::Price;
 use Koha::Acquisition::Booksellers;
 
 use List::MoreUtils qw/any/;
+use Koha::DateUtils qw( dt_from_string );
 
 my $input=new CGI;
 my $flagsrequired = {acquisition => 'order_receive'};
@@ -85,6 +86,7 @@ if ($quantityrec > $origquantityrec ) {
     $order->{order_internalnote} = $input->param("order_internalnote");
     $order->{tax_rate_on_receiving} = $input->param("tax_rate");
     $order->{unitprice} = $unitprice;
+    $order->{datereceived} = dt_from_string( $datereceived )->ymd();
 
     $order = C4::Acquisition::populate_order_with_prices(
         {

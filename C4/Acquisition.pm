@@ -1426,7 +1426,7 @@ sub ModReceiveOrder {
     my $received_items = $params->{received_items};
 
     my $dbh = C4::Context->dbh;
-    my $datereceived = ( $invoice and $invoice->{datereceived} ) ? $invoice->{datereceived} : dt_from_string;
+    my $datereceived = ( $order and $order->{datereceived} ) ? $order->{datereceived} : dt_from_string;
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,
