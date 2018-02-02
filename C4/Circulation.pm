@@ -4130,15 +4130,16 @@ sub _item_denied_renewal {
     my $item = $params->{item};
     return unless $item;
 
-    my $yaml = C4::Context->preference('ItemsDeniedRenewal');
-    my @lines = split /\n/, $yaml;
+    my @lines = split /\n/, C4::Context->preference('ItemsDeniedRenewal')//'';
     my $denyingrules;
     foreach my $line (@lines){
         my ($field,$array) = split /:/, $line;
+        next if !$array;
+        $field =~ s/^\s*|\s*$//g;
         $array =~ s/[ [\]\r]//g;
         my @array = split /,/, $array;
+        @array = map { $_ eq '""' || $_ eq "''" ? '' : $_ } @array;
         @array = map { $_ eq 'NULL' ? undef : $_ } @array;
-        @array = map { $_ eq '""' || $_ eq "''" ? undef : $_ } @array;
         $denyingrules->{$field} = \@array;
     }
     return unless $denyingrules;
@@ -4148,7 +4149,7 @@ sub _item_denied_renewal {
             if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
                 return 1;
             }
-        } elsif (any { $val eq $_ } @{$denyingrules->{$field}}) {
+        } elsif (any { defined($_) && $val eq $_ } @{$denyingrules->{$field}}) {
            # If the results matches the values in the syspref
            # We return true if match found
             return 1;

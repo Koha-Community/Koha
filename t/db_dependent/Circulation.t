@@ -2461,7 +2461,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
 };
 
 subtest 'ItemsDeniedRenewal preference' => sub {
-    plan tests => 16;
+    plan tests => 18;
 
     t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', '' );
 
@@ -2538,7 +2538,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     is( $idr_mayrenew, 1, 'Renewal allowed when 1 rules not matched (withdrawn)' );
     is( $idr_error, undef, 'Renewal allowed when 1 rules not matched (withdrawn)' );
 
-    $idr_rules="withdrawn: [1]\ntype: [HIDE,INVISILE]";
+    $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]";
 
     t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
     ( $idr_mayrenew, $idr_error ) =
@@ -2567,7 +2567,17 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked for undef when NULL in pref' );
+    $idr_rules="itemcallnumber: ['']";
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal not blocked for undef when "" in pref' );
 
+    $idr_rules="itemnotes: [NULL]";
+    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    ( $idr_mayrenew, $idr_error ) =
+    CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
+    is( $idr_mayrenew, 1, 'Renewal not blocked for "" when NULL in pref' );
     $idr_rules="itemnotes: ['']";
     t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
     ( $idr_mayrenew, $idr_error ) =
