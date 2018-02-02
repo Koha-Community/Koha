@@ -53,6 +53,12 @@ __PACKAGE__->table("library_groups");
   data_type: 'text'
   is_nullable: 1
 
+=head2 ft_hide_patron_info
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 created_on
 
   data_type: 'timestamp'
@@ -79,6 +85,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "description",
   { data_type => "text", is_nullable => 1 },
+  "ft_hide_patron_info",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "created_on",
   {
     data_type => "timestamp",
@@ -178,8 +186,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-09 16:27:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7JN93utlgFEyQhE9BMx1QQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-09 16:32:32
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4nPUJUWLIqttCGWm7N0txg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
