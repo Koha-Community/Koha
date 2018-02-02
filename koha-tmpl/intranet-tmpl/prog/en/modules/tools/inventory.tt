@@ -216,8 +216,8 @@ $(document).ready(function(){
                               [% FOREACH value IN status.values %]
                                   [% IF (value.lib) %]
                                     <li>
-                                    <label for="[% value.id %]">
-                                        [% IF value.authorised_value==0 %]
+                                    <label for="[% value.id | html %]">
+                                        [% IF ( status.fieldname == 'items.notforloan' && value.authorised_value == 0 && value.lib == '__IGNORE__' ) %]
                                             For loan
                                         [% ELSE %]
                                             [% value.lib %]
