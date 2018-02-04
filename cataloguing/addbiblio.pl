@@ -21,7 +21,6 @@
 
 use Modern::Perl;
 
-#use warnings; FIXME - Bug 2505
 use CGI q(-utf8);
 use C4::Output;
 use C4::Auth;

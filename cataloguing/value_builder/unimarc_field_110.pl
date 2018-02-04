@@ -20,8 +20,6 @@
 
 use Modern::Perl;
 
-#use warnings; FIXME - Bug 2505
-
 use Koha::Util::FrameworkPlugin qw(wrapper);
 use C4::Auth;
 use CGI qw ( -utf8 );

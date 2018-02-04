@@ -40,7 +40,6 @@ It need :
 
 use Modern::Perl;
 
-#use warnings; FIXME - Bug 2505
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;

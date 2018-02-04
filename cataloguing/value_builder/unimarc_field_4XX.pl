@@ -19,7 +19,6 @@
 
 
 use Modern::Perl;
-#use warnings; FIXME - Bug 2505
 
 use CGI qw ( -utf8 );
 use C4::Output;

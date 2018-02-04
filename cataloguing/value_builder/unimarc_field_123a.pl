@@ -19,7 +19,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-#use warnings; FIXME - Bug 2505
 use C4::Auth;
 use CGI qw ( -utf8 );
 use C4::Context;

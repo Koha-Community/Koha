@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-#use warnings; FIXME - Bug 2505
+
 use Date::Calc qw( Today );
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
