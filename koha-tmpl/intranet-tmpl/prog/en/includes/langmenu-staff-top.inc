@@ -1,8 +1,8 @@
 
 [% IF ( ( ! one_language_enabled ) && ( languages_loop ) && ( Koha.Preference('StaffLangSelectorMode') == 'both' || Koha.Preference('StaffLangSelectorMode') == 'top') ) %]
 <li class="dropdown">
-  <a href="#" title="Switch languages" class="dropdown-toggle" id="langmenu" data-toggle="dropdown" role="button"><i class="icon-flag icon-white"></i> <span class="langlabel">Languages</span> <b class="caret"></b></a>
-    <ul aria-labelledby="langmenu" role="menu" class="dropdown-menu dropdown-menu-right">
+    <a href="#" title="Switch languages" class="dropdown-toggle" id="langmenu" data-toggle="dropdown" role="button"><i class="icon-flag icon-white"></i> <span class="langlabel">Languages</span> <b class="caret"></b></a>
+    <ul aria-labelledby="langmenu" role="menu" class="dropdown-menu dropdown-menu-left">
     [% FOREACH languages_loo IN languages_loop.sort('rfc4646_subtag') %]
         [% IF ( languages_loo.group_enabled ) %]
             [% IF ( languages_loo.plural ) %]
