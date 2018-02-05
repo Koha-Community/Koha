@@ -173,15 +173,15 @@ SKIP:
 # Fill the quote table with the default needed and a spare
 $dbh->do("DELETE FROM quotes WHERE id=3 OR id=25;");
 my $sql = "INSERT INTO quotes (id,source,text,timestamp) VALUES
-(25,'Richard Nixon','When the President does it, that means that it is not illegal.','0000-00-00 00:00:00'),
-(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.','0000-00-00 00:00:00');";
+(25,'Richard Nixon','When the President does it, that means that it is not illegal.',NOW()),
+(3,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',NOW());";
 $dbh->do($sql);
 
                 my $expected_quote = {
                     id          => 3,
                     source      => 'Abraham Lincoln',
                     text        => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',
-                    timestamp   => re('\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}'),   #'0000-00-00 00:00:00',
+                    timestamp   => re('\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}'),   #'YYYY-MM-DD HH:MM:SS'
                 };
 
 # test quote retrieval based on id
