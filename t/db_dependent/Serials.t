@@ -51,8 +51,8 @@ my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 
 my $budgetid;
 my $bpid = AddBudgetPeriod({
-    budget_period_startdate   => '01-01-2015',
-    budget_period_enddate     => '31-12-2015',
+    budget_period_startdate   => '2015-01-01',
+    budget_period_enddate     => '2015-12-31',
     budget_period_description => "budget desc"
 });
 

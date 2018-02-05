@@ -33,8 +33,8 @@ my $bookseller = Koha::Acquisition::Bookseller->new(
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;
 my $bpid = AddBudgetPeriod({
-    budget_period_startdate   => '01-01-2015',
-    budget_period_enddate     => '12-31-2015',
+    budget_period_startdate   => '2015-01-01',
+    budget_period_enddate     => '2015-12-31',
     budget_period_description => "budget desc"
 });
 
@@ -48,11 +48,11 @@ my $budget_id = AddBudget({
 
 my $subscriptionid = NewSubscription(
     undef,      "",     undef, undef, $budget_id, $biblionumber,
-    '01-01-2013',undef, undef, undef,  undef,
+    '2013-01-01',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "notes",undef, '01-01-2013', undef, undef,
+    1,          "notes",undef, '2013-01-01', undef, undef,
     undef,       undef,  0,    "intnotes",  0,
-    undef, undef, 0,          undef,         '31-12-2013', 0
+    undef, undef, 0,          undef,         '2013-12-31', 0
 );
 die unless $subscriptionid;
 
@@ -64,7 +64,7 @@ my $subscription = GetSubscription( $subscriptionid );
 
 my $order = Koha::Acquisition::Order->new({
     biblionumber => $subscription->{biblionumber},
-    entrydate => '01-01-2013',
+    entrydate => '2013-01-01',
     quantity => 1,
     currency => $curcode,
     listprice => $cost,
@@ -88,7 +88,7 @@ $dbh->do(q{DELETE FROM aqinvoices});
 my $invoiceid = AddInvoice(invoicenumber => 'invoice1', booksellerid => $bookseller->id, unknown => "unknown");
 
 my $invoice = GetInvoice( $invoiceid );
-$invoice->{datereceived} = '02-01-2013';
+$invoice->{datereceived} = '2013-01-02';
 
 my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     {

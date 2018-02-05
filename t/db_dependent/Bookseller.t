@@ -189,9 +189,9 @@ is( $bookseller1fromid->subscriptions->count,
 
 my $id_subscription1 = NewSubscription(
     undef,      'BRANCH2',     $id_supplier1, undef, $id_budget, $biblionumber,
-    '01-01-2013',undef, undef, undef,  undef,
+    '2013-01-01',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    1,          "subscription notes",undef, '2013-01-01', undef, undef,
     undef, 'CALL ABC',  0,    "intnotes",  0,
     undef, undef, 0,          undef,         '2013-11-30', 0
 );
@@ -201,9 +201,9 @@ is($subscriptions[0]->{publicnotes}, 'subscription notes', 'subscription search 
 
 my $id_subscription2 = NewSubscription(
     undef,      'BRANCH2',     $id_supplier1, undef, $id_budget, $biblionumber,
-    '01-01-2013',undef, undef, undef,  undef,
+    '2013-01-01',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    1,          "subscription notes",undef, '2013-01-01', undef, undef,
     undef, 'CALL DEF',  0,    "intnotes",  0,
     undef, undef, 0,          undef,         '2013-07-31', 0
 );
@@ -330,9 +330,9 @@ ModBasket($basket4info);
 #Add 1 subscription
 my $id_subscription3 = NewSubscription(
     undef,      "BRANCH1",     $id_supplier1, undef, $id_budget, $biblionumber,
-    '01-01-2013',undef, undef, undef,  undef,
+    '2013-01-01',undef, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          "subscription notes",undef, '01-01-2013', undef, undef,
+    1,          "subscription notes",undef, '2013-01-01', undef, undef,
     undef,       undef,  0,    "intnotes",  0,
     undef, undef, 0,          'LOCA',         '2013-12-31', 0
 );
@@ -355,7 +355,7 @@ my $order1 = Koha::Acquisition::Order->new(
         quantity         => 24,
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
-        entrydate        => '01-01-2013',
+        entrydate        => '2013-01-01',
         currency         => $curcode,
         notes            => "This is a note1",
         tax_rate          => 0.0500,
@@ -364,7 +364,7 @@ my $order1 = Koha::Acquisition::Order->new(
         quantityreceived => 2,
         rrp              => 10,
         ecost            => 10,
-        datereceived     => '01-06-2013'
+        datereceived     => '2013-06-01'
     }
 )->store;
 my $ordernumber1 = $order1->ordernumber;
@@ -375,7 +375,7 @@ my $order2 = Koha::Acquisition::Order->new(
         quantity       => 20,
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
-        entrydate      => '01-01-2013',
+        entrydate      => '2013-01-01',
         currency       => $curcode,
         notes          => "This is a note2",
         tax_rate        => 0.0500,
@@ -393,7 +393,7 @@ my $order3 = Koha::Acquisition::Order->new(
         quantity       => 20,
         biblionumber   => $biblionumber,
         budget_id      => $id_budget,
-        entrydate      => '02-02-2013',
+        entrydate      => '2013-02-02',
         currency       => $curcode,
         notes          => "This is a note3",
         tax_rate        => 0.0500,
@@ -411,7 +411,7 @@ my $order4 = Koha::Acquisition::Order->new(
         quantity         => 20,
         biblionumber     => $biblionumber,
         budget_id        => $id_budget,
-        entrydate        => '02-02-2013',
+        entrydate        => '2013-02-02',
         currency         => $curcode,
         notes            => "This is a note3",
         tax_rate          => 0.0500,

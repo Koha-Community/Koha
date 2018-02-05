@@ -110,11 +110,11 @@ subtest '->subscriptions() tests' => sub {
     # Add two subscriptions
     my $subscription_1_id = NewSubscription(
         undef,        'BRANCH2',     $vendor->id,          undef,
-        $id_budget,   $biblionumber, '01-01-2013',         undef,
+        $id_budget,   $biblionumber, '2013-01-01',         undef,
         undef,        undef,         undef,                undef,
         undef,        undef,         undef,                undef,
         undef,        1,             "subscription notes", undef,
-        '01-01-2013', undef,         undef,                undef,
+        '2013-01-01', undef,         undef,                undef,
         'CALL ABC',   0,             "intnotes",           0,
         undef,        undef,         0,                    undef,
         '2013-11-30', 0
@@ -128,11 +128,11 @@ subtest '->subscriptions() tests' => sub {
 
     my $id_subscription2 = NewSubscription(
         undef,        'BRANCH2',     $vendor->id,          undef,
-        $id_budget,   $biblionumber, '01-01-2013',         undef,
+        $id_budget,   $biblionumber, '2013-01-01',         undef,
         undef,        undef,         undef,                undef,
         undef,        undef,         undef,                undef,
         undef,        1,             "subscription notes", undef,
-        '01-01-2013', undef,         undef,                undef,
+        '2013-01-01', undef,         undef,                undef,
         'CALL DEF',   0,             "intnotes",           0,
         undef,        undef,         0,                    undef,
         '2013-07-31', 0

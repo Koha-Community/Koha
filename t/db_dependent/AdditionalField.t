@@ -110,8 +110,8 @@ use C4::Serials::Numberpattern;
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 my $budgetid;
 my $bpid = AddBudgetPeriod({
-    budget_period_startdate => '01-01-2015',
-    budget_period_enddate   => '01-01-2016',
+    budget_period_startdate => '2015-01-01',
+    budget_period_enddate   => '2016-01-01',
 });
 
 my $budget_id = AddBudget({
