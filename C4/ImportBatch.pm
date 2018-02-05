@@ -1595,10 +1595,10 @@ sub _create_import_record {
     my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $z3950random, $marc_type) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO import_records (import_batch_id, record_sequence, marc, marcxml, 
+    my $sth = $dbh->prepare("INSERT INTO import_records (import_batch_id, record_sequence, marc, marcxml, marcxml_old,
                                                          record_type, encoding, z3950random)
-                                    VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $sth->execute($batch_id, $record_sequence, $marc_record->as_usmarc(), $marc_record->as_xml($marc_type),
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $sth->execute($batch_id, $record_sequence, $marc_record->as_usmarc(), $marc_record->as_xml($marc_type), '',
                   $record_type, $encoding, $z3950random);
     my $import_record_id = $dbh->{'mysql_insertid'};
     $sth->finish();
