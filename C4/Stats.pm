@@ -120,7 +120,7 @@ sub UpdateStats {
     my $type              = $params->{type};
     my $borrowernumber    = exists $params->{borrowernumber} ? $params->{borrowernumber} : '';
     my $itemnumber        = exists $params->{itemnumber}     ? $params->{itemnumber}     : '';
-    my $amount            = exists $params->{amount}         ? $params->{amount}         : '';
+    my $amount            = exists $params->{amount}         ? $params->{amount}         : 0;
     my $other             = exists $params->{other}          ? $params->{other}          : '';
     my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype}       : '';
     my $location          = exists $params->{location}       ? $params->{location}       : undef;
