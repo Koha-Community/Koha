@@ -6,7 +6,7 @@
             [% IF CAN_user_borrowers_edit_borrowers %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
             <li class="dropdown">
                 <a href="/cgi-bin/koha/catalogue/search.pl" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dropdown-menu-right">
                     [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a></li>
                     <li><a href="/cgi-bin/koha/catalogue/itemsearch.pl">Item search</a></li>[% END %]
                 </ul>
@@ -19,7 +19,7 @@
             [% IntranetNav %]
             <li class="dropdown">
                 <a href="/cgi-bin/koha/mainpage.pl" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
                     [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
                         <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></li>
@@ -77,7 +77,7 @@
                     </span>
                     <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="logged-in-menu">
+                <ul class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="logged-in-menu">
 
                     <li class="loggedin-menu-label">
                         Logged in as:<br />

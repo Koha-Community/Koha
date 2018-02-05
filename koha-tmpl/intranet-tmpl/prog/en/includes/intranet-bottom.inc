@@ -23,7 +23,7 @@
                         [% END %]
                     [% END %]
                 <span class="caret"></span></a>
-            <ul id="sub[% languages_loo.rfc4646_subtag %]" class="dropdown-menu">
+            <ul id="sub[% languages_loo.rfc4646_subtag %]" class="dropdown-menu dropdown-menu-right">
             [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
         [% IF ( sublanguages_loo.enabled ) %]
                 [% IF ( sublanguages_loo.sublanguage_current ) %]
