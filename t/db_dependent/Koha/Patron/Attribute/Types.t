@@ -297,19 +297,19 @@ subtest 'search() with branch limits tests' => sub {
     Koha::Patron::Attribute::Types->search()->delete();
 
     my $object_code_1
-        = Koha::Patron::Attribute::Type->new( { code => 'code_1', } )
+        = Koha::Patron::Attribute::Type->new( { code => 'code_1', description => 'a description for code_1' } )
         ->store();
 
     my $object_code_2
-        = Koha::Patron::Attribute::Type->new( { code => 'code_2', } )
+        = Koha::Patron::Attribute::Type->new( { code => 'code_2', description => 'a description for code_2' } )
         ->store();
 
     my $object_code_3
-        = Koha::Patron::Attribute::Type->new( { code => 'code_3', } )
+        = Koha::Patron::Attribute::Type->new( { code => 'code_3', description => 'a description for code_3' } )
         ->store();
 
     my $object_code_4
-        = Koha::Patron::Attribute::Type->new( { code => 'code_4', } )
+        = Koha::Patron::Attribute::Type->new( { code => 'code_4', description => 'a description for code_4' } )
         ->store();
 
     is( Koha::Patron::Attribute::Types->search()->count,
