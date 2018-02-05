@@ -38,6 +38,11 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
+    # Remove /api/v1/app.pl/ from the path
+    $self->hook( before_dispatch => sub {
+        shift->req->url->base->path('/');
+    });
+
     # Force charset=utf8 in Content-Type header for JSON responses
     $self->types->type(json => 'application/json; charset=utf8');
 
