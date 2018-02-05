@@ -162,9 +162,9 @@ sub GetCourses {
     my @query_values;
 
     my $query = "
-        SELECT courses.*
-        FROM courses
-        LEFT JOIN course_reserves ON course_reserves.course_id = courses.course_id
+        SELECT c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp
+        FROM courses c
+        LEFT JOIN course_reserves ON course_reserves.course_id = c.course_id
         LEFT JOIN course_items ON course_items.ci_id = course_reserves.ci_id
     ";
 
@@ -180,7 +180,7 @@ sub GetCourses {
         $query .= join( ' AND ', @query_keys );
     }
 
-    $query .= " GROUP BY courses.course_id ";
+    $query .= " GROUP BY c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp ";
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
