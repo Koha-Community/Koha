@@ -907,25 +907,27 @@ sub GetBorrowersToExpunge {
 
     my $dbh   = C4::Context->dbh;
     my $query = q|
-        SELECT borrowers.borrowernumber,
-               MAX(old_issues.timestamp) AS latestissue,
-               MAX(issues.timestamp) AS currentissue
-        FROM   borrowers
-        JOIN   categories USING (categorycode)
-        LEFT JOIN (
-            SELECT guarantorid
-            FROM borrowers
-            WHERE guarantorid IS NOT NULL
-                AND guarantorid <> 0
-        ) as tmp ON borrowers.borrowernumber=tmp.guarantorid
-        LEFT JOIN old_issues USING (borrowernumber)
-        LEFT JOIN issues USING (borrowernumber)|;
+        SELECT *
+        FROM (
+            SELECT borrowers.borrowernumber,
+                   MAX(old_issues.timestamp) AS latestissue,
+                   MAX(issues.timestamp) AS currentissue
+            FROM   borrowers
+            JOIN   categories USING (categorycode)
+            LEFT JOIN (
+                SELECT guarantorid
+                FROM borrowers
+                WHERE guarantorid IS NOT NULL
+                    AND guarantorid <> 0
+            ) as tmp ON borrowers.borrowernumber=tmp.guarantorid
+            LEFT JOIN old_issues USING (borrowernumber)
+            LEFT JOIN issues USING (borrowernumber)|;
     if ( $filterpatronlist  ){
         $query .= q| LEFT JOIN patron_list_patrons USING (borrowernumber)|;
     }
     $query .= q| WHERE  category_type <> 'S'
         AND tmp.guarantorid IS NULL
-   |;
+    |;
     my @query_params;
     if ( $filterbranch && $filterbranch ne "" ) {
         $query.= " AND borrowers.branchcode = ? ";
@@ -947,11 +949,14 @@ sub GetBorrowersToExpunge {
         $query.=" AND patron_list_id = ? ";
         push( @query_params, $filterpatronlist );
     }
-    $query.=" GROUP BY borrowers.borrowernumber HAVING currentissue IS NULL ";
+    $query .= " GROUP BY borrowers.borrowernumber";
+    $query .= q|
+        ) xxx WHERE currentissue IS NULL|;
     if ( $filterdate ) {
         $query.=" AND ( latestissue < ? OR latestissue IS NULL ) ";
         push @query_params,$filterdate;
     }
+
     warn $query if $debug;
 
     my $sth = $dbh->prepare($query);
