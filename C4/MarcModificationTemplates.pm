@@ -240,6 +240,8 @@ sub AddModificationTemplateAction {
                     $to_regex_search, $to_regex_replace, $to_regex_modifiers, $conditional, $conditional_field, $conditional_subfield, $conditional_comparison,
                     $conditional_value, $conditional_regex, $description )" ) if DEBUG;
 
+  $conditional ||= undef;
+  $conditional_comparison ||= undef;
   $conditional_regex ||= '0';
 
   my $dbh = C4::Context->dbh;
@@ -337,6 +339,9 @@ sub ModModificationTemplateAction {
   ) = @_;
 
   my $dbh = C4::Context->dbh;
+  $conditional ||= undef;
+  $conditional_comparison ||= undef;
+  $conditional_regex ||= '0';
 
   my $query = "
   UPDATE marc_modification_template_actions SET
