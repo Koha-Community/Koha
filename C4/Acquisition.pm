@@ -607,6 +607,8 @@ case the AcqCreateItem syspref takes precedence).
 
 sub ModBasketHeader {
     my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items) = @_;
+
+    $is_standing ||= 0;
     my $query = qq{
         UPDATE aqbasket
         SET basketname=?, note=?, booksellernote=?, booksellerid=?, deliveryplace=?, billingplace=?, is_standing=?, create_items=?
