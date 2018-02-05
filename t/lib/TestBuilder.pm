@@ -473,6 +473,13 @@ sub _gen_default_values {
         Item => {
             more_subfields_xml => undef,
         },
+        Category => {
+            enrolmentfee => 0,
+            reservefee   => 0,
+        },
+        Itemtype => {
+            rentalcharge => 0,
+        },
     };
 }
 
