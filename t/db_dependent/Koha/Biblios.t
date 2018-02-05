@@ -19,11 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use C4::Reserves;
 
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::Subscriptions;
@@ -44,6 +44,17 @@ my $biblioitem = $schema->resultset('Biblioitem')->new(
         biblionumber => $biblio->id
     }
 )->insert();
+
+subtest 'store' => sub {
+    plan tests => 1;
+    is(
+        Koha::Biblios->find( $biblio->biblionumber )->datecreated,
+        output_pref(
+            { dt => dt_from_string, dateformat => 'iso', dateonly => 1 }
+        ),
+        "datecreated must be set to today if not passed to the constructor"
+    );
+};
 
 subtest 'holds + current_holds' => sub {
     plan tests => 5;

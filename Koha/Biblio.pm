@@ -45,6 +45,20 @@ Koha::Biblio - Koha Biblio Object class
 
 =cut
 
+=head3 store
+
+Overloaded I<store> method to set default values
+
+=cut
+
+sub store {
+    my ( $self ) = @_;
+
+    $self->datecreated( dt_from_string ) unless $self->datecreated;
+
+    return $self->SUPER::store;
+}
+
 =head3 subtitles
 
 my @subtitles = $biblio->subtitles();
