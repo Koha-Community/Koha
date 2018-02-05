@@ -67,6 +67,7 @@ my $budget_id = AddBudget({
 my $frequency_id = AddSubscriptionFrequency({ description => "Test frequency 1" });
 my $pattern_id = AddSubscriptionNumberpattern({
     label => 'Test numberpattern 1',
+    description => 'Description for numberpattern 1',
     numberingmethod => '{X}',
     label1 => q{},
     add1 => 1,
