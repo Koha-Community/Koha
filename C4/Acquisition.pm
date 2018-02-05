@@ -2150,7 +2150,6 @@ sub GetLateOrders {
         AND aqbasket.closedate IS NOT NULL
         AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
     ";
-    my $having = "";
     if ($dbdriver eq "mysql") {
         $select .= "
         aqorders.quantity - COALESCE(aqorders.quantityreceived,0)                 AS quantity,
@@ -2161,7 +2160,7 @@ sub GetLateOrders {
             $from .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? DAY)) " ;
             push @query_params, $delay;
         }
-        $having = "HAVING quantity <> 0";
+        $from .= " AND aqorders.quantity - COALESCE(aqorders.quantityreceived,0) <> 0";
     } else {
         # FIXME: account for IFNULL as above
         $select .= "
@@ -2173,6 +2172,7 @@ sub GetLateOrders {
             $from .= " AND (closedate <= (CAST(now() AS date) -(INTERVAL ? DAY)) ";
             push @query_params, $delay;
         }
+        $from .= " AND aqorders.quantity <> 0";
     }
     if (defined $supplierid) {
         $from .= ' AND aqbasket.booksellerid = ? ';
@@ -2203,7 +2203,7 @@ sub GetLateOrders {
         push @query_params, C4::Context->userenv->{branch};
     }
     $from .= " AND orderstatus <> 'cancelled' ";
-    my $query = "$select $from $having\nORDER BY latesince, basketno, borrowers.branchcode, supplier";
+    my $query = "$select $from \nORDER BY latesince, basketno, borrowers.branchcode, supplier";
     $debug and print STDERR "GetLateOrders query: $query\nGetLateOrders args: " . join(" ",@query_params);
     my $sth = $dbh->prepare($query);
     $sth->execute(@query_params);
