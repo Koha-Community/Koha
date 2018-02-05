@@ -139,6 +139,7 @@ sub AddSubscriptionNumberpattern {
         return;
     }
 
+    # FIXME label, description and numberingmethod must be mandatory
     my @keys;
     my @values;
     foreach (qw/ label description numberingmethod displayorder
