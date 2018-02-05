@@ -49,7 +49,7 @@ my $new_item_2 = Koha::Item->new(
         biblioitemnumber => $biblioitem->{biblioitemnumber},
         homebranch       => $library->{branchcode},
         holdingbranch    => $library->{branchcode},
-        barcode          => "another_barcode_for_t",
+        barcode          => "another_bc_for_t",
         itype            => 'BK',
     }
 )->store;
