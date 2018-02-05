@@ -71,18 +71,18 @@
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         function AddFld(kohafield) {
-            var fieldstr = prompt( _("Adding a mapping for: ") + kohafield + ".\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );
+            var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );
             var temp = fieldstr.split(',');
             if( temp.length == 2 ) {
                 $('#add_field').val( kohafield+','+fieldstr );
                 $('#koha2marc').submit();
             } else {
-                alert( "Invalid input. Enter something like: 245,a" );
+                alert( _("Invalid input. Enter something like: 245,a") );
             }
         }
 
         function RemFld(tagfield, subfield ) {
-            if( confirm( _("Mapping will be removed for: ") + tagfield + subfield + ".\n" + _("The change will be applied immediately." ))) {
+            if( confirm( _("Mapping will be removed for: %s.").format(tagfield + subfield) + "\n" + _("The change will be applied immediately." ))) {
                 $('#remove_field').val(tagfield+','+subfield);
                 $('#koha2marc').submit();
             }
