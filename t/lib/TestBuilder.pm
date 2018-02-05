@@ -484,6 +484,9 @@ sub _gen_default_values {
             tax_rate => 0,
             discount => 0,
         },
+        AuthHeader => {
+            marcxml => '',
+        },
     };
 }
 

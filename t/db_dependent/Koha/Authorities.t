@@ -61,8 +61,8 @@ my $new_authority_type_1  = Koha::Authority::Type->new(
         summary            => 'my summary for authority 1',
     }
 )->store;
-my $new_authority_1 = Koha::Authority->new( { authtypecode => $new_authority_type_1->authtypecode, } )->store;
-my $new_authority_2 = Koha::Authority->new( { authtypecode => $new_authority_type_1->authtypecode, } )->store;
+my $new_authority_1 = Koha::Authority->new( { authtypecode => $new_authority_type_1->authtypecode, marcxml => '' } )->store;
+my $new_authority_2 = Koha::Authority->new( { authtypecode => $new_authority_type_1->authtypecode, marcxml => '' } )->store;
 
 is( Koha::Authority::Types->search->count, $nb_of_authority_types + 1, 'The authority type should have been added' );
 is( Koha::Authorities->search->count,      $nb_of_authorities + 2,     'The 2 authorities should have been added' );
