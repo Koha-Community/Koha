@@ -539,16 +539,16 @@ DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
   `borrowernumber` int(11) NOT NULL default 0, -- primary key, Koha assigned ID number for patrons/borrowers
   `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
+  `surname` mediumtext, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
   `othernames` mediumtext, -- any other names associated with the patron/borrower
   `initials` text, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` mediumtext NOT NULL, -- the first address line for your patron/borrower's primary address
+  `address` mediumtext, -- the first address line for your patron/borrower's primary address
   `address2` text, -- the second address line for your patron/borrower's primary address
-  `city` mediumtext NOT NULL, -- the city or town for your patron/borrower's primary address
+  `city` mediumtext, -- the city or town for your patron/borrower's primary address
   `state` text default NULL, -- the state or province for your patron/borrower's primary address
   `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
   `country` text, -- the country for your patron/borrower's primary address
@@ -1564,16 +1564,16 @@ DROP TABLE IF EXISTS `borrowers`;
 CREATE TABLE `borrowers` ( -- this table includes information about your patrons/borrowers/members
   `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
   `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
+  `surname` mediumtext, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
   `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
   `othernames` mediumtext, -- any other names associated with the patron/borrower
   `initials` text, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` mediumtext NOT NULL, -- the first address line for your patron/borrower's primary address
+  `address` mediumtext, -- the first address line for your patron/borrower's primary address
   `address2` text, -- the second address line for your patron/borrower's primary address
-  `city` mediumtext NOT NULL, -- the city or town for your patron/borrower's primary address
+  `city` mediumtext, -- the city or town for your patron/borrower's primary address
   `state` text default NULL, -- the state or province for your patron/borrower's primary address
   `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
   `country` text, -- the country for your patron/borrower's primary address
