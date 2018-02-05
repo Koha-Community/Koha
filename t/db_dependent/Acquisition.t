@@ -154,8 +154,8 @@ my $bpid=AddBudgetPeriod({
 
 my $budgetid = C4::Budgets::AddBudget(
     {
-        budget_code => "budget_code_test_getordersbybib",
-        budget_name => "budget_name_test_getordersbybib",
+        budget_code => "budget_code_test_1",
+        budget_name => "budget_name_test_1",
         budget_period_id => $bpid,
     }
 );

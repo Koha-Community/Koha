@@ -32,8 +32,8 @@ my $basketno = C4::Acquisition::NewBasket(
 
 my $budgetid = C4::Budgets::AddBudget(
     {
-        budget_code => "budget_code_test_getordersbybib",
-        budget_name => "budget_name_test_getordersbybib",
+        budget_code => "budget_code_test",
+        budget_name => "budget_name_test",
     }
 );
 

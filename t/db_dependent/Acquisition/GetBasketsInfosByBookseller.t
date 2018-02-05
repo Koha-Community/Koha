@@ -33,8 +33,8 @@ ok($basketno = NewBasket($supplierid, 1), 'NewBasket(  $supplierid , 1  ) return
 
 my $budgetid = C4::Budgets::AddBudget(
     {
-        budget_code => 'budget_code_test_getordersbybib',
-        budget_name => 'budget_name_test_getordersbybib',
+        budget_code => 'budget_code_test_1',
+        budget_name => 'budget_name_test_1',
     }
 );
 my $budget = C4::Budgets::GetBudget( $budgetid );
