@@ -19,7 +19,7 @@
     }, _("Password contains leading and/or trailing spaces"));
     jQuery.validator.addMethod("password_match", function(value, element){
         var new_password_node = $("input[name='" + new_password_node_name + "']:first");
-        return this.optional(element) || value == $(new_password_node).val();
+        return value == $(new_password_node).val();
     }, _("Please enter the same password as above"));
 </script>
 [% END %]
