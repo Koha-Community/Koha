@@ -22,6 +22,7 @@ use Data::Dumper;
 use MARC::Record;
 use C4::Biblio;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Library;
 
 use t::lib::Mocks;
@@ -259,6 +260,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 
     my $biblio = $schema->resultset('Biblio')->create({
         title       => "Test title",
+        datecreated => dt_from_string,
         biblioitems => [ { itemtype => 'BIB_LEVEL' } ],
     });
     my $biblioitem = $biblio->biblioitems->first;
