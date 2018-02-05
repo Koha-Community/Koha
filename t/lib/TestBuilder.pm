@@ -480,6 +480,10 @@ sub _gen_default_values {
         Itemtype => {
             rentalcharge => 0,
         },
+        Aqbookseller => {
+            tax_rate => 0,
+            discount => 0,
+        },
     };
 }
 
