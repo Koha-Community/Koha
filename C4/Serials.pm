@@ -1453,8 +1453,8 @@ sub NewSubscription {
     # then create the 1st expected number
     $query = qq(
         INSERT INTO subscriptionhistory
-            (biblionumber, subscriptionid, histstartdate)
-        VALUES (?,?,?)
+            (biblionumber, subscriptionid, histstartdate, missinglist, recievedlist)
+        VALUES (?,?,?, '', '')
         );
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $subscriptionid, $startdate);
