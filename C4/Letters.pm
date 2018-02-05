@@ -70,6 +70,9 @@ C4::Letters - Give functions for Letters management
   returns informations about letters.
   if needed, $module filters for letters given module
 
+  DEPRECATED - You must use Koha::Notice::Templates instead
+  The group by clause is confusing and can lead to issues
+
 =cut
 
 sub GetLetters {
@@ -80,14 +83,14 @@ sub GetLetters {
     my $dbh       = C4::Context->dbh;
     my $letters   = $dbh->selectall_arrayref(
         q|
-            SELECT module, code, branchcode, name
+            SELECT code, module, name
             FROM letter
             WHERE 1
         |
           . ( $module ? q| AND module = ?| : q|| )
           . ( $code   ? q| AND code = ?|   : q|| )
           . ( defined $branchcode   ? q| AND branchcode = ?|   : q|| )
-          . q| GROUP BY code ORDER BY name|, { Slice => {} }
+          . q| GROUP BY code, module, name ORDER BY name|, { Slice => {} }
         , ( $module ? $module : () )
         , ( $code ? $code : () )
         , ( defined $branchcode ? $branchcode : () )

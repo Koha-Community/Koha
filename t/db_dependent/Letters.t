@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 77;
+use Test::More tests => 76;
 use Test::MockModule;
 use Test::Warn;
 
@@ -176,7 +176,6 @@ Look at this wonderful biblio timestamp: <<biblio.timestamp>>.
 $dbh->do( q|INSERT INTO letter(branchcode,module,code,name,is_html,title,content,message_transport_type) VALUES (?,'my module','my code','my name',1,?,?,'email')|, undef, $library->{branchcode}, $title, $content );
 $letters = C4::Letters::GetLetters();
 is( @$letters, 1, 'GetLetters returns the correct number of letters' );
-is( $letters->[0]->{branchcode}, $library->{branchcode}, 'GetLetters gets the branch code correctly' );
 is( $letters->[0]->{module}, 'my module', 'GetLetters gets the module correctly' );
 is( $letters->[0]->{code}, 'my code', 'GetLetters gets the code correctly' );
 is( $letters->[0]->{name}, 'my name', 'GetLetters gets the name correctly' );
