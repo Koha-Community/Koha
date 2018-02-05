@@ -44,14 +44,15 @@ subtest '->baskets() tests' => sub {
     $schema->resultset('Aqbasket')->delete();
     Koha::Acquisition::Booksellers->delete();
     $schema->resultset('Subscription')->delete();
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
     is( $vendor->baskets, 0, 'Vendor has no baskets' );
 
     # Add two baskets
-    my $basket_1_id = C4::Acquisition::NewBasket( $vendor->id, 'authorizedby1', 'basketname1' );
-    my $basket_2_id = C4::Acquisition::NewBasket( $vendor->id, 'authorizedby2', 'basketname2' );
+    my $basket_1_id = C4::Acquisition::NewBasket( $vendor->id, $patron->borrowernumber, 'basketname1' );
+    my $basket_2_id = C4::Acquisition::NewBasket( $vendor->id, $patron->borrowernumber, 'basketname2' );
 
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );

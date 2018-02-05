@@ -46,6 +46,7 @@ $dbh->do(q|DELETE FROM aqbasket|);
 $dbh->do(q|DELETE FROM aqbooksellers|);
 $dbh->do(q|DELETE FROM subscription|);
 
+my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 # Add currency
 my $curcode = $builder->build({ source => 'Currency' })->{currencycode};
 
@@ -137,9 +138,9 @@ is_deeply( \@booksellers, \@tab,
 my @bookseller1 = Koha::Acquisition::Booksellers->search({name => $sample_supplier1->{name} });
 is( $bookseller1[0]->baskets->count, 0, 'Supplier1 has 0 basket' );
 my $basketno1 =
-  C4::Acquisition::NewBasket( $id_supplier1, 'authorisedby1', 'basketname1' );
+  C4::Acquisition::NewBasket( $id_supplier1, $patron->borrowernumber, 'basketname1' );
 my $basketno2 =
-  C4::Acquisition::NewBasket( $id_supplier1, 'authorisedby2', 'basketname2' );
+  C4::Acquisition::NewBasket( $id_supplier1, $patron->borrowernumber, 'basketname2' );
 @bookseller1 = Koha::Acquisition::Booksellers->search({ name => $sample_supplier1->{name} });
 is( $bookseller1[0]->baskets->count, 2, 'Supplier1 has 2 baskets' );
 
@@ -289,10 +290,10 @@ my $id_supplier4 = $supplier4->id;
 
 #Add 2 baskets
 my $basketno3 =
-  C4::Acquisition::NewBasket( $id_supplier3, 'authorisedby3', 'basketname3',
+  C4::Acquisition::NewBasket( $id_supplier3, $patron->borrowernumber, 'basketname3',
     'basketnote3' );
 my $basketno4 =
-  C4::Acquisition::NewBasket( $id_supplier4, 'authorisedby4', 'basketname4',
+  C4::Acquisition::NewBasket( $id_supplier4, $patron->borrowernumber, 'basketname4',
     'basketnote4' );
 
 #Modify the basket to add a close date
