@@ -191,8 +191,8 @@ subtest 'is_expired' => sub {
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $patron->dateexpiry( undef )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not set');
-    $patron->dateexpiry( '0000-00-00' )->store->discard_changes;
-    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is not 0000-00-00');
+    $patron->dateexpiry( '0000-00-00' );
+    is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is 0000-00-00');
     $patron->dateexpiry( dt_from_string )->store->discard_changes;
     is( $patron->is_expired, 0, 'Patron should not be considered expired if dateexpiry is today');
     $patron->dateexpiry( dt_from_string->add( days => 1 ) )->store->discard_changes;
@@ -209,8 +209,8 @@ subtest 'is_going_to_expire' => sub {
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $patron->dateexpiry( undef )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is not set');
-    $patron->dateexpiry( '0000-00-00' )->store->discard_changes;
-    is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is not 0000-00-00');
+    $patron->dateexpiry( '0000-00-00' );
+    is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is 0000-00-00');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
     $patron->dateexpiry( dt_from_string )->store->discard_changes;
