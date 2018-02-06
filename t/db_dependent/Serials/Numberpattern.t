@@ -28,7 +28,7 @@ $numberpattern = {};
 $rv = ModSubscriptionNumberpattern($numberpattern);
 is($rv, undef, "ModSubscriptionNumberpattern({}) returns undef");
 # returns 0 because id doesn't exist
-$numberpattern = { id => 1, label => "Test numberpattern 1" };
+$numberpattern = { id => 1, label => "Test numberpattern 1", description => '' };
 $rv = ModSubscriptionNumberpattern($numberpattern);
 is($rv, '0E0', "ModSubscriptionNumberpattern({id=1,label=>'Test numberpattern 1'}) returns '0 but true'");
 
@@ -38,7 +38,7 @@ is($id, undef, "AddSubscriptionNumberpattern(undef) returns undef");
 $numberpattern = {};
 $id = AddSubscriptionNumberpattern($numberpattern);
 is($id, undef, "AddSubscriptionNumberpattern({}) returns undef");
-$numberpattern = { label => "Test numberpattern 1", numberingmethod => "{X}" };
+$numberpattern = { label => "Test numberpattern 1", numberingmethod => "{X}", description => '' };
 $id = AddSubscriptionNumberpattern($numberpattern);
 ok((defined($id) && ($id > 0)), "AddSubscriptionNumberpattern({label => 'Test numberpattern 1', numberingmethod => '{X}'}) returns numberpattern id");
 
