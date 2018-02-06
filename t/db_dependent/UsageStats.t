@@ -240,8 +240,8 @@ sub construct_objects_needed {
 
     $query = '
     INSERT INTO biblio
-      (title, author)
-    VALUES (?,?)';
+      (title, author, datecreated)
+    VALUES (?,?, NOW())';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute( $title1, $author1 );
     my $biblionumber1 = $dbh->last_insert_id( undef, undef, 'biblio', undef );
