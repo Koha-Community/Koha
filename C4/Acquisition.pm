@@ -2518,7 +2518,8 @@ sub GetInvoices {
 
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        SELECT aqinvoices.*, aqbooksellers.name AS suppliername,
+        SELECT aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id,
+            aqbooksellers.name AS suppliername,
           COUNT(
             DISTINCT IF(
               aqorders.datereceived IS NOT NULL,
@@ -2604,7 +2605,7 @@ sub GetInvoices {
     }
 
     $query .= " WHERE " . join(" AND ", @bind_strs) if @bind_strs;
-    $query .= " GROUP BY aqinvoices.invoiceid ";
+    $query .= " GROUP BY aqinvoices.invoiceid, aqinvoices.invoicenumber, aqinvoices.booksellerid, aqinvoices.shipmentdate, aqinvoices.billingdate, aqinvoices.closedate, aqinvoices.shipmentcost, aqinvoices.shipmentcost_budgetid, aqinvoices.message_id, aqbooksellers.name";
 
     if($args{order_by}) {
         my ($column, $direction) = split / /, $args{order_by};
