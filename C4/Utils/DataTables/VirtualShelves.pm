@@ -95,7 +95,8 @@ sub search {
         $limit = "LIMIT $dt_params->{iDisplayStart},$dt_params->{iDisplayLength}";
     }
 
-    my $group_by = " GROUP BY vs.shelfnumber";
+    my $group_by = " GROUP BY vs.shelfnumber, vs.shelfname, vs.owner, vs.category,
+        vs.created_on, vs.lastmodified, bo.surname, bo.firstname, vs.sortfield ";
 
     my $query = join(
         " ",
