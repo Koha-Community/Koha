@@ -238,13 +238,13 @@ $query = '
   INSERT INTO creator_batches
     (batch_id , item_number, borrower_number,
      timestamp, branch_code, creator)
-  VALUES (?,?,?,?,?,?)';
+  VALUES (?,?,?,NOW(),?,?)';
 $insert_sth = $dbh->prepare($query);
-$insert_sth->execute( 11, $item_number1, $borrowernumber1, 'now()', $library1->{branchcode}, 'Labels' );
+$insert_sth->execute( 11, $item_number1, $borrowernumber1, $library1->{branchcode}, 'Labels' );
 
-$insert_sth->execute( 12, $item_number2, $borrowernumber2, 'now()', $library2->{branchcode}, 'Labels' );
+$insert_sth->execute( 12, $item_number2, $borrowernumber2, $library2->{branchcode}, 'Labels' );
 
-$insert_sth->execute( 12, $item_number3, $borrowernumber3, 'now()', $library3->{branchcode}, 'Labels' );
+$insert_sth->execute( 12, $item_number3, $borrowernumber3, $library3->{branchcode}, 'Labels' );
 
 ###########################################################
 #                     Testing Subs
