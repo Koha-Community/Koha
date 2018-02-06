@@ -120,21 +120,21 @@ subtest 'Sharing' => sub {
 
     my $shared_shelf = eval { $shelf_to_share->share };
     is ( ref( $@ ), 'Koha::Exceptions::Virtualshelves::InvalidKeyOnSharing', 'Do not share if no key given' );
-    $shared_shelf = eval { $shelf_to_share->share('this is a valid key') };
+    $shared_shelf = eval { $shelf_to_share->share('valid key') };
     is( ref( $shared_shelf ), 'Koha::Virtualshelfshare', 'On sharing, the method should return a valid Koha::Virtualshelfshare object' );
 
-    my $another_shared_shelf = eval { $shelf_to_share->share('this is another valid key') }; # Just to have 2 shares in DB
+    my $another_shared_shelf = eval { $shelf_to_share->share('valid key2') }; # Just to have 2 shares in DB
 
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 2, '2 shares should have been inserted' );
 
     my $is_accepted = eval {
-        $shared_shelf->accept( 'this is an invalid key', $share_with_me->{borrowernumber} );
+        $shared_shelf->accept( 'invalid k', $share_with_me->{borrowernumber} );
     };
     is( $is_accepted, undef, 'The share should have not been accepted if the key is invalid' );
     is( ref( $@ ), 'Koha::Exceptions::Virtualshelves::InvalidInviteKey', 'accept with an invalid key should raise an exception' );
 
-    $is_accepted = $shared_shelf->accept( 'this is a valid key', $share_with_me->{borrowernumber} );
+    $is_accepted = $shared_shelf->accept( 'valid key', $share_with_me->{borrowernumber} );
     ok( defined($is_accepted), 'The share should have been accepted if the key valid' );
 
     is( $shelf_to_share->is_shared, 1, 'first shelf is shared' );
