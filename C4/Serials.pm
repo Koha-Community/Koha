@@ -1530,6 +1530,9 @@ sub ReNewSubscription {
         );
     }
 
+    $numberlength ||= 0; # Should not we raise an exception instead?
+    $weeklength   ||= 0;
+
     # renew subscription
     $query = qq|
         UPDATE subscription
