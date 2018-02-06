@@ -28,8 +28,13 @@
                 <tr class="clickable" data-url="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]">
                     <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]">[% borrower.surname %], [% borrower.firstname %]</a></td>
             [% ELSE %]
-                <tr class="clickable" data-url="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumber=[% biblionumber %]">
+                [% IF ( multi_hold ) %]
+                    <tr class="clickable" data-url="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumbers=[% biblionumbers %]&amp;multi_hold=1">
+                    <td><a href="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumbers=[% biblionumbers %]&amp;multi_hold=1">[% borrower.surname %], [% borrower.firstname %]</a></td>
+                [% ELSE %]
+                    <tr class="clickable" data-url="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumber=[% biblionumber %]">
                     <td><a href="/cgi-bin/koha/reserve/request.pl?borrowernumber=[% borrower.borrowernumber %]&amp;biblionumber=[% biblionumber %]">[% borrower.surname %], [% borrower.firstname %]</a></td>
+                [% END %]
             [% END %]
                 <td>[% borrower.cardnumber %]</td>
                 <td>[% borrower.dateofbirth %]</td>
