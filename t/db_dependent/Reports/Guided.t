@@ -186,19 +186,19 @@ subtest 'get_saved_reports' => sub {
     is( $count, 0, "There is no report" );
 
     my @report_ids;
-    foreach ( 1..3 ) {
+    foreach my $ii ( 1..3 ) {
         my $id = $builder->build({ source => 'Borrower' })->{ borrowernumber };
         push @report_ids, save_report({
             borrowernumber => $id,
             sql            => "SQL$id",
             name           => "Name$id",
-            area           => "area$id",
+            area           => "area$ii", # ii vs id area is varchar(6)
             group          => "group$id",
             subgroup       => "subgroup$id",
             type           => "type$id",
             notes          => "note$id",
-            cache_expiry   => "null",
-            public         => "null"
+            cache_expiry   => undef,
+            public         => 0,
         });
         $count++;
     }
