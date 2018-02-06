@@ -120,7 +120,7 @@
 
             $('#celldiv_'+cost_id).html(
                 '<input type="text" name="cost_'+cost_id+'" class="cost_input" size="4" value="'+$.trim(cost)+'" />'+
-                '<br/>Disable <input name="disable_'+cost_id+'" value="1" class="disable_transport_cost" type="checkbox" '+(disabled ? 'checked' : '')+' />'
+                '<br/>' + _("Disable ") + '<input name="disable_'+cost_id+'" value="1" class="disable_transport_cost" type="checkbox" '+(disabled ? 'checked' : '')+' />'
             );
             disable_transport_cost(cost_id, disabled);
         }
