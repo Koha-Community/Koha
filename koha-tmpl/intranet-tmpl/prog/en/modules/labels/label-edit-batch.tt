@@ -41,7 +41,7 @@
                     }
                     getstr = items.join("&");
                     item_msg = item_num.join(", ");
-                    var msg = "Are you sure you want to remove label number(s): " + item_msg + " from this batch?"
+                    var msg = _("Are you sure you want to remove label number(s): %s from this batch?").format(item_msg);
                 } else if (document.items.action.checked) {
 		    alert(_("Deletion of label from a batch with only one label will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
                     return; // no deletion for single item batch
