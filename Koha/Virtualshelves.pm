@@ -154,7 +154,7 @@ sub get_shelves_containing_record {
         },
         {
             join     => [ 'virtualshelfcontents', 'virtualshelfshares' ],
-            group_by => 'shelfnumber',
+            distinct => 'shelfnumber',
             order_by => { -asc => 'shelfname' },
         }
     );
