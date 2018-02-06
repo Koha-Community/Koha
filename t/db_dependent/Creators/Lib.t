@@ -403,7 +403,6 @@ $templates = get_all_templates( { orderby => 'rows DESC' } );
 $query = '
   SELECT    count(*)
   FROM      creator_templates
-  ORDER BY  rows DESC
   ';
 $count = $dbh->selectrow_array($query);
 is( $count,      2,      'There are 2 templates' );
@@ -579,7 +578,6 @@ $layouts = get_all_layouts( { orderby => 'font_size DESC' } );
 $query = '
   SELECT   count(*)
   FROM     creator_layouts
-  ORDER BY font_size DESC
   ';
 $count = $dbh->selectrow_array($query);
 is( $count,    2,      'There are layout matching' );
