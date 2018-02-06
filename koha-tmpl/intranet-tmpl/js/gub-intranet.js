@@ -344,10 +344,12 @@ $(document).ready(function() {
       }
     }
 
+    /*
     if ($('#catalog_advsearch').length) {
       $('#advanced-search #toolbar fieldset .btn-group:nth-child(2)').hide();
       $('#advanced-search #searchterms div+div').hide();
     }
+    */
 
     if ($('#catalog_moredetail').length) {
       $(".bibliodetails select[name='itemlost']").each(function(index) {
