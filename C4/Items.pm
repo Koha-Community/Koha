@@ -884,8 +884,8 @@ sub GetItemsForInventory {
         $query .= 'WHERE ';
         $query .= join ' AND ', @where_strings;
     }
-    $query .= ' ORDER BY items.cn_sort, itemcallnumber, title';
     my $count_query = $select_count . $query;
+    $query .= ' ORDER BY items.cn_sort, itemcallnumber, title';
     $query .= " LIMIT $offset, $size" if ($offset and $size);
     $query = $select_columns . $query;
     my $sth = $dbh->prepare($query);
