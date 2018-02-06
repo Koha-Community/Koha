@@ -88,7 +88,7 @@ my $hold = Koha::Hold->new(
     }
 )->store();
 
-my $news         = Koha::NewsItem->new()->store();
+my $news         = Koha::NewsItem->new({ title => 'a news title', content => 'a news content'})->store();
 my $serial       = Koha::Serial->new()->store();
 my $subscription = Koha::Subscription->new()->store();
 my $suggestion   = Koha::Suggestion->new()->store();
