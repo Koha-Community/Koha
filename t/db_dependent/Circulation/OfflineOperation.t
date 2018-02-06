@@ -2,6 +2,8 @@
 
 use Modern::Perl;
 use C4::Circulation;
+
+use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Library;
 
 use Test::More tests => 7;
@@ -51,12 +53,14 @@ my $samplebranch1 = {
 };
 Koha::Library->new($samplebranch1)->store;
 
+my $now = dt_from_string->truncate( to => 'minute' );
+
 #Begin Tests
 #Test AddOfflineOperation
 is(
     AddOfflineOperation(
         'User1', $samplebranch1->{branchcode},
-        'null', 'Action1', 'CODE', 'Cardnumber1', 10
+        $now, 'Action1', 'CODE', 'Cardnumber1', 10
     ),
     'Added.',
     "OfflineOperation has been added"
@@ -71,7 +75,8 @@ is_deeply(
         operationid => $offline_id,
         userid      => 'User1',
         branchcode  => $samplebranch1->{branchcode},
-        timestamp   => "0000-00-00 00:00:00",
+        # FIXME sounds like we need a 'timestamp' dateformat
+        timestamp   => output_pref({ dt => $now, dateformat => 'iso', dateonly => 0 }) . ':00',
         action      => 'Action1',
         barcode     => 'CODE',
         cardnumber  => 'Cardnumber1',
