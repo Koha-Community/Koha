@@ -286,9 +286,9 @@ sub construct_objects_needed {
       (authtypecode, marcxml)
     VALUES (?, "")';
     $insert_sth = $dbh->prepare($query);
-    $insert_sth->execute('authtypecode1');
+    $insert_sth->execute('atc1');
     my $authid1 = $dbh->last_insert_id( undef, undef, 'auth_header', undef );
-    $insert_sth->execute('authtypecode2');
+    $insert_sth->execute('atc2');
     my $authid2 = $dbh->last_insert_id( undef, undef, 'auth_header', undef );
 
     # ---------- Add 1 old_issues
