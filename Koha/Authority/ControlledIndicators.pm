@@ -129,7 +129,7 @@ sub _thesaurus_info {
         ? substr($record->field('008')->data, 11, 1)
         : q{};
     my %thes_mapping = ( a => 0, b => 1, c => 2, d => 3, k => 5, n => 4, r => 7, s => 7, v => 6, z => 7, '|' => 4 );
-    my $ind = $thes_mapping{ $code } // $code // '4';
+    my $ind = $thes_mapping{ $code } // '4';
 
     # Determine optional subfield $2
     my $sub2;
