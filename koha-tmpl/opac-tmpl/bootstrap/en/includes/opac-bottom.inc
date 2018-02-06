@@ -90,11 +90,11 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         // Test need for polyfill
         {
             test: window.matchMedia,
-            nope: "[% interface %]/[% theme %]/lib/media.match.min.js"
+            nope: "[% interface %]/[% theme %]/lib/media.match.min_[% KOHA_VERSION %].js"
         },
         // and then load enquire
-        "[% interface %]/[% theme %]/lib/enquire.min.js",
-        "[% interface %]/[% theme %]/js/script.js"
+        "[% interface %]/[% theme %]/lib/enquire.min_[% KOHA_VERSION %].js",
+        "[% interface %]/[% theme %]/js/script_[% KOHA_VERSION %].js"
     ]);
 
     // Fix for datepicker in a modal

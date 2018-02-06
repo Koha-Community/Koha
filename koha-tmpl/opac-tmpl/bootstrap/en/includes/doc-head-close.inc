@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/jquery/jquery-ui_[% KOHA_VERSION %].css" />
 [% END %]
 
-[% SET opaclayoutstylesheet='opac.css' UNLESS opaclayoutstylesheet %]
+[% SET opaclayoutstylesheet='opac_' _ KOHA_VERSION _ '.css' UNLESS opaclayoutstylesheet %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet %]" />
 [% ELSE %]
