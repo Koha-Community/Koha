@@ -379,7 +379,7 @@ $session->flush;
 sub myMockedget_from_session {
     my $expected_recent_searches = [
         {
-            'time' => 1374978877,
+            'time' => dt_from_string,
             'query_cgi' => 'cgi_test',
             'total' => 2,
             'query_desc' => 'kw,wrdl: history, '
