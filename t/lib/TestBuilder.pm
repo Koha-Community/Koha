@@ -479,6 +479,8 @@ sub _gen_default_values {
         },
         Itemtype => {
             rentalcharge => 0,
+            defaultreplacecost => 0,
+            processfee => 0,
         },
         Aqbookseller => {
             tax_rate => 0,

@@ -32,7 +32,10 @@ my $library = $builder->build({
 my $branchcode = $library->{branchcode};
 
 my $itemtype = $builder->build({
-    source => 'Itemtype'
+    source => 'Itemtype',
+    value => {
+        processfee => 42,
+    }
 });
 
 my %item_branch_infos = (
