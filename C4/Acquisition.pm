@@ -692,7 +692,7 @@ sub GetBasketsInfosByBookseller {
 
     my $dbh = C4::Context->dbh;
     my $query = q{
-        SELECT aqbasket.*,
+        SELECT aqbasket.basketno, aqbasket.basketname, aqbasket.note, aqbasket.booksellernote, aqbasket.contractnumber, aqbasket.creationdate, aqbasket.closedate, aqbasket.booksellerid, aqbasket.authorisedby, aqbasket.booksellerinvoicenumber, aqbasket.basketgroupid, aqbasket.deliveryplace, aqbasket.billingplace, aqbasket.branch, aqbasket.is_standing, aqbasket.create_items,
           SUM(aqorders.quantity) AS total_items,
           SUM(
             IF ( aqorders.orderstatus = 'cancelled', aqorders.quantity, 0 )
@@ -711,7 +711,7 @@ sub GetBasketsInfosByBookseller {
     unless ( $allbaskets ) {
         $query.=" AND (closedate IS NULL OR (aqorders.quantity > aqorders.quantityreceived AND datecancellationprinted IS NULL))";
     }
-    $query.=" GROUP BY aqbasket.basketno";
+    $query.=" GROUP BY aqbasket.basketno, aqbasket.basketname, aqbasket.note, aqbasket.booksellernote, aqbasket.contractnumber, aqbasket.creationdate, aqbasket.closedate, aqbasket.booksellerid, aqbasket.authorisedby, aqbasket.booksellerinvoicenumber, aqbasket.basketgroupid, aqbasket.deliveryplace, aqbasket.billingplace, aqbasket.branch, aqbasket.is_standing, aqbasket.create_items";
 
     my $sth = $dbh->prepare($query);
     $sth->execute($supplierid);
