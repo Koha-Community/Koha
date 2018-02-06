@@ -148,8 +148,8 @@ my $author3 = 'Author 3';
 
 $query = '
   INSERT INTO biblio
-    (title, author)
-  VALUES (?,?)';
+    (title, author, datecreated)
+  VALUES (?,?, NOW())';
 $insert_sth = $dbh->prepare($query);
 $insert_sth->execute( $title1, $author1 );
 $insert_sth->execute( $title2, undef );
