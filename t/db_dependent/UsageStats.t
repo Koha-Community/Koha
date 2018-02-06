@@ -294,8 +294,8 @@ sub construct_objects_needed {
     # ---------- Add 1 old_issues
     $query = '
     INSERT INTO old_issues
-      (borrowernumber, branchcode, itemnumber)
-    VALUES (?,?,?)';
+      (issue_id, borrowernumber, branchcode, itemnumber)
+    VALUES ((select coalesce(max(issue_id), 0)+1 from issues),?,?,?)';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute( $borrowernumber1, $branchcode, $item_number1 );
     my $issue_id1 = $dbh->last_insert_id( undef, undef, 'old_issues', undef );
