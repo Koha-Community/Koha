@@ -651,7 +651,7 @@
             kohadb.initialize();
             $('#header_search #circ_search .tip').text(_("Enter patron card number:"));
 
-            $('ul[aria-labelledby="logged-in-menu"]').html('<li><a class="toplinks">You cannot change your branch or logout while using offline circulation</a></li>');
+            $('ul[aria-labelledby="logged-in-menu"]').html('<li><a class="toplinks">' + _("You cannot change your branch or logout while using offline circulation") + '</a></li>');
 
             // Returns code
             $('#checkin-form, #checkin_search form').submit(function (event) {
