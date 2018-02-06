@@ -283,8 +283,8 @@ sub construct_objects_needed {
     # ---------- Add 2 auth_header
     $query = '
     INSERT INTO auth_header
-      (authtypecode)
-    VALUES (?)';
+      (authtypecode, marcxml)
+    VALUES (?, "")';
     $insert_sth = $dbh->prepare($query);
     $insert_sth->execute('authtypecode1');
     my $authid1 = $dbh->last_insert_id( undef, undef, 'auth_header', undef );
