@@ -36,7 +36,7 @@ use Koha::XSLT_Handler;
 
 #Group 1: testing _build_query and _translate_query (part of Z3950Search)
 subtest '_build_query' => sub {
-    plan tests => 12;
+    plan tests => 14;
     test_build_translate_query();
 };
 #Group 2: testing _create_connection (part of Z3950Search)
@@ -107,6 +107,20 @@ sub test_build_translate_query {
     my @queries2= C4::Breeding::_build_query( $pars3 );
     is( $queries[0] eq $queries2[0] && $queries[1] eq $queries2[1], 1,
         'Third query makes no difference');
+
+    # Check that indexes with equal signs are ok
+    $server = { sru_fields => 'subjectsubdiv=aut.type=ram_pe and aut.accesspoint' };
+    my $pars4 = { subjectsubdiv => 'mysubjectsubdiv' };
+    @queries = C4::Breeding::_auth_build_query( $pars4 );
+    my $zquery = C4::Breeding::_translate_query( $server, $queries[1] );
+    is ( $zquery, 'aut.type=ram_pe and aut.accesspoint="mysubjectsubdiv"', 'SRU query with equal sign in index');
+
+    # Check that indexes with double-quotes are ok
+    $server = { sru_fields => 'subject=(aut.type any "geo ram_nc ram_ge ram_pe ram_co") and aut.accesspoint' };
+    my $pars5 = { subject => 'mysubject' };
+    @queries = C4::Breeding::_auth_build_query( $pars5 );
+    $zquery = C4::Breeding::_translate_query( $server, $queries[1] );
+    is ( $zquery, '(aut.type any "geo ram_nc ram_ge ram_pe ram_co") and aut.accesspoint="mysubject"', 'SRU query with double quotes in index');
 }
 
 sub test_create_connection {

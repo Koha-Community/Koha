@@ -1,0 +1,98 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; SRU search fields mapping for authorities</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#form01").submit(function(event) {
+            if(window.opener) {
+                var newmap=allInputs();
+                window.opener.$('#show_sru_fields').val(newmap);
+                window.close();
+            } else {
+                // In this case not called as a popup. Just do nothing.
+                event.preventDefault();
+            }
+        });
+    });
+    function allInputs () {
+        var aInput= new Array();
+        $("form :input").each(function() {
+            if( this.id && $(this).val() ) {
+                aInput.push(this.id+'='+$(this).val());
+            }
+        });
+        return aInput.join(',');
+    }
+//]]>
+</script>
+</head>
+
+<body id="admin_sru_modmapping" class="admin">
+
+<div id="custom-doc" class="yui-t7">
+
+    <div id="bd">
+        <h1>Modify SRU search fields mapping for authorities</h1>
+        <form id="form01" method="post">
+            <fieldset class="rows">
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        <ol>
+                            <li>
+                                <label for="srchany">Keyword (any): </label>
+                                <input id="srchany" type="text" value="[% FILTER html %][% mapping.srchany %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="nameany">Name (any): </label>
+                                <input id="nameany" type="text" value="[% FILTER html %][% mapping.nameany %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="authorany">Author (any): </label>
+                                <input id="authorany" type="text" value="[% FILTER html %][% mapping.authorany %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="authorpersonal">Author (personal): </label>
+                                <input id="authorpersonal" type="text" value="[% FILTER html %][% mapping.authorpersonal %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="authorcorp">Author (corporate): </label>
+                                <input id="authorcorp" type="text" value="[% FILTER html %][% mapping.authorcorp %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="authormeetingcon">Author (meeting/conference): </label>
+                                <input id="authormeetingcon" type="text" value="[% FILTER html %][% mapping.authormeetingcon %][% END %]" />
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="yui-u">
+                        <ol>
+                            <li>
+                                <label for="subject">Subject heading: </label>
+                                <input id="subject" type="text" value="[% FILTER html %][% mapping.subject %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="subjectsubdiv">Subject sub-division: </label>
+                                <input id="subjectsubdiv" type="text" value="[% FILTER html %][% mapping.subjectsubdiv %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="title">Title (any): </label>
+                                <input id="title" type="text" value="[% FILTER html %][% mapping.title %][% END %]" />
+                            </li>
+                            <li>
+                                <label for="uniformtitle">Title (uniform): </label>
+                                <input id="uniformtitle" type="text" value="[% FILTER html %][% mapping.uniformtitle %][% END %]" />
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="action">
+                <input type="submit" value="Save" class="submit" />
+                <a class="close cancel" href="#">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

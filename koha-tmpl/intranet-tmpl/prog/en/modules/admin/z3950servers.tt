@@ -19,6 +19,7 @@
 [% IF op == 'list' %]
     [% Asset.css("css/datatables.css") %]
 [% END %]
+
 </head>
 
 <body id="admin_z3950servers" class="admin">
@@ -131,8 +132,8 @@
         </li>
         <li>
         <label for="sru_fields">SRU Search fields mapping: </label>
-        <input type="hidden" name="sru_fields" id="sru_fields" value="[% server.sru_fields %]" />
-            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% server.sru_fields %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
+        <input type="hidden" name="sru_fields" id="sru_fields" value="[% FILTER html %][% server.sru_fields %][% END %]" />
+            <input type="text" name="show_sru_fields" id="show_sru_fields" size="100" value="[% FILTER html %][% server.sru_fields %][% END %]" disabled="disabled" /> <input type="button" id="modify_sru_fields" value="Modify" />
         </li>
         [% END %]
         <li>
@@ -213,10 +214,6 @@
                     $("#encoding").val('[% server.encoding %]');
                     $("#recordtype").val('[% server.recordtype %]');
                 [% END %]
-                // Disable recordtype (and default to bib) for non-Z3950 servers until auth is supported
-                [% UNLESS (server.servertype||type) == 'zed' %]
-                    $("#recordtype").prop('disabled',true);
-                [% END %]
                 $( "#serverentry" ).validate({
                     rules: {
                         servername: { required: true },
@@ -249,7 +246,8 @@
             });
             function ModMapping () {
                 var map= $('#show_sru_fields').val();
-                window.open('/cgi-bin/koha/admin/sru_modmapping.pl?mapping='+map,'popup','width=800,height=400,resizable=yes,toolbar=false,scrollbars=yes,top');
+                var type= $('#recordtype').val();
+                window.open('/cgi-bin/koha/admin/sru_modmapping.pl?mapping='+map + '&type=' + type,'popup','width=800,height=400,resizable=yes,toolbar=false,scrollbars=yes,top');
             }
         [% ELSE %]
             $(document).ready(function() {

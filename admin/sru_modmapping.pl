@@ -26,8 +26,9 @@ use C4::Output;
 
 my $input = new CGI;
 my $mapstr = $input->param('mapping')//'';
+my $type = $input->param('type')//'';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
-    template_name => "admin/sru_modmapping.tt",
+    template_name => $type eq "authority" ? "admin/sru_modmapping_auth.tt" : "admin/sru_modmapping.tt",
     query => $input,
     type => "intranet",
     authnotrequired => 0,
@@ -37,7 +38,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
 
 my %map;
 foreach my $singlemap ( split ',', $mapstr ) {
-    my @temp = split '=', $singlemap;
+    my @temp = split '=', $singlemap, 2;
     $map{ $temp[0] } = $temp[1] if @temp>1;
 }
 $template->param( mapping => \%map );

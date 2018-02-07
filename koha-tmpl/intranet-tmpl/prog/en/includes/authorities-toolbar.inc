@@ -10,7 +10,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     [% IF servers.count > 0 %]
-                        <li><a id="z3950_new" href="#">New from Z39.50</a></li>
+                        <li><a id="z3950_new" href="#">New from Z39.50/SRU</a></li>
                         <li role="separator" class="divider"></li>
                     [% END %]
                     [% FOREACH authority_type IN authority_types %]

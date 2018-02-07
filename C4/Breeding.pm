@@ -227,6 +227,53 @@ sub Z3950Search {
     );
 }
 
+sub _auth_build_query {
+    my ( $pars ) = @_;
+
+    my $nameany= $pars->{nameany};
+    my $authorany= $pars->{authorany};
+    my $authorpersonal= $pars->{authorpersonal};
+    my $authorcorp= $pars->{authorcorp};
+    my $authormeetingcon= $pars->{authormeetingcon};
+    my $title= $pars->{title};
+    my $uniformtitle= $pars->{uniformtitle};
+    my $subject= $pars->{subject};
+    my $subjectsubdiv= $pars->{subjectsubdiv};
+    my $srchany= $pars->{srchany};
+    my $authid= $pars->{authid};
+
+    my $qry_build = {
+        nameany           => '@attr 1=1002 "#term" ',
+        authorany         => '@attr 1=1003 "#term" ',
+        authorcorp        => '@attr 1=2 "#term" ',
+        authorpersonal    => '@attr 1=1 "#term" ',
+        authormeetingcon  => '@attr 1=3 "#term" ',
+        subject           => '@attr 1=21 "#term" ',
+        subjectsubdiv     => '@attr 1=47 "#term" ',
+        title             => '@attr 1=4 "#term" ',
+        uniformtitle      => '@attr 1=6 "#term" ',
+        srchany           => '@attr 1=1016 "#term" ',
+    };
+
+    my $zquery='';
+    my $squery='';
+    my $nterms=0;
+    foreach my $k ( sort keys %$pars ) {
+    #note that the sort keys forces an identical result under Perl 5.18
+    #one of the unit tests is based on that assumption
+        if( ( my $val=$pars->{$k} ) && $qry_build->{$k} ) {
+            $qry_build->{$k} =~ s/#term/$val/g;
+            $zquery .= $qry_build->{$k};
+            $squery .= "[$k]=\"$val\" and ";
+            $nterms++;
+        }
+    }
+    $zquery = "\@and " . $zquery for 2..$nterms;
+    $squery =~ s/ and $//;
+    return ( $zquery, $squery );
+
+}
+
 sub _build_query {
     my ( $pars ) = @_;
 
@@ -268,11 +315,9 @@ sub _handle_one_result {
     my $raw= $zoomrec->raw();
     my $marcrecord;
     if( $servhref->{servertype} eq 'sru' ) {
-        $marcrecord= MARC::Record->new_from_xml( $raw, 'UTF-8',
-            $servhref->{syntax} );
-    } else {
-        ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
+        $raw= MARC::Record->new_from_xml( $raw, $servhref->{encoding}, $servhref->{syntax} );
     }
+    ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
     SetUTF8Flag($marcrecord);
     my $error;
     ( $marcrecord, $error ) = _do_xslt_proc($marcrecord, $servhref, $xslh);
@@ -369,7 +414,6 @@ sub _create_connection {
         $option1->option( 'user', $server->{userid} ) if $server->{userid};
         $option1->option( 'password', $server->{password} ) if $server->{password};
     }
-
     my $obj= ZOOM::Connection->create($option1);
     if( $server->{servertype} eq 'sru' ) {
         my $host= $server->{host};
@@ -410,7 +454,7 @@ sub _translate_query { #SRU query adjusted per server cf. srufields column
 
 =head2 ImportBreedingAuth
 
-ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random,$batch_type);
+ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random);
 
     ImportBreedingAuth imports MARC records in the reservoir (import_records table).
     ImportBreedingAuth is based on the ImportBreeding subroutine.
@@ -418,9 +462,7 @@ ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random
 =cut
 
 sub ImportBreedingAuth {
-    my ($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random,$batch_type) = @_;
-    my @marcarray = split /\x1D/, $marcrecords;
-
+    my ($marcrecord,$overwrite_auth,$filename,$encoding,$z3950random) = @_;
     my $dbh = C4::Context->dbh;
 
     my $batch_id = GetZ3950BatchId($filename);
@@ -435,10 +477,6 @@ sub ImportBreedingAuth {
     my $alreadyinfarm = 0;
     my $notmarcrecord = 0;
     my $breedingid;
-    for (my $i=0;$i<=$#marcarray;$i++) {
-        my ($marcrecord, $charset_result, $charset_errors);
-        ($marcrecord, $charset_result, $charset_errors) =
-            MarcToUTF8Record($marcarray[$i]."\x1D", $marc_type, $encoding);
 
         # Normalize the record so it doesn't have separated diacritics
         SetUTF8Flag($marcrecord);
@@ -482,7 +520,6 @@ sub ImportBreedingAuth {
                 }
             }
         }
-    }
     return ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid);
 }
 
@@ -506,17 +543,6 @@ sub Z3950SearchAuth {
     my $random= $pars->{random};
     my $page= $pars->{page};
 
-    my $nameany= $pars->{nameany};
-    my $authorany= $pars->{authorany};
-    my $authorpersonal= $pars->{authorpersonal};
-    my $authorcorp= $pars->{authorcorp};
-    my $authormeetingcon= $pars->{authormeetingcon};
-    my $title= $pars->{title};
-    my $uniformtitle= $pars->{uniformtitle};
-    my $subject= $pars->{subject};
-    my $subjectsubdiv= $pars->{subjectsubdiv};
-    my $srchany= $pars->{srchany};
-    my $authid= $pars->{authid};
 
     my $show_next       = 0;
     my $total_pages     = 0;
@@ -531,100 +557,37 @@ sub Z3950SearchAuth {
     my $count;
     my $record;
     my @serverhost;
-    my @servername;
     my @breeding_loop = ();
 
     my @oConnection;
     my @oResult;
     my @errconn;
+    my @servers;
     my $s = 0;
     my $query;
     my $nterms=0;
 
     my $marcflavour = C4::Context->preference('marcflavour');
     my $marc_type = $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : $marcflavour;
-
-    if ($nameany) {
-        $query .= " \@attr 1=1002 \"$nameany\" "; #Any name (this includes personal, corporate, meeting/conference authors, and author names in subject headings)
-        #This attribute is supported by both the Library of Congress and Libraries Australia 08/05/2013
-        $nterms++;
-    }
-
-    if ($authorany) {
-        $query .= " \@attr 1=1003 \"$authorany\" "; #Author-name (this includes personal, corporate, meeting/conference authors, but not author names in subject headings)
-        #This attribute is not supported by the Library of Congress, but is supported by Libraries Australia 08/05/2013
-        $nterms++;
-    }
-
-    if ($authorcorp) {
-        $query .= " \@attr 1=2 \"$authorcorp\" "; #1005 is another valid corporate author attribute...
-        $nterms++;
-    }
-
-    if ($authorpersonal) {
-        $query .= " \@attr 1=1 \"$authorpersonal\" "; #1004 is another valid personal name attribute...
-        $nterms++;
-    }
-
-    if ($authormeetingcon) {
-        $query .= " \@attr 1=3 \"$authormeetingcon\" "; #1006 is another valid meeting/conference name attribute...
-        $nterms++;
-    }
-
-    if ($subject) {
-        $query .= " \@attr 1=21 \"$subject\" ";
-        $nterms++;
-    }
-
-    if ($subjectsubdiv) {
-        $query .= " \@attr 1=47 \"$subjectsubdiv\" ";
-        $nterms++;
-    }
-
-    if ($title) {
-        $query .= " \@attr 1=4 \"$title\" "; #This is a regular title search. 1=6 will give just uniform titles
-        $nterms++;
-    }
-
-     if ($uniformtitle) {
-        $query .= " \@attr 1=6 \"$uniformtitle\" "; #This is the uniform title search
-        $nterms++;
-    }
-
-    if($srchany) {
-        $query .= " \@attr 1=1016 \"$srchany\" ";
-        $nterms++;
-    }
-
-    for my $i (1..$nterms-1) {
-        $query = "\@and " . $query;
-    }
-
+    my $authid= $pars->{authid};
+    my ( $zquery, $squery ) = _auth_build_query( $pars );
     foreach my $servid (@id) {
         my $sth = $dbh->prepare("select * from z3950servers where id=?");
         $sth->execute($servid);
         while ( $server = $sth->fetchrow_hashref ) {
-            my $option1      = new ZOOM::Options();
-            $option1->option( 'async' => 1 );
-            $option1->option( 'elementSetName', 'F' );
-            $option1->option( 'databaseName',   $server->{db} );
-            $option1->option( 'user', $server->{userid} ) if $server->{userid};
-            $option1->option( 'password', $server->{password} ) if $server->{password};
-            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
-            $option1->option( 'timeout', $server->{timeout} ) if $server->{timeout};
-            $oConnection[$s] = create ZOOM::Connection($option1);
-            $oConnection[$s]->connect( $server->{host}, $server->{port} );
-            $serverhost[$s] = $server->{host};
-            $servername[$s] = $server->{servername};
+            $oConnection[$s] = _create_connection( $server );
+
+            $oResult[$s] =
+            $server->{servertype} eq 'zed'?
+                $oConnection[$s]->search_pqf( $zquery ):
+                $oConnection[$s]->search(new ZOOM::Query::CQL(
+                    _translate_query( $server, $squery )));
             $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
+            $servers[$s] = $server;
             $s++;
-        }    ## while fetch
+        }   ## while fetch
     }    # foreach
     my $nremaining  = $s;
-
-    for ( my $z = 0 ; $z < $s ; $z++ ) {
-        $oResult[$z] = $oConnection[$z]->search_pqf($query);
-    }
 
     while ( $nremaining-- ) {
         my $k;
@@ -657,16 +620,18 @@ sub Z3950SearchAuth {
                             $marcdata   = $rec->raw();
 
                             my ($charset_result, $charset_errors);
+                            if( $servers[$k]->{servertype} eq 'sru' ) {
+                                $marcdata = MARC::Record->new_from_xml( $marcdata, $encoding[$k], $servers[$k]->{syntax} );
+                            }
                             ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, $marc_type, $encoding[$k]);
-
                             my $heading;
                             my $heading_authtype_code;
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
                             $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
 
-                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreedingAuth( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
+                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreedingAuth( $marcrecord, 2, $serverhost[$k], $encoding[$k], $random);
                             my %row_data;
-                            $row_data{server}       = $servername[$k];
+                            $row_data{server}       = $servers[$k]->{'servername'};
                             $row_data{breedingid}   = $breedingid;
                             $row_data{heading}      = $heading;
                             $row_data{authid}       = $authid;
@@ -674,7 +639,7 @@ sub Z3950SearchAuth {
                             push( @breeding_loop, \%row_data );
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'authid'=>-1});
+                            push(@breeding_loop,{'server'=>$servers[$k]->{'servername'},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'authid'=>-1});
                         }
                     }
                 }    #if $numresults
@@ -696,7 +661,7 @@ sub Z3950SearchAuth {
         $oConnection[$_]->destroy();
     }
 
-    my @servers = ();
+    @servers = ();
     foreach my $id (@id) {
         push @servers, {id => $id};
     }
