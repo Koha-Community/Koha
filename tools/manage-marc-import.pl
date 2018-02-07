@@ -62,7 +62,7 @@ my %cookies = parse CGI::Cookie($cookie);
 our $sessionID = $cookies{'CGISESSID'}->value;
 our $dbh = C4::Context->dbh;
 
-my $frameworks = Koha::BiblioFrameworks->search({ tagfield => { 'not' => undef } }, { join => 'marc_tag_structure', group_by=>'frameworkcode',order_by => ['frameworktext'] });
+my $frameworks = Koha::BiblioFrameworks->search({ tagfield => { 'not' => undef } }, { join => 'marc_tag_structure', distinct => 'frameworkcode', order_by => ['frameworktext'] });
 $template->param( frameworks => $frameworks );
 
 if ($op eq "create_labels") {
