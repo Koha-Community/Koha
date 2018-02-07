@@ -32,6 +32,7 @@ use C4::Biblio;
 use C4::Breeding;
 use C4::Output;
 use C4::Koha;
+use C4::Languages qw(getlanguage);
 use C4::Search;
 
 use Koha::BiblioFrameworks;
@@ -46,6 +47,7 @@ my $query   = $input->param('q');
 my @value   = $input->multi_param('value');
 my $page    = $input->param('page') || 1;
 my $results_per_page = 20;
+my $lang = C4::Languages::getlanguage($input);
 
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -75,7 +77,8 @@ if ($query) {
     if ($QParser) {
         $builtquery = $query;
     } else {
-        ( undef,$builtquery,undef,undef,undef,undef,undef,undef,undef,undef) = $builder->build_query_compat(undef,\@operands);
+        ( undef, $builtquery, undef, undef, undef, undef, undef, undef, undef, undef ) =
+          $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
     }
     # find results
     my ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($builtquery, $results_per_page * ($page - 1), $results_per_page);
