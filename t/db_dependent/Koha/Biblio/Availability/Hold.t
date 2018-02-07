@@ -41,7 +41,7 @@ set_default_circulation_rules();
 
 subtest 'Biblio with zero available items in OPAC' => \&t_no_available_items_opac;
 sub t_no_available_items_opac {
-    plan tests => 7;
+    plan tests => 6;
 
     my $item1 = build_a_test_item();
     my $biblio = Koha::Biblios->find($item1->biblionumber);
@@ -78,7 +78,6 @@ sub t_no_available_items_opac {
         to_branch => $branch2->branchcode
     })->in_opac;
     my $expecting = 'Koha::Exceptions::Biblio::NoAvailableItems';
-    my $expecting2 = 'Koha::Exceptions::Hold::ZeroHoldsAllowed';
 
     ok(!Koha::Item::Availability::Hold->new({
             item => $item1, to_branch => $branch2->branchcode,
@@ -89,11 +88,9 @@ sub t_no_available_items_opac {
         })->in_opac->available,
        'When I look at the second item of two in this biblio, it is not available.');
     ok(!$availability->available, 'Then, the biblio is not available.');
-    is($availability->unavailable, 2, 'Then, there are two reasons for unavailability.');
+    is($availability->unavailable, 1, 'Then, there are two reasons for unavailability.');
     is(ref($availability->unavailabilities->{$expecting}), $expecting, 'The first reason says there are no'
        .' available items in this biblio.');
-    is(ref($availability->unavailabilities->{$expecting2}), $expecting2, 'The second reason says no'
-       .' holds are allowed.');
     is(@{$availability->item_unavailabilities}, 2, 'There seems to be two items that are unavailable.');
 };
 
