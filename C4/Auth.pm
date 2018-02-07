@@ -513,11 +513,11 @@ sub get_template_and_user {
             $opac_name = C4::Context->userenv->{'branch'};
         }
 
-        my $search_groups = Koha::Library::Groups->get_search_groups();
+        my @search_groups = Koha::Library::Groups->get_search_groups();
         $template->param(
             OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
-            LibrarySearchGroups                   => $search_groups,
+            LibrarySearchGroups                   => \@search_groups,
             opac_name                             => $opac_name,
             LibraryName                           => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle                      => "" . $LibraryNameTitle,

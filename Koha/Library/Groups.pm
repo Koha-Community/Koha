@@ -60,16 +60,15 @@ sub get_search_groups {
     my ( $self, $params ) = @_;
     my $interface = $params->{interface} || q{};
 
-    my $title = $interface eq 'staff' ? '__SEARCH_GROUPS__' : '__SEARCH_GROUPS_OPAC__';
+    my $field = $interface eq 'staff' ? 'ft_search_groups_staff' : 'ft_search_groups_opac';
 
-    my ($search_groups_root) =
-      $self->search( { parent_id => undef, title => $title } );
+    my @search_groups = $self->search( { $field => 1 } );
 
-    return unless $search_groups_root;
+    return unless @search_groups;
 
-    my $children = $search_groups_root->children();
+    my @children = map { $_->children() } @search_groups;
 
-    return wantarray ? $children->as_list : $children;
+    return @children;
 }
 
 =head3 type

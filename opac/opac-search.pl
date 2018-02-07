@@ -214,8 +214,8 @@ if ($cgi->cookie("search_path_code")) {
     }
 }
 
-my $search_groups = Koha::Library::Groups->get_search_groups();
-$template->param( search_groups => $search_groups );
+my @search_groups = Koha::Library::Groups->get_search_groups();
+$template->param( search_groups => \@search_groups );
 
 # load the language limits (for search)
 my $languages_limit_loop = getLanguages($lang, 1);

@@ -26,7 +26,9 @@
             var title = $(this).data('groupTitle');
             var description = $(this).data('groupDescription');
             var ft_hide_patron_info = $(this).data('groupFt_hide_patron_info');
-            edit_group( id, parent_id, title, description, ft_hide_patron_info );
+            var ft_search_groups_opac = $(this).data('groupFt_search_groups_opac');
+            var ft_search_groups_staff = $(this).data('groupFt_search_groups_staff');
+            edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff );
         });
 
         $('.delete-group').on('click', function() {
@@ -54,30 +56,31 @@
         });
 
         $('#add-group-modal-ft_hide_patron_info').prop('checked', false);
+        $('#add-group-modal-ft_search_groups_opac').prop('checked', false);
+        $('#add-group-modal-ft_search_groups_staff').prop('checked', false);
         if ( parent_id ) {
-            $('#add-group-modal-ft_hide_patron_info').parent().hide();
+            $('#root-group-features-edit').hide();
         } else {
-            $('#add-group-modal-ft_hide_patron_info').parent().show();
+            $('#root-group-features-edit').show();
         }
         $('#add-group-modal').modal('show');
     }
 
-    function edit_group( id, parent_id, title, description, ft_hide_patron_info ) {
+    function edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff ) {
         $('#edit-group-modal-id').val( id );
         $('#edit-group-modal-title').val( title );
         $('#edit-group-modal-description').val( description );
 
         if ( parent_id ) {
             $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
-            $('#edit-group-modal-ft_hide_patron_info').parent().hide();
+            $('#edit-group-modal-ft_search_groups_opac').prop('checked', false);
+            $('#edit-group-modal-ft_search_groups_staff').prop('checked', false);
+            $('#root-group-features-edit').hide();
         } else {
-            if ( ft_hide_patron_info ) {
-                $('#edit-group-modal-ft_hide_patron_info').prop('checked', true);
-            } else {
-                $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
-            }
-
-            $('#edit-group-modal-ft_hide_patron_info').parent().show();
+            $('#edit-group-modal-ft_hide_patron_info').prop('checked', ft_hide_patron_info ? true : false );
+            $('#edit-group-modal-ft_search_groups_opac').prop('checked', ft_search_groups_opac ? true : false );
+            $('#edit-group-modal-ft_search_groups_staff').prop('checked', ft_search_groups_staff ? true : false );
+            $('#root-group-features-edit').show();
         }
 
         $('#edit-group-modal').on('shown', function() {
@@ -188,12 +191,24 @@
                             <label for="add-group-modal-description">Description: </label>
                             <input type="text" name="description" id="add-group-modal-description" />
                         </p>
-                        <h3>Features</h3>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
-                                Limit patron data access by group
-                            </label>
+                        <div id="root-group-features-add">
+                            <h3>Features</h3>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
+                                    Limit patron data access by group
+                                </label>
+                                <p>
+                                <label>
+                                    <input type="checkbox" name="ft_search_groups_opac" id="add-group-modal-ft_search_groups_opac" value="1" />
+                                    Use for OPAC search groups
+                                </label>
+                                <p>
+                                <label>
+                                    <input type="checkbox" name="ft_search_groups_staff" id="add-group-modal-ft_search_groups_staff" value="1" />
+                                    Use for staff search groups
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -226,12 +241,24 @@
                             <label for="edit-group-modal-description">Description: </label>
                             <input type="text" id="edit-group-modal-description" name="description" value="" />
                         </p>
-                        <h3>Features</h3>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
-                                Limit patron data access by group
-                            </label>
+                        <div id="root-group-features-edit">
+                            <h3>Features</h3>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
+                                    Limit patron data access by group
+                                </label>
+                                <p>
+                                <label>
+                                    <input type="checkbox" id="edit-group-modal-ft_search_groups_opac" name="ft_search_groups_opac" value="1" />
+                                    Use for OPAC search groups
+                                </label>
+                                <p>
+                                <label>
+                                    <input type="checkbox" id="edit-group-modal-ft_search_groups_staff" name="ft_search_groups_staff" value="1" />
+                                    Use for staff search groups
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -306,9 +333,17 @@
         </td>
         <td>
             [% UNLESS group.branchcode %]
+              <ul>
                 [% IF group.ft_hide_patron_info %]
-                    <span> * Hide patron's info for librarians outside of this group.</span>
+                    <li>Hide patron's info for librarians outside of this group.</li>
                 [% END %]
+                [% IF group.ft_search_groups_opac %]
+                    <li>Use for OPAC search groups</li>
+                [% END %]
+                [% IF group.ft_search_groups_staff %]
+                    <li>Use for staff search groups</li>
+                [% END %]
+              </ul>
             [% END %]
         </td>
         <td>
@@ -325,7 +360,7 @@
                        </li>
 
                         <li>
-                            <a class="edit-group" id="edit-group-[% group.id %]" href="#" class="edit-group" data-group-id="[% group.id %]" data-group-parent-id="[% group.parent_id %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]">
+                            <a class="edit-group" id="edit-group-[% group.id %]" href="#" class="edit-group" data-group-id="[% group.id %]" data-group-parent-id="[% group.parent_id %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" >
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
                        </li>
