@@ -430,11 +430,18 @@ sub getAllBTJSelectionlists {
                 }elsif ($file =~ /xk$/) {
                     print "BTJ: Found file: $file\n" if $verbose;
                     push @$mk_selectionlist_filenames, $file;
+                }elsif ($file =~ /U2\d\d\dbtj_enn/) {
+                    print "BTJ: Found file: $file\n" if $verbose;
+                    push @$mk_selectionlist_filenames, $file;
+                } else {
+                    print "BTJ: Unknown file: $file\n" if $verbose;
                 }
             }
             else {
                 print "BTJ: Skipping file $file due to \$stagedFileVerificationDuration_days\n" if $verbose > 1;
             }
+        } else {
+            print "BTJ: Skipping file $file\n" if $verbose > 1;
         }
     }
     $ftpcon->close();
