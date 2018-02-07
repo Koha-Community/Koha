@@ -192,11 +192,12 @@ sub Z3950Search {
                 if ($getAll && $numresults > 0) {
                     for ($i = 0 ; $i < $numresults ; $i++) {
                         if($oResult[$k]->record($i)) {
-                            my $res=_handle_one_result($oResult[$k]->record($i), $servers[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
+                            ( $res, $error ) =_handle_one_result($oResult[$k]->record($i), $servers[$k], ++$imported, $biblionumber); #ignores error in sequence numbering
                             push @breeding_loop, $res if $res;
+                            push @errconn, { server => $servers[$k]->{servername}, error => $error, seq => $i+1 } if $error;
                         }
                         else {
-                            push(@breeding_loop,{'server'=>$servers[$k]->{servername},'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                            push @errconn, { 'server' => $servers[$k]->{servername}, error => ( ( $oConnection[$k]->error_x() )[0] ), seq => $i+1 };
                         }
                     }
                 }

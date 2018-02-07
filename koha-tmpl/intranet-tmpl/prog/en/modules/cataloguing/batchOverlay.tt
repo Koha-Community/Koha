@@ -1,13 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Cataloguing &rsaquo; Batch Overlay</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <script src="/js/jquery-2.2.1.min.js"></script>
-    <script src="/js/jquery.dataTables-1.10.11.min.js"></script>
-    <script src="/js/jquery-ui-1.11.4.min.js"></script>
-    <script src="/js/jquery.validate-1.15.0.min.js"></script>
+    <script src="[% interface %]/lib/jquery/jquery-2.2.3.min.js"></script>
+    <script src="[% interface %]/lib/jquery/plugins/jquery.dataTables.min.js"></script>
+    <script src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
+    <script src="[% interface %]/lib/jquery/plugins/jquery.validate.min.js"></script>
+    
+    <link rel="stylesheet" href="[% interface %]/lib/jquery/plugins/jquery.dataTables-1.10.11.min.css">
 
-    <link rel="stylesheet" href="/css/jquery.dataTables-1.10.11.min.css">
-    <link rel="stylesheet" href="/css/jquery-ui-1.11.4/jquery-ui-1.11.4.min.css">
 </head>
 <body>
     [% INCLUDE 'header.inc' %]
@@ -65,7 +65,7 @@
                 <td>[% rc.getErrorsCount() %]</td>
                 <td>
 <!--NOT IMPLEMENTED                    <a class="btn btn-small deleteReportContainer"><i class="icon-remove-sign"></i></a>-->
-                    <a class="btn btn-small showReportContainer"><i class="icon-search"></i></a>
+                    <a class="btn btn-small showReportContainer"><i class="fa fa-search" aria-hidden="true"></i></a>
                 </td>
             </tr>
         [% END %]
