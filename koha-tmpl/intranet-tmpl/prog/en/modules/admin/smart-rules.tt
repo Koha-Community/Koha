@@ -90,7 +90,8 @@
                 <th>Automatic renewal</th>
                 <th>No automatic renewal after</th>
                 <th>No automatic renewal after (hard limit)</th>
-                <th>Holds allowed (count)</th>
+                <th>Holds allowed (total)</th>
+                <th>Holds allowed (daily)</th>
                 <th>Holds per record (count)</th>
                 <th>On shelf holds allowed</th>
                 <th>Item level holds</th>
@@ -185,7 +186,13 @@
                             <td>[% rule.no_auto_renewal_after | html %]</td>
                             <td>[% rule.no_auto_renewal_after_hard_limit | html %]</td>
 							<td>[% rule.reservesallowed | html %]</td>
-                                                        <td>[% rule.holds_per_record | html %]</td>
+                            <td>[% IF rule.unlimited_holds_per_day %]
+                                    <span>Unlimited</span>
+                                [% ELSE %]
+                                    [% rule.holds_per_day | html %]
+                                [% END %]
+                            </td>
+                            <td>[% rule.holds_per_record | html %]</td>
                                                         <td>
                                                             [% IF rule.onshelfholds == 1 %]
                                                                 <span>Yes</span>
@@ -291,7 +298,8 @@
                         <input type="text" size="10" name="no_auto_renewal_after_hard_limit" id="no_auto_renewal_after_hard_limit" value="[% no_auto_renewal_after_hard_limit | html %]" class="datepicker"/>
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
-                    <td><input type="text" name="reservesallowed" id="reservesallowed" size="2" /></td>
+                    <td><input type="text" name="reservesallowed"  id="reservesallowed"  size="2" /></td>
+                    <td><input type="text" name="holds_per_day"    id="holds_per_day"    size="2" /></td>
                     <td><input type="text" name="holds_per_record" id="holds_per_record" size="2" /></td>
                     <td>
                         <select name="onshelfholds" id="onshelfholds">
@@ -346,8 +354,9 @@
                       <th>No renewal before</th>
                       <th>Automatic renewal</th>
                       <th>No automatic renewal after</th>
-                       <th>No automatic renewal after (hard limit)</th>
-                      <th>Holds allowed (count)</th>
+                      <th>No automatic renewal after (hard limit)</th>
+                      <th>Holds allowed (total)</th>
+                      <th>Holds allowed (daily)</th>
                       <th>Holds per record (count)</th>
                       <th>On shelf holds allowed</th>
                       <th>Item level holds</th>
@@ -857,8 +866,11 @@
                             // Remove potential previous input added
                             $(current_column).find("input").remove();
                             $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                        } else if ( i == 3 || i == 4 ) {
-                            // If the value is not an integer for "Current checkouts allowed" or "Current on-site checkouts allowed"
+                        } else if ( i == 3 || i == 4 || i == 24 ) {
+                            // If the value is not an integer for
+                            //     - "Current checkouts allowed"
+                            //     - "Current on-site checkouts allowed"
+                            //     - "Holds allowed (daily)"
                             // The value is "Unlimited" (or an equivalent translated string)
                             // an it should be set to an empty string
                             if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {

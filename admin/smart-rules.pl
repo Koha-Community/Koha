@@ -164,7 +164,10 @@ elsif ($op eq 'add') {
     $no_auto_renewal_after_hard_limit = eval { dt_from_string( $input->param('no_auto_renewal_after_hard_limit') ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
     my $reservesallowed  = $input->param('reservesallowed');
-    my $holds_per_record  = $input->param('holds_per_record');
+    my $holds_per_record = $input->param('holds_per_record');
+    my $holds_per_day    = $input->param('holds_per_day');
+    $holds_per_day =~ s/\s//g;
+    $holds_per_day = undef if $holds_per_day !~ /^\d+/;
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
@@ -205,6 +208,7 @@ elsif ($op eq 'add') {
         no_auto_renewal_after_hard_limit => $no_auto_renewal_after_hard_limit,
         reservesallowed               => $reservesallowed,
         holds_per_record              => $holds_per_record,
+        holds_per_day                 => $holds_per_day,
         issuelength                   => $issuelength,
         lengthunit                    => $lengthunit,
         hardduedate                   => $hardduedate,
@@ -613,9 +617,10 @@ my @sorted_branch_cat_rules = sort { $a->{'humancategorycode'} cmp $b->{'humanca
 
 # note undef maxissueqty so that template can deal with them
 foreach my $entry (@sorted_branch_cat_rules, @sorted_row_loop) {
-    $entry->{unlimited_maxissueqty} = 1 unless defined($entry->{maxissueqty});
+    $entry->{unlimited_maxissueqty}       = 1 unless defined($entry->{maxissueqty});
     $entry->{unlimited_maxonsiteissueqty} = 1 unless defined($entry->{maxonsiteissueqty});
-    $entry->{unlimited_max_holds} = 1 unless defined($entry->{max_holds});
+    $entry->{unlimited_max_holds}         = 1 unless defined($entry->{max_holds});
+    $entry->{unlimited_holds_per_day}     = 1 unless defined($entry->{holds_per_day});
 }
 
 @sorted_row_loop = sort by_category_and_itemtype @row_loop;
