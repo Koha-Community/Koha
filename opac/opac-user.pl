@@ -64,7 +64,7 @@ BEGIN {
 
 # CAS single logout handling
 # Will print header and exit
-C4::Context->preference('casAuthentication') and C4::Auth_with_ldap::logout_if_required($query);
+C4::Context->preference('casAuthentication') and C4::Auth_with_cas::logout_if_required($query);
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

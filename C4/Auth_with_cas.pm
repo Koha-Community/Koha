@@ -35,7 +35,7 @@ BEGIN {
 	require Exporter;
 	$debug = $ENV{DEBUG};
 	@ISA    = qw(Exporter);
-	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
+	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
 }
 my $defaultcasserver;
 my $casservers;
