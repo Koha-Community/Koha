@@ -64,6 +64,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Koha;
 use C4::Budgets qw/ GetBudgetHierarchy /;
+use C4::Languages qw(getlanguage);
 
 use Koha::Acquisition::Booksellers;
 use Koha::SearchEngine;
@@ -83,6 +84,7 @@ my $booksellerid     = $params->{'booksellerid'};
 my $basketno         = $params->{'basketno'};
 my $sub              = $params->{'sub'};
 my $bookseller       = Koha::Acquisition::Booksellers->find( $booksellerid );
+my $lang             = C4::Languages::getlanguage($input);
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -106,7 +108,8 @@ my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BI
 if ($QParser) {
     $builtquery = $query;
 } else {
-    ( undef,$builtquery,undef,undef,undef,undef,undef,undef,undef,undef) = $builder->build_query_compat(undef,\@operands);
+        ( undef, $builtquery, undef, undef, undef, undef, undef, undef, undef, undef ) =
+          $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
 }
 my ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($builtquery, $results_per_page * ($page - 1), $results_per_page);
 

@@ -968,6 +968,9 @@ sub _build_stemmed_operand {
     require Lingua::Stem::Snowball ;
     my $stemmed_operand=q{};
 
+    # Stemmer needs language
+    return $operand unless $lang;
+
     # If operand contains a digit, it is almost certainly an identifier, and should
     # not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
     # can contain the letter "X" - for example, _build_stemmend_operand would reduce
