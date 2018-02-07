@@ -818,7 +818,7 @@
             } else {
                 ids = new Array;
             }
-            if (ids.indexOf(borrowernumber) < 0) {
+            if (ids.indexOf(borrowernumber.toString()) < 0) {
                 ids.push(borrowernumber);
                 $("#users_ids").val(ids.join(':'));
                 var li = '<li id="user_'+borrowernumber+'">'+borrowername
