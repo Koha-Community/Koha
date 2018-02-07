@@ -81,7 +81,7 @@ my $result = GetOptions(
     'truncate'    => \$truncate,
     'since:s'     => \$since,
     'not-expired' => \$not_expired,
-    'no_overwrite'  => \$no_overwrite,
+    'no-overwrite'  => \$no_overwrite,
     'help|h'      => \$help,
 );
 
@@ -111,7 +111,7 @@ Filled' notice for example.
 
 This script creates/overwrites messaging preferences for all borrowers and sets
 them to default values defined for the category they belong to (unless you
-use the options -not-expired or -no_overwrite to update a subset).
+use the options -not-expired or -no-overwrite to update a subset).
 
 =over 8
 
@@ -132,7 +132,7 @@ affects borrower_message_preferences table.
 
 Will only update active borrowers (borrowers who didn't pass their expiration date).
 
-=item B<--no_overwrite>
+=item B<--no-overwrite>
 
 Will only update patrons without messaging preferences and skip patrons that
 already set their preferences.
