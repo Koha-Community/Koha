@@ -14198,7 +14198,7 @@ if( CheckVersion( $DBversion ) ) {
           borrowernumber int(11) NOT NULL,
           date_enrolled timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
           date_canceled timestamp NULL DEFAULT NULL,
-          date_created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          date_created timestamp NULL DEFAULT NULL,
           date_updated timestamp NULL DEFAULT NULL,
           branchcode varchar(10) NULL DEFAULT NULL,
           PRIMARY KEY (id),
