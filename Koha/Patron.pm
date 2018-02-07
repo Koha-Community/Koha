@@ -126,7 +126,7 @@ sub guarantor {
 sub image {
     my ( $self ) = @_;
 
-    return Koha::Patron::Images->find( $self->borrowernumber );
+    return scalar Koha::Patron::Images->find( $self->borrowernumber );
 }
 
 sub library {
