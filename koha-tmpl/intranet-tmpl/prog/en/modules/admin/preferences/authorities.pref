@@ -8,6 +8,13 @@ Authorities:
                   no: "Don't display"
             - broader term/narrower term hierarchies when viewing authorities.
         -
+            - Use the following text to edit how authority records control indicators of attached biblio fields (and possibly subfield $2).<br>
+            - "Lines starting with a comment symbol (#) are skipped. Each line should be of the form: (marc21|unimarc), tag, ind1:(auth1|auth2|some_value), ind2:(auth1|auth2|thesaurus|some_value).<br>"
+            - Here auth1 and auth2 refer to the indicators of the authority record, tag is a biblio field number or an asterisk (*), and some_value is a fixed value (one character).<br>
+            - The MARC21 option thesaurus refers to indicators controlled by authority field 008/11 and 040$f.
+            - pref: AuthorityControlledIndicators
+              type: textarea
+        -
             - When editing records,
             - pref: BiblioAddsAuthorities
               default: no
