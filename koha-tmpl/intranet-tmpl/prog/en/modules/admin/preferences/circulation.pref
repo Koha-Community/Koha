@@ -658,6 +658,12 @@ Circulation:
                   1: Store
                   0: "Don't store"
             - 'the last patron to return an item. This setting is independent of the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=opacreadinghistory">opacreadinghistory</a> and <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=AnonymousPatron">AnonymousPatron</a> system preferences.'
+        -
+            - pref: ODueDebarmentRemovalAllowUnrestricted
+              choices:
+                  yes: Allow
+                  no: Do not allow
+            - removal of Overdue debarments when patron has overdue items but none are old enough to have reached restricting delay. Used in combination with AutoRemoveOverduesRestrictions.
     Holds policy:
         -
             - In the staff interface, split the holds queue into separate tables by

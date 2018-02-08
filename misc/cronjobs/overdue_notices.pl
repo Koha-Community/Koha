@@ -489,8 +489,8 @@ END_SQL
     
     my $rqoverduerules =  $dbh->prepare($query);
     $rqoverduerules->execute($branchcode, @myborcat, @myborcatout);
-    
-    # We get default rules is there is no rule for this branch
+
+    # We get default rules if there is no rule for this branch
     if($rqoverduerules->rows == 0){
         $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' ";
         $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
