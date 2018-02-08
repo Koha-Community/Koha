@@ -307,34 +307,38 @@
         </div>
         <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
             <div class="modal-body">
-                    [% IF ( shibbolethAuthentication ) %]
+                [% IF ( shibbolethAuthentication ) %]
                     [% IF ( invalidShibLogin ) %]
-                    <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
-                    <div class="alert alert-info">
-                        <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
-                    </div>
-                    [% ELSE %]
-                    <h4>Shibboleth Login</h4>
-                    <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
-                    <h4>Local Login</h4>
-                    [% END %]
-            [% END %]
-                    <input type="hidden" name="koha_login_context" value="opac" />
-                    <fieldset class="brief">
-                        <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
-                        <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
-                    [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
-                        <div id="forgotpassword-modal">
-                            <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
+                        <!-- This is what is displayed if shibboleth login has failed to match a koha user -->
+                        <div class="alert alert-info">
+                            <p>Sorry, your Shibboleth identity does not match a valid library identity. If you have a local login, you may use that below.</p>
                         </div>
+                    [% ELSE %]
+                        <h4>Shibboleth login</h4>
+                        <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here to login</a>.</p>
+                        <h4>Local Login</h4>
                     [% END %]
+                [% END %]
+                <input type="hidden" name="koha_login_context" value="opac" />
+                <fieldset class="brief">
+                    <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
+                    <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
                     [% IF Koha.Preference( 'NoLoginInstructions' ) %]
-                        <div id="nologininstructions-modal">
+                        <div id="nologininstructions-modal" class="nologininstructions">
                             [% Koha.Preference( 'NoLoginInstructions' ) %]
                         </div>
                     [% END %]
-                        [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="mpatronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
-                    </fieldset>
+                    [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
+                        <div id="forgotpassword-modal" class="forgotpassword">
+                            <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
+                        </div>
+                    [% END %]
+                    [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                        <div id="patronregistration-modal" class="patronregistration">
+                            <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
+                        </div>
+                    [% END %]
+                </fieldset>
             </div>
             <div class="modal-footer">
                 <input type="submit" class="btn btn-primary" value="Log in" />

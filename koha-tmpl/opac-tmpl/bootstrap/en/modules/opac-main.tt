@@ -94,7 +94,7 @@
 
         [% IF ( display_daily_quote && daily_quote ) %]
             <div id="daily-quote">
-                <h3>Quote of the Day</h3>
+                <h3>Quote of the day</h3>
                 <div>
                     <span id="daily-quote-text">[% daily_quote.text %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source %]</span>
                 </div>
@@ -116,21 +116,25 @@
                                         <legend>Log in to your account:</legend>
                                         <label for="userid">Login:</label><input type="text" id="userid" name="userid" />
                                         <label for="password">Password:</label><input type="password" id="password" name="password" />
-                                    <fieldset class="action">
-                                        <input type="submit" value="Log in" class="btn" />
+                                        <fieldset class="action">
+                                            <input type="submit" value="Log in" class="btn" />
+                                        </fieldset>
+                                        [% IF Koha.Preference( 'NoLoginInstructions' ) %]
+                                            <div id="nologininstructions-main" class="nologininstructions">
+                                                [% Koha.Preference( 'NoLoginInstructions' ) %]
+                                            </div>
+                                        [% END %]
+                                        [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
+                                            <div id="forgotpassword-main" class="forgotpassword">
+                                                <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
+                                            </div>
+                                        [% END %]
+                                        [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
+                                            <div id="patronregistration-main" class="patronregistration">
+                                                <p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p>
+                                            </div>
+                                        [% END %]
                                     </fieldset>
-                                    [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<div id="patronregistration"><p>Don't have an account? <a href="/cgi-bin/koha/opac-memberentry.pl">Register here.</a></p></div>[% END %]
-                                    </fieldset>
-                                [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
-                                    <div id="forgotpassword">
-                                        <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
-                                    </div>
-                                [% END %]
-                                [% IF Koha.Preference( 'NoLoginInstructions' ) %]
-                                    <div id="nologininstructions-main">
-                                        [% Koha.Preference( 'NoLoginInstructions' ) %]
-                                    </div>
-                                [% END %]
                                 </form>
                             </div> <!-- /#login -->
                         [% END # /casAuthentication %]
