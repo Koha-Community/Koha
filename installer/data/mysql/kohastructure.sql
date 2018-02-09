@@ -4173,11 +4173,12 @@ CREATE TABLE library_groups (
     branchcode VARCHAR(10) NULL DEFAULT NULL, -- The branchcode of a branch belonging to the parent group
     title VARCHAR(100) NULL DEFAULT NULL,     -- Short description of the goup
     description TEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
-    created_on DATETIME NOT NULL,          -- Date and time of creation
-    updated_on DATETIME NULL DEFAULT NULL, -- Date and time of last
+    created_on TIMESTAMP NULL,             -- Date and time of creation
+    updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
     PRIMARY KEY id ( id ),
     FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
+    UNIQUE( title )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

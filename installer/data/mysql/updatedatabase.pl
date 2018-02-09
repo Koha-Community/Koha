@@ -15220,6 +15220,32 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17682 - Update URL for Google Scholar in OPACSearchForTitleIn)\n";
 }
 
+$DBversion = '17.12.00.007';
+if( CheckVersion( $DBversion ) ) {
+
+    unless ( TableExists( 'library_groups' ) ) {
+        $dbh->do(q{
+            CREATE TABLE library_groups (
+                id INT(11) NOT NULL auto_increment,    -- unique id for each group
+                parent_id INT(11) NULL DEFAULT NULL,   -- if this is a child group, the id of the parent group
+                branchcode VARCHAR(10) NULL DEFAULT NULL, -- The branchcode of a branch belonging to the parent group
+                title VARCHAR(100) NULL DEFAULT NULL,     -- Short description of the goup
+                description TEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
+                created_on TIMESTAMP NULL,             -- Date and time of creation
+                updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
+                PRIMARY KEY id ( id ),
+                FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
+                FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
+                UNIQUE( title )
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15707 - Add new table library_groups)\n";
+}
+
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
