@@ -274,22 +274,6 @@ if ( $step == 5 ) {
 
 my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
 $template_params->{libraries}   = $libraries;
-$template_params->{group_types} = [
-    {
-        categorytype => 'searchdomain',
-        categories   => [
-            Koha::LibraryCategories->search(
-                { categorytype => 'searchdomain' }
-            )
-        ],
-    },
-    {
-        categorytype => 'properties',
-        categories   => [
-            Koha::LibraryCategories->search( { categorytype => 'properties' } )
-        ],
-    },
-];
 
 if ( $step > 5 ) {
     $template_params->{all_done} = 1;    # If step 5 is complete, we are done!
