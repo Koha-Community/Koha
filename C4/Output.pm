@@ -307,6 +307,21 @@ sub is_ajax {
     return ( $x_req and $x_req =~ /XMLHttpRequest/i ) ? 1 : 0;
 }
 
+=item
+
+    output_and_exit_if_error( $query, $cookie, $template, $params );
+
+To executed at the beginning of scripts to stop the script at this point if
+some errors are found.
+
+Tests for module 'members':
+* patron is not defined (we are looking for a patron that does no longer exist/never existed)
+* The logged in user cannot see patron's infos (feature 'cannot_see_patron_infos')
+
+Others will be added here depending on the needs (for instance biblio does not exist will be useful).
+
+=cut
+
 sub output_and_exit_if_error {
     my ( $query, $cookie, $template, $params ) = @_;
     my $error;
