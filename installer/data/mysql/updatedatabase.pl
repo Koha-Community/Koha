@@ -15309,6 +15309,17 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 18403 - Add the view_borrower_infos_from_any_libraries permission )\n";
 }
 
+$DBversion = '17.12.00.010';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'library_groups', 'ft_hide_patron_info' ) ) {
+        $dbh->do( "ALTER TABLE library_groups ADD COLUMN ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0 AFTER description" );
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20133 - Add library_groups.ft_hide_patron_info)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
