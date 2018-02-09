@@ -209,11 +209,8 @@ if($cgi->cookie("intranet_bib_list")){
     @cart_list = split(/\//, $cart_list);
 }
 
-my @search_groups_opac =
-  Koha::Library::Groups->get_search_groups( { interface => 'opac' } );
-my @search_groups_staff =
+my @search_groups =
   Koha::Library::Groups->get_search_groups( { interface => 'staff' } );
-my @search_groups = ( @search_groups_opac, @search_groups_staff );
 @search_groups = sort { $a->title cmp $b->title } @search_groups;
 
 $template->param(
