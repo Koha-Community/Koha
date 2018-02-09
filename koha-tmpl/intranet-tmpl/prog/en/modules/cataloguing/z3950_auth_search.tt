@@ -28,7 +28,7 @@
                     <li><label for="authorany">Author (any): </label> <input type="text" id="authorany" name="authorany" value="" /></li>
                     <li><label for="authorpersonal">Author (personal): </label> <input type="text" id="authorpersonal" name="authorpersonal" value="[% authorpersonal | html %]" /></li>
                     <li><label for="authorcorp">Author (corporate): </label> <input type="text" id="authorcorp" name="authorcorp" value="[% authorcorp | html %]" /></li>
-                    <li><label for="authormeetingcon">Author (meeting/conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
+                    <li><label for="authormeetingcon">Author (meeting / conference): </label> <input type="text" id="authormeetingcon" name="authormeetingcon" value="[% authormeetingcon | html %]" /></li>
                 </ol>
                 </fieldset>
             </div>
@@ -63,7 +63,11 @@
                 </div>
             </div>
             </div>
-        <fieldset class="action"><input type="submit"  class="submit" value="Search"/> <a class="cancel close" href="#">Cancel</a></fieldset>
+            <nav class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container-fluid">
+                     <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+                </div>
+            </nav>
         </form>
 [% ELSE %]
     <h2>Results for authority records</h2>
