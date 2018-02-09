@@ -791,7 +791,9 @@ sub libraries_where_can_see_patrons {
         }
     }
 
-    return sort(uniq(@restricted_branchcodes));
+    @restricted_branchcodes = grep { defined $_ } @restricted_branchcodes;
+    @restricted_branchcodes = uniq(@restricted_branchcodes);
+    return sort (@restricted_branchcodes);
 }
 
 sub can {
