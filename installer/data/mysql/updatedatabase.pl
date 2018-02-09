@@ -15236,7 +15236,7 @@ if( CheckVersion( $DBversion ) ) {
                 PRIMARY KEY id ( id ),
                 FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
                 FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
-                UNIQUE( title )
+                UNIQUE KEY title ( title )
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
         });
     }
@@ -15248,42 +15248,47 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '17.12.00.008';
 if ( CheckVersion($DBversion) ) {
 
-    $dbh->do(q{
-        INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups - Staff only', NOW() )
-    });
-    my $search_groups_staff_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
+    if ( TableExists( 'branchcategories' ) and TableExists('branchrelations' )) {
+        $dbh->do(q{
+            INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups - Staff only', NOW() )
+        });
+        my $search_groups_staff_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
-    $dbh->do(q{
-        INSERT INTO library_groups ( title, description, created_on ) VALUE ( '__SEARCH_GROUPS_OPAC__', 'Library search groups - Staff only', NOW() )
-    });
-    my $search_groups_opac_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
+        $dbh->do(q{
+            INSERT INTO library_groups ( title, description, created_on ) VALUE ( '__SEARCH_GROUPS_OPAC__', 'Library search groups - Staff only', NOW() )
+        });
+        my $search_groups_opac_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
-    my $sth = $dbh->prepare("SELECT * FROM branchcategories");
+        my $sth = $dbh->prepare("SELECT * FROM branchcategories");
 
-    my $sth2 = $dbh->prepare("INSERT INTO library_groups ( parent_id, title, description, created_on ) VALUES ( ?, ?, ?, NOW() )");
+        my $sth2 = $dbh->prepare("INSERT INTO library_groups ( parent_id, title, description, created_on ) VALUES ( ?, ?, ?, NOW() )");
 
-    my $sth3 = $dbh->prepare("SELECT * FROM branchrelations WHERE categorycode = ?");
+        my $sth3 = $dbh->prepare("SELECT * FROM branchrelations WHERE categorycode = ?");
 
-    my $sth4 = $dbh->prepare("INSERT INTO library_groups ( parent_id, branchcode, created_on ) VALUES ( ?, ?, NOW() )");
+        my $sth4 = $dbh->prepare("INSERT INTO library_groups ( parent_id, branchcode, created_on ) VALUES ( ?, ?, NOW() )");
 
-    $sth->execute();
-    while ( my $lc = $sth->fetchrow_hashref ) {
-        my $description = $lc->{categorycode};
-        $description .= " - " . $lc->{codedescription} if $lc->{codedescription};
+        $sth->execute();
+        while ( my $lc = $sth->fetchrow_hashref ) {
+            my $description = $lc->{categorycode};
+            $description .= " - " . $lc->{codedescription} if $lc->{codedescription};
 
-        $sth2->execute(
-            $lc->{show_in_pulldown} ? $search_groups_opac_root_id : $search_groups_staff_root_id,
-            $lc->{categoryname},
-            $description,
-        );
+            $sth2->execute(
+                $lc->{show_in_pulldown} ? $search_groups_opac_root_id : $search_groups_staff_root_id,
+                $lc->{categoryname},
+                $description,
+            );
 
-        my $subgroup_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
+            my $subgroup_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
-        $sth3->execute( $lc->{categorycode} );
+            $sth3->execute( $lc->{categorycode} );
 
-        while ( my $l = $sth3->fetchrow_hashref ) {
-            $sth4->execute( $subgroup_id, $l->{branchcode} );
+            while ( my $l = $sth3->fetchrow_hashref ) {
+                $sth4->execute( $subgroup_id, $l->{branchcode} );
+            }
         }
+
+        $dbh->do("DROP TABLE branchrelations");
+        $dbh->do("DROP TABLE branchcategories");
     }
 
     print "Upgrade to $DBversion done (Bug 16735 - Migrate library search groups into the new hierarchical groups)\n";
