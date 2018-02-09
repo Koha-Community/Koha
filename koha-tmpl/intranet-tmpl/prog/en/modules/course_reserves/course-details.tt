@@ -211,9 +211,9 @@
             $("#delete_course").click(function(){
                 [% SET count = course_reserves.size || 0 %]
                 [% IF count == 1 %]
-                    return confirmDelete(_("Are you sure you want to delete this course? There is [% count %] attached item.") );
+                    return confirmDelete(_("Are you sure you want to delete this course? There is %s attached item.").format([% count %]) );
                 [% ELSIF count > 1 %]
-                    return confirmDelete(_("Are you sure you want to delete this course? There are [% count %] attached items.") );
+                    return confirmDelete(_("Are you sure you want to delete this course? There are %s attached items.").format([% count %]) );
                 [% ELSE %]
                     return confirmDelete(_("Are you sure you want to delete this course?"));
                 [% END %]
