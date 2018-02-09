@@ -99,12 +99,16 @@ sub controlled_indicators {
             $self->marcxml, 'UTF-8', $flavour );
     }
 
-    my $authtype = Koha::Authority::Types->find( $self->authtypecode );
-    return {} if !$authtype;
+    if( !$self->{_report_tag} ) {
+        my $authtype = Koha::Authority::Types->find( $self->authtypecode );
+        return {} if !$authtype; # very exceptional
+        $self->{_report_tag} = $authtype->auth_tag_to_report;
+    }
 
-    return Koha::Authority::ControlledIndicators->new->get({
+    $self->{_ControlledInds} //= Koha::Authority::ControlledIndicators->new;
+    return $self->{_ControlledInds}->get({
         auth_record => $record,
-        report_tag  => $authtype->auth_tag_to_report,
+        report_tag  => $self->{_report_tag},
         biblio_tag  => $tag,
         flavour     => $flavour,
     });

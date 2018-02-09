@@ -1471,7 +1471,7 @@ sub merge {
                 my $newtag = $tags_new && @$tags_new
                   ? _merge_newtag( $tag, $tags_new )
                   : $tag;
-                my $controlled_ind = Koha::Authority->new({ authtypecode => $authtypeto ? $authtypeto->authtypecode : undef })->controlled_indicators({ record => $MARCto, biblio_tag => $newtag }); #FIXME Replace this tric with new when refactoring
+                my $controlled_ind = $authto->controlled_indicators({ record => $MARCto, biblio_tag => $newtag });
                 my $field_to = MARC::Field->new(
                     $newtag,
                     $controlled_ind->{ind1} // $field->indicator(1),
