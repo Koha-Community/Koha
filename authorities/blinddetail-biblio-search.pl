@@ -105,8 +105,8 @@ if ($authid) {
     push( @subfield_loop, { marc_subfield => 'w', marc_values => $relationship } ) if ( $relationship );
 
     my $controlled_ind = $auth->controlled_indicators({ record => $record, biblio_tag => $tag_number });
-    $indicator1 = $controlled_ind->{ind1} // q{};
-    $indicator2 = $controlled_ind->{ind2} // q{};
+    $indicator1 = $controlled_ind->{ind1};
+    $indicator2 = $controlled_ind->{ind2};
     if( defined $controlled_ind->{sub2} ) {
         my $v = $controlled_ind->{sub2};
         push @subfield_loop, { marc_subfield => '2', marc_values => [ $v ] };
@@ -116,15 +116,13 @@ if ($authid) {
     $template->param( "clear" => 1 );
 }
 
-# Remove spaces in indicators
-$indicator1 =~ s/\s//g;
-$indicator2 =~ s/\s//g;
-
 $template->param(
     authid          => $authid ? $authid : "",
     index           => $index,
     tagid           => $tagid,
+    update_ind1     => defined($indicator1),
     indicator1      => $indicator1,
+    update_ind2     => defined($indicator2),
     indicator2      => $indicator2,
     SUBFIELD_LOOP   => \@subfield_loop,
     tag_number      => $tag_number,

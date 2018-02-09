@@ -97,8 +97,12 @@
                 );
             [% END %]
                 var indicators = field_start.getElementsByClassName('indicator flat');
-                indicators[0].value="[% indicator1 %]";
-                indicators[1].value="[% indicator2 %]";
+                [% IF update_ind1 %]
+                    indicators[0].value="[% indicator1 %]";
+                [% END %]
+                [% IF update_ind2 %]
+                    indicators[1].value="[% indicator2 %]";
+                [% END %]
             [% END %]
 
             // browse all its subfields (clear and $9)
