@@ -15250,14 +15250,9 @@ if ( CheckVersion($DBversion) ) {
 
     if ( TableExists( 'branchcategories' ) and TableExists('branchrelations' )) {
         $dbh->do(q{
-            INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups - Staff only', NOW() )
+            INSERT INTO library_groups ( title, description, created_on ) VALUES ( '__SEARCH_GROUPS__', 'Library search groups', NOW() )
         });
-        my $search_groups_staff_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
-
-        $dbh->do(q{
-            INSERT INTO library_groups ( title, description, created_on ) VALUE ( '__SEARCH_GROUPS_OPAC__', 'Library search groups - Staff only', NOW() )
-        });
-        my $search_groups_opac_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
+        my $search_groups_root_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
         my $sth = $dbh->prepare("SELECT * FROM branchcategories");
 
@@ -15272,11 +15267,7 @@ if ( CheckVersion($DBversion) ) {
             my $description = $lc->{categorycode};
             $description .= " - " . $lc->{codedescription} if $lc->{codedescription};
 
-            $sth2->execute(
-                $lc->{show_in_pulldown} ? $search_groups_opac_root_id : $search_groups_staff_root_id,
-                $lc->{categoryname},
-                $description,
-            );
+            $sth2->execute($search_groups_root_id, $lc->{categoryname}, $description);
 
             my $subgroup_id = $dbh->last_insert_id(undef, undef, 'library_groups', undef);
 
