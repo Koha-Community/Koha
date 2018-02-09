@@ -35,7 +35,9 @@ Koha::Library::Groups - Koha Library::Group object set class
 
 =head2 Class Methods
 
-=head3 my @root_groups = $self->get_root_group()
+=head3 get_root_groups
+
+my @root_groups = $self->get_root_group()
 
 =cut
 
@@ -45,7 +47,9 @@ sub get_root_groups {
     return $self->search( { parent_id => undef }, { order_by => 'title' } );
 }
 
-=head3 my @search_groups = $self->get_search_groups({[interface => 'staff' || 'opac']}))
+=head3 get_search_groups
+
+my @search_groups = $self->get_search_groups({[interface => 'staff' || 'opac']}))
 
 Returns search groups for the specified interface.
 Defaults to OPAC if no interface is specified.
