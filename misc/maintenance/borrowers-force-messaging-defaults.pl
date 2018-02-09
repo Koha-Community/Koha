@@ -54,12 +54,15 @@ sub force_borrower_messaging_defaults {
         $dbh->do(q|SET FOREIGN_KEY_CHECKS = 1|);
     }
 
-    my $sql = "SELECT borrowernumber, categorycode FROM borrowers bo WHERE dateenrolled >= ?";
+    my $sql =
+q|SELECT DISTINCT bo.borrowernumber, bo.categorycode FROM borrowers bo
+LEFT JOIN borrower_message_preferences mp USING (borrowernumber)
+WHERE bo.dateenrolled >= ?|;
     if ($not_expired) {
-        $sql .= " AND dateexpiry >= NOW()"
+        $sql .= " AND bo.dateexpiry >= NOW()"
     }
     if( $no_overwrite ) {
-        $sql .= " AND (SELECT COUNT(*) FROM borrower_message_preferences mp WHERE mp.borrowernumber=bo.borrowernumber) = 0"
+        $sql .= " AND mp.borrowernumber IS NULL";
     }
     my $sth = $dbh->prepare($sql);
     $sth->execute($since);
