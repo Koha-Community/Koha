@@ -307,7 +307,7 @@ sub is_ajax {
     return ( $x_req and $x_req =~ /XMLHttpRequest/i ) ? 1 : 0;
 }
 
-=item
+=item output_and_exit_if_error
 
     output_and_exit_if_error( $query, $cookie, $template, $params );
 
