@@ -15324,6 +15324,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20157 - Use group 'features' to decide which groups to use for group searching functionality)\n";
 }
 
+$DBversion = '17.12.00.012';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q|
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('AutoSwitchPatron', '0', '', 'Auto switch to patron', 'YesNo');
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15752 - Add system preference AutoSwitchPatron)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
