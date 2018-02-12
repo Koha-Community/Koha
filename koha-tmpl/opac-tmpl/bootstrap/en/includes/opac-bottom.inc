@@ -1,3 +1,4 @@
+[%- USE KohaPlugins -%]
 [% UNLESS ( is_popup ) %]
     [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
     [% IF ( opaccredits ) %]
@@ -284,5 +285,6 @@ $(document).ready(function() {
         </script>
     [% END %]
 [% END %]
+[% KohaPlugins.get_plugins_opac_js %]
 </body>
 </html>

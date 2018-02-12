@@ -1,3 +1,4 @@
+[%- USE KohaPlugins -%]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -53,3 +54,4 @@
 <script type="text/javascript" src="[% interface %]/[% theme %]/lib/modernizr.min_[% KOHA_VERSION %].js"></script>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/font-awesome/css/font-awesome.min_[% KOHA_VERSION %].css" />
 [% PROCESS 'html_helpers.inc' %]
+[% KohaPlugins.get_plugins_opac_head %]
