@@ -795,7 +795,8 @@ sub libraries_where_can_see_patrons {
 
     @restricted_branchcodes = grep { defined $_ } @restricted_branchcodes;
     @restricted_branchcodes = uniq(@restricted_branchcodes);
-    return sort (@restricted_branchcodes);
+    @restricted_branchcodes = sort(@restricted_branchcodes);
+    return @restricted_branchcodes;
 }
 
 sub has_permission {
