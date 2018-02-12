@@ -15347,6 +15347,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20175 - Set DEFAULT NULL value for club_enrollments.date_created)\n";
 }
 
+$DBversion = '17.12.00.014';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE marc_subfield_structure SET kohafield=NULL where kohafield='additionalauthors.author'" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19790 - Remove additionalauthors.author from installer files)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
