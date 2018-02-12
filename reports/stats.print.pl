@@ -61,8 +61,8 @@ if ($time2 ne ''){
             $date2=ParseDate($time2);
 }
 
-my $date=UnixDate($date,'%Y-%m-%d');
-my $date2=UnixDate($date2,'%Y-%m-%d');
+$date=UnixDate($date,'%Y-%m-%d');
+$date2=UnixDate($date2,'%Y-%m-%d');
 
 #warn "MASON: DATE: $date, $date2";
 
@@ -72,7 +72,7 @@ my @payments=TotalPaid($date,$date2);
 my $count=@payments;
 # print "MASON: number of payments=$count\n";
 
-my $i=0;
+my $i = 0;
 my $totalcharges=0;
 my $totalcredits=0;
 my $totalpaid=0;
@@ -125,8 +125,8 @@ while ($i<$count ){
 #get credits and append to the bottom of payments
 my @credits=getcredits($date,$date2);
 
-my $count=@credits;
-my $i=0;
+$count=@credits;
+$i=0;
 
 while ($i<$count ){
 
