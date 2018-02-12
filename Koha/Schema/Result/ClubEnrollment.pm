@@ -58,8 +58,7 @@ __PACKAGE__->table("club_enrollments");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: '0000-00-00 00:00:00'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 date_updated
 
@@ -100,8 +99,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => "0000-00-00 00:00:00",
-    is_nullable => 0,
+    is_nullable => 1,
   },
   "date_updated",
   {
@@ -193,8 +191,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1uTIm+Y9A0jEBiumQ60jg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-12 17:59:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ih/HQM4KIRDZ0ESXVR9FwA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
