@@ -36,7 +36,7 @@ use C4::Auth;
 use C4::Debug;
 use Koha::Acquisition::Currencies;
 
-my $input = new CGI;
+our $input = new CGI;
 ####  $input
 
 my $dbh = C4::Context->dbh;
@@ -68,7 +68,7 @@ $template->param( period_button_only => 1 ) if $count == 0;
 
 # authcats_loop populates the YUI planning button
 my $auth_cats_loop            = GetBudgetAuthCats($budget_period_id);
-my $budget_period_id          = $period->{'budget_period_id'};
+$budget_period_id          = $period->{'budget_period_id'};
 my $budget_period_startdate   = $period->{'budget_period_startdate'};
 my $budget_period_enddate     = $period->{'budget_period_enddate'};
 my $budget_period_locked      = $period->{'budget_period_locked'};
@@ -92,8 +92,8 @@ my $show_active  = $input->param('show_active');
 my $show_actual  = $input->param('show_actual');
 my $show_percent = $input->param('show_percent');
 my $output       = $input->param("output");
-my $basename     = $input->param("basename");
-my $del          = $input->param("sep");
+our $basename     = $input->param("basename");
+our $del          = $input->param("sep");
 
 my $show_mine       = $input->param('show_mine') ;
 
@@ -216,7 +216,7 @@ elsif ( $authcat eq 'MONTHS' && $budget_period_startdate && $budget_period_endda
 
     #calc number of months between
     my $months      = ( $Dy * 12 ) + $Dm;
-    my $start_month = @start_date[1];
+    my $start_month = $start_date[1];
     my $end_month   = ( $Dy * 12 ) + $Dm;
 
     for my $mth ( 0 ... $months ) {
