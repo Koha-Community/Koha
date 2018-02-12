@@ -90,7 +90,7 @@ $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . ($borrower->{ borrowernumber 
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "1"});
+  ->json_is('/required_permissions', {"borrowers" => "edit_borrowers"});
 
 # User without permissions, but is the owner of the object
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $borrower->{borrowernumber});

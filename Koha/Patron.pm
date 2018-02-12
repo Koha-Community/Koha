@@ -736,7 +736,7 @@ sub can_see_patrons_from {
     my $can = 0;
     if ( $self->branchcode eq $branchcode ) {
         $can = 1;
-    } elsif ( $self->can( { borrowers => 'view_borrower_infos_from_any_libraries' } ) ) {
+    } elsif ( $self->has_permission( { borrowers => 'view_borrower_infos_from_any_libraries' } ) ) {
         $can = 1;
     } elsif ( my $library_groups = $self->library->library_groups ) {
         while ( my $library_group = $library_groups->next ) {
@@ -773,7 +773,7 @@ sub libraries_where_can_see_patrons {
     }
     else {
         unless (
-            $self->can(
+            $self->has_permission(
                 { borrowers => 'view_borrower_infos_from_any_libraries' }
             )
           )
@@ -798,7 +798,7 @@ sub libraries_where_can_see_patrons {
     return sort (@restricted_branchcodes);
 }
 
-sub can {
+sub has_permission {
     my ( $self, $flagsrequired ) = @_;
     return unless $self->userid;
     # TODO code from haspermission needs to be moved here!
