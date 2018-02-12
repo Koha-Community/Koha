@@ -34,7 +34,7 @@ use Koha::Patrons;
 
 my $input = new CGI;
 
-my ( $loggedinuser ) = checkauth($input, 0, { borrowers => 'edit_borrowers' }, 'intranet');
+my ( $loggedinuserid ) = checkauth($input, 0, { borrowers => 'edit_borrowers' }, 'intranet');
 
 my $destination = $input->param("destination") || '';
 my $borrowernumber=$input->param('borrowernumber');
@@ -44,13 +44,13 @@ my $reregistration = $input->param('reregistration') || '';
 my $dbh = C4::Context->dbh;
 my $dateexpiry;
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( { userid =>  $loggedinuserid } ) or die "Not logged in";
 my $patron         = Koha::Patrons->find( $borrowernumber );
 
 # Ideally we should display a warning on the interface if the logged in user is
 # not allowed to modify this patron.
 # But a librarian is not supposed to hack the system
-unless ( $logged_in_user->can_see_patron_infos($patron) ) {
+if ( $logged_in_user->can_see_patron_infos($patron) ) {
     if ( $reregistration eq 'y' ) {
         # re-reregistration function to automatic calcul of date expiry
         $dateexpiry = $patron->renew_account;
