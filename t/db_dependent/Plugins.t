@@ -10,7 +10,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 35;
+use Test::More tests => 37;
 
 use C4::Context;
 use t::lib::Mocks;
@@ -45,6 +45,8 @@ ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
 ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
 ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
 ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
+ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
+ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );
