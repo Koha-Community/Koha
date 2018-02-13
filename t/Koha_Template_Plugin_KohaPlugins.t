@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 use CGI;
 use File::Basename;
 use File::Spec;
@@ -36,6 +36,12 @@ use_ok( 'Koha::Template::Plugin::KohaPlugins', 'Can use Koha::Template::Plugin::
 
 ok( my $plugin = Koha::Template::Plugin::KohaPlugins->new(), 'Able to instantiate template plugin' );
 
+t::lib::Mocks::mock_preference('UseKohaPlugins',1);
+t::lib::Mocks::mock_config('enable_plugins',1);
 ok( index( $plugin->get_plugins_opac_js, 'Koha::Plugin::Test::opac_js' ) != -1, 'Test plugin opac_js return value is part of code returned by get_plugins_opac_js' );
-
 ok( index( $plugin->get_plugins_opac_head, 'Koha::Plugin::Test::opac_head' ) != -1, 'Test plugin opac_head return value is part of code returned by get_plugins_opac_head' );
+
+t::lib::Mocks::mock_preference('UseKohaPlugins',0);
+t::lib::Mocks::mock_config('enable_plugins',0);
+is( $plugin->get_plugins_opac_js, q{}, 'Test plugin opac_js return value is empty' );
+is( $plugin->get_plugins_opac_head, q{}, 'Test plugin opac_head return value is empty' );
