@@ -23,6 +23,29 @@ use base qw( Template::Plugin );
 
 use Koha::Plugins;
 
+=head1 NAME
+
+Koha::Template::Plugin::KohaPlugins - A module for adding hooks into Koha for plugins
+
+=head1 DESCRIPTION
+
+This plugin contains functions related to adding plugin hooks into various parts
+of Koha.
+
+To use, include the line '[% USE KohaPlugins %]' at the top of the template
+to enable the plugin
+
+=head2 Methods
+
+=head3 get_plugins_opac_head
+
+[% KohaPlugins.get_plugins_opac_head %]
+
+This method collects the output of all plugins with an opac_head method
+to output to the head section of opac pages.
+
+=cut
+
 sub get_plugins_opac_head {
     return q{}
       unless C4::Context->preference('UseKohaPlugins')
@@ -38,6 +61,15 @@ sub get_plugins_opac_head {
 
     return join( "\n", @data );
 }
+
+=head3 get_plugins_opac_js
+
+[% KohaPlugins.get_plugins_opac_js %]
+
+This method collects the output of all plugins with an opac_js method
+to output to the javascript section of at the bottom of opac pages.
+
+=cut
 
 sub get_plugins_opac_js {
     return q{}
