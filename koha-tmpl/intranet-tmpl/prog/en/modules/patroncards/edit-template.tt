@@ -73,22 +73,22 @@
                                         <label for="template_desc">Template description:</label>
                                         <textarea cols="30" rows="3" id="template_desc" name="template_desc">[% template_desc %]</textarea>
                                     </li>
-                                     <li>
-                                 <label for="units">Units:</label>
-                                 <select id="units" name="units">
-                                 [% FOREACH unit IN units %]
+                                    <li>
+                                        <label for="units">Units:</label>
+                                        <select id="units" name="units">
+                                        [% FOREACH unit IN units %]
 
-                                    [% IF ( unit.selected ) %]
-                                    <option value="[% unit.type %]" selected="selected">
-                                    [% ELSE %]
-                                    <option value="[% unit.type %]">
-                                    [% END %]
+                                            [% IF ( unit.selected ) %]
+                                            <option value="[% unit.type %]" selected="selected">
+                                            [% ELSE %]
+                                            <option value="[% unit.type %]">
+                                            [% END %]
 
-                                 [% unit.desc %]
-                                 </option>
-                                 [% END %]
-                                 </select>
-                             </li>
+                                            [% unit.desc %]
+                                            </option>
+                                        [% END %]
+                                        </select>
+                                    </li>
                                     <li>
                                         <label for="page_height">Page height:</label>
                                         <input type="text" size="4" name="page_height" id="page_height" value="[% page_height %]" />
