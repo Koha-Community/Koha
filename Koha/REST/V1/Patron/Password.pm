@@ -44,7 +44,7 @@ sub recovery {
         my $body = $c->req->json;
 
         unless (C4::Context->preference('OpacPasswordChange') and
-                C4::Context->preference('OpacPasswordReset'))
+                C4::Context->preference('OpacResetPassword'))
         {
             return $c->render(status => 403, openapi => {
                 error => 'Password recovery is disabled.'

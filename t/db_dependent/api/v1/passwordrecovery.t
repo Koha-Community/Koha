@@ -58,7 +58,7 @@ subtest 'recovery() tests' => sub {
     $t->request_ok($tx)
       ->status_is(400);
 
-    t::lib::Mocks::mock_preference('OpacPasswordReset', 0);
+    t::lib::Mocks::mock_preference('OpacResetPassword', 0);
     t::lib::Mocks::mock_preference('OpacPasswordChange', 0);
     $tx = $t->ua->build_tx(POST => $url => json => {
         email      => $patron->email,
@@ -79,7 +79,7 @@ subtest 'recovery() tests' => sub {
     $t->request_ok($tx)
       ->status_is(403);
 
-    t::lib::Mocks::mock_preference('OpacPasswordReset', 1);
+    t::lib::Mocks::mock_preference('OpacResetPassword', 1);
     t::lib::Mocks::mock_preference('OpacPasswordChange', 0);
     $tx = $t->ua->build_tx(POST => $url => json => {
         email      => $patron->email,
