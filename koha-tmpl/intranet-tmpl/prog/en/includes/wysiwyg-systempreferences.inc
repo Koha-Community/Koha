@@ -9,7 +9,7 @@ function wysiwyg_change (ed){
     $(original_textarea).trigger("input");
 }
 
-tinyMCE.baseURL = "/intranet-tmpl/lib/tiny_mce";
+tinyMCE.baseURL = "[% interface %]/lib/tiny_mce";
 tinyMCE.init({
     setup : function(ed) {
         ed.onInit.add(function(editor){
