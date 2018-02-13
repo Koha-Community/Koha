@@ -15354,6 +15354,42 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19790 - Remove additionalauthors.author from installer files)\n";
 }
 
+$DBversion = '17.12.00.015';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        ALTER TABLE borrowers
+        MODIFY surname MEDIUMTEXT,
+        MODIFY address MEDIUMTEXT,
+        MODIFY city MEDIUMTEXT
+    |);
+    $dbh->do(q|
+        ALTER TABLE deletedborrowers
+        MODIFY surname MEDIUMTEXT,
+        MODIFY address MEDIUMTEXT,
+        MODIFY city MEDIUMTEXT
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE export_format
+        MODIFY csv_separator VARCHAR(2) NOT NULL DEFAULT ',',
+        MODIFY field_separator VARCHAR(2),
+        MODIFY subfield_separator VARCHAR(2)
+    |);
+    $dbh->do(q|
+        ALTER TABLE export_format MODIFY encoding VARCHAR(255) NOT NULL DEFAULT 'utf8'
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE reserves MODIFY lowestPriority tinyint(1) NOT NULL DEFAULT 0
+    |);
+    $dbh->do(q|
+        ALTER TABLE old_reserves MODIFY lowestPriority tinyint(1) NOT NULL DEFAULT 0
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20144 - Adapt DB structure to work with new SQL modes)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
