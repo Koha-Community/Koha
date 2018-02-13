@@ -48,24 +48,26 @@ __PACKAGE__->table("export_format");
 =head2 csv_separator
 
   data_type: 'varchar'
+  default_value: ','
   is_nullable: 0
   size: 2
 
 =head2 field_separator
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 2
 
 =head2 subfield_separator
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 2
 
 =head2 encoding
 
   data_type: 'varchar'
+  default_value: 'utf8'
   is_nullable: 0
   size: 255
 
@@ -95,13 +97,18 @@ __PACKAGE__->add_columns(
   "content",
   { data_type => "mediumtext", is_nullable => 0 },
   "csv_separator",
-  { data_type => "varchar", is_nullable => 0, size => 2 },
+  { data_type => "varchar", default_value => ",", is_nullable => 0, size => 2 },
   "field_separator",
-  { data_type => "varchar", is_nullable => 0, size => 2 },
+  { data_type => "varchar", is_nullable => 1, size => 2 },
   "subfield_separator",
-  { data_type => "varchar", is_nullable => 0, size => 2 },
+  { data_type => "varchar", is_nullable => 1, size => 2 },
   "encoding",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  {
+    data_type => "varchar",
+    default_value => "utf8",
+    is_nullable => 0,
+    size => 255,
+  },
   "type",
   {
     data_type => "varchar",
@@ -131,8 +138,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("export_format_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-20 10:12:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cHdb+bBmBVTAK71TNjdqgg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:16:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RTcPpu1SdseBlKI9MEdUWA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

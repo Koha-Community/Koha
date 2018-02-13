@@ -38,7 +38,7 @@ __PACKAGE__->table("borrowers");
 =head2 surname
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 firstname
 
@@ -75,7 +75,7 @@ __PACKAGE__->table("borrowers");
 =head2 address
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address2
 
@@ -85,7 +85,7 @@ __PACKAGE__->table("borrowers");
 =head2 city
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 state
 
@@ -459,7 +459,7 @@ __PACKAGE__->add_columns(
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "surname",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "firstname",
   { data_type => "text", is_nullable => 1 },
   "title",
@@ -473,11 +473,11 @@ __PACKAGE__->add_columns(
   "streettype",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "address",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "address2",
   { data_type => "text", is_nullable => 1 },
   "city",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "state",
   { data_type => "text", is_nullable => 1 },
   "zipcode",
@@ -1386,8 +1386,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-09 11:42:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UitEC1xK/a76Ff4ZCS2BKA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:08:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pxhUnV9IMvVGml9HFheMLw
 
 __PACKAGE__->belongs_to(
     "guarantor",

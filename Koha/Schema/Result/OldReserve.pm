@@ -115,6 +115,7 @@ __PACKAGE__->table("old_reserves");
 
   accessor: 'lowest_priority'
   data_type: 'tinyint'
+  default_value: 0
   is_nullable: 0
 
 =head2 suspend
@@ -175,7 +176,12 @@ __PACKAGE__->add_columns(
   "expirationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "lowestPriority",
-  { accessor => "lowest_priority", data_type => "tinyint", is_nullable => 0 },
+  {
+    accessor      => "lowest_priority",
+    data_type     => "tinyint",
+    default_value => 0,
+    is_nullable   => 0,
+  },
   "suspend",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "suspend_until",
@@ -283,8 +289,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-05-02 15:00:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cKmTD43jb4WnCrw57+ixrw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:08:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1QLyttziZfEWRa64oTH1yA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

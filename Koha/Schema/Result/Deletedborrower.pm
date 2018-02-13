@@ -38,7 +38,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 surname
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 firstname
 
@@ -75,7 +75,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 address
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 address2
 
@@ -85,7 +85,7 @@ __PACKAGE__->table("deletedborrowers");
 =head2 city
 
   data_type: 'mediumtext'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 state
 
@@ -456,7 +456,7 @@ __PACKAGE__->add_columns(
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "surname",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "firstname",
   { data_type => "text", is_nullable => 1 },
   "title",
@@ -470,11 +470,11 @@ __PACKAGE__->add_columns(
   "streettype",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "address",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "address2",
   { data_type => "text", is_nullable => 1 },
   "city",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "state",
   { data_type => "text", is_nullable => 1 },
   "zipcode",
@@ -641,8 +641,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-27 13:24:06
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LZK8S3YPK3zZAhH28j8gng
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:08:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:C0Zr5b+5mXPKJKCMWL0Q/w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
