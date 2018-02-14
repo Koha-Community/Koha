@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -53,5 +53,45 @@ subtest 'basket() tests' => sub {
     is_deeply( $retrieved_basket->unblessed,
         $basket->unblessed, "Correct basket found and updated" );
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'store' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+    my $o = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders'
+        }
+    );
+
+    subtest 'entrydate' => sub {
+        plan tests => 2;
+
+        my $order;
+
+        t::lib::Mocks::mock_preference( 'TimeFormat', '12hr' );
+        $order = Koha::Acquisition::Order->new(
+            {
+                basketno     => $o->basketno,
+                biblionumber => $o->biblionumber,
+                budget_id    => $o->budget_id,
+            }
+        )->store;
+        $order->discard_changes;
+        like( $order->entrydate, qr|^\d{4}-\d{2}-\d{2}$| );
+
+        t::lib::Mocks::mock_preference( 'TimeFormat', '24hr' );
+        $order = Koha::Acquisition::Order->new(
+            {
+                basketno     => $o->basketno,
+                biblionumber => $o->biblionumber,
+                budget_id    => $o->budget_id,
+            }
+        )->store;
+        $order->discard_changes;
+        like( $order->entrydate, qr|^\d{4}-\d{2}-\d{2}$| );
+    };
     $schema->storage->txn_rollback;
 };
