@@ -1098,7 +1098,7 @@
                     <div class="nav_results">
                         <div class="l_Results">
                             [% IF ( listResults ) %]
-                                <a href="#" id="a_listResults" title="Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])">Browse results</a>
+                                <a href="#" id="a_listResults">Browse results</a>
                             [% ELSE %]
                                 <span>Browse results</span>
                             [% END %]
@@ -1568,8 +1568,12 @@
     [% END %]
 
     [% IF ( OpacBrowseResults && busc ) %]
+        var list_title_showmsg = _("Show pagination list (%s-%s / %s)").format([% indexPag %], [% indexPagEnd %], [% totalPag %]);
+        var list_title_hidemsg = _("Hide pagination list (%s-%s / %s)").format([% indexPag %], [% indexPagEnd %], [% totalPag %]);
         if (arrPagination.length > 0) {
             renderPagIndexList(pag_index_ini, $("#listResults"));
+            var reslist = $("#a_listResults");
+            reslist.attr('title', list_title_showmsg);
         }
         $("#a_listResults").click(function(e) {
             if (arrPagination.length > 0) {
@@ -1577,13 +1581,11 @@
                 var navigation = $(".results-pagination");
                 if (navigation.css("display") == 'none') {
                     navigation.show();
-                    var newtitle = $(this).attr('title').replace('Show', 'Hide')
-                    $(this).attr('title',newtitle);
+                    $(this).attr('title',list_title_hidemsg);
                     renderPagination(pag_index_ini, arrPagination.length - 1, $("#ul_pagination_list"), false);
                 } else {
                     navigation.hide();
-                    var newtitle = $(this).attr('title').replace('Hide', 'Show')
-                    $(this).attr('title',newtitle);
+                    $(this).attr('title',list_title_showmsg);
                 }
             }
         });
