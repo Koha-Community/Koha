@@ -84,7 +84,19 @@
                                             <option value="[% unit.type %]">
                                             [% END %]
 
-                                            [% unit.desc %]
+                                            [% SWITCH unit.type %]
+                                            [%   CASE 'POINT' %]
+                                            <span>PostScript Points</span>
+                                            [%   CASE 'AGATE' %]
+                                            <span>Adobe Agates</span>
+                                            [%   CASE 'INCH' %]
+                                            <span>US Inches</span>
+                                            [%   CASE 'MM' %]
+                                            <span>SI Millimeters</span>
+                                            [%   CASE 'CM' %]
+                                            <span>SI Centimeters</span>
+                                            [% END %]
+
                                             </option>
                                         [% END %]
                                         </select>
