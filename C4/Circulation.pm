@@ -720,6 +720,7 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         &UpdateStats({
@@ -746,16 +747,9 @@ sub CanBookBeIssued {
             $issuingimpossible{DEBARRED} = 1;
         }
     }
-    if ( !defined $borrower->{dateexpiry} || $borrower->{'dateexpiry'} eq '0000-00-00') {
+
+    if ( $patron->is_expired ) {
         $issuingimpossible{EXPIRED} = 1;
-    } else {
-        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'sql', 'floating' );
-        $expiry_dt->truncate( to => 'day');
-        my $today = $now->clone()->truncate(to => 'day');
-        $today->set_time_zone( 'floating' );
-        if ( DateTime->compare($today, $expiry_dt) == 1 ) {
-            $issuingimpossible{EXPIRED} = 1;
-        }
     }
 
     #
@@ -814,7 +808,7 @@ sub CanBookBeIssued {
         $alerts{OTHER_CHARGES} = sprintf( "%.2f", $other_charges );
     }
 
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     if ( my $debarred_date = $patron->is_debarred ) {
          # patron has accrued fine days or has a restriction. $count is a date
         if ($debarred_date eq '9999-12-31') {

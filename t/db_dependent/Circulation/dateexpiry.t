@@ -60,12 +60,12 @@ sub can_book_be_issued {
     $item = $builder->build( { source => 'Item' } );
     $patron = $builder->build(
         {   source => 'Borrower',
-            value  => { dateexpiry => '0000-00-00' }
+            value  => { dateexpiry => undef }
         }
     );
     $patron->{flags} = C4::Members::patronflags( $patron );
     ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $patron, $item->{barcode} );
-    is( $issuingimpossible->{EXPIRED}, 1, 'The patron should be considered as expired if dateexpiry is 0000-00-00' );
+    is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is not set' );
 
     my $tomorrow = dt_from_string->add_duration( DateTime::Duration->new( days => 1 ) );
     $item = $builder->build( { source => 'Item' } );
