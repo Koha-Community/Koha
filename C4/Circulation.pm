@@ -749,16 +749,9 @@ sub CanBookBeIssued {
             $issuingimpossible{DEBARRED} = 1;
         }
     }
-    if ( !defined $borrower->{dateexpiry} || $borrower->{'dateexpiry'} eq '0000-00-00') {
+
+    if ( $patron->is_expired ) {
         $issuingimpossible{EXPIRED} = 1;
-    } else {
-        my $expiry_dt = dt_from_string( $borrower->{dateexpiry}, 'sql', 'floating' );
-        $expiry_dt->truncate( to => 'day');
-        my $today = $now->clone()->truncate(to => 'day');
-        $today->set_time_zone( 'floating' );
-        if ( DateTime->compare($today, $expiry_dt) == 1 ) {
-            $issuingimpossible{EXPIRED} = 1;
-        }
     }
 
     #
