@@ -70,7 +70,7 @@ sub store {
     }
 
     $self->quantityreceived(0) unless $self->quantityreceived;
-    $self->entrydate(output_pref( { dt => dt_from_string, dateformat => 'iso' } )) unless $self->entrydate;
+    $self->entrydate(dt_from_string) unless $self->entrydate;
 
     $self->ordernumber(undef) unless $self->ordernumber;
     $self = $self->SUPER::store( $self );
