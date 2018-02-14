@@ -88,10 +88,10 @@ my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
 my $borrower_branchcode = $template->{VARS}->{'USER_INFO'}->{'branchcode'};
 
 my $authcat      = $input->param('authcat');
-my $show_active  = $input->param('show_active');
+my $show_active  = $input->param('show_active') // 0;
 my $show_actual  = $input->param('show_actual');
 my $show_percent = $input->param('show_percent');
-my $output       = $input->param("output");
+my $output       = $input->param("output") // q{};
 our $basename     = $input->param("basename");
 our $del          = $input->param("sep");
 
@@ -106,7 +106,7 @@ if ( $budget_period_locked == 1  && not defined  $show_actual ) {
 $authcat = 'Asort1' if  not defined $authcat; # defaults to Asort if no authcat given
 
 my $budget_id = $input->param('budget_id');
-my $op        = $input->param("op");
+my $op        = $input->param("op") // q{};
 
 my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $show_mine?$template->{VARS}->{'USER_INFO'}->{'branchcode'}:'', $show_mine?$template->{VARS}->{'USER_INFO'}->{'borrowernumber'}:'' );
 
@@ -350,8 +350,8 @@ foreach my $budget (@budgets) {
         );
 
         my ( $actual, $estimated, $display ) = GetBudgetsPlanCell( \%cell, $period, $budget );
-        $cell{actual_amount}    = sprintf( "%.2f", $actual );
-        $cell{estimated_amount} = sprintf( "%.2f", $estimated );
+        $cell{actual_amount}    = sprintf( "%.2f", $actual // 0 );
+        $cell{estimated_amount} = sprintf( "%.2f", $estimated // 0 );
         $cell{display}          = $authvals_row[$i]{display};
         $cell{colnum}           = $i;
 
