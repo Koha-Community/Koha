@@ -165,5 +165,5 @@
     var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
     var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
     var CATCODE_MULTI = "[% CATCODE_MULTI %]";
-    var borrowernumber = "[% borrowernumber %]";
+    var borrowernumber = "[% patron.borrowernumber %]";
 </script>

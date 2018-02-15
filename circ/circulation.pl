@@ -609,8 +609,6 @@ if ( $patron ) {
     my $av = Koha::AuthorisedValues->search({ category => 'ROADTYPE', authorised_value => $patron->streettype });
     my $roadtype = $av->count ? $av->next->lib : '';
     $template->param(
-        %{ $patron->unblessed },
-        borrower => $patron->unblessed,
         roadtype          => $roadtype,
         patron            => $patron,
         categoryname      => $patron->category->description,

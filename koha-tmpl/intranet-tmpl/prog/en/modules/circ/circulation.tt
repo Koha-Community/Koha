@@ -10,7 +10,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
-[% IF borrowernumber and borrower%]
+[% IF patron %]
   &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %]
 [% END %]
 </title>
@@ -24,7 +24,7 @@
 [% INCLUDE 'circ-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
-[% IF borrowernumber and borrower %]
+[% IF patron %]
     <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
 [% ELSE %]
     <strong>Checkouts</strong>
@@ -44,7 +44,7 @@
 	<div class="yui-b">
 [% END %]
 
-[% IF borrowernumber %]
+[% IF patron %]
 [% INCLUDE 'members-toolbar.inc' %]
 [% END %]
 
@@ -226,7 +226,7 @@
 [% END %]
 
     <input type="hidden" name="barcode" value="[% barcode |html %]" />
-    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="issueconfirmed" value="1" />
     <input type="hidden" name="override_high_holds" value="[% override_high_holds %]"/>
     [% IF ( DEBT ) %]<input type="hidden" name="debt_confirmed" value="1" />[% END %]
@@ -253,7 +253,7 @@
 [% IF ( RESERVED ) %]
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="restoreduedatespec" />
-    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
@@ -263,7 +263,7 @@
 [% IF ( RESERVE_WAITING ) %]
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="restoreduedatespec" />
-    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
@@ -272,7 +272,7 @@
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]
-    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="restoreduedatespec" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
@@ -289,7 +289,7 @@
 
 [% IF ( RESERVED || ISSUED_TO_ANOTHER ) && (CAN_user_reserveforothers_place_holds ) %]
     [% UNLESS noissues %]
-        <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% borrowernumber %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
+        <button type="submit" onclick="window.location.href='/cgi-bin/koha/reserve/request.pl?biblionumber=[% itembiblionumber %]&borrowernumber=[% patron.borrowernumber %]'"><i class="fa fa-sticky-note-o"></i> Cancel checkout and place a hold for [% INCLUDE 'patron-title.inc' %]</button>
     [% END %]
 [% END %]
 </div></div>
@@ -326,7 +326,7 @@
 
                     [% IF ( fast_cataloging ) %]
                         [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-                            <a class="approve" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]"><i class="fa fa-plus"></i> Add record using fast cataloging</a>
+                            <a class="approve" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&amp;barcode=[% barcode |uri %]&amp;circborrowernumber=[% patron.borrowernumber %]&amp;branch=[% branch %]&amp;duedatespec=[% duedatespec %]&amp;stickyduedate=[% stickyduedate %]"><i class="fa fa-plus"></i> Add record using fast cataloging</a>
                         [% END %]
                     [% END %]
                 </div>
@@ -437,7 +437,7 @@
                                                         <input type="hidden" name="forceallow" value="1">
                                                     [% END %]
                                                     <input type="hidden" name="restoreduedatespec" />
-                                                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                                                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                                                     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
                                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
                                                     <input type="hidden" name="branch" value="[% branch %]" />
@@ -487,7 +487,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 <!-- BARCODE ENTRY -->
 
-[% IF borrowernumber and borrower %]
+[% IF patron %]
 <div class="yui-g">
 
 [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
@@ -597,7 +597,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
     </div> <!-- /.checkout-settings -->
 
-          <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
+          <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
           <input type="hidden" name="branch" value="[% branch %]" />
           <input type="hidden" name="print" value="maybe" />
           <input type="hidden" name="debt_confirmed" value="[% debt_confirmed %]" />
@@ -655,7 +655,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -668,7 +668,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( expired ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
-            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
+            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber %]&amp;categorycode=[% categorycode %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -700,9 +700,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                    [% END %]
                    <br/>
                    <a class="btn btn-default btn-sm" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="fa fa-ban"></i> View restrictions</a>
-                    [% IF (noissues && borrowernumber && CAN_user_circulate_force_checkout) %]
+                    [% IF (noissues && patron && CAN_user_circulate_force_checkout) %]
                         <span class="override_debarment">
-                            <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% borrowernumber %]" class="btn btn-default btn-sm">Override restriction temporarily</a>
+                            <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber %]" class="btn btn-default btn-sm">Override restriction temporarily</a>
                         </span>
                     [% END %]
                </li>
@@ -902,7 +902,7 @@ No patron matched <span class="ex">[% message | html %]</span>
     <fieldset class="action">
         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
             <input type="hidden" name="from" value="circ" />
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
             <input type="submit" value="Suspend all holds" />
 
             [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
@@ -916,7 +916,7 @@ No patron matched <span class="ex">[% message | html %]</span>
     <fieldset class="action">
         <form action="/cgi-bin/koha/reserve/modrequest_suspendall.pl" method="post">
             <input type="hidden" name="from" value="circ" />
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
             <input type="hidden" name="suspend" value="0" />
             <input type="submit" value="Resume all suspended holds" />
 	</form>
@@ -934,12 +934,12 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 [% ELSIF borrowernumber %]
     <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
-[% END %] <!-- borrowernumber and borrower-->
+[% END %]
 </div></div>
 [% END %]
 [% IF Koha.Preference('CircSidebar') %]
 [% UNLESS ( borrowers ) %]
-    [% IF not( borrowernumber and borrower ) %]
+    [% IF not( borrowernumber and patron ) %]
         <div class="yui-b noprint">
             [% INCLUDE 'circ-nav.inc' %]
         </div>
@@ -949,7 +949,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 </div>
 </div>
 [% UNLESS ( borrowers ) %]
-    [% IF borrowernumber and borrower %]
+    [% IF borrowernumber and patron %]
         <div class="yui-b">
             [% INCLUDE 'circ-menu.inc' %]
         </div>
@@ -989,7 +989,7 @@ No patron matched <span class="ex">[% message | html %]</span>
         var MSG_DT_LOADING_RECORDS = _("Loading... you may continue scanning.");
         var interface = "[% interface %]";
         var theme = "[% theme %]";
-        var borrowernumber = "[% borrowernumber %]";
+        var borrowernumber = "[% patron.borrowernumber %]";
         var branchcode = "[% branch %]";
         var exports_enabled = "[% Koha.Preference('ExportCircHistory') %]";
         var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 %];
@@ -1014,15 +1014,15 @@ No patron matched <span class="ex">[% message | html %]</span>
 
         columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) %]
 
-        [% IF borrowernumber and borrower %]
-            if($.cookie("holdfor") != [% borrowernumber %]){
+        [% IF borrowernumber and patron %]
+            if($.cookie("holdfor") != [% patron.borrowernumber %]){
                 $.removeCookie("holdfor", { path: '/' });
             }
         [% ELSE %]
             $.removeCookie("holdfor", { path: '/' });
         [% END %]
 
-        [% UNLESS ( borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
+        [% UNLESS ( patron.borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
 
         // On-site checkout
         function toggle_onsite_checkout(){
@@ -1062,7 +1062,7 @@ No patron matched <span class="ex">[% message | html %]</span>
             if ( $('#clubs-tab').length ) {
                 $('#clubs-tab-link').on('click', function() {
                     $('#clubs-tab').text(_("Loading..."));
-                    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% borrowernumber %]');
+                    $('#clubs-tab').load('/cgi-bin/koha/clubs/patron-clubs-tab.pl?borrowernumber=[% patron.borrowernumber %]');
                 });
             }
 
