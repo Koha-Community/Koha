@@ -30,7 +30,10 @@ use t::lib::Mocks;
 
 use C4::Biblio;
 use C4::Context;
+
+use Koha::Biblio::Metadatas;
 use Koha::Database;
+use Koha::DateUtils;
 
 BEGIN {
     use_ok('Koha::OAI::Server::DeletedRecord');
@@ -344,14 +347,15 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
     # Wait 1 second to be sure no timestamp will be equal to $from defined below
     sleep 1;
 
-    my $from_dt = DateTime->now;
-    my $from = $from_dt->ymd . 'T' . $from_dt->hms . 'Z';
-
     # Modify record to trigger auto update of timestamp
     (my $biblionumber = $marcxml[0]->{header}->{identifier}) =~ s/^.*:(.*)/$1/;
     my $record = GetMarcBiblio({biblionumber => $biblionumber});
     $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
-    ModBiblio($record, $biblionumber);
+    ModBiblio( $record, $biblionumber );
+    my $from_dt = dt_from_string(
+        Koha::Biblio::Metadatas->search({ biblionumber => $biblionumber })
+          ->next->timestamp );
+    my $from = $from_dt->ymd . 'T' . $from_dt->hms . 'Z';
     $oaidc[0]->{header}->{datestamp} = $from;
 
     test_query(
