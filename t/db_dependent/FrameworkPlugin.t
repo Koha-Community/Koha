@@ -1,46 +1,45 @@
 use Modern::Perl;
 
-use C4::Auth;
-use C4::Output;
-use Koha::FrameworkPlugin;
-
 use CGI;
 use File::Temp qw/tempfile/;
 use Getopt::Long;
 use Test::MockModule;
 use Test::More tests => 5;
 
-my @includes;
+use t::lib::TestBuilder;
+
+use C4::Auth;
+use C4::Output;
+use Koha::Database;
+use Koha::FrameworkPlugin;
+
+our @includes;
 GetOptions( 'include=s{,}' => \@includes ); #not used by default !
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+our $dbh = C4::Context->dbh;
+our $builder = t::lib::TestBuilder->new;
 
 subtest 'Test01 -- Simple tests for new and name' => sub {
     plan tests => 7;
     test01();
-    $dbh->rollback;
 };
 subtest 'Test02 -- test build with old styler and marc21_leader' => sub {
     plan tests => 5;
     test02();
-    $dbh->rollback;
 };
 subtest 'Test03 -- tests with bad plugins' => sub {
     test03();
-    $dbh->rollback;
 };
 subtest 'Test04 -- tests with new style plugin' => sub {
     plan tests => 5;
     test04();
-    $dbh->rollback;
 };
 subtest 'Test05 -- tests with build and launch for default plugins' => sub {
     test05( \@includes );
-    $dbh->rollback;
 };
-$dbh->rollback;
+$schema->storage->txn_rollback;
 
 sub test01 {
     #empty plugin
@@ -179,7 +178,8 @@ unimarc_field_4XX.pl |;
 }
 
 sub mock_userenv {
-    return { branch => 'CPL', flags => 1, id => 1 };
+    my $branch = $builder->build({ source => 'Branch' });
+    return { branch => $branch->{branchcode}, flags => 1, id => 1 };
 }
 
 sub all_perms {
