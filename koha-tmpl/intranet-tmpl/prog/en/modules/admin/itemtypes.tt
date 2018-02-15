@@ -195,14 +195,14 @@ Item types administration
                         <ul>
                             <li>
                                 <label for="remote_image_check"> Remote image:</label>
-                                [% IF remote_image %]
+                                [% IF itemtype.imageurl %]
                                     <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
                                 [% ELSE %]
                                     <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
                                 [% END %]
-                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% remote_image %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-                                [% IF ( remote_image ) %]
-                                    <img src="[% remote_image %]" alt="" />
+                                <input type="text" name="remoteImage" size="48" maxlength="200" value="[% itemtype.imageurl %]" onmousedown="document.getElementById('remote_image_check').checked = true;" />
+                                [% IF itemtype.imageurl %]
+                                    <img src="[% itemtype.imageurl %]" alt="" />
                                 [% END %]
                             </li>
                         </ul>
@@ -235,11 +235,11 @@ Item types administration
                 </li>
                 <li>
                     <label for="defaultreplacecost">Default replacement cost: </label>
-                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% defaultreplacecost %]" />
+                    <input type="text" id="defaultreplacecost" name="defaultreplacecost" size="10" value="[% itemtype.defaultreplacecost %]" />
                 </li>
                 <li>
                     <label for="processfee">Processing fee (when lost): </label>
-                    <input type="text" id="processfee" name="processfee" size="10" value="[% processfee %]" />
+                    <input type="text" id="processfee" name="processfee" size="10" value="[% itemtype.processfee %]" />
                 </li>
                 <li>
                     <label for="checkinmsg">Checkin message: </label>
