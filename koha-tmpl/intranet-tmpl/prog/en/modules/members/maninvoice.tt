@@ -70,7 +70,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
     <script type="text/javascript">
         var type_fees = {'L':'','F':'','A':'','N':'','M':''};
         [% FOREACH invoice_types_loo IN invoice_types_loop %]
