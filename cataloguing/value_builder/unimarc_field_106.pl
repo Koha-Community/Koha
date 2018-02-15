@@ -45,7 +45,7 @@ return ($field_number,$res);
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
-	my $result= $input->param('result');
+	my $result= $input->param('result') || q{};
 
 	my $dbh = C4::Context->dbh;
 my ($template, $loggedinuser, $cookie)
