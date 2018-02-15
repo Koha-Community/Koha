@@ -3,7 +3,7 @@
 <li class="dropdown">
   <a href="#" title="Switch languages" class="dropdown-toggle" id="langmenu" data-toggle="dropdown" role="button"><i class="icon-flag icon-white"></i> <span class="langlabel">Languages</span> <b class="caret"></b></a>
     <ul aria-labelledby="langmenu" role="menu" class="dropdown-menu">
-    [% FOREACH languages_loo IN languages_loop.sort('rfc4646_subtag') %]
+    [% FOREACH languages_loo IN languages_loop %]
         [% IF ( languages_loo.group_enabled ) %]
             [% IF ( languages_loo.plural ) %]
                 [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
