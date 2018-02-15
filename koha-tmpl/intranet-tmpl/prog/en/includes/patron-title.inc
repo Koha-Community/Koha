@@ -27,7 +27,7 @@
     [%- SET data.title          = title -%]
 [%- END -%]
 [%# Parameter no_html - if 1, the html tags are NOT generated %]
-[% IF data.title %]
+[%- IF data.title %]
     [%- IF no_html %]
         [%- span_start = '' %]
         [%- span_end   = '' %]
