@@ -1,16 +1,4 @@
 [% USE KohaDates %]
-<script type="text/javascript">
-    $(document).ready(function() {
-        $(".clickable").click(function() {
-            window.document.location = $(this).data('url');
-        });
-        var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [ 0, "asc" ],
-            "sDom": "t",
-            "iDisplayLength": -1
-        }));
-    });
-</script>
 <legend>Patron selection</legend>
 <table id="table_borrowers" class="table_borrowers">
     <thead>
