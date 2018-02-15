@@ -18,7 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use Modern::Perl;
+use strict;
+#use warnings; FIXME - Bug 2505
 
 use Koha::Util::FrameworkPlugin qw(wrapper);
 use C4::Auth;
