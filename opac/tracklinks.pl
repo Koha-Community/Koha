@@ -57,7 +57,7 @@ if ($uri) {
 
         my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
         my $marc_urls = C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour'));
-        if ( grep { /^$uri$/ } map { $_->{MARCURL} } @$marc_urls ) {
+        if ( grep { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls ) {
             $tracker->trackclick(
                 {
                     uri            => $uri,
