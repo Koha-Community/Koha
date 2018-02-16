@@ -382,7 +382,7 @@ function checkMultiHold() {
 
        <ol> <li><span class="label">Patron:</span>
             [% IF ( patron.borrowernumber ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] ([% cardnumber %])</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</a>
             [% ELSE %]
                 Not defined yet
             [% END %]
