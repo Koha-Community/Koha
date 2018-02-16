@@ -5,6 +5,15 @@ use lib qw( ./lib );
 use Plack::Middleware::Debug;
 use Plack::App::Directory;
 
+#BZ 16520, add timestamps to warnings
+use Log::Log4perl qw(:easy);
+Log::Log4perl->easy_init($WARN);
+my $logger = Log::Log4perl->get_logger(); # use the default logger style
+$SIG{__WARN__} = sub {
+    my $message = shift;
+    $logger->warn($message);
+};
+
 use CGI qw(-utf8 ); # we will lose -utf8 under plack
 {
     no warnings 'redefine';
