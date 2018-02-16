@@ -60,14 +60,18 @@ sub import {
     $installer->load_db_schema();
     $installer->set_marcflavour_syspref($args{marcflavour});
     my (undef, $fwklist) = $installer->marc_framework_sql_list('en', $args{marcflavour});
+    my (undef, $list) = $installer->sample_data_sql_list('en');
     my @frameworks;
-    foreach my $fwk (@$fwklist) {
+    foreach my $fwk (@$fwklist, @$list) {
         foreach my $framework (@{ $fwk->{frameworks} }) {
             push @frameworks, $framework->{fwkfile};
         }
     }
     my $all_languages = C4::Languages::getAllLanguages();
     $installer->load_sql_in_order($all_languages, @frameworks);
+    require Koha::SearchEngine::Elasticsearch;
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
+    $installer->set_version_syspref();
 }
 
 1;
