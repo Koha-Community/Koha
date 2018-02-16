@@ -806,11 +806,26 @@ sub has_permission {
     return C4::Auth::haspermission( $self->userid, $flagsrequired );
 }
 
+=head3 is_adult
+
+my $is_adult = $patron->is_adult
+
+Return true if the patron has a category with a type Adult (A) or Organization (I)
+
+=cut
+
 sub is_adult {
     my ( $self ) = @_;
     return $self->category->category_type =~ /^(A|I)$/ ? 1 : 0;
 }
 
+=head3 is_child
+
+my $is_child = $patron->is_child
+
+Return true if the patron has a category with a type Child (C)
+
+=cut
 sub is_child {
     my( $self ) = @_;
     return $self->category->category_type eq 'C' ? 1 : 0;
