@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% SET destination = "circ" %]
 <title>Koha &rsaquo; Circulation
-[% IF borrowernumber and borrower %]
+[% IF patron %]
   &rsaquo; Batch check out &rsaquo; Issuing items to [% INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 %]
 [% END %]
 </title>
@@ -20,7 +20,7 @@
 [% INCLUDE 'circ-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
-    [% IF borrower and borrowernumber %]
+    [% IF patron %]
         <a href="/cgi-bin/koha/circ/circulation.pl">Batch check out</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
     [% ELSE %]
         Batch check out
@@ -34,13 +34,13 @@
 
 <div class="yui-g">
 
-[% IF borrowernumber %]
+[% IF patron %]
 [% INCLUDE 'members-toolbar.inc' %]
 [% END %]
 
-[% IF borrower and not batch_allowed %]
+[% IF patron and not batch_allowed %]
   <div class="dialog alert">You are not allowed to use batch checkout for this patron</div>
-[% ELSIF borrower and noissues and not checkout_infos %]
+[% ELSIF patron and noissues and not checkout_infos %]
   <div class="dialog alert">
     Cannot check out!
     [% IF charges_is_blocker %]
@@ -55,7 +55,7 @@
         </li>
     [% END %]
   </div>
-[% ELSIF borrower and not checkout_infos %]
+[% ELSIF patron and not checkout_infos %]
   <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/circ/circulation.pl">
     <fieldset id="circ_circulation_issue">
       <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
@@ -76,7 +76,7 @@
       </fieldset>
       <input type="hidden" name="op" value="show" />
       <fieldset class="action">
-        <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
+        <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
         <input type="hidden" name="branch" value="[% branch %]" />
         <input type="hidden" name="batch" value="1" />
         <input type="submit" value="Check out" class="button" />
@@ -84,12 +84,12 @@
     </fieldset>
   </form>
 
-[% ELSIF borrower %]
+[% ELSIF patron %]
   [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
-    <h3>Batch checkout confirmation [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
+    <h3>Batch checkout confirmation [% IF patron %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] [% END %]</h3>
     <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
   [% ELSE %]
-    <h3>Batch checkout information [% IF borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] |[% batch %]|[% END %]</h3>
+    <h3>Batch checkout information [% IF patron.borrowernumber %] for [% INCLUDE 'patron-title.inc' invert_name = 1 %] |[% batch %]|[% END %]</h3>
   [% END %]
     <table id="checkout_infos">
       <thead>
@@ -264,7 +264,7 @@
     [% IF confirmation_needed && CAN_user_circulate_force_checkout %]
         <fieldset>
             <legend>Please confirm checkout</legend>
-      <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+      <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
       <input type="hidden" name="issueconfirmed" value="1" />
       <input type="hidden" name="debt_confirmed" value="1" />
       <input type="hidden" name="branch" value="[% branch %]" />
@@ -281,7 +281,7 @@
 </div>
 </div>
 </div>
-[% IF borrower %]
+[% IF patron %]
     <div class="yui-b">
         [% INCLUDE 'circ-menu.inc' %]
     </div>
