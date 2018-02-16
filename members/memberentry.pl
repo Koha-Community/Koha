@@ -760,6 +760,7 @@ $template->param(
 $guarantorid = $borrower_data->{'guarantorid'} || $guarantorid;
 my $guarantor = $guarantorid ? Koha::Patrons->find( $guarantorid ) : undef;
 $template->param(
+  patron => $patron, # Used by address include templates now
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
   guarantor   => $guarantor,
