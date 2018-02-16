@@ -37,7 +37,7 @@ __PACKAGE__->table("plugin_data");
 
 =head2 plugin_value
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -48,7 +48,7 @@ __PACKAGE__->add_columns(
   "plugin_key",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "plugin_value",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -66,8 +66,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("plugin_class", "plugin_key");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/incxJUcobgYLR1a9g8cOQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g4MbnMszG6BGSG0vHxWQig
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

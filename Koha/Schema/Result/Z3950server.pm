@@ -60,7 +60,7 @@ __PACKAGE__->table("z3950servers");
 
 =head2 servername
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 0
 
 =head2 checked
@@ -94,7 +94,7 @@ __PACKAGE__->table("z3950servers");
 
 =head2 encoding
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 recordtype
@@ -112,12 +112,12 @@ __PACKAGE__->table("z3950servers");
 
 =head2 sru_fields
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 add_xslt
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =cut
@@ -136,7 +136,7 @@ __PACKAGE__->add_columns(
   "password",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "servername",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 0 },
   "checked",
   { data_type => "smallint", is_nullable => 1 },
   "rank",
@@ -153,7 +153,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "encoding",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "recordtype",
   {
     data_type => "enum",
@@ -164,9 +164,9 @@ __PACKAGE__->add_columns(
   "sru_options",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "sru_fields",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "add_xslt",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -182,8 +182,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-09-01 10:16:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q0y03nGYIt0eDIVui0UUdw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KK2y1pbgVh1hOVLAXL1e/w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

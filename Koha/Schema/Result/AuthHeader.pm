@@ -58,7 +58,7 @@ __PACKAGE__->table("auth_header");
 
 =head2 authtrees
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 marc
@@ -100,7 +100,7 @@ __PACKAGE__->add_columns(
   "origincode",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "authtrees",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "marc",
   { data_type => "blob", is_nullable => 1 },
   "linkid",
@@ -122,8 +122,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("authid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-04-29 15:07:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:H93XLwvtYfEGFBes5PJCyA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kHEdfMFYFtn3sQ20qsdFyg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

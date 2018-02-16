@@ -55,7 +55,7 @@ __PACKAGE__->table("edifact_messages");
 
 =head2 status
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 basketno
@@ -66,12 +66,12 @@ __PACKAGE__->table("edifact_messages");
 
 =head2 raw_msg
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 filename
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 deleted
@@ -94,13 +94,13 @@ __PACKAGE__->add_columns(
   "edi_acct",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "status",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "basketno",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "raw_msg",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "filename",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "deleted",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
@@ -195,8 +195,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-29 10:32:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R20sqhX9IbPaonx9HnRKeQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JHUEsQ+kXjGTRxxc2FFSjQ
 
 
 1;

@@ -60,7 +60,7 @@ __PACKAGE__->table("import_items");
 
 =head2 import_error
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =cut
@@ -84,7 +84,7 @@ __PACKAGE__->add_columns(
   "marcxml",
   { data_type => "longtext", is_nullable => 0 },
   "import_error",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -117,8 +117,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xJd76DD3iljc4uFm7iZeLQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GaUyqPnOhETQO8YuuKvfNQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

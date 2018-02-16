@@ -98,7 +98,7 @@ __PACKAGE__->table("import_records");
 
 =head2 import_error
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 encoding
@@ -173,7 +173,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "import_error",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "encoding",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 40 },
   "z3950random",
@@ -270,8 +270,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jhzXlqw5mA1lGsI9SZEv/Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yCx/kRJXjPIB5Uuv40TB7g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

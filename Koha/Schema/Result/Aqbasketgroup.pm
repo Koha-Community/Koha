@@ -54,7 +54,7 @@ __PACKAGE__->table("aqbasketgroups");
 
 =head2 freedeliveryplace
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 deliverycomment
@@ -83,7 +83,7 @@ __PACKAGE__->add_columns(
   "deliveryplace",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "freedeliveryplace",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "deliverycomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "billingplace",
@@ -135,8 +135,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tT40YZgK7gOfNG3DVFTHiA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9cEWAMwcFKPYPEG1CaaD3w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

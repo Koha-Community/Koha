@@ -114,7 +114,7 @@ __PACKAGE__->table("import_batches");
 
 =head2 comments
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =cut
@@ -202,7 +202,7 @@ __PACKAGE__->add_columns(
   "file_name",
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "comments",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -235,8 +235,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-30 03:46:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4UfJtTeAzzsuBycjsn2foQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:41giNJCRD9WXC4IGO/1D3A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

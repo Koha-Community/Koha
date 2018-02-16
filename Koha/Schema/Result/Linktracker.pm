@@ -46,7 +46,7 @@ __PACKAGE__->table("linktracker");
 
 =head2 url
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 timeclicked
@@ -67,7 +67,7 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_nullable => 1 },
   "url",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "timeclicked",
   {
     data_type => "datetime",
@@ -89,8 +89,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4Ox7j2FHewUd09dX9i+T6w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MSNByG1qh/5CpRYTcLv/gA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

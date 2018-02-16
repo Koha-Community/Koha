@@ -109,22 +109,22 @@ __PACKAGE__->table("aqorders");
 
 =head2 cancellationreason
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 order_internalnote
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 order_vendornote
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 purchaseordernumber
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 basketno
@@ -309,7 +309,7 @@ __PACKAGE__->table("aqorders");
 
 =head2 suppliers_report
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -344,13 +344,13 @@ __PACKAGE__->add_columns(
   "datecancellationprinted",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "cancellationreason",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "order_internalnote",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "order_vendornote",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "purchaseordernumber",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "basketno",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "timestamp",
@@ -422,7 +422,7 @@ __PACKAGE__->add_columns(
   "suppliers_reference_qualifier",
   { data_type => "varchar", is_nullable => 1, size => 3 },
   "suppliers_report",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -625,8 +625,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-28 15:05:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FyZsBWGJ8wsPkFdYUAetmg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:K0GnMGYtZUQ1WCesHKIxHw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

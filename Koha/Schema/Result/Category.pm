@@ -32,7 +32,7 @@ __PACKAGE__->table("categories");
 
 =head2 description
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 enrolmentperiod
@@ -129,7 +129,7 @@ __PACKAGE__->add_columns(
   "categorycode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "description",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "enrolmentperiod",
   { data_type => "smallint", is_nullable => 1 },
   "enrolmentperioddate",
@@ -267,8 +267,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-08 13:37:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LH3DdDDYXaGsNsILAUZzng
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TGAiiFICSjlKNvnfa87kFQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

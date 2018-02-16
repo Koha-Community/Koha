@@ -31,12 +31,12 @@ __PACKAGE__->table("club_templates");
 
 =head2 name
 
-  data_type: 'tinytext'
+  data_type: 'text'
   is_nullable: 0
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 is_enrollable_from_opac
@@ -83,9 +83,9 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
-  { data_type => "tinytext", is_nullable => 0 },
+  { data_type => "text", is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "is_enrollable_from_opac",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "is_email_required",
@@ -189,7 +189,7 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:29ssLVCIoLxBmUi8E5gHqg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1UuejI9kkTb9eeNKvSLAQQ
 
 1;

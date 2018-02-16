@@ -31,7 +31,7 @@ __PACKAGE__->table("marc_modification_templates");
 
 =head2 name
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =cut
@@ -40,7 +40,7 @@ __PACKAGE__->add_columns(
   "template_id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "name",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -73,8 +73,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-31 22:03:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:igqidvfP0AgV5RRBa1huew
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bu3u1X0RBx4c35kkph05/A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

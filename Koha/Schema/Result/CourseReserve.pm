@@ -43,12 +43,12 @@ __PACKAGE__->table("course_reserves");
 
 =head2 staff_note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 public_note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 timestamp
@@ -68,9 +68,9 @@ __PACKAGE__->add_columns(
   "ci_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "staff_note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "public_note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -141,8 +141,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-02 09:46:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4RbSgGvSM5wH1jpE+deLlA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8SDdUrbxKuAwp6rgn85RmA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

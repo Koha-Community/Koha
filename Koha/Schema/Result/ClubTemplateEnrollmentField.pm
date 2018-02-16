@@ -37,12 +37,12 @@ __PACKAGE__->table("club_template_enrollment_fields");
 
 =head2 name
 
-  data_type: 'tinytext'
+  data_type: 'text'
   is_nullable: 0
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 authorised_value_category
@@ -59,9 +59,9 @@ __PACKAGE__->add_columns(
   "club_template_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
-  { data_type => "tinytext", is_nullable => 0 },
+  { data_type => "text", is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "authorised_value_category",
   { data_type => "varchar", is_nullable => 1, size => 16 },
 );
@@ -111,8 +111,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-01-12 09:56:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KGo2mEIAkTVYSPsOLoaBCg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lN5Shnqo+va0tCdiM/iwNg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

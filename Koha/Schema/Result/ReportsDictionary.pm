@@ -37,7 +37,7 @@ __PACKAGE__->table("reports_dictionary");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 date_created
@@ -54,7 +54,7 @@ __PACKAGE__->table("reports_dictionary");
 
 =head2 saved_sql
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 report_area
@@ -71,7 +71,7 @@ __PACKAGE__->add_columns(
   "name",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "date_created",
   {
     data_type => "datetime",
@@ -85,7 +85,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "saved_sql",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "report_area",
   { data_type => "varchar", is_nullable => 1, size => 6 },
 );
@@ -103,8 +103,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Cnru3/NTfEScxeVggDa5RA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0akgYM7kqiLxz95xUCdrdQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

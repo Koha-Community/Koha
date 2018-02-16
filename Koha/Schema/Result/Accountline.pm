@@ -67,12 +67,12 @@ __PACKAGE__->table("accountlines");
 
 =head2 description
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 dispute
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 accounttype
@@ -102,7 +102,7 @@ __PACKAGE__->table("accountlines");
 
 =head2 note
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 manager_id
@@ -133,9 +133,9 @@ __PACKAGE__->add_columns(
   "amount",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "description",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "dispute",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "accounttype",
   { data_type => "varchar", is_nullable => 1, size => 5 },
   "amountoutstanding",
@@ -150,7 +150,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "note",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
   { data_type => "integer", is_nullable => 1 },
 );
@@ -235,8 +235,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-23 12:27:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:S70xVMIJONd30d0kDrgF2A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Nqx+Byr+p91Kbsuncau0Ng
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -110,7 +110,7 @@ __PACKAGE__->table("creator_layouts");
 
 =head2 layout_xml
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 creator
@@ -165,7 +165,7 @@ __PACKAGE__->add_columns(
     size => 210,
   },
   "layout_xml",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "creator",
   {
     data_type => "char",
@@ -188,8 +188,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("layout_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-05-16 17:38:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BDNkfgqz53LCR2Ij7cVCow
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GdBVaqH0rfn1Jy/t57ieNA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

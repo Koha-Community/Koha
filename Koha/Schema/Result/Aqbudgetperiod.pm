@@ -49,7 +49,7 @@ __PACKAGE__->table("aqbudgetperiods");
 
 =head2 budget_period_description
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 budget_period_total
@@ -87,7 +87,7 @@ __PACKAGE__->add_columns(
   "budget_period_active",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "budget_period_description",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "budget_period_total",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "budget_period_locked",
@@ -111,8 +111,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("budget_period_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SaTTCao0N80iDL8pgf5k1A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M13qdhmXgKilais2IFkXFw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

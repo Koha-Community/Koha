@@ -31,37 +31,37 @@ __PACKAGE__->table("housebound_profile");
 
 =head2 day
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 frequency
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 fav_itemtypes
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 fav_subjects
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 fav_authors
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 referral
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 notes
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -70,19 +70,19 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "day",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "frequency",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "fav_itemtypes",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "fav_subjects",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "fav_authors",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "referral",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "notes",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -130,8 +130,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-25 13:21:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kY+BhDo9g/YCShkmFUVDYA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ESpGqu3oX9qad3elnDvOiw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

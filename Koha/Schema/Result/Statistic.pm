@@ -55,7 +55,7 @@ __PACKAGE__->table("statistics");
 
 =head2 other
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 usercode
@@ -115,7 +115,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "other",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "usercode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "itemnumber",
@@ -133,8 +133,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-08 13:32:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9xOR9IMMUNysXOlsHnRfHA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RI3X/GXlBlUEgG0oxToIIA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

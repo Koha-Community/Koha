@@ -44,12 +44,12 @@ __PACKAGE__->table("action_logs");
 
 =head2 module
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 action
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 object
@@ -59,7 +59,7 @@ __PACKAGE__->table("action_logs");
 
 =head2 info
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 interface
@@ -83,13 +83,13 @@ __PACKAGE__->add_columns(
   "user",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "module",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "action",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "object",
   { data_type => "integer", is_nullable => 1 },
   "info",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "interface",
   { data_type => "varchar", is_nullable => 1, size => 30 },
 );
@@ -107,8 +107,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("action_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-06-25 13:10:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wmjd736WUdPfIn581rXTzw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VVXBchLYkj+S+lLhl7bKgw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -46,7 +46,7 @@ __PACKAGE__->table("opac_news");
 
 =head2 content
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 lang
@@ -95,7 +95,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 250 },
   "content",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "lang",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 25 },
   "timestamp",
@@ -168,8 +168,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-21 12:39:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wfBMbKlWykwfNNNLGkl4BA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gApTRM/dF6uZSMYyvkt4OQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

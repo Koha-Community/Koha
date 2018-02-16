@@ -98,7 +98,7 @@ __PACKAGE__->table("subscription");
 
 =head2 notes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 status
@@ -155,7 +155,7 @@ __PACKAGE__->table("subscription");
 
 =head2 irregularity
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 skip_serialseq
@@ -184,7 +184,7 @@ __PACKAGE__->table("subscription");
 
 =head2 distributedto
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 internalnotes
@@ -194,7 +194,7 @@ __PACKAGE__->table("subscription");
 
 =head2 callnumber
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 location
@@ -299,7 +299,7 @@ __PACKAGE__->add_columns(
   "countissuesperunit",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
   "notes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "status",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "lastvalue1",
@@ -319,7 +319,7 @@ __PACKAGE__->add_columns(
   "manualhistory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "irregularity",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "skip_serialseq",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "letter",
@@ -329,11 +329,11 @@ __PACKAGE__->add_columns(
   "locale",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "distributedto",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "internalnotes",
   { data_type => "longtext", is_nullable => 1 },
   "callnumber",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "location",
   { data_type => "varchar", default_value => "", is_nullable => 1, size => 80 },
   "branchcode",
@@ -445,8 +445,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-09-12 09:39:32
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jAZGa1b6DkY8Sr12reD4nw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZRLfM/4h8VMLTgW7LkUYYA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

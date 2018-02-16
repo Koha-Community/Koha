@@ -37,17 +37,17 @@ __PACKAGE__->table("message_queue");
 
 =head2 subject
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 content
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 metadata
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 letter_code
@@ -79,17 +79,17 @@ __PACKAGE__->table("message_queue");
 
 =head2 to_address
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 from_address
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 content_type
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -100,11 +100,11 @@ __PACKAGE__->add_columns(
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "subject",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "content",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "metadata",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "letter_code",
   { data_type => "varchar", is_nullable => 1, size => 64 },
   "message_transport_type",
@@ -124,11 +124,11 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "to_address",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "from_address",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "content_type",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -181,8 +181,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-06-22 16:37:20
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nQcmtLCbGEeLFLFP4jwy2g
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9u39S/GLtZwnZGp+xcZOBA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

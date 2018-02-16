@@ -66,7 +66,7 @@ __PACKAGE__->table("letter");
 
 =head2 content
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 message_transport_type
@@ -100,7 +100,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 200 },
   "content",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "message_transport_type",
   {
     data_type => "varchar",
@@ -156,8 +156,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-09 21:01:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WZxxDvP7M/Ns/e9cFseeNA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fOuu1Fj8Uo3114QKS2qLkQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

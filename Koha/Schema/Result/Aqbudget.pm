@@ -75,7 +75,7 @@ __PACKAGE__->table("aqbudgets");
 
 =head2 budget_notes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 timestamp
@@ -148,7 +148,7 @@ __PACKAGE__->add_columns(
     size => [28, 6],
   },
   "budget_notes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -283,8 +283,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2015-03-04 10:26:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:E4J/D0+2j0/8JZd0YRnoeA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9MY8aD6YBjuLy8c7tDnZeg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

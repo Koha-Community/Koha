@@ -38,22 +38,22 @@ __PACKAGE__->table("biblio");
 
 =head2 author
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 title
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 unititle
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 notes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 serial
@@ -63,7 +63,7 @@ __PACKAGE__->table("biblio");
 
 =head2 seriestitle
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 copyrightdate
@@ -86,7 +86,7 @@ __PACKAGE__->table("biblio");
 
 =head2 abstract
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =cut
@@ -97,17 +97,17 @@ __PACKAGE__->add_columns(
   "frameworkcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 4 },
   "author",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "title",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "unititle",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "notes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "serial",
   { data_type => "tinyint", is_nullable => 1 },
   "seriestitle",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "copyrightdate",
   { data_type => "smallint", is_nullable => 1 },
   "timestamp",
@@ -120,7 +120,7 @@ __PACKAGE__->add_columns(
   "datecreated",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "abstract",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -348,7 +348,7 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jis7Sm5+9lVKav+o18JLtA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bUv00JjY09Hj2Zj4klqyxA
 
 1;

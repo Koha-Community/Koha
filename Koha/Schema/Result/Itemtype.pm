@@ -32,7 +32,7 @@ __PACKAGE__->table("itemtypes");
 
 =head2 description
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 rentalcharge
@@ -66,7 +66,7 @@ __PACKAGE__->table("itemtypes");
 
 =head2 summary
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 checkinmsg
@@ -106,7 +106,7 @@ __PACKAGE__->add_columns(
   "itemtype",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "description",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "rentalcharge",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "defaultreplacecost",
@@ -118,7 +118,7 @@ __PACKAGE__->add_columns(
   "imageurl",
   { data_type => "varchar", is_nullable => 1, size => 200 },
   "summary",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "checkinmsg",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "checkinmsgtype",
@@ -211,8 +211,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-10 14:27:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vERtWCf17tayLdzgnXpQcA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cNP7/nYGdVeKZ8L7sp1+FQ
 
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;

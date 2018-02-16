@@ -48,7 +48,7 @@ __PACKAGE__->table("messages");
 
 =head2 message
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 message_date
@@ -76,7 +76,7 @@ __PACKAGE__->add_columns(
   "message_type",
   { data_type => "varchar", is_nullable => 0, size => 1 },
   "message",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "message_date",
   {
     data_type => "timestamp",
@@ -123,8 +123,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-31 10:39:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lmkl/u8Lr1cQumfZvn5D4A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cNf9ogl9bN+0BC63dS1rmA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

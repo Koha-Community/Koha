@@ -84,12 +84,12 @@ __PACKAGE__->table("marc_modification_template_actions");
 
 =head2 to_regex_search
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 to_regex_replace
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 to_regex_modifiers
@@ -125,7 +125,7 @@ __PACKAGE__->table("marc_modification_template_actions");
 
 =head2 conditional_value
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 conditional_regex
@@ -136,7 +136,7 @@ __PACKAGE__->table("marc_modification_template_actions");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -175,9 +175,9 @@ __PACKAGE__->add_columns(
   "to_subfield",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "to_regex_search",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "to_regex_replace",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "to_regex_modifiers",
   { data_type => "varchar", default_value => "", is_nullable => 1, size => 8 },
   "conditional",
@@ -197,11 +197,11 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "conditional_value",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "conditional_regex",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -234,8 +234,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-11-05 10:39:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mIif3RU6QvUc0xJepUQZjw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uRkJ8yckBiNtsYgUt8BpEw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

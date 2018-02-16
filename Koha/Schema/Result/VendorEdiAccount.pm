@@ -31,7 +31,7 @@ __PACKAGE__->table("vendor_edi_accounts");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 host
@@ -66,12 +66,12 @@ __PACKAGE__->table("vendor_edi_accounts");
 
 =head2 download_directory
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 upload_directory
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 san
@@ -143,7 +143,7 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "host",
   { data_type => "varchar", is_nullable => 1, size => 40 },
   "username",
@@ -155,9 +155,9 @@ __PACKAGE__->add_columns(
   "vendor_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "download_directory",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "upload_directory",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "san",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "id_code_qualifier",
@@ -250,8 +250,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-01 21:58:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rsSTteR7nV22B/kxr33BBA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TtWuTpP4Ac6/+T6OPMSsRA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

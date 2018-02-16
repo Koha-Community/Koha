@@ -49,7 +49,7 @@ __PACKAGE__->table("aqcontract");
 
 =head2 contractdescription
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 booksellerid
@@ -70,7 +70,7 @@ __PACKAGE__->add_columns(
   "contractname",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "contractdescription",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "booksellerid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -120,8 +120,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PF3RUnj5urQYDFzxsVxOcw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ar69aHSxYQohZDQ+GtIIqA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

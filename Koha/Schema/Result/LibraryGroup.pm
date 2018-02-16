@@ -50,7 +50,7 @@ __PACKAGE__->table("library_groups");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 ft_hide_patron_info
@@ -96,7 +96,7 @@ __PACKAGE__->add_columns(
   "title",
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "ft_hide_patron_info",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "ft_search_groups_opac",
@@ -202,8 +202,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-09 16:35:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Hy7zXPiHGs832yvEBIO6Uw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8hvTh2lWoG/MpfSdq4kx5Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -55,7 +55,7 @@ __PACKAGE__->table("deleteditems");
 
 =head2 booksellerid
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 homebranch
@@ -169,12 +169,12 @@ __PACKAGE__->table("deleteditems");
 
 =head2 itemnotes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 itemnotes_nonpublic
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 holdingbranch
@@ -185,7 +185,7 @@ __PACKAGE__->table("deleteditems");
 
 =head2 paidfor
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 timestamp
@@ -233,7 +233,7 @@ __PACKAGE__->table("deleteditems");
 
 =head2 materials
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 uri
@@ -255,7 +255,7 @@ __PACKAGE__->table("deleteditems");
 
 =head2 enumchron
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 copynumber
@@ -290,7 +290,7 @@ __PACKAGE__->add_columns(
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "booksellerid",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "homebranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "price",
@@ -338,13 +338,13 @@ __PACKAGE__->add_columns(
   "restricted",
   { data_type => "tinyint", is_nullable => 1 },
   "itemnotes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "itemnotes_nonpublic",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "paidfor",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -365,7 +365,7 @@ __PACKAGE__->add_columns(
   "ccode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "materials",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "uri",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "itype",
@@ -373,7 +373,7 @@ __PACKAGE__->add_columns(
   "more_subfields_xml",
   { data_type => "longtext", is_nullable => 1 },
   "enumchron",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "copynumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
@@ -395,8 +395,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-31 17:10:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:npNexLgE7AxLp6iVy1FxgQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RaHchgIC64wq0q4MXqEITA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

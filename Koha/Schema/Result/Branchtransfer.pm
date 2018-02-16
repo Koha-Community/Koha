@@ -66,7 +66,7 @@ __PACKAGE__->table("branchtransfers");
 
 =head2 comments
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =cut
@@ -110,7 +110,7 @@ __PACKAGE__->add_columns(
     size => 10,
   },
   "comments",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -173,8 +173,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 12:22:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8cnatLrGkNwyTo35PCOm2A
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uPQzv0lMxfnu75SzS6UpVQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

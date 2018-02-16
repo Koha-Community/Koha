@@ -84,7 +84,7 @@ __PACKAGE__->table("suggestions");
 
 =head2 note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 author
@@ -148,12 +148,12 @@ __PACKAGE__->table("suggestions");
 
 =head2 reason
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 patronreason
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 budgetid
@@ -170,7 +170,7 @@ __PACKAGE__->table("suggestions");
 
 =head2 collectiontitle
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 itemtype
@@ -232,7 +232,7 @@ __PACKAGE__->add_columns(
     size => 10,
   },
   "note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "author",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "title",
@@ -259,15 +259,15 @@ __PACKAGE__->add_columns(
   "biblionumber",
   { data_type => "integer", is_nullable => 1 },
   "reason",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "patronreason",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "budgetid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "collectiontitle",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "quantity",
@@ -315,8 +315,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FlZsyhm/ugCqtMJ+HoYOkw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dOt4/U4rLcXq+aACRwcpYw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -37,27 +37,27 @@ __PACKAGE__->table("borrowers");
 
 =head2 surname
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 firstname
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 title
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 othernames
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 initials
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 streetnumber
@@ -74,22 +74,22 @@ __PACKAGE__->table("borrowers");
 
 =head2 address
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 address2
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 city
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 state
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 zipcode
@@ -100,17 +100,17 @@ __PACKAGE__->table("borrowers");
 
 =head2 country
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 email
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 phone
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 mobile
@@ -121,17 +121,17 @@ __PACKAGE__->table("borrowers");
 
 =head2 fax
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 emailpro
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 phonepro
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 B_streetnumber
@@ -158,19 +158,19 @@ __PACKAGE__->table("borrowers");
 =head2 B_address2
 
   accessor: 'b_address2'
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 B_city
 
   accessor: 'b_city'
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 B_state
 
   accessor: 'b_state'
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 B_zipcode
@@ -183,19 +183,19 @@ __PACKAGE__->table("borrowers");
 =head2 B_country
 
   accessor: 'b_country'
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 B_email
 
   accessor: 'b_email'
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 B_phone
 
   accessor: 'b_phone'
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 dateofbirth
@@ -262,17 +262,17 @@ __PACKAGE__->table("borrowers");
 
 =head2 contactname
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 contactfirstname
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 contacttitle
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 guarantorid
@@ -282,7 +282,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 borrowernotes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 relationship
@@ -316,7 +316,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 opacnote
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 contactnote
@@ -369,7 +369,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactstate
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 altcontactzipcode
@@ -380,7 +380,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 altcontactcountry
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 altcontactphone
@@ -448,7 +448,7 @@ __PACKAGE__->table("borrowers");
 
 =head2 overdrive_auth_token
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -459,43 +459,43 @@ __PACKAGE__->add_columns(
   "cardnumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "surname",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "firstname",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "title",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "othernames",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "initials",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "streetnumber",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "streettype",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "address",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "address2",
-  { data_type => "text", is_nullable => 1 },
-  "city",
   { data_type => "mediumtext", is_nullable => 1 },
+  "city",
+  { data_type => "longtext", is_nullable => 1 },
   "state",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "zipcode",
   { data_type => "varchar", is_nullable => 1, size => 25 },
   "country",
-  { data_type => "text", is_nullable => 1 },
-  "email",
   { data_type => "mediumtext", is_nullable => 1 },
+  "email",
+  { data_type => "longtext", is_nullable => 1 },
   "phone",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "mobile",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "fax",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "emailpro",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "phonepro",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "B_streetnumber",
   {
     accessor => "b_streetnumber",
@@ -518,11 +518,11 @@ __PACKAGE__->add_columns(
     size => 100,
   },
   "B_address2",
-  { accessor => "b_address2", data_type => "text", is_nullable => 1 },
+  { accessor => "b_address2", data_type => "mediumtext", is_nullable => 1 },
   "B_city",
-  { accessor => "b_city", data_type => "mediumtext", is_nullable => 1 },
+  { accessor => "b_city", data_type => "longtext", is_nullable => 1 },
   "B_state",
-  { accessor => "b_state", data_type => "text", is_nullable => 1 },
+  { accessor => "b_state", data_type => "mediumtext", is_nullable => 1 },
   "B_zipcode",
   {
     accessor => "b_zipcode",
@@ -531,11 +531,11 @@ __PACKAGE__->add_columns(
     size => 25,
   },
   "B_country",
-  { accessor => "b_country", data_type => "text", is_nullable => 1 },
+  { accessor => "b_country", data_type => "mediumtext", is_nullable => 1 },
   "B_email",
-  { accessor => "b_email", data_type => "text", is_nullable => 1 },
+  { accessor => "b_email", data_type => "mediumtext", is_nullable => 1 },
   "B_phone",
-  { accessor => "b_phone", data_type => "mediumtext", is_nullable => 1 },
+  { accessor => "b_phone", data_type => "longtext", is_nullable => 1 },
   "dateofbirth",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "branchcode",
@@ -569,15 +569,15 @@ __PACKAGE__->add_columns(
   "debarredcomment",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "contactname",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "contactfirstname",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "contacttitle",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "guarantorid",
   { data_type => "integer", is_nullable => 1 },
   "borrowernotes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "relationship",
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "sex",
@@ -589,7 +589,7 @@ __PACKAGE__->add_columns(
   "userid",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "opacnote",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "contactnote",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "sort1",
@@ -607,11 +607,11 @@ __PACKAGE__->add_columns(
   "altcontactaddress3",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "altcontactstate",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactzipcode",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "altcontactcountry",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "altcontactphone",
   { data_type => "varchar", is_nullable => 1, size => 50 },
   "smsalertnumber",
@@ -652,7 +652,7 @@ __PACKAGE__->add_columns(
   "login_attempts",
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "overdrive_auth_token",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -1386,8 +1386,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:08:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pxhUnV9IMvVGml9HFheMLw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wM40W+toV8ca5LFwinkHxA
 
 __PACKAGE__->belongs_to(
     "guarantor",

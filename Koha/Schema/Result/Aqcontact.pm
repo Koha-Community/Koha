@@ -67,7 +67,7 @@ __PACKAGE__->table("aqcontacts");
 
 =head2 notes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 orderacquisition
@@ -124,7 +124,7 @@ __PACKAGE__->add_columns(
   "email",
   { data_type => "varchar", is_nullable => 1, size => 100 },
   "notes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "orderacquisition",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "claimacquisition",
@@ -169,8 +169,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-14 07:14:13
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9sJ0ALCjIsvdUcqgpej1JA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R2x8Z9Db2oDULEODgLuw8Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

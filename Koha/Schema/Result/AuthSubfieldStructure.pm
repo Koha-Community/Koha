@@ -127,7 +127,7 @@ __PACKAGE__->table("auth_subfield_structure");
 
 =head2 defaultvalue
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -172,7 +172,7 @@ __PACKAGE__->add_columns(
   "frameworkcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
   "defaultvalue",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -209,8 +209,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-05-18 11:22:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ymm26DwMwBskOjIj1qhWFA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5Prv/DCQk32mTQaqtYhUuA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

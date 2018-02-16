@@ -37,12 +37,12 @@ __PACKAGE__->table("clubs");
 
 =head2 name
 
-  data_type: 'tinytext'
+  data_type: 'text'
   is_nullable: 0
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 date_start
@@ -85,9 +85,9 @@ __PACKAGE__->add_columns(
   "club_template_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "name",
-  { data_type => "tinytext", is_nullable => 0 },
+  { data_type => "text", is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "date_start",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "date_end",
@@ -189,8 +189,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 18:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RKvHFP2y+c5hjpjzKsEQXA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6EB6FURHN+brOhDoPZVeGQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

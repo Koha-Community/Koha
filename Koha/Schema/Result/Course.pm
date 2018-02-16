@@ -61,12 +61,12 @@ __PACKAGE__->table("courses");
 
 =head2 staff_note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 public_note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 students_count
@@ -105,9 +105,9 @@ __PACKAGE__->add_columns(
   "term",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "staff_note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "public_note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "students_count",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "enabled",
@@ -181,8 +181,8 @@ Composing rels: L</course_instructors> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "course_instructors", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:crKCFQ80qo2p885ebiBfnw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o0EBOuJCHxH5IG/PgsJfxg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

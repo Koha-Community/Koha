@@ -49,7 +49,7 @@ __PACKAGE__->table("localization");
 
 =head2 translation
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -64,7 +64,7 @@ __PACKAGE__->add_columns(
   "lang",
   { data_type => "varchar", is_nullable => 0, size => 25 },
   "translation",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -98,8 +98,8 @@ __PACKAGE__->set_primary_key("localization_id");
 __PACKAGE__->add_unique_constraint("entity_code_lang", ["entity", "code", "lang"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-10-27 12:51:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bYEuhKEE13txmjNiRHk8tA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4642LmshpGd3JW7YxM5pIA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

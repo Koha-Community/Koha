@@ -31,7 +31,7 @@ __PACKAGE__->table("subscription_frequencies");
 
 =head2 description
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 displayorder
@@ -63,7 +63,7 @@ __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "description",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "displayorder",
   { data_type => "integer", is_nullable => 1 },
   "unit",
@@ -108,8 +108,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-30 02:42:01
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kOm4+reRTMxUBfVJl4UPig
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AMA/p9t1S6NmZTAHThLROQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

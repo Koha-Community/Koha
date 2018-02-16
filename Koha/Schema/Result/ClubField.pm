@@ -43,7 +43,7 @@ __PACKAGE__->table("club_fields");
 
 =head2 value
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =cut
@@ -56,7 +56,7 @@ __PACKAGE__->add_columns(
   "club_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "value",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -104,8 +104,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07040 @ 2015-01-12 09:56:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m4GLLIVIHgRpRhCGLh12DQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2ySSLrl8GXRXJ38AWg6kng
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -37,12 +37,12 @@ __PACKAGE__->table("uploaded_files");
 
 =head2 filename
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 dir
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 filesize
@@ -59,7 +59,7 @@ __PACKAGE__->table("uploaded_files");
 
 =head2 uploadcategorycode
 
-  data_type: 'tinytext'
+  data_type: 'text'
   is_nullable: 1
 
 =head2 owner
@@ -85,9 +85,9 @@ __PACKAGE__->add_columns(
   "hashvalue",
   { data_type => "char", is_nullable => 0, size => 40 },
   "filename",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "dir",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "filesize",
   { data_type => "integer", is_nullable => 1 },
   "dtcreated",
@@ -98,7 +98,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "uploadcategorycode",
-  { data_type => "tinytext", is_nullable => 1 },
+  { data_type => "text", is_nullable => 1 },
   "owner",
   { data_type => "integer", is_nullable => 1 },
   "public",
@@ -120,8 +120,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-09-25 15:20:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Cq/HSuTaBxZH2qSGEddoaQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kJUbIULQMBo3t51HvWC8cg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

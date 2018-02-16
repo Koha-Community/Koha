@@ -50,7 +50,7 @@ __PACKAGE__->table("borrower_debarments");
 
 =head2 comment
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 manager_id
@@ -88,7 +88,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "comment",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
   { data_type => "integer", is_nullable => 1 },
   "created",
@@ -136,8 +136,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2014-01-07 17:25:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4KkoPNcgZoANIScMWUyS/w
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:J9J1ReRLqhVasOQXvde2Uw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

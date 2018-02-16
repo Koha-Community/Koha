@@ -103,7 +103,7 @@ __PACKAGE__->table("issues");
 
 =head2 note
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 notedate
@@ -163,7 +163,7 @@ __PACKAGE__->add_columns(
   "onsite_checkout",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "note",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "notedate",
   {
     data_type => "datetime",
@@ -241,8 +241,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-03 04:12:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ozRQZiF1LlOJy4KI53OpFw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:skFfce3y1eEx3rSdFaLmPg
 
 __PACKAGE__->belongs_to(
     "borrower",

@@ -48,7 +48,7 @@ __PACKAGE__->table("saved_sql");
 
 =head2 savedsql
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 last_run
@@ -72,7 +72,7 @@ __PACKAGE__->table("saved_sql");
 
 =head2 notes
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 cache_expiry
@@ -125,7 +125,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "savedsql",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "last_run",
   {
     data_type => "datetime",
@@ -137,7 +137,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "notes",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "cache_expiry",
   { data_type => "integer", default_value => 300, is_nullable => 0 },
   "public",
@@ -163,8 +163,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-10-24 09:58:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:eGWRRzpe1+EBialePAIhMQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UCqSsNMGdq+S7MwZulmwA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

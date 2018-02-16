@@ -38,7 +38,7 @@ __PACKAGE__->table("illrequestattributes");
 
 =head2 value
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =cut
@@ -54,7 +54,7 @@ __PACKAGE__->add_columns(
   "type",
   { data_type => "varchar", is_nullable => 0, size => 200 },
   "value",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -89,8 +89,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-11-09 11:42:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:COXHn3Q7RglF6Cl7kKHqLA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X9SxZP1PGXTwDJ6lUkx8Fg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

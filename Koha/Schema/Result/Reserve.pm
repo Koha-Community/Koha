@@ -76,7 +76,7 @@ __PACKAGE__->table("reserves");
 
 =head2 reservenotes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 priority
@@ -171,7 +171,7 @@ __PACKAGE__->add_columns(
   "cancellationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "reservenotes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "priority",
   { data_type => "smallint", is_nullable => 1 },
   "found",
@@ -313,8 +313,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-13 14:08:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IP2cVX4M3BKM4zZvpyGHPQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2GCET9quFpUvzuN7MUWZNw
 
 __PACKAGE__->belongs_to(
   "item",

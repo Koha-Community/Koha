@@ -48,7 +48,7 @@ __PACKAGE__->table("search_history");
 
 =head2 query_cgi
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 0
 
 =head2 type
@@ -82,7 +82,7 @@ __PACKAGE__->add_columns(
   "query_desc",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "query_cgi",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "mediumtext", is_nullable => 0 },
   "type",
   {
     data_type => "varchar",
@@ -114,8 +114,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 14:59:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IDEfmaznxc6sCi0r/8ibhg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d+Qf8sL7wLldvw2qPLoBgQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -31,7 +31,7 @@ __PACKAGE__->table("aqinvoices");
 
 =head2 invoicenumber
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 0
 
 =head2 booksellerid
@@ -82,7 +82,7 @@ __PACKAGE__->add_columns(
   "invoiceid",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "invoicenumber",
-  { data_type => "mediumtext", is_nullable => 0 },
+  { data_type => "longtext", is_nullable => 0 },
   "booksellerid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "shipmentdate",
@@ -184,8 +184,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2014-09-18 16:21:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FPZXlNt8dkjhgt2Rtc+krQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SAUxWSdpMJK4atxhfgCAGg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

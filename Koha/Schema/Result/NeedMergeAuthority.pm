@@ -41,7 +41,7 @@ __PACKAGE__->table("need_merge_authorities");
 
 =head2 reportxml
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 timestamp
@@ -67,7 +67,7 @@ __PACKAGE__->add_columns(
   "authid_new",
   { data_type => "bigint", is_nullable => 1 },
   "reportxml",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
@@ -92,8 +92,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-12 19:42:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BW1u1si2H88+GS/Ok8fuGA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7LzwIYvExKvNgr8/HDZlsg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
