@@ -23,6 +23,14 @@ use Koha::Cities;
 
 use Try::Tiny;
 
+=head1 API
+
+=head2 Class Methods
+
+=head3 list
+
+=cut
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
@@ -44,6 +52,10 @@ sub list {
 
 }
 
+=head3 get
+
+=cut
+
 sub get {
     my $c = shift->openapi->valid_input or return;
 
@@ -55,6 +67,10 @@ sub get {
 
     return $c->render( status => 200, openapi => _to_api($city->TO_JSON) );
 }
+
+=head3 add
+
+=cut
 
 sub add {
     my $c = shift->openapi->valid_input or return;
@@ -79,6 +95,10 @@ sub add {
         }
     };
 }
+
+=head3 update
+
+=cut
 
 sub update {
     my $c = shift->openapi->valid_input or return;
@@ -107,6 +127,10 @@ sub update {
         }
     };
 }
+
+=head3 delete
+
+=cut
 
 sub delete {
     my $c = shift->openapi->valid_input or return;
