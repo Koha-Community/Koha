@@ -3,7 +3,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF patron %][% patron.category.description %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
+<title>Koha &rsaquo; Patrons &rsaquo; [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron [% IF (firstname) %][% firstname %] [% END %][% IF (surname) %][% surname %] [% END %]([%IF categoryname %][% categoryname %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
