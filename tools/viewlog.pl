@@ -70,7 +70,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 if ( $src eq 'circ' ) {
 
     # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
-    use C4::Members;
     use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $patron = Koha::Patrons->find( $borrowernumber );
@@ -78,23 +77,17 @@ if ( $src eq 'circ' ) {
         print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
         exit;
     }
-    $template->param( picture => 1 ) if $patron->image;
-    my $data = $patron->unblessed;
-
     if ( C4::Context->preference('ExtendedPatronAttributes') ) {
-        my $attributes = GetBorrowerAttributes( $data->{'borrowernumber'} );
+        my $attributes = GetBorrowerAttributes( $borrowernumber );
         $template->param(
             ExtendedPatronAttributes => 1,
             extendedattributes       => $attributes
         );
     }
 
-    $template->param(%$data);
-
     $template->param(
-        menu           => 1,
-        borrowernumber => $borrowernumber,
-        categoryname   => $patron->category->description,
+        patron      => $patron,
+        circulation => 1,
     );
 }
 
