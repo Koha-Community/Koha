@@ -11,7 +11,17 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; [% IF step == 1 %]Clean Patron Records[% ELSE %]<a href="/cgi-bin/koha/tools/cleanborrowers.pl">Clean patron records</a> &rsaquo; [% END %][% IF step == 2 %]Confirm[% END %][% IF step == 3 %]Finished[% END %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+    [% IF step == 1 %]
+        Batch patron deletion/anonymization
+    [% ELSE %]
+        <a href="/cgi-bin/koha/tools/cleanborrowers.pl">Batch patron deletion/anonymization</a> &rsaquo;
+    [% END %]
+    [% IF step == 2 %] Confirm [% END %]
+    [% IF step == 3 %] Finished [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
 
