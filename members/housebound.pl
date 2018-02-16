@@ -62,7 +62,7 @@ my $patron = Koha::Patrons->find($borrowernumber);
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Get supporting cast
-my ( $branch, $houseboundprofile, $visit );
+my ( $houseboundprofile, $visit );
 if ( $patron ) { # FIXME This test is not needed - output_and_exit_if_error handles it
     $houseboundprofile = $patron->housebound_profile;
 }
