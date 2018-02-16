@@ -26,10 +26,10 @@ CREATE TABLE `auth_header` (
   `datecreated` date default NULL,
   `modification_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `origincode` varchar(20) default NULL,
-  `authtrees` mediumtext,
+  `authtrees` LONGTEXT,
   `marc` blob,
   `linkid` bigint(20) default NULL,
-  `marcxml` longtext NOT NULL,
+  `marcxml` LONGTEXT NOT NULL,
   PRIMARY KEY  (`authid`),
   KEY `origincode` (`origincode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -43,7 +43,7 @@ CREATE TABLE `auth_types` (
   `authtypecode` varchar(10) NOT NULL default '',
   `authtypetext` varchar(255) NOT NULL default '',
   `auth_tag_to_report` varchar(3) NOT NULL default '',
-  `summary` mediumtext NOT NULL,
+  `summary` LONGTEXT NOT NULL,
   PRIMARY KEY  (`authtypecode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -69,7 +69,7 @@ CREATE TABLE `auth_subfield_structure` (
   `linkid` tinyint(1) NOT NULL default 0,
   `kohafield` varchar(45) NULL default '',
   `frameworkcode` varchar(10) NOT NULL default '',
-  `defaultvalue` TEXT,
+  `defaultvalue` MEDIUMTEXT,
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`),
   CONSTRAINT `auth_subfield_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -130,16 +130,16 @@ DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foreign key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
+  `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial
-  `seriestitle` mediumtext,
+  `seriestitle` LONGTEXT,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
+  `abstract` LONGTEXT, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -163,29 +163,29 @@ DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` ( -- information related to bibliographic records in Koha
   `biblioitemnumber` int(11) NOT NULL auto_increment, -- primary key, unique identifier assigned by Koha
   `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
-  `volume` mediumtext,
-  `number` mediumtext,
+  `volume` LONGTEXT,
+  `number` LONGTEXT,
   `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
-  `isbn` mediumtext, -- ISBN (MARC21 020$a)
-  `issn` mediumtext, -- ISSN (MARC21 022$a)
-  `ean` mediumtext default NULL,
-  `publicationyear` text,
+  `isbn` LONGTEXT, -- ISBN (MARC21 020$a)
+  `issn` LONGTEXT, -- ISSN (MARC21 022$a)
+  `ean` LONGTEXT default NULL,
+  `publicationyear` MEDIUMTEXT,
   `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text, -- volume information (MARC21 362$a)
-  `collectiontitle` mediumtext default NULL,
-  `collectionissn` text default NULL,
-  `collectionvolume` mediumtext default NULL,
-  `editionstatement` text default NULL,
-  `editionresponsibility` text default NULL,
+  `volumedesc` MEDIUMTEXT, -- volume information (MARC21 362$a)
+  `collectiontitle` LONGTEXT default NULL,
+  `collectionissn` MEDIUMTEXT default NULL,
+  `collectionvolume` LONGTEXT default NULL,
+  `editionstatement` MEDIUMTEXT default NULL,
+  `editionresponsibility` MEDIUMTEXT default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
   `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
-  `notes` mediumtext,
+  `notes` LONGTEXT,
   `size` varchar(255) default NULL, -- material size (MARC21 300$c)
   `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
   `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `url` text default NULL, -- url (MARC21 856$u)
+  `url` MEDIUMTEXT default NULL, -- url (MARC21 856$u)
   `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
@@ -246,25 +246,25 @@ CREATE TABLE IF NOT EXISTS `borrower_password_recovery` ( -- holds information a
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` ( -- information about your libraries or branches are stored here
   `branchcode` varchar(10) NOT NULL default '', -- a unique key assigned to each branch
-  `branchname` mediumtext NOT NULL, -- the name of your library or branch
-  `branchaddress1` mediumtext, -- the first address line of for your library or branch
-  `branchaddress2` mediumtext, -- the second address line of for your library or branch
-  `branchaddress3` mediumtext, -- the third address line of for your library or branch
+  `branchname` LONGTEXT NOT NULL, -- the name of your library or branch
+  `branchaddress1` LONGTEXT, -- the first address line of for your library or branch
+  `branchaddress2` LONGTEXT, -- the second address line of for your library or branch
+  `branchaddress3` LONGTEXT, -- the third address line of for your library or branch
   `branchzip` varchar(25) default NULL, -- the zip or postal code for your library or branch
-  `branchcity` mediumtext, -- the city or province for your library or branch
-  `branchstate` mediumtext, -- the state for your library or branch
-  `branchcountry` text, -- the county for your library or branch
-  `branchphone` mediumtext, -- the primary phone for your library or branch
-  `branchfax` mediumtext, -- the fax number for your library or branch
-  `branchemail` mediumtext, -- the primary email address for your library or branch
-  `branchreplyto` mediumtext, -- the email to be used as a Reply-To
-  `branchreturnpath` mediumtext, -- the email to be used as Return-Path
-  `branchurl` mediumtext, -- the URL for your library or branch's website
+  `branchcity` LONGTEXT, -- the city or province for your library or branch
+  `branchstate` LONGTEXT, -- the state for your library or branch
+  `branchcountry` MEDIUMTEXT, -- the county for your library or branch
+  `branchphone` LONGTEXT, -- the primary phone for your library or branch
+  `branchfax` LONGTEXT, -- the fax number for your library or branch
+  `branchemail` LONGTEXT, -- the primary email address for your library or branch
+  `branchreplyto` LONGTEXT, -- the email to be used as a Reply-To
+  `branchreturnpath` LONGTEXT, -- the email to be used as Return-Path
+  `branchurl` LONGTEXT, -- the URL for your library or branch's website
   `issuing` tinyint(4) default NULL, -- unused in Koha
   `branchip` varchar(15) default NULL, -- the IP address for your library or branch
   `branchprinter` varchar(100) default NULL, -- unused in Koha
-  `branchnotes` mediumtext, -- notes related to your library or branch
-  opac_info text, -- HTML that displays in OPAC
+  `branchnotes` LONGTEXT, -- notes related to your library or branch
+  opac_info MEDIUMTEXT, -- HTML that displays in OPAC
   `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
   `marcorgcode` VARCHAR(16) default NULL, -- MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode
   PRIMARY KEY (`branchcode`)
@@ -289,7 +289,7 @@ CREATE TABLE `browser` (
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` ( -- this table shows information related to Koha patron categories
   `categorycode` varchar(10) NOT NULL default '', -- unique primary key used to idenfity the patron category
-  `description` mediumtext, -- description of the patron category
+  `description` LONGTEXT, -- description of the patron category
   `enrolmentperiod` smallint(6) default NULL, -- number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)
   `enrolmentperioddate` DATE NULL DEFAULT NULL, -- date the patron is enrolled until (will be NULL if enrolmentperiod is set)
   `upperagelimit` smallint(6) default NULL, -- age limit for the patron
@@ -316,7 +316,7 @@ DROP TABLE IF EXISTS collections;
 CREATE TABLE collections (
   colId integer(11) NOT NULL auto_increment,
   colTitle varchar(100) NOT NULL DEFAULT '',
-  colDesc text NOT NULL,
+  colDesc MEDIUMTEXT NOT NULL,
   colBranchcode varchar(10) DEFAULT NULL, -- 'branchcode for branch where item should be held.'
   PRIMARY KEY (colId)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -423,7 +423,7 @@ CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choo
 DROP TABLE IF EXISTS `class_sort_rules`;
 CREATE TABLE `class_sort_rules` (
   `class_sort_rule` varchar(10) NOT NULL default '',
-  `description` mediumtext,
+  `description` LONGTEXT,
   `sort_routine` varchar(30) NOT NULL default '',
   PRIMARY KEY (`class_sort_rule`),
   UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
@@ -436,7 +436,7 @@ CREATE TABLE `class_sort_rules` (
 DROP TABLE IF EXISTS `class_sources`;
 CREATE TABLE `class_sources` (
   `cn_source` varchar(10) NOT NULL default '',
-  `description` mediumtext,
+  `description` LONGTEXT,
   `used` tinyint(4) NOT NULL default 0,
   `class_sort_rule` varchar(10) NOT NULL default '',
   PRIMARY KEY (`cn_source`),
@@ -469,16 +469,16 @@ DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records that have been deleted
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
+  `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial
-  `seriestitle` mediumtext,
+  `seriestitle` LONGTEXT,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
+  `abstract` LONGTEXT, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -491,29 +491,29 @@ DROP TABLE IF EXISTS `deletedbiblioitems`;
 CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records that have been deleted
   `biblioitemnumber` int(11) NOT NULL default 0, -- primary key, unique identifier assigned by Koha
   `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
-  `volume` mediumtext,
-  `number` mediumtext,
+  `volume` LONGTEXT,
+  `number` LONGTEXT,
   `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
-  `isbn` mediumtext default NULL, -- ISBN (MARC21 020$a)
-  `issn` mediumtext default NULL, -- ISSN (MARC21 022$a)
-  `ean` mediumtext default NULL,
-  `publicationyear` text,
+  `isbn` LONGTEXT default NULL, -- ISBN (MARC21 020$a)
+  `issn` LONGTEXT default NULL, -- ISSN (MARC21 022$a)
+  `ean` LONGTEXT default NULL,
+  `publicationyear` MEDIUMTEXT,
   `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text, -- volume information (MARC21 362$a)
-  `collectiontitle` mediumtext default NULL,
-  `collectionissn` text default NULL,
-  `collectionvolume` mediumtext default NULL,
-  `editionstatement` text default NULL,
-  `editionresponsibility` text default NULL,
+  `volumedesc` MEDIUMTEXT, -- volume information (MARC21 362$a)
+  `collectiontitle` LONGTEXT default NULL,
+  `collectionissn` MEDIUMTEXT default NULL,
+  `collectionvolume` LONGTEXT default NULL,
+  `editionstatement` MEDIUMTEXT default NULL,
+  `editionresponsibility` MEDIUMTEXT default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
   `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
-  `notes` mediumtext,
+  `notes` LONGTEXT,
   `size` varchar(255) default NULL, -- material size (MARC21 300$c)
   `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
   `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
-  `url` text default NULL, -- url (MARC21 856$u)
+  `url` MEDIUMTEXT default NULL, -- url (MARC21 856$u)
   `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
@@ -539,35 +539,35 @@ DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
   `borrowernumber` int(11) NOT NULL default 0, -- primary key, Koha assigned ID number for patrons/borrowers
   `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` mediumtext, -- patron/borrower's last name (surname)
-  `firstname` text, -- patron/borrower's first name
-  `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` mediumtext, -- any other names associated with the patron/borrower
-  `initials` text, -- initials for your patron/borrower
+  `surname` LONGTEXT, -- patron/borrower's last name (surname)
+  `firstname` MEDIUMTEXT, -- patron/borrower's first name
+  `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
+  `othernames` LONGTEXT, -- any other names associated with the patron/borrower
+  `initials` MEDIUMTEXT, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` mediumtext, -- the first address line for your patron/borrower's primary address
-  `address2` text, -- the second address line for your patron/borrower's primary address
-  `city` mediumtext, -- the city or town for your patron/borrower's primary address
-  `state` text default NULL, -- the state or province for your patron/borrower's primary address
+  `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
+  `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
+  `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
+  `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
   `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
-  `country` text, -- the country for your patron/borrower's primary address
-  `email` mediumtext, -- the primary email address for your patron/borrower's primary address
-  `phone` text, -- the primary phone number for your patron/borrower's primary address
+  `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
+  `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
+  `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
   `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
-  `fax` mediumtext, -- the fax number for your patron/borrower's primary address
-  `emailpro` text, -- the secondary email addres for your patron/borrower's primary address
-  `phonepro` text, -- the secondary phone number for your patron/borrower's primary address
+  `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
+  `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
+  `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
   `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
   `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
   `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
-  `B_address2` text default NULL, -- the second address line for your patron/borrower's alternate address
-  `B_city` mediumtext, -- the city or town for your patron/borrower's alternate address
-  `B_state` text default NULL, -- the state for your patron/borrower's alternate address
+  `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
+  `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
+  `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
   `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
-  `B_country` text, -- the country for your patron/borrower's alternate address
-  `B_email` text, -- the patron/borrower's alternate email address
-  `B_phone` mediumtext, -- the patron/borrower's alternate phone number
+  `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
+  `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
+  `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
   `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
   `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
   `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
@@ -578,17 +578,17 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
   `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
   `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of patron
-  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarantor or organization name
-  `contactfirstname` text, -- used for children to include first name of guarantor
-  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarantor
+  `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
+  `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
+  `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarantors or organizations
-  `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
+  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
   `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
-  `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
@@ -597,9 +597,9 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
   `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
   `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
-  `altcontactstate` text default NULL, -- the state for the alternate contact for the patron/borrower
+  `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
-  `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
+  `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
@@ -610,7 +610,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `lastseen` datetime default NULL, -- last time a patron has been seen (connected at the OPAC or staff interface)
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
   `login_attempts` int(4) default 0, -- number of failed login attemps
-  `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
+  `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
@@ -627,7 +627,7 @@ CREATE TABLE `deleteditems` (
   `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
   `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
   `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
-  `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
+  `booksellerid` LONGTEXT default NULL, -- where the item was purchased (MARC21 952$e)
   `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
   `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
   `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
@@ -647,10 +647,10 @@ CREATE TABLE `deleteditems` (
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` mediumtext, -- public notes on this item (MARC21 952$x)
-  `itemnotes_nonpublic` mediumtext default NULL,
+  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$x)
+  `itemnotes_nonpublic` LONGTEXT default NULL,
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `paidfor` mediumtext,
+  `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
@@ -658,11 +658,11 @@ CREATE TABLE `deleteditems` (
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(255) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
-  `materials` text default NULL, -- materials specified (MARC21 952$3)
+  `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
-  `more_subfields_xml` longtext default NULL, -- additional 952 subfields in XML format
-  `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
+  `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
+  `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
   `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
   `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
   `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
@@ -685,8 +685,8 @@ DROP TABLE IF EXISTS `export_format`;
 CREATE TABLE `export_format` (
   `export_format_id` int(11) NOT NULL auto_increment,
   `profile` varchar(255) NOT NULL,
-  `description` mediumtext NOT NULL,
-  `content` mediumtext NOT NULL,
+  `description` LONGTEXT NOT NULL,
+  `content` LONGTEXT NOT NULL,
   `csv_separator` varchar(2) NOT NULL DEFAULT ',',
   `field_separator` varchar(2),
   `subfield_separator` varchar(2),
@@ -716,7 +716,7 @@ CREATE TABLE `import_batches` ( -- information about batches of marc records tha
   `batch_type` enum('batch', 'z3950', 'webservice') NOT NULL default 'batch', -- where this batch has come from
   `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio', -- type of record in the batch
   `file_name` varchar(100), -- the name of the file uploaded
-  `comments` mediumtext, -- any comments added when the file was uploaded
+  `comments` LONGTEXT, -- any comments added when the file was uploaded
   PRIMARY KEY (`import_batch_id`),
   KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -734,12 +734,12 @@ CREATE TABLE `import_records` (
   `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `import_date` DATE default NULL,
   `marc` longblob NOT NULL,
-  `marcxml` longtext NOT NULL,
-  `marcxml_old` longtext NOT NULL,
+  `marcxml` LONGTEXT NOT NULL,
+  `marcxml_old` LONGTEXT NOT NULL,
   `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio',
   `overlay_status` enum('no_match', 'auto_match', 'manual_match', 'match_applied') NOT NULL default 'no_match',
   `status` enum('error', 'staged', 'imported', 'reverted', 'items_reverted', 'ignored') NOT NULL default 'staged',
-  `import_error` mediumtext,
+  `import_error` LONGTEXT,
   `encoding` varchar(40) NOT NULL default '',
   `z3950random` varchar(40) default NULL,
   PRIMARY KEY (`import_record_id`),
@@ -812,8 +812,8 @@ CREATE TABLE `import_items` (
   `itemnumber` int(11) default NULL,
   `branchcode` varchar(10) default NULL,
   `status` enum('error', 'staged', 'imported', 'reverted', 'ignored') NOT NULL default 'staged',
-  `marcxml` longtext NOT NULL,
-  `import_error` mediumtext,
+  `marcxml` LONGTEXT NOT NULL,
+  `import_error` LONGTEXT,
   PRIMARY KEY (`import_items_id`),
   CONSTRAINT `import_items_ibfk_1` FOREIGN KEY (`import_record_id`)
              REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -887,7 +887,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
   `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
   `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
-  `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
+  `booksellerid` LONGTEXT default NULL, -- where the item was purchased (MARC21 952$e)
   `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
   `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
   `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
@@ -907,10 +907,10 @@ CREATE TABLE `items` ( -- holdings/item information
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` mediumtext, -- public notes on this item (MARC21 952$x)
-  `itemnotes_nonpublic` mediumtext default NULL,
+  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$x)
+  `itemnotes_nonpublic` LONGTEXT default NULL,
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
-  `paidfor` mediumtext,
+  `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
@@ -918,11 +918,11 @@ CREATE TABLE `items` ( -- holdings/item information
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(255) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
-  `materials` text default NULL, -- materials specified (MARC21 952$3)
+  `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
-  `more_subfields_xml` longtext default NULL, -- additional 952 subfields in XML format
-  `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
+  `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
+  `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
   `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
   `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
   `new_status` VARCHAR(32) DEFAULT NULL, -- 'new' value, you can put whatever free-text information. This field is intented to be managed by the automatic_item_modification_by_age cronjob.
@@ -951,13 +951,13 @@ CREATE TABLE `items` ( -- holdings/item information
 DROP TABLE IF EXISTS `itemtypes`;
 CREATE TABLE `itemtypes` ( -- defines the item types
   itemtype varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
-  description mediumtext, -- a plain text explanation of the item type
+  description LONGTEXT, -- a plain text explanation of the item type
   rentalcharge decimal(28,6) default NULL, -- the amount charged when this item is checked out/issued
   defaultreplacecost decimal(28,6) default NULL, -- default replacement cost
   processfee decimal(28,6) default NULL, -- default text be recorded in the column note when the processing fee is applied
   notforloan smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
   imageurl varchar(200) default NULL, -- URL for the item type icon
-  summary text, -- information from the summary field, may include HTML
+  summary MEDIUMTEXT, -- information from the summary field, may include HTML
   checkinmsg VARCHAR(255), -- message that is displayed when an item with the given item type is checked in
   checkinmsgtype CHAR(16) DEFAULT 'message' NOT NULL, -- type (CSS class) for the checkinmsg, can be "alert" or "message"
   sip_media_type VARCHAR(3) DEFAULT NULL, -- SIP2 protocol media type for this itemtype
@@ -994,7 +994,7 @@ CREATE TABLE `branchtransfers` ( -- information for items that are in transit be
   `frombranch` varchar(10) NOT NULL default '', -- the branch the transfer is coming from
   `datearrived` datetime default NULL, -- the date the transfer arrived at its destination
   `tobranch` varchar(10) NOT NULL default '', -- the branch the transfer was going to
-  `comments` mediumtext, -- any comments related to the transfer
+  `comments` LONGTEXT, -- any comments related to the transfer
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
@@ -1059,7 +1059,7 @@ CREATE TABLE `creator_layouts` (
   `callnum_split` int(1) DEFAULT '0',
   `text_justify` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'L',
   `format_string` varchar(210) NOT NULL DEFAULT 'barcode',
-  `layout_xml` text NOT NULL,
+  `layout_xml` MEDIUMTEXT NOT NULL,
   `creator` char(15) NOT NULL DEFAULT 'Labels',
   PRIMARY KEY (`layout_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1116,7 +1116,7 @@ CREATE TABLE `marc_subfield_structure` (
   `frameworkcode` varchar(4) NOT NULL default '',
   `seealso` varchar(1100) default NULL,
   `link` varchar(80) default NULL,
-  `defaultvalue` text default NULL,
+  `defaultvalue` MEDIUMTEXT default NULL,
   `maxlength` int(4) NOT NULL DEFAULT '9999',
   PRIMARY KEY  (`frameworkcode`,`tagfield`,`tagsubfield`),
   KEY `kohafield_2` (`kohafield`),
@@ -1243,7 +1243,7 @@ CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records st
   `id` int NOT NULL auto_increment PRIMARY KEY, -- unique id
   `authid` bigint NOT NULL, -- reference to original authority record
   `authid_new` bigint, -- reference to optional new authority record
-  `reportxml` text, -- xml showing original reporting tag
+  `reportxml` MEDIUMTEXT, -- xml showing original reporting tag
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time last modified
   `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1=done, 2=in progress)
 -- Note: authid and authid_new should NOT be FOREIGN keys !
@@ -1384,7 +1384,7 @@ CREATE TABLE `repeatable_holidays` ( -- information for the days the library is 
   `day` smallint(6) default NULL, -- day of the month this closing is on
   `month` smallint(6) default NULL, -- month this closing is in
   `title` varchar(50) NOT NULL default '', -- title of this closing
-  `description` text NOT NULL, -- description for this closing
+  `description` MEDIUMTEXT NOT NULL, -- description for this closing
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1396,10 +1396,10 @@ DROP TABLE IF EXISTS `reports_dictionary`;
 CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for use in reports
    `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
    `name` varchar(255) default NULL, -- name for this definition
-   `description` text, -- description for this definition
+   `description` MEDIUMTEXT, -- description for this definition
    `date_created` datetime default NULL, -- date and time this definition was created
    `date_modified` datetime default NULL, -- date and time this definition was last modified
-   `saved_sql` text, -- SQL snippet for us in reports
+   `saved_sql` MEDIUMTEXT, -- SQL snippet for us in reports
    report_area varchar(6) DEFAULT NULL, -- Koha module this definition is for Circulation, Catalog, Patrons, Acquistions, Accounts)
    PRIMARY KEY  (id),
    KEY dictionary_area_idx (report_area)
@@ -1415,11 +1415,11 @@ CREATE TABLE saved_sql ( -- saved sql reports
    `borrowernumber` int(11) default NULL, -- the staff member who created this report (borrowers.borrowernumber)
    `date_created` datetime default NULL, -- the date this report was created
    `last_modified` datetime default NULL, -- the date this report was last edited
-   `savedsql` text, -- the SQL for this report
+   `savedsql` MEDIUMTEXT, -- the SQL for this report
    `last_run` datetime default NULL,
    `report_name` varchar(255) NOT NULL default '', -- the name of this report
    `type` varchar(255) default NULL, -- always 1 for tabular
-   `notes` text, -- the notes or description given to this report
+   `notes` MEDIUMTEXT, -- the notes or description given to this report
    `cache_expiry` int NOT NULL default 300,
    `public` boolean NOT NULL default FALSE,
     report_area varchar(6) default NULL,
@@ -1439,7 +1439,7 @@ DROP TABLE IF EXISTS `saved_reports`;
 CREATE TABLE saved_reports (
    `id` int(11) NOT NULL auto_increment,
    `report_id` int(11) default NULL,
-   `report` longtext,
+   `report` LONGTEXT,
    `date_run` datetime default NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1468,7 +1468,7 @@ CREATE TABLE IF NOT EXISTS `search_history` ( -- patron's opac search history
   `userid` int(11) NOT NULL, -- the patron who performed the search (borrowers.borrowernumber)
   `sessionid` varchar(32) NOT NULL, -- a system generated session id
   `query_desc` varchar(255) NOT NULL, -- the search that was performed
-  `query_cgi` text NOT NULL, -- the string to append to the search url to rerun the search
+  `query_cgi` MEDIUMTEXT NOT NULL, -- the string to append to the search url to rerun the search
   `type` varchar(16) NOT NULL DEFAULT 'biblio', -- search type, must be 'biblio' or 'authority'
   `total` int(11) NOT NULL, -- the total of results found
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the search was run
@@ -1523,12 +1523,12 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
   `serialseq_z` varchar( 100 ) NULL DEFAULT NULL, -- third part of issue information
   `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
   `planneddate` date default NULL, -- date expected
-  `notes` text, -- notes
+  `notes` MEDIUMTEXT, -- notes
   `publisheddate` date default NULL, -- date published
   publisheddatetext varchar(100) default NULL, -- date published (descriptive)
   `claimdate` date default NULL, -- date claimed
   claims_count int(11) default 0, -- number of claims made related to this issue
-  `routingnotes` text, -- notes from the routing list
+  `routingnotes` MEDIUMTEXT, -- notes from the routing list
   PRIMARY KEY (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1539,7 +1539,7 @@ CREATE TABLE `serial` ( -- issues related to subscriptions
 DROP TABLE IF EXISTS sessions;
 CREATE TABLE sessions (
   `id` varchar(32) NOT NULL,
-  `a_session` mediumtext NOT NULL,
+  `a_session` LONGTEXT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1564,35 +1564,35 @@ DROP TABLE IF EXISTS `borrowers`;
 CREATE TABLE `borrowers` ( -- this table includes information about your patrons/borrowers/members
   `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
   `cardnumber` varchar(32) default NULL, -- unique key, library assigned ID number for patrons/borrowers
-  `surname` mediumtext, -- patron/borrower's last name (surname)
-  `firstname` text, -- patron/borrower's first name
-  `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
-  `othernames` mediumtext, -- any other names associated with the patron/borrower
-  `initials` text, -- initials for your patron/borrower
+  `surname` LONGTEXT, -- patron/borrower's last name (surname)
+  `firstname` MEDIUMTEXT, -- patron/borrower's first name
+  `title` LONGTEXT, -- patron/borrower's title, for example: Mr. or Mrs.
+  `othernames` LONGTEXT, -- any other names associated with the patron/borrower
+  `initials` MEDIUMTEXT, -- initials for your patron/borrower
   `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
   `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
-  `address` mediumtext, -- the first address line for your patron/borrower's primary address
-  `address2` text, -- the second address line for your patron/borrower's primary address
-  `city` mediumtext, -- the city or town for your patron/borrower's primary address
-  `state` text default NULL, -- the state or province for your patron/borrower's primary address
+  `address` LONGTEXT, -- the first address line for your patron/borrower's primary address
+  `address2` MEDIUMTEXT, -- the second address line for your patron/borrower's primary address
+  `city` LONGTEXT, -- the city or town for your patron/borrower's primary address
+  `state` MEDIUMTEXT default NULL, -- the state or province for your patron/borrower's primary address
   `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
-  `country` text, -- the country for your patron/borrower's primary address
-  `email` mediumtext, -- the primary email address for your patron/borrower's primary address
-  `phone` text, -- the primary phone number for your patron/borrower's primary address
+  `country` MEDIUMTEXT, -- the country for your patron/borrower's primary address
+  `email` LONGTEXT, -- the primary email address for your patron/borrower's primary address
+  `phone` MEDIUMTEXT, -- the primary phone number for your patron/borrower's primary address
   `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
-  `fax` mediumtext, -- the fax number for your patron/borrower's primary address
-  `emailpro` text, -- the secondary email addres for your patron/borrower's primary address
-  `phonepro` text, -- the secondary phone number for your patron/borrower's primary address
+  `fax` LONGTEXT, -- the fax number for your patron/borrower's primary address
+  `emailpro` MEDIUMTEXT, -- the secondary email addres for your patron/borrower's primary address
+  `phonepro` MEDIUMTEXT, -- the secondary phone number for your patron/borrower's primary address
   `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
   `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
   `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
-  `B_address2` text default NULL, -- the second address line for your patron/borrower's alternate address
-  `B_city` mediumtext, -- the city or town for your patron/borrower's alternate address
-  `B_state` text default NULL, -- the state for your patron/borrower's alternate address
+  `B_address2` MEDIUMTEXT default NULL, -- the second address line for your patron/borrower's alternate address
+  `B_city` LONGTEXT, -- the city or town for your patron/borrower's alternate address
+  `B_state` MEDIUMTEXT default NULL, -- the state for your patron/borrower's alternate address
   `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
-  `B_country` text, -- the country for your patron/borrower's alternate address
-  `B_email` text, -- the patron/borrower's alternate email address
-  `B_phone` mediumtext, -- the patron/borrower's alternate phone number
+  `B_country` MEDIUMTEXT, -- the country for your patron/borrower's alternate address
+  `B_email` MEDIUMTEXT, -- the patron/borrower's alternate email address
+  `B_phone` LONGTEXT, -- the patron/borrower's alternate phone number
   `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
   `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
   `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
@@ -1603,17 +1603,17 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
   `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYYY-MM-DD)
   `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of the patron
-  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarantor or organization name
-  `contactfirstname` text, -- used for children to include first name of guarantor
-  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarantor
+  `contactname` LONGTEXT, -- used for children and profesionals to include surname or last name of guarantor or organization name
+  `contactfirstname` MEDIUMTEXT, -- used for children to include first name of guarantor
+  `contacttitle` MEDIUMTEXT, -- used for children to include title (Mr., Mrs., etc) of guarantor
   `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarantors or organizations
-  `borrowernotes` mediumtext, -- a note on the patron/borrower's account that is only visible in the staff client
+  `borrowernotes` LONGTEXT, -- a note on the patron/borrower's account that is only visible in the staff client
   `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarantor
   `sex` varchar(1) default NULL, -- patron/borrower's gender
   `password` varchar(60) default NULL, -- patron/borrower's Bcrypt encrypted password
   `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
   `userid` varchar(75) default NULL, -- patron/borrower's opac and/or staff client log in
-  `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `opacnote` LONGTEXT, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
   `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
   `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
   `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
@@ -1622,9 +1622,9 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
   `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
   `altcontactaddress3` varchar(255) default NULL, -- the city for the alternate contact for the patron/borrower
-  `altcontactstate` text default NULL, -- the state for the alternate contact for the patron/borrower
+  `altcontactstate` MEDIUMTEXT default NULL, -- the state for the alternate contact for the patron/borrower
   `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
-  `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
+  `altcontactcountry` MEDIUMTEXT default NULL, -- the country for the alternate contact for the patron/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SMS turned on)
   `sms_provider_id` int(11) DEFAULT NULL, -- the provider of the mobile phone number defined in smsalertnumber
@@ -1635,7 +1635,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `lastseen` datetime default NULL, -- last time a patron has been seen (connected at the OPAC or staff interface)
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
   `login_attempts` int(4) default 0, -- number of failed login attemps
-  `overdrive_auth_token` text default NULL, -- persist OverDrive auth token
+  `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
@@ -1679,7 +1679,7 @@ CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
   borrowernumber int(11) NOT NULL, -- foreign key for borrowers.borrowernumber for patron who is restricted
   expiration date DEFAULT NULL, -- expiration date of the restriction
   `type` enum('SUSPENSION','OVERDUES','MANUAL','DISCHARGE') NOT NULL DEFAULT 'MANUAL', -- type of restriction
-  `comment` text, -- comments about the restriction
+  `comment` MEDIUMTEXT, -- comments about the restriction
   manager_id int(11) DEFAULT NULL, -- foreign key for borrowers.borrowernumber for the librarian managing the restriction
   created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date the restriction was added
   updated timestamp NULL DEFAULT NULL, -- date the restriction was updated
@@ -1726,7 +1726,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
-  `note` mediumtext default NULL, -- issue note text
+  `note` LONGTEXT default NULL, -- issue note text
   `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
   PRIMARY KEY (`issue_id`),
   UNIQUE KEY `itemnumber` (`itemnumber`),
@@ -1757,7 +1757,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
   `onsite_checkout` int(1) NOT NULL default 0, -- in house use flag
-  `note` mediumtext default NULL, -- issue note text
+  `note` LONGTEXT default NULL, -- issue note text
   `notedate` datetime default NULL, -- datetime of issue note (yyyy-mm-dd hh:mm::ss)
   PRIMARY KEY (`issue_id`),
   KEY `old_issuesborridx` (`borrowernumber`),
@@ -1819,7 +1819,7 @@ CREATE TABLE `opac_news` ( -- data from the news tool
   `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
   `branchcode` varchar(10) default NULL, -- branch code users to create branch specific news, NULL is every branch.
   `title` varchar(250) NOT NULL default '', -- title of the news article
-  `content` text NOT NULL, -- the body of your news article
+  `content` MEDIUMTEXT NOT NULL, -- the body of your news article
   `lang` varchar(25) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
   `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
@@ -1858,7 +1858,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
   `cancellationdate` date default NULL, -- the date this hold was cancelled
-  `reservenotes` mediumtext, -- notes related to this hold
+  `reservenotes` LONGTEXT, -- notes related to this hold
   `priority` smallint(6) default NULL, -- where in the queue the patron sits
   `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
@@ -1897,7 +1897,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `notificationdate` date default NULL, -- currently unused
   `reminderdate` date default NULL, -- currently unused
   `cancellationdate` date default NULL, -- the date this hold was cancelled
-  `reservenotes` mediumtext, -- notes related to this hold
+  `reservenotes` LONGTEXT, -- notes related to this hold
   `priority` smallint(6) default NULL, -- where in the queue the patron sits
   `found` varchar(1) default NULL, -- a one letter code defining what the status is of the hold is after it has been confirmed
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
@@ -1933,7 +1933,7 @@ CREATE TABLE `reviews` ( -- patron opac comments
   `reviewid` int(11) NOT NULL auto_increment, -- unique identifier for this comment
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron left this comment
   `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bibliographic record this comment is for
-  `review` text, -- the body of the comment
+  `review` MEDIUMTEXT, -- the body of the comment
   `approved` tinyint(4) default 0, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
   `datereviewed` datetime default NULL, -- the date the comment was left
   PRIMARY KEY  (`reviewid`),
@@ -1954,7 +1954,7 @@ CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
   `year` smallint(6) NOT NULL default 0, -- year this closing is in
   `isexception` smallint(1) NOT NULL default 1, -- is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
   `title` varchar(50) NOT NULL default '', -- title for this closing
-  `description` text NOT NULL, -- description of this closing
+  `description` MEDIUMTEXT NOT NULL, -- description of this closing
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1969,7 +1969,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `proccode` varchar(4) default NULL, -- type of procedure used when making payments (does not appear in the code)
   `value` double(16,4) default NULL, -- monetary value associated with the transaction
   `type` varchar(16) default NULL, -- transaction type (locause, issue, return, renew, writeoff, payment, Credit*)
-  `other` mediumtext, -- used by SIP
+  `other` LONGTEXT, -- used by SIP
   `usercode` varchar(10) default NULL, -- unused in Koha
   `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
   `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
@@ -1996,7 +1996,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
 DROP TABLE IF EXISTS subscription_frequencies;
 CREATE TABLE subscription_frequencies (
     id INTEGER NOT NULL AUTO_INCREMENT,
-    description TEXT NOT NULL,
+    description MEDIUMTEXT NOT NULL,
     displayorder INT DEFAULT NULL,
     unit ENUM('day','week','month','year') DEFAULT NULL,
     unitsperissue INTEGER NOT NULL DEFAULT '1',
@@ -2013,7 +2013,7 @@ CREATE TABLE subscription_numberpatterns (
     id INTEGER NOT NULL AUTO_INCREMENT,
     label VARCHAR(255) NOT NULL,
     displayorder INTEGER DEFAULT NULL,
-    description TEXT NOT NULL,
+    description MEDIUMTEXT NOT NULL,
     numberingmethod VARCHAR(255) NOT NULL,
     label1 VARCHAR(255) DEFAULT NULL,
     add1 INTEGER DEFAULT NULL,
@@ -2054,7 +2054,7 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `numberlength` int(11) default 0, -- subscription length in weeks (will not be filled in if monthlength or weeklength is set)
   `periodicity` integer default null, -- frequency type links to subscription_frequencies.id
   countissuesperunit INTEGER NOT NULL DEFAULT 1,
-  `notes` mediumtext, -- notes
+  `notes` LONGTEXT, -- notes
   `status` varchar(100) NOT NULL default '',  -- status of this subscription
   `lastvalue1` int(11) default NULL,
   `innerloop1` int(11) default 0,
@@ -2064,14 +2064,14 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `innerloop3` int(11) default 0,
   `firstacquidate` date default NULL, -- first issue received date
   `manualhistory` tinyint(1) NOT NULL default 0, -- yes or no to managing the history manually
-  `irregularity` text, -- any irregularities in the subscription
+  `irregularity` MEDIUMTEXT, -- any irregularities in the subscription
   skip_serialseq BOOLEAN NOT NULL DEFAULT 0,
   `letter` varchar(20) default NULL,
   `numberpattern` integer default null, -- the numbering pattern used links to subscription_numberpatterns.id
   locale VARCHAR(80) DEFAULT NULL, -- for foreign language subscriptions to display months, seasons, etc correctly
-  `distributedto` text,
-  `internalnotes` longtext,
-  `callnumber` text, -- default call number
+  `distributedto` MEDIUMTEXT,
+  `internalnotes` LONGTEXT,
+  `callnumber` MEDIUMTEXT, -- default call number
   `location` varchar(80) NULL default '', -- default shelving location (items.location)
   `branchcode` varchar(10) NOT NULL default '', -- default branches (items.homebranch)
   `lastbranch` varchar(10),
@@ -2099,8 +2099,8 @@ CREATE TABLE `subscriptionhistory` (
   `subscriptionid` int(11) NOT NULL default 0,
   `histstartdate` date default NULL,
   `histenddate` date default NULL,
-  `missinglist` longtext NOT NULL,
-  `recievedlist` longtext NOT NULL,
+  `missinglist` LONGTEXT NOT NULL,
+  `recievedlist` LONGTEXT NOT NULL,
   `opacnote` varchar(150) NOT NULL default '',
   `librariannote` varchar(150) NOT NULL default '',
   PRIMARY KEY  (`subscriptionid`),
@@ -2132,9 +2132,9 @@ CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing l
 DROP TABLE IF EXISTS `systempreferences`;
 CREATE TABLE `systempreferences` ( -- global system preferences
   `variable` varchar(50) NOT NULL default '', -- system preference name
-  `value` text, -- system preference values
-  `options` mediumtext, -- options for multiple choice system preferences
-  `explanation` text, -- descriptive text for the system preference
+  `value` MEDIUMTEXT, -- system preference values
+  `options` LONGTEXT, -- options for multiple choice system preferences
+  `explanation` MEDIUMTEXT, -- descriptive text for the system preference
   `type` varchar(20) default NULL, -- type of question this preference asks (multiple choice, plain text, yes or no, etc)
   PRIMARY KEY  (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -2282,17 +2282,17 @@ CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets u
   `db` varchar(255) default NULL, -- target's database name
   `userid` varchar(255) default NULL, -- username needed to log in to target
   `password` varchar(255) default NULL, -- password needed to log in to target
-  `servername` mediumtext NOT NULL, -- name given to the target by the library
+  `servername` LONGTEXT NOT NULL, -- name given to the target by the library
   `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
   `rank` int(11) default NULL, -- where this target appears in the list of targets
   `syntax` varchar(80) default NULL, -- marc format provided by this target
   `timeout` int(11) NOT NULL DEFAULT '0', -- number of seconds before Koha stops trying to access this server
   `servertype` enum('zed','sru') NOT NULL default 'zed', -- zed means z39.50 server
-  `encoding` text default NULL, -- characters encoding provided by this target
+  `encoding` MEDIUMTEXT default NULL, -- characters encoding provided by this target
   `recordtype` enum('authority','biblio') NOT NULL default 'biblio', -- server contains bibliographic or authority records
   `sru_options` varchar(255) default NULL, -- options like sru=get, sru_version=1.1; will be passed to the server via ZOOM
-  `sru_fields` mediumtext default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
-  `add_xslt` mediumtext default NULL, -- zero or more paths to XSLT files to be processed on the search results
+  `sru_fields` LONGTEXT default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
+  `add_xslt` LONGTEXT default NULL, -- zero or more paths to XSLT files to be processed on the search results
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2449,17 +2449,17 @@ CREATE TABLE `tmp_holdsqueue` (
   `biblionumber` int(11) default NULL,
   `itemnumber` int(11) default NULL,
   `barcode` varchar(20) default NULL,
-  `surname` mediumtext NOT NULL,
-  `firstname` text,
-  `phone` text,
+  `surname` LONGTEXT NOT NULL,
+  `firstname` MEDIUMTEXT,
+  `phone` MEDIUMTEXT,
   `borrowernumber` int(11) NOT NULL,
   `cardnumber` varchar(32) default NULL,
   `reservedate` date default NULL,
-  `title` mediumtext,
+  `title` LONGTEXT,
   `itemcallnumber` varchar(255) default NULL,
   `holdingbranch` varchar(10) default NULL,
   `pickbranch` varchar(10) default NULL,
-  `notes` text,
+  `notes` MEDIUMTEXT,
   `item_level_request` tinyint(4) NOT NULL default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2481,16 +2481,16 @@ DROP TABLE IF EXISTS `message_queue`;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) default NULL,
-  `subject` text,
-  `content` text,
-  `metadata` text DEFAULT NULL,
+  `subject` MEDIUMTEXT,
+  `content` MEDIUMTEXT,
+  `metadata` MEDIUMTEXT DEFAULT NULL,
   `letter_code` varchar(64) DEFAULT NULL,
   `message_transport_type` varchar(20) NOT NULL,
   `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
   `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `to_address` mediumtext,
-  `from_address` mediumtext,
-  `content_type` text,
+  `to_address` LONGTEXT,
+  `from_address` LONGTEXT,
+  `content_type` MEDIUMTEXT,
   PRIMARY KEY `message_id` (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),
@@ -2510,7 +2510,7 @@ CREATE TABLE `letter` ( -- table for all notice templates in Koha
   `name` varchar(100) NOT NULL default '', -- plain text name for this notice or slip
   `is_html` tinyint(1) default 0, -- does this notice or slip use HTML (1 for yes, 0 for no)
   `title` varchar(200) NOT NULL default '', -- subject line of the notice
-  `content` text, -- body text for the notice or slip
+  `content` MEDIUMTEXT, -- body text for the notice or slip
   `message_transport_type` varchar(20) NOT NULL DEFAULT 'email', -- transport type for this notice
   `lang` varchar(25) NOT NULL DEFAULT 'default', -- lang of the notice
   PRIMARY KEY  (`module`,`code`, `branchcode`, `message_transport_type`, `lang`),
@@ -2656,7 +2656,7 @@ CREATE TABLE `messages` ( -- circulation messages left via the patron's check ou
   `borrowernumber` int(11) NOT NULL, -- foreign key linking this message to the borrowers table
   `branchcode` varchar(10) default NULL, -- foreign key linking the message to the branches table
   `message_type` varchar(1) NOT NULL, -- whether the message is for the librarians (L) or the patron (B)
-  `message` text NOT NULL, -- the text of the message
+  `message` MEDIUMTEXT NOT NULL, -- the text of the message
   `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
   `manager_id` int(11) default NULL, -- creator of message
   PRIMARY KEY (`message_id`),
@@ -2676,13 +2676,13 @@ CREATE TABLE `accountlines` (
   `itemnumber` int(11) default NULL,
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
-  `description` mediumtext,
-  `dispute` mediumtext,
+  `description` LONGTEXT,
+  `dispute` LONGTEXT,
   `accounttype` varchar(5) default NULL,
   `amountoutstanding` decimal(28,6) default NULL,
   `lastincrement` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `note` text NULL default NULL,
+  `note` MEDIUMTEXT NULL default NULL,
   `manager_id` int(11) NULL,
   PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),
@@ -2729,10 +2729,10 @@ CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the
   `action_id` int(11) NOT NULL auto_increment, -- unique identifier for each action
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time the action took place
   `user` int(11) NOT NULL default 0, -- the staff member who performed the action (borrowers.borrowernumber)
-  `module` text, -- the module this action was taken against
-  `action` text, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
+  `module` MEDIUMTEXT, -- the module this action was taken against
+  `action` MEDIUMTEXT, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
   `object` int(11) default NULL, -- the object that the action was taken against (could be a borrowernumber, itemnumber, etc)
-  `info` text, -- information about the action (usually includes SQL statement)
+  `info` MEDIUMTEXT, -- information about the action (usually includes SQL statement)
   `interface` VARCHAR(30) DEFAULT NULL, -- the context this action was taken in
   PRIMARY KEY (`action_id`),
   KEY `timestamp_idx` (`timestamp`),
@@ -2766,20 +2766,20 @@ CREATE TABLE `alert` (
 DROP TABLE IF EXISTS `aqbooksellers`;
 CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquisitions
   `id` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha
-  `name` mediumtext NOT NULL, -- vendor name
-  `address1` mediumtext, -- first line of vendor physical address
-  `address2` mediumtext, -- second line of vendor physical address
-  `address3` mediumtext, -- third line of vendor physical address
-  `address4` mediumtext, -- fourth line of vendor physical address
+  `name` LONGTEXT NOT NULL, -- vendor name
+  `address1` LONGTEXT, -- first line of vendor physical address
+  `address2` LONGTEXT, -- second line of vendor physical address
+  `address3` LONGTEXT, -- third line of vendor physical address
+  `address4` LONGTEXT, -- fourth line of vendor physical address
   `phone` varchar(30) default NULL, -- vendor phone number
-  `accountnumber` mediumtext, -- unused in Koha
-  `othersupplier` mediumtext,  -- unused in Koha
+  `accountnumber` LONGTEXT, -- unused in Koha
+  `othersupplier` LONGTEXT,  -- unused in Koha
   `currency` varchar(10) NOT NULL default '', -- unused in Koha
-  `booksellerfax` mediumtext, -- vendor fax number
-  `notes` mediumtext, -- order notes
-  `bookselleremail` mediumtext, -- vendor email
-  `booksellerurl` mediumtext, -- unused in Koha
-  `postal` mediumtext, -- vendor postal address (all lines)
+  `booksellerfax` LONGTEXT, -- vendor fax number
+  `notes` LONGTEXT, -- order notes
+  `bookselleremail` LONGTEXT, -- vendor email
+  `booksellerurl` LONGTEXT, -- unused in Koha
+  `postal` LONGTEXT, -- vendor postal address (all lines)
   `url` varchar(255) default NULL, -- vendor web address
   `active` tinyint(4) default NULL, -- is this vendor active (1 for yes, 0 for no)
   `listprice` varchar(10) default NULL, -- currency code for list prices
@@ -2810,7 +2810,7 @@ CREATE TABLE `aqbasketgroups` (
   `closed` tinyint(1) default NULL,
   `booksellerid` int(11) NOT NULL,
   `deliveryplace` varchar(10) default NULL,
-  `freedeliveryplace` text default NULL,
+  `freedeliveryplace` MEDIUMTEXT default NULL,
   `deliverycomment` varchar(255) default NULL,
   `billingplace` varchar(10) default NULL,
   PRIMARY KEY  (`id`),
@@ -2832,7 +2832,7 @@ CREATE TABLE `aqbudgets` ( -- information related to Funds
   `budget_amount` decimal(28,6) NULL default '0.00', -- total amount for this fund
   `budget_encumb` decimal(28,6) NULL default '0.00', -- not used in the code
   `budget_expend` decimal(28,6) NULL default '0.00', -- not used in the code
-  `budget_notes` mediumtext, -- notes related to this fund
+  `budget_notes` LONGTEXT, -- notes related to this fund
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this fund was last touched (created or modified)
   `budget_period_id` int(11) default NULL, -- id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
   `sort1_authcat` varchar(80) default NULL, -- statistical category for this fund
@@ -2875,7 +2875,7 @@ CREATE TABLE `aqbudgetperiods` ( -- information related to Budgets
   `budget_period_startdate` date NOT NULL, -- date when the budget starts
   `budget_period_enddate` date NOT NULL, -- date when the budget ends
   `budget_period_active` tinyint(1) default '0', -- whether this budget is active or not (1 for yes, 0 for no)
-  `budget_period_description` mediumtext, -- description assigned to this budget
+  `budget_period_description` LONGTEXT, -- description assigned to this budget
   `budget_period_total` decimal(28,6), -- total amount available in this budget
   `budget_period_locked` tinyint(1) default NULL, -- whether this budget is locked or not (1 for yes, 0 for no)
   `sort1_authcat` varchar(10) default NULL, -- statistical category for this budget
@@ -2914,7 +2914,7 @@ CREATE TABLE aqcontacts (
   altphone varchar(100) default NULL, -- contact's alternate phone number
   fax varchar(100) default NULL,  -- contact's fax number
   email varchar(100) default NULL, -- contact's email address
-  notes mediumtext, -- notes related to the contact
+  notes LONGTEXT, -- notes related to the contact
   orderacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisition orders
   claimacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
   claimissues BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive serial claims
@@ -2936,7 +2936,7 @@ CREATE TABLE `aqcontract` (
   `contractstartdate` date default NULL,
   `contractenddate` date default NULL,
   `contractname` varchar(50) default NULL,
-  `contractdescription` mediumtext,
+  `contractdescription` LONGTEXT,
   `booksellerid` int(11) not NULL,
   PRIMARY KEY  (`contractnumber`),
   CONSTRAINT `booksellerid_fk1` FOREIGN KEY (`booksellerid`)
@@ -2951,14 +2951,14 @@ DROP TABLE IF EXISTS `aqbasket`;
 CREATE TABLE `aqbasket` ( -- stores data about baskets in acquisitions
   `basketno` int(11) NOT NULL auto_increment, -- primary key, Koha defined number
   `basketname` varchar(50) default NULL, -- name given to the basket at creation
-  `note` mediumtext, -- the internal note added at basket creation
-  `booksellernote` mediumtext, -- the vendor note added at basket creation
+  `note` LONGTEXT, -- the internal note added at basket creation
+  `booksellernote` LONGTEXT, -- the vendor note added at basket creation
   `contractnumber` int(11), -- links this basket to the aqcontract table (aqcontract.contractnumber)
   `creationdate` date default NULL, -- the date the basket was created
   `closedate` date default NULL, -- the date the basket was closed
   `booksellerid` int(11) NOT NULL default 1, -- the Koha assigned ID for the vendor (aqbooksellers.id)
   `authorisedby` varchar(10) default NULL, -- the borrowernumber of the person who created the basket
-  `booksellerinvoicenumber` mediumtext, -- appears to always be NULL
+  `booksellerinvoicenumber` LONGTEXT, -- appears to always be NULL
   `basketgroupid` int(11), -- links this basket to its group (aqbasketgroups.id)
   `deliveryplace` varchar(10) default NULL, -- basket delivery place
   `billingplace` varchar(10) default NULL, -- basket billing place
@@ -3005,7 +3005,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
    rejecteddate date default NULL, -- date the suggestion was marked as rejected
   `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
-  `note` mediumtext, -- note entered on the suggestion
+  `note` LONGTEXT, -- note entered on the suggestion
   `author` varchar(80) default NULL, -- author of the suggested item
   `title` varchar(255) default NULL, -- title of the suggested item
   `copyrightdate` smallint(6) default NULL, -- copyright date of the suggested item
@@ -3016,11 +3016,11 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   `place` varchar(255) default NULL, -- publication place of the suggested item
   `isbn` varchar(30) default NULL, -- isbn of the suggested item
   `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
-  `reason` text, -- reason for accepting or rejecting the suggestion
-  `patronreason` text, -- reason for making the suggestion
+  `reason` MEDIUMTEXT, -- reason for accepting or rejecting the suggestion
+  `patronreason` MEDIUMTEXT, -- reason for making the suggestion
    budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
    branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
-   collectiontitle text default NULL, -- collection name for the suggested item
+   collectiontitle MEDIUMTEXT default NULL, -- collection name for the suggested item
    itemtype VARCHAR(30) default NULL, -- suggested item type
    quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
    currency VARCHAR(10) default NULL, -- suggested currency for the suggested price
@@ -3042,14 +3042,14 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
 DROP TABLE IF EXISTS vendor_edi_accounts;
 CREATE TABLE IF NOT EXISTS vendor_edi_accounts (
   id INT(11) NOT NULL auto_increment,
-  description TEXT NOT NULL,
+  description MEDIUMTEXT NOT NULL,
   host VARCHAR(40),
   username VARCHAR(40),
   password VARCHAR(40),
   last_activity DATE,
   vendor_id INT(11) REFERENCES aqbooksellers( id ),
-  download_directory TEXT,
-  upload_directory TEXT,
+  download_directory MEDIUMTEXT,
+  upload_directory MEDIUMTEXT,
   san VARCHAR(20),
   id_code_qualifier VARCHAR(3) default '14',
   transport VARCHAR(6) default 'FTP',
@@ -3078,10 +3078,10 @@ CREATE TABLE IF NOT EXISTS edifact_messages (
   transfer_date DATE,
   vendor_id INT(11) REFERENCES aqbooksellers( id ),
   edi_acct  INTEGER REFERENCES vendor_edi_accounts( id ),
-  status TEXT,
+  status MEDIUMTEXT,
   basketno INT(11) REFERENCES aqbasket( basketno),
-  raw_msg MEDIUMTEXT,
-  filename TEXT,
+  raw_msg LONGTEXT,
+  filename MEDIUMTEXT,
   deleted BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY  (id),
   KEY vendorid ( vendor_id),
@@ -3099,7 +3099,7 @@ CREATE TABLE IF NOT EXISTS edifact_messages (
 DROP TABLE IF EXISTS aqinvoices;
 CREATE TABLE aqinvoices (
   invoiceid int(11) NOT NULL AUTO_INCREMENT,    -- ID of the invoice, primary key
-  invoicenumber mediumtext NOT NULL,    -- Name of invoice
+  invoicenumber LONGTEXT NOT NULL,    -- Name of invoice
   booksellerid int(11) NOT NULL,    -- foreign key to aqbooksellers
   shipmentdate date default NULL,   -- date of shipment
   billingdate date default NULL,    -- date of billing
@@ -3133,10 +3133,10 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `unitprice_tax_included` decimal(28,6) default NULL, -- the unit price including tax (on receiving)
   `quantityreceived` smallint(6) NOT NULL default 0, -- the quantity that have been received so far
   `datecancellationprinted` date default NULL, -- the date the line item was deleted
-  `cancellationreason` text default NULL, -- reason of cancellation
-  `order_internalnote` mediumtext, -- notes related to this order line, made for staff
-  `order_vendornote` mediumtext, -- notes related to this order line, made for vendor
-  `purchaseordernumber` mediumtext, -- not used? always NULL
+  `cancellationreason` MEDIUMTEXT default NULL, -- reason of cancellation
+  `order_internalnote` LONGTEXT, -- notes related to this order line, made for staff
+  `order_vendornote` LONGTEXT, -- notes related to this order line, made for vendor
+  `purchaseordernumber` LONGTEXT, -- not used? always NULL
   `basketno` int(11) default NULL, -- links this order line to a specific basket (aqbasket.basketno)
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this order line was last modified
   `rrp` decimal(13,2) DEFAULT NULL, -- the replacement cost for this line item
@@ -3167,7 +3167,7 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   line_item_id varchar(35) default NULL, -- Supplier's article id for Edifact orderline
   suppliers_reference_number varchar(35) default NULL, -- Suppliers unique edifact quote ref
   suppliers_reference_qualifier varchar(3) default NULL, -- Type of number above usually 'QLI'
-  `suppliers_report` text COLLATE utf8mb4_unicode_ci, -- reports received from suppliers
+  `suppliers_report` MEDIUMTEXT COLLATE utf8mb4_unicode_ci, -- reports received from suppliers
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
@@ -3308,8 +3308,8 @@ CREATE TABLE ratings ( -- information related to the star ratings in the OPAC
 DROP TABLE IF EXISTS quotes;
 CREATE TABLE `quotes` ( -- data for the quote of the day feature
   `id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the quote
-  `source` text DEFAULT NULL, -- source/credit for the quote
-  `text` mediumtext NOT NULL, -- text of the quote
+  `source` MEDIUMTEXT DEFAULT NULL, -- source/credit for the quote
+  `text` LONGTEXT NOT NULL, -- text of the quote
   `timestamp` datetime NOT NULL, -- date and time that the quote last appeared in the opac
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3360,35 +3360,35 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `verification_token` varchar(255) NOT NULL DEFAULT '',
   `borrowernumber` int(11) NOT NULL DEFAULT '0',
   `cardnumber` varchar(32) DEFAULT NULL,
-  `surname` mediumtext,
-  `firstname` text,
-  `title` mediumtext,
-  `othernames` mediumtext,
-  `initials` text,
+  `surname` LONGTEXT,
+  `firstname` MEDIUMTEXT,
+  `title` LONGTEXT,
+  `othernames` LONGTEXT,
+  `initials` MEDIUMTEXT,
   `streetnumber` varchar(10) DEFAULT NULL,
   `streettype` varchar(50) DEFAULT NULL,
-  `address` mediumtext,
-  `address2` text,
-  `city` mediumtext,
-  `state` text,
+  `address` LONGTEXT,
+  `address2` MEDIUMTEXT,
+  `city` LONGTEXT,
+  `state` MEDIUMTEXT,
   `zipcode` varchar(25) DEFAULT NULL,
-  `country` text,
-  `email` mediumtext,
-  `phone` text,
+  `country` MEDIUMTEXT,
+  `email` LONGTEXT,
+  `phone` MEDIUMTEXT,
   `mobile` varchar(50) DEFAULT NULL,
-  `fax` mediumtext,
-  `emailpro` text,
-  `phonepro` text,
+  `fax` LONGTEXT,
+  `emailpro` MEDIUMTEXT,
+  `phonepro` MEDIUMTEXT,
   `B_streetnumber` varchar(10) DEFAULT NULL,
   `B_streettype` varchar(50) DEFAULT NULL,
   `B_address` varchar(100) DEFAULT NULL,
-  `B_address2` text,
-  `B_city` mediumtext,
-  `B_state` text,
+  `B_address2` MEDIUMTEXT,
+  `B_city` LONGTEXT,
+  `B_state` MEDIUMTEXT,
   `B_zipcode` varchar(25) DEFAULT NULL,
-  `B_country` text,
-  `B_email` text,
-  `B_phone` mediumtext,
+  `B_country` MEDIUMTEXT,
+  `B_email` MEDIUMTEXT,
+  `B_phone` LONGTEXT,
   `dateofbirth` date DEFAULT NULL,
   `branchcode` varchar(10) DEFAULT NULL,
   `categorycode` varchar(10) DEFAULT NULL,
@@ -3399,17 +3399,17 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `lost` tinyint(1) DEFAULT NULL,
   `debarred` date DEFAULT NULL,
   `debarredcomment` varchar(255) DEFAULT NULL,
-  `contactname` mediumtext,
-  `contactfirstname` text,
-  `contacttitle` text,
+  `contactname` LONGTEXT,
+  `contactfirstname` MEDIUMTEXT,
+  `contacttitle` MEDIUMTEXT,
   `guarantorid` int(11) DEFAULT NULL,
-  `borrowernotes` mediumtext,
+  `borrowernotes` LONGTEXT,
   `relationship` varchar(100) DEFAULT NULL,
   `sex` varchar(1) DEFAULT NULL,
   `password` varchar(30) DEFAULT NULL,
   `flags` int(11) DEFAULT NULL,
   `userid` varchar(75) DEFAULT NULL,
-  `opacnote` mediumtext,
+  `opacnote` LONGTEXT,
   `contactnote` varchar(255) DEFAULT NULL,
   `sort1` varchar(80) DEFAULT NULL,
   `sort2` varchar(80) DEFAULT NULL,
@@ -3418,13 +3418,13 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `altcontactaddress1` varchar(255) DEFAULT NULL,
   `altcontactaddress2` varchar(255) DEFAULT NULL,
   `altcontactaddress3` varchar(255) DEFAULT NULL,
-  `altcontactstate` text,
+  `altcontactstate` MEDIUMTEXT,
   `altcontactzipcode` varchar(50) DEFAULT NULL,
-  `altcontactcountry` text,
+  `altcontactcountry` MEDIUMTEXT,
   `altcontactphone` varchar(50) DEFAULT NULL,
   `smsalertnumber` varchar(50) DEFAULT NULL,
   `privacy` int(11) DEFAULT NULL,
-  `extended_attributes` text DEFAULT NULL,
+  `extended_attributes` MEDIUMTEXT DEFAULT NULL,
   PRIMARY KEY (`verification_token` (191),`borrowernumber`),
   KEY `verification_token` (`verification_token` (191)),
   KEY `borrowernumber` (`borrowernumber`)
@@ -3438,8 +3438,8 @@ DROP TABLE IF EXISTS uploaded_files;
 CREATE TABLE uploaded_files (
     id int(11) NOT NULL AUTO_INCREMENT,
     hashvalue CHAR(40) NOT NULL,
-    filename TEXT NOT NULL,
-    dir TEXT NOT NULL,
+    filename MEDIUMTEXT NOT NULL,
+    dir MEDIUMTEXT NOT NULL,
     filesize int(11),
     dtcreated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     uploadcategorycode tinytext,
@@ -3460,7 +3460,7 @@ CREATE TABLE linktracker (
    biblionumber int(11) DEFAULT NULL, -- biblionumber of the record the link is from
    itemnumber int(11) DEFAULT NULL, -- itemnumber if applicable that the link was from
    borrowernumber int(11) DEFAULT NULL, -- borrowernumber who clicked the link
-   url text, -- the link itself
+   url MEDIUMTEXT, -- the link itself
    timeclicked datetime DEFAULT NULL, -- the date and time the link was clicked
    PRIMARY KEY (id),
    KEY bibidx (biblionumber),
@@ -3476,7 +3476,7 @@ CREATE TABLE linktracker (
 CREATE TABLE IF NOT EXISTS plugin_data (
   plugin_class varchar(255) NOT NULL,
   plugin_key varchar(255) NOT NULL,
-  plugin_value text,
+  plugin_value MEDIUMTEXT,
   PRIMARY KEY ( `plugin_class` (191), `plugin_key` (191) )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -3526,7 +3526,7 @@ ALTER TABLE `patron_list_patrons`
 
 CREATE TABLE IF NOT EXISTS marc_modification_templates (
     template_id int(11) NOT NULL AUTO_INCREMENT,
-    name text NOT NULL,
+    name MEDIUMTEXT NOT NULL,
     PRIMARY KEY (template_id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -3545,16 +3545,16 @@ CREATE TABLE IF NOT EXISTS marc_modification_template_actions (
   field_value varchar(100) DEFAULT NULL,
   to_field varchar(3) DEFAULT NULL,
   to_subfield varchar(1) DEFAULT NULL,
-  to_regex_search text,
-  to_regex_replace text,
+  to_regex_search MEDIUMTEXT,
+  to_regex_replace MEDIUMTEXT,
   to_regex_modifiers varchar(8) DEFAULT '',
   conditional enum('if','unless') DEFAULT NULL,
   conditional_field varchar(3) DEFAULT NULL,
   conditional_subfield varchar(1) DEFAULT NULL,
   conditional_comparison enum('exists','not_exists','equals','not_equals') DEFAULT NULL,
-  conditional_value text,
+  conditional_value MEDIUMTEXT,
   conditional_regex tinyint(1) NOT NULL DEFAULT '0',
-  description text,
+  description MEDIUMTEXT,
   PRIMARY KEY (mmta_id),
   CONSTRAINT `mmta_ibfk_1` FOREIGN KEY (`template_id`) REFERENCES `marc_modification_templates` (`template_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3666,7 +3666,7 @@ CREATE TABLE `localization` (
       entity varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
       code varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
       lang varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL, -- could be a foreign key
-      translation text COLLATE utf8mb4_unicode_ci,
+      translation MEDIUMTEXT COLLATE utf8mb4_unicode_ci,
       PRIMARY KEY (localization_id),
       UNIQUE KEY `entity_code_lang` (`entity`,`code`,`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -3714,8 +3714,8 @@ CREATE TABLE `courses` (
   `section` varchar(255) DEFAULT NULL, -- the 'section' of a course
   `course_name` varchar(255) DEFAULT NULL, -- the name of the course
   `term` varchar(80) DEFAULT NULL, -- the authorised value for the TERM
-  `staff_note` mediumtext, -- the text of the staff only note
-  `public_note` mediumtext, -- the text of the public / opac note
+  `staff_note` LONGTEXT, -- the text of the staff only note
+  `public_note` LONGTEXT, -- the text of the public / opac note
   `students_count` varchar(20) DEFAULT NULL, -- how many students will be taking this course/section
   `enabled` enum('yes','no') NOT NULL DEFAULT 'yes', -- determines whether the course is active
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -3787,8 +3787,8 @@ CREATE TABLE `course_reserves` (
   `cr_id` int(11) NOT NULL AUTO_INCREMENT,
   `course_id` int(11) NOT NULL, -- foreign key to link to courses.course_id
   `ci_id` int(11) NOT NULL, -- foreign key to link to courses_items.ci_id
-  `staff_note` mediumtext, -- staff only note
-  `public_note` mediumtext, -- public, OPAC visible note
+  `staff_note` LONGTEXT, -- staff only note
+  `public_note` LONGTEXT, -- public, OPAC visible note
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`cr_id`),
    UNIQUE KEY `pseudo_key` (`course_id`,`ci_id`),
@@ -3832,13 +3832,13 @@ CREATE TABLE `hold_fill_targets` (
 DROP TABLE IF EXISTS `housebound_profile`;
 CREATE TABLE `housebound_profile` (
   `borrowernumber` int(11) NOT NULL, -- Number of the borrower associated with this profile.
-  `day` text NOT NULL,  -- The preferred day of the week for delivery.
-  `frequency` text NOT NULL, -- The Authorised_Value definining the pattern for delivery.
-  `fav_itemtypes` text default NULL, -- Free text describing preferred itemtypes.
-  `fav_subjects` text default NULL, -- Free text describing preferred subjects.
-  `fav_authors` text default NULL, -- Free text describing preferred authors.
-  `referral` text default NULL, -- Free text indicating how the borrower was added to the service.
-  `notes` text default NULL, -- Free text for additional notes.
+  `day` MEDIUMTEXT NOT NULL,  -- The preferred day of the week for delivery.
+  `frequency` MEDIUMTEXT NOT NULL, -- The Authorised_Value definining the pattern for delivery.
+  `fav_itemtypes` MEDIUMTEXT default NULL, -- Free text describing preferred itemtypes.
+  `fav_subjects` MEDIUMTEXT default NULL, -- Free text describing preferred subjects.
+  `fav_authors` MEDIUMTEXT default NULL, -- Free text describing preferred authors.
+  `referral` MEDIUMTEXT default NULL, -- Free text indicating how the borrower was added to the service.
+  `notes` MEDIUMTEXT default NULL, -- Free text for additional notes.
   PRIMARY KEY  (`borrowernumber`),
   CONSTRAINT `housebound_profile_bnfk`
     FOREIGN KEY (`borrowernumber`)
@@ -3900,16 +3900,16 @@ CREATE TABLE `article_requests` (
   `biblionumber` int(11) NOT NULL,
   `itemnumber` int(11) DEFAULT NULL,
   `branchcode` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `title` text,
-  `author` text,
-  `volume` text,
-  `issue` text,
-  `date` text,
-  `pages` text,
-  `chapters` text,
-  `patron_notes` text,
+  `title` MEDIUMTEXT,
+  `author` MEDIUMTEXT,
+  `volume` MEDIUMTEXT,
+  `issue` MEDIUMTEXT,
+  `date` MEDIUMTEXT,
+  `pages` MEDIUMTEXT,
+  `chapters` MEDIUMTEXT,
+  `patron_notes` MEDIUMTEXT,
   `status` enum('PENDING','PROCESSING','COMPLETED','CANCELED') NOT NULL DEFAULT 'PENDING',
-  `notes` text,
+  `notes` MEDIUMTEXT,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_on` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -3966,7 +3966,7 @@ CREATE TABLE deletedbiblio_metadata (
 CREATE TABLE IF NOT EXISTS club_templates (
   id int(11) NOT NULL AUTO_INCREMENT,
   `name` tinytext NOT NULL,
-  description text,
+  description MEDIUMTEXT,
   is_enrollable_from_opac tinyint(1) NOT NULL DEFAULT '0',
   is_email_required tinyint(1) NOT NULL DEFAULT '0',
   branchcode varchar(10) NULL DEFAULT NULL,
@@ -3986,7 +3986,7 @@ CREATE TABLE IF NOT EXISTS clubs (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
   `name` tinytext NOT NULL,
-  description text,
+  description MEDIUMTEXT,
   date_start date DEFAULT NULL,
   date_end date DEFAULT NULL,
   branchcode varchar(10) NULL DEFAULT NULL,
@@ -4029,7 +4029,7 @@ CREATE TABLE IF NOT EXISTS club_template_enrollment_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
   `name` tinytext NOT NULL,
-  description text,
+  description MEDIUMTEXT,
   authorised_value_category varchar(16) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY club_template_id (club_template_id),
@@ -4044,7 +4044,7 @@ CREATE TABLE IF NOT EXISTS club_enrollment_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_enrollment_id int(11) NOT NULL,
   club_template_enrollment_field_id int(11) NOT NULL,
-  `value` text NOT NULL,
+  `value` MEDIUMTEXT NOT NULL,
   PRIMARY KEY (id),
   KEY club_enrollment_id (club_enrollment_id),
   KEY club_template_enrollment_field_id (club_template_enrollment_field_id),
@@ -4060,7 +4060,7 @@ CREATE TABLE IF NOT EXISTS club_template_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
   `name` tinytext NOT NULL,
-  description text,
+  description MEDIUMTEXT,
   authorised_value_category varchar(16) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY club_template_id (club_template_id),
@@ -4075,7 +4075,7 @@ CREATE TABLE IF NOT EXISTS club_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_field_id int(11) NOT NULL,
   club_id int(11) NOT NULL,
-  `value` text,
+  `value` MEDIUMTEXT,
   PRIMARY KEY (id),
   KEY club_template_field_id (club_template_field_id),
   KEY club_id (club_id),
@@ -4102,8 +4102,8 @@ CREATE TABLE illrequests (
     medium varchar(30) DEFAULT NULL,            -- The Koha request type
     accessurl varchar(500) DEFAULT NULL,        -- Potential URL for accessing item
     cost varchar(20) DEFAULT NULL,              -- Cost of request
-    notesopac text DEFAULT NULL,                -- Patron notes attached to request
-    notesstaff text DEFAULT NULL,               -- Staff notes attached to request
+    notesopac MEDIUMTEXT DEFAULT NULL,                -- Patron notes attached to request
+    notesstaff MEDIUMTEXT DEFAULT NULL,               -- Staff notes attached to request
     orderid varchar(50) DEFAULT NULL,           -- Backend id attached to request
     backend varchar(20) DEFAULT NULL,           -- The backend used to create request
     CONSTRAINT `illrequests_bnfk`
@@ -4124,7 +4124,7 @@ DROP TABLE IF EXISTS `illrequestattributes`;
 CREATE TABLE illrequestattributes (
     illrequest_id bigint(20) unsigned NOT NULL, -- ILL request number
     type varchar(200) NOT NULL,                 -- API ILL property name
-    value text NOT NULL,                        -- API ILL property value
+    value MEDIUMTEXT NOT NULL,                        -- API ILL property value
     PRIMARY KEY  (`illrequest_id`, `type` (191)),
     CONSTRAINT `illrequestattributes_ifk`
       FOREIGN KEY (illrequest_id)
@@ -4142,7 +4142,7 @@ CREATE TABLE library_groups (
     parent_id INT(11) NULL DEFAULT NULL,   -- if this is a child group, the id of the parent group
     branchcode VARCHAR(10) NULL DEFAULT NULL, -- The branchcode of a branch belonging to the parent group
     title VARCHAR(100) NULL DEFAULT NULL,     -- Short description of the goup
-    description TEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
+    description MEDIUMTEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
     ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0, -- Turn on the feature "Hide patron's info" for this group
     ft_search_groups_opac tinyint(1) NOT NULL DEFAULT 0, -- Use this group for staff side search groups
     ft_search_groups_staff tinyint(1) NOT NULL DEFAULT 0, -- Use this group for opac side search groups
