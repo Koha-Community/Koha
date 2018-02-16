@@ -472,8 +472,8 @@ subtest 'Test max_holds per library/patron category' => sub {
 
     $rule_branch->max_holds(5);
     $rule_branch->update();
-    $rule_branch->max_holds(5);
-    $rule_branch->insert();
+    $rule_all->max_holds(5);
+    $rule_all->insert();
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
     is( $ret, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 5' );
