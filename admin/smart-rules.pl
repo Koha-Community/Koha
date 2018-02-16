@@ -306,7 +306,7 @@ elsif ($op eq "add-branch-cat") {
             $sth_search->execute($categorycode);
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
-                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $categorycode, $max_holds );
+                $sth_update->execute( $maxissueqty, $maxonsiteissueqty, $max_holds, $categorycode );
             } else {
                 $sth_insert->execute( $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds );
             }
