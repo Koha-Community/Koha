@@ -296,7 +296,7 @@ elsif ($op eq "add-branch-cat") {
                     maxonsiteissueqty = ?
                 WHERE categorycode = ?
             |);
-            $sth_search->execute($branch);
+            $sth_search->execute($categorycode);
             my $res = $sth_search->fetchrow_hashref();
             if ($res->{total}) {
                 $sth_update->execute($maxissueqty, $maxonsiteissueqty, $categorycode);
