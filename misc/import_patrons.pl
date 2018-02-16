@@ -103,7 +103,7 @@ import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm 
 
 =head1 OPTIONS
 
-=over8
+=over 8
 
 =item B<-h|--help>
 
