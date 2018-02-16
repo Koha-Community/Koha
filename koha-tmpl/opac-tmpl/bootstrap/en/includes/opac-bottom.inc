@@ -108,10 +108,10 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/amazonimages_[% KOHA_VERSION %].js"></script>
 [% END %]
 
-<script src="[% interface %]/lib/emoji-picker/js/config.js"></script>
-<script src="[% interface %]/lib/emoji-picker/js/util.js"></script>
-<script src="[% interface %]/lib/emoji-picker/js/jquery.emojiarea.js"></script>
-<script src="[% interface %]/lib/emoji-picker/js/emoji-picker.js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/config_[% KOHA_VERSION %].js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/util_[% KOHA_VERSION %].js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/jquery.emojiarea_[% KOHA_VERSION %].js"></script>
+<script src="[% interface %]/lib/emoji-picker/js/emoji-picker_[% KOHA_VERSION %].js"></script>
 
 <script type="text/javascript">
     //<![CDATA[
