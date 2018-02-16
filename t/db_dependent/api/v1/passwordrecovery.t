@@ -260,7 +260,7 @@ subtest 'recovery() tests' => sub {
             email      => $patron->email,
             userid     => $patron->userid,
             custom_link => 'https://anotherallowed/reset-password.pl',
-            skip_mail => Mojo::JSON->true
+            skip_email => Mojo::JSON->true
         });
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
         $t->request_ok($tx)
@@ -270,7 +270,7 @@ subtest 'recovery() tests' => sub {
             email      => $patron->email,
             userid     => $patron->userid,
             custom_link => 'https://anotherallowed/reset-password.pl',
-            skip_mail => Mojo::JSON->true
+            skip_email => Mojo::JSON->true
         });
         $tx->req->cookies({name => 'CGISESSID', value => $session->id});
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
@@ -287,7 +287,7 @@ subtest 'recovery() tests' => sub {
             email      => $patron->email,
             userid     => $patron->userid,
             custom_link => 'https://notallowed/reset-password.pl',
-            skip_mail => Mojo::JSON->true,
+            skip_email => Mojo::JSON->true,
         });
         $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
@@ -298,7 +298,7 @@ subtest 'recovery() tests' => sub {
             email      => $patron->email,
             userid     => $patron->userid,
             custom_link => 'https://anotherallowed/reset-password.pl',
-            skip_mail => Mojo::JSON->true,
+            skip_email => Mojo::JSON->true,
         });
         $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
