@@ -272,7 +272,7 @@ subtest 'pending_count() and pending() tests' => sub {
 
     my $patron_1
         = $builder->build(
-        { source => 'Borrower', value => { branchcode => $library_1 } } );
+        { source => 'Borrower', value => { branchcode => $library_1, flags => 1 } } );
     my $patron_2
         = $builder->build(
         { source => 'Borrower', value => { branchcode => $library_2 } } );
