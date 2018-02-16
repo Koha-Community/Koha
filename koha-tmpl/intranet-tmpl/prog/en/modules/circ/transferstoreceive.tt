@@ -55,11 +55,11 @@
                             [% reser.patron.surname %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname %][% END %]
                         </a>
                         [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone %][% END %]
-                            [% IF ( reser.patron.email ) %]
+                            [% IF ( reser.patron.first_valid_email_address ) %]
                                 <br />
                                 [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.patron.email %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
-                                    [% reser.patron.email %]
+                                <a href="mailto:[% reser.patron.first_valid_email_address %]?subject=[% INCLUDE subject %] [% reser.title |html %]">
+                                    [% reser.patron.first_valid_email_address %]
                                 </a>
                             [% END %]
                         [% ELSE %]
