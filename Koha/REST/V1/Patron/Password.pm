@@ -71,7 +71,7 @@ sub recovery {
             );
         }
 
-        my $link = $body->{'custom_link'};
+        my $link = $body->{'complete_url'};
         my $skip_email =  0;
         if ($body->{'skip_email'}) {
             Koha::Exceptions::Authentication::Required->throw(

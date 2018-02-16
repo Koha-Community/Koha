@@ -204,7 +204,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://notallowed'
+            complete_url => 'https://notallowed'
         });
         $tx->req->cookies({name => 'CGISESSID', value => $session->id});
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
@@ -218,7 +218,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://allowed/reset-password.pl?uniqueKey={uuid}'
+            complete_url => 'https://allowed/reset-password.pl?uniqueKey={uuid}'
         });
         $tx->req->cookies({name => 'CGISESSID', value => $session->id});
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
@@ -259,7 +259,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://anotherallowed/reset-password.pl',
+            complete_url => 'https://anotherallowed/reset-password.pl',
             skip_email => Mojo::JSON->true
         });
         $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
@@ -269,7 +269,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://anotherallowed/reset-password.pl',
+            complete_url => 'https://anotherallowed/reset-password.pl',
             skip_email => Mojo::JSON->true
         });
         $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -286,7 +286,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://notallowed/reset-password.pl',
+            complete_url => 'https://notallowed/reset-password.pl',
             skip_email => Mojo::JSON->true,
         });
         $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
@@ -297,7 +297,7 @@ subtest 'recovery() tests' => sub {
         $tx = $t->ua->build_tx(POST => $url => json => {
             email      => $patron->email,
             userid     => $patron->userid,
-            custom_link => 'https://anotherallowed/reset-password.pl',
+            complete_url => 'https://anotherallowed/reset-password.pl',
             skip_email => Mojo::JSON->true,
         });
         $tx->req->cookies({name => 'CGISESSID', value => $service_session->id});
