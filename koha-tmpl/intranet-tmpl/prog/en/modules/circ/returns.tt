@@ -657,20 +657,20 @@
             <td class="ci-dateaccessioned">[% riloo.dateaccessioned | $KohaDates %]</td>
             <td class="ci-type">[% ItemTypes.GetDescription( riloo.itemtype ) %] [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) %]</td>
             <td class="ci-patron">[% IF ( riloo.duedate ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.borrowernumber %]">
-                    [% riloo.borsurname %], [% riloo.borfirstname %] ([% riloo.borcategorycode %])
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.patron.borrowernumber %]">
+                    [% riloo.patron.surname %], [% riloo.patron.firstname %] ([% riloo.patron.category.description %])
                 </a>
                 [% IF riloo.borissuescount %]
                     <span class="results_summary nowrap">
                         <span class="label">Checkouts:</span>
                         <span class="number_box">
-                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.borrowernumber %]">[% riloo.borissuescount %]</a>
+                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber %]">[% riloo.borissuescount %]</a>
                         </span>
                     </span>
                 [% END %]
             [% ELSE %]Not checked out[% END %]</td>
             <td class="ci-note">
-                [% IF ( riloo.bornote ) %]<p><span class="circ-hlt patron-note">[% riloo.bornote %]</p></span>[% END %]
+                [% IF ( riloo.patron.borrowernotes ) %]<p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes %]</p></span>[% END %]
                 [% IF ( riloo.itemnote ) %]<p><span class="circ-hlt item-note-public">[% riloo.itemnote %]</p></span>[% END %]
                 [% IF ( riloo.itemnotes_nonpublic ) %]<p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic %]</p></span>[% END %]
             </td>
