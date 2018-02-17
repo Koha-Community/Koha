@@ -78,7 +78,7 @@ eof
 
     # Stop the Zebra server if needed
     if is_zebra_running $name; then
-        koha-stop-zebra $name || /bin/true
+        koha-zebra --stop $name || /bin/true
     fi
     # Stop the indexer daemon if needed
     if is_indexer_running $name; then
