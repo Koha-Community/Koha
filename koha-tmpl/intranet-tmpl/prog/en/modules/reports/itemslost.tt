@@ -166,10 +166,10 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter.js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter_[% KOHA_VERSION %].js"></script>
     [% INCLUDE 'columns_settings.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/table_filters.js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/table_filters_[% KOHA_VERSION %].js"></script>
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
     <script type='text/javascript'>
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) %];
