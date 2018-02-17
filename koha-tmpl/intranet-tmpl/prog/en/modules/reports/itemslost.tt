@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE ColumnsSettings %]
 [% USE KohaDates %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
@@ -94,9 +95,9 @@
                         <td>[% item.price %]</td>
                         <td>[% item.replacementprice %]</td>
                         <td>[% Branches.GetName(item.homebranch) %]</td>
-                        <td>[% item.effective_itemtype %]</td>
+                        <td>[% ItemTypes.GetDescription(item.effective_itemtype) %]</td>
                         <td>[% Branches.GetName(item.holdingbranch) %]</td>
-                        <td>[% item.location %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'LOC', item.location )%]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
                         <td>[% item.itemnotes %]</td>
                     </tr>
