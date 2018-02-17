@@ -5,10 +5,12 @@
 # Required-Stop:     $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Start Zebra server for each Koha instance
+# Short-Description: Start required services for each Koha instance
 # Description:       For each enabled Koha instance on this host,
-#                    as listed by "koha-list --enabled", start a Zebra
-#                    server (using koha-start-zebra).
+#                    if enabled, start:
+#                      - a Zebra server (using koha-zebra)
+#                      - a Plack server (using koha-plack)
+#                      - a SIP server   (using koha-start-sip)
 ### END INIT INFO
 
 # Author: Lars Wirzenius <lars@catalyst.net.nz>
