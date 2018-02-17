@@ -67,7 +67,7 @@ do
                 koha-stop-sip $name
             fi
             if is_zebra_running $name; then
-                koha-stop-zebra $name
+                koha-zebra --stop $name
             fi
             if is_indexer_running $name; then
                 koha-indexer --stop $name

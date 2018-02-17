@@ -9,12 +9,12 @@
     notifempty
     sharedscripts
     prerotate
-        /usr/sbin/koha-stop-zebra $(koha-list --enabled) > /dev/null
+        /usr/sbin/koha-zebra --stop $(koha-list --enabled) > /dev/null
         /usr/sbin/koha-plack --stop --quiet $(koha-list --enabled --plack) > /dev/null
     endscript
     postrotate
         /etc/init.d/apache2 reload > /dev/null
         /usr/sbin/koha-plack --start --quiet $(koha-list --enabled --plack) > /dev/null
-        /usr/sbin/koha-start-zebra $(koha-list --enabled) > /dev/null
+        /usr/sbin/koha-zebra --start $(koha-list --enabled) > /dev/null
     endscript
 }
