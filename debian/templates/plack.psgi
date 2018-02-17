@@ -39,7 +39,7 @@ use Koha::DateUtils;
 
 #BZ 16357, add timestamps to warnings
 use Log::Log4perl qw(:easy);
-Log::Log4perl->easy_init($WARN);
+Log::Log4perl->easy_init({ level => $WARN, utf8 => 1 });
 my $logger = Log::Log4perl->get_logger(); # use the default logger style
 $SIG{__WARN__} = sub {
     my $message = shift;
