@@ -114,6 +114,12 @@ __PACKAGE__->table("items");
   default_value: 0
   is_nullable: 0
 
+=head2 damaged_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 itemlost
 
   data_type: 'tinyint'
@@ -323,6 +329,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "damaged",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "damaged_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost_on",
@@ -675,8 +687,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:50sZaqt8I9HG2reLqzSSVQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-18 16:41:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CrNXvpDUvvcuPZK2Gfzs/Q
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

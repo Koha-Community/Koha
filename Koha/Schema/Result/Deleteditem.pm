@@ -111,6 +111,12 @@ __PACKAGE__->table("deleteditems");
   default_value: 0
   is_nullable: 0
 
+=head2 damaged_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 itemlost
 
   data_type: 'tinyint'
@@ -309,6 +315,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "damaged",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "damaged_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost_on",
@@ -395,8 +407,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RaHchgIC64wq0q4MXqEITA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-18 16:41:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xb11fPjp5PyXU7yfFWHycw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
