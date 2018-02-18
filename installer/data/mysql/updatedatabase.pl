@@ -15543,8 +15543,23 @@ if( CheckVersion( $DBversion ) ) {
     }
     $dbh->do(q|SET foreign_key_checks = 1|);
 
-    print "Upgrade to $DBversion done (Bug 18336: Convert DB tables to utf8mb4 💩)\n";
+    print "Upgrade to $DBversion done (Bug 18336 - Convert DB tables to utf8mb4 💩)\n";
     SetVersion($DBversion);
+}
+
+
+$DBversion = '17.12.00.017';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'items', 'damaged_on' ) ) {
+        $dbh->do( "ALTER TABLE items ADD COLUMN damaged_on DATETIME NULL AFTER damaged");
+    }
+    if( !column_exists( 'deleteditems', 'damaged_on' ) ) {
+        $dbh->do( "ALTER TABLE deleteditems ADD COLUMN damaged_on DATETIME NULL AFTER damaged");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17672 - Add damaged_on to items and deleteditems tables)\n";
 }
 
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
