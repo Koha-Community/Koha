@@ -106,7 +106,7 @@
                 <tr>
                     <td>
                         [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">[% END %]
-                        [% account.description %]&nbsp;[% IF account.item AND account.accounttype != 'F' AND account.accounttype != 'FU' %] [% account.item.biblio.title |html %][% END %]
+                        [% account.description %]&nbsp;[% IF account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' %] [% account.item.biblio.title |html %][% END %]
                         [% IF ( account.itemnumber ) %]</a>[% END %]
                     </td>
                     <td>[% account.date | $KohaDates %]</td>
