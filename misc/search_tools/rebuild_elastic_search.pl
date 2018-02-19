@@ -92,13 +92,13 @@ use MARC::Record;
 use Modern::Perl;
 use Pod::Usage;
 
-use Data::Dumper; # TODO remove
-
 my $verbose = 0;
 my $commit = 5000;
 my ($delete, $help, $man);
 my ($index_biblios, $index_authorities);
 my (@biblionumbers);
+
+$|=1; # flushes output
 
 GetOptions(
     'c|commit=i'       => \$commit,
@@ -161,10 +161,8 @@ sub do_reindex {
 
     my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new( { index => $index_name } );
     if ($delete) {
-
-        # We know it's safe to not recreate the indexer because update_index
-        # hasn't been called yet.
         $indexer->drop_index();
+        $indexer->create_index();
     }
 
     my $count        = 0;
@@ -173,23 +171,29 @@ sub do_reindex {
     while ( my $record = $next->() ) {
         my $id     = $record->id;
         my $record = $record->record;
-        _log( 1, "$id\n" );
         $count++;
+        if ( $verbose == 1 ) {
+            _log( 1, "$count records processed\n" ) if ( $count % 1000 == 0);
+        } else {
+            _log( 2, "$id\n" );
+        }
 
         push @id_buffer,     $id;
         push @commit_buffer, $record;
         if ( !( --$commit_count ) ) {
-            _log( 2, "Committing...\n" );
+            _log( 1, "Committing $commit records..." );
             $indexer->update_index( \@id_buffer, \@commit_buffer );
             $commit_count  = $commit;
             @id_buffer     = ();
             @commit_buffer = ();
+            _log( 1, " done\n" );
         }
     }
 
     # There are probably uncommitted records
+    _log( 1, "Committing final records...\n" );
     $indexer->update_index( \@id_buffer, \@commit_buffer );
-    _log( 1, "$count records indexed.\n" );
+    _log( 1, "Total $count records indexed\n" );
 }
 
 # Checks some basic stuff to ensure that it's sane before we start.

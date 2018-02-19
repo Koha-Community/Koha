@@ -139,6 +139,28 @@ sub delete_index_background {
     $self->delete_index(@_);
 }
 
+=head2 $indexer->create_index();
+
+Create an index on the Elasticsearch server.
+
+=cut
+
+sub create_index {
+    my ($self) = @_;
+
+    if (!$self->store) {
+        my $params  = $self->get_elasticsearch_params();
+        $self->store(
+            Catmandu::Store::ElasticSearch->new(
+                %$params,
+                index_settings => $self->get_elasticsearch_settings(),
+                index_mappings => $self->get_elasticsearch_mappings(),
+            )
+        );
+    }
+    $self->store->bag->commit;
+}
+
 =head2 $indexer->drop_index();
 
 Drops the index from the elasticsearch server. Calling C<update_index>
@@ -161,8 +183,9 @@ sub drop_index {
             )
         );
     }
-    $self->store->drop();
+    my $store = $self->store;
     $self->store(undef);
+    $store->drop();
 }
 
 sub _sanitise_records {

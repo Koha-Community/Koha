@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -52,11 +52,41 @@ SKIP: {
 
     eval { $indexer->get_elasticsearch_params; };
 
-    skip 'ElasticSeatch configuration not available', 1
+    skip 'Elasticsearch configuration not available', 1
         if $@;
 
     ok( $indexer->update_index(undef,$records), 'Update Index' );
 }
+
+subtest 'create_index() tests' => sub {
+
+    plan tests => 3;
+
+    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
+    $se->mock( 'get_elasticsearch_params', sub {
+        my ($self, $sub ) = @_;
+
+        my $method = $se->original( 'get_elasticsearch_params' );
+        my $params = $method->( $self );
+        $params->{index_name} .= '__test';
+        return $params;
+    });
+
+    my $indexer;
+    ok(
+        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
+        'Creating a new indexer object'
+    );
+    ok(
+        $indexer->create_index(),
+        'Creating an index'
+    );
+    $indexer->drop_index();
+    ok(
+        $indexer->drop_index(),
+        'Dropping the index'
+    );
+};
 
 subtest '_convert_marc_to_json() tests' => sub {
 
