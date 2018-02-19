@@ -81,7 +81,9 @@ a.add, a.delete {
           An error occurred when deleting the existing mappings. Nothing has been changed!
           (search field [% m.values.field_name | html %] with mapping [% m.values.marc_field | html %].)
         [% CASE 'success_on_update' %]
-          Mapping updated successfully.
+          Mappings updated successfully.
+        [% CASE 'success_on_reset' %]
+          Mappings have been reset successfully.
         [% CASE %]
           [% m.code | html %]
         [% END %]
@@ -109,6 +111,19 @@ a.add, a.delete {
         </div>
     [% END %]
 
+    [% IF reset_confirm %]
+        <div class="dialog alert">
+            <h3>The current mappings you see on the screen will be erased and replaced by the mappings in the mappings.yaml file.</h3>
+            <form action="?" method="post">
+                <input type="hidden" name="op" value="reset_confirmed" />
+                <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
+            </form>
+            <br>
+            <form action="?" method="post">
+                <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not reset mappings</button>
+            </form>
+        </div>
+    [% END %]
     <form method="post">
         <input type="hidden" name="op" value="edit" />
         <div id="tabs" class="toptabs" style="clear:both">
@@ -298,7 +313,10 @@ a.add, a.delete {
                 </div>
             [% END %]
         </div>
-        <p><button class="btn btn-default" type="submit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button></p>
+        <p>
+            <button class="btn btn-default" type="submit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button>
+            <a class="btn btn-default" href="?op=reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</a>
+        </p>
     </form>
 </div>
 

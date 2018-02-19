@@ -97,14 +97,16 @@ if ( $op eq 'edit' ) {
         $schema->storage->txn_commit;
     }
 }
-elsif( $op eq 'reset' ) {
-    # TODO Move this feature to the interface
-    my $sure = $input->param('i_know_what_i_am_doing');
-    if ( $sure ) {
-        Koha::SearchMarcMaps->search->delete;
-        Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
-    }
+elsif( $op eq 'reset' || $op eq 'reset_confirmed' ) {
+    Koha::SearchMarcMaps->delete;
+    Koha::SearchFields->delete;
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
+    push @messages, { type => 'message', code => 'success_on_reset' };
 }
+elsif( $op eq 'reset_confirm' ) {
+    $template->param( reset_confirm => 1 );
+}
+
 
 my @indexes;
 
@@ -114,6 +116,7 @@ for my $index_name (qw| biblios authorities |) {
         {   join => { search_marc_to_fields => 'search_marc_map' },
             '+select' => [ 'search_marc_to_fields.facet', 'search_marc_to_fields.suggestible', 'search_marc_to_fields.sort', 'search_marc_map.marc_field' ],
             '+as'     => [ 'facet',                       'suggestible',                       'sort',                       'marc_field' ],
+            order_by => { -asc => [qw/name marc_field/] }
         }
     );
 
