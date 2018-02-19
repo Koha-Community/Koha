@@ -220,7 +220,11 @@ $(document).ready(function () {
 <!-- Patron has waiting holds -->
 [% IF ( waiting_holds ) %]
     <div id="awaiting-pickup" class="dialog message">
-        <h3>[% holdsfirstname %] [% holdssurname %] has [% waiting_holds %] hold(s) waiting for pickup.</h3>
+        [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]	
+            <h3>[% holdsfirstname %] [% holdssurname %] has [% waiting_holds %] hold(s) waiting for pickup.</h3> 
+	[% ELSE %]
+            <h3>Patron has [% waiting_holds %] hold(s) waiting for pickup.</h3>
+	[% END %]
         <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber %]">Check out to this patron</a>.</p>
     </div>
 [% END %]
