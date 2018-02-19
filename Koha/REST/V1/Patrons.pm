@@ -44,8 +44,8 @@ sub list {
 
     return try {
         my $patrons_set = Koha::Patrons->new;
-        my @patrons = $c->objects->search( $patrons_set )->as_list;
-        return $c->render( status => 200, openapi => \@patrons );
+        my $patrons = $c->objects->search( $patrons_set );
+        return $c->render( status => 200, openapi => $patrons );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
