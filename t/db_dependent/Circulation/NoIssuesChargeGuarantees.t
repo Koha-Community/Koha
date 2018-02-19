@@ -45,7 +45,7 @@ my $patron = $builder->build(
     {
         source => 'Borrower',
         value => {
-            patron_category => $patron_category->{categorycode},
+            categorycode => $patron_category->{categorycode},
         }
     }
 );
@@ -54,7 +54,7 @@ my $guarantee = $builder->build(
         source => 'Borrower',
         value  => {
             guarantorid => $patron->{borrowernumber},
-            patron_category => $patron_category->{categorycode},
+            categorycode => $patron_category->{categorycode},
         }
     }
 );
