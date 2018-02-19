@@ -44,7 +44,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'recovery() tests' => sub {
-    plan tests => 32;
+    plan tests => 35;
 
     $schema->storage->txn_begin;
 
@@ -143,6 +143,18 @@ subtest 'recovery() tests' => sub {
         $rs->search({ borrowernumber => $patron->borrowernumber })->count, 1,
         'Password modification request found in database'
     );
+    $rs->next->set_columns({
+        valid_until => '1970-01-01 12:00:00' })->update_or_insert();
+
+    $tx = $t->ua->build_tx(POST => $url => json => {
+        email      => $patron->email,
+        cardnumber => $patron->cardnumber
+    });
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(201)
+      ->json_is('/status' => 1, 'Duplicate expired request regenerated');
 
     my $notice_content = Koha::Notice::Messages->search({
         borrowernumber => $patron->borrowernumber,
@@ -192,7 +204,7 @@ subtest 'recovery() tests' => sub {
         letter_code => 'PASSWORD_RESET',
         message_transport_type => 'email'
     })->count;
-    is($notice, 3, 'Found password reset letters in message queue.');
+    is($notice, 4, 'Found password reset letters in message queue.');
 
     subtest 'custom reset link' => sub {
         plan tests => 5;

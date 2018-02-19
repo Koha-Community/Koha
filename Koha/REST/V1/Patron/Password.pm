@@ -27,6 +27,7 @@ use Koha::Patron::Password::Recovery qw(
     SendPasswordRecoveryEmail
     ValidateBorrowernumber
     CompletePasswordRecovery
+    DeleteExpiredPasswordRecovery
 );
 use Koha::Patrons;
 
@@ -87,8 +88,9 @@ sub recovery {
                 $skip_email = 1;
             }
         }
-        
+
         my $resend = ValidateBorrowernumber($patron->borrowernumber);
+        DeleteExpiredPasswordRecovery($patron->borrowernumber) unless $resend;
 
         my $ret = SendPasswordRecoveryEmail($patron, $patron->email, $resend, {
             url => $link,
