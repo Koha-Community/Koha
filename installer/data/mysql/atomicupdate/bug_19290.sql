@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES  ('BrowseResultSelection','0',NULL,'Enable/Disable browsing search results fromt the bibliographic record detail page in staff client','YesNo');

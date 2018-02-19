@@ -15564,7 +15564,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17672 - Add damaged_on to items and deleteditems tables)\n";
 }
 
-# DEVELOPER PROCESS, search for anything to execute in the db_update directory
+$DBversion = '17.12.00.018';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q|
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES  ('BrowseResultSelection','0',NULL,'Enable/Disable browsing search results fromt the bibliographic record detail page in staff client','YesNo')
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19290 - Add system preference BrowseResultSelection)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
