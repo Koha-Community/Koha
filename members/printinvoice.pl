@@ -80,7 +80,7 @@ if ( $accountline->{'amountoutstanding'} <= 0 ) {
 }
 
 my %row = (
-    'date'                    => dt_from_string( $accountline->{'date'}, dateonly => 1 ),
+    'date'                    => dt_from_string( $accountline->{'date'} ),
     'amountcredit'            => $accountline->{'amountcredit'},
     'amountoutstandingcredit' => $accountline->{'amountoutstandingcredit'},
     'description'             => $accountline->{'description'},

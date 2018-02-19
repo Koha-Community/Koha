@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE Branches %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print receipt for [% patron.cardnumber %]</title>
@@ -45,7 +46,7 @@
 
   [% FOREACH account IN accounts %]
 <tr class="highlight">
-      <td>[% account.date %]</td>
+      <td>[% account.date | $KohaDates%]</td>
        <td>
         [% SWITCH account.accounttype %]
           [% CASE 'Pay' %]Payment, thanks
