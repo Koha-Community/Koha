@@ -106,7 +106,7 @@ while ( my $line = $accts->next ) {
 
     if ( $accountline->{itemnumber} ) {
         # Because we will not have access to the object from the template
-        $accountline->{item} = { biblionumber => $line->item->biblionumber, };
+        $accountline->{item} = $line->item;
     }
     push @accountlines, $accountline;
 }
