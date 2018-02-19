@@ -423,7 +423,7 @@ subtest 'NORMARC' => sub {
 };
 
 subtest 'IsMarcStructureInternal' => sub {
-    plan tests => 6;
+    plan tests => 8;
     my $tagslib = GetMarcStructure();
     my @internals;
     for my $tag ( sort keys %$tagslib ) {
@@ -433,12 +433,14 @@ subtest 'IsMarcStructureInternal' => sub {
         }
     }
     @internals = uniq @internals;
-    is( scalar(@internals), 4, 'expect four internals');
+    is( scalar(@internals), 6, 'expect 6 internals');
     is( grep( /^lib$/, @internals ), 1, 'check lib' );
     is( grep( /^tab$/, @internals ), 1, 'check tab' );
     is( grep( /^mandatory$/, @internals ), 1, 'check mandatory' );
     is( grep( /^repeatable$/, @internals ), 1, 'check repeatable' );
     is( grep( /^a$/, @internals ), 0, 'no subfield a' );
+    is( grep( /^ind1_defaultvalue$/, @internals ), 1, 'check indicator 1 default value' );
+    is( grep( /^ind2_defaultvalue$/, @internals ), 1, 'check indicator 2 default value' );
 };
 
 subtest 'deletedbiblio_metadata' => sub {
