@@ -15468,7 +15468,7 @@ if( CheckVersion( $DBversion ) ) {
                         MODIFY COLUMN kohafield
                             VARCHAR(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                         MODIFY COLUMN authorised_value
-                            VARCHAR(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                            VARCHAR(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                         MODIFY COLUMN authtypecode
                             VARCHAR(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                         MODIFY COLUMN value_builder
@@ -15478,7 +15478,9 @@ if( CheckVersion( $DBversion ) ) {
                         MODIFY COLUMN seealso
                             VARCHAR(1100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                         MODIFY COLUMN link
-                            VARCHAR(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+                            VARCHAR(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                        MODIFY COLUMN defaultvalue
+                            MEDIUMTEXT COLLATE utf8mb4_unicode_ci default NULL
                 |);
                 $dbh->do(qq|ALTER TABLE $name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci|);
             }

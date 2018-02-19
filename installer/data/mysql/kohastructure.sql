@@ -3444,7 +3444,7 @@ CREATE TABLE uploaded_files (
     dir MEDIUMTEXT NOT NULL,
     filesize int(11),
     dtcreated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    uploadcategorycode tinytext,
+    uploadcategorycode TEXT,
     owner int(11),
     public tinyint,
     permanent tinyint,
@@ -3967,7 +3967,7 @@ CREATE TABLE deletedbiblio_metadata (
 
 CREATE TABLE IF NOT EXISTS club_templates (
   id int(11) NOT NULL AUTO_INCREMENT,
-  `name` tinytext NOT NULL,
+  `name` TEXT NOT NULL,
   description MEDIUMTEXT,
   is_enrollable_from_opac tinyint(1) NOT NULL DEFAULT '0',
   is_email_required tinyint(1) NOT NULL DEFAULT '0',
@@ -3987,7 +3987,7 @@ CREATE TABLE IF NOT EXISTS club_templates (
 CREATE TABLE IF NOT EXISTS clubs (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
-  `name` tinytext NOT NULL,
+  `name` TEXT NOT NULL,
   description MEDIUMTEXT,
   date_start date DEFAULT NULL,
   date_end date DEFAULT NULL,
@@ -4030,7 +4030,7 @@ CREATE TABLE IF NOT EXISTS club_enrollments (
 CREATE TABLE IF NOT EXISTS club_template_enrollment_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
-  `name` tinytext NOT NULL,
+  `name` TEXT NOT NULL,
   description MEDIUMTEXT,
   authorised_value_category varchar(16) DEFAULT NULL,
   PRIMARY KEY (id),
@@ -4061,7 +4061,7 @@ CREATE TABLE IF NOT EXISTS club_enrollment_fields (
 CREATE TABLE IF NOT EXISTS club_template_fields (
   id int(11) NOT NULL AUTO_INCREMENT,
   club_template_id int(11) NOT NULL,
-  `name` tinytext NOT NULL,
+  `name` TEXT NOT NULL,
   description MEDIUMTEXT,
   authorised_value_category varchar(16) DEFAULT NULL,
   PRIMARY KEY (id),
