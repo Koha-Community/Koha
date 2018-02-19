@@ -123,6 +123,7 @@
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
 </fieldset>
 </form>
+[% ELSE %]
     <p>[% patron.firstname |html %] [% patron.surname |html %] has no outstanding fines.</p>
 [% END %]
 </div></div>
