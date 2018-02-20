@@ -388,4 +388,26 @@ $(document).ready(function() {
       });
     }, 300);
   }
+
+
+
+  
+  $('#subscription_summary .rows ol li:nth-child(5)').css('white-space', 'pre');
+  $('#subscription_summary .rows ol li:nth-child(5) span.label').css('display', 'block').css('float', 'none');
+
+  /*KOHA-1092:*/
+
+  if ( $( "#circ_returns #exemptcheck" ).length ) {
+    $( "#circ_returns #dropboxcheck" ).parent().hide();
+  }else{
+    $( "#circ_returns fieldset#checkin_options" ).hide();
+  }
+
+  /* Modify advance search options */
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="ln,rtrn"]').attr('value', 'language');
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="pn"]').attr('value', 'name');
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="pn,phr"]').attr('value', 'name,phr');
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="pl"]').attr('value', 'place-of-publication');
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="curriculum"]').hide();
+  $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="yr,st-year"]').hide();
 })(jQuery);
