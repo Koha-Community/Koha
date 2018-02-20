@@ -297,6 +297,7 @@ function checkMultiHold() {
     [% UNLESS ( multi_hold ) %]
       <h3>Cannot place hold</h3>
       <ul>
+      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
         [% IF ( exceeded_maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% maxreserves %] total holds.</li>
         [% ELSIF ( exceeded_holds_per_record ) %]
@@ -312,15 +313,40 @@ function checkMultiHold() {
         [% ELSIF ( maxreserves ) %]
           <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> has too many holds.</li>
         [% END %]
+      [% ELSE %]
+        [% IF ( exceeded_maxreserves ) %]
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">]Patron</a> can only place a maximum of [% maxreserves %] total holds.</li>
+        [% ELSIF ( exceeded_holds_per_record ) %]
+          <li><strong>Too many holds for this record: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+        [% ELSIF ( alreadypossession ) %]
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> <strong>is already in possession</strong> of one item.</li>
+        [% ELSIF ( alreadyreserved ) %]
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> <strong>already has a hold</strong> on this item.</li>
+        [% ELSIF ( ageRestricted ) %]
+          <li><strong>Age restricted</strong></li>
+        [% ELSIF ( none_available ) %]
+          <li><strong>No items are available</strong> to be placed on hold.</li>
+        [% ELSIF ( maxreserves ) %]
+          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> has too many holds.</li>
+        [% END %]
+      [% END %]
       </ul>
     [% ELSE %]
         <h3>Cannot place hold on some items</h3>
         [% IF ( exceeded_maxreserves ) %]
-          <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+	  [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+            <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+	  [% ELSE %]
+            <li><strong>Too many holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> can place [% new_reserves_allowed %] of the requested [% new_reserves_count %] holds for a maximum of [% maxreserves %] total holds.</li>
+	  [% END %]
         [% ELSIF ( exceeded_holds_per_record ) %]
             [% FOREACH biblioloo IN biblioloop %]
                 [% IF (biblioloo.tooManyHoldsForThisRecord) %]
+		  [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
                     <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+		  [% ELSE %]
+                    <li><strong>Too many holds for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]"> [% biblioloo.title %]</a>: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron </a> can only place a maximum of [% max_holds_for_record %] hold(s) on this record.</li>
+		  [% END %]
                 [% END %]
             [% END %]
         [% END %]
@@ -332,26 +358,42 @@ function checkMultiHold() {
 [% IF ( expiry || diffbranch || restricted || ( amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') ) ) %]
 <div class="dialog message"><ul>
     [% IF ( expiry ) %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Account has expired</strong></li>
+      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Account has expired</strong></li>
+      [% ELSE %]
+        <li><strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patrons</a> account has expired</strong></li>
+      [% END %]
     [% END %]
 
     [% IF restricted %]
-    <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has restrictions</strong></li>
+      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has restrictions</strong></li>
+      [% ELSE %]
+        <li><strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]#reldebarments">Patron</a> has restrictions</strong></li>
+      [% END %]
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+        <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+      [% ELSE %]
+        <li><strong><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">Patron</a> has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+      [% END %]
     [% END %]
 
     [% IF ( diffbranch ) %]
-    <li> <strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> Patron's home library: ([% borrower_branchname %] / [% borrower_branchcode %] )</li>
+      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+        <li><strong>Pickup library is different. </strong>Patron: <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> Patron's home library: ([% borrower_branchname %] / [% borrower_branchcode %])</li>
+      [% ELSE %]
+        <li><strong>Pickup library is different. </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron's</a> home library: ([% borrower_branchname %] / [% borrower_branchcode %])</li>
+      [% END %]
     [% END %]
 
 </ul></div>
 [% END %]
 
   [% IF ( messageborrower ) %]
-   <div class="dialog alert"><h3>Patron not found:</h3> <p>Name or barcode not found. Please try an other </p></div>
+    <div class="dialog alert"><h3>Patron not found:</h3> <p>Name or barcode not found. Please try an other </p></div>
   [% END %]
 
   <fieldset class="rows left">
@@ -382,7 +424,11 @@ function checkMultiHold() {
 
        <ol> <li><span class="label">Patron:</span>
             [% IF ( borrowernumber ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] ([% cardnumber %])</a>
+		[% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] ([% cardnumber %])</a>
+		[% ELSE %]
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% cardnumber %]</a>
+		[% END %]
             [% ELSE %]
                 Not defined yet
             [% END %]
@@ -670,7 +716,11 @@ function checkMultiHold() {
             [% END %]
 
           [% IF ( biblioloo.alreadyres ) %]
-              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+	      [% IF NOT Koha.Preference('ReducePatronInfoOnCirculation') %]
+                <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+	      [% ELSE %]
+                <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Patron</a> <strong>already has a hold</strong> on this item </li>
+	      [% END %]
           [% END %]
           [% IF ( biblioloo.none_avail ) %]
               <li> <strong>No items are available</strong> to be placed on hold</li>
