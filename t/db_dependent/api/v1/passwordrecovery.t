@@ -334,7 +334,7 @@ subtest 'recovery() tests' => sub {
 };
 
 subtest 'complete_recovery() tests' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -387,6 +387,16 @@ subtest 'complete_recovery() tests' => sub {
       $stored_pw,
        Koha::AuthUtils::hash_password('1234', $stored_pw), 'Password changed'
     );
+
+    $tx = $t->ua->build_tx(POST => $url => json => {
+        uuid                 => $uuid_str,
+        new_password         => '1234',
+        confirm_new_password => '1234',
+    });
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(404, 'Previous uuid not found');
 
     $schema->storage->txn_rollback;
 };

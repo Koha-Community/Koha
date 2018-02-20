@@ -155,6 +155,7 @@ sub complete_recovery {
         }
         my $password = $body->{new_password};
         $patron->update_password( $patron->userid, hash_password($password) );
+        CompletePasswordRecovery($body->{uuid});
         return $c->render(status => 200, openapi => {});
     }
     catch {
