@@ -7,7 +7,7 @@ VALUES
 
 ('claimacquisition','ACQCLAIM','Требование приобретения','Экземпляр не получено','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Номер заказа <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> каждый) получено не было.</order>', 'email'),
 
-('serial','RLIST','Список скерування','Сериальные издания уже доступное','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nСледующий выпуск уже доступен:\r\n\r\n<<items.content>>\r\n\r\nПросьба забрать его в любое удобное для Вас время.', 'email'),
+('serial','SERIAL_ALERT','Список скерування','Сериальные издания уже доступное','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nСледующий выпуск уже доступен:\r\n\r\n<<items.content>>\r\n\r\nПросьба забрать его в любое удобное для Вас время.', 'email'),
 
 ('members','ACCTDETAILS','Шаблон данных учетной записи - типовые','Данные Вашего нового учетного счета в Коха.','Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nДанные Вашего нового учетного счета в Коха такие:\r\n\r\nПользователь:  <<borrowers.userid>>\r\nПароль: <<borrowers.password>>\r\n\r\nЕсли у Вас возникли проблемы или вопросы по поводу Вашей учетной записи, пожалуйста, свяжитесь с администратором Коха.\r\n\r\nСпасибо,\r\nадминистратор Koha\r\nkohaadmin@yoursite.org', 'email'),
 

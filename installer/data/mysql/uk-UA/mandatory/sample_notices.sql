@@ -14,7 +14,7 @@ INSERT INTO `letter` (module, code, name, title, content, message_transport_type
  '<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n Будь ласка, замовляйте для бібліотеки:\r\n\r\n<order>Номер замовлення <<aqorders.ordernumber>> (<<biblio.title>>) (кількість: <<aqorders.quantity>>) ($<<aqorders.listprice>> кожний).</order>\r\n\r\n Спасибі,\n\n<<branches.branchname>>',
  'email'),
 
-('serial','RLIST','список скерування', 'Серіальне видання вже доступне',
+('serial','SERIAL_ALERT','список скерування', 'Серіальне видання вже доступне',
  '<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nНаступний випуск вже доступний:\r\n\r\n<<biblio.title>> / <<biblio.author>> (<<items.barcode>>)\r\n\r\n Прохання забрати його в будь-який зручний для Вас час.',
  'email'),
 
