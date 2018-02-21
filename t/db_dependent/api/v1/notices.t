@@ -385,7 +385,7 @@ subtest 'delete() tests' => sub {
 };
 
 subtest 'Notices::Report::labyrintti() tests' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -400,6 +400,20 @@ subtest 'Notices::Report::labyrintti() tests' => sub {
 
     my $labyrintti_config = {
         labyrintti => {
+            reportUrlAllowedIPs => ''
+        }
+    };
+
+    t::lib::Mocks::mock_config('smsProviders', $labyrintti_config);
+
+    my $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
+        => form => { status => 'ERROR', message => 'Landline number' });
+    $tx->req->env({REMOTE_ADDR => '100.100.100.100'});
+    $t->request_ok($tx)
+      ->status_is(401);
+
+    $labyrintti_config = {
+        labyrintti => {
             reportUrlAllowedIPs => '127.0.0.1,123.123.123.123'
         }
     };
@@ -408,7 +422,7 @@ subtest 'Notices::Report::labyrintti() tests' => sub {
 
     my $message_id = $notice->{'message_id'};
 
-    my $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
+    $tx = $t->ua->build_tx(POST => "/api/v1/notices/-1/report/labyrintti"
         => form => { status => 'ERROR', message => 'Landline number' });
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
