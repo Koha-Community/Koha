@@ -120,6 +120,12 @@ __PACKAGE__->table("z3950servers");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 attributes
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 255
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -167,6 +173,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "add_xslt",
   { data_type => "longtext", is_nullable => 1 },
+  "attributes",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -182,8 +190,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KK2y1pbgVh1hOVLAXL1e/w
+# Created by DBIx::Class::Schema::Loader v0.07047 @ 2018-02-20 01:04:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YUp6TnDwq7/oLaSmSdVE3A
 
 sub koha_object_class {
     'Koha::Z3950Server';
