@@ -186,7 +186,6 @@ elsif ( defined $query->param('code') ) {
                 my $auto_registration = C4::Context->preference('GoogleOpenIDConnectAutoRegister') // q{0};
                 my $borrower = Koha::Patrons->find( { email => $email } );
                 if (! $borrower && $auto_registration==1) {
-                    my $cardnumber = fixup_cardnumber();
                     my $firstname = $claims_json->{'given_name'} // q{};
                     my $surname = $claims_json->{'family_name'} // q{};
                     my $delimiter = $firstname ? q{.} : q{};
@@ -198,7 +197,6 @@ elsif ( defined $query->param('code') ) {
                     if (defined $patron_category && defined $library) {
                         my $password = undef;
                         my $borrowernumber = C4::Members::AddMember(
-                            cardnumber   => $cardnumber,
                             firstname    => $firstname,
                             surname      => $surname,
                             email        => $email,

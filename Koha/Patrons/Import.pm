@@ -295,11 +295,6 @@ sub import_patrons {
             );
         }
         else {
-            # FIXME: fixup_cardnumber says to lock table, but the web interface doesn't so this doesn't either.
-            # At least this is closer to AddMember than in members/memberentry.pl
-            if ( !$borrower{'cardnumber'} ) {
-                $borrower{'cardnumber'} = fixup_cardnumber(undef);
-            }
             if ( $borrowernumber = AddMember(%borrower) ) {
 
                 if ( $borrower{debarred} ) {

@@ -83,6 +83,49 @@ Koha::Patron - Koha Patron Object class
 
 =cut
 
+=head3 new
+
+=cut
+
+sub new {
+    my ( $class, $params ) = @_;
+
+    return $class->SUPER::new($params);
+}
+
+sub fixup_cardnumber {
+    my ( $self ) = @_;
+    my $max = Koha::Patrons->search({
+        cardnumber => {-regexp => '^-?[0-9]+$'}
+    }, {
+        select => \'CAST(cardnumber AS SIGNED)',
+        as => ['cast_cardnumber']
+    })->_resultset->get_column('cast_cardnumber')->max;
+    $self->cardnumber($max+1);
+}
+
+sub store {
+    my( $self ) = @_;
+
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            if (
+                C4::Context->preference("autoMemberNum")
+                and ( not defined $self->cardnumber
+                    or $self->cardnumber eq '' )
+              )
+            {
+                # Warning: The caller is responsible for locking the members table in write
+                # mode, to avoid database corruption.
+                # We are in a transaction but the table is not locked
+                $self->fixup_cardnumber;
+            }
+
+            $self->SUPER::store;
+        }
+    );
+}
+
 =head3 delete
 
 $patron->delete

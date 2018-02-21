@@ -86,7 +86,6 @@ BEGIN {
     #Check data
     push @EXPORT, qw(
         &checkuserpassword
-        &fixup_cardnumber
         &checkcardnumber
     );
 }
@@ -426,12 +425,6 @@ sub AddMember {
         $data{'dateenrolled'} = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
     }
 
-    if ( C4::Context->preference("autoMemberNum") ) {
-        if ( not exists $data{cardnumber} or not defined $data{cardnumber} or $data{cardnumber} eq '' ) {
-            $data{cardnumber} = fixup_cardnumber( $data{cardnumber} );
-        }
-    }
-
     $data{'privacy'} =
         $category->default_privacy() eq 'default' ? 1
       : $category->default_privacy() eq 'never'   ? 2
@@ -479,32 +472,6 @@ sub AddMember {
     $patron->add_enrolment_fee_if_needed;
 
     return $data{borrowernumber};
-}
-
-=head2 fixup_cardnumber
-
-Warning: The caller is responsible for locking the members table in write
-mode, to avoid database corruption.
-
-=cut
-
-sub fixup_cardnumber {
-    my ($cardnumber) = @_;
-    my $autonumber_members = C4::Context->boolean_preference('autoMemberNum') || 0;
-
-    # Find out whether member numbers should be generated
-    # automatically. Should be either "1" or something else.
-    # Defaults to "0", which is interpreted as "no".
-
-    ($autonumber_members) or return $cardnumber;
-    my $dbh = C4::Context->dbh;
-
-    my $sth = $dbh->prepare(
-        'SELECT MAX( CAST( cardnumber AS SIGNED ) ) FROM borrowers WHERE cardnumber REGEXP "^-?[0-9]+$"'
-    );
-    $sth->execute;
-    my ($result) = $sth->fetchrow;
-    return $result + 1;
 }
 
 =head2 GetAllIssues
@@ -879,11 +846,10 @@ sub IssueSlip {
 sub AddMember_Auto {
     my ( %borrower ) = @_;
 
-    $borrower{'cardnumber'} ||= fixup_cardnumber();
-
     $borrower{'borrowernumber'} = AddMember(%borrower);
-
-    return ( %borrower );
+    my $patron = Koha::Patrons->find( $borrower{borrowernumber} )->unblessed;
+    $patron->{password} = $borrower{password};
+    return %$patron;
 }
 
 =head2 AddMember_Opac

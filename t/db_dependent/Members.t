@@ -388,13 +388,11 @@ is( $borrower->{password} eq $hashed_up, 1, 'Check password hash equals hash of 
 
 subtest 'Trivial test for AddMember_Auto' => sub {
     plan tests => 3;
-    my $members_mock = Test::MockModule->new( 'C4::Members' );
-    $members_mock->mock( 'fixup_cardnumber', sub { 12345; } );
     my $library = $builder->build({ source => 'Branch' });
     my $category = $builder->build({ source => 'Category' });
     my %borr = AddMember_Auto( surname=> 'Dick3', firstname => 'Philip', branchcode => $library->{branchcode}, categorycode => $category->{categorycode}, password => '34567890' );
     ok( $borr{borrowernumber}, 'Borrower hash contains borrowernumber' );
-    is( $borr{cardnumber}, 12345, 'Borrower hash contains cardnumber' );
+    like( $borr{cardnumber}, qr/^\d+$/, 'Borrower hash contains cardnumber' );
     my $patron = Koha::Patrons->find( $borr{borrowernumber} );
     isnt( $patron, undef, 'Patron found' );
 };
