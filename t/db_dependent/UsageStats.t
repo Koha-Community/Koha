@@ -545,7 +545,6 @@ sub mocking_systempreferences_to_a_set_value {
         AutoEmailPrimaryAddress
         autoMemberNum
         BorrowerRenewalPeriodBase
-        checkdigit
         EnableBorrowerFiles
         EnhancedMessagingPreferences
         ExtendedPatronAttributes

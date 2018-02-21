@@ -534,9 +534,6 @@ mode, to avoid database corruption.
 
 =cut
 
-use vars qw( @weightings );
-my @weightings = ( 8, 4, 6, 3, 5, 2, 1 );
-
 sub fixup_cardnumber {
     my ($cardnumber) = @_;
     my $autonumber_members = C4::Context->boolean_preference('autoMemberNum') || 0;
@@ -545,56 +542,15 @@ sub fixup_cardnumber {
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".
 
-    #     if ($cardnumber !~ /\S/ && $autonumber_members) {
     ($autonumber_members) or return $cardnumber;
-    my $checkdigit = C4::Context->preference('checkdigit');
     my $dbh = C4::Context->dbh;
-    if ( $checkdigit and $checkdigit eq 'katipo' ) {
 
-        # if checkdigit is selected, calculate katipo-style cardnumber.
-        # otherwise, just use the max()
-        # purpose: generate checksum'd member numbers.
-        # We'll assume we just got the max value of digits 2-8 of member #'s
-        # from the database and our job is to increment that by one,
-        # determine the 1st and 9th digits and return the full string.
-        my $sth = $dbh->prepare(
-            "select max(substring(borrowers.cardnumber,2,7)) as new_num from borrowers"
-        );
-        $sth->execute;
-        my $data = $sth->fetchrow_hashref;
-        $cardnumber = $data->{new_num};
-        if ( !$cardnumber ) {    # If DB has no values,
-            $cardnumber = 1000000;    # start at 1000000
-        } else {
-            $cardnumber += 1;
-        }
-
-        my $sum = 0;
-        for ( my $i = 0 ; $i < 8 ; $i += 1 ) {
-            # read weightings, left to right, 1 char at a time
-            my $temp1 = $weightings[$i];
-
-            # sequence left to right, 1 char at a time
-            my $temp2 = substr( $cardnumber, $i, 1 );
-
-            # mult each char 1-7 by its corresponding weighting
-            $sum += $temp1 * $temp2;
-        }
-
-        my $rem = ( $sum % 11 );
-        $rem = 'X' if $rem == 10;
-
-        return "V$cardnumber$rem";
-     } else {
-
-        my $sth = $dbh->prepare(
-            'SELECT MAX( CAST( cardnumber AS SIGNED ) ) FROM borrowers WHERE cardnumber REGEXP "^-?[0-9]+$"'
-        );
-        $sth->execute;
-        my ($result) = $sth->fetchrow;
-        return $result + 1;
-    }
-    return $cardnumber;     # just here as a fallback/reminder 
+    my $sth = $dbh->prepare(
+        'SELECT MAX( CAST( cardnumber AS SIGNED ) ) FROM borrowers WHERE cardnumber REGEXP "^-?[0-9]+$"'
+    );
+    $sth->execute;
+    my ($result) = $sth->fetchrow;
+    return $result + 1;
 }
 
 =head2 GetPendingIssues

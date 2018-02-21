@@ -102,7 +102,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('casServerUrl','https://localhost:8443/cas','','URL of the cas server','Free'),
 ('CatalogModuleRelink','0',NULL,'If OFF the linker will never replace the authids that are set in the cataloging module.','YesNo'),
 ('CataloguingLog','1',NULL,'If ON, log edit/create/delete actions on bibliographic data. WARNING: this feature is very resource consuming.','YesNo'),
-('checkdigit','none','none|katipo','If ON, enable checks on patron cardnumber: none or \"Katipo\" style checks','Choice'),
 ('CheckPrevCheckout','hardno','hardyes|softyes|softno|hardno','By default, for every item checked out, should we warn if the patron has borrowed that item in the past?','Choice'),
 ('CircAutocompl','1',NULL,'If ON, autocompletion is enabled for the Circulation input','YesNo'),
 ('CircAutoPrintQuickSlip','qslip',NULL,'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window, Display a print slip window or Clear the screen.','Choice'),

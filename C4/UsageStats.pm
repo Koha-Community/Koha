@@ -291,7 +291,6 @@ sub BuildReport {
         AutoEmailPrimaryAddress
         autoMemberNum
         BorrowerRenewalPeriodBase
-        checkdigit
         EnableBorrowerFiles
         EnhancedMessagingPreferences
         ExtendedPatronAttributes
