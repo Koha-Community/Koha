@@ -58,12 +58,14 @@ sub recovery {
             );
         }
 
+        my $find;
+        $find->{userid} = $body->{userid} if defined $body->{userid};
+        $find->{cardnumber} = $body->{cardnumber} if
+            defined $body->{cardnumber} && length $body->{cardnumber}>0;
+
         my $patron = Koha::Patrons->search({
             email => $body->{email},
-            '-or' => {
-                userid => $body->{userid},
-                cardnumber => $body->{cardnumber},
-            }
+            '-or' => $find,
         })->next;
 
         unless ($patron) {
