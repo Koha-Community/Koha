@@ -703,7 +703,7 @@ sub LinkBibHeadingsToAuthorities {
                         $marcrecordauth->insert_fields_ordered(
                             MARC::Field->new(
                                 '667', '', '',
-                                'a' => "Machine generated authority record."
+                                'a' => C4::Context->preference('GenerateAuthorityField667')
                             )
                         );
                         my $cite =
@@ -713,7 +713,7 @@ sub LinkBibHeadingsToAuthorities {
                         $cite =~ s/^[\s\,]*//;
                         $cite =~ s/[\s\,]*$//;
                         $cite =
-                            "Work cat.: ("
+                            C4::Context->preference('GenerateAuthorityField670') . ": ("
                           . ( $library ? $library->get_effective_marcorgcode : C4::Context->preference('MARCOrgCode') ) . ")"
                           . $bib->subfield( '999', 'c' ) . ": "
                           . $cite;
