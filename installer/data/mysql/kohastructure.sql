@@ -2204,6 +2204,7 @@ CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets u
   `sru_options` varchar(255) default NULL, -- options like sru=get, sru_version=1.1; will be passed to the server via ZOOM
   `sru_fields` LONGTEXT default NULL, -- contains the mapping between the Z3950 search fields and the specific SRU server indexes
   `add_xslt` LONGTEXT default NULL, -- zero or more paths to XSLT files to be processed on the search results
+  `attributes` VARCHAR(255) default NULL, -- additional attributes passed to PQF queries
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
