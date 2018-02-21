@@ -18,6 +18,9 @@ package Koha::Account::Line;
 use Modern::Perl;
 
 use Carp;
+use Data::Dumper;
+
+use C4::Log qw(logaction);
 
 use Koha::Database;
 use Koha::Items;
@@ -80,6 +83,22 @@ sub void {
                 type      => 'Void Payment',
             }
         )->store();
+    }
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction("FINES", 'VOID', $self->borrowernumber, Dumper({
+            action            => 'void_payment',
+            borrowernumber    => $self->borrowernumber,,
+            amount            => $self->amount,
+            amountoutstanding => $self->amountoutstanding,
+            description       => $self->description,
+            accounttype       => $self->accounttype,
+            payment_type      => $self->payment_type,
+            note              => $self->note,
+            itemnumber        => $self->itemnumber,
+            manager_id        => $self->manager_id,
+            offsets           => [ map { $_->unblessed } @account_offsets ],
+        }));
     }
 
     $self->set(
