@@ -459,11 +459,7 @@ sub ModCourseItem {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 
-    my $itemnumber    = $params{'itemnumber'};
-    my $itype         = $params{'itype'};
-    my $ccode         = $params{'ccode'};
-    my $holdingbranch = $params{'holdingbranch'};
-    my $location      = $params{'location'};
+    my $itemnumber = $params{'itemnumber'};
 
     return unless ($itemnumber);
 
@@ -503,10 +499,8 @@ sub _AddCourseItem {
     push( @values, $params{'itemnumber'} );
 
     foreach (@FIELDS) {
-        if ( $params{$_} ) {
-            push( @fields, "$_ = ?" );
-            push( @values, $params{$_} );
-        }
+        push( @fields, "$_ = ?" );
+        push( @values, $params{$_} || undef );
     }
 
     my $query = "INSERT INTO course_items SET " . join( ',', @fields );
@@ -530,10 +524,6 @@ sub _UpdateCourseItem {
 
     my $ci_id         = $params{'ci_id'};
     my $course_item   = $params{'course_item'};
-    my $itype         = $params{'itype'};
-    my $ccode         = $params{'ccode'};
-    my $holdingbranch = $params{'holdingbranch'};
-    my $location      = $params{'location'};
 
     return unless ( $ci_id || $course_item );
 
@@ -541,49 +531,13 @@ sub _UpdateCourseItem {
       unless ($course_item);
     $ci_id = $course_item->{'ci_id'} unless ($ci_id);
 
-    ## Revert fields that had an 'original' value, but now don't
-    ## Update the item fields to the stored values from course_items
-    ## and then set those fields in course_items to NULL
-    my @fields_to_revert;
-    foreach (@FIELDS) {
-        if ( !$params{$_} && $course_item->{$_} ) {
-            push( @fields_to_revert, $_ );
-        }
-    }
-    _RevertFields(
-        ci_id       => $ci_id,
-        fields      => \@fields_to_revert,
-        course_item => $course_item
-    ) if (@fields_to_revert);
 
-    ## Update fields that still have an original value, but it has changed
-    ## This necessitates only changing the current item values, as we still
-    ## have the original values stored in course_items
     my %mod_params;
     foreach (@FIELDS) {
-        if (   $params{$_}
-            && $course_item->{$_}
-            && $params{$_} ne $course_item->{$_} ) {
-            $mod_params{$_} = $params{$_};
-        }
+        $mod_params{$_} = $params{$_};
     }
-    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} ) if %mod_params;
 
-    ## Update fields that didn't have an original value, but now do
-    ## We must save the original value in course_items, and also
-    ## update the item fields to the new value
-    my $item = GetItem( $course_item->{'itemnumber'} );
-    my %mod_params_new;
-    my %mod_params_old;
-    foreach (@FIELDS) {
-        if ( $params{$_} && !$course_item->{$_} ) {
-            $mod_params_new{$_} = $params{$_};
-            $mod_params_old{$_} = $item->{$_};
-        }
-    }
-    _ModStoredFields( 'ci_id' => $params{'ci_id'}, %mod_params_old );
-    ModItem( \%mod_params_new, undef, $course_item->{'itemnumber'} ) if %mod_params_new;
-
+    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} );
 }
 
 =head2 _ModStoredFields
@@ -627,31 +581,18 @@ sub _RevertFields {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 
-    my $ci_id       = $params{'ci_id'};
-    my $course_item = $params{'course_item'};
-    my $fields      = $params{'fields'};
-    my @fields      = @$fields;
+    my $ci_id = $params{'ci_id'};
 
     return unless ($ci_id);
 
-    $course_item = GetCourseItem( ci_id => $params{'ci_id'} )
-      unless ($course_item);
+    my $course_item = GetCourseItem( ci_id => $params{'ci_id'} );
 
     my $mod_item_params;
-    my @fields_to_null;
-    foreach my $field (@fields) {
-        foreach (@FIELDS) {
-            if ( $field eq $_ && $course_item->{$_} ) {
-                $mod_item_params->{$_} = $course_item->{$_};
-                push( @fields_to_null, $_ );
-            }
-        }
+    foreach my $field ( @FIELDS ) {
+        $mod_item_params->{$field} = $course_item->{$field};
     }
+
     ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} ) if $mod_item_params && %$mod_item_params;
-
-    my $query = "UPDATE course_items SET " . join( ',', map { "$_=NULL" } @fields_to_null ) . " WHERE ci_id = ?";
-
-    C4::Context->dbh->do( $query, undef, $ci_id ) if (@fields_to_null);
 }
 
 =head2 _SwapAllFields
@@ -736,7 +677,7 @@ sub DelCourseItem {
 
     return unless ($ci_id);
 
-    _RevertFields( ci_id => $ci_id, fields => \@FIELDS );
+    _RevertFields( ci_id => $ci_id );
 
     my $query = "
         DELETE FROM course_items
