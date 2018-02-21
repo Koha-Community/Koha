@@ -391,7 +391,7 @@ $(document).ready(function() {
 
 
 
-  
+
   $('#subscription_summary .rows ol li:nth-child(5)').css('white-space', 'pre');
   $('#subscription_summary .rows ol li:nth-child(5) span.label').css('display', 'block').css('float', 'none');
 
@@ -410,4 +410,11 @@ $(document).ready(function() {
   $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="pl"]').attr('value', 'place-of-publication');
   $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="curriculum"]').hide();
   $('#catalog_advsearch #advanced-search #searchterms .advsearch option[value="yr,st-year"]').hide();
+
+
+
+  if (("#pat_maninvoice").length) {
+      $("#pat_maninvoice #invoice_type").prepend($("<option></option>").attr("selected",'selected').attr("value",'').text("-- Välj --")); 
+      $("#pat_maninvoice #desc").attr("required",'required');
+  }
 })(jQuery);
