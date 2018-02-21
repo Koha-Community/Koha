@@ -1,162 +1,10 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Batches &rsaquo; [% IF batch_id %]Edit ([% batch_id %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% INCLUDE 'greybox.inc' %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-    [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
-        //<![CDATA[
-           function DeleteConfirm() {
-                var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
-                var answer = confirm(msg);
-                if (answer) {
-                    window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id %]";
-                }
-                else {
-                    return; // abort delete
-                }
-            };
-            function Remove() {
-                items = new Array;
-
-                if(document.items.action.length > 0) {
-                    for (var i=0; i < document.items.action.length; i++) {
-                        if (document.items.action[i].checked) {
-                            items.push("label_id=" +  document.items.action[i].value);
-                        }
-                    }
-                    getstr = items.join("&");
-                    var msg = _("Are you sure you want to remove the selected patron(s) from this batch?");
-                } else if (document.items.action.checked) {
-                    alert(_("Deletion of patron from a batch with only one patron will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
-                    return; // no deletion for single item batch
-                }
-                else {
-                    alert(_("Please select at least one patron to delete."));
-                    return;     // no item selected
-                }
-                var answer = confirm(msg);
-                if (answer) {
-                    window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
-                }
-                else {
-                    return; // abort delete
-                }
-            };
-            function Add() {
-                var bor_nums = document.getElementById("bor_num_list");
-                if (bor_nums.value == '') {
-                    window.open("/cgi-bin/koha/patroncards/add_user_search.pl",
-                   'PatronPopup',
-                   'width=840,height=500,location=yes,toolbar=no,'
-                   + 'scrollbars=yes,resize=yes');
-                }
-                else {
-                    document.forms["add_by_bor_num"].submit();
-                }
-            };
-
-            function add_user(borrowernumber) {
-                $("#bor_num_list").val($("#bor_num_list").val()+borrowernumber+"\r\n");
-            }
-
-            function DeDuplicate() {
-                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
-            };
-            function Xport(mode) {
-                if (mode == 'label') {
-                    patroncards= new Array;
-                    if(document.items.action.length > 0) {
-                        for (var i=0; i < document.items.action.length; i++) {
-                            if (document.items.action[i].checked) {
-                                patroncards.push("label_id=" +  document.items.action[i].value);
-                            }
-                        }
-                        if (patroncards.length < 1) {
-                            alert(_("Please select at least one card to export."));
-                            return;     // no batch selected
-                        }
-                        getstr = patroncards.join("&");
-                    }
-                    else if (document.items.action.checked) {
-                        getstr = document.items.action.value;
-                    }
-                    else {
-                        alert(_("Please select at least one card to export."));
-                        return;     // no batch selected
-                    }
-                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
-                }
-                else if (mode == 'batch') {
-                    return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 400, 800);
-                }
-                else {
-                    // some pass-thru error trapping just in case...
-                }
-            };
-           function selected_layout() {
-                if (document.items.action.length) {
-                for (i=0;i<document.items.action.length;i++){
-                    if (document.items.action[i].checked==true){
-                        return(document.items.action[i].value);
-                    }
-                };
-                }
-                else {
-                    if (document.items.action.checked){
-                        return(document.items.action.value);
-                    }
-                };
-                alert(_("Please select at least one item."));
-                return (-1);
-            };
-
-         $(document).ready(function() {
-            $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -2, -1 ], "bSortable": false, "bSearchable": false }
-                ],
-                "aaSorting": [[ 0, "asc" ]],
-                "sPaginationType": "four_button",
-                "autoWidth": false
-            }));
-            $("#additems").click(function(){
-                Add();
-                return false;
-            });
-            $("#removeitems").click(function(){
-                Remove();
-                return false;
-            });
-            $("#deletebatch").click(function(){
-                DeleteConfirm();
-                return false;
-            });
-            $("#deduplicate").click(function(){
-                DeDuplicate();
-                return false;
-            });
-            $("#exportitems").click(function(){
-                Xport('label');
-                return false;
-            });
-            $("#exportbatch").click(function(){
-                Xport('batch');
-                return false;
-            });
-            $(".delete").on("click", function(){
-                return confirmDelete( _("Are you sure you want to delete this patron from the card batch?") );
-            });
-            $(".export").on("click", function(e){
-                e.preventDefault();
-                var label_id = $(this).data("label-id");
-                var batch_id = $(this).data("batch-id");
-                GB_showCenter( _("Export single card"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id+'&label_id='+label_id, 400, 800);
-            });
-         });
-        //]]>
-    </script>
+    <link rel="stylesheet" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
+
 <body id="pcard_edit-batch" class="tools pcard">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -274,4 +122,151 @@
                   [% INCLUDE 'tools-menu.inc' %]
                 </div>
             </div>
-    [% INCLUDE 'intranet-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'greybox.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        function DeleteConfirm() {
+            var msg = _("Are you sure you want to delete batch %s?").format("[% batch_id %]");
+            var answer = confirm(msg);
+            if (answer) {
+                window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id %]";
+            } else {
+                return; // abort delete
+            }
+        };
+        function Remove() {
+            items = new Array;
+
+            if(document.items.action.length > 0) {
+                for (var i=0; i < document.items.action.length; i++) {
+                    if (document.items.action[i].checked) {
+                        items.push("label_id=" +  document.items.action[i].value);
+                    }
+                }
+                getstr = items.join("&");
+                var msg = _("Are you sure you want to remove the selected patron(s) from this batch?");
+            } else if (document.items.action.checked) {
+                alert(_("Deletion of patron from a batch with only one patron will delete the batch.") + "\n\n" + _("If this is what you want, select the 'Delete batch' option from the toolbar"));
+                return; // no deletion for single item batch
+            } else {
+                alert(_("Please select at least one patron to delete."));
+                return;     // no item selected
+            }
+            var answer = confirm(msg);
+            if (answer) {
+                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
+            } else {
+                return; // abort delete
+            }
+        };
+        function Add() {
+            var bor_nums = document.getElementById("bor_num_list");
+            if (bor_nums.value == '') {
+                window.open("/cgi-bin/koha/patroncards/add_user_search.pl",
+               'PatronPopup',
+               'width=840,height=500,location=yes,toolbar=no,'
+               + 'scrollbars=yes,resize=yes');
+            } else {
+                document.forms["add_by_bor_num"].submit();
+            }
+        };
+
+        function add_user(borrowernumber) {
+            $("#bor_num_list").val($("#bor_num_list").val()+borrowernumber+"\r\n");
+        }
+
+        function DeDuplicate() {
+            window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
+        };
+        function Xport(mode) {
+            if (mode == 'label') {
+                patroncards= new Array;
+                if(document.items.action.length > 0) {
+                    for (var i=0; i < document.items.action.length; i++) {
+                        if (document.items.action[i].checked) {
+                            patroncards.push("label_id=" +  document.items.action[i].value);
+                        }
+                    }
+                    if (patroncards.length < 1) {
+                        alert(_("Please select at least one card to export."));
+                        return;     // no batch selected
+                    }
+                    getstr = patroncards.join("&");
+                } else if (document.items.action.checked) {
+                    getstr = document.items.action.value;
+                } else {
+                    alert(_("Please select at least one card to export."));
+                    return;     // no batch selected
+                }
+                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 400, 800);
+            } else if (mode == 'batch') {
+                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 400, 800);
+            } else {
+                // some pass-thru error trapping just in case...
+            }
+        };
+        function selected_layout() {
+            if (document.items.action.length) {
+            for (i=0;i<document.items.action.length;i++){
+                if (document.items.action[i].checked==true){
+                    return(document.items.action[i].value);
+                }
+            };
+            } else {
+                if (document.items.action.checked){
+                    return(document.items.action.value);
+                }
+            };
+            alert(_("Please select at least one item."));
+            return (-1);
+        };
+
+        $(document).ready(function() {
+            $("#batcht").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -2, -1 ], "bSortable": false, "bSearchable": false }
+                ],
+                "aaSorting": [[ 0, "asc" ]],
+                "sPaginationType": "four_button",
+                "autoWidth": false
+            }));
+            $("#additems").click(function(){
+                Add();
+                return false;
+            });
+            $("#removeitems").click(function(){
+                Remove();
+                return false;
+            });
+            $("#deletebatch").click(function(){
+                DeleteConfirm();
+                return false;
+            });
+            $("#deduplicate").click(function(){
+                DeDuplicate();
+                return false;
+            });
+            $("#exportitems").click(function(){
+                Xport('label');
+                return false;
+            });
+            $("#exportbatch").click(function(){
+                Xport('batch');
+                return false;
+            });
+            $(".delete").on("click", function(){
+                return confirmDelete( _("Are you sure you want to delete this patron from the card batch?") );
+            });
+            $(".export").on("click", function(e){
+                e.preventDefault();
+                var label_id = $(this).data("label-id");
+                var batch_id = $(this).data("batch-id");
+                GB_showCenter( _("Export single card"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id+'&label_id='+label_id, 400, 800);
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

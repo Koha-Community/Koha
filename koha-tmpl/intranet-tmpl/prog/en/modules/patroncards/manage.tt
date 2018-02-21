@@ -1,4 +1,5 @@
 [% USE CGI %]
+[% SET footerjs = 1 %]
 [% BLOCK translate_card_element %]
 [%-  SWITCH element -%]
 [%-  CASE 'layout'    -%]layout
@@ -24,151 +25,8 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; [% PROCESS translate_card_element element=card_element_title %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    [% INCLUDE 'greybox.inc' %]
-    <script type="text/javascript">
-        //<![CDATA[
-            function DeleteConfirm() {
-                var element_ids = selected_layouts("delete");
-
-                var msg;
-                if (element_ids.length > 1) {
-                    msg = _("Are you sure you want to delete %s %s?").format(element_ids.length, "[% PROCESS translate_card_elements element=card_element %]");
-                } else if (element_ids.length == 1) {
-                    msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
-                }
-
-                if (msg && confirm(msg)) {
-                    var elements = "";
-                    for (var i = 0; i < element_ids.length; i++) {
-                        if (element_ids[i] > -1) {
-                            elements += element_ids[i] + ","
-                        }
-                        else {
-                            return;     // no layout selected
-                        }
-                    }
-
-                    window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=" + elements;
-                }
-                else {
-                    return; // abort delete
-                }
-
-            };
-
-            function Edit() {
-                var element_id = selected_layouts("edit");
-                if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=" + element_id;
-                }
-                else {
-                    return;     // no layout selected
-                };
-            };
-            function Xport() {
-                batches= new Array;
-                if(document.layouts.action.length > 0) {
-                    for (var i=0; i < document.layouts.action.length; i++) {
-                        if (document.layouts.action[i].checked) {
-                            batches.push("batch_id=" +  document.layouts.action[i].value);
-                        }
-                    }
-                    if (batches.length < 1) {
-                        alert(_("Please select at least one batch to export."));
-                        return;     // no batch selected
-                    }
-                    getstr = batches.join("&");
-                }
-                else if (document.layouts.action.checked) {
-                    getstr = "batch_id="+document.layouts.action.value;
-                }
-                else {
-                    alert(_("Please select at least one batch to export."));
-                    return;     // no batch selected
-                }
-                return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 400, 800);
-            };
-
-            function XportPatronlist() {
-                if ( patron_list_id.value.length < 1 ) {
-                    alert(_("Please select a patron list."));
-                    return;     // no patron list selected
-                }
-                getstr = 'patronlist_id='+patron_list_id.value;
-                return GB_showCenter(_("Export patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
-            };
-
-            function selected_layout(op) {
-                if (document.layouts.action.length) {
-                    var selected = new Array();
-                    for (i=0;i<document.layouts.action.length;i++){
-                        if (document.layouts.action[i].checked){
-                            selected.push(i);
-                        }
-                    };
-                    if (selected.length == 1 || (op == "delete" && selected.length >= 1)) {
-                        if (op == "delete") {
-                            var selectedDelete = new Array;
-                            for (i = 0; i < selected.length; i++) {
-                                selectedDelete.push(document.layouts.action[selected[i]].value);
-                            }
-                            return(selectedDelete);
-                        } else {
-                            // op == 'edit' returns only the object and not list
-                            return(document.layouts.action[selected[0]].value);
-                        }
-                    }
-                    else if (selected.length < 1) {
-                        if (op == "edit") {
-                            alert(_("Please select one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
-                        } else {
-                            alert(_("Please select at least one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
-                        }
-                        return (-1);
-                    }
-                    else {
-                        alert(_("Please select only one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
-                        return (-1);
-                    }
-                }
-                else {
-                    if (document.layouts.action.checked){
-                        return([document.layouts.action.value]);
-                    }
-                };
-                alert(_("Please select a %s.").format("[% PROCESS translate_card_element element=card_element %]"));
-                return (-1);
-            };
-
-        $(document).ready(function() {
-            $("#edit").click(function(){
-                Edit();
-                return false;
-            });
-            $("#delete").click(function(){
-                DeleteConfirm();
-                return false;
-            });
-            $("#print").click(function(){
-                Xport();
-                return false;
-            });
-            $("#printlist").click(function(){
-                XportPatronlist();
-                return false;
-            });
-            $(".delete").on("click", function(){
-                return confirmDelete( _("Are you sure you want to delete this?") );
-            });
-            $(".export").on("click", function(e){
-                e.preventDefault();
-                var batch_id = $(this).data("batch-id");
-                GB_showCenter( _("Export single batch"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id, 400, 800);
-            });
-         });
-//]]>
-</script>
 </head>
+
 <body id="pcard_manage" class="tools pcard">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -270,4 +128,150 @@
               [% INCLUDE 'tools-menu.inc' %]
             </div>
         </div>
-    [% INCLUDE 'intranet-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'greybox.inc' %]
+    <script>
+        function DeleteConfirm() {
+            var element_ids = selected_layouts("delete");
+
+            var msg;
+            if (element_ids.length > 1) {
+                msg = _("Are you sure you want to delete %s %s?").format(element_ids.length, "[% PROCESS translate_card_elements element=card_element %]");
+            } else if (element_ids.length == 1) {
+                msg = _("Are you sure you want to delete %s %s?").format("[% PROCESS translate_card_element element=card_element %]", element_ids[0]);
+            }
+
+            if (msg && confirm(msg)) {
+                var elements = "";
+                for (var i = 0; i < element_ids.length; i++) {
+                    if (element_ids[i] > -1) {
+                        elements += element_ids[i] + ","
+                    }
+                    else {
+                        return;     // no layout selected
+                    }
+                }
+
+                window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&card_element=[% card_element %]&element_id=" + elements;
+            }
+            else {
+                return; // abort delete
+            }
+
+        };
+
+        function Edit() {
+            var element_id = selected_layouts("edit");
+            if (element_id>-1) {
+                window.location = "/cgi-bin/koha/patroncards/edit-[% card_element %].pl?op=edit&element_id=" + element_id;
+            }
+            else {
+                return;     // no layout selected
+            };
+        };
+        function Xport() {
+            batches= new Array;
+            if(document.layouts.action.length > 0) {
+                for (var i=0; i < document.layouts.action.length; i++) {
+                    if (document.layouts.action[i].checked) {
+                        batches.push("batch_id=" +  document.layouts.action[i].value);
+                    }
+                }
+                if (batches.length < 1) {
+                    alert(_("Please select at least one batch to export."));
+                    return;     // no batch selected
+                }
+                getstr = batches.join("&");
+            }
+            else if (document.layouts.action.checked) {
+                getstr = "batch_id="+document.layouts.action.value;
+            }
+            else {
+                alert(_("Please select at least one batch to export."));
+                return;     // no batch selected
+            }
+            return GB_showCenter(_("Export patron cards"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 400, 800);
+        };
+
+        function XportPatronlist() {
+            if ( patron_list_id.value.length < 1 ) {
+                alert(_("Please select a patron list."));
+                return;     // no patron list selected
+            }
+            getstr = 'patronlist_id='+patron_list_id.value;
+            return GB_showCenter(_("Export patron cards from list"), "/cgi-bin/koha/patroncards/print.pl?" + getstr, 700, 800);
+        };
+
+        function selected_layout(op) {
+            if (document.layouts.action.length) {
+                var selected = new Array();
+                for (i=0;i<document.layouts.action.length;i++){
+                    if (document.layouts.action[i].checked){
+                        selected.push(i);
+                    }
+                };
+                if (selected.length == 1 || (op == "delete" && selected.length >= 1)) {
+                    if (op == "delete") {
+                        var selectedDelete = new Array;
+                        for (i = 0; i < selected.length; i++) {
+                            selectedDelete.push(document.layouts.action[selected[i]].value);
+                        }
+                        return(selectedDelete);
+                    } else {
+                        // op == 'edit' returns only the object and not list
+                        return(document.layouts.action[selected[0]].value);
+                    }
+                }
+                else if (selected.length < 1) {
+                    if (op == "edit") {
+                        alert(_("Please select one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
+                    } else {
+                        alert(_("Please select at least one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
+                    }
+                    return (-1);
+                }
+                else {
+                    alert(_("Please select only one %s to %s.").format("[% PROCESS translate_card_element element=card_element %]", op));
+                    return (-1);
+                }
+            }
+            else {
+                if (document.layouts.action.checked){
+                    return([document.layouts.action.value]);
+                }
+            };
+            alert(_("Please select a %s.").format("[% PROCESS translate_card_element element=card_element %]"));
+            return (-1);
+        };
+
+        $(document).ready(function() {
+            $("#edit").click(function(){
+                Edit();
+                return false;
+            });
+            $("#delete").click(function(){
+                DeleteConfirm();
+                return false;
+            });
+            $("#print").click(function(){
+                Xport();
+                return false;
+            });
+            $("#printlist").click(function(){
+                XportPatronlist();
+                return false;
+            });
+            $(".delete").on("click", function(){
+                return confirmDelete( _("Are you sure you want to delete this?") );
+            });
+            $(".export").on("click", function(e){
+                e.preventDefault();
+                var batch_id = $(this).data("batch-id");
+                GB_showCenter( _("Export single batch"),'/cgi-bin/koha/patroncards/print.pl?batch_id='+batch_id, 400, 800);
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

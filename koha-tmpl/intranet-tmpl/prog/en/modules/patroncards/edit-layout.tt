@@ -1,111 +1,9 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Layout &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <script type="text/JavaScript" language="JavaScript">
-        //<![CDATA[
-            $(document).ready(function() {
-                var selectedUnit = $("#units option:selected").attr("value");
-                var unitfields = $("#font_size,#field_1_llx,#field_1_lly,#field_2_llx,#field_2_lly,#field_3_llx,#field_3_lly,#barcode_Tx,#barcode_Ty,#image_1_Dx,#image_1_Tx,#image_1_Ty,#image_2_Dx,#image_2_Tx,#image_2_Ty");
-                $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-                $("#units").change(function(){
-                    $(".unit").html(getUnit($(this).val()));
-                });
-                Go($("#image_1_image_source").val(), 'image_1_image_name');
-                Go($("#image_1_image_source").val(), 'image_1_image_metrics');
-                $("#image_1_image_source").change(function(){
-                    $(".image_1_image_source").html(Go($(this).val(), 'image_1_image_name'));
-                    $(".image_1_image_source").html(Go($(this).val(), 'image_1_image_metrics'));
-                });
-                Go($("#image_2_image_source").val(), 'image_2_image_name');
-                Go($("#image_2_image_source").val(), 'image_2_image_metrics');
-                $("#image_2_image_source").change(function(){
-                    $(".image_2_image_source").html(Go($(this).val(), 'image_2_image_name'));
-                    $(".image_2_image_source").html(Go($(this).val(), 'image_2_image_metrics'));
-                });
-                var selectFieldNames = ["field_1","field_2","field_3"];
-                for (var i=0; i < selectFieldNames.length; i++) {
-                    Go($("#"+selectFieldNames[i]+"_enable").prop("checked"), selectFieldNames[i]+"_select");
-                }
-                $("#field_1_enable").change(function(){
-                    $(".field_1_enable").html(Go($(this).prop("checked"), 'field_1_select'));
-                });
-                $("#field_2_enable").change(function(){
-                    $(".field_2_enable").html(Go($(this).prop("checked"), 'field_2_select'));
-                });
-                $("#field_3_enable").change(function(){
-                    $(".field_3_enable").html(Go($(this).prop("checked"), 'field_3_select'));
-                });
-                $("#barcode_print").load(barcode_text('barcode_param'));
-                $("#barcode_print").change(function(){
-                    barcode_text('barcode_param');
-                });
-            function barcode_text(division) {
-                var eBarcode = document.getElementById(division);
-                if( $("input[name=barcode_print]:checked").prop("checked") ) {
-                    eBarcode.style.display = 'block';
-                } else {
-                    eBarcode.style.display = 'none';
-                    $('input[name=barcode_text_print]').prop('checked', false);
-                }
-            }
-            function getUnit(unit){
-                switch(unit){
-                    case "POINT":
-                        var unit = " pt";
-                    break;
-                    case "AGATE":
-                        var unit = " ag";
-                    break;
-                    case "INCH":
-                        var unit = " in";
-                    break;
-                    case "MM":
-                        var unit = " mm";
-                    break;
-                    case "CM":
-                        var unit = " cm";
-                    break;
-                    default:
-                        var unit = " pt";
-                    }
-                return unit;
-            }
-            function Go(oSelect, oElement){
-                var element = document.getElementById(oElement);
-                switch(true) {
-                    case /^.*_name/.test(oElement):
-                        if ((oSelect == 'patronimages') || (oSelect == 'none')) {
-                            element.style.display = 'none';
-                        }
-                        else {
-                            element.style.display = 'block';
-                        }
-                        break;
-                    case /^.*_metrics/.test(oElement):
-                        if ((oSelect == 'none') || (oSelect == '')) {
-                            element.style.display = 'none';
-                        }
-                        else {
-                            element.style.display = 'block';
-                        }
-                        break;
-                    case /^.*_select/.test(oElement):
-                        if (!oSelect) {
-                            element.style.display = 'none';
-                        }
-                        else {
-                            element.style.display = 'block';
-                        }
-                        break;
-                    default:
-                        return;
-                }
-                return;
-            }
-        });
-        //]]>
-    </script>
 </head>
+
 <body id="pcard_edit-layout" class="tools pcard">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -568,4 +466,107 @@
               [% INCLUDE 'tools-menu.inc' %]
             </div>
         </div>
-        [% INCLUDE 'intranet-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(document).ready(function() {
+            var selectedUnit = $("#units option:selected").attr("value");
+            var unitfields = $("#font_size,#field_1_llx,#field_1_lly,#field_2_llx,#field_2_lly,#field_3_llx,#field_3_lly,#barcode_Tx,#barcode_Ty,#image_1_Dx,#image_1_Tx,#image_1_Ty,#image_2_Dx,#image_2_Tx,#image_2_Ty");
+            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
+            $("#units").change(function(){
+                $(".unit").html(getUnit($(this).val()));
+            });
+            Go($("#image_1_image_source").val(), 'image_1_image_name');
+            Go($("#image_1_image_source").val(), 'image_1_image_metrics');
+            $("#image_1_image_source").change(function(){
+                $(".image_1_image_source").html(Go($(this).val(), 'image_1_image_name'));
+                $(".image_1_image_source").html(Go($(this).val(), 'image_1_image_metrics'));
+            });
+            Go($("#image_2_image_source").val(), 'image_2_image_name');
+            Go($("#image_2_image_source").val(), 'image_2_image_metrics');
+            $("#image_2_image_source").change(function(){
+                $(".image_2_image_source").html(Go($(this).val(), 'image_2_image_name'));
+                $(".image_2_image_source").html(Go($(this).val(), 'image_2_image_metrics'));
+            });
+            var selectFieldNames = ["field_1","field_2","field_3"];
+            for (var i=0; i < selectFieldNames.length; i++) {
+                Go($("#"+selectFieldNames[i]+"_enable").prop("checked"), selectFieldNames[i]+"_select");
+            }
+            $("#field_1_enable").change(function(){
+                $(".field_1_enable").html(Go($(this).prop("checked"), 'field_1_select'));
+            });
+            $("#field_2_enable").change(function(){
+                $(".field_2_enable").html(Go($(this).prop("checked"), 'field_2_select'));
+            });
+            $("#field_3_enable").change(function(){
+                $(".field_3_enable").html(Go($(this).prop("checked"), 'field_3_select'));
+            });
+            $("#barcode_print").load(barcode_text('barcode_param'));
+            $("#barcode_print").change(function(){
+                barcode_text('barcode_param');
+            });
+            function barcode_text(division) {
+                var eBarcode = document.getElementById(division);
+                if( $("input[name=barcode_print]:checked").prop("checked") ) {
+                    eBarcode.style.display = 'block';
+                } else {
+                    eBarcode.style.display = 'none';
+                    $('input[name=barcode_text_print]').prop('checked', false);
+                }
+            }
+            function getUnit(unit){
+                switch(unit){
+                    case "POINT":
+                        var unit = " pt";
+                    break;
+                    case "AGATE":
+                        var unit = " ag";
+                    break;
+                    case "INCH":
+                        var unit = " in";
+                    break;
+                    case "MM":
+                        var unit = " mm";
+                    break;
+                    case "CM":
+                        var unit = " cm";
+                    break;
+                    default:
+                        var unit = " pt";
+                    }
+                return unit;
+            }
+            function Go(oSelect, oElement){
+                var element = document.getElementById(oElement);
+                switch(true) {
+                    case /^.*_name/.test(oElement):
+                        if ((oSelect == 'patronimages') || (oSelect == 'none')) {
+                            element.style.display = 'none';
+                        } else {
+                            element.style.display = 'block';
+                        }
+                        break;
+                    case /^.*_metrics/.test(oElement):
+                        if ((oSelect == 'none') || (oSelect == '')) {
+                            element.style.display = 'none';
+                        } else {
+                            element.style.display = 'block';
+                        }
+                        break;
+                    case /^.*_select/.test(oElement):
+                        if (!oSelect) {
+                            element.style.display = 'none';
+                        } else {
+                            element.style.display = 'block';
+                        }
+                        break;
+                    default:
+                        return;
+                }
+                return;
+            }
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

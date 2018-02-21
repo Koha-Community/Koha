@@ -1,41 +1,9 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit ([% profile_id %])[% ELSE %]New[% END%]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function(){
-        var selectedUnit = $("#units option:selected").attr("value");
-        var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
-        $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-        $("#units").change(function(){
-            $(".unit").html(getUnit($(this).val()));
-        });
-        function getUnit(unit){
-            switch(unit){
-                case "POINT":
-                    var unit = " pt";
-                    break;
-                case "AGATE":
-                    var unit = " ag";
-                    break;
-                case "INCH":
-                    var unit = " in";
-                    break;
-                case "MM":
-                    var unit = " mm";
-                    break;
-                case "CM":
-                    var unit = " cm";
-                    break;
-                default:
-                    var unit = "";
-            }
-            return unit;
-        }
-        });
-        //]]>
-    </script>
 </head>
+
 <body id="pcard_edit-profile" class="tools pcard">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -138,4 +106,40 @@
                   [% INCLUDE 'tools-menu.inc' %]
                 </div>
             </div>
-            [% INCLUDE 'intranet-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $(document).ready(function(){
+            var selectedUnit = $("#units option:selected").attr("value");
+            var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
+            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
+            $("#units").change(function(){
+                $(".unit").html(getUnit($(this).val()));
+            });
+            function getUnit(unit){
+                switch(unit){
+                    case "POINT":
+                        var unit = " pt";
+                        break;
+                    case "AGATE":
+                        var unit = " ag";
+                        break;
+                    case "INCH":
+                        var unit = " in";
+                        break;
+                    case "MM":
+                        var unit = " mm";
+                        break;
+                    case "CM":
+                        var unit = " cm";
+                        break;
+                    default:
+                        var unit = "";
+                }
+                return unit;
+            }
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

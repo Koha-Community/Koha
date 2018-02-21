@@ -1,20 +1,15 @@
-    [% INCLUDE 'doc-head-open.inc' %]
+[% SET footerjs = 1 %]
+<!DOCTYPE html>
+[% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">[% ELSE %]<html lang="[% lang %]">[% END %]
+<head>
     <title>Koha &rsaquo; Tools &rsaquo; Patron cards &rsaquo; Patron card printing/exporting</title>
+    <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
+    [% INCLUDE intranetstylesheet.inc %]
+    [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
     [% INCLUDE 'doc-head-close.inc' popup => 1%]
-    <script type="text/javascript">
-        //<![CDATA[
-            function Done() {
-                window.location = "[% referer %]";
-            };
-            $(document).ready(function(){
-                $(".gb-close").on("click",function(){
-                    parent.parent.GB_hide();
-                });
-            })
-        //]]>
-    </script>
     <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
 </head>
+
 <body id="pcard_print" class="tools pcard">
     <div id="custom-doc">
         <div id="bd">
@@ -118,4 +113,21 @@
             [% END %]
         </div>
     </div>
-    [% INCLUDE 'popup-bottom.inc' %]
+
+[% IF ( IntranetUserJS ) %]
+    <script src="[% interface %]/lib/jquery/jquery-2.2.3.min_[% KOHA_VERSION %].js"></script>
+    <script src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min_[% KOHA_VERSION %].js"></script>
+    <script>
+        [% IntranetUserJS %]
+        function Done() {
+            window.location = "[% referer %]";
+        };
+        $(document).ready(function(){
+            $(".gb-close").on("click",function(){
+                parent.parent.GB_hide();
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'popup-bottom.inc' %]
