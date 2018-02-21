@@ -104,6 +104,24 @@ sub fixup_cardnumber {
     $self->cardnumber($max+1);
 }
 
+# trim whitespace from data which has some non-whitespace in it.
+# Could be moved to Koha::Object if need to be reused
+sub trim_whitespaces {
+    my( $self ) = @_;
+
+    my $schema  = Koha::Database->new->schema;
+    my @columns = $schema->source('Borrowers')->columns;
+
+    for my $column( @columns ) {
+        my $value = $self->$column;
+        if ( defined $value ) {
+            $value =~ s/^\s*|\s*$//g;
+            $self->$column($value);
+        }
+    }
+    return $self;
+}
+
 sub store {
     my( $self ) = @_;
 

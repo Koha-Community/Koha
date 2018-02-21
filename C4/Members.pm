@@ -405,13 +405,6 @@ sub AddMember {
         );
     }
 
-    # trim whitespace from data which has some non-whitespace in it.
-    foreach my $field_name (keys(%data)) {
-        if ( defined $data{$field_name} && $data{$field_name} =~ /\S/ ) {
-            $data{$field_name} =~ s/^\s*|\s*$//g;
-        }
-    }
-
     my $p = Koha::Patron->new( { userid => $data{userid}, firstname => $data{firstname}, surname => $data{surname} } );
     # generate a proper login if none provided
     $data{'userid'} = $p->generate_userid
