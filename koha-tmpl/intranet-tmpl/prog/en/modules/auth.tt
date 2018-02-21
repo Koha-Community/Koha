@@ -18,6 +18,7 @@
 
 <div id="login">
 <h1><a href="http://koha-community.org">Koha</a></h1>
+[% IF (Koha.Preference('StaffLoginInstructions')) %]<div id="login_instructions">[% Koha.Preference('StaffLoginInstructions') %]</div>[% END %]
 [% IF ( nopermission ) %]
 <div id="login_error">
     <strong>Error:</strong>
