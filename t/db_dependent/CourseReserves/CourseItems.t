@@ -23,7 +23,7 @@ use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCou
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 17;
+use Test::More tests => 27;
 
 BEGIN {
     require_ok('C4::CourseReserves');
@@ -37,10 +37,6 @@ my $builder = t::lib::TestBuilder->new();
 create_dependent_objects();
 my ($biblionumber, $itemnumber) = create_bib_and_item();
 
-my $course = $builder->build({
-    source => 'CourseReserve',
-});
-
 my $ci_id = ModCourseItem(
     itemnumber    => $itemnumber,
     itype         => 'BK_foo',
@@ -48,6 +44,13 @@ my $ci_id = ModCourseItem(
     holdingbranch => 'B2',
     location      => 'TH',
 );
+
+my $course = $builder->build({
+    source => 'CourseReserve',
+    value => {
+        ci_id => $ci_id,
+    }
+});
 
 my $cr_id = ModCourseReserve(
     course_id   => $course->{course_id},
@@ -66,6 +69,33 @@ my $item = Koha::Items->find($itemnumber);
 is($item->itype, 'BK_foo', 'Item type in course should be BK_foo');
 is($item->ccode, 'BOOK', 'Item ccode in course should be BOOK');
 is($item->holdingbranch, 'B2', 'Item holding branch in course should be B2');
+is($item->location, 'TH', 'Item location in course should be TH');
+
+ModCourseItem(
+    itemnumber    => $itemnumber,
+    itype         => 'BK_foo',
+    ccode         => 'DVD',
+    holdingbranch => 'B3',
+    location      => 'TH',
+);
+
+ModCourseReserve(
+    course_id   => $course->{course_id},
+    ci_id       => $ci_id,
+    staff_note  => '',
+    public_note => '',
+);
+
+$course_item = GetCourseItem( ci_id => $ci_id );
+is($course_item->{itype}, 'CD_foo', 'Course item itype should be CD_foo');
+is($course_item->{ccode}, 'CD', 'Course item ccode should be CD');
+is($course_item->{holdingbranch}, 'B1', 'Course item holding branch should be B1');
+is($course_item->{location}, 'HR', 'Course item location should be HR');
+
+$item = Koha::Items->find($itemnumber);
+is($item->itype, 'BK_foo', 'Item type in course should be BK_foo');
+is($item->ccode, 'DVD', 'Item ccode in course should be DVD');
+is($item->holdingbranch, 'B3', 'Item holding branch in course should be B3');
 is($item->location, 'TH', 'Item location in course should be TH');
 
 DelCourseReserve( cr_id => $cr_id );
@@ -100,6 +130,27 @@ $item = Koha::Items->find($itemnumber);
 is($item->ccode, 'BOOK', 'Item ccode should be BOOK');
 
 my $course_item2 = GetCourseItem( ci_id => $ci_id2 );
+is($course_item2->{ccode}, '', 'Course item ccode should be empty');
+
+ModCourseItem(
+    itemnumber    => $itemnumber,
+    itype         => 'CD_foo',
+    ccode         => 'DVD',
+    holdingbranch => 'B1',
+    location      => 'HR',
+);
+
+ModCourseReserve(
+    course_id   => $course->{course_id},
+    ci_id       => $ci_id2,
+    staff_note  => '',
+    public_note => '',
+);
+
+$item = Koha::Items->find($itemnumber);
+is($item->ccode, 'DVD', 'Item ccode should be BOOK');
+
+$course_item2 = GetCourseItem( ci_id => $ci_id2 );
 is($course_item2->{ccode}, '', 'Course item ccode should be empty');
 
 DelCourseReserve( cr_id => $cr_id2 );
@@ -142,10 +193,27 @@ sub create_dependent_objects {
     });
 
     $builder->build({
+        source => 'Branch',
+        value  => {
+            branchcode => 'B3',
+            branchname => 'Branch 3'
+        }
+    });
+
+    $builder->build({
         source => 'AuthorisedValue',
         value  => {
             category => 'CCODE',
             authorised_value => 'BOOK',
+            lib => 'Book'
+        }
+    });
+
+    $builder->build({
+        source => 'AuthorisedValue',
+        value  => {
+            category => 'CCODE',
+            authorised_value => 'DVD',
             lib => 'Book'
         }
     });
