@@ -33,9 +33,10 @@ use JSON;
 
 use C4::Context;
 use C4::Charset;
-use C4::AuthoritiesMarc;
 use C4::Auth qw/check_cookie_auth/;
 use C4::Output;
+use Koha::SearchEngine::Search;
+use Koha::SearchEngine::QueryBuilder;
 
 my $query = new CGI;
 
@@ -60,7 +61,18 @@ if ( $auth_status ne "ok" ) {
     my $resultsperpage = 50;
     my $startfrom = 0;
 
-    my ( $results, $total ) = SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value, $startfrom * $resultsperpage, $resultsperpage, $authtypecode, $orderby );
+    my $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $searcher = Koha::SearchEngine::Search->new(
+        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    my $search_query = $builder->build_authorities_query_compat(
+        \@marclist, \@and_or, \@excluding, \@operator,
+        \@value, $authtypecode, $orderby
+    );
+    my $offset = $startfrom * $resultsperpage;
+    my ( $results, $total ) =
+        $searcher->search_auth_compat( $search_query, $offset,
+        $resultsperpage );
 
     my %used_summaries; # hash to avoid duplicates
     my @summaries;
