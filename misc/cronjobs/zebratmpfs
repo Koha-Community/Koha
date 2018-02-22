@@ -1,24 +1,24 @@
 #!/bin/sh
 
-# ZebraTmpFS V160814 Written by Pasi Korkalo / Outi Libraries
-# A script for managing zebra-indexes on ram-disk (tmpfs)
+# ZebraTmpFS V171211 Written by Pasi Korkalo / Koha-Suomi Oy 
+# A script for managing zebra-indexes on /dev/shm
 
 # The script has two functions:
 
-# 1) It functions as an init-script that sets up tmpfs and syncs zebra-index
-#    between the tmpfs and disk
+# 1) It functions as an init-script that sets up an index cache to /dev/shm
+#    and syncs zebra-index between the cache and disk
 
 # 2) It takes care of updating/re-creating the index and keeping it in sync
-#    between the tmpfs and disk (for cron)
+#    between the index cache and disk (for cron)
 
 # Update your index from crontab with something like this:
-# */5 06-20 * * * $KOHA_PATH/misc/cronjobs/zebratmpfs reindex >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+# */5 06-20 * * * $KOHA_CRONJOB_TRIGGER cronjobs/zebratmpfs reindex
 
 # For complete re-indexing every su-mo night, this will also sync the new index to disk:
-# 10 00 * * 7 $KOHA_PATH/misc/cronjobs/zebratmpfs newindex >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+# 10 00 * * 7 $KOHA_CRONJOB_TRIGGER cronjobs/zebratmpfs newindex
 
 # It's probably a good idea to sync the index to disk nightly:
-# 10 00 * * 1-6 $KOHA_PATH/misc/cronjobs/zebratmpfs synctodisk >> /home/koha/koha-dev/var/log/zebra-tmpfs 2>&1
+# 10 00 * * 1-6 $KOHA_CRONJOB_TRIGGER cronjobs/zebratmpfs synctodisk
 
 # To have zebratmpfs start automatically when bringing up Koha-server, do (as root):
 # ln -s $KOHA_PATH/misc/cronjobs/zebratmpfs /etc/init.d
@@ -31,9 +31,6 @@
 # Short-Description: Manage and sync Zebra inram/ondisk indexing
 # Description:       Start and stop tmpfs for zebra, keep disk and memory indexes synced and rebuild/refresh indexes
 ### END INIT INFO
-
-# Reserve this much memory for the tmpfs:
-export tmpfssize=80G
 
 if test -z "$KOHA_PATH" || test -z "$KOHA_CONF"; then
   echo "KOHA_PATH or KOHA_CONF not set."
@@ -49,11 +46,19 @@ syncit() {
 }
 
 ramit() {
-  # Make dir and mount tmpfs if necessary, then sync data from disk
+  # Make dir and bind-mount /dev/shm/zebradb, then sync data from disk
+  if ! mount | grep -q "^tmpfs on /dev/shm type tmpfs"; then
+    echo "For some weird reason you don't have /dev/shm mounted as tmpfs."
+    exit 1
+  fi
   if ! mount | grep -q "^tmpfs on $zebraindexlocation/zebradb type tmpfs"; then
-    mkdir -p $zebraindexlocation/zebradb
-    test $(id -u) -gt 0 && needsudo="sudo"
-    $needsudo mount -t tmpfs -o size=$tmpfssize tmpfs $zebraindexlocation/zebradb || exit 1
+    mkdir -p $zebraindexlocation/zebradb /dev/shm/zebradb
+    if test $(id -u) -eq 0; then
+      chown koha:koha /dev/shm/zebradb
+      mount --bind /dev/shm/zebradb $zebraindexlocation/zebradb || exit 1
+    else
+      sudo mount --bind /dev/shm/zebradb $zebraindexlocation/zebradb || exit 1
+    fi
   fi
   cp -au $zebraindexlocation/zebradb.ondisk/* $zebraindexlocation/zebradb
 }
@@ -73,7 +78,7 @@ index() {
 
 estimatetime() {
   # This will (very badly) estimate the time it takes to create a new index based on current index size.
-  size=$(du -sh $zebraindexlocation//zebradb | cut -f 1 -d 'G')
+  size=$(du -sh $zebraindexlocation/zebradb | cut -f 1 -d 'G')
   test $size -gt 1 2> /dev/null || size=1
 
   hours=$(($size / 4))
@@ -91,7 +96,7 @@ doinit() {
   # zebradb has content? => yes => have ondisk? => no  => move current index as ondisk, mount tmpfs and sync from disk
   #                                             => yes => won't overwrite current ondisk on init, abort with error
   #                      => no  => have ondisk? => no  => index, then re-init
-  #                                             => yes => mount tmpfs, sync from disk
+  #                                             => yes => mount /dev/shm/zebradb, sync from disk
 
     if test "$(echo $zebraindexlocation/zebradb/*)" != "$zebraindexlocation/zebradb/*"; then
       if test -d $zebraindexlocation/zebradb.ondisk; then
