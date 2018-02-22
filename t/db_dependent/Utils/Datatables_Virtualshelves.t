@@ -29,11 +29,9 @@ use Koha::Virtualshelves;
 
 use_ok( "C4::Utils::DataTables::VirtualShelves" );
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM virtualshelves|);
 
