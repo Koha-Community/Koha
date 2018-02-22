@@ -23,6 +23,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Form::MessagingPreferences;
+use Koha::AuthUtils;
 use Koha::Patrons;
 use Koha::Patron::Modifications;
 
@@ -59,17 +60,17 @@ if (
     $template->param(
         OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
 
-    my $borrower = $m->unblessed();
+    my $patron_attrs = $m->unblessed;
+    $patron_attrs->{password} ||= Koha::AuthUtils::generate_password;
 
-    my $password;
-    ( $borrowernumber, $password ) = AddMember_Opac(%$borrower);
+    $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+    my $patron = Koha::Patron->new( $patron_attrs )->store;
 
-    if ($borrowernumber) {
+    if ($patron) {
         $m->delete();
-        C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
+        C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
-        $template->param( password_cleartext => $password );
-        my $patron = Koha::Patrons->find( $borrowernumber );
+        $template->param( password_cleartext => $patron->plain_text_password );
         $template->param( borrower => $patron->unblessed );
         $template->param(
             PatronSelfRegistrationAdditionalInstructions =>

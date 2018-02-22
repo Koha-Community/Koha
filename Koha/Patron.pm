@@ -127,6 +127,18 @@ sub trim_whitespaces {
     return $self;
 }
 
+sub plain_text_password {
+    my ( $self, $password ) = @_;
+    if ( $password ) {
+        $self->{_plain_text_password} = $password;
+        return $self;
+    }
+    return $self->{_plain_text_password}
+        if $self->{_plain_text_password};
+
+    return;
+}
+
 sub store {
     my ($self) = @_;
 
@@ -182,7 +194,7 @@ sub store {
                 }
 
                 # Make a copy of the plain text password for later use
-                my $plain_text_password = $self->password;
+                $self->plain_text_password( $self->password );
 
                 # Create a disabled account if no password provided
                 $self->password( $self->password
@@ -214,8 +226,7 @@ sub store {
                             'sync'           => 1,
                             'syncstatus'     => 'new',
                             'hashed_pin' =>
-                              Koha::NorwegianPatronDB::NLEncryptPIN(
-                                $plain_text_password),
+                              Koha::NorwegianPatronDB::NLEncryptPIN($self->plain_text_password),
                         }
                       );
                 }

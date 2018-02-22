@@ -76,11 +76,6 @@ BEGIN {
         &changepassword
     );
 
-    #Insert data
-    push @EXPORT, qw(
-        &AddMember_Opac
-    );
-
     #Check data
     push @EXPORT, qw(
         &checkuserpassword
@@ -736,27 +731,6 @@ sub IssueSlip {
         repeat => \%repeat,
         loops => \%loops,
     );
-}
-
-=head2 AddMember_Opac
-
-=cut
-
-sub AddMember_Opac {
-    my ( %borrower ) = @_;
-
-    $borrower{'categorycode'} //= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-    my $password = $borrower{password};
-    if (not defined $password){
-        my $sr = new String::Random;
-        $sr->{'A'} = [ 'A'..'Z', 'a'..'z' ];
-        $password = $sr->randpattern("AAAAAAAAAA");
-        $borrower{'password'} = $password;
-    }
-
-    my $patron = Koha::Patron->new(\%borrower)->store;
-
-    return ( $patron->borrowernumber, $password );
 }
 
 =head2 DeleteExpiredOpacRegistrations
