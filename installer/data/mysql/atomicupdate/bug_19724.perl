@@ -1,7 +1,8 @@
 $DBversion = 'XXX';
+require C4::Installer;
 if( CheckVersion( $DBversion ) ) {
     foreach my $table (qw(biblio_metadata deletedbiblio_metadata)) {
-        if (!column_exists($table, 'timestamp')) {
+        if (!C4::Installer::column_exists($table, 'timestamp')) {
             $dbh->do(qq{
                 ALTER TABLE `$table`
                 ADD COLUMN `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER `metadata`,
