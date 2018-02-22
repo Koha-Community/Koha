@@ -6,7 +6,8 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="marc items">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc items str">
 
   <xsl:template name="datafield">
     <xsl:param name="tag"/>
@@ -291,7 +292,7 @@
         <a>
           <xsl:attribute name="href">
             <xsl:text>/cgi-bin/koha/opac-search.pl?q=su:</xsl:text>
-            <xsl:value-of select="marc:subfield[@code='a']"/>
+            <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
           </xsl:attribute>
           <xsl:call-template name="chopPunctuation">
             <xsl:with-param name="chopString">
@@ -355,9 +356,9 @@
                 <xsl:otherwise>
                   <xsl:attribute name="href">
                     <xsl:text>/cgi-bin/koha/opac-search.pl?q=au:</xsl:text>
-                    <xsl:value-of select="marc:subfield[@code='a']"/>
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="marc:subfield[@code='b']"/>
+                    <xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>
+                    <xsl:text>%20</xsl:text>
+                    <xsl:value-of select="str:encode-uri(marc:subfield[@code='b'], true())"/>
                   </xsl:attribute>
                 </xsl:otherwise>
               </xsl:choose>
