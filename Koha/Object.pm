@@ -219,6 +219,17 @@ sub unblessed {
     return { $self->_result->get_columns };
 }
 
+=head3 $object->get_from_storage;
+
+=cut
+
+sub get_from_storage {
+    my ( $self, $attrs ) = @_;
+    my $stored_object = $self->_result->get_from_storage($attrs);
+    my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
+    return $object_class->_new_from_dbic($stored_object);
+}
+
 =head3 $object->TO_JSON
 
 Returns an unblessed representation of the object, suitable for JSON output.
