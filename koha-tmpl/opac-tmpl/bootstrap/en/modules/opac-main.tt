@@ -33,9 +33,9 @@
         </div>
     [% END %]
 
-    [% IF ( OpacNav ||  OpacNavBottom  ) && Koha.Preference( 'opacuserlogin' ) == 1 %]
+    [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
         <div class="span7">
-    [% ELSIF Koha.Preference( 'opacuserlogin' ) == 1 %]
+    [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
         <div class="span9">
     [% ELSIF ( OpacNav ||  OpacNavBottom  ) %]
         <div class="span10">
