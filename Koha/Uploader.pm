@@ -58,8 +58,12 @@ Koha::Uploader - Facilitate file uploads (temporary and permanent)
 
 =cut
 
-use constant KOHA_UPLOAD => 'koha_upload';
+use constant KOHA_UPLOAD  => 'koha_upload';
 use constant BYTES_DIGEST => 2048;
+use constant ERR_EXISTS   => 'UPLERR_ALREADY_EXISTS';
+use constant ERR_PERMS    => 'UPLERR_CANNOT_WRITE';
+use constant ERR_ROOT     => 'UPLERR_NO_ROOT_DIR';
+use constant ERR_TEMP     => 'UPLERR_NO_TEMP_DIR';
 
 use Modern::Perl;
 use CGI; # no utf8 flag, since it may interfere with binary uploads
@@ -220,9 +224,9 @@ sub _create_file {
             $self->{files}->{$filename}->{errcode} ) {
         #skip
     } elsif( !$self->{temporary} && !$self->{rootdir} ) {
-        $self->{files}->{$filename}->{errcode} = 3; #no rootdir
+        $self->{files}->{$filename}->{errcode} = ERR_ROOT; #no rootdir
     } elsif( $self->{temporary} && !$self->{tmpdir} ) {
-        $self->{files}->{$filename}->{errcode} = 4; #no tempdir
+        $self->{files}->{$filename}->{errcode} = ERR_TEMP; #no tempdir
     } else {
         my $dir = $self->_dir;
         my $hashval = $self->{files}->{$filename}->{hash};
@@ -235,7 +239,7 @@ sub _create_file {
             hashvalue          => $hashval,
             uploadcategorycode => $self->{category},
         })->count ) {
-            $self->{files}->{$filename}->{errcode} = 1; #already exists
+            $self->{files}->{$filename}->{errcode} = ERR_EXISTS;
             return;
         }
 
@@ -244,7 +248,7 @@ sub _create_file {
             $fh->binmode;
             $self->{files}->{$filename}->{fh}= $fh;
         } else {
-            $self->{files}->{$filename}->{errcode} = 2; #not writable
+            $self->{files}->{$filename}->{errcode} = ERR_PERMS;
         }
     }
     return $fh;

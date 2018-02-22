@@ -25,6 +25,10 @@ use C4::Auth;
 use C4::Output;
 use Koha::UploadedFiles;
 
+use constant ERR_READING     => 'UPLERR_FILE_NOT_READ';
+use constant ALERT_DELETED   => 'UPL_FILE_DELETED'; # alert, no error
+use constant ERR_NOT_DELETED => 'UPLERR_FILE_NOT_DELETED';
+
 my $input  = CGI::->new;
 my $op     = $input->param('op') // 'new';
 my $plugin = $input->param('plugin');
@@ -87,9 +91,9 @@ if ( $op eq 'new' ) {
     my $delete = $rec ? $rec->delete : undef;
     #TODO Improve error handling
     my $msg = $delete
-        ? JSON::to_json({ $fn => { code => 6 }})
+        ? JSON::to_json({ $fn => { code => ALERT_DELETED }})
         : $id
-        ? JSON::to_json({ $fn || $id, { code => 7 }})
+        ? JSON::to_json({ $fn || $id, { code => ERR_NOT_DELETED }})
         : '';
     $template->param(
         mode             => 'deleted',
@@ -104,7 +108,7 @@ if ( $op eq 'new' ) {
     if ( !$rec || !$fh ) {
         $template->param(
             mode             => 'new',
-            msg              => JSON::to_json({ $id => { code => 5 }}),
+            msg              => JSON::to_json({ $id => { code => ERR_READING }}),
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {

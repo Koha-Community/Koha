@@ -249,18 +249,6 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
-        var errMESSAGES = [
-            "Error 0: Not in use",
-            _("This file already exists (in this category)."),
-            _("File could not be created. Check permissions."),
-            _("Your koha-conf.xml does not contain a valid upload_path."),
-            _("No temporary directory found."),
-            _("File could not be read."),
-            _("File has been deleted."),
-            _("File or upload record could not be deleted."),
-        ];
-    </script>
     [% Asset.js("js/file-upload.js") %]
     <script type="text/javascript">
         function StartUpload() {
@@ -318,12 +306,41 @@
             var str = '';
             for( var file in err ) {
                 str= str + '<p>' + file + ': ' +
-                    errMESSAGES[ err[file].code ] + '</p>';
+                    errMESSAGES( err[file].code ) + '</p>';
             }
             if( str ) {
                 $('#myalerts').html(str);
                 $('#myalerts').show();
             }
+        }
+        function errMESSAGES(code) {
+            var rv;
+            switch(code) {
+                case 'UPLERR_ALREADY_EXISTS':
+                    rv = _("This file already exists (in this category).");
+                    break;
+                case 'UPLERR_CANNOT_WRITE':
+                    rv = _("File could not be created. Check permissions.");
+                    break;
+                case 'UPLERR_NO_ROOT_DIR':
+                    rv = _("Your koha-conf.xml does not contain a valid upload_path.");
+                    break;
+                case 'UPLERR_NO_TEMP_DIR':
+                    rv = _("No temporary directory found.");
+                    break;
+                case 'UPLERR_FILE_NOT_READ':
+                    rv = _("File could not be read.");
+                    break;
+                case 'UPL_FILE_DELETED': // An alert, no error
+                    rv = _("File has been deleted.");
+                    break;
+                case 'UPLERR_FILE_NOT_DELETED':
+                    rv = _("File or upload record could not be deleted.");
+                    break;
+                default:
+                    rv = code;
+            }
+            return rv;
         }
         function CheckSearch() {
             if( $("#term").val()=="" ) {

@@ -145,7 +145,7 @@ subtest 'Add same file in same category' => sub {
     is( $upl->count, 0, 'Upload 4 failed as expected' );
     is( $upl->result, undef, 'Result is undefined' );
     my $e = $upl->err;
-    is( $e->{file2}->{code}, 1, "Errcode 1 [already exists] reported" );
+    is( $e->{file2}->{code}, Koha::Uploader::ERR_EXISTS, "Already exists error reported" );
 };
 
 subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
