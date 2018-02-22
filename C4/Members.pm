@@ -78,7 +78,6 @@ BEGIN {
 
     #Insert data
     push @EXPORT, qw(
-    &AddMember_Auto
         &AddMember_Opac
     );
 
@@ -739,18 +738,6 @@ sub IssueSlip {
     );
 }
 
-=head2 AddMember_Auto
-
-=cut
-
-sub AddMember_Auto {
-    my ( %borrower ) = @_;
-
-    my $patron = Koha::Patron->new(\%borrower)->store;
-
-    return %{ $patron->unblessed };
-}
-
 =head2 AddMember_Opac
 
 =cut
@@ -767,9 +754,9 @@ sub AddMember_Opac {
         $borrower{'password'} = $password;
     }
 
-    %borrower = AddMember_Auto(%borrower);
+    my $patron = Koha::Patron->new(\%borrower)->store;
 
-    return ( $borrower{'borrowernumber'}, $password );
+    return ( $patron->borrowernumber, $password );
 }
 
 =head2 DeleteExpiredOpacRegistrations

@@ -207,13 +207,24 @@ if ( $action eq 'create' ) {
             $template->param( OpacPasswordChange =>
                   C4::Context->preference('OpacPasswordChange') );
 
-            my ( $borrowernumber, $password ) = AddMember_Opac(%borrower);
-            C4::Members::Attributes::SetBorrowerAttributes( $borrowernumber, $attributes );
-            C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if $borrowernumber && C4::Context->preference('EnhancedMessagingPreferences');
+            my $patron = Koha::Patron->new( \%borrower )->store;
+            if ( $patron ) {
+                C4::Members::Attributes::SetBorrowerAttributes( $patron->borrowernumber, $attributes );
+                if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
+                    C4::Form::MessagingPreferences::handle_form_action(
+                        $cgi,
+                        { borrowernumber => $patron->borrowernumber },
+                        $template,
+                        1,
+                        C4::Context->preference('PatronSelfRegistrationDefaultCategory')
+                    );
+                }
 
-            $template->param( password_cleartext => $password );
-            my $patron = Koha::Patrons->find( $borrowernumber );
-            $template->param( borrower => $patron->unblessed );
+                $template->param( password_cleartext => $password );
+                $template->param( borrower => $patron->unblessed );
+            } else {
+                # FIXME Handle possible errors here
+            }
             $template->param(
                 PatronSelfRegistrationAdditionalInstructions =>
                   C4::Context->preference(

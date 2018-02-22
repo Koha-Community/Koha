@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Exception;
 
@@ -385,17 +385,6 @@ is( $password eq "Nexus-6", 1, 'Test password used if submitted');
 $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $hashed_up =  Koha::AuthUtils::hash_password("Nexus-6", $borrower->{password});
 is( $borrower->{password} eq $hashed_up, 1, 'Check password hash equals hash of submitted password' );
-
-subtest 'Trivial test for AddMember_Auto' => sub {
-    plan tests => 3;
-    my $library = $builder->build({ source => 'Branch' });
-    my $category = $builder->build({ source => 'Category' });
-    my %borr = AddMember_Auto( surname=> 'Dick3', firstname => 'Philip', branchcode => $library->{branchcode}, categorycode => $category->{categorycode}, password => '34567890' );
-    ok( $borr{borrowernumber}, 'Borrower hash contains borrowernumber' );
-    like( $borr{cardnumber}, qr/^\d+$/, 'Borrower hash contains cardnumber' );
-    my $patron = Koha::Patrons->find( $borr{borrowernumber} );
-    isnt( $patron, undef, 'Patron found' );
-};
 
 $schema->storage->txn_rollback;
 
