@@ -251,7 +251,7 @@ subtest 'store() tests' => sub {
     my $patron = Koha::Patron->new({ categorycode => $category_id });
 
     my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0;
+    $schema->storage->dbh->{PrintError} = 0; # FIXME This does not longer work - because of the transaction in Koha::Patron->store?
     throws_ok
         { $patron->store }
         'Koha::Exceptions::Object::FKConstraint',
