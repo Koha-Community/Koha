@@ -110,11 +110,10 @@ sub log_request {
     my ($c) = @_;
 
     eval {
-        $c->app->log->trace(sub { Data::Dumper::Dumper($c->req) });
-        $c->app->log->debug(
+        $c->app->log->trace(
             'Request JSON body ' . Mojo::JSON::encode_json($c->req->json)
         );
-        $c->app->log->debug(
+        $c->app->log->trace(
             'Request params ' . Mojo::JSON::encode_json($c->req->params->to_hash)
         );
     };
@@ -128,8 +127,7 @@ sub log_response {
     my ($c, $args) = @_;
 
     eval {
-        $c->app->log->trace(sub { Data::Dumper::Dumper($c->res) });
-        $c->app->log->debug(
+        $c->app->log->trace(
             'Rendering response ' . Mojo::JSON::encode_json($args)
         );
     };
