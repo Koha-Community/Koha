@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw( uniq );
+use Module::Load::Conditional qw( can_load );
 use Text::Unaccent qw( unac_string );
 
 use C4::Context;
@@ -40,6 +41,10 @@ use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
 use Koha::Account;
 use Koha::Subscription::Routinglists;
+
+if ( ! can_load( modules => { 'Koha::NorwegianPatronDB' => undef } ) ) {
+   warn "Unable to load Koha::NorwegianPatronDB";
+}
 
 use base qw(Koha::Object);
 
@@ -110,7 +115,7 @@ sub trim_whitespaces {
     my( $self ) = @_;
 
     my $schema  = Koha::Database->new->schema;
-    my @columns = $schema->source('Borrowers')->columns;
+    my @columns = $schema->source($self->_type)->columns;
 
     for my $column( @columns ) {
         my $value = $self->$column;
@@ -123,7 +128,7 @@ sub trim_whitespaces {
 }
 
 sub store {
-    my( $self ) = @_;
+    my ($self) = @_;
 
     $self->_result->result_source->schema->txn_do(
         sub {
@@ -138,10 +143,95 @@ sub store {
                 # We are in a transaction but the table is not locked
                 $self->fixup_cardnumber;
             }
+            unless ( $self->in_storage ) {    #AddMember
 
-            $self->SUPER::store;
+                unless( $self->category->in_storage ) {
+                    Koha::Exceptions::Object::FKConstraint->throw(
+                        broken_fk => 'categorycode',
+                        value     => $self->categorycode,
+                    );
+                }
+
+                $self->trim_whitespaces;
+
+                # Generate a valid userid/login if needed
+                $self->userid($self->generate_userid)
+                  if not $self->userid or not $self->has_valid_userid;
+
+                # Add expiration date if it isn't already there
+                unless ( $self->dateexpiry ) {
+                    $self->dateexpiry( $self->category->get_expiry_date );
+                }
+
+                # Add enrollment date if it isn't already there
+                unless ( $self->dateenrolled ) {
+                    $self->dateenrolled(dt_from_string);
+                }
+
+                # Set the privacy depending on the patron's category
+                my $default_privacy = $self->category->default_privacy || q{};
+                $default_privacy =
+                    $default_privacy eq 'default' ? 1
+                  : $default_privacy eq 'never'   ? 2
+                  : $default_privacy eq 'forever' ? 0
+                  :                                                   undef;
+                $self->privacy($default_privacy);
+
+                unless ( defined $self->privacy_guarantor_checkouts ) {
+                    $self->privacy_guarantor_checkouts(0);
+                }
+
+                # Make a copy of the plain text password for later use
+                my $plain_text_password = $self->password;
+
+                # Create a disabled account if no password provided
+                $self->password( $self->password
+                    ? Koha::AuthUtils::hash_password( $self->password )
+                    : '!' );
+
+                # We don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00)
+                $self->dateofbirth(undef) unless $self->dateofbirth;
+                $self->debarred(undef)    unless $self->debarred;
+
+                # Set default values if not set
+                $self->sms_provider_id(undef) unless $self->sms_provider_id;
+                $self->guarantorid(undef)     unless $self->guarantorid;
+
+                $self->borrowernumber(undef);
+
+                $self = $self->SUPER::store;
+
+                # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
+                # cronjob will use for syncing with NL
+                if (   C4::Context->preference('NorwegianPatronDBEnable')
+                    && C4::Context->preference('NorwegianPatronDBEnable') == 1 )
+                {
+                    Koha::Database->new->schema->resultset('BorrowerSync')
+                      ->create(
+                        {
+                            'borrowernumber' => $self->borrowernumber,
+                            'synctype'       => 'norwegianpatrondb',
+                            'sync'           => 1,
+                            'syncstatus'     => 'new',
+                            'hashed_pin' =>
+                              Koha::NorwegianPatronDB::NLEncryptPIN(
+                                $plain_text_password),
+                        }
+                      );
+                }
+
+                $self->add_enrolment_fee_if_needed;
+
+                logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
+                  if C4::Context->preference("BorrowersLog");
+            }
+            else {    #ModMember
+                $self = $self->SUPER::store;
+            }
+
         }
     );
+    return $self;
 }
 
 =head3 delete

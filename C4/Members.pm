@@ -78,7 +78,6 @@ BEGIN {
 
     #Insert data
     push @EXPORT, qw(
-        &AddMember
     &AddMember_Auto
         &AddMember_Opac
     );
@@ -373,98 +372,6 @@ sub ModMember {
         logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if $borrowers_log;
     }
     return $execute_success;
-}
-
-=head2 AddMember
-
-  $borrowernumber = &AddMember(%borrower);
-
-insert new borrower into table
-
-(%borrower keys are database columns. Database columns could be
-different in different versions. Please look into database for correct
-column names.)
-
-Returns the borrowernumber upon success
-
-Returns as undef upon any db error without further processing
-
-=cut
-
-#'
-sub AddMember {
-    my (%data) = @_;
-    my $dbh = C4::Context->dbh;
-    my $schema = Koha::Database->new()->schema;
-
-    my $category = Koha::Patron::Categories->find( $data{categorycode} );
-    unless ($category) {
-        Koha::Exceptions::Object::FKConstraint->throw(
-            broken_fk => 'categorycode',
-            value     => $data{categorycode},
-        );
-    }
-
-    my $p = Koha::Patron->new( { userid => $data{userid}, firstname => $data{firstname}, surname => $data{surname} } );
-    # generate a proper login if none provided
-    $data{'userid'} = $p->generate_userid
-      if ( $data{'userid'} eq '' || ! $p->has_valid_userid );
-
-    # add expiration date if it isn't already there
-    $data{dateexpiry} ||= $category->get_expiry_date;
-
-    # add enrollment date if it isn't already there
-    unless ( $data{'dateenrolled'} ) {
-        $data{'dateenrolled'} = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
-    }
-
-    $data{'privacy'} =
-        $category->default_privacy() eq 'default' ? 1
-      : $category->default_privacy() eq 'never'   ? 2
-      : $category->default_privacy() eq 'forever' ? 0
-      :                                             undef;
-
-    $data{'privacy_guarantor_checkouts'} = 0 unless defined( $data{'privacy_guarantor_checkouts'} );
-
-    # Make a copy of the plain text password for later use
-    my $plain_text_password = $data{'password'};
-
-    # create a disabled account if no password provided
-    $data{'password'} = ($data{'password'})? hash_password($data{'password'}) : '!';
-
-    # we don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00
-    $data{'dateofbirth'}     = undef if ( not $data{'dateofbirth'} );
-    $data{'debarred'}        = undef if ( not $data{'debarred'} );
-    $data{'sms_provider_id'} = undef if ( not $data{'sms_provider_id'} );
-    $data{'guarantorid'}     = undef if ( not $data{'guarantorid'} );
-
-    # get only the columns of Borrower
-    # FIXME Do we really need this check?
-    my @columns = $schema->source('Borrower')->columns;
-    my $new_member = { map { join(' ',@columns) =~ /$_/ ? ( $_ => $data{$_} )  : () } keys(%data) } ;
-
-    delete $new_member->{borrowernumber};
-
-    my $patron = Koha::Patron->new( $new_member )->store;
-    $data{borrowernumber} = $patron->borrowernumber;
-
-    # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
-    # cronjob will use for syncing with NL
-    if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-        Koha::Database->new->schema->resultset('BorrowerSync')->create({
-            'borrowernumber' => $data{'borrowernumber'},
-            'synctype'       => 'norwegianpatrondb',
-            'sync'           => 1,
-            'syncstatus'     => 'new',
-            'hashed_pin'     => Koha::NorwegianPatronDB::NLEncryptPIN( $plain_text_password ),
-        });
-    }
-
-    logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
-
-    $patron->add_enrolment_fee_if_needed;
-
-    return $data{borrowernumber};
 }
 
 =head2 GetAllIssues
