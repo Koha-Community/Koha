@@ -9,8 +9,9 @@
                 <label for="additional_field_[% field.id %]"> [% field.name %]: </label>
                 [% IF field.authorised_value_category %]
                     <select name="additional_field_[% field.id %]" id="additional_field_[% field.id %]">
-                        [% FOREACH av IN AuthorisedValues.Get( field.authorised_value_category, values.${field.name} ) %]
-                            [% IF av.selected %]
+                        <option value="">All</option>
+                        [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox( field.authorised_value_category ) %]
+                            [% IF av.authorised_value == values.${field.name} %]
                                 <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
                             [% ELSE %]
                                 <option value="[% av.authorised_value %]">[% av.lib %]</option>
