@@ -1317,7 +1317,7 @@ sub AddIssue {
                 AddReturn( $item->{'barcode'}, C4::Context->userenv->{'branch'} );
             }
 
-            MoveReserve( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $cancelreserve );
+            C4::Reserves::MoveReserve( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $cancelreserve );
 
             # Starting process for transfer job (checking transfert and validate it if we have one)
             my ($datesent) = GetTransfers( $item->{'itemnumber'} );
