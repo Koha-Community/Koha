@@ -222,6 +222,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^\d+$/,
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
+        qr/^csrf_token$/,
     );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
@@ -422,8 +423,15 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
-        $borrowernumber = &AddMember(%newdata);
-        $newdata{'borrowernumber'} = $borrowernumber;
+        delete $newdata{password2};
+        my $patron = eval { Koha::Patron->new(\%newdata)->store };
+        if ( $@ ) {
+            # FIXME Urgent error handling here, we cannot fail without relevant feedback
+            # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
+            warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
+        } else {
+            $borrowernumber = $patron->borrowernumber;
+        }
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailOpacUser") == 1 && $newdata{'userid'}  && $newdata{'password'}) {

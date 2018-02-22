@@ -25,10 +25,10 @@ use DateTime;
 use C4::Context;
 use C4::Biblio; # AddBiblio
 use C4::Circulation; # AddIssue
-use C4::Members;# AddMember
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
+use Koha::Patrons;
 
 use Scalar::Util qw( isvstring );
 use Try::Tiny;
@@ -352,8 +352,7 @@ subtest 'unblessed_all_relateds' => sub {
         categorycode => $patron_category->{categorycode},
         branchcode => $library->branchcode,
     };
-    my $borrowernumber = C4::Members::AddMember(%$patron_data);
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $patron = Koha::Patron->new($patron_data)->store;
     my ($biblionumber) = AddBiblio( MARC::Record->new, '' );
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $item = $builder->build_object(

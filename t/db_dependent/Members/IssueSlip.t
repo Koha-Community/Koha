@@ -119,7 +119,7 @@ my $itemnumber2 =
   AddItem( { barcode => $barcode2, %item_infos }, $biblionumber2 );
 
 my $borrowernumber =
-  AddMember( categorycode => $categorycode, branchcode => $branchcode );
+  Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 my $module = new Test::MockModule('C4::Context');

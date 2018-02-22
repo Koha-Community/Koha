@@ -22,15 +22,13 @@ use C4::Context;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use C4::Output;
-use C4::Members;
 use Koha::Patrons;
 use Koha::Libraries;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patrons;
 use Koha::Patron::Categories;
-use Koha::Patron::Category;
 use Koha::ItemTypes;
-use Koha::IssuingRule;
 use Koha::IssuingRules;
 
 #Setting variables
@@ -187,10 +185,12 @@ if ( $step == 3 ) {
             $patron_data->{dateexpiry} =
               $patron_category->get_expiry_date( $patron_data->{dateenrolled} );
 
-            my $borrowernumber = C4::Members::AddMember(%$patron_data);
+            eval {
+                Koha::Patron->new($patron_data)->store;
+            };
 
             #Error handling checking if the patron was created successfully
-            if ($borrowernumber) {
+            unless ($@) {
                 push @messages, { code => 'success_on_insert_patron' };
             }
             else {

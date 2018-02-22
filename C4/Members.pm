@@ -746,10 +746,9 @@ sub IssueSlip {
 sub AddMember_Auto {
     my ( %borrower ) = @_;
 
-    $borrower{'borrowernumber'} = AddMember(%borrower);
-    my $patron = Koha::Patrons->find( $borrower{borrowernumber} )->unblessed;
-    $patron->{password} = $borrower{password};
-    return %$patron;
+    my $patron = Koha::Patron->new(\%borrower)->store;
+
+    return %{ $patron->unblessed };
 }
 
 =head2 AddMember_Opac
@@ -760,16 +759,17 @@ sub AddMember_Opac {
     my ( %borrower ) = @_;
 
     $borrower{'categorycode'} //= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-    if (not defined $borrower{'password'}){
+    my $password = $borrower{password};
+    if (not defined $password){
         my $sr = new String::Random;
         $sr->{'A'} = [ 'A'..'Z', 'a'..'z' ];
-        my $password = $sr->randpattern("AAAAAAAAAA");
+        $password = $sr->randpattern("AAAAAAAAAA");
         $borrower{'password'} = $password;
     }
 
     %borrower = AddMember_Auto(%borrower);
 
-    return ( $borrower{'borrowernumber'}, $borrower{'password'} );
+    return ( $borrower{'borrowernumber'}, $password );
 }
 
 =head2 DeleteExpiredOpacRegistrations

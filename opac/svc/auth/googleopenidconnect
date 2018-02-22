@@ -34,7 +34,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 escape );
 use C4::Auth qw{ checkauth get_session get_template_and_user };
 use C4::Context;
-use C4::Members;
 use C4::Output;
 use Koha::Patrons;
 
@@ -196,7 +195,8 @@ elsif ( defined $query->param('code') ) {
                     my $library = Koha::Libraries->find( $branchcode );
                     if (defined $patron_category && defined $library) {
                         my $password = undef;
-                        my $borrowernumber = C4::Members::AddMember(
+                        # TODO errors handling!
+                        my $borrower = Koha::Patron->new(
                             firstname    => $firstname,
                             surname      => $surname,
                             email        => $email,
@@ -204,9 +204,7 @@ elsif ( defined $query->param('code') ) {
                             branchcode   => $branchcode,
                             userid       => $userid,
                             password     => $password
-                        );
-                        $borrower = Koha::Patrons->find( {
-                            borrowernumber => $borrowernumber } );
+                        )->store;
                     } else {
                         $error_feedback = 'The GoogleOpenIDConnectDefaultBranch or GoogleOpenIDConnectDefaultCategory system preferences are not configured properly. Please contact the library with this error message.';
                     }

@@ -29,7 +29,6 @@ use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
 use C4::Log;
-use C4::Members;
 use C4::Reserves;
 use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
@@ -307,11 +306,11 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         dateexpiry => dt_from_string->subtract( months => 1 ),
     );
 
-    my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
-    my $reserving_borrowernumber = AddMember(%reserving_borrower_data);
-    my $hold_waiting_borrowernumber = AddMember(%hold_waiting_borrower_data);
-    my $restricted_borrowernumber = AddMember(%restricted_borrower_data);
-    my $expired_borrowernumber = AddMember(%expired_borrower_data);
+    my $renewing_borrowernumber = Koha::Patron->new(\%renewing_borrower_data)->store->borrowernumber;
+    my $reserving_borrowernumber = Koha::Patron->new(\%reserving_borrower_data)->store->borrowernumber;
+    my $hold_waiting_borrowernumber = Koha::Patron->new(\%hold_waiting_borrower_data)->store->borrowernumber;
+    my $restricted_borrowernumber = Koha::Patron->new(\%restricted_borrower_data)->store->borrowernumber;
+    my $expired_borrowernumber = Koha::Patron->new(\%expired_borrower_data)->store->borrowernumber;
 
     my $renewing_borrower = Koha::Patrons->find( $renewing_borrowernumber )->unblessed;
     my $restricted_borrower = Koha::Patrons->find( $restricted_borrowernumber )->unblessed;
@@ -936,7 +935,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         branchcode => $branch,
     );
 
-    my $a_borrower_borrowernumber = AddMember(%a_borrower_data);
+    my $a_borrower_borrowernumber = Koha::Patron->new(\%a_borrower_data)->store->borrowernumber;
     my $a_borrower = Koha::Patrons->find( $a_borrower_borrowernumber )->unblessed;
 
     my $yesterday = DateTime->today(time_zone => C4::Context->tz())->add( days => -1 );
@@ -1015,7 +1014,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         branchcode => $branch,
     );
 
-    my $borrowernumber = AddMember(%a_borrower_data);
+    my $borrowernumber = Koha::Patron->new(\%a_borrower_data)->store->borrowernumber;
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
     my $issue = AddIssue( $borrower, $barcode );
@@ -1074,18 +1073,18 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    my $borrowernumber1 = AddMember(
+    my $borrowernumber1 = Koha::Patron->new({
         firstname    => 'Kyle',
         surname      => 'Hall',
         categorycode => $patron_category->{categorycode},
         branchcode   => $library2->{branchcode},
-    );
-    my $borrowernumber2 = AddMember(
+    })->store->borrowernumber;
+    my $borrowernumber2 = Koha::Patron->new({
         firstname    => 'Chelsea',
         surname      => 'Hall',
         categorycode => $patron_category->{categorycode},
         branchcode   => $library2->{branchcode},
-    );
+    })->store->borrowernumber;
 
     my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
     my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
@@ -1146,12 +1145,12 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         $biblionumber
     );
 
-    my $borrowernumber = AddMember(
+    my $borrowernumber = Koha::Patron->new({
         firstname =>  'fn',
         surname => 'dn',
         categorycode => $patron_category->{categorycode},
         branchcode => $branch,
-    );
+    })->store->borrowernumber;
 
     my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
@@ -1507,7 +1506,7 @@ subtest 'MultipleReserves' => sub {
         categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
-    my $renewing_borrowernumber = AddMember(%renewing_borrower_data);
+    my $renewing_borrowernumber = Koha::Patron->new(\%renewing_borrower_data)->store->borrowernumber;
     my $renewing_borrower = Koha::Patrons->find( $renewing_borrowernumber )->unblessed;
     my $issue = AddIssue( $renewing_borrower, $barcode1);
     my $datedue = dt_from_string( $issue->date_due() );
@@ -1520,7 +1519,7 @@ subtest 'MultipleReserves' => sub {
         categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
-    my $reserving_borrowernumber1 = AddMember(%reserving_borrower_data1);
+    my $reserving_borrowernumber1 = Koha::Patron->new(\%reserving_borrower_data1)->store->borrowernumber;
     AddReserve(
         $branch, $reserving_borrowernumber1, $biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
@@ -1533,7 +1532,7 @@ subtest 'MultipleReserves' => sub {
         categorycode => $patron_category->{categorycode},
         branchcode => $branch,
     );
-    my $reserving_borrowernumber2 = AddMember(%reserving_borrower_data2);
+    my $reserving_borrowernumber2 = Koha::Patron->new(\%reserving_borrower_data2)->store->borrowernumber;
     AddReserve(
         $branch, $reserving_borrowernumber2, $biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,

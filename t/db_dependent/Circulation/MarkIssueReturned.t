@@ -25,9 +25,9 @@ use t::lib::TestBuilder;
 
 use C4::Circulation;
 use C4::Context;
-use C4::Members;
 use Koha::Checkouts;
 use Koha::Database;
+use Koha::Patrons;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -66,7 +66,7 @@ subtest 'anonymous patron' => sub {
     like ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, 'AnonymousPatron is not set - Fatal error on anonymization' );
     Koha::Checkouts->find( $issue->issue_id )->delete;
 
-    my $anonymous_borrowernumber = C4::Members::AddMember( categorycode => $patron_category->{categorycode}, branchcode => $library->{branchcode} );
+    my $anonymous_borrowernumber = Koha::Patron->new({categorycode => $patron_category->{categorycode}, branchcode => $library->{branchcode} })->store->borrowernumber;
     t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_borrowernumber);
     $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
     eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };

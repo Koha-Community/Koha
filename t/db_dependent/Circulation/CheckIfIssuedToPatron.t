@@ -23,7 +23,6 @@ use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 use Koha::Library;
 use Koha::Patrons;
 use MARC::Record;
@@ -73,8 +72,9 @@ my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $barcode2 = '0202';
 AddItem({ barcode => $barcode2, %item_info }, $biblionumber2);
 
-my $borrowernumber1 = AddMember(categorycode => $categorycode, branchcode => $branchcode);
-my $borrowernumber2 = AddMember(categorycode => $categorycode, branchcode => $branchcode);
+my $borrowernumber1 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
+my $borrowernumber2 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
+# FIXME following code must be simplified to use the Koha::Patron objects
 my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
 my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
 

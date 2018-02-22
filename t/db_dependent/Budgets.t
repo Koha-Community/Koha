@@ -8,10 +8,10 @@ BEGIN {
 use C4::Context;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::Members qw( AddMember );
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
@@ -681,7 +681,7 @@ for my $new_budget ( @new_budgets ) {
 
 my $patron_category = $builder->build({ source => 'Category' });
 my $branchcode = $library->{branchcode};
-my $john_doe = C4::Members::AddMember(
+my $john_doe = Koha::Patron->new({
     cardnumber   => '123456',
     firstname    => 'John',
     surname      => 'Doe',
@@ -690,7 +690,7 @@ my $john_doe = C4::Members::AddMember(
     dateofbirth  => '',
     dateexpiry   => '9999-12-31',
     userid       => 'john.doe'
-);
+})->store->borrowernumber;
 
 C4::Budgets::SetOwnerToFundHierarchy( $budget_id1, $john_doe );
 is( C4::Budgets::GetBudget($budget_id1)->{budget_owner_id},
@@ -706,7 +706,7 @@ is( C4::Budgets::GetBudget($budget_id2)->{budget_owner_id},
 is( C4::Budgets::GetBudget($budget_id21)->{budget_owner_id},
     undef, "SetOwnerToFundHierarchy should not have set an owner for budget 21 ($budget_id21)" );
 
-my $jane_doe = C4::Members::AddMember(
+my $jane_doe = Koha::Patron->new({
     cardnumber   => '789012',
     firstname    => 'Jane',
     surname      => 'Doe',
@@ -715,7 +715,7 @@ my $jane_doe = C4::Members::AddMember(
     dateofbirth  => '',
     dateexpiry   => '9999-12-31',
     userid       => 'jane.doe'
-);
+})->store->borrowernumber;
 
 C4::Budgets::SetOwnerToFundHierarchy( $budget_id11, $jane_doe );
 is( C4::Budgets::GetBudget($budget_id1)->{budget_owner_id},

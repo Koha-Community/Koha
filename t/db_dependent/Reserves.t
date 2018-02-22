@@ -52,7 +52,7 @@ my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
 
-my $frameworkcode = q||;
+my $frameworkcode = q//;
 
 
 t::lib::Mocks::mock_preference('ReservesNeedReturns', 1);
@@ -120,7 +120,7 @@ my %data = (
     branchcode => $branch_1,
 );
 Koha::Patron::Categories->find($category_1)->set({ enrolmentfee => 0})->store;
-my $borrowernumber = AddMember(%data);
+my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $biblionumber   = $bibnum;
 my $barcode        = $testbarcode;
@@ -172,28 +172,28 @@ t::lib::Mocks::mock_preference( 'ReservesControlBranch', $ReservesControlBranch 
 ### Regression test for bug 10272
 ###
 my %requesters = ();
-$requesters{$branch_1} = AddMember(
+$requesters{$branch_1} = Koha::Patron->new({
     branchcode   => $branch_1,
     categorycode => $category_2,
     surname      => "borrower from $branch_1",
-);
+})->store->borrowernumber;
 for my $i ( 2 .. 5 ) {
-    $requesters{"CPL$i"} = AddMember(
+    $requesters{"CPL$i"} = Koha::Patron->new({
         branchcode   => $branch_1,
         categorycode => $category_2,
         surname      => "borrower $i from $branch_1",
-    );
+    })->store->borrowernumber;
 }
-$requesters{$branch_2} = AddMember(
+$requesters{$branch_2} = Koha::Patron->new({
     branchcode   => $branch_2,
     categorycode => $category_2,
     surname      => "borrower from $branch_2",
-);
-$requesters{$branch_3} = AddMember(
+})->store->borrowernumber;
+$requesters{$branch_3} = Koha::Patron->new({
     branchcode   => $branch_3,
     categorycode => $category_2,
     surname      => "borrower from $branch_3",
-);
+})->store->borrowernumber;
 
 # Configure rules so that $branch_1 allows only $branch_1 patrons
 # to request its items, while $branch_2 will allow its items

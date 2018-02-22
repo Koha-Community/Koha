@@ -25,13 +25,12 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Context;
-use C4::Members;
 use C4::Letters;
 use C4::Budgets qw( AddBudgetPeriod AddBudget );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
-use Koha::Library;
 use Koha::Libraries;
+use Koha::Patrons;
 use Koha::Suggestions;
 
 BEGIN {
@@ -76,7 +75,7 @@ my $member = {
     categorycode => $patron_category->{categorycode},
     branchcode => 'CPL',
 };
-my $borrowernumber = AddMember(%$member);
+my $borrowernumber = Koha::Patron->new($member)->store->borrowernumber;
 
 my $biblionumber1 = 1;
 my $my_suggestion = {

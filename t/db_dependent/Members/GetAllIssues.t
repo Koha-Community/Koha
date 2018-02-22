@@ -64,9 +64,9 @@ my $itemnumber3 =
   AddItem( { barcode => '0203', %item_infos }, $biblionumber2 );
 
 my $borrowernumber1 =
-  AddMember( categorycode => $categorycode, branchcode => $branchcode );
+  Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
 my $borrowernumber2 =
-  AddMember( categorycode => $categorycode, branchcode => $branchcode );
+  Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
 my $borrower1 = Koha::Patrons->find( $borrowernumber1 )->unblessed;
 my $borrower2 = Koha::Patrons->find( $borrowernumber2 )->unblessed;
 

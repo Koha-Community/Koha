@@ -66,14 +66,14 @@ my $library = $builder->build({
 });
 my $patron_category = $builder->build({ source => 'Category' })->{categorycode};
 my $date = dt_from_string;
-my $borrowernumber = AddMember(
+my $borrowernumber = Koha::Patron->new({
     firstname    => 'Jane',
     surname      => 'Smith',
     categorycode => $patron_category,
     branchcode   => $library->{branchcode},
     dateofbirth  => $date,
     smsalertnumber => undef,
-);
+})->store->borrowernumber;
 
 my $marc_record = MARC::Record->new;
 my( $biblionumber, $biblioitemnumber ) = AddBiblio( $marc_record, '' );
@@ -468,16 +468,17 @@ $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('seri
 my ($serials_count, @serials) = GetSerials($subscriptionid);
 my $serial = $serials[0];
 
-my $borrowernumber = AddMember(
+my $patron = Koha::Patron->new({
     firstname    => 'John',
     surname      => 'Smith',
     categorycode => $patron_category,
     branchcode   => $library->{branchcode},
     dateofbirth  => $date,
     email        => 'john.smith@test.de',
-);
+})->store;
+my $borrowernumber = $patron->borrowernumber;
 my $subscription = Koha::Subscriptions->find( $subscriptionid );
-$subscription->add_subscriber( scalar Koha::Patrons->find( $borrowernumber ) );
+$subscription->add_subscriber( $patron );
 
 my $err2;
 warning_is {
@@ -676,14 +677,14 @@ subtest 'Test limit parameter for SendQueuedMessages' => sub {
 
     my $dbh = C4::Context->dbh;
 
-    my $borrowernumber = AddMember(
+    my $borrowernumber = Koha::Patron->new({
         firstname    => 'Jane',
         surname      => 'Smith',
         categorycode => $patron_category,
         branchcode   => $library->{branchcode},
         dateofbirth  => $date,
         smsalertnumber => undef,
-    );
+    })->store->borrowernumber;
 
     $dbh->do(q|DELETE FROM message_queue|);
     $my_message = {

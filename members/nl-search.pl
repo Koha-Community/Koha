@@ -39,12 +39,12 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Members;
 use C4::Members::Attributes qw( SetBorrowerAttributes );
 use C4::Utils::DataTables::Members;
 use Koha::NorwegianPatronDB qw( NLCheckSysprefs NLSearch NLDecodePin NLGetFirstname NLGetSurname NLSync );
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 my $cgi = CGI->new;
@@ -134,13 +134,14 @@ if ( $op && $op eq 'search' ) {
         'categorycode' => scalar $cgi->param('categorycode'),
     );
     # Add the new patron
-    my $borrowernumber = &AddMember(%borrower);
-    if ( $borrowernumber ) {
+    my $patron = eval { Koha::Patron->new(\%borrower)->store; };
+    unless ( $@) {
+        my $borrowernumber = $patron->borrowernumber;
         # Add extended patron attributes
         SetBorrowerAttributes($borrowernumber, [
             { code => 'fnr', value => scalar $cgi->param('fnr_hash') },
         ], 'no_branch_limit' );
-        # Override the default sync data created by AddMember
+        # Override the default sync data created by Koha::Patron->store
         my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
             'synctype'       => 'norwegianpatrondb',
             'borrowernumber' => $borrowernumber,

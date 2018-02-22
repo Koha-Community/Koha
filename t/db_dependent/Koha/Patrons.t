@@ -28,11 +28,9 @@ use JSON;
 use C4::Biblio;
 use C4::Circulation;
 
-use C4::Members;
 use C4::Circulation;
 
 use Koha::Holds;
-use Koha::Patron;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Database;
@@ -395,7 +393,7 @@ subtest 'add_enrolment_fee_if_needed' => sub {
         branchcode   => $library->{branchcode},
     );
 
-    my $borrowernumber = C4::Members::AddMember(%borrower_data);
+    my $borrowernumber = Koha::Patron->new(\%borrower_data)->store->borrowernumber;
     $borrower_data{borrowernumber} = $borrowernumber;
 
     my $patron = Koha::Patrons->find( $borrowernumber );
@@ -1259,7 +1257,7 @@ subtest 'userid_is_valid' => sub {
     );
 
     my $expected_userid_patron_1 = 'tomasito.none';
-    my $borrowernumber = AddMember(%data);
+    my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
     my $patron_1       = Koha::Patrons->find($borrowernumber);
     is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
 
@@ -1287,7 +1285,7 @@ subtest 'userid_is_valid' => sub {
 
     # Add a new borrower with the same userid but different cardnumber
     $data{cardnumber} = "987654321";
-    my $new_borrowernumber = AddMember(%data);
+    my $new_borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
     my $patron_2 = Koha::Patrons->find($new_borrowernumber);
     $patron_2->userid($patron_1->userid);
     is( $patron_2->has_valid_userid,
@@ -1296,10 +1294,10 @@ subtest 'userid_is_valid' => sub {
     my $new_userid = 'a_user_id';
     $data{cardnumber} = "234567890";
     $data{userid}     = 'a_user_id';
-    $borrowernumber   = AddMember(%data);
+    $borrowernumber   = Koha::Patron->new(\%data)->store->borrowernumber;
     my $patron_3 = Koha::Patrons->find($borrowernumber);
     is( $patron_3->userid, $new_userid,
-        'AddMember should insert the given userid' );
+        'Koha::Patron->store should insert the given userid' );
 
     # Cleanup
     $patron_1->delete;
@@ -1329,14 +1327,14 @@ subtest 'generate_userid' => sub {
     my $new_patron = Koha::Patron->new({ firstname => $data{firstname}, surname => $data{surname} } );
     my $userid = $new_patron->generate_userid;
     is( $userid, $expected_userid_patron_1, 'generate_userid should generate the userid we expect' );
-    my $borrowernumber = AddMember(%data);
+    my $borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
     my $patron_1 = Koha::Patrons->find($borrowernumber);
     is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
 
     $userid = $new_patron->generate_userid;
     is( $userid, $expected_userid_patron_1 . '1', 'generate_userid should generate the userid we expect' );
     $data{cardnumber} = '987654321';
-    my $new_borrowernumber = AddMember(%data);
+    my $new_borrowernumber = Koha::Patron->new(\%data)->store->borrowernumber;
     my $patron_2 = Koha::Patrons->find($new_borrowernumber);
     isnt( $patron_2->userid, 'tomasito',
         "Patron with duplicate userid has new userid generated" );

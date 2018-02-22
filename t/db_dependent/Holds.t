@@ -11,7 +11,6 @@ use Test::More tests => 55;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 use C4::Calendar;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
@@ -58,12 +57,12 @@ my ($item_bibnum, $item_bibitemnum, $itemnumber)
 # Create some borrowers
 my @borrowernumbers;
 foreach (1..$borrowers_count) {
-    my $borrowernumber = AddMember(
+    my $borrowernumber = Koha::Patron->new({
         firstname =>  'my firstname',
         surname => 'my surname ' . $_,
         categorycode => $category->{categorycode},
         branchcode => $branch_1,
-    );
+    })->store->borrowernumber;
     push @borrowernumbers, $borrowernumber;
 }
 

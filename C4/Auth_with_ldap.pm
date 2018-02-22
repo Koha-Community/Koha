@@ -23,7 +23,6 @@ use Carp;
 
 use C4::Debug;
 use C4::Context;
-use C4::Members qw(AddMember);
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;

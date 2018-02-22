@@ -3,7 +3,6 @@
 use Modern::Perl;
 
 use C4::Context;
-use C4::Members;
 use Koha::Database;
 use Koha::Patrons;
 
@@ -23,12 +22,12 @@ my $library = $builder->build({
 });
 
 my $patron_category = $builder->build({ source => 'Category' });
-my $borrowernumber = AddMember(
+my $borrowernumber = Koha::Patron->new({
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
-);
+})->store->borrowernumber;
 
 my $success = AddDebarment({
     borrowernumber => $borrowernumber,

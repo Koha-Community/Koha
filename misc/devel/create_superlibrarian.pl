@@ -21,7 +21,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
-use C4::Members;
+use Koha::Patrons;
 
 my ( $help, $surname, $userid, $password, $branchcode, $categorycode, $cardnumber );
 GetOptions(
@@ -40,7 +40,7 @@ pod2usage("branchcode is mandatory")   unless $branchcode;
 pod2usage("categorycode is mandatory") unless $categorycode;
 pod2usage("cardnumber is mandatory")   unless $cardnumber;
 
-C4::Members::AddMember(
+Koha::Patron->new({
     surname      => $surname,
     userid       => $userid,
     cardnumber   => $cardnumber,
@@ -48,7 +48,7 @@ C4::Members::AddMember(
     categorycode => $categorycode,
     password     => $password,
     flags        => 1,
-);
+})->store;
 
 =head1 NAME
 

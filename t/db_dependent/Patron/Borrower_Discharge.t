@@ -23,8 +23,8 @@ use C4::Biblio qw( AddBiblio );
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Context;
 use C4::Items qw( AddItem );
-use C4::Members qw( AddMember );
 
+use Koha::Patrons;
 use Koha::Patron::Discharge;
 use Koha::Database;
 

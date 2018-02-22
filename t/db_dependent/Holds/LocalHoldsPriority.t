@@ -9,8 +9,8 @@ use Test::More tests => 6;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 use Koha::Database;
+use Koha::Patrons;
 
 use t::lib::TestBuilder;
 
@@ -57,12 +57,12 @@ my $patron_category = $builder->build({ source => 'Category' });
 # Create some borrowers
 my @borrowernumbers;
 foreach ( 1 .. $borrowers_count ) {
-    my $borrowernumber = AddMember(
+    my $borrowernumber = Koha::Patron->new({
         firstname    => 'my firstname',
         surname      => 'my surname ' . $_,
         categorycode => $patron_category->{categorycode},
         branchcode   => $branchcodes[$_],
-    );
+    })->store->borrowernumber;
     push @borrowernumbers, $borrowernumber;
 }
 

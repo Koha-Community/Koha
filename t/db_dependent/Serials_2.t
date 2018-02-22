@@ -6,8 +6,8 @@ use Test::More tests => 50;
 use MARC::Record;
 
 use C4::Biblio qw( AddBiblio );
-use C4::Members qw( AddMember );
 use Koha::Database;
+use Koha::Patrons;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use_ok('C4::Serials');
@@ -79,13 +79,13 @@ is( C4::Serials::can_edit_subscription($subscription_from_my_branch), 0, "cannot
 is( C4::Serials::can_claim_subscription($subscription_from_my_branch), 0, "cannot edit a subscription without userenv set");
 
 my $userid = 'my_userid';
-my $borrowernumber = C4::Members::AddMember(
+my $borrowernumber = Koha::Patron->new({
     firstname =>  'my fistname',
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => $my_branch,
     userid => $userid,
-);
+})->store->borrowernumber;
 
 $userenv = { flags => 1, id => $borrowernumber, branch => '' };
 

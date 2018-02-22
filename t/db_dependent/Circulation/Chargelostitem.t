@@ -9,8 +9,8 @@ use t::lib::TestBuilder;
 
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 use C4::Circulation;
+use Koha::Patrons;
 use MARC::Record;
 
 BEGIN {
@@ -55,7 +55,8 @@ my $categorycode = $builder->build({
     source => 'Category'
 })->{categorycode};
 
-my $borrowernumber = AddMember(categorycode => $categorycode, branchcode => $branchcode);
+my $borrowernumber = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
+# TODO following code must be simplified to use the Koha::Patron object
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed();
 
 # Need to mock userenv for AddIssue

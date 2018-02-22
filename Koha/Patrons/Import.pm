@@ -295,39 +295,42 @@ sub import_patrons {
             );
         }
         else {
-            if ( $borrowernumber = AddMember(%borrower) ) {
+            my $patron = eval {
+                Koha::Patron->new(\%borrower)->store;
+            };
+            unless ( $@ ) {
 
-                if ( $borrower{debarred} ) {
+                if ( $patron->is_debarred ) {
                     AddDebarment(
                         {
-                            borrowernumber => $borrowernumber,
-                            expiration     => $borrower{debarred},
-                            comment        => $borrower{debarredcomment}
+                            borrowernumber => $patron->borrowernumber,
+                            expiration     => $patron->debarred,
+                            comment        => $patron->debarredcomment,
                         }
                     );
                 }
 
                 if ($extended) {
-                    SetBorrowerAttributes( $borrowernumber, $patron_attributes );
+                    SetBorrowerAttributes( $patron->borrowernumber, $patron_attributes );
                 }
 
                 if ($set_messaging_prefs) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults(
                         {
-                            borrowernumber => $borrowernumber,
-                            categorycode   => $borrower{categorycode}
+                            borrowernumber => $patron->borrowernumber,
+                            categorycode   => $patron->categorycode,
                         }
                     );
                 }
 
                 $imported++;
-                push @imported_borrowers, $borrowernumber; #for patronlist
+                push @imported_borrowers, $patron->borrowernumber; #for patronlist
                 push(
                     @feedback,
                     {
                         feedback => 1,
                         name     => 'lastimported',
-                        value    => $borrower{'surname'} . ' / ' . $borrowernumber
+                        value    => $patron->surname . ' / ' . $patron->borrowernumber,
                     }
                 );
             }
@@ -338,7 +341,7 @@ sub import_patrons {
                     @errors,
                     {
                         name  => 'lastinvalid',
-                        value => $borrower{'surname'} . ' / AddMember',
+                        value => $borrower{'surname'} . ' / Create patron',
                     }
                 );
             }

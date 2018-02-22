@@ -24,7 +24,6 @@ use Test::More tests => 3;
 use MARC::Record;
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 use C4::Reserves;
 
 use Koha::Libraries;
@@ -73,12 +72,12 @@ my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
 my $patron_category = $builder->build({ source => 'Category' });
 my @borrowernumbers;
 foreach my $i ( 1 .. $borrowers_count ) {
-    my $borrowernumber = AddMember(
+    my $borrowernumber = Koha::Patron->new({
         firstname    => 'my firstname',
         surname      => 'my surname ' . $i,
         categorycode => $patron_category->{categorycode},
         branchcode   => $branchcode,
-    );
+    })->store->borrowernumber;
     push @borrowernumbers, $borrowernumber;
 }
 

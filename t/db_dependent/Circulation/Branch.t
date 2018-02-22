@@ -18,10 +18,11 @@
 use Modern::Perl;
 
 use C4::Biblio;
-use C4::Members;
 use C4::Circulation;
 use C4::Items;
 use C4::Context;
+
+use Koha::Patrons;
 
 use Test::More tests => 14;
 use t::lib::Mocks;
@@ -138,12 +139,12 @@ my @sampleitem3 = C4::Items::AddItem(
 my $item_id3 = $sampleitem3[2];
 
 #Add borrower
-my $borrower_id1 = C4::Members::AddMember(
+my $borrower_id1 = Koha::Patron->new({
     firstname    => 'firstname1',
     surname      => 'surname1 ',
     categorycode => $samplecat->{categorycode},
     branchcode   => $samplebranch1->{branchcode},
-);
+})->store->borrowernumber;
 
 is_deeply(
     GetBranchBorrowerCircRule(),

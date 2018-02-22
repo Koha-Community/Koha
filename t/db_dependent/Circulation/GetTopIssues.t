@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
-use C4::Members;
 
 use Koha::Database;
 use Koha::Patrons;
@@ -63,11 +62,11 @@ AddItem({
     homebranch => $branch_2->{ branchcode },
 }, $biblionumber);
 
-my $borrowernumber = AddMember(
+my $borrowernumber = Koha::Patron->new({
     userid => 'gti.test',
     categorycode => $category,
     branchcode => $branch_1->{ branchcode }
-);
+})->store->borrowernumber;
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 
 AddIssue($borrower, 'GTI_BARCODE_001');

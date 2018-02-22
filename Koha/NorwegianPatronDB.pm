@@ -566,7 +566,7 @@ sub _format_soap_error {
 
 =head2 _soap_to_koha_patron
 
-Convert a SOAP object of type "Laaner" into a hash that can be sent to AddMember or ModMember.
+Convert a SOAP object of type "Laaner" into a hash that can be sent to Koha::Patron
 
 =cut
 

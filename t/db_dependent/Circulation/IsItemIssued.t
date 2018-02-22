@@ -23,7 +23,6 @@ use Test::MockModule;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
-use C4::Members;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patrons;
@@ -49,12 +48,12 @@ C4::Context->set_userenv(
 
 
 
-my $borrowernumber = AddMember(
+my $borrowernumber = Koha::Patron->new({
     firstname =>  'my firstname',
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => $library->{branchcode},
-);
+})->store->borrowernumber;
 
 my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
 my $record = MARC::Record->new();

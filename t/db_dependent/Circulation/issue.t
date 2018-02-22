@@ -27,7 +27,6 @@ use C4::Biblio;
 use C4::Circulation;
 use C4::Context;
 use C4::Items;
-use C4::Members;
 use C4::Reserves;
 use Koha::Checkouts;
 use Koha::Database;
@@ -143,19 +142,19 @@ my @sampleitem2 = C4::Items::AddItem(
 my $item_id2 = $sampleitem2[2];
 
 #Add borrower
-my $borrower_id1 = C4::Members::AddMember(
+my $borrower_id1 = Koha::Patron->new({
     firstname    => 'firstname1',
     surname      => 'surname1 ',
     categorycode => $categorycode,
     branchcode   => $branchcode_1
-);
+})->store->borrowernumber;
 my $borrower_1 = Koha::Patrons->find( $borrower_id1 )->unblessed;
-my $borrower_id2 = C4::Members::AddMember(
+my $borrower_id2 = Koha::Patron->new({
     firstname    => 'firstname2',
     surname      => 'surname2 ',
     categorycode => $categorycode,
     branchcode   => $branchcode_2,
-);
+})->store->borrowernumber;
 my $borrower_2 = Koha::Patrons->find( $borrower_id2 )->unblessed;
 
 my @USERENV = (
