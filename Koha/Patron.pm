@@ -106,7 +106,7 @@ sub fixup_cardnumber {
         select => \'CAST(cardnumber AS SIGNED)',
         as => ['cast_cardnumber']
     })->_resultset->get_column('cast_cardnumber')->max;
-    $self->cardnumber($max+1);
+    $self->cardnumber(($max || 0) +1);
 }
 
 # trim whitespace from data which has some non-whitespace in it.
