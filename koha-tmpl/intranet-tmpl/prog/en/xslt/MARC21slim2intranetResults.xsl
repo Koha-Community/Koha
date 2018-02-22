@@ -299,6 +299,8 @@
            </xsl:call-template>
         </xsl:if>
 
+        <xsl:call-template name="cover-image-856u"/> <!-- koha-suomi: cover image -->
+
     <a>
         <xsl:attribute name="href">
             <xsl:call-template name="buildBiblioDefaultViewURL">

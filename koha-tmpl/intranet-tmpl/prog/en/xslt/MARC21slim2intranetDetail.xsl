@@ -201,6 +201,8 @@
             </xsl:when>
         </xsl:choose>
 
+        <xsl:call-template name="cover-image-856u"/> <!-- koha-suomi: cover image -->
+
         <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
             <h5 class="author">

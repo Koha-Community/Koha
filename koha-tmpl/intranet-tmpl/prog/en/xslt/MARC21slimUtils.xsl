@@ -319,6 +319,38 @@
         </xsl:choose>
     </xsl:template>
 
+    <!-- koha-suomi: cover image -->
+    <xsl:template name="cover-image-856u">
+        <xsl:if test="marc:datafield[@tag=856]/marc:subfield[@code='u']">
+          <xsl:for-each select="marc:datafield[@tag=856]">
+            <xsl:variable name="SubqText">
+              <xsl:value-of select="marc:subfield[@code='q']"/>
+            </xsl:variable>
+            <xsl:choose>
+              <xsl:when test="substring($SubqText,1,5)='IMAGE' or substring($SubqText,1,5)='image' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd'">
+                <a class="cover_image_container">
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="marc:subfield[@code='u']"/>
+                  </xsl:attribute>
+                    <xsl:element name="img">
+                      <xsl:attribute name="src">
+                        <xsl:value-of select="marc:subfield[@code='u']"/>
+                      </xsl:attribute>
+                      <xsl:attribute name="alt">
+			<xsl:choose>
+			  <xsl:when test="marc:subfield[@code='y']"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:when>
+			  <xsl:otherwise><xsl:value-of select="marc:subfield[@code='z']"/></xsl:otherwise>
+			  </xsl:choose>
+                      </xsl:attribute>
+                    </xsl:element>
+                </a>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:for-each>
+        </xsl:if>
+    </xsl:template>
+    <!-- /koha-suomi: cover image -->
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
