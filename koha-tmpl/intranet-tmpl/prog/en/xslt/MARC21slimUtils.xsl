@@ -1,6 +1,10 @@
 <?xml version='1.0'?>
 <!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
-<xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
+<xsl:stylesheet version="1.0"
+  xmlns:marc="http://www.loc.gov/MARC21/slim"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc">
 	<xsl:template name="datafield">
 		<xsl:param name="tag"/>
 		<xsl:param name="ind1"><xsl:text> </xsl:text></xsl:param>
@@ -27,6 +31,7 @@
 		<xsl:param name="subdivDelimiter"/>
         <xsl:param name="prefix"/>
         <xsl:param name="suffix"/>
+        <xsl:param name="urlencode"/>
 		<xsl:variable name="str">
 			<xsl:for-each select="marc:subfield">
 				<xsl:if test="contains($codes, @code)">
@@ -37,7 +42,14 @@
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>
-		<xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+        <xsl:choose>
+            <xsl:when test="$urlencode=1">
+                <xsl:value-of select="str:encode-uri(substring($str,1,string-length($str)-string-length($delimeter))    )"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+            </xsl:otherwise>
+        </xsl:choose>
 	</xsl:template>
 
     <xsl:template name="subfieldSelectSpan">
@@ -197,7 +209,7 @@
                         </xsl:when>
                         <xsl:when test="boolean($index)">
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of  select="$index"/>:<xsl:value-of  select="marc:subfield[@code='a']"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri($index, true())"/>:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
                                 <xsl:value-of select="$str"/>
                             </a>
                         </xsl:when>
@@ -271,7 +283,8 @@
             <xsl:choose>
                 <xsl:when test="$url='1'">
                     <xsl:if test="$field/marc:subfield[@code='b']">
-                         <a href="/cgi-bin/koha/catalogue/search.pl?q=Provider:{$field/marc:subfield[@code='b']}">
+                         <a>
+                         <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Provider:<xsl:value-of select="str:encode-uri($field/marc:subfield[@code='b'], true())"/></xsl:attribute>
                          <xsl:call-template name="subfieldSelect">
                              <xsl:with-param name="codes">b</xsl:with-param>
                          </xsl:call-template>
