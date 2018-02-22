@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use FindBin;
 use File::Slurp;
-use Test::More tests => 41;
+use Test::More tests => 35;
 use Test::Warn;
 
 use Koha::XSLT_Handler;
@@ -29,15 +29,11 @@ use Koha::XSLT_Handler;
 my $engine=Koha::XSLT_Handler->new;
 is( ref $engine, 'Koha::XSLT_Handler', 'Testing creation of handler object' );
 
-warning_is { $engine->transform('') } #we passed no file at first time
-            "No XSLT file passed.",
-            "No XSLT warning correctly displayed";
-is( $engine->err, 1, 'Engine returns error on no file' );
+$engine->transform('');
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_1, 'Engine returns error on no file' );
 
-warning_is { $engine->transform( '', 'thisfileshouldnotexist.%$#@' ) }
-            "XSLT file not found.",
-            "No XSLT warning correctly displayed";
-is( $engine->err, 2, 'Engine returns error on bad file' );
+$engine->transform( '', 'thisfileshouldnotexist.%$#@' );
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_2, 'Engine returns error on bad file' );
 is( $engine->refresh( 'asdjhaskjh'), 0, 'Test on invalid refresh' );
 
 #check first test xsl
@@ -51,28 +47,25 @@ $xsltfile_1= $path.$xsltfile_1;
 my $output;
 
 # Undefined text tests
-warning_is { $output = $engine->transform( undef, $xsltfile_1 ) }
-           "No string to transform.",
-           "No string warning correctly displayed";
-is( $engine->err, 7, 'Engine returns error on undefined text' );
+$output = $engine->transform( undef, $xsltfile_1 );
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_7, 'Engine returns error on undefined text' );
 
 # Empty string tests
-warning_is { $output = $engine->transform( '', $xsltfile_1 ) }
-           "Error while parsing input: Empty String",
-           "Empty string warning correctly displayed";
-is( $engine->err, 5, 'Engine returns error on empty string' );
+$output = $engine->transform( '', $xsltfile_1 );
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_5, 'Engine returns error on empty string' );
 
 # Non-XML tests
+$engine->print_warns(1);
 warning_like { $output = $engine->transform( 'abcdef', $xsltfile_1 ) }
-           qr{^Error while parsing input: :1: parser error : Start tag expected, '<' not found},
-           "Non-XML warning correctly displayed";
-is( $engine->err, 5, 'Engine returns error on non-xml' );
+    qr{parser error : Start tag expected, '<' not found},
+    "Non-XML warning correctly displayed";
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_5, 'Engine returns error on non-xml' );
 
 # Malformed XML tests
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
-             "Malformed XML warning correctly displayed";
-is( $engine->err, 5, 'Engine returns error on malformed xml' );
+    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    "Malformed XML warning correctly displayed";
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_5, 'Engine returns error on malformed xml' );
 
 #Test not returning source on failure when asked for
 #Include passing do_not_return via constructor on second engine
@@ -82,18 +75,19 @@ my $secondengine=Koha::XSLT_Handler->new( {
 });
 $engine->do_not_return_source(1);
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
-             "Malformed XML warning correctly displayed";
+    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Engine respects do_not_return_source==1');
+$secondengine->print_warns(1);
 warning_like { $output = $secondengine->transform( '<a></b>', $xsltfile_1 ) }
-             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
-             "Malformed XML warning correctly displayed";
+    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 0, 'Second engine respects it too');
 undef $secondengine; #bye
 $engine->do_not_return_source(0);
 warning_like { $output = $engine->transform( '<a></b>', $xsltfile_1 ) }
-             qr{^Error while parsing input: :1: parser error : Opening and ending tag mismatch: a line 1 and b},
-             "Malformed XML warning correctly displayed";
+    qr{parser error : Opening and ending tag mismatch: a line 1 and b},
+    "Malformed XML warning correctly displayed";
 is( defined $output? 1: 0, 1, 'Engine respects do_not_return_source==0');
 
 #Testing valid refresh now
@@ -146,11 +140,9 @@ is( -e $path.$xsltfile_2, 1, "Found my test stylesheet $xsltfile_2" );
 exit if !-e $path.$xsltfile_2;
 $xsltfile_2= $path.$xsltfile_2;
 
-warning_like { $output = $engine->transform( $xml_2, $xsltfile_2 ) }
-             qr{^Error while parsing stylesheet:},
-             "Bad XSL warning correctly displayed";
-is( $engine->err, 4, 'Engine returned error for parsing bad xsl' );
-is( defined($engine->errstr), 1, 'Error string contains text');
+$engine->print_warns(0);
+$output = $engine->transform( $xml_2, $xsltfile_2 );
+is( $engine->err, Koha::XSLT_Handler::XSLTH_ERR_4, 'Engine returned error for parsing bad xsl' );
 
 #The third test xsl is okay again; main use is clearing two items from cache
 my $xsltfile_3 = 'test03.xsl';

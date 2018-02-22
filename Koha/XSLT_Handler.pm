@@ -28,8 +28,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
     my $output = $xslt_engine->transform($xml, $xsltfilename);
     $output = $xslt_engine->transform({ xml => $xml, file => $file });
     $output = $xslt_engine->transform({ xml => $xml, code => $code });
-    my $err= $xslt_engine->err; # error number
-    my $errstr= $xslt_engine->errstr; # error message
+    my $err= $xslt_engine->err; # error code
     $xslt_engine->refresh($xsltfilename);
 
 =head1 DESCRIPTION
@@ -37,7 +36,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
     A XSLT handler object on top of LibXML and LibXSLT, allowing you to
     run XSLT stylesheets repeatedly without loading them again.
     Errors occurring during loading, parsing or transforming are reported
-    via the err and errstr attributes.
+    via the err attribute.
     Reloading XSLT files can be done with the refresh method.
 
 =head1 METHODS
@@ -58,11 +57,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 
 =head2 err
 
-    Error number (see list of ERROR CODES)
-
-=head2 errstr
-
-    Error message
+    Error code (see list of ERROR CODES)
 
 =head2 do_not_return_source
 
@@ -71,35 +66,36 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 
 =head2 print_warns
 
-    If set, print error messages to STDERR. True by default.
+    If set, print error messages to STDERR. False by default. Looks at the
+    DEBUG environment variable too.
 
 =head1 ERROR CODES
 
-=head2 Error 1
+=head2 Error XSLTH_ERR_NO_FILE
 
     No XSLT file passed
 
-=head2 Error 2
+=head2 Error XSLTH_ERR_FILE_NOT_FOUND
 
     XSLT file not found
 
-=head2 Error 3
+=head2 Error XSLTH_ERR_LOADING
 
-    Error while loading stylesheet xml: [furter information]
+    Error while loading stylesheet xml: [optional warnings]
 
-=head2 Error 4
+=head2 Error XSLTH_ERR_PARSING_CODE
 
-    Error while parsing stylesheet: [furter information]
+    Error while parsing stylesheet: [optional warnings]
 
-=head2 Error 5
+=head2 Error XSLTH_ERR_PARSING_DATA
 
-    Error while parsing input: [furter information]
+    Error while parsing input: [optional warnings]
 
-=head2 Error 6
+=head2 Error XSLTH_ERR_TRANSFORMING
 
-    Error while transforming input: [furter information]
+    Error while transforming input: [optional warnings]
 
-=head2 Error 7
+=head2 Error XSLTH_NO_STRING_PASSED
 
     No string to transform
 
@@ -125,8 +121,16 @@ use XML::LibXSLT;
 
 use base qw(Class::Accessor);
 
-__PACKAGE__->mk_ro_accessors(qw( err errstr ));
+__PACKAGE__->mk_ro_accessors(qw( err ));
 __PACKAGE__->mk_accessors(qw( do_not_return_source print_warns ));
+
+use constant XSLTH_ERR_1    => 'XSLTH_ERR_NO_FILE';
+use constant XSLTH_ERR_2    => 'XSLTH_ERR_FILE_NOT_FOUND';
+use constant XSLTH_ERR_3    => 'XSLTH_ERR_LOADING';
+use constant XSLTH_ERR_4    => 'XSLTH_ERR_PARSING_CODE';
+use constant XSLTH_ERR_5    => 'XSLTH_ERR_PARSING_DATA';
+use constant XSLTH_ERR_6    => 'XSLTH_ERR_TRANSFORMING';
+use constant XSLTH_ERR_7    => 'XSLTH_NO_STRING_PASSED';
 
 =head2 transform
 
@@ -180,7 +184,7 @@ sub transform {
 
     #check if no string passed
     if ( !defined $xml ) {
-        $self->_set_error(7);
+        $self->_set_error( XSLTH_ERR_7 );
         return;               #always undef
     }
 
@@ -193,7 +197,7 @@ sub transform {
     my $parser = XML::LibXML->new();
     my $source = eval { $parser->parse_string($xml) };
     if ($@) {
-        $self->_set_error( 5, $@ );
+        $self->_set_error( XSLTH_ERR_5, $@ );
         return $retval;
     }
     my $result = eval {
@@ -213,7 +217,7 @@ sub transform {
             : $stsh->output_as_chars( $transformed ); # default: chars
     };
     if ($@) {
-        $self->_set_error( 6, $@ );
+        $self->_set_error( XSLTH_ERR_6, $@ );
         return $retval;
     }
     $self->{last_xsltfile} = $key;
@@ -259,8 +263,10 @@ sub _init {
     my $self = shift;
 
     $self->_set_error;
-    $self->{xslt_hash}            = {};
-    $self->{print_warns}          = 1 unless exists $self->{print_warns};
+    $self->{xslt_hash} = {};
+    $self->{print_warns} = exists $self->{print_warns}
+        ? $self->{print_warns}
+        : $ENV{DEBUG} // 0;
     $self->{do_not_return_source} = 0
       unless exists $self->{do_not_return_source};
 
@@ -281,7 +287,7 @@ sub _load {
     if ( !$filename && !$code ) {
         my $last = $self->{last_xsltfile};
         if ( !$last || !exists $self->{xslt_hash}->{$last} ) {
-            $self->_set_error(1);
+            $self->_set_error( XSLTH_ERR_1 );
             return;
         }
         return $last;
@@ -300,7 +306,7 @@ sub _load {
 
     #Check file existence (skipping URLs)
     if( $filename && $filename !~ /^https?:\/\// && !-e $filename ) {
-        $self->_set_error(2);
+        $self->_set_error( XSLTH_ERR_2 );
         return;
     }
 
@@ -310,7 +316,7 @@ sub _load {
         $parser->load_xml( $self->_load_xml_args($filename, $code) )
     };
     if ($@) {
-        $self->_set_error( 3, $@ );
+        $self->_set_error( XSLTH_ERR_3, $@ );
         return;
     }
 
@@ -319,7 +325,7 @@ sub _load {
     $rv = $code? $digest.$codelen: $filename;
     $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
     if ($@) {
-        $self->_set_error( 4, $@ );
+        $self->_set_error( XSLTH_ERR_4, $@ );
         delete $self->{xslt_hash}->{$rv};
         return;
     }
@@ -335,43 +341,10 @@ sub _load_xml_args {
 # Internal routine for handling error information.
 
 sub _set_error {
-    my ( $self, $errno, $addmsg ) = @_;
+    my ( $self, $errcode, $warn ) = @_;
 
-    if ( !$errno ) {    #clear the error
-        $self->{err}    = undef;
-        $self->{errstr} = undef;
-        return;
-    }
-
-    $self->{err} = $errno;
-    if ( $errno == 1 ) {
-        $self->{errstr} = "No XSLT file passed.";
-    }
-    elsif ( $errno == 2 ) {
-        $self->{errstr} = "XSLT file not found.";
-    }
-    elsif ( $errno == 3 ) {
-        $self->{errstr} = "Error while loading stylesheet xml:";
-    }
-    elsif ( $errno == 4 ) {
-        $self->{errstr} = "Error while parsing stylesheet:";
-    }
-    elsif ( $errno == 5 ) {
-        $self->{errstr} = "Error while parsing input:";
-    }
-    elsif ( $errno == 6 ) {
-        $self->{errstr} = "Error while transforming input:";
-    }
-    elsif ( $errno == 7 ) {
-        $self->{errstr} = "No string to transform.";
-    }
-
-    if ($addmsg) {
-        $self->{errstr} .= " $addmsg";
-    }
-
-    warn $self->{errstr} if $self->{print_warns};
-    return;
+    $self->{err} = $errcode; #set or clear error
+    warn 'XSLT_Handler: '. $warn if $warn && $self->{print_warns};
 }
 
 =head1 AUTHOR
