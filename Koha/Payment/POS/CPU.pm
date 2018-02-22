@@ -442,10 +442,12 @@ sub _get_payment {
     $payment->{Source}      = $class->_get_server_config()->{'source'};
     $payment->{Id}          = $transaction->transaction_id;
     $payment->{Mode}        = C4::Context->config('pos')->{'CPU'}->{'mode'};
-    $payment->{Description} = $borrower->surname . ", "
-                            . $borrower->firstname . " (".$borrower->cardnumber.")";
+    if (C4::Context->config('pos')->{'CPU'}->{'receiptDescription'} eq 'borrower') {
+        $payment->{Description} = $borrower->surname . ", " .  $borrower->firstname . " (".$borrower->cardnumber.")";
+    } else {
+        $payment->{Description} = "#" . $transaction->transaction_id;
+    }
     $payment->{Products}    = $class->get_prepared_products($transaction->GetProducts(), C4::Context::mybranch());
-
     my $notificationAddress = C4::Context->config('pos')->{'CPU'}->{'notificationAddress'};
     my $transactionNumber = $transaction->transaction_id;
     $notificationAddress =~ s/{invoicenumber}/$transactionNumber/g;
