@@ -533,7 +533,7 @@ RECORD: while (  ) {
                     ModBiblioMarc( $record, $biblionumber, $framework );
                     next RECORD;
                 } else {
-                    printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
+                    printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ok"}) if ($logfile);
                 }
                 push @$errors_ref, @{ $more_errors };
             }
