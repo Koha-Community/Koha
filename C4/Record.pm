@@ -300,10 +300,9 @@ sub marc2dcxml {
             croak "The format argument ($format) not accepted.\n" .
                   "Please pass a valid format (oaidc, srwdc, or rdfdc)\n";
         }
-        my $err = $xslt_engine->err; # error number
-        my $errstr = $xslt_engine->errstr; # error message
+        my $err = $xslt_engine->err; # error code
         if ( $err ) {
-            croak "Error when processing $errstr Error number: $err\n";
+            croak "Error $err while processing\n";
         } else {
             return $output;
         }

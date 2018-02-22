@@ -46,7 +46,7 @@ subtest '_create_connection' => sub {
 };
 #Group 3: testing _do_xslt_proc (part of Z3950Search)
 subtest '_do_xslt_proc' => sub {
-    plan tests => 7;
+    plan tests => 6;
     test_do_xslt();
 };
 
@@ -162,27 +162,16 @@ sub test_do_xslt {
 
     #ready for the main test
     my @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine );
-    is( $res[1] && $res[1] eq 'xslt_err', undef,
-        'Check error code of _do_xslt_proc');
-    if( !$res[1] ) {
-        is( ref $res[0] eq 'MARC::Record', 1, 'Got back MARC record');
-        my $sub = $res[0]->subfield('990','a')//'';
-        is( $sub eq 'I saw you', 1, 'Found 990a in the record');
-    } else {
-        ok( 1, 'Skipped one test');
-        ok( 1, 'Skipped another one');
-    }
+    is( $res[1], undef, 'No error returned' );
+    is( ref $res[0], 'MARC::Record', 'Got back MARC record');
+    is( $res[0]->subfield('990','a'), 'I saw you', 'Found 990a in the record');
 
     #forcing an error on the xslt side
     $server->{add_xslt} = 'notafile.xsl';
-    warning_like
-        { @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine ) }
-        qr/^XSLT file not found./,
-        '_do_xslt_proc warns it XSLT_handler problem';
-    is( $res[1] && $res[1] eq 'xslt_err', 1,
-        'Check error code again');
+    @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine );
+    is( $res[1], Koha::XSLT_Handler::XSLTH_ERR_2, 'Error code found' );
     #We still expect the original record back
-    is( ref $res[0] eq 'MARC::Record', 1, 'Still got back MARC record');
-    is ( $res[0]->subfield('245','a') eq 'Just a title', 1,
+    is( ref $res[0], 'MARC::Record', 'Still got back MARC record' );
+    is ( $res[0]->subfield('245','a'), 'Just a title',
         'At least the title is the same :)' );
 }

@@ -316,7 +316,7 @@ sub _do_xslt_proc {
     if( !$xslh->err ) {
         return MARC::Record->new_from_xml($xml, 'UTF-8');
     } else {
-        return ( $marc, 'xslt_err' ); #original record in case of errors
+        return ( $marc, $xslh->err ); #original record in case of errors
     }
 }
 

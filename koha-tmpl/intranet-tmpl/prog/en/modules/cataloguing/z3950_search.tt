@@ -83,7 +83,7 @@
                 [% FOREACH errcon IN errconn %]
                     [% IF ( errcon.error == '10000' ) %]<li>Connection failed to [% errcon.server %]</li>
                     [% ELSIF ( errcon.error == '10007' ) %]<li>Connection timeout to [% errcon.server %]</li>
-                    [% ELSIF ( errcon.error == 'xslt_err' ) %]<li>[% errcon.server %]: Warning: XSLT error on search result [% errcon.seq %]</li>
+                    [% ELSIF errcon.error.match( '^XSLTH' ) %]<li>[% errcon.server %] record [% errcon.seq %]: [% PROCESS 'xslt-handler.inc' code=errcon.error %]</li>
                     [% ELSE %]<li>[% errcon.server %] record [% errcon.seq %]: [% errcon.error %]</li>
                     [% END %]
                 [% END %]
