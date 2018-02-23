@@ -588,12 +588,13 @@ sub DelSuggestion {
     &DelSuggestionsOlderThan($days)
 
     Delete all suggestions older than TODAY-$days , that have be accepted or rejected.
+    We do now allow a negative number. If you want to delete all suggestions, just use Koha::Suggestions->delete or so.
 
 =cut
 
 sub DelSuggestionsOlderThan {
     my ($days) = @_;
-    return unless $days;
+    return unless $days && $days > 0;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         q{
