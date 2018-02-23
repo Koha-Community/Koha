@@ -867,6 +867,13 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.17',
     },
+    'Search::Elasticsearch' => {
+        'usage'    => 'Elasticsearch integration',
+        'required' => '1',
+        'min_ver'  => '5.01',
+        # also required for Zebra installs: about page: bug 20061
+    },
+
 };
 
 1;
