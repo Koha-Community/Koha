@@ -256,6 +256,13 @@ sub store {
                 $self->dateenrolled(undef) unless $self->dateenrolled;
                 $self->dateexpiry(undef)   unless $self->dateexpiry;
 
+                # FIXME We should not deal with that here, callers have to do this job
+                # Moved from ModMember to prevent regressions
+                unless ( $self->userid ) {
+                    my $stored_userid = $self->get_from_storage->userid;
+                    $self->userid($stored_userid);
+                }
+
                 if ( C4::Context->preference('FeeOnChangePatronCategory')
                     and $self->category->categorycode ne
                     $self->get_from_storage->category->categorycode )
