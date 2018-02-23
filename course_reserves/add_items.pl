@@ -62,8 +62,8 @@ if ( !$item && $action eq 'lookup' ){
 
 $template->param( course => GetCourse($course_id) );
 
-if ( $action eq 'lookup' ) {
-    my $course_item = GetCourseItem( itemnumber => $item->{'itemnumber'} );
+if ( $action eq 'lookup' and $item ) {
+    my $course_item = GetCourseItem( itemnumber => $item->itemnumber );
     my $course_reserve =
       ($course_item)
       ? GetCourseReserve(
