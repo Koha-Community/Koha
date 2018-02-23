@@ -84,7 +84,7 @@
                         <select id="holdingbranch" name="holdingbranch">
                             <option value="">LEAVE UNCHANGED</option>
                             [% FOREACH b IN Branches.all() %]
-                                [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.value == item.holdingbranch ) || ( course.enabled == 'no' && b.value == course_item.holdingbranch ) ) %]
+                                [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.branchcode == item.holdingbranch ) || ( course.enabled == 'no' && b.branchcode == course_item.holdingbranch ) ) %]
                                     <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
                                 [% ELSE %]
                                     <option value="[% b.branchcode %]">[% b.branchname %]</option>
