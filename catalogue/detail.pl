@@ -216,7 +216,7 @@ if ( $mss->count ) {
     $template->param( itemwithdrawnloop => GetAuthorisedValues( $mss->next->authorised_value) );
 }
 
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => { not => undef } });
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my %materials_map;
 if ($mss->count) {
     my $materials_authvals = GetAuthorisedValues($mss->next->authorised_value);
