@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw( uniq );
+use JSON qw( to_json );
 use Module::Load::Conditional qw( can_load );
 use Text::Unaccent qw( unac_string );
 
@@ -155,16 +156,25 @@ sub store {
                 # We are in a transaction but the table is not locked
                 $self->fixup_cardnumber;
             }
+
+            unless( $self->category->in_storage ) {
+                Koha::Exceptions::Object::FKConstraint->throw(
+                    broken_fk => 'categorycode',
+                    value     => $self->categorycode,
+                );
+            }
+
+            $self->trim_whitespaces;
+
+            # We don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00)
+            $self->dateofbirth(undef) unless $self->dateofbirth;
+            $self->debarred(undef)    unless $self->debarred;
+
+            # Set default values if not set
+            $self->sms_provider_id(undef) unless $self->sms_provider_id;
+            $self->guarantorid(undef)     unless $self->guarantorid;
+
             unless ( $self->in_storage ) {    #AddMember
-
-                unless( $self->category->in_storage ) {
-                    Koha::Exceptions::Object::FKConstraint->throw(
-                        broken_fk => 'categorycode',
-                        value     => $self->categorycode,
-                    );
-                }
-
-                $self->trim_whitespaces;
 
                 # Generate a valid userid/login if needed
                 $self->userid($self->generate_userid)
@@ -201,14 +211,6 @@ sub store {
                     ? Koha::AuthUtils::hash_password( $self->password )
                     : '!' );
 
-                # We don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00)
-                $self->dateofbirth(undef) unless $self->dateofbirth;
-                $self->debarred(undef)    unless $self->debarred;
-
-                # Set default values if not set
-                $self->sms_provider_id(undef) unless $self->sms_provider_id;
-                $self->guarantorid(undef)     unless $self->guarantorid;
-
                 $self->borrowernumber(undef);
 
                 $self = $self->SUPER::store;
@@ -237,9 +239,78 @@ sub store {
                   if C4::Context->preference("BorrowersLog");
             }
             else {    #ModMember
+                # test to know if you must update or not the borrower password
+                if ( defined $self->password ) {
+                    if ( $self->password eq '****' or $self->password eq '' ) {
+                        $self->password(undef);
+                    } else {
+                        if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+                            # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
+                            Koha::NorwegianPatronDB::NLUpdateHashedPIN( $self->borrowernumber, $self->password );
+                        }
+                        $self->password(Koha::AuthUtils::hash_password($self->password));
+                    }
+                }
+
+                 # Come from ModMember, but should not be possible (?)
+                $self->dateenrolled(undef) unless $self->dateenrolled;
+                $self->dateexpiry(undef)   unless $self->dateexpiry;
+
+                if ( C4::Context->preference('FeeOnChangePatronCategory')
+                    and $self->category->categorycode ne
+                    $self->get_from_storage->category->categorycode )
+                {
+                    $self->add_enrolment_fee_if_needed;
+                }
+
+                # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
+                # cronjob will use for syncing with NL
+                if (   C4::Context->preference('NorwegianPatronDBEnable')
+                    && C4::Context->preference('NorwegianPatronDBEnable') == 1 )
+                {
+                    my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
+                        'synctype'       => 'norwegianpatrondb',
+                        'borrowernumber' => $self->borrowernumber,
+                    });
+                    # Do not set to "edited" if syncstatus is "new". We need to sync as new before
+                    # we can sync as changed. And the "new sync" will pick up all changes since
+                    # the patron was created anyway.
+                    if ( $borrowersync->syncstatus ne 'new' && $borrowersync->syncstatus ne 'delete' ) {
+                        $borrowersync->update( { 'syncstatus' => 'edited' } );
+                    }
+                    # Set the value of 'sync'
+                    # FIXME THIS IS BROKEN # $borrowersync->update( { 'sync' => $data{'sync'} } );
+
+                    # Try to do the live sync
+                    Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $self->borrowernumber });
+                }
+
+                my $borrowers_log = C4::Context->preference("BorrowersLog");
+                my $previous_cardnumber = $self->get_from_storage->cardnumber;
+                if ( $borrowers_log && $previous_cardnumber ne $self->cardnumber )
+                {
+                    logaction(
+                        "MEMBERS",
+                        "MODIFY",
+                        $self->borrowernumber,
+                        to_json(
+                            {
+                                cardnumber_replaced => {
+                                    previous_cardnumber => $previous_cardnumber,
+                                    new_cardnumber      => $self->cardnumber,
+                                }
+                            },
+                            { utf8 => 1, pretty => 1 }
+                        )
+                    );
+                }
+
+                logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
+                    "UPDATE (executed w/ arg: " . $self->borrowernumber . ")" )
+                  if $borrowers_log;
+
                 $self = $self->SUPER::store;
             }
-
         }
     );
     return $self;
@@ -1162,8 +1233,7 @@ Generate a userid using the $surname and the $firstname (if there is a value in 
 
 Return the generate userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $userid is unique, or a higher numeric value if not unique).
 
-# Note: Should we set $self->userid with the generated value?
-# Certainly yes, but we AddMember and ModMember will be rewritten
+# TODO: Set $self->userid with the generated value
 
 =cut
 

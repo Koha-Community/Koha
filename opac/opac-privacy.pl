@@ -21,7 +21,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
-use C4::Members;
 use C4::Output;
 use Koha::Patrons;
 
@@ -50,12 +49,14 @@ my $privacy                    = $query->param("privacy");
 my $privacy_guarantor_checkouts = $query->param("privacy_guarantor_checkouts");
 
 if ( $op eq "update_privacy" ) {
-    ModMember(
-        borrowernumber             => $borrowernumber,
-        privacy                    => $privacy,
-        privacy_guarantor_checkouts => $privacy_guarantor_checkouts,
-    );
-    $template->param( 'privacy_updated' => 1 );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    if ( $patron ) {
+        $patron->set({
+            privacy                    => $privacy,
+            privacy_guarantor_checkouts => $privacy_guarantor_checkouts,
+        })->store;
+        $template->param( 'privacy_updated' => 1 );
+    }
 }
 elsif ( $op eq "delete_record" ) {
 

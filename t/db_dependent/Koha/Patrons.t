@@ -402,16 +402,16 @@ subtest 'add_enrolment_fee_if_needed' => sub {
 
     t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 0 );
     $borrower_data{categorycode} = 'J';
-    C4::Members::ModMember(%borrower_data);
+    $patron->set(\%borrower_data)->store;
     $total = $patron->account->balance;
     is( int($total), int($enrolmentfee_K), "Kid growing and become a juvenile, but shouldn't pay for the upgrade " );
 
     $borrower_data{categorycode} = 'K';
-    C4::Members::ModMember(%borrower_data);
+    $patron->set(\%borrower_data)->store;
     t::lib::Mocks::mock_preference( 'FeeOnChangePatronCategory', 1 );
 
     $borrower_data{categorycode} = 'J';
-    C4::Members::ModMember(%borrower_data);
+    $patron->set(\%borrower_data)->store;
     $total = $patron->account->balance;
     is( int($total), int($enrolmentfee_K + $enrolmentfee_J), "Kid growing and become a juvenile, they should pay " . ( $enrolmentfee_K + $enrolmentfee_J ) );
 
@@ -1362,13 +1362,13 @@ subtest 'Log cardnumber change' => sub {
     plan tests => 3;
 
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
-    my $patron = $builder->build( { source => 'Borrower' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
 
-    my $cardnumber = $patron->{cardnumber};
-    $patron->{cardnumber} = 'TESTCARDNUMBER';
-    ModMember(%$patron);
+    my $cardnumber = $patron->cardnumber;
+    $patron->set( { cardnumber => 'TESTCARDNUMBER' });
+    $patron->store;
 
-    my @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->{borrowernumber} } );
+    my @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
     my $log_info = from_json( $logs[0]->info );
     is( $log_info->{cardnumber_replaced}->{new_cardnumber}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
     is( $log_info->{cardnumber_replaced}->{previous_cardnumber}, $cardnumber, 'Got correct old cardnumber' );

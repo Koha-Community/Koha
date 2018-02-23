@@ -295,8 +295,8 @@ if ( $op eq 'do' ) {
         # If at least one field are filled, we want to modify the borrower
         if ( defined $infos ) {
             $infos->{borrowernumber} = $borrowernumber;
-            my $success = ModMember(%$infos);
-            if (!$success) {
+            eval { Koha::Patrons->find( $borrowernumber )->set($infos)->store; };
+            if ( $@ ) { # FIXME We could provide better error handling here
                 my $patron = Koha::Patrons->find( $borrowernumber );
                 $infos->{cardnumber} = $patron ? $patron->cardnumber || '' : '';
                 push @errors, { error => "can_not_update", borrowernumber => $infos->{borrowernumber}, cardnumber => $infos->{cardnumber} };

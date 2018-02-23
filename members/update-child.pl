@@ -22,7 +22,7 @@
     script to update a child member to (usually) an adult member category
 
     - if called with op=multi, will return all available non child categories, for selection.
-    - if called with op=update, script will update member record via  ModMember().
+    - if called with op=update, script will update member record via Koha::Patron->store.
 
 =cut
 
@@ -31,7 +31,6 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Auth;
 use C4::Output;
-use C4::Members;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -76,14 +75,9 @@ elsif ( $op eq 'update' ) {
     my $patron         = Koha::Patrons->find( $borrowernumber );
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-    my $member = $patron->unblessed;
-    $member->{'guarantorid'}  = 0;
-    $member->{'categorycode'} = $catcode;
-    my $borcat = Koha::Patron::Categories->find($catcode);
-    $member->{'category_type'} = $borcat->category_type;
-    $member->{'description'}   = $borcat->description;
-    delete $member->{password};
-    ModMember(%$member);
+    $patron->guarantorid(undef);
+    $patron->categorycode($catcode);
+    $patron->store;
 
     if (  $catcode_multi ) {
         $template->param(

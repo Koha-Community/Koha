@@ -72,7 +72,6 @@ BEGIN {
 
     #Modify data
     push @EXPORT, qw(
-        &ModMember
         &changepassword
     );
 
@@ -259,113 +258,6 @@ sub patronflags {
         $flags{'WAITING'}     = \%flaginfo;
     }
     return ( \%flags );
-}
-
-
-=head2 ModMember
-
-  my $success = ModMember(borrowernumber => $borrowernumber,
-                                            [ field => value ]... );
-
-Modify borrower's data.  All date fields should ALREADY be in ISO format.
-
-return :
-true on success, or false on failure
-
-=cut
-
-sub ModMember {
-    my (%data) = @_;
-
-    # trim whitespace from data which has some non-whitespace in it.
-    foreach my $field_name (keys(%data)) {
-        if ( defined $data{$field_name} && $data{$field_name} =~ /\S/ ) {
-            $data{$field_name} =~ s/^\s*|\s*$//g;
-        }
-    }
-
-    # test to know if you must update or not the borrower password
-    if (exists $data{password}) {
-        if ($data{password} eq '****' or $data{password} eq '') {
-            delete $data{password};
-        } else {
-            if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-                # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
-                Koha::NorwegianPatronDB::NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
-            }
-            $data{password} = hash_password($data{password});
-        }
-    }
-
-    my $old_categorycode = Koha::Patrons->find( $data{borrowernumber} )->categorycode;
-
-    # get only the columns of a borrower
-    my $schema = Koha::Database->new()->schema;
-    my @columns = $schema->source('Borrower')->columns;
-    my $new_borrower = { map { join(' ', @columns) =~ /$_/ ? ( $_ => $data{$_} ) : () } keys(%data) };
-
-    $new_borrower->{dateofbirth}     ||= undef if exists $new_borrower->{dateofbirth};
-    $new_borrower->{dateenrolled}    ||= undef if exists $new_borrower->{dateenrolled};
-    $new_borrower->{dateexpiry}      ||= undef if exists $new_borrower->{dateexpiry};
-    $new_borrower->{debarred}        ||= undef if exists $new_borrower->{debarred};
-    $new_borrower->{sms_provider_id} ||= undef if exists $new_borrower->{sms_provider_id};
-    $new_borrower->{guarantorid}     ||= undef if exists $new_borrower->{guarantorid};
-
-    my $patron = Koha::Patrons->find( $new_borrower->{borrowernumber} );
-
-    my $borrowers_log = C4::Context->preference("BorrowersLog");
-    if ( $borrowers_log && $patron->cardnumber ne $new_borrower->{cardnumber} )
-    {
-        logaction(
-            "MEMBERS",
-            "MODIFY",
-            $data{'borrowernumber'},
-            to_json(
-                {
-                    cardnumber_replaced => {
-                        previous_cardnumber => $patron->cardnumber,
-                        new_cardnumber      => $new_borrower->{cardnumber},
-                    }
-                },
-                { utf8 => 1, pretty => 1 }
-            )
-        );
-    }
-
-    delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
-
-    my $execute_success = $patron->store if $patron->set($new_borrower);
-
-    if ($execute_success) { # only proceed if the update was a success
-        # If the patron changes to a category with enrollment fee, we add a fee
-        if ( $data{categorycode} and $data{categorycode} ne $old_categorycode ) {
-            if ( C4::Context->preference('FeeOnChangePatronCategory') ) {
-                $patron->add_enrolment_fee_if_needed;
-            }
-        }
-
-        # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
-        # cronjob will use for syncing with NL
-        if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-            my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
-                'synctype'       => 'norwegianpatrondb',
-                'borrowernumber' => $data{'borrowernumber'}
-            });
-            # Do not set to "edited" if syncstatus is "new". We need to sync as new before
-            # we can sync as changed. And the "new sync" will pick up all changes since
-            # the patron was created anyway.
-            if ( $borrowersync->syncstatus ne 'new' && $borrowersync->syncstatus ne 'delete' ) {
-                $borrowersync->update( { 'syncstatus' => 'edited' } );
-            }
-            # Set the value of 'sync'
-            $borrowersync->update( { 'sync' => $data{'sync'} } );
-            # Try to do the live sync
-            Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
-        }
-
-        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if $borrowers_log;
-    }
-    return $execute_success;
 }
 
 =head2 GetAllIssues

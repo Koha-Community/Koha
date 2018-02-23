@@ -22,7 +22,7 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-use C4::Members;
+use Koha::Patrons;
 use Koha::Patron::Modifications;
 
 my $query = new CGI;
@@ -57,10 +57,9 @@ foreach my $param (@params) {
 
             if ($query->param("unset_gna_$borrowernumber")) {
                 # Unset gone no address
-                ModMember(
-                    borrowernumber => $borrowernumber,
-                    gonenoaddress  => undef
-                );
+                # FIXME Looks like this could go to $m->approve
+                my $patron = Koha::Patrons->find( $borrowernumber );
+                $patron->gonenoaddress(undef)->store;
             }
 
             $m->approve() if $m;

@@ -526,13 +526,13 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Res
 
 #Set the dateofbirth for the Borrower making them "too young".
 $borrower->{dateofbirth} = DateTime->now->add( years => -15 );
-C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
+Koha::Patrons->find( $borrowernumber )->set({ dateofbirth => $borrower->{dateofbirth} })->store;
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'ageRestricted', "Reserving a 'PEGI 16' Biblio by a 15 year old borrower fails");
 
 #Set the dateofbirth for the Borrower making them "too old".
 $borrower->{dateofbirth} = DateTime->now->add( years => -30 );
-C4::Members::ModMember( borrowernumber => $borrowernumber, dateofbirth => $borrower->{dateofbirth} );
+Koha::Patrons->find( $borrowernumber )->set({ dateofbirth => $borrower->{dateofbirth} })->store;
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber) , 'OK', "Reserving a 'PEGI 16' Biblio by a 30 year old borrower succeeds");
        ####

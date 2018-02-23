@@ -12,9 +12,9 @@ nl-sync-to-koha.pl - Sync patrons from the Norwegian national patron database (N
 
 =cut
 
-use C4::Members;
 use C4::Members::Attributes qw( UpdateBorrowerAttribute );
 use Koha::NorwegianPatronDB qw( NLCheckSysprefs NLGetChanged );
+use Koha::Patrons;
 use Koha::Database;
 use Getopt::Long;
 use Pod::Usage;
@@ -70,17 +70,11 @@ foreach my $patron ( @{ $result->{'kohapatrons'} } ) {
         # Delete the extra data from the copy of the hashref
         delete $clean_patron{'_extra'};
         # Find the borrowernumber based on cardnumber
-        my $stored_patron = Koha::Database->new->schema->resultset('Borrower')->find({
-            'cardnumber' => $patron->{'cardnumber'}
-        });
+        my $stored_patron = Koha::Patrons->find({ cardnumber => $patron->{cardnumber} });
         my $borrowernumber = $stored_patron->borrowernumber;
         if ( $run ) {
-            # Call ModMember
-            my $success = ModMember(
-                'borrowernumber' => $borrowernumber,
-                %clean_patron,
-            );
-            if ( $success ) {
+            # FIXME Exceptions must be caught here
+            if ( $stored_patron->set(\%clean_patron)->store ) {
                 # Get the sync object
                 my $sync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
                     'synctype'       => 'norwegianpatrondb',

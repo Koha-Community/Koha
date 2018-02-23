@@ -30,6 +30,7 @@ use C4::Output;
 use C4::Members;
 use C4::Members::Messaging;
 use C4::Form::MessagingPreferences;
+use Koha::Patrons;
 use Koha::SMS::Providers;
 
 my $query = CGI->new();
@@ -50,37 +51,35 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME and if borrowernumber is invalid?
+
 my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
     my $sms = $query->param('SMSnumber');
     my $sms_provider_id = $query->param('sms_provider_id');
-    if ( defined $sms && ( $borrower->{'smsalertnumber'} // '' ) ne $sms
-            or ( $borrower->{sms_provider_id} // '' ) ne $sms_provider_id ) {
-        ModMember(
-            borrowernumber  => $borrowernumber,
+    if ( defined $sms && ( $patron->smsalertnumber // '' ) ne $sms
+            or ( $patron->sms_provider_id // '' ) ne $sms_provider_id ) {
+        $patron->set({
             smsalertnumber  => $sms,
             sms_provider_id => $sms_provider_id,
-        );
-        # FIXME will not be needed when ModMember will be replaced
-        $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+        })->store;
     }
 
-    C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $borrowernumber }, $template);
+    C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $patron->borrowernumber }, $template);
 }
 
-C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrower->{'borrowernumber'} }, $template);
+C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $patron->borrowernumber }, $template);
 
-$template->param( BORROWER_INFO         => $borrower,
+$template->param( BORROWER_INFO         => $patron->unblessed,
                   messagingview         => 1,
-                  SMSnumber => $borrower->{'smsalertnumber'},
+                  SMSnumber             => $patron->smsalertnumber, # FIXME This is already sent 2 lines above
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
                   TalkingTechItivaPhone        =>  C4::Context->preference("TalkingTechItivaPhoneNotification") );
 
 if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
     my @providers = Koha::SMS::Providers->search();
-    $template->param( sms_providers => \@providers, sms_provider_id => $borrower->{'sms_provider_id'} );
+    $template->param( sms_providers => \@providers, sms_provider_id => $patron->sms_provider_id );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

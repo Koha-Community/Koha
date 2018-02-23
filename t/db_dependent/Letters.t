@@ -610,7 +610,7 @@ subtest 'SendQueuedMessages' => sub {
     is( $@, '', 'SendQueuedMessages should not explode if the patron does not have a sms provider set' );
 
     my $sms_pro = $builder->build_object({ class => 'Koha::SMS::Providers', value => { domain => 'kidclamp.rocks' } });
-    ModMember( borrowernumber => $borrowernumber, smsalertnumber => '5555555555', sms_provider_id => $sms_pro->id() );
+    $patron->set( { smsalertnumber => '5555555555', sms_provider_id => $sms_pro->id() } )->store;
     $message_id = C4::Letters::EnqueueLetter($my_message); #using datas set around line 95 and forward
     C4::Letters::SendQueuedMessages();
     my $sms_message_address = $schema->resultset('MessageQueue')->search({

@@ -202,7 +202,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
     }
 }
 
-# remove keys from %newdata that ModMember() doesn't like
+# remove keys from %newdata that is not part of patron's attributes
 {
     my @keys_to_delete = (
         qr/^BorrowerMandatoryField$/,
