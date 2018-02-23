@@ -295,7 +295,7 @@ $patstodel = GetBorrowersToExpunge( {expired_before => '2015-01-02', patron_list
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by expirationdate and list');
 $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_list_id => $list1->patron_list_id() } );
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Guarantor patron not deleted by last issue date');
-Koha::Patrons->find($guarantee->{borrowernumber})->set({ guarantorid => '' })->store;
+Koha::Patrons->find($guarantee->{borrowernumber})->set({ guarantorid => undef })->store;
 
 $builder->build({
         source => 'Issue',
