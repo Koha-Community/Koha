@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-18 11:51-0300\n"
-"PO-Revision-Date: 2017-11-27 12:46+0000\n"
-"Last-Translator: Meltem <meltem.arun@goethe.de>\n"
+"POT-Creation-Date: 2018-02-19 02:45-0300\n"
+"PO-Revision-Date: 2018-02-07 14:13+0000\n"
+"Last-Translator: cs <christian.stelzenmueller@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1511786785.000000\n"
+"X-POOTLE-MTIME: 1518012835.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -80,7 +80,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:675
 #, c-format
 msgid "%s %s %s %s Item in transit from "
 msgstr "%s %s %s %s Materyal şu konumdan nakledilmekte"
@@ -120,7 +120,7 @@ msgstr ""
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Materyal beklemede "
@@ -189,7 +189,7 @@ msgstr "%s %s Bitiş tarihi:"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:669
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s gelmekte olan materyal "
@@ -454,7 +454,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s ve %s "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber | html 
+#. %2$s:  biblio.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -473,7 +473,7 @@ msgstr "%s (ilgili aramalar: %s%s%s). %s "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:541
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Hesap donduruldu %s %s "
@@ -496,10 +496,18 @@ msgstr ""
 "lütfen personelle iletişime geçiniz. %s"
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Otomatik süre uzatma"
+
+#. %1$s:  ELSIF ISSUE.auto_account_expired 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
+#, fuzzy, c-format
+msgid "%s Automatic renewal failed, your account is expired. "
+msgstr ""
+"%s Süresi daha fazla uzatılamaz %s Otomatik süre uzatma başarısız oldu, "
+"ödenmemiş cezalarınız bulunmaktadır."
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -593,7 +601,7 @@ msgid "%s Issue notes have not been enabled. Please contact the library. %s "
 msgstr "%s Sayı notları etkinleştirilmedi. Lütfen kütüphaneye başvurun. %s"
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s Materyalin alınması bekleniyor "
@@ -623,7 +631,7 @@ msgstr ""
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Şu tarihden önce süresi uzatılamaz: %s"
@@ -633,7 +641,7 @@ msgstr "%s Şu tarihden önce süresi uzatılamaz: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:42
 #, c-format
 msgid "%s No results found for that in %s catalog. "
-msgstr "%s kataloğunda %s sonuç bulunamadı. "
+msgstr "%s %s kataloğunda sonuç bulunamadı."
 
 #. %1$s:  ELSE 
 #. %2$s:  END # / IF results 
@@ -643,7 +651,7 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s Sonuç bulunamadı, filtreleri değiştirmeyi deneyin. %s"
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s İzin verilmiyor"
@@ -664,7 +672,7 @@ msgstr "%s Süresi uzatılamaz %s İzin verilmiyor"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%sAyırtılmış %s Süresini daha fazla uzatamazsınız %s "
@@ -698,7 +706,7 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:843
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s Beklemede %s İşleniyor %s Tamamlandı %s İptal edildi %s"
@@ -867,7 +875,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Evet %s Hayır %s  "
@@ -876,7 +884,7 @@ msgstr "%s Evet %s Hayır %s  "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
@@ -972,7 +980,7 @@ msgstr "%s materyal sipariş edildi."
 #. %4$s:  RESERVE.expirationdate | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
 #, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s tarihinden %s %s tarihine kadar %s %s %s"
@@ -1468,7 +1476,7 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Bir aboneliğe ait sayılar"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber | html 
+#. %5$s:  biblio.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -2560,16 +2568,17 @@ msgstr "(%s bibliyografik kayıtlar)"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(Uzatma haklarından kalan %s, toplam hak sayısı %s)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #, c-format
 msgid "(%s total)"
@@ -2715,13 +2724,13 @@ msgid "(on hold)"
 msgstr "(ayırtılmış)"
 
 #. %1$s:  ar.item.barcode 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:807
 #, c-format
 msgid "(only %s)"
 msgstr "(sadece %s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:291
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #, c-format
 msgid "(overdue)"
 msgstr "(overdue)"
@@ -2831,8 +2840,8 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
@@ -3178,9 +3187,9 @@ msgstr "Alternatif adres bilgisi:"
 msgid "Alternate contact"
 msgstr "Alternatif iletişim adresi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "Amount"
 msgstr "Miktar"
@@ -3291,7 +3300,7 @@ msgid "April"
 msgstr "Nisan"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Bu ayırmayı iptal etmek istediğinizden emin misiniz?"
 
@@ -3342,14 +3351,14 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Bu paylaşımı silmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr ""
 "Tüm askıya alınmış ayırma işlemlerini devam ettirmek istediğinizden emin "
 "misiniz?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Tüm ayırma işlemlerini askıya almak istediğinizden emin misiniz?"
 
@@ -3358,7 +3367,7 @@ msgstr "Tüm ayırma işlemlerini askıya almak istediğinizden emin misiniz?"
 msgid "Arrived"
 msgstr "Geldi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "Article requests "
 msgstr "Makale istekleri"
@@ -3448,7 +3457,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:252
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:176
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:786
 #, c-format
 msgid "Author"
 msgstr "Yazar"
@@ -3598,15 +3607,15 @@ msgstr "Arama listesi sonuçlarına geri dön"
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:125
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:182
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:464
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "Barcode"
 msgstr "Barkod"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #, c-format
 msgid "Barcode:"
 msgstr "Barkod:"
@@ -3736,15 +3745,15 @@ msgstr "Yer Numarası"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:184
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:225
 #, c-format
 msgid "Call no."
 msgstr "Yer no"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:534
 #, c-format
 msgid "Call no.:"
 msgstr "Yer numarası:"
@@ -3803,9 +3812,9 @@ msgstr "Yer numarası: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:722
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:741
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:861
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:864
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:171
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:296
@@ -3838,7 +3847,7 @@ msgstr "E-posta bildirimini iptal et "
 msgid "Cancel enrollment "
 msgstr "Kaydı iptal et"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:860
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:863
 #, c-format
 msgid "Cancel:"
 msgstr "İptal et:"
@@ -3927,7 +3936,7 @@ msgstr "Parolanızı değiştirin"
 msgid "Change your password "
 msgstr "Parolanızı değiştirin "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:788
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:791
 #, c-format
 msgid "Chapters"
 msgstr "Bölümler"
@@ -4010,7 +4019,7 @@ msgstr "%s için ödünç alınanlar"
 msgid "Checkouts: "
 msgstr "Ödünç alınanlar:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:31
 #, c-format
 msgid "Citation"
 msgstr "Atıf"
@@ -4072,8 +4081,8 @@ msgstr "Tümünü temizle"
 msgid "Clear date"
 msgstr "Tarihi temizle"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:758
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:761
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Süresiz olarak askıya almak için tarihi silin"
@@ -4134,7 +4143,7 @@ msgstr "Listeyi geri almak için tıklayın"
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 msgid "Click to view in Google Books"
 msgstr "Google Books içerisinde görmek için tıklayın"
 
@@ -4431,7 +4440,7 @@ msgstr ""
 "Kullanıcıya, Koha bibliyografik kaydındaki belirli bir materyalde materyal "
 "düzeyinde ayırtma isteği oluşturur."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
 #, c-format
 msgid "Credits"
 msgstr "Krediler"
@@ -4486,7 +4495,7 @@ msgstr "DVD video / Videodisk"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:786
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:789
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:101
@@ -4514,7 +4523,7 @@ msgstr "İade tarihi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
 #, c-format
 msgid "Date due:"
 msgstr "İade tarihi:"
@@ -4779,7 +4788,7 @@ msgstr "Tamamlandı"
 msgid "Download"
 msgstr "İndir"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:350
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr "iCal/.ics dosyası olarak indirin"
@@ -4806,8 +4815,8 @@ msgid "Dublin Core"
 msgstr "Dublin Core"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:463
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:466
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:226
 #, c-format
 msgid "Due"
@@ -4842,7 +4851,7 @@ msgstr "HATA: Hiçbir kayıt numarası belirtilmedi."
 msgid "Edit"
 msgstr "Düzenle"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
 #, c-format
 msgid "Edit / Create note"
 msgstr "Düzenleme / Oluşturma notu"
@@ -5121,13 +5130,13 @@ msgstr "Belirli bir materyalin seçimi bekleniyor."
 msgid "Expiration date:"
 msgstr "Sona erme tarihi:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:635
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, c-format
 msgid "Expiration:"
 msgstr "Sona erme tarihi:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #, c-format
 msgid "Expires on"
 msgstr "Sona erme tarihi:"
@@ -5206,7 +5215,7 @@ msgid "Fine amount"
 msgstr "Ceza miktarı"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
 #, c-format
 msgid "Fines"
@@ -5221,14 +5230,14 @@ msgid "Fines (%s)"
 msgstr "Cezalar (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:66
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, c-format
 msgid "Fines and charges"
 msgstr "Cezalar ve ücretler"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #, c-format
 msgid "Fines:"
 msgstr "Cezalar:"
@@ -5574,7 +5583,7 @@ msgstr "Pencereyi gizle"
 msgid "Highlight"
 msgstr "Vurgula"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:624
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
 #, c-format
 msgid "Hold date:"
 msgstr "Ayırma tarihi:"
@@ -5625,7 +5634,7 @@ msgstr "Mevcut"
 msgid "Holdings:"
 msgstr "Mevcut:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
 #, c-format
 msgid "Holds "
 msgstr "Ayırtılanlar "
@@ -6033,7 +6042,7 @@ msgstr "Eğitmenler:"
 msgid "Invalid shelf number."
 msgstr "Geçersiz raf numarası."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:788
 #, c-format
 msgid "Issue"
 msgstr "Sayı"
@@ -6105,7 +6114,7 @@ msgstr "Materyal kayıp"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:463
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #, c-format
@@ -6201,8 +6210,8 @@ msgstr "Anahtar kelime"
 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:22
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:24
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:40
 #, c-format
 msgid "Koha"
 msgstr "Koha"
@@ -6461,11 +6470,11 @@ msgstr "Yükleniyor"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:356
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:359
 #, c-format
 msgid "Loading... "
 msgstr "Yükleniyor..."
@@ -6759,7 +6768,7 @@ msgstr "Eksik sayılar: %s "
 msgid "Mo"
 msgstr "Pzt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Modify"
 msgstr "Değiştir"
@@ -6838,7 +6847,7 @@ msgstr "Daha Dar Terim"
 msgid "Never"
 msgstr "Asla"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, c-format
 msgid "Never expires "
 msgstr "Süre kısıtlaması yok"
@@ -6866,7 +6875,7 @@ msgstr "Yeni"
 msgid "New comment on %s %s, %s%s"
 msgstr "%s %s, %s%s hakkındaki yeni yorum"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:71
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:72
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:507
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
@@ -6983,9 +6992,9 @@ msgstr "Hiçbir değişiklik yapılmadı."
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:208
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:225
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:234
@@ -7284,7 +7293,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:789
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
@@ -7318,7 +7327,7 @@ msgid "Nothing"
 msgstr "Hiçbir şey"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7539,12 +7548,12 @@ msgstr "Genel sıra önceliği: %s"
 msgid "Overdue (%s)"
 msgstr "Gecikenler (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
 #, c-format
 msgid "Overdues "
 msgstr "Gecikenler "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:790
 #, c-format
 msgid "Pages"
 msgstr "Sayfalar"
@@ -7662,18 +7671,18 @@ msgstr "Telefon:"
 msgid "Physical details:"
 msgstr "Fiziksel ayrıntılar:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:589
 #, c-format
 msgid "Pick up location"
 msgstr "Alınacak yer"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:646
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
 #, c-format
 msgid "Pick up location:"
 msgstr "Teslim alma yeri:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:791
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:794
 #, c-format
 msgid "Pickup library"
 msgstr "Teslim alma kütüphanesi"
@@ -7722,8 +7731,8 @@ msgstr "Ayırt"
 msgid "Place request"
 msgstr "İstekte bulunun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:781
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
 #, c-format
 msgid "Placed on"
 msgstr "Sipariş verme tarihi"
@@ -8078,12 +8087,12 @@ msgstr "Yazdır"
 msgid "Print list"
 msgstr "Liste yazdır"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #, c-format
 msgid "Priority"
 msgstr "Öncelik"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:654
 #, c-format
 msgid "Priority:"
 msgstr "Öncelik:"
@@ -8292,7 +8301,7 @@ msgstr "Kayıt URL'si"
 msgid "Record not found"
 msgstr "Kayıt bulunamadı"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #, c-format
 msgid "Record title"
 msgstr "Kayıt başlığı"
@@ -8344,7 +8353,7 @@ msgstr "Düzenli baskı"
 msgid "Related Term"
 msgstr "İlgili Terim"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:417
 #, c-format
 msgid "Relative"
 msgstr "Göreceli"
@@ -8417,16 +8426,16 @@ msgstr "Paylaşımı kaldır"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:186
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:283
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
 #, c-format
 msgid "Renew"
 msgstr "Süresini uzat"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Renew all"
 msgstr "Tümünün süresini uzat"
 
@@ -8439,8 +8448,8 @@ msgid "Renew item"
 msgstr "Materyalin süresini uzat"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Renew selected"
 msgstr "Seçilenlerin süresini uzat"
 
@@ -8556,17 +8565,17 @@ msgstr "Sonuçlar %s - %s arası (Toplamı %s)"
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "Arama sonuçları %siçin '%s'%s%s&nbsp;limit(ler) ile:&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:696
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:699
 #, c-format
 msgid "Resume"
 msgstr "Kaldığı yerden devam et"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:765
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:768
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Tüm askıya alınan ayırmaları devam ettir"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:710
 #, c-format
 msgid "Resume your hold on "
 msgstr "Üzerindeki ayırma işleminize kaldığı yerden devam edin"
@@ -8893,7 +8902,7 @@ msgstr "Bölüm:"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:355
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:223
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
@@ -9250,7 +9259,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Something went wrong. The note has not been saved"
 msgstr "Bir şeyler yanlış gitti. Not kaydedilmedi"
 
@@ -9431,8 +9440,8 @@ msgstr "İstatistikler"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:590
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:790
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:793
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:850
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
 #, c-format
@@ -9440,7 +9449,7 @@ msgid "Status"
 msgstr "Durum"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, c-format
 msgid "Status:"
 msgstr "Durum:"
@@ -9537,12 +9546,12 @@ msgstr "Gönder ve bu pencereyi kapat"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Submit changes"
 msgstr "Değişiklikleri gönderin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:324
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #, c-format
 msgid "Submit note"
@@ -9625,8 +9634,8 @@ msgstr "Abonelik: "
 msgid "Subscriptions ( %s )"
 msgstr "Abonelikler ( %s )"
 
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:32
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:33
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:41
 #, c-format
 msgid "Sudoc"
 msgstr "Sudoc"
@@ -9684,26 +9693,26 @@ msgstr "Soyadı:"
 msgid "Surveys"
 msgstr "Anketler"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:592
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:703
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:721
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:732
 #, c-format
 msgid "Suspend"
 msgstr "Askıya al"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:752
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Suspend all holds"
 msgstr "Tüm ayırmaları beklet"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, c-format
 msgid "Suspend until:"
 msgstr "Şu tarihe kadar askıya al:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:712
 #, c-format
 msgid "Suspend your hold on "
 msgstr "üzerindeki ayırma işlemini askıya al"
@@ -10339,10 +10348,10 @@ msgstr "Yazdırma onay bekleme süresi aşıldı"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:583
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:53
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
@@ -10695,7 +10704,7 @@ msgstr "Bu eserle ilgili ayrıntıları göster"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
 msgid "View on Amazon.com"
 msgstr "Amazon.com üzerinde görüntüle"
 
@@ -10710,7 +10719,7 @@ msgstr "Arama geçmişinizi görüntüleyin"
 msgid "Vol info"
 msgstr "Cilt bilgileri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #, c-format
 msgid "Volume"
 msgstr "Cilt"
@@ -10973,8 +10982,8 @@ msgstr "Genel bir listeyi paylaşamazsınız."
 msgid "You currently have nothing checked out."
 msgstr "Şu anda üzerinizde ödünç alınmış hiçbir materyal yoktur."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "Ödenmemiş ceza ve diğer borçlarınızın toplamı:"
@@ -11040,7 +11049,7 @@ msgstr ""
 "Bir arama motoru veya bir yer iminden güncel olmayan bir bağlantıyı takip "
 "ettiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:397
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
 #, c-format
 msgid "You have a credit of:"
 msgstr "Alacaklı olduğunuz miktar:"
@@ -11050,7 +11059,7 @@ msgstr "Alacaklı olduğunuz miktar:"
 msgid "You have already requested this title."
 msgstr "Bu eseri zaten istediniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:873
 #, c-format
 msgid "You have no article requests currently."
 msgstr "Şu anda hiç bir makale talebiniz yok."
@@ -11069,7 +11078,7 @@ msgstr ""
 "Tüm gerekli alanları doldurmadınız. Lütfen tüm eksik alanları doldurunuz ve "
 "yeniden gönderiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Üzerinizde ödünç alınmış hiçbir şey yoktur"
@@ -11409,17 +11418,17 @@ msgid "Your messaging settings"
 msgstr "Mesajlaşma ayarlarınız"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Your note about %s could not be saved."
 msgstr "%s hakkındaki notunuz kaydedilemedi."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "%s hakkındaki notunuz kaydedildi ve kütüphaneye gönderildi."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Your note about %s was removed."
 msgstr "%s hakkındaki notunuz kaldırıldı."
 
@@ -11898,7 +11907,8 @@ msgstr "koha %s kataloğu"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
-msgid "koha:biblionumber:[% biblionumber | html %]"
+#, fuzzy
+msgid "koha:biblionumber:[% biblio.biblionumber %]"
 msgstr "koha:biblionumber:[% biblionumber | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
@@ -12095,7 +12105,7 @@ msgstr "göster_ödünçler"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
 #, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -12236,7 +12246,7 @@ msgstr "yorum yazmak için."
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:756
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:759
 #, c-format
 msgid "until "
 msgstr "kadar "
@@ -12423,7 +12433,7 @@ msgstr "Etiketleriniz"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:305
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:708
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:268
 #, c-format

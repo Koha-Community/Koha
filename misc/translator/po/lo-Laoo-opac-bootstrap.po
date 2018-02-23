@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-18 11:33-0300\n"
+"POT-Creation-Date: 2018-02-19 02:01-0300\n"
 "PO-Revision-Date: 2012-06-14 17:45+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,7 +80,7 @@ msgstr "%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%sການບັນທຶກນີ
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:675
 #, fuzzy, c-format
 msgid "%s %s %s %s Item in transit from "
 msgstr "%s %s %s ລາຍການທີ່ຢູ່ໃນຊ່ວງຜ່ານຈາກ "
@@ -117,7 +117,7 @@ msgstr ""
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s ລາຍການທີ່ກຳລັງລໍຖ້າຢູ່ "
@@ -185,7 +185,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:669
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:672
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s ລາຍການທີ່ນຳໄປຫາ "
@@ -429,7 +429,7 @@ msgid "%s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s and %s "
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ສຳນວນຫົວຂໍ້ "
 
 #. %1$s:  bibliotitle 
-#. %2$s:  biblionumber | html 
+#. %2$s:  biblio.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:27
 #, c-format
 msgid "%s (Record no. %s)"
@@ -448,7 +448,7 @@ msgstr "(ການຄົ້ນຫາທີ່ກ່ຽວພັນກັບ: %s%
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:541
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
 #, fuzzy, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%sບັນຊີທີ່ຖຶກໂຈະໄວ້ %s "
@@ -471,10 +471,16 @@ msgstr ""
 "ເພື່ອແກ້ໄຂບັນຫາດັ່ງກ່າວ."
 
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
 #, fuzzy, c-format
 msgid "%s Automatic renewal "
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
+
+#. %1$s:  ELSIF ISSUE.auto_account_expired 
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
+#, fuzzy, c-format
+msgid "%s Automatic renewal failed, your account is expired. "
+msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -565,7 +571,7 @@ msgid "%s Issue notes have not been enabled. Please contact the library. %s "
 msgstr "ເພື່ອສະແດງຄວາມກະຈ່າງແຈ້ງກ່ຽວກັບບັນຊີຂອງທ່ານ, ກະລຸນາຕິດຕໍຫໍສະໜຸດ."
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:670
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s ລາຍການກຳລັງລໍຖ້າເພື່ອນຳໄປໃຊ້ງານ "
@@ -593,7 +599,7 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
 #, fuzzy, c-format
 msgid "%s No renewal before %s "
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
@@ -613,7 +619,7 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s ບໍ່ມີຂໍ້ມູນຂອງການຄົ້ນຫາ. %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #, fuzzy, c-format
 msgid "%s Not allowed"
 msgstr "%s ບໍ່ມີການຈ່ອງທີ່ໄດ້ຮັບອະນຸຍາດ"
@@ -634,7 +640,7 @@ msgstr "ບໍ່ອະນຸຍາດໃຫ້ຢື່ມຕໍ່ອີກ"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #, fuzzy, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%sສຳຮອງ %sບໍ່ສາມາດຕໍ່ອາຍຸໄດ້ອີກແລ້ວ %s "
@@ -666,7 +672,7 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:843
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:846
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr ""
@@ -822,7 +828,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #, fuzzy, c-format
 msgid "%s Yes %s No %s "
 msgstr "%sແມ່ນແລ້ວ%sບໍ່ແມ່ນ%s %s "
@@ -831,7 +837,7 @@ msgstr "%sແມ່ນແລ້ວ%sບໍ່ແມ່ນ%s %s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
@@ -922,7 +928,7 @@ msgstr ""
 #. %4$s:  RESERVE.expirationdate | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:660
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
 #, fuzzy, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s %s %s%s%sບໍ່ມີຫົວຂໍ້%s %s %s%s "
@@ -1396,7 +1402,7 @@ msgstr "%s%s%s%sໂຄຫາ ອອນລາຍ%s ບັນຊີລາຍຊື
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#. %5$s:  biblionumber | html 
+#. %5$s:  biblio.biblionumber 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:3
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; MARC details for record no. %s"
@@ -2479,16 +2485,17 @@ msgstr "(%s biblios)"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:296
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:302
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:548
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:305
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:551
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s of %s ລາຍການທີ່ສາມາດຢື່ມຕໍ່ໄປໄດ້)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:219
 #, c-format
 msgid "(%s total)"
@@ -2632,13 +2639,13 @@ msgid "(on hold)"
 msgstr "(ຢູ່ໃນການຈ່ອງ)"
 
 #. %1$s:  ar.item.barcode 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:807
 #, c-format
 msgid "(only %s)"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:291
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:550
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:553
 #, fuzzy, c-format
 msgid "(overdue)"
 msgstr "ກາຍກຳນົດ "
@@ -2749,8 +2756,8 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:636
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:639
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
 msgid "0000-00-00"
 msgstr ""
 
@@ -3089,9 +3096,9 @@ msgstr "ຊຸດຂໍ້ມູນ:"
 msgid "Alternate contact"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:366
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:397
 #, c-format
 msgid "Amount"
 msgstr "ຈຳນວນ"
@@ -3201,7 +3208,7 @@ msgid "April"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Are you sure you want to cancel this hold?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
@@ -3255,13 +3262,13 @@ msgid "Are you sure you want to remove this share?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຈະລົບລາຍການນີ້?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #, fuzzy
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #, fuzzy
 msgid "Are you sure you want to suspend all holds?"
 msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງການຈະຍົກເລີກການຈ່ອງນີ້?"
@@ -3271,7 +3278,7 @@ msgstr "ທ່ານແນ່ໃຈບໍ່ທີ່ທ່ານຕ້ອງກ
 msgid "Arrived"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "Article requests "
 msgstr ""
@@ -3359,7 +3366,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:252
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:176
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:786
 #, c-format
 msgid "Author"
 msgstr "ນັກປະພັນ"
@@ -3509,15 +3516,15 @@ msgstr "ກັບຄືນຫາລາຍການຜົນຂອງການຄ
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:125
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:182
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:412
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:415
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:464
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "Barcode"
 msgstr "ບາໂຄດ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:526
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:529
 #, c-format
 msgid "Barcode:"
 msgstr ""
@@ -3645,15 +3652,15 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:184
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:416
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:225
 #, c-format
 msgid "Call no."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:531
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:534
 #, fuzzy, c-format
 msgid "Call no.:"
 msgstr "ລຳດັບການໂທ."
@@ -3712,9 +3719,9 @@ msgstr "ໝາຍເລກໂທລະສັບ"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:722
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:741
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:861
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:864
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:171
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:296
@@ -3747,7 +3754,7 @@ msgstr "ຍົກເລີກການຈັດແຈງໝວດໝູ່ຂອ
 msgid "Cancel enrollment "
 msgstr "ບໍ່ສາມາດທີ່ຈະເພີ່ມອີກ 1 ຫລື ຫລາຍກວ່າ 1 ແທັກ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:860
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:863
 #, fuzzy, c-format
 msgid "Cancel:"
 msgstr "ຍົກເລີກ"
@@ -3836,7 +3843,7 @@ msgstr "ປ່ຽນລະຫັດຂອງຂ້ອຍ"
 msgid "Change your password "
 msgstr "ປ່ຽນລະຫັດຜ່ານຂອງເຈົ້າ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:788
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:791
 #, c-format
 msgid "Chapters"
 msgstr ""
@@ -3920,7 +3927,7 @@ msgstr "ຢື່ມອອກໃຫ້ %s "
 msgid "Checkouts: "
 msgstr "ບັນດາລາຍການຕ່າງໆທີ່ຢືມອອກ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:30
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:31
 #, c-format
 msgid "Citation"
 msgstr ""
@@ -3982,8 +3989,8 @@ msgstr ""
 msgid "Clear date"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:758
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:720
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:761
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr ""
@@ -4047,7 +4054,7 @@ msgstr "ກົດ ເພື່ອເປີດໃນຫນ້າຕ່າງໃ�
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:214
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:487
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 msgid "Click to view in Google Books"
 msgstr "ກົດ ເພື່ອສະແດງງຜົນໃນ Google Books"
 
@@ -4343,7 +4350,7 @@ msgid ""
 msgstr ""
 "ສ້າງ, ສຳລັບສະມາຊິກ, ໃນລະດັບລາຍການຂໍຈ່ອງຂອງລາຍການໃດໝຶ່ງສະເພາະທີ່ໄດ້ບັນທຶກຂໍມູນໄວ້ໃນ ໂຄຫາແລ້ວ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:392
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:395
 #, c-format
 msgid "Credits"
 msgstr "ບັດສິນເຊື່ອ"
@@ -4398,7 +4405,7 @@ msgstr "ດີວີດີ ວີດີໂອ / ແຜ່ນວີດີໂອ"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:74
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:786
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:789
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:849
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:101
@@ -4426,7 +4433,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:255
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:536
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:539
 #, c-format
 msgid "Date due:"
 msgstr ""
@@ -4691,7 +4698,7 @@ msgstr ""
 msgid "Download"
 msgstr "ດາວໂລດ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:350
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr ""
@@ -4718,8 +4725,8 @@ msgid "Dublin Core"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:177
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:411
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:463
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:466
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:226
 #, c-format
 msgid "Due"
@@ -4754,7 +4761,7 @@ msgstr "ຜິດພາດ: ບໍ່ໄດ້ຮັບໜາຍເລກຂອ�
 msgid "Edit"
 msgstr "ແກ້ໄຂ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:328
 #, c-format
 msgid "Edit / Create note"
 msgstr ""
@@ -5033,13 +5040,13 @@ msgstr "ເລີືອກສະເນົາລາຍການໃດໝຶ່ງ
 msgid "Expiration date:"
 msgstr "ສະບັບດັດແກ້:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:635
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, c-format
 msgid "Expiration:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
 #, c-format
 msgid "Expires on"
 msgstr ""
@@ -5116,7 +5123,7 @@ msgid "Fine amount"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
 #, c-format
 msgid "Fines"
@@ -5131,14 +5138,14 @@ msgid "Fines (%s)"
 msgstr "ຄ່າປັບໃຫມ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:66
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:364
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:378
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:381
 #, fuzzy, c-format
 msgid "Fines and charges"
 msgstr "ຄ່າປັບໃຫມ ແລະ ຄ່າທຳນຽມ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:308
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:560
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:563
 #, fuzzy, c-format
 msgid "Fines:"
 msgstr "ຄ່າປັບໃຫມ"
@@ -5481,7 +5488,7 @@ msgstr ""
 msgid "Highlight"
 msgstr "ຫມາຍໄວ້"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:624
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
 #, fuzzy, c-format
 msgid "Hold date:"
 msgstr "ວັນທີ່ຈ່ອງ"
@@ -5532,7 +5539,7 @@ msgstr ""
 msgid "Holdings:"
 msgstr "ສິ່ງທີ່ຈ່ອງ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
 #, c-format
 msgid "Holds "
 msgstr "ຈ່ອງ "
@@ -5923,7 +5930,7 @@ msgstr "%s%sໃນ %s"
 msgid "Invalid shelf number."
 msgstr "ໝາຍເລກໂທລະສັບ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:788
 #, fuzzy, c-format
 msgid "Issue"
 msgstr "ສະບັບ #"
@@ -5995,7 +6002,7 @@ msgstr "ທີ່ຈ່ອງ"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:460
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:463
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1182
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #, c-format
@@ -6092,8 +6099,8 @@ msgstr "ອັກສອນຫຍໍ້ເພື່ອຄົ້ນຫາ"
 
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:22
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:24
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:40
 #, c-format
 msgid "Koha"
 msgstr "ໂຄຫາ"
@@ -6352,11 +6359,11 @@ msgstr "%sກຳລັງລໍຄອຍທີ່ %s "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Loading..."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:356
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:359
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "%sກຳລັງລໍຄອຍທີ່ %s "
@@ -6648,7 +6655,7 @@ msgstr "ສິ່ງທີ່ຂາດຫາຍ: %s "
 msgid "Mo"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
 #, c-format
 msgid "Modify"
 msgstr "ປັບປ່ຽນ"
@@ -6727,7 +6734,7 @@ msgstr ""
 msgid "Never"
 msgstr "ບໍ່ເຄີຍ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:640
 #, fuzzy, c-format
 msgid "Never expires "
 msgstr "%s%s%sບໍ່ມີວັນໜົດອາຍຸ%s "
@@ -6755,7 +6762,7 @@ msgstr ""
 msgid "New comment on %s %s, %s%s"
 msgstr "ຄຳຄິດເຫັນໃຫມ່ຈາກ %s %s, %s%s"
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:71
+#: opac-tmpl/bootstrap/en/includes/masthead.inc:72
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:167
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:507
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:660
@@ -6872,9 +6879,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:208
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:225
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:481
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:489
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:484
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:501
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:990
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:234
@@ -7174,7 +7181,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:151
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:789
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:112
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:36
@@ -7208,7 +7215,7 @@ msgid "Nothing"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7424,12 +7431,12 @@ msgstr ""
 msgid "Overdue (%s)"
 msgstr "ກາຍກຳນົດ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:454
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
 #, c-format
 msgid "Overdues "
 msgstr "ກາຍກຳນົດ "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:790
 #, c-format
 msgid "Pages"
 msgstr ""
@@ -7547,18 +7554,18 @@ msgstr "%s ໂທລະສັບ:"
 msgid "Physical details:"
 msgstr "ລາຍລະອຽດກ່ຽວກັບຮ່າງກາຍ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:589
 #, fuzzy, c-format
 msgid "Pick up location"
 msgstr "ເລືອກທີ່ຕັ້ງ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:646
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
 #, fuzzy, c-format
 msgid "Pick up location:"
 msgstr "ເລືອກທີ່ຕັ້ງ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:791
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:794
 #, fuzzy, c-format
 msgid "Pickup library"
 msgstr "ເລືອກທີ່ຕັ້ງ"
@@ -7609,8 +7616,8 @@ msgstr "ທີ່ຈ່ອງ"
 msgid "Place request"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:781
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
 #, c-format
 msgid "Placed on"
 msgstr ""
@@ -7945,12 +7952,12 @@ msgstr "ປີ້ນ"
 msgid "Print list"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:591
 #, c-format
 msgid "Priority"
 msgstr "ລຳດັບຄວາມສຳຄັນ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:651
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:654
 #, c-format
 msgid "Priority:"
 msgstr ""
@@ -8161,7 +8168,7 @@ msgstr "ຮັບເອົາການບັນທຶກ"
 msgid "Record not found"
 msgstr "ບໍ່ພົບທະບຽນທີ່ຄົ້ນຫາ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #, fuzzy, c-format
 msgid "Record title"
 msgstr "ຊື່ເລື່ອງລວມ"
@@ -8213,7 +8220,7 @@ msgstr "ງານພິມປົກກະຕິ"
 msgid "Related Term"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:414
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:417
 #, c-format
 msgid "Relative"
 msgstr ""
@@ -8291,16 +8298,16 @@ msgstr "ລະຫັດຂອງງານ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:186
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:283
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:468
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:549
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
 #, c-format
 msgid "Renew"
 msgstr "ຢື່ມຕໍ່"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Renew all"
 msgstr "ຢື່ມຕໍ່ທັງຫມົດ"
 
@@ -8313,8 +8320,8 @@ msgid "Renew item"
 msgstr "ລາຍການທີ່ຈະຢື່ມຕໍ່"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Renew selected"
 msgstr "ຢື່ມຕໍ່ລາຍການທີ່ເລືອກໄວ້"
 
@@ -8431,17 +8438,17 @@ msgstr "ຜົນຂອງການຄົ້ນຫາ %s ເຖິງ %s ຂອ�
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s ຄົ້ນຫາ %sເພື່ອ '%s'%s%s&nbsp;ໃນຂອບເຂດຈຳກັດ:&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:696
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:699
 #, fuzzy, c-format
 msgid "Resume"
 msgstr "ຜົນຂອງການຄົ້ນຫາ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:765
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:768
 #, c-format
 msgid "Resume all suspended holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:707
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:710
 #, fuzzy, c-format
 msgid "Resume your hold on "
 msgstr "ທີ່ຈ່ອງ"
@@ -8769,7 +8776,7 @@ msgstr "%s%sໃນ %s"
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:355
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:223
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:496
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:499
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
@@ -9125,7 +9132,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -9298,8 +9305,8 @@ msgstr "ສະຖິຕິ"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:590
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:790
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:793
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:850
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
 #, c-format
@@ -9307,7 +9314,7 @@ msgid "Status"
 msgstr "ສະຖານະ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:659
 #, c-format
 msgid "Status:"
 msgstr ""
@@ -9404,13 +9411,13 @@ msgstr "ສົ່ງຂໍ້ມູນ ແລະ ປິດຫນ້າຕ່າ�
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:156
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #, fuzzy
 msgid "Submit changes"
 msgstr "ບັນທຶກການປ່ຽນແປງຕ່າງໆ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:324
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #, fuzzy, c-format
 msgid "Submit note"
@@ -9497,8 +9504,8 @@ msgstr "ການສະມັກເປັນສະມາຊິກ : "
 msgid "Subscriptions ( %s )"
 msgstr "ການສະມັກສະມາຊິກ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:32
-#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:39
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:33
+#: opac-tmpl/bootstrap/en/modules/opac-idref.tt:41
 #, c-format
 msgid "Sudoc"
 msgstr ""
@@ -9556,26 +9563,26 @@ msgstr "%s ນາມສະກຸນ:"
 msgid "Surveys"
 msgstr "ແບບສຳຫລວດ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:592
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:700
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:718
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:703
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:721
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:724
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:732
 #, c-format
 msgid "Suspend"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:752
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:755
 #, c-format
 msgid "Suspend all holds"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
 #, c-format
 msgid "Suspend until:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:709
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:712
 #, c-format
 msgid "Suspend your hold on "
 msgstr ""
@@ -10196,10 +10203,10 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:251
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:583
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:413
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:462
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:53
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:224
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
@@ -10550,7 +10557,7 @@ msgstr "ສະແດງລາຍລະອຽດກ່ຽວກັບຊື່ເ
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
 #, fuzzy
 msgid "View on Amazon.com"
 msgstr "ສະແດງທີ່ Amazon.com"
@@ -10566,7 +10573,7 @@ msgstr "ສະແດງປະຫວັດການຄົ້ນຫາຂອງທ
 msgid "Vol info"
 msgstr "ຂໍ້ມູນກ່ຽວກັບລະດັບ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
 #, c-format
 msgid "Volume"
 msgstr ""
@@ -10823,8 +10830,8 @@ msgstr ""
 msgid "You currently have nothing checked out."
 msgstr "ປະຈຸບັນທ່ານຍັງບໍ່ທັນໄດ້ຢື່ມຫຍັງອອກ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:369
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:383
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:372
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:386
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr "ຂະນະນີ້ທ່ານຍັງບໍ່ທັນໄດ້ຊຳລະຄ້່າປັບໃຫມ ແລະ ຄ່າລົງທະບຽນ ເຊິ່ງເປັນຈະນວນ:"
@@ -10888,7 +10895,7 @@ msgstr ""
 msgid "You followed an outdated link e.g. from a search engine or a bookmark."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:397
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:400
 #, c-format
 msgid "You have a credit of:"
 msgstr "ທ່ານມີບັນຊີຂອງ:"
@@ -10898,7 +10905,7 @@ msgstr "ທ່ານມີບັນຊີຂອງ:"
 msgid "You have already requested this title."
 msgstr "ທ່ານໄດ້ທຳການຮ້ອງຂໍກ່ຽວກັບຊື່ເລື່ອງນີ້ແລ້ວ."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:873
 #, fuzzy, c-format
 msgid "You have no article requests currently."
 msgstr "ທ່ານໄດ້ທຳການຮ້ອງຂໍກ່ຽວກັບຊື່ເລື່ອງນີ້ແລ້ວ."
@@ -10915,7 +10922,7 @@ msgid ""
 "fields and resubmit."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:350
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:353
 #, c-format
 msgid "You have nothing checked out"
 msgstr "ທ່ານບໍ່ມີຫຍັງທີ່ຈະຢື່ມອອກ"
@@ -11231,18 +11238,18 @@ msgid "Your messaging settings"
 msgstr "ການຕັ້ງຄ່າກ່ຽວກັບຂໍ້ຄວາມຂອງທ່ານ"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "ການເຂົ້າຫາບັນຊີລາຍຊື່ບໍ່ປະສົບຜົນສຳເລັດ ເນື່ອງຈາກຖືກປິດໂດຍຫໍສະຫມຸດ."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:893
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:896
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "ຜິດພາດ: ບໍ່ໄດ້ຮັບໜາຍເລກຂອງບັນນານຸກົມ."
@@ -11717,7 +11724,7 @@ msgstr "koha opac %s"
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:107
 #, fuzzy
-msgid "koha:biblionumber:[% biblionumber | html %]"
+msgid "koha:biblionumber:[% biblio.biblionumber %]"
 msgstr "koha:biblionumber:[% biblionumber %]"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
@@ -11912,7 +11919,7 @@ msgstr "ສະແດງການຢື່ມ"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:677
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:680
 #, fuzzy, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -12048,7 +12055,7 @@ msgstr "ເພື່ອທີ່ຈະລົງຄຳຄິດຄຳເຫັນ
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:756
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:759
 #, fuzzy, c-format
 msgid "until "
 msgstr "ເຍົາວະຊົນ; "
@@ -12236,7 +12243,7 @@ msgstr "ແທັກ/ປ້າຍຂອງຂ້ອງ"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:305
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:708
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:141
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:268
 #, c-format

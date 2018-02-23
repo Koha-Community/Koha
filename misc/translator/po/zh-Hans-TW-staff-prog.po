@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zh-Hans-TW-i-staff-t-prog-v-3004000\n"
-"POT-Creation-Date: 2017-12-18 11:54-0300\n"
+"POT-Creation-Date: 2018-02-19 02:53-0300\n"
 "PO-Revision-Date: 2017-12-26 07:22+0000\n"
 "Last-Translator: Frank <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -639,7 +639,7 @@ msgstr ""
 #. %27$s:  resultsloo.item('size') 
 #. %28$s:  END 
 #. %29$s:  IF ( resultsloo.timestamp ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:156
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:158
 #, c-format
 msgid ""
 "%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdition: %s%s "
@@ -1114,6 +1114,16 @@ msgstr "%s %s ( %s ) 已經排定自動續借，且不能在 %s 之前續借。"
 #. %1$s:  item.biblio.title 
 #. %2$s:  item.biblioitem.subtitle 
 #. %3$s:  item.barcode 
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:95
+#, fuzzy, c-format
+msgid ""
+"%s %s ( %s ) has been scheduled for automatic renewal and cannot be renewed "
+"because the patron's account is expired"
+msgstr "%s %s ( %s ) 已經排定自動續借且不能在 %s 之前續借。"
+
+#. %1$s:  item.biblio.title 
+#. %2$s:  item.biblioitem.subtitle 
+#. %3$s:  item.barcode 
 #. %4$s:  soonestrenewdate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:71
 #, c-format
@@ -1125,7 +1135,7 @@ msgstr "%s %s ( %s ) 已經排定自動續借且不能在 %s 之前續借。"
 #. %1$s:  item.biblio.title 
 #. %2$s:  item.biblioitem.subtitle 
 #. %3$s:  item.barcode 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:95
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:107
 #, c-format
 msgid "%s %s ( %s ) has been scheduled for automatic renewal. "
 msgstr "%s %s ( %s ) 已經排定自動續借。"
@@ -1147,7 +1157,7 @@ msgstr "%s %s (%s 取消) %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:257
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:258
 #, c-format
 msgid "%s %s (%s) %s No matching rule in effect %s%s "
 msgstr "%s %s (%s) %s 沒有對映規則 %s%s "
@@ -1705,7 +1715,7 @@ msgstr "%s %s 館員介面 %s 收條 %s 全部 %s OPAC (%s) %s "
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.itemlostcount ) 
 #. %3$s:  resultsloo.itemlostcount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:194
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:196
 #, c-format
 msgid "%s %s Lost (%s)"
 msgstr "%s %s 遺失 (%s)"
@@ -1733,7 +1743,7 @@ msgstr "%s %s 不 %s"
 #. %2$s:  IF group_type.categorytype == 'properties' 
 #. %3$s:  ELSIF group_type.categorytype == 'searchdomain' 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:309
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:313
 #, c-format
 msgid "%s %s No properties defined. %s No search domain defined. %s "
 msgstr "%s %s 未指定屬性。%s 未指定搜尋的網域。%s "
@@ -1743,7 +1753,7 @@ msgstr "%s %s 未指定屬性。%s 未指定搜尋的網域。%s "
 #. %3$s:  END 
 #. %4$s: # display the search results 
 #. %5$s:  IF ( total ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:123
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:125
 #, c-format
 msgid "%s %s No results found %s %s %s "
 msgstr "%s %s 未找到結果 %s %s %s "
@@ -1760,7 +1770,7 @@ msgstr "%s %s 沒有設定 %s "
 #. %2$s:  IF ( resultsloo.notforloancount ) 
 #. %3$s:  resultsloo.notforloancount 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:196
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:198
 #, c-format
 msgid "%s %s Not for loan (%s)%s "
 msgstr "%s %s 不外借 (%s)%s "
@@ -1777,7 +1787,7 @@ msgstr "%s %s 可被預約 %s %s "
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.orderedcount ) 
 #. %3$s:  resultsloo.orderedcount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:195
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:197
 #, c-format
 msgid "%s %s On order (%s)"
 msgstr "%s %s 訂購中 (%s)"
@@ -2000,7 +2010,7 @@ msgstr "%s %s 等待於 %s %s 直到 %s %s "
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.withdrawncount ) 
 #. %3$s:  resultsloo.withdrawncount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:193
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:195
 #, c-format
 msgid "%s %s Withdrawn (%s),"
 msgstr "%s %s 註銷 (%s)，"
@@ -2116,8 +2126,8 @@ msgstr "%s %s 給 "
 msgid "%s %s has %s hold(s) waiting for pickup."
 msgstr "%s %s 有 %s 本預約書到館等待提取。"
 
-#. %1$s:  borrower.firstname 
-#. %2$s:  borrower.surname 
+#. %1$s:  borrower.firstname |html 
+#. %2$s:  borrower.surname |html 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:171
 #, c-format
 msgid "%s %s has no outstanding fines."
@@ -2711,18 +2721,18 @@ msgstr "%s &nbsp; %s 說明："
 #. %7$s:  category.categorycode 
 #. %8$s:  ELSIF op == 'add_form'  
 #. %9$s:  IF library 
-#. %10$s:  ELSE 
-#. %11$s:  library.branchcode 
+#. %10$s:  library.branchcode | html 
+#. %11$s:  ELSE 
 #. %12$s:  END 
 #. %13$s:  ELSIF op == 'delete_confirm' 
-#. %14$s:  library.branchcode 
+#. %14$s:  library.branchcode | html 
 #. %15$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:64
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s &rsaquo; %sEdit group %s%sNew group%s %s &rsaquo; Confirm deletion of "
-"group %s %s &rsaquo; %sModify library%sNew library %s%s %s &rsaquo; Confirm "
-"deletion of library '%s' %s "
+"%s &rsaquo; %s Edit group %s %s New group %s %s &rsaquo; Confirm deletion of "
+"group %s %s &rsaquo; %s Modify library %s %s New library %s %s &rsaquo; "
+"Confirm deletion of library '%s' %s "
 msgstr ""
 "%s &rsaquo; %s編輯羣組 %s%s新增羣組%s %s &rsaquo; 確認刪除羣組 %s %s "
 "&rsaquo; %s修改圖書館%s新增圖書館 %s%s %s &rsaquo; 確認刪除圖書館 '%s' %s "
@@ -3089,7 +3099,7 @@ msgstr "%s 新增紀錄"
 #. %4$s:  nomatch_action 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:285
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:286
 #, c-format
 msgid ""
 "%s Add incoming record %s Ignore incoming record (its items may still be "
@@ -3109,7 +3119,7 @@ msgid "%s Add items only if no matching bib was found"
 msgstr "%s 僅在找不到對映書目時，新增館藏"
 
 #. %1$s:  IF ( record_type != 'auth' ) 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:332
 #, c-format
 msgid "%s Add new bibliographic records into this framework: "
 msgstr "%s 新增書目記錄至此框架："
@@ -3187,7 +3197,7 @@ msgstr "%s 總是新增館藏"
 #. %6$s:  item_action 
 #. %7$s:  END 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:302
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:303
 #, c-format
 msgid ""
 "%s Always add items %s Add items only if matching bib was found %s Add items "
@@ -3264,7 +3274,7 @@ msgstr "%s 類型 %s 使用中。無法刪除！%s 確認刪除類型 %s%s "
 
 #. %1$s:  IF ( resultsloo.onloancount ) 
 #. %2$s:  resultsloo.onloancount 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:192
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:194
 #, c-format
 msgid "%s Checked out (%s),"
 msgstr "%s 借出 (%s)，"
@@ -3323,7 +3333,7 @@ msgstr "%s 縣市："
 #. %8$s:  batch_lis.import_status 
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:556
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:226
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:227
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #, c-format
 msgid ""
@@ -3343,7 +3353,7 @@ msgstr "%s 關閉 %s 逾期 %s "
 #. %2$s:  invoice.closedate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:141
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:145
 #, c-format
 msgid "%s Closed on %s %s Open %s "
 msgstr "%s 關閉在 %s %s 開啟 %s "
@@ -3484,7 +3494,7 @@ msgid "%s Enabled "
 msgstr "%s 啟用 "
 
 #. %1$s:  IF ( error ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:219
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:221
 #, c-format
 msgid "%s Error: "
 msgstr "%s 錯誤："
@@ -4211,7 +4221,7 @@ msgstr "%s 以收到紀錄取代既有紀錄"
 #. %5$s:  overlay_action 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:268
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:269
 #, c-format
 msgid ""
 "%s Replace existing record with incoming record %s Add incoming record %s "
@@ -5393,13 +5403,13 @@ msgid "%s result(s) found %sfor "
 msgstr "%s 結果找到 %s "
 
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:133
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
 #, c-format
 msgid "%s result(s) found in catalog, "
 msgstr "%s 結果於目錄內找到，"
 
 #. %1$s:  breeding_count 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:137
 #, c-format
 msgid "%s result(s) found in reservoir"
 msgstr "在儲存庫裡找到 %s 筆結果"
@@ -5742,7 +5752,7 @@ msgstr "%s%s%s(檔案內無電子郵件信箱)%s"
 #. %2$s:  comments 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:223
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:224
 #, c-format
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(無)%s"
@@ -6187,7 +6197,7 @@ msgstr ""
 #. %1$s:  IF ( record_type == 'auth' ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:224
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:225
 #, c-format
 msgid "%sAuthority records%sBibliographic records%s"
 msgstr "%s權威紀錄%s書目紀錄%s"
@@ -6285,7 +6295,7 @@ msgstr "%s編輯課程%s建立課程%s"
 #. %2$s:  category.categorycode 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:325
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:329
 #, c-format
 msgid "%sEdit group %s%sAdd group%s"
 msgstr "%s編輯群組 %s%s新增群組%s"
@@ -6720,7 +6730,7 @@ msgstr "%s剖析上傳檔案 "
 #. %1$s:  IF group_type.categorytype == 'properties' 
 #. %2$s:  ELSIF group_type.categorytype == 'searchdomain' 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:285
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:289
 #, c-format
 msgid "%sProperties%sSearch domain%s"
 msgstr "%s屬性%s搜尋範圍%s"
@@ -7223,88 +7233,88 @@ msgstr "&lt;a href=\"[856u]\"&gt;開啟網站&lt;/a&gt;"
 msgid "&nbsp; Sub report:"
 msgstr "&nbsp; 次報表："
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:5
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:6
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Author as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 著者敘述"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:32
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:34
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:33
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:35
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Call number"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 索書號"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:7
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:8
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Conference name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 會議名稱"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:9
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:10
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Conference name as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 會議名稱敘述"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:6
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:7
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 會議名稱"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:8
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:9
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Corporate name as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 會議名稱敘述"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:29
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:30
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISBN"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:30
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:31
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:3
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:4
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Keyword as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 鍵詞當成片語"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:10
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:11
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Personal name"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 個人姓名"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:11
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:12
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Personal name as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 個人姓名敘述"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:14
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:15
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Series title"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 集叢題名"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:18
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:19
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and broader terms"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 主題與廣義詞"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:19
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:20
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 主題與狹義詞"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:20
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:21
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 主題與相關詞"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:16
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:17
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 主題敘述"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:13
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:14
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Title as phrase"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; 題名敘述"
@@ -7896,7 +7906,7 @@ msgstr "&rsaquo; 採購單群組"
 #. %1$s:  import_batch_id 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:147
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:148
 #, c-format
 msgid "&rsaquo; Batch %s %s &rsaquo; Manage staged MARC records %s "
 msgstr "&rsaquo; 批次 %s %s &rsaquo; 管理待匯出的 MARC 紀錄 %s "
@@ -8249,7 +8259,7 @@ msgstr "&rsaquo; 封面 "
 msgid "&rsaquo; Images for "
 msgstr "&rsaquo; 封面 "
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:89
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:93
 #, c-format
 msgid "&rsaquo; Invoices"
 msgstr "&rsaquo; 收據"
@@ -8434,8 +8444,8 @@ msgstr "&rsaquo; 讀者清單"
 msgid "&rsaquo; Patrons with no checkouts"
 msgstr "&rsaquo; 無借出的讀者"
 
-#. %1$s:  borrower.firstname 
-#. %2$s:  borrower.surname 
+#. %1$s:  borrower.firstname |html 
+#. %2$s:  borrower.surname |html 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:51
 #, c-format
 msgid "&rsaquo; Pay fines for %s %s"
@@ -8625,13 +8635,6 @@ msgstr "&rsaquo; 結果%s 上傳離線流通檔案%s"
 #, c-format
 msgid "&rsaquo; Results%s&rsaquo; Catalog statistics%s"
 msgstr "&rsaquo; 結果%s&rsaquo; 目錄統計%s"
-
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:10
-#, c-format
-msgid "&rsaquo; Results%s&rsaquo; Checkouts by patron category%s"
-msgstr "&rsaquo; 結果%s&rsaquo; 依讀者類型分類的借出%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8883,7 +8886,7 @@ msgstr "&rsaquo; 供應商價格未定%s%s價格未定%s"
 msgid "&rsaquo; Update patron records"
 msgstr "&rsaquo; 更新讀者記錄"
 
-#. %1$s:  name 
+#. %1$s:  name |html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  ELSE 
@@ -9352,7 +9355,7 @@ msgstr "(items.itemcallnumber) "
 
 #. For the first occurrence,
 #. %1$s:  resultsloo.timestamp 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:170
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:172
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:580
 #, c-format
 msgid "(modified on %s)"
@@ -9428,7 +9431,7 @@ msgstr "(以 * 做為糢糊搜尋) "
 msgid ") %s No basket group %s "
 msgstr ") %s 無採購單群組 %s "
 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:118
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:130
 #, c-format
 msgid ") is currently restricted."
 msgstr ") 是現在的限制。"
@@ -9439,7 +9442,7 @@ msgid ") is not checked out to a patron."
 msgstr ") 是未借出給讀者。"
 
 #. %1$s:  date_due | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:139
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:151
 #, c-format
 msgid ") now due on %s "
 msgstr ") 現在的到期日 %s "
@@ -9452,7 +9455,7 @@ msgstr ") 在 "
 
 #. %1$s:  borrower.firstname 
 #. %2$s:  borrower.surname 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:137
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:149
 #, c-format
 msgid ") renewed for %s %s ( "
 msgstr ") %s %s 的續借 ( "
@@ -9797,8 +9800,8 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:191
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:214
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:94
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:129
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:136
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:133
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:140
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
@@ -10140,7 +10143,7 @@ msgstr "帳號摘要：%s %s (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:81
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:123
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
 #, c-format
 msgid "Account type"
 msgstr "帳戶類型"
@@ -10179,7 +10182,7 @@ msgstr "採訪與/或建議管理"
 msgid "Acquisition date"
 msgstr "採訪日期"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:51
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:52
 #, c-format
 msgid "Acquisition date (yyyy-mm-dd)"
 msgstr "採訪日期(yyyy-mm-dd)"
@@ -10233,7 +10236,7 @@ msgstr "採訪表單"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:172
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:64
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:26
@@ -10251,7 +10254,7 @@ msgstr "採訪表單"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/edi_ean.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/edimsg.tt:10
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:89
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:58
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:180
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:33
@@ -10290,8 +10293,8 @@ msgstr "採訪統計 "
 msgid "Action"
 msgstr "動作"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:265
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:268
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:266
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:269
 #, c-format
 msgid "Action if matching record found:"
 msgstr "若找到對映的紀錄，則："
@@ -10301,8 +10304,8 @@ msgstr "若找到對映的紀錄，則："
 msgid "Action if matching record found: "
 msgstr "若找到對映的紀錄，則："
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:282
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:285
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:286
 #, c-format
 msgid "Action if no match found:"
 msgstr "若找不到對映書目時，則："
@@ -10333,7 +10336,7 @@ msgstr "若找不到對映書目時，則："
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:324
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:366
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:230
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:293
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:297
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:157
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:352
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:211
@@ -10376,15 +10379,15 @@ msgstr "動作"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:428
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:223
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:127
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:202
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:249
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:204
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:251
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:205
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:94
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:90
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:248
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:376
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:94
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:151
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:155
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:61
 #, c-format
 msgid "Actions "
@@ -10435,12 +10438,12 @@ msgstr "使用中："
 msgid "Actual cost"
 msgstr "實際成本"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:145
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:148
 #, c-format
 msgid "Actual cost tax exc."
 msgstr "不含稅的價格。"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:146
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:149
 #, c-format
 msgid "Actual cost tax inc."
 msgstr "含稅的價格。"
@@ -10552,7 +10555,7 @@ msgstr "新增寄送 "
 msgid "Add a new field"
 msgstr "新增欄位"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:316
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:320
 #, c-format
 msgid "Add a new group"
 msgstr "新增群組"
@@ -10621,7 +10624,7 @@ msgstr "新增另一個欄位"
 msgid "Add basket group for "
 msgstr "新增採購單群組 "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:256
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:258
 #, c-format
 msgid "Add biblio"
 msgstr "新增書目"
@@ -11014,7 +11017,7 @@ msgstr "新增、編輯與刪除讀者虛擬書架及其內容"
 msgid "Add, modify and view patron information"
 msgstr "新增、修改與檢視讀者資訊"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:209
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:211
 #, c-format
 msgid "Add/Edit items"
 msgstr "新增/編輯館藏"
@@ -11509,8 +11512,8 @@ msgstr "Aliki Pavlidou"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:54
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:66
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:14
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:288
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:351
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:292
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:355
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:186
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:69
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:41
@@ -11760,6 +11763,16 @@ msgstr "已經收到"
 msgid "Already validated discharges"
 msgstr "已經離館除籍了"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:264
+#, c-format
+msgid "Alt-C"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:268
+#, c-format
+msgid "Alt-P"
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-de.inc:2
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-fr.inc:2
 #: intranet-tmpl/prog/en/includes/member-alt-address-style-us.inc:2
@@ -11946,7 +11959,7 @@ msgstr "Amit Gupta"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:84
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:40
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:126
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:41
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:71
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:100
@@ -11964,7 +11977,7 @@ msgstr "總計必須是數字，或空白"
 #: intranet-tmpl/prog/en/modules/members/pay.tt:85
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:41
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:127
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:181
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:180
 #, c-format
 msgid "Amount outstanding"
 msgstr "待付總計"
@@ -12205,11 +12218,6 @@ msgstr "Antoine Farnault"
 msgid "Any"
 msgstr "任何"
 
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:62
-#, c-format
-msgid "Any Category code"
-msgstr "任何範圍代碼"
-
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:184
 #, c-format
 msgid "Any audience"
@@ -12312,20 +12320,15 @@ msgid "Appear in position: "
 msgstr "顯示的位置："
 
 #. %1$s:  num_with_matches 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:205
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:206
 #, c-format
 msgid "Applied different matching rule. Number of records matched now %s "
 msgstr "使用其他對映規則。符合的紀錄數為 %s "
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:318
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:319
 msgid "Apply different matching rules"
 msgstr "適用其他對映規則"
-
-#. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:121
-msgid "Apply directly"
-msgstr "直接應用"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:253
@@ -12450,7 +12453,7 @@ msgid "Are you sure you want to delete %s %s?"
 msgstr "確定刪除 %s %s 嗎？"
 
 #. %1$s:  library.branchname |html 
-#. %2$s:  library.branchcode 
+#. %2$s:  library.branchcode | html 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:207
 #, c-format
 msgid "Are you sure you want to delete %s (%s)?"
@@ -12509,7 +12512,7 @@ msgstr "確定刪除 club 模板 %s嗎？將刪除使用此模板的club以及�
 
 #. %1$s:  category.codedescription |html 
 #. %2$s:  category.categorycode 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:385
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:389
 #, c-format
 msgid "Are you sure you want to delete the group '%s' (%s)?"
 msgstr "確定刪除 '%s' (%s) 群組嗎？"
@@ -12623,6 +12626,14 @@ msgstr "確定刪除此檔案嗎？"
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:4
 msgid "Are you sure you want to delete this image?"
 msgstr "確定刪除此封面嗎？"
+
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:11
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:10
+#, fuzzy
+msgid "Are you sure you want to delete this invoice?"
+msgstr "確定刪除此館藏嗎？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:16
@@ -13069,7 +13080,7 @@ msgstr "Authid"
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:9
 #: intranet-tmpl/prog/en/includes/resort_form.inc:18
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:4
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:5
 #: intranet-tmpl/prog/en/modules/serials/result.tt:33
 #: intranet-tmpl/prog/en/modules/labels/search.tt:29
 #: intranet-tmpl/prog/en/modules/labels/search.tt:30
@@ -13166,7 +13177,7 @@ msgstr "著者：%s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:216
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:344
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:154
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:337
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:341
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1112
 #, c-format
 msgid "Author:"
@@ -13186,7 +13197,7 @@ msgid "Author: "
 msgstr "著者："
 
 #. %1$s:  author |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:257
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:261
 #, c-format
 msgid "Author: %s"
 msgstr "著者：%s"
@@ -13447,6 +13458,12 @@ msgstr "自動續借"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
+#, fuzzy
+msgid "Automatic renewal failed, account expired"
+msgstr "自動續借失敗，讀者尚有未支付罰款"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/strings.inc:1
 msgid "Automatic renewal failed, patron has unpaid fines"
 msgstr "自動續借失敗，讀者尚有未支付罰款"
 
@@ -13572,7 +13589,7 @@ msgid ""
 msgstr "錯誤或遺漏寄件人地址；檢查分館的電子郵件或偏好 KohaAdminEmailAddress。"
 
 #: intranet-tmpl/prog/en/columns.def:69
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:22
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:23
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:79
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:253
 #: intranet-tmpl/prog/en/modules/labels/result.tt:103
@@ -14294,7 +14311,7 @@ msgstr "書目號碼："
 msgid "Biblios"
 msgstr "Biblios"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:228
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:230
 #, c-format
 msgid "Biblios in reservoir"
 msgstr "在儲存庫的書目"
@@ -14316,15 +14333,15 @@ msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ)，德國"
 msgid "Bill to: %s %s "
 msgstr "帳單至：%s %s "
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:111
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:178
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:315
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:115
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:319
 #, c-format
 msgid "Billing date"
 msgstr "帳單日期"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:88
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:186
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:91
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:190
 #, c-format
 msgid "Billing date:"
 msgstr "帳單日期："
@@ -14335,13 +14352,13 @@ msgstr "帳單日期："
 #. %4$s:  ELSE 
 #. %5$s:  billingdatefrom | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:235
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:239
 #, c-format
 msgid "Billing date: %s From %s To %s %s All since %s %s "
 msgstr "帳單日期：%s 從 %s 至 %s %s 所有從 %s %s "
 
 #. %1$s:  billingdateto | $KohaDates 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:245
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:249
 #, c-format
 msgid "Billing date: All until %s "
 msgstr "帳單日期：所有從 %s "
@@ -15192,7 +15209,7 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:251
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:327
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:199
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:378
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:382
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:102
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:127
@@ -15237,8 +15254,8 @@ msgstr "不能儲存此紀錄，因為以下欄位尚未填入資料："
 #: intranet-tmpl/prog/en/modules/members/pay.tt:167
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:52
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:155
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:224
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:202
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:231
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:121
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1036
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:72
@@ -15733,8 +15750,8 @@ msgstr "讀者證號碼："
 msgid "Card number: %s"
 msgstr "讀者證號碼：%s"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:207
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:254
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:209
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:256
 #, c-format
 msgid "Card preview"
 msgstr "卡片格式預覧"
@@ -15961,7 +15978,7 @@ msgstr "類別代碼祗能用下列字元：字母、數字、- 與 _。"
 msgid "Category code unknown."
 msgstr "類型代碼不明。"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:339
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:343
 #, c-format
 msgid "Category code:"
 msgstr "範圍代碼："
@@ -15969,7 +15986,7 @@ msgstr "範圍代碼："
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:70
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:75
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:273
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:335
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:339
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:37
 #, c-format
 msgid "Category code: "
@@ -15981,7 +15998,7 @@ msgid "Category name"
 msgstr "類型名稱"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:146
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:354
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:358
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:62
 #, c-format
 msgid "Category type: "
@@ -16117,25 +16134,25 @@ msgstr "變更使用者名稱與密碼 %s %s"
 msgid "Change vendor note"
 msgstr "改變供應商說明"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:211
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:212
 #, c-format
 msgid "Changed action if matching record found"
 msgstr "若無符合的紀錄則改變"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:214
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:215
 #, c-format
 msgid "Changed action if no match found"
 msgstr "若無符合則改變"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:217
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:218
 #, c-format
 msgid "Changed item processing option"
 msgstr "改變館藏處理選項"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:257
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:266
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:300
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:258
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:267
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:284
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:301
 #, c-format
 msgid "Changed. "
 msgstr "改變。"
@@ -16667,20 +16684,6 @@ msgstr "禁止借出因為該讀者逾期罰款超過標準。"
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "禁止借出因為該讀者已有逾期館藏。"
 
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:10
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:57
-#, c-format
-msgid "Checkouts by patron category"
-msgstr "依讀者類型排序的借出"
-
-#. %1$s:  IF ( mainloo.borrower_category ) 
-#. %2$s:  mainloo.borrower_category 
-#. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:20
-#, c-format
-msgid "Checkouts by patron category %s for category = %s%s"
-msgstr "借出依讀者類型 %s 類型 = %s%s"
-
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #, c-format
 msgid "Checkouts:"
@@ -17107,7 +17110,7 @@ msgstr "流通表單"
 msgid "Circulation: Overdues at %s"
 msgstr "流通：於 %s 逾期"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:474
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:473
 #, c-format
 msgid "Citation"
 msgstr "引用"
@@ -17304,7 +17307,7 @@ msgid "Clean patron records"
 msgstr "清除讀者紀錄"
 
 #. %1$s:  import_batch_id 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:176
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:177
 #, c-format
 msgid "Cleaned import batch #%s"
 msgstr "清除批次匯入#%s"
@@ -17652,18 +17655,18 @@ msgstr "複製流通與罰款規則失敗！"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:270
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:26
 #: intranet-tmpl/prog/en/modules/labels/result.tt:150
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:281
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:283
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:253
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1143
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:115
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:487
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:124
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:159
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:413
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:294
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:199
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:495
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:494
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:125
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:146
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:252
@@ -17716,7 +17719,7 @@ msgstr "關閉此視窗。"
 msgid "Close window"
 msgstr "關閉視窗"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:116
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:119
 #, c-format
 msgid "Close: "
 msgstr "關閉："
@@ -17740,7 +17743,7 @@ msgid "Closed on %s"
 msgstr "關閉於 %s"
 
 #. %1$s:  invoiceclosedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:111
 #, c-format
 msgid "Closed on %s."
 msgstr "關閉於 %s。"
@@ -17809,7 +17812,7 @@ msgstr "未註冊的俱樂部是"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:152
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:348
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:226
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:291
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:295
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:164
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:345
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:207
@@ -17852,7 +17855,7 @@ msgid "Collapsed"
 msgstr "已收摺"
 
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:147
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:213
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:220
 #, c-format
 msgid "Collect from patron: "
 msgstr "來自讀者的收集："
@@ -17999,7 +18002,7 @@ msgstr "欄必須由左至右填寫：若第一欄空白，其他欄會被忽略
 msgid "Columns settings"
 msgstr "設定欄"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:236
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:238
 #, c-format
 msgid "Coming from"
 msgstr "來自"
@@ -18075,7 +18078,7 @@ msgstr "待審核的評論"
 msgid "Comments pending approval"
 msgstr "核可待決的評論"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:223
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:224
 #, c-format
 msgid "Comments:"
 msgstr "評論："
@@ -18111,7 +18114,7 @@ msgstr "完整請求 "
 msgid "Complete view"
 msgstr "完整檢視"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:359
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:360
 #, c-format
 msgid "Completed import of records"
 msgstr "匯入紀錄完成"
@@ -18164,7 +18167,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:262
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:386
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:154
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:223
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:230
 #, c-format
 msgid "Confirm"
 msgstr "確認"
@@ -19158,27 +19161,27 @@ msgstr "額度："
 msgid "Creep:"
 msgstr "爬出 Creep："
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:264
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:272
 #, c-format
 msgid "Ctrl-D"
 msgstr "Ctrl-D"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:268
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:276
 #, c-format
 msgid "Ctrl-H"
 msgstr "Ctrl-H"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:272
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:280
 #, c-format
 msgid "Ctrl-S"
 msgstr "Ctrl-S"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:280
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:288
 #, c-format
 msgid "Ctrl-Shift-X"
 msgstr "Ctrl-Shift-X"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:276
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:284
 #, c-format
 msgid "Ctrl-X"
 msgstr "Ctrl-X"
@@ -19348,7 +19351,7 @@ msgid ""
 "effects: "
 msgstr "當前的預約政策。不同的政策有不同的影響："
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:39
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:40
 #, c-format
 msgid "Curriculum"
 msgstr "課程"
@@ -19550,7 +19553,7 @@ msgstr "資料庫："
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:149
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:143
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:234
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:236
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:262
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:405
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:87
@@ -19923,7 +19926,7 @@ msgstr "十二月"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:76
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:46
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:383
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:335
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:336
 #, c-format
 msgid "Default"
 msgstr "預設"
@@ -19957,7 +19960,7 @@ msgstr "預設字型"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:50
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:55
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:102
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:114
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:115
 #, c-format
 msgid "Default framework"
 msgstr "預設框架"
@@ -20261,8 +20264,8 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:436
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:439
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:481
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:273
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:304
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:276
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:308
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:169
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:228
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:393
@@ -20299,11 +20302,11 @@ msgstr "延遲是逾期後的天數，屆時才啟發逾期通知。"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:309
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:72
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:126
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:129
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:408
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:329
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:104
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:162
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:166
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:99
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:446
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:87
@@ -20433,12 +20436,12 @@ msgstr "刪除連絡"
 msgid "Delete course"
 msgstr "刪除課程"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:277
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:285
 #, c-format
 msgid "Delete current field"
 msgstr "刪除此分欄"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:281
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:289
 #, c-format
 msgid "Delete current subfield"
 msgstr "刪除此分欄"
@@ -20689,7 +20692,7 @@ msgstr "刪除嗎？"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:553
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:679
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:165
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:168
 #, c-format
 msgid "Deleted bibliographic record, can't find title"
 msgstr "刪除找不到題名的書目紀錄"
@@ -20846,7 +20849,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:287
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:292
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:296
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:165
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:317
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:346
@@ -20861,11 +20864,11 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:206
 #: intranet-tmpl/prog/en/modules/members/pay.tt:79
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:176
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:175
 #: intranet-tmpl/prog/en/modules/members/files.tt:47
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:62
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:233
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:391
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:85
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:38
@@ -20944,7 +20947,7 @@ msgstr "說明："
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:81
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:274
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:350
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:354
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:144
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:71
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:121
@@ -20998,7 +21001,7 @@ msgstr "目的紀錄"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:81
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:70
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:155
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:159
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:129
 #, c-format
 msgid "Details"
@@ -21092,13 +21095,13 @@ msgstr "您的意思是："
 msgid "Did you mean?"
 msgstr "您的意思是？"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:478
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:477
 #, c-format
 msgid "Diff"
 msgstr "差異"
 
 #. ABBR
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:478
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:477
 msgid "Differences between the original biblio and the imported"
 msgstr "原始書目與匯入書目的差異"
 
@@ -21284,7 +21287,7 @@ msgstr "不要新增重複的紀錄。從目錄內的既有紀錄新增訂閱。
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:214
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:229
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:245
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:246
 #, c-format
 msgid "Do not look for matching records"
 msgstr "不要檢視對映紀錄"
@@ -21821,7 +21824,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:439
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:480
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:272
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:303
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:307
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:113
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:168
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:227
@@ -21974,7 +21977,7 @@ msgstr "編輯採購單 %s"
 msgid "Edit basket group %s (%s) for "
 msgstr "編輯採購單群組 %s (%s) 給 "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:210
 #, c-format
 msgid "Edit biblio"
 msgstr "編輯書目"
@@ -22192,7 +22195,7 @@ msgstr "編輯搜尋結果"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:144
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:235
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:237
 #, c-format
 msgid "Edition"
 msgstr "版本"
@@ -22467,7 +22470,7 @@ msgstr "註冊費 "
 msgid "Enrolment period: "
 msgstr "註冊期間："
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:284
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:292
 #, c-format
 msgid "Enter"
 msgstr "輸入"
@@ -22556,7 +22559,7 @@ msgstr "鍵入館藏條碼："
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:661
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:677
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:154
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:166
 #, c-format
 msgid "Enter item barcode: "
 msgstr "鍵入館藏條碼："
@@ -23403,7 +23406,7 @@ msgstr "不能以此條碼 加入館藏 "
 msgid "Failed to add scheduled task"
 msgstr "無法排定工作"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:203
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:204
 #, c-format
 msgid "Failed to apply different matching rule"
 msgstr "不能使用不同的對映規則"
@@ -23721,7 +23724,7 @@ msgstr "檔案名稱"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:183
 #: intranet-tmpl/prog/en/modules/tools/export.tt:244
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:222
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:223
 #, c-format
 msgid "File name:"
 msgstr "檔案名稱"
@@ -23778,7 +23781,7 @@ msgstr "檔案名稱"
 msgid "Files"
 msgstr "檔案"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:227
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:230
 #, c-format
 msgid "Files attached to invoice"
 msgstr "在收據內的檔案"
@@ -24470,8 +24473,8 @@ msgstr "來自供應商："
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:188
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:208
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:303
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:318
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:307
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:322
 #, c-format
 msgid "From:"
 msgstr "來自："
@@ -24510,7 +24513,7 @@ msgstr "Frédérick Capovilla"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:481
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:664
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:152
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:155
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:252
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:358
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:170
@@ -24603,7 +24606,7 @@ msgstr "基金總數"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:289
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:437
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:191
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:195
 #, c-format
 msgid "Fund:"
 msgstr "基金："
@@ -24652,14 +24655,14 @@ msgstr "通用公共許可證"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:480
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:663
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:151
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:154
 #, c-format
 msgid "GST"
 msgstr "營業稅"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:662
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:150
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:153
 #, c-format
 msgid "GST %%"
 msgstr "營業稅 %%"
@@ -24786,7 +24789,7 @@ msgstr "取得 Firefox 外掛程式"
 msgid "Get desktop application"
 msgstr "取得桌面應用程式"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:269
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:277
 #, c-format
 msgid "Get help on current subfield"
 msgstr "當前分欄的說明"
@@ -24867,7 +24870,7 @@ msgstr "進入館藏搜尋"
 msgid "Go to page : "
 msgstr "至網頁："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:131
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:134
 #, c-format
 msgid "Go to receipt page"
 msgstr "至收條網頁"
@@ -25753,7 +25756,7 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:171
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:64
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:26
@@ -25773,7 +25776,7 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/edi_ean.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/edimsg.tt:9
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:89
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:58
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:180
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:66
@@ -25785,7 +25788,6 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:14
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:28
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:86
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:10
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:9
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:262
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
@@ -25820,7 +25822,7 @@ msgstr "每年的此段時間都是假日"
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:137
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:17
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:51
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:144
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:145
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:10
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:20
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
@@ -26087,7 +26089,7 @@ msgstr "ISBD"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:38
 #: intranet-tmpl/prog/en/modules/labels/search.tt:39
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:145
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:233
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:235
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:456
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:457
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:13
@@ -26097,7 +26099,7 @@ msgstr "ISBD"
 msgid "ISBN"
 msgstr "ISBN"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:329
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:333
 #, c-format
 msgid "ISBN / EAN / ISSN:"
 msgstr "ISBN / EAN / ISSN："
@@ -26114,7 +26116,7 @@ msgid "ISBN, author or title :"
 msgstr "ISBN、著者或題名："
 
 #. %1$s:  isbneanissn |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:255
 #, c-format
 msgid "ISBN/EAN/ISSN: %s"
 msgstr "ISBN/EAN/ISSN: %s"
@@ -26483,7 +26485,7 @@ msgstr "忽略"
 msgid "Ignore "
 msgstr "忽略 "
 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:127
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:139
 #, c-format
 msgid "Ignore and continue"
 msgstr "忽略並繼續"
@@ -26697,7 +26699,7 @@ msgstr "以下列參數匯入採購單內勾選的館藏："
 msgid "Import an ISO2709 or MARCXML record"
 msgstr "匯入 ISO2709 或 MARCXML 記錄"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:180
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:181
 #, c-format
 msgid "Import batch deleted successfully"
 msgstr "成功刪除批次的匯入"
@@ -26752,7 +26754,7 @@ msgid "Import results :"
 msgstr "匯入結果："
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 msgid "Import this batch into the catalog"
 msgstr "匯入此批次進入目錄"
 
@@ -27001,10 +27003,20 @@ msgstr "插入 "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:265
 #, c-format
+msgid "Insert copyright symbol (©)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:269
+#, c-format
+msgid "Insert copyright symbol (℗) (sound recordings)"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:273
+#, c-format
 msgid "Insert delimiter (‡)"
 msgstr "插入分隔符號 (‡)"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:289
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:297
 #, c-format
 msgid "Insert line break"
 msgstr "搜入斷列標記"
@@ -27218,12 +27230,12 @@ msgstr "發票"
 msgid "Invoice amount"
 msgstr "發票金額"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:134
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:137
 #, c-format
 msgid "Invoice details"
 msgstr "發票詳情"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:70
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:73
 #, c-format
 msgid "Invoice has been modified"
 msgstr "發票已經修改"
@@ -27239,8 +27251,8 @@ msgid "Invoice item price includes tax: "
 msgstr "發票金額含稅："
 
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:58
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:108
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:178
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:182
 #, c-format
 msgid "Invoice no."
 msgstr "發票號碼。"
@@ -27251,12 +27263,12 @@ msgid "Invoice no.: "
 msgstr "發票號碼："
 
 #. %1$s:  invoicenumber |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:213
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:217
 #, c-format
 msgid "Invoice no.: %s"
 msgstr "發票號碼：%s"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:282
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:286
 #, c-format
 msgid "Invoice no:"
 msgstr "發票號碼："
@@ -27274,10 +27286,10 @@ msgid "Invoice number reverse"
 msgstr "發票號碼反轉"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:228
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:80
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:221
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:207
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:186
 #, c-format
 msgid "Invoice number:"
 msgstr "發票號碼："
@@ -27294,7 +27306,7 @@ msgid "Invoice prices:"
 msgstr "發票金額："
 
 #. %1$s:  invoicenumber 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:73
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:76
 #, c-format
 msgid "Invoice: %s"
 msgstr "發票：%s"
@@ -27303,8 +27315,8 @@ msgstr "發票：%s"
 #: intranet-tmpl/prog/en/includes/vendor-menu.inc:7
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:256
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:32
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:61
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:96
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:64
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
 #, c-format
 msgid "Invoices"
 msgstr "發票"
@@ -27708,8 +27720,8 @@ msgstr "館藏號檔案："
 msgid "Item only"
 msgstr "祗限館藏"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:299
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:302
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:300
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:303
 #, c-format
 msgid "Item processing:"
 msgstr "館藏處理中："
@@ -27719,7 +27731,7 @@ msgstr "館藏處理中："
 msgid "Item records were last synced on: "
 msgstr "館藏記錄最新的同步時間："
 
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:134
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:146
 #, c-format
 msgid "Item renewed:"
 msgstr "續借的館藏："
@@ -28140,12 +28152,12 @@ msgstr "Jesse Weaver (16.05、16.11 品管成員)"
 msgid "Jo Ransom"
 msgstr "Jo Ransom"
 
-#: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:122
+#: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:123
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:255
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:268
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:264
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:343
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:354
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:344
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:355
 #, c-format
 msgid "Job progress: "
 msgstr "工作處理中："
@@ -28360,7 +28372,7 @@ msgstr "鍵值"
 msgid "Keyboard shortcuts "
 msgstr "鍵盤捷徑 "
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:2
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:3
 #: intranet-tmpl/prog/en/modules/labels/search.tt:26
 #: intranet-tmpl/prog/en/modules/labels/search.tt:27
 #, c-format
@@ -29181,19 +29193,19 @@ msgstr "Koha &rsaquo; 管理 &rsaquo; Koha 使用統計"
 #. %7$s:  category.categorycode 
 #. %8$s:  ELSIF op == 'add_form' 
 #. %9$s:  IF library 
-#. %10$s:  ELSE 
-#. %11$s:  library.branchcode 
+#. %10$s:  library.branchcode | html 
+#. %11$s:  ELSE 
 #. %12$s:  END 
 #. %13$s:  ELSIF op == 'delete_confirm' 
-#. %14$s:  library.branchcode 
+#. %14$s:  library.branchcode | html 
 #. %15$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:2
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Administration &rsaquo; Libraries and groups %s &rsaquo;%sEdit "
-"group %s%sNew group%s %s &rsaquo; Confirm deletion of group %s %s &rsaquo;"
-"%sModify library%sNew library %s%s %s &rsaquo; Confirm deletion of library "
-"'%s' %s "
+"Koha &rsaquo; Administration &rsaquo; Libraries and groups %s &rsaquo; %s "
+"Edit group %s %s New group %s %s &rsaquo; Confirm deletion of group %s %s "
+"&rsaquo; %s Modify library %s %s New library %s %s &rsaquo; Confirm deletion "
+"of library '%s' %s "
 msgstr ""
 "Koha &rsaquo; 管理 &rsaquo; 圖書館與群組 %s &rsaquo;%s編輯群組 %s%s新增群"
 "組%s %s &rsaquo; 確認刪除群組 %s %s &rsaquo; %s修改圖書館 %s新增圖書館 %s%s "
@@ -29935,8 +29947,8 @@ msgstr "Koha &rsaquo; 讀者 &rsaquo; 新增人工額度"
 msgid "Koha &rsaquo; Patrons &rsaquo; Create manual invoice"
 msgstr "Koha &rsaquo; 讀者 &rsaquo; 新增人工發票"
 
-#. %1$s:  borrower.firstname 
-#. %2$s:  borrower.surname 
+#. %1$s:  borrower.firstname |html 
+#. %2$s:  borrower.surname |html 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:6
 #, c-format
 msgid "Koha &rsaquo; Patrons &rsaquo; Pay Fines for %s %s"
@@ -30029,11 +30041,6 @@ msgstr "Koha &rsaquo; 報表 &rsaquo; 平均借出時間"
 #, c-format
 msgid "Koha &rsaquo; Reports &rsaquo; Catalog by item types"
 msgstr "Koha &rsaquo; 報表 &rsaquo; 館藏類型目錄"
-
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:3
-#, c-format
-msgid "Koha &rsaquo; Reports &rsaquo; Checkouts by patron category"
-msgstr "Koha &rsaquo; 報表 &rsaquo; 讀者類型的借出"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  END 
@@ -31207,7 +31214,7 @@ msgstr "語言"
 msgid "Lang: "
 msgstr "語言："
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:36
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:37
 #, c-format
 msgid "Language"
 msgstr "語言"
@@ -31494,7 +31501,7 @@ msgstr "書信"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:83
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:125
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:179
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
 #, c-format
 msgid "Level"
 msgstr "層次"
@@ -31585,7 +31592,7 @@ msgstr "圖書館限制："
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:112
 #: intranet-tmpl/prog/en/modules/members/member.tt:402
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:126
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:144
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:147
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:64
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:158
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:179
@@ -31715,7 +31722,7 @@ msgstr "圖書館使用"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:633
 #: intranet-tmpl/prog/en/modules/members/member.tt:508
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:366
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:353
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:285
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:291
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:257
@@ -31743,7 +31750,6 @@ msgstr "圖書館："
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:200
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:169
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:173
-#: intranet-tmpl/prog/en/modules/tools/export.tt:99
 #, c-format
 msgid "Library: "
 msgstr "圖書館："
@@ -31751,7 +31757,7 @@ msgstr "圖書館："
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( branchcode ) 
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:27
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:266
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:270
 #, c-format
 msgid "Library: %s"
 msgstr "圖書館：%s"
@@ -31996,7 +32002,7 @@ msgstr "載入中"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:143
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:278
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:280
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:250
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:138
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1140
@@ -32007,7 +32013,7 @@ msgstr "載入中"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:410
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:290
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:196
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:492
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:491
 #, c-format
 msgid "Loading "
 msgstr "載入中 "
@@ -32135,7 +32141,7 @@ msgstr "地區設定："
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:149
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:270
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:90
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:143
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:145
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:65
@@ -32487,15 +32493,15 @@ msgid "MARC modification templates %s"
 msgstr "修改 MARC 模板 %s"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:140
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:253
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:255
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:1137
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:109
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:481
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:407
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:193
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:489
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:488
 #, c-format
 msgid "MARC preview"
 msgstr "MARC 預覧"
@@ -32699,6 +32705,11 @@ msgstr "管理 "
 msgid "Manage CSV export profiles"
 msgstr "管理CSV匯出設定檔"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:110
+#, c-format
+msgid "Manage EDIFACT transmissions"
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:6
 #, c-format
 msgid "Manage Koha system settings (Administration panel)"
@@ -32779,7 +32790,7 @@ msgid ""
 "Manage indexes, facets, and their mappings to MARC fields and subfields."
 msgstr "管理索引、面向、及其對映至 MARC 欄位與分欄。"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:132
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:135
 #, c-format
 msgid "Manage invoice files"
 msgstr "管理收據檔"
@@ -32874,7 +32885,7 @@ msgid "Manage serial subscriptions"
 msgstr "管理期刊訂閱"
 
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:25
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:147
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:148
 #, c-format
 msgid "Manage staged MARC records"
 msgstr "管理待處理的 MARC 紀錄"
@@ -32882,7 +32893,7 @@ msgstr "管理待處理的 MARC 紀錄"
 #. %1$s:  IF ( import_batch_id ) 
 #. %2$s:  import_batch_id 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:160
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:161
 #, c-format
 msgid "Manage staged MARC records %s &rsaquo; Batch %s %s "
 msgstr "管理待匯入 MARC 紀錄 %s &rsaquo; 批次 %s %s "
@@ -33162,7 +33173,7 @@ msgstr "檢查對映 %s"
 msgid "Match check 1 | "
 msgstr "檢查對映1 | "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:477
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:476
 #, c-format
 msgid "Match details"
 msgstr "對映詳情"
@@ -33198,7 +33209,7 @@ msgstr "對映點"
 msgid "Match threshold: "
 msgstr "對映閾值："
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:476
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:475
 #, c-format
 msgid "Match type"
 msgstr "對映類型"
@@ -33213,12 +33224,12 @@ msgstr "對映容許 %s (分數 = %s)：%s"
 msgid "Matches biblio %s (score=%s):%s"
 msgstr "對映書目 %s (分數 = %s)：%s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:257
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:258
 #, c-format
 msgid "Matching rule applied"
 msgstr "採用的對映規則"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:244
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:245
 #, c-format
 msgid "Matching rule applied:"
 msgstr "採用的對映規則："
@@ -33368,12 +33379,12 @@ msgstr "男性"
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:284
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:98
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:132
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:201
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:205
 #, c-format
 msgid "Merge"
 msgstr "合併"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:176
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:180
 #, c-format
 msgid "Merge invoices"
 msgstr "合併發票"
@@ -33384,13 +33395,13 @@ msgstr "合併發票"
 msgid "Merge reference"
 msgstr "合併參照"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:121
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:123
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:404
 #, c-format
 msgid "Merge selected"
 msgstr "合併指定的紀錄"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:175
 #, c-format
 msgid "Merge selected invoices"
 msgstr "合併指定的發票"
@@ -34030,12 +34041,12 @@ msgstr "移動未支出的基金"
 msgid "Move these patrons to the trash"
 msgstr "將這些讀者移到垃圾筒"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:293
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:301
 #, c-format
 msgid "Move to next position"
 msgstr "移動至下個位置"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:297
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:305
 #, c-format
 msgid "Move to previous position"
 msgstr "移動至前個位置"
@@ -34148,7 +34159,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:126
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:161
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:225
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:290
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:294
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:64
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:81
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:56
@@ -34162,7 +34173,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/members/files.tt:45
 #: intranet-tmpl/prog/en/modules/members/member.tt:399
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:53
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:234
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:129
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:390
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:303
@@ -34266,7 +34277,7 @@ msgstr "名稱："
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:132
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:79
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:154
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:345
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:349
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:516
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:318
@@ -34573,7 +34584,7 @@ msgstr "新增款目"
 msgid "New field"
 msgstr "新增欄位"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:285
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:293
 #, c-format
 msgid "New field on next line"
 msgstr "新欄位在下一列"
@@ -34599,12 +34610,12 @@ msgstr "新增框架"
 msgid "New frequency"
 msgstr "新增刊期"
 
-#: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:63
+#: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:64
 #, c-format
 msgid "New from Z39.50"
 msgstr "新增自Z39.50伺服器"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:109
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:110
 #, c-format
 msgid "New from Z39.50/SRU"
 msgstr "新增自 Z39.50/SRU"
@@ -35156,9 +35167,9 @@ msgstr "未儲存電子郵件。"
 msgid "No entries to show"
 msgstr "暫無項目"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:95
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:181
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:193
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:197
 #, c-format
 msgid "No fund"
 msgstr "無基金"
@@ -35178,7 +35189,7 @@ msgstr "此搜尋類別內無基金"
 msgid "No group"
 msgstr "無群組"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:320
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:324
 #, c-format
 msgid "No groups defined."
 msgstr "未設定群組。"
@@ -35382,7 +35393,7 @@ msgstr "無通知"
 msgid "No order selected"
 msgstr "還沒有選擇訂單"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:223
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:226
 #, c-format
 msgid "No orders yet"
 msgstr "還沒有訂單"
@@ -35504,7 +35515,7 @@ msgstr "未移除紀錄。"
 msgid "No records have been selected."
 msgstr "無選定紀錄。"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:186
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:187
 #, c-format
 msgid "No records have been staged."
 msgstr "無紀錄待處理。"
@@ -35535,7 +35546,7 @@ msgstr "無法在 %s 之前續借"
 msgid "No results for your query"
 msgstr "您的搜尋未找到結果"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:219
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:221
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:403
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:61
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:51
@@ -35635,7 +35646,7 @@ msgstr "不，不要刪除"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:641
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:298
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:214
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:392
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:396
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:133
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:146
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:334
@@ -35739,7 +35750,7 @@ msgstr "非公開說明"
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:125
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:265
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:267
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:789
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:791
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:14
@@ -36015,7 +36026,7 @@ msgstr "說明："
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:81
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:701
 #: intranet-tmpl/prog/en/modules/members/mancredit.tt:48
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:218
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:225
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:69
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:210
 #, c-format
@@ -36045,7 +36056,7 @@ msgstr ""
 "存。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1220
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1222
 msgid "Note: Quick add guarantor form populates address fields in full form"
 msgstr "說明：快速新增保證人的表單列出所有地址欄位"
 
@@ -36108,7 +36119,7 @@ msgstr "說明 "
 msgid "Notes : %s "
 msgstr "說明：%s "
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:37
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:38
 #, c-format
 msgid "Notes/Comments"
 msgstr "說明/評論"
@@ -36223,7 +36234,7 @@ msgstr "通知來自"
 
 #: intranet-tmpl/prog/en/modules/members/pay.tt:82
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:124
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:178
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:177
 #, c-format
 msgid "Notify id"
 msgstr "通知代號"
@@ -36353,12 +36364,12 @@ msgstr "顯示在線上公用目錄的期數："
 msgid "Number of issues:"
 msgstr "期數："
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:365
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:366
 #, c-format
 msgid "Number of items added"
 msgstr "新增期數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:376
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:377
 #, c-format
 msgid "Number of items deleted"
 msgstr "刪除的期數"
@@ -36368,12 +36379,12 @@ msgstr "刪除的期數"
 msgid "Number of items displayed"
 msgstr "展示的期數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:367
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:368
 #, c-format
 msgid "Number of items ignored because of duplicate barcode"
 msgstr "條碼重複而忽略的館藏數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:366
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:367
 #, c-format
 msgid "Number of items replaced"
 msgstr "取代的館藏數"
@@ -36409,33 +36420,33 @@ msgstr "頁數"
 msgid "Number of potential barcodes read: %s"
 msgstr "讀取潛在的條碼數：%s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:361
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:362
 #, c-format
 msgid "Number of records added"
 msgstr "新增的紀錄數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:379
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:380
 #, c-format
 msgid "Number of records changed back"
 msgstr "改變的紀錄數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:374
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:375
 #, c-format
 msgid "Number of records deleted"
 msgstr "刪除的紀錄數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:363
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:380
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:364
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:381
 #, c-format
 msgid "Number of records ignored"
 msgstr "忽略的紀錄數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:377
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:378
 #, c-format
 msgid "Number of records not deleted due to items on loan"
 msgstr "因為館藏外借中，不能刪除紀錄數"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:362
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:363
 #, c-format
 msgid "Number of records updated"
 msgstr "更新紀錄數"
@@ -37033,7 +37044,7 @@ msgstr "在新視窗開啟。"
 msgid "Open on:"
 msgstr "開啟位置："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:113
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:116
 #, c-format
 msgid "Open."
 msgstr "開啟。"
@@ -37493,7 +37504,8 @@ msgstr "逾期：讀者有逾期館藏。"
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:65
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:77
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:89
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:113
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:101
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:125
 #, c-format
 msgid "Override and renew"
 msgstr "取消與續借"
@@ -37504,7 +37516,7 @@ msgid "Override blocked renewals"
 msgstr "取消禁止的續借"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:53
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:101
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:113
 #, c-format
 msgid "Override limit and renew"
 msgstr "強制限制與續借"
@@ -37582,15 +37594,6 @@ msgstr "Pablo Bianchi"
 #, c-format
 msgid "Packaging manager:"
 msgstr "套件管理員："
-
-#. For the first occurrence,
-#. %1$s:  FOREACH page IN pages 
-#. %2$s:  IF ( page.current_page ) 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:388
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:456
-#, c-format
-msgid "Page %s %s "
-msgstr "頁 %s %s "
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:93
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:93
@@ -38530,12 +38533,12 @@ msgstr "支付全部罰款"
 msgid "Pay amount"
 msgstr "支付總額"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:206
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:213
 #, c-format
 msgid "Pay an amount toward all fines"
 msgstr "支付所有罰款"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:206
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:213
 #, c-format
 msgid "Pay an amount toward selected fines"
 msgstr "支付選定的罰款"
@@ -39853,7 +39856,7 @@ msgid "Prev"
 msgstr "上一頁"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:275
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:277
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:247
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:134
 #, c-format
@@ -40389,8 +40392,8 @@ msgid "Programmed texts"
 msgstr "程式化文字"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:228
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:358
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:361
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:362
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:365
 #, c-format
 msgid "Properties"
 msgstr "屬性"
@@ -40470,7 +40473,7 @@ msgstr "公開說明"
 msgid "Publication date"
 msgstr "出版日期"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:50
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:51
 #, c-format
 msgid "Publication date (yyyy-yyyy)"
 msgstr "出版年(yyyy-yyyy)"
@@ -40499,7 +40502,7 @@ msgstr "出版年"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:457
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:629
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:345
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:349
 #, c-format
 msgid "Publication year:"
 msgstr "出版年："
@@ -40511,7 +40514,7 @@ msgid "Publication year: "
 msgstr "出版年："
 
 #. %1$s:  publicationyear |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:267
 #, c-format
 msgid "Publication year: %s"
 msgstr "出版年：%s"
@@ -40572,7 +40575,7 @@ msgid "Published on (text)"
 msgstr "出版地 (文字)"
 
 #: intranet-tmpl/prog/en/columns.def:133
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:41
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:42
 #: intranet-tmpl/prog/en/modules/serials/result.tt:34
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:452
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:453
@@ -40585,7 +40588,7 @@ msgstr "出版地 (文字)"
 msgid "Publisher"
 msgstr "出版者"
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:42
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:43
 #, c-format
 msgid "Publisher location"
 msgstr "出版地"
@@ -40604,7 +40607,7 @@ msgstr "出版者編號："
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:703
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:115
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:341
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:345
 #, c-format
 msgid "Publisher:"
 msgstr "出版者："
@@ -40616,7 +40619,7 @@ msgid "Publisher: "
 msgstr "出版者："
 
 #. %1$s:  publisher |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:260
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:264
 #, c-format
 msgid "Publisher: %s"
 msgstr "出版者：%s"
@@ -40662,7 +40665,7 @@ msgstr "新書推薦"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:476
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:659
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:147
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:150
 #, c-format
 msgid "Qty."
 msgstr "數量"
@@ -40740,7 +40743,7 @@ msgstr "佇列"
 msgid "Queue: "
 msgstr "佇列："
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1215
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1217
 #, c-format
 msgid "Quick add"
 msgstr "快速新增"
@@ -40950,7 +40953,7 @@ msgstr "收到嗎？"
 msgid "Received"
 msgstr "收到"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:116
 #, c-format
 msgid "Received biblios"
 msgstr "收到書目"
@@ -40971,7 +40974,7 @@ msgstr "收到期刊"
 msgid "Received issues:"
 msgstr "收到期刊："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:113
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:117
 #, c-format
 msgid "Received items"
 msgstr "收到館藏"
@@ -41019,7 +41022,7 @@ msgstr "再檢查相依性"
 msgid "Recipients:"
 msgstr "簽收者："
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:479
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:478
 #, c-format
 msgid "Record"
 msgstr "紀錄"
@@ -41389,8 +41392,8 @@ msgstr "從館藏移除它"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:149
 #, c-format
-msgid "Remove non-local items:"
-msgstr "移除非本地館藏："
+msgid "Remove items not owned by selected libraries:"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:513
 #, c-format
@@ -41470,7 +41473,7 @@ msgstr "移除嗎？"
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:746
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:759
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:24
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:152
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:164
 #, c-format
 msgid "Renew"
 msgstr "續訂"
@@ -41594,7 +41597,7 @@ msgstr "借閱折扣 (%%)"
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:86
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:334
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:367
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:157
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:161
 #, c-format
 msgid "Reopen"
 msgstr "再開啟"
@@ -41614,7 +41617,7 @@ msgstr "再開啟此採購籃"
 msgid "Reopen this basket group"
 msgstr "再開啟此採購籃群組"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:111
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:114
 #, c-format
 msgid "Reopen: "
 msgstr "再開啟："
@@ -41788,7 +41791,6 @@ msgstr "報表 %s"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:14
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:28
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:86
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:10
 #: intranet-tmpl/prog/en/modules/reports/stats_screen.tt:9
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:263
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:29
@@ -41983,8 +41985,8 @@ msgstr "Require.js JS 模組系統"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:156
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:150
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:156
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:341
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:347
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:345
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:351
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:83
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:91
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:96
@@ -42063,7 +42065,7 @@ msgstr "Require.js JS 模組系統"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:86
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:91
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:96
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:82
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:85
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:194
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:317
@@ -42152,10 +42154,10 @@ msgid "Reserves"
 msgstr "保留"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:242
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:257
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:266
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:300
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:258
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:267
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:284
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:301
 #, c-format
 msgid "Reset"
 msgstr "重設"
@@ -42708,7 +42710,7 @@ msgstr "SMS 提供商"
 msgid "SMS number:"
 msgstr "簡訊號碼："
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1195
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1196
 #, c-format
 msgid "SMS provider:"
 msgstr "SMS 提供商："
@@ -42854,7 +42856,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:25
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:580
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:147
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:124
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:315
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:114
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:644
@@ -42973,7 +42975,7 @@ msgstr "儲存現在的記錄 (Ctrl-S)"
 msgid "Save quotes"
 msgstr "儲存引句"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:273
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:281
 #, c-format
 msgid "Save record"
 msgstr "儲存紀錄"
@@ -43194,7 +43196,7 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:118
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:358
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:362
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:108
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:209
 #, c-format
@@ -43292,8 +43294,8 @@ msgstr "搜尋合約"
 msgid "Search currencies"
 msgstr "搜尋幣別"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:357
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:360
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:361
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:364
 #, c-format
 msgid "Search domain"
 msgstr "搜尋網域"
@@ -43350,7 +43352,7 @@ msgstr "搜尋欄位"
 msgid "Search fields:"
 msgstr "搜尋欄位："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:279
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:283
 #, c-format
 msgid "Search filters"
 msgstr "搜尋篩選器"
@@ -43673,7 +43675,7 @@ msgstr "搜尋代理商"
 msgid "Search vendors:"
 msgstr "搜尋代理商"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:210
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:214
 #, c-format
 msgid "Search was: "
 msgstr "搜尋是："
@@ -43861,11 +43863,6 @@ msgid ""
 "each valid record staged for later import into the catalog."
 msgstr "選定 MARC 檔案送至匯入儲存庫待處理。剖析後且紀錄無誤，就可匯入目錄。"
 
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:60
-#, c-format
-msgid "Select a borrower category"
-msgstr "選定讀者類型"
-
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:470
 #, c-format
 msgid "Select a budget"
@@ -43943,7 +43940,6 @@ msgid "Select a library : "
 msgstr "選定圖書館："
 
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:104
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:69
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:65
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:44
 #, c-format
@@ -44645,6 +44641,11 @@ msgstr "性別"
 msgid "Share my Koha usage statistics: "
 msgstr "共享我的 Koha 使用統計："
 
+#: intranet-tmpl/prog/en/includes/admin-menu.inc:84
+#, fuzzy, c-format
+msgid "Share usage statistics"
+msgstr "共享本館的使用統計"
+
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:128
 #, c-format
 msgid ""
@@ -44683,7 +44684,7 @@ msgid "Shelving control number"
 msgstr "排架控制碼"
 
 #: intranet-tmpl/prog/en/columns.def:97
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:23
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:24
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:673
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:751
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:176
@@ -44716,31 +44717,31 @@ msgstr "排架位置："
 msgid "Shelving location: "
 msgstr "排架位置："
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:288
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:296
 #, c-format
 msgid "Shift-Enter"
 msgstr "Shift-Enter"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:296
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:304
 #, c-format
 msgid "Shift-Tab"
 msgstr "Shift-Tab"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:178
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:182
 #, c-format
 msgid "Shipment cost"
 msgstr "運送成本"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:189
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:193
 #, c-format
 msgid "Shipment cost:"
 msgstr "運送成本："
 
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:58
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:212
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:110
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:178
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:300
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:114
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:182
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 #, c-format
 msgid "Shipment date"
 msgstr "運送日期"
@@ -44750,8 +44751,8 @@ msgstr "運送日期"
 msgid "Shipment date reverse"
 msgstr "回復運送日期"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:85
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:183
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:88
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:187
 #, c-format
 msgid "Shipment date:"
 msgstr "運送日期："
@@ -44767,13 +44768,13 @@ msgstr "運送日期："
 #. %4$s:  ELSE 
 #. %5$s:  shipmentdatefrom | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:219
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:223
 #, c-format
 msgid "Shipment date: %s From %s To %s %s All since %s %s "
 msgstr "帳單日期：%s 從 %s 至 %s %s 所有從 %s %s "
 
 #. %1$s:  shipmentdateto | $KohaDates 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:229
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:233
 #, c-format
 msgid "Shipment date: All until %s "
 msgstr "帳單日期：所有從 %s "
@@ -44784,7 +44785,7 @@ msgstr "帳單日期：所有從 %s "
 msgid "Shipping cost for invoice %s"
 msgstr "發票 %s 的運送成本"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:91
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:94
 #, c-format
 msgid "Shipping cost:"
 msgstr "運送成本："
@@ -44794,7 +44795,7 @@ msgstr "運送成本："
 msgid "Shipping cost: "
 msgstr "運送成本："
 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:93
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:96
 #, c-format
 msgid "Shipping fund:"
 msgstr "運送基金："
@@ -44900,7 +44901,7 @@ msgid "Show all columns"
 msgstr "顯示所有欄位"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:464
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:137
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:140
 #, c-format
 msgid "Show all details "
 msgstr "顯示所有詳情 "
@@ -44991,7 +44992,7 @@ msgstr "顯示這個欄號的說明"
 msgid "Show helpers for fixed and coded fields"
 msgstr "顯示固定與代碼欄位的說明"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:367
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:371
 #, c-format
 msgid "Show in search pulldown: "
 msgstr "顯示在搜尋下拉："
@@ -45027,7 +45028,7 @@ msgstr "祗顯示我的"
 msgid "Show only renewed "
 msgstr "祗顯示續借 "
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:100
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:104
 #, c-format
 msgid "Show only subscriptions "
 msgstr "祗顯示訂閱 "
@@ -45218,7 +45219,7 @@ msgstr "Sonia Lemaire"
 msgid "Sophie Meynieux"
 msgstr "Sophie Meynieux"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:209
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:213
 #, c-format
 msgid "Sorry, but there are no results for your search."
 msgstr "抱歉，您的搜尋沒有結果。"
@@ -45557,7 +45558,7 @@ msgstr "管理待處理的 MARC 紀錄"
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:178
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:92
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:107
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:187
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:188
 #, c-format
 msgid "Stage MARC records for import"
 msgstr "待匯入的 MARC 記錄"
@@ -45599,7 +45600,7 @@ msgstr "待處理 MARC 管理"
 msgid "Staged MARC record management"
 msgstr "待管理的 MARC 記錄"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:225
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:226
 #, c-format
 msgid "Staged:"
 msgstr "待處理："
@@ -45624,8 +45625,8 @@ msgstr "標準"
 msgid "Standard ID: "
 msgstr "標準 ID："
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:25
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:27
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:26
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:28
 #: intranet-tmpl/prog/en/modules/labels/search.tt:35
 #: intranet-tmpl/prog/en/modules/labels/search.tt:36
 #, c-format
@@ -45695,7 +45696,7 @@ msgstr "開始日期："
 msgid "Start date: *"
 msgstr "開始日期：*"
 
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:280
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:284
 #, c-format
 msgid "Start defining libraries"
 msgstr "開始設定圖書館"
@@ -45846,11 +45847,11 @@ msgstr "統計精靈"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:68
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:114
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:118
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:545
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:284
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:405
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:475
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:474
 #, c-format
 msgid "Status"
 msgstr "狀態"
@@ -45865,10 +45866,10 @@ msgstr "狀態 "
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:366
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:710
 #: intranet-tmpl/prog/en/modules/tags/review.tt:213
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:113
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:200
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:226
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:111
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:116
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:204
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:227
 #, c-format
 msgid "Status:"
 msgstr "狀態："
@@ -46175,7 +46176,7 @@ msgstr "次群組名稱"
 msgid "Subgroup:"
 msgstr "次群組："
 
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:15
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:16
 #: intranet-tmpl/prog/en/modules/labels/search.tt:47
 #: intranet-tmpl/prog/en/modules/labels/search.tt:48
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:446
@@ -46296,7 +46297,7 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:616
 #: intranet-tmpl/prog/en/modules/admin/clone-rules.tt:56
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:198
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:377
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:381
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:101
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:126
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
@@ -46310,7 +46311,7 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:685
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:205
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:158
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:170
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:83
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:172
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:125
@@ -46326,7 +46327,6 @@ msgstr "主題："
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:361
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:150
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:353
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:79
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:137
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:124
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:283
@@ -46563,7 +46563,7 @@ msgstr "次類型的限制"
 msgid "Success."
 msgstr "成功。"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:372
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:373
 #, c-format
 msgid "Success: Import reversed"
 msgstr "成功：匯入回覆"
@@ -46683,7 +46683,7 @@ msgstr "總和"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:66
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:66
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:143
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:94
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:247
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:355
@@ -46972,8 +46972,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:94
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:119
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:133
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:27
-#: intranet-tmpl/prog/en/modules/reports/issues_by_borrower_category.tt:44
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:41
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:55
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:45
@@ -46985,7 +46983,7 @@ msgstr ""
 msgid "TOTAL"
 msgstr "總計"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:292
+#: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:300
 #, c-format
 msgid "Tab"
 msgstr "定位鍵"
@@ -48316,7 +48314,7 @@ msgid "There are no late orders."
 msgstr "沒有遲到的訂單。"
 
 #: intranet-tmpl/prog/en/includes/noadd-warnings.inc:5
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:280
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:284
 #, c-format
 msgid "There are no libraries defined. "
 msgstr "沒有定義圖書館。"
@@ -48758,7 +48756,7 @@ msgid "This item is lost"
 msgstr "此館藏已遺失"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:152
-#: intranet-tmpl/prog/en/modules/circ/renew.tt:107
+#: intranet-tmpl/prog/en/modules/circ/renew.tt:119
 #, c-format
 msgid "This item is on hold for another patron."
 msgstr "此館藏已到館待預約者提取。"
@@ -49201,7 +49199,7 @@ msgstr "TinyMCE WYSIWYG 編輯器 v3.5.8 "
 #: intranet-tmpl/prog/en/includes/resort_form.inc:75
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:17
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:24
-#: intranet-tmpl/prog/en/includes/search_indexes.inc:12
+#: intranet-tmpl/prog/en/includes/search_indexes.inc:13
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:82
 #: intranet-tmpl/prog/en/modules/serials/result.tt:32
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:208
@@ -49211,8 +49209,8 @@ msgstr "TinyMCE WYSIWYG 編輯器 v3.5.8 "
 #: intranet-tmpl/prog/en/modules/labels/search.tt:53
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:84
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:142
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:232
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:144
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:234
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:78
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:93
@@ -49343,7 +49341,7 @@ msgstr "題名片語"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:215
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:343
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:22
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:333
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:337
 #, c-format
 msgid "Title:"
 msgstr "題名："
@@ -49366,7 +49364,7 @@ msgid "Title: "
 msgstr "題名："
 
 #. %1$s:  title |html 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:258
 #, c-format
 msgid "Title: %s"
 msgstr "題名：%s"
@@ -49475,6 +49473,11 @@ msgstr "新增流通規則，請至 ："
 msgid "To date: "
 msgstr "至日期："
 
+#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:103
+#, fuzzy, c-format
+msgid "To edit patron permissions, go to: "
+msgstr "設定取得超級圖書員的權限，請至："
+
 #: intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:25
 #, c-format
 msgid ""
@@ -49484,11 +49487,6 @@ msgid ""
 msgstr ""
 "必須先啟用系統偏好 UseKohaPlugins，並在 Koha 組態檔裡設定旗標 "
 "enable_plugins，就能啟用 Koha 的外掛軟體"
-
-#: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:103
-#, c-format
-msgid "To give the new patron superlibrarian permissions go to: "
-msgstr "設定取得超級圖書員的權限，請至："
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:112
 #, c-format
@@ -49566,8 +49564,8 @@ msgstr "更新 %s %s 的照片，選擇新的照片檔案，再按 '上傳' 鈕�
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:778
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:162
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:209
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:307
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:322
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:311
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:326
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:110
 #, c-format
 msgid "To:"
@@ -49749,7 +49747,7 @@ msgstr "工具外掛"
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:138
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:17
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:51
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:144
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:145
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:11
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:22
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:229
@@ -49813,13 +49811,13 @@ msgstr "總計 "
 #. For the first occurrence,
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:517
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:200
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:203
 #, c-format
 msgid "Total (%s)"
 msgstr "總計(%s)"
 
 #. %1$s:  tf.tax_rate * 100 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:189
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:192
 #, c-format
 msgid "Total (GST %s %%)"
 msgstr "總計(含稅 %s %%)"
@@ -49837,7 +49835,7 @@ msgid "Total (GST %s)"
 msgstr "總計(含稅 %s)"
 
 #. %1$s:  currency.symbol 
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:210
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:213
 #, c-format
 msgid "Total + Shipment cost (%s)"
 msgstr "總額 + 運費 (%s)"
@@ -49859,7 +49857,7 @@ msgstr "總計額度：%s"
 msgid "Total amount of cash collected: %s "
 msgstr "總計收到的現金：%s "
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:209
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:216
 #, c-format
 msgid "Total amount outstanding: "
 msgstr "總共待支付："
@@ -49881,7 +49879,7 @@ msgstr "總共應支付："
 msgid "Total amount refunds: %s"
 msgstr "總共還出：%s"
 
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:183
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:182
 #, c-format
 msgid "Total amount to be written off:"
 msgstr "豁免的總額："
@@ -50008,7 +50006,7 @@ msgstr "未稅總額"
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:660
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:148
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:151
 #, c-format
 msgid "Total tax exc. (%s)"
 msgstr "未稅總計(%s)"
@@ -50022,7 +50020,7 @@ msgstr "含稅總額"
 #. %1$s:  currency 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:478
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:661
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:149
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:152
 #, c-format
 msgid "Total tax inc. (%s)"
 msgstr "含稅總計(%s)"
@@ -50278,7 +50276,7 @@ msgstr "Tumer Garip"
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:75
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:615
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:232
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:66
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:404
@@ -50292,7 +50290,7 @@ msgid "Type of procedure"
 msgstr "程序類型"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:110
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:224
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:225
 #, c-format
 msgid "Type:"
 msgstr "類型："
@@ -50481,7 +50479,7 @@ msgid "Undefined"
 msgstr "沒有定義"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:353
 msgid "Undo import into catalog"
 msgstr "復原匯入目錄"
 
@@ -50609,7 +50607,7 @@ msgstr "Universidad Nacional de Córdoba, 阿根廷"
 msgid "Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)"
 msgstr "Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1197
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1198
 #, c-format
 msgid "Unknown"
 msgstr "不明"
@@ -50954,7 +50952,7 @@ msgstr "上傳交易"
 
 #: intranet-tmpl/prog/en/modules/members/files.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:56
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:234
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:237
 #, c-format
 msgid "Uploaded"
 msgstr "已上傳"
@@ -51097,7 +51095,7 @@ msgid ""
 "Use the reports dictionary to define custom criteria to use in your reports"
 msgstr "使用報表字典定義使用於您報表的客製化範圍"
 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:272
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:276
 #, c-format
 msgid "Use the search form on the left to find invoices."
 msgstr "使用左方的搜尋表單找尋發票。"
@@ -51322,7 +51320,7 @@ msgstr "變數："
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:69
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:109
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:113
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:41
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:171
 #, c-format
@@ -51451,7 +51449,7 @@ msgstr "搜尋供應商：找到 %s 個有關 '%s'"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:213
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:237
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:56
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:286
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:290
 #, c-format
 msgid "Vendor:"
 msgstr "供應商："
@@ -51460,7 +51458,7 @@ msgstr "供應商："
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:163
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:67
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:40
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:75
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:78
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:117
@@ -51470,7 +51468,7 @@ msgid "Vendor: "
 msgstr "供應商："
 
 #. %1$s:  suppliername 
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:216
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:220
 #, c-format
 msgid "Vendor: %s"
 msgstr "供應商：%s"
@@ -52155,6 +52153,11 @@ msgstr "含框架："
 msgid "With framework: "
 msgstr "含框架："
 
+#: intranet-tmpl/prog/en/modules/tools/export.tt:99
+#, fuzzy, c-format
+msgid "With items owned by the following libraries: "
+msgstr "此館藏必須還入以下的圖書館："
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:9
 msgid "With selected search: "
@@ -52237,9 +52240,14 @@ msgid "Write off fines and fees"
 msgstr "註銷罰款與費用"
 
 #. INPUT type=submit name=confirm_writeoff
-#: intranet-tmpl/prog/en/modules/members/paycollect.tt:194
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:201
 msgid "Write off this charge"
 msgstr "豁免此費用"
+
+#: intranet-tmpl/prog/en/modules/members/paycollect.tt:195
+#, fuzzy, c-format
+msgid "Writeoff amount: "
+msgstr "罰款金額："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:15
@@ -52399,7 +52407,7 @@ msgstr "是的，關閉(Y)"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:211
-#: intranet-tmpl/prog/en/modules/admin/branches.tt:389
+#: intranet-tmpl/prog/en/modules/admin/branches.tt:393
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:130
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:143
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:39
@@ -53849,7 +53857,7 @@ msgstr "budget_code"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:113
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:162
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:165
 #, c-format
 msgid "by"
 msgstr "著者"
@@ -55947,7 +55955,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:258
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:139
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:174
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:274
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:276
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:105
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:186
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:233
@@ -55961,7 +55969,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:286
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:311
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:192
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:488
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:487
 #, c-format
 msgid "×"
 msgstr "×"
