@@ -17,37 +17,34 @@
 
 use Modern::Perl;
 
+use DateTime::Duration;
+use Test::More tests => 102;
+use Test::Warn;
+
 use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use C4::Context;
 use C4::Members;
 use C4::Letters;
 use C4::Budgets qw( AddBudgetPeriod AddBudget );
-
+use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Library;
 use Koha::Libraries;
-
-use t::lib::TestBuilder;
-
-use DateTime::Duration;
-use Test::More tests => 102;
-use Test::Warn;
 
 BEGIN {
     use_ok('C4::Suggestions');
 }
 
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-my $sql;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
-
 my $builder = t::lib::TestBuilder->new;
+
 # Reset item types to only the default ones
 $dbh->do(q|DELETE FROM itemtypes;|);
-$sql = "
+my $sql = qq|
 INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl, summary) VALUES
 ('BK', 'Books',5,0,'bridge/book.gif',''),
 ('MX', 'Mixed Materials',5,0,'bridge/kit.gif',''),
@@ -56,7 +53,7 @@ INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan, imageurl
 ('VM', 'Visual Materials',5,1,'bridge/dvd.gif',''),
 ('MU', 'Music',5,0,'bridge/sound.gif',''),
 ('CR', 'Continuing Resources',5,0,'bridge/periodical.gif',''),
-('REF', 'Reference',0,1,'bridge/reference.gif','');";
+('REF', 'Reference',0,1,'bridge/reference.gif','');|;
 $dbh->do($sql);
 $dbh->do(q|DELETE FROM suggestions|);
 $dbh->do(q|DELETE FROM issues|);
@@ -384,3 +381,5 @@ subtest 'GetUnprocessedSuggestions' => sub {
     $unprocessed_suggestions = C4::Suggestions::GetUnprocessedSuggestions(5);
     is( scalar(@$unprocessed_suggestions), 0, 'GetUnprocessedSuggestions should not return the suggestion, it has not been suggested 5 days ago' );
 };
+
+$schema->storage->txn_rollback;
