@@ -2418,7 +2418,7 @@ sub _FixAccountForLostAndReturned {
             description  => "Item Returned " . $item_id,
             account_type => 'CR',
             offset_type  => 'Lost Item Return',
-            accounlines  => [$accountline],
+            lines        => [$accountline],
 
         }
     );
