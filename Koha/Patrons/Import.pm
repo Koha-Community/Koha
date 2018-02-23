@@ -241,12 +241,15 @@ sub import_patrons {
                 }
             }
 
-            unless ( ModMember(%borrower) ) {
+            my $patron = Koha::Patrons->find( $borrowernumber );
+            eval { $patron->set(\%borrower)->store };
+            if ( $@ ) {
                 $invalid++;
 
                 push(
                     @errors,
                     {
+                        # TODO We can raise a better error
                         name  => 'lastinvalid',
                         value => $borrower{'surname'} . ' / ' . $borrowernumber
                     }
