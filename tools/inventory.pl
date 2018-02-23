@@ -71,7 +71,7 @@ unshift @$frameworks, { frameworkcode => '' };
 
 for my $fwk ( @$frameworks ){
   my $fwkcode = $fwk->{frameworkcode};
-  my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fwkcode, kohafield => 'items.location', authorised_value => { not => undef } });
+  my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fwkcode, kohafield => 'items.location', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
   my $authcode = $mss->count ? $mss->next->authorised_value : undef;
     if ($authcode && $authorisedvalue_categories!~/\b$authcode\W/){
       $authorisedvalue_categories.="$authcode ";
@@ -88,7 +88,7 @@ my @notforloans;
 for my $statfield (qw/items.notforloan items.itemlost items.withdrawn items.damaged/){
     my $hash = {};
     $hash->{fieldname} = $statfield;
-    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => $statfield, authorised_value => { not => undef } });
+    my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => $statfield, authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
     $hash->{authcode} = $mss->count ? $mss->next->authorised_value : undef;
     if ($hash->{authcode}){
         my $arr = GetAuthorisedValues($hash->{authcode});

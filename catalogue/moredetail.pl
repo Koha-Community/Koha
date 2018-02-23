@@ -190,15 +190,15 @@ foreach my $item (@items){
     }
 }
 
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => { not => undef } });
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 if ( $mss->count ) {
     $template->param( itemlostloop => GetAuthorisedValues( $mss->next->authorised_value ) );
 }
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged', authorised_value => { not => undef } });
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 if ( $mss->count ) {
     $template->param( itemdamagedloop => GetAuthorisedValues( $mss->next->authorised_value ) );
 }
-$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.withdrawn', authorised_value => { not => undef } });
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 if ( $mss->count ) {
     $template->param( itemwithdrawnloop => GetAuthorisedValues( $mss->next->authorised_value) );
 }

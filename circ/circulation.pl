@@ -352,7 +352,7 @@ if (@$barcodes) {
 
     if ( $item ) {
         $biblio = $item->biblio;
-        my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.notforloan', authorised_value => { not => undef } });
+        my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $biblio->frameworkcode, kohafield => 'items.notforloan', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
         $template_params->{authvalcode_notforloan} = $mss->count ? $mss->next->authorised_value : undef;
     }
 
