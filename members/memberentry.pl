@@ -223,6 +223,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
         qr/^csrf_token$/,
+        qr/^add_debarment$/, qr/^debarred_expiration$/ # We already dealt with debarments previously
     );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
@@ -524,7 +525,12 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             delete $newdata{'password'};
             delete $newdata{'userid'};
         }
-        &ModMember(%newdata) unless scalar(keys %newdata) <= 1; # bug 4508 - avoid crash if we're not
+
+        my $patron = Koha::Patrons->find( $borrowernumber );
+        $newdata{debarredcomment} = $newdata{debarred_comment};
+        delete $newdata{debarred_comment};
+        delete $newdata{password2};
+        $patron->set(\%newdata)->store if scalar(keys %newdata) > 1; # bug 4508 - avoid crash if we're not
                                                                 # updating any columns in the borrowers table,
                                                                 # which can happen if we're only editing the
                                                                 # patron attributes or messaging preferences sections
