@@ -1994,6 +1994,16 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
     my $patron = $builder->build( { source => 'Borrower' } );
 
+    Koha::Account::Line->new(
+        {
+            borrowernumber => $patron->{borrowernumber},
+            accounttype    => 'F',
+            itemnumber     => $itemnumber,
+            amount => 10.00,
+            amountoutstanding => 10.00,
+        }
+    )->store();
+
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber => $patron->{borrowernumber},
