@@ -90,7 +90,7 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10 --list-invites --temp-uploads
 
 # delete old purchase suggestions weekly. Replace XX with a number to define the age of suggestions to delete.
-@weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --days XX > /dev/null 2>&1
+@weekly	__KOHA_USER__  $KOHA_CRON_PATH/purge_suggestions.pl --confirm --days XX > /dev/null 2>&1
 
 # share_usage_with_koha_community.pl every months
 0 0 1 * *  __KOHA_USER__ $KOHA_CRON_PATH/share_usage_with_koha_community.pl

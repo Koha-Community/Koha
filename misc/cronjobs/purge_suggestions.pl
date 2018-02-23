@@ -18,10 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use utf8;
 
 BEGIN {
-
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
@@ -34,48 +32,39 @@ use C4::Suggestions;
 use C4::Log;
 use C4::Context;
 
-my ( $help, $days );
+my ( $help, $days, $confirm );
 
 GetOptions(
     'help|?' => \$help,
-    'days=s' => \$days,
+    'days:i' => \$days,
+    'confirm'=> \$confirm,
 );
 
 my $usage = << 'ENDUSAGE';
-This script delete old suggestions
+This script deletes old suggestions
 Parameters:
 -help|? This message
 -days TTT to define the age of suggestions to delete
+-confirm flag needed to confirm purge operation
+
+The days parameter falls back to the value of system preference
+PurgeSuggestionsOlderThan. Suggestions are deleted only for a positive
+number of days.
 
 Example:
 ENDUSAGE
-$usage .= $0 . " -days 30\n";
+$usage .= $0 . " -confirm -days 30\n";
 
 # If this script is called without the 'days' parameter, we use the system preferences value instead.
-if ( !defined($days) && !$help ) {
-    my $purge_sugg_days =
-      C4::Context->preference('PurgeSuggestionsOlderThan') || q{};
-    if ( $purge_sugg_days ne q{} and $purge_sugg_days >= 0 ) {
-        $days = $purge_sugg_days;
-    }
-}
+$days = C4::Context->preference('PurgeSuggestionsOlderThan') if !defined($days);
 
 # If this script is called with the 'help' parameter, we show up the help message and we leave the script without doing anything.
-if ($help) {
+if( !$confirm || $help || !defined($days) ) {
+    print "No confirm parameter passed!\n\n" if !$confirm && !$help;
     print $usage;
-    exit;
-}
-
-if ( defined($days) && $days ne q{} && $days > 0 ) {
+} elsif( $days > 0 ) {
     cronlogaction();
     DelSuggestionsOlderThan($days);
-}
-elsif (!defined($days)){
-    print $usage;
-}
-elsif ( $days == 0 ) {
-    warn "This script is not executed with 0 days. Aborted.\n";
-}
-else {
+} else {
     warn "This script requires a positive number of days. Aborted.\n";
 }
