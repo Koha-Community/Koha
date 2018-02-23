@@ -916,7 +916,7 @@ sub generate_userid {
     my ($self) = @_;
     my $userid;
     my $offset = 0;
-    my $patron = Koha::Patron->new;
+    my $existing_userid = $self->userid;
     my $firstname = $self->firstname // q{};
     my $surname = $self->surname // q{};
     #The script will "do" the following code and increment the $offset until the generated userid is unique
@@ -926,9 +926,14 @@ sub generate_userid {
       $userid = lc(($firstname)? "$firstname.$surname" : $surname);
       $userid = unac_string('utf-8',$userid);
       $userid .= $offset unless $offset == 0;
-      $patron->userid( $userid );
+      $self->userid( $userid );
       $offset++;
-     } while (! $patron->has_valid_userid );
+     } while (! $self->has_valid_userid );
+
+     # Resetting to the previous value as the callers do not expect
+     # this method to modify the userid attribute
+     # This will be done later (move of AddMember and ModMember)
+     $self->userid( $existing_userid );
 
      return $userid;
 

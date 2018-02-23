@@ -1265,7 +1265,7 @@ subtest 'userid_is_valid' => sub {
 };
 
 subtest 'generate_userid' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category = $builder->build_object(
@@ -1302,6 +1302,11 @@ subtest 'generate_userid' => sub {
 
     $userid = $new_patron->generate_userid;
     is( $userid, $expected_userid_patron_1 . '2', 'generate_userid should generate the userid we expect' );
+
+    $patron_1 = Koha::Patrons->find($borrowernumber);
+    $patron_1->userid(undef);
+    $userid = $patron_1->generate_userid;
+    is( $userid, $expected_userid_patron_1, 'generate_userid should generate the userid we expect' );
 
     # Cleanup
     $patron_1->delete;
