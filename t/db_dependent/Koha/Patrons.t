@@ -417,7 +417,6 @@ subtest 'add_enrolment_fee_if_needed' => sub {
 
     # Check with calling directly Koha::Patron->get_enrolment_fee_if_needed
     $patron->categorycode('YA')->store;
-    my $fee = $patron->add_enrolment_fee_if_needed;
     $total = $patron->account->balance;
     is( int($total),
         int($enrolmentfee_K + $enrolmentfee_J + $enrolmentfee_YA),
