@@ -177,7 +177,7 @@ sub store {
             unless ( $self->in_storage ) {    #AddMember
 
                 # Generate a valid userid/login if needed
-                $self->userid($self->generate_userid)
+                $self->generate_userid
                   if not $self->userid or not $self->has_valid_userid;
 
                 # Add expiration date if it isn't already there
@@ -1234,40 +1234,31 @@ sub has_valid_userid {
 =head3 generate_userid
 
 my $patron = Koha::Patron->new( $params );
-my $userid = $patron->generate_userid
+$patron->generate_userid
 
 Generate a userid using the $surname and the $firstname (if there is a value in $firstname).
 
-Return the generate userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $userid is unique, or a higher numeric value if not unique).
-
-# TODO: Set $self->userid with the generated value
+Set a generated userid ($firstname.$surname if there is a $firstname, or $surname if there is no value in $firstname) plus offset (0 if the $userid is unique, or a higher numeric value if not unique).
 
 =cut
 
 sub generate_userid {
     my ($self) = @_;
-    my $userid;
     my $offset = 0;
-    my $existing_userid = $self->userid;
     my $firstname = $self->firstname // q{};
     my $surname = $self->surname // q{};
     #The script will "do" the following code and increment the $offset until the generated userid is unique
     do {
       $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
       $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
-      $userid = lc(($firstname)? "$firstname.$surname" : $surname);
+      my $userid = lc(($firstname)? "$firstname.$surname" : $surname);
       $userid = unac_string('utf-8',$userid);
       $userid .= $offset unless $offset == 0;
       $self->userid( $userid );
       $offset++;
      } while (! $self->has_valid_userid );
 
-     # Resetting to the previous value as the callers do not expect
-     # this method to modify the userid attribute
-     # This will be done later (move of AddMember and ModMember)
-     $self->userid( $existing_userid );
-
-     return $userid;
+     return $self;
 
 }
 

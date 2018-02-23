@@ -283,7 +283,8 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
         # Full page edit, firstname and surname input zones are present
         $patron->firstname($newdata{firstname});
         $patron->surname($newdata{surname});
-        $newdata{'userid'} = $patron->generate_userid;
+        $patron->generate_userid;
+        $newdata{'userid'} = $patron->userid;
     }
     elsif ( ( defined $data{'firstname'} || $category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
         # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
@@ -291,7 +292,8 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
         # FIXME clean thiscode newdata vs data is very confusing
         $patron->firstname($data{firstname});
         $patron->surname($data{surname});
-        $newdata{'userid'} = $patron->generate_userid;
+        $patron->generate_userid;
+        $newdata{'userid'} = $patron->userid;
     }
     else {
         $newdata{'userid'} = $data{'userid'};
