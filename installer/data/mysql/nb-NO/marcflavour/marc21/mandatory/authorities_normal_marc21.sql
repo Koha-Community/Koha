@@ -1619,7 +1619,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -2532,7 +2532,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('PERSO_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('PERSO_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('PERSO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('PERSO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('PERSO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -3442,7 +3442,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('CORPO_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('CORPO_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('CORPO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('CORPO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('CORPO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -4357,7 +4357,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('MEETI_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('MEETI_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('MEETI_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('MEETI_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('MEETI_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -5310,7 +5310,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('UNIF_TITLE', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('UNIF_TITLE', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('UNIF_TITLE', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('UNIF_TITLE', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('UNIF_TITLE', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -6178,7 +6178,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('CHRON_TERM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('CHRON_TERM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('CHRON_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('CHRON_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('CHRON_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -7050,7 +7050,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('TOPIC_TERM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('TOPIC_TERM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('TOPIC_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('TOPIC_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('TOPIC_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -7920,7 +7920,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('GEOGR_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('GEOGR_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('GEOGR_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('GEOGR_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('GEOGR_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -8795,6 +8795,6 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('GENRE/FORM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('GENRE/FORM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('GENRE/FORM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('GENRE/FORM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('GENRE/FORM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 

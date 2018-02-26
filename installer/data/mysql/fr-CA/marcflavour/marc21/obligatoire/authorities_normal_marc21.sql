@@ -1583,7 +1583,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 ("","880","x","x","x","1","0","8",NULL,NULL,NULL,"0","0","0","","",NULL),
 ("","880","y","y","y","1","0","8",NULL,NULL,NULL,"0","0","0","","",NULL),
 ("","880","z","z","z","1","0","8",NULL,NULL,NULL,"0","0","0","","",NULL),
-("","942","a","Koha type d'authorite","Koha type d'authorite","0","1","9",NULL,NULL,NULL,"0","8","0","auth_header.authtypecode","",NULL);
+("","942","a","Koha type d'authorite","Koha type d'authorite","0","1","9",NULL,NULL,NULL,"0","1","0","auth_header.authtypecode","",NULL);
 
 -- ******************************************************
 

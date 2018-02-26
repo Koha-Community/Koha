@@ -1953,7 +1953,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '884', 'k', 'Identifier of source metadata', 'Identifier of source metadata', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '884', 'q', 'Conversion agency', 'Conversion agency', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '884', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************

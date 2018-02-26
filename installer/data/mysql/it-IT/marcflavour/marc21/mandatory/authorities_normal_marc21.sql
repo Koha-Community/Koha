@@ -1953,7 +1953,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '884', 'k', 'Identificatore dei metadati di partenza', 'Identificatore dei metadati di partenza', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '884', 'q', 'Agenzia che ha effettuato la conversione', 'Agenzia che ha effettuato la conversione', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '884', 'u', 'URI (Uniform Resource Identifier)', 'URI (Uniform Resource Identifier)', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('', '942', 'a', 'Tipo di authority', 'Tipo di authority', 0, 1, 9, NULL, NULL, NULL, 0, 8, 0, 'auth_header.authtypecode', '');
+        ('', '942', 'a', 'Tipo di authority', 'Tipo di authority', 0, 1, 9, NULL, NULL, NULL, 0, 1, 0, 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
