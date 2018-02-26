@@ -1,6 +1,6 @@
-/home/koha/koha-dev/var/log/plack*.log 
-/home/koha/koha-dev/var/log/rest.log 
-/home/koha/koha-dev/var/log/cpu_pos.log 
+__LOG_DIR__/plack*.log 
+__LOG_DIR__/rest.log 
+__LOG_DIR__/cpu_pos.log 
 {
 	daily
 	missingok
@@ -18,8 +18,8 @@
 	endscript
 }
 
-/home/koha/koha-dev/var/log/sip2.log
-/home/koha/koha-dev/var/log/sip2/*
+__LOG_DIR__/sip2.log
+__LOG_DIR__/sip2/*
 {
 	daily
 	missingok
@@ -35,7 +35,7 @@
 	endscript
 }
 
-/home/koha/koha-dev/var/log/koha-zebradaemon* {
+__LOG_DIR__/koha-zebradaemon* {
 	daily
 	missingok
 	rotate 14
@@ -50,7 +50,7 @@
 	endscript
 }
 
-/home/koha/koha-dev/var/log/editx/* {
+__LOG_DIR__/editx/* {
 	daily
 	missingok
 	rotate 14
@@ -61,7 +61,7 @@
 	su
 }
 
-/home/koha/koha-dev/var/log/cronjobs/* {
+__LOG_DIR__/cronjobs/* {
 	daily
 	missingok
 	rotate 14
@@ -72,8 +72,8 @@
 	su
 }
 
-/home/koha/koha-dev/var/log/intranet-error.log
-/home/koha/koha-dev/var/log/opac-error.log
+__LOG_DIR__/intranet-error.log
+__LOG_DIR__/opac-error.log
 {
 	daily
 	missingok
@@ -85,7 +85,7 @@
 	su
 }
 
-/home/koha/koha-dev/var/log/koha-*error_log {
+__LOG_DIR__/koha-*error_log {
 	daily
 	missingok
 	rotate 14
