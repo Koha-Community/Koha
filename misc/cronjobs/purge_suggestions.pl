@@ -62,7 +62,7 @@ $days = C4::Context->preference('PurgeSuggestionsOlderThan') if !defined($days);
 if( !$confirm || $help || !defined($days) ) {
     print "No confirm parameter passed!\n\n" if !$confirm && !$help;
     print $usage;
-} elsif( $days > 0 ) {
+} elsif( $days and $days > 0 ) {
     cronlogaction();
     DelSuggestionsOlderThan($days);
 } else {
