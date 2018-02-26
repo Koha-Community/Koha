@@ -107,7 +107,7 @@
 
         // Our 'render' function for borrowerlink
         var createPatronLink = function(data, type, row) {
-            return '<a title="View borrower details" ' +
+            return '<a title="' + _("View borrower details") + '" ' +
                 'href="/cgi-bin/koha/members/moremember.pl?' +
                 'borrowernumber='+row.borrowernumber+'">' +
                 row.patron_firstname + ' ' + row.patron_surname +
