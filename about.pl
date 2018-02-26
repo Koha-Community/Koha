@@ -61,6 +61,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $time_zone = {
+    actual      => C4::Context->timezone(),
+    config      => C4::Context->config('timezone'),
+    environment => $ENV{TZ},
+};
+$template->param( 'time_zone' => $time_zone );
+
 my $perl_path = $^X;
 if ($^O ne 'VMS') {
     $perl_path .= $Config{_exe} unless $perl_path =~ m/$Config{_exe}$/i;

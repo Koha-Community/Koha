@@ -111,6 +111,10 @@
             [% ELSIF (errZebraConnection) %]
             <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) %] </td></tr>
             [% END %]
+            <tr><th scope="row">Time zone: </th>
+               <td>Used: [% time_zone.actual %]<br/>
+                   Config: [% time_zone.config %]<br/>
+                   ENV: [% time_zone.environment %]</td></tr>
         </table>
         </div>
         <div id="perl">
