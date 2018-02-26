@@ -15575,6 +15575,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19290 - Add system preference BrowseResultSelection)\n";
 }
 
+$DBversion = '17.12.00.019';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q|UPDATE auth_subfield_structure SET hidden=1 WHERE hidden<>0|);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20074 - Auth_subfield_structure changes hidden attribute)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
