@@ -42,3 +42,6 @@ INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, 
  ('MEETI_NAME', '942', 1, '', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', 'MEETI_NAME', '942', 'a', 1, 0, 'Koha auth type', 'Koha auth type', 9, 8, 'auth_header.authtypecode', NULL, NULL, 0, NULL, 0);
+
+-- Replace nonzero hidden values like -5, 1 or 8 by 1
+UPDATE auth_subfield_structure SET hidden=1 WHERE hidden<>0
