@@ -342,7 +342,28 @@ sub delete {
     while ( my $rule = $self->next ){
         $rule->delete;
     }
+}
 
+=head3 get_onshelfholds_policy
+
+    my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy({ item => $item, patron => $patron });
+
+=cut
+
+sub get_onshelfholds_policy {
+    my ( $class, $params ) = @_;
+    my $item = $params->{item};
+    my $itemtype = $item->effective_itemtype;
+    my $patron = $params->{patron};
+    my $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => ( $patron ? $patron->categorycode : undef ),
+            itemtype     => $itemtype,
+            branchcode   => $item->holdingbranch,
+            rule_name    => 'onshelfholds',
+        }
+    );
+    return $rule ? $rule->rule_value : undef;
 }
 
 =head3 type

@@ -31,7 +31,7 @@ use C4::XSLT;
 
 use Koha::Biblios;
 use Koha::Biblioitems;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -337,7 +337,7 @@ if ( $op eq 'view' ) {
 
                 my $items = $biblio->items;
                 while ( my $item = $items->next ) {
-                    $this_item->{allow_onshelf_holds} = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
+                    $this_item->{allow_onshelf_holds} = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
                     last if $this_item->{allow_onshelf_holds};
                 }
 

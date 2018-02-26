@@ -216,17 +216,17 @@ my $hold = $builder->build({
     }
 });
 
-Koha::IssuingRule->new(
+Koha::CirculationRules->set_rules(
     {
-        categorycode => '*',
+        categorycode => undef,
         itemtype     => $itemtype2,
-        branchcode   => '*',
-        issuelength  => 7,
-        lengthunit   => 8,
-        reservesallowed => 99,
-        onshelfholds => 0,
+        branchcode   => undef,
+        rules        => {
+            maxissueqty     => 99,
+            onshelfholds    => 2,
+        }
     }
-)->store();
+);
 
 $is = IsAvailableForItemLevelRequest( $item3, $patron1);
 is( $is, 1, "Item can be held, items in transit are not available" );

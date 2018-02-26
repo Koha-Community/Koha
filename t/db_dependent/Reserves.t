@@ -563,19 +563,6 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-ok( C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() allowed" );
-Koha::CirculationRules->set_rules(
-    {
-        categorycode => $categorycode,
-        itemtype     => $itype,
-        branchcode   => $holdingbranch,
-        rules => {
-            onshelfholds => 0,
-        }
-    }
-);
-ok( !C4::Reserves::OnShelfHoldsAllowed($item, $borrower), "OnShelfHoldsAllowed() disallowed" );
-
 # tests for MoveReserve in relation to ConfirmFutureHolds (BZ 14526)
 #   hold from A pos 1, today, no fut holds: MoveReserve should fill it
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));

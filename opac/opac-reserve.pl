@@ -36,7 +36,7 @@ use C4::Debug;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Checkouts;
@@ -548,7 +548,7 @@ foreach my $biblioNum (@biblionumbers) {
             CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK';
 
         if ($policy_holdallowed) {
-            my $opac_hold_policy = Koha::IssuingRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
+            my $opac_hold_policy = Koha::CirculationRules->get_opacitemholds_policy( { item => $item, patron => $patron } );
             if ( $opac_hold_policy ne 'N' ) { # If Y or F
                 $itemLoopIter->{available} = 1;
                 $numCopiesOPACAvailable++;

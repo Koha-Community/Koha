@@ -58,7 +58,7 @@ use C4::Acquisition;
 use C4::Koha;
 use List::MoreUtils qw( any uniq );
 use Koha::Biblios;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -138,7 +138,7 @@ $template->param(
 my $allow_onshelf_holds;
 for my $itm (@all_items) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
-    $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
+    $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
     last if $allow_onshelf_holds;
 }
 

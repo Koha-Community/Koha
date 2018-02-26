@@ -52,7 +52,7 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use Koha::Biblios;
 use Koha::RecordProcessor;
 use Koha::AuthorisedValues;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Acquisition::Orders;
@@ -689,7 +689,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         && !$itemtypes->{$itm->{'itype'}}->{notforloan}
         && $itm->{'itemnumber'};
 
-    $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
+    $allow_onshelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
 
     # get collection code description, too
