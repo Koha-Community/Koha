@@ -112,11 +112,11 @@
                                 <select name="ohidden" size="1" id="ohidden[% loo.row %]">
                                     [%- IF ( loo.ohidden ==  0 ) -%]
                                     <option value= "0" selected="selected">Show all</option>
-                                    <option value="-5">Hide all</option>
+                                    <option value="1">Hide all</option>
                                     [%- ELSE -%]
                                     [%# All other non-zero values mean: Hide %]
                                     <option value= "0">Show all</option>
-                                    <option value="-5" selected="selected">Hide all</option>
+                                    <option value="1" selected="selected">Hide all</option>
                                     [%- END -%]
                                 </select>
                             </li>
