@@ -1924,3 +1924,6 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '880', 'x', 0, 1, 'x', 'x',                                   8, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '880', 'y', 0, 1, 'y', 'y',                                   8, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '880', 'z', 0, 1, 'z', 'z',                                   8, 0, '', NULL, NULL, 0, NULL, 0);
+
+-- Replace nonzero hidden values like -5, 1 or 8 by 1
+UPDATE auth_subfield_structure SET hidden=1 WHERE hidden<>0
