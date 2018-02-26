@@ -15584,6 +15584,23 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20074 - Auth_subfield_structure changes hidden attribute)\n";
 }
 
+$DBversion = '17.12.00.020';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q|
+        INSERT IGNORE INTO language_descriptions(subtag, type, lang, description)
+        VALUES ('vi', 'language', 'de', 'Vietnamesisch')
+    |);
+
+    $dbh->do(q|
+        UPDATE language_descriptions SET description = 'Tiếng Việt'
+        WHERE subtag = 'vi' and type = 'language' and lang = 'vi'
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20082 - Update descriptions of Vietnamese language)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
