@@ -185,6 +185,12 @@ my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
 
 my $authorisedby = $order->{authorisedby};
 my $authorised_patron = Koha::Patrons->find( $authorisedby );
+if ( $authorised_patron ) { # This should not happen unless there was a migration issue (or very old install?)
+    $template->param(
+        memberfirstname  => $authorised_patron->firstname || "",
+        membersurname    => $authorised_patron->surname || "",
+    );
+}
 
 my $budget = GetBudget( $order->{budget_id} );
 
@@ -217,8 +223,6 @@ $template->param(
     ecost                 => $ecost,
     unitprice             => $unitprice,
     tax_rate              => $tax_rate,
-    memberfirstname       => $authorised_patron->firstname || "",
-    membersurname         => $authorised_patron->surname || "",
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     datereceived          => $datereceived,
