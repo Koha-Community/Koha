@@ -128,20 +128,23 @@ sub generate_subfield_form {
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
         $subfield_data{maxlength}  = $subfieldlib->{maxlength};
         
-        $value =~ s/"/&quot;/g;
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
-            # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
-            my $today_dt = dt_from_string;
-            my $year = $today_dt->strftime('%Y');
-            my $month = $today_dt->strftime('%m');
-            my $day = $today_dt->strftime('%d');
-            $value =~ s/<<YYYY>>/$year/g;
-            $value =~ s/<<MM>>/$month/g;
-            $value =~ s/<<DD>>/$day/g;
-            # And <<USER>> with surname (?)
-            my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
-            $value=~s/<<USER>>/$username/g;
+            if ( $value ) {
+                # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+                my $today_dt = dt_from_string;
+                my $year = $today_dt->strftime('%Y');
+                my $month = $today_dt->strftime('%m');
+                my $day = $today_dt->strftime('%d');
+                $value =~ s/<<YYYY>>/$year/g;
+                $value =~ s/<<MM>>/$month/g;
+                $value =~ s/<<DD>>/$day/g;
+                # And <<USER>> with surname (?)
+                my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
+                $value=~s/<<USER>>/$username/g;
+            }
+        } else {
+            $value =~ s/"/&quot;/g;
         }
         
         $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
@@ -153,7 +156,7 @@ sub generate_subfield_form {
             my $CNsubfield2 = substr($pref_itemcallnumber, 4, 1);
             my $temp2 = $temp->field($CNtag);
             if ($temp2) {
-                $value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
+                my $value = join ' ', $temp2->subfield($CNsubfield) || q{}, $temp2->subfield($CNsubfield2) || q{};
                 #remove any trailing space incase one subfield is used
                 $value =~ s/^\s+|\s+$//g;
             }
@@ -293,7 +296,9 @@ sub generate_subfield_form {
             };
         }
         elsif (
-                length($value) > 100
+                (
+                    $value and length($value) > 100
+                )
                 or (
                     C4::Context->preference("marcflavour") eq "UNIMARC"
                     and 300 <= $tag && $tag < 400 && $subfieldtag eq 'a'
@@ -323,7 +328,7 @@ sub generate_subfield_form {
         my $subfieldsToAllowForRestrictedEditing = C4::Context->preference('SubfieldsToAllowForRestrictedEditing');
         my $allowAllSubfields = (
             not defined $subfieldsToAllowForRestrictedEditing
-              or $subfieldsToAllowForRestrictedEditing == q||
+              or $subfieldsToAllowForRestrictedEditing eq q||
         ) ? 1 : 0;
         my @subfieldsToAllow = split(/ /, $subfieldsToAllowForRestrictedEditing);
 
@@ -370,7 +375,7 @@ my $input        = new CGI;
 my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
-my $op           = $input->param('op');
+my $op           = $input->param('op') || q{};
 my $hostitemnumber = $input->param('hostitemnumber');
 my $marcflavour  = C4::Context->preference("marcflavour");
 my $searchid     = $input->param('searchid');
