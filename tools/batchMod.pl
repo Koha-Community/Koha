@@ -316,7 +316,7 @@ my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 my $subfieldsToAllowForBatchmod = C4::Context->preference('SubfieldsToAllowForRestrictedBatchmod');
 my $allowAllSubfields = (
     not defined $subfieldsToAllowForBatchmod
-      or $subfieldsToAllowForBatchmod == q||
+      or $subfieldsToAllowForBatchmod eq q||
 ) ? 1 : 0;
 my @subfieldsToAllow = split(/ /, $subfieldsToAllowForBatchmod);
 
