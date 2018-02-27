@@ -44,7 +44,7 @@
 [% END %][% END %][% END %]
 
 [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |uri %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |uri %][% bt_id %]" /></a>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id %]" /></a>[% END %][% END %]
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author |html %]. [% END %]
 	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place |html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode |html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear |html %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate |html %][% END %][% END %]
