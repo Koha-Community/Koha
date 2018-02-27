@@ -416,5 +416,70 @@ $(document).ready(function() {
   if (("#pat_maninvoice").length) {
       $("#pat_maninvoice #invoice_type").prepend($("<option></option>").attr("selected",'selected').attr("value",'').text("-- Välj --")); 
       $("#pat_maninvoice #desc").attr("required",'required');
+  } 
+
+
+
+
+
+/* #### filter based on booksellerid #### */ 
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+} 
+
+let bookseller_ids = [{id: "1", identity_str: " Adlib "},{id: "2", identity_str: " Daw "},{id: "3", identity_str: " Delb " }];
+let current_bookseller_id = getParameterByName("booksellerid");
+let bookseller_to_filter_out_arr = jQuery.grep(bookseller_ids, function(item) {
+  return item.id !== current_bookseller_id;
+});
+
+
+// make array from select
+let select_arr = [];
+$("#ean option").each  ( function() {
+  select_arr.push({id: $(this).val(), content: $(this).text()});
+});
+
+let select_arr_filtered = [];
+select_arr_filtered =  $.map(select_arr, function(select_item,index) {
+  let temp = $.map(bookseller_to_filter_out_arr, function(item,index) {
+     if (select_item.content.indexOf(item.identity_str) === -1) {
+         return null;
+     }
+     else {
+       return true;
+     }
+  });
+  // compact it by removing null
+  temp = $.grep(temp, function(n, i){
+    return (n != null);
+  });
+  if (temp.length === 0) {
+    return select_item;
   }
+  else {
+    return null;
+  }
+});
+
+// compact it by removing null
+select_arr_filtered = $.grep(select_arr_filtered, function(n, i){
+ return (n != null);
+});
+
+// create new select
+$('#ean option').remove().end();
+$.each(select_arr_filtered, function(index, item) {
+  $('#ean').append('<option value="' + item.id + '">' + item.content + '</option>');
+})
+
+
+
 })(jQuery);
