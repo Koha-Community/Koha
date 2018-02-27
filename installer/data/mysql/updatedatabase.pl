@@ -15610,7 +15610,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 19290 - Add system preference BrowseResultSelection)\n";
+    print "Upgrade to $DBversion done (Bug 13287 - Add system preference PurgeSuggestionsOlderThan)\n";
 }
 
 # SEE bug 13068
