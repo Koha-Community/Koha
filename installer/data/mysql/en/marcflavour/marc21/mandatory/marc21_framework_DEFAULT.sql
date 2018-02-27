@@ -4484,7 +4484,7 @@ WHERE frameworkcode="" AND tagfield IN (
         OR  kohafield="biblio.author"
         OR  kohafield="biblioitems.publishercode"
         OR  kohafield="biblioitems.editionstatement"
-        OR  kohafield="biblioitems.publicationyear"
+        OR  kohafield="biblio.copyrightdate"
         OR  kohafield="biblioitems.isbn"
         OR  kohafield="biblio.seriestitle"
     ) AND frameworkcode=""
@@ -4493,4 +4493,4 @@ INSERT INTO marc_subfield_structure(tagfield, tagsubfield, liblibrarian, libopac
 SELECT tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, kohafield, tab, authorised_value, authtypecode, value_builder, isurl, hidden, 'ACQ', seealso, link, defaultvalue, maxlength
 FROM marc_subfield_structure
 WHERE frameworkcode=""
-AND kohafield IN ("biblio.title", "biblio.author", "biblioitems.publishercode", "biblioitems.editionstatement", "biblioitems.publicationyear", "biblioitems.isbn", "biblio.seriestitle" );
+AND kohafield IN ("biblio.title", "biblio.author", "biblioitems.publishercode", "biblioitems.editionstatement", "biblio.copyrightdate", "biblioitems.isbn", "biblio.seriestitle" );
