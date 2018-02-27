@@ -388,7 +388,7 @@
             var li_node = $("li.attributes:last");
             var li_clone = $(li_node).clone();
             if ( $(li_clone).find("a.del_attributes").length == 0 ) {
-                $(li_clone).append('<a href="#" title="Delete" class="del_attributes"><i class="fa fa-fw fa-trash"></i> Delete</a>');
+                $(li_clone).append('<a href="#" title="' + _("Delete") + '" class="del_attributes"><i class="fa fa-fw fa-trash"></i> ' + _("Delete") + '</a>');
             }
             $(li_clone).find('select[name="patron_attributes"]').change(function() {
                 updateAttrValues(this);
