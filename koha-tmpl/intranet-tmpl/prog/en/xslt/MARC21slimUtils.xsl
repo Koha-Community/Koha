@@ -351,6 +351,55 @@
     </xsl:template>
     <!-- /koha-suomi: cover image -->
 
+    <!-- koha-suomi: language -->
+    <xsl:template name="show-lang-041">
+       <xsl:if test="marc:datafield[@tag=041]">
+          <xsl:for-each select="marc:datafield[@tag=041]">
+             <span class="results_summary languages">
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='a']"/>
+		 <xsl:with-param name="langLabel">Language: </xsl:with-param>
+	       </xsl:call-template>
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='b']"/>
+		 <xsl:with-param name="langLabel">Summary language: </xsl:with-param>
+	       </xsl:call-template>
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='d']"/>
+		 <xsl:with-param name="langLabel">Spoken language: </xsl:with-param>
+	       </xsl:call-template>
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='h']"/>
+		 <xsl:with-param name="langLabel">Original language: </xsl:with-param>
+	       </xsl:call-template>
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='j']"/>
+		 <xsl:with-param name="langLabel">Subtitle language: </xsl:with-param>
+	       </xsl:call-template>
+             </span>
+          </xsl:for-each>
+       </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="show-lang-node">
+      <xsl:param name="langNode"/>
+      <xsl:param name="langLabel"/>
+      <xsl:if test="$langNode">
+	<span class="language">
+	  <span class="label"><xsl:value-of select="$langLabel"/></span>
+          <xsl:for-each select="$langNode">
+            <xsl:element name="img">
+	      <xsl:attribute name="src">/intranet-tmpl/prog/img/phoca/<xsl:value-of select="."/>.png</xsl:attribute>
+	      <xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
+	      <xsl:attribute name="title"><xsl:value-of select="."/></xsl:attribute>
+	      <xsl:attribute name="class">lang_icon</xsl:attribute>
+	    </xsl:element>
+	  </xsl:for-each>
+	</span>
+      </xsl:if>
+    </xsl:template>
+    <!-- /koha-suomi: language -->
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.

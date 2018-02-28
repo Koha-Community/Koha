@@ -236,6 +236,7 @@
         </span>
     </xsl:if>
 
+    <xsl:call-template name="show-lang-041"/> <!-- koha-suomi: language -->
 
         <!--Series: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
