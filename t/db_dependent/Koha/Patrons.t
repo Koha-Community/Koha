@@ -528,17 +528,17 @@ subtest 'get_age' => sub {
 
     $patron->dateofbirth( undef );
     is( $patron->get_age, undef, 'get_age should return undef if no dateofbirth is defined' );
-    $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
+    $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1, end_of_month => 'limit'  ) );
     is( $patron->get_age, 12, 'Patron should be 12' );
-    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 1 ) );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 1, end_of_month => 'limit'  ) );
     is( $patron->get_age, 17, 'Patron should be 17, happy birthday tomorrow!' );
-    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 0 ) );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => 0, days => 0, end_of_month => 'limit'  ) );
     is( $patron->get_age, 18, 'Patron should be 18' );
-    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -31 ) );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -31, end_of_month => 'limit'  ) );
     is( $patron->get_age, 19, 'Patron should be 19' );
-    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -30 ) );
+    $patron->dateofbirth( $today->clone->add( years => -18, months => -12, days => -30, end_of_month => 'limit'  ) );
     is( $patron->get_age, 19, 'Patron should be 19 again' );
-    $patron->dateofbirth( $today->clone->add( years => 0,   months => -1, days => -1 ) );
+    $patron->dateofbirth( $today->clone->add( years => 0,   months => -1, days => -1, end_of_month => 'limit'  ) );
     is( $patron->get_age, 0, 'Patron is a newborn child' );
 
     $patron->delete;
