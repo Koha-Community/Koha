@@ -301,23 +301,23 @@
                   <input type="hidden" name="lang" value="[% lang %]" />
                   <label for="is_html_[% letter.message_transport_type %]">HTML message:</label>
                   [% IF letter.is_html %]
-                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]" value="1" checked="checked" />
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]_[% lang %]" value="1" checked="checked" />
                   [% ELSE %]
-                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]" value="1" />
+                    <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]_[% lang %]" value="1" />
                   [% END %]
                 </li>
                 <li>
-                  <label for="title_[% letter.message_transport_type %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]" name="title" size="60" value="[% letter.title %]" />
+                  <label for="title_[% letter.message_transport_type %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]_[% lang %]" name="title" size="60" value="[% letter.title %]" />
                 </li>
                 <li>
                   <label for="SQLfieldname_[% letter.message_transport_type %]">Message body:</label>
                   [% IF letter.message_transport_type == 'sms' %]
-                    <span id="sms_counter">[% IF letter.content && letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
+                    <span class="sms_counter" id="sms_counter_[% lang %]">[% IF letter.content && letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
                   [% END %]
                   <table>
                     <tr>
                       <td>
-                        <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type %]" multiple="multiple" size="9">
+                        <select name="SQLfieldname" id="SQLfieldname_[% letter.message_transport_type %]_[% lang %]" multiple="multiple" size="9">
                           [% FOREACH SQLfieldname IN SQLfieldnames %]
                             <option value="[% SQLfieldname.value %]">[% SQLfieldname.text %]</option>
                           [% END %]
@@ -326,7 +326,7 @@
                         <td class="actions">
                             <button type="button" data-containerid="[% letter.message_transport_type %]_[% lang %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
                         </td>
-                      <td><textarea name="content" id="content_[% letter.message_transport_type %]" cols="80" rows="15">[% letter.content %]</textarea></td>
+                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content %]</textarea></td>
                     </tr>
                   </table>
                 </li>
@@ -500,13 +500,14 @@
             });
 
             var sms_limit = 160;
-            $("#content_sms").on("keyup", function(){
+            $(".content_sms").on("keyup", function(){
                 var length = $(this).val().length;
-                $("#sms_counter").html(length + "/" + sms_limit + _(" characters"));
+                var sms_counter = ("#sms_counter_" + $(this).data('lang'));
+                $(sms_counter).html(length + "/" + sms_limit + _(" characters"));
                 if ( length  > sms_limit ) {
-                    $("#sms_counter").css("color", "red");
+                    $(sms_counter).css("color", "red");
                 } else {
-                    $("#sms_counter").css("color", "black");
+                    $(sms_counter).css("color", "black");
                 }
             });
             $( ".transport-types" ).accordion({ collapsible: true, active:false, animate: 200 });
