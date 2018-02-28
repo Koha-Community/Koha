@@ -54,9 +54,10 @@ sub do_checkout {
 	my $patron_barcode = $self->{patron}->id;
         my $overridden_duedate; # usually passed as undef to AddIssue
 	$debug and warn "do_checkout: patron (" . $patron_barcode . ")";
-	my $borrower = $self->{patron}->getmemberdetails_object();
+    my $patron = Koha::Patrons->find( { cardnumber => $patron_barcode } );
+    my $borrower = $patron->unblessed;
 	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
-    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($borrower, $barcode,
+    my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode,
         C4::Context->preference("AllowItemsOnHoldCheckout")
     );
 
@@ -149,10 +150,10 @@ sub do_checkout {
 }
 
 sub _can_we_issue {
-    my ( $borrower, $barcode, $pref ) = @_;
+    my ( $patron, $barcode, $pref ) = @_;
 
     my ( $issuingimpossible, $needsconfirmation, $alerts ) =
-      CanBookBeIssued( $borrower, $barcode, undef, 0, $pref );
+      CanBookBeIssued( $patron, $barcode, undef, 0, $pref );
     for my $href ( $issuingimpossible, $needsconfirmation ) {
 
         # some data is returned using lc keys we only

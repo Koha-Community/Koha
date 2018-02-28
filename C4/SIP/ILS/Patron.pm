@@ -67,7 +67,6 @@ sub new {
     {
     no warnings;    # any of these $kp->{fields} being concat'd could be undef
     %ilspatron = (
-        getmemberdetails_object => $kp,
         name => $kp->{firstname} . " " . $kp->{surname},
         id   => $kp->{cardnumber},    # to SIP, the id is the BARCODE, not userid
         password        => $pw,
@@ -164,7 +163,6 @@ my %fields = (
     recall_overdue          => 0,   # for patron_status[12]
     too_many_billed         => 0,   # for patron_status[13]
     inet                    => 0,   # EnvisionWare extension
-    getmemberdetails_object => 0,
 );
 
 our $AUTOLOAD;
