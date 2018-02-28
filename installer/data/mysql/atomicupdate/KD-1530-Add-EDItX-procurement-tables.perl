@@ -4,7 +4,7 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
         CREATE TABLE procurement_bookseller_link (
         aqbooksellers_id INT(11) NOT NULL,
-        vendor_assigned_id VARCHAR(20) UNSIGNED NOT NULL,
+        vendor_assigned_id VARCHAR(20) NOT NULL,
         PRIMARY KEY (aqbooksellers_id, vendor_assigned_id),
         KEY ix_procurement_bookseller_link_aqbooksellers_id (aqbooksellers_id),
         KEY ix_procurement_bookseller_link_vendor_assigned_id (vendor_assigned_id),
