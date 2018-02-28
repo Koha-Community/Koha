@@ -512,6 +512,7 @@
             </span>
         </xsl:if>
 
+        <xsl:call-template name="show-age-rating"/> <!-- koha-suomi: kielletty alle -->
 
         <!-- Build ISBN -->
         <xsl:if test="marc:datafield[@tag=020]/marc:subfield[@code='a']">

@@ -400,6 +400,21 @@
     </xsl:template>
     <!-- /koha-suomi: language -->
 
+    <!-- koha-suomi: kielletty alle -->
+    <xsl:template name="show-age-rating">
+      <xsl:if test="marc:datafield[@tag=521]/marc:subfield[@code='a']">
+        <xsl:for-each select="marc:datafield[@tag=521]">
+          <xsl:variable name="agelimit" select="translate(marc:subfield[@code='a'], ' .-;', '')"/>
+          <xsl:choose>
+            <xsl:when test="starts-with($agelimit, 'K')">
+              <span class="results_summary age_limit">Suitable for <xsl:value-of select="substring($agelimit, 2)"/> years and older.</span>
+            </xsl:when>
+            </xsl:choose>
+        </xsl:for-each>
+      </xsl:if>
+    </xsl:template>
+    <!-- /koha-suomi: kielletty alle -->
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
