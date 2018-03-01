@@ -507,7 +507,7 @@
                                                         [% END # IF RequestOnOpac %]
 
                                                         [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
-                                                            [% IF Koha.Preference('ArticleRequests') %]
+                                                            [% IF SEARCH_RESULT.artreqpossible %]
                                                                 <span class="actions"><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Request article</a></span>
                                                             [% END %]
                                                         [% END %]

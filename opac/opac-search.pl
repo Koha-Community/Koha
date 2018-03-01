@@ -56,6 +56,7 @@ use Koha::ItemTypes;
 use Koha::Ratings;
 use Koha::Virtualshelves;
 use Koha::Library::Groups;
+use Koha::Patrons;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -641,6 +642,12 @@ for (my $i=0;$i<@servers;$i++) {
         }
         $hits = 0 unless @newresults;
 
+        my $categorycode; # needed for may_article_request
+        if( $borrowernumber && C4::Context->preference('ArticleRequests') ) {
+            my $patron = Koha::Patrons->find( $borrowernumber );
+            $categorycode = $patron ? $patron->categorycode : undef;
+        }
+
         foreach my $res (@newresults) {
 
             # must define a value for size if not present in DB
@@ -696,6 +703,12 @@ for (my $i=0;$i<@servers;$i++) {
                 $res->{ratings} = $ratings;
                 $res->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
             }
+
+            # BZ17530: 'Intelligent' guess if result can be article requested
+            $res->{artreqpossible} = Koha::Biblio->may_article_request({
+                categorycode => $categorycode,
+                itemtype     => $res->{itemtype},
+            });
         }
 
         if ($results_hashref->{$server}->{"hits"}){
