@@ -16,7 +16,7 @@ $(document).ready(function() {
     location.href = '/cgi-bin/koha/members/members-home.pl';
   });
   shortcut.add('F3', function() {
-    location.href = '/cgi-bin/koha/catalogue/itemsearch.pl#UB=barcode';
+    location.href = '/cgi-bin/koha/catalogue/search.pl#UB=barcode';
   });
 
   shortcut.add('F4', function() {
@@ -24,12 +24,7 @@ $(document).ready(function() {
   });
 
   shortcut.add('F5', function() {
-    if ($("#header_search #circ_search").length > 0) {
-      $("#header_search").selectTabByID("#circ_search");
-      $("#findborrower").focus();
-    } else {
-      location.href = '/cgi-bin/koha/circ/circulation-home.pl#UB=checkout';
-    }
+    location.href = '/cgi-bin/koha/circ/circulation-home.pl#UB=checkout';
   });
 
   shortcut.add('F6', function() {
@@ -92,10 +87,10 @@ $(document).ready(function() {
   }
 
   // F3
-  if (location.pathname === "/cgi-bin/koha/catalogue/itemsearch.pl" &&
-    location.hash === "#UB=barcode") {
-    $('input[name="q"]').focus();
-    $('input[name="q"]').parent().parent().goTo();
+  if (location.pathname === "/cgi-bin/koha/catalogue/search.pl" &&
+      location.hash === "#UB=barcode") {
+    var $theSelect = $('#catalog_advsearch #searchterms legend+div select');
+    $theSelect.val('bc');
   }
 
   //F4
