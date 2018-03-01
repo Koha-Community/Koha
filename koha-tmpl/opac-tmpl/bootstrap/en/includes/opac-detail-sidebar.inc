@@ -14,7 +14,7 @@
     <li><a class="print-large" href="#">Print</a></li>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-        [% IF Koha.Preference('ArticleRequests') %]
+        [% IF artreqpossible %]
             <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | html %]">Request article</a></li>
         [% END %]
     [% END %]

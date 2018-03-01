@@ -756,6 +756,14 @@ if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
+if( C4::Context->preference('ArticleRequests') ) {
+    my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
+    my $artreqpossible = $patron
+        ? $biblio->can_article_request( $patron )
+        : $biblio->may_article_request;
+    $template->param( artreqpossible => $artreqpossible );
+}
+
     $template->param(
                      MARCNOTES               => $marcnotesarray,
                      norequests              => $norequests,
