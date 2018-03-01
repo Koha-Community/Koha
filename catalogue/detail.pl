@@ -30,7 +30,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Serials;
-use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
+use C4::XISBN qw(get_xisbns);
 use C4::External::Amazon;
 use C4::Search;		# enabled_staff_search_views
 use C4::Tags qw(get_tags);

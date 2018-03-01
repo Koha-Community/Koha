@@ -39,20 +39,9 @@ BEGIN {
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(
 		&get_xisbns
-        &get_biblionumber_from_isbn
 	);
 }
 
-sub get_biblionumber_from_isbn {
-    my $isbn = shift;
-   	$isbn.='%';
-    my @biblionumbers;
-    my $dbh=C4::Context->dbh;
-    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ? LIMIT 10";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($isbn);
-	return $sth->fetchall_arrayref({});
-}
 =head1 NAME
 
 C4::XISBN - Functions for retrieving XISBN content in Koha

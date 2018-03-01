@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 4;
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
@@ -45,12 +45,7 @@ my $biblionumber1 = _add_biblio_with_isbn($isbn1);
 my $biblionumber2 = _add_biblio_with_isbn($isbn2);
 my $biblionumber3 = _add_biblio_with_isbn($isbn3);
 
-my $trial = C4::XISBN::get_biblionumber_from_isbn($isbn1);
-is( $trial->[0]->{biblionumber},
-    $biblionumber1,
-    "It gets the correct biblionumber from the only isbn we have added." );
-
-$trial = C4::XISBN::_get_biblio_from_xisbn($isbn1);
+my $trial = C4::XISBN::_get_biblio_from_xisbn($isbn1);
 is( $trial->{biblionumber},
     $biblionumber1, "Gets biblionumber like the previous test." );
 
