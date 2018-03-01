@@ -121,6 +121,65 @@ sub get_onshelfholds_policy {
     return $issuing_rule ? $issuing_rule->onshelfholds : undef;
 }
 
+=head3 article_requestable_rules
+
+    Return rules that allow article requests, optionally filtered by
+    patron categorycode.
+
+    Use with care; see guess_article_requestable_itemtypes.
+
+=cut
+
+sub article_requestable_rules {
+    my ( $class_or_self, $params ) = @_;
+    my $category = $params->{categorycode};
+
+    return if !C4::Context->preference('ArticleRequests');
+    return $class_or_self->search({
+        $category ? ( categorycode => [ $category, '*' ] ) : (),
+        article_requests => { '!=' => 'no' },
+    });
+}
+
+=head3 guess_article_requestable_itemtypes
+
+    Return item types in a hashref that are likely possible to be
+    'article requested'. Constructed by an intelligent guess in the
+    issuing rules (see article_requestable_rules).
+
+    Optional parameters: categorycode.
+
+    Note: the routine is used in opac-search to obtain a reasonable
+    estimate within performance borders (not looking at all items but
+    just using default itemtype). Also we are not looking at the
+    branchcode here, since home or holding branch of the item is
+    leading and branch may be unknown too (anonymous opac session).
+
+=cut
+
+our $last_article_requestable_guesses; # used during Plack life time
+
+sub guess_article_requestable_itemtypes {
+    my ( $class_or_self, $params ) = @_;
+    my $category = $params->{categorycode};
+    return {} if !C4::Context->preference('ArticleRequests');
+
+    my $key = $category || '*';
+    return $last_article_requestable_guesses->{$key}
+        if $last_article_requestable_guesses && exists $last_article_requestable_guesses->{$key};
+
+    my $res = {};
+    my $rules = $class_or_self->article_requestable_rules({
+        $category ? ( categorycode => $category ) : (),
+    });
+    return $res if !$rules;
+    foreach my $rule ( $rules->as_list ) {
+        $res->{ $rule->itemtype } = 1;
+    }
+    $last_article_requestable_guesses->{$key} = $res;
+    return $res;
+}
+
 =head3 type
 
 =cut

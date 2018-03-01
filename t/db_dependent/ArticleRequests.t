@@ -19,16 +19,17 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 55;
+use Test::More tests => 56;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Koha::Database;
 use Koha::Biblio;
 use Koha::Notice::Messages;
 use Koha::Patron;
-
-use t::lib::TestBuilder;
+use Koha::Library::Group;
+use Koha::IssuingRules;
 
 BEGIN {
     use_ok('Koha::ArticleRequest');
@@ -215,6 +216,34 @@ subtest 'search_limited' => sub {
     is( Koha::ArticleRequests->search_limited->count, $nb_article_requests, 'Koha::ArticleRequests->search_limited should return all article requests for superlibrarian' );
     set_logged_in_user( $patron_2 ); # Is restricted
     is( Koha::ArticleRequests->search_limited->count, 0, 'Koha::ArticleRequests->search_limited should not return all article requests for restricted patron' );
+};
+
+subtest 'may_article_request' => sub {
+    plan tests => 6;
+
+    # mocking
+    t::lib::Mocks::mock_preference('ArticleRequests', 1);
+    $Koha::IssuingRules::last_article_requestable_guesses = {
+        '*'  => { 'CR' => 1 },
+        'S'  => { '*'  => 1 },
+        'PT' => { 'BK' => 1 },
+    };
+
+    # tests for class method call
+    is( Koha::Biblio->may_article_request({ itemtype => 'CR' }), 1, 'SER/* should be true' );
+    is( Koha::Biblio->may_article_request({ itemtype => 'CR', categorycode => 'S' }), 1, 'SER/S should be true' );
+    is( Koha::Biblio->may_article_request({ itemtype => 'CR', categorycode => 'PT' }), '', 'SER/PT should be false' );
+
+    # tests for instance method call
+    my $builder = t::lib::TestBuilder->new;
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $biblioitem = $builder->build_object({ class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber, itemtype => 'BK' }});
+    is( $biblio->may_article_request, '', 'BK/* false' );
+    is( $biblio->may_article_request({ categorycode => 'S' }), 1, 'BK/S true' );
+    is( $biblio->may_article_request({ categorycode => 'PT' }), 1, 'BK/PT true' );
+
+    # Cleanup
+    $Koha::IssuingRules::last_article_requestable_guesses = undef;
 };
 
 $schema->storage->txn_rollback();
