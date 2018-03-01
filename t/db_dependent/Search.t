@@ -619,6 +619,11 @@ if ( $indexing_mode eq 'dom' ) {
     is( $query, "an:42 and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )", 'buildQuery should add the available part to the query if requested with ccl' );
     is( $query_desc, 'an:42', 'buildQuery should remove the available part from the query' );
 
+    ( $error, $query, $simple_query, $query_cgi,
+    $query_desc, $limit, $limit_cgi, $limit_desc,
+    $query_type ) = buildQuery([], [ 0 ], [ 'su,phr' ], [], [], 0, 'en');
+    is($query, 'su,phr=0 ', 'buildQuery should keep 0 value');
+
     # Let's see what happens when we pass bad data into these routines.
     # We have to catch warnings since we're not very good about returning errors.
 
@@ -970,12 +975,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 109;
+    plan tests => 110;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 109;
+    plan tests => 110;
     run_marc21_search_tests('dom');
 };
 
