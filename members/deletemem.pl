@@ -57,6 +57,7 @@ if ( $loggedinuser == $member ) {
 }
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $patron         = Koha::Patrons->find( $member );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Handle deletion from the Norwegian national patron database, if it is enabled
@@ -76,11 +77,8 @@ if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preferen
 my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
 my $countissues = scalar(@$issues);
 
-my $patron = Koha::Patrons->find( $member );
 my $charges = $patron->account->non_issues_charges;
 my $userenv = C4::Context->userenv;
-
- 
 
 if ($patron->category->category_type eq "S") {
     unless(C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) {
