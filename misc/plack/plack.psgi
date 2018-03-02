@@ -41,13 +41,11 @@ use Koha::Database;
 use Koha::DateUtils;
 
 #BZ 16520, add timestamps to warnings
-use Log::Log4perl qw(:easy);
-Log::Log4perl->easy_init({ level => $WARN, utf8 => 1 });
-my $logger = Log::Log4perl->get_logger(); # use the default logger style
-$SIG{__WARN__} = sub {
-    my $message = shift;
-    $logger->warn($message);
-};
+use Koha::Logger;
+
+my $logger = Koha::Logger->get({ interface => 'plack-error' });
+$SIG{__WARN__} = sub { $logger->warn(shift);  };
+$SIG{__DIE__}  = sub { $logger->fatal(shift); };
 
 use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 {
