@@ -28,10 +28,14 @@ else
     exit 1
 fi
 
+chdir="no"
+starting_dir=$(pwd)
+
 listopts=""
 while [ ! -z "$1" ]
 do
     case "$1" in
+        --chdir) chdir="yes";;
         --email) listopts="$listopts --email";;
       --noemail) listopts="$listopts --noemail";;
       --enabled) listopts="$listopts --enabled";;
@@ -53,6 +57,13 @@ do
     cmd=`echo "$@" | sed -e s/__instancename__/${name}/g`
 
     if [ "${cmd}" != "" ]; then
+
+        # Change to the instance's home dir if required
+        [ "chdir" != "no" ] && eval cd ~$name"-koha"
+
         koha-shell ${name} -c "${cmd}"
+
+        # Go back to the original dir if required
+        [ "chdir" != "no" ] && cd $starting_dir
     fi
 done
