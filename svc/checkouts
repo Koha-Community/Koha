@@ -90,6 +90,8 @@ my $sql = '
         items.itype,
         biblioitems.itemtype,
 
+        items.ccode,
+
         borrowernumber,
         surname,
         firstname,
@@ -171,6 +173,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         barcode              => $c->{barcode},
         itemtype             => $item_level_itypes ? $c->{itype} : $c->{itemtype},
         itemtype_description => $itemtype ? $itemtype->translated_description : q{},
+        ccode                => $c->{ccode},
         location             => $location,
         homebranch           => $c->{homebranch},
         itemnotes            => $c->{itemnotes},

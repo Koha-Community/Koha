@@ -297,6 +297,11 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
+                        return oObj.ccode.escapeHtml();
+                    }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
                         return oObj.location.escapeHtml();
                     }
                 },
@@ -629,6 +634,11 @@ $(document).ready(function() {
                     {
                         "mDataProp": function ( oObj ) {
                             return oObj.itemtype_description.escapeHtml();
+                        }
+                    },
+                    {
+                        "mDataProp": function ( oObj ) {
+                            return oObj.ccode.escapeHtml();
                         }
                     },
                     {
