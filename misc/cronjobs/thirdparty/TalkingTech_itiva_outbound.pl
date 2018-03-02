@@ -37,6 +37,7 @@ use C4::Letters;
 use C4::Overdues;
 use Koha::Calendar;
 use Koha::DateUtils;
+use Koha::Patrons;
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -57,6 +58,7 @@ my @holds_waiting_days_to_call;
 my $library_code;
 my $help;
 my $outfile;
+my $skip_patrons_with_email;
 
 # maps to convert I-tiva terms to Koha terms
 my $type_module_map = {
@@ -78,6 +80,7 @@ GetOptions(
     'type:s'                => \@types,
     'w|waiting-hold-day:s'  => \@holds_waiting_days_to_call,
     'c|code|library-code:s' => \$library_code,
+    's|skip-patrons-with-email' => \$skip_patrons_with_email,
     'help|h'                => \$help,
 );
 
@@ -116,7 +119,11 @@ foreach my $type (@types) {
         next;
     }
 
+    my $patrons;
     foreach my $issues (@loop) {
+        $patrons->{$issues->{borrowernumber}} ||= Koha::Patrons->find( $issues->{borrowernumber} ) if $skip_patrons_with_email;
+        next if $skip_patrons_with_email && $patrons->{$issues->{borrowernumber}}->notice_email_address;
+
         my $date_dt = dt_from_string ( $issues->{'date_due'} );
         my $due_date = output_pref( { dt => $date_dt, dateonly => 1, dateformat =>'metric' } );
 
