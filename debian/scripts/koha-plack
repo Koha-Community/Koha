@@ -92,11 +92,18 @@ start_plack()
 
         log_daemon_msg "Starting Plack daemon for ${instancename}"
 
+        # Change to the instance's user dir
+        current_dir=$(pwd)
+        eval cd "~$instancename-koha"
+
         if ${STARMAN} ${STARMANOPTS}; then
             log_end_msg 0
         else
             log_end_msg 1
         fi
+        # Go back to the original dir
+        cd $current_dir
+
     else
         log_daemon_msg "Error: Plack already running for ${instancename}"
         log_end_msg 1
