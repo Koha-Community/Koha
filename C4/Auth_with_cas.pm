@@ -32,10 +32,10 @@ use YAML;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
-	require Exporter;
-	$debug = $ENV{DEBUG};
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
+    require Exporter;
+    $debug = $ENV{DEBUG};
+    @ISA   = qw(Exporter);
+    @EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
 }
 my $defaultcasserver;
 my $casservers;
