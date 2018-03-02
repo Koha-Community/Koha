@@ -270,11 +270,13 @@ sub pay {
             letter_code            => uc("ACCOUNT_$type"),
             message_transport_type => 'email',
             lang    => Koha::Patrons->find( $self->{patron_id} )->lang,
-            objects => {
-                patron  => scalar Koha::Patrons->find( $self->{patron_id} ),
-                library => scalar Koha::Libraries->find( $self->{library_id} ),
-                offsets => \@account_offsets,
-                credit  => $payment,
+            tables => {
+                borrowers       => $self->{patron_id},
+                branches        => $self->{library_id},
+            },
+            substitute => {
+                credit => $payment,
+                offsets => scalar Koha::Account::Offsets->search( { id => { -in => [ map { $_->id } @account_offsets ] } } ),
             },
           )
       )
