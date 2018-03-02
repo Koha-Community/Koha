@@ -37,7 +37,7 @@
                     alert(_("Please select at least one batch to export."));
                     return;     // no batch selected
                 }
-                return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?" + getstr, 400, 800);
+                return GB_showCenter(_("Export Labels"), "/cgi-bin/koha/labels/label-print.pl?" + getstr, 400, 800);
             };
             function selected_layout(op) {
                 var selected = new Array;
