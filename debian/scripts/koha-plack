@@ -85,6 +85,8 @@ start_plack()
     PLACK_WORKERS=$(run_safe_xmlstarlet $instancename plack_workers)
     [ -z $PLACK_WORKERS ] && PLACK_WORKERS="2"
 
+    instance_user="${instancename}-koha"
+
     environment="deployment"
     daemonize="--daemonize"
     logging="--access-log /var/log/koha/${instancename}/plack.log \
@@ -100,7 +102,7 @@ start_plack()
     fi
 
     STARMANOPTS="-M FindBin ${max_requests_and_workers} \
-                 --user=${instancename}-koha --group ${instancename}-koha \
+                 --user=${instance_user} --group ${instancename}-koha \
                  --pid ${PIDFILE} ${daemonize} ${logging} \
                  -E ${environment} --socket ${PLACKSOCKET} ${PSGIFILE}"
 
@@ -109,11 +111,18 @@ start_plack()
 
         log_daemon_msg "Starting Plack daemon for ${instancename}"
 
+        # Change to the instance's user dir
+        current_dir=$(pwd)
+        eval cd ~$instance_user
+
         if ${STARMAN} ${STARMANOPTS}; then
             log_end_msg 0
         else
             log_end_msg 1
         fi
+        # Go back to the original dir
+        cd $current_dir
+
     else
         log_daemon_msg "Error: Plack already running for ${instancename}"
         log_end_msg 1
