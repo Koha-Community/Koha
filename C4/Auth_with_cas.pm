@@ -52,6 +52,10 @@ if (multipleAuth()) {
     $casservers = { 'default' => C4::Context->preference('casServerUrl') };
 }
 
+=head1 Subroutines
+
+=cut
+
 # Is there a configuration file for multiple cas servers?
 sub multipleAuth {
     return (-e qq($yamlauthfile));
@@ -228,7 +232,12 @@ sub _url_with_get_params {
     return $uri_base_part . $uri_params_part;
 }
 
-# CAS single logout
+=head2 logout_if_required
+
+    If using CAS, this subroutine will trigger single-signout of the CAS server.
+
+=cut
+
 sub logout_if_required {
     my ( $query ) = @_;
     # Check we havent been hit by a logout call
