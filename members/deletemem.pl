@@ -57,7 +57,6 @@ if ( $loggedinuser == $member ) {
 }
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
-my $patron         = Koha::Patrons->find( $member );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Handle deletion from the Norwegian national patron database, if it is enabled
@@ -108,7 +107,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
-if ( $op eq 'delete_confirm' or $countissues > 0 or $flags->{'CHARGES'}  or $is_guarantor or $deletelocal == 0) {
+if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor or $deletelocal == 0) {
 
     $template->param(
         patron => $patron,
