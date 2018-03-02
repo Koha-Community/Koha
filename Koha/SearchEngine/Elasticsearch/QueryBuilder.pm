@@ -892,7 +892,41 @@ sub _clean_search_term {
     # Remove unquoted colons that have whitespace on either side of them
     $term =~ s/(\:[:\s]+|[:\s]+:)$lookahead//g;
 
+    $term = $self->_query_regex_escape_process($term);
+
     return $term;
+}
+
+=head2 _query_regex_escape_process
+
+    my $query = $self->_query_regex_escape_process($query);
+
+Processes query in accordance with current "QueryRegexEscapeOptions" system preference setting.
+
+=cut
+
+sub _query_regex_escape_process {
+    my ($self, $query) = @_;
+    my $regex_escape_options = C4::Context->preference("QueryRegexEscapeOptions");
+    if ($regex_escape_options ne 'dont_escape') {
+        if ($regex_escape_options eq 'escape') {
+            # Will escape unescaped slashes (/) while preserving
+            # unescaped slashes within quotes
+            # @TODO: assumes quotes are always balanced and will
+            # not handle escaped qoutes properly, should perhaps be
+            # replaced with a more general parser solution
+            # so that this function is ever only provided with unqouted
+            # query parts
+            $query =~ s@(?:(?<!\\)((?:[\\]{2})*)(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@\\$1@g;
+        }
+        elsif($regex_escape_options eq 'unescape_escaped') {
+            # Will unescape escaped slashes (\/) and escape
+            # unescaped slashes (/) while preserving slashes within quotes
+            # The same limitatations as above apply for handling of quotes
+            $query =~ s@(?:(?<!\\)(?:((?:[\\]{2})*[\\])|((?:[\\]{2})*))(?=/))(?![^"]*"(?:[^"]*"[^"]*")*[^"]*$)@($1 ? substr($1, 0, -1) : ($2 . "\\"))@ge;
+        }
+    }
+    return $query;
 }
 
 =head2 _fix_limit_special_cases

@@ -30,6 +30,13 @@ Searching:
                   no: Disable
             - ranking of search results by relevance (REQUIRES ZEBRA).
         -
+            - pref: QueryRegexEscapeOptions
+              choices:
+                  escape: Escape
+                  unescape_escaped: Unescape escaped
+                  dont_escape: Don't escape
+            - "regular expressions within query strings. If \"Unescape escaped\" is selected this will allow writing regular expressions \"\/like this\/\" while \"/this/\", \"or/this\" will be escaped and interpreted by Elasticsearch as regular strings."
+        -
             - pref: OpacGroupResults
               default: 0
               choices:
