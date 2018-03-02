@@ -111,35 +111,39 @@
             </h1>
         </xsl:if>
 
-        <!--Component part records: Displaying title and author of component part records if available. These are floated to right by css. -->
+        <!-- Component part records: Displaying title and author of component part records -->
         <xsl:if test="marc:componentPartRecords/marc:componentPart">
-                 <span class="componentPartRecordsContainer results_summary">
-                       <h5>Component part records:</h5>
-                       <xsl:for-each select="marc:componentPartRecords/marc:componentPart">
-                         <span class="componentPartRecord">
-                                 <span class="componentPartRecordTitle">
-                                       <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:biblionumber" /></xsl:attribute>
-                                          <xsl:choose>
-                                            <xsl:when test="marc:title">
-                                              <xsl:value-of select="substring-before( concat(marc:title, '/'), '/')" />
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                              <xsl:value-of select="substring-before( concat(marc:unititle, '/'), '/')" />
-                                            </xsl:otherwise>
-                                          </xsl:choose>
-                                       </a>
-                                 </span>
-                               <xsl:if test="marc:author">
-                                 -
-                                 <span class="componentPartRecordAuthor">
-                                       <xsl:value-of select="marc:author" />
-                                 </span>
-                               </xsl:if>
-                         </span>
-                         <br />
-                       </xsl:for-each>
-                 </span>
-               </xsl:if>
+            <span class="results_summary componentPartRecordsContainer">
+                <h5>Component part records:</h5>
+                <ol class="componentParts">
+                    <xsl:for-each select="marc:componentPartRecords/marc:componentPart">
+                        <li>
+                            <span class="componentPartRecord">
+                                <span class="componentPartRecordTitle">
+                                    <a>
+                                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:biblionumber" /></xsl:attribute>
+                                    <xsl:choose>
+                                        <xsl:when test="marc:title">
+                                            <xsl:value-of select="substring-before( concat(marc:title, '/'), '/')" />
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="substring-before( concat(marc:unititle, '/'), '/')" />
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    </a>
+                                </span>
+                                <xsl:if test="marc:author">
+                                    -
+                                    <span class="componentPartRecordAuthor">
+                                        <xsl:value-of select="marc:author" />
+                                    </span>
+                                </xsl:if>
+                            </span>
+                        </li>
+                    </xsl:for-each>
+                </ol>
+            </span>
+        </xsl:if>
 
 
         <!--Bug 13381 -->
