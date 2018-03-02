@@ -23,7 +23,7 @@
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-foreach</command> <arg><option>--enabled</option></arg> <arg><option>--email</option>|<option>--noemail</option></arg> <arg><option>command</option></arg>
+      <command>koha-foreach</command> <arg><option>--chdir</option></arg> <arg><option>--enabled</option></arg> <arg><option>--email</option>|<option>--noemail</option></arg> <arg><option>command</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -31,7 +31,20 @@
   <para>Run a command for each Koha instance. Takes the same arguments as koha-list.</para>
   <para>The string "__instancename__" is replaced in the argument list with the name of the Koha instance in each iteration.</para>
   </refsect1>
-  
+
+  <refsect1>
+    <title>Options</title>
+      <variablelist>
+      <varlistentry>
+        <term><option>--chdir</option></term>
+        <listitem>
+          <para>This option makes the command jump into the instance's home directory before running the required command. This prevents
+            directory traversal permissions issues.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
   <refsect1><title>See also</title>
   <simplelist type="inline">
     <member><command>koha-create-dirs(8)</command></member>
