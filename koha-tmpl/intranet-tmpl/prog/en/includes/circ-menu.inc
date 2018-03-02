@@ -65,7 +65,8 @@
     [% END %][% END %]
     <li class="patroncategory">Category: [% patron.category.description %] ([% patron.categorycode %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( patron.branchcode ) %]</li>
-</ul></div>
+    <li class="patronborrowernumber">Borrower Number: ([% patron.borrowernumber %])</li>
+  </ul></div>
 <div id="menu">
 <ul>
     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
