@@ -175,7 +175,11 @@ sub _item_looper {
     my $limit = $self->limit ? $self->limit : $params->{'limit'};
     my $count = 0;
 
-    my @holds = Koha::Holds->search({ biblionumber => $biblio->biblionumber })->as_list;
+    my @holds = Koha::Holds->search({
+        biblionumber => $biblio->biblionumber,
+        borrowernumber => $patron->borrowernumber,
+    })->as_list if $patron;
+
     my @nonfound_holds = Koha::Holds->search({
         biblionumber => $biblio->biblionumber,
         found => undef,
