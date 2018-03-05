@@ -296,9 +296,9 @@ $(document).ready(function(){
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
     });
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear all</a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select all</a>");
-    $("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option>[% IF Koha.Preference( 'opacbookbag' ) == 1 %]<option value=\"addtocart\">Cart</option>[% END %][% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %]<optgroup label=\"Lists:\">[% IF ( barshelves ) %][% FOREACH barshelvesloo IN barshelvesloop %][% IF ( category == 1 ) %]<option id=\"s[% barshelvesloo.shelfnumber %]\" value=\"addtolist\">[% barshelvesloo.shelfname | html %]</option>[% END %][% END %][% END %]<option value=\"newlist\">[ New list ]</option></optgroup>[% ELSE %]<option value=\"newlist\">List</option>[% END %][% END %]</select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">" + _("Clear all") + "</a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">" + _("Select all") + "</a>");
+    $("span.addto").html("<label for=\"addto\">" + _("Add to: ") + "</label><select name=\"addto\" id=\"addto\"><option value=\"\"></option>[% IF Koha.Preference( 'opacbookbag' ) == 1 %]<option value=\"addtocart\">" + _("Cart") + "</option>[% END %][% IF Koha.Preference( 'virtualshelves' ) == 1 %][% IF ( loggedinusername ) %]<optgroup label=\"" + _("Lists:") + "\">[% IF ( barshelves ) %][% FOREACH barshelvesloo IN barshelvesloop %][% IF ( category == 1 ) %]<option id=\"s[% barshelvesloo.shelfnumber %]\" value=\"addtolist\">[% barshelvesloo.shelfname | html %]</option>[% END %][% END %][% END %]<option value=\"newlist\">" + _("[ New list ]") + "</option></optgroup>[% ELSE %]<option value=\"newlist\">" + _("List") + "</option>[% END %][% END %]</select> <input type=\"submit\" class=\"submit\" value=\"" + _("Save") + "\" />");
     $("#addto").change(function(){
         cartList();
     });
