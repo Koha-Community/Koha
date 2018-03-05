@@ -202,7 +202,7 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 15;
+    plan tests => 16;
 
     my $borrno_tmp = $post_data->{'borrowernumber'};
     $post_data->{'borrowernumber'} = int $nopermission->{'borrowernumber'};
@@ -236,7 +236,8 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
             }
         )
       )
-      ->json_is( '/priority', 2 );
+      ->json_is( '/priority',   2 )
+      ->json_is( '/itemnumber', $itemnumber );
 };
 
 subtest "Test endpoints with permission" => sub {
