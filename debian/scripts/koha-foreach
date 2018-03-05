@@ -59,11 +59,11 @@ do
     if [ "${cmd}" != "" ]; then
 
         # Change to the instance's home dir if required
-        [ "chdir" != "no" ] && eval cd ~$name"-koha"
+        [ "$chdir" != "no" ] && eval cd ~$name"-koha"
 
         koha-shell ${name} -c "${cmd}"
 
         # Go back to the original dir if required
-        [ "chdir" != "no" ] && cd $starting_dir
+        [ "$chdir" != "no" ] && cd "$starting_dir"
     fi
 done
