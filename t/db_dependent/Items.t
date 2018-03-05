@@ -148,7 +148,7 @@ subtest 'ModItem tests' => sub {
 
 subtest 'GetHiddenItemnumbers tests' => sub {
 
-    plan tests => 9;
+    plan tests => 11;
 
     # This sub is controlled by the OpacHiddenItems system preference.
 
@@ -198,12 +198,12 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     push @items, GetItem( $item2_itemnumber );
 
     # Empty OpacHiddenItems
-    C4::Context->set_preference('OpacHiddenItems','');
+    t::lib::Mocks::mock_preference('OpacHiddenItems','');
     ok( !defined( GetHiddenItemnumbers( { items => \@items } ) ),
         "Hidden items list undef if OpacHiddenItems empty");
 
     # Blank spaces
-    C4::Context->set_preference('OpacHiddenItems','  ');
+    t::lib::Mocks::mock_preference('OpacHiddenItems','  ');
     ok( scalar GetHiddenItemnumbers( { items => \@items } ) == 0,
         "Hidden items list empty if OpacHiddenItems only contains blanks");
 
@@ -219,7 +219,6 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     $opachiddenitems = "
         withdrawn: [1,0]";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    C4::Context->set_preference( 'OpacHiddenItems', $opachiddenitems );
     @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and withdrawn=0 hidden");
@@ -233,6 +232,13 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     @hidden = GetHiddenItemnumbers( { items => \@items } );
     ok( scalar @hidden == 2, "Two items hidden");
     is_deeply( \@hidden, \@itemnumbers, "withdrawn=1 and homebranch library2 hidden");
+
+    # Override hidden with patron category
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsExceptions', 'S' );
+    @hidden = GetHiddenItemnumbers( { items => \@items, borcat => 'PT' } );
+    ok( scalar @hidden == 2, "Two items still hidden");
+    @hidden = GetHiddenItemnumbers( { items => \@items, borcat => 'S' } );
+    ok( scalar @hidden == 0, "Two items not hidden");
 
     # Valid OpacHiddenItems, empty list
     @items = ();
@@ -554,7 +560,7 @@ subtest 'Koha::Item(s) tests' => sub {
 };
 
 subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin();
 
@@ -605,18 +611,30 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     warning_is { C4::Biblio::EmbedItemsInMarcBiblio() }
     { carped => 'EmbedItemsInMarcBiblio: No MARC record passed' },
-      'Should crap is no record passed.';
+      'Should carp is no record passed.';
 
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber );
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber });
     my @items = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items' );
 
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber,
-        [ $itemnumbers[1], $itemnumbers[3] ] );
+    my $marc_with_items = C4::Biblio::GetMarcBiblio({
+        biblionumber => $biblionumber,
+        embed_items  => 1 });
+    is_deeply( $record, $marc_with_items, 'A direct call to GetMarcBiblio with items matches');
+
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber,
+        item_numbers => [ $itemnumbers[1], $itemnumbers[3] ] });
     @items = $record->field($itemfield);
     is( scalar @items, 2, 'Should return all items present in the list' );
 
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber,
+        opac         => 1 });
     @items = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items for opac' );
 
@@ -624,13 +642,18 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
         homebranch: ['$library1->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
 
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber );
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber });
     @items = $record->field($itemfield);
     is( scalar @items,
         $number_of_items,
         'Even with OpacHiddenItems set, all items should have been embedded' );
 
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber,
+        opac         => 1 });
     @items = $record->field($itemfield);
     is(
         scalar @items,
@@ -641,7 +664,10 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     $opachiddenitems = "
         homebranch: ['$library1->{branchcode}', '$library2->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
-    C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
+    C4::Biblio::EmbedItemsInMarcBiblio({
+        marc_record  => $record,
+        biblionumber => $biblionumber,
+        opac         => 1 });
     @items = $record->field($itemfield);
     is(
         scalar @items,

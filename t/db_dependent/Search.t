@@ -22,6 +22,7 @@ use utf8;
 use YAML;
 
 use C4::Debug;
+use C4::XSLT;
 require C4::Context;
 
 # work around spurious wide character warnings
@@ -99,6 +100,11 @@ our $QueryFuzzy = 0;
 our $UseQueryParser = 0;
 our $SearchEngine = 'Zebra';
 our $marcflavour = 'MARC21';
+our $htdocs = File::Spec->rel2abs(dirname($0));
+my @htdocs = split /\//, $htdocs;
+$htdocs[-2] = 'koha-tmpl';
+$htdocs[-1] = 'opac-tmpl';
+$htdocs = join '/', @htdocs;
 our $contextmodule = new Test::MockModule('C4::Context');
 $contextmodule->mock('preference', sub {
     my ($self, $pref) = @_;
@@ -140,6 +146,38 @@ $contextmodule->mock('preference', sub {
         return '';
     } elsif ($pref eq 'template') {
         return 'prog';
+    } elsif ($pref eq 'OPACXSLTResultsDisplay') {
+        return C4::XSLT::_get_best_default_xslt_filename($htdocs, 'bootstrap','en',$marcflavour . 'slim2OPACResults.xsl');
+    } elsif ($pref eq 'BiblioDefaultView') {
+        return 'normal';
+    } elsif ($pref eq 'IdRef') {
+        return '0';
+    } elsif ($pref eq 'IntranetBiblioDefaultView') {
+        return 'normal';
+    } elsif ($pref eq 'OPACBaseURL') {
+        return 'http://library.mydnsname.org';
+    } elsif ($pref eq 'OPACResultsLibrary') {
+        return 'homebranch';
+    } elsif ($pref eq 'OpacSuppression') {
+        return '0';
+    } elsif ($pref eq 'OPACURLOpenInNewWindow') {
+        return '0';
+    } elsif ($pref eq 'TraceCompleteSubfields') {
+        return '0';
+    } elsif ($pref eq 'TraceSubjectSubdivisions') {
+        return '0';
+    } elsif ($pref eq 'TrackClicks') {
+        return '0';
+    } elsif ($pref eq 'URLLinkText') {
+        return q{};
+    } elsif ($pref eq 'UseAuthoritiesForTracings') {
+        return '1';
+    } elsif ($pref eq 'UseControlNumber') {
+        return '0';
+    } elsif ($pref eq 'UseICU') {
+        return '0';
+    } elsif ($pref eq 'viewISBD') {
+        return '1';
     } else {
         warn "The syspref $pref was requested but I don't know what to say; this indicates that the test requires updating"
             unless $pref =~ m/(XSLT|item|branch|holding|image)/i;

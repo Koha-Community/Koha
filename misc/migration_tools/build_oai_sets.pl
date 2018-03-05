@@ -127,7 +127,9 @@ foreach my $res (@$results) {
         next;
     }
     if($embed_items) {
-        C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber);
+        C4::Biblio::EmbedItemsInMarcBiblio({
+            marc_record  => $record,
+            biblionumber => $biblionumber });
     }
 
     my @biblio_sets = CalcOAISetsBiblio($record, $mappings);

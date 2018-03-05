@@ -41,6 +41,7 @@ use C4::Debug;
 use C4::Output qw(:html :ajax pagination_bar);
 use C4::Scrubber;
 use C4::Biblio;
+use C4::Items qw(GetItemsInfo GetHiddenItemnumbers);
 use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag stratify_tags);
 use C4::XSLT;
 
@@ -226,13 +227,35 @@ if ($is_ajax) {
 
 my $results = [];
 my $my_tags = [];
+my $borcat  = q{};
 
 if ($loggedinuser) {
+    my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
+    $borcat = $patron ? $patron->categorycode : $borcat;
+    my $should_hide = C4::Context->preference('OpacHiddenItems') // q{};
+    $should_hide = ( $should_hide =~ /\S/ ) ? 1 : 0;
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
     my $my_approved_tags = get_approval_rows({ approved => 1 });
     foreach my $tag (@$my_tags) {
+        $tag->{visible} = 0;
         my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
-        my $record = &GetMarcBiblio({ biblionumber => $tag->{biblionumber} });
+        my $record = &GetMarcBiblio({
+            biblionumber => $tag->{biblionumber},
+            embed_items  => 1,
+            opac         => 1,
+            borcat       => $borcat });
+        next unless $record;
+        my $hidden_items = undef;
+        my @hidden_itemnumbers;
+        my @all_items;
+        if ($should_hide) {
+            @all_items = GetItemsInfo( $tag->{biblionumber} );
+            @hidden_itemnumbers = GetHiddenItemnumbers({
+                items => \@all_items,
+                borcat => $borcat });
+            $hidden_items = \@hidden_itemnumbers;
+        }
+        next if ( $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
         $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
         $tag->{title} = $biblio->title;
         $tag->{author} = $biblio->author;
@@ -244,7 +267,7 @@ if ($loggedinuser) {
         if ( $xslfile ) {
             $tag->{XSLTBloc} = XSLTParse4Display(
                     $tag->{ biblionumber }, $record, "OPACXSLTResultsDisplay",
-                    1, undef, $sysxml, $xslfile, $lang
+                    1, $hidden_items, $sysxml, $xslfile, $lang
             );
         }
 
@@ -252,6 +275,7 @@ if ($loggedinuser) {
         $date =~ /\s+(\d{2}\:\d{2}\:\d{2})/;
         $tag->{time_created_display} = $1;
         $tag->{approved} = ( grep { $_->{term} eq $tag->{term} and $_->{approved} } @$my_approved_tags );
+        $tag->{visible} = 1;
     }
 }
 
@@ -281,6 +305,24 @@ if ($add_op) {
 		$arghash->{biblionumber} = $arg;
 	}
 	$results = get_approval_rows($arghash);
+    my @filtered_results;
+    foreach my $my_tag (@$my_tags) {
+        if (grep { $_->{term} eq $my_tag->{term} } @$results) {
+            if (! $my_tag->{visible} ) {
+                my $check_biblio = GetMarcBiblio({
+                    biblionumber => $my_tag->{biblionumber},
+                    embed_items  => 1,
+                    opac         => 1,
+                    borcat       => $borcat });
+                if ($check_biblio) {
+                    push @filtered_results, $my_tag;
+                }
+            } else {
+                push @filtered_results, $my_tag;
+            }
+        }
+    }
+    $results = \@filtered_results;
     stratify_tags(10, $results); # work out the differents sizes for things
 	my $count = scalar @$results;
 	$template->param(TAGLOOP_COUNT => $count, mine => $mine);

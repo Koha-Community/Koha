@@ -50,6 +50,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     }
 );
 
+my $borcat = q{};
+if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    # we need to fetch the borrower info here, so we can pass the category
+    my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+    $borcat = $borrower ? $borrower->categorycode : $borcat;
+}
+
 my $shelfnumber = $query->param('shelfnumber');
 my $format  = $query->param('format');
 my $context = $query->param('context');
@@ -83,7 +90,9 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
 
                 my $record = GetMarcBiblio({
                     biblionumber => $biblionumber,
-                    embed_items  => 1 });
+                    embed_items  => 1,
+                    opac         => 1,
+                    borcat       => $borcat });
                 my $framework = &GetFrameworkCode( $biblionumber );
                 $record_processor->options({
                     interface => 'opac',

@@ -60,6 +60,14 @@ use Koha::RecordProcessor;
 use Koha::Biblios;
 
 my $query = CGI->new();
+my $biblionumber = $query->param('biblionumber');
+if ( !$biblionumber ) {
+    print $query->redirect('/cgi-bin/koha/errors/404.pl');
+    exit;
+}
+$biblionumber = int($biblionumber);
+
+#open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-ISBDdetail.tt",
@@ -70,8 +78,41 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $query->param('biblionumber');
-$biblionumber = int($biblionumber);
+my $borcat = q{};
+if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    # we need to fetch the borrower info here, so we can pass the category
+    my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
+    $borcat = $patron ? $patron->categorycode : $borcat;
+}
+
+my $record = GetMarcBiblio({
+    biblionumber => $biblionumber,
+    embed_items  => 1,
+    opac         => 1,
+    borcat       => $borcat });
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+my @all_items = GetItemsInfo($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $framework = $biblio ? $biblio->frameworkcode : q{};
+my ($tag_itemnumber, $subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
+my @nonhiddenitems = $record->field($tag_itemnumber);
+if (scalar @all_items >= 1 && scalar @nonhiddenitems == 0) {
+    print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
+    exit;
+}
+
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'opac',
+        frameworkcode => $framework
+    }
+});
+$record_processor->process($record);
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
@@ -82,44 +123,6 @@ if(my $cart_list = $query->cookie("bib_list")){
 }
 
 my $marcflavour      = C4::Context->preference("marcflavour");
-
-my @items = GetItemsInfo($biblionumber);
-if (scalar @items >= 1) {
-    my $borcat;
-    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-
-        # we need to fetch the borrower info here, so we can pass the category
-        my $borrower = GetMember( borrowernumber => $borrowernumber );
-        $borcat = $borrower->{categorycode};
-    }
-
-    my @hiddenitems = GetHiddenItemnumbers( { items => \@items, borcat => $borcat });
-
-    if (scalar @hiddenitems == scalar @items ) {
-        print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
-        exit;
-    }
-}
-
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1 });
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
-
-my $biblio = Koha::Biblios->find( $biblionumber );
-
-my $framework = GetFrameworkCode( $biblionumber );
-my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
-    options => {
-        interface => 'opac',
-        frameworkcode => $framework
-    }
-});
-$record_processor->process($record);
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
@@ -142,7 +145,6 @@ $template->param(
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $record );
 
 my @subscriptions       = SearchSubscriptions({ biblionumber => $biblionumber, orderby => 'title' });
@@ -178,7 +180,7 @@ my $res = GetISBDView({
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 my $patron = Koha::Patrons->find( $loggedinuser );
-for my $itm (@items) {
+for my $itm (@all_items) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
     $norequests = 0
       if $norequests

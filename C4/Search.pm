@@ -1908,7 +1908,7 @@ sub searchResults {
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
-    my $interface = $search_context eq 'opac' ? 'OPAC' : '';
+    my $interface = $is_opac ? 'OPAC' : '';
     my $xslsyspref = $interface . "XSLTResultsDisplay";
     my $xslfile = C4::Context->preference($xslsyspref);
     my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
@@ -2206,9 +2206,9 @@ sub searchResults {
                     $other_items->{$key}->{intransit} = ( $transfertwhen ne '' ) ? 1 : 0;
                     $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
                     $other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value and $item->{notforloan};
-					$other_items->{$key}->{count}++ if $item->{$hbranch};
-					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-					$other_items->{$key}->{description} = $item->{description};
+                    $other_items->{$key}->{count}++ if $item->{$hbranch};
+                    $other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
+                    $other_items->{$key}->{description} = $item->{description};
                     $other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
@@ -2217,9 +2217,9 @@ sub searchResults {
                     $available_count++;
 					$available_items->{$prefix}->{count}++ if $item->{$hbranch};
 					foreach (qw(branchname itemcallnumber description)) {
-                    	$available_items->{$prefix}->{$_} = $item->{$_};
-					}
-					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
+                        $available_items->{$prefix}->{$_} = $item->{$_};
+                    }
+                    $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
                     $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }

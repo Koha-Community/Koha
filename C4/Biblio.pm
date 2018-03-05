@@ -1112,7 +1112,8 @@ sub GetMarcSubfieldStructureFromKohaField {
   my $record = GetMarcBiblio({
       biblionumber => $biblionumber,
       embed_items  => $embeditems,
-      opac         => $opac });
+      opac         => $opac,
+      borcat       => $patron_category });
 
 Returns MARC::Record representing a biblio record, or C<undef> if the
 biblionumber doesn't exist.
@@ -1136,6 +1137,12 @@ set to true to include item information.
 set to true to make the result suited for OPAC view. This causes things like
 OpacHiddenItems to be applied.
 
+=item C<$borcat>
+
+If the OpacHiddenItemsExceptions system preference is set, this patron category
+can be used to make visible OPAC items which would be normally hidden.
+It only makes sense in combination both embed_items and opac values true.
+
 =back
 
 =cut
@@ -1151,6 +1158,7 @@ sub GetMarcBiblio {
     my $biblionumber = $params->{biblionumber};
     my $embeditems   = $params->{embed_items} || 0;
     my $opac         = $params->{opac} || 0;
+    my $borcat       = $params->{borcat} // q{};
 
     if (not defined $biblionumber) {
         carp 'GetMarcBiblio called with undefined biblionumber';
@@ -1178,7 +1186,11 @@ sub GetMarcBiblio {
 
         C4::Biblio::_koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber,
             $biblioitemnumber );
-        C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, $opac )
+        C4::Biblio::EmbedItemsInMarcBiblio({
+            marc_record  => $record,
+            biblionumber => $biblionumber,
+            opac         => $opac,
+            borcat       => $borcat })
           if ($embeditems);
 
         return $record;
@@ -2756,7 +2768,11 @@ sub ModZebra {
 
 =head2 EmbedItemsInMarcBiblio
 
-    EmbedItemsInMarcBiblio($marc, $biblionumber, $itemnumbers, $opac);
+    EmbedItemsInMarcBiblio({
+        marc_record  => $marc,
+        biblionumber => $biblionumber,
+        item_numbers => $itemnumbers,
+        opac         => $opac });
 
 Given a MARC::Record object containing a bib record,
 modify it to include the items attached to it as 9XX
@@ -2765,14 +2781,23 @@ if $itemnumbers is defined, only specified itemnumbers are embedded.
 
 If $opac is true, then opac-relevant suppressions are included.
 
+If opac filtering will be done, borcat should be passed to properly
+override if necessary.
+
 =cut
 
 sub EmbedItemsInMarcBiblio {
-    my ($marc, $biblionumber, $itemnumbers, $opac) = @_;
+    my ($params) = @_;
+    my ($marc, $biblionumber, $itemnumbers, $opac, $borcat);
+    $marc = $params->{marc_record};
     if ( !$marc ) {
         carp 'EmbedItemsInMarcBiblio: No MARC record passed';
         return;
     }
+    $biblionumber = $params->{biblionumber};
+    $itemnumbers = $params->{item_numbers};
+    $opac = $params->{opac};
+    $borcat = $params->{borcat} // q{};
 
     $itemnumbers = [] unless defined $itemnumbers;
 
@@ -2783,20 +2808,28 @@ sub EmbedItemsInMarcBiblio {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
     $sth->execute($biblionumber);
-    my @item_fields;
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my @items;
+
+    my @item_fields; # Array holding the actual MARC data for items to be included.
+    my @items;       # Array holding items which are both in the list (sitenumbers)
+                     # and on this biblionumber
+
+    # Flag indicating if there is potential hiding.
     my $opachiddenitems = $opac
       && ( C4::Context->preference('OpacHiddenItems') !~ /^\s*$/ );
+
     require C4::Items;
     while ( my ($itemnumber) = $sth->fetchrow_array ) {
         next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
         my $i = $opachiddenitems ? C4::Items::GetItem($itemnumber) : undef;
         push @items, { itemnumber => $itemnumber, item => $i };
     }
+    my @items2pass = map { $_->{item} } @items;
     my @hiddenitems =
       $opachiddenitems
-      ? C4::Items::GetHiddenItemnumbers( map { $_->{item} } @items )
+      ? C4::Items::GetHiddenItemnumbers({
+            items  => \@items2pass,
+            borcat => $borcat })
       : ();
     # Convert to a hash for quick searching
     my %hiddenitems = map { $_ => 1 } @hiddenitems;

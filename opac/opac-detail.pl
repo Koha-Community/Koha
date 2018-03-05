@@ -68,7 +68,11 @@ BEGIN {
 	}
 }
 
-my $query = new CGI;
+my $query = CGI->new();
+
+my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
+$biblionumber = int($biblionumber);
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-detail.tt",
@@ -78,20 +82,23 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $query->param('biblionumber') || $query->param('bib') || 0;
-$biblionumber = int($biblionumber);
-
 my @all_items = GetItemsInfo($biblionumber);
 my @hiddenitems;
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $borcat= q{};
+if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    $borcat = $patron ? $patron->categorycode : q{};
+}
+
+my $record = GetMarcBiblio({
+    biblionumber => $biblionumber,
+    opac         => 1 });
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
+    exit;
+}
+
 if ( scalar @all_items >= 1 ) {
-    my $borcat;
-    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-
-        # we need to fetch the borrower info here, so we can pass the category
-        my $borrower = GetMember( borrowernumber => $borrowernumber );
-        $borcat = $borrower->{categorycode};
-    }
-
     push @hiddenitems,
       GetHiddenItemnumbers( { items => \@all_items, borcat => $borcat } );
 
@@ -101,14 +108,8 @@ if ( scalar @all_items >= 1 ) {
     }
 }
 
-my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
-    exit;
-}
-
 my $biblio = Koha::Biblios->find( $biblionumber );
-my $framework = &GetFrameworkCode( $biblionumber );
+my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {
@@ -239,10 +240,14 @@ if ($session->param('busc')) {
         };
         my $hits;
         my @newresults;
+        my $search_context = {
+            'interface' => 'opac',
+            'category'  => $borcat
+        };
         for (my $i=0;$i<@servers;$i++) {
             my $server = $servers[$i];
             $hits = $results_hashref->{$server}->{"hits"};
-            @newresults = searchResults({ 'interface' => 'opac' }, '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, $results_hashref->{$server}->{"RECORDS"});
+            @newresults = searchResults( $search_context, '', $hits, $results_per_page, $offset, $arrParamsBusc->{'scan'}, $results_hashref->{$server}->{"RECORDS"});
         }
         return \@newresults;
     }#searchAgain
@@ -670,7 +675,6 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
         items_count => scalar( @items ),
     );
 } else {
-  my $patron = Koha::Patrons->find( $borrowernumber );
   for my $itm (@items) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
     $itm->{holds_count} = $item_reserves{ $itm->{itemnumber} };
@@ -868,16 +872,16 @@ if ( C4::Context->preference('reviewson') ) {
         }
     }
     for my $review (@$reviews) {
-        my $patron = Koha::Patrons->find( $review->{borrowernumber} ); # FIXME Should be Koha::Review->reviewer or similar
+        my $review_patron = Koha::Patrons->find( $review->{borrowernumber} ); # FIXME Should be Koha::Review->reviewer or similar
 
         # setting some borrower info into this hash
-        if ( $patron ) {
-            $review->{patron} = $patron;
-            if ( $libravatar_enabled and $patron->email ) {
-                $review->{avatarurl} = libravatar_url( email => $patron->email, https => $ENV{HTTPS} );
+        if ( $review_patron ) {
+            $review->{patron} = $review_patron;
+            if ( $libravatar_enabled and $review_patron->email ) {
+                $review->{avatarurl} = libravatar_url( email => $review_patron->email, https => $ENV{HTTPS} );
             }
 
-            if ( $patron->borrowernumber eq $borrowernumber ) {
+            if ( $review_patron->borrowernumber eq $borrowernumber ) {
                 $loggedincommenter = 1;
             }
         }

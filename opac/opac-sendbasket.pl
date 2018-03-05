@@ -59,6 +59,7 @@ if ( $email_add ) {
     });
     my $email = Koha::Email->new();
     my $patron = Koha::Patrons->find( $borrowernumber );
+    my $borcat = $patron ? $patron->categorycode : q{};
     my $user_email = $patron->first_valid_email_address
     || C4::Context->preference('KohaAdminEmailAddress');
 
@@ -89,7 +90,9 @@ if ( $email_add ) {
         next unless $dat;
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
-            embed_items  => 1 });
+            embed_items  => 1,
+            opac         => 1,
+            borcat       => $borcat });
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 

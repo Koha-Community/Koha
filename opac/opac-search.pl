@@ -51,8 +51,8 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
-use C4::Members qw(GetMember);
 
+use Koha::Libraries;
 use Koha::ItemTypes;
 use Koha::Ratings;
 use Koha::Virtualshelves;
@@ -596,6 +596,8 @@ if ($tag) {
     $DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
     $results_hashref->{biblioserver}->{RECORDS} = \@marclist;
     # FIXME: tag search and standard search should work together, not exclusively
+    # FIXME: Because search and standard search don't work together OpacHiddenItems
+    #        displays search results which should be hidden.
     # FIXME: No facets for tags search.
 } elsif ($build_grouped_results) {
     eval {
@@ -626,8 +628,8 @@ my $search_context = {};
 $search_context->{'interface'} = 'opac';
 if (C4::Context->preference('OpacHiddenItemsExceptions')){
     # we need to fetch the borrower info here, so we can pass the category
-    my $borrower = GetMember( borrowernumber => $borrowernumber );
-    $search_context->{'category'} = $borrower->{'categorycode'};
+    my $patron = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+    $search_context->{'category'} = $patron ? $patron->categorycode : q{};
 }
 
 for (my $i=0;$i<@servers;$i++) {

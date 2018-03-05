@@ -735,7 +735,9 @@ my @big_array;
 #---- finds where items.itemnumber is stored
 my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", $frameworkcode);
 my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", $frameworkcode);
-C4::Biblio::EmbedItemsInMarcBiblio($temp, $biblionumber);
+C4::Biblio::EmbedItemsInMarcBiblio({
+    marc_record  => $temp,
+    biblionumber => $biblionumber });
 my @fields = $temp->fields();
 
 

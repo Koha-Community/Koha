@@ -130,6 +130,7 @@
                                 <thead><tr><th>&nbsp;</th><th>Term</th><th>Title</th><th>Date added</th></tr></thead>
                                 <tbody>
                                     [% FOREACH MY_TAG IN MY_TAGS %]
+                                        [% IF MY_TAG.visible %]
                                         <tr>
                                             <td>
                                                 <input type="checkbox" name="del[% MY_TAG.tag_id | html %]" value="del[% MY_TAG.tag_id | html %]">
@@ -167,6 +168,7 @@
                                                 </span>
                                             </td>
                                         </tr>
+                                        [% END %]
                                     [% END %]
                                 </tbody>
                             </table>

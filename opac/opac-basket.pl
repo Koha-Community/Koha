@@ -56,6 +56,13 @@ if (C4::Context->preference('TagsEnabled')) {
 	}
 }
 
+my $borcat = q{};
+if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    # we need to fetch the borrower info here, so we can pass the category
+    my $borrower = Koha::Patron->find( { borrowernumber -> $borrowernumber } );
+    $borcat = $borrower ? $borrower->categorycode : $borcat;
+}
+
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
@@ -63,6 +70,8 @@ foreach my $biblionumber ( @bibs ) {
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
 
+    # No filtering on the item records needed for the record itself
+    # since the only reason item information is grabbed is because of branchcodes.
     my $record = &GetMarcBiblio({ biblionumber => $biblionumber });
     my $framework = &GetFrameworkCode( $biblionumber );
     $record_processor->options({
@@ -76,7 +85,24 @@ foreach my $biblionumber ( @bibs ) {
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-    my @items            = &GetItemsInfo( $biblionumber );
+
+    # grab all the items...
+    my @all_items        = &GetItemsInfo( $biblionumber );
+
+    # determine which ones should be hidden / visible
+    my @hidden_items     = GetHiddenItemnumbers({ items => \@all_items, borcat => $borcat });
+
+    # If every item is hidden, then the biblio should be hidden too.
+    next if (scalar @all_items >= 1 && scalar @hidden_items == scalar @all_items);
+
+    # copy the visible ones into the items array.
+    my @items;
+    foreach my $item (@all_items) {
+        if ( none { $item->{itemnumber} ne $_ } @hidden_items ) {
+            push @items, $item;
+        }
+    }
+
     my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     my $hasauthors = 0;

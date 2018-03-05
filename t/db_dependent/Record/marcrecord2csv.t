@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use MARC::Record;
 use MARC::Field;
@@ -29,7 +29,11 @@ my $csv_content = q(Title=245$a|Author=245$c|Subject=650$a);
 my $csv_profile_id_1 = insert_csv_profile({ csv_content => $csv_content });
 my $csv = Text::CSV::Encoded->new();
 
-my $csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_1, 1, $csv );
+# Test bad biblionumber case
+my $csv_output = C4::Record::marcrecord2csv( -1, $csv_profile_id_1, 1, $csv );
+ok(! defined $csv_output, 'Bad biblionumber gives undef as expected.');
+
+$csv_output = C4::Record::marcrecord2csv( $biblionumber, $csv_profile_id_1, 1, $csv );
 
 is( $csv_output, q[Title|Author|Subject
 "The art of computer programming,The art of another title"|"Donald E. Knuth.,Donald E. Knuth. II"|"Computer programming.,Computer algorithms."

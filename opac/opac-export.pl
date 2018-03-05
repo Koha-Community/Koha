@@ -35,11 +35,25 @@ my $biblionumber = $query->param("bib")||0;
 $biblionumber = int($biblionumber);
 my $error = q{};
 
+# Determine logged in user's patron category.
+# Blank if not logged in.
+my $userenv = C4::Context->userenv;
+my $borcat = q{};
+if ($userenv) {
+    my $borrowernumber = $userenv->{'number'};
+    if ($borrowernumber) {
+        my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+        $borcat = $borrower ? $borrower->categorycode : $borcat;
+    }
+}
+
 my $include_items = ($format =~ /bibtex/) ? 0 : 1;
 my $marc = $biblionumber
     ? GetMarcBiblio({
         biblionumber => $biblionumber,
-        embed_items  => $include_items })
+        embed_items  => $include_items,
+        opac         => 1,
+        borcat       => $borcat })
     : undef;
 
 if(!$marc) {

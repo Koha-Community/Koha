@@ -79,6 +79,9 @@ if ( $email ) {
         }
     );
 
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $borcat = $patron ? $patron->categorycode : q{};
+
     my $shelf = Koha::Virtualshelves->find( $shelfid );
     my $contents = $shelf->get_contents;
     my $marcflavour         = C4::Context->preference('marcflavour');
@@ -87,11 +90,15 @@ if ( $email ) {
 
     while ( my $content = $contents->next ) {
         my $biblionumber = $content->biblionumber;
-        my $fw               = GetFrameworkCode($biblionumber);
-        my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
-            embed_items  => 1 });
+            embed_items  => 1,
+            opac         => 1,
+            borcat       => $borcat });
+        next unless $record;
+        my $fw               = GetFrameworkCode($biblionumber);
+        my $dat              = GetBiblioData($biblionumber);
+
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
         my $subtitle         = GetRecordValue('subtitle', $record, $fw);
@@ -110,8 +117,6 @@ if ( $email ) {
 
         push( @results, $dat );
     }
-
-    my $patron = Koha::Patrons->find( $borrowernumber );
 
     $template2->param(
         BIBLIO_RESULTS => \@results,

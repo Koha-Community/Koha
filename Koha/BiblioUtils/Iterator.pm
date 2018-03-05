@@ -108,7 +108,9 @@ sub next {
           if ( !defined($bibnum) );
 
         # TODO this should really be in Koha::BiblioUtils or something similar.
-        C4::Biblio::EmbedItemsInMarcBiblio( $marc, $bibnum );
+        C4::Biblio::EmbedItemsInMarcBiblio({
+            marc_record  => $marc,
+            biblionumber => $bibnum });
     }
 
     if (wantarray) {

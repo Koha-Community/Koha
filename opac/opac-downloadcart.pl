@@ -32,7 +32,7 @@ use Koha::CsvProfiles;
 use Koha::RecordProcessor;
 
 use utf8;
-my $query = new CGI;
+my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
@@ -48,6 +48,13 @@ my $format  = $query->param('format');
 my $dbh     = C4::Context->dbh;
 
 if ($bib_list && $format) {
+
+    my $borcat = q{};
+    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+        # we need to fetch the borrower info here, so we can pass the category
+        my $borrower = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
+        $borcat = $borrower ? $borrower->categorycode : $borcat;
+    }
 
     my @bibs = split( /\//, $bib_list );
 
@@ -70,7 +77,9 @@ if ($bib_list && $format) {
 
             my $record = GetMarcBiblio({
                 biblionumber => $biblio,
-                embed_items  => 1 });
+                embed_items  => 1,
+                opac         => 1,
+                borcat       => $borcat });
             my $framework = &GetFrameworkCode( $biblio );
             $record_processor->options({
                 interface => 'opac',

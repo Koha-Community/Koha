@@ -90,6 +90,8 @@ $template->param( shibbolethAuthentication => C4::Context->config('useshibboleth
 # get borrower information ....
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $borr = $patron->unblessed;
+# unblessed is a hash vs. object/undef. Hence the use of curly braces here.
+my $borcat = $borr ? $borr->{categorycode} : q{};
 
 my (  $today_year,   $today_month,   $today_day) = Today();
 my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
@@ -215,7 +217,11 @@ if ( $pending_checkouts->count ) { # Useless test
         );
         $issue->{rentalfines} = $rental_fines->count ? $rental_fines->next->get_column('rental_fines') : 0;
 
-        my $marcrecord = GetMarcBiblio({ biblionumber => $issue->{'biblionumber'} });
+        my $marcrecord = GetMarcBiblio({
+            biblionumber => $issue->{'biblionumber'},
+            embed_items  => 1,
+            opac         => 1,
+            borcat       => $borcat });
         $issue->{'subtitle'} = GetRecordValue('subtitle', $marcrecord, GetFrameworkCode($issue->{'biblionumber'}));
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );

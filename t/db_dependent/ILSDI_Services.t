@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -113,6 +113,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     $schema->resultset( 'BorrowerAttributeType' )->delete_all;
     $schema->resultset( 'Category' )->delete_all;
     $schema->resultset( 'Item' )->delete_all; # 'Branch' deps. on this
+    $schema->resultset( 'Club' )->delete_all;
     $schema->resultset( 'Branch' )->delete_all;
 
     # Configure Koha to enable ILS-DI server and extended attributes:
@@ -295,3 +296,42 @@ subtest 'LookupPatron test' => sub {
     # Cleanup
     $schema->storage->txn_rollback;
 };
+
+# This is a stub, as it merely is for triggering the GetMarcBiblio call.
+subtest 'GetRecords' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build({
+        source => 'Biblio',
+        value  => {
+            title => 'Title 1',    },
+    });
+
+    my $item = $builder->build({
+        source => 'Item',
+        value  => {
+            biblionumber => $biblio->{biblionumber},
+        },
+    });
+
+    my $biblioitem = $builder->build({
+        source => 'Biblioitem',
+        value  => {
+            biblionumber => $biblio->{biblionumber},
+            itemnumber   => $item->{itemnumber},
+        },
+    });
+
+    my $query = CGI->new({
+        'schema' => 'MARCXML',
+        'id'     => [ $biblio->{biblionumber} ]
+    });
+
+    my $result = C4::ILSDI::Services::GetRecords($query);
+    ok($result,'There is a result');
+
+    $schema->storage->txn_rollback;
+}

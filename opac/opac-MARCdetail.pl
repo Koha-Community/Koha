@@ -64,55 +64,14 @@ use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 
-my $query = new CGI;
-
-my $dbh = C4::Context->dbh;
+my $query = CGI->new();
 
 my $biblionumber = $query->param('biblionumber');
 if ( ! $biblionumber ) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
-
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1 });
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
-
-my @all_items = GetItemsInfo($biblionumber);
-my @items2hide;
-if (scalar @all_items >= 1) {
-    my $borcat;
-    if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-
-        # we need to fetch the borrower info here, so we can pass the category
-        my $borrower = GetMember( borrowernumber => $borrowernumber );
-        $borcat = $borrower->{categorycode};
-    }
-    push @items2hide, GetHiddenItemnumbers({ items => \@all_items, borcat => $botcat });
-
-    if (scalar @items2hide == scalar @all_items ) {
-        print $query->redirect("/cgi-bin/koha/errors/404.pl");
-        exit;
-    }
-}
-
-my $framework = &GetFrameworkCode( $biblionumber );
-my $tagslib = &GetMarcStructure( 0, $framework );
-my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
-my $biblio = Koha::Biblios->find( $biblionumber );
-
-my $record_processor = Koha::RecordProcessor->new({
-    filters => 'ViewPolicy',
-    options => {
-        interface => 'opac',
-        frameworkcode => $framework
-    }
-});
-$record_processor->process($record);
+$biblionumber = int($biblionumber);
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -125,11 +84,42 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my ($bt_tag,$bt_subtag) = GetMarcFromKohaField('biblio.title',$framework);
-$template->param(
-    bibliotitle => $biblio->title,
-) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
-     $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
+my $patron = Koha::Patrons->find( $loggedinuser );
+my $borcat = q{};
+if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    # we need to fetch the borrower info here, so we can pass the category
+    $borcat = $patron ? $patron->categorycode : $borcat;
+}
+
+my $record = GetMarcBiblio({
+    biblionumber => $biblionumber,
+    embed_items  => 1,
+    opac         => 1,
+    borcat       => $borcat });
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+my @all_items = GetItemsInfo($biblionumber);
+my $biblio = Koha::Biblios->find( $biblionumber );
+my $framework = $biblio ? $biblio->frameworkcode : q{};
+my $tagslib = &GetMarcStructure( 0, $framework );
+my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
+my @nonhiddenitems = $record->field($tag_itemnumber);
+if (scalar @all_items >= 1 && scalar @nonhiddenitems == 0) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
+my $record_processor = Koha::RecordProcessor->new({
+    filters => 'ViewPolicy',
+    options => {
+        interface => 'opac',
+        frameworkcode => $framework
+    }
+});
+$record_processor->process($record);
 
 # get biblionumbers stored in the cart
 if(my $cart_list = $query->cookie("bib_list")){
@@ -139,8 +129,13 @@ if(my $cart_list = $query->cookie("bib_list")){
     }
 }
 
+my ($bt_tag,$bt_subtag) = GetMarcFromKohaField('biblio.title',$framework);
+$template->param(
+    bibliotitle => $biblio->title,
+) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
+     $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} > -8;   # except -8;
+
 my $allow_onshelf_holds;
-my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@all_items) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
     $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
@@ -279,6 +274,7 @@ for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {
 # loop through each tag
 # warning : we may have differents number of columns in each row. Thus, we first build a hash, complete it if necessary
 # then construct template.
+# $record has already had all the item fields filtered above.
 my @fields = $record->fields();
 my %witness
   ; #---- stores the list of subfields used at least once, with the "meaning" of the code
@@ -286,9 +282,6 @@ my @item_subfield_codes;
 my @item_loop;
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
-    next if ( ( $field->tag() eq $tag_itemnumber ) &&
-              ( any { $field->subfield($subtag_itemnumber) eq $_ }
-                   @items2hide) );
     my @subf = $field->subfields;
     my $item;
 
