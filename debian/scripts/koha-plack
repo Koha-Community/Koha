@@ -121,7 +121,7 @@ start_plack()
             log_end_msg 1
         fi
         # Go back to the original dir
-        cd $current_dir
+        cd "$current_dir"
 
     else
         log_daemon_msg "Error: Plack already running for ${instancename}"
