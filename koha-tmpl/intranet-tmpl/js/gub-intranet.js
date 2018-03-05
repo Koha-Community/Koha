@@ -369,13 +369,19 @@ $(document).ready(function() {
     }, 300);
 
   }
+
+
   // Set permanent location automatically when selecting shelving location
   if (location.pathname === '/cgi-bin/koha/cataloguing/additem.pl') {
+
     setTimeout(function() {
       // exceptions maps locations ids to other locations ids
       var exceptions = {'50':'50'};
       $('#subfield952c').on('change', function(e) {
         var val = e.val.toString().substr(0,2);
+        if (val === "") {
+          return;
+        }
         if(exceptions[val]){
           val = exceptions[val];
         }
