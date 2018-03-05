@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -203,6 +203,34 @@ sub t_all_items_available {
        'When I look at the second item of two in this biblio, it seems to be available.');
     ok($availability->available, 'Then, the biblio is available.');
     is(@{$item_availabilities}, 2, 'There seems to be two available items in this biblio.');
+};
+
+subtest 'Biblio with one item that and item-level holds forbidden' => \&t_itemlevelholdforbidden;
+sub t_itemlevelholdforbidden {
+    plan tests => 3;
+
+    my $item = build_a_test_item();
+    my $biblio = Koha::Biblios->find($item->biblionumber);
+
+    my $patron = build_a_test_patron();
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        holds_per_record => 10,
+        reservesallowed => 10,
+        opacitemholds => 'N',
+    })->store;
+
+    my $availability = Koha::Biblio::Availability::Hold->new({biblio => $biblio, patron => $patron})->in_opac;
+    my $item_availabilities = $availability->item_availabilities;
+    ok(!Koha::Item::Availability::Hold->new({ item => $item, patron => $patron })->in_opac->available,
+       'When I look at the item in this biblio, it is not to be available.');
+    ok($availability->available, 'But then, the biblio is available.');
+    is(@{$item_availabilities}, 1, 'There seems to be one available item in this biblio.');
 };
 
 subtest 'Performance test' => \&t_performance_test;
