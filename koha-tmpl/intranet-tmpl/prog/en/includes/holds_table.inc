@@ -87,13 +87,7 @@
             [% END %]
 
             <td>
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% hold.borrowernumber %]" >
-                    [% IF ( hold.hidename ) %]
-                        [% hold.cardnumber (hold.borrowernumber) %]
-                    [% ELSE %]
-                        [% hold.firstname %] [% hold.surname %]
-                    [% END %]
-                </a>
+                [% INCLUDE 'patron-title.inc' patron=hold.patron hide_patron_infos_if_needed=1 %]
             </td>
 
             <td>[% hold.notes %]</td>
