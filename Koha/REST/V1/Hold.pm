@@ -144,6 +144,7 @@ sub edit {
         branchcode => $branchcode,
         rank => $priority,
         suspend_until => $suspend_until,
+        itemnumber => $hold->itemnumber
     };
 
     C4::Reserves::ModReserve($params);
