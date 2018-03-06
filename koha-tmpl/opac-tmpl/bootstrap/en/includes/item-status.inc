@@ -53,7 +53,12 @@
 
 [% IF ( item.withdrawn ) %]
     [% SET itemavailable = 0 %]
-    <span class="item-status withdrawn">Item withdrawn</span>
+    [% av_lib_include = AuthorisedValues.GetByCode( 'WITHDRAWN', item.withdrawn, 1 ) %]
+    [% IF av_lib_include %]
+        <span class="item-status withdrawn">[% av_lib_include %]</span>
+    [% ELSE %]
+        <span class="item-status withdrawn">Item withdrawn</span>
+    [% END %]
 [% END %]
 
 
