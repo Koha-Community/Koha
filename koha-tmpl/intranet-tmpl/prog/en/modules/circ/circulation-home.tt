@@ -11,83 +11,130 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Circulation</div>
 
     <div class="main container-fluid">
+
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
 
-<div class="row">
+            <div class="col-sm-6 col-md-3">
+                <h3>Circulation</h3>
 
-<div class="col-xs-6">
-<h1>Circulation</h1>
+                <ul class="buttons-list">
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/circulation.pl"><i class="fa fa-upload"></i> Check out</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/returns.pl"><i class="fa fa-download"></i> Check in</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/renew.pl"><i class="fa fa-retweet"></i> Renew</a>
+                    </li>
+                    [% UNLESS IndependentBranches %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/selectbranchprinter.pl"><i class="fa fa-home"></i> Set library</a>
+                        </li>
+                    [% END %]
+                    [% IF ( fast_cataloging ) %]
+                        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
+                            <li>
+                                <a class="circ-button" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA"><i class="fa fa-plus"></i> Fast cataloging</a>
+                            </li>
+                        [% END %]
+                    [% END %]
+                </ul>
+            </div>
 
-    <ul class="buttons-list">
-        <li><a class="circ-button" href="/cgi-bin/koha/circ/circulation.pl"><i class="fa fa-upload"></i> Check out</a></li>
-        <li><a class="circ-button" href="/cgi-bin/koha/circ/returns.pl"><i class="fa fa-download"></i> Check in</a></li>
-        <li><a class="circ-button" href="/cgi-bin/koha/circ/renew.pl"><i class="fa fa-retweet"></i> Renew</a></li>
-    [% UNLESS IndependentBranches %]<li><a class="circ-button" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>[% END %]
-        [% IF ( fast_cataloging ) %]
-            [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-                <li><a class="circ-button" href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA"><i class="fa fa-plus"></i> Fast cataloging</a></li>
-            [% END %]
-        [% END %]
+            <div class="col-sm-6 col-md-3">
+                <h3>Holds management</h3>
 
-    </ul>
-<h1>Holds management</h1>
-<ul class="buttons-list">
-    <li>    <a class="circ-button" href="/cgi-bin/koha/circ/view_holdsqueue.pl"><i class="fa fa-tasks"></i> Holds queue</a></li>
-    <li>    <a class="circ-button" href="/cgi-bin/koha/circ/pendingreserves.pl"><i class="fa fa-hand-grab-o"></i> Holds to pull</a></li>
-    <li>    <a class="circ-button" href="/cgi-bin/koha/circ/waitingreserves.pl"><i class="fa fa-calendar"></i> Holds awaiting pickup</a></li>
-    <li>    <a class="circ-button" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa fa-line-chart"></i> Hold ratios</a></li>
-</ul>
+                <ul class="buttons-list">
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/view_holdsqueue.pl"><i class="fa fa-tasks"></i> Holds queue</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/pendingreserves.pl"><i class="fa fa-hand-grab-o"></i> Holds to pull</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/waitingreserves.pl"><i class="fa fa-calendar"></i> Holds awaiting pickup</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/reserveratios.pl"><i class="fa fa-line-chart"></i> Hold ratios</a>
+                    </li>
+                </ul>
+            </div>
 
-</div>
-<div class="col-xs-6">
-<h1>Patron request management</h1>
-<ul class="buttons-list">
-    [% IF Koha.Preference('ArticleRequests') %]
-    <li>
-        <a class="circ-button" href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests"><i class="fa fa-newspaper-o"></i> Article requests</a>
-    </li>
-    [% END %]
-</ul>
-<h1>Transfers management</h1>
-<ul class="buttons-list">
-    [% IF Branches.InIndependentBranchesMode %]
-        <li><a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa fa-exchange"></i> Transfer</a></li>
-    [% END %]
-    <li>    <a class="circ-button" href="/cgi-bin/koha/circ/transferstoreceive.pl"><i class="fa fa-sign-in"></i> Transfers to receive</a></li>
-</ul>
-<h1>Overdues management</h1>
-<ul class="buttons-list">
-     [% IF ( CAN_user_circulate_overdues_report ) %]<li>    <a class="circ-button" href="/cgi-bin/koha/circ/overdue.pl"><i class="fa fa-clock-o"></i> Overdues</a></li>[% END %]
-	<li>    <a class="circ-button" href="/cgi-bin/koha/circ/branchoverdues.pl"><i class="fa fa-clock-o"></i> Overdues with fines</a> </li>
-        Limited to your library.  See report help for other details.
-    [% IF Koha.Preference('OnSiteCheckouts') %]
-        <li><a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl">Pending on-site checkouts</a></li>
-    [% END %]
-</ul>
+            <!-- Add the extra clearfix for only the required viewport -->
+            <div class="clearfix visible-sm-block"></div>
 
-	</div>
-</div>
+            <div class="col-sm-6 col-md-3">
+                [% IF Koha.Preference('ArticleRequests') %]
+                    <h3>Patron request management</h3>
+                    <ul class="buttons-list">
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests"><i class="fa fa-newspaper-o"></i> Article requests</a>
+                        </li>
+                    </ul>
+                [% END %]
 
-    <div class="row" id="intranet-circulation-home-html">
-        <div class="col-md-12">
-            [% Koha.Preference('IntranetCirculationHomeHTML') %]
-        <h5>Offline circulation</h5>
-                <ul>
-            [% IF (AllowOfflineCirculation) %]
-            <li><a href="/cgi-bin/koha/circ/offline.pl">Built-in offline circulation interface</a></li>
-            [% END %]
-            <li><a href="/cgi-bin/koha/offline_circ/process_koc.pl">Upload offline circulation file (.koc)</a></li>
-            <li><a href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a>
-            <ul>
-                <li><a href="https://github.com/bywatersolutions/koha-offline-circulation/releases">Get desktop application</a></li>
-                <li><a href="https://addons.mozilla.org/[% lang %]/firefox/addon/koct/">Get Firefox add-on</a></li>
-            </ul>
+                <h3>Transfers management</h3>
+
+                <ul class="buttons-list">
+                    [% IF Branches.InIndependentBranchesMode %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa fa-exchange"></i> Transfer</a>
+                        </li>
+                    [% END %]
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/transferstoreceive.pl"><i class="fa fa-sign-in"></i> Transfers to receive</a>
+                    </li>
                 </ul>
 
+                <h3>Overdues management</h3>
+
+                <ul class="buttons-list">
+                     [% IF ( CAN_user_circulate_overdues_report ) %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/overdue.pl"><i class="fa fa-clock-o"></i> Overdues</a>
+                        </li>
+                    [% END %]
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/circ/branchoverdues.pl"><i class="fa fa-clock-o"></i> Overdues with fines</a>
+                    </li>
+                    [% IF Koha.Preference('OnSiteCheckouts') %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl">Pending on-site checkouts</a>
+                        </li>
+                    [% END %]
+                </ul>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <h3>Offline circulation</h3>
+
+                <ul class="buttons-list">
+                    [% IF (AllowOfflineCirculation) %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/offline.pl">Built-in offline circulation interface</a>
+                        </li>
+                    [% END %]
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/offline_circ/process_koc.pl">Upload offline circulation file (.koc)</a>
+                    </li>
+                    <li>
+                        <a class="circ-button" href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a>
+                    </li>
+                </ul>
+
+                <p><a class="document windows-link" href="https://github.com/bywatersolutions/koha-offline-circulation/releases">Get desktop application</a></p>
+
+                <p><a class="document firefox-link" href="https://addons.mozilla.org/[% lang %]/firefox/addon/koct/">Get Firefox add-on</a></p>
+
+            </div>
+        </div>
+
+        <div class="row" id="intranet-circulation-home-html">
+            <div class="col-md-12">
+                [% Koha.Preference('IntranetCirculationHomeHTML') %]
+            </div>
         </div>
     </div>
-</div>
-</div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
