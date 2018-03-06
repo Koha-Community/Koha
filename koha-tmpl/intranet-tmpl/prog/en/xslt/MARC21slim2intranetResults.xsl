@@ -895,24 +895,7 @@
     </span>
    </xsl:if>
 
-    <xsl:if test="marc:datafield[@tag=020]">
-    <span class="results_summary isbn"><span class="label">ISBN: </span>
-    <xsl:for-each select="marc:datafield[@tag=020]">
-    <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
-            <xsl:value-of select="marc:subfield[@code='a']"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-    </xsl:for-each>
-    </span>
-    </xsl:if>
-
-    <xsl:if test="marc:datafield[@tag=022]">
-    <span class="results_summary issn"><span class="label">ISSN: </span>
-    <xsl:for-each select="marc:datafield[@tag=022]">
-            <xsl:value-of select="marc:subfield[@code='a']"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-    </xsl:for-each>
-    </span>
-    </xsl:if>
+   <xsl:call-template name="showISBNISSN"/>
 
     <xsl:if test="marc:datafield[@tag=250]">
     <span class="results_summary edition">

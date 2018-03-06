@@ -448,43 +448,7 @@
         </xsl:if>
 
 
-        <!-- Build ISBN -->
-        <xsl:if test="marc:datafield[@tag=020]/marc:subfield[@code='a']">
-          <span class="results_summary isbn"><span class="label">ISBN: </span>
-            <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[@code='a']">
-              <span property="isbn">
-                <xsl:value-of select="."/>
-                <xsl:choose>
-                  <xsl:when test="position()=last()">
-                    <xsl:text>.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </span>
-            </xsl:for-each>
-          </span>
-        </xsl:if>
-
-        <!-- Build ISSN -->
-        <xsl:if test="marc:datafield[@tag=022]/marc:subfield[@code='a']">
-          <span class="results_summary issn"><span class="label">ISSN: </span>
-            <xsl:for-each select="marc:datafield[@tag=022]/marc:subfield[@code='a']">
-              <span property="issn">
-                <xsl:value-of select="."/>
-                <xsl:choose>
-                  <xsl:when test="position()=last()">
-                    <xsl:text>.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </span>
-            </xsl:for-each>
-          </span>
-        </xsl:if>
+        <xsl:call-template name="showISBNISSN"/>
 
         <xsl:if test="marc:datafield[@tag=013]">
             <span class="results_summary patent_info">

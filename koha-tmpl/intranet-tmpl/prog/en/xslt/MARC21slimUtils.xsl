@@ -298,6 +298,46 @@
         </span>
     </xsl:template>
 
+    <xsl:template name="showISBNISSN">
+      <xsl:call-template name="showSingleSubfield">
+        <xsl:with-param name="tag">020</xsl:with-param>
+        <xsl:with-param name="code">a</xsl:with-param>
+        <xsl:with-param name="class">isbn</xsl:with-param>
+        <xsl:with-param name="label">ISBN: </xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="showSingleSubfield">
+        <xsl:with-param name="tag">022</xsl:with-param>
+        <xsl:with-param name="code">a</xsl:with-param>
+        <xsl:with-param name="class">issn</xsl:with-param>
+        <xsl:with-param name="label">ISSN: </xsl:with-param>
+      </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="showSingleSubfield">
+      <xsl:param name="tag"/>
+      <xsl:param name="code"/>
+      <xsl:param name="class"/>
+      <xsl:param name="label"/>
+      <xsl:if test="marc:datafield[@tag=$tag]/marc:subfield[@code=$code]">
+        <span><xsl:attribute name="class"><xsl:value-of select="concat('results_summary ', $class)"/></xsl:attribute>
+        <span class="label"><xsl:value-of select="$label"/></span>
+            <xsl:for-each select="marc:datafield[@tag=$tag]/marc:subfield[@code=$code]">
+              <span><xsl:attribute name="property"><xsl:value-of select="$class"/></xsl:attribute>
+                <xsl:value-of select="."/>
+                <xsl:choose>
+                  <xsl:when test="position()=last()">
+                    <xsl:text>.</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:text>; </xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </span>
+            </xsl:for-each>
+          </span>
+        </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
