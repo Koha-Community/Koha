@@ -61,6 +61,7 @@ start_zebra()
 
     # get zebra log levels from koha-conf.xml
     local loglevels=$(get_loglevels ${name})
+    local max_record_size=$(get_max_record_size ${name})
 
     if ! is_zebra_running $name; then
 
@@ -76,6 +77,7 @@ start_zebra()
                     --user=${name}-koha.${name}-koha"
 
         ZEBRA_PARAMS="-v $loglevels \
+                      -k $max_record_size \
                       -f /etc/koha/sites/${name}/koha-conf.xml"
 
         [ "$verbose" != "no" ] && \
