@@ -13,16 +13,30 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-        <h2>Guided reports</h2>
-        <div class="row">
-            <div class="col-xs-6">
+            <div class="row">
+                <div class="col-xs-6">
 
-        <ul>
-            <li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided reports wizard</a></li>
-            [% IF ( CAN_user_reports_create_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new</a></li>[% END %]
-            [% IF ( CAN_user_reports_execute_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Use saved</a></li>[% END %]
-            [% IF ( CAN_user_reports_create_reports ) %]<li><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL">Create from SQL</a></li>[% END %]
-        </ul>
+                    [% IF ( CAN_user_reports_execute_reports || CAN_user_reports_create_reports ) %]
+                        <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+                            <fieldset class="brief">
+                                <h2>Guided reports</h2>
+                                <input name="phase" value="Use saved" type="hidden">
+                                <input name="filter_set" value="1" type="hidden">
+                                [% IF ( CAN_user_reports_create_reports ) %]
+                                    <p>
+                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new"><i class="fa fa-code-fork"></i> Create guided report</a>
+                                    </p>
+                                    <p>
+                                        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create%20report%20from%20SQL"><i class="fa fa-plus"></i> Create from SQL</a>
+                                    </p>
+                                [% END %]
+                                <p>
+                                    <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved"><i class="fa fa-list"></i> Use saved</a>
+                                </p>
+                                <label for="filter_keyword">Search by keyword:</label> <input id="filter_keyword" name="filter_keyword" value="" size="16" type="text" /> <input value="Search" type="submit" />
+                            </fieldset>
+                        </form>
+                    [% END %]
 
         <h5>Reports dictionary</h5>
         <ul>
