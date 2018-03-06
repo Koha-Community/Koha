@@ -42,10 +42,6 @@ use Koha::Database;
 use Koha::DateUtils;
 
 #BZ 16520, add timestamps to warnings
-use Koha::Logger;
-
-my $logger = Koha::Logger->get({ interface => 'plack-error' });
-$SIG{__WARN__} = sub { $logger->warn(shift);  };
 
 use CGI qw(-utf8 ); # we will loose -utf8 under plack, otherwise
 {
@@ -101,6 +97,11 @@ my $apiv1  = builder {
 my $proxies = C4::Context->config('trusted_proxy');
 
 builder {
+    # Enable logging
+    enable "+Koha::Middleware::Logger";
+    enable "LogWarn";
+    enable "LogErrors";
+
     enable "ReverseProxy";
     enable_if { $proxies } "Plack::Middleware::RealIP",
         header => 'X-Forwarded-For',

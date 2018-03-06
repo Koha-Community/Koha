@@ -14,6 +14,16 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.14'
     },
+    'Plack::Middleware::LogWarn' => {
+        'usage'    => 'Plack',
+        'required' => '1',
+        'min_ver'  => '0.001002'
+    },
+    'Plack::Middleware::LogErrors' => {
+        'usage'    => 'Plack',
+        'required' => '1',
+        'min_ver'  => '0.002'
+    },
     'Plack::Middleware::Debug' => {
         'usage'    => 'Plack',
         'required' => '1',
