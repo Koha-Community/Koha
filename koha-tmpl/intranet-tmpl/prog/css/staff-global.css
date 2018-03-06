@@ -385,6 +385,21 @@ legend {
     width: auto;
 }
 
+details > summary {
+    cursor: pointer;
+}
+
+details > summary::before {
+    content: "\f0da";
+    display: inline-block;
+    font-family: FontAwesome;
+    width: 1em;
+}
+
+details[open] > summary::before {
+    content: "\f0d7";
+}
+
 #floating-save {
     background-color: rgba(185, 216, 217, 0.6);
     bottom: 3%;
