@@ -254,6 +254,17 @@ get_loglevels()
     fi
 }
 
+get_max_record_size()
+{
+    local instancename=$1
+    local retval=$(xmlstarlet sel -t -v 'yazgfs/config/zebra_max_record_size' /etc/koha/sites/$instancename/koha-conf.xml)
+    if [ "$retval" != "" ]; then
+        echo "$retval"
+    else
+        echo "1024"
+    fi
+}
+
 get_tmpdir()
 {
     if [ "$TMPDIR" != "" ]; then
