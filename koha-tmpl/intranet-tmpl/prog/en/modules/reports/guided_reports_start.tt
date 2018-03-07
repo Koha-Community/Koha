@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE Koha %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
@@ -178,7 +179,7 @@ canned reports and writing custom SQL reports.</p>
                     [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
                     <th>Saved results</th>
                     [% IF has_obsolete_reports %]<th>Update</th>[% END %]
-                    <th>&nbsp;</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -953,8 +954,9 @@ Sub report:<select name="subreport">
     [% INCLUDE 'calendar.inc' %]
     [% IF ( saved1 ) %]
         [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
     [% END %]
-    <script type="text/javascript">
+    <script>
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
         var group_subgroups = {};
         [% FOREACH group IN groups_with_subgroups %]
@@ -986,6 +988,7 @@ Sub report:<select name="subreport">
         $(document).ready(function(){
 
             $('[data-toggle="tooltip"]').tooltip();
+            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) %];
 
             $('#limit').change(function() {
                 $('#limitselect').submit();
@@ -1009,7 +1012,7 @@ Sub report:<select name="subreport">
             });
 
             [% IF (saved1) %]
-                var rtable = $("#table_reports").dataTable($.extend(true, {}, dataTablesDefaults, {
+                var rtable = KohaTable("table_reports", {
                     'iDisplayLength': [% Koha.Preference('NumSavedReports') %],
                     'bAutoWidth': false,
                     'sPaginationType': 'four_button',
@@ -1022,8 +1025,8 @@ Sub report:<select name="subreport">
                     ],
                     'oLanguage': {
                         'sZeroRecords': _("No matching reports found")
-                    }
-                }));
+                    },
+                }, columns_settings);
 
                 var rtabs = $("#tabs").tabs();
                 rtabs.on("tabsactivate", function(e, ui) {
