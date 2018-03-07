@@ -692,8 +692,11 @@ subtest 'TranslateNotices' => sub {
 
 subtest 'SendQueuedMessages' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
+
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
+    t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', '');
+
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
         INSERT INTO message_queue(borrowernumber, subject, content, message_transport_type, status, letter_code)
@@ -707,11 +710,37 @@ subtest 'SendQueuedMessages' => sub {
     $patron->set( { smsalertnumber => '5555555555', sms_provider_id => $sms_pro->id() } )->store;
     $message_id = C4::Letters::EnqueueLetter($my_message); #using datas set around line 95 and forward
     C4::Letters::SendQueuedMessages();
-    my $sms_message_address = $schema->resultset('MessageQueue')->search({
+
+    my $message = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
         status => 'sent'
-    })->next()->to_address();
-    is( $sms_message_address, '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );
+    })->next();
+
+    is( $message->to_address(), '5555555555@kidclamp.rocks', 'SendQueuedMessages populates the to address correctly for SMS by email when to_address not set' );
+    is(
+        $message->from_address(),
+        'from@example.com',
+        'SendQueuedMessages uses message queue item \"from address\" for SMS by email when EmailSMSSendDriverFromAddress system preference is not set'
+    );
+
+    $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber, status => 'sent'})->delete(); #clear borrower queue
+
+    t::lib::Mocks::mock_preference('EmailSMSSendDriverFromAddress', 'override@example.com');
+
+    $message_id = C4::Letters::EnqueueLetter($my_message);
+    C4::Letters::SendQueuedMessages();
+
+    $message = $schema->resultset('MessageQueue')->search({
+        borrowernumber => $borrowernumber,
+        status => 'sent'
+    })->next();
+
+    is(
+        $message->from_address(),
+        'override@example.com',
+        'SendQueuedMessages uses EmailSMSSendDriverFromAddress value for SMS by email when EmailSMSSendDriverFromAddress is set'
+    );
+
     $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber,status => 'sent'})->delete(); #clear borrower queue
     $my_message->{to_address} = 'fixme@kidclamp.iswrong';
     $message_id = C4::Letters::EnqueueLetter($my_message);
@@ -723,7 +752,7 @@ subtest 'SendQueuedMessages' => sub {
     is ( $number_attempted, 0, 'There were no password reset messages for SendQueuedMessages to attempt.' );
 
     C4::Letters::SendQueuedMessages();
-    $sms_message_address = $schema->resultset('MessageQueue')->search({
+    my $sms_message_address = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
         status => 'sent'
     })->next()->to_address();

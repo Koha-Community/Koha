@@ -994,7 +994,15 @@ sub SendQueuedMessages {
                 }
                 $message->{to_address}  = $patron->smsalertnumber; #Sometime this is set to email - sms should always use smsalertnumber
                 $message->{to_address} .= '@' . $sms_provider->domain();
-                _update_message_to_address($message->{'message_id'},$message->{to_address});
+
+                # Check for possible from_address override
+                my $from_address = C4::Context->preference('EmailSMSSendDriverFromAddress');
+                if ($from_address && $message->{from_address} ne $from_address) {
+                    $message->{from_address} = $from_address;
+                    _update_message_from_address($message->{'message_id'}, $message->{from_address});
+                }
+
+                _update_message_to_address($message->{'message_id'}, $message->{to_address});
                 _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
             } else {
                 _send_message_by_sms( $message );
@@ -1387,6 +1395,12 @@ sub _update_message_to_address {
     my ($id, $to)= @_;
     my $dbh = C4::Context->dbh();
     $dbh->do('UPDATE message_queue SET to_address=? WHERE message_id=?',undef,($to,$id));
+}
+
+sub _update_message_from_address {
+    my ($message_id, $from_address) = @_;
+    my $dbh = C4::Context->dbh();
+    $dbh->do('UPDATE message_queue SET from_address = ? WHERE message_id = ?', undef, ($from_address, $message_id));
 }
 
 sub _set_message_status {
