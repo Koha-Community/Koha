@@ -9,6 +9,7 @@
 
 $(document).ready(function() {
 
+
   shortcut.add('F1', function() {
     location.href = '/cgi-bin/koha/catalogue/search.pl';
   });
@@ -88,7 +89,7 @@ $(document).ready(function() {
 
   // F3
   if (location.pathname === "/cgi-bin/koha/catalogue/search.pl" &&
-      location.hash === "#UB=barcode") {
+    location.hash === "#UB=barcode") {
     var $theSelect = $('#catalog_advsearch #searchterms legend+div select');
     $theSelect.val('bc');
   }
@@ -131,6 +132,26 @@ $(document).ready(function() {
     if ($('#results-wrapper').text().match(/\S+/)) {
       $('div#results-wrapper').goTo();
     }
+  }
+  //Disable the pay "pay fine"-functionallity for fines with account type "FE"
+  if (location.pathname === '/cgi-bin/koha/members/pay.pl') {
+    console.log('fix me up!');
+    let checkAccountTypeHandler = function() {
+      $('#pat_pay form #finest tbody tr').each(function() {
+        let row = $(this);
+        if (row.find('td').eq(4).text() === 'FU') {
+          //Disable checkbox
+          row.find('td .cb').prop('checked', false).trigger('change').prop('disabled', true);
+          // Disable button
+          row.find('input[name*="pay_indiv_"]').prop('disabled', true);
+        }
+      });
+    };
+
+    $('#CheckAll').on('click', checkAccountTypeHandler);
+
+    // Trigger on page load
+    checkAccountTypeHandler();
   }
 
 
@@ -376,13 +397,13 @@ $(document).ready(function() {
 
     setTimeout(function() {
       // exceptions maps locations ids to other locations ids
-      var exceptions = {'50':'50'};
+      var exceptions = { '50': '50' };
       $('#subfield952c').on('change', function(e) {
-        var val = e.val.toString().substr(0,2);
+        var val = e.val.toString().substr(0, 2);
         if (val === "") {
           return;
         }
-        if(exceptions[val]){
+        if (exceptions[val]) {
           val = exceptions[val];
         }
         $('#subfield952a select').select2('val', val).trigger('change');
@@ -398,10 +419,10 @@ $(document).ready(function() {
 
   /*KOHA-1092:*/
 
-  if ( $( "#circ_returns #exemptcheck" ).length ) {
-    $( "#circ_returns #dropboxcheck" ).parent().hide();
-  }else{
-    $( "#circ_returns fieldset#checkin_options" ).hide();
+  if ($("#circ_returns #exemptcheck").length) {
+    $("#circ_returns #dropboxcheck").parent().hide();
+  } else {
+    $("#circ_returns fieldset#checkin_options").hide();
   }
 
   /* Modify advance search options */
@@ -415,71 +436,69 @@ $(document).ready(function() {
 
 
   if (("#pat_maninvoice").length) {
-      $("#pat_maninvoice #invoice_type").prepend($("<option></option>").attr("selected",'selected').attr("value",'').text("-- Välj --")); 
-      $("#pat_maninvoice #desc").attr("required",'required');
-  } 
+    $("#pat_maninvoice #invoice_type").prepend($("<option></option>").attr("selected", 'selected').attr("value", '').text("-- Välj --"));
+    $("#pat_maninvoice #desc").attr("required", 'required');
+  }
 
 
 
 
 
-/* #### filter based on booksellerid #### */ 
+  /* #### filter based on booksellerid #### */
 
-function getParameterByName(name, url) {
+  function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
+      results = regex.exec(url);
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-} 
+  }
 
-let bookseller_ids = [{id: "1", identity_str: " Adlib "},{id: "2", identity_str: " Daw "},{id: "3", identity_str: " Delb " }];
-let current_bookseller_id = getParameterByName("booksellerid");
-let bookseller_to_filter_out_arr = jQuery.grep(bookseller_ids, function(item) {
-  return item.id !== current_bookseller_id;
-});
-
-
-// make array from select
-let select_arr = [];
-$("#ean option").each  ( function() {
-  select_arr.push({id: $(this).val(), content: $(this).text()});
-});
-
-let select_arr_filtered = [];
-select_arr_filtered =  $.map(select_arr, function(select_item,index) {
-  let temp = $.map(bookseller_to_filter_out_arr, function(item,index) {
-     if (select_item.content.indexOf(item.identity_str) === -1) {
-         return null;
-     }
-     else {
-       return true;
-     }
+  let bookseller_ids = [{ id: "1", identity_str: " Adlib " }, { id: "2", identity_str: " Daw " }, { id: "3", identity_str: " Delb " }];
+  let current_bookseller_id = getParameterByName("booksellerid");
+  let bookseller_to_filter_out_arr = jQuery.grep(bookseller_ids, function(item) {
+    return item.id !== current_bookseller_id;
   });
+
+
+  // make array from select
+  let select_arr = [];
+  $("#ean option").each(function() {
+    select_arr.push({ id: $(this).val(), content: $(this).text() });
+  });
+
+  let select_arr_filtered = [];
+  select_arr_filtered = $.map(select_arr, function(select_item, index) {
+    let temp = $.map(bookseller_to_filter_out_arr, function(item, index) {
+      if (select_item.content.indexOf(item.identity_str) === -1) {
+        return null;
+      } else {
+        return true;
+      }
+    });
+    // compact it by removing null
+    temp = $.grep(temp, function(n, i) {
+      return (n != null);
+    });
+    if (temp.length === 0) {
+      return select_item;
+    } else {
+      return null;
+    }
+  });
+
   // compact it by removing null
-  temp = $.grep(temp, function(n, i){
+  select_arr_filtered = $.grep(select_arr_filtered, function(n, i) {
     return (n != null);
   });
-  if (temp.length === 0) {
-    return select_item;
-  }
-  else {
-    return null;
-  }
-});
 
-// compact it by removing null
-select_arr_filtered = $.grep(select_arr_filtered, function(n, i){
- return (n != null);
-});
-
-// create new select
-$('#ean option').remove().end();
-$.each(select_arr_filtered, function(index, item) {
-  $('#ean').append('<option value="' + item.id + '">' + item.content + '</option>');
-})
+  // create new select
+  $('#ean option').remove().end();
+  $.each(select_arr_filtered, function(index, item) {
+    $('#ean').append('<option value="' + item.id + '">' + item.content + '</option>');
+  });
 
 
 
