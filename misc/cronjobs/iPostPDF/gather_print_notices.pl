@@ -30,7 +30,7 @@ BEGIN {
 use
   CGI; # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
 use C4::Context;
-use C4::Dates;
+use Koha::DateUtils;
 use C4::Debug;
 use C4::Letters;
 use HTML::Template;
@@ -78,7 +78,7 @@ if ( !$output_directory || !-d $output_directory || !-w $output_directory ) {
 
 my $fileplace = C4::Context->config('intranetdir');
 
-my $today        = C4::Dates->new();
+my $today     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
 my @all_messages = @{ GetPrintMessages() };
 exit unless (@all_messages);
 
@@ -115,7 +115,7 @@ foreach my $message (@all_messages) {
 
     my $borrower = GetBorrower($message->{'borrowernumber'});
 
-    my $pdfFile = $branch->{'branchcode'}.$message->{'message_id'}."_".$today->output('iso'). ".pdf";
+    my $pdfFile = $branch->{'branchcode'}.$message->{'message_id'}."_".$today. ".pdf";
 
    
     $letterTemplate->param(ITEMINFO => Encode::encode( "utf8", $message->{'content'}));
