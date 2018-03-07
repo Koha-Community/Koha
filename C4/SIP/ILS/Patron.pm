@@ -33,7 +33,7 @@ sub new {
     my $type = ref($class) || $class;
     my $self;
     $kp = Koha::Patrons->find( { cardnumber => $patron_id } )
-      or Koha::Patrons->find( { userid => $patron_id } );
+      || Koha::Patrons->find( { userid => $patron_id } );
     $debug and warn "new Patron: " . Dumper($kp->unblessed) if $kp;
     unless ($kp) {
         syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
