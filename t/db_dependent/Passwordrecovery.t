@@ -23,7 +23,7 @@ use Koha::Database;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 
-use Test::More tests => 18;
+use Test::More tests => 20;
 
 use_ok('Koha::Patron::Password::Recovery');
 
@@ -191,6 +191,11 @@ $letters = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber1,
 
 ok( $tempuuid1 ne $tempuuid2, "[SendPasswordRecoveryEmail] UPDATE == ON changes uuid in the database and updates the expirydate");
 ok( scalar @$letters == 2, "[SendPasswordRecoveryEmail] UPDATE == ON sends a new letter with updated uuid");
+
+foreach my $letter (@$letters) {
+    ok( $letter->{status} eq 'failed',
+        'Test SendPasswordRecoverEmail failed due to TestBuilder Sender not being a valid email address as expected.' );
+}
 
 $schema->storage->txn_rollback();
 
