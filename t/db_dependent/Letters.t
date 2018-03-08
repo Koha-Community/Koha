@@ -632,7 +632,7 @@ subtest 'TranslateNotices' => sub {
 
 subtest 'SendQueuedMessages' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
     t::lib::Mocks::mock_preference( 'SMSSendDriver', 'Email' );
     my $patron = Koha::Patrons->find($borrowernumber);
     $dbh->do(q|
@@ -655,6 +655,13 @@ subtest 'SendQueuedMessages' => sub {
     $schema->resultset('MessageQueue')->search({borrowernumber => $borrowernumber,status => 'sent'})->delete(); #clear borrower queue
     $my_message->{to_address} = 'fixme@kidclamp.iswrong';
     $message_id = C4::Letters::EnqueueLetter($my_message);
+
+    my $number_attempted = C4::Letters::SendQueuedMessages({
+        borrowernumber => -1, # -1 still triggers the borrowernumber condition
+        letter_code    => 'PASSWORD_RESET',
+    });
+    is ( $number_attempted, 0, 'There were no password reset messages for SendQueuedMessages to attempt.' );
+
     C4::Letters::SendQueuedMessages();
     $sms_message_address = $schema->resultset('MessageQueue')->search({
         borrowernumber => $borrowernumber,
