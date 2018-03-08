@@ -922,7 +922,7 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'sk', 'language', 'Slovak','2014-10-30');
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES ( 'sk','slk');
+VALUES ( 'sk','slo');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'sk', 'language', 'sk', 'Slovenčina');
