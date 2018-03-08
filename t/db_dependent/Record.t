@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -71,14 +71,24 @@ my $test3xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 is ($marcoaidc, $test3xml, "testing OAIDC Metadata");
 
 my $marcrdfdc=marc2dcxml( $marc, undef, undef, "rdfdc" );
-my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
+my $test4Axml=qq(<?xml version="1.0" encoding="UTF-8"?>
 <rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <dc:type/>
   <dc:language/>
 </rdf:Description>
 );
 
-is ($marcrdfdc, $test4xml, "testing OAIDC Metadata");
+is ($marcrdfdc, $test4Axml, "testing RDFDC Metadata");
+
+my $marcdc=marc2dcxml( $marc, undef, undef, "dc" );
+my $test4Bxml=qq(<?xml version="1.0" encoding="UTF-8"?>
+<rdf:Description xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <dc:type/>
+  <dc:language/>
+</rdf:Description>
+);
+
+is ($marcrdfdc, $test4Bxml, "testing DC Metadata");
 
 my $mods=marc2modsxml($marc);
 my $test5xml=qq(<?xml version="1.0" encoding="UTF-8"?>
