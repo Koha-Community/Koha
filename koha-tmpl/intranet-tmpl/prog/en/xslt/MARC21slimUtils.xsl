@@ -388,12 +388,10 @@
 	<span class="language">
 	  <span class="label"><xsl:value-of select="$langLabel"/></span>
           <xsl:for-each select="$langNode">
-            <xsl:element name="img">
-	      <xsl:attribute name="src">/intranet-tmpl/prog/img/phoca/<xsl:value-of select="."/>.png</xsl:attribute>
-	      <xsl:attribute name="alt"><xsl:value-of select="."/></xsl:attribute>
-	      <xsl:attribute name="title"><xsl:value-of select="."/></xsl:attribute>
-	      <xsl:attribute name="class">lang_icon</xsl:attribute>
-	    </xsl:element>
+            <span>
+	      <xsl:attribute name="class">lang_name-<xsl:value-of select="translate(., ' .-;>&lt;|#', '_')"/></xsl:attribute>
+	      <xsl:value-of select="."/>
+	    </span>
 	  </xsl:for-each>
 	</span>
       </xsl:if>
