@@ -432,6 +432,7 @@ sub get_template_and_user {
         hide_marc       => C4::Context->preference("hide_marc"),
         item_level_itypes  => C4::Context->preference('item-level_itypes'),
         patronimages       => C4::Context->preference("patronimages"),
+        redmineSSOUrl      => C4::Context->config('redmine_sso_url'),
         singleBranchMode   => ( Koha::Libraries->search->count == 1 ),
         XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
         XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
