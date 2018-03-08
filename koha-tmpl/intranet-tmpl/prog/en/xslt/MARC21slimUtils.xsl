@@ -1,6 +1,7 @@
 <?xml version='1.0'?>
 <!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 <xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="marc">
+  <xsl:include href="MARC21Languages.xsl"/>
 	<xsl:template name="datafield">
 		<xsl:param name="tag"/>
 		<xsl:param name="ind1"><xsl:text> </xsl:text></xsl:param>
@@ -390,7 +391,9 @@
           <xsl:for-each select="$langNode">
             <span>
 	      <xsl:attribute name="class">lang_name-<xsl:value-of select="translate(., ' .-;>&lt;|#', '_')"/></xsl:attribute>
-	      <xsl:value-of select="."/>
+	      <xsl:call-template name="languageCodeText">
+		<xsl:with-param name="code" select="."/>
+	      </xsl:call-template>
 	    </span>
 	  </xsl:for-each>
 	</span>
