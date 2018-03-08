@@ -415,6 +415,23 @@
     </xsl:template>
     <!-- /koha-suomi: kielletty alle -->
 
+    <!-- koha-suomi: lehden numero -->
+    <!-- show 362a if it's not the same as end of 245a -->
+    <xsl:template name="maybe-show-f362a">
+      <xsl:if test="//marc:datafield[@tag=362]/marc:subfield[@code='a']">
+	<xsl:variable name="f362ao" select="//marc:datafield[@tag=362]/marc:subfield[@code='a']"/>
+	<xsl:variable name="f362a" select="translate($f362ao, ' .-;', '')"/>
+	<xsl:variable name="f245a" select="translate(//marc:datafield[@tag=245]/marc:subfield[@code='a'], ' .-;', '')"/>
+	<xsl:variable name="f362al" select="string-length($f362a)"/>
+	<xsl:variable name="f245al" select="string-length($f245a)"/>
+	<xsl:if test="not($f362a = substring($f245a, $f245al - $f362al + 1))">
+	  <xsl:value-of select="$f362ao"/>
+	  <xsl:text> </xsl:text>
+	</xsl:if>
+      </xsl:if>
+    </xsl:template>
+    <!-- /koha-suomi: lehden numero -->
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.

@@ -318,6 +318,7 @@
                         <xsl:with-param name="codes">a</xsl:with-param>
                     </xsl:call-template>
                     <xsl:text> </xsl:text>
+                    <xsl:call-template name="maybe-show-f362a"/> <!-- koha-suomi -->
                     <!-- 13381 add additional subfields-->
                     <xsl:for-each select="marc:subfield[contains('bchknps', @code)]">
                         <xsl:choose>
