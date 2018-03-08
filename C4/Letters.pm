@@ -1038,7 +1038,12 @@ Returns number of messages sent.
 sub SendQueuedMessages {
     my $params = shift;
 
-    my $unsent_messages = _get_unsent_messages( { limit => $params->{limit} } );
+    my $which_unsent_messages  = {
+        'limit'          => $params->{'limit'} // 0,
+        'borrowernumber' => $params->{'borrowernumber'} // q{},
+        'letter_code'    => $params->{'letter_code'} // q{},
+    };
+    my $unsent_messages = _get_unsent_messages( $which_unsent_messages );
     MESSAGE: foreach my $message ( @$unsent_messages ) {
         # warn Data::Dumper->Dump( [ $message ], [ 'message' ] );
         warn sprintf( 'sending %s message to patron: %s',
@@ -1282,12 +1287,16 @@ sub _get_unsent_messages {
     my @query_params = ('pending');
     if ( ref $params ) {
         if ( $params->{'message_transport_type'} ) {
-            $statement .= ' AND message_transport_type = ? ';
+            $statement .= ' AND mq.message_transport_type = ? ';
             push @query_params, $params->{'message_transport_type'};
         }
         if ( $params->{'borrowernumber'} ) {
-            $statement .= ' AND borrowernumber = ? ';
+            $statement .= ' AND mq.borrowernumber = ? ';
             push @query_params, $params->{'borrowernumber'};
+        }
+        if ( $params->{'letter_code'} ) {
+            $statement .= ' AND mq.letter_code = ? ';
+            push @query_params, $params->{'letter_code'};
         }
         if ( $params->{'limit'} ) {
             $statement .= ' limit ? ';

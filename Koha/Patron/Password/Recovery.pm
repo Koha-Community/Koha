@@ -161,8 +161,11 @@ sub SendPasswordRecoveryEmail {
             message_transport_type => 'email',
         }
     );
-
-    return 1;
+    my $num_letters_attempted = C4::Letters::SendQueuedMessages( {
+        borrowernumber => $borrower->borrowernumber,
+        letter_code => 'PASSWORD_RESET'
+    } );
+    return ($num_letters_attempted > 0);
 }
 
 =head2 CompletePasswordRecovery
