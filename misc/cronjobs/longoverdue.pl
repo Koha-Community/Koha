@@ -35,7 +35,7 @@ BEGIN {
 }
 use C4::Context;
 use C4::Items;
-use C4::Circulation qw/LostItem/;
+use C4::Circulation qw/LostItem MarkIssueReturned/;
 use Getopt::Long;
 use C4::Log;
 use Pod::Usage;
