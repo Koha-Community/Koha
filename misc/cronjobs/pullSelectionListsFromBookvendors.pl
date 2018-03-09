@@ -242,7 +242,7 @@ sub stageSelectionlist {
     my ($selectionList, $encoding, $listType) = @_;
 
     my ($batch_id, $num_valid_records, $num_items, @import_errors) =
-        C4::ImportBatch::BatchStageMarcRecords('biblio', $encoding, $selectionList->getMarcRecords(), $selectionList->getIdentifier(), undef, $selectionList->getDescription(), '', 0, 0, 100, undef);
+        C4::ImportBatch::BatchStageMarcRecords('biblio', $encoding, $selectionList->getMarcRecords(), $selectionList->getIdentifier(), undef, undef, $selectionList->getDescription(), '', 0, 0, 100, undef);
     print join("\n",
     "MARC record staging report for selection list ".$selectionList->getIdentifier(),
     "------------------------------------",
