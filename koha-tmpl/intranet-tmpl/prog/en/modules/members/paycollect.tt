@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% patron.firstname %] [% patron.surname %]</title>
@@ -119,6 +120,8 @@
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id %]" />
     <input type="hidden" name="title" id="title" value="[% title %]" />
     <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note %]" />
+    <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding %]" />
+    <input type="hidden" name="confirm_writeoff" id="confirm_writeoff" value="1" />
     <table>
     <thead><tr>
             <th>Description</th>
@@ -139,12 +142,14 @@
                 <li>
                     <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding %]" />
+                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price %]" />
                 </li>
             </ol>
         </fieldset>
-        <div class="action"><input type="submit" name="confirm_writeoff" id="confirm_writeoff" value="Write off this charge" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
+        <div class="action">
+            <input type="submit" value="Write off this charge" />
+            <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
+        </div>
     </form>
 [% ELSE %]
 
@@ -201,10 +206,28 @@
     [% Asset.js("js/members-menu.js") %]
     <script type= "text/javascript">
         $(document).ready(function() {
-            $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
+            $('#payindivfine, #payfine').preventDoubleFormSubmit();
             $("#paid").on("change",function(){
                 moneyFormat( this );
             });
+        });
+
+        prevent_default = 1;
+        $('#woindivfine').on('submit', function(e){
+            if ( prevent_default ) {
+                e.preventDefault();
+
+                let amount_outstanding = parseFloat( $('#amountoutstanding').attr('value') );
+                let amount_writeoff = parseFloat( $('#amountwrittenoff').attr('value') );
+                if ( amount_writeoff > amount_outstanding ) {
+                    alert(_("You are attemping to writeoff more than the value of the fee."));
+                    $('#woindivfine').beenSubmitted = false;
+                } else {
+                    prevent_default = 0;
+                    $('#woindivfine').preventDoubleFormSubmit();
+                    $('#woindivfine').submit();
+                }
+            }
         });
 
         function moneyFormat(textObj) {

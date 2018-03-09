@@ -182,6 +182,10 @@ borrower_add_additional_fields($borrower, $template);
 
 $template->param(%$borrower);
 
+if ( $input->param('error_over') ) {
+    $template->param( error_over => 1, total_due => $input->param('amountoutstanding') );
+}
+
 $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
     patron        => $patron,
