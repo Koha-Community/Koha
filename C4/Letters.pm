@@ -1026,10 +1026,22 @@ ENDSQL
 
 =head2 SendQueuedMessages ([$hashref]) 
 
-    my $sent = SendQueuedMessages({ verbose => 1, limit => 50 });
+    my $sent = SendQueuedMessages({
+        letter_code => $letter_code,
+        borrowernumber => $who_letter_is_for,
+        limit => 50,
+        verbose => 1
+    });
 
-Sends all of the 'pending' items in the message queue, unless the optional
-limit parameter is passed too. The verbose parameter is also optional.
+Sends all of the 'pending' items in the message queue, unless
+parameters are passed.
+
+The letter_code, borrowernumber and limit parameters are used
+to build a parameter set for _get_unsent_messages, thus limiting
+which pending messages will be processed. They are all optional.
+
+The verbose parameter can be used to generate debugging output.
+It is also optional.
 
 Returns number of messages sent.
 
@@ -1229,15 +1241,15 @@ sub ResendMessage {
 
 =head2 _add_attachements
 
-named parameters:
-letter - the standard letter hashref
-attachments - listref of attachments. each attachment is a hashref of:
-  type - the mime type, like 'text/plain'
-  content - the actual attachment
-  filename - the name of the attachment.
-message - a MIME::Lite object to attach these to.
+  named parameters:
+  letter - the standard letter hashref
+  attachments - listref of attachments. each attachment is a hashref of:
+    type - the mime type, like 'text/plain'
+    content - the actual attachment
+    filename - the name of the attachment.
+  message - a MIME::Lite object to attach these to.
 
-returns your letter object, with the content updated.
+  returns your letter object, with the content updated.
 
 =cut
 
@@ -1272,6 +1284,20 @@ sub _add_attachments {
     return $letter;
 
 }
+
+=head2 _get_unsent_messages
+
+  This function's parameter hash reference takes the following
+  optional named parameters:
+   message_transport_type: method of message sending (e.g. email, sms, etc.)
+   borrowernumber        : who the message is to be sent
+   letter_code           : type of message being sent (e.g. PASSWORD_RESET)
+   limit                 : maximum number of messages to send
+
+  This function returns an array of matching hash referenced rows from
+  message_queue with some borrower information added.
+
+=cut
 
 sub _get_unsent_messages {
     my $params = shift;
