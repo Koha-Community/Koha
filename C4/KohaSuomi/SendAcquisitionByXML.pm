@@ -143,7 +143,7 @@ sub sendBasketGroupAsXml{
 
     my $msg = MIME::Lite->new(
         From    => $branch->branchemail,
-        To      => 'arvo.tilaus@btj.fi',
+        To      => 'edi-tilaukset@btj.fi',
         Subject => 'tilaus',
         Data => 'Tilaustiedot',
         Type    => 'multipart/mixed'
