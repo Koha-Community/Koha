@@ -93,15 +93,29 @@ if ($writeoff_all) {
     my $amount       = $input->param('amountwrittenoff');
     my $payment_note = $input->param("payment_note");
 
-    Koha::Account->new( { patron_id => $borrowernumber } )->pay(
-        {
-            amount     => $amount,
-            lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
-            type       => 'writeoff',
-            note       => $payment_note,
-            library_id => $branch,
-        }
-    );
+    my $accountline = Koha::Account::Lines->find( $accountlines_id );
+
+    if ( $amount > $accountline->amountoutstanding ) {
+        print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
+              . "borrowernumber=$borrowernumber"
+              . "&amount=$amount"
+              . "&amountoutstanding=" . $accountline->amountoutstanding
+              . "&accounttype=" . $accountline->accounttype
+              . "&accountlines_id=" . $accountlines_id
+              . "&writeoff_individual=1"
+              . "&error_over=1" );
+
+    } else {
+        Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+            {
+                amount     => $amount,
+                lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
+                type       => 'writeoff',
+                note       => $payment_note,
+                library_id => $branch,
+            }
+        );
+    }
 }
 
 for (@names) {
