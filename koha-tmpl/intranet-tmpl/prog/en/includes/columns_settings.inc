@@ -26,10 +26,22 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             columns: included_ids,
             text: _("Column visibility"),
         },
-        'excelHtml5',
-        'csvHtml5',
-        'copyHtml5',
-        'print',
+        {
+            extend: 'excelHtml5',
+            text: _("Excel"),
+        },
+        {
+            extend: 'csvHtml5',
+            text: _("CSV"),
+        },
+        {
+            extend: 'copyHtml5',
+            text: _("Copy"),
+        },
+        {
+            extend: 'print',
+            text: _("Print"),
+        },
     ];
 
     var table = $(selector);
