@@ -5,6 +5,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:str="http://exslt.org/strings"
   exclude-result-prefixes="marc">
+  <xsl:include href="MARC21Languages.xsl"/>
 	<xsl:template name="datafield">
 		<xsl:param name="tag"/>
 		<xsl:param name="ind1"><xsl:text> </xsl:text></xsl:param>
@@ -349,7 +350,58 @@
               </span>
             </xsl:for-each>
           </span>
-        </xsl:if>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="show-lang-041">
+      <xsl:if test="marc:datafield[@tag=041]">
+	<xsl:for-each select="marc:datafield[@tag=041]">
+	  <span class="results_summary languages">
+	    <xsl:call-template name="show-lang-node">
+	      <xsl:with-param name="langNode" select="marc:subfield[@code='a']"/>
+	      <xsl:with-param name="langLabel">Language: </xsl:with-param>
+	    </xsl:call-template>
+	    <xsl:call-template name="show-lang-node">
+	      <xsl:with-param name="langNode" select="marc:subfield[@code='b']"/>
+	      <xsl:with-param name="langLabel">Summary language: </xsl:with-param>
+	    </xsl:call-template>
+	    <xsl:call-template name="show-lang-node">
+	      <xsl:with-param name="langNode" select="marc:subfield[@code='d']"/>
+	      <xsl:with-param name="langLabel">Spoken language: </xsl:with-param>
+	    </xsl:call-template>
+	    <xsl:call-template name="show-lang-node">
+	      <xsl:with-param name="langNode" select="marc:subfield[@code='h']"/>
+	      <xsl:with-param name="langLabel">Original language: </xsl:with-param>
+	    </xsl:call-template>
+	    <xsl:call-template name="show-lang-node">
+	      <xsl:with-param name="langNode" select="marc:subfield[@code='j']"/>
+	      <xsl:with-param name="langLabel">Subtitle language: </xsl:with-param>
+	    </xsl:call-template>
+	  </span>
+	</xsl:for-each>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="show-lang-node">
+      <xsl:param name="langNode"/>
+      <xsl:param name="langLabel"/>
+      <xsl:if test="$langNode">
+	<span class="language">
+	  <span class="label"><xsl:value-of select="$langLabel"/></span>
+	  <xsl:for-each select="$langNode">
+	    <span>
+	      <xsl:attribute name="class">lang_code-<xsl:value-of select="substring(translate(., ' .-;|#', '_'),1,3)"/></xsl:attribute>
+	      <xsl:call-template name="languageCodeText">
+		<xsl:with-param name="code" select="substring(.,1,3)"/>
+	      </xsl:call-template>
+	      <xsl:if test="position() != last()">
+	        <span class="sep"><xsl:text>, </xsl:text></span>
+	      </xsl:if>
+	    </span>
+	  </xsl:for-each>
+	  <span class="sep"><xsl:text>. </xsl:text></span>
+	</span>
+      </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>

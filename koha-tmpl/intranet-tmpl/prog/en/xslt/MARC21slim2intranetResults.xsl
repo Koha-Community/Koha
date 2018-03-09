@@ -826,6 +826,8 @@
 	</span>
 </xsl:if> <!-- DisplayIconsXSLT -->
 
+    <xsl:call-template name="show-lang-041"/>
+
     <!-- Publisher Statement: Alternate Graphic Representation (MARC 880) -->
     <xsl:if test="$display880">
       <xsl:call-template name="m880Select">
