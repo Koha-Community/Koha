@@ -30,6 +30,10 @@ use Koha::Patrons;
 
 our $kp;    # koha patron
 
+=head1 Methods
+
+=cut
+
 sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
@@ -473,6 +477,13 @@ sub _get_outstanding_holds {
     }
     return \@holds;
 }
+
+=head2 build_patron_attributes_string
+
+This method builds the part of the sip message for extended patron
+attributes as defined in the sip config
+
+=cut
 
 sub build_patron_attributes_string {
     my ( $self, $server ) = @_;
