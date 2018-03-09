@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 26;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
+use JSON;
 
 use C4::Biblio;
 use C4::Circulation;
@@ -1120,6 +1121,24 @@ subtest 'is_child | is_adult' => sub {
 
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons + 1, 'Delete should have deleted the patron' );
+
+subtest 'Log cardnumber change' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+    my $patron = $builder->build( { source => 'Borrower' } );
+
+    my $cardnumber = $patron->{cardnumber};
+    $patron->{cardnumber} = 'TESTCARDNUMBER';
+    ModMember(%$patron);
+
+    my @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->{borrowernumber} } );
+    my $log_info = from_json( $logs[0]->info );
+    is( $log_info->{cardnumber_replaced}->{new_cardnumber}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
+    is( $log_info->{cardnumber_replaced}->{previous_cardnumber}, $cardnumber, 'Got correct old cardnumber' );
+    is( scalar @logs, 2, 'With BorrowerLogs, Change in cardnumber should be logged, as well as general alert of patron mod.' );
+};
+
 
 $schema->storage->txn_rollback;
 
