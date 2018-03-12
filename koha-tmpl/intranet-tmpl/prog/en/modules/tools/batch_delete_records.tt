@@ -11,11 +11,11 @@ var MSG_CANNOT_BE_DELETED = _("This record cannot be deleted, at least one item 
 $(document).ready(function() {
   $("#selectall").click(function(e){
     e.preventDefault();
-    $(".records").checkCheckboxes();
+    $(".records").checkCheckboxes(":input[type='checkbox']:not(:disabled)");
   });
   $("#clearall").click(function(e){
     e.preventDefault();
-    $(".records").unCheckCheckboxes();
+    $(".records").unCheckCheckboxes(":input[type='checkbox']:not(:disabled)");
   });
   $("#selectwithoutitems").click(function(e){
     e.preventDefault();
