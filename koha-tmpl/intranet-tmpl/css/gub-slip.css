@@ -1,0 +1,62 @@
+
+@media print {
+  body {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #hold-slip {
+    --slip-width: 130mm;
+    --slip-height: 190mm;
+
+    font-family: sans-serif;
+    font-size: 16pt;
+    width: var(--slip-width);
+    height:var(--slip-height);
+    margin:0;
+  }
+
+  #hold-slip .slip-info {
+    width: 100%;
+    padding: 0.5cm 0;
+  }
+  #hold-slip .slip-info .date {
+    display: block;
+    font-size: 18pt;
+    font-weight: bold;
+  }
+  #hold-slip .slip-header .date {
+    margin-bottom: 3mm;
+  }
+  #hold-slip .slip-footer .date {
+    margin-top: 3mm;
+  }
+  #hold-slip .slip-info .name {
+    font-size: 22pt;
+    font-weight: bold;
+  }
+  #hold-slip .slip-info .title {
+    font-size: 18pt;
+    font-weight: normal;
+    margin-bottom: 3mm;
+  }
+  #hold-slip .slip-note {
+    width: var(--slip-width);
+    margin-top: 2cm;
+    line-height: 1.2;
+  }
+  #hold-slip .slip-note .note-row {
+    font-size: 12pt;
+    margin-bottom: 3mm;
+  }
+  #hold-slip .slip-header {
+    position: relative;
+    width: var(--slip-width);
+    border-bottom: 1px solid #999;
+  }
+  #hold-slip .slip-footer {
+    position: absolute;
+    width: var(--slip-width);
+    bottom: 0;
+    border-top: 1px solid #999;
+  }
+}
