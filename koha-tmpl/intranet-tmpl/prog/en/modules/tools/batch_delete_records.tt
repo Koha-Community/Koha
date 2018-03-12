@@ -185,11 +185,11 @@
         $(document).ready(function() {
           $("#selectall").click(function(e){
             e.preventDefault();
-            $(".records").checkCheckboxes();
+            $(".records").checkCheckboxes(":input[type='checkbox']:not(:disabled)");
           });
           $("#clearall").click(function(e){
             e.preventDefault();
-            $(".records").unCheckCheckboxes();
+            $(".records").unCheckCheckboxes(":input[type='checkbox']:not(:disabled)");
           });
           $("#selectwithoutitems").click(function(e){
             e.preventDefault();
