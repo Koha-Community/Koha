@@ -42,7 +42,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $err = 0;
-my $errstr = undef;
+my $errtype = undef;
 my $duplicate_count = undef;
 my $duplicate_message = undef;
 my $db_rows = {};
@@ -72,14 +72,14 @@ if ($op eq 'remove') {
     foreach my $label_id (@label_ids) {
     $err = $batch->remove_item($label_id);
     }
-    $errstr = "item(s) not removed from batch $batch_id." if $err;
+    $errtype = 'ITEM_NOT_REMOVED' if $err;
 #    Something like this would be nice to avoid problems with the browser's 'refresh' button, but it needs an error handling mechanism...
 #    print $cgi->redirect("label-edit-batch.pl?op=edit&batch_id=$batch_id");
 #    exit;
 }
 elsif ($op eq 'delete') {
     $err = C4::Labels::Batch::delete(batch_id => $batch_id, branch_code => $branch_code);
-    $errstr = "batch $batch_id was not deleted." if $err;
+    $errtype = 'BATCH_NOT_DELETED' if $err;
 }
 elsif ($op eq 'add') {
     if ($number_list) {
@@ -103,11 +103,11 @@ elsif ($op eq 'add') {
             $err = $batch->add_item($item_number);
         }
         $batch_id = $batch->get_attr('batch_id') if $batch_id == 0; #update batch_id if we added to a new batch
-        $errstr = "item(s) not added to batch $batch_id." if $err;
+        $errtype = 'ITEM_NOT_ADDED' if $err;
     }
     else {
         $err = 1;
-        $errstr = "items(s) not added, the error was: Branch is not set, you please set your branch before adding items to a batch";
+        $errtype = 'BRANCH_NOT_SET';
     }
 }
 elsif ($op eq 'new') {
@@ -118,7 +118,7 @@ elsif ($op eq 'de_duplicate') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
     $duplicate_count = $batch->remove_duplicates();
     $duplicate_message = 1 if $duplicate_count != -1;
-    $errstr = "batch $batch_id not fully de-duplicated." if $duplicate_count == -1;
+    $errtype = 'BATCH_NOT_DEDUP' if $duplicate_count == -1;
 }
 else { # edit
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
@@ -131,7 +131,7 @@ my $table = html_table($display_columns, $db_rows);
 
 $template->param(
                 err         => $err,
-                errstr      => $errstr,
+                errtype     => $errtype,
                 ) if ($err ne 0);
 
 $template->param(
