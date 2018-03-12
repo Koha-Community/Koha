@@ -64,8 +64,8 @@ if ( $op eq "do_search" ) {
     my @value     = (
         $query->param('value_mainstr') || undef,
         $query->param('value_main')    || undef,
+        $query->param('value_match')   || undef,
         $query->param('value_any')     || undef,
-        $query->param('value_match')   || undef
     );
     my $orderby        = $query->param('orderby')        || '';
     my $startfrom      = $query->param('startfrom')      || 0;
