@@ -22,11 +22,15 @@
 
             [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
             <div id="toolbar">
-                <ul class="toolbar">
-                    [% IF CAN_user_coursereserves_add_reserves %]<li><a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a></li>[% END %]
-                    [% IF ( CAN_user_coursereserves_manage_courses ) %]<li><a class="btn btn-default btn-sm" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a></li>[% END %]
-                </ul>
+                [% IF CAN_user_coursereserves_add_reserves %]
+                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a>
+                [% END %]
+                [% IF ( CAN_user_coursereserves_manage_courses ) %]
+                    <a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a>
+                [% END %]
+                [% IF ( CAN_user_coursereserves_manage_courses ) %]
+                    <a class="btn btn-default btn-sm" id="delete_course" href="/cgi-bin/koha/course_reserves/mod_course.pl?course_id=[% course.course_id %]&amp;action=del"><i class="fa fa-trash"></i> Delete course</a>
+                [% END %]
             </div><!-- /toolbar -->
             [% END %]
 

@@ -20,11 +20,9 @@
 
                     [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
                     <div id="toolbar">
-                        <ul class="toolbar">
-                            [% IF ( CAN_user_coursereserves_manage_courses ) %]
-                            <li><a class="btn btn-default btn-sm" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl"><i class="fa fa-plus"></i> New course</a></li>
-                            [% END %]
-                        </ul>
+                        [% IF ( CAN_user_coursereserves_manage_courses ) %]
+                            <a class="btn btn-default btn-sm" id="new_course" href="/cgi-bin/koha/course_reserves/course.pl"><i class="fa fa-plus"></i> New course</a>
+                        [% END %]
                     </div><!-- /toolbar -->
                     [% END %]
 
