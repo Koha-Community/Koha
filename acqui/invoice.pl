@@ -132,7 +132,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
                 reason => $reason[$i],
                 note => $note[$i],
                 budget_id => $budget_id[$i] || undef,
-                encumber_open => $encumber_open[$i],
+                encumber_open => defined $e_open{ $adjustment_id[$i] } ? 1 : 0,
             });
             $new_adj->store();
         }
