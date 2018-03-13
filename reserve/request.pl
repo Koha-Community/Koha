@@ -144,6 +144,7 @@ if ( $biblionumbers ) {
     push @biblionumbers, $input->multi_param('biblionumber');
 }
 
+my $multihold = scalar $input->param('multi_hold');
 # FIXME multi_hold should not be a variable but depends on the number of elements in @biblionumbers
 $template->param(multi_hold => scalar $input->param('multi_hold'));
 
@@ -209,6 +210,10 @@ my $patron = Koha::Patrons->find( $borrowernumber_hold );
 
 my $logged_in_patron = Koha::Patrons->find( $borrowernumber );
 
+my $wants_check;
+if ($patron) {
+    $wants_check = $patron->wants_check_for_previous_checkout;
+}
 my $itemdata_enumchron = 0;
 my $itemdata_ccode = 0;
 my @biblioloop = ();
@@ -374,7 +379,18 @@ foreach my $biblionumber (@biblionumbers) {
 
         foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
             my $item = $iteminfos_of->{$itemnumber};
-
+            my $do_check;
+            if ( $patron ) {
+                $do_check = $patron->do_check_for_previous_checkout($item) if $wants_check;
+                if ( $do_check && $wants_check ) {
+                    $item->{checked_previously} = $do_check;
+                    if ( $multihold ) {
+                        $biblioloopiter{checked_previously} = $do_check;
+                    } else {
+                        $template->param( checked_previously => $do_check );
+                    }
+                }
+            }
             $item->{force_hold_level} = $force_hold_level;
 
             unless (C4::Context->preference('item-level_itypes')) {
