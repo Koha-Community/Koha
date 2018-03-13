@@ -107,7 +107,7 @@ foreach my $accountline ( @{$accts}) {
         foreach my $relaccline (@$relacclines){
             $related_accountlines->{$relaccline->{accountlines_id}} = [] if not exists $related_accountlines->{$relaccline->{accountlines_id}};
 
-            push $related_accountlines->{$relaccline->{accountlines_id}}, $transaction->transaction_id;
+            push @{$related_accountlines->{$relaccline->{accountlines_id}}}, $transaction->transaction_id;
         }
     }
 }
