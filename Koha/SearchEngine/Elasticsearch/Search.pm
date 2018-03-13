@@ -217,7 +217,7 @@ sub search_auth_compat {
             # with the record. It's not documented why this is the case, so
             # it's not reproduced here yet.
             my $authtype           = $rs->single;
-            my $auth_tag_to_report = $authtype->auth_tag_to_report;
+            my $auth_tag_to_report = $authtype ? $authtype->auth_tag_to_report : $authtypecode;
             my $marc               = $self->json2marc($marc_json);
             my $mainentry          = $marc->field($auth_tag_to_report);
             my $reported_tag;
@@ -227,11 +227,7 @@ sub search_auth_compat {
                 }
             }
             # Turn the resultset into a hash
-            my %authtype_cols;
-            foreach my $col ($authtype->result_source->columns) {
-                $authtype_cols{$col} = $authtype->get_column($col);
-            }
-            $result{authtype}     = $authtype->authtypetext;
+            $result{authtype}     = $authtype ? $authtype->authtypetext : $authtypecode;
             $result{reported_tag} = $reported_tag;
 
             # Reimplementing BuildSummary is out of scope because it'll be hard
