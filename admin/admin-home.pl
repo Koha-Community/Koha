@@ -21,8 +21,12 @@ use warnings;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
+use Koha::Plugins;
 
 my $query = new CGI;
+
+my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "admin/admin-home.tt",
@@ -33,5 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+$template->param( plugins_enabled => $plugins_enabled, );
 
 output_html_with_http_headers $query, $cookie, $template->output;
