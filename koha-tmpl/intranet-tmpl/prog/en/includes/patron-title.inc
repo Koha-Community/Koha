@@ -61,7 +61,7 @@
     [%- ELSE -%]
         [% data.title %][%- data.firstname | html %] [% IF data.othernames %] ([% data.othernames | html %]) [% END %] [% data.surname | html -%]
     [%- END -%]
-    [%- IF display_cardnumber AND data.cardnumber %]([% data.cardnumber | html %])[% END -%]
+    [%- IF display_cardnumber AND data.cardnumber %] ([% data.cardnumber | html %])[% END -%]
 [%- ELSIF display_cardnumber -%]
     [%- IF data.cardnumber -%][%# FIXME Cardnumber should always be defined, right? -%]
         [%- data.cardnumber | html -%]
