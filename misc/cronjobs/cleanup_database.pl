@@ -81,6 +81,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --temp-uploads     Delete temporary uploads.
    --temp-uploads-days DAYS Override the corresponding preference value.
    --uploads-missing FLAG Delete upload records for missing files when FLAG is true, count them otherwise
+   --oauth-tokens     Delete expired OAuth2 tokens
 USAGE
     exit $_[0];
 }
@@ -106,6 +107,7 @@ my $special_holidays_days;
 my $temp_uploads;
 my $temp_uploads_days;
 my $uploads_missing;
+my $oauth_tokens;
 
 GetOptions(
     'h|help'            => \$help,
@@ -129,6 +131,7 @@ GetOptions(
     'temp-uploads'      => \$temp_uploads,
     'temp-uploads-days:i' => \$temp_uploads_days,
     'uploads-missing:i' => \$uploads_missing,
+    'oauth-tokens'      => \$oauth_tokens,
 ) || usage(1);
 
 # Use default values
@@ -162,6 +165,7 @@ unless ( $sessions
     || $special_holidays_days
     || $temp_uploads
     || defined $uploads_missing
+    || $oauth_tokens
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -331,6 +335,13 @@ if( defined $uploads_missing ) {
     } else {
         print "Removed $count records for missing uploads\n";
     }
+}
+
+if ($oauth_tokens) {
+    require Koha::OAuthAccessTokens;
+
+    my $count = int Koha::OAuthAccessTokens->search({ expires => { '<=', time } })->delete;
+    say "Removed $count expired OAuth2 tokens";
 }
 
 exit(0);

@@ -1,0 +1,64 @@
+{
+    "/oauth/token": {
+        "post": {
+            "x-mojo-to": "OAuth#token",
+            "operationId": "tokenOAuth",
+            "tags": ["oauth"],
+            "produces": [
+                "application/json"
+            ],
+            "parameters": [
+                {
+                    "name": "grant_type",
+                    "in": "formData",
+                    "description": "grant type (client_credentials)",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "name": "client_id",
+                    "in": "formData",
+                    "description": "client id",
+                    "type": "string"
+                },
+                {
+                    "name": "client_secret",
+                    "in": "formData",
+                    "description": "client secret",
+                    "type": "string"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "access_token": {
+                                "type": "string"
+                            },
+                            "token_type": {
+                                "type": "string"
+                            },
+                            "expires_in": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Bad Request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            }
+        }
+    }
+}

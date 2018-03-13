@@ -22,10 +22,12 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Auth qw( check_cookie_auth get_session haspermission );
+use C4::Context;
 
 use Koha::Account::Lines;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::OAuth;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
 
@@ -110,6 +112,31 @@ sub authenticate_api_request {
 
     my $spec = $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
     my $authorization = $spec->{'x-koha-authorization'};
+
+    if (my $oauth = $c->oauth) {
+        my $clients = C4::Context->config('api_client');
+        $clients = [ $clients ] unless ref $clients eq 'ARRAY';
+        my ($client) = grep { $_->{client_id} eq $oauth->{client_id} } @$clients;
+
+        my $patron = Koha::Patrons->find($client->{patron_id});
+        my $permissions = $authorization->{'permissions'};
+        # Check if the patron is authorized
+        if ( haspermission($patron->userid, $permissions)
+            or allow_owner($c, $authorization, $patron)
+            or allow_guarantor($c, $authorization, $patron) ) {
+
+            validate_query_parameters( $c, $spec );
+
+            # Everything is ok
+            return 1;
+        }
+
+        Koha::Exceptions::Authorization::Unauthorized->throw(
+            error => "Authorization failure. Missing required permission(s).",
+            required_permissions => $permissions,
+        );
+    }
+
     my $cookie = $c->cookie('CGISESSID');
     my ($session, $user);
     # Mojo doesn't use %ENV the way CGI apps do
