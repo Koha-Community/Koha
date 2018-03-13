@@ -4,6 +4,7 @@
 
 #addbibliotabs .ui-tabs-panel {
 	float : left;
+    width: 100%;
 }
 
 .buttonPlus {
@@ -75,7 +76,6 @@ a.tagnum {
 
 .subfield {
 	color : #00698a;
-	float: left;
 	width: 10em;
 	text-align:right;
 }
@@ -91,7 +91,7 @@ a.tagnum {
 
 .input_marceditor {
 	float:left;
-	width:30em;
+    width: auto;
 }
 
 .indicator {
@@ -168,4 +168,33 @@ tbody tr.active td {
     position: absolute;
     top: 50%;
     width: 15em;
+}
+
+
+@media (min-width: 768px) {
+    div.subfield_line label {
+        width: 20em;
+    }
+
+    input.marceditor {
+        width: 50em;
+    }
+
+    .subfield {
+        width: 14em;
+    }
+}
+
+@media (min-width: 1200px) {
+    div.subfield_line label {
+        width: 25em;
+    }
+
+    input.marceditor {
+        width: 60em;
+    }
+
+    .subfield {
+        width: 16em;
+    }
 }
