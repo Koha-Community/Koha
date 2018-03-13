@@ -323,20 +323,15 @@ sub get_fixer_rules {
         sub {
             my ( $name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field ) = @_;
             return if $marc_type ne $marcflavour;
-            my $options = '';
+            my $options ='';
 
-            # There's a bug when using 'split' with something that
-            # selects a range
-            # The split makes everything into nested arrays, but that's not
-            # really a big deal, ES doesn't mind.
-            $options = '' unless $marc_field =~ m|_/| || $type eq 'sum';
             push @rules, "marc_map('$marc_field','${name}.\$append', $options)";
             if ($facet) {
                 push @rules, "marc_map('$marc_field','${name}__facet.\$append', $options)";
             }
             if ($suggestible) {
                 push @rules,
-                    #"marc_map('$marc_field','${name}__suggestion.input.\$append', $options)"; #must not have nested data structures in .input
+                    #"marc_map('$marc_field','${name}__suggestion.input.\$append', '')"; #must not have nested data structures in .input
                     "marc_map('$marc_field','${name}__suggestion.input.\$append')";
             }
             if ( $type eq 'boolean' ) {
