@@ -207,6 +207,13 @@ sub fix_misconfigured_preference {
 
     my $valid_mtts = [];
     foreach my $mtt (keys %{$self->message_transport_types}) {
+        my $transport = Koha::Patron::Message::Transports->find({
+            message_attribute_id => $self->message_attribute_id,
+            message_transport_type => $mtt
+        });
+        unless ($transport) {
+            next;
+        }
         if ($mtt_to_patronfield_to_validator->{$mtt}) {
             my $patron = Koha::Patrons->find($self->borrowernumber);
             my ($field) = keys %{$mtt_to_patronfield_to_validator->{$mtt}};
