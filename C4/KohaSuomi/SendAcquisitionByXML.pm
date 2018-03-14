@@ -80,7 +80,7 @@ sub sendBasketGroupAsXml{
 
         foreach my $order (@orders) {
             my $bd = GetBiblioData( $order->{'biblionumber'} );
-            my $marcxml = $bd->{marcxml};
+            my $marcxml = GetXmlBiblio($order->{'biblionumber'});
             my $allfons = getField($marcxml, '001');
 
             my $field971 = getField($marcxml, '971');
