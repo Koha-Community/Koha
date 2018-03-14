@@ -105,7 +105,10 @@
                         <tbody>
                         </tbody>
                     </table></li>
-                    <li><label for="merge_invoicenumber">Invoice number:</label><span id="merge_invoicenumber"></span></li>
+                    <li><label for="merge_invoicenumber">Invoice number:</label>
+                            <input type="text" size="10" id="merge_invoicenumber" name="invoicenumber" value="" class="required" required="required" />
+                            <span class="required">Required</span>
+                            </li>
                     <li><label for="merge_shipmentdate">Shipment date:</label>
                             <input type="text" size="10" id="merge_shipmentdate" name="shipmentdate" value="" class="datepicker" /></li>
 
@@ -351,8 +354,7 @@
                         $(row).click(function () {
                             $('#merge_table tbody tr').removeClass('active');
                             $(this).addClass('active');
-                            $('#merge_invoicenumber').text(invoice.invoicenumber);
-                            $.each(['invoiceid', 'shipmentdate', 'billingdate', 'shipmentcost', 'shipment_budgetid'], function (idx, prop) {
+                            $.each(['invoiceid', 'shipmentdate', 'billingdate', 'shipmentcost', 'shipment_budgetid', 'invoicenumber'], function (idx, prop) {
                                 $('#merge_' + prop).val(invoice[prop]);
                             });
                             if (invoice.closedate) {
