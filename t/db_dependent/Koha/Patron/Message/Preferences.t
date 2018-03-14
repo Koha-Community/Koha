@@ -163,7 +163,7 @@ subtest 'Test Koha::Patron::Message::Preferences->get_options' => sub {
 };
 
 subtest 'Test Koha::Patron::Message::Preference->fix_misconfigured_preference' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     subtest 'Test method availability and return value' => sub {
         plan tests => 3;
@@ -303,6 +303,41 @@ subtest 'Test Koha::Patron::Message::Preference->fix_misconfigured_preference' =
 
         $schema->storage->txn_rollback;
     };
+
+    subtest 'Delete forbidden transport type' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        my $mtt1 = Koha::Patron::Message::Transport::Types->find('email');
+        my $mtt2 = Koha::Patron::Message::Transport::Types->find('sms');
+
+        my $patron = build_a_test_patron();
+        $patron->set({ email => 'nobody@example.com' })->store;
+        $patron->set({ smsalertnumber => '+358500000000'})->store;
+        my ($preference) = build_a_test_complete_preference({
+            patron => $patron,
+            mtt1 => $mtt1,
+            mtt2 => $mtt2,
+        });
+
+        Koha::Patron::Message::Transports->search({
+            message_transport_type => $mtt2->message_transport_type
+        })->delete;
+
+        Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next->fix_misconfigured_preference;
+
+        $preference = Koha::Patron::Message::Preferences->search({
+            borrowernumber => $patron->borrowernumber
+        })->next;
+        my $asd = $preference->message_transport_types;
+        ok(!exists $preference->message_transport_types->{sms}, 'SMS deleted');
+        ok(exists $preference->message_transport_types->{email}, 'Email still enabled');
+
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest 'Add preferences from defaults' => sub {
@@ -395,6 +430,8 @@ log4perl.appender.INTRANET.layout=SimpleLayout
 HERE
             );
             t::lib::Mocks::mock_config('log4perl_conf', $conf);
+            Log::Log4perl->init($conf);
+            Log::Log4perl::Logger->cleanup();
             my $appenders = Log::Log4perl->appenders;
             my $appender = Log::Log4perl->appenders->{OPAC};
 
