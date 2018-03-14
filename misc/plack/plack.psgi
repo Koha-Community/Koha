@@ -105,7 +105,7 @@ builder {
     enable "ReverseProxy";
     enable_if { $proxies } "Plack::Middleware::RealIP",
         header => 'X-Forwarded-For',
-        trusted_proxy => [split /[ ,]+/, $proxies];
+        trusted_proxy => defined $proxies ? [split /[ ,]+/, $proxies] : [];
     enable "Plack::Middleware::Static";
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
