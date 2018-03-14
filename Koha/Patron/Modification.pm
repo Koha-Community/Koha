@@ -194,6 +194,9 @@ sub approve {
                 if ( $_->isa('DBIx::Class::Exception') ) {
                     Koha::Exceptions::Patron::Modification->throw( $_->{msg} );
                 }
+                elsif ( $_->can('rethrow') ) {
+                    Koha::Exceptions::rethrow_exception($_);
+                }
                 else {
                     Koha::Exceptions::Patron::Modification->throw($@);
                 }
