@@ -55,8 +55,8 @@ $(document).ready(function() {
   $("#homebranchfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
       $('select', this).change( function () {
-          var filter_value = $(this).val();
-          holdst.fnFilter( filter_value, 5, true );
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 5, true, false );
       } );
   } );
   $("#itypefilter").each( function () {
