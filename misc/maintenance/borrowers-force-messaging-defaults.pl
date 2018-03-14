@@ -57,7 +57,7 @@ WHERE bo.dateenrolled >= ?|;
     if( $no_overwrite ) {
         $sql .= " AND mp.borrowernumber IS NULL";
     }
-    $sql .= " AND categorycode = ?" if $category;
+    $sql .= " AND bo.categorycode = ?" if $category;
     my $sth = $dbh->prepare($sql);
     $sth->execute($since, $category || () );
     my $cnt = 0;
