@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2015 Theke Solutions
+# Copyright 2015 Theke Solutions, 2018 Koha-Suomi Oy
 #
 # This file is part of Koha.
 #
@@ -30,7 +30,6 @@ set -e
 
 . /lib/lsb/init-functions
 
-
 HELPER_FUNCTIONS="__PERL_MODULE_DIR__/debian/scripts/koha-functions.sh"
 
 RUNDIR="/var/run/koha"
@@ -40,11 +39,12 @@ PLACKSOCKET="$RUNDIR/plack.sock"
 PSGIFILE="__PERL_MODULE_DIR__/misc/plack/plack.psgi"
 MODE="deployment" #development|deployment|test
 LISTEN=":5000"
-#User and group must be the same as for apache2, eg. www-data. This is to prevent nasty surprises with priviledge escalation.
-#And so programs can communicate via the same unix-socket
-USER="www-data"
-GROUP="www-data"
 
+#User and group must be the same as for apache2, eg. www-data. This is to prevent nasty surprises with priviledge escalation.
+#And so programs can communicate via the same unix-socket. You need to include Koha user in www-data group so that logging
+#doesn't get complicated.
+DAEMON_USER="www-data"
+DAEMON_GROUP="www-data"
 
 #Set Environment for koha-plack-daemon.sh
 export KOHA_CONF="__KOHA_CONF_DIR__/koha-conf.xml"
@@ -53,10 +53,10 @@ export OPAC_CGI_DIR="__OPAC_CGI_DIR__/opac"
 export PERL_MODULE_DIR="__PERL_MODULE_DIR__"
 export PLACK_DEBUG #This is set if debug-parameter is given or if mode is development
 
-
-#Make sure the pid-dir and log-dir exists
-mkdir -p $RUNDIR
-mkdir -p $LOGDIR
+#Make sure the pid-dir and log-dir exists + set owners and permissions
+mkdir -p $RUNDIR $LOGDIR
+chmod 770 $RUNDIR $LOGDIR
+chown $DAEMON_USER:$DAEMON_GROUP $LOGDIR $RUNDIR
 
 # include helper functions
 if [ -f "$HELPER_FUNCTIONS" ]; then
@@ -99,36 +99,36 @@ EOF
 
 start_plack()
 {
-    _check_and_fix_perms
+    # Default to 10 workers/1000 requests for deployment if not otherwise configured in koha-conf.xml
+    WORKERS=$(xmllint --xpath "yazgfs/config/plack_workers/text()" $KOHA_CONF 2> /dev/null || printf "10")
+    REQUESTS=$(xmllint --xpath "yazgfs/config/plack_max_requests/text()" $KOHA_CONF 2> /dev/null || printf "1000")
 
-    DEBUGGER_STR=""
     test "$DEBUGGER" == "1" && DEBUGGER_STR="/usr/bin/perl -d "
 
     STARMANOPTS="-M FindBin \
-                 --user=$USER --group=$GROUP \
-                 --pid ${PIDFILE} \
+                 --user=$DAEMON_USER --group=$DAEMON_GROUP \
+                 --pid $PIDFILE \
                  -E $MODE \
-                 ${PSGIFILE} "
+                 $PSGIFILE "
 
     test "$MODE" != "deployment" && STARMANOPTS="$STARMANOPTS --workers 1"
 
     test "$MODE" == "deployment" && STARMANOPTS="$STARMANOPTS --daemonize \
-                                                              --max-requests 50 \
-                                                              --workers 2 \
+                                                              --max-requests $REQUESTS \
+                                                              --workers $WORKERS \
                                                               --access-log $LOGDIR/plack.log \
-                                                              --error-log $LOGDIR/plack-error.log \
-                                                "
+                                                              --error-log $LOGDIR/plack-error.log"
 
-    test -n "$PLACKSOCKET" && STARMANOPTS="$STARMANOPTS --listen ${PLACKSOCKET} "
+    test -n "$PLACKSOCKET" && STARMANOPTS="$STARMANOPTS --listen $PLACKSOCKET "
 
-    test -n "$LISTEN" && STARMANOPTS="$STARMANOPTS --listen ${LISTEN} "
+    test -n "$LISTEN" && STARMANOPTS="$STARMANOPTS --listen $LISTEN "
 
 
 
     if ! is_plack_running; then
         log_daemon_msg "Starting Plack daemon"
 
-        if ${DEBUGGER_STR} ${STARMAN} ${STARMANOPTS}; then
+        if $DEBUGGER_STR $STARMAN $STARMANOPTS; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -145,7 +145,7 @@ stop_plack()
 
         log_daemon_msg "Stopping Plack daemon"
 
-        if start-stop-daemon --pidfile ${PIDFILE} --stop; then
+        if start-stop-daemon --pidfile $PIDFILE --stop; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -162,7 +162,7 @@ restart_plack()
 
         log_daemon_msg "Restarting Plack daemon"
 
-        if stop_plack && start_plack; then
+        if stop_plack && sleep 2 && start_plack; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -180,7 +180,7 @@ reload_starman()
 
         log_daemon_msg "Hot-reloading starman daemon !!!"
 
-        if start-stop-daemon --pidfile ${PIDFILE} --stop --signal HUP; then
+        if start-stop-daemon --pidfile $PIDFILE --stop --signal HUP; then
             log_end_msg 0
         else
             log_end_msg 1
@@ -201,49 +201,31 @@ check_env_and_warn()
         apache_version_ok="yes"
     fi
 
-    for module in ${required_modules}; do
-        if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q ${module}; then
-            missing_modules="${missing_modules}${module} "
+    for module in $required_modules; do
+        if ! /usr/sbin/apachectl -M 2> /dev/null | grep -q $module; then
+            missing_modules="$missing_modules$module "
         fi
     done
 
-    if [ "${apache_version_ok}" != "yes" ]; then
+    if [ "$apache_version_ok" != "yes" ]; then
         warn "WARNING: koha-plack requires Apache 2.4.x and you don't have that."
     fi
 
-    if [ "${missing_modules}" != "" ]; then
+    if [ "$missing_modules" != "" ]; then
         cat 1>&2 <<EOM
 WARNING: koha-plack requires some Apache modules that you are missing.
 You can install them with:
 
-    sudo a2enmod ${missing_modules}
+    sudo a2enmod $missing_modules
 
 EOM
 
     fi
 }
 
-_check_and_fix_perms()
-{
-    local files="/var/log/koha/plack.log \
-                 /var/log/koha/plack-error.log"
-
-    for file in ${files}
-    do
-        if [ ! -e "${file}" ]; then
-            touch ${file}
-        fi
-        chown "koha":"koha" ${file}
-    done
-}
-
 set_action()
 {
-    if [ "$op" = "" ]; then
-        op=$1
-    else
-        die "Error: only one action can be specified."
-    fi
+    test -z "$op" && op=$1 || die "Error: only one action can be specified."
 }
 
 STARMAN=$(which starman)
@@ -293,9 +275,7 @@ while [ $# -gt 0 ]; do
 
 done
 
-if [ -z $PERL5LIB ]; then
-    PERL5LIB="__INTRANET_CGI_DIR__"
-fi
+test -z $PERL5LIB && PERL5LIB="$INTRANET_CGI_DIR"
 export PERL5LIB
 
 check_env_and_warn
