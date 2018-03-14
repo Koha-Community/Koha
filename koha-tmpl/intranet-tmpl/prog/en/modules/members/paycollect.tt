@@ -95,12 +95,12 @@
 <div class="tabs-container">
 [% IF ( error_over ) %]
     <div id="error_message" class="dialog alert">
-    You must pay a value less than or equal to [% total_due | format('%.2f') %].
+    You must pay a value less than or equal to [% total_due | $Price %].
     </div>
 [% END %]
 [% IF ( error_under ) %]
     <div id="error_message" class="dialog alert">
-    You must collect a value greater than or equal to [% total_paid | format('%.2f') %].
+    You must collect a value greater than or equal to [% total_paid | $Price %].
     </div>
 [% END %]
 
@@ -138,7 +138,7 @@
             <th>Amount outstanding</th>
         </tr></thead>
     <tfoot>
-        <tr><td colspan="3">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td></tr>
+        <tr><td colspan="3">Total amount payable:</td><td>[% amountoutstanding | $Price %]</td></tr>
     </tfoot>
     <tbody><tr>
             <td>
@@ -146,8 +146,8 @@
             </td>
             [% line.debit_type_code = debit_type_code %]
             <td>[% PROCESS account_type_description account=line %]</td>
-            <td class="debit">[% amount | format('%.2f') %]</td>
-            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+            <td class="debit">[% amount | $Price %]</td>
+            <td class="debit">[% amountoutstanding | $Price %]</td>
         </tr></tbody>
 </table>
 
@@ -215,13 +215,13 @@
             <th>Amount</th>
             <th>Amount outstanding</th>
         </tr></thead>
-    <tfoot><tr><td colspan="3">Total amount outstanding:</td><td>[% amountoutstanding | format('%.2f') %]</td></tr></tfoot>
+    <tfoot><tr><td colspan="3">Total amount outstanding:</td><td>[% amountoutstanding | $Price %]</td></tr></tfoot>
     <tbody><tr>
             <td>[% individual_description | html %]</td>
             [% line.debit_type_code = debit_type_code %]
             <td>[% PROCESS account_type_description account=line %]</td>
-            <td class="debit">[% amount | format('%.2f') %]</td>
-            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+            <td class="debit">[% amount | $Price %]</td>
+            <td class="debit">[% amountoutstanding | $Price %]</td>
         </tr></tbody>
     </table>
 
@@ -277,7 +277,7 @@
     <ol>
         <li>
             <span class="label">Total amount outstanding: </span>
-            <span class="debit">[% total | format('%.2f') %]</span>
+            <span class="debit">[% total | $Price %]</span>
         </li>
     <li>
         [% IF type == 'WRITEOFF' %]
