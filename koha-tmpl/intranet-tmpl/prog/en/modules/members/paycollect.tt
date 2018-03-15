@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE Branches %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Collect fine payment for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -7,9 +8,6 @@
 //<![CDATA[
 $(document).ready(function() {
     $('#payindivfine, #woindivfine, #payfine').preventDoubleFormSubmit();
-    $("#paid").on("change",function(){
-        moneyFormat( this );
-    });
 });
 
 function moneyFormat(textObj) {
@@ -191,7 +189,7 @@ function moneyFormat(textObj) {
 <div class="tabs-container">
 [% IF ( error_over ) %]
     <div id="error_message" class="dialog alert">
-    You must pay a value less than or equal to [% total_due | format('%.2f') %].
+    You must pay a value less than or equal to [% total_due | $Price %].
     </div>
 [% END %]
 
@@ -298,7 +296,7 @@ function moneyFormat(textObj) {
             <th>Amount outstanding</th>
         </tr></thead>
     <tfoot>
-        <td colspan="5">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td>
+        <td colspan="5">Total amount payable:</td><td>[% amountoutstanding | $Price %]</td>
     </tfoot>
     <tbody><tr>
             <td>
@@ -307,8 +305,8 @@ function moneyFormat(textObj) {
             <td>[% accounttype %]</td>
             <td>[% notify_id %]</td>
             <td>[% notify_level %]</td>
-            <td class="debit">[% amount | format('%.2f') %]</td>
-            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+            <td class="debit">[% amount | $Price %]</td>
+            <td class="debit">[% amountoutstanding | $Price %]</td>
         </tr></tbody>
 </table>
 
@@ -317,7 +315,7 @@ function moneyFormat(textObj) {
     <li>
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding | format('%.2f') %]" />
+        <input name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]" />
     </li>
     <li>
         [% IF POSInterface %]
@@ -357,14 +355,14 @@ function moneyFormat(textObj) {
             <th>Amount</th>
             <th>Amount outstanding</th>
         </tr></thead>
-    <tfoot><td colspan="5">Total amount to be written off:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
+    <tfoot><td colspan="5">Total amount to be written off:</td><td>[% amountoutstanding | $Price %]</td></tfoot>
     <tbody><tr>
             <td>[% description %] [% title %]</td>
             <td>[% accounttype %]</td>
             <td>[% notify_id %]</td>
             <td>[% notify_level %]</td>
-            <td class="debit">[% amount | format('%.2f') %]</td>
-            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+            <td class="debit">[% amount | $Price %]</td>
+            <td class="debit">[% amountoutstanding | $Price %]</td>
         </tr></tbody>
     </table>
     </fieldset>
@@ -383,12 +381,12 @@ function moneyFormat(textObj) {
     <ol>
         <li>
             <span class="label">Total amount outstanding: </span>
-            <span class="debit">[% total | format('%.2f') %]</span>
+            <span class="debit">[% total | $Price %]</span>
         </li>
     <li>
         <label for="paid">Collect from patron: </label>
         <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
+        <input name="paid" id="paid" type="text" pattern="^\s*(\d+)([,.]\d\d)?\s*$" value="[% total | $Price on_editing => 1 %]" />
     </li>
     <li>
         <label for="selected_accts_notes">Note: </label>

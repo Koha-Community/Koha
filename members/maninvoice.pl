@@ -34,6 +34,7 @@ use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Images;
 
+use Koha::CurrencyFormat;
 use Koha::Patron::Categories;
 
 my $input=new CGI;
@@ -57,6 +58,7 @@ if ($add){
         my $amount=$input->param('amount');
         my $type=$input->param('type');
         my $note    = $input->param('note');
+	$amount = Koha::CurrencyFormat::fix_currency_str($amount);
         my $error   = manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
         if ($error) {
             my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

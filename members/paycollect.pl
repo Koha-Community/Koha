@@ -32,6 +32,7 @@ use Koha::Patron::Images;
 use Koha::Account;
 use JSON;
 
+use Koha::CurrencyFormat;
 use Koha::Patron::Categories;
 
 use Koha::Payment::POS;
@@ -108,6 +109,8 @@ if ( $individual || $writeoff ) {
         selected_accts_notes => scalar $input->param('notes'),
     );
 }
+
+$total_paid = Koha::CurrencyFormat::fix_currency_str($total_paid);
 
 if ( $total_paid and $total_paid ne '0.00' ) {
     if ( $total_paid < 0 or $total_paid > $total_due ) {
