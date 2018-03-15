@@ -20,9 +20,11 @@
     <script type="text/javascript">
         $(document).ready(function(){
             [% IF tag_number == 'rancor' %]
-            function RancorReplaceField( new_text ){
+            function RancorReplaceField( new_text, ind_1, ind_2 ){
                 var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
                 cur_field.setText(new_text);
+                cur_field.setIndicator1(ind_1);
+                cur_field.setIndicator2(ind_2);
                 return true;
             }
                 [% IF ( clear ) %]
@@ -36,7 +38,7 @@
                     [%- END -%]
                 [%- END -%]‡9[% authid %]";
                 [% END %]
-                RancorReplaceField( new_line );
+                RancorReplaceField( new_line, "[% indicator1 %]", "[% indicator2 %]" );
             [% ELSE %]
             var index_start = "[% index %]";
             var whichfield;
