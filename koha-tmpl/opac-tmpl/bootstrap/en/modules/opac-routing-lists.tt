@@ -1,0 +1,71 @@
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your routing lists</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% BLOCK cssinclude %]
+    [% Asset.css("css/datatables.css") %]
+[% END %]
+</head>
+
+[% INCLUDE 'bodytag.inc' bodyid='opac-account' bodyclass='scrollto' %]
+[% INCLUDE 'masthead.inc' %]
+
+<div class="main">
+    <ul class="breadcrumb">
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-routing-lists.pl">[% INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="#">Your routing lists</a></li>
+    </ul>
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div id="navigation">
+                    [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
+                </div>
+            </div>
+            <div class="span10">
+                <div id="user-routing-lists" class="maincontent">
+
+
+                    <h3>Routing lists</h3>
+
+                    [% IF ( routinglists ) %]
+                        <p id="routing-list-intro">You are subscribed to the routing lists for following serial titles. If you wish to make changes, please contact the library.</p>
+
+                        <table class="table table-bordered table-striped" id="routingtable">
+                            <thead>
+                                <tr>
+                                    <th>Subscription title</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            [% FOREACH routinglist IN routinglists %]
+                                [% IF ( titles_loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                                    <td>
+                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber %]">
+                                            [% routinglist.subscription.biblio.title %]
+                                        </a>
+                                    </td>
+                                </tr>
+                            [% END %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <p>You are currently not listed on any routing lists.</p>
+                    [% END %]
+                </div>
+            </div> <!-- / .span10 -->
+        </div> <!-- / .row-fluid -->
+    </div> <!-- / .container-fluid -->
+</div> <!-- / .main -->
+
+[% INCLUDE 'opac-bottom.inc' %]
+[% BLOCK jsinclude %]
+[% INCLUDE 'datatables.inc' %]
+<script type="text/javascript">
+</script>
+[% END %]

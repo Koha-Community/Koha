@@ -96,6 +96,15 @@
                 <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">your lists</a></li>
             [% END %]
 
+            [% IF Koha.Preference( 'RoutingSerials' ) && routing_lists_exist %]
+                [% IF ( routinglistsview ) %]
+                    <li class="active">
+                [% ELSE %]
+                    <li>
+                [% END %]
+                <a href="/cgi-bin/koha/opac-routing-lists.pl">your routing lists</a></li>
+            [% END %]
+
             [% IF Koha.Preference( 'useDischarge' ) == 1 %]
                 [% IF ( dischargeview ) %]
                     <li class="active">

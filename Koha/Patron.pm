@@ -39,6 +39,7 @@ use Koha::Patrons;
 use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
 use Koha::Account;
+use Koha::Subscription::Routinglists;
 
 use base qw(Koha::Object);
 
@@ -649,7 +650,7 @@ sub old_checkouts {
 
 my $overdue_items = $patron->get_overdues
 
-Return the overdued items
+Return the overdue items
 
 =cut
 
@@ -664,6 +665,20 @@ sub get_overdues {
             prefetch => { item => { biblio => 'biblioitems' } },
         }
     );
+}
+
+=head3 get_routinglists
+
+my @routinglists = $patron->get_routinglists
+
+Returns the routing lists a patron is subscribed to.
+
+=cut
+
+sub get_routinglists {
+    my ($self) = @_;
+    my @subscribed_routings = Koha::Subscription::Routinglists->search({ borrowernumber => $self->borrowernumber });
+    return @subscribed_routings;
 }
 
 =head3 get_age

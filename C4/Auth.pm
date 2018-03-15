@@ -238,12 +238,12 @@ sub get_template_and_user {
     }
 
     my $borrowernumber;
+    my $patron;
     if ($user) {
 
         # It's possible for $user to be the borrowernumber if they don't have a
         # userid defined (and are logging in through some other method, such
         # as SSL certs against an email address)
-        my $patron;
         $borrowernumber = getborrowernumber($user) if defined($user);
         if ( !defined($borrowernumber) && defined($user) ) {
             $patron = Koha::Patrons->find( $user );
@@ -610,6 +610,7 @@ sub get_template_and_user {
             PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
             PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
             useDischarge                 => C4::Context->preference('useDischarge'),
+            routing_lists_exist                   => ( $patron and $patron->get_routinglists ),
         );
 
         $template->param( OpacPublic => '1' ) if ( $user || C4::Context->preference("OpacPublic") );
