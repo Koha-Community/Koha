@@ -351,10 +351,10 @@ sub parametrized_url {
     my $vars = shift || {}; # ie { LANG => en }
     my $ret = $url;
     while ( my ($key,$val) = each %$vars) {
-        my $val_url = URI::Escape::uri_escape_utf8($val);
+        my $val_url = URI::Escape::uri_escape_utf8( $val // q{} );
         $ret =~ s/\{$key\}/$val_url/g;
     }
-    $ret =~ s/\{[^\{]*\}//g; # remove not defined vars
+    $ret =~ s/\{[^\{]*\}//g; # remove remaining vars
     return $ret;
 }
 

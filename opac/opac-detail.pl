@@ -200,6 +200,7 @@ if ($session->param('busc')) {
                 }
             } else {
                 for my $value (@{$arrParamsBusc->{$_}}) {
+                    next if !defined($value);
                     $pasarParams .= '&amp;' if ($j);
                     $pasarParams .= $_ . '=' . Encode::decode('UTF-8', uri_escape_utf8($value));
                     $j++;
