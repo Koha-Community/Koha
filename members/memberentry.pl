@@ -271,10 +271,10 @@ if ( $guarantorid ) {
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
 $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
-$newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
-
-# Trim spaces from zipcode, they cause problems with OpusCapita
-$newdata{'zipcode'} =~ s/ //g;
+if ( defined($input->param('zipcode')) ){
+    $newdata{'zipcode'} = $input->param('zipcode');
+    $newdata{'zipcode'} =~ s/ //g; # KD2913 Trim spaces from zipcode, they cause problems with OpusCapita
+}
 
 $newdata{'country'} = $input->param('country') if defined($input->param('country'));
 
