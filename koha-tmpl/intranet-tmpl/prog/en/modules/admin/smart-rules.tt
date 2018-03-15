@@ -6,6 +6,7 @@
 [% USE Categories %]
 [% USE ItemTypes %]
 [% USE CirculationRules %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 
 [% SET branchcode = humanbranch || undef %]
@@ -267,7 +268,7 @@
                                     <td>[% chargeperiod | html %]</td>
                                     <td>[% IF chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
                                     <td>[% firstremind | html %]</td>
-                                    <td>[% overduefinescap FILTER format("%.2f") %]</td>
+                                    <td>[% overduefinescap | $Price %]</td>
                                     <td>
                                         [% IF cap_fine_to_replacement_price %]
                                             <input type="checkbox" checked="checked" disabled="disabled" />
